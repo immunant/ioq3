@@ -15,7 +15,7 @@ path = "lib.rs"
 
 [dependencies]
 c2rust-asm-casts = "0.1"
-libc = "0.2"
+libc = "=0.2.66"
 
 
 
