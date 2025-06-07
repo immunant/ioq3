@@ -2963,7 +2963,7 @@ unsafe extern "C" fn Controls_MenuKey(
 ) -> crate::src::qcommon::q_shared::sfxHandle_t {
     let mut current_block: u64;
     let mut id: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
+    let mut _i: libc::c_int = 0;
     let mut found: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
     let mut bindptr: *mut bind_t = 0 as *mut bind_t;
     found = crate::src::qcommon::q_shared::qfalse;
@@ -3026,7 +3026,7 @@ unsafe extern "C" fn Controls_MenuKey(
             if key != -(1 as libc::c_int) {
                 // remove from any other bind
                 bindptr = g_bindings.as_mut_ptr();
-                i = 0 as libc::c_int;
+                _i = 0 as libc::c_int;
                 while !(*bindptr).label.is_null() {
                     if (*bindptr).bind2 == key {
                         (*bindptr).bind2 = -(1 as libc::c_int)
@@ -3035,7 +3035,7 @@ unsafe extern "C" fn Controls_MenuKey(
                         (*bindptr).bind1 = (*bindptr).bind2;
                         (*bindptr).bind2 = -(1 as libc::c_int)
                     }
-                    i += 1;
+                    _i += 1;
                     bindptr = bindptr.offset(1)
                 }
             }
@@ -3044,7 +3044,7 @@ unsafe extern "C" fn Controls_MenuKey(
                 as *mut crate::ui_local_h::menucommon_s))
                 .id;
             bindptr = g_bindings.as_mut_ptr();
-            i = 0 as libc::c_int;
+            _i = 0 as libc::c_int;
             while !(*bindptr).label.is_null() {
                 if (*bindptr).id == id {
                     found = crate::src::qcommon::q_shared::qtrue;
@@ -3081,7 +3081,7 @@ unsafe extern "C" fn Controls_MenuKey(
                     }
                     break;
                 } else {
-                    i += 1;
+                    _i += 1;
                     bindptr = bindptr.offset(1)
                 }
             }

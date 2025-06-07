@@ -252,9 +252,8 @@ unsafe extern "C" fn op_mem_close(mut _stream: *mut libc::c_void) -> libc::c_int
     return 0 as libc::c_int;
 }
 
-static mut OP_MEM_CALLBACKS: crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks = unsafe {
-    {
-        let mut init = crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks {
+static mut OP_MEM_CALLBACKS: crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks = {
+    let mut init = crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks {
             read: Some(
                 op_mem_read
                     as unsafe extern "C" fn(
@@ -275,9 +274,8 @@ static mut OP_MEM_CALLBACKS: crate::src::opusfile_0_9::src::opusfile::OpusFileCa
                 op_mem_tell as unsafe extern "C" fn(_: *mut libc::c_void) -> libc::c_longlong,
             ),
             close: Some(op_mem_close as unsafe extern "C" fn(_: *mut libc::c_void) -> libc::c_int),
-        };
-        init
-    }
+    };
+    init
 };
 /* *******************************************************************
 *                                                                  *
