@@ -301,7 +301,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // active (after loading) gameplay
 #[no_mangle]
 
-pub static mut drawTeamOverlayModificationCount: libc::c_int = -(1 as libc::c_int);
+pub static mut drawTeamOverlayModificationCount: libc::c_int = -1;
 #[no_mangle]
 
 pub static mut sortedTeamPlayers: [libc::c_int; 32] = [0; 32];
@@ -335,58 +335,58 @@ unsafe extern "C" fn CG_DrawField(
     let mut ptr: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut l: libc::c_int = 0;
     let mut frame: libc::c_int = 0;
-    if width < 1 as libc::c_int {
+    if width < 1 {
         return;
     }
     // draw number string
-    if width > 5 as libc::c_int {
-        width = 5 as libc::c_int
+    if width > 5 {
+        width = 5
     }
     match width {
         1 => {
-            value = if value > 9 as libc::c_int {
-                9 as libc::c_int
+            value = if value > 9 {
+                9
             } else {
                 value
             };
-            value = if value < 0 as libc::c_int {
-                0 as libc::c_int
+            value = if value < 0 {
+                0
             } else {
                 value
             }
         }
         2 => {
-            value = if value > 99 as libc::c_int {
-                99 as libc::c_int
+            value = if value > 99 {
+                99
             } else {
                 value
             };
-            value = if value < -(9 as libc::c_int) {
-                -(9 as libc::c_int)
+            value = if value < -9 {
+                -9
             } else {
                 value
             }
         }
         3 => {
-            value = if value > 999 as libc::c_int {
-                999 as libc::c_int
+            value = if value > 999 {
+                999
             } else {
                 value
             };
-            value = if value < -(99 as libc::c_int) {
-                -(99 as libc::c_int)
+            value = if value < -99 {
+                -99
             } else {
                 value
             }
         }
         4 => {
-            value = if value > 9999 as libc::c_int {
-                9999 as libc::c_int
+            value = if value > 9999 {
+                9999
             } else {
                 value
             };
-            value = if value < -(999 as libc::c_int) {
-                -(999 as libc::c_int)
+            value = if value < -999 {
+                -999
             } else {
                 value
             }
@@ -403,22 +403,22 @@ unsafe extern "C" fn CG_DrawField(
     if l > width {
         l = width
     }
-    x += 2 as libc::c_int + 32 as libc::c_int * (width - l);
+    x += 2 + 32 * (width - l);
     ptr = num.as_mut_ptr();
     while *ptr as libc::c_int != 0 && l != 0 {
         if *ptr as libc::c_int == '-' as i32 {
-            frame = 10 as libc::c_int
+            frame = 10
         } else {
             frame = *ptr as libc::c_int - '0' as i32
         }
         crate::src::cgame::cg_drawtools::CG_DrawPic(
             x as libc::c_float,
             y as libc::c_float,
-            32 as libc::c_int as libc::c_float,
-            48 as libc::c_int as libc::c_float,
+            32 as libc::c_float,
+            48 as libc::c_float,
             crate::src::cgame::cg_main::cgs.media.numberShaders[frame as usize],
         );
-        x += 32 as libc::c_int;
+        x += 32;
         ptr = ptr.offset(1);
         l -= 1
     }
@@ -486,28 +486,28 @@ pub unsafe extern "C" fn CG_Draw3DModel(
     crate::src::cgame::cg_drawtools::CG_AdjustFrom640(&mut x, &mut y, &mut w, &mut h);
     crate::stdlib::memset(
         &mut refdef as *mut crate::tr_types_h::refdef_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0,
         ::std::mem::size_of::<crate::tr_types_h::refdef_t>() as libc::c_ulong,
     );
     crate::stdlib::memset(
         &mut ent as *mut crate::tr_types_h::refEntity_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0,
         ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
     );
     crate::src::qcommon::q_math::AnglesToAxis(
         angles as *const crate::src::qcommon::q_shared::vec_t,
         ent.axis.as_mut_ptr(),
     );
-    ent.origin[0 as libc::c_int as usize] = *origin.offset(0 as libc::c_int as isize);
-    ent.origin[1 as libc::c_int as usize] = *origin.offset(1 as libc::c_int as isize);
-    ent.origin[2 as libc::c_int as usize] = *origin.offset(2 as libc::c_int as isize);
+    ent.origin[0 as usize] = *origin.offset(0 as isize);
+    ent.origin[1 as usize] = *origin.offset(1 as isize);
+    ent.origin[2 as usize] = *origin.offset(2 as isize);
     ent.hModel = model;
     ent.customSkin = skin;
-    ent.renderfx = 0x40 as libc::c_int;
-    refdef.rdflags = 0x1 as libc::c_int;
+    ent.renderfx = 0x40;
+    refdef.rdflags = 0x1;
     crate::src::qcommon::q_math::AxisClear(refdef.viewaxis.as_mut_ptr());
-    refdef.fov_x = 30 as libc::c_int as libc::c_float;
-    refdef.fov_y = 30 as libc::c_int as libc::c_float;
+    refdef.fov_x = 30 as libc::c_float;
+    refdef.fov_y = 30 as libc::c_float;
     refdef.x = x as libc::c_int;
     refdef.y = y as libc::c_int;
     refdef.width = w as libc::c_int;
@@ -559,26 +559,26 @@ pub unsafe extern "C" fn CG_DrawHead(
             mins.as_mut_ptr(),
             maxs.as_mut_ptr(),
         );
-        origin[2 as libc::c_int as usize] = (-0.5f64
-            * (mins[2 as libc::c_int as usize] + maxs[2 as libc::c_int as usize]) as libc::c_double)
+        origin[2 as usize] = (-0.5f64
+            * (mins[2 as usize] + maxs[2 as usize]) as libc::c_double)
             as crate::src::qcommon::q_shared::vec_t;
-        origin[1 as libc::c_int as usize] = (0.5f64
-            * (mins[1 as libc::c_int as usize] + maxs[1 as libc::c_int as usize]) as libc::c_double)
+        origin[1 as usize] = (0.5f64
+            * (mins[1 as usize] + maxs[1 as usize]) as libc::c_double)
             as crate::src::qcommon::q_shared::vec_t;
         // calculate distance so the head nearly fills the box
         // assume heads are taller than wide
         len = (0.7f64
-            * (maxs[2 as libc::c_int as usize] - mins[2 as libc::c_int as usize]) as libc::c_double)
+            * (maxs[2 as usize] - mins[2 as usize]) as libc::c_double)
             as libc::c_float; // len / tan( fov/2 )
-        origin[0 as libc::c_int as usize] =
+        origin[0 as usize] =
             (len as libc::c_double / 0.268f64) as crate::src::qcommon::q_shared::vec_t;
         // allow per-model tweaking
-        origin[0 as libc::c_int as usize] =
-            origin[0 as libc::c_int as usize] + (*ci).headOffset[0 as libc::c_int as usize];
-        origin[1 as libc::c_int as usize] =
-            origin[1 as libc::c_int as usize] + (*ci).headOffset[1 as libc::c_int as usize];
-        origin[2 as libc::c_int as usize] =
-            origin[2 as libc::c_int as usize] + (*ci).headOffset[2 as libc::c_int as usize];
+        origin[0 as usize] =
+            origin[0 as usize] + (*ci).headOffset[0 as usize];
+        origin[1 as usize] =
+            origin[1 as usize] + (*ci).headOffset[1 as usize];
+        origin[2 as usize] =
+            origin[2 as usize] + (*ci).headOffset[2 as usize];
         CG_Draw3DModel(
             x,
             y,
@@ -628,10 +628,10 @@ pub unsafe extern "C" fn CG_DrawFlagModel(
     let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut handle: crate::src::qcommon::q_shared::qhandle_t = 0;
     if force2D as u64 == 0 && crate::src::cgame::cg_main::cg_draw3dIcons.integer != 0 {
-        angles[2 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        angles[1 as libc::c_int as usize] = angles[2 as libc::c_int as usize];
-        angles[0 as libc::c_int as usize] = angles[1 as libc::c_int as usize];
+        angles[2 as usize] =
+            0 as crate::src::qcommon::q_shared::vec_t;
+        angles[1 as usize] = angles[2 as usize];
+        angles[0 as usize] = angles[1 as usize];
         cm = crate::src::cgame::cg_main::cgs.media.redFlagModel;
         // offset the origin y and z to center the flag
         crate::src::cgame::cg_syscalls::trap_R_ModelBounds(
@@ -639,20 +639,20 @@ pub unsafe extern "C" fn CG_DrawFlagModel(
             mins.as_mut_ptr(),
             maxs.as_mut_ptr(),
         );
-        origin[2 as libc::c_int as usize] = (-0.5f64
-            * (mins[2 as libc::c_int as usize] + maxs[2 as libc::c_int as usize]) as libc::c_double)
+        origin[2 as usize] = (-0.5f64
+            * (mins[2 as usize] + maxs[2 as usize]) as libc::c_double)
             as crate::src::qcommon::q_shared::vec_t;
-        origin[1 as libc::c_int as usize] = (0.5f64
-            * (mins[1 as libc::c_int as usize] + maxs[1 as libc::c_int as usize]) as libc::c_double)
+        origin[1 as usize] = (0.5f64
+            * (mins[1 as usize] + maxs[1 as usize]) as libc::c_double)
             as crate::src::qcommon::q_shared::vec_t;
         // calculate distance so the flag nearly fills the box
         // assume heads are taller than wide
         len = (0.5f64
-            * (maxs[2 as libc::c_int as usize] - mins[2 as libc::c_int as usize]) as libc::c_double)
+            * (maxs[2 as usize] - mins[2 as usize]) as libc::c_double)
             as libc::c_float; // len / tan( fov/2 )
-        origin[0 as libc::c_int as usize] =
+        origin[0 as usize] =
             (len as libc::c_double / 0.268f64) as crate::src::qcommon::q_shared::vec_t;
-        angles[1 as libc::c_int as usize] = (60 as libc::c_int as libc::c_double
+        angles[1 as usize] = (60 as libc::c_double
             * crate::stdlib::sin(crate::src::cgame::cg_main::cg.time as libc::c_double / 2000.0f64))
             as crate::src::qcommon::q_shared::vec_t;
         if team == crate::bg_public_h::TEAM_RED as libc::c_int {
@@ -670,7 +670,7 @@ pub unsafe extern "C" fn CG_DrawFlagModel(
             w,
             h,
             handle,
-            0 as libc::c_int,
+            0,
             origin.as_mut_ptr(),
             angles.as_mut_ptr(),
         );
@@ -715,31 +715,31 @@ unsafe extern "C" fn CG_DrawStatusBarHead(mut x: libc::c_float) {
     let mut size: libc::c_float = 0.;
     let mut stretch: libc::c_float = 0.;
     let mut frac: libc::c_float = 0.;
-    angles[2 as libc::c_int as usize] = 0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    angles[1 as libc::c_int as usize] = angles[2 as libc::c_int as usize];
-    angles[0 as libc::c_int as usize] = angles[1 as libc::c_int as usize];
+    angles[2 as usize] = 0 as crate::src::qcommon::q_shared::vec_t;
+    angles[1 as usize] = angles[2 as usize];
+    angles[0 as usize] = angles[1 as usize];
     if crate::src::cgame::cg_main::cg.damageTime != 0.
         && crate::src::cgame::cg_main::cg.time as libc::c_float
             - crate::src::cgame::cg_main::cg.damageTime
-            < 500 as libc::c_int as libc::c_float
+            < 500 as libc::c_float
     {
         frac = (crate::src::cgame::cg_main::cg.time as libc::c_float
             - crate::src::cgame::cg_main::cg.damageTime)
-            / 500 as libc::c_int as libc::c_float;
-        size = (48 as libc::c_int as libc::c_double
+            / 500 as libc::c_float;
+        size = (48 as libc::c_double
             * 1.25f64
             * (1.5f64 - frac as libc::c_double * 0.5f64)) as libc::c_float;
-        stretch = (size as libc::c_double - 48 as libc::c_int as libc::c_double * 1.25f64)
+        stretch = (size as libc::c_double - 48 as libc::c_double * 1.25f64)
             as libc::c_float;
         // kick in the direction of damage
         x = (x as libc::c_double
             - (stretch as libc::c_double * 0.5f64
                 + (crate::src::cgame::cg_main::cg.damageX * stretch) as libc::c_double * 0.5f64))
             as libc::c_float;
-        crate::src::cgame::cg_main::cg.headStartYaw = 180 as libc::c_int as libc::c_float
-            + crate::src::cgame::cg_main::cg.damageX * 45 as libc::c_int as libc::c_float;
-        crate::src::cgame::cg_main::cg.headEndYaw = (180 as libc::c_int as libc::c_double
-            + 20 as libc::c_int as libc::c_double
+        crate::src::cgame::cg_main::cg.headStartYaw = 180 as libc::c_float
+            + crate::src::cgame::cg_main::cg.damageX * 45 as libc::c_float;
+        crate::src::cgame::cg_main::cg.headEndYaw = (180 as libc::c_double
+            + 20 as libc::c_double
                 * crate::stdlib::cos(
                     2.0f64
                         * (((::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
@@ -748,7 +748,7 @@ unsafe extern "C" fn CG_DrawStatusBarHead(mut x: libc::c_float) {
                             - 0.5f64)
                         * 3.14159265358979323846f64,
                 )) as libc::c_float;
-        crate::src::cgame::cg_main::cg.headEndPitch = (5 as libc::c_int as libc::c_double
+        crate::src::cgame::cg_main::cg.headEndPitch = (5 as libc::c_double
             * crate::stdlib::cos(
                 2.0f64
                     * (((::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
@@ -759,10 +759,10 @@ unsafe extern "C" fn CG_DrawStatusBarHead(mut x: libc::c_float) {
             )) as libc::c_float;
         crate::src::cgame::cg_main::cg.headStartTime = crate::src::cgame::cg_main::cg.time;
         crate::src::cgame::cg_main::cg.headEndTime =
-            ((crate::src::cgame::cg_main::cg.time + 100 as libc::c_int) as libc::c_float
+            ((crate::src::cgame::cg_main::cg.time + 100) as libc::c_float
                 + (::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
                     / 0x7fff as libc::c_int as libc::c_float
-                    * 2000 as libc::c_int as libc::c_float) as libc::c_int
+                    * 2000 as libc::c_float) as libc::c_int
     } else {
         if crate::src::cgame::cg_main::cg.time >= crate::src::cgame::cg_main::cg.headEndTime {
             // select a new head angle
@@ -772,12 +772,12 @@ unsafe extern "C" fn CG_DrawStatusBarHead(mut x: libc::c_float) {
             crate::src::cgame::cg_main::cg.headStartTime =
                 crate::src::cgame::cg_main::cg.headEndTime;
             crate::src::cgame::cg_main::cg.headEndTime =
-                ((crate::src::cgame::cg_main::cg.time + 100 as libc::c_int) as libc::c_float
+                ((crate::src::cgame::cg_main::cg.time + 100) as libc::c_float
                     + (::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
                         / 0x7fff as libc::c_int as libc::c_float
-                        * 2000 as libc::c_int as libc::c_float) as libc::c_int;
-            crate::src::cgame::cg_main::cg.headEndYaw = (180 as libc::c_int as libc::c_double
-                + 20 as libc::c_int as libc::c_double
+                        * 2000 as libc::c_float) as libc::c_int;
+            crate::src::cgame::cg_main::cg.headEndYaw = (180 as libc::c_double
+                + 20 as libc::c_double
                     * crate::stdlib::cos(
                         2.0f64
                             * (((::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
@@ -786,7 +786,7 @@ unsafe extern "C" fn CG_DrawStatusBarHead(mut x: libc::c_float) {
                                 - 0.5f64)
                             * 3.14159265358979323846f64,
                     )) as libc::c_float;
-            crate::src::cgame::cg_main::cg.headEndPitch = (5 as libc::c_int as libc::c_double
+            crate::src::cgame::cg_main::cg.headEndPitch = (5 as libc::c_double
                 * crate::stdlib::cos(
                     2.0f64
                         * (((::libc::rand() & 0x7fff as libc::c_int) as libc::c_float
@@ -796,7 +796,7 @@ unsafe extern "C" fn CG_DrawStatusBarHead(mut x: libc::c_float) {
                         * 3.14159265358979323846f64,
                 )) as libc::c_float
         }
-        size = (48 as libc::c_int as libc::c_double * 1.25f64) as libc::c_float
+        size = (48 as libc::c_double * 1.25f64) as libc::c_float
     }
     // if the server was frozen for a while we may have a bad head start time
     if crate::src::cgame::cg_main::cg.headStartTime > crate::src::cgame::cg_main::cg.time {
@@ -808,17 +808,17 @@ unsafe extern "C" fn CG_DrawStatusBarHead(mut x: libc::c_float) {
             - crate::src::cgame::cg_main::cg.headStartTime) as libc::c_float;
     frac = frac
         * frac
-        * (3 as libc::c_int as libc::c_float - 2 as libc::c_int as libc::c_float * frac);
-    angles[1 as libc::c_int as usize] = crate::src::cgame::cg_main::cg.headStartYaw
+        * (3 as libc::c_float - 2 as libc::c_float * frac);
+    angles[1 as usize] = crate::src::cgame::cg_main::cg.headStartYaw
         + (crate::src::cgame::cg_main::cg.headEndYaw - crate::src::cgame::cg_main::cg.headStartYaw)
             * frac;
-    angles[0 as libc::c_int as usize] = crate::src::cgame::cg_main::cg.headStartPitch
+    angles[0 as usize] = crate::src::cgame::cg_main::cg.headStartPitch
         + (crate::src::cgame::cg_main::cg.headEndPitch
             - crate::src::cgame::cg_main::cg.headStartPitch)
             * frac;
     CG_DrawHead(
         x,
-        480 as libc::c_int as libc::c_float - size,
+        480 as libc::c_float - size,
         size,
         size,
         (*crate::src::cgame::cg_main::cg.snap).ps.clientNum,
@@ -836,9 +836,9 @@ CG_DrawStatusBarFlag
 unsafe extern "C" fn CG_DrawStatusBarFlag(mut x: libc::c_float, mut team: libc::c_int) {
     CG_DrawFlagModel(
         x,
-        (480 as libc::c_int - 48 as libc::c_int) as libc::c_float,
-        48 as libc::c_int as libc::c_float,
-        48 as libc::c_int as libc::c_float,
+        (480 - 48) as libc::c_float,
+        48 as libc::c_float,
+        48 as libc::c_float,
         team,
         crate::src::qcommon::q_shared::qfalse,
     );
@@ -861,19 +861,19 @@ pub unsafe extern "C" fn CG_DrawTeamBackground(
     mut team: libc::c_int,
 ) {
     let mut hcolor: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
-    hcolor[3 as libc::c_int as usize] = alpha;
+    hcolor[3 as usize] = alpha;
     if team == crate::bg_public_h::TEAM_RED as libc::c_int {
-        hcolor[0 as libc::c_int as usize] =
-            1 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        hcolor[1 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        hcolor[2 as libc::c_int as usize] = 0 as libc::c_int as crate::src::qcommon::q_shared::vec_t
+        hcolor[0 as usize] =
+            1 as crate::src::qcommon::q_shared::vec_t;
+        hcolor[1 as usize] =
+            0 as crate::src::qcommon::q_shared::vec_t;
+        hcolor[2 as usize] = 0 as crate::src::qcommon::q_shared::vec_t
     } else if team == crate::bg_public_h::TEAM_BLUE as libc::c_int {
-        hcolor[0 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        hcolor[1 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        hcolor[2 as libc::c_int as usize] = 1 as libc::c_int as crate::src::qcommon::q_shared::vec_t
+        hcolor[0 as usize] =
+            0 as crate::src::qcommon::q_shared::vec_t;
+        hcolor[1 as usize] =
+            0 as crate::src::qcommon::q_shared::vec_t;
+        hcolor[2 as usize] = 1 as crate::src::qcommon::q_shared::vec_t
     } else {
         return;
     }
@@ -909,15 +909,15 @@ unsafe extern "C" fn CG_DrawStatusBar() {
         [0.5f32, 0.5f32, 0.5f32, 1.0f32],
         [1.0f32, 1.0f32, 1.0f32, 1.0f32],
     ];
-    if crate::src::cgame::cg_main::cg_drawStatus.integer == 0 as libc::c_int {
+    if crate::src::cgame::cg_main::cg_drawStatus.integer == 0 {
         return;
     }
     // draw the team background
     CG_DrawTeamBackground(
-        0 as libc::c_int,
-        420 as libc::c_int,
-        640 as libc::c_int,
-        60 as libc::c_int,
+        0,
+        420,
+        640,
+        60,
         0.33f32,
         (*crate::src::cgame::cg_main::cg.snap).ps.persistant
             [crate::bg_public_h::PERS_TEAM as libc::c_int as usize],
@@ -927,39 +927,39 @@ unsafe extern "C" fn CG_DrawStatusBar() {
         .offset((*crate::src::cgame::cg_main::cg.snap).ps.clientNum as isize)
         as *mut crate::cg_local_h::centity_t;
     ps = &mut (*crate::src::cgame::cg_main::cg.snap).ps;
-    angles[2 as libc::c_int as usize] = 0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    angles[1 as libc::c_int as usize] = angles[2 as libc::c_int as usize];
-    angles[0 as libc::c_int as usize] = angles[1 as libc::c_int as usize];
+    angles[2 as usize] = 0 as crate::src::qcommon::q_shared::vec_t;
+    angles[1 as usize] = angles[2 as usize];
+    angles[0 as usize] = angles[1 as usize];
     // draw any 3D icons first, so the changes back to 2D are minimized
     if (*cent).currentState.weapon != 0
         && crate::src::cgame::cg_main::cg_weapons[(*cent).currentState.weapon as usize].ammoModel
             != 0
     {
-        origin[0 as libc::c_int as usize] =
-            70 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        origin[1 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        origin[2 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        angles[1 as libc::c_int as usize] = (90 as libc::c_int as libc::c_double
-            + 20 as libc::c_int as libc::c_double
+        origin[0 as usize] =
+            70 as crate::src::qcommon::q_shared::vec_t;
+        origin[1 as usize] =
+            0 as crate::src::qcommon::q_shared::vec_t;
+        origin[2 as usize] =
+            0 as crate::src::qcommon::q_shared::vec_t;
+        angles[1 as usize] = (90 as libc::c_double
+            + 20 as libc::c_double
                 * crate::stdlib::sin(
                     crate::src::cgame::cg_main::cg.time as libc::c_double / 1000.0f64,
                 ))
             as crate::src::qcommon::q_shared::vec_t;
         CG_Draw3DModel(
-            (32 as libc::c_int * 3 as libc::c_int + 4 as libc::c_int) as libc::c_float,
-            432 as libc::c_int as libc::c_float,
-            48 as libc::c_int as libc::c_float,
-            48 as libc::c_int as libc::c_float,
+            (32 * 3 + 4) as libc::c_float,
+            432 as libc::c_float,
+            48 as libc::c_float,
+            48 as libc::c_float,
             crate::src::cgame::cg_main::cg_weapons[(*cent).currentState.weapon as usize].ammoModel,
-            0 as libc::c_int,
+            0,
             origin.as_mut_ptr(),
             angles.as_mut_ptr(),
         );
     }
     CG_DrawStatusBarHead(
-        (185 as libc::c_int + 32 as libc::c_int * 3 as libc::c_int + 4 as libc::c_int)
+        (185 + 32 * 3 + 4)
             as libc::c_float,
     );
     if crate::src::cgame::cg_main::cg.predictedPlayerState.powerups
@@ -967,10 +967,10 @@ unsafe extern "C" fn CG_DrawStatusBar() {
         != 0
     {
         CG_DrawStatusBarFlag(
-            (185 as libc::c_int
-                + 32 as libc::c_int * 3 as libc::c_int
-                + 4 as libc::c_int
-                + 48 as libc::c_int) as libc::c_float,
+            (185
+                + 32 * 3
+                + 4
+                + 48) as libc::c_float,
             crate::bg_public_h::TEAM_RED as libc::c_int,
         );
     } else if crate::src::cgame::cg_main::cg.predictedPlayerState.powerups
@@ -978,10 +978,10 @@ unsafe extern "C" fn CG_DrawStatusBar() {
         != 0
     {
         CG_DrawStatusBarFlag(
-            (185 as libc::c_int
-                + 32 as libc::c_int * 3 as libc::c_int
-                + 4 as libc::c_int
-                + 48 as libc::c_int) as libc::c_float,
+            (185
+                + 32 * 3
+                + 4
+                + 48) as libc::c_float,
             crate::bg_public_h::TEAM_BLUE as libc::c_int,
         );
     } else if crate::src::cgame::cg_main::cg.predictedPlayerState.powerups
@@ -989,32 +989,32 @@ unsafe extern "C" fn CG_DrawStatusBar() {
         != 0
     {
         CG_DrawStatusBarFlag(
-            (185 as libc::c_int
-                + 32 as libc::c_int * 3 as libc::c_int
-                + 4 as libc::c_int
-                + 48 as libc::c_int) as libc::c_float,
+            (185
+                + 32 * 3
+                + 4
+                + 48) as libc::c_float,
             crate::bg_public_h::TEAM_FREE as libc::c_int,
         );
     }
     if (*ps).stats[crate::bg_public_h::STAT_ARMOR as libc::c_int as usize] != 0 {
-        origin[0 as libc::c_int as usize] =
-            90 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        origin[1 as libc::c_int as usize] =
-            0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-        origin[2 as libc::c_int as usize] =
-            -(10 as libc::c_int) as crate::src::qcommon::q_shared::vec_t;
-        angles[1 as libc::c_int as usize] =
-            (((crate::src::cgame::cg_main::cg.time & 2047 as libc::c_int) * 360 as libc::c_int)
+        origin[0 as usize] =
+            90 as crate::src::qcommon::q_shared::vec_t;
+        origin[1 as usize] =
+            0 as crate::src::qcommon::q_shared::vec_t;
+        origin[2 as usize] =
+            -(10) as crate::src::qcommon::q_shared::vec_t;
+        angles[1 as usize] =
+            (((crate::src::cgame::cg_main::cg.time & 2047) * 360)
                 as libc::c_double
                 / 2048.0f64) as crate::src::qcommon::q_shared::vec_t;
         CG_Draw3DModel(
-            (370 as libc::c_int + 32 as libc::c_int * 3 as libc::c_int + 4 as libc::c_int)
+            (370 + 32 * 3 + 4)
                 as libc::c_float,
-            432 as libc::c_int as libc::c_float,
-            48 as libc::c_int as libc::c_float,
-            48 as libc::c_int as libc::c_float,
+            432 as libc::c_float,
+            48 as libc::c_float,
+            48 as libc::c_float,
             crate::src::cgame::cg_main::cgs.media.armorModel,
-            0 as libc::c_int,
+            0,
             origin.as_mut_ptr(),
             angles.as_mut_ptr(),
         );
@@ -1024,7 +1024,7 @@ unsafe extern "C" fn CG_DrawStatusBar() {
     //
     if (*cent).currentState.weapon != 0 {
         value = (*ps).ammo[(*cent).currentState.weapon as usize];
-        if value > -(1 as libc::c_int) {
+        if value > -1 {
             if crate::src::cgame::cg_main::cg
                 .predictedPlayerState
                 .weaponstate
@@ -1032,23 +1032,23 @@ unsafe extern "C" fn CG_DrawStatusBar() {
                 && crate::src::cgame::cg_main::cg
                     .predictedPlayerState
                     .weaponTime
-                    > 100 as libc::c_int
+                    > 100
             {
                 // draw as dark grey when reloading
-                color = 2 as libc::c_int
+                color = 2
             // dark grey
-            } else if value >= 0 as libc::c_int {
-                color = 0 as libc::c_int
+            } else if value >= 0 {
+                color = 0
             // green
             } else {
-                color = 1 as libc::c_int
+                color = 1
                 // red
             }
             crate::src::cgame::cg_syscalls::trap_R_SetColor(colors[color as usize].as_mut_ptr());
             CG_DrawField(
-                0 as libc::c_int,
-                432 as libc::c_int,
-                3 as libc::c_int,
+                0,
+                432,
+                3,
                 value,
             );
             crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
@@ -1062,10 +1062,10 @@ unsafe extern "C" fn CG_DrawStatusBar() {
                     .ammoIcon;
                 if icon != 0 {
                     crate::src::cgame::cg_drawtools::CG_DrawPic(
-                        (32 as libc::c_int * 3 as libc::c_int + 4 as libc::c_int) as libc::c_float,
-                        432 as libc::c_int as libc::c_float,
-                        48 as libc::c_int as libc::c_float,
-                        48 as libc::c_int as libc::c_float,
+                        (32 * 3 + 4) as libc::c_float,
+                        432 as libc::c_float,
+                        48 as libc::c_float,
+                        48 as libc::c_float,
                         icon,
                     );
                 }
@@ -1076,30 +1076,30 @@ unsafe extern "C" fn CG_DrawStatusBar() {
     // health
     //
     value = (*ps).stats[crate::bg_public_h::STAT_HEALTH as libc::c_int as usize];
-    if value > 100 as libc::c_int {
+    if value > 100 {
         crate::src::cgame::cg_syscalls::trap_R_SetColor(
-            colors[3 as libc::c_int as usize].as_mut_ptr(),
+            colors[3 as usize].as_mut_ptr(),
         );
     // white
-    } else if value > 25 as libc::c_int {
+    } else if value > 25 {
         crate::src::cgame::cg_syscalls::trap_R_SetColor(
-            colors[0 as libc::c_int as usize].as_mut_ptr(),
+            colors[0 as usize].as_mut_ptr(),
         );
     // green
-    } else if value > 0 as libc::c_int {
-        color = crate::src::cgame::cg_main::cg.time >> 8 as libc::c_int & 1 as libc::c_int; // flash
+    } else if value > 0 {
+        color = crate::src::cgame::cg_main::cg.time >> 8 & 1; // flash
         crate::src::cgame::cg_syscalls::trap_R_SetColor(colors[color as usize].as_mut_ptr());
     } else {
         crate::src::cgame::cg_syscalls::trap_R_SetColor(
-            colors[1 as libc::c_int as usize].as_mut_ptr(),
+            colors[1 as usize].as_mut_ptr(),
         );
         // red
     }
     // stretch the health up when taking damage
     CG_DrawField(
-        185 as libc::c_int,
-        432 as libc::c_int,
-        3 as libc::c_int,
+        185,
+        432,
+        3,
         value,
     );
     crate::src::cgame::cg_drawtools::CG_ColorForHealth(hcolor.as_mut_ptr());
@@ -1108,14 +1108,14 @@ unsafe extern "C" fn CG_DrawStatusBar() {
     // armor
     //
     value = (*ps).stats[crate::bg_public_h::STAT_ARMOR as libc::c_int as usize];
-    if value > 0 as libc::c_int {
+    if value > 0 {
         crate::src::cgame::cg_syscalls::trap_R_SetColor(
-            colors[0 as libc::c_int as usize].as_mut_ptr(),
+            colors[0 as usize].as_mut_ptr(),
         );
         CG_DrawField(
-            370 as libc::c_int,
-            432 as libc::c_int,
-            3 as libc::c_int,
+            370,
+            432,
+            3,
             value,
         );
         crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
@@ -1124,11 +1124,11 @@ unsafe extern "C" fn CG_DrawStatusBar() {
             && crate::src::cgame::cg_main::cg_drawIcons.integer != 0
         {
             crate::src::cgame::cg_drawtools::CG_DrawPic(
-                (370 as libc::c_int + 32 as libc::c_int * 3 as libc::c_int + 4 as libc::c_int)
+                (370 + 32 * 3 + 4)
                     as libc::c_float,
-                432 as libc::c_int as libc::c_float,
-                48 as libc::c_int as libc::c_float,
-                48 as libc::c_int as libc::c_float,
+                432 as libc::c_float,
+                48 as libc::c_float,
+                48 as libc::c_float,
                 crate::src::cgame::cg_main::cgs.media.armorIcon,
             );
         }
@@ -1157,7 +1157,7 @@ unsafe extern "C" fn CG_DrawAttacker(mut y: libc::c_float) -> libc::c_float {
     let mut clientNum: libc::c_int = 0;
     if crate::src::cgame::cg_main::cg.predictedPlayerState.stats
         [crate::bg_public_h::STAT_HEALTH as libc::c_int as usize]
-        <= 0 as libc::c_int
+        <= 0
     {
         return y;
     }
@@ -1167,27 +1167,27 @@ unsafe extern "C" fn CG_DrawAttacker(mut y: libc::c_float) -> libc::c_float {
     clientNum = crate::src::cgame::cg_main::cg
         .predictedPlayerState
         .persistant[crate::bg_public_h::PERS_ATTACKER as libc::c_int as usize];
-    if clientNum < 0 as libc::c_int
-        || clientNum >= 64 as libc::c_int
+    if clientNum < 0
+        || clientNum >= 64
         || clientNum == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum
     {
         return y;
     }
     if crate::src::cgame::cg_main::cgs.clientinfo[clientNum as usize].infoValid as u64 == 0 {
-        crate::src::cgame::cg_main::cg.attackerTime = 0 as libc::c_int;
+        crate::src::cgame::cg_main::cg.attackerTime = 0;
         return y;
     }
     t = crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cg.attackerTime;
-    if t > 10000 as libc::c_int {
-        crate::src::cgame::cg_main::cg.attackerTime = 0 as libc::c_int;
+    if t > 10000 {
+        crate::src::cgame::cg_main::cg.attackerTime = 0;
         return y;
     }
-    size = (48 as libc::c_int as libc::c_double * 1.25f64) as libc::c_float;
-    angles[0 as libc::c_int as usize] = 0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    angles[1 as libc::c_int as usize] = 180 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    angles[2 as libc::c_int as usize] = 0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
+    size = (48 as libc::c_double * 1.25f64) as libc::c_float;
+    angles[0 as usize] = 0 as crate::src::qcommon::q_shared::vec_t;
+    angles[1 as usize] = 180 as crate::src::qcommon::q_shared::vec_t;
+    angles[2 as usize] = 0 as crate::src::qcommon::q_shared::vec_t;
     CG_DrawHead(
-        640 as libc::c_int as libc::c_float - size,
+        640 as libc::c_float - size,
         y,
         size,
         size,
@@ -1195,7 +1195,7 @@ unsafe extern "C" fn CG_DrawAttacker(mut y: libc::c_float) -> libc::c_float {
         angles.as_mut_ptr(),
     );
     info = crate::src::cgame::cg_main::CG_ConfigString(
-        32 as libc::c_int + 256 as libc::c_int + 256 as libc::c_int + clientNum,
+        32 + 256 + 256 + clientNum,
     );
     name = crate::src::qcommon::q_shared::Info_ValueForKey(
         info,
@@ -1203,12 +1203,12 @@ unsafe extern "C" fn CG_DrawAttacker(mut y: libc::c_float) -> libc::c_float {
     );
     y += size;
     crate::src::cgame::cg_drawtools::CG_DrawBigString(
-        640 as libc::c_int - crate::src::qcommon::q_shared::Q_PrintStrlen(name) * 16 as libc::c_int,
+        640 - crate::src::qcommon::q_shared::Q_PrintStrlen(name) * 16,
         y as libc::c_int,
         name,
         0.5f64 as libc::c_float,
     );
-    return y + 16 as libc::c_int as libc::c_float + 2 as libc::c_int as libc::c_float;
+    return y + 16 as libc::c_float + 2 as libc::c_float;
 }
 /*
 ==================
@@ -1225,14 +1225,14 @@ unsafe extern "C" fn CG_DrawSnapshot(mut y: libc::c_float) -> libc::c_float {
         crate::src::cgame::cg_main::cg.latestSnapshotNum,
         crate::src::cgame::cg_main::cgs.serverCommandSequence,
     );
-    w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16 as libc::c_int;
+    w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16;
     crate::src::cgame::cg_drawtools::CG_DrawBigString(
-        635 as libc::c_int - w,
-        (y + 2 as libc::c_int as libc::c_float) as libc::c_int,
+        635 - w,
+        (y + 2 as libc::c_float) as libc::c_int,
         s,
         1.0f32,
     );
-    return y + 16 as libc::c_int as libc::c_float + 4 as libc::c_int as libc::c_float;
+    return y + 16 as libc::c_float + 4 as libc::c_float;
 }
 
 unsafe extern "C" fn CG_DrawFPS(mut y: libc::c_float) -> libc::c_float {
@@ -1251,33 +1251,33 @@ unsafe extern "C" fn CG_DrawFPS(mut y: libc::c_float) -> libc::c_float {
     t = crate::src::cgame::cg_syscalls::trap_Milliseconds();
     frameTime = t - previous;
     previous = t;
-    previousTimes[(index % 4 as libc::c_int) as usize] = frameTime;
+    previousTimes[(index % 4) as usize] = frameTime;
     index += 1;
-    if index > 4 as libc::c_int {
+    if index > 4 {
         // average multiple frames together to smooth changes out a bit
-        total = 0 as libc::c_int;
-        i = 0 as libc::c_int;
-        while i < 4 as libc::c_int {
+        total = 0;
+        i = 0;
+        while i < 4 {
             total += previousTimes[i as usize];
             i += 1
         }
         if total == 0 {
-            total = 1 as libc::c_int
+            total = 1
         }
-        fps = 1000 as libc::c_int * 4 as libc::c_int / total;
+        fps = 1000 * 4 / total;
         s = crate::src::qcommon::q_shared::va(
             b"%ifps\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             fps,
         );
-        w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16 as libc::c_int;
+        w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16;
         crate::src::cgame::cg_drawtools::CG_DrawBigString(
-            635 as libc::c_int - w,
-            (y + 2 as libc::c_int as libc::c_float) as libc::c_int,
+            635 - w,
+            (y + 2 as libc::c_float) as libc::c_int,
             s,
             1.0f32,
         );
     }
-    return y + 16 as libc::c_int as libc::c_float + 4 as libc::c_int as libc::c_float;
+    return y + 16 as libc::c_float + 4 as libc::c_float;
 }
 /*
 =================
@@ -1293,25 +1293,25 @@ unsafe extern "C" fn CG_DrawTimer(mut y: libc::c_float) -> libc::c_float {
     let mut tens: libc::c_int = 0;
     let mut msec: libc::c_int = 0;
     msec = crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cgs.levelStartTime;
-    seconds = msec / 1000 as libc::c_int;
-    mins = seconds / 60 as libc::c_int;
-    seconds -= mins * 60 as libc::c_int;
-    tens = seconds / 10 as libc::c_int;
-    seconds -= tens * 10 as libc::c_int;
+    seconds = msec / 1000;
+    mins = seconds / 60;
+    seconds -= mins * 60;
+    tens = seconds / 10;
+    seconds -= tens * 10;
     s = crate::src::qcommon::q_shared::va(
         b"%i:%i%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         mins,
         tens,
         seconds,
     );
-    w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16 as libc::c_int;
+    w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16;
     crate::src::cgame::cg_drawtools::CG_DrawBigString(
-        635 as libc::c_int - w,
-        (y + 2 as libc::c_int as libc::c_float) as libc::c_int,
+        635 - w,
+        (y + 2 as libc::c_float) as libc::c_int,
         s,
         1.0f32,
     );
-    return y + 16 as libc::c_int as libc::c_float + 4 as libc::c_int as libc::c_float;
+    return y + 16 as libc::c_float + 4 as libc::c_float;
 }
 /*
 =================
@@ -1354,15 +1354,15 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
         return y;
         // Not on any team
     }
-    plyrs = 0 as libc::c_int;
+    plyrs = 0;
     // max player name width
-    pwidth = 0 as libc::c_int;
-    count = if numSortedTeamPlayers > 8 as libc::c_int {
-        8 as libc::c_int
+    pwidth = 0;
+    count = if numSortedTeamPlayers > 8 {
+        8
     } else {
         numSortedTeamPlayers
     };
-    i = 0 as libc::c_int;
+    i = 0;
     while i < count {
         ci = crate::src::cgame::cg_main::cgs
             .clientinfo
@@ -1385,15 +1385,15 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
     if plyrs == 0 {
         return y;
     }
-    if pwidth > 12 as libc::c_int {
-        pwidth = 12 as libc::c_int
+    if pwidth > 12 {
+        pwidth = 12
     }
     // max location name width
-    lwidth = 0 as libc::c_int; // if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE )
-    i = 1 as libc::c_int;
-    while i < 64 as libc::c_int {
+    lwidth = 0; // if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE )
+    i = 1;
+    while i < 64 {
         p = crate::src::cgame::cg_main::CG_ConfigString(
-            32 as libc::c_int + 256 as libc::c_int + 256 as libc::c_int + 64 as libc::c_int + i,
+            32 + 256 + 256 + 64 + i,
         );
         if !p.is_null() && *p as libc::c_int != 0 {
             len = crate::src::cgame::cg_drawtools::CG_DrawStrlen(p);
@@ -1403,16 +1403,16 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
         }
         i += 1
     }
-    if lwidth > 16 as libc::c_int {
-        lwidth = 16 as libc::c_int
+    if lwidth > 16 {
+        lwidth = 16
     }
-    w = (pwidth + lwidth + 4 as libc::c_int + 7 as libc::c_int) * 8 as libc::c_int;
+    w = (pwidth + lwidth + 4 + 7) * 8;
     if right as u64 != 0 {
-        x = 640 as libc::c_int - w
+        x = 640 - w
     } else {
-        x = 0 as libc::c_int
+        x = 0
     }
-    h = plyrs * (16 as libc::c_int / 2 as libc::c_int);
+    h = plyrs * (16 / 2);
     if upper as u64 != 0 {
         ret_y = (y + h as libc::c_float) as libc::c_int
     } else {
@@ -1423,15 +1423,15 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
         [crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
         == crate::bg_public_h::TEAM_RED as libc::c_int
     {
-        hcolor[0 as libc::c_int as usize] = 1.0f32;
-        hcolor[1 as libc::c_int as usize] = 0.0f32;
-        hcolor[2 as libc::c_int as usize] = 0.0f32;
-        hcolor[3 as libc::c_int as usize] = 0.33f32
+        hcolor[0 as usize] = 1.0f32;
+        hcolor[1 as usize] = 0.0f32;
+        hcolor[2 as usize] = 0.0f32;
+        hcolor[3 as usize] = 0.33f32
     } else {
-        hcolor[0 as libc::c_int as usize] = 0.0f32;
-        hcolor[1 as libc::c_int as usize] = 0.0f32;
-        hcolor[2 as libc::c_int as usize] = 1.0f32;
-        hcolor[3 as libc::c_int as usize] = 0.33f32
+        hcolor[0 as usize] = 0.0f32;
+        hcolor[1 as usize] = 0.0f32;
+        hcolor[2 as usize] = 1.0f32;
+        hcolor[3 as usize] = 0.33f32
     }
     crate::src::cgame::cg_syscalls::trap_R_SetColor(hcolor.as_mut_ptr());
     crate::src::cgame::cg_drawtools::CG_DrawPic(
@@ -1442,7 +1442,7 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
         crate::src::cgame::cg_main::cgs.media.teamStatusBar,
     );
     crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
-    i = 0 as libc::c_int;
+    i = 0;
     while i < count {
         ci = crate::src::cgame::cg_main::cgs
             .clientinfo
@@ -1454,11 +1454,11 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
                     [crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
                     as libc::c_uint
         {
-            hcolor[3 as libc::c_int as usize] = 1.0f64 as crate::src::qcommon::q_shared::vec_t;
-            hcolor[2 as libc::c_int as usize] = hcolor[3 as libc::c_int as usize];
-            hcolor[1 as libc::c_int as usize] = hcolor[2 as libc::c_int as usize];
-            hcolor[0 as libc::c_int as usize] = hcolor[1 as libc::c_int as usize];
-            xx = x + 8 as libc::c_int;
+            hcolor[3 as usize] = 1.0f64 as crate::src::qcommon::q_shared::vec_t;
+            hcolor[2 as usize] = hcolor[3 as usize];
+            hcolor[1 as usize] = hcolor[2 as usize];
+            hcolor[0 as usize] = hcolor[1 as usize];
+            xx = x + 8;
             crate::src::cgame::cg_drawtools::CG_DrawStringExt(
                 xx,
                 y as libc::c_int,
@@ -1466,16 +1466,16 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
                 hcolor.as_mut_ptr(),
                 crate::src::qcommon::q_shared::qfalse,
                 crate::src::qcommon::q_shared::qfalse,
-                8 as libc::c_int,
-                16 as libc::c_int / 2 as libc::c_int,
-                12 as libc::c_int,
+                8,
+                16 / 2,
+                12,
             );
             if lwidth != 0 {
                 p = crate::src::cgame::cg_main::CG_ConfigString(
-                    32 as libc::c_int
-                        + 256 as libc::c_int
-                        + 256 as libc::c_int
-                        + 64 as libc::c_int
+                    32
+                        + 256
+                        + 256
+                        + 64
                         + (*ci).location,
                 );
                 if p.is_null() || *p == 0 {
@@ -1486,7 +1486,7 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
                 //					len = lwidth;
                 //				xx = x + TINYCHAR_WIDTH * 2 + TINYCHAR_WIDTH * pwidth +
                 //					((lwidth/2 - len/2) * TINYCHAR_WIDTH);
-                xx = x + 8 as libc::c_int * 2 as libc::c_int + 8 as libc::c_int * pwidth;
+                xx = x + 8 * 2 + 8 * pwidth;
                 crate::src::cgame::cg_drawtools::CG_DrawStringExt(
                     xx,
                     y as libc::c_int,
@@ -1494,9 +1494,9 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
                     hcolor.as_mut_ptr(),
                     crate::src::qcommon::q_shared::qfalse,
                     crate::src::qcommon::q_shared::qfalse,
-                    8 as libc::c_int,
-                    16 as libc::c_int / 2 as libc::c_int,
-                    16 as libc::c_int,
+                    8,
+                    16 / 2,
+                    16,
                 );
             }
             crate::src::cgame::cg_drawtools::CG_GetColorForHealth(
@@ -1512,9 +1512,9 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
                 (*ci).armor,
             );
             xx = x
-                + 8 as libc::c_int * 3 as libc::c_int
-                + 8 as libc::c_int * pwidth
-                + 8 as libc::c_int * lwidth;
+                + 8 * 3
+                + 8 * pwidth
+                + 8 * lwidth;
             crate::src::cgame::cg_drawtools::CG_DrawStringExt(
                 xx,
                 y as libc::c_int,
@@ -1522,26 +1522,26 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
                 hcolor.as_mut_ptr(),
                 crate::src::qcommon::q_shared::qfalse,
                 crate::src::qcommon::q_shared::qfalse,
-                8 as libc::c_int,
-                16 as libc::c_int / 2 as libc::c_int,
-                0 as libc::c_int,
+                8,
+                16 / 2,
+                0,
             );
             // draw weapon icon
-            xx += 8 as libc::c_int * 3 as libc::c_int;
+            xx += 8 * 3;
             if crate::src::cgame::cg_main::cg_weapons[(*ci).curWeapon as usize].weaponIcon != 0 {
                 crate::src::cgame::cg_drawtools::CG_DrawPic(
                     xx as libc::c_float,
                     y,
-                    8 as libc::c_int as libc::c_float,
-                    (16 as libc::c_int / 2 as libc::c_int) as libc::c_float,
+                    8 as libc::c_float,
+                    (16 / 2) as libc::c_float,
                     crate::src::cgame::cg_main::cg_weapons[(*ci).curWeapon as usize].weaponIcon,
                 );
             } else {
                 crate::src::cgame::cg_drawtools::CG_DrawPic(
                     xx as libc::c_float,
                     y,
-                    8 as libc::c_int as libc::c_float,
-                    (16 as libc::c_int / 2 as libc::c_int) as libc::c_float,
+                    8 as libc::c_float,
+                    (16 / 2) as libc::c_float,
                     crate::src::cgame::cg_main::cgs.media.deferShader,
                 );
             }
@@ -1549,11 +1549,11 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
             if right as u64 != 0 {
                 xx = x
             } else {
-                xx = x + w - 8 as libc::c_int
+                xx = x + w - 8
             }
-            j = 0 as libc::c_int;
+            j = 0;
             while j <= crate::bg_public_h::PW_NUM_POWERUPS as libc::c_int {
-                if (*ci).powerups & (1 as libc::c_int) << j != 0 {
+                if (*ci).powerups & (1) << j != 0 {
                     item = crate::src::game::bg_misc::BG_FindItemForPowerup(
                         j as crate::bg_public_h::powerup_t,
                     ) as *mut crate::bg_public_h::gitem_s;
@@ -1561,20 +1561,20 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
                         crate::src::cgame::cg_drawtools::CG_DrawPic(
                             xx as libc::c_float,
                             y,
-                            8 as libc::c_int as libc::c_float,
-                            (16 as libc::c_int / 2 as libc::c_int) as libc::c_float,
+                            8 as libc::c_float,
+                            (16 / 2) as libc::c_float,
                             crate::src::cgame::cg_syscalls::trap_R_RegisterShader((*item).icon),
                         );
                         if right as u64 != 0 {
-                            xx -= 8 as libc::c_int
+                            xx -= 8
                         } else {
-                            xx += 8 as libc::c_int
+                            xx += 8
                         }
                     }
                 }
                 j += 1
             }
-            y += (16 as libc::c_int / 2 as libc::c_int) as libc::c_float
+            y += (16 / 2) as libc::c_float
         }
         i += 1
     }
@@ -1590,10 +1590,10 @@ CG_DrawUpperRight
 
 unsafe extern "C" fn CG_DrawUpperRight(mut stereoFrame: crate::tr_types_h::stereoFrame_t) {
     let mut y: libc::c_float = 0.;
-    y = 0 as libc::c_int as libc::c_float;
+    y = 0 as libc::c_float;
     if crate::src::cgame::cg_main::cgs.gametype as libc::c_uint
         >= crate::bg_public_h::GT_TEAM as libc::c_int as libc::c_uint
-        && crate::src::cgame::cg_main::cg_drawTeamOverlay.integer == 1 as libc::c_int
+        && crate::src::cgame::cg_main::cg_drawTeamOverlay.integer == 1
     {
         y = CG_DrawTeamOverlay(
             y,
@@ -1647,29 +1647,29 @@ unsafe extern "C" fn CG_DrawScores(mut y: libc::c_float) -> libc::c_float {
     let mut item: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
     s1 = crate::src::cgame::cg_main::cgs.scores1;
     s2 = crate::src::cgame::cg_main::cgs.scores2;
-    y -= (16 as libc::c_int + 8 as libc::c_int) as libc::c_float;
+    y -= (16 + 8) as libc::c_float;
     y1 = y;
     // draw from the right side to left
     if crate::src::cgame::cg_main::cgs.gametype as libc::c_uint
         >= crate::bg_public_h::GT_TEAM as libc::c_int as libc::c_uint
     {
-        x = 640 as libc::c_int;
-        color[0 as libc::c_int as usize] = 0.0f32;
-        color[1 as libc::c_int as usize] = 0.0f32;
-        color[2 as libc::c_int as usize] = 1.0f32;
-        color[3 as libc::c_int as usize] = 0.33f32;
+        x = 640;
+        color[0 as usize] = 0.0f32;
+        color[1 as usize] = 0.0f32;
+        color[2 as usize] = 1.0f32;
+        color[3 as usize] = 0.33f32;
         s = crate::src::qcommon::q_shared::va(
             b"%2i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             s2,
         );
-        w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16 as libc::c_int
-            + 8 as libc::c_int;
+        w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16
+            + 8;
         x -= w;
         crate::src::cgame::cg_drawtools::CG_FillRect(
             x as libc::c_float,
-            y - 4 as libc::c_int as libc::c_float,
+            y - 4 as libc::c_float,
             w as libc::c_float,
-            (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+            (16 + 8) as libc::c_float,
             color.as_mut_ptr(),
         );
         if (*crate::src::cgame::cg_main::cg.snap).ps.persistant
@@ -1678,14 +1678,14 @@ unsafe extern "C" fn CG_DrawScores(mut y: libc::c_float) -> libc::c_float {
         {
             crate::src::cgame::cg_drawtools::CG_DrawPic(
                 x as libc::c_float,
-                y - 4 as libc::c_int as libc::c_float,
+                y - 4 as libc::c_float,
                 w as libc::c_float,
-                (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                (16 + 8) as libc::c_float,
                 crate::src::cgame::cg_main::cgs.media.selectShader,
             );
         }
         crate::src::cgame::cg_drawtools::CG_DrawBigString(
-            x + 4 as libc::c_int,
+            x + 4,
             y as libc::c_int,
             s,
             1.0f32,
@@ -1697,37 +1697,37 @@ unsafe extern "C" fn CG_DrawScores(mut y: libc::c_float) -> libc::c_float {
             item = crate::src::game::bg_misc::BG_FindItemForPowerup(crate::bg_public_h::PW_BLUEFLAG)
                 as *mut crate::bg_public_h::gitem_s;
             if !item.is_null() {
-                y1 = y - 16 as libc::c_int as libc::c_float - 8 as libc::c_int as libc::c_float;
-                if crate::src::cgame::cg_main::cgs.blueflag >= 0 as libc::c_int
-                    && crate::src::cgame::cg_main::cgs.blueflag <= 2 as libc::c_int
+                y1 = y - 16 as libc::c_float - 8 as libc::c_float;
+                if crate::src::cgame::cg_main::cgs.blueflag >= 0
+                    && crate::src::cgame::cg_main::cgs.blueflag <= 2
                 {
                     crate::src::cgame::cg_drawtools::CG_DrawPic(
                         x as libc::c_float,
-                        y1 - 4 as libc::c_int as libc::c_float,
+                        y1 - 4 as libc::c_float,
                         w as libc::c_float,
-                        (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                        (16 + 8) as libc::c_float,
                         crate::src::cgame::cg_main::cgs.media.blueFlagShader
                             [crate::src::cgame::cg_main::cgs.blueflag as usize],
                     );
                 }
             }
         }
-        color[0 as libc::c_int as usize] = 1.0f32;
-        color[1 as libc::c_int as usize] = 0.0f32;
-        color[2 as libc::c_int as usize] = 0.0f32;
-        color[3 as libc::c_int as usize] = 0.33f32;
+        color[0 as usize] = 1.0f32;
+        color[1 as usize] = 0.0f32;
+        color[2 as usize] = 0.0f32;
+        color[3 as usize] = 0.33f32;
         s = crate::src::qcommon::q_shared::va(
             b"%2i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             s1,
         );
-        w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16 as libc::c_int
-            + 8 as libc::c_int;
+        w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16
+            + 8;
         x -= w;
         crate::src::cgame::cg_drawtools::CG_FillRect(
             x as libc::c_float,
-            y - 4 as libc::c_int as libc::c_float,
+            y - 4 as libc::c_float,
             w as libc::c_float,
-            (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+            (16 + 8) as libc::c_float,
             color.as_mut_ptr(),
         );
         if (*crate::src::cgame::cg_main::cg.snap).ps.persistant
@@ -1736,14 +1736,14 @@ unsafe extern "C" fn CG_DrawScores(mut y: libc::c_float) -> libc::c_float {
         {
             crate::src::cgame::cg_drawtools::CG_DrawPic(
                 x as libc::c_float,
-                y - 4 as libc::c_int as libc::c_float,
+                y - 4 as libc::c_float,
                 w as libc::c_float,
-                (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                (16 + 8) as libc::c_float,
                 crate::src::cgame::cg_main::cgs.media.selectShader,
             );
         }
         crate::src::cgame::cg_drawtools::CG_DrawBigString(
-            x + 4 as libc::c_int,
+            x + 4,
             y as libc::c_int,
             s,
             1.0f32,
@@ -1755,15 +1755,15 @@ unsafe extern "C" fn CG_DrawScores(mut y: libc::c_float) -> libc::c_float {
             item = crate::src::game::bg_misc::BG_FindItemForPowerup(crate::bg_public_h::PW_REDFLAG)
                 as *mut crate::bg_public_h::gitem_s;
             if !item.is_null() {
-                y1 = y - 16 as libc::c_int as libc::c_float - 8 as libc::c_int as libc::c_float;
-                if crate::src::cgame::cg_main::cgs.redflag >= 0 as libc::c_int
-                    && crate::src::cgame::cg_main::cgs.redflag <= 2 as libc::c_int
+                y1 = y - 16 as libc::c_float - 8 as libc::c_float;
+                if crate::src::cgame::cg_main::cgs.redflag >= 0
+                    && crate::src::cgame::cg_main::cgs.redflag <= 2
                 {
                     crate::src::cgame::cg_drawtools::CG_DrawPic(
                         x as libc::c_float,
-                        y1 - 4 as libc::c_int as libc::c_float,
+                        y1 - 4 as libc::c_float,
                         w as libc::c_float,
-                        (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                        (16 + 8) as libc::c_float,
                         crate::src::cgame::cg_main::cgs.media.redFlagShader
                             [crate::src::cgame::cg_main::cgs.redflag as usize],
                     );
@@ -1782,11 +1782,11 @@ unsafe extern "C" fn CG_DrawScores(mut y: libc::c_float) -> libc::c_float {
                 b"%2i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 v,
             );
-            w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16 as libc::c_int
-                + 8 as libc::c_int;
+            w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16
+                + 8;
             x -= w;
             crate::src::cgame::cg_drawtools::CG_DrawBigString(
-                x + 4 as libc::c_int,
+                x + 4,
                 y as libc::c_int,
                 s,
                 1.0f32,
@@ -1795,7 +1795,7 @@ unsafe extern "C" fn CG_DrawScores(mut y: libc::c_float) -> libc::c_float {
     } else {
         let mut spectator: crate::src::qcommon::q_shared::qboolean =
             crate::src::qcommon::q_shared::qfalse;
-        x = 640 as libc::c_int;
+        x = 640;
         score = (*crate::src::cgame::cg_main::cg.snap).ps.persistant
             [crate::bg_public_h::PERS_SCORE as libc::c_int as usize];
         spectator = ((*crate::src::cgame::cg_main::cg.snap).ps.persistant
@@ -1806,96 +1806,96 @@ unsafe extern "C" fn CG_DrawScores(mut y: libc::c_float) -> libc::c_float {
         if s1 != score {
             s2 = score
         }
-        if s2 != -(9999 as libc::c_int) {
+        if s2 != -9999 {
             s = crate::src::qcommon::q_shared::va(
                 b"%2i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 s2,
             );
-            w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16 as libc::c_int
-                + 8 as libc::c_int;
+            w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16
+                + 8;
             x -= w;
             if spectator as u64 == 0 && score == s2 && score != s1 {
-                color[0 as libc::c_int as usize] = 1.0f32;
-                color[1 as libc::c_int as usize] = 0.0f32;
-                color[2 as libc::c_int as usize] = 0.0f32;
-                color[3 as libc::c_int as usize] = 0.33f32;
+                color[0 as usize] = 1.0f32;
+                color[1 as usize] = 0.0f32;
+                color[2 as usize] = 0.0f32;
+                color[3 as usize] = 0.33f32;
                 crate::src::cgame::cg_drawtools::CG_FillRect(
                     x as libc::c_float,
-                    y - 4 as libc::c_int as libc::c_float,
+                    y - 4 as libc::c_float,
                     w as libc::c_float,
-                    (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                    (16 + 8) as libc::c_float,
                     color.as_mut_ptr(),
                 );
                 crate::src::cgame::cg_drawtools::CG_DrawPic(
                     x as libc::c_float,
-                    y - 4 as libc::c_int as libc::c_float,
+                    y - 4 as libc::c_float,
                     w as libc::c_float,
-                    (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                    (16 + 8) as libc::c_float,
                     crate::src::cgame::cg_main::cgs.media.selectShader,
                 );
             } else {
-                color[0 as libc::c_int as usize] = 0.5f32;
-                color[1 as libc::c_int as usize] = 0.5f32;
-                color[2 as libc::c_int as usize] = 0.5f32;
-                color[3 as libc::c_int as usize] = 0.33f32;
+                color[0 as usize] = 0.5f32;
+                color[1 as usize] = 0.5f32;
+                color[2 as usize] = 0.5f32;
+                color[3 as usize] = 0.33f32;
                 crate::src::cgame::cg_drawtools::CG_FillRect(
                     x as libc::c_float,
-                    y - 4 as libc::c_int as libc::c_float,
+                    y - 4 as libc::c_float,
                     w as libc::c_float,
-                    (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                    (16 + 8) as libc::c_float,
                     color.as_mut_ptr(),
                 );
             }
             crate::src::cgame::cg_drawtools::CG_DrawBigString(
-                x + 4 as libc::c_int,
+                x + 4,
                 y as libc::c_int,
                 s,
                 1.0f32,
             );
         }
         // first place
-        if s1 != -(9999 as libc::c_int) {
+        if s1 != -9999 {
             s = crate::src::qcommon::q_shared::va(
                 b"%2i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 s1,
             );
-            w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16 as libc::c_int
-                + 8 as libc::c_int;
+            w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16
+                + 8;
             x -= w;
             if spectator as u64 == 0 && score == s1 {
-                color[0 as libc::c_int as usize] = 0.0f32;
-                color[1 as libc::c_int as usize] = 0.0f32;
-                color[2 as libc::c_int as usize] = 1.0f32;
-                color[3 as libc::c_int as usize] = 0.33f32;
+                color[0 as usize] = 0.0f32;
+                color[1 as usize] = 0.0f32;
+                color[2 as usize] = 1.0f32;
+                color[3 as usize] = 0.33f32;
                 crate::src::cgame::cg_drawtools::CG_FillRect(
                     x as libc::c_float,
-                    y - 4 as libc::c_int as libc::c_float,
+                    y - 4 as libc::c_float,
                     w as libc::c_float,
-                    (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                    (16 + 8) as libc::c_float,
                     color.as_mut_ptr(),
                 );
                 crate::src::cgame::cg_drawtools::CG_DrawPic(
                     x as libc::c_float,
-                    y - 4 as libc::c_int as libc::c_float,
+                    y - 4 as libc::c_float,
                     w as libc::c_float,
-                    (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                    (16 + 8) as libc::c_float,
                     crate::src::cgame::cg_main::cgs.media.selectShader,
                 );
             } else {
-                color[0 as libc::c_int as usize] = 0.5f32;
-                color[1 as libc::c_int as usize] = 0.5f32;
-                color[2 as libc::c_int as usize] = 0.5f32;
-                color[3 as libc::c_int as usize] = 0.33f32;
+                color[0 as usize] = 0.5f32;
+                color[1 as usize] = 0.5f32;
+                color[2 as usize] = 0.5f32;
+                color[3 as usize] = 0.33f32;
                 crate::src::cgame::cg_drawtools::CG_FillRect(
                     x as libc::c_float,
-                    y - 4 as libc::c_int as libc::c_float,
+                    y - 4 as libc::c_float,
                     w as libc::c_float,
-                    (16 as libc::c_int + 8 as libc::c_int) as libc::c_float,
+                    (16 + 8) as libc::c_float,
                     color.as_mut_ptr(),
                 );
             }
             crate::src::cgame::cg_drawtools::CG_DrawBigString(
-                x + 4 as libc::c_int,
+                x + 4,
                 y as libc::c_int,
                 s,
                 1.0f32,
@@ -1906,18 +1906,18 @@ unsafe extern "C" fn CG_DrawScores(mut y: libc::c_float) -> libc::c_float {
                 b"%2i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 crate::src::cgame::cg_main::cgs.fraglimit,
             );
-            w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16 as libc::c_int
-                + 8 as libc::c_int;
+            w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16
+                + 8;
             x -= w;
             crate::src::cgame::cg_drawtools::CG_DrawBigString(
-                x + 4 as libc::c_int,
+                x + 4,
                 y as libc::c_int,
                 s,
                 1.0f32,
             );
         }
     }
-    return y1 - 8 as libc::c_int as libc::c_float;
+    return y1 - 8 as libc::c_float;
 }
 // MISSIONPACK
 /*
@@ -1946,27 +1946,27 @@ unsafe extern "C" fn CG_DrawPowerups(mut y: libc::c_float) -> libc::c_float {
         [1.0f32, 0.2f32, 0.2f32, 1.0f32],
     ];
     ps = &mut (*crate::src::cgame::cg_main::cg.snap).ps;
-    if (*ps).stats[crate::bg_public_h::STAT_HEALTH as libc::c_int as usize] <= 0 as libc::c_int {
+    if (*ps).stats[crate::bg_public_h::STAT_HEALTH as libc::c_int as usize] <= 0 {
         return y;
     }
     // sort the list by time remaining
-    active = 0 as libc::c_int;
-    i = 0 as libc::c_int;
-    while i < 16 as libc::c_int {
+    active = 0;
+    i = 0;
+    while i < 16 {
         if !((*ps).powerups[i as usize] == 0) {
             // ZOID--don't draw if the power up has unlimited time
             // This is true of the CTF flags
-            if !((*ps).powerups[i as usize] == 2147483647 as libc::c_int) {
+            if !((*ps).powerups[i as usize] == 2147483647) {
                 t = (*ps).powerups[i as usize] - crate::src::cgame::cg_main::cg.time;
-                if !(t <= 0 as libc::c_int) {
+                if !(t <= 0) {
                     // insert into the list
-                    j = 0 as libc::c_int;
+                    j = 0;
                     while j < active {
                         if sortedTime[j as usize] >= t {
-                            k = active - 1 as libc::c_int;
+                            k = active - 1;
                             while k >= j {
-                                sorted[(k + 1 as libc::c_int) as usize] = sorted[k as usize];
-                                sortedTime[(k + 1 as libc::c_int) as usize] =
+                                sorted[(k + 1) as usize] = sorted[k as usize];
+                                sortedTime[(k + 1) as usize] =
                                     sortedTime[k as usize];
                                 k -= 1
                             }
@@ -1984,55 +1984,55 @@ unsafe extern "C" fn CG_DrawPowerups(mut y: libc::c_float) -> libc::c_float {
         i += 1
     }
     // draw the icons and timers
-    x = 640 as libc::c_int - 48 as libc::c_int - 32 as libc::c_int * 2 as libc::c_int;
-    i = 0 as libc::c_int;
+    x = 640 - 48 - 32 * 2;
+    i = 0;
     while i < active {
         item = crate::src::game::bg_misc::BG_FindItemForPowerup(
             sorted[i as usize] as crate::bg_public_h::powerup_t,
         ) as *mut crate::bg_public_h::gitem_s;
         if !item.is_null() {
-            color = 1 as libc::c_int;
-            y -= 48 as libc::c_int as libc::c_float;
+            color = 1;
+            y -= 48 as libc::c_float;
             crate::src::cgame::cg_syscalls::trap_R_SetColor(colors[color as usize].as_mut_ptr());
             CG_DrawField(
                 x,
                 y as libc::c_int,
-                2 as libc::c_int,
-                sortedTime[i as usize] / 1000 as libc::c_int,
+                2,
+                sortedTime[i as usize] / 1000,
             );
             t = (*ps).powerups[sorted[i as usize] as usize];
-            if t - crate::src::cgame::cg_main::cg.time >= 5 as libc::c_int * 1000 as libc::c_int {
+            if t - crate::src::cgame::cg_main::cg.time >= 5 * 1000 {
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
             } else {
                 let mut modulate: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
                 f = (t - crate::src::cgame::cg_main::cg.time) as libc::c_float
-                    / 1000 as libc::c_int as libc::c_float;
+                    / 1000 as libc::c_float;
                 f -= f as libc::c_int as libc::c_float;
-                modulate[3 as libc::c_int as usize] = f;
-                modulate[2 as libc::c_int as usize] = modulate[3 as libc::c_int as usize];
-                modulate[1 as libc::c_int as usize] = modulate[2 as libc::c_int as usize];
-                modulate[0 as libc::c_int as usize] = modulate[1 as libc::c_int as usize];
+                modulate[3 as usize] = f;
+                modulate[2 as usize] = modulate[3 as usize];
+                modulate[1 as usize] = modulate[2 as usize];
+                modulate[0 as usize] = modulate[1 as usize];
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(modulate.as_mut_ptr());
             }
             if crate::src::cgame::cg_main::cg.powerupActive == sorted[i as usize]
                 && crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cg.powerupTime
-                    < 200 as libc::c_int
+                    < 200
             {
                 f = (1.0f64
                     - ((crate::src::cgame::cg_main::cg.time as libc::c_float
                         - crate::src::cgame::cg_main::cg.powerupTime as libc::c_float)
-                        / 200 as libc::c_int as libc::c_float)
+                        / 200 as libc::c_float)
                         as libc::c_double) as libc::c_float;
-                size = (48 as libc::c_int as libc::c_double
+                size = (48 as libc::c_double
                     * (1.0f64 + (1.5f64 - 1.0f64) * f as libc::c_double))
                     as libc::c_float
             } else {
-                size = 48 as libc::c_int as libc::c_float
+                size = 48 as libc::c_float
             }
             crate::src::cgame::cg_drawtools::CG_DrawPic(
-                640 as libc::c_int as libc::c_float - size,
-                y + (48 as libc::c_int / 2 as libc::c_int) as libc::c_float
-                    - size / 2 as libc::c_int as libc::c_float,
+                640 as libc::c_float - size,
+                y + (48 / 2) as libc::c_float
+                    - size / 2 as libc::c_float,
                 size,
                 size,
                 crate::src::cgame::cg_syscalls::trap_R_RegisterShader((*item).icon),
@@ -2053,10 +2053,10 @@ CG_DrawLowerRight
 
 unsafe extern "C" fn CG_DrawLowerRight() {
     let mut y: libc::c_float = 0.;
-    y = (480 as libc::c_int - 48 as libc::c_int) as libc::c_float;
+    y = (480 - 48) as libc::c_float;
     if crate::src::cgame::cg_main::cgs.gametype as libc::c_uint
         >= crate::bg_public_h::GT_TEAM as libc::c_int as libc::c_uint
-        && crate::src::cgame::cg_main::cg_drawTeamOverlay.integer == 2 as libc::c_int
+        && crate::src::cgame::cg_main::cg_drawTeamOverlay.integer == 2
     {
         y = CG_DrawTeamOverlay(
             y,
@@ -2079,35 +2079,35 @@ unsafe extern "C" fn CG_DrawPickupItem(mut y: libc::c_int) -> libc::c_int {
     let mut fadeColor: *mut libc::c_float = 0 as *mut libc::c_float;
     if (*crate::src::cgame::cg_main::cg.snap).ps.stats
         [crate::bg_public_h::STAT_HEALTH as libc::c_int as usize]
-        <= 0 as libc::c_int
+        <= 0
     {
         return y;
     }
-    y -= 48 as libc::c_int;
+    y -= 48;
     value = crate::src::cgame::cg_main::cg.itemPickup;
     if value != 0 {
         fadeColor = crate::src::cgame::cg_drawtools::CG_FadeColor(
             crate::src::cgame::cg_main::cg.itemPickupTime,
-            3000 as libc::c_int,
+            3000,
         );
         if !fadeColor.is_null() {
             crate::src::cgame::cg_weapons::CG_RegisterItemVisuals(value);
             crate::src::cgame::cg_syscalls::trap_R_SetColor(fadeColor);
             crate::src::cgame::cg_drawtools::CG_DrawPic(
-                8 as libc::c_int as libc::c_float,
+                8 as libc::c_float,
                 y as libc::c_float,
-                48 as libc::c_int as libc::c_float,
-                48 as libc::c_int as libc::c_float,
+                48 as libc::c_float,
+                48 as libc::c_float,
                 crate::src::cgame::cg_main::cg_items[value as usize].icon,
             );
             crate::src::cgame::cg_drawtools::CG_DrawBigString(
-                48 as libc::c_int + 16 as libc::c_int,
-                y + (48 as libc::c_int / 2 as libc::c_int - 16 as libc::c_int / 2 as libc::c_int),
+                48 + 16,
+                y + (48 / 2 - 16 / 2),
                 (*crate::src::game::bg_misc::bg_itemlist
                     .as_mut_ptr()
                     .offset(value as isize))
                 .pickup_name,
-                *fadeColor.offset(0 as libc::c_int as isize),
+                *fadeColor.offset(0 as isize),
             );
             crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
         }
@@ -2124,10 +2124,10 @@ CG_DrawLowerLeft
 
 unsafe extern "C" fn CG_DrawLowerLeft() {
     let mut y: libc::c_float = 0.;
-    y = (480 as libc::c_int - 48 as libc::c_int) as libc::c_float;
+    y = (480 - 48) as libc::c_float;
     if crate::src::cgame::cg_main::cgs.gametype as libc::c_uint
         >= crate::bg_public_h::GT_TEAM as libc::c_int as libc::c_uint
-        && crate::src::cgame::cg_main::cg_drawTeamOverlay.integer == 3 as libc::c_int
+        && crate::src::cgame::cg_main::cg_drawTeamOverlay.integer == 3
     {
         y = CG_DrawTeamOverlay(
             y,
@@ -2151,12 +2151,12 @@ unsafe extern "C" fn CG_DrawTeamInfo() {
     let mut hcolor: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
     let mut chatHeight: libc::c_int = 0;
     // bottom end
-    if crate::src::cgame::cg_main::cg_teamChatHeight.integer < 8 as libc::c_int {
+    if crate::src::cgame::cg_main::cg_teamChatHeight.integer < 8 {
         chatHeight = crate::src::cgame::cg_main::cg_teamChatHeight.integer
     } else {
-        chatHeight = 8 as libc::c_int
+        chatHeight = 8
     } // disabled
-    if chatHeight <= 0 as libc::c_int {
+    if chatHeight <= 0 {
         return;
     }
     if crate::src::cgame::cg_main::cgs.teamLastChatPos
@@ -2171,59 +2171,59 @@ unsafe extern "C" fn CG_DrawTeamInfo() {
         }
         h = (crate::src::cgame::cg_main::cgs.teamChatPos
             - crate::src::cgame::cg_main::cgs.teamLastChatPos)
-            * (16 as libc::c_int / 2 as libc::c_int);
+            * (16 / 2);
         if crate::src::cgame::cg_main::cgs.clientinfo
             [crate::src::cgame::cg_main::cg.clientNum as usize]
             .team as libc::c_uint
             == crate::bg_public_h::TEAM_RED as libc::c_int as libc::c_uint
         {
-            hcolor[0 as libc::c_int as usize] = 1.0f32;
-            hcolor[1 as libc::c_int as usize] = 0.0f32;
-            hcolor[2 as libc::c_int as usize] = 0.0f32;
-            hcolor[3 as libc::c_int as usize] = 0.33f32
+            hcolor[0 as usize] = 1.0f32;
+            hcolor[1 as usize] = 0.0f32;
+            hcolor[2 as usize] = 0.0f32;
+            hcolor[3 as usize] = 0.33f32
         } else if crate::src::cgame::cg_main::cgs.clientinfo
             [crate::src::cgame::cg_main::cg.clientNum as usize]
             .team as libc::c_uint
             == crate::bg_public_h::TEAM_BLUE as libc::c_int as libc::c_uint
         {
-            hcolor[0 as libc::c_int as usize] = 0.0f32;
-            hcolor[1 as libc::c_int as usize] = 0.0f32;
-            hcolor[2 as libc::c_int as usize] = 1.0f32;
-            hcolor[3 as libc::c_int as usize] = 0.33f32
+            hcolor[0 as usize] = 0.0f32;
+            hcolor[1 as usize] = 0.0f32;
+            hcolor[2 as usize] = 1.0f32;
+            hcolor[3 as usize] = 0.33f32
         } else {
-            hcolor[0 as libc::c_int as usize] = 0.0f32;
-            hcolor[1 as libc::c_int as usize] = 1.0f32;
-            hcolor[2 as libc::c_int as usize] = 0.0f32;
-            hcolor[3 as libc::c_int as usize] = 0.33f32
+            hcolor[0 as usize] = 0.0f32;
+            hcolor[1 as usize] = 1.0f32;
+            hcolor[2 as usize] = 0.0f32;
+            hcolor[3 as usize] = 0.33f32
         }
         crate::src::cgame::cg_syscalls::trap_R_SetColor(hcolor.as_mut_ptr());
         crate::src::cgame::cg_drawtools::CG_DrawPic(
-            0 as libc::c_int as libc::c_float,
-            (420 as libc::c_int - h) as libc::c_float,
-            640 as libc::c_int as libc::c_float,
+            0 as libc::c_float,
+            (420 - h) as libc::c_float,
+            640 as libc::c_float,
             h as libc::c_float,
             crate::src::cgame::cg_main::cgs.media.teamStatusBar,
         );
         crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
-        hcolor[2 as libc::c_int as usize] = 1.0f32;
-        hcolor[1 as libc::c_int as usize] = hcolor[2 as libc::c_int as usize];
-        hcolor[0 as libc::c_int as usize] = hcolor[1 as libc::c_int as usize];
-        hcolor[3 as libc::c_int as usize] = 1.0f32;
-        i = crate::src::cgame::cg_main::cgs.teamChatPos - 1 as libc::c_int;
+        hcolor[2 as usize] = 1.0f32;
+        hcolor[1 as usize] = hcolor[2 as usize];
+        hcolor[0 as usize] = hcolor[1 as usize];
+        hcolor[3 as usize] = 1.0f32;
+        i = crate::src::cgame::cg_main::cgs.teamChatPos - 1;
         while i >= crate::src::cgame::cg_main::cgs.teamLastChatPos {
             crate::src::cgame::cg_drawtools::CG_DrawStringExt(
-                0 as libc::c_int + 8 as libc::c_int,
-                420 as libc::c_int
+                0 + 8,
+                420
                     - (crate::src::cgame::cg_main::cgs.teamChatPos - i)
-                        * (16 as libc::c_int / 2 as libc::c_int),
+                        * (16 / 2),
                 crate::src::cgame::cg_main::cgs.teamChatMsgs[(i % chatHeight) as usize]
                     .as_mut_ptr(),
                 hcolor.as_mut_ptr(),
                 crate::src::qcommon::q_shared::qfalse,
                 crate::src::qcommon::q_shared::qfalse,
-                8 as libc::c_int,
-                16 as libc::c_int / 2 as libc::c_int,
-                0 as libc::c_int,
+                8,
+                16 / 2,
+                0,
             );
             i -= 1
         }
@@ -2243,10 +2243,10 @@ unsafe extern "C" fn CG_DrawHoldableItem() {
     if value != 0 {
         crate::src::cgame::cg_weapons::CG_RegisterItemVisuals(value);
         crate::src::cgame::cg_drawtools::CG_DrawPic(
-            (640 as libc::c_int - 48 as libc::c_int) as libc::c_float,
-            ((480 as libc::c_int - 48 as libc::c_int) / 2 as libc::c_int) as libc::c_float,
-            48 as libc::c_int as libc::c_float,
-            48 as libc::c_int as libc::c_float,
+            (640 - 48) as libc::c_float,
+            ((480 - 48) / 2) as libc::c_float,
+            48 as libc::c_float,
+            48 as libc::c_float,
             crate::src::cgame::cg_main::cg_items[value as usize].icon,
         );
     };
@@ -2271,28 +2271,28 @@ unsafe extern "C" fn CG_DrawReward() {
     }
     color = crate::src::cgame::cg_drawtools::CG_FadeColor(
         crate::src::cgame::cg_main::cg.rewardTime,
-        3000 as libc::c_int,
+        3000,
     );
     if color.is_null() {
-        if crate::src::cgame::cg_main::cg.rewardStack > 0 as libc::c_int {
-            i = 0 as libc::c_int;
+        if crate::src::cgame::cg_main::cg.rewardStack > 0 {
+            i = 0;
             while i < crate::src::cgame::cg_main::cg.rewardStack {
                 crate::src::cgame::cg_main::cg.rewardSound[i as usize] =
-                    crate::src::cgame::cg_main::cg.rewardSound[(i + 1 as libc::c_int) as usize];
+                    crate::src::cgame::cg_main::cg.rewardSound[(i + 1) as usize];
                 crate::src::cgame::cg_main::cg.rewardShader[i as usize] =
-                    crate::src::cgame::cg_main::cg.rewardShader[(i + 1 as libc::c_int) as usize];
+                    crate::src::cgame::cg_main::cg.rewardShader[(i + 1) as usize];
                 crate::src::cgame::cg_main::cg.rewardCount[i as usize] =
-                    crate::src::cgame::cg_main::cg.rewardCount[(i + 1 as libc::c_int) as usize];
+                    crate::src::cgame::cg_main::cg.rewardCount[(i + 1) as usize];
                 i += 1
             }
             crate::src::cgame::cg_main::cg.rewardTime = crate::src::cgame::cg_main::cg.time;
             crate::src::cgame::cg_main::cg.rewardStack -= 1;
             color = crate::src::cgame::cg_drawtools::CG_FadeColor(
                 crate::src::cgame::cg_main::cg.rewardTime,
-                3000 as libc::c_int,
+                3000,
             );
             crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
-                crate::src::cgame::cg_main::cg.rewardSound[0 as libc::c_int as usize],
+                crate::src::cgame::cg_main::cg.rewardSound[0 as usize],
                 crate::src::qcommon::q_shared::CHAN_ANNOUNCER as libc::c_int,
             );
         } else {
@@ -2314,50 +2314,50 @@ unsafe extern "C" fn CG_DrawReward() {
 
     count = cg.rewardCount[0] - count*10;		// number of small rewards to draw
     */
-    if crate::src::cgame::cg_main::cg.rewardCount[0 as libc::c_int as usize] >= 10 as libc::c_int {
-        y = 56 as libc::c_int as libc::c_float;
-        x = (320 as libc::c_int - 48 as libc::c_int / 2 as libc::c_int) as libc::c_float;
+    if crate::src::cgame::cg_main::cg.rewardCount[0 as usize] >= 10 {
+        y = 56 as libc::c_float;
+        x = (320 - 48 / 2) as libc::c_float;
         crate::src::cgame::cg_drawtools::CG_DrawPic(
             x,
             y,
-            (48 as libc::c_int - 4 as libc::c_int) as libc::c_float,
-            (48 as libc::c_int - 4 as libc::c_int) as libc::c_float,
-            crate::src::cgame::cg_main::cg.rewardShader[0 as libc::c_int as usize],
+            (48 - 4) as libc::c_float,
+            (48 - 4) as libc::c_float,
+            crate::src::cgame::cg_main::cg.rewardShader[0 as usize],
         );
         crate::src::qcommon::q_shared::Com_sprintf(
             buf.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as libc::c_int,
             b"%d\x00" as *const u8 as *const libc::c_char,
-            crate::src::cgame::cg_main::cg.rewardCount[0 as libc::c_int as usize],
+            crate::src::cgame::cg_main::cg.rewardCount[0 as usize],
         );
-        x = ((640 as libc::c_int
-            - 8 as libc::c_int * crate::src::cgame::cg_drawtools::CG_DrawStrlen(buf.as_mut_ptr()))
-            / 2 as libc::c_int) as libc::c_float;
+        x = ((640
+            - 8 * crate::src::cgame::cg_drawtools::CG_DrawStrlen(buf.as_mut_ptr()))
+            / 2) as libc::c_float;
         crate::src::cgame::cg_drawtools::CG_DrawStringExt(
             x as libc::c_int,
-            (y + 48 as libc::c_int as libc::c_float) as libc::c_int,
+            (y + 48 as libc::c_float) as libc::c_int,
             buf.as_mut_ptr(),
             color,
             crate::src::qcommon::q_shared::qfalse,
             crate::src::qcommon::q_shared::qtrue,
-            8 as libc::c_int,
-            16 as libc::c_int,
-            0 as libc::c_int,
+            8,
+            16,
+            0,
         );
     } else {
-        count = crate::src::cgame::cg_main::cg.rewardCount[0 as libc::c_int as usize];
-        y = 56 as libc::c_int as libc::c_float;
-        x = (320 as libc::c_int - count * 48 as libc::c_int / 2 as libc::c_int) as libc::c_float;
-        i = 0 as libc::c_int;
+        count = crate::src::cgame::cg_main::cg.rewardCount[0 as usize];
+        y = 56 as libc::c_float;
+        x = (320 - count * 48 / 2) as libc::c_float;
+        i = 0;
         while i < count {
             crate::src::cgame::cg_drawtools::CG_DrawPic(
                 x,
                 y,
-                (48 as libc::c_int - 4 as libc::c_int) as libc::c_float,
-                (48 as libc::c_int - 4 as libc::c_int) as libc::c_float,
-                crate::src::cgame::cg_main::cg.rewardShader[0 as libc::c_int as usize],
+                (48 - 4) as libc::c_float,
+                (48 - 4) as libc::c_float,
+                crate::src::cgame::cg_main::cg.rewardShader[0 as usize],
             );
-            x += 48 as libc::c_int as libc::c_float;
+            x += 48 as libc::c_float;
             i += 1
         }
     }
@@ -2386,7 +2386,7 @@ pub unsafe extern "C" fn CG_AddLagometerFrameInfo() {
     offset =
         crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cg.latestSnapshotTime;
     lagometer.frameSamples
-        [(lagometer.frameCount & 128 as libc::c_int - 1 as libc::c_int) as usize] = offset;
+        [(lagometer.frameCount & 128 - 1) as usize] = offset;
     lagometer.frameCount += 1;
 }
 /*
@@ -2407,16 +2407,16 @@ pub unsafe extern "C" fn CG_AddLagometerSnapshotInfo(
     // dropped packet
     if snap.is_null() {
         lagometer.snapshotSamples
-            [(lagometer.snapshotCount & 128 as libc::c_int - 1 as libc::c_int) as usize] =
-            -(1 as libc::c_int);
+            [(lagometer.snapshotCount & 128 - 1) as usize] =
+            -1;
         lagometer.snapshotCount += 1;
         return;
     }
     // add this snapshot's info
     lagometer.snapshotSamples
-        [(lagometer.snapshotCount & 128 as libc::c_int - 1 as libc::c_int) as usize] = (*snap).ping;
+        [(lagometer.snapshotCount & 128 - 1) as usize] = (*snap).ping;
     lagometer.snapshotFlags
-        [(lagometer.snapshotCount & 128 as libc::c_int - 1 as libc::c_int) as usize] =
+        [(lagometer.snapshotCount & 128 - 1) as usize] =
         (*snap).snapFlags;
     lagometer.snapshotCount += 1;
 }
@@ -2445,8 +2445,8 @@ unsafe extern "C" fn CG_DrawDisconnect() {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
     let mut w: libc::c_int = 0;
     // draw the phone jack if we are completely past our buffers
-    cmdNum = crate::src::cgame::cg_syscalls::trap_GetCurrentCmdNumber() - 64 as libc::c_int
-        + 1 as libc::c_int;
+    cmdNum = crate::src::cgame::cg_syscalls::trap_GetCurrentCmdNumber() - 64
+        + 1;
     crate::src::cgame::cg_syscalls::trap_GetUserCmd(
         cmdNum,
         &mut cmd as *mut _ as *mut crate::src::qcommon::q_shared::usercmd_s,
@@ -2459,24 +2459,24 @@ unsafe extern "C" fn CG_DrawDisconnect() {
     }
     // also add text in center of screen
     s = b"Connection Interrupted\x00" as *const u8 as *const libc::c_char;
-    w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16 as libc::c_int;
+    w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16;
     crate::src::cgame::cg_drawtools::CG_DrawBigString(
-        320 as libc::c_int - w / 2 as libc::c_int,
-        100 as libc::c_int,
+        320 - w / 2,
+        100,
         s,
         1.0f32,
     );
     // blink the icon
-    if crate::src::cgame::cg_main::cg.time >> 9 as libc::c_int & 1 as libc::c_int != 0 {
+    if crate::src::cgame::cg_main::cg.time >> 9 & 1 != 0 {
         return;
     }
-    x = (640 as libc::c_int - 48 as libc::c_int) as libc::c_float;
-    y = (480 as libc::c_int - 48 as libc::c_int) as libc::c_float;
+    x = (640 - 48) as libc::c_float;
+    y = (480 - 48) as libc::c_float;
     crate::src::cgame::cg_drawtools::CG_DrawPic(
         x,
         y,
-        48 as libc::c_int as libc::c_float,
-        48 as libc::c_int as libc::c_float,
+        48 as libc::c_float,
+        48 as libc::c_float,
         crate::src::cgame::cg_syscalls::trap_R_RegisterShader(
             b"gfx/2d/net.tga\x00" as *const u8 as *const libc::c_char,
         ),
@@ -2511,37 +2511,37 @@ unsafe extern "C" fn CG_DrawLagometer() {
     //
     // draw the graph
     //
-    x = 640 as libc::c_int - 48 as libc::c_int;
-    y = 480 as libc::c_int - 48 as libc::c_int;
+    x = 640 - 48;
+    y = 480 - 48;
     crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
     crate::src::cgame::cg_drawtools::CG_DrawPic(
         x as libc::c_float,
         y as libc::c_float,
-        48 as libc::c_int as libc::c_float,
-        48 as libc::c_int as libc::c_float,
+        48 as libc::c_float,
+        48 as libc::c_float,
         crate::src::cgame::cg_main::cgs.media.lagometerShader,
     );
     ax = x as libc::c_float;
     ay = y as libc::c_float;
-    aw = 48 as libc::c_int as libc::c_float;
-    ah = 48 as libc::c_int as libc::c_float;
+    aw = 48 as libc::c_float;
+    ah = 48 as libc::c_float;
     crate::src::cgame::cg_drawtools::CG_AdjustFrom640(&mut ax, &mut ay, &mut aw, &mut ah);
-    color = -(1 as libc::c_int);
-    range = ah / 3 as libc::c_int as libc::c_float;
+    color = -1;
+    range = ah / 3 as libc::c_float;
     mid = ay + range;
-    vscale = range / 300 as libc::c_int as libc::c_float;
+    vscale = range / 300 as libc::c_float;
     // draw the frame interpoalte / extrapolate graph
-    a = 0 as libc::c_int;
+    a = 0;
     while (a as libc::c_float) < aw {
-        i = lagometer.frameCount - 1 as libc::c_int - a & 128 as libc::c_int - 1 as libc::c_int;
+        i = lagometer.frameCount - 1 - a & 128 - 1;
         v = lagometer.frameSamples[i as usize] as libc::c_float;
         v *= vscale;
-        if v > 0 as libc::c_int as libc::c_float {
-            if color != 1 as libc::c_int {
-                color = 1 as libc::c_int;
+        if v > 0 as libc::c_float {
+            if color != 1 {
+                color = 1;
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(
                     crate::src::qcommon::q_math::g_color_table
-                        [('3' as i32 - '0' as i32 & 0x7 as libc::c_int) as usize]
+                        [('3' as i32 - '0' as i32 & 0x7) as usize]
                         .as_mut_ptr(),
                 );
             }
@@ -2551,20 +2551,20 @@ unsafe extern "C" fn CG_DrawLagometer() {
             crate::src::cgame::cg_syscalls::trap_R_DrawStretchPic(
                 ax + aw - a as libc::c_float,
                 mid - v,
-                1 as libc::c_int as libc::c_float,
+                1 as libc::c_float,
                 v,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
+                0 as libc::c_float,
+                0 as libc::c_float,
+                0 as libc::c_float,
+                0 as libc::c_float,
                 crate::src::cgame::cg_main::cgs.media.whiteShader,
             );
-        } else if v < 0 as libc::c_int as libc::c_float {
-            if color != 2 as libc::c_int {
-                color = 2 as libc::c_int;
+        } else if v < 0 as libc::c_float {
+            if color != 2 {
+                color = 2;
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(
                     crate::src::qcommon::q_math::g_color_table
-                        [('4' as i32 - '0' as i32 & 0x7 as libc::c_int) as usize]
+                        [('4' as i32 - '0' as i32 & 0x7) as usize]
                         .as_mut_ptr(),
                 );
             }
@@ -2575,39 +2575,39 @@ unsafe extern "C" fn CG_DrawLagometer() {
             crate::src::cgame::cg_syscalls::trap_R_DrawStretchPic(
                 ax + aw - a as libc::c_float,
                 mid,
-                1 as libc::c_int as libc::c_float,
+                1 as libc::c_float,
                 v,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
+                0 as libc::c_float,
+                0 as libc::c_float,
+                0 as libc::c_float,
+                0 as libc::c_float,
                 crate::src::cgame::cg_main::cgs.media.whiteShader,
             );
         }
         a += 1
     }
     // draw the snapshot latency / drop graph
-    range = ah / 2 as libc::c_int as libc::c_float; // YELLOW for rate delay
-    vscale = range / 900 as libc::c_int as libc::c_float; // RED for dropped snapshots
-    a = 0 as libc::c_int;
+    range = ah / 2 as libc::c_float; // YELLOW for rate delay
+    vscale = range / 900 as libc::c_float; // RED for dropped snapshots
+    a = 0;
     while (a as libc::c_float) < aw {
-        i = lagometer.snapshotCount - 1 as libc::c_int - a & 128 as libc::c_int - 1 as libc::c_int;
+        i = lagometer.snapshotCount - 1 - a & 128 - 1;
         v = lagometer.snapshotSamples[i as usize] as libc::c_float;
-        if v > 0 as libc::c_int as libc::c_float {
-            if lagometer.snapshotFlags[i as usize] & 1 as libc::c_int != 0 {
-                if color != 5 as libc::c_int {
-                    color = 5 as libc::c_int;
+        if v > 0 as libc::c_float {
+            if lagometer.snapshotFlags[i as usize] & 1 != 0 {
+                if color != 5 {
+                    color = 5;
                     crate::src::cgame::cg_syscalls::trap_R_SetColor(
                         crate::src::qcommon::q_math::g_color_table
-                            [('3' as i32 - '0' as i32 & 0x7 as libc::c_int) as usize]
+                            [('3' as i32 - '0' as i32 & 0x7) as usize]
                             .as_mut_ptr(),
                     );
                 }
-            } else if color != 3 as libc::c_int {
-                color = 3 as libc::c_int;
+            } else if color != 3 {
+                color = 3;
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(
                     crate::src::qcommon::q_math::g_color_table
-                        [('2' as i32 - '0' as i32 & 0x7 as libc::c_int) as usize]
+                        [('2' as i32 - '0' as i32 & 0x7) as usize]
                         .as_mut_ptr(),
                 );
             }
@@ -2618,32 +2618,32 @@ unsafe extern "C" fn CG_DrawLagometer() {
             crate::src::cgame::cg_syscalls::trap_R_DrawStretchPic(
                 ax + aw - a as libc::c_float,
                 ay + ah - v,
-                1 as libc::c_int as libc::c_float,
+                1 as libc::c_float,
                 v,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
+                0 as libc::c_float,
+                0 as libc::c_float,
+                0 as libc::c_float,
+                0 as libc::c_float,
                 crate::src::cgame::cg_main::cgs.media.whiteShader,
             );
-        } else if v < 0 as libc::c_int as libc::c_float {
-            if color != 4 as libc::c_int {
-                color = 4 as libc::c_int;
+        } else if v < 0 as libc::c_float {
+            if color != 4 {
+                color = 4;
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(
                     crate::src::qcommon::q_math::g_color_table
-                        [('1' as i32 - '0' as i32 & 0x7 as libc::c_int) as usize]
+                        [('1' as i32 - '0' as i32 & 0x7) as usize]
                         .as_mut_ptr(),
                 );
             }
             crate::src::cgame::cg_syscalls::trap_R_DrawStretchPic(
                 ax + aw - a as libc::c_float,
                 ay + ah - range,
-                1 as libc::c_int as libc::c_float,
+                1 as libc::c_float,
                 range,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
-                0 as libc::c_int as libc::c_float,
+                0 as libc::c_float,
+                0 as libc::c_float,
+                0 as libc::c_float,
+                0 as libc::c_float,
                 crate::src::cgame::cg_main::cgs.media.whiteShader,
             );
         }
@@ -2694,7 +2694,7 @@ pub unsafe extern "C" fn CG_CenterPrint(
     crate::src::cgame::cg_main::cg.centerPrintY = y;
     crate::src::cgame::cg_main::cg.centerPrintCharWidth = charWidth;
     // count the number of lines for centering
-    crate::src::cgame::cg_main::cg.centerPrintLines = 1 as libc::c_int;
+    crate::src::cgame::cg_main::cg.centerPrintLines = 1;
     s = crate::src::cgame::cg_main::cg.centerPrint.as_mut_ptr();
     while *s != 0 {
         if *s as libc::c_int == '\n' as i32 {
@@ -2721,7 +2721,7 @@ unsafe extern "C" fn CG_DrawCenterString() {
     }
     color = crate::src::cgame::cg_drawtools::CG_FadeColor(
         crate::src::cgame::cg_main::cg.centerPrintTime,
-        (1000 as libc::c_int as libc::c_float * crate::src::cgame::cg_main::cg_centertime.value)
+        (1000 as libc::c_float * crate::src::cgame::cg_main::cg_centertime.value)
             as libc::c_int,
     );
     if color.is_null() {
@@ -2730,11 +2730,11 @@ unsafe extern "C" fn CG_DrawCenterString() {
     crate::src::cgame::cg_syscalls::trap_R_SetColor(color);
     start = crate::src::cgame::cg_main::cg.centerPrint.as_mut_ptr();
     y = crate::src::cgame::cg_main::cg.centerPrintY
-        - crate::src::cgame::cg_main::cg.centerPrintLines * 16 as libc::c_int / 2 as libc::c_int;
+        - crate::src::cgame::cg_main::cg.centerPrintLines * 16 / 2;
     loop {
         let mut linebuffer: [libc::c_char; 1024] = [0; 1024];
-        l = 0 as libc::c_int;
-        while l < 50 as libc::c_int {
+        l = 0;
+        while l < 50 {
             if *start.offset(l as isize) == 0
                 || *start.offset(l as isize) as libc::c_int == '\n' as i32
             {
@@ -2743,10 +2743,10 @@ unsafe extern "C" fn CG_DrawCenterString() {
             linebuffer[l as usize] = *start.offset(l as isize);
             l += 1
         }
-        linebuffer[l as usize] = 0 as libc::c_int as libc::c_char;
+        linebuffer[l as usize] = 0 as libc::c_char;
         w = crate::src::cgame::cg_main::cg.centerPrintCharWidth
             * crate::src::cgame::cg_drawtools::CG_DrawStrlen(linebuffer.as_mut_ptr());
-        x = (640 as libc::c_int - w) / 2 as libc::c_int;
+        x = (640 - w) / 2;
         crate::src::cgame::cg_drawtools::CG_DrawStringExt(
             x,
             y,
@@ -2757,7 +2757,7 @@ unsafe extern "C" fn CG_DrawCenterString() {
             crate::src::cgame::cg_main::cg.centerPrintCharWidth,
             (crate::src::cgame::cg_main::cg.centerPrintCharWidth as libc::c_double * 1.5f64)
                 as libc::c_int,
-            0 as libc::c_int,
+            0,
         );
         y = (y as libc::c_double
             + crate::src::cgame::cg_main::cg.centerPrintCharWidth as libc::c_double * 1.5f64)
@@ -2818,20 +2818,20 @@ unsafe extern "C" fn CG_DrawCrosshair() {
     // pulse the size of the crosshair when picking up items
     f = (crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cg.itemPickupBlendTime)
         as libc::c_float;
-    if f > 0 as libc::c_int as libc::c_float && f < 200 as libc::c_int as libc::c_float {
-        f /= 200 as libc::c_int as libc::c_float;
-        w *= 1 as libc::c_int as libc::c_float + f;
-        h *= 1 as libc::c_int as libc::c_float + f
+    if f > 0 as libc::c_float && f < 200 as libc::c_float {
+        f /= 200 as libc::c_float;
+        w *= 1 as libc::c_float + f;
+        h *= 1 as libc::c_float + f
     }
     x = crate::src::cgame::cg_main::cg_crosshairX.integer as libc::c_float;
     y = crate::src::cgame::cg_main::cg_crosshairY.integer as libc::c_float;
     crate::src::cgame::cg_drawtools::CG_AdjustFrom640(&mut x, &mut y, &mut w, &mut h);
     ca = crate::src::cgame::cg_main::cg_drawCrosshair.integer;
-    if ca < 0 as libc::c_int {
-        ca = 0 as libc::c_int
+    if ca < 0 {
+        ca = 0
     }
     hShader =
-        crate::src::cgame::cg_main::cgs.media.crosshairShader[(ca % 10 as libc::c_int) as usize];
+        crate::src::cgame::cg_main::cgs.media.crosshairShader[(ca % 10) as usize];
     crate::src::cgame::cg_syscalls::trap_R_DrawStretchPic(
         ((x + crate::src::cgame::cg_main::cg.refdef.x as libc::c_float) as libc::c_double
             + 0.5f64
@@ -2843,10 +2843,10 @@ unsafe extern "C" fn CG_DrawCrosshair() {
                     as libc::c_double) as libc::c_float,
         w,
         h,
-        0 as libc::c_int as libc::c_float,
-        0 as libc::c_int as libc::c_float,
-        1 as libc::c_int as libc::c_float,
-        1 as libc::c_int as libc::c_float,
+        0 as libc::c_float,
+        0 as libc::c_float,
+        1 as libc::c_float,
+        1 as libc::c_float,
         hShader,
     );
     crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
@@ -2923,16 +2923,16 @@ unsafe extern "C" fn CG_DrawCrosshair3D() {
     // pulse the size of the crosshair when picking up items
     f = (crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cg.itemPickupBlendTime)
         as libc::c_float;
-    if f > 0 as libc::c_int as libc::c_float && f < 200 as libc::c_int as libc::c_float {
-        f /= 200 as libc::c_int as libc::c_float;
-        w *= 1 as libc::c_int as libc::c_float + f
+    if f > 0 as libc::c_float && f < 200 as libc::c_float {
+        f /= 200 as libc::c_float;
+        w *= 1 as libc::c_float + f
     }
     ca = crate::src::cgame::cg_main::cg_drawCrosshair.integer;
-    if ca < 0 as libc::c_int {
-        ca = 0 as libc::c_int
+    if ca < 0 {
+        ca = 0
     }
     hShader =
-        crate::src::cgame::cg_main::cgs.media.crosshairShader[(ca % 10 as libc::c_int) as usize];
+        crate::src::cgame::cg_main::cgs.media.crosshairShader[(ca % 10) as usize];
     // Use a different method rendering the crosshair so players don't see two of them when
     // focusing their eyes at distant objects with high stereo separation
     // We are going to trace to the next shootable object and place the crosshair in front of it.
@@ -2958,21 +2958,21 @@ unsafe extern "C" fn CG_DrawCrosshair3D() {
     // let the trace run through until a change in stereo separation of the crosshair becomes less than one pixel.
     maxdist =
         crate::src::cgame::cg_main::cgs.glconfig.vidWidth as libc::c_float * stereoSep * zProj
-            / (2 as libc::c_int as libc::c_float * xmax);
-    endpos[0 as libc::c_int as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg
-        [0 as libc::c_int as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as libc::c_int as usize]
-            [0 as libc::c_int as usize]
+            / (2 as libc::c_float * xmax);
+    endpos[0 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg
+        [0 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as usize]
+            [0 as usize]
             * maxdist;
-    endpos[1 as libc::c_int as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg
-        [1 as libc::c_int as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as libc::c_int as usize]
-            [1 as libc::c_int as usize]
+    endpos[1 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg
+        [1 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as usize]
+            [1 as usize]
             * maxdist;
-    endpos[2 as libc::c_int as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg
-        [2 as libc::c_int as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as libc::c_int as usize]
-            [2 as libc::c_int as usize]
+    endpos[2 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg
+        [2 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as usize]
+            [2 as usize]
             * maxdist;
     crate::src::cgame::cg_predict::CG_Trace(
         &mut trace as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
@@ -2981,21 +2981,21 @@ unsafe extern "C" fn CG_DrawCrosshair3D() {
         0 as *const crate::src::qcommon::q_shared::vec_t,
         0 as *const crate::src::qcommon::q_shared::vec_t,
         endpos.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        0 as libc::c_int,
-        1 as libc::c_int | 0x2000000 as libc::c_int | 0x4000000 as libc::c_int,
+        0,
+        1 | 0x2000000 | 0x4000000,
     );
     crate::stdlib::memset(
         &mut ent as *mut crate::tr_types_h::refEntity_t as *mut libc::c_void,
-        0 as libc::c_int,
+        0,
         ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
     );
     ent.reType = crate::tr_types_h::RT_SPRITE;
-    ent.renderfx = 0x8 as libc::c_int | 0x10 as libc::c_int;
-    ent.origin[0 as libc::c_int as usize] = trace.endpos[0 as libc::c_int as usize];
-    ent.origin[1 as libc::c_int as usize] = trace.endpos[1 as libc::c_int as usize];
-    ent.origin[2 as libc::c_int as usize] = trace.endpos[2 as libc::c_int as usize];
+    ent.renderfx = 0x8 | 0x10;
+    ent.origin[0 as usize] = trace.endpos[0 as usize];
+    ent.origin[1 as usize] = trace.endpos[1 as usize];
+    ent.origin[2 as usize] = trace.endpos[2 as usize];
     // scale the crosshair so it appears the same size for all distances
-    ent.radius = w / 640 as libc::c_int as libc::c_float * xmax * trace.fraction * maxdist / zProj;
+    ent.radius = w / 640 as libc::c_float * xmax * trace.fraction * maxdist / zProj;
     ent.customShader = hShader;
     crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
         &mut ent as *mut _ as *const crate::tr_types_h::refEntity_t,
@@ -3028,24 +3028,24 @@ unsafe extern "C" fn CG_ScanForCrosshairEntity() {
     let mut start: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut end: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut content: libc::c_int = 0;
-    start[0 as libc::c_int as usize] =
-        crate::src::cgame::cg_main::cg.refdef.vieworg[0 as libc::c_int as usize];
-    start[1 as libc::c_int as usize] =
-        crate::src::cgame::cg_main::cg.refdef.vieworg[1 as libc::c_int as usize];
-    start[2 as libc::c_int as usize] =
-        crate::src::cgame::cg_main::cg.refdef.vieworg[2 as libc::c_int as usize];
-    end[0 as libc::c_int as usize] = start[0 as libc::c_int as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as libc::c_int as usize]
-            [0 as libc::c_int as usize]
-            * 131072 as libc::c_int as libc::c_float;
-    end[1 as libc::c_int as usize] = start[1 as libc::c_int as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as libc::c_int as usize]
-            [1 as libc::c_int as usize]
-            * 131072 as libc::c_int as libc::c_float;
-    end[2 as libc::c_int as usize] = start[2 as libc::c_int as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as libc::c_int as usize]
-            [2 as libc::c_int as usize]
-            * 131072 as libc::c_int as libc::c_float;
+    start[0 as usize] =
+        crate::src::cgame::cg_main::cg.refdef.vieworg[0 as usize];
+    start[1 as usize] =
+        crate::src::cgame::cg_main::cg.refdef.vieworg[1 as usize];
+    start[2 as usize] =
+        crate::src::cgame::cg_main::cg.refdef.vieworg[2 as usize];
+    end[0 as usize] = start[0 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as usize]
+            [0 as usize]
+            * 131072 as libc::c_float;
+    end[1 as usize] = start[1 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as usize]
+            [1 as usize]
+            * 131072 as libc::c_float;
+    end[2 as usize] = start[2 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as usize]
+            [2 as usize]
+            * 131072 as libc::c_float;
     crate::src::cgame::cg_predict::CG_Trace(
         &mut trace as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
         start.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -3055,24 +3055,24 @@ unsafe extern "C" fn CG_ScanForCrosshairEntity() {
             as *const crate::src::qcommon::q_shared::vec_t,
         end.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         (*crate::src::cgame::cg_main::cg.snap).ps.clientNum,
-        1 as libc::c_int | 0x2000000 as libc::c_int,
+        1 | 0x2000000,
     );
-    if trace.entityNum >= 64 as libc::c_int {
+    if trace.entityNum >= 64 {
         return;
     }
     // if the player is in fog, don't show it
     content = crate::src::cgame::cg_predict::CG_PointContents(
         trace.endpos.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-        0 as libc::c_int,
+        0,
     );
-    if content & 64 as libc::c_int != 0 {
+    if content & 64 != 0 {
         return;
     }
     // if the player is invisible, don't show it
     if crate::src::cgame::cg_main::cg_entities[trace.entityNum as usize]
         .currentState
         .powerups
-        & (1 as libc::c_int) << crate::bg_public_h::PW_INVIS as libc::c_int
+        & (1) << crate::bg_public_h::PW_INVIS as libc::c_int
         != 0
     {
         return;
@@ -3105,7 +3105,7 @@ unsafe extern "C" fn CG_DrawCrosshairNames() {
     // draw the name of the player being looked at
     color = crate::src::cgame::cg_drawtools::CG_FadeColor(
         crate::src::cgame::cg_main::cg.crosshairClientTime,
-        1000 as libc::c_int,
+        1000,
     );
     if color.is_null() {
         crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
@@ -3115,13 +3115,13 @@ unsafe extern "C" fn CG_DrawCrosshairNames() {
         [crate::src::cgame::cg_main::cg.crosshairClientNum as usize]
         .name
         .as_mut_ptr();
-    w = (crate::src::cgame::cg_drawtools::CG_DrawStrlen(name) * 16 as libc::c_int) as libc::c_float;
+    w = (crate::src::cgame::cg_drawtools::CG_DrawStrlen(name) * 16) as libc::c_float;
     crate::src::cgame::cg_drawtools::CG_DrawBigString(
-        (320 as libc::c_int as libc::c_float - w / 2 as libc::c_int as libc::c_float)
+        (320 as libc::c_float - w / 2 as libc::c_float)
             as libc::c_int,
-        170 as libc::c_int,
+        170,
         name,
-        *color.offset(3 as libc::c_int as isize) * 0.5f32,
+        *color.offset(3 as isize) * 0.5f32,
     );
     crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const libc::c_float);
 }
@@ -3134,8 +3134,8 @@ CG_DrawSpectator
 
 unsafe extern "C" fn CG_DrawSpectator() {
     crate::src::cgame::cg_drawtools::CG_DrawBigString(
-        320 as libc::c_int - 9 as libc::c_int * 8 as libc::c_int,
-        440 as libc::c_int,
+        320 - 9 * 8,
+        440,
         b"SPECTATOR\x00" as *const u8 as *const libc::c_char,
         1.0f32,
     );
@@ -3143,8 +3143,8 @@ unsafe extern "C" fn CG_DrawSpectator() {
         == crate::bg_public_h::GT_TOURNAMENT as libc::c_int as libc::c_uint
     {
         crate::src::cgame::cg_drawtools::CG_DrawBigString(
-            320 as libc::c_int - 15 as libc::c_int * 8 as libc::c_int,
-            460 as libc::c_int,
+            320 - 15 * 8,
+            460,
             b"waiting to play\x00" as *const u8 as *const libc::c_char,
             1.0f32,
         );
@@ -3152,8 +3152,8 @@ unsafe extern "C" fn CG_DrawSpectator() {
         >= crate::bg_public_h::GT_TEAM as libc::c_int as libc::c_uint
     {
         crate::src::cgame::cg_drawtools::CG_DrawBigString(
-            320 as libc::c_int - 39 as libc::c_int * 8 as libc::c_int,
-            460 as libc::c_int,
+            320 - 39 * 8,
+            460,
             b"press ESC and use the JOIN menu to play\x00" as *const u8 as *const libc::c_char,
             1.0f32,
         );
@@ -3179,11 +3179,11 @@ unsafe extern "C" fn CG_DrawVote() {
             crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as libc::c_int,
         );
     }
-    sec = (30000 as libc::c_int
+    sec = (30000
         - (crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cgs.voteTime))
-        / 1000 as libc::c_int;
-    if sec < 0 as libc::c_int {
-        sec = 0 as libc::c_int
+        / 1000;
+    if sec < 0 {
+        sec = 0
     }
     s = crate::src::qcommon::q_shared::va(
         b"VOTE(%i):%s yes:%i no:%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3193,8 +3193,8 @@ unsafe extern "C" fn CG_DrawVote() {
         crate::src::cgame::cg_main::cgs.voteNo,
     );
     crate::src::cgame::cg_drawtools::CG_DrawSmallString(
-        0 as libc::c_int,
-        58 as libc::c_int,
+        0,
+        58,
         s,
         1.0f32,
     );
@@ -3213,13 +3213,13 @@ unsafe extern "C" fn CG_DrawTeamVote() {
         .team as libc::c_uint
         == crate::bg_public_h::TEAM_RED as libc::c_int as libc::c_uint
     {
-        cs_offset = 0 as libc::c_int
+        cs_offset = 0
     } else if crate::src::cgame::cg_main::cgs.clientinfo
         [crate::src::cgame::cg_main::cg.clientNum as usize]
         .team as libc::c_uint
         == crate::bg_public_h::TEAM_BLUE as libc::c_int as libc::c_uint
     {
-        cs_offset = 1 as libc::c_int
+        cs_offset = 1
     } else {
         return;
     }
@@ -3235,12 +3235,12 @@ unsafe extern "C" fn CG_DrawTeamVote() {
             crate::src::qcommon::q_shared::CHAN_LOCAL_SOUND as libc::c_int,
         );
     }
-    sec = (30000 as libc::c_int
+    sec = (30000
         - (crate::src::cgame::cg_main::cg.time
             - crate::src::cgame::cg_main::cgs.teamVoteTime[cs_offset as usize]))
-        / 1000 as libc::c_int;
-    if sec < 0 as libc::c_int {
-        sec = 0 as libc::c_int
+        / 1000;
+    if sec < 0 {
+        sec = 0
     }
     s = crate::src::qcommon::q_shared::va(
         b"TEAMVOTE(%i):%s yes:%i no:%i\x00" as *const u8 as *const libc::c_char
@@ -3251,8 +3251,8 @@ unsafe extern "C" fn CG_DrawTeamVote() {
         crate::src::cgame::cg_main::cgs.teamVoteNo[cs_offset as usize],
     );
     crate::src::cgame::cg_drawtools::CG_DrawSmallString(
-        0 as libc::c_int,
-        90 as libc::c_int,
+        0,
+        90,
         s,
         1.0f32,
     );
@@ -3288,16 +3288,16 @@ unsafe extern "C" fn CG_DrawFollow() -> crate::src::qcommon::q_shared::qboolean 
     let mut x: libc::c_float = 0.;
     let mut color: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
     let mut name: *const libc::c_char = 0 as *const libc::c_char;
-    if (*crate::src::cgame::cg_main::cg.snap).ps.pm_flags & 4096 as libc::c_int == 0 {
+    if (*crate::src::cgame::cg_main::cg.snap).ps.pm_flags & 4096 == 0 {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    color[0 as libc::c_int as usize] = 1 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    color[1 as libc::c_int as usize] = 1 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    color[2 as libc::c_int as usize] = 1 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
-    color[3 as libc::c_int as usize] = 1 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
+    color[0 as usize] = 1 as crate::src::qcommon::q_shared::vec_t;
+    color[1 as usize] = 1 as crate::src::qcommon::q_shared::vec_t;
+    color[2 as usize] = 1 as crate::src::qcommon::q_shared::vec_t;
+    color[3 as usize] = 1 as crate::src::qcommon::q_shared::vec_t;
     crate::src::cgame::cg_drawtools::CG_DrawBigString(
-        320 as libc::c_int - 9 as libc::c_int * 8 as libc::c_int,
-        24 as libc::c_int,
+        320 - 9 * 8,
+        24,
         b"following\x00" as *const u8 as *const libc::c_char,
         1.0f32,
     );
@@ -3306,19 +3306,19 @@ unsafe extern "C" fn CG_DrawFollow() -> crate::src::qcommon::q_shared::qboolean 
         .name
         .as_mut_ptr();
     x = (0.5f64
-        * (640 as libc::c_int
-            - 32 as libc::c_int * crate::src::cgame::cg_drawtools::CG_DrawStrlen(name))
+        * (640
+            - 32 * crate::src::cgame::cg_drawtools::CG_DrawStrlen(name))
             as libc::c_double) as libc::c_float;
     crate::src::cgame::cg_drawtools::CG_DrawStringExt(
         x as libc::c_int,
-        40 as libc::c_int,
+        40,
         name,
         color.as_mut_ptr(),
         crate::src::qcommon::q_shared::qtrue,
         crate::src::qcommon::q_shared::qtrue,
-        32 as libc::c_int,
-        48 as libc::c_int,
-        0 as libc::c_int,
+        32,
+        48,
+        0,
     );
     return crate::src::qcommon::q_shared::qtrue;
 }
@@ -3331,21 +3331,21 @@ CG_DrawAmmoWarning
 unsafe extern "C" fn CG_DrawAmmoWarning() {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
     let mut w: libc::c_int = 0;
-    if crate::src::cgame::cg_main::cg_drawAmmoWarning.integer == 0 as libc::c_int {
+    if crate::src::cgame::cg_main::cg_drawAmmoWarning.integer == 0 {
         return;
     }
     if crate::src::cgame::cg_main::cg.lowAmmoWarning == 0 {
         return;
     }
-    if crate::src::cgame::cg_main::cg.lowAmmoWarning == 2 as libc::c_int {
+    if crate::src::cgame::cg_main::cg.lowAmmoWarning == 2 {
         s = b"OUT OF AMMO\x00" as *const u8 as *const libc::c_char
     } else {
         s = b"LOW AMMO WARNING\x00" as *const u8 as *const libc::c_char
     }
-    w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16 as libc::c_int;
+    w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16;
     crate::src::cgame::cg_drawtools::CG_DrawBigString(
-        320 as libc::c_int - w / 2 as libc::c_int,
-        64 as libc::c_int,
+        320 - w / 2,
+        64,
         s,
         1.0f32,
     );
@@ -3368,16 +3368,16 @@ unsafe extern "C" fn CG_DrawWarmup() {
     if sec == 0 {
         return;
     }
-    if sec < 0 as libc::c_int {
+    if sec < 0 {
         s = b"Waiting for players\x00" as *const u8 as *const libc::c_char;
-        w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16 as libc::c_int;
+        w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s) * 16;
         crate::src::cgame::cg_drawtools::CG_DrawBigString(
-            320 as libc::c_int - w / 2 as libc::c_int,
-            24 as libc::c_int,
+            320 - w / 2,
+            24,
             s,
             1.0f32,
         );
-        crate::src::cgame::cg_main::cg.warmupCount = 0 as libc::c_int;
+        crate::src::cgame::cg_main::cg.warmupCount = 0;
         return;
     }
     if crate::src::cgame::cg_main::cgs.gametype as libc::c_uint
@@ -3386,7 +3386,7 @@ unsafe extern "C" fn CG_DrawWarmup() {
         // find the two active players
         ci1 = 0 as *mut crate::cg_local_h::clientInfo_t;
         ci2 = 0 as *mut crate::cg_local_h::clientInfo_t;
-        i = 0 as libc::c_int;
+        i = 0;
         while i < crate::src::cgame::cg_main::cgs.maxclients {
             if crate::src::cgame::cg_main::cgs.clientinfo[i as usize].infoValid as libc::c_uint != 0
                 && crate::src::cgame::cg_main::cgs.clientinfo[i as usize].team as libc::c_uint
@@ -3415,21 +3415,21 @@ unsafe extern "C" fn CG_DrawWarmup() {
                 (*ci2).name.as_mut_ptr(),
             );
             w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s);
-            if w > 640 as libc::c_int / 32 as libc::c_int {
-                cw = 640 as libc::c_int / w
+            if w > 640 / 32 {
+                cw = 640 / w
             } else {
-                cw = 32 as libc::c_int
+                cw = 32
             }
             crate::src::cgame::cg_drawtools::CG_DrawStringExt(
-                320 as libc::c_int - w * cw / 2 as libc::c_int,
-                20 as libc::c_int,
+                320 - w * cw / 2,
+                20,
                 s,
                 crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
                 crate::src::qcommon::q_shared::qfalse,
                 crate::src::qcommon::q_shared::qtrue,
                 cw,
                 (cw as libc::c_float * 1.5f32) as libc::c_int,
-                0 as libc::c_int,
+                0,
             );
         }
     } else {
@@ -3449,31 +3449,31 @@ unsafe extern "C" fn CG_DrawWarmup() {
             s = b"\x00" as *const u8 as *const libc::c_char
         }
         w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s);
-        if w > 640 as libc::c_int / 32 as libc::c_int {
-            cw = 640 as libc::c_int / w
+        if w > 640 / 32 {
+            cw = 640 / w
         } else {
-            cw = 32 as libc::c_int
+            cw = 32
         }
         crate::src::cgame::cg_drawtools::CG_DrawStringExt(
-            320 as libc::c_int - w * cw / 2 as libc::c_int,
-            25 as libc::c_int,
+            320 - w * cw / 2,
+            25,
             s,
             crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
             crate::src::qcommon::q_shared::qfalse,
             crate::src::qcommon::q_shared::qtrue,
             cw,
             (cw as libc::c_float * 1.1f32) as libc::c_int,
-            0 as libc::c_int,
+            0,
         );
     }
-    sec = (sec - crate::src::cgame::cg_main::cg.time) / 1000 as libc::c_int;
-    if sec < 0 as libc::c_int {
-        crate::src::cgame::cg_main::cg.warmup = 0 as libc::c_int;
-        sec = 0 as libc::c_int
+    sec = (sec - crate::src::cgame::cg_main::cg.time) / 1000;
+    if sec < 0 {
+        crate::src::cgame::cg_main::cg.warmup = 0;
+        sec = 0
     }
     s = crate::src::qcommon::q_shared::va(
         b"Starts in: %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        sec + 1 as libc::c_int,
+        sec + 1,
     );
     if sec != crate::src::cgame::cg_main::cg.warmupCount {
         crate::src::cgame::cg_main::cg.warmupCount = sec;
@@ -3500,22 +3500,22 @@ unsafe extern "C" fn CG_DrawWarmup() {
         }
     }
     match crate::src::cgame::cg_main::cg.warmupCount {
-        0 => cw = 28 as libc::c_int,
-        1 => cw = 24 as libc::c_int,
-        2 => cw = 20 as libc::c_int,
-        _ => cw = 16 as libc::c_int,
+        0 => cw = 28,
+        1 => cw = 24,
+        2 => cw = 20,
+        _ => cw = 16,
     }
     w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(s);
     crate::src::cgame::cg_drawtools::CG_DrawStringExt(
-        320 as libc::c_int - w * cw / 2 as libc::c_int,
-        70 as libc::c_int,
+        320 - w * cw / 2,
+        70,
         s,
         crate::src::qcommon::q_math::colorWhite.as_mut_ptr(),
         crate::src::qcommon::q_shared::qfalse,
         crate::src::qcommon::q_shared::qtrue,
         cw,
         (cw as libc::c_double * 1.5f64) as libc::c_int,
-        0 as libc::c_int,
+        0,
     );
 }
 //==================================================================================
@@ -3530,7 +3530,7 @@ unsafe extern "C" fn CG_Draw2D(mut stereoFrame: crate::tr_types_h::stereoFrame_t
     if crate::src::cgame::cg_main::cg.levelShot as u64 != 0 {
         return;
     }
-    if crate::src::cgame::cg_main::cg_draw2D.integer == 0 as libc::c_int {
+    if crate::src::cgame::cg_main::cg_draw2D.integer == 0 {
         return;
     }
     if (*crate::src::cgame::cg_main::cg.snap).ps.pm_type
@@ -3558,7 +3558,7 @@ unsafe extern "C" fn CG_Draw2D(mut stereoFrame: crate::tr_types_h::stereoFrame_t
     } else if crate::src::cgame::cg_main::cg.showScores as u64 == 0
         && (*crate::src::cgame::cg_main::cg.snap).ps.stats
             [crate::bg_public_h::STAT_HEALTH as libc::c_int as usize]
-            > 0 as libc::c_int
+            > 0
     {
         CG_DrawStatusBar();
         CG_DrawAmmoWarning();
@@ -3612,7 +3612,7 @@ pub unsafe extern "C" fn CG_DrawActive(mut stereoView: crate::tr_types_h::stereo
     if (*crate::src::cgame::cg_main::cg.snap).ps.persistant
         [crate::bg_public_h::PERS_TEAM as libc::c_int as usize]
         == crate::bg_public_h::TEAM_SPECTATOR as libc::c_int
-        && (*crate::src::cgame::cg_main::cg.snap).ps.pm_flags & 8192 as libc::c_int != 0
+        && (*crate::src::cgame::cg_main::cg.snap).ps.pm_flags & 8192 != 0
     {
         crate::src::cgame::cg_scoreboard::CG_DrawTourneyScoreboard();
         return;
