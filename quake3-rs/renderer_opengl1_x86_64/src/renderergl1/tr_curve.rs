@@ -262,7 +262,6 @@ unsafe extern "C" fn MakeMeshNormals(
     let mut dist: libc::c_int = 0;
     let mut normal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut sum: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    let mut count: libc::c_int = 0 as libc::c_int;
     let mut base: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut delta: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut x: libc::c_int = 0;
@@ -341,7 +340,6 @@ unsafe extern "C" fn MakeMeshNormals(
     while i < width {
         j = 0 as libc::c_int;
         while j < height {
-            count = 0 as libc::c_int;
             dv = &mut *(*ctrl.offset(j as isize)).as_mut_ptr().offset(i as isize)
                 as *mut crate::qfiles_h::drawVert_t;
             base[0 as libc::c_int as usize] = (*dv).xyz[0 as libc::c_int as usize];
@@ -434,7 +432,6 @@ unsafe extern "C" fn MakeMeshNormals(
                             normal[1 as libc::c_int as usize] + sum[1 as libc::c_int as usize];
                         sum[2 as libc::c_int as usize] =
                             normal[2 as libc::c_int as usize] + sum[2 as libc::c_int as usize];
-                        count += 1
                     }
                 }
                 k += 1

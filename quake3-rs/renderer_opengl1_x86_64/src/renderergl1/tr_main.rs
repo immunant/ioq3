@@ -2150,7 +2150,6 @@ unsafe extern "C" fn SurfIsOffscreen(
     let mut clip: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
     let mut eye: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
     let mut i: libc::c_int = 0;
-    let mut pointOr: libc::c_uint = 0 as libc::c_int as libc::c_uint;
     let mut pointAnd: libc::c_uint = !(0 as libc::c_int) as libc::c_uint;
     R_RotateForViewer();
     R_DecomposeSort(
@@ -2189,7 +2188,6 @@ unsafe extern "C" fn SurfIsOffscreen(
             j += 1
         }
         pointAnd &= pointFlags;
-        pointOr |= pointFlags;
         i += 1
     }
     // trivially reject
