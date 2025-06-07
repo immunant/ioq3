@@ -4,4 +4,4 @@
 - Never modify Cargo.toml or Cargo.lock
 
 # build instructions
-- `cargo build --release`
+- `cargo +nightly-2019-12-05 build --release`
