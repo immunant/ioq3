@@ -4047,10 +4047,10 @@ pub unsafe extern "C" fn AINode_Battle_Fight(
         return crate::src::qcommon::q_shared::qfalse as libc::c_int;
     }
     //if there is another better enemy
-    (crate::src::game::ai_dmq3::BotFindEnemy(
+    crate::src::game::ai_dmq3::BotFindEnemy(
         bs as *mut crate::src::game::ai_main::bot_state_s,
         (*bs).enemy,
-    )) != 0;
+    );
     //if no enemy
     if (*bs).enemy < 0 as libc::c_int {
         AIEnter_Seek_LTG(
@@ -4133,7 +4133,7 @@ pub unsafe extern "C" fn AINode_Battle_Fight(
     target[1 as libc::c_int as usize] = entinfo.origin[1 as libc::c_int as usize];
     target[2 as libc::c_int as usize] = entinfo.origin[2 as libc::c_int as usize];
     // if not a player enemy
-    ((*bs).enemy) >= 64 as libc::c_int;
+    // ignore non-player enemies
     //update the reachability area and origin if possible
     areanum = crate::src::game::ai_dmq3::BotPointAreaNum(target.as_mut_ptr());
     if areanum != 0 && crate::src::game::g_syscalls::trap_AAS_AreaReachability(areanum) != 0 {
@@ -4751,10 +4751,10 @@ pub unsafe extern "C" fn AINode_Battle_Retreat(
         return crate::src::qcommon::q_shared::qfalse as libc::c_int;
     }
     //if there is another better enemy
-    (crate::src::game::ai_dmq3::BotFindEnemy(
+    crate::src::game::ai_dmq3::BotFindEnemy(
         bs as *mut crate::src::game::ai_main::bot_state_s,
         (*bs).enemy,
-    )) != 0;
+    );
     //
     (*bs).tfl = 0x2 as libc::c_int
         | 0x4 as libc::c_int
@@ -4816,7 +4816,7 @@ pub unsafe extern "C" fn AINode_Battle_Retreat(
         target[1 as libc::c_int as usize] = entinfo.origin[1 as libc::c_int as usize];
         target[2 as libc::c_int as usize] = entinfo.origin[2 as libc::c_int as usize];
         // if not a player enemy
-        ((*bs).enemy) >= 64 as libc::c_int;
+        // ignore non-player enemies
         //update the reachability area and origin if possible
         areanum = crate::src::game::ai_dmq3::BotPointAreaNum(target.as_mut_ptr());
         if areanum != 0 && crate::src::game::g_syscalls::trap_AAS_AreaReachability(areanum) != 0 {
@@ -5178,7 +5178,7 @@ pub unsafe extern "C" fn AINode_Battle_NBG(
         target[1 as libc::c_int as usize] = entinfo.origin[1 as libc::c_int as usize];
         target[2 as libc::c_int as usize] = entinfo.origin[2 as libc::c_int as usize];
         // if not a player enemy
-        ((*bs).enemy) >= 64 as libc::c_int;
+        // ignore non-player enemies
         //update the reachability area and origin if possible
         areanum = crate::src::game::ai_dmq3::BotPointAreaNum(target.as_mut_ptr());
         if areanum != 0 && crate::src::game::g_syscalls::trap_AAS_AreaReachability(areanum) != 0 {

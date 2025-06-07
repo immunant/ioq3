@@ -939,7 +939,7 @@ A player has predicted a teleport, but hasn't arrived yet
 
 unsafe extern "C" fn RB_Hyperspace() {
     let mut c: libc::c_float = 0.;
-    (backEnd.isHyperspace as u64) == 0;
+    // ensure hyperspace flag cleared
     c = (backEnd.refdef.time & 255 as libc::c_int) as libc::c_float / 255.0f32;
     crate::src::sdl::sdl_glimp::qglClearColor.expect("non-null function pointer")(
         c,

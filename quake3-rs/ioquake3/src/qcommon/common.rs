@@ -5282,7 +5282,7 @@ pub unsafe extern "C" fn Field_CompletePlayerName(
     } else {
         crate::src::qcommon::q_shared::qfalse as libc::c_int
     } as crate::src::qcommon::q_shared::qboolean;
-    (Field_CompletePlayerNameFinal(whitespace) as u64) == 0;
+    Field_CompletePlayerNameFinal(whitespace);
 }
 #[no_mangle]
 

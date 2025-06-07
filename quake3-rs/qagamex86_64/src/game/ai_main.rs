@@ -2239,10 +2239,10 @@ pub unsafe extern "C" fn BotAI(
                     b"scores\x00" as *const u8 as *const libc::c_char,
                 ) == 0)
                 {
-                    (crate::src::qcommon::q_shared::Q_stricmp(
+                    crate::src::qcommon::q_shared::Q_stricmp(
                         buf.as_mut_ptr(),
                         b"clientLevelShot\x00" as *const u8 as *const libc::c_char,
-                    )) == 0;
+                    );
                 }
             }
         }

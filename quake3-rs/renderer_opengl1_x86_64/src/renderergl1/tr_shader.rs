@@ -551,7 +551,7 @@ pub unsafe extern "C" fn R_RemapShader(
                 as *const libc::c_char,
             shaderName,
         );
-        return;
+
     }
     sh2 = R_FindShaderByName(newShaderName);
     if sh2.is_null() || sh2 == crate::src::renderergl1::tr_main::tr.defaultShader {
@@ -567,7 +567,6 @@ pub unsafe extern "C" fn R_RemapShader(
                 as *const libc::c_char,
             newShaderName,
         );
-        return;
     }
     // remap all the shaders with the given name
     // even tho they might have different lightmaps
@@ -961,7 +960,6 @@ unsafe extern "C" fn ParseWaveForm(
                 as *const libc::c_char,
             shader.name.as_mut_ptr(),
         );
-        return;
     }
     (*wave).func = NameToGenFunc(token);
     // BASE, AMP, PHASE, FREQ
@@ -1044,7 +1042,6 @@ unsafe extern "C" fn ParseTexMod(
                 as *const libc::c_char,
             shader.name.as_mut_ptr(),
         );
-        return;
     }
     tmi = &mut *(*(*stage)
         .bundle

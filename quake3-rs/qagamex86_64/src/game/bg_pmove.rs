@@ -1935,7 +1935,7 @@ unsafe extern "C" fn PM_Footsteps() {
             // wading / swimming at surface
             PM_AddEvent(crate::bg_public_h::EV_SWIM as libc::c_int);
         } else {
-            ((*pm).waterlevel) == 3 as libc::c_int;
+            // waterlevel 3 case has no additional action
         }
     };
 }

@@ -523,8 +523,7 @@ pub unsafe extern "C" fn CG_FragmentBounceSound(
             );
         }
     } else {
-        ((*le).leBounceSoundType as libc::c_uint)
-            == crate::cg_local_h::LEBS_BRASS as libc::c_int as libc::c_uint;
+        // no bounce sound for non-brass types
     }
     // don't allow a fragment to make multiple bounce sounds,
     // or it gets too noisy as they settle

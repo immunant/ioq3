@@ -282,7 +282,6 @@ unsafe extern "C" fn CG_TransitionSnapshot() {
         (*crate::src::cgame::cg_main::cg.nextSnap).serverCommandSequence,
     );
     // if we had a map_restart, set everything with initial
-    (crate::src::cgame::cg_main::cg.mapRestart as u64) != 0;
     // clear the currentValid flag for all entities in the existing snapshot
     i = 0 as libc::c_int;
     while i < (*crate::src::cgame::cg_main::cg.snap).numEntities {
@@ -486,8 +485,7 @@ unsafe extern "C" fn CG_ReadNextSnapshot() -> *mut crate::cg_public_h::snapshot_
             crate::src::cgame::cg_main::cgs.processedSnapshotNum,
             dest as *mut crate::cg_public_h::snapshot_t,
         );
-        (!crate::src::cgame::cg_main::cg.snap.is_null() && r as libc::c_uint != 0)
-            && (*dest).serverTime == (*crate::src::cgame::cg_main::cg.snap).serverTime;
+        // validate snapshot timing
         if r as u64 != 0 {
             crate::src::cgame::cg_draw::CG_AddLagometerSnapshotInfo(
                 dest as *mut crate::cg_public_h::snapshot_t,
