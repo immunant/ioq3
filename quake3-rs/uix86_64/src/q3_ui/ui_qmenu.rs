@@ -275,8 +275,7 @@ pub use crate::src::ui::ui_syscalls::trap_Error;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
 pub use crate::src::ui::ui_syscalls::trap_R_SetColor;
 pub use crate::src::ui::ui_syscalls::trap_S_RegisterSound;
-use crate::stdlib::sin;
-use crate::stdlib::strlen;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;
@@ -304,8 +303,7 @@ pub use crate::ui_local_h::menuslider_s;
 pub use crate::ui_local_h::menutext_s;
 pub use crate::ui_local_h::mfield_t;
 pub use crate::ui_local_h::uiStatic_t;
-use ::libc::strcat;
-use ::libc::strcpy;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
@@ -1905,7 +1903,7 @@ Menu_ActivateItem
 #[no_mangle]
 
 pub unsafe extern "C" fn Menu_ActivateItem(
-    mut s: *mut crate::ui_local_h::menuframework_s,
+    mut _s: *mut crate::ui_local_h::menuframework_s,
     mut item: *mut crate::ui_local_h::menucommon_s,
 ) -> crate::src::qcommon::q_shared::sfxHandle_t {
     if (*item).callback.is_some() {

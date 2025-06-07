@@ -11,7 +11,6 @@ pub mod qcommon_h {
         return fi.f;
     }
 
-    use crate::src::qcommon::q_shared::floatint_t;
     // _QCOMMON_H_
     // flags for sv_allowDownload and cl_allowDownload
 }
@@ -345,28 +344,7 @@ pub use crate::src::botlib::be_ai_goal::bot_goal_s;
 pub use crate::src::botlib::be_ai_move::bot_initmove_s;
 pub use crate::src::botlib::be_ai_move::bot_moveresult_s;
 pub use crate::src::botlib::be_ai_weap::weaponinfo_s;
-use crate::src::client::cl_keys::Key_ClearStates;
-use crate::src::client::cl_keys::Key_GetBinding;
-use crate::src::client::cl_keys::Key_GetOverstrikeMode;
-use crate::src::client::cl_keys::Key_IsDown;
-use crate::src::client::cl_keys::Key_SetBinding;
-use crate::src::client::cl_keys::Key_SetOverstrikeMode;
-use crate::src::client::snd_main::S_RegisterSound;
-use crate::src::client::snd_main::S_StartBackgroundTrack;
-use crate::src::client::snd_main::S_StartLocalSound;
-use crate::src::client::snd_main::S_StopBackgroundTrack;
-use crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
-use crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
-use crate::stdlib::atan2;
-use crate::stdlib::ceil;
-use crate::stdlib::cos;
-use crate::stdlib::floor;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::sin;
-use crate::stdlib::sqrt;
-use crate::stdlib::strncmp;
-use crate::stdlib::strncpy;
+
 extern "C" {
     /*
     ===========================================================================
@@ -1385,7 +1363,7 @@ CLUI_GetCDKey
 ====================
 */
 
-unsafe extern "C" fn CLUI_GetCDKey(mut buf: *mut libc::c_char, mut buflen: libc::c_int) {
+unsafe extern "C" fn CLUI_GetCDKey(mut buf: *mut libc::c_char, mut _buflen: libc::c_int) {
     let mut gamedir: *const libc::c_char = 0 as *const libc::c_char;
     gamedir = crate::src::qcommon::cvar::Cvar_VariableString(
         b"fs_game\x00" as *const u8 as *const libc::c_char,

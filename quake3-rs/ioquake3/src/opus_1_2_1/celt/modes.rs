@@ -7119,16 +7119,8 @@ pub mod static_modes_float_h {
         [&mode48000_960_120 as *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode]
     };
 
-    use crate::opus_types_h::opus_int16;
-    use crate::src::opus_1_2_1::celt::kiss_fft::arch_fft_state;
-    use crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state;
-    use crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx;
-    use crate::src::opus_1_2_1::celt::mdct::mdct_lookup;
-
     use crate::src::opus_1_2_1::celt::modes::band_allocation;
     use crate::src::opus_1_2_1::celt::modes::eband5ms;
-    use crate::src::opus_1_2_1::celt::modes::OpusCustomMode;
-    use crate::src::opus_1_2_1::celt::modes::PulseCache;
 }
 
 pub use crate::arch_h::opus_val16;

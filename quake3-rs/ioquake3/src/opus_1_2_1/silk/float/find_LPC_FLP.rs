@@ -5,12 +5,7 @@ pub use crate::opus_types_h::opus_int32;
 pub use crate::resampler_structs_h::_silk_resampler_state_struct;
 pub use crate::resampler_structs_h::silk_resampler_state_struct;
 pub use crate::resampler_structs_h::C2RustUnnamed_64;
-use crate::src::opus_1_2_1::silk::float::burg_modified_FLP::silk_burg_modified_FLP;
-use crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP;
-use crate::src::opus_1_2_1::silk::float::wrappers_FLP::silk_A2NLSF_FLP;
-use crate::src::opus_1_2_1::silk::float::wrappers_FLP::silk_NLSF2A_FLP;
-use crate::src::opus_1_2_1::silk::float::LPC_analysis_filter_FLP::silk_LPC_analysis_filter_FLP;
-use crate::src::opus_1_2_1::silk::interpolate::silk_interpolate;
+
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
 pub use crate::stdlib::int16_t;

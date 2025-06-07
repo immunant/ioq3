@@ -6,7 +6,7 @@ pub use crate::botlib_h::bsp_surface_s;
 pub use crate::botlib_h::bsp_surface_t;
 pub use crate::botlib_h::bsp_trace_s;
 pub use crate::botlib_h::bsp_trace_t;
-use crate::src::botlib::be_interface::botimport;
+
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::cplane_s;
 pub use crate::src::qcommon::q_shared::cplane_t;
@@ -21,7 +21,7 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::memset;
+
 #[no_mangle]
 
 pub static mut allocatedmemory: libc::c_int = 0;

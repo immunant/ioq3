@@ -327,10 +327,9 @@ pub use crate::src::ui::ui_syscalls::trap_LAN_GetServerCount;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
 pub use crate::src::ui::ui_syscalls::trap_SetPbClStatus;
 pub use crate::stdlib::__compar_fn_t;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
+
 pub use crate::stdlib::qsort;
-use crate::stdlib::strlen;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;
@@ -354,8 +353,7 @@ pub use crate::ui_local_h::menulist_s;
 pub use crate::ui_local_h::menuradiobutton_s;
 pub use crate::ui_local_h::menutext_s;
 pub use crate::ui_local_h::uiStatic_t;
-use ::libc::strcat;
-use ::libc::strcpy;
+
 pub use ::libc::strtol;
 
 #[repr(C)]

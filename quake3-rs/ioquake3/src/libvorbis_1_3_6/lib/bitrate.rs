@@ -67,8 +67,7 @@ pub use crate::highlevel_h::highlevel_byblocktype;
 pub use crate::highlevel_h::highlevel_encode_setup;
 pub use crate::src::libvorbis_1_3_6::lib::codebook::codebook;
 pub use crate::src::libvorbis_1_3_6::lib::codebook::static_codebook;
-use crate::stdlib::memset;
-use crate::stdlib::rint;
+
 /* *******************************************************************
 *                                                                  *
 * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *

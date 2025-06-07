@@ -187,8 +187,6 @@ pub mod mathops_h {
         return res.f;
     }
 
-    use crate::arch_h::opus_val16;
-    use crate::stdlib::floor;
     /* MATHOPS_H */
     /* FIXED_POINT */
 }
@@ -255,31 +253,31 @@ pub mod float_cast_h {
     */
     /* Version 1.1 */
     /*============================================================================
-    **      On Intel Pentium processors (especially PIII and probably P4), converting
-    **      from float to int is very slow. To meet the C specs, the code produced by
-    **      most C compilers targeting Pentium needs to change the FPU rounding mode
-    **      before the float to int conversion is performed.
-    **
-    **      Changing the FPU rounding mode causes the FPU pipeline to be flushed. It
-    **      is this flushing of the pipeline which is so slow.
-    **
-    **      Fortunately the ISO C99 specifications define the functions lrint, lrintf,
-    **      llrint and llrintf which fix this problem as a side effect.
-    **
-    **      On Unix-like systems, the configure process should have detected the
-    **      presence of these functions. If they weren't found we have to replace them
-    **      here with a standard C cast.
-    */
+     **      On Intel Pentium processors (especially PIII and probably P4), converting
+     **      from float to int is very slow. To meet the C specs, the code produced by
+     **      most C compilers targeting Pentium needs to change the FPU rounding mode
+     **      before the float to int conversion is performed.
+     **
+     **      Changing the FPU rounding mode causes the FPU pipeline to be flushed. It
+     **      is this flushing of the pipeline which is so slow.
+     **
+     **      Fortunately the ISO C99 specifications define the functions lrint, lrintf,
+     **      llrint and llrintf which fix this problem as a side effect.
+     **
+     **      On Unix-like systems, the configure process should have detected the
+     **      presence of these functions. If they weren't found we have to replace them
+     **      here with a standard C cast.
+     */
     /*
-    **      The C99 prototypes for lrint and lrintf are as follows:
-    **
-    **              long int lrintf (float x) ;
-    **              long int lrint  (double x) ;
-    */
+     **      The C99 prototypes for lrint and lrintf are as follows:
+     **
+     **              long int lrintf (float x) ;
+     **              long int lrint  (double x) ;
+     */
     /*      The presence of the required functions are detected during the configure
-    **      process and the values HAVE_LRINT and HAVE_LRINTF are set accordingly in
-    **      the config.h file.
-    */
+     **      process and the values HAVE_LRINT and HAVE_LRINTF are set accordingly in
+     **      the config.h file.
+     */
     /* With GCC, when SSE is available, the fastest conversion is cvtss2si. */
     #[inline]
 
@@ -303,7 +301,6 @@ pub mod float_cast_h {
         return float2int(x) as crate::opus_types_h::opus_int16;
     }
 
-    use crate::opus_types_h::opus_int16;
     use ::std::arch::x86_64::_mm_cvt_ss2si;
     use ::std::arch::x86_64::_mm_set_ss;
     /* FLOAT_CAST_H */
@@ -329,7 +326,6 @@ pub mod pitch_h {
         }
         return xy;
     }
-    use crate::arch_h::opus_val32;
 }
 
 pub mod os_support_h {
@@ -377,8 +373,6 @@ pub mod os_support_h {
         return crate::stdlib::malloc(size);
     }
 
-    use crate::stdlib::malloc;
-    use ::libc::free;
     /* OS_SUPPORT_H */
     /*#ifdef __GNUC__
     #pragma GCC poison printf sprintf
@@ -404,8 +398,7 @@ pub use crate::stdlib::uint32_t;
 pub use crate::opus_types_h::opus_int16;
 pub use crate::opus_types_h::opus_int32;
 pub use crate::opus_types_h::opus_uint32;
-use crate::src::opus_1_2_1::celt::celt_encoder::opus_custom_encoder_ctl;
-use crate::src::opus_1_2_1::celt::celt_encoder::OpusCustomEncoder;
+
 pub use crate::src::opus_1_2_1::celt::mdct::mdct_lookup;
 pub use crate::src::opus_1_2_1::celt::modes::OpusCustomMode;
 pub use crate::src::opus_1_2_1::celt::modes::PulseCache;
@@ -437,11 +430,7 @@ pub use crate::opus_private_h::OpusRepacketizer;
 pub use crate::resampler_structs_h::silk_resampler_state_struct;
 pub use crate::resampler_structs_h::C2RustUnnamed_64;
 pub use crate::resampler_structs_h::_silk_resampler_state_struct;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_bit_logp;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_done;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_init;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_shrink;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_uint;
+
 pub use crate::src::opus_1_2_1::src::analysis::run_analysis;
 pub use crate::src::opus_1_2_1::src::analysis::tonality_analysis_init;
 pub use crate::src::opus_1_2_1::src::analysis::tonality_analysis_reset;
@@ -451,9 +440,7 @@ pub use crate::src::opus_1_2_1::src::opus_encoder::mathops_h::celt_exp2;
 pub use crate::src::opus_1_2_1::src::opus_encoder::mathops_h::celt_maxabs16;
 pub use crate::src::opus_1_2_1::src::opus_encoder::opus_private_h::align;
 pub use crate::src::opus_1_2_1::src::repacketizer::opus_repacketizer_out_range_impl;
-use crate::stdlib::fabs;
-use crate::stdlib::floor;
-use crate::stdlib::sqrt;
+
 pub use crate::structs_FLP_h::silk_encoder;
 pub use crate::structs_FLP_h::silk_encoder_state_FLP;
 pub use crate::structs_FLP_h::silk_shape_state_FLP;
@@ -465,25 +452,12 @@ pub use crate::structs_h::silk_nsq_state;
 pub use crate::structs_h::stereo_enc_state;
 pub use crate::structs_h::SideInfoIndices;
 
-use crate::src::opus_1_2_1::silk::enc_API::silk_Encode;
-use crate::src::opus_1_2_1::silk::enc_API::silk_Get_Encoder_Size;
-use crate::src::opus_1_2_1::silk::enc_API::silk_InitEncoder;
 pub use crate::src::opus_1_2_1::src::opus_encoder::float_cast_h::float2int;
 pub use crate::src::opus_1_2_1::src::opus_encoder::float_cast_h::FLOAT2INT16;
 pub use crate::src::opus_1_2_1::src::opus_encoder::pitch_h::celt_inner_prod_c;
-use crate::src::opus_1_2_1::src::repacketizer::opus_packet_pad;
-use crate::src::opus_1_2_1::src::repacketizer::opus_repacketizer_cat;
-use crate::src::opus_1_2_1::src::repacketizer::opus_repacketizer_init;
-use crate::stdlib::malloc;
-use ::libc::free;
 
-use crate::src::opus_1_2_1::silk::lin2log::silk_lin2log;
-use crate::src::opus_1_2_1::silk::log2lin::silk_log2lin;
 pub use crate::src::opus_1_2_1::src::opus_encoder::os_support_h::opus_alloc;
 pub use crate::src::opus_1_2_1::src::opus_encoder::os_support_h::opus_free;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -869,7 +843,7 @@ unsafe extern "C" fn hp_cutoff(
     mut len: libc::c_int,
     mut channels: libc::c_int,
     mut Fs: crate::opus_types_h::opus_int32,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 ) {
     let mut B_Q28: [crate::opus_types_h::opus_int32; 3] = [0; 3];
     let mut A_Q28: [crate::opus_types_h::opus_int32; 2] = [0; 2];
@@ -1666,7 +1640,7 @@ unsafe extern "C" fn compute_frame_energy(
     mut pcm: *const crate::arch_h::opus_val16,
     mut frame_size: libc::c_int,
     mut channels: libc::c_int,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 ) -> crate::arch_h::opus_val32 {
     let mut len: libc::c_int = frame_size * channels;
     return celt_inner_prod_c(pcm, pcm, len) / len as libc::c_float;

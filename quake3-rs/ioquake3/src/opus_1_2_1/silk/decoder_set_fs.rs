@@ -5,21 +5,12 @@ pub use crate::opus_types_h::opus_int32;
 pub use crate::resampler_structs_h::_silk_resampler_state_struct;
 pub use crate::resampler_structs_h::silk_resampler_state_struct;
 pub use crate::resampler_structs_h::C2RustUnnamed_64;
-use crate::src::opus_1_2_1::silk::resampler::silk_resampler_init;
-use crate::src::opus_1_2_1::silk::tables_NLSF_CB_NB_MB::silk_NLSF_CB_NB_MB;
-use crate::src::opus_1_2_1::silk::tables_NLSF_CB_WB::silk_NLSF_CB_WB;
-use crate::src::opus_1_2_1::silk::tables_other::silk_uniform4_iCDF;
-use crate::src::opus_1_2_1::silk::tables_other::silk_uniform6_iCDF;
-use crate::src::opus_1_2_1::silk::tables_other::silk_uniform8_iCDF;
-use crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_contour_10_ms_NB_iCDF;
-use crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_contour_10_ms_iCDF;
-use crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_contour_NB_iCDF;
-use crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_contour_iCDF;
+
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
 pub use crate::stdlib::int16_t;
 pub use crate::stdlib::int32_t;
-use crate::stdlib::memset;
+
 pub use crate::structs_h::silk_CNG_struct;
 pub use crate::structs_h::silk_NLSF_CB_struct;
 pub use crate::structs_h::silk_PLC_struct;

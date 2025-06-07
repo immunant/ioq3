@@ -13,8 +13,7 @@ pub use crate::opus_types_h::opus_uint32;
 pub use crate::resampler_structs_h::_silk_resampler_state_struct;
 pub use crate::resampler_structs_h::silk_resampler_state_struct;
 pub use crate::resampler_structs_h::C2RustUnnamed_64;
-use crate::src::opus_1_2_1::silk::resampler_private_AR2::silk_resampler_private_AR2;
-use crate::stdlib::memcpy;
+
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without

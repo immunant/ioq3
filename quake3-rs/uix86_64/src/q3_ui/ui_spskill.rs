@@ -274,7 +274,7 @@ pub use crate::src::ui::ui_syscalls::trap_Cvar_VariableValue;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
 pub use crate::src::ui::ui_syscalls::trap_S_RegisterSound;
 pub use crate::src::ui::ui_syscalls::trap_S_StartLocalSound;
-use crate::stdlib::memset;
+
 pub use crate::ui_local_h::_tag_menuframework;
 pub use crate::ui_local_h::menubitmap_s;
 pub use crate::ui_local_h::menucommon_s;
@@ -627,7 +627,7 @@ UI_SPSkillMenu_FightEvent
 */
 
 unsafe extern "C" fn UI_SPSkillMenu_FightEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut notification: libc::c_int,
 ) {
     if notification != 3 as libc::c_int {
@@ -642,7 +642,7 @@ UI_SPSkillMenu_BackEvent
 */
 
 unsafe extern "C" fn UI_SPSkillMenu_BackEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut notification: libc::c_int,
 ) {
     if notification != 3 as libc::c_int {

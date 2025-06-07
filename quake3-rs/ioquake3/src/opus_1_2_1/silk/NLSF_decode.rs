@@ -3,8 +3,7 @@ use ::libc;
 pub use crate::opus_types_h::opus_int16;
 pub use crate::opus_types_h::opus_int32;
 pub use crate::opus_types_h::opus_uint32;
-use crate::src::opus_1_2_1::silk::NLSF_stabilize::silk_NLSF_stabilize;
-use crate::src::opus_1_2_1::silk::NLSF_unpack::silk_NLSF_unpack;
+
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
 pub use crate::stdlib::__uint32_t;

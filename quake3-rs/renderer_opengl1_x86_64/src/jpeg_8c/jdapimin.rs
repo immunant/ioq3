@@ -201,7 +201,7 @@ pub use crate::src::jpeg_8c::jerror::JWRN_MUST_RESYNC;
 pub use crate::src::jpeg_8c::jerror::JWRN_NOT_SEQUENTIAL;
 pub use crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA;
 pub use crate::src::jpeg_8c::jmemmgr::jinit_memory_mgr;
-use crate::stdlib::memset;
+
 /*
  * jdapimin.c
  *

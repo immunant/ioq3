@@ -105,10 +105,10 @@ pub mod Inlines_h {
         let mut b32_nrm: crate::opus_types_h::opus_int32 = 0;
         let mut result: crate::opus_types_h::opus_int32 = 0;
         /* Compute number of bits head room and normalize inputs */
-        a_headrm = silk_CLZ32((if a32 > 0 as libc::c_int { a32 } else { -a32 })) - 1 as libc::c_int; /* Q: a_headrm                  */
+        a_headrm = silk_CLZ32(if a32 > 0 as libc::c_int { a32 } else { -a32 }) - 1 as libc::c_int; /* Q: a_headrm                  */
         a32_nrm = ((a32 as crate::opus_types_h::opus_uint32) << a_headrm)
             as crate::opus_types_h::opus_int32; /* Q: b_headrm                  */
-        b_headrm = silk_CLZ32((if b32 > 0 as libc::c_int { b32 } else { -b32 })) - 1 as libc::c_int;
+        b_headrm = silk_CLZ32(if b32 > 0 as libc::c_int { b32 } else { -b32 }) - 1 as libc::c_int;
         b32_nrm = ((b32 as crate::opus_types_h::opus_uint32) << b_headrm)
             as crate::opus_types_h::opus_int32;
         /* Inverse of b32, with 14 bits of precision */
@@ -184,7 +184,7 @@ pub mod Inlines_h {
         let mut err_Q32: crate::opus_types_h::opus_int32 = 0;
         let mut result: crate::opus_types_h::opus_int32 = 0;
         /* Compute number of bits head room and normalize input */
-        b_headrm = silk_CLZ32((if b32 > 0 as libc::c_int { b32 } else { -b32 })) - 1 as libc::c_int; /* Q: b_headrm                */
+        b_headrm = silk_CLZ32(if b32 > 0 as libc::c_int { b32 } else { -b32 }) - 1 as libc::c_int; /* Q: b_headrm                */
         b32_nrm = ((b32 as crate::opus_types_h::opus_uint32) << b_headrm)
             as crate::opus_types_h::opus_int32;
         /* Inverse of b32, with 14 bits of precision */
@@ -241,9 +241,7 @@ pub mod Inlines_h {
             return 0 as libc::c_int;
         };
     }
-    use crate::opus_types_h::opus_int16;
-    use crate::opus_types_h::opus_int32;
-    use crate::opus_types_h::opus_uint32;
+
     use crate::src::opus_1_2_1::silk::NSQ_del_dec::macros_h::silk_CLZ32;
     /* SILK_FIX_INLINES_H */
 }
@@ -354,7 +352,7 @@ pub mod NSQ_h {
         }
         return out;
     }
-    use crate::opus_types_h::opus_int32;
+
     /* SILK_NSQ_H */
 }
 
@@ -371,11 +369,9 @@ pub use crate::opus_types_h::opus_uint32;
 pub use crate::resampler_structs_h::_silk_resampler_state_struct;
 pub use crate::resampler_structs_h::silk_resampler_state_struct;
 pub use crate::resampler_structs_h::C2RustUnnamed_64;
-use crate::src::opus_1_2_1::silk::tables_other::silk_Quantization_Offsets_Q10;
+
 pub use crate::src::opus_1_2_1::silk::NSQ_del_dec::macros_h::silk_CLZ32;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
+
 pub use crate::structs_h::silk_LP_state;
 pub use crate::structs_h::silk_NLSF_CB_struct;
 pub use crate::structs_h::silk_VAD_state;
@@ -1113,7 +1109,7 @@ unsafe extern "C" fn silk_noise_shape_quantizer_del_dec(
     mut nStatesDelayedDecision: libc::c_int,
     mut smpl_buf_idx: *mut libc::c_int,
     mut decisionDelay: libc::c_int,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 )
 /* I                                        */
 {

@@ -27,12 +27,7 @@ pub use crate::src::qcommon::q_shared::PRINT_ALL;
 pub use crate::src::qcommon::q_shared::PRINT_DEVELOPER;
 pub use crate::src::qcommon::q_shared::PRINT_ERROR;
 pub use crate::src::qcommon::q_shared::PRINT_WARNING;
-use crate::src::renderergl1::tr_init::glConfig;
-use crate::src::renderergl1::tr_init::r_ignorehwgamma;
-use crate::src::renderergl1::tr_main::ri;
-use crate::stdlib::SDL_GetError;
-use crate::stdlib::SDL_SetWindowGammaRamp;
-use crate::stdlib::SDL_Window;
+
 pub use crate::tr_public_h::refimport_t;
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;

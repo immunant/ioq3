@@ -1,6 +1,5 @@
 use ::libc;
 
-use crate::stdlib::memset;
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without

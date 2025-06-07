@@ -1,5 +1,3 @@
-use ::libc;
-
 // __Q_SHARED_H
 pub use crate::src::qcommon::q_shared::vec_t;
 /*

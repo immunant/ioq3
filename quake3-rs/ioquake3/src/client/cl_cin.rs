@@ -142,19 +142,7 @@ pub use crate::src::client::cl_main::cls;
 pub use crate::src::client::cl_main::re;
 pub use crate::src::client::cl_scrn::SCR_AdjustFrom640;
 pub use crate::src::client::cl_ui::uivm;
-use crate::src::client::snd_dma::s_rawend;
-use crate::src::client::snd_main::S_RawSamples;
-use crate::src::client::snd_main::S_StopAllSounds;
-use crate::src::client::snd_main::S_Update;
-use crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
-use crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use ::libc::abs;
-use ::libc::strcmp;
-use ::libc::strcpy;
-use ::libc::strstr;
+
 extern "C" {
     #[no_mangle]
     pub static mut s_soundtime: libc::c_int;

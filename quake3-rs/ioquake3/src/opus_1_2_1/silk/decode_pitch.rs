@@ -2,10 +2,7 @@ use ::libc;
 
 pub use crate::opus_types_h::opus_int16;
 pub use crate::opus_types_h::opus_int32;
-use crate::src::opus_1_2_1::silk::pitch_est_tables::silk_CB_lags_stage2;
-use crate::src::opus_1_2_1::silk::pitch_est_tables::silk_CB_lags_stage2_10_ms;
-use crate::src::opus_1_2_1::silk::pitch_est_tables::silk_CB_lags_stage3;
-use crate::src::opus_1_2_1::silk::pitch_est_tables::silk_CB_lags_stage3_10_ms;
+
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
 pub use crate::stdlib::int16_t;

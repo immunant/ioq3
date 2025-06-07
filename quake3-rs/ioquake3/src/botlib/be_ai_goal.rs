@@ -29,7 +29,6 @@ pub mod q_shared_h {
                 as libc::c_double,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -62,10 +61,7 @@ pub use crate::src::botlib::l_libvar::LibVar;
 pub use crate::src::botlib::l_libvar::LibVarSet;
 pub use crate::src::botlib::l_libvar::LibVarString;
 pub use crate::src::botlib::l_libvar::LibVarValue;
-use crate::src::botlib::l_log::Log_Write;
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetClearedHunkMemory;
-use crate::src::botlib::l_memory::GetClearedMemory;
+
 pub use crate::src::botlib::l_precomp::define_s;
 pub use crate::src::botlib::l_precomp::define_t;
 pub use crate::src::botlib::l_precomp::indent_s;
@@ -106,37 +102,7 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
-use ::libc::strcmp;
-use ::libc::strcpy;
 
-use crate::src::botlib::be_aas_reach::AAS_AreaJumpPad;
-use crate::src::botlib::be_aas_reach::AAS_AreaReachability;
-use crate::src::botlib::be_aas_reach::AAS_BestReachableArea;
-use crate::src::botlib::be_aas_reach::AAS_BestReachableFromJumpPadArea;
-use crate::src::botlib::be_aas_route::AAS_AreaTravelTimeToGoalArea;
-use crate::src::botlib::be_aas_sample::AAS_PointAreaNum;
-use crate::src::botlib::be_aas_sample::AAS_PresenceTypeBoundingBox;
-
-use crate::src::botlib::be_aas_bspq3::AAS_FloatForBSPEpairKey;
-use crate::src::botlib::be_aas_bspq3::AAS_IntForBSPEpairKey;
-use crate::src::botlib::be_aas_bspq3::AAS_NextBSPEntity;
-use crate::src::botlib::be_aas_bspq3::AAS_PointContents;
-use crate::src::botlib::be_aas_bspq3::AAS_Trace;
-use crate::src::botlib::be_aas_bspq3::AAS_ValueForBSPEpairKey;
-use crate::src::botlib::be_aas_bspq3::AAS_VectorForBSPEpairKey;
-use crate::src::botlib::be_aas_entity::AAS_EntityInfo;
-use crate::src::botlib::be_aas_entity::AAS_EntityModelindex;
-use crate::src::botlib::be_aas_entity::AAS_EntityType;
-use crate::src::botlib::be_aas_entity::AAS_NextEntity;
-use crate::src::botlib::be_aas_main::AAS_Loaded;
-use crate::src::botlib::be_aas_main::AAS_Time;
-use crate::src::botlib::be_aas_move::AAS_DropToFloor;
-use crate::src::botlib::be_ai_move::BotReachabilityArea;
-use crate::src::botlib::be_interface::botDeveloper;
-use crate::src::botlib::be_interface::botimport;
 //goal state
 
 pub type bot_goalstate_t = bot_goalstate_s;
@@ -407,8 +373,8 @@ pub unsafe extern "C" fn BotInterbreedGoalFuzzyLogic(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotSaveGoalFuzzyLogic(
-    mut goalstate: libc::c_int,
-    mut filename: *mut libc::c_char,
+    mut _goalstate: libc::c_int,
+    mut _filename: *mut libc::c_char,
 ) {
     //bot_goalstate_t *gs;
     //gs = BotGoalStateFromHandle(goalstate);
@@ -427,7 +393,7 @@ pub unsafe extern "C" fn BotSaveGoalFuzzyLogic(
 
 pub unsafe extern "C" fn BotMutateGoalFuzzyLogic(
     mut goalstate: libc::c_int,
-    mut range: libc::c_float,
+    mut _range: libc::c_float,
 ) {
     let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
     gs = BotGoalStateFromHandle(goalstate);
@@ -2847,7 +2813,7 @@ pub unsafe extern "C" fn BotTouchingGoal(
 pub unsafe extern "C" fn BotItemGoalInVisButNotVisible(
     mut viewer: libc::c_int,
     mut eye: *mut crate::src::qcommon::q_shared::vec_t,
-    mut viewangles: *mut crate::src::qcommon::q_shared::vec_t,
+    mut _viewangles: *mut crate::src::qcommon::q_shared::vec_t,
     mut goal: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
 ) -> libc::c_int {
     let mut entinfo: crate::be_aas_h::aas_entityinfo_t = crate::be_aas_h::aas_entityinfo_t {

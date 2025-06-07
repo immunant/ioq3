@@ -38,7 +38,6 @@ pub mod q_shared_h {
             * *v2.offset(1 as libc::c_int as isize)
             - *v1.offset(1 as libc::c_int as isize) * *v2.offset(0 as libc::c_int as isize);
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -97,18 +96,11 @@ pub use crate::botlib_h::bsp_surface_s;
 pub use crate::botlib_h::bsp_surface_t;
 pub use crate::botlib_h::bsp_trace_s;
 pub use crate::botlib_h::bsp_trace_t;
-use crate::src::botlib::be_aas_bspq3::AAS_EntityCollision;
-use crate::src::botlib::be_aas_main::aasworld;
-use crate::src::botlib::be_aas_reach::AAS_AreaReachability;
+
 pub use crate::src::botlib::be_aas_sample::q_shared_h::CrossProduct;
 pub use crate::src::botlib::be_aas_sample::q_shared_h::VectorInverse;
 pub use crate::src::botlib::be_aas_sample::q_shared_h::VectorLength;
-use crate::src::botlib::be_interface::botDeveloper;
-use crate::src::botlib::be_interface::botimport;
-use crate::src::botlib::l_libvar::LibVarValue;
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetClearedHunkMemory;
-use crate::src::botlib::l_memory::GetHunkMemory;
+
 pub use crate::src::qcommon::q_math::VectorNormalize;
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::cplane_s;
@@ -124,9 +116,6 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
-use ::libc::abs;
 
 pub type aas_tracestack_t = aas_tracestack_s;
 

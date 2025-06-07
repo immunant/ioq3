@@ -71,23 +71,15 @@ pub use crate::client_h::clientConnection_t;
 pub use crate::curl_h::CURL;
 pub use crate::multi_h::CURLM;
 pub use crate::src::client::cl_main::clc;
-use crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
-use crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
-use crate::src::sys::sys_main::Sys_AnsiColorPrint;
+
 pub use crate::stdlib::__sighandler_t;
 pub use crate::stdlib::cc_t;
-use crate::stdlib::memmove;
+
 pub use crate::stdlib::signal;
 pub use crate::stdlib::speed_t;
-use crate::stdlib::strlen;
+
 pub use crate::stdlib::tcflag_t;
 
-use crate::stdlib::read;
-use crate::stdlib::write;
-use ::libc::fcntl;
-use ::libc::tcflush;
-use ::libc::tcgetattr;
-use ::libc::tcsetattr;
 extern "C" {
     /*
     ===========================================================================
@@ -362,7 +354,7 @@ set attributes if user did CTRL+Z and then does fg again.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CON_SigCont(mut signum: libc::c_int) {
+pub unsafe extern "C" fn CON_SigCont(mut _signum: libc::c_int) {
     CON_Init();
 }
 /*

@@ -13,17 +13,7 @@ pub use crate::opus_types_h::opus_uint32;
 pub use crate::resampler_structs_h::_silk_resampler_state_struct;
 pub use crate::resampler_structs_h::silk_resampler_state_struct;
 pub use crate::resampler_structs_h::C2RustUnnamed_64;
-use crate::src::opus_1_2_1::silk::resampler_private_IIR_FIR::silk_resampler_private_IIR_FIR;
-use crate::src::opus_1_2_1::silk::resampler_private_down_FIR::silk_resampler_private_down_FIR;
-use crate::src::opus_1_2_1::silk::resampler_private_up2_HQ::silk_resampler_private_up2_HQ_wrapper;
-use crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_1_2_COEFS;
-use crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_1_3_COEFS;
-use crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_1_4_COEFS;
-use crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_1_6_COEFS;
-use crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_2_3_COEFS;
-use crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_3_4_COEFS;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
+
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without

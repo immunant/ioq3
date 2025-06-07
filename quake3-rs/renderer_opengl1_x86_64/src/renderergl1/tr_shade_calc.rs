@@ -266,7 +266,6 @@ pub mod q_shared_h {
             * *v2.offset(1 as libc::c_int as isize)
             - *v1.offset(1 as libc::c_int as isize) * *v2.offset(0 as libc::c_int as isize);
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -345,9 +344,7 @@ pub use crate::src::renderergl1::tr_shade::tess;
 pub use crate::src::renderergl1::tr_shadows::RB_ProjectionShadowDeform;
 pub use crate::src::renderergl1::tr_surface::RB_AddQuadStamp;
 pub use crate::src::renderergl1::tr_surface::RB_AddQuadStampExt;
-use crate::stdlib::floor;
-use crate::stdlib::sqrt;
-use crate::stdlib::strlen;
+
 pub use crate::tr_common_h::image_s;
 pub use crate::tr_common_h::image_t;
 pub use crate::tr_common_h::imgFlags_t;

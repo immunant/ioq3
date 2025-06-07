@@ -85,8 +85,7 @@ pub use crate::src::renderergl1::tr_main::R_AddDrawSurf;
 pub use crate::src::renderergl1::tr_main::R_RenderView;
 pub use crate::src::renderergl1::tr_shader::R_GetShaderByHandle;
 pub use crate::src::sdl::sdl_glimp::GLimp_LogComment;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
+
 pub use crate::tr_common_h::image_s;
 pub use crate::tr_common_h::image_t;
 pub use crate::tr_common_h::imgFlags_t;

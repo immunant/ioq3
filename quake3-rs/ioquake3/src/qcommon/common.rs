@@ -6,7 +6,6 @@ pub mod stdlib_float_h {
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
-    use ::libc::strtod;
 }
 
 pub mod ctype_h {
@@ -227,27 +226,12 @@ pub use crate::src::sys::sys_main::Sys_Quit;
 pub use crate::src::sys::sys_unix::Sys_Milliseconds;
 pub use crate::src::sys::sys_unix::Sys_RandomBytes;
 pub use crate::src::sys::sys_unix::Sys_SetEnv;
-use crate::stdlib::calloc;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
-use crate::stdlib::vsnprintf;
-use ::libc::getenv;
-use ::libc::rand;
-use ::libc::srand;
-use ::libc::strcat;
-use ::libc::strcmp;
-use ::libc::strcpy;
-use ::libc::strtod;
 
 pub use crate::src::qcommon::common::ctype_h::tolower;
 pub use crate::src::qcommon::common::ctype_h::toupper;
 pub use crate::stdlib::__ctype_tolower_loc;
 pub use crate::stdlib::__ctype_toupper_loc;
-use crate::stdlib::asctime;
-use ::libc::localtime;
-use ::libc::time;
-use ::libc::umask;
+
 extern "C" {
     #[no_mangle]
     pub fn CIN_CloseAllVideos();
@@ -1186,11 +1170,11 @@ pub unsafe extern "C" fn Com_StringContains(
                 {
                     if 0 != 0 {
                         let mut __c: libc::c_int = *str1.offset(j as isize) as libc::c_int;
-                        __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                        __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                             __c
                         } else {
                             *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                        })
+                        }
                     } else {
                         __res = toupper(*str1.offset(j as isize) as libc::c_int)
                     }
@@ -1206,11 +1190,11 @@ pub unsafe extern "C" fn Com_StringContains(
                 {
                     if 0 != 0 {
                         let mut __c: libc::c_int = *str2.offset(j as isize) as libc::c_int;
-                        __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                        __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                             __c
                         } else {
                             *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                        })
+                        }
                     } else {
                         __res = toupper(*str2.offset(j as isize) as libc::c_int)
                     }
@@ -1303,12 +1287,11 @@ pub unsafe extern "C" fn Com_Filter(
                         {
                             if 0 != 0 {
                                 let mut __c: libc::c_int = *name as libc::c_int;
-                                __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int
-                                {
+                                __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                                     __c
                                 } else {
                                     *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                                })
+                                }
                             } else {
                                 __res = toupper(*name as libc::c_int)
                             }
@@ -1324,12 +1307,11 @@ pub unsafe extern "C" fn Com_Filter(
                         {
                             if 0 != 0 {
                                 let mut __c: libc::c_int = *filter as libc::c_int;
-                                __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int
-                                {
+                                __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                                     __c
                                 } else {
                                     *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                                })
+                                }
                             } else {
                                 __res = toupper(*filter as libc::c_int)
                             }
@@ -1345,12 +1327,11 @@ pub unsafe extern "C" fn Com_Filter(
                         {
                             if 0 != 0 {
                                 let mut __c: libc::c_int = *name as libc::c_int;
-                                __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int
-                                {
+                                __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                                     __c
                                 } else {
                                     *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                                })
+                                }
                             } else {
                                 __res = toupper(*name as libc::c_int)
                             }
@@ -1367,12 +1348,11 @@ pub unsafe extern "C" fn Com_Filter(
                             if 0 != 0 {
                                 let mut __c: libc::c_int =
                                     *filter.offset(2 as libc::c_int as isize) as libc::c_int;
-                                __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int
-                                {
+                                __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                                     __c
                                 } else {
                                     *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                                })
+                                }
                             } else {
                                 __res = toupper(
                                     *filter.offset(2 as libc::c_int as isize) as libc::c_int
@@ -1400,12 +1380,11 @@ pub unsafe extern "C" fn Com_Filter(
                         {
                             if 0 != 0 {
                                 let mut __c: libc::c_int = *filter as libc::c_int;
-                                __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int
-                                {
+                                __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                                     __c
                                 } else {
                                     *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                                })
+                                }
                             } else {
                                 __res = toupper(*filter as libc::c_int)
                             }
@@ -1421,12 +1400,11 @@ pub unsafe extern "C" fn Com_Filter(
                         {
                             if 0 != 0 {
                                 let mut __c: libc::c_int = *name as libc::c_int;
-                                __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int
-                                {
+                                __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                                     __c
                                 } else {
                                     *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                                })
+                                }
                             } else {
                                 __res = toupper(*name as libc::c_int)
                             }
@@ -1466,11 +1444,11 @@ pub unsafe extern "C" fn Com_Filter(
                 {
                     if 0 != 0 {
                         let mut __c: libc::c_int = *filter as libc::c_int;
-                        __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                        __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                             __c
                         } else {
                             *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                        })
+                        }
                     } else {
                         __res = toupper(*filter as libc::c_int)
                     }
@@ -1486,11 +1464,11 @@ pub unsafe extern "C" fn Com_Filter(
                 {
                     if 0 != 0 {
                         let mut __c: libc::c_int = *name as libc::c_int;
-                        __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                        __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                             __c
                         } else {
                             *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                        })
+                        }
                     } else {
                         __res = toupper(*name as libc::c_int)
                     }
@@ -4705,11 +4683,11 @@ unsafe extern "C" fn FindMatches(mut s: *const libc::c_char) {
                 {
                     if 0 != 0 {
                         let mut __c: libc::c_int = shortestMatch[i as usize] as libc::c_int;
-                        __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                        __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                             __c
                         } else {
                             *(*crate::stdlib::__ctype_tolower_loc()).offset(__c as isize)
-                        })
+                        }
                     } else {
                         __res = tolower(shortestMatch[i as usize] as libc::c_int)
                     }
@@ -4725,11 +4703,11 @@ unsafe extern "C" fn FindMatches(mut s: *const libc::c_char) {
                 {
                     if 0 != 0 {
                         let mut __c: libc::c_int = *s.offset(i as isize) as libc::c_int;
-                        __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                        __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                             __c
                         } else {
                             *(*crate::stdlib::__ctype_tolower_loc()).offset(__c as isize)
-                        })
+                        }
                     } else {
                         __res = tolower(*s.offset(i as isize) as libc::c_int)
                     }

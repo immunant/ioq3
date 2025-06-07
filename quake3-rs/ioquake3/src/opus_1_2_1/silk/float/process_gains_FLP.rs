@@ -10,7 +10,7 @@ pub mod SigProc_FLP_h {
     pub unsafe extern "C" fn silk_sigmoid(mut x: libc::c_float) -> libc::c_float {
         return (1.0f64 / (1.0f64 + crate::stdlib::exp(-x as libc::c_double))) as libc::c_float;
     }
-    use crate::stdlib::exp;
+
     /* SILK_SIGPROC_FLP_H */
 }
 
@@ -20,16 +20,13 @@ pub use crate::resampler_structs_h::_silk_resampler_state_struct;
 pub use crate::resampler_structs_h::silk_resampler_state_struct;
 pub use crate::resampler_structs_h::C2RustUnnamed_64;
 pub use crate::src::opus_1_2_1::silk::float::process_gains_FLP::SigProc_FLP_h::silk_sigmoid;
-use crate::src::opus_1_2_1::silk::gain_quant::silk_gains_quant;
-use crate::src::opus_1_2_1::silk::tables_other::silk_Quantization_Offsets_Q10;
+
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
-use crate::stdlib::exp;
+
 pub use crate::stdlib::int16_t;
 pub use crate::stdlib::int32_t;
-use crate::stdlib::memcpy;
-use crate::stdlib::pow;
-use crate::stdlib::sqrt;
+
 pub use crate::structs_FLP_h::silk_encoder_control_FLP;
 pub use crate::structs_FLP_h::silk_encoder_state_FLP;
 pub use crate::structs_FLP_h::silk_shape_state_FLP;

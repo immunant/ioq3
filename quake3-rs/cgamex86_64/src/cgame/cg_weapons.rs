@@ -46,7 +46,6 @@ pub mod q_shared_h {
             * *v2.offset(1 as libc::c_int as isize)
             - *v1.offset(1 as libc::c_int as isize) * *v2.offset(0 as libc::c_int as isize);
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -394,9 +393,7 @@ pub use crate::src::cgame::cg_syscalls::trap_S_AddLoopingSound;
 pub use crate::src::cgame::cg_syscalls::trap_S_RegisterSound;
 pub use crate::src::cgame::cg_syscalls::trap_S_StartSound;
 pub use crate::src::cgame::cg_weapons::stdlib_h::atoi;
-use crate::stdlib::memset;
-use crate::stdlib::sin;
-use crate::stdlib::sqrt;
+
 pub use ::libc::rand;
 pub use ::libc::strtol;
 /*
@@ -1181,7 +1178,7 @@ CG_GrappleTrail
 
 pub unsafe extern "C" fn CG_GrappleTrail(
     mut ent: *mut crate::cg_local_h::centity_t,
-    mut wi: *const crate::cg_local_h::weaponInfo_t,
+    mut _wi: *const crate::cg_local_h::weaponInfo_t,
 ) {
     let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut es: *mut crate::src::qcommon::q_shared::entityState_t =
@@ -1832,7 +1829,8 @@ unsafe extern "C" fn CG_MapTorsoToWeaponFrame(
                 + 6 as libc::c_int
     {
         return 1 as libc::c_int + frame
-            - (*ci).animations[crate::bg_public_h::TORSO_ATTACK as libc::c_int as usize].firstFrame;
+            - (*ci).animations[crate::bg_public_h::TORSO_ATTACK as libc::c_int as usize]
+                .firstFrame;
     }
     // stand attack 2
     if frame
@@ -2217,7 +2215,7 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     mut parent: *mut crate::tr_types_h::refEntity_t,
     mut ps: *mut crate::src::qcommon::q_shared::playerState_t,
     mut cent: *mut crate::cg_local_h::centity_t,
-    mut team: libc::c_int,
+    mut _team: libc::c_int,
 ) {
     let mut gun: crate::tr_types_h::refEntity_t = crate::tr_types_h::refEntity_t {
         reType: crate::tr_types_h::RT_MODEL,
@@ -3109,7 +3107,7 @@ pub unsafe extern "C" fn CG_MissileHitWall(
     mut clientNum: libc::c_int,
     mut origin: *mut crate::src::qcommon::q_shared::vec_t,
     mut dir: *mut crate::src::qcommon::q_shared::vec_t,
-    mut soundType: crate::cg_local_h::impactSound_t,
+    mut _soundType: crate::cg_local_h::impactSound_t,
 ) {
     let mut mod_0: crate::src::qcommon::q_shared::qhandle_t = 0;
     let mut mark: crate::src::qcommon::q_shared::qhandle_t = 0;

@@ -50,10 +50,7 @@ pub use crate::botlib_h::bsp_surface_s;
 pub use crate::botlib_h::bsp_surface_t;
 pub use crate::botlib_h::bsp_trace_s;
 pub use crate::botlib_h::bsp_trace_t;
-use crate::src::botlib::be_aas_main::aasworld;
-use crate::src::botlib::be_interface::botimport;
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetClearedMemory;
+
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::cplane_s;
 pub use crate::src::qcommon::q_shared::cplane_t;
@@ -68,8 +65,7 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::memcpy;
-use ::libc::abs;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
@@ -137,7 +133,7 @@ pub struct optimized_s {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_KeepEdge(mut edge: *mut crate::aasfile_h::aas_edge_t) -> libc::c_int {
+pub unsafe extern "C" fn AAS_KeepEdge(mut _edge: *mut crate::aasfile_h::aas_edge_t) -> libc::c_int {
     return 1 as libc::c_int;
 }
 //end of the function AAS_KeepFace

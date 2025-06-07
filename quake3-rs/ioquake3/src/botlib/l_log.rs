@@ -23,9 +23,7 @@ pub use crate::src::botlib::be_interface::botimport;
 pub use crate::src::botlib::be_interface::botlib_globals_s;
 pub use crate::src::botlib::be_interface::botlib_globals_t;
 pub use crate::src::botlib::be_interface::botlibglobals;
-use crate::src::botlib::l_libvar::LibVarValue;
-use crate::src::qcommon::cvar::Cvar_VariableString;
-use crate::src::qcommon::files::FS_BuildOSPath;
+
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::cplane_s;
 pub use crate::src::qcommon::q_shared::cplane_t;
@@ -41,12 +39,6 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::fclose;
-use crate::stdlib::fflush;
-use crate::stdlib::fopen;
-use crate::stdlib::fprintf;
-use crate::stdlib::strlen;
-use crate::stdlib::vfprintf;
 
 pub type logfile_t = logfile_s;
 

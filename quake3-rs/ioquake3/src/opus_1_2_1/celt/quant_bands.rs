@@ -63,7 +63,7 @@ pub mod mathops_h {
             + frac * (0.95909232f32 + frac * (-0.33951290f32 + frac * 0.16541097f32));
         return (1 as libc::c_int + integer) as libc::c_float + frac;
     }
-    use crate::opus_types_h::opus_uint32;
+
     /* MATHOPS_H */
     /* FIXED_POINT */
 }
@@ -98,18 +98,7 @@ pub use crate::src::opus_1_2_1::celt::quant_bands::entcode_h::ec_get_buffer;
 pub use crate::src::opus_1_2_1::celt::quant_bands::entcode_h::ec_range_bytes;
 pub use crate::src::opus_1_2_1::celt::quant_bands::entcode_h::ec_tell;
 pub use crate::src::opus_1_2_1::celt::quant_bands::mathops_h::celt_log2;
-use crate::stdlib::floor;
 
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_bit_logp;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_bits;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_bit_logp;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_bits;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf;
-use crate::src::opus_1_2_1::celt::laplace::ec_laplace_decode;
-use crate::src::opus_1_2_1::celt::laplace::ec_laplace_encode;
-use crate::stdlib::memcpy;
-use ::libc::abs;
 /* Copyright (c) 2007-2008 CSIRO
 Copyright (c) 2007-2009 Xiph.Org Foundation
 Written by Jean-Marc Valin */

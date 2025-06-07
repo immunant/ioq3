@@ -289,10 +289,7 @@ pub use crate::jpeglib_h::JBLOCKROW;
 pub use crate::jpeglib_h::JSAMPARRAY;
 pub use crate::jpeglib_h::JSAMPROW;
 pub use crate::src::jpeg_8c::jcomapi::jpeg_destroy;
-use crate::stdlib::fprintf;
-use crate::stdlib::stderr;
-use ::libc::exit;
-use ::libc::sprintf;
+
 /*
  * jerror.c
  *

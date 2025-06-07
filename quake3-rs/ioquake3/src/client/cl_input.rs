@@ -204,13 +204,7 @@ pub use crate::ui_public_h::UI_SHUTDOWN;
 pub use crate::vm_local_h::vm_s;
 
 pub use crate::src::client::cl_input::stdlib_h::atoi;
-use crate::src::client::cl_keys::anykeydown;
-use crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
-use crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
-use crate::stdlib::fabs;
-use crate::stdlib::memset;
-use crate::stdlib::powf;
-use crate::stdlib::sqrt;
+
 pub use ::libc::strtol;
 /*
 ===========================================================================
@@ -929,7 +923,7 @@ CL_MouseEvent
 pub unsafe extern "C" fn CL_MouseEvent(
     mut dx: libc::c_int,
     mut dy: libc::c_int,
-    mut time: libc::c_int,
+    mut _time: libc::c_int,
 ) {
     if crate::src::client::cl_keys::Key_GetCatcher() & 0x2 as libc::c_int != 0 {
         crate::src::qcommon::vm::VM_Call(
@@ -964,7 +958,7 @@ Joystick values stay set until changed
 pub unsafe extern "C" fn CL_JoystickEvent(
     mut axis: libc::c_int,
     mut value: libc::c_int,
-    mut time: libc::c_int,
+    mut _time: libc::c_int,
 ) {
     if axis < 0 as libc::c_int || axis >= 16 as libc::c_int {
         crate::src::qcommon::common::Com_Error(

@@ -6,7 +6,6 @@ pub mod stdlib_float_h {
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
-    use ::libc::strtod;
 }
 
 pub mod stdlib_h {
@@ -138,11 +137,7 @@ pub use crate::src::qcommon::q_shared::TR_LINEAR;
 pub use crate::src::qcommon::q_shared::TR_LINEAR_STOP;
 pub use crate::src::qcommon::q_shared::TR_SINE;
 pub use crate::src::qcommon::q_shared::TR_STATIONARY;
-use crate::stdlib::memcpy;
-use crate::stdlib::strlen;
-use ::libc::sscanf;
-use ::libc::strcmp;
-use ::libc::strstr;
+
 pub use ::libc::strtod;
 pub use ::libc::strtol;
 extern "C" {
@@ -373,7 +368,7 @@ pub static mut fields: [field_t; 20] = [field_t {
 }; 20];
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_item_botroam(mut ent: *mut crate::g_local_h::gentity_t) {}
+pub unsafe extern "C" fn SP_item_botroam(mut _ent: *mut crate::g_local_h::gentity_t) {}
 #[no_mangle]
 
 pub static mut spawns: [spawn_t; 49] = unsafe {

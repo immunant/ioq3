@@ -9,8 +9,7 @@ pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::qboolean;
 pub use crate::src::qcommon::q_shared::qfalse;
 pub use crate::src::qcommon::q_shared::qtrue;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

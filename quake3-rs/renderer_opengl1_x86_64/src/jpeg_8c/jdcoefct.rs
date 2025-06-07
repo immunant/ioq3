@@ -292,7 +292,7 @@ unsafe extern "C" fn decompress_onepass(
  */
 
 unsafe extern "C" fn dummy_consume_data(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
+    mut _cinfo: crate::jpeglib_h::j_decompress_ptr,
 ) -> libc::c_int {
     return 0 as libc::c_int;
     /* Always indicate nothing was done */

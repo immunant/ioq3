@@ -1,13 +1,12 @@
 use ::libc;
 
 pub use crate::stdlib::__off_t;
-use crate::stdlib::calloc;
-use crate::stdlib::malloc;
+
 pub use crate::stdlib::off_t;
 pub use crate::zconf_h::uInt;
 pub use crate::zconf_h::uLong;
 pub use crate::zconf_h::voidpf;
-use ::libc::free;
+
 /* for buggy compilers */
 #[no_mangle]
 

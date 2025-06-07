@@ -148,7 +148,7 @@ pub use crate::opus_types_h::opus_int16;
 pub use crate::opus_types_h::opus_int32;
 pub use crate::opus_types_h::opus_uint32;
 pub use crate::src::opus_1_2_1::silk::bwexpander_32::silk_bwexpander_32;
-use crate::src::opus_1_2_1::silk::table_LSF_cos::silk_LSFCosTab_FIX_Q12;
+
 pub use crate::src::opus_1_2_1::silk::A2NLSF::SigProc_FIX_h::silk_min_32;
 /* Helper function for A2NLSF(..)                    */
 /* Transforms polynomials from cos(n*f) to cos(f)^n  */

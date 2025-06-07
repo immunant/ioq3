@@ -82,7 +82,6 @@ pub mod pitch_h {
         }
         return xy;
     }
-    use crate::arch_h::opus_val32;
 }
 pub use crate::opus_types_h::opus_uint32;
 pub use crate::stdlib::__uint32_t;
@@ -91,8 +90,7 @@ pub use crate::stdlib::uint32_t;
 pub use crate::arch_h::celt_norm;
 pub use crate::arch_h::opus_val16;
 pub use crate::arch_h::opus_val32;
-use crate::src::opus_1_2_1::celt::cwrs::decode_pulses;
-use crate::src::opus_1_2_1::celt::cwrs::encode_pulses;
+
 pub use crate::src::opus_1_2_1::celt::entcode::ec_ctx;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_dec;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_enc;
@@ -100,10 +98,7 @@ pub use crate::src::opus_1_2_1::celt::entcode::ec_window;
 pub use crate::src::opus_1_2_1::celt::vq::entcode_h::celt_udiv;
 pub use crate::src::opus_1_2_1::celt::vq::mathops_h::fast_atan2f;
 pub use crate::src::opus_1_2_1::celt::vq::pitch_h::celt_inner_prod_c;
-use crate::stdlib::cos;
-use crate::stdlib::fabs;
-use crate::stdlib::floor;
-use crate::stdlib::sqrt;
+
 /* Copyright (c) 2007-2008 CSIRO
 Copyright (c) 2007-2009 Xiph.Org Foundation
 Written by Jean-Marc Valin */
@@ -302,7 +297,7 @@ pub unsafe extern "C" fn op_pvq_search_c(
     mut iy: *mut libc::c_int,
     mut K: libc::c_int,
     mut N: libc::c_int,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 ) -> crate::arch_h::opus_val16 {
     let mut y: *mut crate::arch_h::celt_norm = 0 as *mut crate::arch_h::celt_norm;
     let mut signx: *mut libc::c_int = 0 as *mut libc::c_int;
@@ -549,7 +544,7 @@ pub unsafe extern "C" fn renormalise_vector(
     mut X: *mut crate::arch_h::celt_norm,
     mut N: libc::c_int,
     mut gain: crate::arch_h::opus_val16,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 ) {
     let mut i: libc::c_int = 0;
     let mut E: crate::arch_h::opus_val32 = 0.;
@@ -623,7 +618,7 @@ pub unsafe extern "C" fn stereo_itheta(
     mut Y: *const crate::arch_h::celt_norm,
     mut stereo: libc::c_int,
     mut N: libc::c_int,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 ) -> libc::c_int {
     let mut i: libc::c_int = 0;
     let mut itheta: libc::c_int = 0;

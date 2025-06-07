@@ -111,7 +111,7 @@ pub mod SigProc_FLP_h {
             k -= 1
         }
     }
-    use crate::opus_types_h::opus_int32;
+
     /* SILK_SIGPROC_FLP_H */
 }
 
@@ -141,26 +141,11 @@ pub use crate::structs_h::silk_VAD_state;
 pub use crate::structs_h::silk_encoder_state;
 pub use crate::structs_h::silk_nsq_state;
 pub use crate::structs_h::SideInfoIndices;
-use ::libc::abs;
 
 pub use crate::src::opus_1_2_1::silk::float::encode_frame_FLP::SigProc_FIX_h::silk_min_int;
 pub use crate::src::opus_1_2_1::silk::float::encode_frame_FLP::SigProc_FLP_h::silk_short2float_array;
 pub use crate::src::opus_1_2_1::silk::log2lin::silk_log2lin;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
 
-use crate::src::opus_1_2_1::silk::encode_indices::silk_encode_indices;
-use crate::src::opus_1_2_1::silk::encode_pulses::silk_encode_pulses;
-use crate::src::opus_1_2_1::silk::float::find_pitch_lags_FLP::silk_find_pitch_lags_FLP;
-use crate::src::opus_1_2_1::silk::float::find_pred_coefs_FLP::silk_find_pred_coefs_FLP;
-use crate::src::opus_1_2_1::silk::float::noise_shape_analysis_FLP::silk_noise_shape_analysis_FLP;
-use crate::src::opus_1_2_1::silk::float::process_gains_FLP::silk_process_gains_FLP;
-use crate::src::opus_1_2_1::silk::float::wrappers_FLP::silk_NSQ_wrapper_FLP;
-use crate::src::opus_1_2_1::silk::gain_quant::silk_gains_ID;
-use crate::src::opus_1_2_1::silk::gain_quant::silk_gains_dequant;
-use crate::src::opus_1_2_1::silk::gain_quant::silk_gains_quant;
-use crate::src::opus_1_2_1::silk::LP_variable_cutoff::silk_LP_variable_cutoff;
-use crate::src::opus_1_2_1::silk::VAD::silk_VAD_GetSA_Q8_c;
 #[no_mangle]
 
 pub unsafe extern "C" fn silk_encode_do_VAD_FLP(

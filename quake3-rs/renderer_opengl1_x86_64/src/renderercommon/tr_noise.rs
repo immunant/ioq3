@@ -1,8 +1,5 @@
 use ::libc;
 
-use crate::stdlib::floor;
-use ::libc::rand;
-
 static mut s_noise_table: [libc::c_float; 256] = [0.; 256];
 
 static mut s_noise_perm: [libc::c_int; 256] = [0; 256];

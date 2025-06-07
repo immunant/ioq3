@@ -28,7 +28,7 @@ pub mod q_shared_h {
         }
         return 1 as libc::c_int;
     }
-    use crate::stdlib::sqrt;
+
     // __Q_SHARED_H
 }
 
@@ -93,9 +93,7 @@ pub use crate::botlib_h::bsp_trace_s;
 pub use crate::botlib_h::bsp_trace_t;
 pub use crate::src::botlib::be_aas_entity::q_shared_h::VectorCompare;
 pub use crate::src::botlib::be_aas_entity::q_shared_h::VectorLength;
-use crate::src::botlib::be_aas_main::aasworld;
-use crate::src::botlib::be_aas_main::AAS_Time;
-use crate::src::botlib::be_aas_reach::AAS_BestReachableLinkArea;
+
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::cplane_s;
 pub use crate::src::qcommon::q_shared::cplane_t;
@@ -110,17 +108,6 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::fabsf;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
-
-use crate::src::botlib::be_aas_bspq3::AAS_BSPLinkEntity;
-use crate::src::botlib::be_aas_bspq3::AAS_BSPModelMinsMaxsOrigin;
-use crate::src::botlib::be_aas_bspq3::AAS_UnlinkFromBSPLeaves;
-use crate::src::botlib::be_aas_sample::AAS_LinkEntityClientBBox;
-use crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas;
-use crate::src::botlib::be_interface::botimport;
 
 pub const ET_MOVER: C2RustUnnamed_1 = 4;
 /*

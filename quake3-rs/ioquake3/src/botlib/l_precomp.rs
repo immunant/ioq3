@@ -95,27 +95,6 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::fabs;
-use crate::stdlib::vsnprintf;
-use ::libc::sprintf;
-
-use crate::src::botlib::be_interface::botimport;
-use crate::src::botlib::l_log::Log_Write;
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetClearedMemory;
-use crate::src::botlib::l_memory::GetMemory;
-use crate::stdlib::ctime;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
-use crate::stdlib::strncat;
-use ::libc::free;
-use ::libc::labs;
-use ::libc::strcat;
-use ::libc::strcmp;
-use ::libc::strcpy;
-use ::libc::time;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -2286,7 +2265,7 @@ pub unsafe extern "C" fn PC_RemoveAllGlobalDefines() {
 #[no_mangle]
 
 pub unsafe extern "C" fn PC_CopyDefine(
-    mut source: *mut crate::src::botlib::l_precomp::source_t,
+    mut _source: *mut crate::src::botlib::l_precomp::source_t,
     mut define: *mut crate::src::botlib::l_precomp::define_t,
 ) -> *mut crate::src::botlib::l_precomp::define_t {
     let mut newdefine: *mut crate::src::botlib::l_precomp::define_t =

@@ -11,13 +11,7 @@ pub use crate::src::opus_1_2_1::celt::entcode::ec_ctx;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_dec;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_enc;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_window;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf;
-use crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_shell_code_table0;
-use crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_shell_code_table1;
-use crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_shell_code_table2;
-use crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_shell_code_table3;
-use crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_shell_code_table_offsets;
+
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without

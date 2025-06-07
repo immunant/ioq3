@@ -627,9 +627,9 @@ pub unsafe extern "C" fn GL_SelectTexture(mut unit: libc::c_int) {
 
 pub unsafe extern "C" fn GL_BindMultitexture(
     mut image0: *mut crate::tr_common_h::image_t,
-    mut env0: crate::stdlib::GLuint,
+    mut _env0: crate::stdlib::GLuint,
     mut image1: *mut crate::tr_common_h::image_t,
-    mut env1: crate::stdlib::GLuint,
+    mut _env1: crate::stdlib::GLuint,
 ) {
     let mut texnum0: libc::c_int = 0;
     let mut texnum1: libc::c_int = 0;
@@ -1532,8 +1532,8 @@ pub unsafe extern "C" fn RE_StretchRaw(
 #[no_mangle]
 
 pub unsafe extern "C" fn RE_UploadCinematic(
-    mut w: libc::c_int,
-    mut h: libc::c_int,
+    mut _w: libc::c_int,
+    mut _h: libc::c_int,
     mut cols: libc::c_int,
     mut rows: libc::c_int,
     mut data: *const crate::src::qcommon::q_shared::byte,

@@ -38,17 +38,13 @@ pub use crate::src::opusfile_0_9::src::opusfile::op_tell_func;
 pub use crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks;
 pub use crate::src::opusfile_0_9::src::opusfile::OpusHead;
 pub use crate::src::qcommon::common::Com_Printf;
-use crate::src::qcommon::common::Hunk_AllocateTempMemory;
-use crate::src::qcommon::common::Hunk_FreeTempMemory;
-use crate::src::qcommon::files::FS_FTell;
-use crate::src::qcommon::files::FS_Read;
-use crate::src::qcommon::files::FS_Seek;
+
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::fileHandle_t;
 pub use crate::src::qcommon::q_shared::FS_SEEK_CUR;
 pub use crate::src::qcommon::q_shared::FS_SEEK_END;
 pub use crate::src::qcommon::q_shared::FS_SEEK_SET;
-use ::libc::__errno_location;
+
 // Q3 Ogg Opus codec
 #[no_mangle]
 
@@ -213,7 +209,7 @@ pub unsafe extern "C" fn S_OggOpus_Callback_seek(
 #[no_mangle]
 
 pub unsafe extern "C" fn S_OggOpus_Callback_close(
-    mut datasource: *mut libc::c_void,
+    mut _datasource: *mut libc::c_void,
 ) -> libc::c_int {
     // we do nothing here and close all things manually in S_OggOpus_CodecCloseStream()
     return 0 as libc::c_int;

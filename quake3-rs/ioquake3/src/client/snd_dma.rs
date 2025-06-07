@@ -192,8 +192,7 @@ pub use crate::src::client::snd_mem::SND_setup;
 pub use crate::src::client::snd_mem::SND_shutdown;
 pub use crate::src::client::snd_mem::S_LoadSound;
 pub use crate::src::client::snd_mix::S_PaintChannels;
-use crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
-use crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
+
 pub use crate::src::qcommon::cmd::Cmd_RemoveCommand;
 pub use crate::src::qcommon::common::Com_DPrintf;
 pub use crate::src::qcommon::common::Com_Error;
@@ -251,10 +250,9 @@ pub use crate::src::sdl::sdl_snd::SNDDMA_StopCapture;
 pub use crate::src::sdl::sdl_snd::SNDDMA_Submit;
 
 pub use crate::src::client::snd_dma::ctype_h::tolower;
-use crate::src::client::snd_mem::S_DisplayFreeMemory;
+
 pub use crate::stdlib::__ctype_tolower_loc;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;
@@ -270,7 +268,7 @@ pub use crate::tr_types_h::GLHW_RIVA128;
 pub use crate::tr_types_h::TC_NONE;
 pub use crate::tr_types_h::TC_S3TC;
 pub use crate::tr_types_h::TC_S3TC_ARB;
-use ::libc::strcpy;
+
 #[no_mangle]
 
 pub static mut s_backgroundStream: *mut crate::src::client::snd_codec::snd_stream_t = 0
@@ -1822,7 +1820,7 @@ pub unsafe extern "C" fn S_Base_Respatialize(
     mut entityNum: libc::c_int,
     mut head: *const crate::src::qcommon::q_shared::vec_t,
     mut axis: *mut crate::src::qcommon::q_shared::vec3_t,
-    mut inwater: libc::c_int,
+    mut _inwater: libc::c_int,
 ) {
     let mut i: libc::c_int = 0;
     let mut ch: *mut crate::snd_local_h::channel_t = 0 as *mut crate::snd_local_h::channel_t;

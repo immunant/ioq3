@@ -2,12 +2,6 @@ use ::libc;
 
 pub use crate::ogg_h::oggpack_buffer;
 
-use crate::stdlib::malloc;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::realloc;
-use ::libc::free;
-
 static mut mask: [libc::c_ulong; 33] = [
     0 as libc::c_int as libc::c_ulong,
     0x1 as libc::c_int as libc::c_ulong,

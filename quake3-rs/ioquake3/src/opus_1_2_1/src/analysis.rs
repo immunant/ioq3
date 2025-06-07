@@ -227,15 +227,7 @@ pub use crate::src::opus_1_2_1::src::analysis::mathops_h::fast_atan2f;
 pub use crate::src::opus_1_2_1::src::mlp::mlp_process;
 pub use crate::src::opus_1_2_1::src::mlp::MLP;
 pub use crate::src::opus_1_2_1::src::mlp_data::net;
-use crate::stdlib::fabs;
-use crate::stdlib::floor;
-use crate::stdlib::log;
-use crate::stdlib::log10;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::pow;
-use crate::stdlib::sqrt;
+
 /* Copyright (c) 2011 Xiph.Org Foundation
 Written by Jean-Marc Valin */
 /*

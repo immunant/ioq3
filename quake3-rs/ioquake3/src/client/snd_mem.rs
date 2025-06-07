@@ -13,20 +13,16 @@ pub use crate::src::client::snd_codec::snd_info_t;
 pub use crate::src::client::snd_codec::S_CodecLoad;
 pub use crate::src::client::snd_dma::dma;
 pub use crate::src::client::snd_dma::S_FreeOldestSound;
-use crate::src::qcommon::common::Com_DPrintf;
-use crate::src::qcommon::common::Com_Milliseconds;
+
 pub use crate::src::qcommon::common::Com_Printf;
-use crate::src::qcommon::common::Hunk_AllocateTempMemory;
-use crate::src::qcommon::common::Hunk_FreeTempMemory;
-use crate::src::qcommon::cvar::Cvar_Get;
+
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::cvar_s;
 pub use crate::src::qcommon::q_shared::cvar_t;
 pub use crate::src::qcommon::q_shared::qboolean;
 pub use crate::src::qcommon::q_shared::qfalse;
 pub use crate::src::qcommon::q_shared::qtrue;
-use crate::stdlib::malloc;
-use ::libc::free;
+
 /*
 ===============================================================================
 
@@ -149,7 +145,7 @@ unsafe extern "C" fn ResampleSfx(
     mut inwidth: libc::c_int,
     mut samples: libc::c_int,
     mut data: *mut crate::src::qcommon::q_shared::byte,
-    mut compressed: crate::src::qcommon::q_shared::qboolean,
+    mut _compressed: crate::src::qcommon::q_shared::qboolean,
 ) -> libc::c_int {
     let mut outcount: libc::c_int = 0; // this is usually 0.5, 1, or 2
     let mut srcsample: libc::c_int = 0;

@@ -1,5 +1,3 @@
-use ::libc;
-
 pub use crate::config_types_h::ogg_int64_t;
 pub use crate::ogg_h::oggpack_buffer;
 pub use crate::stdlib::__int64_t;

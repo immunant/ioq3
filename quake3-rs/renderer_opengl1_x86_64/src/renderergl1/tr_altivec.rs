@@ -1,4 +1,3 @@
-use ::libc;
 /* This file is only compiled for PowerPC builds with Altivec support.
 Altivec intrinsics need to be in a separate file, so GCC's -maltivec
 command line can enable them, but give us the option to _not_ use that

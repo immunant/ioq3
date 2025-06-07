@@ -13,9 +13,7 @@ pub use crate::opus_types_h::opus_uint32;
 pub use crate::resampler_structs_h::_silk_resampler_state_struct;
 pub use crate::resampler_structs_h::silk_resampler_state_struct;
 pub use crate::resampler_structs_h::C2RustUnnamed_64;
-use crate::src::opus_1_2_1::silk::lin2log::silk_lin2log;
-use crate::src::opus_1_2_1::silk::VAD::silk_VAD_Init;
-use crate::stdlib::memset;
+
 pub use crate::structs_FLP_h::silk_encoder_state_FLP;
 pub use crate::structs_FLP_h::silk_shape_state_FLP;
 pub use crate::structs_h::silk_LP_state;

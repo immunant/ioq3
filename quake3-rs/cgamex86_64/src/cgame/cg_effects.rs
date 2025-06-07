@@ -131,7 +131,7 @@ pub use crate::tr_types_h::RT_SPRITE;
 pub use crate::tr_types_h::TC_NONE;
 pub use crate::tr_types_h::TC_S3TC;
 pub use crate::tr_types_h::TC_S3TC_ARB;
-use ::libc::rand;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

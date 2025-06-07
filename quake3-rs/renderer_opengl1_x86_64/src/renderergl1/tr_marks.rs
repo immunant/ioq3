@@ -281,7 +281,7 @@ pub use crate::tr_types_h::STEREO_RIGHT;
 
 pub use crate::src::renderergl1::tr_init::r_marksOnTriangleMeshes;
 pub use crate::src::renderergl1::tr_main::tr;
-use crate::stdlib::memcpy;
+
 pub use crate::tr_common_h::image_s;
 pub use crate::tr_common_h::image_t;
 pub use crate::tr_common_h::imgFlags_t;
@@ -808,12 +808,12 @@ pub unsafe extern "C" fn R_AddMarkFragments(
     mut dists: *mut libc::c_float,
     mut maxPoints: libc::c_int,
     mut pointBuffer: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxFragments: libc::c_int,
+    mut _maxFragments: libc::c_int,
     mut fragmentBuffer: *mut crate::src::qcommon::q_shared::markFragment_t,
     mut returnedPoints: *mut libc::c_int,
     mut returnedFragments: *mut libc::c_int,
-    mut mins: *mut crate::src::qcommon::q_shared::vec_t,
-    mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
+    mut _mins: *mut crate::src::qcommon::q_shared::vec_t,
+    mut _maxs: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
     let mut pingPong: libc::c_int = 0;
     let mut i: libc::c_int = 0;

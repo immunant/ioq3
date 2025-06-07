@@ -98,7 +98,7 @@ pub mod Inlines_h {
         let mut err_Q32: crate::opus_types_h::opus_int32 = 0;
         let mut result: crate::opus_types_h::opus_int32 = 0;
         /* Compute number of bits head room and normalize input */
-        b_headrm = silk_CLZ32((if b32 > 0 as libc::c_int { b32 } else { -b32 })) - 1 as libc::c_int; /* Q: b_headrm                */
+        b_headrm = silk_CLZ32(if b32 > 0 as libc::c_int { b32 } else { -b32 }) - 1 as libc::c_int; /* Q: b_headrm                */
         b32_nrm = ((b32 as crate::opus_types_h::opus_uint32) << b_headrm)
             as crate::opus_types_h::opus_int32;
         /* Inverse of b32, with 14 bits of precision */
@@ -155,9 +155,7 @@ pub mod Inlines_h {
             return 0 as libc::c_int;
         };
     }
-    use crate::opus_types_h::opus_int16;
-    use crate::opus_types_h::opus_int32;
-    use crate::opus_types_h::opus_uint32;
+
     use crate::src::opus_1_2_1::silk::LPC_inv_pred_gain::macros_h::silk_CLZ32;
     /* SILK_FIX_INLINES_H */
 }
@@ -236,13 +234,11 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
             return 0 as libc::c_int;
         }
         mult2Q = 32 as libc::c_int
-            - silk_CLZ32(
-                (if rc_mult1_Q30 > 0 as libc::c_int {
-                    rc_mult1_Q30
-                } else {
-                    -rc_mult1_Q30
-                }),
-            );
+            - silk_CLZ32(if rc_mult1_Q30 > 0 as libc::c_int {
+                rc_mult1_Q30
+            } else {
+                -rc_mult1_Q30
+            });
         rc_mult2 = silk_INVERSE32_varQ(rc_mult1_Q30, mult2Q + 30 as libc::c_int);
         n = 0 as libc::c_int;
         while n < k + 1 as libc::c_int >> 1 as libc::c_int {

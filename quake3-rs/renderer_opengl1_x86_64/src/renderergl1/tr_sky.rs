@@ -323,11 +323,7 @@ pub use crate::src::sdl::sdl_glimp::qglPushMatrix;
 pub use crate::src::sdl::sdl_glimp::qglTexCoord2fv;
 pub use crate::src::sdl::sdl_glimp::qglTranslatef;
 pub use crate::src::sdl::sdl_glimp::qglVertex3fv;
-use crate::stdlib::ceil;
-use crate::stdlib::fabs;
-use crate::stdlib::floor;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
+
 pub use crate::stdlib::GLclampd;
 pub use crate::stdlib::GLenum;
 pub use crate::stdlib::GLfloat;
@@ -1211,7 +1207,7 @@ unsafe extern "C" fn FillCloudySkySide(
 }
 
 unsafe extern "C" fn FillCloudBox(
-    mut shader: *const crate::tr_local_h::shader_t,
+    mut _shader: *const crate::tr_local_h::shader_t,
     mut stage: libc::c_int,
 ) {
     let mut i: libc::c_int = 0;

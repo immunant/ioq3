@@ -3,12 +3,9 @@ use ::libc;
 pub use crate::stddef_h::size_t;
 
 pub use crate::stdlib::__compar_fn_t;
-use crate::stdlib::acos;
-use crate::stdlib::cos;
-use crate::stdlib::exp;
-use crate::stdlib::fabs;
+
 pub use crate::stdlib::qsort;
-use crate::stdlib::sqrt;
+
 /* *******************************************************************
 *                                                                  *
 * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *

@@ -523,9 +523,7 @@ pub use crate::qgl_h::VertexPointerproc;
 pub use crate::qgl_h::Viewportproc;
 pub use crate::sdl_icon_h::C2RustUnnamed_152;
 pub use crate::src::sdl::sdl_glimp::sdl_icon_h::CLIENT_WINDOW_ICON;
-use crate::stdlib::fabs;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
+
 pub use crate::stdlib::GLbitfield;
 pub use crate::stdlib::GLboolean;
 pub use crate::stdlib::GLchar;
@@ -541,36 +539,6 @@ pub use crate::stdlib::GLsizeiptr;
 pub use crate::stdlib::GLubyte;
 pub use crate::stdlib::GLuint;
 pub use crate::stdlib::GLvoid;
-use crate::stdlib::SDL_GetError;
-use ::libc::sscanf;
-use ::libc::strstr;
-
-use crate::src::renderergl1::tr_init::displayAspect;
-use crate::src::renderergl1::tr_init::glConfig;
-use crate::src::renderergl1::tr_init::maxAnisotropy;
-use crate::src::renderergl1::tr_init::r_allowExtensions;
-use crate::src::renderergl1::tr_init::r_colorbits;
-use crate::src::renderergl1::tr_init::r_depthbits;
-use crate::src::renderergl1::tr_init::r_drawBuffer;
-use crate::src::renderergl1::tr_init::r_ext_compiled_vertex_array;
-use crate::src::renderergl1::tr_init::r_ext_compressed_textures;
-use crate::src::renderergl1::tr_init::r_ext_multisample;
-use crate::src::renderergl1::tr_init::r_ext_multitexture;
-use crate::src::renderergl1::tr_init::r_ext_texture_env_add;
-use crate::src::renderergl1::tr_init::r_ext_texture_filter_anisotropic;
-use crate::src::renderergl1::tr_init::r_fullscreen;
-use crate::src::renderergl1::tr_init::r_ignorehwgamma;
-use crate::src::renderergl1::tr_init::r_mode;
-use crate::src::renderergl1::tr_init::r_noborder;
-use crate::src::renderergl1::tr_init::r_stencilbits;
-use crate::src::renderergl1::tr_init::r_stereoEnabled;
-use crate::src::renderergl1::tr_init::r_swapInterval;
-use crate::src::renderergl1::tr_init::textureFilterAnisotropic;
-use crate::src::renderergl1::tr_init::R_GetModeInfo;
-use crate::src::renderergl1::tr_main::ri;
-use crate::stdlib::SDL_Init;
-use crate::stdlib::SDL_QuitSubSystem;
-use crate::stdlib::SDL_WasInit;
 
 pub const RSERR_INVALID_MODE: rserr_t = 2;
 
@@ -1152,7 +1120,7 @@ GLimp_LogComment
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn GLimp_LogComment(mut comment: *mut libc::c_char) {}
+pub unsafe extern "C" fn GLimp_LogComment(mut _comment: *mut libc::c_char) {}
 /*
 ===============
 GLimp_CompareModes

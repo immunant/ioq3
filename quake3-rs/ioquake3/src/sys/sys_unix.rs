@@ -111,40 +111,15 @@ pub use crate::stdlib::stat;
 pub use crate::stdlib::timezone;
 pub use crate::stdlib::DIR;
 
-use crate::src::sys::con_log::CON_LogRead;
-use crate::src::sys::sys_main::Sys_SigHandler;
 pub use crate::src::sys::sys_unix::sys_stat_h::stat;
 pub use crate::stdlib::__sighandler_t;
 pub use crate::stdlib::__xstat;
-use crate::stdlib::memset;
+
 pub use crate::stdlib::signal;
-use crate::stdlib::strlen;
-use ::libc::__errno_location;
-use ::libc::exit;
-use ::libc::getenv;
+
 pub use ::libc::kill;
 pub use ::libc::mkdir;
 pub use ::libc::mkfifo;
-use ::libc::setenv;
-use ::libc::strcmp;
-use ::libc::strstr;
-use ::libc::unsetenv;
-
-use crate::stdlib::__xpg_basename;
-use crate::stdlib::dirname;
-use crate::stdlib::execvp;
-use crate::stdlib::fesetround;
-use crate::stdlib::getcwd;
-use crate::stdlib::write;
-use ::libc::close;
-use ::libc::fcntl;
-use ::libc::fork;
-use ::libc::getpid;
-use ::libc::getuid;
-use ::libc::isatty;
-use ::libc::open;
-use ::libc::usleep;
-use ::libc::wait;
 
 pub type dialogCommandBuilder_t = Option<
     unsafe extern "C" fn(
@@ -13474,7 +13449,7 @@ Sys_XmessageCommand
 unsafe extern "C" fn Sys_XmessageCommand(
     mut type_0: crate::qcommon_h::dialogType_t,
     mut message: *const libc::c_char,
-    mut title: *const libc::c_char,
+    mut _title: *const libc::c_char,
 ) {
     Sys_ClearExecBuffer();
     Sys_AppendToExecBuffer(b"xmessage\x00" as *const u8 as *const libc::c_char);

@@ -233,7 +233,6 @@ pub mod q_shared_h {
                 as libc::c_double,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -507,17 +506,6 @@ pub use crate::tr_local_h::TMOD_SCROLL;
 pub use crate::tr_local_h::TMOD_STRETCH;
 pub use crate::tr_local_h::TMOD_TRANSFORM;
 pub use crate::tr_local_h::TMOD_TURBULENT;
-use ::libc::sscanf;
-
-use crate::stdlib::ceil;
-use crate::stdlib::fabs;
-use crate::stdlib::floor;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
-use crate::stdlib::strlen;
-use ::libc::strchr;
-use ::libc::strcpy;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1290,9 +1278,9 @@ ParseFlare
 
 unsafe extern "C" fn ParseFlare(
     mut ds: *mut crate::qfiles_h::dsurface_t,
-    mut verts: *mut crate::qfiles_h::drawVert_t,
+    mut _verts: *mut crate::qfiles_h::drawVert_t,
     mut surf: *mut crate::tr_local_h::msurface_t,
-    mut indexes: *mut libc::c_int,
+    mut _indexes: *mut libc::c_int,
 ) {
     let mut flare: *mut crate::tr_local_h::srfFlare_t = 0 as *mut crate::tr_local_h::srfFlare_t;
     let mut i: libc::c_int = 0;

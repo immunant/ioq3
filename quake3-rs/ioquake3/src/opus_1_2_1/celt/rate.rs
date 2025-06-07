@@ -44,10 +44,7 @@ pub use crate::src::opus_1_2_1::celt::entcode::ec_ctx;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_dec;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_enc;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_window;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_bit_logp;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_uint;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_bit_logp;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_uint;
+
 pub use crate::src::opus_1_2_1::celt::rate::entcode_h::celt_udiv;
 /* Copyright (c) 2007-2008 CSIRO
 Copyright (c) 2007-2009 Xiph.Org Foundation

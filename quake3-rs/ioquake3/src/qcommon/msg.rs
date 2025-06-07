@@ -47,9 +47,7 @@ pub use crate::src::qcommon::q_shared::TR_LINEAR;
 pub use crate::src::qcommon::q_shared::TR_LINEAR_STOP;
 pub use crate::src::qcommon::q_shared::TR_SINE;
 pub use crate::src::qcommon::q_shared::TR_STATIONARY;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
+
 extern "C" {
     #[no_mangle]
     pub static mut cl_shownet: *mut crate::src::qcommon::q_shared::cvar_t;

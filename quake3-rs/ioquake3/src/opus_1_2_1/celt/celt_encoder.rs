@@ -149,8 +149,7 @@ pub mod mathops_h {
             + frac * (0.95909232f32 + frac * (-0.33951290f32 + frac * 0.16541097f32));
         return (1 as libc::c_int + integer) as libc::c_float + frac;
     }
-    use crate::arch_h::opus_val16;
-    use crate::opus_types_h::opus_uint32;
+
     /* MATHOPS_H */
     /* FIXED_POINT */
 }
@@ -172,8 +171,6 @@ pub mod pitch_h {
         }
         return xy;
     }
-
-    use crate::arch_h::opus_val32;
 }
 
 pub use crate::internal::__builtin_va_list;
@@ -217,40 +214,16 @@ pub use crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state;
 pub use crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx;
 pub use crate::src::opus_1_2_1::celt::mdct::clt_mdct_forward_c;
 pub use crate::src::opus_1_2_1::celt::mdct::mdct_lookup;
-use crate::src::opus_1_2_1::celt::modes::opus_custom_mode_create;
+
 pub use crate::src::opus_1_2_1::celt::modes::OpusCustomMode;
 pub use crate::src::opus_1_2_1::celt::modes::PulseCache;
-use crate::stdlib::fabs;
-use crate::stdlib::floor;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
-use ::libc::abs;
 
-use crate::src::opus_1_2_1::celt::bands::compute_band_energies;
-use crate::src::opus_1_2_1::celt::bands::haar1;
-use crate::src::opus_1_2_1::celt::bands::hysteresis_decision;
-use crate::src::opus_1_2_1::celt::bands::normalise_bands;
-use crate::src::opus_1_2_1::celt::bands::quant_all_bands;
-use crate::src::opus_1_2_1::celt::bands::spreading_decision;
 pub use crate::src::opus_1_2_1::celt::celt_encoder::pitch_h::celt_inner_prod_c;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_bit_logp;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_bits;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_done;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_init;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_shrink;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_uint;
+
 pub use crate::src::opus_1_2_1::celt::pitch::pitch_downsample;
 pub use crate::src::opus_1_2_1::celt::pitch::pitch_search;
 pub use crate::src::opus_1_2_1::celt::pitch::remove_doubling;
-use crate::src::opus_1_2_1::celt::quant_bands::amp2Log2;
-use crate::src::opus_1_2_1::celt::quant_bands::eMeans;
-use crate::src::opus_1_2_1::celt::quant_bands::quant_coarse_energy;
-use crate::src::opus_1_2_1::celt::quant_bands::quant_energy_finalise;
-use crate::src::opus_1_2_1::celt::quant_bands::quant_fine_energy;
-use crate::src::opus_1_2_1::celt::rate::compute_allocation;
+
 /* Copyright (c) 2007-2008 CSIRO
 Copyright (c) 2007-2010 Xiph.Org Foundation
 Copyright (c) 2008 Gregory Maxwell
@@ -1462,7 +1435,7 @@ unsafe extern "C" fn alloc_trim_analysis(
     mut intensity: libc::c_int,
     mut surround_trim: crate::arch_h::opus_val16,
     mut equiv_rate: crate::opus_types_h::opus_int32,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 ) -> libc::c_int {
     let mut i: libc::c_int = 0;
     let mut diff: crate::arch_h::opus_val32 = 0 as libc::c_int as crate::arch_h::opus_val32;

@@ -12,8 +12,7 @@ pub use crate::src::botlib::be_interface::botimport;
 pub use crate::src::botlib::be_interface::botlib_globals_s;
 pub use crate::src::botlib::be_interface::botlib_globals_t;
 pub use crate::src::botlib::be_interface::botlibglobals;
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetClearedHunkMemory;
+
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::cplane_s;
 pub use crate::src::qcommon::q_shared::cplane_t;
@@ -29,7 +28,7 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::memcpy;
+
 #[no_mangle]
 
 pub static mut botinputs: *mut crate::botlib_h::bot_input_t =
@@ -528,7 +527,7 @@ pub unsafe extern "C" fn EA_View(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn EA_EndRegular(mut client: libc::c_int, mut thinktime: libc::c_float) {}
+pub unsafe extern "C" fn EA_EndRegular(mut _client: libc::c_int, mut _thinktime: libc::c_float) {}
 //end of the function EA_EndRegular
 //===========================================================================
 //

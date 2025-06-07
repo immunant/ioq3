@@ -31,7 +31,7 @@ pub mod q_shared_h {
                 as libc::c_double,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
-    use crate::stdlib::sqrt;
+
     // __Q_SHARED_H
 }
 
@@ -47,14 +47,7 @@ pub use crate::src::qcommon::q_shared::qtrue;
 pub use crate::src::qcommon::q_shared::vec3_t;
 pub use crate::src::qcommon::q_shared::vec4_t;
 pub use crate::src::qcommon::q_shared::vec_t;
-use crate::stdlib::acos;
-use crate::stdlib::atan2;
-use crate::stdlib::cos;
-use crate::stdlib::fabs;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::sin;
-use crate::stdlib::sqrt;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

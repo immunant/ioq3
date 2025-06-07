@@ -28,7 +28,6 @@ pub mod q_shared_h {
                 as libc::c_double,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -294,7 +293,7 @@ pub use crate::src::qcommon::q_shared::TR_LINEAR;
 pub use crate::src::qcommon::q_shared::TR_LINEAR_STOP;
 pub use crate::src::qcommon::q_shared::TR_SINE;
 pub use crate::src::qcommon::q_shared::TR_STATIONARY;
-use crate::stdlib::sqrt;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;

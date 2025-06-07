@@ -555,7 +555,7 @@ unsafe extern "C" fn ycck_cmyk_convert(
  * Empty method for start_pass.
  */
 
-unsafe extern "C" fn start_pass_dcolor(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
+unsafe extern "C" fn start_pass_dcolor(mut _cinfo: crate::jpeglib_h::j_decompress_ptr) {
     /* no work needed */
 }
 /*

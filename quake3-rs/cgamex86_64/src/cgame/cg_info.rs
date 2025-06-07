@@ -134,7 +134,7 @@ pub use crate::tr_types_h::RT_SPRITE;
 pub use crate::tr_types_h::TC_NONE;
 pub use crate::tr_types_h::TC_S3TC;
 pub use crate::tr_types_h::TC_S3TC_ARB;
-use ::libc::strrchr;
+
 pub use ::libc::strtol;
 
 static mut loadingPlayerIconCount: libc::c_int = 0;

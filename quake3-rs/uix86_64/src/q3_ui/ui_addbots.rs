@@ -53,7 +53,7 @@ pub use crate::src::ui::ui_syscalls::trap_Cvar_VariableValue;
 pub use crate::src::ui::ui_syscalls::trap_GetConfigString;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
 pub use crate::stdlib::__compar_fn_t;
-use crate::stdlib::memset;
+
 pub use crate::stdlib::qsort;
 pub use crate::ui_local_h::_tag_menuframework;
 pub use crate::ui_local_h::menubitmap_s;
@@ -376,7 +376,10 @@ UI_AddBotsMenu_FightEvent
 =================
 */
 
-unsafe extern "C" fn UI_AddBotsMenu_FightEvent(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
+unsafe extern "C" fn UI_AddBotsMenu_FightEvent(
+    mut _ptr: *mut libc::c_void,
+    mut event: libc::c_int,
+) {
     let mut team: *const libc::c_char = 0 as *const libc::c_char;
     let mut skill: libc::c_int = 0;
     if event != 3 as libc::c_int {
@@ -422,7 +425,7 @@ UI_AddBotsMenu_BackEvent
 =================
 */
 
-unsafe extern "C" fn UI_AddBotsMenu_BackEvent(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
+unsafe extern "C" fn UI_AddBotsMenu_BackEvent(mut _ptr: *mut libc::c_void, mut event: libc::c_int) {
     if event != 3 as libc::c_int {
         return;
     }
@@ -459,7 +462,7 @@ UI_AddBotsMenu_UpEvent
 =================
 */
 
-unsafe extern "C" fn UI_AddBotsMenu_UpEvent(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
+unsafe extern "C" fn UI_AddBotsMenu_UpEvent(mut _ptr: *mut libc::c_void, mut event: libc::c_int) {
     if event != 3 as libc::c_int {
         return;
     }
@@ -474,7 +477,7 @@ UI_AddBotsMenu_DownEvent
 =================
 */
 
-unsafe extern "C" fn UI_AddBotsMenu_DownEvent(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
+unsafe extern "C" fn UI_AddBotsMenu_DownEvent(mut _ptr: *mut libc::c_void, mut event: libc::c_int) {
     if event != 3 as libc::c_int {
         return;
     }

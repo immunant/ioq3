@@ -602,7 +602,7 @@ unsafe extern "C" fn null_convert(
  * Empty method for start_pass.
  */
 
-unsafe extern "C" fn null_method(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
+unsafe extern "C" fn null_method(mut _cinfo: crate::jpeglib_h::j_compress_ptr) {
     /* no work needed */
 }
 /*

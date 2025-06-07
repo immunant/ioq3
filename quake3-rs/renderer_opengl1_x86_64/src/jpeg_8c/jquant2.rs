@@ -287,7 +287,7 @@ pub type LOCFSERROR = libc::c_int;
 unsafe extern "C" fn prescan_quantize(
     mut cinfo: crate::jpeglib_h::j_decompress_ptr,
     mut input_buf: crate::jpeglib_h::JSAMPARRAY,
-    mut output_buf: crate::jpeglib_h::JSAMPARRAY,
+    mut _output_buf: crate::jpeglib_h::JSAMPARRAY,
     mut num_rows: libc::c_int,
 ) {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
@@ -1474,11 +1474,11 @@ unsafe extern "C" fn init_error_limit(mut cinfo: crate::jpeglib_h::j_decompress_
         *table.offset(in_0 as isize) = out;
         *table.offset(-in_0 as isize) = -out;
         in_0 += 1;
-        out += (if in_0 & 1 as libc::c_int != 0 {
+        out += if in_0 & 1 as libc::c_int != 0 {
             0 as libc::c_int
         } else {
             1 as libc::c_int
-        })
+        }
     }
     /* Clamp the rest to final out value (which is (MAXJSAMPLE+1)/8) */
     while in_0 <= 255 as libc::c_int {
@@ -1500,7 +1500,7 @@ unsafe extern "C" fn finish_pass1(mut cinfo: crate::jpeglib_h::j_decompress_ptr)
     (*cquantize).needs_zeroed = 1 as libc::c_int;
 }
 
-unsafe extern "C" fn finish_pass2(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
+unsafe extern "C" fn finish_pass2(mut _cinfo: crate::jpeglib_h::j_decompress_ptr) {
     /* no work */
 }
 /*

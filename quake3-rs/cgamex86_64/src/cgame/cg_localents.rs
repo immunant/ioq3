@@ -31,7 +31,6 @@ pub mod q_shared_h {
             * *v2.offset(1 as libc::c_int as isize)
             - *v1.offset(1 as libc::c_int as isize) * *v2.offset(0 as libc::c_int as isize);
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -179,10 +178,7 @@ pub use crate::src::cgame::cg_predict::CG_Trace;
 pub use crate::src::cgame::cg_syscalls::trap_R_AddLightToScene;
 pub use crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene;
 pub use crate::src::cgame::cg_syscalls::trap_S_StartSound;
-use crate::stdlib::memset;
-use crate::stdlib::sin;
-use crate::stdlib::sqrt;
-use ::libc::rand;
+
 #[no_mangle]
 
 pub static mut cg_localEntities: [crate::cg_local_h::localEntity_t; 512] =

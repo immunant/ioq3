@@ -70,21 +70,9 @@ pub use crate::src::libvorbis_1_3_6::lib::sharedbook::vorbis_staticbook_destroy;
 pub use crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup;
 
 pub use crate::src::libvorbis_1_3_6::lib::info::ctype_h::toupper;
-use crate::src::libvorbis_1_3_6::lib::registry::_floor_P;
-use crate::src::libvorbis_1_3_6::lib::registry::_mapping_P;
-use crate::src::libvorbis_1_3_6::lib::registry::_residue_P;
-use crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog;
+
 pub use crate::stdlib::__ctype_toupper_loc;
-use crate::stdlib::calloc;
-use crate::stdlib::malloc;
-use crate::stdlib::memcmp;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::realloc;
-use crate::stdlib::strlen;
-use ::libc::free;
-use ::libc::strcat;
-use ::libc::strcpy;
+
 /* helpers */
 
 unsafe extern "C" fn _v_writestring(
@@ -203,11 +191,11 @@ unsafe extern "C" fn tagcompare(
             {
                 if 0 != 0 {
                     let mut __c: libc::c_int = *s1.offset(c as isize) as libc::c_int;
-                    __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                    __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                         __c
                     } else {
                         *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                    })
+                    }
                 } else {
                     __res = toupper(*s1.offset(c as isize) as libc::c_int)
                 }
@@ -223,11 +211,11 @@ unsafe extern "C" fn tagcompare(
             {
                 if 0 != 0 {
                     let mut __c: libc::c_int = *s2.offset(c as isize) as libc::c_int;
-                    __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                    __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                         __c
                     } else {
                         *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                    })
+                    }
                 } else {
                     __res = toupper(*s2.offset(c as isize) as libc::c_int)
                 }

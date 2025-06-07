@@ -7,7 +7,7 @@ pub use crate::stdlib::__uint8_t;
 pub use crate::stdlib::int32_t;
 
 pub use crate::src::jpeg_8c::jerror::C2RustUnnamed_1;
-use crate::src::qcommon::puff::puff;
+
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::cvar_s;
 pub use crate::src::qcommon::q_shared::cvar_t;
@@ -19,7 +19,7 @@ pub use crate::src::qcommon::q_shared::ha_pref;
 pub use crate::src::qcommon::q_shared::qboolean;
 pub use crate::src::qcommon::q_shared::qfalse;
 pub use crate::src::qcommon::q_shared::qtrue;
-use crate::src::qcommon::q_shared::LongSwap;
+
 pub use crate::src::qcommon::q_shared::FMV_EOF;
 pub use crate::src::qcommon::q_shared::FMV_IDLE;
 pub use crate::src::qcommon::q_shared::FMV_ID_BLT;
@@ -31,14 +31,12 @@ pub use crate::src::qcommon::q_shared::PRINT_ALL;
 pub use crate::src::qcommon::q_shared::PRINT_DEVELOPER;
 pub use crate::src::qcommon::q_shared::PRINT_ERROR;
 pub use crate::src::qcommon::q_shared::PRINT_WARNING;
-use crate::src::renderergl1::tr_main::ri;
-use crate::stdlib::memcmp;
-use crate::stdlib::memcpy;
+
 pub use crate::stdlib::uint16_t;
 pub use crate::stdlib::uint32_t;
 pub use crate::stdlib::uint8_t;
 pub use crate::tr_public_h::refimport_t;
-use ::libc::abs;
+
 /*
  *  Some support functions for buffered files follow.
  */

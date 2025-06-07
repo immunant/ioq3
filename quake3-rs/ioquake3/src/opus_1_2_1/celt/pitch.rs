@@ -188,8 +188,6 @@ pub mod pitch_h {
         }
         return xy;
     }
-    use crate::arch_h::opus_val16;
-    use crate::arch_h::opus_val32;
 }
 
 pub use crate::arch_h::celt_sig;
@@ -198,12 +196,9 @@ pub use crate::arch_h::opus_val32;
 pub use crate::opus_types_h::opus_uint32;
 pub use crate::src::opus_1_2_1::celt::pitch::entcode_h::celt_udiv;
 pub use crate::stdlib::__uint32_t;
-use crate::stdlib::sqrt;
-pub use crate::stdlib::uint32_t;
-use ::libc::abs;
 
-use crate::src::opus_1_2_1::celt::celt_lpc::_celt_autocorr;
-use crate::src::opus_1_2_1::celt::celt_lpc::_celt_lpc;
+pub use crate::stdlib::uint32_t;
+
 pub use crate::src::opus_1_2_1::celt::pitch::pitch_h::celt_inner_prod_c;
 pub use crate::src::opus_1_2_1::celt::pitch::pitch_h::dual_inner_prod_c;
 pub use crate::src::opus_1_2_1::celt::pitch::pitch_h::xcorr_kernel_c;
@@ -469,7 +464,7 @@ pub unsafe extern "C" fn celt_pitch_xcorr_c(
     mut xcorr: *mut crate::arch_h::opus_val32,
     mut len: libc::c_int,
     mut max_pitch: libc::c_int,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 ) {
     /* This is a simple version of the pitch correlation that should work
     well on DSPs like Blackfin and TI C5x/C6x */
@@ -684,7 +679,7 @@ pub unsafe extern "C" fn remove_doubling(
     mut T0_: *mut libc::c_int,
     mut prev_period: libc::c_int,
     mut prev_gain: crate::arch_h::opus_val16,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 ) -> crate::arch_h::opus_val16 {
     let mut k: libc::c_int = 0;
     let mut i: libc::c_int = 0;

@@ -3,16 +3,12 @@ use ::libc;
 pub use crate::stdlib::__uint32_t;
 pub use crate::stdlib::uint32_t;
 
-use crate::src::qcommon::files::FS_FCloseFile;
-use crate::src::qcommon::files::FS_Read;
-use crate::src::qcommon::files::FS_SV_FOpenFileRead;
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::fileHandle_t;
 pub use crate::src::qcommon::q_shared::va;
 pub use crate::src::qcommon::q_shared::Q_strcat;
 pub use crate::src::qcommon::q_shared::Q_strncpyz;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
+
 /*
  * This code implements the MD5 message-digest algorithm.
  * The algorithm is due to Ron Rivest.  This code was

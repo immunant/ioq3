@@ -30,16 +30,6 @@ pub use crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global;
 
 pub use crate::highlevel_h::highlevel_byblocktype;
 pub use crate::highlevel_h::highlevel_encode_setup;
-use crate::stdlib::calloc;
-use crate::stdlib::malloc;
-use crate::stdlib::memset;
-use ::libc::free;
-
-use crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc;
-use crate::src::libvorbis_1_3_6::lib::lsp::vorbis_lsp_to_curve;
-use crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog;
-use crate::stdlib::atan;
-use crate::stdlib::floor;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -259,7 +249,7 @@ unsafe extern "C" fn floor0_map_lazy_init(
 }
 
 unsafe extern "C" fn floor0_look(
-    mut vd: *mut crate::codec_h::vorbis_dsp_state,
+    mut _vd: *mut crate::codec_h::vorbis_dsp_state,
     mut i: *mut libc::c_void,
 ) -> *mut libc::c_void {
     let mut info: *mut crate::backends_h::vorbis_info_floor0 =

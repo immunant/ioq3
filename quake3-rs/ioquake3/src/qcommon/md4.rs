@@ -2,8 +2,7 @@ use ::libc;
 
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::stdlib::__uint32_t;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
+
 pub use crate::stdlib::uint32_t;
 /*
     mdfour.c

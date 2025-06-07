@@ -232,8 +232,7 @@ pub use crate::src::qcommon::cm_load::c_traces;
 pub use crate::src::qcommon::cm_load::cm;
 pub use crate::src::qcommon::cm_load::cm_noCurves;
 pub use crate::src::qcommon::cm_load::CM_ClipHandleToModel;
-use crate::src::qcommon::cm_load::CM_ModelBounds;
-use crate::src::qcommon::cm_load::CM_TempBoxModel;
+
 pub use crate::src::qcommon::cm_patch::patchCollide_s;
 pub use crate::src::qcommon::cm_patch::CM_PositionTestInPatchCollide;
 pub use crate::src::qcommon::cm_patch::CM_TraceThroughPatchCollide;
@@ -258,8 +257,7 @@ pub use crate::src::qcommon::q_shared::qtrue;
 pub use crate::src::qcommon::q_shared::trace_t;
 pub use crate::src::qcommon::q_shared::vec3_t;
 pub use crate::src::qcommon::q_shared::vec_t;
-use crate::stdlib::fabs;
-use crate::stdlib::memset;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

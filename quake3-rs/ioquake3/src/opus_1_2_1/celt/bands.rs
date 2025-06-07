@@ -55,8 +55,6 @@ pub mod mathops_h {
         return res.f;
     }
 
-    use crate::stdlib::floor;
-
     /* MATHOPS_H */
     /* FIXED_POINT */
 }
@@ -184,7 +182,6 @@ pub mod pitch_h {
         }
         return xy;
     }
-    use crate::arch_h::opus_val32;
 }
 
 pub use crate::stdlib::__int16_t;
@@ -220,28 +217,11 @@ pub use crate::src::opus_1_2_1::celt::entcode::ec_dec;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_enc;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_tell_frac;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_window;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_bit_logp;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_bits;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_uint;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_update;
-use crate::src::opus_1_2_1::celt::entdec::ec_decode;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_bit_logp;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_bits;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_uint;
-use crate::src::opus_1_2_1::celt::entenc::ec_encode;
+
 pub use crate::src::opus_1_2_1::celt::kiss_fft::arch_fft_state;
 pub use crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state;
 pub use crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx;
 pub use crate::src::opus_1_2_1::celt::mathops::isqrt32;
-use crate::src::opus_1_2_1::celt::quant_bands::eMeans;
-use crate::src::opus_1_2_1::celt::vq::alg_quant;
-use crate::src::opus_1_2_1::celt::vq::alg_unquant;
-use crate::src::opus_1_2_1::celt::vq::renormalise_vector;
-use crate::src::opus_1_2_1::celt::vq::stereo_itheta;
-use crate::stdlib::floor;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -415,7 +395,7 @@ pub unsafe extern "C" fn compute_band_energies(
     mut end: libc::c_int,
     mut C: libc::c_int,
     mut LM: libc::c_int,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 ) {
     let mut i: libc::c_int = 0;
     let mut c: libc::c_int = 0;
@@ -759,7 +739,7 @@ unsafe extern "C" fn stereo_merge(
     mut Y: *mut crate::arch_h::celt_norm,
     mut mid: crate::arch_h::opus_val16,
     mut N: libc::c_int,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 ) {
     let mut j: libc::c_int = 0;
     let mut xp: crate::arch_h::opus_val32 = 0 as libc::c_int as crate::arch_h::opus_val32;

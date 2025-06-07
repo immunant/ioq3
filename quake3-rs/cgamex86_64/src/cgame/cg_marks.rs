@@ -131,8 +131,7 @@ pub use crate::src::cgame::cg_main::cgs;
 pub use crate::src::cgame::cg_main::CG_Error;
 pub use crate::src::cgame::cg_syscalls::trap_CM_MarkFragments;
 pub use crate::src::cgame::cg_syscalls::trap_R_AddPolyToScene;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

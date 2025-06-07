@@ -57,10 +57,7 @@ pub use crate::src::qcommon::q_shared::qboolean;
 pub use crate::src::qcommon::q_shared::qfalse;
 pub use crate::src::qcommon::q_shared::qtrue;
 pub use crate::src::qcommon::q_shared::Com_sprintf;
-use crate::stdlib::fprintf;
-use crate::stdlib::strlen;
-use crate::stdlib::strncpy;
-use ::libc::strcmp;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
@@ -379,7 +376,7 @@ pub unsafe extern "C" fn ReadChar(
 
 pub unsafe extern "C" fn ReadString(
     mut source: *mut crate::src::botlib::l_precomp::source_t,
-    mut fd: *mut crate::src::botlib::l_struct::fielddef_t,
+    mut _fd: *mut crate::src::botlib::l_struct::fielddef_t,
     mut p: *mut libc::c_void,
 ) -> libc::c_int {
     let mut token: crate::src::botlib::l_script::token_t = crate::src::botlib::l_script::token_t {

@@ -3,15 +3,13 @@ use ::libc;
 pub use crate::opus_types_h::opus_int16;
 pub use crate::opus_types_h::opus_int32;
 pub use crate::opus_types_h::opus_uint32;
-use crate::src::opus_1_2_1::silk::biquad_alt::silk_biquad_alt_stride1;
-use crate::src::opus_1_2_1::silk::tables_other::silk_Transition_LP_A_Q28;
-use crate::src::opus_1_2_1::silk::tables_other::silk_Transition_LP_B_Q28;
+
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
 pub use crate::stdlib::__uint32_t;
 pub use crate::stdlib::int16_t;
 pub use crate::stdlib::int32_t;
-use crate::stdlib::memcpy;
+
 pub use crate::stdlib::uint32_t;
 pub use crate::structs_h::silk_LP_state;
 /* **********************************************************************

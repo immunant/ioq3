@@ -102,13 +102,7 @@ pub use crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup;
 
 pub use crate::scales_h::C2RustUnnamed_58;
 pub use crate::src::libvorbis_1_3_6::lib::envelope::scales_h::todB;
-use crate::stdlib::calloc;
-use crate::stdlib::malloc;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::realloc;
-use crate::stdlib::sin;
-use ::libc::free;
+
 /* *******************************************************************
 *                                                                  *
 * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *

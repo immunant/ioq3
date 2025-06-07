@@ -66,12 +66,9 @@ use ::libc;
 pub use crate::src::client::snd_codec_ogg::ogg_codec;
 pub use crate::src::client::snd_codec_opus::opus_codec;
 pub use crate::src::client::snd_codec_wav::wav_codec;
-use crate::src::qcommon::common::Com_DPrintf;
+
 pub use crate::src::qcommon::common::Com_Printf;
-use crate::src::qcommon::common::Z_Free;
-use crate::src::qcommon::common::Z_Malloc;
-use crate::src::qcommon::files::FS_FCloseFile;
-use crate::src::qcommon::files::FS_FOpenFileRead;
+
 pub use crate::src::qcommon::q_shared::fileHandle_t;
 pub use crate::src::qcommon::q_shared::qboolean;
 pub use crate::src::qcommon::q_shared::qfalse;

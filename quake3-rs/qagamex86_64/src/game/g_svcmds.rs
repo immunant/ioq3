@@ -123,8 +123,7 @@ pub use crate::src::game::g_syscalls::trap_Argv;
 pub use crate::src::game::g_syscalls::trap_Cvar_Set;
 pub use crate::src::game::g_syscalls::trap_SendConsoleCommand;
 pub use crate::src::game::g_syscalls::trap_SendServerCommand;
-use crate::stdlib::strlen;
-use ::libc::strchr;
+
 pub use ::libc::strtol;
 extern "C" {
     #[no_mangle]

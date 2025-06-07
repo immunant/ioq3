@@ -98,15 +98,14 @@ pub use crate::alc_h::LPALCMAKECONTEXTCURRENT;
 pub use crate::alc_h::LPALCOPENDEVICE;
 pub use crate::alc_h::LPALCPROCESSCONTEXT;
 pub use crate::alc_h::LPALCSUSPENDCONTEXT;
-use crate::src::qcommon::common::Com_DPrintf;
+
 pub use crate::src::qcommon::common::Com_Printf;
 pub use crate::src::qcommon::q_shared::qboolean;
 pub use crate::src::qcommon::q_shared::qfalse;
 pub use crate::src::qcommon::q_shared::qtrue;
-use crate::src::sys::sys_main::Sys_LoadDll;
+
 pub use crate::stdlib::mbstate_t;
-use crate::stdlib::SDL_LoadFunction;
-use crate::stdlib::SDL_UnloadObject;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

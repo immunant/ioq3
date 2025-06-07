@@ -111,12 +111,7 @@ pub use crate::server_h::CS_ZOMBIE;
 pub use crate::server_h::SS_DEAD;
 pub use crate::server_h::SS_GAME;
 pub use crate::server_h::SS_LOADING;
-use crate::src::qcommon::cm_load::CM_LeafArea;
-use crate::src::qcommon::cm_load::CM_LeafCluster;
-use crate::src::qcommon::cm_test::CM_AreasConnected;
-use crate::src::qcommon::cm_test::CM_ClusterPVS;
-use crate::src::qcommon::cm_test::CM_PointLeafnum;
-use crate::src::qcommon::cm_test::CM_WriteAreaBits;
+
 pub use crate::src::qcommon::common::com_timescale;
 pub use crate::src::qcommon::common::Com_DPrintf;
 pub use crate::src::qcommon::common::Com_Error;
@@ -173,7 +168,7 @@ pub use crate::src::server::sv_main::SV_RateMsec;
 pub use crate::src::server::sv_net_chan::SV_Netchan_Transmit;
 pub use crate::src::server::sv_snapshot::q_shared_h::VectorLengthSquared;
 pub use crate::stdlib::__compar_fn_t;
-use crate::stdlib::memset;
+
 pub use crate::stdlib::qsort;
 
 #[repr(C)]
@@ -551,7 +546,7 @@ unsafe extern "C" fn SV_AddEntitiesVisibleFromPoint(
     mut origin: *mut crate::src::qcommon::q_shared::vec_t,
     mut frame: *mut crate::server_h::clientSnapshot_t,
     mut eNums: *mut snapshotEntityNumbers_t,
-    mut portal: crate::src::qcommon::q_shared::qboolean,
+    mut _portal: crate::src::qcommon::q_shared::qboolean,
 ) {
     let mut e: libc::c_int = 0;
     let mut i: libc::c_int = 0;

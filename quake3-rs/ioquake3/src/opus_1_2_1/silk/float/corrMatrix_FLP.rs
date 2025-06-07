@@ -1,7 +1,5 @@
 use ::libc;
 
-use crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP;
-use crate::src::opus_1_2_1::silk::float::inner_product_FLP::silk_inner_product_FLP;
 /* Calculates correlation vector X'*t */
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.

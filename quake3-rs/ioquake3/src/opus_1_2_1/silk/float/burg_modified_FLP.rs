@@ -1,11 +1,5 @@
 use ::libc;
 
-use crate::stdlib::sqrt;
-
-use crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP;
-use crate::src::opus_1_2_1::silk::float::inner_product_FLP::silk_inner_product_FLP;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without

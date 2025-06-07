@@ -131,14 +131,7 @@ pub use crate::src::libogg_1_3_3::src::framing::ogg_sync_pageout;
 pub use crate::src::libogg_1_3_3::src::framing::ogg_sync_pageseek;
 pub use crate::src::libogg_1_3_3::src::framing::ogg_sync_reset;
 pub use crate::src::libogg_1_3_3::src::framing::ogg_sync_wrote;
-use crate::src::opus_1_2_1::src::opus::opus_packet_get_samples_per_frame;
-use crate::src::opus_1_2_1::src::opus::opus_pcm_soft_clip;
-use crate::src::opus_1_2_1::src::opus_decoder::opus_packet_get_nb_frames;
-use crate::src::opus_1_2_1::src::opus_multistream_decoder::opus_multistream_decode_float;
-use crate::src::opus_1_2_1::src::opus_multistream_decoder::opus_multistream_decoder_create;
-use crate::src::opus_1_2_1::src::opus_multistream_decoder::opus_multistream_decoder_ctl;
-use crate::src::opus_1_2_1::src::opus_multistream_decoder::opus_multistream_decoder_destroy;
-use crate::src::opus_1_2_1::src::opus_multistream_decoder::OpusMSDecoder;
+
 pub use crate::src::opusfile_0_9::src::info::opus_head_parse;
 pub use crate::src::opusfile_0_9::src::info::opus_tags_clear;
 pub use crate::src::opusfile_0_9::src::info::opus_tags_get_album_gain;
@@ -146,13 +139,7 @@ pub use crate::src::opusfile_0_9::src::info::opus_tags_get_track_gain;
 pub use crate::src::opusfile_0_9::src::info::opus_tags_parse;
 pub use crate::src::opusfile_0_9::src::stream::op_fopen;
 pub use crate::src::opusfile_0_9::src::stream::op_mem_stream_create;
-use crate::stdlib::malloc;
-use crate::stdlib::memcmp;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::realloc;
-use ::libc::free;
+
 /*We use this to remember the pages we found while enumerating the links of a
  chained stream.
 We keep track of the starting and ending offsets, as well as the point we
@@ -4477,7 +4464,8 @@ unsafe extern "C" fn op_get_pcm_offset(
             /*This means an unseekable stream claimed to have a page from more than
             2 billion days after we joined.*/
             return 2 as libc::c_int as libc::c_long
-                * (((1 as libc::c_int as crate::config_types_h::ogg_int64_t) << 62 as libc::c_int)
+                * (((1 as libc::c_int as crate::config_types_h::ogg_int64_t)
+                    << 62 as libc::c_int)
                     - 1 as libc::c_int as libc::c_long)
                 | 1 as libc::c_int as libc::c_long;
         }

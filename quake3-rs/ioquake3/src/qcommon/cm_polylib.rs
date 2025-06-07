@@ -38,7 +38,6 @@ pub mod q_shared_h {
             * *v2.offset(1 as libc::c_int as isize)
             - *v1.offset(1 as libc::c_int as isize) * *v2.offset(0 as libc::c_int as isize);
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -49,8 +48,7 @@ pub use crate::be_aas_h::C2RustUnnamed_0;
 pub use crate::src::qcommon::cm_polylib::q_shared_h::CrossProduct;
 pub use crate::src::qcommon::cm_polylib::q_shared_h::VectorLength;
 pub use crate::src::qcommon::common::Com_Error;
-use crate::src::qcommon::common::Z_Free;
-use crate::src::qcommon::common::Z_Malloc;
+
 pub use crate::src::qcommon::q_math::vec3_origin;
 pub use crate::src::qcommon::q_math::VectorNormalize2;
 pub use crate::src::qcommon::q_shared::qboolean;
@@ -63,12 +61,7 @@ pub use crate::src::qcommon::q_shared::ERR_DROP;
 pub use crate::src::qcommon::q_shared::ERR_FATAL;
 pub use crate::src::qcommon::q_shared::ERR_NEED_CD;
 pub use crate::src::qcommon::q_shared::ERR_SERVERDISCONNECT;
-use ::libc::printf;
 
-use crate::stdlib::fabs;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

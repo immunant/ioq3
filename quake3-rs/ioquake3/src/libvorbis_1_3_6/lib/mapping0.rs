@@ -60,7 +60,7 @@ pub use crate::src::libogg_1_3_3::src::bitwise::oggpack_write;
 pub use crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_info;
 pub use crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_state;
 pub use crate::src::libvorbis_1_3_6::lib::bitrate::vorbis_bitrate_managed;
-use crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc;
+
 pub use crate::src::libvorbis_1_3_6::lib::codebook::codebook;
 pub use crate::src::libvorbis_1_3_6::lib::codebook::static_codebook;
 pub use crate::src::libvorbis_1_3_6::lib::envelope::envelope_band;
@@ -81,15 +81,10 @@ pub use crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy;
 pub use crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global;
 pub use crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy;
 pub use crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global;
-use crate::src::libvorbis_1_3_6::lib::registry::_floor_P;
-use crate::src::libvorbis_1_3_6::lib::registry::_residue_P;
-use crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog;
+
 pub use crate::src::libvorbis_1_3_6::lib::smallft::drft_forward;
 pub use crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup;
-use crate::src::libvorbis_1_3_6::lib::window::_vorbis_apply_window;
-use crate::stdlib::calloc;
-use crate::stdlib::memset;
-use ::libc::free;
+
 /* *******************************************************************
 *                                                                  *
 * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *

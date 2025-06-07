@@ -100,7 +100,6 @@ pub mod q_shared_h {
                 as libc::c_double,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
-    use crate::stdlib::sqrt;
 
     // entity index
     // entityType_t
@@ -427,14 +426,11 @@ pub use crate::src::qcommon::q_shared::TR_LINEAR;
 pub use crate::src::qcommon::q_shared::TR_LINEAR_STOP;
 pub use crate::src::qcommon::q_shared::TR_SINE;
 pub use crate::src::qcommon::q_shared::TR_STATIONARY;
-use crate::stdlib::sqrt;
 
 pub use crate::src::game::g_client::stdlib_h::atoi;
-use crate::src::game::g_team::SelectCTFSpawnPoint;
-use crate::stdlib::memset;
+
 pub use ::libc::rand;
-use ::libc::strcmp;
-use ::libc::strcpy;
+
 pub use ::libc::strtol;
 /*
 ===========================================================================
@@ -514,7 +510,7 @@ The intermission will be viewed from this point.  Target an info_notnull for the
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_info_player_intermission(mut ent: *mut crate::g_local_h::gentity_t) {}
+pub unsafe extern "C" fn SP_info_player_intermission(mut _ent: *mut crate::g_local_h::gentity_t) {}
 /*
 =======================================================================
 
@@ -1647,7 +1643,8 @@ pub unsafe extern "C" fn ClientConnect(
                 value,
             ) != 0 as libc::c_int
         {
-            return b"Invalid password\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
+            return b"Invalid password\x00" as *const u8 as *const libc::c_char
+                as *mut libc::c_char;
         }
     }
     // if a player reconnects quickly after a disconnect, the client disconnect may never be called, thus flag can get lost in the ether
@@ -1688,7 +1685,8 @@ pub unsafe extern "C" fn ClientConnect(
         ) as u64
             == 0
         {
-            return b"BotConnectfailed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
+            return b"BotConnectfailed\x00" as *const u8 as *const libc::c_char
+                as *mut libc::c_char;
         }
     }
     // read or initialize the session data

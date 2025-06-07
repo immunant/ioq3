@@ -914,8 +914,7 @@ pub use crate::src::client::cl_main::j_up;
 pub use crate::src::client::cl_main::j_up_axis;
 pub use crate::src::client::cl_main::j_yaw;
 pub use crate::src::client::cl_main::j_yaw_axis;
-use crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
-use crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
+
 pub use crate::src::qcommon::cmd::Cbuf_AddText;
 pub use crate::src::qcommon::cmd::Cbuf_ExecuteText;
 pub use crate::src::qcommon::common::Com_DPrintf;
@@ -958,7 +957,7 @@ pub use crate::src::qcommon::q_shared::EXEC_APPEND;
 pub use crate::src::qcommon::q_shared::EXEC_INSERT;
 pub use crate::src::qcommon::q_shared::EXEC_NOW;
 pub use crate::src::sys::sys_unix::Sys_Milliseconds;
-use crate::stdlib::memset;
+
 pub use crate::stdlib::SDL_AudioDeviceEvent;
 pub use crate::stdlib::SDL_CommonEvent;
 pub use crate::stdlib::SDL_ControllerAxisEvent;
@@ -968,7 +967,7 @@ pub use crate::stdlib::SDL_DisplayEvent;
 pub use crate::stdlib::SDL_DollarGestureEvent;
 pub use crate::stdlib::SDL_DropEvent;
 pub use crate::stdlib::SDL_Event;
-use crate::stdlib::SDL_GetError;
+
 pub use crate::stdlib::SDL_JoyAxisEvent;
 pub use crate::stdlib::SDL_JoyBallEvent;
 pub use crate::stdlib::SDL_JoyButtonEvent;
@@ -1061,14 +1060,6 @@ pub use crate::tr_types_h::GLHW_RIVA128;
 pub use crate::tr_types_h::TC_NONE;
 pub use crate::tr_types_h::TC_S3TC;
 pub use crate::tr_types_h::TC_S3TC_ARB;
-use ::libc::abs;
-
-use crate::stdlib::SDL_Init;
-use crate::stdlib::SDL_QuitSubSystem;
-use crate::stdlib::SDL_SetRelativeMouseMode;
-use crate::stdlib::SDL_ShowCursor;
-use crate::stdlib::SDL_WarpMouseInWindow;
-use crate::stdlib::SDL_WasInit;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

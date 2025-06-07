@@ -405,8 +405,7 @@ pub use crate::src::client::cl_scrn::SCR_DrawSmallChar;
 pub use crate::src::client::cl_scrn::SCR_DrawSmallStringExt;
 pub use crate::src::client::cl_scrn::SCR_UpdateScreen;
 pub use crate::src::client::cl_ui::uivm;
-use crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
-use crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
+
 pub use crate::ui_public_h::UIMENU_BAD_CD_KEY;
 pub use crate::ui_public_h::UIMENU_INGAME;
 pub use crate::ui_public_h::UIMENU_MAIN;
@@ -427,10 +426,7 @@ pub use crate::ui_public_h::UI_SET_ACTIVE_MENU;
 pub use crate::ui_public_h::UI_SHUTDOWN;
 
 pub use crate::src::client::cl_keys::stdlib_h::atoi;
-use crate::src::client::snd_main::S_StopAllSounds;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::strlen;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;
@@ -446,8 +442,7 @@ pub use crate::tr_types_h::GLHW_RIVA128;
 pub use crate::tr_types_h::TC_NONE;
 pub use crate::tr_types_h::TC_S3TC;
 pub use crate::tr_types_h::TC_S3TC_ARB;
-use ::libc::strcat;
-use ::libc::strchr;
+
 pub use ::libc::strtol;
 
 #[repr(C)]
@@ -2280,7 +2275,7 @@ pub unsafe extern "C" fn Field_VariableSizeDraw(
     mut edit: *mut crate::qcommon_h::field_t,
     mut x: libc::c_int,
     mut y: libc::c_int,
-    mut width: libc::c_int,
+    mut _width: libc::c_int,
     mut size: libc::c_int,
     mut showCursor: crate::src::qcommon::q_shared::qboolean,
     mut noColorEscape: crate::src::qcommon::q_shared::qboolean,
@@ -2467,7 +2462,7 @@ pub unsafe extern "C" fn Field_KeyDownEvent(
         Field_Paste(edit);
         return;
     }
-    key = ({
+    key = {
         let mut __res: libc::c_int = 0;
         if ::std::mem::size_of::<libc::c_int>() as libc::c_ulong > 1 as libc::c_int as libc::c_ulong
         {
@@ -2485,7 +2480,7 @@ pub unsafe extern "C" fn Field_KeyDownEvent(
             __res = *(*crate::stdlib::__ctype_tolower_loc()).offset(key as isize)
         }
         __res
-    });
+    };
     len = crate::stdlib::strlen((*edit).buffer.as_mut_ptr()) as libc::c_int;
     match key {
         140 => {
@@ -2734,11 +2729,11 @@ pub unsafe extern "C" fn Console_Key(mut key: libc::c_int) {
             {
                 if 0 != 0 {
                     let mut __c: libc::c_int = key;
-                    __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                    __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                         __c
                     } else {
                         *(*crate::stdlib::__ctype_tolower_loc()).offset(__c as isize)
-                    })
+                    }
                 } else {
                     __res = tolower(key)
                 }
@@ -2766,11 +2761,11 @@ pub unsafe extern "C" fn Console_Key(mut key: libc::c_int) {
             {
                 if 0 != 0 {
                     let mut __c: libc::c_int = key;
-                    __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                    __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                         __c
                     } else {
                         *(*crate::stdlib::__ctype_tolower_loc()).offset(__c as isize)
-                    })
+                    }
                 } else {
                     __res = tolower(key)
                 }
@@ -2949,7 +2944,7 @@ pub unsafe extern "C" fn Key_StringToKeynum(mut str: *mut libc::c_char) -> libc:
         return -(1 as libc::c_int);
     }
     if *str.offset(1 as libc::c_int as isize) == 0 {
-        return ({
+        return {
             let mut __res: libc::c_int = 0;
             if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
                 > 1 as libc::c_int as libc::c_ulong
@@ -2970,7 +2965,7 @@ pub unsafe extern "C" fn Key_StringToKeynum(mut str: *mut libc::c_char) -> libc:
                     .offset(*str.offset(0 as libc::c_int as isize) as libc::c_int as isize)
             }
             __res
-        });
+        };
     }
     // check for hex code
     n = crate::src::qcommon::q_shared::Com_HexStrToInt(str);

@@ -143,19 +143,7 @@ pub use crate::g_local_h::SPECTATOR_SCOREBOARD;
 pub use crate::g_local_h::TEAM_ACTIVE;
 pub use crate::g_local_h::TEAM_BEGIN;
 pub use crate::src::game::ai_chat::stdlib_h::atoi;
-use crate::src::game::ai_dmq3::bot_fastchat;
-use crate::src::game::ai_dmq3::bot_nochat;
-use crate::src::game::ai_dmq3::gametype;
-use crate::src::game::ai_dmq3::BotEntityVisible;
-use crate::src::game::ai_dmq3::BotIsDead;
-use crate::src::game::ai_dmq3::BotIsObserver;
-use crate::src::game::ai_dmq3::BotSameTeam;
-use crate::src::game::ai_dmq3::ClientName;
-use crate::src::game::ai_dmq3::EasyClientName;
-use crate::src::game::ai_dmq3::EntityIsDead;
-use crate::src::game::ai_dmq3::EntityIsInvisible;
-use crate::src::game::ai_dmq3::EntityIsShooting;
-use crate::src::game::ai_dmq3::TeamPlayIsOn;
+
 pub use crate::src::game::ai_main::bot_activategoal_s;
 pub use crate::src::game::ai_main::bot_activategoal_t;
 pub use crate::src::game::ai_main::bot_state_s;
@@ -176,10 +164,9 @@ pub use crate::src::game::g_syscalls::trap_Characteristic_BFloat;
 pub use crate::src::game::g_syscalls::trap_GetConfigstring;
 pub use crate::src::game::g_syscalls::trap_GetServerinfo;
 pub use crate::src::game::g_syscalls::trap_PointContents;
-use crate::stdlib::strlen;
-use crate::stdlib::strncpy;
+
 pub use ::libc::rand;
-use ::libc::strcpy;
+
 pub use ::libc::strtol;
 /*
 ==================
@@ -2175,7 +2162,7 @@ BotChatTime
 #[no_mangle]
 
 pub unsafe extern "C" fn BotChatTime(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut _bs: *mut crate::src::game::ai_main::bot_state_t,
 ) -> libc::c_float {
     //int cpm;
     //cpm = trap_Characteristic_BInteger(bs->character, CHARACTERISTIC_CHAT_CPM, 1, 4000);

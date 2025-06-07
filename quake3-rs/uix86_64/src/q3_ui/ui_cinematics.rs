@@ -37,7 +37,7 @@ pub use crate::src::qcommon::q_shared::EXEC_NOW;
 pub use crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText;
 pub use crate::src::ui::ui_syscalls::trap_Cvar_Set;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
-use crate::stdlib::memset;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;
@@ -448,7 +448,7 @@ UI_CinematicsMenu_BackEvent
 */
 
 unsafe extern "C" fn UI_CinematicsMenu_BackEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut event: libc::c_int,
 ) {
     if event != 3 as libc::c_int {

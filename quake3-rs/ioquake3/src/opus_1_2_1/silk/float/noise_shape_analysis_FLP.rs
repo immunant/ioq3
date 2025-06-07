@@ -17,8 +17,6 @@ pub mod SigProc_FLP_h {
         return (3.32192809488736f64 * crate::stdlib::log10(x)) as libc::c_float;
     }
 
-    use crate::stdlib::exp;
-    use crate::stdlib::log10;
     /* SILK_SIGPROC_FLP_H */
 }
 
@@ -29,14 +27,10 @@ pub use crate::resampler_structs_h::silk_resampler_state_struct;
 pub use crate::resampler_structs_h::C2RustUnnamed_64;
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
-use crate::stdlib::exp;
-use crate::stdlib::fabs;
+
 pub use crate::stdlib::int16_t;
 pub use crate::stdlib::int32_t;
-use crate::stdlib::log10;
-use crate::stdlib::memcpy;
-use crate::stdlib::pow;
-use crate::stdlib::sqrt;
+
 pub use crate::structs_FLP_h::silk_encoder_control_FLP;
 pub use crate::structs_FLP_h::silk_encoder_state_FLP;
 pub use crate::structs_FLP_h::silk_shape_state_FLP;
@@ -47,7 +41,6 @@ pub use crate::structs_h::silk_encoder_state;
 pub use crate::structs_h::silk_nsq_state;
 pub use crate::structs_h::SideInfoIndices;
 
-use crate::src::opus_1_2_1::silk::float::apply_sine_window_FLP::silk_apply_sine_window_FLP;
 pub use crate::src::opus_1_2_1::silk::float::autocorrelation_FLP::silk_autocorrelation_FLP;
 pub use crate::src::opus_1_2_1::silk::float::bwexpander_FLP::silk_bwexpander_FLP;
 pub use crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP;
@@ -55,7 +48,7 @@ pub use crate::src::opus_1_2_1::silk::float::k2a_FLP::silk_k2a_FLP;
 pub use crate::src::opus_1_2_1::silk::float::noise_shape_analysis_FLP::SigProc_FLP_h::silk_log2;
 pub use crate::src::opus_1_2_1::silk::float::noise_shape_analysis_FLP::SigProc_FLP_h::silk_sigmoid;
 pub use crate::src::opus_1_2_1::silk::float::schur_FLP::silk_schur_FLP;
-use crate::src::opus_1_2_1::silk::float::warped_autocorrelation_FLP::silk_warped_autocorrelation_FLP;
+
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without

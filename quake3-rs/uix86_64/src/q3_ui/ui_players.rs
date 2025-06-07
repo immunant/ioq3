@@ -6,7 +6,6 @@ pub mod stdlib_float_h {
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
-    use ::libc::strtod;
 }
 
 pub mod stdlib_h {
@@ -149,11 +148,7 @@ pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterSkin;
 pub use crate::src::ui::ui_syscalls::trap_R_RenderScene;
 pub use crate::src::ui::ui_syscalls::trap_S_StartLocalSound;
-use crate::stdlib::atan2;
-use crate::stdlib::fabs;
-use crate::stdlib::memset;
-use crate::stdlib::sin;
-use crate::stdlib::tan;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;
@@ -187,7 +182,7 @@ pub use crate::ui_local_h::menuframework_s;
 pub use crate::ui_local_h::playerInfo_t;
 pub use crate::ui_local_h::uiStatic_t;
 pub use ::libc::rand;
-use ::libc::strchr;
+
 pub use ::libc::strtod;
 pub use ::libc::strtol;
 
@@ -1009,7 +1004,7 @@ UI_PlayerFloatSprite
 */
 
 unsafe extern "C" fn UI_PlayerFloatSprite(
-    mut pi: *mut crate::ui_local_h::playerInfo_t,
+    mut _pi: *mut crate::ui_local_h::playerInfo_t,
     mut origin: *mut crate::src::qcommon::q_shared::vec_t,
     mut shader: crate::src::qcommon::q_shared::qhandle_t,
 ) {

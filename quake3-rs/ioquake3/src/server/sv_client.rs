@@ -177,7 +177,7 @@ pub use crate::src::qcommon::q_shared::Info_SetValueForKey;
 pub use crate::src::qcommon::q_shared::Info_ValueForKey;
 pub use crate::src::qcommon::q_shared::Q_stricmp;
 pub use crate::src::qcommon::q_shared::Q_strncpyz;
-use crate::src::qcommon::q_shared::ShortSwap;
+
 pub use crate::src::qcommon::q_shared::ERR_DISCONNECT;
 pub use crate::src::qcommon::q_shared::ERR_DROP;
 pub use crate::src::qcommon::q_shared::ERR_FATAL;
@@ -226,14 +226,10 @@ pub use crate::src::server::sv_net_chan::SV_Netchan_TransmitNextFragment;
 pub use crate::src::server::sv_snapshot::SV_SendClientSnapshot;
 pub use crate::src::server::sv_snapshot::SV_SendMessageToClient;
 pub use crate::src::server::sv_snapshot::SV_UpdateServerCommandsToClient;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
+
 pub use crate::vm_local_h::vm_s;
 pub use ::libc::rand;
-use ::libc::strcmp;
-use ::libc::strrchr;
-use ::libc::strstr;
+
 pub use ::libc::strtol;
 
 #[repr(C)]

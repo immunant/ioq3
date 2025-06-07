@@ -31,12 +31,9 @@ pub use crate::resampler_structs_h::_silk_resampler_state_struct;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_ctx;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_enc;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_window;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_patch_initial_bits;
+
 pub use crate::src::opus_1_2_1::silk::enc_API::entcode_h::ec_tell;
-use crate::src::opus_1_2_1::silk::resampler::silk_resampler;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
+
 pub use crate::structs_FLP_h::silk_encoder;
 pub use crate::structs_FLP_h::silk_encoder_state_FLP;
 pub use crate::structs_FLP_h::silk_shape_state_FLP;
@@ -48,20 +45,6 @@ pub use crate::structs_h::silk_nsq_state;
 pub use crate::structs_h::stereo_enc_state;
 pub use crate::structs_h::SideInfoIndices;
 
-use crate::src::opus_1_2_1::silk::check_control_input::check_control_input;
-use crate::src::opus_1_2_1::silk::control_SNR::silk_control_SNR;
-use crate::src::opus_1_2_1::silk::control_codec::silk_control_encoder;
-use crate::src::opus_1_2_1::silk::encode_indices::silk_encode_indices;
-use crate::src::opus_1_2_1::silk::encode_pulses::silk_encode_pulses;
-use crate::src::opus_1_2_1::silk::float::encode_frame_FLP::silk_encode_do_VAD_FLP;
-use crate::src::opus_1_2_1::silk::float::encode_frame_FLP::silk_encode_frame_FLP;
-use crate::src::opus_1_2_1::silk::init_encoder::silk_init_encoder;
-use crate::src::opus_1_2_1::silk::stereo_LR_to_MS::silk_stereo_LR_to_MS;
-use crate::src::opus_1_2_1::silk::stereo_encode_pred::silk_stereo_encode_mid_only;
-use crate::src::opus_1_2_1::silk::stereo_encode_pred::silk_stereo_encode_pred;
-use crate::src::opus_1_2_1::silk::tables_other::silk_LBRR_flags_iCDF_ptr;
-use crate::src::opus_1_2_1::silk::tables_other::silk_Quantization_Offsets_Q10;
-use crate::src::opus_1_2_1::silk::HP_variable_cutoff::silk_HP_variable_cutoff;
 /* ***************************************/
 /* Encoder functions                    */
 /* ***************************************/

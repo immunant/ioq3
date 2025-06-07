@@ -56,7 +56,6 @@ pub mod q_shared_h {
             * *v2.offset(1 as libc::c_int as isize)
             - *v1.offset(1 as libc::c_int as isize) * *v2.offset(0 as libc::c_int as isize);
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -92,10 +91,7 @@ pub use crate::src::renderergl1::tr_curve::q_shared_h::VectorLengthSquared;
 pub use crate::tr_public_h::refimport_t;
 
 pub use crate::src::renderergl1::tr_init::r_subdivisions;
-use crate::src::renderergl1::tr_main::ri;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
+
 pub use crate::tr_local_h::srfGridMesh_s;
 pub use crate::tr_local_h::srfGridMesh_t;
 pub use crate::tr_local_h::surfaceType_t;

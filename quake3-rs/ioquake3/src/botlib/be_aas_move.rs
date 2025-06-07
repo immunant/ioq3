@@ -28,7 +28,6 @@ pub mod q_shared_h {
                 as libc::c_double,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -91,7 +90,7 @@ pub use crate::botlib_h::bsp_trace_s;
 pub use crate::botlib_h::bsp_trace_t;
 pub use crate::src::botlib::be_aas_move::q_shared_h::VectorCompare;
 pub use crate::src::botlib::be_aas_move::q_shared_h::VectorLength;
-use crate::src::botlib::l_libvar::LibVarValue;
+
 pub use crate::src::qcommon::q_math::vec3_origin;
 pub use crate::src::qcommon::q_math::AngleVectors;
 pub use crate::src::qcommon::q_math::VectorNormalize;
@@ -109,23 +108,7 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::fabsf;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
-use ::libc::abs;
 
-use crate::src::botlib::be_aas_bspq3::AAS_PointContents;
-use crate::src::botlib::be_aas_bspq3::AAS_Trace;
-use crate::src::botlib::be_aas_debug::AAS_ClearShownDebugLines;
-use crate::src::botlib::be_aas_debug::AAS_DebugLine;
-use crate::src::botlib::be_aas_main::aasworld;
-use crate::src::botlib::be_aas_sample::AAS_PlaneFromNum;
-use crate::src::botlib::be_aas_sample::AAS_PointAreaNum;
-use crate::src::botlib::be_aas_sample::AAS_PointInsideFace;
-use crate::src::botlib::be_aas_sample::AAS_PointPresenceType;
-use crate::src::botlib::be_aas_sample::AAS_PresenceTypeBoundingBox;
-use crate::src::botlib::be_aas_sample::AAS_TraceAreas;
-use crate::src::botlib::be_aas_sample::AAS_TraceClientBBox;
 extern "C" {
     /*
     ===========================================================================

@@ -14,7 +14,6 @@ pub mod q_shared_h {
                 as libc::c_double,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -156,9 +155,7 @@ pub use crate::src::sdl::sdl_glimp::qglUnlockArraysEXT;
 pub use crate::src::sdl::sdl_glimp::qglVertex3fv;
 pub use crate::src::sdl::sdl_glimp::qglVertexPointer;
 pub use crate::src::sdl::sdl_glimp::GLimp_LogComment;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
+
 pub use crate::stdlib::GLclampd;
 pub use crate::stdlib::GLenum;
 pub use crate::stdlib::GLfloat;

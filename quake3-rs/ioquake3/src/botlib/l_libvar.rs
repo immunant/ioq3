@@ -46,15 +46,11 @@ pub struct libvar_s {
 }
 use ::libc;
 
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetMemory;
 pub use crate::src::qcommon::q_shared::qboolean;
 pub use crate::src::qcommon::q_shared::qfalse;
 pub use crate::src::qcommon::q_shared::qtrue;
 pub use crate::src::qcommon::q_shared::Q_stricmp;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
-use ::libc::strcpy;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

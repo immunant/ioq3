@@ -243,7 +243,7 @@ pub use crate::tr_local_h::TMOD_SCROLL;
 pub use crate::tr_local_h::TMOD_STRETCH;
 pub use crate::tr_local_h::TMOD_TRANSFORM;
 pub use crate::tr_local_h::TMOD_TURBULENT;
-use ::libc::strcmp;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

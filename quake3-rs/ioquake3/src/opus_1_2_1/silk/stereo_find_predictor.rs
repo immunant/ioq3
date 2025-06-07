@@ -55,8 +55,6 @@ pub mod SigProc_FIX_h {
         return if a > b { a } else { b };
     }
 
-    use crate::opus_types_h::opus_int32;
-    use crate::opus_types_h::opus_uint32;
     /* SILK_SIGPROC_FIX_H */
     /*    silk_SMMUL: Signed top word multiply.
     ARMv6        2 instruction cycles.
@@ -136,10 +134,10 @@ pub mod Inlines_h {
         let mut b32_nrm: crate::opus_types_h::opus_int32 = 0;
         let mut result: crate::opus_types_h::opus_int32 = 0;
         /* Compute number of bits head room and normalize inputs */
-        a_headrm = silk_CLZ32((if a32 > 0 as libc::c_int { a32 } else { -a32 })) - 1 as libc::c_int; /* Q: a_headrm                  */
+        a_headrm = silk_CLZ32(if a32 > 0 as libc::c_int { a32 } else { -a32 }) - 1 as libc::c_int; /* Q: a_headrm                  */
         a32_nrm = ((a32 as crate::opus_types_h::opus_uint32) << a_headrm)
             as crate::opus_types_h::opus_int32; /* Q: b_headrm                  */
-        b_headrm = silk_CLZ32((if b32 > 0 as libc::c_int { b32 } else { -b32 })) - 1 as libc::c_int;
+        b_headrm = silk_CLZ32(if b32 > 0 as libc::c_int { b32 } else { -b32 }) - 1 as libc::c_int;
         b32_nrm = ((b32 as crate::opus_types_h::opus_uint32) << b_headrm)
             as crate::opus_types_h::opus_int32;
         /* Inverse of b32, with 14 bits of precision */
@@ -200,9 +198,7 @@ pub mod Inlines_h {
             return 0 as libc::c_int;
         };
     }
-    use crate::opus_types_h::opus_int16;
-    use crate::opus_types_h::opus_int32;
-    use crate::opus_types_h::opus_uint32;
+
     use crate::src::opus_1_2_1::silk::stereo_find_predictor::macros_h::silk_CLZ32;
     use crate::src::opus_1_2_1::silk::stereo_find_predictor::SigProc_FIX_h::silk_ROR32;
     /* SILK_FIX_INLINES_H */

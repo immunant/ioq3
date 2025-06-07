@@ -28,31 +28,31 @@ pub mod float_cast_h {
     */
     /* Version 1.1 */
     /*============================================================================
-    **      On Intel Pentium processors (especially PIII and probably P4), converting
-    **      from float to int is very slow. To meet the C specs, the code produced by
-    **      most C compilers targeting Pentium needs to change the FPU rounding mode
-    **      before the float to int conversion is performed.
-    **
-    **      Changing the FPU rounding mode causes the FPU pipeline to be flushed. It
-    **      is this flushing of the pipeline which is so slow.
-    **
-    **      Fortunately the ISO C99 specifications define the functions lrint, lrintf,
-    **      llrint and llrintf which fix this problem as a side effect.
-    **
-    **      On Unix-like systems, the configure process should have detected the
-    **      presence of these functions. If they weren't found we have to replace them
-    **      here with a standard C cast.
-    */
+     **      On Intel Pentium processors (especially PIII and probably P4), converting
+     **      from float to int is very slow. To meet the C specs, the code produced by
+     **      most C compilers targeting Pentium needs to change the FPU rounding mode
+     **      before the float to int conversion is performed.
+     **
+     **      Changing the FPU rounding mode causes the FPU pipeline to be flushed. It
+     **      is this flushing of the pipeline which is so slow.
+     **
+     **      Fortunately the ISO C99 specifications define the functions lrint, lrintf,
+     **      llrint and llrintf which fix this problem as a side effect.
+     **
+     **      On Unix-like systems, the configure process should have detected the
+     **      presence of these functions. If they weren't found we have to replace them
+     **      here with a standard C cast.
+     */
     /*
-    **      The C99 prototypes for lrint and lrintf are as follows:
-    **
-    **              long int lrintf (float x) ;
-    **              long int lrint  (double x) ;
-    */
+     **      The C99 prototypes for lrint and lrintf are as follows:
+     **
+     **              long int lrintf (float x) ;
+     **              long int lrint  (double x) ;
+     */
     /*      The presence of the required functions are detected during the configure
-    **      process and the values HAVE_LRINT and HAVE_LRINTF are set accordingly in
-    **      the config.h file.
-    */
+     **      process and the values HAVE_LRINT and HAVE_LRINTF are set accordingly in
+     **      the config.h file.
+     */
     /* With GCC, when SSE is available, the fastest conversion is cvtss2si. */
     #[inline]
 
@@ -89,13 +89,7 @@ pub use crate::resampler_structs_h::silk_resampler_state_struct;
 pub use crate::resampler_structs_h::C2RustUnnamed_64;
 pub use crate::src::opus_1_2_1::silk::float::wrappers_FLP::float_cast_h::float2int;
 pub use crate::src::opus_1_2_1::silk::float::wrappers_FLP::SigProc_FLP_h::silk_float2int;
-use crate::src::opus_1_2_1::silk::process_NLSFs::silk_process_NLSFs;
-use crate::src::opus_1_2_1::silk::quant_LTP_gains::silk_quant_LTP_gains;
-use crate::src::opus_1_2_1::silk::tables_other::silk_LTPScales_table_Q14;
-use crate::src::opus_1_2_1::silk::NSQ_del_dec::silk_NSQ_del_dec_c;
-use crate::src::opus_1_2_1::silk::A2NLSF::silk_A2NLSF;
-use crate::src::opus_1_2_1::silk::NLSF2A::silk_NLSF2A;
-use crate::src::opus_1_2_1::silk::NSQ::silk_NSQ_c;
+
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
 pub use crate::stdlib::__uint16_t;

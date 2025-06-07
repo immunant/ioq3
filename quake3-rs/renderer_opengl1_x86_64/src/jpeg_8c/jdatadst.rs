@@ -189,10 +189,7 @@ pub use crate::src::jpeg_8c::jerror::JWRN_JPEG_EOF;
 pub use crate::src::jpeg_8c::jerror::JWRN_MUST_RESYNC;
 pub use crate::src::jpeg_8c::jerror::JWRN_NOT_SEQUENTIAL;
 pub use crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA;
-use crate::stdlib::ferror;
-use crate::stdlib::fflush;
-use crate::stdlib::fwrite;
-use crate::stdlib::memcpy;
+
 extern "C" {
     /*
      * jdatadst.c
@@ -263,7 +260,7 @@ unsafe extern "C" fn init_destination(mut cinfo: crate::jpeglib_h::j_compress_pt
     (*dest).pub_0.free_in_buffer = 4096 as libc::c_int as crate::stddef_h::size_t;
 }
 
-unsafe extern "C" fn init_mem_destination(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
+unsafe extern "C" fn init_mem_destination(mut _cinfo: crate::jpeglib_h::j_compress_ptr) {
     /* no work necessary here */
 }
 /*

@@ -16,7 +16,7 @@ pub use crate::src::qcommon::q_shared::EXEC_APPEND;
 pub use crate::src::qcommon::q_shared::EXEC_INSERT;
 pub use crate::src::qcommon::q_shared::EXEC_NOW;
 pub use crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText;
-use crate::stdlib::memset;
+
 pub use crate::ui_local_h::_tag_menuframework;
 pub use crate::ui_local_h::menuframework_s;
 

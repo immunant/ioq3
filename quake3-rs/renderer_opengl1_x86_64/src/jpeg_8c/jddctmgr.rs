@@ -235,7 +235,6 @@ pub use crate::src::jpeg_8c::jidctint::jpeg_idct_8x16;
 pub use crate::src::jpeg_8c::jidctint::jpeg_idct_8x4;
 pub use crate::src::jpeg_8c::jidctint::jpeg_idct_9x9;
 pub use crate::src::jpeg_8c::jidctint::jpeg_idct_islow;
-use crate::stdlib::memset;
 
 pub type my_idct_ptr = *mut my_idct_controller;
 

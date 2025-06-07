@@ -47,7 +47,7 @@ pub use crate::src::ui::ui_syscalls::trap_FS_FOpenFile;
 pub use crate::src::ui::ui_syscalls::trap_FS_GetFileList;
 pub use crate::src::ui::ui_syscalls::trap_FS_Read;
 pub use crate::src::ui::ui_syscalls::trap_Print;
-use crate::stdlib::strlen;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;
@@ -72,10 +72,7 @@ pub use crate::ui_local_h::AWARD_FRAGS;
 pub use crate::ui_local_h::AWARD_GAUNTLET;
 pub use crate::ui_local_h::AWARD_IMPRESSIVE;
 pub use crate::ui_local_h::AWARD_PERFECT;
-use ::libc::strcat;
-use ::libc::strcmp;
-use ::libc::strcpy;
-use ::libc::strstr;
+
 pub use ::libc::strtol;
 #[no_mangle]
 

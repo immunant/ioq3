@@ -299,8 +299,6 @@ pub mod stdlib_float_h {
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
-
-    use ::libc::strtod;
 }
 pub use crate::internal::__builtin_va_list;
 pub use crate::internal::__va_list_tag;
@@ -327,16 +325,7 @@ pub use crate::stdlib::__ctype_b_loc;
 pub use crate::stdlib::__ctype_tolower_loc;
 pub use crate::stdlib::__ctype_toupper_loc;
 pub use crate::stdlib::__int32_t;
-use crate::stdlib::memmove;
-use crate::stdlib::strlen;
-use crate::stdlib::strncpy;
-use crate::stdlib::vsnprintf;
-use ::libc::strcat;
-use ::libc::strchr;
-use ::libc::strcmp;
-use ::libc::strcpy;
-use ::libc::strrchr;
-use ::libc::strtod;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

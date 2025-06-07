@@ -12,7 +12,6 @@ pub mod stdlib_h {
     }
 }
 
-use crate::src::q3_ui::ui_gameinfo::UI_GetNumSPTiers;
 pub use crate::src::q3_ui::ui_sparena::stdlib_h::atoi;
 pub use crate::src::qcommon::q_shared::va;
 pub use crate::src::qcommon::q_shared::C2RustUnnamed_0;
@@ -21,9 +20,7 @@ pub use crate::src::qcommon::q_shared::Q_stricmp;
 pub use crate::src::qcommon::q_shared::EXEC_APPEND;
 pub use crate::src::qcommon::q_shared::EXEC_INSERT;
 pub use crate::src::qcommon::q_shared::EXEC_NOW;
-use crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText;
-use crate::src::ui::ui_syscalls::trap_Cvar_SetValue;
-use crate::src::ui::ui_syscalls::trap_Cvar_VariableValue;
+
 pub use ::libc::strtol;
 /*
 ===========================================================================

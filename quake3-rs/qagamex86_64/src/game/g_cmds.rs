@@ -19,7 +19,6 @@ pub mod stdlib_float_h {
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
-    use ::libc::strtod;
 }
 
 pub mod stdlib_h {
@@ -239,15 +238,11 @@ pub use crate::src::game::g_syscalls::trap_SendServerCommand;
 pub use crate::src::game::g_syscalls::trap_SetConfigstring;
 pub use crate::src::game::g_syscalls::trap_SetUserinfo;
 pub use crate::src::game::g_team::OnSameTeam;
-use crate::src::game::g_team::Team_GetLocationMsg;
+
 pub use crate::src::game::g_utils::vtos;
 pub use crate::src::game::g_utils::G_FreeEntity;
 pub use crate::src::game::g_utils::G_Spawn;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
-use ::libc::strcat;
-use ::libc::strcpy;
+
 pub use ::libc::strtod;
 pub use ::libc::strtol;
 /*
@@ -2354,11 +2349,11 @@ pub unsafe extern "C" fn Cmd_Vote_f(mut ent: *mut crate::g_local_h::gentity_t) {
         {
             if 0 != 0 {
                 let mut __c: libc::c_int = msg[0 as libc::c_int as usize] as libc::c_int;
-                __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                     __c
                 } else {
                     *(*crate::stdlib::__ctype_tolower_loc()).offset(__c as isize)
-                })
+                }
             } else {
                 __res = tolower(msg[0 as libc::c_int as usize] as libc::c_int)
             }
@@ -2756,11 +2751,11 @@ pub unsafe extern "C" fn Cmd_TeamVote_f(mut ent: *mut crate::g_local_h::gentity_
         {
             if 0 != 0 {
                 let mut __c: libc::c_int = msg[0 as libc::c_int as usize] as libc::c_int;
-                __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                     __c
                 } else {
                     *(*crate::stdlib::__ctype_tolower_loc()).offset(__c as isize)
-                })
+                }
             } else {
                 __res = tolower(msg[0 as libc::c_int as usize] as libc::c_int)
             }
@@ -2855,7 +2850,7 @@ Cmd_Stats_f
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cmd_Stats_f(mut ent: *mut crate::g_local_h::gentity_t) {
+pub unsafe extern "C" fn Cmd_Stats_f(mut _ent: *mut crate::g_local_h::gentity_t) {
     /*
         int max, n, i;
 

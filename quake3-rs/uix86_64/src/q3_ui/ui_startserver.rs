@@ -77,9 +77,9 @@ pub use crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer;
 pub use crate::src::ui::ui_syscalls::trap_Cvar_VariableValue;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
 pub use crate::stdlib::__compar_fn_t;
-use crate::stdlib::memset;
+
 pub use crate::stdlib::qsort;
-use crate::stdlib::strlen;
+
 pub use crate::ui_local_h::_tag_menuframework;
 pub use crate::ui_local_h::menubitmap_s;
 pub use crate::ui_local_h::menucommon_s;
@@ -89,8 +89,7 @@ pub use crate::ui_local_h::menulist_s;
 pub use crate::ui_local_h::menuradiobutton_s;
 pub use crate::ui_local_h::menutext_s;
 pub use crate::ui_local_h::mfield_t;
-use ::libc::strcpy;
-use ::libc::strrchr;
+
 pub use ::libc::strtol;
 extern "C" {
     // use ui_servers2.c definition
@@ -728,7 +727,10 @@ StartServer_GametypeEvent
 =================
 */
 
-unsafe extern "C" fn StartServer_GametypeEvent(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
+unsafe extern "C" fn StartServer_GametypeEvent(
+    mut _ptr: *mut libc::c_void,
+    mut event: libc::c_int,
+) {
     let mut i: libc::c_int = 0;
     let mut count: libc::c_int = 0;
     let mut gamebits: libc::c_int = 0;
@@ -3524,7 +3526,7 @@ UI_BotSelectMenu_LeftEvent
 */
 
 unsafe extern "C" fn UI_BotSelectMenu_LeftEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut event: libc::c_int,
 ) {
     if event != 3 as libc::c_int {
@@ -3544,7 +3546,7 @@ UI_BotSelectMenu_RightEvent
 */
 
 unsafe extern "C" fn UI_BotSelectMenu_RightEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut event: libc::c_int,
 ) {
     if event != 3 as libc::c_int {
@@ -3588,7 +3590,7 @@ UI_BotSelectMenu_BackEvent
 */
 
 unsafe extern "C" fn UI_BotSelectMenu_BackEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut event: libc::c_int,
 ) {
     if event != 3 as libc::c_int {
@@ -3603,7 +3605,7 @@ UI_BotSelectMenu_SelectEvent
 */
 
 unsafe extern "C" fn UI_BotSelectMenu_SelectEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut event: libc::c_int,
 ) {
     if event != 3 as libc::c_int {

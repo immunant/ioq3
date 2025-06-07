@@ -12,13 +12,7 @@ pub use ::libc::free;
 
 pub use crate::src::libvorbis_1_3_6::lib::codebook::codebook;
 pub use crate::src::libvorbis_1_3_6::lib::codebook::static_codebook;
-use crate::stdlib::fabs;
-use crate::stdlib::floor;
-use crate::stdlib::ldexp;
-use crate::stdlib::log;
-use crate::stdlib::memset;
-use crate::stdlib::pow;
-use crate::stdlib::rint;
+
 /* *******************************************************************
 *                                                                  *
 * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *

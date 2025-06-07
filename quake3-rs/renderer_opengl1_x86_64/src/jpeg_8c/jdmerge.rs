@@ -205,7 +205,7 @@ unsafe extern "C" fn merged_2v_upsample(
     mut cinfo: crate::jpeglib_h::j_decompress_ptr,
     mut input_buf: crate::jpeglib_h::JSAMPIMAGE,
     mut in_row_group_ctr: *mut crate::jmorecfg_h::JDIMENSION,
-    mut in_row_groups_avail: crate::jmorecfg_h::JDIMENSION,
+    mut _in_row_groups_avail: crate::jmorecfg_h::JDIMENSION,
     mut output_buf: crate::jpeglib_h::JSAMPARRAY,
     mut out_row_ctr: *mut crate::jmorecfg_h::JDIMENSION,
     mut out_rows_avail: crate::jmorecfg_h::JDIMENSION,
@@ -275,10 +275,10 @@ unsafe extern "C" fn merged_1v_upsample(
     mut cinfo: crate::jpeglib_h::j_decompress_ptr,
     mut input_buf: crate::jpeglib_h::JSAMPIMAGE,
     mut in_row_group_ctr: *mut crate::jmorecfg_h::JDIMENSION,
-    mut in_row_groups_avail: crate::jmorecfg_h::JDIMENSION,
+    mut _in_row_groups_avail: crate::jmorecfg_h::JDIMENSION,
     mut output_buf: crate::jpeglib_h::JSAMPARRAY,
     mut out_row_ctr: *mut crate::jmorecfg_h::JDIMENSION,
-    mut out_rows_avail: crate::jmorecfg_h::JDIMENSION,
+    mut _out_rows_avail: crate::jmorecfg_h::JDIMENSION,
 )
 /* 1:1 vertical sampling case: much easier, never need a spare row. */
 {

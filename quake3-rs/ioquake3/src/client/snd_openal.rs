@@ -46,7 +46,6 @@ pub mod q_shared_h {
             + v[1 as libc::c_int as usize] * v[1 as libc::c_int as usize]
             + v[2 as libc::c_int as usize] * v[2 as libc::c_int as usize];
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -113,44 +112,7 @@ pub use crate::snd_local_h::SRCPRI_ENTITY;
 pub use crate::snd_local_h::SRCPRI_LOCAL;
 pub use crate::snd_local_h::SRCPRI_ONESHOT;
 pub use crate::snd_local_h::SRCPRI_STREAM;
-use crate::src::client::cl_main::cl_useMumble;
-use crate::src::client::qal::qalBufferData;
-use crate::src::client::qal::qalDeleteBuffers;
-use crate::src::client::qal::qalDeleteSources;
-use crate::src::client::qal::qalDistanceModel;
-use crate::src::client::qal::qalDopplerFactor;
-use crate::src::client::qal::qalGenBuffers;
-use crate::src::client::qal::qalGenSources;
-use crate::src::client::qal::qalGetError;
-use crate::src::client::qal::qalGetSourcef;
-use crate::src::client::qal::qalGetSourcei;
-use crate::src::client::qal::qalGetString;
-use crate::src::client::qal::qalListenerf;
-use crate::src::client::qal::qalListenerfv;
-use crate::src::client::qal::qalSource3f;
-use crate::src::client::qal::qalSourcePlay;
-use crate::src::client::qal::qalSourceQueueBuffers;
-use crate::src::client::qal::qalSourceStop;
-use crate::src::client::qal::qalSourceUnqueueBuffers;
-use crate::src::client::qal::qalSourcef;
-use crate::src::client::qal::qalSourcefv;
-use crate::src::client::qal::qalSourcei;
-use crate::src::client::qal::qalSpeedOfSound;
-use crate::src::client::qal::qalcCaptureCloseDevice;
-use crate::src::client::qal::qalcCaptureOpenDevice;
-use crate::src::client::qal::qalcCaptureSamples;
-use crate::src::client::qal::qalcCaptureStart;
-use crate::src::client::qal::qalcCaptureStop;
-use crate::src::client::qal::qalcCloseDevice;
-use crate::src::client::qal::qalcCreateContext;
-use crate::src::client::qal::qalcDestroyContext;
-use crate::src::client::qal::qalcGetIntegerv;
-use crate::src::client::qal::qalcGetString;
-use crate::src::client::qal::qalcIsExtensionPresent;
-use crate::src::client::qal::qalcMakeContextCurrent;
-use crate::src::client::qal::qalcOpenDevice;
-use crate::src::client::qal::QAL_Init;
-use crate::src::client::qal::QAL_Shutdown;
+
 pub use crate::src::client::snd_codec::snd_codec_s;
 pub use crate::src::client::snd_codec::snd_codec_t;
 pub use crate::src::client::snd_codec::snd_info_s;
@@ -172,12 +134,11 @@ pub use crate::src::client::snd_main::s_volume;
 pub use crate::src::client::snd_openal::q_shared_h::Distance;
 pub use crate::src::client::snd_openal::q_shared_h::DistanceSquared;
 pub use crate::src::client::snd_openal::q_shared_h::VectorLength;
-use crate::src::qcommon::common::Com_DPrintf;
+
 pub use crate::src::qcommon::common::Com_Error;
-use crate::src::qcommon::common::Com_Milliseconds;
+
 pub use crate::src::qcommon::common::Com_Printf;
-use crate::src::qcommon::common::Hunk_FreeTempMemory;
-use crate::src::qcommon::cvar::Cvar_Get;
+
 pub use crate::src::qcommon::q_math::vec3_origin;
 pub use crate::src::qcommon::q_math::Q_isnan;
 pub use crate::src::qcommon::q_shared::byte;
@@ -198,14 +159,7 @@ pub use crate::src::qcommon::q_shared::ERR_DROP;
 pub use crate::src::qcommon::q_shared::ERR_FATAL;
 pub use crate::src::qcommon::q_shared::ERR_NEED_CD;
 pub use crate::src::qcommon::q_shared::ERR_SERVERDISCONNECT;
-use crate::src::sys::sys_unix::Sys_Milliseconds;
-use crate::stdlib::fmodf;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
-use crate::stdlib::strlen;
-use ::libc::strcmp;
-use ::libc::strcpy;
+
 //===========================================================================
 
 pub type src_t = src_s;
@@ -896,7 +850,7 @@ S_AL_RegisterSound
 
 unsafe extern "C" fn S_AL_RegisterSound(
     mut sample: *const libc::c_char,
-    mut compressed: crate::src::qcommon::q_shared::qboolean,
+    mut _compressed: crate::src::qcommon::q_shared::qboolean,
 ) -> crate::src::qcommon::q_shared::sfxHandle_t {
     let mut sfx: crate::src::qcommon::q_shared::sfxHandle_t = S_AL_BufferFind(sample);
     if knownSfx[sfx as usize].inMemory as u64 == 0 && knownSfx[sfx as usize].isDefault as u64 == 0 {
@@ -1447,8 +1401,8 @@ S_AL_SrcAlloc
 
 unsafe extern "C" fn S_AL_SrcAlloc(
     mut priority: crate::snd_local_h::alSrcPriority_t,
-    mut entnum: libc::c_int,
-    mut channel: libc::c_int,
+    mut _entnum: libc::c_int,
+    mut _channel: libc::c_int,
 ) -> crate::snd_local_h::srcHandle_t {
     let mut i: libc::c_int = 0;
     let mut empty: libc::c_int = -(1 as libc::c_int);
@@ -1729,7 +1683,9 @@ S_AL_ClearLoopingSounds
 =================
 */
 
-unsafe extern "C" fn S_AL_ClearLoopingSounds(mut killall: crate::src::qcommon::q_shared::qboolean) {
+unsafe extern "C" fn S_AL_ClearLoopingSounds(
+    mut _killall: crate::src::qcommon::q_shared::qboolean,
+) {
     let mut i: libc::c_int = 0;
     i = 0 as libc::c_int;
     while i < srcCount {
@@ -2972,7 +2928,7 @@ unsafe extern "C" fn S_AL_Respatialize(
     mut entityNum: libc::c_int,
     mut origin: *const crate::src::qcommon::q_shared::vec_t,
     mut axis: *mut crate::src::qcommon::q_shared::vec3_t,
-    mut inwater: libc::c_int,
+    mut _inwater: libc::c_int,
 ) {
     let mut orientation: [libc::c_float; 6] = [0.; 6];
     let mut sorigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];

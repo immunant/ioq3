@@ -315,8 +315,7 @@ pub use crate::src::ui::ui_syscalls::trap_Key_SetCatcher;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
 pub use crate::src::ui::ui_syscalls::trap_S_RegisterSound;
 pub use crate::src::ui::ui_syscalls::trap_S_StartLocalSound;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;
@@ -523,7 +522,7 @@ UI_SPPostgameMenu_AgainEvent
 */
 
 unsafe extern "C" fn UI_SPPostgameMenu_AgainEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut event: libc::c_int,
 ) {
     if event != 3 as libc::c_int {
@@ -542,7 +541,7 @@ UI_SPPostgameMenu_NextEvent
 */
 
 unsafe extern "C" fn UI_SPPostgameMenu_NextEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut event: libc::c_int,
 ) {
     let mut currentSet: libc::c_int = 0;
@@ -582,7 +581,7 @@ UI_SPPostgameMenu_MenuEvent
 */
 
 unsafe extern "C" fn UI_SPPostgameMenu_MenuEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut event: libc::c_int,
 ) {
     if event != 3 as libc::c_int {

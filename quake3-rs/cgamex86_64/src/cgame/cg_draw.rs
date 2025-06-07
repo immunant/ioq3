@@ -6,7 +6,6 @@ pub mod stdlib_float_h {
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
-    use ::libc::strtod;
 }
 
 pub use crate::bg_public_h::animation_s;
@@ -258,13 +257,6 @@ pub use crate::src::cgame::cg_syscalls::trap_R_SetColor;
 pub use crate::src::cgame::cg_syscalls::trap_S_StartLocalSound;
 pub use crate::src::cgame::cg_weapons::CG_DrawWeaponSelect;
 pub use crate::src::cgame::cg_weapons::CG_RegisterItemVisuals;
-use crate::stdlib::cos;
-use crate::stdlib::memset;
-use crate::stdlib::sin;
-use crate::stdlib::strlen;
-use crate::stdlib::tan;
-use ::libc::rand;
-use ::libc::strtod;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

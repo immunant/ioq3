@@ -148,24 +148,18 @@ pub use crate::stdlib::fread;
 pub use crate::stdlib::fseek;
 pub use crate::stdlib::ftell;
 pub use crate::stdlib::fwrite;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
+
 pub use crate::stdlib::off_t;
 pub use crate::stdlib::qsort;
 pub use crate::stdlib::setvbuf;
-use crate::stdlib::strlen;
+
 pub use crate::stdlib::vsnprintf;
 pub use crate::zconf_h::uInt;
 pub use crate::zconf_h::uLong;
 pub use crate::zconf_h::voidp;
 pub use ::libc::remove;
 pub use ::libc::rename;
-use ::libc::strchr;
-use ::libc::strcmp;
-use ::libc::strcpy;
-use ::libc::strrchr;
-use ::libc::strstr;
+
 pub use ::libc::strtol;
 extern "C" {
     #[no_mangle]
@@ -1393,7 +1387,7 @@ Return qtrue if filename has a demo extension
 
 pub unsafe extern "C" fn FS_IsDemoExt(
     mut filename: *const libc::c_char,
-    mut namelen: libc::c_int,
+    mut _namelen: libc::c_int,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut ext_test: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut index: libc::c_int = 0;
@@ -4317,7 +4311,7 @@ Frees all resources.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_Shutdown(mut closemfp: crate::src::qcommon::q_shared::qboolean) {
+pub unsafe extern "C" fn FS_Shutdown(mut _closemfp: crate::src::qcommon::q_shared::qboolean) {
     let mut p: *mut searchpath_t = 0 as *mut searchpath_t;
     let mut next: *mut searchpath_t = 0 as *mut searchpath_t;
     let mut i: libc::c_int = 0;

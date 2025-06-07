@@ -3,8 +3,7 @@ use ::libc;
 pub use crate::be_aas_h::C2RustUnnamed_0;
 pub use crate::qcommon_h::xcommand_t;
 pub use crate::snd_local_h::soundInterface_t;
-use crate::src::client::snd_codec::S_CodecInit;
-use crate::src::client::snd_codec::S_CodecShutdown;
+
 pub use crate::src::client::snd_dma::S_Base_Init;
 pub use crate::src::client::snd_openal::S_AL_Init;
 pub use crate::src::qcommon::cmd::Cmd_AddCommand;
@@ -39,7 +38,7 @@ pub use crate::src::qcommon::q_shared::ERR_DROP;
 pub use crate::src::qcommon::q_shared::ERR_FATAL;
 pub use crate::src::qcommon::q_shared::ERR_NEED_CD;
 pub use crate::src::qcommon::q_shared::ERR_SERVERDISCONNECT;
-use crate::stdlib::memset;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

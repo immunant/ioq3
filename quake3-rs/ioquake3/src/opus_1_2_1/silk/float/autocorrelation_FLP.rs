@@ -1,6 +1,5 @@
 use ::libc;
 
-use crate::src::opus_1_2_1::silk::float::inner_product_FLP::silk_inner_product_FLP;
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without

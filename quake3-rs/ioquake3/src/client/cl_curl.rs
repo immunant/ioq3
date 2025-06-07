@@ -508,11 +508,7 @@ pub use crate::src::client::cl_main::clc;
 pub use crate::src::client::cl_main::cls;
 pub use crate::src::client::cl_main::CL_AddReliableCommand;
 pub use crate::src::client::cl_main::CL_NextDownload;
-use crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
-use crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
-use crate::src::sys::sys_main::Sys_LoadDll;
-use crate::stdlib::SDL_LoadFunction;
-use crate::stdlib::SDL_UnloadObject;
+
 /*
 ===========================================================================
 Copyright (C) 2006 Tony J. White (tjw@tjw.org)
@@ -910,11 +906,11 @@ pub unsafe extern "C" fn CL_cURL_Cleanup() {
 }
 
 unsafe extern "C" fn CL_cURL_CallbackProgress(
-    mut dummy: *mut libc::c_void,
+    mut _dummy: *mut libc::c_void,
     mut dltotal: libc::c_double,
     mut dlnow: libc::c_double,
-    mut ultotal: libc::c_double,
-    mut ulnow: libc::c_double,
+    mut _ultotal: libc::c_double,
+    mut _ulnow: libc::c_double,
 ) -> libc::c_int {
     crate::src::client::cl_main::clc.downloadSize = dltotal as libc::c_int;
     crate::src::qcommon::cvar::Cvar_SetValue(

@@ -119,47 +119,13 @@ pub use crate::stdlib::SDL_version;
 pub use crate::stdlib::Uint32;
 pub use crate::stdlib::Uint8;
 pub use crate::stdlib::__xstat;
-use crate::stdlib::fclose;
-use crate::stdlib::fopen;
-use crate::stdlib::fprintf;
-use crate::stdlib::fputs;
-use crate::stdlib::fread;
-use crate::stdlib::stderr;
-use crate::stdlib::stdout;
-use crate::stdlib::strlen;
-use crate::stdlib::vsnprintf;
-use crate::stdlib::SDL_GetClipboardText;
-use crate::stdlib::SDL_GetError;
+
 pub use crate::stdlib::SDL_FALSE;
 pub use crate::stdlib::SDL_TRUE;
 pub use ::libc::exit;
-use ::libc::remove;
-use ::libc::strchr;
-use ::libc::strcmp;
-use ::libc::strtok;
+
 pub use ::libc::strtol;
 
-use crate::src::sys::con_log::CON_LogWrite;
-use crate::src::sys::con_tty::CON_Init;
-use crate::src::sys::con_tty::CON_Input;
-use crate::src::sys::con_tty::CON_Print;
-use crate::src::sys::con_tty::CON_Shutdown;
-use crate::src::sys::sys_unix::Sys_ErrorDialog;
-use crate::src::sys::sys_unix::Sys_PID;
-use crate::src::sys::sys_unix::Sys_PIDIsRunning;
-use crate::src::sys::sys_unix::Sys_PlatformExit;
-use crate::src::sys::sys_unix::Sys_PlatformInit;
-use crate::stdlib::SDL_Has3DNow;
-use crate::stdlib::SDL_HasAltiVec;
-use crate::stdlib::SDL_HasMMX;
-use crate::stdlib::SDL_HasRDTSC;
-use crate::stdlib::SDL_HasSSE;
-use crate::stdlib::SDL_HasSSE2;
-use crate::stdlib::SDL_LoadFunction;
-use crate::stdlib::SDL_LoadObject;
-use crate::stdlib::SDL_Quit;
-use crate::stdlib::SDL_UnloadObject;
-use crate::stdlib::SDL_WasInit;
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

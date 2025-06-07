@@ -69,13 +69,7 @@ pub use crate::src::botlib::be_ai_weight::FindFuzzyWeight;
 pub use crate::src::botlib::be_ai_weight::FreeWeightConfig;
 pub use crate::src::botlib::be_ai_weight::FuzzyWeight;
 pub use crate::src::botlib::be_ai_weight::ReadWeightConfig;
-use crate::src::botlib::be_interface::botimport;
-use crate::src::botlib::l_libvar::LibVarSet;
-use crate::src::botlib::l_libvar::LibVarString;
-use crate::src::botlib::l_libvar::LibVarValue;
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetClearedHunkMemory;
-use crate::src::botlib::l_memory::GetClearedMemory;
+
 pub use crate::src::botlib::l_precomp::define_s;
 pub use crate::src::botlib::l_precomp::define_t;
 pub use crate::src::botlib::l_precomp::indent_s;
@@ -112,9 +106,7 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use ::libc::strcmp;
+
 //weapon configuration: set of weapons with projectiles
 
 pub type weaponconfig_t = weaponconfig_s;
@@ -849,7 +841,7 @@ pub unsafe extern "C" fn BotChooseBestFightWeapon(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn BotResetWeaponState(mut weaponstate: libc::c_int) {}
+pub unsafe extern "C" fn BotResetWeaponState(mut _weaponstate: libc::c_int) {}
 //returns a handle to a newly allocated weapon state
 //end of the function BotResetWeaponState
 //========================================================================

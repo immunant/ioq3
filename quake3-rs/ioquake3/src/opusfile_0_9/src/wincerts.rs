@@ -1,4 +1,3 @@
-use ::libc;
 /*This should really be part of OpenSSL, but there's been a patch [1] sitting
  in their bugtracker for over two years that implements this, without any
  action, so I'm giving up and re-implementing it locally.

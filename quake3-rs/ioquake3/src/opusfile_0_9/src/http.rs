@@ -19,7 +19,6 @@ pub use crate::ogg_h::ogg_stream_state;
 pub use crate::ogg_h::ogg_sync_state;
 pub use crate::opus_types_h::opus_int32;
 pub use crate::opus_types_h::opus_uint32;
-use crate::src::opus_1_2_1::src::opus_multistream_decoder::OpusMSDecoder;
 
 pub use crate::be_aas_h::C2RustUnnamed_0;
 pub use crate::internal_h::op_sample;
@@ -51,12 +50,6 @@ pub use crate::stdlib::_ISspace;
 pub use crate::stdlib::_ISupper;
 pub use crate::stdlib::_ISxdigit;
 pub use crate::stdlib::__ctype_b_loc;
-use crate::stdlib::malloc;
-use crate::stdlib::memcpy;
-use crate::stdlib::strlen;
-use crate::stdlib::strspn;
-use ::libc::free;
-use ::libc::strcmp;
 
 unsafe extern "C" fn op_string_range_dup(
     mut _start: *const libc::c_char,

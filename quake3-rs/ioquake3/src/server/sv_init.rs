@@ -59,8 +59,7 @@ pub use crate::src::client::cl_main::CL_Disconnect;
 pub use crate::src::client::cl_main::CL_MapLoading;
 pub use crate::src::client::cl_main::CL_ShutdownAll;
 pub use crate::src::client::cl_main::CL_StartHunkUsers;
-use crate::src::qcommon::cm_load::CM_ClearMap;
-use crate::src::qcommon::cm_load::CM_LoadMap;
+
 pub use crate::src::qcommon::cmd::Cbuf_AddText;
 pub use crate::src::qcommon::common::com_dedicated;
 pub use crate::src::qcommon::common::com_errorEntered;
@@ -179,11 +178,9 @@ pub use crate::src::server::sv_main::SV_MasterShutdown;
 pub use crate::src::server::sv_main::SV_SendServerCommand;
 pub use crate::src::server::sv_snapshot::SV_SendClientSnapshot;
 pub use crate::src::server::sv_world::SV_ClearWorld;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
+
 pub use crate::vm_local_h::vm_s;
-use ::libc::rand;
-use ::libc::strcmp;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

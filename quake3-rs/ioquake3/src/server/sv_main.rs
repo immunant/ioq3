@@ -133,7 +133,7 @@ pub use crate::src::qcommon::q_shared::Q_strcat;
 pub use crate::src::qcommon::q_shared::Q_stricmp;
 pub use crate::src::qcommon::q_shared::Q_strncmp;
 pub use crate::src::qcommon::q_shared::Q_strncpyz;
-use crate::src::qcommon::q_shared::ShortSwap;
+
 pub use crate::src::qcommon::q_shared::TR_GRAVITY;
 pub use crate::src::qcommon::q_shared::TR_INTERPOLATE;
 pub use crate::src::qcommon::q_shared::TR_LINEAR;
@@ -155,15 +155,9 @@ pub use crate::src::server::sv_init::SV_Shutdown;
 pub use crate::src::server::sv_net_chan::SV_Netchan_Process;
 pub use crate::src::server::sv_snapshot::SV_SendClientMessages;
 pub use crate::src::sys::sys_unix::Sys_Milliseconds;
-use crate::stdlib::memcmp;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
-use crate::stdlib::strncmp;
-use crate::stdlib::vsnprintf;
+
 pub use crate::vm_local_h::vm_s;
-use ::libc::strcmp;
-use ::libc::strcpy;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
@@ -1386,7 +1380,7 @@ Redirect all printfs
 
 unsafe extern "C" fn SVC_RemoteCommand(
     mut from: crate::qcommon_h::netadr_t,
-    mut msg: *mut crate::qcommon_h::msg_t,
+    mut _msg: *mut crate::qcommon_h::msg_t,
 ) {
     let mut valid: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
     let mut remaining: [libc::c_char; 1024] = [0; 1024];

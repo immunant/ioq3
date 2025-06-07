@@ -14,9 +14,7 @@ pub use crate::src::opus_1_2_1::celt::entcode::ec_ctx;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_dec;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_enc;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_window;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf;
-use crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_sign_iCDF;
+
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without

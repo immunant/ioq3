@@ -9,8 +9,7 @@ pub use crate::snd_local_h::sfx_s;
 pub use crate::snd_local_h::sfx_t;
 pub use crate::snd_local_h::sndBuffer;
 pub use crate::snd_local_h::sndBuffer_s;
-use crate::src::client::cl_avi::CL_VideoRecording;
-use crate::src::client::cl_avi::CL_WriteAVIAudioFrame;
+
 pub use crate::src::client::snd_adpcm::S_AdpcmGetSamples;
 pub use crate::src::client::snd_dma::dma;
 pub use crate::src::client::snd_dma::loop_channels;
@@ -35,8 +34,7 @@ pub use crate::src::qcommon::q_shared::qfalse;
 pub use crate::src::qcommon::q_shared::qtrue;
 pub use crate::src::qcommon::q_shared::vec3_t;
 pub use crate::src::qcommon::q_shared::vec_t;
-use crate::stdlib::memset;
-use crate::stdlib::sin;
+
 /* Previous output value */
 /* Index into stepsize table */
 // couldn't be loaded, so use buzz

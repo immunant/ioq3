@@ -6192,16 +6192,6 @@ pub use crate::scales_h::C2RustUnnamed_58;
 pub use crate::src::libvorbis_1_3_6::lib::psy::masking_h::tonemasks;
 pub use crate::src::libvorbis_1_3_6::lib::psy::masking_h::ATH;
 pub use crate::src::libvorbis_1_3_6::lib::psy::scales_h::unitnorm;
-use crate::stdlib::atan;
-use crate::stdlib::ceil;
-use crate::stdlib::exp;
-use crate::stdlib::fabs;
-use crate::stdlib::floor;
-use crate::stdlib::log;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::rint;
-use crate::stdlib::sqrt;
 
 static mut stereo_threshholds: [libc::c_double; 9] = [
     0.0f64, 0.5f64, 1.0f64, 1.5f64, 2.5f64, 4.5f64, 8.5f64, 16.5f64, 9e10f64,

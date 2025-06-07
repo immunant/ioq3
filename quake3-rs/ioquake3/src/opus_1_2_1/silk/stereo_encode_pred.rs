@@ -4,11 +4,7 @@ pub use crate::opus_types_h::opus_uint32;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_ctx;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_enc;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_window;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf;
-use crate::src::opus_1_2_1::silk::tables_other::silk_stereo_only_code_mid_iCDF;
-use crate::src::opus_1_2_1::silk::tables_other::silk_stereo_pred_joint_iCDF;
-use crate::src::opus_1_2_1::silk::tables_other::silk_uniform3_iCDF;
-use crate::src::opus_1_2_1::silk::tables_other::silk_uniform5_iCDF;
+
 pub use crate::stdlib::__uint32_t;
 pub use crate::stdlib::uint32_t;
 /* **********************************************************************

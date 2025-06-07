@@ -77,39 +77,7 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::memset;
-use crate::stdlib::vsnprintf;
 
-use crate::src::botlib::be_aas_bspq3::AAS_DumpBSPData;
-use crate::src::botlib::be_aas_bspq3::AAS_LoadBSPFile;
-use crate::src::botlib::be_aas_move::AAS_InitSettings;
-use crate::src::botlib::be_aas_optimize::AAS_Optimize;
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetClearedHunkMemory;
-use crate::src::botlib::l_memory::PrintMemoryLabels;
-use crate::src::botlib::l_memory::PrintUsedMemorySize;
-
-use crate::src::botlib::be_aas_cluster::AAS_InitClustering;
-use crate::src::botlib::be_aas_entity::AAS_InvalidateEntities;
-use crate::src::botlib::be_aas_entity::AAS_ResetEntityLinks;
-use crate::src::botlib::be_aas_entity::AAS_UnlinkInvalidEntities;
-use crate::src::botlib::be_aas_file::AAS_DumpAASData;
-use crate::src::botlib::be_aas_file::AAS_LoadAASFile;
-use crate::src::botlib::be_aas_file::AAS_WriteAASFile;
-use crate::src::botlib::be_aas_reach::AAS_ContinueInitReachability;
-use crate::src::botlib::be_aas_reach::AAS_InitReachability;
-use crate::src::botlib::be_aas_route::AAS_FreeRoutingCaches;
-use crate::src::botlib::be_aas_route::AAS_InitRouting;
-use crate::src::botlib::be_aas_route::AAS_RoutingInfo;
-use crate::src::botlib::be_aas_route::AAS_WriteRouteCache;
-use crate::src::botlib::be_aas_routealt::AAS_InitAlternativeRouting;
-use crate::src::botlib::be_aas_routealt::AAS_ShutdownAlternativeRouting;
-use crate::src::botlib::be_aas_sample::AAS_FreeAASLinkHeap;
-use crate::src::botlib::be_aas_sample::AAS_FreeAASLinkedEntities;
-use crate::src::botlib::be_aas_sample::AAS_InitAASLinkHeap;
-use crate::src::botlib::be_aas_sample::AAS_InitAASLinkedEntities;
-use crate::src::botlib::be_interface::botDeveloper;
-use crate::src::botlib::be_interface::botimport;
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

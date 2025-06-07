@@ -91,10 +91,6 @@ pub use crate::src::client::cl_main::cl_aviMotionJpeg;
 pub use crate::src::client::cl_main::cls;
 pub use crate::src::client::cl_main::re;
 pub use crate::src::client::snd_dma::dma;
-use crate::stdlib::ceil;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
 
 pub type aviFileData_t = aviFileData_s;
 

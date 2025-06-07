@@ -12,18 +12,14 @@ pub use crate::stdlib::__uid_t;
 pub use crate::stdlib::__uint32_t;
 pub use crate::stdlib::gettimeofday;
 pub use crate::stdlib::int32_t;
-use crate::stdlib::mbstowcs;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
+
 pub use crate::stdlib::mmap;
 pub use crate::stdlib::mode_t;
 pub use crate::stdlib::munmap;
-use crate::stdlib::snprintf;
-use crate::stdlib::strlen;
+
 pub use crate::stdlib::timezone;
 pub use crate::stdlib::uint32_t;
-use ::libc::close;
-use ::libc::getuid;
+
 pub use ::libc::shm_open;
 pub use ::libc::timeval;
 

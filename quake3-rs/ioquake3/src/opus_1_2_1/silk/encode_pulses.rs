@@ -10,17 +10,7 @@ pub use crate::opus_types_h::opus_uint32;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_ctx;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_enc;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_window;
-use crate::stdlib::memset;
 
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf;
-use crate::src::opus_1_2_1::silk::code_signs::silk_encode_signs;
-use crate::src::opus_1_2_1::silk::shell_coder::silk_shell_encoder;
-use crate::src::opus_1_2_1::silk::tables_other::silk_lsb_iCDF;
-use crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_max_pulses_table;
-use crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_pulses_per_block_BITS_Q5;
-use crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_pulses_per_block_iCDF;
-use crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_rate_levels_BITS_Q5;
-use crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_rate_levels_iCDF;
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without

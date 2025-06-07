@@ -2,13 +2,12 @@ use ::libc;
 
 pub use crate::opus_types_h::opus_int16;
 pub use crate::opus_types_h::opus_int32;
-use crate::src::opus_1_2_1::silk::resampler_private_AR2::silk_resampler_private_AR2;
-use crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_2_3_COEFS_LQ;
+
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
 pub use crate::stdlib::int16_t;
 pub use crate::stdlib::int32_t;
-use crate::stdlib::memcpy;
+
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without

@@ -68,7 +68,7 @@ pub mod q_shared_h {
                 as libc::c_double,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
-    use crate::stdlib::sqrt;
+
     // __Q_SHARED_H
 }
 
@@ -118,22 +118,16 @@ pub use crate::be_aas_h::aas_altroutegoal_s;
 pub use crate::be_aas_h::aas_altroutegoal_t;
 pub use crate::be_aas_h::aas_entityinfo_s;
 pub use crate::be_aas_h::aas_entityinfo_t;
-use crate::src::botlib::be_aas_main::aasworld;
-use crate::src::botlib::be_aas_reach::AAS_AreaReachability;
-use crate::src::botlib::be_aas_route::AAS_AreaTravelTimeToGoalArea;
+
 pub use crate::src::botlib::be_aas_routealt::q_shared_h::VectorLength;
-use crate::src::botlib::l_log::Log_Write;
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetMemory;
+
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::qboolean;
 pub use crate::src::qcommon::q_shared::qfalse;
 pub use crate::src::qcommon::q_shared::qtrue;
 pub use crate::src::qcommon::q_shared::vec3_t;
 pub use crate::src::qcommon::q_shared::vec_t;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
-use ::libc::abs;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
@@ -250,7 +244,7 @@ pub unsafe extern "C" fn AAS_AltRoutingFloodCluster_r(mut areanum: libc::c_int) 
 pub unsafe extern "C" fn AAS_AlternativeRouteGoals(
     mut start: *mut crate::src::qcommon::q_shared::vec_t,
     mut startareanum: libc::c_int,
-    mut goal: *mut crate::src::qcommon::q_shared::vec_t,
+    mut _goal: *mut crate::src::qcommon::q_shared::vec_t,
     mut goalareanum: libc::c_int,
     mut travelflags: libc::c_int,
     mut altroutegoals: *mut crate::be_aas_h::aas_altroutegoal_t,

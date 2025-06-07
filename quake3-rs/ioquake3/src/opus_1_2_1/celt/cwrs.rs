@@ -7,13 +7,12 @@ pub use crate::src::opus_1_2_1::celt::entcode::ec_ctx;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_dec;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_enc;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_window;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_uint;
-use crate::src::opus_1_2_1::celt::entenc::ec_enc_uint;
+
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__uint32_t;
 pub use crate::stdlib::int16_t;
 pub use crate::stdlib::uint32_t;
-use ::libc::abs;
+
 /* Copyright (c) 2007-2008 CSIRO
 Copyright (c) 2007-2009 Xiph.Org Foundation
 Copyright (c) 2007-2009 Timothy B. Terriberry

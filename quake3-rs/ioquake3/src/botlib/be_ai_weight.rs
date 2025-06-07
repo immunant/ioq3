@@ -40,10 +40,7 @@ pub use crate::botlib_h::bsp_surface_s;
 pub use crate::botlib_h::bsp_surface_t;
 pub use crate::botlib_h::bsp_trace_s;
 pub use crate::botlib_h::bsp_trace_t;
-use crate::src::botlib::be_interface::botimport;
-use crate::src::botlib::l_libvar::LibVarGetValue;
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetClearedMemory;
+
 pub use crate::src::botlib::l_precomp::define_s;
 pub use crate::src::botlib::l_precomp::define_t;
 pub use crate::src::botlib::l_precomp::indent_s;
@@ -82,10 +79,7 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::strlen;
-use ::libc::rand;
-use ::libc::strcmp;
-use ::libc::strcpy;
+
 #[no_mangle]
 
 pub static mut weightFileList: [*mut crate::src::botlib::be_ai_weight::weightconfig_t; 128] =

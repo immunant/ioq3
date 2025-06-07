@@ -13,14 +13,7 @@ pub use crate::ogg_h::ogg_packet;
 pub use crate::ogg_h::ogg_page;
 pub use crate::ogg_h::ogg_stream_state;
 pub use crate::ogg_h::ogg_sync_state;
-use crate::stdlib::malloc;
-use crate::stdlib::memchr;
-use crate::stdlib::memcmp;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::realloc;
-use ::libc::free;
+
 /* *******************************************************************
 *                                                                  *
 * THIS FILE IS PART OF THE Ogg CONTAINER SOURCE CODE.              *

@@ -20,17 +20,7 @@ pub use crate::src::opusfile_0_9::src::opusfile::op_read_func;
 pub use crate::src::opusfile_0_9::src::opusfile::op_seek_func;
 pub use crate::src::opusfile_0_9::src::opusfile::op_tell_func;
 pub use crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks;
-use crate::stdlib::fclose;
-use crate::stdlib::fdopen;
-use crate::stdlib::feof;
-use crate::stdlib::fopen;
-use crate::stdlib::fread;
-use crate::stdlib::freopen;
-use crate::stdlib::fseeko;
-use crate::stdlib::ftello;
-use crate::stdlib::malloc;
-use crate::stdlib::memcpy;
-use ::libc::free;
+
 /*The context information needed to read from a block of memory as if it were a
 file.*/
 

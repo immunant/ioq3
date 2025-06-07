@@ -40,13 +40,12 @@ pub use crate::resampler_structs_h::_silk_resampler_state_struct;
 pub use crate::resampler_structs_h::silk_resampler_state_struct;
 pub use crate::resampler_structs_h::C2RustUnnamed_64;
 pub use crate::src::opus_1_2_1::silk::init_decoder::cpu_support_h::opus_select_arch;
-use crate::src::opus_1_2_1::silk::CNG::silk_CNG_Reset;
-use crate::src::opus_1_2_1::silk::PLC::silk_PLC_Reset;
+
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
 pub use crate::stdlib::int16_t;
 pub use crate::stdlib::int32_t;
-use crate::stdlib::memset;
+
 pub use crate::structs_h::silk_CNG_struct;
 pub use crate::structs_h::silk_NLSF_CB_struct;
 pub use crate::structs_h::silk_PLC_struct;

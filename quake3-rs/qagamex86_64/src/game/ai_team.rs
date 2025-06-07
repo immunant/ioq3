@@ -97,16 +97,7 @@ pub use crate::g_local_h::SPECTATOR_NOT;
 pub use crate::g_local_h::SPECTATOR_SCOREBOARD;
 pub use crate::g_local_h::TEAM_ACTIVE;
 pub use crate::g_local_h::TEAM_BEGIN;
-use crate::src::game::ai_cmd::notleader;
-use crate::src::game::ai_dmq3::ctf_blueflag;
-use crate::src::game::ai_dmq3::ctf_redflag;
-use crate::src::game::ai_dmq3::gametype;
-use crate::src::game::ai_dmq3::BotPointAreaNum;
-use crate::src::game::ai_dmq3::BotSameTeam;
-use crate::src::game::ai_dmq3::BotSetLastOrderedTask;
-use crate::src::game::ai_dmq3::BotTeam;
-use crate::src::game::ai_dmq3::ClientFromName;
-use crate::src::game::ai_dmq3::ClientName;
+
 pub use crate::src::game::ai_main::bot_activategoal_s;
 pub use crate::src::game::ai_main::bot_activategoal_t;
 pub use crate::src::game::ai_main::bot_state_s;
@@ -117,7 +108,7 @@ pub use crate::src::game::ai_main::floattime;
 pub use crate::src::game::ai_main::BotAI_BotInitialChat;
 pub use crate::src::game::ai_main::BotAI_GetClientState;
 pub use crate::src::game::ai_team::stdlib_h::atoi;
-use crate::src::game::ai_vcmd::BotVoiceChat_Defend;
+
 pub use crate::src::game::g_main::g_entities;
 pub use crate::src::game::g_main::level;
 pub use crate::src::game::g_syscalls::trap_AAS_AreaTravelTimeToGoalArea;
@@ -125,11 +116,9 @@ pub use crate::src::game::g_syscalls::trap_BotEnterChat;
 pub use crate::src::game::g_syscalls::trap_BotGetChatMessage;
 pub use crate::src::game::g_syscalls::trap_BotQueueConsoleMessage;
 pub use crate::src::game::g_syscalls::trap_GetConfigstring;
-use crate::stdlib::memcpy;
-use crate::stdlib::strlen;
-use crate::stdlib::strncpy;
+
 pub use ::libc::rand;
-use ::libc::strcpy;
+
 pub use ::libc::strtol;
 /*
 ===========================================================================
@@ -436,7 +425,7 @@ BotSetTeamMateTaskPreference
 #[no_mangle]
 
 pub unsafe extern "C" fn BotSetTeamMateTaskPreference(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut _bs: *mut crate::src::game::ai_main::bot_state_t,
     mut teammate: libc::c_int,
     mut preference: libc::c_int,
 ) {
@@ -460,7 +449,7 @@ BotGetTeamMateTaskPreference
 #[no_mangle]
 
 pub unsafe extern "C" fn BotGetTeamMateTaskPreference(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut _bs: *mut crate::src::game::ai_main::bot_state_t,
     mut teammate: libc::c_int,
 ) -> libc::c_int {
     let mut teammatename: [libc::c_char; 36] = [0; 36];
@@ -613,9 +602,9 @@ BotVoiceChat
 #[no_mangle]
 
 pub unsafe extern "C" fn BotVoiceChat(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
-    mut toclient: libc::c_int,
-    mut voicechat: *mut libc::c_char,
+    mut _bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut _toclient: libc::c_int,
+    mut _voicechat: *mut libc::c_char,
 ) {
 }
 /*
@@ -626,9 +615,9 @@ BotVoiceChatOnly
 #[no_mangle]
 
 pub unsafe extern "C" fn BotVoiceChatOnly(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
-    mut toclient: libc::c_int,
-    mut voicechat: *mut libc::c_char,
+    mut _bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut _toclient: libc::c_int,
+    mut _voicechat: *mut libc::c_char,
 ) {
 }
 /*
@@ -639,9 +628,9 @@ BotSayVoiceTeamOrder
 #[no_mangle]
 
 pub unsafe extern "C" fn BotSayVoiceTeamOrder(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
-    mut toclient: libc::c_int,
-    mut voicechat: *mut libc::c_char,
+    mut _bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut _toclient: libc::c_int,
+    mut _voicechat: *mut libc::c_char,
 ) {
 }
 /*

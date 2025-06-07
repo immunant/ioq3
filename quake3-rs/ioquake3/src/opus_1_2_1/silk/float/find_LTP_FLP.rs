@@ -1,9 +1,5 @@
 use ::libc;
 
-use crate::src::opus_1_2_1::silk::float::corrMatrix_FLP::silk_corrMatrix_FLP;
-use crate::src::opus_1_2_1::silk::float::corrMatrix_FLP::silk_corrVector_FLP;
-use crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP;
-use crate::src::opus_1_2_1::silk::float::scale_vector_FLP::silk_scale_vector_FLP;
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without

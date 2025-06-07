@@ -183,7 +183,7 @@ pub use crate::src::game::g_syscalls::trap_SendConsoleCommand;
 pub use crate::src::game::g_syscalls::trap_SendServerCommand;
 pub use crate::src::game::g_syscalls::trap_SetConfigstring;
 pub use crate::src::game::g_syscalls::trap_UnlinkEntity;
-use crate::src::game::g_team::CheckTeamStatus;
+
 pub use crate::src::game::g_utils::G_Find;
 pub use crate::src::game::g_utils::G_FreeEntity;
 pub use crate::src::game::g_utils::G_ModelIndex;
@@ -229,10 +229,6 @@ pub use crate::src::qcommon::q_shared::TR_LINEAR;
 pub use crate::src::qcommon::q_shared::TR_LINEAR_STOP;
 pub use crate::src::qcommon::q_shared::TR_SINE;
 pub use crate::src::qcommon::q_shared::TR_STATIONARY;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
-use crate::stdlib::vsnprintf;
-use ::libc::strcmp;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1711,15 +1707,15 @@ pub unsafe extern "C" fn vmMain(
     mut arg0: libc::c_int,
     mut arg1: libc::c_int,
     mut arg2: libc::c_int,
-    mut arg3: libc::c_int,
-    mut arg4: libc::c_int,
-    mut arg5: libc::c_int,
-    mut arg6: libc::c_int,
-    mut arg7: libc::c_int,
-    mut arg8: libc::c_int,
-    mut arg9: libc::c_int,
-    mut arg10: libc::c_int,
-    mut arg11: libc::c_int,
+    mut _arg3: libc::c_int,
+    mut _arg4: libc::c_int,
+    mut _arg5: libc::c_int,
+    mut _arg6: libc::c_int,
+    mut _arg7: libc::c_int,
+    mut _arg8: libc::c_int,
+    mut _arg9: libc::c_int,
+    mut _arg10: libc::c_int,
+    mut _arg11: libc::c_int,
 ) -> crate::stdlib::intptr_t {
     match command {
         0 => {
@@ -2150,7 +2146,7 @@ pub unsafe extern "C" fn G_ShutdownGame(mut restart: libc::c_int) {
 #[no_mangle]
 
 pub unsafe extern "C" fn Com_Error(
-    mut level_0: libc::c_int,
+    mut _level_0: libc::c_int,
     mut error: *const libc::c_char,
     mut args: ...
 ) -> ! {

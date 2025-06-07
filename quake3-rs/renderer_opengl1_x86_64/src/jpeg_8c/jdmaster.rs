@@ -209,8 +209,6 @@ pub use crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA;
 pub use crate::src::jpeg_8c::jquant1::jinit_1pass_quantizer;
 pub use crate::src::jpeg_8c::jquant2::jinit_2pass_quantizer;
 pub use crate::src::jpeg_8c::jutils::jdiv_round_up;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
 
 pub type my_master_ptr = *mut my_decomp_master;
 

@@ -6,7 +6,6 @@ pub mod stdlib_float_h {
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
-    use ::libc::strtod;
 }
 
 pub mod stdlib_h {
@@ -152,12 +151,9 @@ pub use crate::src::game::g_syscalls::trap_Print;
 pub use crate::src::game::g_syscalls::trap_SendConsoleCommand;
 pub use crate::src::game::g_syscalls::trap_SendServerCommand;
 pub use crate::src::game::g_syscalls::trap_SetUserinfo;
-use crate::stdlib::strlen;
+
 pub use ::libc::rand;
-use ::libc::strcat;
-use ::libc::strcmp;
-use ::libc::strcpy;
-use ::libc::strrchr;
+
 pub use ::libc::strtod;
 pub use ::libc::strtol;
 extern "C" {

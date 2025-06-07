@@ -50,13 +50,7 @@ pub use crate::botlib_h::bsp_surface_s;
 pub use crate::botlib_h::bsp_surface_t;
 pub use crate::botlib_h::bsp_trace_s;
 pub use crate::botlib_h::bsp_trace_t;
-use crate::src::botlib::be_aas_main::aasworld;
-use crate::src::botlib::be_aas_main::AAS_Error;
-use crate::src::botlib::be_aas_reach::AAS_AreaReachability;
-use crate::src::botlib::l_libvar::LibVarGetValue;
-use crate::src::botlib::l_log::Log_Write;
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetClearedMemory;
+
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::cplane_s;
 pub use crate::src::qcommon::q_shared::cplane_t;
@@ -71,8 +65,7 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::memset;
-use ::libc::abs;
+
 extern "C" {
     /*
     ===========================================================================

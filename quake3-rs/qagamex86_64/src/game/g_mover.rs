@@ -252,7 +252,6 @@ pub mod q_shared_h {
         *v.offset(1 as libc::c_int as isize) = -*v.offset(1 as libc::c_int as isize);
         *v.offset(2 as libc::c_int as isize) = -*v.offset(2 as libc::c_int as isize);
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -483,7 +482,7 @@ pub use crate::src::game::g_syscalls::trap_LinkEntity;
 pub use crate::src::game::g_syscalls::trap_SetBrushModel;
 pub use crate::src::game::g_syscalls::trap_Trace;
 pub use crate::src::game::g_syscalls::trap_UnlinkEntity;
-use crate::src::game::g_team::Team_DroppedFlagThink;
+
 pub use crate::src::game::g_utils::tv;
 pub use crate::src::game::g_utils::vtos;
 pub use crate::src::game::g_utils::G_AddEvent;
@@ -495,9 +494,6 @@ pub use crate::src::game::g_utils::G_SoundIndex;
 pub use crate::src::game::g_utils::G_Spawn;
 pub use crate::src::game::g_utils::G_TempEntity;
 pub use crate::src::game::g_utils::G_UseTargets;
-use crate::stdlib::fabs;
-use crate::stdlib::sqrt;
-use ::libc::strcmp;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1809,7 +1805,7 @@ Touch_DoorTriggerSpectator
 unsafe extern "C" fn Touch_DoorTriggerSpectator(
     mut ent: *mut crate::g_local_h::gentity_t,
     mut other: *mut crate::g_local_h::gentity_t,
-    mut trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut _trace: *mut crate::src::qcommon::q_shared::trace_t,
 ) {
     let mut axis: libc::c_int = 0;
     let mut doorMin: libc::c_float = 0.;
@@ -2123,7 +2119,7 @@ Don't allow decent if a living player is on it
 pub unsafe extern "C" fn Touch_Plat(
     mut ent: *mut crate::g_local_h::gentity_t,
     mut other: *mut crate::g_local_h::gentity_t,
-    mut trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut _trace: *mut crate::src::qcommon::q_shared::trace_t,
 ) {
     if (*other).client.is_null()
         || (*(*other).client).ps.stats[crate::bg_public_h::STAT_HEALTH as libc::c_int as usize]
@@ -2150,7 +2146,7 @@ If the plat is at the bottom position, start it going up
 pub unsafe extern "C" fn Touch_PlatCenterTrigger(
     mut ent: *mut crate::g_local_h::gentity_t,
     mut other: *mut crate::g_local_h::gentity_t,
-    mut trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut _trace: *mut crate::src::qcommon::q_shared::trace_t,
 ) {
     if (*other).client.is_null() {
         return;
@@ -2351,7 +2347,7 @@ Touch_Button
 pub unsafe extern "C" fn Touch_Button(
     mut ent: *mut crate::g_local_h::gentity_t,
     mut other: *mut crate::g_local_h::gentity_t,
-    mut trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut _trace: *mut crate::src::qcommon::q_shared::trace_t,
 ) {
     if (*other).client.is_null() {
         return;

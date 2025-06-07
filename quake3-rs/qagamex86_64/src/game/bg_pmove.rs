@@ -14,7 +14,6 @@ pub mod q_shared_h {
                 as libc::c_double,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -250,9 +249,7 @@ pub use crate::src::qcommon::q_shared::usercmd_s;
 pub use crate::src::qcommon::q_shared::usercmd_t;
 pub use crate::src::qcommon::q_shared::vec3_t;
 pub use crate::src::qcommon::q_shared::vec_t;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
-use ::libc::abs;
+
 extern "C" {
     /*
     ================

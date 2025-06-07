@@ -54,8 +54,7 @@ pub use crate::src::qcommon::q_shared::CA_UNINITIALIZED;
 
 pub use crate::client_h::clientConnection_t;
 pub use crate::src::client::cl_main::clc;
-use crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
-use crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

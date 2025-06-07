@@ -77,7 +77,7 @@ pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
 pub use crate::src::ui::ui_syscalls::trap_R_SetColor;
 pub use crate::src::ui::ui_syscalls::trap_S_RegisterSound;
 pub use crate::src::ui::ui_syscalls::trap_S_StartLocalSound;
-use crate::stdlib::sin;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;
@@ -107,9 +107,7 @@ pub use crate::ui_local_h::AWARD_IMPRESSIVE;
 pub use crate::ui_local_h::AWARD_PERFECT;
 
 pub use crate::src::q3_ui::ui_splevel::stdlib_h::atoi;
-use crate::stdlib::memset;
-use ::libc::strcpy;
-use ::libc::strrchr;
+
 pub use ::libc::strtol;
 
 #[repr(C)]
@@ -893,7 +891,10 @@ unsafe extern "C" fn UI_SPLevelMenu_ResetAction(
     UI_SPLevelMenu();
 }
 
-unsafe extern "C" fn UI_SPLevelMenu_ResetEvent(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
+unsafe extern "C" fn UI_SPLevelMenu_ResetEvent(
+    mut _ptr: *mut libc::c_void,
+    mut event: libc::c_int,
+) {
     if event != 3 as libc::c_int {
         return;
     }
@@ -939,7 +940,7 @@ UI_SPLevelMenu_LeftArrowEvent
 */
 
 unsafe extern "C" fn UI_SPLevelMenu_LeftArrowEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut notification: libc::c_int,
 ) {
     if notification != 3 as libc::c_int {
@@ -958,7 +959,7 @@ UI_SPLevelMenu_RightArrowEvent
 */
 
 unsafe extern "C" fn UI_SPLevelMenu_RightArrowEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut notification: libc::c_int,
 ) {
     if notification != 3 as libc::c_int {
@@ -977,7 +978,7 @@ UI_SPLevelMenu_PlayerEvent
 */
 
 unsafe extern "C" fn UI_SPLevelMenu_PlayerEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut notification: libc::c_int,
 ) {
     if notification != 3 as libc::c_int {
@@ -1012,7 +1013,7 @@ UI_SPLevelMenu_NextEvent
 */
 
 unsafe extern "C" fn UI_SPLevelMenu_NextEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut notification: libc::c_int,
 ) {
     if notification != 3 as libc::c_int {
@@ -1033,7 +1034,7 @@ UI_SPLevelMenu_BackEvent
 */
 
 unsafe extern "C" fn UI_SPLevelMenu_BackEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut notification: libc::c_int,
 ) {
     if notification != 3 as libc::c_int {
@@ -1051,7 +1052,7 @@ UI_SPLevelMenu_CustomEvent
 */
 
 unsafe extern "C" fn UI_SPLevelMenu_CustomEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut notification: libc::c_int,
 ) {
     if notification != 3 as libc::c_int {

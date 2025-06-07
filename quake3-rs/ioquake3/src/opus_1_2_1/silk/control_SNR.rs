@@ -13,10 +13,7 @@ pub use crate::opus_types_h::opus_uint32;
 pub use crate::resampler_structs_h::_silk_resampler_state_struct;
 pub use crate::resampler_structs_h::silk_resampler_state_struct;
 pub use crate::resampler_structs_h::C2RustUnnamed_64;
-use crate::src::opus_1_2_1::silk::tables_other::silk_SNR_table_Q1;
-use crate::src::opus_1_2_1::silk::tables_other::silk_TargetRate_table_MB;
-use crate::src::opus_1_2_1::silk::tables_other::silk_TargetRate_table_NB;
-use crate::src::opus_1_2_1::silk::tables_other::silk_TargetRate_table_WB;
+
 pub use crate::structs_h::silk_LP_state;
 pub use crate::structs_h::silk_NLSF_CB_struct;
 pub use crate::structs_h::silk_VAD_state;

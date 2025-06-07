@@ -6,7 +6,6 @@ pub mod stdlib_float_h {
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
-    use ::libc::strtod;
 }
 
 pub mod ctype_h {
@@ -123,11 +122,7 @@ pub use crate::src::renderergl1::tr_shade::RB_StageIteratorVertexLitTexture;
 pub use crate::src::renderergl1::tr_shader::stdlib_float_h::atof;
 pub use crate::src::renderergl1::tr_sky::RB_StageIteratorSky;
 pub use crate::src::renderergl1::tr_sky::R_InitSkyTexCoords;
-use crate::stdlib::memcmp;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
+
 pub use crate::stdlib::GLenum;
 pub use crate::stdlib::GLuint;
 pub use crate::tr_common_h::image_s;
@@ -312,15 +307,10 @@ pub use crate::tr_local_h::TMOD_SCROLL;
 pub use crate::tr_local_h::TMOD_STRETCH;
 pub use crate::tr_local_h::TMOD_TRANSFORM;
 pub use crate::tr_local_h::TMOD_TURBULENT;
-use ::libc::strcat;
-use ::libc::strcmp;
-use ::libc::strtod;
 
 pub use crate::src::renderergl1::tr_shader::ctype_h::tolower;
-use crate::src::sdl::sdl_glimp::qglActiveTextureARB;
+
 pub use crate::stdlib::__ctype_tolower_loc;
-use crate::stdlib::cos;
-use crate::stdlib::sin;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -4708,7 +4698,7 @@ pub unsafe extern "C" fn RE_RegisterShaderFromImage(
     mut name: *const libc::c_char,
     mut lightmapIndex: libc::c_int,
     mut image: *mut crate::tr_common_h::image_t,
-    mut mipRawImage: crate::src::qcommon::q_shared::qboolean,
+    mut _mipRawImage: crate::src::qcommon::q_shared::qboolean,
 ) -> crate::src::qcommon::q_shared::qhandle_t {
     let mut hash: libc::c_int = 0;
     let mut sh: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;

@@ -352,8 +352,7 @@ pub use crate::src::sdl::sdl_glimp::qglEnd;
 pub use crate::src::sdl::sdl_glimp::qglLineWidth;
 pub use crate::src::sdl::sdl_glimp::qglVertex3f;
 pub use crate::src::sdl::sdl_glimp::qglVertex3fv;
-use crate::stdlib::cos;
-use crate::stdlib::sin;
+
 pub use crate::stdlib::GLenum;
 pub use crate::stdlib::GLfloat;
 pub use crate::stdlib::GLuint;
@@ -2961,7 +2960,7 @@ Entities that have a single procedurally generated surface
 ====================
 */
 
-unsafe extern "C" fn RB_SurfaceEntity(mut surfType: *mut crate::tr_local_h::surfaceType_t) {
+unsafe extern "C" fn RB_SurfaceEntity(mut _surfType: *mut crate::tr_local_h::surfaceType_t) {
     match (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
         .e
         .reType as libc::c_uint
@@ -2987,7 +2986,7 @@ unsafe extern "C" fn RB_SurfaceEntity(mut surfType: *mut crate::tr_local_h::surf
     };
 }
 
-unsafe extern "C" fn RB_SurfaceBad(mut surfType: *mut crate::tr_local_h::surfaceType_t) {
+unsafe extern "C" fn RB_SurfaceBad(mut _surfType: *mut crate::tr_local_h::surfaceType_t) {
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
@@ -3008,7 +3007,7 @@ unsafe extern "C" fn RB_SurfaceFlare(mut surf: *mut crate::tr_local_h::srfFlare_
     };
 }
 
-unsafe extern "C" fn RB_SurfaceSkip(mut surf: *mut libc::c_void) {}
+unsafe extern "C" fn RB_SurfaceSkip(mut _surf: *mut libc::c_void) {}
 #[no_mangle]
 
 pub static mut rb_surfaceTable: [Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>; 11] = unsafe {

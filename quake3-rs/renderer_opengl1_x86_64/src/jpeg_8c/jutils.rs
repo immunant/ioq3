@@ -9,8 +9,7 @@ pub use crate::jpeglib_h::JBLOCK;
 pub use crate::jpeglib_h::JBLOCKROW;
 pub use crate::jpeglib_h::JSAMPARRAY;
 pub use crate::jpeglib_h::JSAMPROW;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
+
 /*
  * jutils.c
  *

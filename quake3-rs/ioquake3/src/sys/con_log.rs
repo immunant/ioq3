@@ -1,8 +1,5 @@
 use ::libc;
 
-use crate::stdlib::memcpy;
-use crate::stdlib::strlen;
-
 static mut consoleLog: [libc::c_char; 32768] = [0; 32768];
 
 static mut writePos: libc::c_uint = 0 as libc::c_int as libc::c_uint;

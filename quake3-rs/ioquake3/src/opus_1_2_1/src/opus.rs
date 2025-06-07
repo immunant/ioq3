@@ -4,7 +4,7 @@ pub use crate::opus_types_h::opus_int16;
 pub use crate::opus_types_h::opus_int32;
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
-use crate::stdlib::fabs;
+
 pub use crate::stdlib::int16_t;
 pub use crate::stdlib::int32_t;
 /* Copyright (c) 2011 Xiph.Org Foundation, Skype Limited

@@ -65,7 +65,6 @@ pub mod q_shared_h {
             + *v.offset(1 as libc::c_int as isize) * *v.offset(1 as libc::c_int as isize)
             + *v.offset(2 as libc::c_int as isize) * *v.offset(2 as libc::c_int as isize);
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -121,60 +120,9 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::fabs;
-use crate::stdlib::fabsf;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
 
-use crate::src::botlib::be_aas_bspq3::AAS_BSPModelMinsMaxsOrigin;
-use crate::src::botlib::be_aas_bspq3::AAS_NextBSPEntity;
-use crate::src::botlib::be_aas_bspq3::AAS_PointContents;
-use crate::src::botlib::be_aas_bspq3::AAS_Trace;
-use crate::src::botlib::be_aas_bspq3::AAS_ValueForBSPEpairKey;
-use crate::src::botlib::be_aas_entity::AAS_EntityInfo;
-use crate::src::botlib::be_aas_entity::AAS_EntityModelNum;
-use crate::src::botlib::be_aas_entity::AAS_EntityModelindex;
-use crate::src::botlib::be_aas_entity::AAS_EntityType;
-use crate::src::botlib::be_aas_entity::AAS_NextEntity;
-use crate::src::botlib::be_aas_entity::AAS_OriginOfMoverWithModelNum;
-use crate::src::botlib::be_aas_main::AAS_ProjectPointOntoVector;
-use crate::src::botlib::be_aas_main::AAS_Time;
-use crate::src::botlib::be_aas_move::AAS_AgainstLadder;
-use crate::src::botlib::be_aas_move::AAS_HorizontalVelocityForJump;
-use crate::src::botlib::be_aas_move::AAS_JumpReachRunStart;
-use crate::src::botlib::be_aas_move::AAS_OnGround;
-use crate::src::botlib::be_aas_move::AAS_PredictClientMovement;
-use crate::src::botlib::be_aas_move::AAS_Swimming;
-use crate::src::botlib::be_aas_reach::AAS_AreaDoNotEnter;
-use crate::src::botlib::be_aas_reach::AAS_AreaJumpPad;
-use crate::src::botlib::be_aas_reach::AAS_AreaReachability;
-use crate::src::botlib::be_aas_route::AAS_AreaContentsTravelFlags;
-use crate::src::botlib::be_aas_route::AAS_AreaTravelTimeToGoalArea;
-use crate::src::botlib::be_aas_route::AAS_NextAreaReachability;
-use crate::src::botlib::be_aas_route::AAS_NextModelReachability;
-use crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum;
-use crate::src::botlib::be_aas_route::AAS_TravelFlagForType;
-use crate::src::botlib::be_aas_sample::AAS_AreaPresenceType;
-use crate::src::botlib::be_aas_sample::AAS_PointAreaNum;
-use crate::src::botlib::be_aas_sample::AAS_PresenceTypeBoundingBox;
-use crate::src::botlib::be_aas_sample::AAS_TraceAreas;
-use crate::src::botlib::be_aas_sample::AAS_TraceClientBBox;
 pub use crate::src::botlib::be_ai_move::stdlib_h::atoi;
-use crate::src::botlib::be_ea::EA_Attack;
-use crate::src::botlib::be_ea::EA_Command;
-use crate::src::botlib::be_ea::EA_Crouch;
-use crate::src::botlib::be_ea::EA_DelayedJump;
-use crate::src::botlib::be_ea::EA_Jump;
-use crate::src::botlib::be_ea::EA_Move;
-use crate::src::botlib::be_ea::EA_MoveForward;
-use crate::src::botlib::be_ea::EA_MoveUp;
-use crate::src::botlib::be_ea::EA_SelectWeapon;
-use crate::src::botlib::be_ea::EA_View;
-use crate::src::botlib::be_ea::EA_Walk;
-use crate::src::botlib::be_interface::botDeveloper;
-use crate::src::botlib::be_interface::botimport;
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetClearedMemory;
+
 pub use ::libc::rand;
 pub use ::libc::strtol;
 /*
@@ -1179,7 +1127,7 @@ pub unsafe extern "C" fn BotOnTopOfEntity(mut ms: *mut bot_movestate_t) -> libc:
 #[no_mangle]
 
 pub unsafe extern "C" fn BotValidTravel(
-    mut origin: *mut crate::src::qcommon::q_shared::vec_t,
+    mut _origin: *mut crate::src::qcommon::q_shared::vec_t,
     mut reach: *mut crate::aasfile_h::aas_reachability_t,
     mut travelflags: libc::c_int,
 ) -> libc::c_int {
@@ -2193,7 +2141,7 @@ pub unsafe extern "C" fn BotSwimInDirection(
     mut ms: *mut bot_movestate_t,
     mut dir: *mut crate::src::qcommon::q_shared::vec_t,
     mut speed: libc::c_float,
-    mut type_0: libc::c_int,
+    mut _type_0: libc::c_int,
 ) -> libc::c_int {
     let mut normdir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     normdir[0 as libc::c_int as usize] = *dir.offset(0 as libc::c_int as isize);
@@ -4950,7 +4898,7 @@ pub unsafe extern "C" fn BotFinishTravel_FuncBobbing(
 
 pub unsafe extern "C" fn GrappleState(
     mut ms: *mut bot_movestate_t,
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
+    mut _reach: *mut crate::aasfile_h::aas_reachability_t,
 ) -> libc::c_int {
     let mut i: libc::c_int = 0;
     let mut entinfo: crate::be_aas_h::aas_entityinfo_t = crate::be_aas_h::aas_entityinfo_t {

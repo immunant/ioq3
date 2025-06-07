@@ -36,7 +36,7 @@ pub use crate::src::qcommon::q_shared::EXEC_NOW;
 pub use crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText;
 pub use crate::src::ui::ui_syscalls::trap_GetConfigString;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
-use crate::stdlib::memset;
+
 pub use crate::ui_local_h::_tag_menuframework;
 pub use crate::ui_local_h::menubitmap_s;
 pub use crate::ui_local_h::menucommon_s;
@@ -329,7 +329,7 @@ UI_RemoveBotsMenu_DeleteEvent
 */
 
 unsafe extern "C" fn UI_RemoveBotsMenu_DeleteEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut event: libc::c_int,
 ) {
     if event != 3 as libc::c_int {
@@ -371,7 +371,7 @@ UI_RemoveAddBotsMenu_BackEvent
 */
 
 unsafe extern "C" fn UI_RemoveBotsMenu_BackEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut event: libc::c_int,
 ) {
     if event != 3 as libc::c_int {
@@ -385,7 +385,10 @@ UI_RemoveBotsMenu_UpEvent
 =================
 */
 
-unsafe extern "C" fn UI_RemoveBotsMenu_UpEvent(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
+unsafe extern "C" fn UI_RemoveBotsMenu_UpEvent(
+    mut _ptr: *mut libc::c_void,
+    mut event: libc::c_int,
+) {
     if event != 3 as libc::c_int {
         return;
     }
@@ -401,7 +404,7 @@ UI_RemoveBotsMenu_DownEvent
 */
 
 unsafe extern "C" fn UI_RemoveBotsMenu_DownEvent(
-    mut ptr: *mut libc::c_void,
+    mut _ptr: *mut libc::c_void,
     mut event: libc::c_int,
 ) {
     if event != 3 as libc::c_int {

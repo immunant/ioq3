@@ -276,7 +276,7 @@ pub type downsample1_ptr = Option<
  * Initialize for a downsampling pass.
  */
 
-unsafe extern "C" fn start_pass_downsample(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
+unsafe extern "C" fn start_pass_downsample(mut _cinfo: crate::jpeglib_h::j_compress_ptr) {
     /* no work for now */
 }
 /*

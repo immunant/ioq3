@@ -243,7 +243,7 @@ pub use crate::stdlib::uint32_t;
 pub use crate::mathops_h::C2RustUnnamed_61;
 pub use crate::src::opus_1_2_1::src::mlp::arch_h::celt_isnan;
 pub use crate::src::opus_1_2_1::src::mlp::tansig_table_h::tansig_table;
-use crate::stdlib::floor;
+
 /* Copyright (c) 2008-2011 Octasic Inc.
 Written by Jean-Marc Valin */
 /*

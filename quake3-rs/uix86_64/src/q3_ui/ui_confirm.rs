@@ -277,7 +277,7 @@ pub use crate::src::q3_ui::ui_qmenu::Menu_SetCursorToItem;
 pub use crate::src::qcommon::q_shared::C2RustUnnamed_0;
 pub use crate::src::ui::ui_syscalls::trap_GetClientState;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
-use crate::stdlib::memset;
+
 pub use crate::ui_local_h::_tag_menuframework;
 pub use crate::ui_local_h::menucommon_s;
 pub use crate::ui_local_h::menuframework_s;

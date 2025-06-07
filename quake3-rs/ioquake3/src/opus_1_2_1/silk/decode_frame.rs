@@ -16,15 +16,7 @@ pub use crate::resampler_structs_h::C2RustUnnamed_64;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_ctx;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_dec;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_window;
-use crate::src::opus_1_2_1::silk::decode_core::silk_decode_core;
-use crate::src::opus_1_2_1::silk::decode_indices::silk_decode_indices;
-use crate::src::opus_1_2_1::silk::decode_parameters::silk_decode_parameters;
-use crate::src::opus_1_2_1::silk::decode_pulses::silk_decode_pulses;
-use crate::src::opus_1_2_1::silk::CNG::silk_CNG;
-use crate::src::opus_1_2_1::silk::PLC::silk_PLC;
-use crate::src::opus_1_2_1::silk::PLC::silk_PLC_glue_frames;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
+
 pub use crate::structs_h::silk_CNG_struct;
 pub use crate::structs_h::silk_NLSF_CB_struct;
 pub use crate::structs_h::silk_PLC_struct;

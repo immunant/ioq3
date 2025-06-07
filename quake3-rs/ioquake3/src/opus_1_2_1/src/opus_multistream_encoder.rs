@@ -103,7 +103,7 @@ pub mod mathops_h {
             + frac * (0.95909232f32 + frac * (-0.33951290f32 + frac * 0.16541097f32));
         return (1 as libc::c_int + integer) as libc::c_float + frac;
     }
-    use crate::opus_types_h::opus_uint32;
+
     /* MATHOPS_H */
     /* FIXED_POINT */
 }
@@ -153,8 +153,6 @@ pub mod os_support_h {
         return crate::stdlib::malloc(size);
     }
 
-    use crate::stdlib::malloc;
-    use ::libc::free;
     /* OS_SUPPORT_H */
     /*#ifdef __GNUC__
     #pragma GCC poison printf sprintf
@@ -219,7 +217,6 @@ pub mod pitch_h {
         }
         return xy;
     }
-    use crate::arch_h::opus_val32;
 }
 
 pub use crate::internal::__builtin_va_list;
@@ -248,19 +245,14 @@ pub use crate::src::opus_1_2_1::src::opus_encoder::downmix_float;
 pub use crate::src::opus_1_2_1::src::opus_encoder::downmix_int;
 pub use crate::src::opus_1_2_1::src::opus_encoder::frame_size_select;
 pub use crate::src::opus_1_2_1::src::opus_encoder::opus_encode_native;
-use crate::src::opus_1_2_1::src::opus_encoder::opus_encoder_ctl;
-use crate::src::opus_1_2_1::src::opus_encoder::opus_encoder_get_size;
-use crate::src::opus_1_2_1::src::opus_encoder::opus_encoder_init;
-use crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
+
 pub use crate::src::opus_1_2_1::src::opus_multistream::get_left_channel;
 pub use crate::src::opus_1_2_1::src::opus_multistream::get_mono_channel;
 pub use crate::src::opus_1_2_1::src::opus_multistream::get_right_channel;
 pub use crate::src::opus_1_2_1::src::opus_multistream::validate_layout;
 pub use crate::src::opus_1_2_1::src::opus_multistream_encoder::arch_h::celt_isnan;
 pub use crate::src::opus_1_2_1::src::opus_multistream_encoder::opus_private_h::align;
-use crate::src::opus_1_2_1::src::repacketizer::opus_repacketizer_cat;
-use crate::src::opus_1_2_1::src::repacketizer::opus_repacketizer_get_nb_frames;
-use crate::src::opus_1_2_1::src::repacketizer::opus_repacketizer_init;
+
 pub use crate::src::opus_1_2_1::src::repacketizer::opus_repacketizer_out_range_impl;
 pub use crate::stddef_h::size_t;
 
@@ -273,20 +265,11 @@ pub use crate::src::opus_1_2_1::celt::modes::OpusCustomMode;
 pub use crate::src::opus_1_2_1::celt::modes::PulseCache;
 pub use crate::src::opus_1_2_1::src::opus_multistream_encoder::mathops_h::celt_log2;
 pub use crate::stdarg_h::va_list;
-use crate::stdlib::floor;
 
-use crate::src::opus_1_2_1::celt::bands::compute_band_energies;
-use crate::src::opus_1_2_1::celt::celt::resampling_factor;
-use crate::src::opus_1_2_1::celt::celt_encoder::celt_preemphasis;
-use crate::src::opus_1_2_1::celt::quant_bands::amp2Log2;
 pub use crate::src::opus_1_2_1::src::opus_multistream_encoder::cpu_support_h::opus_select_arch;
 pub use crate::src::opus_1_2_1::src::opus_multistream_encoder::os_support_h::opus_alloc;
 pub use crate::src::opus_1_2_1::src::opus_multistream_encoder::os_support_h::opus_free;
 pub use crate::src::opus_1_2_1::src::opus_multistream_encoder::pitch_h::celt_inner_prod_c;
-use crate::stdlib::malloc;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use ::libc::free;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

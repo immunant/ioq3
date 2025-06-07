@@ -14,7 +14,6 @@ pub mod q_shared_h {
                 as libc::c_double,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -73,13 +72,7 @@ pub use crate::botlib_h::bsp_surface_t;
 pub use crate::botlib_h::bsp_trace_s;
 pub use crate::botlib_h::bsp_trace_t;
 pub use crate::src::botlib::be_aas_route::q_shared_h::VectorLength;
-use crate::src::botlib::l_crc::CRC_ProcessString;
-use crate::src::botlib::l_libvar::LibVarValue;
-use crate::src::botlib::l_log::Log_Write;
-use crate::src::botlib::l_memory::AvailableMemory;
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetClearedMemory;
-use crate::src::botlib::l_memory::GetMemory;
+
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::cplane_s;
 pub use crate::src::qcommon::q_shared::cplane_t;
@@ -95,25 +88,7 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
-use ::libc::rand;
 
-use crate::src::botlib::be_aas_main::aasworld;
-use crate::src::botlib::be_aas_main::AAS_Error;
-use crate::src::botlib::be_aas_main::AAS_ProjectPointOntoVector;
-use crate::src::botlib::be_aas_main::AAS_Time;
-use crate::src::botlib::be_aas_reach::AAS_AreaCrouch;
-use crate::src::botlib::be_aas_reach::AAS_AreaDoNotEnter;
-use crate::src::botlib::be_aas_reach::AAS_AreaGroundFaceArea;
-use crate::src::botlib::be_aas_reach::AAS_AreaReachability;
-use crate::src::botlib::be_aas_reach::AAS_AreaSwim;
-use crate::src::botlib::be_aas_sample::AAS_PointAreaNum;
-use crate::src::botlib::be_aas_sample::AAS_TraceAreas;
-use crate::src::botlib::be_aas_sample::AAS_TraceClientBBox;
-use crate::src::botlib::be_interface::botDeveloper;
-use crate::src::botlib::be_interface::botimport;
 //end of the function AAS_CreateAllRoutingCache
 //===========================================================================
 //
@@ -3461,7 +3436,7 @@ pub unsafe extern "C" fn AAS_PredictRoute(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_BridgeWalkable(mut areanum: libc::c_int) -> libc::c_int {
+pub unsafe extern "C" fn AAS_BridgeWalkable(mut _areanum: libc::c_int) -> libc::c_int {
     return crate::src::qcommon::q_shared::qfalse as libc::c_int;
 }
 //end of the function AAS_BridgeWalkable
@@ -3836,8 +3811,8 @@ pub unsafe extern "C" fn AAS_RandomGoalArea(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_AreaVisible(
-    mut srcarea: libc::c_int,
-    mut destarea: libc::c_int,
+    mut _srcarea: libc::c_int,
+    mut _destarea: libc::c_int,
 ) -> libc::c_int {
     return crate::src::qcommon::q_shared::qfalse as libc::c_int;
 }
@@ -3876,10 +3851,10 @@ pub unsafe extern "C" fn DistancePointToLine(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_NearestHideArea(
-    mut srcnum: libc::c_int,
+    mut _srcnum: libc::c_int,
     mut origin: *mut crate::src::qcommon::q_shared::vec_t,
     mut areanum: libc::c_int,
-    mut enemynum: libc::c_int,
+    mut _enemynum: libc::c_int,
     mut enemyorigin: *mut crate::src::qcommon::q_shared::vec_t,
     mut enemyareanum: libc::c_int,
     mut travelflags: libc::c_int,

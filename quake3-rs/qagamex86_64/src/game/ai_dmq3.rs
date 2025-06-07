@@ -54,7 +54,6 @@ pub mod q_shared_h {
             * *v2.offset(1 as libc::c_int as isize)
             - *v1.offset(1 as libc::c_int as isize) * *v2.offset(0 as libc::c_int as isize);
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -395,10 +394,7 @@ pub use crate::g_local_h::SPECTATOR_NOT;
 pub use crate::g_local_h::SPECTATOR_SCOREBOARD;
 pub use crate::g_local_h::TEAM_ACTIVE;
 pub use crate::g_local_h::TEAM_BEGIN;
-use crate::src::game::ai_chat::BotChatTime;
-use crate::src::game::ai_chat::BotChat_EnterGame;
-use crate::src::game::ai_chat::BotValidChatPosition;
-use crate::src::game::ai_cmd::BotMatchMessage;
+
 pub use crate::src::game::ai_dmq3::ctype_h::toupper;
 pub use crate::src::game::ai_dmq3::stdlib_h::atoi;
 pub use crate::src::game::ai_main::bot_activategoal_s;
@@ -476,28 +472,11 @@ pub use crate::src::game::g_syscalls::trap_SetUserinfo;
 pub use crate::src::game::g_syscalls::trap_UnifyWhiteSpaces;
 pub use crate::src::game::g_utils::G_ModelIndex;
 pub use crate::stdlib::__ctype_toupper_loc;
-use crate::stdlib::fabs;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
-use crate::stdlib::strlen;
-use crate::stdlib::strncpy;
+
 pub use ::libc::rand;
-use ::libc::strcmp;
-use ::libc::strstr;
+
 pub use ::libc::strtol;
 
-use crate::src::game::ai_dmnet::AIEnter_Seek_ActivateEntity;
-use crate::src::game::ai_dmnet::AIEnter_Seek_LTG;
-use crate::src::game::ai_dmnet::AIEnter_Stand;
-use crate::src::game::ai_dmnet::AINode_Seek_LTG;
-use crate::src::game::ai_dmnet::AINode_Seek_NBG;
-use crate::src::game::ai_dmnet::AINode_Stand;
-use crate::src::game::ai_dmnet::BotDumpNodeSwitches;
-use crate::src::game::ai_dmnet::BotResetNodeSwitches;
-use crate::src::game::ai_team::BotTeamAI;
-use crate::src::game::ai_team::BotVoiceChat;
 extern "C" {
     #[no_mangle]
     pub static mut bot_developer: crate::src::qcommon::q_shared::vmCvar_t;
@@ -1004,7 +983,7 @@ BotSetTeamStatus
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotSetTeamStatus(mut bs: *mut crate::src::game::ai_main::bot_state_t) {}
+pub unsafe extern "C" fn BotSetTeamStatus(mut _bs: *mut crate::src::game::ai_main::bot_state_t) {}
 // set last ordered task
 /*
 ==================
@@ -1788,11 +1767,11 @@ pub unsafe extern "C" fn stristr(
                 {
                     if 0 != 0 {
                         let mut __c: libc::c_int = *charset.offset(i as isize) as libc::c_int;
-                        __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                        __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                             __c
                         } else {
                             *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                        })
+                        }
                     } else {
                         __res = toupper(*charset.offset(i as isize) as libc::c_int)
                     }
@@ -1808,11 +1787,11 @@ pub unsafe extern "C" fn stristr(
                 {
                     if 0 != 0 {
                         let mut __c: libc::c_int = *str.offset(i as isize) as libc::c_int;
-                        __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                        __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                             __c
                         } else {
                             *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                        })
+                        }
                     } else {
                         __res = toupper(*str.offset(i as isize) as libc::c_int)
                     }
@@ -2206,8 +2185,8 @@ BotCheckItemPickup
 #[no_mangle]
 
 pub unsafe extern "C" fn BotCheckItemPickup(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
-    mut oldinventory: *mut libc::c_int,
+    mut _bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut _oldinventory: *mut libc::c_int,
 ) {
 }
 //update the inventory
@@ -2854,7 +2833,7 @@ BotWantsToHelp
 #[no_mangle]
 
 pub unsafe extern "C" fn BotWantsToHelp(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut _bs: *mut crate::src::game::ai_main::bot_state_t,
 ) -> libc::c_int {
     return crate::src::qcommon::q_shared::qtrue as libc::c_int;
 }
@@ -6756,7 +6735,7 @@ BotTriggerMultipleGoal
 #[no_mangle]
 
 pub unsafe extern "C" fn BotTriggerMultipleActivateGoal(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut _bs: *mut crate::src::game::ai_main::bot_state_t,
     mut bspent: libc::c_int,
     mut activategoal: *mut crate::src::game::ai_main::bot_activategoal_t,
 ) -> libc::c_int {
@@ -8677,7 +8656,7 @@ BotDeathmatchAI
 
 pub unsafe extern "C" fn BotDeathmatchAI(
     mut bs: *mut crate::src::game::ai_main::bot_state_t,
-    mut thinktime: libc::c_float,
+    mut _thinktime: libc::c_float,
 ) {
     let mut gender: [libc::c_char; 144] = [0; 144];
     let mut name: [libc::c_char; 144] = [0; 144];

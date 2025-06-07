@@ -481,11 +481,6 @@ pub use crate::src::qcommon::q_shared::TR_LINEAR;
 pub use crate::src::qcommon::q_shared::TR_LINEAR_STOP;
 pub use crate::src::qcommon::q_shared::TR_SINE;
 pub use crate::src::qcommon::q_shared::TR_STATIONARY;
-use crate::stdlib::atan2;
-use crate::stdlib::memset;
-use ::libc::rand;
-use ::libc::strcmp;
-use ::libc::strcpy;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1299,7 +1294,7 @@ G_Sound
 
 pub unsafe extern "C" fn G_Sound(
     mut ent: *mut crate::g_local_h::gentity_t,
-    mut channel: libc::c_int,
+    mut _channel: libc::c_int,
     mut soundIndex: libc::c_int,
 ) {
     let mut te: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;

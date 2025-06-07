@@ -51,9 +51,7 @@ pub use crate::src::ui::ui_syscalls::trap_R_ClearScene;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterModel;
 pub use crate::src::ui::ui_syscalls::trap_R_RenderScene;
 pub use crate::src::ui::ui_syscalls::trap_VerifyCDKey;
-use crate::stdlib::memset;
-use crate::stdlib::sin;
-use crate::stdlib::strlen;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;
@@ -403,7 +401,7 @@ pub unsafe extern "C" fn MainMenu_Cache() {
 #[no_mangle]
 
 pub unsafe extern "C" fn ErrorMessage_Key(
-    mut key: libc::c_int,
+    mut _key: libc::c_int,
 ) -> crate::src::qcommon::q_shared::sfxHandle_t {
     crate::src::ui::ui_syscalls::trap_Cvar_Set(
         b"com_errorMessage\x00" as *const u8 as *const libc::c_char,

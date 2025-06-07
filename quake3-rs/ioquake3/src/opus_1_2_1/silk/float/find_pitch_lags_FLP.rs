@@ -5,19 +5,12 @@ pub use crate::opus_types_h::opus_int32;
 pub use crate::resampler_structs_h::_silk_resampler_state_struct;
 pub use crate::resampler_structs_h::silk_resampler_state_struct;
 pub use crate::resampler_structs_h::C2RustUnnamed_64;
-use crate::src::opus_1_2_1::silk::float::apply_sine_window_FLP::silk_apply_sine_window_FLP;
-use crate::src::opus_1_2_1::silk::float::autocorrelation_FLP::silk_autocorrelation_FLP;
-use crate::src::opus_1_2_1::silk::float::bwexpander_FLP::silk_bwexpander_FLP;
-use crate::src::opus_1_2_1::silk::float::k2a_FLP::silk_k2a_FLP;
-use crate::src::opus_1_2_1::silk::float::pitch_analysis_core_FLP::silk_pitch_analysis_core_FLP;
-use crate::src::opus_1_2_1::silk::float::schur_FLP::silk_schur_FLP;
-use crate::src::opus_1_2_1::silk::float::LPC_analysis_filter_FLP::silk_LPC_analysis_filter_FLP;
+
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
 pub use crate::stdlib::int16_t;
 pub use crate::stdlib::int32_t;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
+
 pub use crate::structs_FLP_h::silk_encoder_control_FLP;
 pub use crate::structs_FLP_h::silk_encoder_state_FLP;
 pub use crate::structs_FLP_h::silk_shape_state_FLP;

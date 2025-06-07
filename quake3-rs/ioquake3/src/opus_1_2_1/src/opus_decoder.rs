@@ -73,7 +73,6 @@ pub mod mathops_h {
         return res.f;
     }
 
-    use crate::stdlib::floor;
     /* MATHOPS_H */
     /* FIXED_POINT */
 }
@@ -150,31 +149,31 @@ pub mod float_cast_h {
     */
     /* Version 1.1 */
     /*============================================================================
-    **      On Intel Pentium processors (especially PIII and probably P4), converting
-    **      from float to int is very slow. To meet the C specs, the code produced by
-    **      most C compilers targeting Pentium needs to change the FPU rounding mode
-    **      before the float to int conversion is performed.
-    **
-    **      Changing the FPU rounding mode causes the FPU pipeline to be flushed. It
-    **      is this flushing of the pipeline which is so slow.
-    **
-    **      Fortunately the ISO C99 specifications define the functions lrint, lrintf,
-    **      llrint and llrintf which fix this problem as a side effect.
-    **
-    **      On Unix-like systems, the configure process should have detected the
-    **      presence of these functions. If they weren't found we have to replace them
-    **      here with a standard C cast.
-    */
+     **      On Intel Pentium processors (especially PIII and probably P4), converting
+     **      from float to int is very slow. To meet the C specs, the code produced by
+     **      most C compilers targeting Pentium needs to change the FPU rounding mode
+     **      before the float to int conversion is performed.
+     **
+     **      Changing the FPU rounding mode causes the FPU pipeline to be flushed. It
+     **      is this flushing of the pipeline which is so slow.
+     **
+     **      Fortunately the ISO C99 specifications define the functions lrint, lrintf,
+     **      llrint and llrintf which fix this problem as a side effect.
+     **
+     **      On Unix-like systems, the configure process should have detected the
+     **      presence of these functions. If they weren't found we have to replace them
+     **      here with a standard C cast.
+     */
     /*
-    **      The C99 prototypes for lrint and lrintf are as follows:
-    **
-    **              long int lrintf (float x) ;
-    **              long int lrint  (double x) ;
-    */
+     **      The C99 prototypes for lrint and lrintf are as follows:
+     **
+     **              long int lrintf (float x) ;
+     **              long int lrint  (double x) ;
+     */
     /*      The presence of the required functions are detected during the configure
-    **      process and the values HAVE_LRINT and HAVE_LRINTF are set accordingly in
-    **      the config.h file.
-    */
+     **      process and the values HAVE_LRINT and HAVE_LRINTF are set accordingly in
+     **      the config.h file.
+     */
     /* With GCC, when SSE is available, the fastest conversion is cvtss2si. */
     #[inline]
 
@@ -198,7 +197,6 @@ pub mod float_cast_h {
         return float2int(x) as crate::opus_types_h::opus_int16;
     }
 
-    use crate::opus_types_h::opus_int16;
     use ::std::arch::x86_64::_mm_cvt_ss2si;
     use ::std::arch::x86_64::_mm_set_ss;
     /* FLOAT_CAST_H */
@@ -218,8 +216,6 @@ pub mod os_support_h {
         ::libc::free(ptr);
     }
 
-    use crate::stdlib::malloc;
-    use ::libc::free;
     /* OS_SUPPORT_H */
     /*#ifdef __GNUC__
     #pragma GCC poison printf sprintf
@@ -245,8 +241,7 @@ pub use crate::stdlib::uint32_t;
 pub use crate::opus_types_h::opus_int16;
 pub use crate::opus_types_h::opus_int32;
 pub use crate::opus_types_h::opus_uint32;
-use crate::src::opus_1_2_1::celt::celt_decoder::opus_custom_decoder_ctl;
-use crate::src::opus_1_2_1::celt::celt_decoder::OpusCustomDecoder;
+
 pub use crate::src::opus_1_2_1::celt::mdct::mdct_lookup;
 pub use crate::src::opus_1_2_1::celt::modes::OpusCustomMode;
 pub use crate::src::opus_1_2_1::celt::modes::PulseCache;
@@ -269,29 +264,15 @@ pub use crate::opus_private_h::C2RustUnnamed_98;
 pub use crate::src::opus_1_2_1::src::opus::opus_packet_parse_impl;
 pub use crate::src::opus_1_2_1::src::opus_decoder::mathops_h::celt_exp2;
 pub use crate::src::opus_1_2_1::src::opus_decoder::opus_private_h::align;
-use crate::stdlib::floor;
 
-use crate::src::opus_1_2_1::celt::celt_decoder::celt_decode_with_ec;
-use crate::src::opus_1_2_1::celt::celt_decoder::celt_decoder_get_size;
-use crate::src::opus_1_2_1::celt::celt_decoder::celt_decoder_init;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_bit_logp;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_init;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_uint;
-use crate::src::opus_1_2_1::silk::dec_API::silk_Decode;
-use crate::src::opus_1_2_1::silk::dec_API::silk_Get_Decoder_Size;
-use crate::src::opus_1_2_1::silk::dec_API::silk_InitDecoder;
-use crate::src::opus_1_2_1::src::opus::opus_packet_get_samples_per_frame;
-use crate::src::opus_1_2_1::src::opus::opus_pcm_soft_clip;
 pub use crate::src::opus_1_2_1::src::opus_decoder::cpu_support_h::opus_select_arch;
 pub use crate::src::opus_1_2_1::src::opus_decoder::stack_alloc_h::_opus_false;
-use crate::stdlib::malloc;
-use ::libc::free;
 
 pub use crate::src::opus_1_2_1::src::opus_decoder::float_cast_h::float2int;
 pub use crate::src::opus_1_2_1::src::opus_decoder::float_cast_h::FLOAT2INT16;
 pub use crate::src::opus_1_2_1::src::opus_decoder::os_support_h::opus_alloc;
 pub use crate::src::opus_1_2_1::src::opus_decoder::os_support_h::opus_free;
-use crate::stdlib::memset;
+
 /* Copyright (c) 2010 Xiph.Org Foundation, Skype Limited
 Written by Jean-Marc Valin and Koen Vos */
 /*

@@ -107,8 +107,7 @@ pub use crate::src::renderergl1::tr_model_iqm::R_IQMLerpTag;
 pub use crate::src::renderergl1::tr_model_iqm::R_LoadIQM;
 pub use crate::src::renderergl1::tr_scene::RE_ClearScene;
 pub use crate::src::renderergl1::tr_shader::R_FindShader;
-use crate::stdlib::memcpy;
-use crate::stdlib::strlen;
+
 pub use crate::tr_common_h::image_s;
 pub use crate::tr_common_h::image_t;
 pub use crate::tr_common_h::imgFlags_t;
@@ -257,9 +256,6 @@ pub use crate::tr_local_h::TMOD_SCROLL;
 pub use crate::tr_local_h::TMOD_STRETCH;
 pub use crate::tr_local_h::TMOD_TRANSFORM;
 pub use crate::tr_local_h::TMOD_TURBULENT;
-use ::libc::strchr;
-use ::libc::strcmp;
-use ::libc::strcpy;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

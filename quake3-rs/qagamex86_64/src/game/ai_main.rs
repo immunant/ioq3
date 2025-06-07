@@ -411,37 +411,9 @@ pub use crate::src::game::g_syscalls::trap_GetConfigstring;
 pub use crate::src::game::g_syscalls::trap_SendConsoleCommand;
 pub use crate::src::game::g_syscalls::trap_SetConfigstring;
 pub use crate::src::game::g_syscalls::trap_Trace;
-use crate::stdlib::fabs;
 
-use crate::src::game::ai_chat::BotChatTest;
-use crate::src::game::ai_chat::BotChat_ExitGame;
-use crate::src::game::ai_dmq3::bot_challenge;
-use crate::src::game::ai_dmq3::bot_fastchat;
-use crate::src::game::ai_dmq3::bot_grapple;
-use crate::src::game::ai_dmq3::bot_nochat;
-use crate::src::game::ai_dmq3::bot_rocketjump;
-use crate::src::game::ai_dmq3::bot_testrchat;
-use crate::src::game::ai_dmq3::gametype;
-use crate::src::game::ai_dmq3::BotCTFCarryingFlag;
-use crate::src::game::ai_dmq3::BotClearActivateGoalStack;
-use crate::src::game::ai_dmq3::BotDeathmatchAI;
-use crate::src::game::ai_dmq3::BotFreeWaypoints;
-use crate::src::game::ai_dmq3::BotPointAreaNum;
-use crate::src::game::ai_dmq3::BotSetupDeathmatchAI;
-use crate::src::game::ai_dmq3::BotSynonymContext;
-use crate::src::game::ai_dmq3::BotTeam;
-use crate::src::game::ai_dmq3::ClientFromName;
-use crate::src::game::ai_dmq3::ClientName;
-use crate::src::game::ai_dmq3::EasyClientName;
 pub use crate::src::game::ai_main::stdlib_h::atoi;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
-use crate::stdlib::vsnprintf;
-use ::libc::sscanf;
-use ::libc::strchr;
-use ::libc::strcpy;
+
 pub use ::libc::strtol;
 extern "C" {
     #[no_mangle]

@@ -167,14 +167,7 @@ pub use crate::src::client::cl_main::CL_InitDownloads;
 pub use crate::src::client::cl_main::CL_NextDownload;
 pub use crate::src::client::cl_main::CL_StopRecord_f;
 pub use crate::src::client::cl_parse::stdlib_h::atoi;
-use crate::src::client::snd_main::S_RawSamples;
-use crate::src::opus_1_2_1::src::opus_decoder::opus_decode;
-use crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_ctl;
-use crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
-use crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
+
 pub use ::libc::strtol;
 /*
 ===========================================================================

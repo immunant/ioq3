@@ -173,7 +173,7 @@ pub use crate::ui_public_h::UI_S_STARTLOCALSOUND;
 pub use crate::ui_public_h::UI_S_STOPBACKGROUNDTRACK;
 pub use crate::ui_public_h::UI_UPDATESCREEN;
 pub use crate::ui_public_h::UI_VERIFY_CDKEY;
-use ::libc::exit;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

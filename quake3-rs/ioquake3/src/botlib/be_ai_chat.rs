@@ -103,31 +103,9 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::fprintf;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
-use crate::stdlib::strncpy;
-use ::libc::rand;
-use ::libc::sprintf;
-use ::libc::strcat;
-use ::libc::strcmp;
-use ::libc::strcpy;
 
-use crate::src::botlib::be_aas_main::AAS_Time;
 pub use crate::src::botlib::be_ai_chat::ctype_h::toupper;
-use crate::src::botlib::be_ea::EA_Command;
-use crate::src::botlib::be_interface::botDeveloper;
-use crate::src::botlib::be_interface::botimport;
-use crate::src::botlib::l_libvar::LibVarGetValue;
-use crate::src::botlib::l_libvar::LibVarString;
-use crate::src::botlib::l_libvar::LibVarValue;
-use crate::src::botlib::l_log::Log_FilePointer;
-use crate::src::botlib::l_log::Log_Write;
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetClearedHunkMemory;
-use crate::src::botlib::l_memory::GetClearedMemory;
+
 pub use crate::stdlib::__ctype_toupper_loc;
 //reply chat
 
@@ -785,11 +763,11 @@ pub unsafe extern "C" fn StringContains(
                 {
                     if 0 != 0 {
                         let mut __c: libc::c_int = *str1.offset(j as isize) as libc::c_int;
-                        __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                        __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                             __c
                         } else {
                             *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                        })
+                        }
                     } else {
                         __res = toupper(*str1.offset(j as isize) as libc::c_int)
                     }
@@ -805,11 +783,11 @@ pub unsafe extern "C" fn StringContains(
                 {
                     if 0 != 0 {
                         let mut __c: libc::c_int = *str2.offset(j as isize) as libc::c_int;
-                        __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                        __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                             __c
                         } else {
                             *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                        })
+                        }
                     } else {
                         __res = toupper(*str2.offset(j as isize) as libc::c_int)
                     }
@@ -886,11 +864,11 @@ pub unsafe extern "C" fn StringContainsWord(
                 {
                     if 0 != 0 {
                         let mut __c: libc::c_int = *str1.offset(j as isize) as libc::c_int;
-                        __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                        __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                             __c
                         } else {
                             *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                        })
+                        }
                     } else {
                         __res = toupper(*str1.offset(j as isize) as libc::c_int)
                     }
@@ -906,11 +884,11 @@ pub unsafe extern "C" fn StringContainsWord(
                 {
                     if 0 != 0 {
                         let mut __c: libc::c_int = *str2.offset(j as isize) as libc::c_int;
-                        __res = (if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
+                        __res = if __c < -(128 as libc::c_int) || __c > 255 as libc::c_int {
                             __c
                         } else {
                             *(*crate::stdlib::__ctype_toupper_loc()).offset(__c as isize)
-                        })
+                        }
                     } else {
                         __res = toupper(*str2.offset(j as isize) as libc::c_int)
                     }

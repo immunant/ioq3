@@ -150,88 +150,7 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::clock;
-use crate::stdlib::memset;
-use crate::stdlib::strncpy;
 
-use crate::src::botlib::be_aas_entity::AAS_EntityInfo;
-use crate::src::botlib::be_aas_entity::AAS_UpdateEntity;
-use crate::src::botlib::be_aas_main::AAS_Initialized;
-use crate::src::botlib::be_aas_main::AAS_LoadMap;
-use crate::src::botlib::be_aas_main::AAS_Setup;
-use crate::src::botlib::be_aas_main::AAS_Shutdown;
-use crate::src::botlib::be_aas_main::AAS_StartFrame;
-use crate::src::botlib::be_aas_main::AAS_Time;
-use crate::src::botlib::be_aas_move::AAS_PredictClientMovement;
-use crate::src::botlib::be_aas_move::AAS_Swimming;
-use crate::src::botlib::be_aas_reach::AAS_AreaReachability;
-use crate::src::botlib::be_aas_routealt::AAS_AlternativeRouteGoals;
-use crate::src::botlib::l_libvar::LibVarDeAllocAll;
-use crate::src::botlib::l_libvar::LibVarGetString;
-use crate::src::botlib::l_libvar::LibVarGetValue;
-use crate::src::botlib::l_libvar::LibVarSet;
-use crate::src::botlib::l_libvar::LibVarValue;
-use crate::src::botlib::l_log::Log_Open;
-use crate::src::botlib::l_log::Log_Shutdown;
-use crate::src::botlib::l_precomp::PC_AddGlobalDefine;
-use crate::src::botlib::l_precomp::PC_CheckOpenSourceHandles;
-use crate::src::botlib::l_precomp::PC_FreeSourceHandle;
-use crate::src::botlib::l_precomp::PC_LoadSourceHandle;
-use crate::src::botlib::l_precomp::PC_ReadTokenHandle;
-use crate::src::botlib::l_precomp::PC_RemoveAllGlobalDefines;
-use crate::src::botlib::l_precomp::PC_SourceFileAndLine;
-
-use crate::src::botlib::be_aas_bspq3::AAS_FloatForBSPEpairKey;
-use crate::src::botlib::be_aas_bspq3::AAS_IntForBSPEpairKey;
-use crate::src::botlib::be_aas_bspq3::AAS_NextBSPEntity;
-use crate::src::botlib::be_aas_bspq3::AAS_PointContents;
-use crate::src::botlib::be_aas_bspq3::AAS_ValueForBSPEpairKey;
-use crate::src::botlib::be_aas_bspq3::AAS_VectorForBSPEpairKey;
-use crate::src::botlib::be_aas_route::AAS_AreaTravelTimeToGoalArea;
-use crate::src::botlib::be_aas_route::AAS_EnableRoutingArea;
-use crate::src::botlib::be_aas_route::AAS_PredictRoute;
-use crate::src::botlib::be_aas_sample::AAS_AreaInfo;
-use crate::src::botlib::be_aas_sample::AAS_BBoxAreas;
-use crate::src::botlib::be_aas_sample::AAS_PointAreaNum;
-use crate::src::botlib::be_aas_sample::AAS_PointReachabilityAreaIndex;
-use crate::src::botlib::be_aas_sample::AAS_PresenceTypeBoundingBox;
-use crate::src::botlib::be_aas_sample::AAS_TraceAreas;
-use crate::src::botlib::be_ai_char::BotFreeCharacter;
-use crate::src::botlib::be_ai_char::BotLoadCharacter;
-use crate::src::botlib::be_ai_char::BotShutdownCharacters;
-use crate::src::botlib::be_ai_char::Characteristic_BFloat;
-use crate::src::botlib::be_ai_char::Characteristic_BInteger;
-use crate::src::botlib::be_ai_char::Characteristic_Float;
-use crate::src::botlib::be_ai_char::Characteristic_Integer;
-use crate::src::botlib::be_ai_char::Characteristic_String;
-use crate::src::botlib::be_ai_gen::GeneticParentsAndChildSelection;
-use crate::src::botlib::be_ai_weight::BotShutdownWeights;
-use crate::src::botlib::be_ea::EA_Action;
-use crate::src::botlib::be_ea::EA_Attack;
-use crate::src::botlib::be_ea::EA_Command;
-use crate::src::botlib::be_ea::EA_Crouch;
-use crate::src::botlib::be_ea::EA_DelayedJump;
-use crate::src::botlib::be_ea::EA_EndRegular;
-use crate::src::botlib::be_ea::EA_Gesture;
-use crate::src::botlib::be_ea::EA_GetInput;
-use crate::src::botlib::be_ea::EA_Jump;
-use crate::src::botlib::be_ea::EA_Move;
-use crate::src::botlib::be_ea::EA_MoveBack;
-use crate::src::botlib::be_ea::EA_MoveDown;
-use crate::src::botlib::be_ea::EA_MoveForward;
-use crate::src::botlib::be_ea::EA_MoveLeft;
-use crate::src::botlib::be_ea::EA_MoveRight;
-use crate::src::botlib::be_ea::EA_MoveUp;
-use crate::src::botlib::be_ea::EA_ResetInput;
-use crate::src::botlib::be_ea::EA_Respawn;
-use crate::src::botlib::be_ea::EA_Say;
-use crate::src::botlib::be_ea::EA_SayTeam;
-use crate::src::botlib::be_ea::EA_SelectWeapon;
-use crate::src::botlib::be_ea::EA_Setup;
-use crate::src::botlib::be_ea::EA_Shutdown;
-use crate::src::botlib::be_ea::EA_Talk;
-use crate::src::botlib::be_ea::EA_Use;
-use crate::src::botlib::be_ea::EA_View;
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
@@ -789,10 +708,10 @@ pub unsafe extern "C" fn Export_BotLibUpdateEntity(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotExportTest(
-    mut parm0: libc::c_int,
-    mut parm1: *mut libc::c_char,
-    mut parm2: *mut crate::src::qcommon::q_shared::vec_t,
-    mut parm3: *mut crate::src::qcommon::q_shared::vec_t,
+    mut _parm0: libc::c_int,
+    mut _parm1: *mut libc::c_char,
+    mut _parm2: *mut crate::src::qcommon::q_shared::vec_t,
+    mut _parm3: *mut crate::src::qcommon::q_shared::vec_t,
 ) -> libc::c_int {
     //	return AAS_PointLight(parm2, NULL, NULL, NULL);
     return 0 as libc::c_int;

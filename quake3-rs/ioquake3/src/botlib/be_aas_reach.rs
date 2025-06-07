@@ -38,7 +38,6 @@ pub mod q_shared_h {
             * *v2.offset(1 as libc::c_int as isize)
             - *v1.offset(1 as libc::c_int as isize) * *v2.offset(0 as libc::c_int as isize);
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -115,7 +114,7 @@ pub use crate::src::botlib::be_aas_reach::q_shared_h::CrossProduct;
 pub use crate::src::botlib::be_aas_reach::q_shared_h::VectorInverse;
 pub use crate::src::botlib::be_aas_reach::q_shared_h::VectorLength;
 pub use crate::src::botlib::be_aas_reach::stdlib_h::atoi;
-use crate::src::botlib::l_log::Log_Write;
+
 pub use crate::src::qcommon::q_math::AngleVectors;
 pub use crate::src::qcommon::q_math::VectorNormalize;
 pub use crate::src::qcommon::q_shared::byte;
@@ -132,44 +131,11 @@ pub use crate::src::qcommon::q_shared::FS_APPEND;
 pub use crate::src::qcommon::q_shared::FS_APPEND_SYNC;
 pub use crate::src::qcommon::q_shared::FS_READ;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::fabs;
-use crate::stdlib::fabsf;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
-use crate::stdlib::tan;
+
 pub use ::libc::abs;
-use ::libc::strcmp;
+
 pub use ::libc::strtol;
 
-use crate::src::botlib::be_aas_bspq3::AAS_BSPModelMinsMaxsOrigin;
-use crate::src::botlib::be_aas_bspq3::AAS_FloatForBSPEpairKey;
-use crate::src::botlib::be_aas_bspq3::AAS_IntForBSPEpairKey;
-use crate::src::botlib::be_aas_bspq3::AAS_NextBSPEntity;
-use crate::src::botlib::be_aas_bspq3::AAS_PointContents;
-use crate::src::botlib::be_aas_bspq3::AAS_Trace;
-use crate::src::botlib::be_aas_bspq3::AAS_ValueForBSPEpairKey;
-use crate::src::botlib::be_aas_bspq3::AAS_VectorForBSPEpairKey;
-use crate::src::botlib::be_aas_debug::AAS_PermanentLine;
-use crate::src::botlib::be_aas_main::aasworld;
-use crate::src::botlib::be_aas_main::AAS_Error;
-use crate::src::botlib::be_aas_move::aassettings;
-use crate::src::botlib::be_aas_move::AAS_BFGJumpZVelocity;
-use crate::src::botlib::be_aas_move::AAS_ClientMovementHitBBox;
-use crate::src::botlib::be_aas_move::AAS_DropToFloor;
-use crate::src::botlib::be_aas_move::AAS_HorizontalVelocityForJump;
-use crate::src::botlib::be_aas_move::AAS_PredictClientMovement;
-use crate::src::botlib::be_aas_move::AAS_RocketJumpZVelocity;
-use crate::src::botlib::be_aas_sample::AAS_AreaPresenceType;
-use crate::src::botlib::be_aas_sample::AAS_LinkEntityClientBBox;
-use crate::src::botlib::be_aas_sample::AAS_PointAreaNum;
-use crate::src::botlib::be_aas_sample::AAS_PointInsideFace;
-use crate::src::botlib::be_aas_sample::AAS_TraceAreas;
-use crate::src::botlib::be_aas_sample::AAS_TraceClientBBox;
-use crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas;
-use crate::src::botlib::l_libvar::LibVarGetValue;
-use crate::src::botlib::l_libvar::LibVarValue;
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetClearedMemory;
 extern "C" {
     /*
     ===========================================================================
@@ -9763,7 +9729,7 @@ pub unsafe extern "C" fn AAS_StoreReachability() {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_ContinueInitReachability(mut time: libc::c_float) -> libc::c_int {
+pub unsafe extern "C" fn AAS_ContinueInitReachability(mut _time: libc::c_float) -> libc::c_int {
     let mut i: libc::c_int = 0;
     let mut j: libc::c_int = 0;
     let mut todo: libc::c_int = 0;

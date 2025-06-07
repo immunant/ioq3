@@ -28,7 +28,7 @@ pub use crate::qcommon_h::vm_t;
 pub use crate::src::qcommon::vm::VM_BlockCopy;
 pub use crate::src::qcommon::vm::VM_Debug;
 pub use crate::src::qcommon::vm::VM_ValueToSymbol;
-use crate::stdlib::memcpy;
+
 pub use crate::vm_local_h::vmSymbol_s;
 pub use crate::vm_local_h::vm_s;
 pub use crate::vm_local_h::OP_ADD;

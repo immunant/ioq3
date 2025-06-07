@@ -9,19 +9,11 @@ pub use crate::stdlib::uint32_t;
 
 pub use crate::opus_types_h::opus_int32;
 pub use crate::opus_types_h::opus_uint32;
-use crate::src::opusfile_0_9::src::internal::op_strncasecmp;
+
 pub use crate::src::opusfile_0_9::src::opusfile::OpusHead;
 pub use crate::src::opusfile_0_9::src::opusfile::OpusPictureTag;
 pub use crate::src::opusfile_0_9::src::opusfile::OpusTags;
-use crate::stdlib::malloc;
-use crate::stdlib::memcmp;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::realloc;
-use crate::stdlib::strlen;
-use ::libc::free;
-use ::libc::strcmp;
+
 /* *******************************************************************
  *                                                                  *
  * THIS FILE IS PART OF THE libopusfile SOFTWARE CODEC SOURCE CODE. *

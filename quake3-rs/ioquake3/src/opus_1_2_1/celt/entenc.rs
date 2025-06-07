@@ -20,8 +20,7 @@ pub use crate::src::opus_1_2_1::celt::entcode::ec_ctx;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_enc;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_window;
 pub use crate::src::opus_1_2_1::celt::entenc::entcode_h::celt_udiv;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
+
 /* Copyright (c) 2001-2011 Timothy B. Terriberry
 Copyright (c) 2008-2009 Xiph.Org Foundation */
 /*

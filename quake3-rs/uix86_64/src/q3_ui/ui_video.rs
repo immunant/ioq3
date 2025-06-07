@@ -49,8 +49,7 @@ pub use crate::src::ui::ui_syscalls::trap_Cvar_SetValue;
 pub use crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer;
 pub use crate::src::ui::ui_syscalls::trap_Cvar_VariableValue;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;
@@ -74,7 +73,7 @@ pub use crate::ui_local_h::menulist_s;
 pub use crate::ui_local_h::menuslider_s;
 pub use crate::ui_local_h::menutext_s;
 pub use crate::ui_local_h::uiStatic_t;
-use ::libc::strchr;
+
 pub use ::libc::strtol;
 
 #[repr(C)]
@@ -1613,7 +1612,7 @@ GraphicsOptions_ApplyChanges
 */
 
 unsafe extern "C" fn GraphicsOptions_ApplyChanges(
-    mut unused: *mut libc::c_void,
+    mut _unused: *mut libc::c_void,
     mut notification: libc::c_int,
 ) {
     if notification != 3 as libc::c_int {
@@ -1878,7 +1877,7 @@ GraphicsOptions_TQEvent
 ================
 */
 
-unsafe extern "C" fn GraphicsOptions_TQEvent(mut ptr: *mut libc::c_void, mut event: libc::c_int) {
+unsafe extern "C" fn GraphicsOptions_TQEvent(mut _ptr: *mut libc::c_void, mut event: libc::c_int) {
     if event != 3 as libc::c_int {
         return;
     }

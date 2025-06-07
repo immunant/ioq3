@@ -28,8 +28,7 @@ pub use crate::src::qcommon::q_shared::PRINT_ALL;
 pub use crate::src::qcommon::q_shared::PRINT_DEVELOPER;
 pub use crate::src::qcommon::q_shared::PRINT_ERROR;
 pub use crate::src::qcommon::q_shared::PRINT_WARNING;
-use crate::src::renderergl1::tr_main::ri;
-use crate::stdlib::memcpy;
+
 pub use crate::tr_public_h::refimport_t;
 
 #[repr(C)]

@@ -1,8 +1,5 @@
 use ::libc;
 
-use crate::src::game::g_main::g_debugAlloc;
-use crate::src::game::g_main::G_Error;
-use crate::src::game::g_main::G_Printf;
 pub use crate::src::qcommon::q_shared::cvarHandle_t;
 pub use crate::src::qcommon::q_shared::vmCvar_t;
 

@@ -72,7 +72,7 @@ pub use crate::src::sdl::sdl_glimp::qglStencilFunc;
 pub use crate::src::sdl::sdl_glimp::qglStencilOp;
 pub use crate::src::sdl::sdl_glimp::qglVertex3f;
 pub use crate::src::sdl::sdl_glimp::qglVertex3fv;
-use crate::stdlib::memset;
+
 pub use crate::stdlib::GLboolean;
 pub use crate::stdlib::GLenum;
 pub use crate::stdlib::GLfloat;

@@ -45,11 +45,9 @@ pub use crate::src::libogg_1_3_3::src::bitwise::oggpack_look;
 pub use crate::src::libogg_1_3_3::src::bitwise::oggpack_read;
 pub use crate::src::libogg_1_3_3::src::bitwise::oggpack_write;
 pub use crate::src::libvorbis_1_3_6::lib::sharedbook::_book_maptype1_quantvals;
-use crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog;
+
 pub use crate::src::libvorbis_1_3_6::lib::sharedbook::vorbis_staticbook_destroy;
-use crate::stdlib::calloc;
-use crate::stdlib::malloc;
-use ::libc::labs;
+
 /* *******************************************************************
 *                                                                  *
 * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *

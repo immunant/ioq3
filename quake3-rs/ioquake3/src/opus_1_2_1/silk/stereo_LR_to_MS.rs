@@ -60,10 +60,10 @@ pub mod Inlines_h {
         let mut b32_nrm: crate::opus_types_h::opus_int32 = 0;
         let mut result: crate::opus_types_h::opus_int32 = 0;
         /* Compute number of bits head room and normalize inputs */
-        a_headrm = silk_CLZ32((if a32 > 0 as libc::c_int { a32 } else { -a32 })) - 1 as libc::c_int; /* Q: a_headrm                  */
+        a_headrm = silk_CLZ32(if a32 > 0 as libc::c_int { a32 } else { -a32 }) - 1 as libc::c_int; /* Q: a_headrm                  */
         a32_nrm = ((a32 as crate::opus_types_h::opus_uint32) << a_headrm)
             as crate::opus_types_h::opus_int32; /* Q: b_headrm                  */
-        b_headrm = silk_CLZ32((if b32 > 0 as libc::c_int { b32 } else { -b32 })) - 1 as libc::c_int;
+        b_headrm = silk_CLZ32(if b32 > 0 as libc::c_int { b32 } else { -b32 }) - 1 as libc::c_int;
         b32_nrm = ((b32 as crate::opus_types_h::opus_uint32) << b_headrm)
             as crate::opus_types_h::opus_int32;
         /* Inverse of b32, with 14 bits of precision */
@@ -124,9 +124,7 @@ pub mod Inlines_h {
             return 0 as libc::c_int;
         };
     }
-    use crate::opus_types_h::opus_int16;
-    use crate::opus_types_h::opus_int32;
-    use crate::opus_types_h::opus_uint32;
+
     use crate::src::opus_1_2_1::silk::stereo_LR_to_MS::macros_h::silk_CLZ32;
     /* SILK_FIX_INLINES_H */
 }
@@ -137,14 +135,13 @@ pub use crate::opus_types_h::opus_uint32;
 pub use crate::src::opus_1_2_1::silk::stereo_LR_to_MS::macros_h::silk_CLZ32;
 pub use crate::src::opus_1_2_1::silk::stereo_LR_to_MS::Inlines_h::silk_DIV32_varQ;
 pub use crate::src::opus_1_2_1::silk::stereo_LR_to_MS::SigProc_FIX_h::silk_max_int;
-use crate::src::opus_1_2_1::silk::stereo_find_predictor::silk_stereo_find_predictor;
-use crate::src::opus_1_2_1::silk::stereo_quant_pred::silk_stereo_quant_pred;
+
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
 pub use crate::stdlib::__uint32_t;
 pub use crate::stdlib::int16_t;
 pub use crate::stdlib::int32_t;
-use crate::stdlib::memcpy;
+
 pub use crate::stdlib::uint32_t;
 pub use crate::structs_h::stereo_enc_state;
 /* **********************************************************************

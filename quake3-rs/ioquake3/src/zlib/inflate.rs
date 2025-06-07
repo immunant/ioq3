@@ -99,16 +99,14 @@ pub struct inflate_state {
 use ::libc;
 
 pub use crate::src::zlib::adler32::adler32;
-use crate::src::zlib::inffast::inflate_fast;
+
 pub use crate::src::zlib::inftrees::code;
 pub use crate::src::zlib::inftrees::codetype;
 pub use crate::src::zlib::inftrees::inflate_table;
 pub use crate::src::zlib::inftrees::CODES;
 pub use crate::src::zlib::inftrees::DISTS;
 pub use crate::src::zlib::inftrees::LENS;
-use crate::src::zlib::zutil::zcalloc;
-use crate::src::zlib::zutil::zcfree;
-use crate::stdlib::memcpy;
+
 pub use crate::zconf_h::uInt;
 pub use crate::zconf_h::uLong;
 pub use crate::zconf_h::voidpf;

@@ -33,16 +33,13 @@ pub use crate::ogg_h::oggpack_buffer;
 pub use crate::src::libogg_1_3_3::src::bitwise::oggpack_read;
 pub use crate::src::libogg_1_3_3::src::bitwise::oggpack_write;
 pub use crate::src::libvorbis_1_3_6::lib::bitrate::bitrate_manager_info;
-use crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc;
+
 pub use crate::src::libvorbis_1_3_6::lib::codebook::codebook;
 pub use crate::src::libvorbis_1_3_6::lib::codebook::static_codebook;
 pub use crate::src::libvorbis_1_3_6::lib::codebook::vorbis_book_decode;
 pub use crate::src::libvorbis_1_3_6::lib::codebook::vorbis_book_encode;
 pub use crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy;
 pub use crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global;
-use crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog;
-use crate::stdlib::memset;
-use crate::stdlib::rint;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -391,7 +388,7 @@ unsafe extern "C" fn floor1_unpack(
 }
 
 unsafe extern "C" fn floor1_look(
-    mut vd: *mut crate::codec_h::vorbis_dsp_state,
+    mut _vd: *mut crate::codec_h::vorbis_dsp_state,
     mut in_0: *mut libc::c_void,
 ) -> *mut libc::c_void {
     let mut sortpointer: [*mut libc::c_int; 65] = [0 as *mut libc::c_int; 65];

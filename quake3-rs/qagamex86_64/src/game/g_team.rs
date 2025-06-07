@@ -174,7 +174,6 @@ pub mod q_shared_h {
                 as libc::c_double,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -428,15 +427,11 @@ pub use crate::src::qcommon::q_shared::TR_LINEAR_STOP;
 pub use crate::src::qcommon::q_shared::TR_SINE;
 pub use crate::src::qcommon::q_shared::TR_STATIONARY;
 pub use crate::stdlib::__compar_fn_t;
-use crate::stdlib::memset;
+
 pub use crate::stdlib::qsort;
-use crate::stdlib::sqrt;
-use crate::stdlib::strlen;
-use crate::stdlib::vsnprintf;
+
 pub use ::libc::rand;
-use ::libc::strchr;
-use ::libc::strcmp;
-use ::libc::strcpy;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
@@ -826,7 +821,7 @@ order.
 
 pub unsafe extern "C" fn Team_FragBonuses(
     mut targ: *mut crate::g_local_h::gentity_t,
-    mut inflictor: *mut crate::g_local_h::gentity_t,
+    mut _inflictor: *mut crate::g_local_h::gentity_t,
     mut attacker: *mut crate::g_local_h::gentity_t,
 ) {
     let mut i: libc::c_int = 0;
@@ -2000,24 +1995,24 @@ Only in CTF games.  Red players spawn here at game start.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_team_CTF_redplayer(mut ent: *mut crate::g_local_h::gentity_t) {}
+pub unsafe extern "C" fn SP_team_CTF_redplayer(mut _ent: *mut crate::g_local_h::gentity_t) {}
 /*QUAKED team_CTF_blueplayer (0 0 1) (-16 -16 -16) (16 16 32)
 Only in CTF games.  Blue players spawn here at game start.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_team_CTF_blueplayer(mut ent: *mut crate::g_local_h::gentity_t) {}
+pub unsafe extern "C" fn SP_team_CTF_blueplayer(mut _ent: *mut crate::g_local_h::gentity_t) {}
 /*QUAKED team_CTF_redspawn (1 0 0) (-16 -16 -24) (16 16 32)
 potential spawning position for red team in CTF games.
 Targets will be fired when someone spawns in on them.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_team_CTF_redspawn(mut ent: *mut crate::g_local_h::gentity_t) {}
+pub unsafe extern "C" fn SP_team_CTF_redspawn(mut _ent: *mut crate::g_local_h::gentity_t) {}
 /*QUAKED team_CTF_bluespawn (0 0 1) (-16 -16 -24) (16 16 32)
 potential spawning position for blue team in CTF games.
 Targets will be fired when someone spawns in on them.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_team_CTF_bluespawn(mut ent: *mut crate::g_local_h::gentity_t) {}
+pub unsafe extern "C" fn SP_team_CTF_bluespawn(mut _ent: *mut crate::g_local_h::gentity_t) {}

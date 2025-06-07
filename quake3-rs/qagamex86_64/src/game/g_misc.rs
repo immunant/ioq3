@@ -456,8 +456,7 @@ pub use crate::src::qcommon::q_shared::TR_LINEAR;
 pub use crate::src::qcommon::q_shared::TR_LINEAR_STOP;
 pub use crate::src::qcommon::q_shared::TR_SINE;
 pub use crate::src::qcommon::q_shared::TR_STATIONARY;
-use crate::stdlib::sin;
-use ::libc::rand;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
@@ -824,7 +823,7 @@ an info_notnull
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SP_misc_teleporter_dest(mut ent: *mut crate::g_local_h::gentity_t) {}
+pub unsafe extern "C" fn SP_misc_teleporter_dest(mut _ent: *mut crate::g_local_h::gentity_t) {}
 //===========================================================
 /*QUAKED misc_model (1 0 0) (-16 -16 -16) (16 16 16)
 "model"		arbitrary .md3 file to display
@@ -950,8 +949,8 @@ pub unsafe extern "C" fn SP_misc_portal_camera(mut ent: *mut crate::g_local_h::g
 
 pub unsafe extern "C" fn Use_Shooter(
     mut ent: *mut crate::g_local_h::gentity_t,
-    mut other: *mut crate::g_local_h::gentity_t,
-    mut activator: *mut crate::g_local_h::gentity_t,
+    mut _other: *mut crate::g_local_h::gentity_t,
+    mut _activator: *mut crate::g_local_h::gentity_t,
 ) {
     let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut deg: libc::c_float = 0.;

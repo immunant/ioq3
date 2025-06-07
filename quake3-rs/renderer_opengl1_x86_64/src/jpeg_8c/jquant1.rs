@@ -647,8 +647,8 @@ unsafe extern "C" fn select_ncolors(
 }
 
 unsafe extern "C" fn output_value(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut ci: libc::c_int,
+    mut _cinfo: crate::jpeglib_h::j_decompress_ptr,
+    mut _ci: libc::c_int,
     mut j: libc::c_int,
     mut maxj: libc::c_int,
 ) -> libc::c_int
@@ -665,8 +665,8 @@ unsafe extern "C" fn output_value(
 }
 
 unsafe extern "C" fn largest_input_value(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut ci: libc::c_int,
+    mut _cinfo: crate::jpeglib_h::j_decompress_ptr,
+    mut _ci: libc::c_int,
     mut j: libc::c_int,
     mut maxj: libc::c_int,
 ) -> libc::c_int
@@ -1338,7 +1338,7 @@ unsafe extern "C" fn alloc_fs_workspace(mut cinfo: crate::jpeglib_h::j_decompres
 
 unsafe extern "C" fn start_pass_1_quant(
     mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut is_pre_scan: crate::jmorecfg_h::boolean,
+    mut _is_pre_scan: crate::jmorecfg_h::boolean,
 ) {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
     let mut arraysize: crate::stddef_h::size_t = 0;
@@ -1454,7 +1454,7 @@ unsafe extern "C" fn start_pass_1_quant(
  * Finish up at the end of the pass.
  */
 
-unsafe extern "C" fn finish_pass_1_quant(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
+unsafe extern "C" fn finish_pass_1_quant(mut _cinfo: crate::jpeglib_h::j_decompress_ptr) {
     /* no work in 1-pass case */
 }
 /*

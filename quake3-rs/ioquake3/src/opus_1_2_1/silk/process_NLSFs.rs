@@ -13,7 +13,7 @@ pub use crate::opus_types_h::opus_uint32;
 pub use crate::resampler_structs_h::_silk_resampler_state_struct;
 pub use crate::resampler_structs_h::silk_resampler_state_struct;
 pub use crate::resampler_structs_h::C2RustUnnamed_64;
-use crate::stdlib::memcpy;
+
 pub use crate::structs_h::silk_LP_state;
 pub use crate::structs_h::silk_NLSF_CB_struct;
 pub use crate::structs_h::silk_VAD_state;
@@ -21,10 +21,6 @@ pub use crate::structs_h::silk_encoder_state;
 pub use crate::structs_h::silk_nsq_state;
 pub use crate::structs_h::SideInfoIndices;
 
-use crate::src::opus_1_2_1::silk::interpolate::silk_interpolate;
-use crate::src::opus_1_2_1::silk::NLSF_VQ_weights_laroia::silk_NLSF_VQ_weights_laroia;
-use crate::src::opus_1_2_1::silk::NLSF_encode::silk_NLSF_encode;
-use crate::src::opus_1_2_1::silk::NLSF2A::silk_NLSF2A;
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without

@@ -54,26 +54,14 @@ pub use crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy;
 pub use crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global;
 pub use crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy;
 pub use crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global;
-use crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog;
+
 pub use crate::src::libvorbis_1_3_6::lib::sharedbook::vorbis_book_init_decode;
 pub use crate::src::libvorbis_1_3_6::lib::sharedbook::vorbis_book_init_encode;
 pub use crate::src::libvorbis_1_3_6::lib::sharedbook::vorbis_staticbook_destroy;
 pub use crate::src::libvorbis_1_3_6::lib::smallft::drft_clear;
 pub use crate::src::libvorbis_1_3_6::lib::smallft::drft_init;
 pub use crate::src::libvorbis_1_3_6::lib::smallft::drft_lookup;
-use crate::src::libvorbis_1_3_6::lib::window::_vorbis_window_get;
-use crate::stdlib::calloc;
-use crate::stdlib::malloc;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::realloc;
-use ::libc::free;
 
-use crate::src::libvorbis_1_3_6::lib::lpc::vorbis_lpc_from_data;
-use crate::src::libvorbis_1_3_6::lib::lpc::vorbis_lpc_predict;
-use crate::src::libvorbis_1_3_6::lib::registry::_floor_P;
-use crate::src::libvorbis_1_3_6::lib::registry::_residue_P;
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_block_init(

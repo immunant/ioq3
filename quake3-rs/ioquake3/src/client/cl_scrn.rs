@@ -132,12 +132,7 @@ pub use crate::src::client::cl_main::clc;
 pub use crate::src::client::cl_main::cls;
 pub use crate::src::client::cl_main::re;
 pub use crate::src::client::cl_ui::uivm;
-use crate::src::client::snd_main::S_StopAllSounds;
-use crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
-use crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
-use crate::stdlib::memcpy;
-use crate::stdlib::strlen;
-use ::libc::sprintf;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

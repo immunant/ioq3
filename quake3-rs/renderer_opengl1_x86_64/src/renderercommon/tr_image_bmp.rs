@@ -24,8 +24,7 @@ pub use crate::src::qcommon::q_shared::FMV_ID_IDLE;
 pub use crate::src::qcommon::q_shared::FMV_ID_WAIT;
 pub use crate::src::qcommon::q_shared::FMV_LOOPED;
 pub use crate::src::qcommon::q_shared::FMV_PLAY;
-use crate::src::renderergl1::tr_main::ri;
-use crate::stdlib::memcpy;
+
 pub use crate::tr_public_h::refimport_t;
 
 #[repr(C)]

@@ -19,7 +19,6 @@ pub mod stdlib_float_h {
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
-    use ::libc::strtod;
 }
 
 pub use crate::internal::__builtin_va_list;
@@ -357,12 +356,7 @@ pub use crate::src::client::cl_scrn::SCR_UpdateScreen;
 pub use crate::src::client::cl_ui::uivm;
 pub use crate::src::client::cl_ui::CL_InitUI;
 pub use crate::src::client::cl_ui::CL_ShutdownUI;
-use crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_destroy;
-use crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
-use crate::src::opus_1_2_1::src::opus_encoder::opus_encode;
-use crate::src::opus_1_2_1::src::opus_encoder::opus_encoder_ctl;
-use crate::src::opus_1_2_1::src::opus_encoder::opus_encoder_destroy;
-use crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
+
 pub use crate::tr_public_h::refexport_t;
 pub use crate::tr_public_h::refimport_t;
 pub use crate::tr_public_h::GetRefAPI_t;
@@ -420,16 +414,7 @@ pub use crate::cg_public_h::CG_SHUTDOWN;
 pub use crate::opus_types_h::opus_int16;
 pub use crate::opus_types_h::opus_int32;
 pub use crate::src::client::cl_main::stdlib_float_h::atof;
-use crate::src::qcommon::q_shared::ShortSwap;
-use crate::stdlib::fabs;
-use crate::stdlib::fprintf;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
-use crate::stdlib::stderr;
-use crate::stdlib::strlen;
-use crate::stdlib::vsnprintf;
+
 pub use crate::ui_public_h::UIMENU_BAD_CD_KEY;
 pub use crate::ui_public_h::UIMENU_INGAME;
 pub use crate::ui_public_h::UIMENU_MAIN;
@@ -448,42 +433,6 @@ pub use crate::ui_public_h::UI_MOUSE_EVENT;
 pub use crate::ui_public_h::UI_REFRESH;
 pub use crate::ui_public_h::UI_SET_ACTIVE_MENU;
 pub use crate::ui_public_h::UI_SHUTDOWN;
-use ::libc::sprintf;
-use ::libc::sscanf;
-use ::libc::strchr;
-use ::libc::strcmp;
-use ::libc::strrchr;
-use ::libc::strstr;
-
-use crate::src::client::cl_curl::cl_cURLLib;
-use crate::src::client::cl_curl::CL_cURL_BeginDownload;
-use crate::src::client::cl_curl::CL_cURL_Init;
-use crate::src::client::cl_curl::CL_cURL_PerformDownload;
-use crate::src::client::cl_curl::CL_cURL_Shutdown;
-use crate::src::client::cl_keys::g_consoleField;
-use crate::src::client::libmumblelink::mumble_islinked;
-use crate::src::client::libmumblelink::mumble_unlink;
-use crate::src::client::libmumblelink::mumble_update_coordinates;
-use crate::src::client::snd_main::S_AvailableCaptureSamples;
-use crate::src::client::snd_main::S_BeginRegistration;
-use crate::src::client::snd_main::S_Capture;
-use crate::src::client::snd_main::S_DisableSounds;
-use crate::src::client::snd_main::S_Init;
-use crate::src::client::snd_main::S_MasterGain;
-use crate::src::client::snd_main::S_Shutdown;
-use crate::src::client::snd_main::S_StartCapture;
-use crate::src::client::snd_main::S_StopAllSounds;
-use crate::src::client::snd_main::S_StopCapture;
-use crate::src::client::snd_main::S_Update;
-use crate::src::qcommon::cm_load::CM_ClearMap;
-use crate::src::qcommon::cm_patch::CM_DrawDebugSurface;
-use crate::src::qcommon::cm_test::CM_ClusterPVS;
-use crate::src::sys::sys_main::Sys_LoadDll;
-use crate::src::sys::sys_unix::Sys_GLimpInit;
-use crate::src::sys::sys_unix::Sys_GLimpSafeInit;
-use crate::stdlib::SDL_GetError;
-use crate::stdlib::SDL_LoadFunction;
-use crate::stdlib::SDL_UnloadObject;
 
 pub type serverStatus_t = serverStatus_s;
 
@@ -2696,7 +2645,7 @@ CL_CompleteDemoName
 ====================
 */
 
-unsafe extern "C" fn CL_CompleteDemoName(mut args: *mut libc::c_char, mut argNum: libc::c_int) {
+unsafe extern "C" fn CL_CompleteDemoName(mut _args: *mut libc::c_char, mut argNum: libc::c_int) {
     if argNum == 2 as libc::c_int {
         let mut demoExt: [libc::c_char; 16] = [0; 16];
         crate::src::qcommon::q_shared::Com_sprintf(
@@ -3738,7 +3687,7 @@ CL_CompletePlayerName
 ==================
 */
 
-unsafe extern "C" fn CL_CompletePlayerName(mut args: *mut libc::c_char, mut argNum: libc::c_int) {
+unsafe extern "C" fn CL_CompletePlayerName(mut _args: *mut libc::c_char, mut argNum: libc::c_int) {
     if argNum == 2 as libc::c_int {
         let mut names: [[libc::c_char; 32]; 64] = [[0; 32]; 64];
         let mut namesPtr: [*const libc::c_char; 64] = [0 as *const libc::c_char; 64];
@@ -7193,14 +7142,16 @@ pub unsafe extern "C" fn CL_GetServerStatus(
         ) as u64
             != 0
         {
-            return &mut *cl_serverStatusList.as_mut_ptr().offset(i as isize) as *mut serverStatus_t;
+            return &mut *cl_serverStatusList.as_mut_ptr().offset(i as isize)
+                as *mut serverStatus_t;
         }
         i += 1
     }
     i = 0 as libc::c_int;
     while i < 16 as libc::c_int {
         if cl_serverStatusList[i as usize].retrieved as u64 != 0 {
-            return &mut *cl_serverStatusList.as_mut_ptr().offset(i as isize) as *mut serverStatus_t;
+            return &mut *cl_serverStatusList.as_mut_ptr().offset(i as isize)
+                as *mut serverStatus_t;
         }
         i += 1
     }

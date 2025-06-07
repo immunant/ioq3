@@ -14,7 +14,6 @@ pub mod q_shared_h {
                 as libc::c_double,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -25,7 +24,6 @@ pub mod stdlib_float_h {
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
-    use ::libc::strtod;
 }
 
 pub use crate::bg_public_h::gitem_s;
@@ -147,38 +145,7 @@ pub use crate::src::game::g_syscalls::trap_EA_Action;
 pub use crate::src::game::g_syscalls::trap_EA_Command;
 pub use crate::src::game::g_syscalls::trap_EA_SayTeam;
 pub use crate::src::game::g_syscalls::trap_GetConfigstring;
-use crate::stdlib::memcpy;
-use crate::stdlib::sqrt;
-use crate::stdlib::strlen;
-use crate::stdlib::strncpy;
-use ::libc::sscanf;
-use ::libc::strcpy;
 
-use crate::src::game::ai_dmq3::ctf_blueflag;
-use crate::src::game::ai_dmq3::ctf_redflag;
-use crate::src::game::ai_dmq3::gametype;
-use crate::src::game::ai_dmq3::stristr;
-use crate::src::game::ai_dmq3::BotCreateWayPoint;
-use crate::src::game::ai_dmq3::BotFindWayPoint;
-use crate::src::game::ai_dmq3::BotFreeWaypoints;
-use crate::src::game::ai_dmq3::BotGetAlternateRouteGoal;
-use crate::src::game::ai_dmq3::BotOppositeTeam;
-use crate::src::game::ai_dmq3::BotPointAreaNum;
-use crate::src::game::ai_dmq3::BotRememberLastOrderedTask;
-use crate::src::game::ai_dmq3::BotSameTeam;
-use crate::src::game::ai_dmq3::BotSetTeamStatus;
-use crate::src::game::ai_dmq3::BotTeam;
-use crate::src::game::ai_dmq3::ClientFromName;
-use crate::src::game::ai_dmq3::ClientName;
-use crate::src::game::ai_dmq3::ClientOnSameTeamFromName;
-use crate::src::game::ai_dmq3::EasyClientName;
-use crate::src::game::ai_dmq3::TeamPlayIsOn;
-use crate::src::game::ai_team::BotGetTeamMateTaskPreference;
-use crate::src::game::ai_team::BotSetTeamMateTaskPreference;
-use crate::src::game::ai_team::BotVoiceChat;
-use crate::src::game::ai_team::BotVoiceChatOnly;
-use ::libc::rand;
-use ::libc::strtod;
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
@@ -2221,7 +2188,7 @@ BotMatch_WhoIsTeamLeader
 
 pub unsafe extern "C" fn BotMatch_WhoIsTeamLeader(
     mut bs: *mut crate::src::game::ai_main::bot_state_t,
-    mut match_0: *mut crate::be_ai_chat_h::bot_match_t,
+    mut _match_0: *mut crate::be_ai_chat_h::bot_match_t,
 ) {
     let mut netname: [libc::c_char; 256] = [0; 256];
     if crate::src::game::ai_dmq3::TeamPlayIsOn() == 0 {
@@ -2389,7 +2356,7 @@ BotMatch_WhatIsMyCommand
 
 pub unsafe extern "C" fn BotMatch_WhatIsMyCommand(
     mut bs: *mut crate::src::game::ai_main::bot_state_t,
-    mut match_0: *mut crate::be_ai_chat_h::bot_match_t,
+    mut _match_0: *mut crate::be_ai_chat_h::bot_match_t,
 ) {
     let mut netname: [libc::c_char; 36] = [0; 36];
     crate::src::game::ai_dmq3::ClientName(
@@ -2947,7 +2914,7 @@ pub unsafe extern "C" fn BotMatch_CTF(
 #[no_mangle]
 
 pub unsafe extern "C" fn BotMatch_EnterGame(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
+    mut _bs: *mut crate::src::game::ai_main::bot_state_t,
     mut match_0: *mut crate::be_ai_chat_h::bot_match_t,
 ) {
     let mut client: libc::c_int = 0;

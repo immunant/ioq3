@@ -11,7 +11,6 @@ pub mod qcommon_h {
         return fi.f;
     }
 
-    use crate::src::qcommon::q_shared::floatint_t;
     // _QCOMMON_H_
     // flags for sv_allowDownload and cl_allowDownload
 }
@@ -355,8 +354,7 @@ pub use crate::src::client::cl_cin::CIN_StopCinematic;
 pub use crate::src::client::cl_console::Con_ClearNotify;
 pub use crate::src::client::cl_console::Con_Close;
 pub use crate::src::client::cl_keys::Key_GetCatcher;
-use crate::src::client::cl_keys::Key_GetKey;
-use crate::src::client::cl_keys::Key_IsDown;
+
 pub use crate::src::client::cl_keys::Key_SetCatcher;
 pub use crate::src::client::cl_main::cgvm;
 pub use crate::src::client::cl_main::cl;
@@ -377,44 +375,9 @@ pub use crate::src::client::cl_parse::cl_connectedToCheatServer;
 pub use crate::src::client::cl_parse::cl_connectedToPureServer;
 pub use crate::src::client::cl_parse::CL_SystemInfoChanged;
 pub use crate::src::client::cl_scrn::SCR_UpdateScreen;
-use crate::src::client::libmumblelink::mumble_islinked;
-use crate::src::client::libmumblelink::mumble_link;
-use crate::src::client::snd_main::S_AddLoopingSound;
-use crate::src::client::snd_main::S_AddRealLoopingSound;
-use crate::src::client::snd_main::S_ClearLoopingSounds;
-use crate::src::client::snd_main::S_RegisterSound;
-use crate::src::client::snd_main::S_Respatialize;
-use crate::src::client::snd_main::S_StartBackgroundTrack;
-use crate::src::client::snd_main::S_StartLocalSound;
-use crate::src::client::snd_main::S_StartSound;
-use crate::src::client::snd_main::S_StopBackgroundTrack;
-use crate::src::client::snd_main::S_StopLoopingSound;
-use crate::src::client::snd_main::S_UpdateEntityPosition;
-use crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_create;
-use crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
-use crate::src::opus_1_2_1::src::opus_encoder::opus_encoder_create;
-use crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
-use crate::src::qcommon::cm_load::CM_InlineModel;
-use crate::src::qcommon::cm_load::CM_LoadMap;
-use crate::src::qcommon::cm_load::CM_NumInlineModels;
-use crate::src::qcommon::cm_load::CM_TempBoxModel;
-use crate::src::qcommon::cm_test::CM_PointContents;
-use crate::src::qcommon::cm_test::CM_TransformedPointContents;
-use crate::src::qcommon::cm_trace::CM_BoxTrace;
-use crate::src::qcommon::cm_trace::CM_TransformedBoxTrace;
-use crate::stdlib::atan2;
-use crate::stdlib::ceil;
-use crate::stdlib::cos;
-use crate::stdlib::floor;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::sin;
-use crate::stdlib::sqrt;
-use crate::stdlib::strlen;
-use crate::stdlib::strncpy;
+
 pub use ::libc::abs;
-use ::libc::strcat;
-use ::libc::strcmp;
+
 pub use ::libc::strtol;
 extern "C" {
     /*

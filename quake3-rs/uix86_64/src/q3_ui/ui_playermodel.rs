@@ -341,8 +341,7 @@ pub use crate::src::ui::ui_syscalls::trap_FS_GetFileList;
 pub use crate::src::ui::ui_syscalls::trap_MemoryRemaining;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
 pub use crate::src::ui::ui_syscalls::trap_S_RegisterSound;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;
@@ -366,10 +365,6 @@ pub use crate::ui_local_h::menuframework_s;
 pub use crate::ui_local_h::menutext_s;
 pub use crate::ui_local_h::playerInfo_t;
 pub use crate::ui_local_h::uiStatic_t;
-use ::libc::strcat;
-use ::libc::strchr;
-use ::libc::strcmp;
-use ::libc::strstr;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

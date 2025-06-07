@@ -100,31 +100,31 @@ pub mod float_cast_h {
     */
     /* Version 1.1 */
     /*============================================================================
-    **      On Intel Pentium processors (especially PIII and probably P4), converting
-    **      from float to int is very slow. To meet the C specs, the code produced by
-    **      most C compilers targeting Pentium needs to change the FPU rounding mode
-    **      before the float to int conversion is performed.
-    **
-    **      Changing the FPU rounding mode causes the FPU pipeline to be flushed. It
-    **      is this flushing of the pipeline which is so slow.
-    **
-    **      Fortunately the ISO C99 specifications define the functions lrint, lrintf,
-    **      llrint and llrintf which fix this problem as a side effect.
-    **
-    **      On Unix-like systems, the configure process should have detected the
-    **      presence of these functions. If they weren't found we have to replace them
-    **      here with a standard C cast.
-    */
+     **      On Intel Pentium processors (especially PIII and probably P4), converting
+     **      from float to int is very slow. To meet the C specs, the code produced by
+     **      most C compilers targeting Pentium needs to change the FPU rounding mode
+     **      before the float to int conversion is performed.
+     **
+     **      Changing the FPU rounding mode causes the FPU pipeline to be flushed. It
+     **      is this flushing of the pipeline which is so slow.
+     **
+     **      Fortunately the ISO C99 specifications define the functions lrint, lrintf,
+     **      llrint and llrintf which fix this problem as a side effect.
+     **
+     **      On Unix-like systems, the configure process should have detected the
+     **      presence of these functions. If they weren't found we have to replace them
+     **      here with a standard C cast.
+     */
     /*
-    **      The C99 prototypes for lrint and lrintf are as follows:
-    **
-    **              long int lrintf (float x) ;
-    **              long int lrint  (double x) ;
-    */
+     **      The C99 prototypes for lrint and lrintf are as follows:
+     **
+     **              long int lrintf (float x) ;
+     **              long int lrint  (double x) ;
+     */
     /*      The presence of the required functions are detected during the configure
-    **      process and the values HAVE_LRINT and HAVE_LRINTF are set accordingly in
-    **      the config.h file.
-    */
+     **      process and the values HAVE_LRINT and HAVE_LRINTF are set accordingly in
+     **      the config.h file.
+     */
     /* With GCC, when SSE is available, the fastest conversion is cvtss2si. */
     #[inline]
 
@@ -178,8 +178,7 @@ pub mod SigProc_FLP_h {
             k -= 1
         }
     }
-    use crate::opus_types_h::opus_int16;
-    use crate::opus_types_h::opus_int32;
+
     use crate::src::opus_1_2_1::silk::control_codec::float_cast_h::float2int;
     /* SILK_SIGPROC_FLP_H */
 }
@@ -210,22 +209,13 @@ pub use crate::src::opus_1_2_1::silk::control_codec::SigProc_FIX_h::silk_max_int
 pub use crate::src::opus_1_2_1::silk::control_codec::SigProc_FIX_h::silk_min_int;
 pub use crate::src::opus_1_2_1::silk::resampler::silk_resampler;
 pub use crate::src::opus_1_2_1::silk::resampler::silk_resampler_init;
-use crate::stdlib::memset;
+
 pub use crate::structs_FLP_h::silk_encoder_state_FLP;
 pub use crate::structs_FLP_h::silk_shape_state_FLP;
 
-use crate::src::opus_1_2_1::silk::control_audio_bandwidth::silk_control_audio_bandwidth;
 pub use crate::src::opus_1_2_1::silk::control_codec::SigProc_FLP_h::silk_float2short_array;
 pub use crate::src::opus_1_2_1::silk::control_codec::SigProc_FLP_h::silk_short2float_array;
-use crate::src::opus_1_2_1::silk::tables_NLSF_CB_NB_MB::silk_NLSF_CB_NB_MB;
-use crate::src::opus_1_2_1::silk::tables_NLSF_CB_WB::silk_NLSF_CB_WB;
-use crate::src::opus_1_2_1::silk::tables_other::silk_uniform4_iCDF;
-use crate::src::opus_1_2_1::silk::tables_other::silk_uniform6_iCDF;
-use crate::src::opus_1_2_1::silk::tables_other::silk_uniform8_iCDF;
-use crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_contour_10_ms_NB_iCDF;
-use crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_contour_10_ms_iCDF;
-use crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_contour_NB_iCDF;
-use crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_contour_iCDF;
+
 /* Control the Silk encoder */
 /* Control encoder */
 #[no_mangle]

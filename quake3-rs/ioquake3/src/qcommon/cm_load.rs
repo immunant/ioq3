@@ -29,13 +29,10 @@ pub use crate::qfiles_h::MST_TRIANGLE_SOUP;
 pub use crate::src::qcommon::cm_patch::patchCollide_s;
 pub use crate::src::qcommon::cm_patch::CM_ClearLevelPatches;
 pub use crate::src::qcommon::cm_patch::CM_GeneratePatchCollide;
-use crate::src::qcommon::common::Com_DPrintf;
+
 pub use crate::src::qcommon::common::Com_Error;
 pub use crate::src::qcommon::common::Hunk_Alloc;
-use crate::src::qcommon::cvar::Cvar_Get;
-use crate::src::qcommon::files::FS_FreeFile;
-use crate::src::qcommon::files::FS_ReadFile;
-use crate::src::qcommon::md4::Com_BlockChecksum;
+
 pub use crate::src::qcommon::q_math::SetPlaneSignbits;
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::clipHandle_t;
@@ -58,9 +55,7 @@ pub use crate::src::qcommon::q_shared::ERR_DROP;
 pub use crate::src::qcommon::q_shared::ERR_FATAL;
 pub use crate::src::qcommon::q_shared::ERR_NEED_CD;
 pub use crate::src::qcommon::q_shared::ERR_SERVERDISCONNECT;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use ::libc::strcmp;
+
 extern "C" {
     #[no_mangle]
     pub fn CM_FloodAreaConnections();

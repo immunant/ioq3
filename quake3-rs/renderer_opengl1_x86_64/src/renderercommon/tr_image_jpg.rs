@@ -131,7 +131,6 @@ pub use crate::src::jpeg_8c::jdapistd::jpeg_read_scanlines;
 pub use crate::src::jpeg_8c::jdapistd::jpeg_start_decompress;
 pub use crate::src::jpeg_8c::jdatasrc::jpeg_mem_src;
 pub use crate::src::jpeg_8c::jerror::jpeg_std_error;
-use crate::src::renderergl1::tr_main::ri;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -702,7 +701,7 @@ unsafe extern "C" fn empty_output_buffer(
  * for error exit.
  */
 
-unsafe extern "C" fn term_destination(mut cinfo: crate::jpeglib_h::j_compress_ptr) {}
+unsafe extern "C" fn term_destination(mut _cinfo: crate::jpeglib_h::j_compress_ptr) {}
 /*
  * Prepare for output to a stdio stream.
  * The caller must have already opened the stream, and is responsible

@@ -83,15 +83,9 @@ pub use crate::src::qcommon::q_shared::FS_SEEK_CUR;
 pub use crate::src::qcommon::q_shared::FS_SEEK_END;
 pub use crate::src::qcommon::q_shared::FS_SEEK_SET;
 pub use crate::src::qcommon::q_shared::FS_WRITE;
-use crate::stdlib::memset;
 
 pub use crate::src::botlib::be_aas_file::stdlib_h::atoi;
-use crate::src::botlib::be_aas_main::aasworld;
-use crate::src::botlib::be_aas_main::AAS_Error;
-use crate::src::botlib::be_interface::botimport;
-use crate::src::botlib::l_libvar::LibVarGetString;
-use crate::src::botlib::l_memory::FreeMemory;
-use crate::src::botlib::l_memory::GetClearedHunkMemory;
+
 pub use ::libc::strtol;
 /*
 ===========================================================================

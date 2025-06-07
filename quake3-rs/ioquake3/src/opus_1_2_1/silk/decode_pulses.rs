@@ -13,14 +13,7 @@ pub use crate::opus_types_h::opus_uint32;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_ctx;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_dec;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_window;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf;
-use crate::stdlib::memset;
 
-use crate::src::opus_1_2_1::silk::code_signs::silk_decode_signs;
-use crate::src::opus_1_2_1::silk::shell_coder::silk_shell_decoder;
-use crate::src::opus_1_2_1::silk::tables_other::silk_lsb_iCDF;
-use crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_pulses_per_block_iCDF;
-use crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_rate_levels_iCDF;
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without

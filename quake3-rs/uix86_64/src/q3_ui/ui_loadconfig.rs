@@ -266,15 +266,13 @@ pub use crate::src::qcommon::q_shared::EXEC_NOW;
 pub use crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText;
 pub use crate::src::ui::ui_syscalls::trap_FS_GetFileList;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
+
 pub use crate::ui_local_h::_tag_menuframework;
 pub use crate::ui_local_h::menubitmap_s;
 pub use crate::ui_local_h::menucommon_s;
 pub use crate::ui_local_h::menuframework_s;
 pub use crate::ui_local_h::menulist_s;
 pub use crate::ui_local_h::menutext_s;
-use ::libc::strcpy;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

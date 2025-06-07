@@ -35,14 +35,6 @@ pub use crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global;
 
 pub use crate::highlevel_h::highlevel_byblocktype;
 pub use crate::highlevel_h::highlevel_encode_setup;
-use crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc;
-use crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog;
-use crate::stdlib::calloc;
-use crate::stdlib::malloc;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use ::libc::abs;
-use ::libc::free;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1093,13 +1085,13 @@ pub unsafe extern "C" fn res0_inverse(
 
 pub unsafe extern "C" fn res1_forward(
     mut opb: *mut crate::ogg_h::oggpack_buffer,
-    mut vb: *mut crate::codec_h::vorbis_block,
+    mut _vb: *mut crate::codec_h::vorbis_block,
     mut vl: *mut libc::c_void,
     mut in_0: *mut *mut libc::c_int,
     mut nonzero: *mut libc::c_int,
     mut ch: libc::c_int,
     mut partword: *mut *mut libc::c_long,
-    mut submap: libc::c_int,
+    mut _submap: libc::c_int,
 ) -> libc::c_int {
     let mut i: libc::c_int = 0;
     let mut used: libc::c_int = 0 as libc::c_int;
@@ -1238,7 +1230,7 @@ pub unsafe extern "C" fn res2_forward(
     mut nonzero: *mut libc::c_int,
     mut ch: libc::c_int,
     mut partword: *mut *mut libc::c_long,
-    mut submap: libc::c_int,
+    mut _submap: libc::c_int,
 ) -> libc::c_int {
     let mut i: libc::c_long = 0;
     let mut j: libc::c_long = 0;

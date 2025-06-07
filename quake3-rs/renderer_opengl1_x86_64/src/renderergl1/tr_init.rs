@@ -136,9 +136,7 @@ pub use crate::src::sdl::sdl_glimp::qglShadeModel;
 pub use crate::src::sdl::sdl_glimp::GLimp_Init;
 pub use crate::src::sdl::sdl_glimp::GLimp_Minimize;
 pub use crate::src::sdl::sdl_glimp::GLimp_Shutdown;
-use crate::stdlib::memset;
-use crate::stdlib::sin;
-use crate::stdlib::strlen;
+
 pub use crate::stdlib::GLboolean;
 pub use crate::stdlib::GLclampd;
 pub use crate::stdlib::GLenum;
@@ -353,8 +351,7 @@ pub use crate::tr_types_h::STEREO_RIGHT;
 pub use crate::tr_types_h::TC_NONE;
 pub use crate::tr_types_h::TC_S3TC;
 pub use crate::tr_types_h::TC_S3TC_ARB;
-use ::libc::strcmp;
-use ::libc::strcpy;
+
 /*
 ** R_GetModeInfo
 */

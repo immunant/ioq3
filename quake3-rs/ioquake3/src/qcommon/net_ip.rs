@@ -11,7 +11,6 @@ pub mod byteswap_h {
             | (__bsx as libc::c_int & 0xff as libc::c_int) << 8 as libc::c_int)
             as crate::stdlib::__uint16_t;
     }
-    use crate::stdlib::__uint16_t;
 }
 
 pub use crate::stddef_h::size_t;
@@ -113,16 +112,10 @@ pub use crate::stdlib::freeifaddrs;
 pub use crate::stdlib::gethostbyname;
 pub use crate::stdlib::getifaddrs;
 pub use crate::stdlib::ifaddrs;
-use crate::stdlib::memcmp;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::recv;
-use crate::stdlib::recvfrom;
-use crate::stdlib::send;
-use crate::stdlib::sendto;
+
 pub use crate::stdlib::sockaddr_storage;
 pub use crate::stdlib::socklen_t;
-use crate::stdlib::strlen;
+
 pub use crate::stdlib::C2RustUnnamed_131;
 pub use crate::stdlib::IFF_ALLMULTI;
 pub use crate::stdlib::IFF_AUTOMEDIA;
@@ -149,23 +142,18 @@ pub use crate::stdlib::SOCK_RAW;
 pub use crate::stdlib::SOCK_RDM;
 pub use crate::stdlib::SOCK_SEQPACKET;
 pub use crate::stdlib::SOCK_STREAM;
-use ::libc::__errno_location;
+
 pub use ::libc::addrinfo;
-use ::libc::bind;
-use ::libc::close;
-use ::libc::connect;
+
 pub use ::libc::freeaddrinfo;
 pub use ::libc::gai_strerror;
 pub use ::libc::getaddrinfo;
 pub use ::libc::getnameinfo;
 pub use ::libc::hostent;
 pub use ::libc::if_nametoindex;
-use ::libc::ioctl;
-use ::libc::rand;
-use ::libc::setsockopt;
+
 pub use ::libc::sockaddr;
-use ::libc::socket;
-use ::libc::strerror;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

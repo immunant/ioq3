@@ -5,21 +5,12 @@ pub use crate::opus_types_h::opus_int32;
 pub use crate::resampler_structs_h::silk_resampler_state_struct;
 pub use crate::resampler_structs_h::C2RustUnnamed_64;
 pub use crate::resampler_structs_h::_silk_resampler_state_struct;
-use crate::src::opus_1_2_1::silk::float::find_LPC_FLP::silk_find_LPC_FLP;
-use crate::src::opus_1_2_1::silk::float::find_LTP_FLP::silk_find_LTP_FLP;
-use crate::src::opus_1_2_1::silk::float::residual_energy_FLP::silk_residual_energy_FLP;
-use crate::src::opus_1_2_1::silk::float::scale_copy_vector_FLP::silk_scale_copy_vector_FLP;
-use crate::src::opus_1_2_1::silk::float::wrappers_FLP::silk_process_NLSFs_FLP;
-use crate::src::opus_1_2_1::silk::float::wrappers_FLP::silk_quant_LTP_gains_FLP;
-use crate::src::opus_1_2_1::silk::float::LTP_analysis_filter_FLP::silk_LTP_analysis_filter_FLP;
-use crate::src::opus_1_2_1::silk::float::LTP_scale_ctrl_FLP::silk_LTP_scale_ctrl_FLP;
+
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
 pub use crate::stdlib::int16_t;
 pub use crate::stdlib::int32_t;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::pow;
+
 pub use crate::structs_FLP_h::silk_encoder_control_FLP;
 pub use crate::structs_FLP_h::silk_encoder_state_FLP;
 pub use crate::structs_FLP_h::silk_shape_state_FLP;

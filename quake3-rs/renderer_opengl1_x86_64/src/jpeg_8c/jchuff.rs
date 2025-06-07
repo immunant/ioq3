@@ -190,8 +190,6 @@ pub use crate::src::jpeg_8c::jerror::JWRN_JPEG_EOF;
 pub use crate::src::jpeg_8c::jerror::JWRN_MUST_RESYNC;
 pub use crate::src::jpeg_8c::jerror::JWRN_NOT_SEQUENTIAL;
 pub use crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

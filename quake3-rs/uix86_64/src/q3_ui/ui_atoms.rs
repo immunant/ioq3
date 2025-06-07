@@ -94,10 +94,7 @@ pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
 pub use crate::src::ui::ui_syscalls::trap_R_SetColor;
 pub use crate::src::ui::ui_syscalls::trap_S_StartLocalSound;
 pub use crate::src::ui::ui_syscalls::trap_UpdateScreen;
-use crate::stdlib::memcpy;
-use crate::stdlib::sin;
-use crate::stdlib::strlen;
-use crate::stdlib::vsnprintf;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;
@@ -212,7 +209,7 @@ pub static mut m_entersound: crate::src::qcommon::q_shared::qboolean =
 #[no_mangle]
 
 pub unsafe extern "C" fn Com_Error(
-    mut level: libc::c_int,
+    mut _level: libc::c_int,
     mut error: *const libc::c_char,
     mut args: ...
 ) -> ! {

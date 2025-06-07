@@ -8,7 +8,7 @@ pub use crate::jmorecfg_h::JDIMENSION;
 pub use crate::jmorecfg_h::JSAMPLE;
 pub use crate::jpeglib_h::JSAMPARRAY;
 pub use crate::jpeglib_h::JSAMPROW;
-use crate::stdlib::memset;
+
 /* preferred floating type */
 /*
  * Each IDCT routine is responsible for range-limiting its results and

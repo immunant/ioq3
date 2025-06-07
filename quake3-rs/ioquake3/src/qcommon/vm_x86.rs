@@ -27,11 +27,7 @@ pub use crate::src::qcommon::common::Z_Free;
 pub use crate::src::qcommon::common::Z_Malloc;
 pub use crate::src::qcommon::vm::currentVM;
 pub use crate::src::qcommon::vm::VM_BlockCopy;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::mmap;
-use crate::stdlib::mprotect;
-use crate::stdlib::munmap;
+
 pub use crate::vm_local_h::vmSymbol_s;
 pub use crate::vm_local_h::vm_s;
 pub use crate::vm_local_h::OP_ADD;
@@ -557,7 +553,7 @@ Relative call to vm->codeBase + callOfs
 #[no_mangle]
 
 pub unsafe extern "C" fn EmitCallRel(
-    mut vm: *mut crate::qcommon_h::vm_t,
+    mut _vm: *mut crate::qcommon_h::vm_t,
     mut callOfs: libc::c_int,
 ) {
     EmitString(b"E8\x00" as *const u8 as *const libc::c_char); // call 0x12345678
@@ -571,7 +567,7 @@ Call to DoSyscall()
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn EmitCallDoSyscall(mut vm: *mut crate::qcommon_h::vm_t) -> libc::c_int {
+pub unsafe extern "C" fn EmitCallDoSyscall(mut _vm: *mut crate::qcommon_h::vm_t) -> libc::c_int {
     // use edx register to store DoSyscall address
     EmitRexString(
         0x48 as libc::c_int as crate::src::qcommon::q_shared::byte,

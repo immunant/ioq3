@@ -171,14 +171,12 @@ pub mod pitch_h {
                 *sum.offset(3 as libc::c_int as isize) + tmp_2 * y_1
         };
     }
-
-    use crate::arch_h::opus_val16;
 }
 pub use crate::arch_h::opus_val16;
 pub use crate::arch_h::opus_val32;
 pub use crate::src::opus_1_2_1::celt::celt_lpc::pitch_h::xcorr_kernel_c;
 pub use crate::src::opus_1_2_1::celt::pitch::celt_pitch_xcorr_c;
-use crate::stdlib::memset;
+
 /* Copyright (c) 2009-2010 Xiph.Org Foundation
 Written by Jean-Marc Valin */
 /*
@@ -289,7 +287,7 @@ pub unsafe extern "C" fn celt_fir_c(
     mut y: *mut crate::arch_h::opus_val16,
     mut N: libc::c_int,
     mut ord: libc::c_int,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 ) {
     let mut i: libc::c_int = 0;
     let mut j: libc::c_int = 0;
@@ -344,7 +342,7 @@ pub unsafe extern "C" fn celt_iir(
     mut N: libc::c_int,
     mut ord: libc::c_int,
     mut mem: *mut crate::arch_h::opus_val16,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 ) {
     let mut i: libc::c_int = 0;
     let mut j: libc::c_int = 0;

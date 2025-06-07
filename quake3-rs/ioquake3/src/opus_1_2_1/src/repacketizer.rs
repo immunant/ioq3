@@ -45,8 +45,6 @@ pub mod os_support_h {
         ::libc::free(ptr);
     }
 
-    use crate::stdlib::malloc;
-    use ::libc::free;
     /* OS_SUPPORT_H */
     /*#ifdef __GNUC__
     #pragma GCC poison printf sprintf
@@ -62,20 +60,18 @@ pub use crate::opus_private_h::OpusRepacketizer;
 pub use crate::opus_types_h::opus_int16;
 pub use crate::opus_types_h::opus_int32;
 pub use crate::src::opus_1_2_1::src::opus::encode_size;
-use crate::src::opus_1_2_1::src::opus::opus_packet_get_samples_per_frame;
+
 pub use crate::src::opus_1_2_1::src::opus::opus_packet_parse_impl;
-use crate::src::opus_1_2_1::src::opus_decoder::opus_packet_get_nb_frames;
+
 pub use crate::stddef_h::size_t;
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
 pub use crate::stdlib::int16_t;
 pub use crate::stdlib::int32_t;
-use crate::stdlib::memmove;
 
 pub use crate::src::opus_1_2_1::src::repacketizer::os_support_h::opus_alloc;
 pub use crate::src::opus_1_2_1::src::repacketizer::os_support_h::opus_free;
-use crate::stdlib::malloc;
-use ::libc::free;
+
 /* Copyright (c) 2011 Xiph.Org Foundation
 Written by Jean-Marc Valin */
 /*

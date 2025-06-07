@@ -216,7 +216,6 @@ pub mod stdlib_float_h {
     pub unsafe extern "C" fn atof(mut __nptr: *const libc::c_char) -> libc::c_double {
         return ::libc::strtod(__nptr, 0 as *mut libc::c_void as *mut *mut libc::c_char);
     }
-    use ::libc::strtod;
 }
 
 pub use crate::qfiles_h::dshader_t;
@@ -264,8 +263,7 @@ pub use crate::src::sdl::sdl_glimp::qglOrtho;
 pub use crate::src::sdl::sdl_glimp::qglPopMatrix;
 pub use crate::src::sdl::sdl_glimp::qglPushMatrix;
 pub use crate::src::sdl::sdl_glimp::qglReadPixels;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
+
 pub use crate::stdlib::GLdouble;
 pub use crate::stdlib::GLenum;
 pub use crate::stdlib::GLint;
@@ -443,7 +441,7 @@ pub use crate::tr_types_h::RT_SPRITE;
 pub use crate::tr_types_h::STEREO_CENTER;
 pub use crate::tr_types_h::STEREO_LEFT;
 pub use crate::tr_types_h::STEREO_RIGHT;
-use ::libc::strtod;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

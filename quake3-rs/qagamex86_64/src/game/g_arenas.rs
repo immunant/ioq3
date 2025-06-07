@@ -261,8 +261,7 @@ pub use crate::src::game::g_utils::G_AddEvent;
 pub use crate::src::game::g_utils::G_ModelIndex;
 pub use crate::src::game::g_utils::G_SetOrigin;
 pub use crate::src::game::g_utils::G_Spawn;
-use crate::stdlib::strlen;
-use ::libc::strcat;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

@@ -408,18 +408,6 @@ pub use crate::keycodes_h::K_WORLD_95;
 pub use crate::keycodes_h::MAX_KEYS;
 pub use crate::multi_h::CURLM;
 
-use crate::src::client::cl_keys::chatField;
-use crate::src::client::cl_keys::chat_playerNum;
-use crate::src::client::cl_keys::chat_team;
-use crate::src::client::cl_keys::g_consoleField;
-use crate::src::client::cl_keys::historyEditLines;
-use crate::src::client::cl_keys::Field_BigDraw;
-use crate::src::client::cl_keys::Field_Draw;
-use crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
-use crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
-use crate::stdlib::memcpy;
-use crate::stdlib::strlen;
-
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct console_t {
@@ -861,7 +849,10 @@ Cmd_CompleteTxtName
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cmd_CompleteTxtName(mut args: *mut libc::c_char, mut argNum: libc::c_int) {
+pub unsafe extern "C" fn Cmd_CompleteTxtName(
+    mut _args: *mut libc::c_char,
+    mut argNum: libc::c_int,
+) {
     if argNum == 2 as libc::c_int {
         crate::src::qcommon::common::Field_CompleteFilename(
             b"\x00" as *const u8 as *const libc::c_char,

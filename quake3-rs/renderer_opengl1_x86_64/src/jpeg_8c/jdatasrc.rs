@@ -197,7 +197,6 @@ pub use crate::src::jpeg_8c::jerror::JWRN_JPEG_EOF;
 pub use crate::src::jpeg_8c::jerror::JWRN_MUST_RESYNC;
 pub use crate::src::jpeg_8c::jerror::JWRN_NOT_SEQUENTIAL;
 pub use crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA;
-use crate::stdlib::fread;
 
 pub type my_src_ptr = *mut my_source_mgr;
 
@@ -224,7 +223,7 @@ unsafe extern "C" fn init_source(mut cinfo: crate::jpeglib_h::j_decompress_ptr) 
     (*src).start_of_file = 1 as libc::c_int;
 }
 
-unsafe extern "C" fn init_mem_source(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
+unsafe extern "C" fn init_mem_source(mut _cinfo: crate::jpeglib_h::j_decompress_ptr) {
     /* no work necessary here */
 }
 /*
@@ -386,7 +385,7 @@ unsafe extern "C" fn skip_input_data(
  * for error exit.
  */
 
-unsafe extern "C" fn term_source(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
+unsafe extern "C" fn term_source(mut _cinfo: crate::jpeglib_h::j_decompress_ptr) {
     /* no work necessary here */
 }
 /*

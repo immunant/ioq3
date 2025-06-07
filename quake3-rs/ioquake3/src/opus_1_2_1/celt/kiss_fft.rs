@@ -74,7 +74,7 @@ heavily modified to better suit Opus */
 
 unsafe extern "C" fn kf_bfly2(
     mut Fout: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx,
-    mut m: libc::c_int,
+    mut _m: libc::c_int,
     mut N: libc::c_int,
 ) {
     let mut Fout2: *mut crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx =

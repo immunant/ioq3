@@ -64,15 +64,10 @@ pub use crate::src::qcommon::vm_x86::VM_CallCompiled;
 pub use crate::src::qcommon::vm_x86::VM_Compile;
 pub use crate::src::sys::sys_main::Sys_LoadGameDll;
 pub use crate::src::sys::sys_main::Sys_UnloadDll;
-use crate::stdlib::fopen;
-use crate::stdlib::fprintf;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
+
 pub use crate::vm_local_h::vmSymbol_s;
 pub use crate::vm_local_h::vmSymbol_t;
 pub use crate::vm_local_h::vm_s;
-use ::libc::strcmp;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

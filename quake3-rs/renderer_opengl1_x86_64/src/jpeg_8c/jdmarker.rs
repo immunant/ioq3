@@ -206,7 +206,6 @@ pub use crate::src::jpeg_8c::jutils::jpeg_natural_order4;
 pub use crate::src::jpeg_8c::jutils::jpeg_natural_order5;
 pub use crate::src::jpeg_8c::jutils::jpeg_natural_order6;
 pub use crate::src::jpeg_8c::jutils::jpeg_natural_order7;
-use crate::stdlib::memcpy;
 
 pub const M_APP0: C2RustUnnamed_53 = 224;
 

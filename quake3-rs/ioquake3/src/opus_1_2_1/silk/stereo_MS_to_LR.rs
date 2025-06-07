@@ -8,7 +8,7 @@ pub use crate::stdlib::__int32_t;
 pub use crate::stdlib::__uint32_t;
 pub use crate::stdlib::int16_t;
 pub use crate::stdlib::int32_t;
-use crate::stdlib::memcpy;
+
 pub use crate::stdlib::uint32_t;
 pub use crate::structs_h::stereo_dec_state;
 /* **********************************************************************

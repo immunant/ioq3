@@ -40,7 +40,6 @@ pub mod q_shared_h {
                 as libc::c_double,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -146,10 +145,7 @@ pub use crate::src::sdl::sdl_glimp::qglColor3f;
 pub use crate::src::sdl::sdl_glimp::qglDepthRange;
 pub use crate::src::sdl::sdl_glimp::qglEnd;
 pub use crate::src::sdl::sdl_glimp::qglVertex3fv;
-use crate::stdlib::memset;
-use crate::stdlib::sin;
-use crate::stdlib::sqrt;
-use crate::stdlib::tan;
+
 pub use crate::stdlib::GLclampd;
 pub use crate::stdlib::GLenum;
 pub use crate::stdlib::GLfloat;
@@ -2143,7 +2139,7 @@ unsafe extern "C" fn IsMirror(
 
 unsafe extern "C" fn SurfIsOffscreen(
     mut drawSurf: *const crate::tr_local_h::drawSurf_t,
-    mut clipDest: *mut crate::src::qcommon::q_shared::vec4_t,
+    mut _clipDest: *mut crate::src::qcommon::q_shared::vec4_t,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut shortest: libc::c_float = 100000000 as libc::c_int as libc::c_float;
     let mut entityNum: libc::c_int = 0;

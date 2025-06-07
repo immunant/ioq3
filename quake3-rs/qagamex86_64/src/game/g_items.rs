@@ -214,11 +214,9 @@ pub use crate::src::game::g_syscalls::trap_LinkEntity;
 pub use crate::src::game::g_syscalls::trap_PointContents;
 pub use crate::src::game::g_syscalls::trap_SetConfigstring;
 pub use crate::src::game::g_syscalls::trap_Trace;
-use crate::src::game::g_team::Pickup_Team;
+
 pub use crate::src::game::g_team::Team_CheckDroppedItem;
-use crate::src::game::g_team::Team_DroppedFlagThink;
-use crate::src::game::g_team::Team_FreeEntity;
-use crate::src::game::g_team::Team_InitGame;
+
 pub use crate::src::game::g_utils::vtos;
 pub use crate::src::game::g_utils::G_AddEvent;
 pub use crate::src::game::g_utils::G_AddPredictableEvent;
@@ -257,8 +255,7 @@ pub use crate::src::qcommon::q_shared::TR_LINEAR;
 pub use crate::src::qcommon::q_shared::TR_LINEAR_STOP;
 pub use crate::src::qcommon::q_shared::TR_SINE;
 pub use crate::src::qcommon::q_shared::TR_STATIONARY;
-use crate::stdlib::memset;
-use ::libc::rand;
+
 //======================================================================
 #[no_mangle]
 
@@ -633,7 +630,7 @@ Touch_Item
 pub unsafe extern "C" fn Touch_Item(
     mut ent: *mut crate::g_local_h::gentity_t,
     mut other: *mut crate::g_local_h::gentity_t,
-    mut trace: *mut crate::src::qcommon::q_shared::trace_t,
+    mut _trace: *mut crate::src::qcommon::q_shared::trace_t,
 ) {
     let mut respawn: libc::c_int = 0; // dead people can't pickup
     let mut predict: crate::src::qcommon::q_shared::qboolean =
@@ -914,8 +911,8 @@ Respawn the item
 
 pub unsafe extern "C" fn Use_Item(
     mut ent: *mut crate::g_local_h::gentity_t,
-    mut other: *mut crate::g_local_h::gentity_t,
-    mut activator: *mut crate::g_local_h::gentity_t,
+    mut _other: *mut crate::g_local_h::gentity_t,
+    mut _activator: *mut crate::g_local_h::gentity_t,
 ) {
     RespawnItem(ent);
 }

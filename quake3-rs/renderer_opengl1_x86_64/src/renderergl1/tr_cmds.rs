@@ -112,7 +112,7 @@ pub use crate::src::sdl::sdl_glimp::qglGetError;
 pub use crate::src::sdl::sdl_glimp::qglStencilFunc;
 pub use crate::src::sdl::sdl_glimp::qglStencilMask;
 pub use crate::src::sdl::sdl_glimp::qglStencilOp;
-use crate::stdlib::memset;
+
 pub use crate::stdlib::GLbitfield;
 pub use crate::stdlib::GLboolean;
 pub use crate::stdlib::GLclampf;

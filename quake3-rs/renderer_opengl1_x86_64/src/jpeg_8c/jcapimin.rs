@@ -192,7 +192,7 @@ pub use crate::src::jpeg_8c::jerror::JWRN_NOT_SEQUENTIAL;
 pub use crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA;
 pub use crate::src::jpeg_8c::jmemmgr::jinit_memory_mgr;
 pub use crate::src::jpeg_8c::jutils::jpeg_natural_order;
-use crate::stdlib::memset;
+
 /*
  * jcapimin.c
  *

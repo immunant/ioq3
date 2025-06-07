@@ -361,8 +361,7 @@ pub use crate::src::ui::ui_syscalls::trap_Key_KeynumToStringBuf;
 pub use crate::src::ui::ui_syscalls::trap_Key_SetBinding;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterModel;
 pub use crate::src::ui::ui_syscalls::trap_R_RegisterShaderNoMip;
-use crate::stdlib::fabs;
-use crate::stdlib::memset;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;
@@ -389,9 +388,6 @@ pub use crate::ui_local_h::menuslider_s;
 pub use crate::ui_local_h::menutext_s;
 pub use crate::ui_local_h::playerInfo_t;
 pub use crate::ui_local_h::uiStatic_t;
-use ::libc::strcat;
-use ::libc::strcmp;
-use ::libc::strcpy;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -2709,7 +2705,7 @@ Controls_StatusBar
 =================
 */
 
-unsafe extern "C" fn Controls_StatusBar(mut self_0: *mut libc::c_void) {
+unsafe extern "C" fn Controls_StatusBar(mut _self_0: *mut libc::c_void) {
     crate::src::q3_ui::ui_atoms::UI_DrawString(
         (640 as libc::c_int as libc::c_double * 0.50f64) as libc::c_int,
         (480 as libc::c_int as libc::c_double * 0.80f64) as libc::c_int,

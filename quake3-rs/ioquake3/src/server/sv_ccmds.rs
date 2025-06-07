@@ -146,7 +146,7 @@ pub use crate::src::qcommon::q_shared::Q_IsColorString;
 pub use crate::src::qcommon::q_shared::Q_stricmp;
 pub use crate::src::qcommon::q_shared::Q_stricmpn;
 pub use crate::src::qcommon::q_shared::Q_strncpyz;
-use crate::src::qcommon::q_shared::ShortSwap;
+
 pub use crate::src::qcommon::q_shared::TR_GRAVITY;
 pub use crate::src::qcommon::q_shared::TR_INTERPOLATE;
 pub use crate::src::qcommon::q_shared::TR_LINEAR;
@@ -174,12 +174,9 @@ pub use crate::src::server::sv_main::svs;
 pub use crate::src::server::sv_main::SV_AddServerCommand;
 pub use crate::src::server::sv_main::SV_SendServerCommand;
 pub use crate::src::server::sv_world::SV_SectorList_f;
-use crate::stdlib::memmove;
-use crate::stdlib::strlen;
+
 pub use crate::vm_local_h::vm_s;
-use ::libc::strcat;
-use ::libc::strchr;
-use ::libc::strcpy;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
@@ -2168,7 +2165,7 @@ SV_CompleteMapName
 ==================
 */
 
-unsafe extern "C" fn SV_CompleteMapName(mut args: *mut libc::c_char, mut argNum: libc::c_int) {
+unsafe extern "C" fn SV_CompleteMapName(mut _args: *mut libc::c_char, mut argNum: libc::c_int) {
     if argNum == 2 as libc::c_int {
         crate::src::qcommon::common::Field_CompleteFilename(
             b"maps\x00" as *const u8 as *const libc::c_char,
@@ -2184,7 +2181,7 @@ SV_CompletePlayerName
 ==================
 */
 
-unsafe extern "C" fn SV_CompletePlayerName(mut args: *mut libc::c_char, mut argNum: libc::c_int) {
+unsafe extern "C" fn SV_CompletePlayerName(mut _args: *mut libc::c_char, mut argNum: libc::c_int) {
     if argNum == 2 as libc::c_int {
         let mut names: [[libc::c_char; 32]; 64] = [[0; 32]; 64];
         let mut namesPtr: [*const libc::c_char; 64] = [0 as *const libc::c_char; 64];

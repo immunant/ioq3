@@ -3,21 +3,15 @@ use ::libc;
 pub use crate::opus_types_h::opus_int16;
 pub use crate::opus_types_h::opus_int32;
 pub use crate::opus_types_h::opus_uint32;
-use crate::src::opus_1_2_1::silk::VQ_WMat_EC::silk_VQ_WMat_EC_c;
+
 pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
 pub use crate::stdlib::__uint32_t;
 pub use crate::stdlib::int16_t;
 pub use crate::stdlib::int32_t;
-use crate::stdlib::memcpy;
+
 pub use crate::stdlib::uint32_t;
 
-use crate::src::opus_1_2_1::silk::lin2log::silk_lin2log;
-use crate::src::opus_1_2_1::silk::log2lin::silk_log2lin;
-use crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_gain_BITS_Q5_ptrs;
-use crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_vq_gain_ptrs_Q7;
-use crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_vq_ptrs_Q7;
-use crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_vq_sizes;
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without
@@ -184,7 +178,7 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
     mut xX_Q17: *const crate::opus_types_h::opus_int32,
     subfr_len: libc::c_int,
     nb_subfr: libc::c_int,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 )
 /* I    Run-time architecture           */
 {

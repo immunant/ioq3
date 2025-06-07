@@ -14,11 +14,7 @@ pub use crate::src::client::snd_codec::CODEC_LOAD;
 pub use crate::src::client::snd_codec::CODEC_OPEN;
 pub use crate::src::client::snd_codec::CODEC_READ;
 pub use crate::src::qcommon::common::Com_Printf;
-use crate::src::qcommon::common::Hunk_AllocateTempMemory;
-use crate::src::qcommon::files::FS_FCloseFile;
-use crate::src::qcommon::files::FS_FOpenFileRead;
-use crate::src::qcommon::files::FS_Read;
-use crate::src::qcommon::files::FS_Seek;
+
 pub use crate::src::qcommon::q_shared::byte;
 pub use crate::src::qcommon::q_shared::fileHandle_t;
 pub use crate::src::qcommon::q_shared::qboolean;

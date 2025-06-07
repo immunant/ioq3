@@ -70,7 +70,7 @@ pub unsafe extern "C" fn clt_mdct_forward_c(
     mut overlap: libc::c_int,
     mut shift: libc::c_int,
     mut stride: libc::c_int,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 ) {
     let mut i: libc::c_int = 0;
     let mut N: libc::c_int = 0;
@@ -277,7 +277,7 @@ pub unsafe extern "C" fn clt_mdct_backward_c(
     mut overlap: libc::c_int,
     mut shift: libc::c_int,
     mut stride: libc::c_int,
-    mut arch: libc::c_int,
+    mut _arch: libc::c_int,
 ) {
     let mut i: libc::c_int = 0;
     let mut N: libc::c_int = 0;

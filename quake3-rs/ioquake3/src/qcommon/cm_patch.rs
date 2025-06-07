@@ -214,7 +214,6 @@ pub mod q_shared_h {
             * *v2.offset(1 as libc::c_int as isize)
             - *v1.offset(1 as libc::c_int as isize) * *v2.offset(0 as libc::c_int as isize);
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -232,11 +231,11 @@ pub use crate::src::qcommon::cm_polylib::CopyWinding;
 pub use crate::src::qcommon::cm_polylib::FreeWinding;
 pub use crate::src::qcommon::cm_polylib::WindingBounds;
 pub use crate::src::qcommon::cm_test::CM_BoundsIntersect;
-use crate::src::qcommon::common::Com_DPrintf;
+
 pub use crate::src::qcommon::common::Com_Error;
 pub use crate::src::qcommon::common::Com_Printf;
 pub use crate::src::qcommon::common::Hunk_Alloc;
-use crate::src::qcommon::cvar::Cvar_Get;
+
 pub use crate::src::qcommon::q_math::vec3_origin;
 pub use crate::src::qcommon::q_math::AddPointToBounds;
 pub use crate::src::qcommon::q_math::ClearBounds;
@@ -261,10 +260,7 @@ pub use crate::src::qcommon::q_shared::ERR_DROP;
 pub use crate::src::qcommon::q_shared::ERR_FATAL;
 pub use crate::src::qcommon::q_shared::ERR_NEED_CD;
 pub use crate::src::qcommon::q_shared::ERR_SERVERDISCONNECT;
-use crate::stdlib::fabs;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
+
 extern "C" {
     /*
     =======================================================================
@@ -1332,7 +1328,7 @@ CM_SetBorderInward
 unsafe extern "C" fn CM_SetBorderInward(
     mut facet: *mut crate::src::qcommon::cm_patch::facet_t,
     mut grid: *mut crate::src::qcommon::cm_patch::cGrid_t,
-    mut gridPlanes: *mut [[libc::c_int; 2]; 129],
+    mut _gridPlanes: *mut [[libc::c_int; 2]; 129],
     mut i: libc::c_int,
     mut j: libc::c_int,
     mut which: libc::c_int,

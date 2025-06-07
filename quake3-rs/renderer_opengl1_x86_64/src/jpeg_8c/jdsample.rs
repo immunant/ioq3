@@ -266,7 +266,7 @@ unsafe extern "C" fn sep_upsample(
     mut cinfo: crate::jpeglib_h::j_decompress_ptr,
     mut input_buf: crate::jpeglib_h::JSAMPIMAGE,
     mut in_row_group_ctr: *mut crate::jmorecfg_h::JDIMENSION,
-    mut in_row_groups_avail: crate::jmorecfg_h::JDIMENSION,
+    mut _in_row_groups_avail: crate::jmorecfg_h::JDIMENSION,
     mut output_buf: crate::jpeglib_h::JSAMPARRAY,
     mut out_row_ctr: *mut crate::jmorecfg_h::JDIMENSION,
     mut out_rows_avail: crate::jmorecfg_h::JDIMENSION,
@@ -356,8 +356,8 @@ unsafe extern "C" fn sep_upsample(
  */
 
 unsafe extern "C" fn fullsize_upsample(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut compptr: *mut crate::jpeglib_h::jpeg_component_info,
+    mut _cinfo: crate::jpeglib_h::j_decompress_ptr,
+    mut _compptr: *mut crate::jpeglib_h::jpeg_component_info,
     mut input_data: crate::jpeglib_h::JSAMPARRAY,
     mut output_data_ptr: *mut crate::jpeglib_h::JSAMPARRAY,
 ) {
@@ -369,9 +369,9 @@ unsafe extern "C" fn fullsize_upsample(
  */
 
 unsafe extern "C" fn noop_upsample(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut compptr: *mut crate::jpeglib_h::jpeg_component_info,
-    mut input_data: crate::jpeglib_h::JSAMPARRAY,
+    mut _cinfo: crate::jpeglib_h::j_decompress_ptr,
+    mut _compptr: *mut crate::jpeglib_h::jpeg_component_info,
+    mut _input_data: crate::jpeglib_h::JSAMPARRAY,
     mut output_data_ptr: *mut crate::jpeglib_h::JSAMPARRAY,
 ) {
     *output_data_ptr = 0 as crate::jpeglib_h::JSAMPARRAY;
@@ -448,7 +448,7 @@ unsafe extern "C" fn int_upsample(
 
 unsafe extern "C" fn h2v1_upsample(
     mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut compptr: *mut crate::jpeglib_h::jpeg_component_info,
+    mut _compptr: *mut crate::jpeglib_h::jpeg_component_info,
     mut input_data: crate::jpeglib_h::JSAMPARRAY,
     mut output_data_ptr: *mut crate::jpeglib_h::JSAMPARRAY,
 ) {
@@ -484,7 +484,7 @@ unsafe extern "C" fn h2v1_upsample(
 
 unsafe extern "C" fn h2v2_upsample(
     mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-    mut compptr: *mut crate::jpeglib_h::jpeg_component_info,
+    mut _compptr: *mut crate::jpeglib_h::jpeg_component_info,
     mut input_data: crate::jpeglib_h::JSAMPARRAY,
     mut output_data_ptr: *mut crate::jpeglib_h::JSAMPARRAY,
 ) {

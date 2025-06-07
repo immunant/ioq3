@@ -1,7 +1,5 @@
 use ::libc;
 
-use crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP;
-use crate::src::opus_1_2_1::silk::float::LPC_analysis_filter_FLP::silk_LPC_analysis_filter_FLP;
 /* 16th order LPC analysis filter */
 /* O    LPC residual signal                         */
 /* I    LPC coefficients                            */

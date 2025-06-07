@@ -405,9 +405,7 @@ pub use crate::src::cgame::cg_weapons::CG_MissileHitWall;
 pub use crate::src::cgame::cg_weapons::CG_OutOfAmmoChange;
 pub use crate::src::cgame::cg_weapons::CG_RailTrail;
 pub use crate::src::cgame::cg_weapons::CG_ShotgunFire;
-use ::libc::rand;
-use ::libc::strcat;
-use ::libc::strcpy;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

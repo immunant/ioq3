@@ -188,7 +188,6 @@ pub use crate::src::jpeg_8c::jerror::JWRN_MUST_RESYNC;
 pub use crate::src::jpeg_8c::jerror::JWRN_NOT_SEQUENTIAL;
 pub use crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA;
 pub use crate::src::jpeg_8c::jutils::jcopy_sample_rows;
-use crate::stdlib::memcpy;
 
 pub type my_prep_ptr = *mut my_prep_controller;
 

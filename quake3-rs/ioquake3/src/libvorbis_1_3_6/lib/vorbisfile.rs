@@ -75,7 +75,7 @@ pub mod os_h {
     done safely because all x86_64 CPUs supports SSE2. */
     #[inline]
 
-    pub unsafe extern "C" fn vorbis_fpu_setround(mut fpu: *mut crate::os_h::vorbis_fpu_control) {}
+    pub unsafe extern "C" fn vorbis_fpu_setround(mut _fpu: *mut crate::os_h::vorbis_fpu_control) {}
     #[inline]
 
     pub unsafe extern "C" fn vorbis_ftoi(mut f: libc::c_double) -> libc::c_int {
@@ -83,7 +83,7 @@ pub mod os_h {
     }
     #[inline]
 
-    pub unsafe extern "C" fn vorbis_fpu_restore(mut fpu: crate::os_h::vorbis_fpu_control) {}
+    pub unsafe extern "C" fn vorbis_fpu_restore(mut _fpu: crate::os_h::vorbis_fpu_control) {}
 
     use ::std::arch::x86_64::_mm_cvtsd_si32;
     use ::std::arch::x86_64::_mm_load_sd;
@@ -169,19 +169,6 @@ pub use crate::src::libvorbis_1_3_6::lib::vorbisfile::os_h::vorbis_fpu_restore;
 pub use crate::src::libvorbis_1_3_6::lib::vorbisfile::os_h::vorbis_fpu_setround;
 pub use crate::src::libvorbis_1_3_6::lib::vorbisfile::os_h::vorbis_ftoi;
 
-use crate::stdlib::calloc;
-use crate::stdlib::fclose;
-use crate::stdlib::fopen;
-use crate::stdlib::fread;
-use crate::stdlib::fseek;
-use crate::stdlib::ftell;
-use crate::stdlib::malloc;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::realloc;
-use crate::stdlib::rint;
-use ::libc::__errno_location;
-use ::libc::free;
 extern "C" {
     #[no_mangle]
     pub fn vorbis_window(

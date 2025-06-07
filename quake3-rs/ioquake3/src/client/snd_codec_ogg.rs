@@ -41,14 +41,7 @@ pub use crate::codec_h::vorbis_info;
 pub use crate::ogg_h::ogg_stream_state;
 pub use crate::ogg_h::ogg_sync_state;
 pub use crate::ogg_h::oggpack_buffer;
-use crate::src::qcommon::common::Hunk_AllocateTempMemory;
-use crate::src::qcommon::common::Hunk_FreeTempMemory;
-use crate::src::qcommon::common::Z_Free;
-use crate::src::qcommon::common::Z_Malloc;
-use crate::src::qcommon::files::FS_FTell;
-use crate::src::qcommon::files::FS_Read;
-use crate::src::qcommon::files::FS_Seek;
-use ::libc::__errno_location;
+
 // Q3 OGG codec
 #[no_mangle]
 
@@ -220,7 +213,7 @@ pub unsafe extern "C" fn S_OGG_Callback_seek(
 // fclose() replacement
 #[no_mangle]
 
-pub unsafe extern "C" fn S_OGG_Callback_close(mut datasource: *mut libc::c_void) -> libc::c_int {
+pub unsafe extern "C" fn S_OGG_Callback_close(mut _datasource: *mut libc::c_void) -> libc::c_int {
     // we do nothing here and close all things manually in S_OGG_CodecCloseStream()
     return 0 as libc::c_int;
 }

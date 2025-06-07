@@ -70,7 +70,7 @@ pub use crate::src::renderergl1::tr_main::R_AddDrawSurf;
 pub use crate::src::renderergl1::tr_main::R_CullLocalBox;
 pub use crate::src::renderergl1::tr_main::R_CullLocalPointAndRadius;
 pub use crate::src::renderergl1::tr_shader::R_GetShaderByHandle;
-use crate::stdlib::fabs;
+
 pub use crate::tr_common_h::image_s;
 pub use crate::tr_common_h::image_t;
 pub use crate::tr_common_h::imgFlags_t;
@@ -233,7 +233,7 @@ pub use crate::tr_local_h::TMOD_SCROLL;
 pub use crate::tr_local_h::TMOD_STRETCH;
 pub use crate::tr_local_h::TMOD_TRANSFORM;
 pub use crate::tr_local_h::TMOD_TURBULENT;
-use ::libc::strcmp;
+
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

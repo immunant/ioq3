@@ -149,10 +149,7 @@ pub use crate::src::cgame::cg_syscalls::trap_R_RemapShader;
 pub use crate::src::cgame::cg_syscalls::trap_S_ClearLoopingSounds;
 pub use crate::src::cgame::cg_syscalls::trap_S_RegisterSound;
 pub use crate::src::cgame::cg_syscalls::trap_S_StartLocalSound;
-use crate::stdlib::memset;
-use crate::stdlib::strncpy;
-use ::libc::strcmp;
-use ::libc::strstr;
+
 pub use ::libc::strtol;
 /*
 ===========================================================================

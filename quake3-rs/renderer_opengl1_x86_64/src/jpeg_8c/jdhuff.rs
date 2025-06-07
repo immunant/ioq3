@@ -198,7 +198,6 @@ pub use crate::src::jpeg_8c::jerror::JWRN_MUST_RESYNC;
 pub use crate::src::jpeg_8c::jerror::JWRN_NOT_SEQUENTIAL;
 pub use crate::src::jpeg_8c::jerror::JWRN_TOO_MUCH_DATA;
 pub use crate::src::jpeg_8c::jutils::jpeg_natural_order;
-use crate::stdlib::memset;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

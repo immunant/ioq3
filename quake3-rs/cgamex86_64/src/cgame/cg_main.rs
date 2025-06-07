@@ -175,7 +175,7 @@ pub use crate::src::qcommon::q_shared::TR_LINEAR;
 pub use crate::src::qcommon::q_shared::TR_LINEAR_STOP;
 pub use crate::src::qcommon::q_shared::TR_SINE;
 pub use crate::src::qcommon::q_shared::TR_STATIONARY;
-use crate::stdlib::vsnprintf;
+
 pub use crate::tr_types_h::glDriverType_t;
 pub use crate::tr_types_h::glHardwareType_t;
 pub use crate::tr_types_h::glconfig_t;
@@ -209,10 +209,7 @@ pub use crate::tr_types_h::TC_S3TC;
 pub use crate::tr_types_h::TC_S3TC_ARB;
 
 pub use crate::src::cgame::cg_main::stdlib_h::atoi;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::strlen;
-use ::libc::strcmp;
+
 pub use ::libc::strtol;
 
 #[repr(C)]
@@ -264,15 +261,15 @@ pub unsafe extern "C" fn vmMain(
     mut arg0: libc::c_int,
     mut arg1: libc::c_int,
     mut arg2: libc::c_int,
-    mut arg3: libc::c_int,
-    mut arg4: libc::c_int,
-    mut arg5: libc::c_int,
-    mut arg6: libc::c_int,
-    mut arg7: libc::c_int,
-    mut arg8: libc::c_int,
-    mut arg9: libc::c_int,
-    mut arg10: libc::c_int,
-    mut arg11: libc::c_int,
+    mut _arg3: libc::c_int,
+    mut _arg4: libc::c_int,
+    mut _arg5: libc::c_int,
+    mut _arg6: libc::c_int,
+    mut _arg7: libc::c_int,
+    mut _arg8: libc::c_int,
+    mut _arg9: libc::c_int,
+    mut _arg10: libc::c_int,
+    mut _arg11: libc::c_int,
 ) -> crate::stdlib::intptr_t {
     match command {
         0 => {
@@ -3256,7 +3253,7 @@ pub unsafe extern "C" fn CG_Error(mut msg: *const libc::c_char, mut args: ...) -
 #[no_mangle]
 
 pub unsafe extern "C" fn Com_Error(
-    mut level: libc::c_int,
+    mut _level: libc::c_int,
     mut error: *const libc::c_char,
     mut args: ...
 ) -> ! {
@@ -4572,12 +4569,12 @@ CG_EventHandling
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_EventHandling(mut type_0: libc::c_int) {}
+pub unsafe extern "C" fn CG_EventHandling(mut _type_0: libc::c_int) {}
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_KeyEvent(
-    mut key: libc::c_int,
-    mut down: crate::src::qcommon::q_shared::qboolean,
+    mut _key: libc::c_int,
+    mut _down: crate::src::qcommon::q_shared::qboolean,
 ) {
 }
 /*
@@ -4784,7 +4781,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_MouseEvent(mut x: libc::c_int, mut y: libc::c_int) {}
+pub unsafe extern "C" fn CG_MouseEvent(mut _x: libc::c_int, mut _y: libc::c_int) {}
 unsafe extern "C" fn run_static_initializers() {
     cvarTableSize = (::std::mem::size_of::<[cvarTable_t; 83]>() as libc::c_ulong)
         .wrapping_div(::std::mem::size_of::<cvarTable_t>() as libc::c_ulong)

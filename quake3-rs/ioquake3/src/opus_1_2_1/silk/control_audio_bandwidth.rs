@@ -10,7 +10,7 @@ pub use crate::stdlib::__int16_t;
 pub use crate::stdlib::__int32_t;
 pub use crate::stdlib::int16_t;
 pub use crate::stdlib::int32_t;
-use crate::stdlib::memset;
+
 pub use crate::structs_h::silk_LP_state;
 pub use crate::structs_h::silk_NLSF_CB_struct;
 pub use crate::structs_h::silk_VAD_state;

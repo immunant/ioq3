@@ -222,7 +222,6 @@ pub mod q_shared_h {
                 as libc::c_double,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -331,10 +330,7 @@ pub use crate::src::renderergl1::tr_shade::tess;
 pub use crate::src::renderergl1::tr_shader::R_FindShader;
 pub use crate::src::renderergl1::tr_shader::R_GetShaderByHandle;
 pub use crate::src::renderergl1::tr_surface::RB_CheckOverflow;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
-use crate::stdlib::strlen;
+
 pub use crate::tr_common_h::image_s;
 pub use crate::tr_common_h::image_t;
 pub use crate::tr_common_h::imgFlags_t;
@@ -509,7 +505,6 @@ pub use crate::tr_local_h::TMOD_SCROLL;
 pub use crate::tr_local_h::TMOD_STRETCH;
 pub use crate::tr_local_h::TMOD_TRANSFORM;
 pub use crate::tr_local_h::TMOD_TURBULENT;
-use ::libc::strcmp;
 
 #[repr(C)]
 #[derive(Copy, Clone)]

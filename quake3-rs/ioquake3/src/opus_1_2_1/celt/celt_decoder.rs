@@ -173,18 +173,10 @@ pub use crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_state;
 pub use crate::src::opus_1_2_1::celt::kiss_fft::kiss_twiddle_cpx;
 pub use crate::src::opus_1_2_1::celt::mdct::clt_mdct_backward_c;
 pub use crate::src::opus_1_2_1::celt::mdct::mdct_lookup;
-use crate::src::opus_1_2_1::celt::modes::opus_custom_mode_create;
+
 pub use crate::src::opus_1_2_1::celt::modes::OpusCustomMode;
 pub use crate::src::opus_1_2_1::celt::modes::PulseCache;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
 
-use crate::src::opus_1_2_1::celt::bands::anti_collapse;
-use crate::src::opus_1_2_1::celt::bands::celt_lcg_rand;
-use crate::src::opus_1_2_1::celt::bands::denormalise_bands;
-use crate::src::opus_1_2_1::celt::bands::quant_all_bands;
 pub use crate::src::opus_1_2_1::celt::celt::comb_filter;
 pub use crate::src::opus_1_2_1::celt::celt::init_caps;
 pub use crate::src::opus_1_2_1::celt::celt::resampling_factor;
@@ -192,23 +184,7 @@ pub use crate::src::opus_1_2_1::celt::celt::tf_select_table;
 pub use crate::src::opus_1_2_1::celt::celt_decoder::celt_h::spread_icdf;
 pub use crate::src::opus_1_2_1::celt::celt_decoder::celt_h::tapset_icdf;
 pub use crate::src::opus_1_2_1::celt::celt_decoder::celt_h::trim_icdf;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_bit_logp;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_bits;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_init;
-use crate::src::opus_1_2_1::celt::entdec::ec_dec_uint;
-use crate::src::opus_1_2_1::celt::pitch::pitch_downsample;
-use crate::src::opus_1_2_1::celt::pitch::pitch_search;
-use crate::src::opus_1_2_1::celt::rate::compute_allocation;
 
-use crate::src::opus_1_2_1::celt::celt_lpc::_celt_autocorr;
-use crate::src::opus_1_2_1::celt::celt_lpc::_celt_lpc;
-use crate::src::opus_1_2_1::celt::celt_lpc::celt_fir_c;
-use crate::src::opus_1_2_1::celt::celt_lpc::celt_iir;
-use crate::src::opus_1_2_1::celt::quant_bands::unquant_coarse_energy;
-use crate::src::opus_1_2_1::celt::quant_bands::unquant_energy_finalise;
-use crate::src::opus_1_2_1::celt::quant_bands::unquant_fine_energy;
-use crate::src::opus_1_2_1::celt::vq::renormalise_vector;
 /* * Decoder state
 @brief Decoder state
 */

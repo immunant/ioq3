@@ -137,11 +137,7 @@ pub use crate::stdlib::GLsizei;
 pub use crate::stdlib::GLuint;
 pub use crate::stdlib::GLvoid;
 pub use crate::stdlib::__ctype_tolower_loc;
-use crate::stdlib::memcpy;
-use crate::stdlib::memset;
-use crate::stdlib::pow;
-use crate::stdlib::strlen;
-use crate::stdlib::strncmp;
+
 pub use crate::tr_common_h::image_s;
 pub use crate::tr_common_h::image_t;
 pub use crate::tr_common_h::imgFlags_t;
@@ -288,9 +284,6 @@ pub use crate::tr_local_h::TMOD_SCROLL;
 pub use crate::tr_local_h::TMOD_STRETCH;
 pub use crate::tr_local_h::TMOD_TRANSFORM;
 pub use crate::tr_local_h::TMOD_TURBULENT;
-use ::libc::strcmp;
-use ::libc::strcpy;
-use ::libc::strstr;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1745,7 +1738,7 @@ pub unsafe extern "C" fn R_CreateImage(
     mut height: libc::c_int,
     mut type_0: crate::tr_common_h::imgType_t,
     mut flags: crate::tr_common_h::imgFlags_t,
-    mut internalFormat: libc::c_int,
+    mut _internalFormat: libc::c_int,
 ) -> *mut crate::tr_common_h::image_t {
     let mut image: *mut crate::tr_common_h::image_t = 0 as *mut crate::tr_common_h::image_t;
     let mut isLightmap: crate::src::qcommon::q_shared::qboolean =

@@ -53,12 +53,7 @@ pub use crate::src::qcommon::q_shared::EXEC_APPEND;
 pub use crate::src::qcommon::q_shared::EXEC_INSERT;
 pub use crate::src::qcommon::q_shared::EXEC_NOW;
 pub use crate::src::server::sv_game::SV_GameCommand;
-use crate::stdlib::memcpy;
-use crate::stdlib::memmove;
-use crate::stdlib::strlen;
-use ::libc::strcat;
-use ::libc::strcmp;
-use ::libc::strpbrk;
+
 pub use ::libc::strtol;
 
 #[repr(C)]
@@ -1095,7 +1090,10 @@ Cmd_CompleteCfgName
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cmd_CompleteCfgName(mut args: *mut libc::c_char, mut argNum: libc::c_int) {
+pub unsafe extern "C" fn Cmd_CompleteCfgName(
+    mut _args: *mut libc::c_char,
+    mut argNum: libc::c_int,
+) {
     if argNum == 2 as libc::c_int {
         crate::src::qcommon::common::Field_CompleteFilename(
             b"\x00" as *const u8 as *const libc::c_char,

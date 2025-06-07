@@ -10,13 +10,6 @@ pub struct mdct_lookup {
 }
 use ::libc;
 
-use crate::stdlib::cos;
-use crate::stdlib::log;
-use crate::stdlib::malloc;
-use crate::stdlib::memset;
-use crate::stdlib::rint;
-use crate::stdlib::sin;
-use ::libc::free;
 /* *******************************************************************
 *                                                                  *
 * THIS FILE IS PART OF THE OggVorbis SOFTWARE CODEC SOURCE CODE.   *

@@ -164,7 +164,6 @@ pub mod q_shared_h {
                 as libc::c_double,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
-    use crate::stdlib::sqrt;
 
     // __Q_SHARED_H
 }
@@ -224,9 +223,7 @@ pub use crate::tr_types_h::STEREO_RIGHT;
 
 pub use crate::src::renderergl1::tr_main::ri;
 pub use crate::src::renderergl1::tr_main::tr;
-use crate::stdlib::floor;
-use crate::stdlib::memset;
-use crate::stdlib::sqrt;
+
 pub use crate::tr_common_h::image_s;
 pub use crate::tr_common_h::image_t;
 pub use crate::tr_common_h::imgFlags_t;
