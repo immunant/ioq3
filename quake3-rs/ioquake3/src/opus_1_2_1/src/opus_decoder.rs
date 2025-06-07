@@ -1112,7 +1112,7 @@ unsafe extern "C" fn opus_decode_frame(
     (*st).prev_mode = mode;
     (*st).prev_redundancy = (redundancy != 0 && celt_to_silk == 0) as libc::c_int;
     if celt_ret >= 0 as libc::c_int {
-        (_opus_false()) != 0;
+        _opus_false();
     }
     return if celt_ret < 0 as libc::c_int {
         celt_ret
@@ -1173,7 +1173,7 @@ pub unsafe extern "C" fn opus_decode_native(
                 break;
             }
         }
-        (_opus_false()) != 0;
+        _opus_false();
         (*st).last_packet_duration = pcm_count;
         return pcm_count;
     } else {
@@ -1255,7 +1255,7 @@ pub unsafe extern "C" fn opus_decode_native(
         if ret_0 < 0 as libc::c_int {
             return ret_0;
         } else {
-            (_opus_false()) != 0;
+            _opus_false();
             (*st).last_packet_duration = frame_size;
             return frame_size;
         }
@@ -1288,7 +1288,7 @@ pub unsafe extern "C" fn opus_decode_native(
         i += 1
     }
     (*st).last_packet_duration = nb_samples;
-    (_opus_false()) != 0;
+    _opus_false();
     if soft_clip != 0 {
         crate::src::opus_1_2_1::src::opus::opus_pcm_soft_clip(
             pcm,

@@ -557,7 +557,7 @@ unsafe extern "C" fn TableForFunc(mut func: crate::tr_local_h::genFunc_t) -> *mu
             .name
             .as_mut_ptr(),
     );
-    return 0 as *mut libc::c_float;
+
 }
 /*
 ** EvalWaveForm

@@ -4707,7 +4707,7 @@ pub unsafe extern "C" fn BotReplyChat(
                     if num < 0 as libc::c_int {
                         break;
                     }
-                    ((*m).time) > crate::src::botlib::be_aas_main::AAS_Time();
+                    // check message timestamp
                     m = (*m).next
                 }
                 if !m.is_null() {

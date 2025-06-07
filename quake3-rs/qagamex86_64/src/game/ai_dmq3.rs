@@ -1291,7 +1291,6 @@ pub unsafe extern "C" fn BotCTFSeekGoals(mut bs: *mut crate::src::game::ai_main:
             if ((*bs).owndecision_time as libc::c_float) < crate::src::game::ai_main::floattime {
                 //if enemy flag carrier is visible
                 c = BotEnemyFlagCarrierVisible(bs);
-                (c) >= 0 as libc::c_int;
                 //if not already doing something important
                 if (*bs).ltgtype != 4 as libc::c_int
                     && (*bs).ltgtype != 6 as libc::c_int
@@ -5723,7 +5722,7 @@ pub unsafe extern "C" fn BotCheckAttack(mut bs: *mut crate::src::game::ai_main::
         &mut entinfo as *mut _ as *mut crate::be_aas_h::aas_entityinfo_s,
     );
     // if not attacking a player
-    (attackentity) >= 64 as libc::c_int;
+    // ignore non-player attack entities
     //
     reactiontime = crate::src::game::g_syscalls::trap_Characteristic_BFloat(
         (*bs).character,
@@ -6497,7 +6496,7 @@ pub unsafe extern "C" fn BotFuncButtonActivateGoal(
                 }
                 i -= 1
             }
-            (i) < 0 as libc::c_int;
+            // ensure a valid reachability index was found
             if i >= 0 as libc::c_int {
                 //
                 (*activategoal).goal.origin[0 as libc::c_int as usize] =
@@ -7954,7 +7953,7 @@ pub unsafe extern "C" fn BotAIPredictObstacles(
             }
         }
     } else if route.stopevent & 2 as libc::c_int != 0 {
-        (route.endtravelflags & 0x4000000 as libc::c_int) != 0;
+        // non-walkable endtravel flags detected
     }
     return crate::src::qcommon::q_shared::qfalse as libc::c_int;
 }

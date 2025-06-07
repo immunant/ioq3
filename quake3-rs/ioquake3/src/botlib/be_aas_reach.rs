@@ -9819,7 +9819,7 @@ pub unsafe extern "C" fn AAS_ContinueInitReachability(mut _time: libc::c_float) 
                                             //check for ladder reachabilities
                                             if !(AAS_Reachability_Ladder(i, j) != 0) {
                                                 //check for a jump reachability
-                                                (AAS_Reachability_Jump(i, j)) != 0;
+                                                AAS_Reachability_Jump(i, j);
                                             }
                                         }
                                     }

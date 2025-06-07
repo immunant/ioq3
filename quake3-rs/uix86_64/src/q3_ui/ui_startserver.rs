@@ -2165,7 +2165,7 @@ unsafe extern "C" fn ServerOptions_Event(mut ptr: *mut libc::c_void, mut event: 
             }
         }
         18 => {
-            (event) != 3 as libc::c_int;
+            // empty case
         }
         24 => {
             if !(event != 3 as libc::c_int) {

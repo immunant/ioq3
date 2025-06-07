@@ -6122,7 +6122,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
             //if the bot needs a new reachability
             //end else
             //if the area has no reachability links
-            (crate::src::botlib::be_aas_reach::AAS_AreaReachability((*ms).areanum)) == 0; //end if
+            // skip areas without reachability links
                                                                                           //end if
                                                                                           //DEBUG
             reachnum = BotGetReachabilityToGoal(

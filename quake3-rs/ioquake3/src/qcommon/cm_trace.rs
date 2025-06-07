@@ -1451,7 +1451,7 @@ pub unsafe extern "C" fn CM_TraceThroughSphere(
             (*tw).trace.contents = 0x2000000 as libc::c_int
         }
     } else {
-        (d) == 0 as libc::c_int as libc::c_float;
+        // plane distance is zero
     };
     // no intersection at all
 }
@@ -1652,7 +1652,7 @@ pub unsafe extern "C" fn CM_TraceThroughVerticalCylinder(
             }
         }
     } else {
-        (d) == 0 as libc::c_int as libc::c_float;
+        // plane distance is zero
     };
     // no intersection at all
 }

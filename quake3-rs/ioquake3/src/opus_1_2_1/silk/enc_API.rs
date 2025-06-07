@@ -86,14 +86,14 @@ pub unsafe extern "C" fn silk_InitEncoder(
                 as *mut crate::structs_FLP_h::silk_encoder_state_FLP,
             arch,
         );
-        (ret) != 0;
+        // ignore return value
         n += 1
     }
     (*psEnc).nChannelsAPI = 1 as libc::c_int;
     (*psEnc).nChannelsInternal = 1 as libc::c_int;
     /* Read control structure */
     ret += silk_QueryEncoder(encState, encStatus);
-    (ret) != 0;
+    // ignore return value
     return ret;
 }
 /* **********************************************************************
@@ -1171,7 +1171,7 @@ pub unsafe extern "C" fn silk_Encode(
                     maxBits,
                     useCBR,
                 );
-                (ret) != 0 as libc::c_int;
+                // ignore return value
             }
             (*psEnc).state_Fxx[n as usize]
                 .sCmn
