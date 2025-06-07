@@ -1854,7 +1854,7 @@ pub unsafe extern "C" fn R_CreateImage(
 // Note that the ordering indicates the order of preference used
 // when there are multiple images of different formats available
 
-static mut imageLoaders: [imageExtToLoaderMap_t; 6] = unsafe {
+static mut imageLoaders: [imageExtToLoaderMap_t; 6] = {
     [
         {
             let mut init = imageExtToLoaderMap_t {

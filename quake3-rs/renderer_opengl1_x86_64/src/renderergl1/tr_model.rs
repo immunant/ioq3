@@ -489,7 +489,7 @@ pub unsafe extern "C" fn R_RegisterIQM(
 // Note that the ordering indicates the order of preference used
 // when there are multiple models of different formats available
 
-static mut modelLoaders: [modelExtToLoaderMap_t; 3] = unsafe {
+static mut modelLoaders: [modelExtToLoaderMap_t; 3] = {
     [
         {
             let mut init = modelExtToLoaderMap_t {

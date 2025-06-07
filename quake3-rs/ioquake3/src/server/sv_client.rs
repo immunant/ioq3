@@ -2628,7 +2628,7 @@ unsafe extern "C" fn SV_Voip_f(mut cl: *mut crate::server_h::client_t) {
     };
 }
 
-static mut ucmds: [ucmd_t; 10] = unsafe {
+static mut ucmds: [ucmd_t; 10] = {
     [
         {
             let mut init = ucmd_t {

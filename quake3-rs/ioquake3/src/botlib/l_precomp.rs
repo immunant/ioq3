@@ -3736,7 +3736,7 @@ pub unsafe extern "C" fn PC_Directive_evalfloat(
 //============================================================================
 #[no_mangle]
 
-pub static mut directives: [directive_t; 20] = unsafe {
+pub static mut directives: [directive_t; 20] = {
     [
         {
             let mut init = directive_s {
@@ -4112,7 +4112,7 @@ pub unsafe extern "C" fn PC_DollarDirective_evalfloat(
 //============================================================================
 #[no_mangle]
 
-pub static mut dollardirectives: [directive_t; 20] = unsafe {
+pub static mut dollardirectives: [directive_t; 20] = {
     [
         {
             let mut init = directive_s {

@@ -785,7 +785,7 @@ pub unsafe extern "C" fn BotVoiceChat_Dummy(
 }
 #[no_mangle]
 
-pub static mut voiceCommands: [voiceCommand_t; 15] = unsafe {
+pub static mut voiceCommands: [voiceCommand_t; 15] = {
     [
         {
             let mut init = voiceCommand_s {

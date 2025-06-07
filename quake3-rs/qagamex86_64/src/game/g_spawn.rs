@@ -371,7 +371,7 @@ pub static mut fields: [field_t; 20] = [field_t {
 pub unsafe extern "C" fn SP_item_botroam(mut _ent: *mut crate::g_local_h::gentity_t) {}
 #[no_mangle]
 
-pub static mut spawns: [spawn_t; 49] = unsafe {
+pub static mut spawns: [spawn_t; 49] = {
     [
         {
             let mut init = spawn_t {

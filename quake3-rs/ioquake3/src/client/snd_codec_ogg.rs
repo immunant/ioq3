@@ -45,7 +45,7 @@ pub use crate::ogg_h::oggpack_buffer;
 // Q3 OGG codec
 #[no_mangle]
 
-pub static mut ogg_codec: crate::src::client::snd_codec::snd_codec_t = unsafe {
+pub static mut ogg_codec: crate::src::client::snd_codec::snd_codec_t = {
     {
         let mut init = crate::src::client::snd_codec::snd_codec_s {
             ext: b"ogg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
