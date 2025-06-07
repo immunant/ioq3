@@ -303,15 +303,15 @@ pub unsafe extern "C" fn R_RenderShadowEdges() {
     let mut j: libc::c_int = 0;
     let mut k: libc::c_int = 0;
     let mut i2: libc::c_int = 0;
-    let mut c_edges: libc::c_int = 0;
-    let mut c_rejected: libc::c_int = 0;
+    let mut _c_edges: libc::c_int = 0;
+    let mut _c_rejected: libc::c_int = 0;
     let mut hit: [libc::c_int; 2] = [0; 2];
     // an edge is NOT a silhouette edge if its face doesn't face the light,
     // or if it has a reverse paired edge that also faces the light.
     // A well behaved polyhedron would have exactly two faces for each edge,
     // but lots of models have dangling edges or overfanned edges
-    c_edges = 0 as libc::c_int;
-    c_rejected = 0 as libc::c_int;
+    _c_edges = 0 as libc::c_int;
+    _c_rejected = 0 as libc::c_int;
     i = 0 as libc::c_int;
     while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
         c = numEdgeDefs[i as usize];
@@ -348,9 +348,9 @@ pub unsafe extern "C" fn R_RenderShadowEdges() {
                         shadowXyz[i2 as usize].as_mut_ptr(),
                     );
                     crate::src::sdl::sdl_glimp::qglEnd.expect("non-null function pointer")();
-                    c_edges += 1
+                    _c_edges += 1
                 } else {
-                    c_rejected += 1
+                    _c_rejected += 1
                 }
             }
             j += 1

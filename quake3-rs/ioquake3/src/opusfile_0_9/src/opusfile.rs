@@ -1392,9 +1392,9 @@ pub unsafe extern "C" fn opus_granule_sample(
     mut _head: *const crate::src::opusfile_0_9::src::opusfile::OpusHead,
     mut _gp: crate::config_types_h::ogg_int64_t,
 ) -> crate::config_types_h::ogg_int64_t {
-    let mut pre_skip: crate::opus_types_h::opus_int32 = 0;
-    pre_skip = (*_head).pre_skip as crate::opus_types_h::opus_int32;
-    if _gp != -(1 as libc::c_int) as libc::c_long && op_granpos_add(&mut _gp, _gp, -pre_skip) != 0 {
+    let mut _pre_skip: crate::opus_types_h::opus_int32 = 0;
+    _pre_skip = (*_head).pre_skip as crate::opus_types_h::opus_int32;
+    if _gp != -(1 as libc::c_int) as libc::c_long && op_granpos_add(&mut _gp, _gp, -_pre_skip) != 0 {
         _gp = -(1 as libc::c_int) as crate::config_types_h::ogg_int64_t
     }
     return _gp;
@@ -3730,7 +3730,7 @@ unsafe extern "C" fn op_get_granulepos(
     let mut duration: crate::config_types_h::ogg_int64_t =
         0 as libc::c_int as crate::config_types_h::ogg_int64_t;
     let mut pcm_start: crate::config_types_h::ogg_int64_t = 0;
-    let mut pre_skip: crate::opus_types_h::opus_int32 = 0;
+    let mut _pre_skip: crate::opus_types_h::opus_int32 = 0;
     let mut nlinks: libc::c_int = 0;
     let mut li_lo: libc::c_int = 0;
     let mut li_hi: libc::c_int = 0;
@@ -3752,12 +3752,12 @@ unsafe extern "C" fn op_get_granulepos(
     }
     _pcm_offset -= (*links.offset(li_lo as isize)).pcm_file_offset;
     pcm_start = (*links.offset(li_lo as isize)).pcm_start;
-    pre_skip = (*links.offset(li_lo as isize)).head.pre_skip as crate::opus_types_h::opus_int32;
-    duration -= pre_skip as libc::c_long;
+    _pre_skip = (*links.offset(li_lo as isize)).head.pre_skip as crate::opus_types_h::opus_int32;
+    duration -= _pre_skip as libc::c_long;
     if _pcm_offset >= duration {
         return -(1 as libc::c_int) as crate::config_types_h::ogg_int64_t;
     }
-    _pcm_offset += pre_skip as libc::c_long;
+    _pcm_offset += _pre_skip as libc::c_long;
     if (pcm_start
         > (2 as libc::c_int as libc::c_long
             * (((1 as libc::c_int as crate::config_types_h::ogg_int64_t) << 62 as libc::c_int)
@@ -3857,7 +3857,7 @@ unsafe extern "C" fn op_pcm_seek_page(
     let mut best_gp: crate::config_types_h::ogg_int64_t = 0;
     let mut diff: crate::config_types_h::ogg_int64_t = 0;
     let mut serialno: crate::config_types_h::ogg_uint32_t = 0;
-    let mut pre_skip: crate::opus_types_h::opus_int32 = 0;
+    let mut _pre_skip: crate::opus_types_h::opus_int32 = 0;
     let mut begin: libc::c_longlong = 0;
     let mut end: libc::c_longlong = 0;
     let mut boundary: libc::c_longlong = 0;
@@ -3897,7 +3897,7 @@ unsafe extern "C" fn op_pcm_seek_page(
         _target_gp = pcm_start
     }
     /*Special case seeking to the start of the link.*/
-    pre_skip = (*link).head.pre_skip as crate::opus_types_h::opus_int32;
+    _pre_skip = (*link).head.pre_skip as crate::opus_types_h::opus_int32;
     if op_granpos_cmp(_target_gp, pcm_pre_skip) < 0 as libc::c_int {
         boundary = begin;
         end = boundary
@@ -4328,8 +4328,8 @@ pub unsafe extern "C" fn op_pcm_seek(
         let mut gp: crate::config_types_h::ogg_int64_t = 0;
         gp = (*_of).prev_packet_gp;
         if (gp != -(1 as libc::c_int) as libc::c_long) as libc::c_int as libc::c_long != 0 {
-            let mut nbuffered: libc::c_int = 0;
-            nbuffered = if (*_of).od_buffer_size - (*_of).od_buffer_pos > 0 as libc::c_int {
+            let mut _nbuffered: libc::c_int = 0;
+            _nbuffered = if (*_of).od_buffer_size - (*_of).od_buffer_pos > 0 as libc::c_int {
                 ((*_of).od_buffer_size) - (*_of).od_buffer_pos
             } else {
                 0 as libc::c_int
@@ -4486,7 +4486,7 @@ pub unsafe extern "C" fn op_pcm_tell(
     mut _of: *const crate::internal_h::OggOpusFile,
 ) -> crate::config_types_h::ogg_int64_t {
     let mut gp: crate::config_types_h::ogg_int64_t = 0;
-    let mut nbuffered: libc::c_int = 0;
+    let mut _nbuffered: libc::c_int = 0;
     let mut li: libc::c_int = 0;
     if ((*_of).ready_state < 2 as libc::c_int) as libc::c_int as libc::c_long != 0 {
         return -(131 as libc::c_int) as crate::config_types_h::ogg_int64_t;
@@ -4495,7 +4495,7 @@ pub unsafe extern "C" fn op_pcm_tell(
     if gp == -(1 as libc::c_int) as libc::c_long {
         return 0 as libc::c_int as crate::config_types_h::ogg_int64_t;
     }
-    nbuffered = if (*_of).od_buffer_size - (*_of).od_buffer_pos > 0 as libc::c_int {
+    _nbuffered = if (*_of).od_buffer_size - (*_of).od_buffer_pos > 0 as libc::c_int {
         ((*_of).od_buffer_size) - (*_of).od_buffer_pos
     } else {
         0 as libc::c_int

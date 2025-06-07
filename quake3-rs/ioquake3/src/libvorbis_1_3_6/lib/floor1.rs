@@ -961,7 +961,7 @@ unsafe extern "C" fn fit_line(
     let mut xb: libc::c_double = 0 as libc::c_int as libc::c_double;
     let mut yb: libc::c_double = 0 as libc::c_int as libc::c_double;
     let mut x2b: libc::c_double = 0 as libc::c_int as libc::c_double;
-    let mut y2b: libc::c_double = 0 as libc::c_int as libc::c_double;
+    let mut _y2b: libc::c_double = 0 as libc::c_int as libc::c_double;
     let mut xyb: libc::c_double = 0 as libc::c_int as libc::c_double;
     let mut bn: libc::c_double = 0 as libc::c_int as libc::c_double;
     let mut i: libc::c_int = 0;
@@ -981,7 +981,7 @@ unsafe extern "C" fn fit_line(
             + (*a.offset(i as isize)).ya as libc::c_double * weight;
         x2b += (*a.offset(i as isize)).x2b as libc::c_double
             + (*a.offset(i as isize)).x2a as libc::c_double * weight;
-        y2b += (*a.offset(i as isize)).y2b as libc::c_double
+        _y2b += (*a.offset(i as isize)).y2b as libc::c_double
             + (*a.offset(i as isize)).y2a as libc::c_double * weight;
         xyb += (*a.offset(i as isize)).xyb as libc::c_double
             + (*a.offset(i as isize)).xya as libc::c_double * weight;
@@ -993,7 +993,7 @@ unsafe extern "C" fn fit_line(
         xb += x0 as libc::c_double;
         yb += *y0 as libc::c_double;
         x2b += (x0 * x0) as libc::c_double;
-        y2b += (*y0 * *y0) as libc::c_double;
+        _y2b += (*y0 * *y0) as libc::c_double;
         xyb += (*y0 * x0) as libc::c_double;
         bn += 1.
     }
@@ -1001,7 +1001,7 @@ unsafe extern "C" fn fit_line(
         xb += x1 as libc::c_double;
         yb += *y1 as libc::c_double;
         x2b += (x1 * x1) as libc::c_double;
-        y2b += (*y1 * *y1) as libc::c_double;
+        _y2b += (*y1 * *y1) as libc::c_double;
         xyb += (*y1 * x1) as libc::c_double;
         bn += 1.
     }

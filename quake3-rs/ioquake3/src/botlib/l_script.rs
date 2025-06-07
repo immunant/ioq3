@@ -984,7 +984,7 @@ pub unsafe extern "C" fn PS_ReadEscapeCharacter(
 ) -> libc::c_int {
     let mut c: libc::c_int = 0;
     let mut val: libc::c_int = 0;
-    let mut i: libc::c_int = 0;
+    let mut _i: libc::c_int = 0;
     //step over the leading '\\'
     (*script).script_p = (*script).script_p.offset(1);
     //determine the escape character
@@ -1005,7 +1005,7 @@ pub unsafe extern "C" fn PS_ReadEscapeCharacter(
         63 => c = '?' as i32,
         120 => {
             (*script).script_p = (*script).script_p.offset(1); //end case
-            i = 0 as libc::c_int; //end for
+            _i = 0 as libc::c_int; //end for
             val = 0 as libc::c_int; //end if
             loop {
                 c = *(*script).script_p as libc::c_int;
@@ -1020,7 +1020,7 @@ pub unsafe extern "C" fn PS_ReadEscapeCharacter(
                     c = c - 'a' as i32 + 10 as libc::c_int
                 }
                 val = (val << 4 as libc::c_int) + c;
-                i += 1;
+                _i += 1;
                 (*script).script_p = (*script).script_p.offset(1)
             }
             (*script).script_p = (*script).script_p.offset(-1);
@@ -1045,7 +1045,7 @@ pub unsafe extern "C" fn PS_ReadEscapeCharacter(
                         as *mut libc::c_char,
                 ); //end for
             } //end if
-            i = 0 as libc::c_int;
+            _i = 0 as libc::c_int;
             val = 0 as libc::c_int;
             loop {
                 c = *(*script).script_p as libc::c_int;
@@ -1054,7 +1054,7 @@ pub unsafe extern "C" fn PS_ReadEscapeCharacter(
                 }
                 c = c - '0' as i32;
                 val = val * 10 as libc::c_int + c;
-                i += 1;
+                _i += 1;
                 (*script).script_p = (*script).script_p.offset(1)
             }
             (*script).script_p = (*script).script_p.offset(-1);

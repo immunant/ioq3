@@ -9583,7 +9583,6 @@ pub mod stdlib {
 
     pub type __socklen_t = libc::c_uint;
 }
-#[macro_use]
 extern crate c2rust_asm_casts;
 extern crate libc;
 
