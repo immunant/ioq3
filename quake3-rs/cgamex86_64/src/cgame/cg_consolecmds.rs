@@ -300,7 +300,7 @@ unsafe extern "C" fn CG_StartOrbit_f() {
     };
 }
 
-static mut commands: [consoleCommand_t; 21] = unsafe {
+static mut commands: [consoleCommand_t; 21] = {
     [
         {
             let mut init = consoleCommand_t {
