@@ -2415,7 +2415,6 @@ pub unsafe extern "C" fn Hunk_SmallLog() {
     let mut block2: *mut hunkblock_t = 0 as *mut hunkblock_t;
     let mut buf: [libc::c_char; 4096] = [0; 4096];
     let mut size: libc::c_int = 0;
-    let mut locsize: libc::c_int = 0;
     let mut numBlocks: libc::c_int = 0;
     if logfile == 0 || crate::src::qcommon::files::FS_Initialized() as u64 == 0 {
         return;
@@ -2442,7 +2441,6 @@ pub unsafe extern "C" fn Hunk_SmallLog() {
     block = hunkblocks;
     while !block.is_null() {
         if !((*block).printed != 0) {
-            locsize = (*block).size;
             block2 = (*block).next;
             while !block2.is_null() {
                 if !((*block).line != (*block2).line) {
@@ -2450,7 +2448,6 @@ pub unsafe extern "C" fn Hunk_SmallLog() {
                         != 0)
                     {
                         size += (*block2).size;
-                        locsize += (*block2).size;
                         (*block2).printed = crate::src::qcommon::q_shared::qtrue as libc::c_int
                             as crate::src::qcommon::q_shared::byte
                     }

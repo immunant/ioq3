@@ -2279,10 +2279,8 @@ Controls_InitCvars
 */
 
 unsafe extern "C" fn Controls_InitCvars() {
-    let mut i: libc::c_int = 0;
     let mut cvarptr: *mut configcvar_t = 0 as *mut configcvar_t;
     cvarptr = g_configcvars.as_mut_ptr();
-    i = 0 as libc::c_int;
     while !(*cvarptr).name.is_null() {
         // get current value
         (*cvarptr).value = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue((*cvarptr).name);
@@ -2292,7 +2290,6 @@ unsafe extern "C" fn Controls_InitCvars() {
             crate::src::ui::ui_syscalls::trap_Cvar_VariableValue((*cvarptr).name);
         // restore current value
         crate::src::ui::ui_syscalls::trap_Cvar_SetValue((*cvarptr).name, (*cvarptr).value);
-        i += 1;
         cvarptr = cvarptr.offset(1)
     }
 }
@@ -2304,9 +2301,7 @@ Controls_GetCvarDefault
 
 unsafe extern "C" fn Controls_GetCvarDefault(mut name: *mut libc::c_char) -> libc::c_float {
     let mut cvarptr: *mut configcvar_t = 0 as *mut configcvar_t;
-    let mut i: libc::c_int = 0;
     cvarptr = g_configcvars.as_mut_ptr();
-    i = 0 as libc::c_int;
     loop {
         if (*cvarptr).name.is_null() {
             return 0 as libc::c_int as libc::c_float;
@@ -2314,7 +2309,6 @@ unsafe extern "C" fn Controls_GetCvarDefault(mut name: *mut libc::c_char) -> lib
         if ::libc::strcmp((*cvarptr).name, name) == 0 {
             break;
         }
-        i += 1;
         cvarptr = cvarptr.offset(1)
     }
     return (*cvarptr).defaultvalue;
@@ -2327,9 +2321,7 @@ Controls_GetCvarValue
 
 unsafe extern "C" fn Controls_GetCvarValue(mut name: *mut libc::c_char) -> libc::c_float {
     let mut cvarptr: *mut configcvar_t = 0 as *mut configcvar_t;
-    let mut i: libc::c_int = 0;
     cvarptr = g_configcvars.as_mut_ptr();
-    i = 0 as libc::c_int;
     loop {
         if (*cvarptr).name.is_null() {
             return 0 as libc::c_int as libc::c_float;
@@ -2337,7 +2329,6 @@ unsafe extern "C" fn Controls_GetCvarValue(mut name: *mut libc::c_char) -> libc:
         if ::libc::strcmp((*cvarptr).name, name) == 0 {
             break;
         }
-        i += 1;
         cvarptr = cvarptr.offset(1)
     }
     return (*cvarptr).value;
@@ -2785,18 +2776,15 @@ Controls_GetConfig
 */
 
 unsafe extern "C" fn Controls_GetConfig() {
-    let mut i: libc::c_int = 0;
     let mut twokeys: [libc::c_int; 2] = [0; 2];
     let mut bindptr: *mut bind_t = 0 as *mut bind_t;
     // put the bindings into a local store
     bindptr = g_bindings.as_mut_ptr();
     // iterate each command, get its numeric binding
-    i = 0 as libc::c_int;
     while !(*bindptr).label.is_null() {
         Controls_GetKeyAssignment((*bindptr).command, twokeys.as_mut_ptr());
         (*bindptr).bind1 = twokeys[0 as libc::c_int as usize];
         (*bindptr).bind2 = twokeys[1 as libc::c_int as usize];
-        i += 1;
         bindptr = bindptr.offset(1)
     }
     s_controls.invertmouse.curvalue = (Controls_GetCvarValue(
@@ -2859,12 +2847,10 @@ Controls_SetConfig
 */
 
 unsafe extern "C" fn Controls_SetConfig() {
-    let mut i: libc::c_int = 0;
     let mut bindptr: *mut bind_t = 0 as *mut bind_t;
     // set the bindings from the local store
     bindptr = g_bindings.as_mut_ptr();
     // iterate each command, get its numeric binding
-    i = 0 as libc::c_int;
     while !(*bindptr).label.is_null() {
         if (*bindptr).bind1 != -(1 as libc::c_int) {
             crate::src::ui::ui_syscalls::trap_Key_SetBinding((*bindptr).bind1, (*bindptr).command);
@@ -2875,7 +2861,6 @@ unsafe extern "C" fn Controls_SetConfig() {
                 );
             }
         }
-        i += 1;
         bindptr = bindptr.offset(1)
     }
     if s_controls.invertmouse.curvalue != 0 {
@@ -2933,16 +2918,13 @@ Controls_SetDefaults
 */
 
 unsafe extern "C" fn Controls_SetDefaults() {
-    let mut i: libc::c_int = 0;
     let mut bindptr: *mut bind_t = 0 as *mut bind_t;
     // set the bindings from the local store
     bindptr = g_bindings.as_mut_ptr();
     // iterate each command, set its default binding
-    i = 0 as libc::c_int;
     while !(*bindptr).label.is_null() {
         (*bindptr).bind1 = (*bindptr).defaultbind1;
         (*bindptr).bind2 = (*bindptr).defaultbind2;
-        i += 1;
         bindptr = bindptr.offset(1)
     }
     s_controls.invertmouse.curvalue = (Controls_GetCvarDefault(

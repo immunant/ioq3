@@ -1525,11 +1525,10 @@ pub unsafe extern "C" fn Q_isanumber(
     mut s: *const libc::c_char,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut d: libc::c_double = 0.;
     if *s as libc::c_int == '\u{0}' as i32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    d = ::libc::strtod(s, &mut p);
+    ::libc::strtod(s, &mut p);
     return (*p as libc::c_int == '\u{0}' as i32) as libc::c_int
         as crate::src::qcommon::q_shared::qboolean;
 }

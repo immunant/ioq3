@@ -173,25 +173,24 @@ send "\b \b"
 
 unsafe extern "C" fn CON_Back() {
     let mut key: libc::c_char = 0;
-    let mut size: crate::stddef_h::size_t = 0;
     key = '\u{8}' as i32 as libc::c_char;
-    size = crate::stdlib::write(
+    crate::stdlib::write(
         1 as libc::c_int,
         &mut key as *mut libc::c_char as *const libc::c_void,
         1 as libc::c_int as crate::stddef_h::size_t,
-    ) as crate::stddef_h::size_t;
+    );
     key = ' ' as i32 as libc::c_char;
-    size = crate::stdlib::write(
+    crate::stdlib::write(
         1 as libc::c_int,
         &mut key as *mut libc::c_char as *const libc::c_void,
         1 as libc::c_int as crate::stddef_h::size_t,
-    ) as crate::stddef_h::size_t;
+    );
     key = '\u{8}' as i32 as libc::c_char;
-    size = crate::stdlib::write(
+    crate::stdlib::write(
         1 as libc::c_int,
         &mut key as *mut libc::c_char as *const libc::c_void,
         1 as libc::c_int as crate::stddef_h::size_t,
-    ) as crate::stddef_h::size_t;
+    );
 }
 /*
 ==================
@@ -239,20 +238,19 @@ unsafe extern "C" fn CON_Show() {
         let mut i: libc::c_int = 0;
         ttycon_hide -= 1;
         if ttycon_hide == 0 as libc::c_int {
-            let mut size: crate::stddef_h::size_t = 0;
-            size = crate::stdlib::write(
+            crate::stdlib::write(
                 1 as libc::c_int,
                 b"tty]\x00" as *const u8 as *const libc::c_char as *const libc::c_void,
                 crate::stdlib::strlen(b"tty]\x00" as *const u8 as *const libc::c_char),
-            ) as crate::stddef_h::size_t;
+            );
             if TTY_con.cursor != 0 {
                 i = 0 as libc::c_int;
                 while i < TTY_con.cursor {
-                    size = crate::stdlib::write(
+                    crate::stdlib::write(
                         1 as libc::c_int,
                         TTY_con.buffer.as_mut_ptr().offset(i as isize) as *const libc::c_void,
                         1 as libc::c_int as crate::stddef_h::size_t,
-                    ) as crate::stddef_h::size_t;
+                    );
                     i += 1
                 }
             }
@@ -458,7 +456,6 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
     let mut avail: libc::c_int = 0;
     let mut key: libc::c_char = 0;
     let mut history: *mut crate::qcommon_h::field_t = 0 as *mut crate::qcommon_h::field_t;
-    let mut size: crate::stddef_h::size_t = 0;
     if ttycon_on as u64 != 0 {
         avail = crate::stdlib::read(
             0 as libc::c_int,
@@ -624,11 +621,11 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             TTY_con.buffer[TTY_con.cursor as usize] = key; // next char will always be '\0'
             TTY_con.cursor += 1;
             // print the current line (this is differential)
-            size = crate::stdlib::write(
+            crate::stdlib::write(
                 1 as libc::c_int,
                 &mut key as *mut libc::c_char as *const libc::c_void,
                 1 as libc::c_int as crate::stddef_h::size_t,
-            ) as crate::stddef_h::size_t
+            );
         } // stdin
         return 0 as *mut libc::c_char;
     } else {

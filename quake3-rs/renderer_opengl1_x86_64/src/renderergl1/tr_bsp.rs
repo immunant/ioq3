@@ -688,7 +688,6 @@ unsafe extern "C" fn R_LoadLightmaps(mut l: *mut crate::qfiles_h::lump_t) {
     let mut i: libc::c_int = 0;
     let mut j: libc::c_int = 0;
     let mut maxIntensity: libc::c_float = 0 as libc::c_int as libc::c_float;
-    let mut sumIntensity: libc::c_double = 0 as libc::c_int as libc::c_double;
     len = (*l).filelen;
     if len == 0 {
         return;
@@ -770,7 +769,6 @@ unsafe extern "C" fn R_LoadLightmaps(mut l: *mut crate::qfiles_h::lump_t) {
                         as crate::src::qcommon::q_shared::byte;
                 image[(j * 4 as libc::c_int + 3 as libc::c_int) as usize] =
                     255 as libc::c_int as crate::src::qcommon::q_shared::byte;
-                sumIntensity += intensity as libc::c_double;
                 j += 1
             }
         } else {
