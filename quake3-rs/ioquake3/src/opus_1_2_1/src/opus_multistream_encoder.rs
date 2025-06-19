@@ -699,7 +699,7 @@ pub unsafe extern "C" fn surround_analysis(
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as libc::c_int as libc::c_long
-                        * in_0.wrapping_offset_from(mem.offset((c * overlap) as isize))
+                        * in_0.offset_from(mem.offset((c * overlap) as isize))
                             as libc::c_long) as libc::c_ulong,
                 ),
         );
@@ -858,7 +858,7 @@ pub unsafe extern "C" fn surround_analysis(
                     (0 as libc::c_int as libc::c_long
                         * mem
                             .offset((c * overlap) as isize)
-                            .wrapping_offset_from(in_0.offset(frame_size as isize))
+                            .offset_from(in_0.offset(frame_size as isize))
                             as libc::c_long) as libc::c_ulong,
                 ),
         );
@@ -1426,7 +1426,7 @@ unsafe extern "C" fn rate_allocation(
         4029 as libc::c_int,
         (&mut Fs as *mut crate::opus_types_h::opus_int32).offset(
             (&mut Fs as *mut crate::opus_types_h::opus_int32)
-                .wrapping_offset_from(&mut Fs as *mut crate::opus_types_h::opus_int32)
+                .offset_from(&mut Fs as *mut crate::opus_types_h::opus_int32)
                 as libc::c_long as isize,
         ),
     );
@@ -1494,7 +1494,7 @@ unsafe extern "C" fn opus_multistream_encode_native(
         4029 as libc::c_int,
         (&mut Fs as *mut crate::opus_types_h::opus_int32).offset(
             (&mut Fs as *mut crate::opus_types_h::opus_int32)
-                .wrapping_offset_from(&mut Fs as *mut crate::opus_types_h::opus_int32)
+                .offset_from(&mut Fs as *mut crate::opus_types_h::opus_int32)
                 as libc::c_long as isize,
         ),
     );
@@ -1503,7 +1503,7 @@ unsafe extern "C" fn opus_multistream_encode_native(
         4007 as libc::c_int,
         (&mut vbr as *mut crate::opus_types_h::opus_int32).offset(
             (&mut vbr as *mut crate::opus_types_h::opus_int32)
-                .wrapping_offset_from(&mut vbr as *mut crate::opus_types_h::opus_int32)
+                .offset_from(&mut vbr as *mut crate::opus_types_h::opus_int32)
                 as libc::c_long as isize,
         ),
     );
@@ -1512,7 +1512,7 @@ unsafe extern "C" fn opus_multistream_encode_native(
         10015 as libc::c_int,
         (&mut celt_mode as *mut *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode).offset(
             (&mut celt_mode as *mut *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode)
-                .wrapping_offset_from(
+                .offset_from(
                     &mut celt_mode
                         as *mut *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
                 ) as libc::c_long as isize,
@@ -1776,7 +1776,7 @@ unsafe extern "C" fn opus_multistream_encode_native(
                 bandLogE.as_mut_ptr().offset(
                     bandLogE
                         .as_mut_ptr()
-                        .wrapping_offset_from(bandLogE.as_mut_ptr())
+                        .offset_from(bandLogE.as_mut_ptr())
                         as libc::c_long as isize,
                 ),
             );

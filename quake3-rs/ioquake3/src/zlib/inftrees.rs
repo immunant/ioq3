@@ -475,7 +475,7 @@ pub unsafe extern "C" fn inflate_table(
             (*(*table).offset(low as isize)).op = curr as libc::c_uchar;
             (*(*table).offset(low as isize)).bits = root as libc::c_uchar;
             (*(*table).offset(low as isize)).val =
-                next.wrapping_offset_from(*table) as libc::c_long as libc::c_ushort
+                next.offset_from(*table) as libc::c_long as libc::c_ushort
         }
     }
     /*

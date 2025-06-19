@@ -1123,7 +1123,7 @@ unsafe extern "C" fn tf_analysis(
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as libc::c_int as libc::c_long
-                        * tmp.wrapping_offset_from(&mut *X.offset(
+                        * tmp.offset_from(&mut *X.offset(
                             (tf_chan * N0
                                 + ((*(*m).eBands.offset(i as isize) as libc::c_int) << LM))
                                 as isize,
@@ -1152,7 +1152,7 @@ unsafe extern "C" fn tf_analysis(
                                                                                          as
                                                                                          libc::c_long
                                                                                          *
-                                                                                         tmp_1.wrapping_offset_from(tmp)
+                                                                                         tmp_1.offset_from(tmp)
                                                                                              as
                                                                                              libc::c_long)
                                                                                         as
@@ -2072,7 +2072,7 @@ unsafe extern "C" fn run_prefilter(
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_sig>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as libc::c_int as libc::c_long
-                        * pre[c as usize].wrapping_offset_from(
+                        * pre[c as usize].offset_from(
                             prefilter_mem.offset((c * 1024 as libc::c_int) as isize),
                         ) as libc::c_long) as libc::c_ulong,
                 ),
@@ -2087,7 +2087,7 @@ unsafe extern "C" fn run_prefilter(
                     (0 as libc::c_int as libc::c_long
                         * pre[c as usize]
                             .offset(1024 as libc::c_int as isize)
-                            .wrapping_offset_from(
+                            .offset_from(
                                 in_0.offset((c * (N + overlap)) as isize)
                                     .offset(overlap as isize),
                             ) as libc::c_long) as libc::c_ulong,
@@ -2228,7 +2228,7 @@ unsafe extern "C" fn run_prefilter(
                     (0 as libc::c_int as libc::c_long
                         * in_0
                             .offset((c * (N + overlap)) as isize)
-                            .wrapping_offset_from(
+                            .offset_from(
                                 (*st).in_mem.as_mut_ptr().offset((c * overlap) as isize),
                             ) as libc::c_long) as libc::c_ulong,
                 ),
@@ -2279,7 +2279,7 @@ unsafe extern "C" fn run_prefilter(
                             .in_mem
                             .as_mut_ptr()
                             .offset((c * overlap) as isize)
-                            .wrapping_offset_from(
+                            .offset_from(
                                 in_0.offset((c * (N + overlap)) as isize).offset(N as isize),
                             ) as libc::c_long) as libc::c_ulong,
                 ),
@@ -2294,7 +2294,7 @@ unsafe extern "C" fn run_prefilter(
                         (0 as libc::c_int as libc::c_long
                             * prefilter_mem
                                 .offset((c * 1024 as libc::c_int) as isize)
-                                .wrapping_offset_from(pre[c as usize].offset(N as isize))
+                                .offset_from(pre[c as usize].offset(N as isize))
                                 as libc::c_long) as libc::c_ulong,
                     ),
             );
@@ -2310,7 +2310,7 @@ unsafe extern "C" fn run_prefilter(
                         (0 as libc::c_int as libc::c_long
                             * prefilter_mem
                                 .offset((c * 1024 as libc::c_int) as isize)
-                                .wrapping_offset_from(
+                                .offset_from(
                                     prefilter_mem
                                         .offset((c * 1024 as libc::c_int) as isize)
                                         .offset(N as isize),
@@ -2331,7 +2331,7 @@ unsafe extern "C" fn run_prefilter(
                                 .offset((c * 1024 as libc::c_int) as isize)
                                 .offset(1024 as libc::c_int as isize)
                                 .offset(-(N as isize))
-                                .wrapping_offset_from(
+                                .offset_from(
                                     pre[c as usize].offset(1024 as libc::c_int as isize),
                                 ) as libc::c_long) as libc::c_ulong,
                     ),
@@ -3283,7 +3283,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as libc::c_int as libc::c_long
-                        * bandLogE2.wrapping_offset_from(bandLogE) as libc::c_long)
+                        * bandLogE2.offset_from(bandLogE) as libc::c_long)
                         as libc::c_ulong,
                 ),
         );
@@ -4128,7 +4128,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
                     (0 as libc::c_int as libc::c_long
                         * (&mut *oldBandE.offset(nbEBands as isize)
                             as *mut crate::arch_h::opus_val16)
-                            .wrapping_offset_from(oldBandE)
+                            .offset_from(oldBandE)
                             as libc::c_long) as libc::c_ulong,
                 ),
         );
@@ -4141,7 +4141,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as libc::c_int as libc::c_long
-                        * oldLogE2.wrapping_offset_from(oldLogE) as libc::c_long)
+                        * oldLogE2.offset_from(oldLogE) as libc::c_long)
                         as libc::c_ulong,
                 ),
         );
@@ -4152,7 +4152,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as libc::c_int as libc::c_long
-                        * oldLogE.wrapping_offset_from(oldBandE) as libc::c_long)
+                        * oldLogE.offset_from(oldBandE) as libc::c_long)
                         as libc::c_ulong,
                 ),
         );
@@ -4363,7 +4363,7 @@ pub unsafe extern "C" fn opus_custom_encoder_ctl(
                 0 as libc::c_int,
                 ((opus_custom_encoder_get_size((*st).mode, (*st).channels) as libc::c_long
                     - (&mut (*st).rng as *mut crate::opus_types_h::opus_uint32 as *mut libc::c_char)
-                        .wrapping_offset_from(st as *mut libc::c_char)
+                        .offset_from(st as *mut libc::c_char)
                         as libc::c_long) as libc::c_ulong)
                     .wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
             );
@@ -4402,7 +4402,7 @@ pub unsafe extern "C" fn opus_custom_encoder_ctl(
                         .wrapping_add(
                             (0 as libc::c_int as libc::c_long
                                 * (&mut (*st).analysis as *mut crate::celt_h::AnalysisInfo)
-                                    .wrapping_offset_from(info)
+                                    .offset_from(info)
                                     as libc::c_long) as libc::c_ulong,
                         ),
                 );
@@ -4423,7 +4423,7 @@ pub unsafe extern "C" fn opus_custom_encoder_ctl(
                         .wrapping_add(
                             (0 as libc::c_int as libc::c_long
                                 * (&mut (*st).silk_info as *mut crate::celt_h::SILKInfo)
-                                    .wrapping_offset_from(info_0)
+                                    .offset_from(info_0)
                                     as libc::c_long) as libc::c_ulong,
                         ),
                 );

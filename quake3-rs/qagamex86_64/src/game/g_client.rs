@@ -982,7 +982,7 @@ pub unsafe extern "C" fn CopyToBodyQue(mut ent: *mut crate::g_local_h::gentity_t
     (*body).s.eFlags = 0x1 as libc::c_int; // don't bounce
     (*body).s.powerups = 0 as libc::c_int;
     (*body).s.loopSound = 0 as libc::c_int;
-    (*body).s.number = body.wrapping_offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
+    (*body).s.number = body.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
         as libc::c_long as libc::c_int;
     (*body).timestamp = crate::src::game::g_main::level.time;
     (*body).physicsObject = crate::src::qcommon::q_shared::qtrue;
@@ -1873,7 +1873,7 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut crate::g_local_h::gentity_t) 
     let mut accuracy_shots: libc::c_int = 0;
     let mut eventSequence: libc::c_int = 0;
     let mut userinfo: [libc::c_char; 1024] = [0; 1024];
-    index = ent.wrapping_offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
+    index = ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
         as libc::c_long as libc::c_int;
     client = (*ent).client;
     spawn_origin[2 as libc::c_int as usize] =
@@ -2041,7 +2041,7 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut crate::g_local_h::gentity_t) 
     // the respawned flag will be cleared after the attack and jump keys come up
     (*client).ps.pm_flags |= 512 as libc::c_int;
     crate::src::game::g_syscalls::trap_GetUsercmd(
-        client.wrapping_offset_from(crate::src::game::g_main::level.clients) as libc::c_long
+        client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long
             as libc::c_int,
         &mut (*(*ent).client).pers.cmd as *mut _ as *mut crate::src::qcommon::q_shared::usercmd_s,
     );
@@ -2106,7 +2106,7 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut crate::g_local_h::gentity_t) 
     (*client).ps.commandTime = crate::src::game::g_main::level.time - 100 as libc::c_int;
     (*(*ent).client).pers.cmd.serverTime = crate::src::game::g_main::level.time;
     crate::src::game::g_active::ClientThink(
-        ent.wrapping_offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
             as libc::c_int,
     );
     // run the presend to set anything else, follow spectators wait

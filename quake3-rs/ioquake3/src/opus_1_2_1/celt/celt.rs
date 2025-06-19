@@ -140,7 +140,7 @@ pub unsafe extern "C" fn comb_filter(
                     )
                     .wrapping_add(
                         (0 as libc::c_int as libc::c_long
-                            * y.wrapping_offset_from(x) as libc::c_long)
+                            * y.offset_from(x) as libc::c_long)
                             as libc::c_ulong,
                     ),
             );
@@ -211,7 +211,7 @@ pub unsafe extern "C" fn comb_filter(
                     .wrapping_add(
                         (0 as libc::c_int as libc::c_long
                             * y.offset(overlap as isize)
-                                .wrapping_offset_from(x.offset(overlap as isize))
+                                .offset_from(x.offset(overlap as isize))
                                 as libc::c_long) as libc::c_ulong,
                     ),
             );

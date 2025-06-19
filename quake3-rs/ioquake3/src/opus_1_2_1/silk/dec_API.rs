@@ -622,7 +622,7 @@ pub unsafe extern "C" fn silk_Decode(
                 )
                 .wrapping_add(
                     (0 as libc::c_int as libc::c_long
-                        * samplesOut1_tmp_storage2.wrapping_offset_from(samplesOut) as libc::c_long)
+                        * samplesOut1_tmp_storage2.offset_from(samplesOut) as libc::c_long)
                         as libc::c_ulong,
                 ),
         );

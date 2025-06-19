@@ -445,7 +445,7 @@ unsafe extern "C" fn SpawnModelOnVictoryPad(
     (*body).s.eFlags = 0 as libc::c_int;
     (*body).s.powerups = 0 as libc::c_int;
     (*body).s.loopSound = 0 as libc::c_int;
-    (*body).s.number = body.wrapping_offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
+    (*body).s.number = body.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
         as libc::c_long as libc::c_int;
     (*body).timestamp = crate::src::game::g_main::level.time;
     (*body).physicsObject = crate::src::qcommon::q_shared::qtrue;
@@ -771,7 +771,7 @@ unsafe extern "C" fn SpawnPodium() -> *mut crate::g_local_h::gentity_t {
     (*podium).classname = b"podium\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*podium).s.eType = crate::bg_public_h::ET_GENERAL as libc::c_int;
     (*podium).s.number = podium
-        .wrapping_offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
+        .offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
         as libc::c_long as libc::c_int;
     (*podium).clipmask = 1 as libc::c_int;
     (*podium).r.contents = 1 as libc::c_int;

@@ -1424,7 +1424,7 @@ pub unsafe extern "C" fn VM_LogSyscalls(mut args: *mut libc::c_int) {
         f,
         b"%i: %p (%i) = %i %i %i %i\n\x00" as *const u8 as *const libc::c_char,
         callnum,
-        args.wrapping_offset_from((*currentVM).dataBase as *mut libc::c_int) as libc::c_long
+        args.offset_from((*currentVM).dataBase as *mut libc::c_int) as libc::c_long
             as *mut libc::c_void,
         *args.offset(0 as libc::c_int as isize),
         *args.offset(1 as libc::c_int as isize),

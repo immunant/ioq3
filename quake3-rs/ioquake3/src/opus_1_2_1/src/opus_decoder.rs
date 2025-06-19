@@ -904,7 +904,7 @@ unsafe extern "C" fn opus_decode_frame(
             celt_dec,
             4031 as libc::c_int,
             (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32).offset(
-                (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32).wrapping_offset_from(
+                (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32).offset_from(
                     &mut redundant_rng as *mut crate::opus_types_h::opus_uint32,
                 ) as libc::c_long as isize,
             ),
@@ -992,7 +992,7 @@ unsafe extern "C" fn opus_decode_frame(
         10015 as libc::c_int,
         (&mut celt_mode as *mut *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode).offset(
             (&mut celt_mode as *mut *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode)
-                .wrapping_offset_from(
+                .offset_from(
                     &mut celt_mode
                         as *mut *const crate::src::opus_1_2_1::celt::modes::OpusCustomMode,
                 ) as libc::c_long as isize,
@@ -1024,7 +1024,7 @@ unsafe extern "C" fn opus_decode_frame(
             celt_dec,
             4031 as libc::c_int,
             (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32).offset(
-                (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32).wrapping_offset_from(
+                (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32).offset_from(
                     &mut redundant_rng as *mut crate::opus_types_h::opus_uint32,
                 ) as libc::c_long as isize,
             ),
@@ -1476,7 +1476,7 @@ pub unsafe extern "C" fn opus_decoder_ctl(
                 (::std::mem::size_of::<OpusDecoder>() as libc::c_ulong)
                     .wrapping_sub(
                         (&mut (*st).stream_channels as *mut libc::c_int as *mut libc::c_char)
-                            .wrapping_offset_from(st as *mut libc::c_char)
+                            .offset_from(st as *mut libc::c_char)
                             as libc::c_long as libc::c_ulong,
                     )
                     .wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
@@ -1513,7 +1513,7 @@ pub unsafe extern "C" fn opus_decoder_ctl(
                         celt_dec,
                         4033 as libc::c_int,
                         value_2
-                            .offset(value_2.wrapping_offset_from(value_2) as libc::c_long as isize),
+                            .offset(value_2.offset_from(value_2) as libc::c_long as isize),
                     );
                 } else {
                     *value_2 = (*st).DecControl.prevPitchLag
@@ -1577,7 +1577,7 @@ pub unsafe extern "C" fn opus_decoder_ctl(
                 crate::src::opus_1_2_1::celt::celt_decoder::opus_custom_decoder_ctl(
                     celt_dec,
                     4047 as libc::c_int,
-                    value_7.offset(value_7.wrapping_offset_from(value_7) as libc::c_long as isize),
+                    value_7.offset(value_7.offset_from(value_7) as libc::c_long as isize),
                 );
                 current_block = 2116367355679836638;
             }

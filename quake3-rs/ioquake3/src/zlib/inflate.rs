@@ -6881,20 +6881,20 @@ pub unsafe extern "C" fn inflateCopy(
         (*copy).lencode = (*copy).codes.as_mut_ptr().offset(
             (*state)
                 .lencode
-                .wrapping_offset_from((*state).codes.as_mut_ptr()) as libc::c_long
+                .offset_from((*state).codes.as_mut_ptr()) as libc::c_long
                 as isize,
         );
         (*copy).distcode = (*copy).codes.as_mut_ptr().offset(
             (*state)
                 .distcode
-                .wrapping_offset_from((*state).codes.as_mut_ptr()) as libc::c_long
+                .offset_from((*state).codes.as_mut_ptr()) as libc::c_long
                 as isize,
         )
     }
     (*copy).next = (*copy).codes.as_mut_ptr().offset(
         (*state)
             .next
-            .wrapping_offset_from((*state).codes.as_mut_ptr()) as libc::c_long as isize,
+            .offset_from((*state).codes.as_mut_ptr()) as libc::c_long as isize,
     );
     if !window.is_null() {
         wsize = (1 as libc::c_uint) << (*state).wbits;

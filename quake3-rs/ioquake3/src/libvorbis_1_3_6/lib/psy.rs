@@ -7991,7 +7991,7 @@ unsafe extern "C" fn noise_normalize(
         j = 0 as libc::c_int;
         while j < count {
             let mut k: libc::c_int =
-                (*sort.offset(j as isize)).wrapping_offset_from(q) as libc::c_long as libc::c_int;
+                (*sort.offset(j as isize)).offset_from(q) as libc::c_long as libc::c_int;
             if acc as libc::c_double >= (*vi).normal_thresh {
                 *out.offset(k as isize) = unitnorm(*r.offset(k as isize)) as libc::c_int;
                 acc -= 1.0f32;

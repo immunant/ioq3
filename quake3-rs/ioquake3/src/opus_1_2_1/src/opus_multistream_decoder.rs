@@ -455,7 +455,7 @@ unsafe extern "C" fn opus_multistream_decode_native(
         4029 as libc::c_int,
         (&mut Fs as *mut crate::opus_types_h::opus_int32).offset(
             (&mut Fs as *mut crate::opus_types_h::opus_int32)
-                .wrapping_offset_from(&mut Fs as *mut crate::opus_types_h::opus_int32)
+                .offset_from(&mut Fs as *mut crate::opus_types_h::opus_int32)
                 as libc::c_long as isize,
         ),
     );

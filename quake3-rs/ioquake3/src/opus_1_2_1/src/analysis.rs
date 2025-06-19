@@ -752,7 +752,7 @@ unsafe extern "C" fn downmix_and_resample(
             (subframe as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as libc::c_int as libc::c_long * y.wrapping_offset_from(tmp) as libc::c_long)
+                    (0 as libc::c_int as libc::c_long * y.offset_from(tmp) as libc::c_long)
                         as libc::c_ulong,
                 ),
         );
@@ -816,7 +816,7 @@ pub unsafe extern "C" fn tonality_analysis_reset(
         (::std::mem::size_of::<crate::src::opus_1_2_1::src::analysis::TonalityAnalysisState>()
             as libc::c_ulong)
             .wrapping_sub(
-                start.wrapping_offset_from(tonal as *mut libc::c_char) as libc::c_long
+                start.offset_from(tonal as *mut libc::c_char) as libc::c_long
                     as libc::c_ulong,
             )
             .wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
@@ -865,7 +865,7 @@ pub unsafe extern "C" fn tonality_get_info(
             .wrapping_add(
                 (0 as libc::c_int as libc::c_long
                     * info_out
-                        .wrapping_offset_from(&mut *(*tonal).info.as_mut_ptr().offset(pos as isize))
+                        .offset_from(&mut *(*tonal).info.as_mut_ptr().offset(pos as isize))
                         as libc::c_long) as libc::c_ulong,
             ),
     );
@@ -1118,7 +1118,7 @@ unsafe extern "C" fn tonality_analysis(
             .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong)
             .wrapping_add(
                 (0 as libc::c_int as libc::c_long
-                    * (*tonal).inmem.as_mut_ptr().wrapping_offset_from(
+                    * (*tonal).inmem.as_mut_ptr().offset_from(
                         (*tonal)
                             .inmem
                             .as_mut_ptr()

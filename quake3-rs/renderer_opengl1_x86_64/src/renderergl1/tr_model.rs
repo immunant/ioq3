@@ -1132,7 +1132,7 @@ unsafe extern "C" fn R_LoadMDR(
     /* The first frame will be put into the first free space after the header */
     frame = mdr.offset(1 as libc::c_int as isize) as *mut crate::qfiles_h::mdrFrame_t;
     (*mdr).ofsFrames = (frame as *mut crate::src::qcommon::q_shared::byte)
-        .wrapping_offset_from(mdr as *mut crate::src::qcommon::q_shared::byte)
+        .offset_from(mdr as *mut crate::src::qcommon::q_shared::byte)
         as libc::c_long as libc::c_int;
     if (*pinmodel).ofsFrames < 0 as libc::c_int {
         let mut cframe: *mut crate::qfiles_h::mdrCompFrame_t =
@@ -1247,7 +1247,7 @@ unsafe extern "C" fn R_LoadMDR(
     // frame should now point to the first free address after all frames.
     lod = frame as *mut crate::qfiles_h::mdrLOD_t;
     (*mdr).ofsLODs = (lod as *mut crate::src::qcommon::q_shared::byte)
-        .wrapping_offset_from(mdr as *mut crate::src::qcommon::q_shared::byte)
+        .offset_from(mdr as *mut crate::src::qcommon::q_shared::byte)
         as libc::c_long as libc::c_int;
     curlod = (pinmodel as *mut crate::src::qcommon::q_shared::byte)
         .offset((*pinmodel).ofsLODs as isize) as *mut crate::qfiles_h::mdrLOD_t;
@@ -1271,7 +1271,7 @@ unsafe extern "C" fn R_LoadMDR(
         // swap all the surfaces
         surf = lod.offset(1 as libc::c_int as isize) as *mut crate::qfiles_h::mdrSurface_t;
         (*lod).ofsSurfaces = (surf as *mut crate::src::qcommon::q_shared::byte)
-            .wrapping_offset_from(lod as *mut crate::src::qcommon::q_shared::byte)
+            .offset_from(lod as *mut crate::src::qcommon::q_shared::byte)
             as libc::c_long as libc::c_int;
         cursurf = (curlod as *mut crate::src::qcommon::q_shared::byte)
             .offset((*curlod).ofsSurfaces as isize)
@@ -1305,7 +1305,7 @@ unsafe extern "C" fn R_LoadMDR(
                 ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as libc::c_int,
             );
             (*surf).ofsHeader = (mdr as *mut crate::src::qcommon::q_shared::byte)
-                .wrapping_offset_from(surf as *mut crate::src::qcommon::q_shared::byte)
+                .offset_from(surf as *mut crate::src::qcommon::q_shared::byte)
                 as libc::c_long as libc::c_int;
             (*surf).numVerts = (*cursurf).numVerts;
             (*surf).numTriangles = (*cursurf).numTriangles;
@@ -1363,7 +1363,7 @@ unsafe extern "C" fn R_LoadMDR(
             // now copy the vertexes.
             v = surf.offset(1 as libc::c_int as isize) as *mut crate::qfiles_h::mdrVertex_t;
             (*surf).ofsVerts = (v as *mut crate::src::qcommon::q_shared::byte)
-                .wrapping_offset_from(surf as *mut crate::src::qcommon::q_shared::byte)
+                .offset_from(surf as *mut crate::src::qcommon::q_shared::byte)
                 as libc::c_long as libc::c_int;
             curv = (cursurf as *mut crate::src::qcommon::q_shared::byte)
                 .offset((*cursurf).ofsVerts as isize)
@@ -1429,7 +1429,7 @@ unsafe extern "C" fn R_LoadMDR(
             // we know the offset to the triangles now:
             tri = v as *mut crate::qfiles_h::mdrTriangle_t;
             (*surf).ofsTriangles = (tri as *mut crate::src::qcommon::q_shared::byte)
-                .wrapping_offset_from(surf as *mut crate::src::qcommon::q_shared::byte)
+                .offset_from(surf as *mut crate::src::qcommon::q_shared::byte)
                 as libc::c_long as libc::c_int;
             curtri = (cursurf as *mut crate::src::qcommon::q_shared::byte)
                 .offset((*cursurf).ofsTriangles as isize)
@@ -1464,7 +1464,7 @@ unsafe extern "C" fn R_LoadMDR(
             }
             // tri now points to the end of the surface.
             (*surf).ofsEnd = (tri as *mut crate::src::qcommon::q_shared::byte)
-                .wrapping_offset_from(surf as *mut crate::src::qcommon::q_shared::byte)
+                .offset_from(surf as *mut crate::src::qcommon::q_shared::byte)
                 as libc::c_long as libc::c_int;
             surf = tri as *mut crate::qfiles_h::mdrSurface_t;
             // find the next surface.
@@ -1475,7 +1475,7 @@ unsafe extern "C" fn R_LoadMDR(
         }
         // surf points to the next lod now.
         (*lod).ofsEnd = (surf as *mut crate::src::qcommon::q_shared::byte)
-            .wrapping_offset_from(lod as *mut crate::src::qcommon::q_shared::byte)
+            .offset_from(lod as *mut crate::src::qcommon::q_shared::byte)
             as libc::c_long as libc::c_int;
         lod = surf as *mut crate::qfiles_h::mdrLOD_t;
         // find the next LOD.
@@ -1486,7 +1486,7 @@ unsafe extern "C" fn R_LoadMDR(
     // lod points to the first tag now, so update the offset too.
     tag = lod as *mut crate::qfiles_h::mdrTag_t;
     (*mdr).ofsTags = (tag as *mut crate::src::qcommon::q_shared::byte)
-        .wrapping_offset_from(mdr as *mut crate::src::qcommon::q_shared::byte)
+        .offset_from(mdr as *mut crate::src::qcommon::q_shared::byte)
         as libc::c_long as libc::c_int;
     curtag = (pinmodel as *mut crate::src::qcommon::q_shared::byte)
         .offset((*pinmodel).ofsTags as isize) as *mut crate::qfiles_h::mdrTag_t;
@@ -1518,7 +1518,7 @@ unsafe extern "C" fn R_LoadMDR(
     }
     // And finally we know the real offset to the end.
     (*mdr).ofsEnd = (tag as *mut crate::src::qcommon::q_shared::byte)
-        .wrapping_offset_from(mdr as *mut crate::src::qcommon::q_shared::byte)
+        .offset_from(mdr as *mut crate::src::qcommon::q_shared::byte)
         as libc::c_long as libc::c_int;
     // phew! we're done.
     return crate::src::qcommon::q_shared::qtrue;

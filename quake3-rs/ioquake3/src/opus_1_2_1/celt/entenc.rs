@@ -419,7 +419,7 @@ pub unsafe extern "C" fn ec_enc_shrink(
                         .buf
                         .offset(_size as isize)
                         .offset(-((*_this).end_offs as isize))
-                        .wrapping_offset_from(
+                        .offset_from(
                             (*_this)
                                 .buf
                                 .offset((*_this).storage as isize)

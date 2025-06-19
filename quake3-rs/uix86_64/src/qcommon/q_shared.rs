@@ -447,11 +447,11 @@ pub unsafe extern "C" fn COM_StripExtension(
         (slash.is_null()) || slash < dot
     } {
         destsize = if (destsize as libc::c_long)
-            < dot.wrapping_offset_from(in_0) as libc::c_long + 1 as libc::c_int as libc::c_long
+            < dot.offset_from(in_0) as libc::c_long + 1 as libc::c_int as libc::c_long
         {
             destsize as libc::c_long
         } else {
-            (dot.wrapping_offset_from(in_0) as libc::c_long) + 1 as libc::c_int as libc::c_long
+            (dot.offset_from(in_0) as libc::c_long) + 1 as libc::c_int as libc::c_long
         } as libc::c_int
     }
     if in_0 == out as *const libc::c_char && destsize > 1 as libc::c_int {
@@ -911,7 +911,7 @@ pub unsafe extern "C" fn COM_Compress(mut data_p: *mut libc::c_char) -> libc::c_
         }
         *out = 0 as libc::c_int as libc::c_char
     }
-    return out.wrapping_offset_from(data_p) as libc::c_long as libc::c_int;
+    return out.offset_from(data_p) as libc::c_long as libc::c_int;
 }
 #[no_mangle]
 pub unsafe extern "C" fn COM_ParseExt(

@@ -4253,7 +4253,7 @@ pub unsafe extern "C" fn FS_ComparePaks(
                         // Find out whether it might have overflowed the buffer and don't add this file to the
                         // list if that is the case.
                         if crate::stdlib::strlen(origpos)
-                            .wrapping_add(origpos.wrapping_offset_from(neededpaks) as libc::c_long
+                            .wrapping_add(origpos.offset_from(neededpaks) as libc::c_long
                                 as libc::c_ulong)
                             >= (len - 1 as libc::c_int) as libc::c_ulong
                         {

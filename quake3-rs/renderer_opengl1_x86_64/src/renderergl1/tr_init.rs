@@ -1265,7 +1265,7 @@ pub unsafe extern "C" fn RB_ReadPixels(
         0x1401 as libc::c_int as crate::stdlib::GLenum,
         bufstart as *mut libc::c_void,
     );
-    *offset = bufstart.wrapping_offset_from(buffer) as libc::c_long as crate::stddef_h::size_t;
+    *offset = bufstart.offset_from(buffer) as libc::c_long as crate::stddef_h::size_t;
     *padlen = padwidth - linelen;
     return buffer;
 }

@@ -1872,7 +1872,7 @@ pub unsafe extern "C" fn Cvar_Register(
     if vmCvar.is_null() {
         return;
     }
-    (*vmCvar).handle = cv.wrapping_offset_from(cvar_indexes.as_mut_ptr()) as libc::c_long
+    (*vmCvar).handle = cv.offset_from(cvar_indexes.as_mut_ptr()) as libc::c_long
         as crate::src::qcommon::q_shared::cvarHandle_t;
     (*vmCvar).modificationCount = -(1 as libc::c_int);
     Cvar_Update(vmCvar);

@@ -439,7 +439,7 @@ unsafe extern "C" fn floor1_look(
     i = 0 as libc::c_int;
     while i < n {
         (*look).forward_index[i as usize] = sortpointer[i as usize]
-            .wrapping_offset_from((*info).postlist.as_mut_ptr())
+            .offset_from((*info).postlist.as_mut_ptr())
             as libc::c_long as libc::c_int;
         i += 1
     }

@@ -254,9 +254,9 @@ pub unsafe extern "C" fn R_LoadPCX(
     }
     if raw
         .b
-        .wrapping_offset_from(pcx as *mut crate::src::qcommon::q_shared::byte)
+        .offset_from(pcx as *mut crate::src::qcommon::q_shared::byte)
         as libc::c_long
-        >= end.wrapping_offset_from(769 as libc::c_int as *mut crate::src::qcommon::q_shared::byte)
+        >= end.offset_from(769 as libc::c_int as *mut crate::src::qcommon::q_shared::byte)
             as libc::c_long
         || *end.offset(-(769 as libc::c_int) as isize) as libc::c_int != 0xc as libc::c_int
     {

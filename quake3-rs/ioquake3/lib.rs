@@ -11,7 +11,7 @@
 #![feature(const_transmute)]
 #![feature(extern_types)]
 #![feature(main)]
-#![feature(ptr_wrapping_offset_from)]
+#![feature(ptr_offset_from)]
 #![feature(register_tool)]
 #![feature(stdsimd)]
 #![register_tool(c2rust)]

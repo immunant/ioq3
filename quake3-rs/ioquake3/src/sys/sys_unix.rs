@@ -13313,7 +13313,7 @@ Sys_AppendToExecBuffer
 unsafe extern "C" fn Sys_AppendToExecBuffer(mut text: *const libc::c_char) {
     let mut size: crate::stddef_h::size_t =
         (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong).wrapping_sub(
-            execBufferPointer.wrapping_offset_from(execBuffer.as_mut_ptr()) as libc::c_long
+            execBufferPointer.offset_from(execBuffer.as_mut_ptr()) as libc::c_long
                 as libc::c_ulong,
         );
     let mut length: libc::c_int =

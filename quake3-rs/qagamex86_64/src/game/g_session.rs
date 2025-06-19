@@ -163,7 +163,7 @@ pub unsafe extern "C" fn G_WriteClientSessionData(mut client: *mut crate::g_loca
     );
     var = crate::src::qcommon::q_shared::va(
         b"session%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        client.wrapping_offset_from(crate::src::game::g_main::level.clients) as libc::c_long
+        client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long
             as libc::c_int,
     );
     crate::src::game::g_syscalls::trap_Cvar_Set(var, s);
@@ -185,7 +185,7 @@ pub unsafe extern "C" fn G_ReadSessionData(mut client: *mut crate::g_local_h::gc
     let mut sessionTeam: libc::c_int = 0;
     var = crate::src::qcommon::q_shared::va(
         b"session%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-        client.wrapping_offset_from(crate::src::game::g_main::level.clients) as libc::c_long
+        client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long
             as libc::c_int,
     );
     crate::src::game::g_syscalls::trap_Cvar_VariableStringBuffer(
@@ -256,7 +256,7 @@ pub unsafe extern "C" fn G_InitSessionData(
         {
             crate::src::game::g_cmds::SetTeam(
                 &mut *crate::src::game::g_main::g_entities.as_mut_ptr().offset(
-                    client.wrapping_offset_from(crate::src::game::g_main::level.clients)
+                    client.offset_from(crate::src::game::g_main::level.clients)
                         as libc::c_long as isize,
                 ) as *mut _ as *mut crate::g_local_h::gentity_s,
                 value,
