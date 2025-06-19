@@ -121,16 +121,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 pub unsafe extern "C" fn CG_TargetCommand_f() {
     let mut targetNum: libc::c_int = 0;
     let mut test: [libc::c_char; 4] = [0; 4];
-    targetNum = crate::src::cgame::cg_main::CG_CrosshairPlayer();
+    targetNum = CG_CrosshairPlayer();
     if targetNum == -(1 as libc::c_int) {
         return;
     }
-    crate::src::cgame::cg_syscalls::trap_Argv(
+    trap_Argv(
         1 as libc::c_int,
         test.as_mut_ptr(),
         4 as libc::c_int,
     );
-    crate::src::cgame::cg_syscalls::trap_SendClientCommand(crate::src::qcommon::q_shared::va(
+    trap_SendClientCommand(va(
         b"gc %i %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         targetNum,
         atoi(test.as_mut_ptr()),
@@ -145,11 +145,11 @@ Keybinding command
 */
 
 unsafe extern "C" fn CG_SizeUp_f() {
-    crate::src::cgame::cg_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"cg_viewsize\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            crate::src::cgame::cg_main::cg_viewsize.integer + 10 as libc::c_int,
+            cg_viewsize.integer + 10 as libc::c_int,
         ),
     );
 }
@@ -162,11 +162,11 @@ Keybinding command
 */
 
 unsafe extern "C" fn CG_SizeDown_f() {
-    crate::src::cgame::cg_syscalls::trap_Cvar_Set(
+    trap_Cvar_Set(
         b"cg_viewsize\x00" as *const u8 as *const libc::c_char,
-        crate::src::qcommon::q_shared::va(
+        va(
             b"%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            crate::src::cgame::cg_main::cg_viewsize.integer - 10 as libc::c_int,
+            cg_viewsize.integer - 10 as libc::c_int,
         ),
     );
 }
@@ -179,42 +179,42 @@ Debugging command to print the current position
 */
 
 unsafe extern "C" fn CG_Viewpos_f() {
-    crate::src::cgame::cg_main::CG_Printf(
+    CG_Printf(
         b"(%i %i %i) : %i\n\x00" as *const u8 as *const libc::c_char,
-        crate::src::cgame::cg_main::cg.refdef.vieworg[0 as libc::c_int as usize] as libc::c_int,
-        crate::src::cgame::cg_main::cg.refdef.vieworg[1 as libc::c_int as usize] as libc::c_int,
-        crate::src::cgame::cg_main::cg.refdef.vieworg[2 as libc::c_int as usize] as libc::c_int,
-        crate::src::cgame::cg_main::cg.refdefViewAngles[1 as libc::c_int as usize] as libc::c_int,
+        cg.refdef.vieworg[0 as libc::c_int as usize] as libc::c_int,
+        cg.refdef.vieworg[1 as libc::c_int as usize] as libc::c_int,
+        cg.refdef.vieworg[2 as libc::c_int as usize] as libc::c_int,
+        cg.refdefViewAngles[1 as libc::c_int as usize] as libc::c_int,
     );
 }
 
 unsafe extern "C" fn CG_ScoresDown_f() {
-    if (crate::src::cgame::cg_main::cg.scoresRequestTime + 2000 as libc::c_int)
-        < crate::src::cgame::cg_main::cg.time
+    if (cg.scoresRequestTime + 2000 as libc::c_int)
+        < cg.time
     {
         // the scores are more than two seconds out of data,
         // so request new ones
-        crate::src::cgame::cg_main::cg.scoresRequestTime = crate::src::cgame::cg_main::cg.time;
-        crate::src::cgame::cg_syscalls::trap_SendClientCommand(
+        cg.scoresRequestTime = cg.time;
+        trap_SendClientCommand(
             b"score\x00" as *const u8 as *const libc::c_char,
         );
         // leave the current scores up if they were already
         // displayed, but if this is the first hit, clear them out
-        if crate::src::cgame::cg_main::cg.showScores as u64 == 0 {
-            crate::src::cgame::cg_main::cg.showScores = crate::src::qcommon::q_shared::qtrue;
-            crate::src::cgame::cg_main::cg.numScores = 0 as libc::c_int
+        if cg.showScores as u64 == 0 {
+            cg.showScores = qtrue;
+            cg.numScores = 0 as libc::c_int
         }
     } else {
         // show the cached contents even if they just pressed if it
         // is within two seconds
-        crate::src::cgame::cg_main::cg.showScores = crate::src::qcommon::q_shared::qtrue
+        cg.showScores = qtrue
     };
 }
 
 unsafe extern "C" fn CG_ScoresUp_f() {
-    if crate::src::cgame::cg_main::cg.showScores as u64 != 0 {
-        crate::src::cgame::cg_main::cg.showScores = crate::src::qcommon::q_shared::qfalse;
-        crate::src::cgame::cg_main::cg.scoreFadeTime = crate::src::cgame::cg_main::cg.time
+    if cg.showScores as u64 != 0 {
+        cg.showScores = qfalse;
+        cg.scoreFadeTime = cg.time
     };
 }
 
@@ -222,38 +222,38 @@ unsafe extern "C" fn CG_TellTarget_f() {
     let mut clientNum: libc::c_int = 0;
     let mut command: [libc::c_char; 128] = [0; 128];
     let mut message: [libc::c_char; 128] = [0; 128];
-    clientNum = crate::src::cgame::cg_main::CG_CrosshairPlayer();
+    clientNum = CG_CrosshairPlayer();
     if clientNum == -(1 as libc::c_int) {
         return;
     }
-    crate::src::cgame::cg_syscalls::trap_Args(message.as_mut_ptr(), 128 as libc::c_int);
-    crate::src::qcommon::q_shared::Com_sprintf(
+    trap_Args(message.as_mut_ptr(), 128 as libc::c_int);
+    Com_sprintf(
         command.as_mut_ptr(),
         128 as libc::c_int,
         b"tell %i %s\x00" as *const u8 as *const libc::c_char,
         clientNum,
         message.as_mut_ptr(),
     );
-    crate::src::cgame::cg_syscalls::trap_SendClientCommand(command.as_mut_ptr());
+    trap_SendClientCommand(command.as_mut_ptr());
 }
 
 unsafe extern "C" fn CG_TellAttacker_f() {
     let mut clientNum: libc::c_int = 0;
     let mut command: [libc::c_char; 128] = [0; 128];
     let mut message: [libc::c_char; 128] = [0; 128];
-    clientNum = crate::src::cgame::cg_main::CG_LastAttacker();
+    clientNum = CG_LastAttacker();
     if clientNum == -(1 as libc::c_int) {
         return;
     }
-    crate::src::cgame::cg_syscalls::trap_Args(message.as_mut_ptr(), 128 as libc::c_int);
-    crate::src::qcommon::q_shared::Com_sprintf(
+    trap_Args(message.as_mut_ptr(), 128 as libc::c_int);
+    Com_sprintf(
         command.as_mut_ptr(),
         128 as libc::c_int,
         b"tell %i %s\x00" as *const u8 as *const libc::c_char,
         clientNum,
         message.as_mut_ptr(),
     );
-    crate::src::cgame::cg_syscalls::trap_SendClientCommand(command.as_mut_ptr());
+    trap_SendClientCommand(command.as_mut_ptr());
 }
 /*
 ==================
@@ -263,7 +263,7 @@ CG_StartOrbit_f
 
 unsafe extern "C" fn CG_StartOrbit_f() {
     let mut var: [libc::c_char; 1024] = [0; 1024];
-    crate::src::cgame::cg_syscalls::trap_Cvar_VariableStringBuffer(
+    trap_Cvar_VariableStringBuffer(
         b"developer\x00" as *const u8 as *const libc::c_char,
         var.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as libc::c_int,
@@ -271,29 +271,29 @@ unsafe extern "C" fn CG_StartOrbit_f() {
     if atoi(var.as_mut_ptr()) == 0 {
         return;
     }
-    if crate::src::cgame::cg_main::cg_cameraOrbit.value != 0 as libc::c_int as libc::c_float {
-        crate::src::cgame::cg_syscalls::trap_Cvar_Set(
+    if cg_cameraOrbit.value != 0 as libc::c_int as libc::c_float {
+        trap_Cvar_Set(
             b"cg_cameraOrbit\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
-        crate::src::cgame::cg_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"cg_thirdPerson\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
     } else {
-        crate::src::cgame::cg_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"cg_cameraOrbit\x00" as *const u8 as *const libc::c_char,
             b"5\x00" as *const u8 as *const libc::c_char,
         );
-        crate::src::cgame::cg_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"cg_thirdPerson\x00" as *const u8 as *const libc::c_char,
             b"1\x00" as *const u8 as *const libc::c_char,
         );
-        crate::src::cgame::cg_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"cg_thirdPersonAngle\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
         );
-        crate::src::cgame::cg_syscalls::trap_Cvar_Set(
+        trap_Cvar_Set(
             b"cg_thirdPersonRange\x00" as *const u8 as *const libc::c_char,
             b"100\x00" as *const u8 as *const libc::c_char,
         );
@@ -306,7 +306,7 @@ static mut commands: [consoleCommand_t; 21] = {
             let mut init = consoleCommand_t {
                 cmd: b"testgun\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 function: Some(
-                    crate::src::cgame::cg_view::CG_TestGun_f as unsafe extern "C" fn() -> (),
+                    CG_TestGun_f as unsafe extern "C" fn() -> (),
                 ),
             };
             init
@@ -315,7 +315,7 @@ static mut commands: [consoleCommand_t; 21] = {
             let mut init = consoleCommand_t {
                 cmd: b"testmodel\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 function: Some(
-                    crate::src::cgame::cg_view::CG_TestModel_f as unsafe extern "C" fn() -> (),
+                    CG_TestModel_f as unsafe extern "C" fn() -> (),
                 ),
             };
             init
@@ -324,7 +324,7 @@ static mut commands: [consoleCommand_t; 21] = {
             let mut init = consoleCommand_t {
                 cmd: b"nextframe\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 function: Some(
-                    crate::src::cgame::cg_view::CG_TestModelNextFrame_f
+                    CG_TestModelNextFrame_f
                         as unsafe extern "C" fn() -> (),
                 ),
             };
@@ -334,7 +334,7 @@ static mut commands: [consoleCommand_t; 21] = {
             let mut init = consoleCommand_t {
                 cmd: b"prevframe\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 function: Some(
-                    crate::src::cgame::cg_view::CG_TestModelPrevFrame_f
+                    CG_TestModelPrevFrame_f
                         as unsafe extern "C" fn() -> (),
                 ),
             };
@@ -344,7 +344,7 @@ static mut commands: [consoleCommand_t; 21] = {
             let mut init = consoleCommand_t {
                 cmd: b"nextskin\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 function: Some(
-                    crate::src::cgame::cg_view::CG_TestModelNextSkin_f
+                    CG_TestModelNextSkin_f
                         as unsafe extern "C" fn() -> (),
                 ),
             };
@@ -354,7 +354,7 @@ static mut commands: [consoleCommand_t; 21] = {
             let mut init = consoleCommand_t {
                 cmd: b"prevskin\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 function: Some(
-                    crate::src::cgame::cg_view::CG_TestModelPrevSkin_f
+                    CG_TestModelPrevSkin_f
                         as unsafe extern "C" fn() -> (),
                 ),
             };
@@ -385,7 +385,7 @@ static mut commands: [consoleCommand_t; 21] = {
             let mut init = consoleCommand_t {
                 cmd: b"+zoom\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 function: Some(
-                    crate::src::cgame::cg_view::CG_ZoomDown_f as unsafe extern "C" fn() -> (),
+                    CG_ZoomDown_f as unsafe extern "C" fn() -> (),
                 ),
             };
             init
@@ -394,7 +394,7 @@ static mut commands: [consoleCommand_t; 21] = {
             let mut init = consoleCommand_t {
                 cmd: b"-zoom\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 function: Some(
-                    crate::src::cgame::cg_view::CG_ZoomUp_f as unsafe extern "C" fn() -> (),
+                    CG_ZoomUp_f as unsafe extern "C" fn() -> (),
                 ),
             };
             init
@@ -417,7 +417,7 @@ static mut commands: [consoleCommand_t; 21] = {
             let mut init = consoleCommand_t {
                 cmd: b"weapnext\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 function: Some(
-                    crate::src::cgame::cg_weapons::CG_NextWeapon_f as unsafe extern "C" fn() -> (),
+                    CG_NextWeapon_f as unsafe extern "C" fn() -> (),
                 ),
             };
             init
@@ -426,7 +426,7 @@ static mut commands: [consoleCommand_t; 21] = {
             let mut init = consoleCommand_t {
                 cmd: b"weapprev\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 function: Some(
-                    crate::src::cgame::cg_weapons::CG_PrevWeapon_f as unsafe extern "C" fn() -> (),
+                    CG_PrevWeapon_f as unsafe extern "C" fn() -> (),
                 ),
             };
             init
@@ -435,7 +435,7 @@ static mut commands: [consoleCommand_t; 21] = {
             let mut init = consoleCommand_t {
                 cmd: b"weapon\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 function: Some(
-                    crate::src::cgame::cg_weapons::CG_Weapon_f as unsafe extern "C" fn() -> (),
+                    CG_Weapon_f as unsafe extern "C" fn() -> (),
                 ),
             };
             init
@@ -472,7 +472,7 @@ static mut commands: [consoleCommand_t; 21] = {
             let mut init = consoleCommand_t {
                 cmd: b"loaddeferred\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 function: Some(
-                    crate::src::cgame::cg_players::CG_LoadDeferredPlayers
+                    CG_LoadDeferredPlayers
                         as unsafe extern "C" fn() -> (),
                 ),
             };
@@ -490,24 +490,24 @@ Cmd_Argc() / Cmd_Argv()
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_ConsoleCommand() -> crate::src::qcommon::q_shared::qboolean {
+pub unsafe extern "C" fn CG_ConsoleCommand() -> qboolean {
     let mut cmd: *const libc::c_char = 0 as *const libc::c_char;
     let mut i: libc::c_int = 0;
-    cmd = crate::src::cgame::cg_main::CG_Argv(0 as libc::c_int);
+    cmd = CG_Argv(0 as libc::c_int);
     i = 0 as libc::c_int;
     while (i as libc::c_ulong)
         < (::std::mem::size_of::<[consoleCommand_t; 21]>() as libc::c_ulong)
             .wrapping_div(::std::mem::size_of::<consoleCommand_t>() as libc::c_ulong)
     {
-        if crate::src::qcommon::q_shared::Q_stricmp(cmd, commands[i as usize].cmd) == 0 {
+        if Q_stricmp(cmd, commands[i as usize].cmd) == 0 {
             commands[i as usize]
                 .function
                 .expect("non-null function pointer")();
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 /*
 ===========================================================================
@@ -774,76 +774,76 @@ pub unsafe extern "C" fn CG_InitConsoleCommands() {
         < (::std::mem::size_of::<[consoleCommand_t; 21]>() as libc::c_ulong)
             .wrapping_div(::std::mem::size_of::<consoleCommand_t>() as libc::c_ulong)
     {
-        crate::src::cgame::cg_syscalls::trap_AddCommand(commands[i as usize].cmd);
+        trap_AddCommand(commands[i as usize].cmd);
         i += 1
     }
     //
     // the game server will interpret these commands, which will be automatically
     // forwarded to the server after they are not recognized locally
     //
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"kill\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(b"say\x00" as *const u8 as *const libc::c_char);
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(b"say\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(
         b"say_team\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"tell\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"give\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(b"god\x00" as *const u8 as *const libc::c_char);
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(b"god\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(
         b"notarget\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"noclip\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"where\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"team\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"follow\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"follownext\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"followprev\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"levelshot\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"addbot\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"setviewpos\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"callvote\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"vote\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"callteamvote\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"teamvote\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"stats\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"teamtask\x00" as *const u8 as *const libc::c_char,
     );
-    crate::src::cgame::cg_syscalls::trap_AddCommand(
+    trap_AddCommand(
         b"loaddefered\x00" as *const u8 as *const libc::c_char,
     );
     // spelled wrong, but not changing for demo
