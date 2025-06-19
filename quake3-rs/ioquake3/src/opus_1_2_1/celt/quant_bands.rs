@@ -170,8 +170,7 @@ static mut beta_coef: [opus_val16; 4] = [
     (6554 as i32 as f64 / 32768.0f64) as opus_val16,
 ];
 
-static mut beta_intra: opus_val16 =
-    (4915 as i32 as f64 / 32768.0f64) as opus_val16;
+static mut beta_intra: opus_val16 = (4915 as i32 as f64 / 32768.0f64) as opus_val16;
 /*Parameters of the Laplace-like probability models used for the coarse energy.
 There is one pair of parameters for each frame size, prediction type
  (inter/intra), and band number.
@@ -595,10 +594,7 @@ unsafe extern "C" fn quant_coarse_energy_impl(
     let mut i: i32 = 0;
     let mut c: i32 = 0;
     let mut badness: i32 = 0 as i32;
-    let mut prev: [opus_val32; 2] = [
-        0 as i32 as opus_val32,
-        0 as i32 as opus_val32,
-    ];
+    let mut prev: [opus_val32; 2] = [0 as i32 as opus_val32, 0 as i32 as opus_val32];
     let mut coef: opus_val16 = 0.;
     let mut beta: opus_val16 = 0.;
     if tell + 3 as i32 <= budget {
@@ -740,21 +736,20 @@ pub unsafe extern "C" fn quant_coarse_energy(
     let mut max_decay: opus_val16 = 0.;
     let mut oldEBands_intra: *mut opus_val16 = 0 as *mut opus_val16;
     let mut error_intra: *mut opus_val16 = 0 as *mut opus_val16;
-    let mut enc_start_state: ec_enc =
-        ec_enc {
-            buf: 0 as *mut u8,
-            storage: 0,
-            end_offs: 0,
-            end_window: 0,
-            nend_bits: 0,
-            nbits_total: 0,
-            offs: 0,
-            rng: 0,
-            val: 0,
-            ext: 0,
-            rem: 0,
-            error: 0,
-        };
+    let mut enc_start_state: ec_enc = ec_enc {
+        buf: 0 as *mut u8,
+        storage: 0,
+        end_offs: 0,
+        end_window: 0,
+        nend_bits: 0,
+        nbits_total: 0,
+        offs: 0,
+        rng: 0,
+        val: 0,
+        ext: 0,
+        rem: 0,
+        error: 0,
+    };
     let mut tell: opus_uint32 = 0;
     let mut badness1: i32 = 0 as i32;
     let mut intra_bias: opus_int32 = 0;
@@ -763,8 +758,8 @@ pub unsafe extern "C" fn quant_coarse_energy(
         || two_pass == 0
             && *delayedIntra > (2 as i32 * C * (end - start)) as f32
             && nbAvailableBytes > (end - start) * C) as i32;
-    intra_bias = (budget as f32 * *delayedIntra * loss_rate as f32 / (C * 512 as i32) as f32)
-        as opus_int32;
+    intra_bias =
+        (budget as f32 * *delayedIntra * loss_rate as f32 / (C * 512 as i32) as f32) as opus_int32;
     new_distortion = loss_distortion(eBands, oldEBands, start, effEnd, (*m).nbEBands, C);
     tell = ec_tell(enc) as opus_uint32;
     if tell.wrapping_add(3 as i32 as u32) > budget {
@@ -826,30 +821,27 @@ pub unsafe extern "C" fn quant_coarse_energy(
     }
     if intra == 0 {
         let mut intra_buf: *mut u8 = 0 as *mut u8;
-        let mut enc_intra_state: ec_enc =
-            ec_enc {
-                buf: 0 as *mut u8,
-                storage: 0,
-                end_offs: 0,
-                end_window: 0,
-                nend_bits: 0,
-                nbits_total: 0,
-                offs: 0,
-                rng: 0,
-                val: 0,
-                ext: 0,
-                rem: 0,
-                error: 0,
-            };
+        let mut enc_intra_state: ec_enc = ec_enc {
+            buf: 0 as *mut u8,
+            storage: 0,
+            end_offs: 0,
+            end_window: 0,
+            nend_bits: 0,
+            nbits_total: 0,
+            offs: 0,
+            rng: 0,
+            val: 0,
+            ext: 0,
+            rem: 0,
+            error: 0,
+        };
         let mut tell_intra: opus_int32 = 0;
         let mut nstart_bytes: opus_uint32 = 0;
         let mut nintra_bytes: opus_uint32 = 0;
         let mut save_bytes: opus_uint32 = 0;
         let mut badness2: i32 = 0;
         let mut intra_bits: *mut u8 = 0 as *mut u8;
-        tell_intra = ec_tell_frac(
-            enc as *mut ec_ctx,
-        ) as opus_int32;
+        tell_intra = ec_tell_frac(enc as *mut ec_ctx) as opus_int32;
         enc_intra_state = *enc;
         nstart_bytes = ec_range_bytes(&mut enc_start_state);
         nintra_bytes = ec_range_bytes(&mut enc_intra_state);
@@ -896,11 +888,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
         if two_pass != 0
             && (badness1 < badness2
                 || badness1 == badness2
-                    && ec_tell_frac(
-                        enc as *mut ec_ctx,
-                    ) as opus_int32
-                        + intra_bias
-                        > tell_intra)
+                    && ec_tell_frac(enc as *mut ec_ctx) as opus_int32 + intra_bias > tell_intra)
         {
             *enc = enc_intra_state;
             /* Copy intra bits to bit-stream */
@@ -918,9 +906,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
                 oldEBands as *mut libc::c_void,
                 oldEBands_intra as *const libc::c_void,
                 ((C * (*m).nbEBands) as libc::c_ulong)
-                    .wrapping_mul(
-                        ::std::mem::size_of::<opus_val16>() as libc::c_ulong
-                    )
+                    .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
                     .wrapping_add(
                         (0 as i32 as isize * oldEBands.offset_from(oldEBands_intra) as isize)
                             as libc::c_ulong,
@@ -930,9 +916,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
                 error as *mut libc::c_void,
                 error_intra as *const libc::c_void,
                 ((C * (*m).nbEBands) as libc::c_ulong)
-                    .wrapping_mul(
-                        ::std::mem::size_of::<opus_val16>() as libc::c_ulong
-                    )
+                    .wrapping_mul(::std::mem::size_of::<opus_val16>() as libc::c_ulong)
                     .wrapping_add(
                         (0 as i32 as isize * error.offset_from(error_intra) as isize)
                             as libc::c_ulong,
@@ -985,8 +969,7 @@ pub unsafe extern "C" fn quant_fine_energy(
     /* Encode finer resolution */
     i = start;
     while i < end {
-        let mut frac: opus_int16 =
-            ((1 as i32) << *fine_quant.offset(i as isize)) as opus_int16;
+        let mut frac: opus_int16 = ((1 as i32) << *fine_quant.offset(i as isize)) as opus_int16;
         if !(*fine_quant.offset(i as isize) <= 0 as i32) {
             c = 0 as i32;
             loop {
@@ -1099,10 +1082,7 @@ pub unsafe extern "C" fn unquant_coarse_energy(
     let mut prob_model: *const u8 = e_prob_model[LM as usize][intra as usize].as_ptr();
     let mut i: i32 = 0;
     let mut c: i32 = 0;
-    let mut prev: [opus_val32; 2] = [
-        0 as i32 as opus_val32,
-        0 as i32 as opus_val32,
-    ];
+    let mut prev: [opus_val32; 2] = [0 as i32 as opus_val32, 0 as i32 as opus_val32];
     let mut coef: opus_val16 = 0.;
     let mut beta: opus_val16 = 0.;
     let mut budget: opus_int32 = 0;

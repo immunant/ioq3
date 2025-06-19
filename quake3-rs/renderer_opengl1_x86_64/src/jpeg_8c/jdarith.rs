@@ -230,9 +230,7 @@ unsafe extern "C" fn get_byte(mut cinfo: j_decompress_ptr) -> i32
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
     }
     (*src).bytes_in_buffer = (*src).bytes_in_buffer.wrapping_sub(1);
@@ -267,10 +265,7 @@ unsafe extern "C" fn get_byte(mut cinfo: j_decompress_ptr) -> i32
  * derived from Markus Kuhn's JBIG implementation.
  */
 
-unsafe extern "C" fn arith_decode(
-    mut cinfo: j_decompress_ptr,
-    mut st: *mut u8,
-) -> i32 {
+unsafe extern "C" fn arith_decode(mut cinfo: j_decompress_ptr, mut st: *mut u8) -> i32 {
     let mut e: arith_entropy_ptr = (*cinfo).entropy as arith_entropy_ptr;
     let mut nl: u8 = 0;
     let mut nm: u8 = 0;
@@ -330,9 +325,7 @@ unsafe extern "C" fn arith_decode(
      * Qe values and probability estimation state machine
      */
     sv = *st as i32; /* => Qe_Value */
-    qe = *jpeg_aritab
-        .as_ptr()
-        .offset((sv & 0x7f as i32) as isize); /* Next_Index_LPS + Switch_MPS */
+    qe = *jpeg_aritab.as_ptr().offset((sv & 0x7f as i32) as isize); /* Next_Index_LPS + Switch_MPS */
     nl = (qe & 0xff as i32 as isize) as u8; /* Next_Index_MPS */
     qe >>= 8 as i32;
     nm = (qe & 0xff as i32 as isize) as u8;
@@ -374,8 +367,7 @@ unsafe extern "C" fn arith_decode(
 unsafe extern "C" fn process_restart(mut cinfo: j_decompress_ptr) {
     let mut entropy: arith_entropy_ptr = (*cinfo).entropy as arith_entropy_ptr;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     /* Advance past the RSTn marker */
     if Some(
         (*(*cinfo).marker)
@@ -488,16 +480,14 @@ unsafe extern "C" fn decode_mcu_DC_first(
                 while arith_decode(cinfo, st) != 0 {
                     m <<= 1 as i32;
                     if m == 0x8000 as i32 {
-                        (*(*cinfo).err).msg_code =
-                            JWRN_ARITH_BAD_CODE as i32;
+                        (*(*cinfo).err).msg_code = JWRN_ARITH_BAD_CODE as i32;
                         Some(
                             (*(*cinfo).err)
                                 .emit_message
                                 .expect("non-null function pointer"),
                         )
                         .expect("non-null function pointer")(
-                            cinfo as j_common_ptr,
-                            -(1 as i32),
+                            cinfo as j_common_ptr, -(1 as i32)
                         );
                         (*entropy).ct = -(1 as i32);
                         return 1 as i32;
@@ -536,8 +526,7 @@ unsafe extern "C" fn decode_mcu_DC_first(
             (*entropy).last_dc_val[ci as usize] += v
         }
         /* Scale and output the DC coefficient (assumes jpeg_natural_order[0]=0) */
-        (*block)[0 as i32 as usize] =
-            ((*entropy).last_dc_val[ci as usize] << (*cinfo).Al) as JCOEF;
+        (*block)[0 as i32 as usize] = ((*entropy).last_dc_val[ci as usize] << (*cinfo).Al) as JCOEF;
         blkn += 1
     }
     return 1 as i32;
@@ -593,8 +582,7 @@ unsafe extern "C" fn decode_mcu_AC_first(
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as j_common_ptr,
-                    -(1 as i32),
+                    cinfo as j_common_ptr, -(1 as i32)
                 );
                 (*entropy).ct = -(1 as i32);
                 return 1 as i32;
@@ -619,16 +607,14 @@ unsafe extern "C" fn decode_mcu_AC_first(
                 while arith_decode(cinfo, st) != 0 {
                     m <<= 1 as i32;
                     if m == 0x8000 as i32 {
-                        (*(*cinfo).err).msg_code =
-                            JWRN_ARITH_BAD_CODE as i32;
+                        (*(*cinfo).err).msg_code = JWRN_ARITH_BAD_CODE as i32;
                         Some(
                             (*(*cinfo).err)
                                 .emit_message
                                 .expect("non-null function pointer"),
                         )
                         .expect("non-null function pointer")(
-                            cinfo as j_common_ptr,
-                            -(1 as i32),
+                            cinfo as j_common_ptr, -(1 as i32)
                         );
                         (*entropy).ct = -(1 as i32);
                         return 1 as i32;
@@ -654,8 +640,7 @@ unsafe extern "C" fn decode_mcu_AC_first(
             v = -v
         }
         /* Scale and output coefficient in natural (dezigzagged) order */
-        (*block)[*natural_order.offset(k as isize) as usize] =
-            (v << (*cinfo).Al) as JCOEF;
+        (*block)[*natural_order.offset(k as isize) as usize] = (v << (*cinfo).Al) as JCOEF;
         k += 1
     }
     return 1 as i32;
@@ -770,16 +755,14 @@ unsafe extern "C" fn decode_mcu_AC_refine(
                 st = st.offset(3 as i32 as isize);
                 k += 1;
                 if k > (*cinfo).Se {
-                    (*(*cinfo).err).msg_code =
-                        JWRN_ARITH_BAD_CODE as i32;
+                    (*(*cinfo).err).msg_code = JWRN_ARITH_BAD_CODE as i32;
                     Some(
                         (*(*cinfo).err)
                             .emit_message
                             .expect("non-null function pointer"),
                     )
                     .expect("non-null function pointer")(
-                        cinfo as j_common_ptr,
-                        -(1 as i32),
+                        cinfo as j_common_ptr, -(1 as i32)
                     );
                     (*entropy).ct = -(1 as i32);
                     return 1 as i32;
@@ -799,8 +782,7 @@ unsafe extern "C" fn decode_mcu(
     mut MCU_data: *mut JBLOCKROW,
 ) -> boolean {
     let mut entropy: arith_entropy_ptr = (*cinfo).entropy as arith_entropy_ptr;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut block: JBLOCKROW = 0 as *mut JBLOCK;
     let mut st: *mut u8 = 0 as *mut u8;
     let mut blkn: i32 = 0;
@@ -848,16 +830,14 @@ unsafe extern "C" fn decode_mcu(
                 while arith_decode(cinfo, st) != 0 {
                     m <<= 1 as i32;
                     if m == 0x8000 as i32 {
-                        (*(*cinfo).err).msg_code =
-                            JWRN_ARITH_BAD_CODE as i32;
+                        (*(*cinfo).err).msg_code = JWRN_ARITH_BAD_CODE as i32;
                         Some(
                             (*(*cinfo).err)
                                 .emit_message
                                 .expect("non-null function pointer"),
                         )
                         .expect("non-null function pointer")(
-                            cinfo as j_common_ptr,
-                            -(1 as i32),
+                            cinfo as j_common_ptr, -(1 as i32)
                         );
                         (*entropy).ct = -(1 as i32);
                         return 1 as i32;
@@ -895,8 +875,7 @@ unsafe extern "C" fn decode_mcu(
             }
             (*entropy).last_dc_val[ci as usize] += v
         }
-        (*block)[0 as i32 as usize] =
-            (*entropy).last_dc_val[ci as usize] as JCOEF;
+        (*block)[0 as i32 as usize] = (*entropy).last_dc_val[ci as usize] as JCOEF;
         /* Sections F.2.4.2 & F.1.4.4.2: Decoding of AC coefficients */
         tbl = (*compptr).ac_tbl_no;
         /* Figure F.20: Decode_AC_coefficients */
@@ -910,16 +889,14 @@ unsafe extern "C" fn decode_mcu(
                 st = st.offset(3 as i32 as isize);
                 k += 1;
                 if k > (*cinfo).lim_Se {
-                    (*(*cinfo).err).msg_code =
-                        JWRN_ARITH_BAD_CODE as i32;
+                    (*(*cinfo).err).msg_code = JWRN_ARITH_BAD_CODE as i32;
                     Some(
                         (*(*cinfo).err)
                             .emit_message
                             .expect("non-null function pointer"),
                     )
                     .expect("non-null function pointer")(
-                        cinfo as j_common_ptr,
-                        -(1 as i32),
+                        cinfo as j_common_ptr, -(1 as i32)
                     );
                     (*entropy).ct = -(1 as i32);
                     return 1 as i32;
@@ -944,8 +921,7 @@ unsafe extern "C" fn decode_mcu(
                     while arith_decode(cinfo, st) != 0 {
                         m <<= 1 as i32;
                         if m == 0x8000 as i32 {
-                            (*(*cinfo).err).msg_code =
-                                JWRN_ARITH_BAD_CODE as i32;
+                            (*(*cinfo).err).msg_code = JWRN_ARITH_BAD_CODE as i32;
                             Some(
                                 (*(*cinfo).err)
                                     .emit_message
@@ -994,8 +970,7 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
     let mut entropy: arith_entropy_ptr = (*cinfo).entropy as arith_entropy_ptr;
     let mut ci: i32 = 0;
     let mut tbl: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     if (*cinfo).progressive_mode != 0 {
         /* Validate progressive scan parameters */
         if (*cinfo).Ss == 0 as i32 {
@@ -1052,9 +1027,7 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             _ => {}
         }
@@ -1071,8 +1044,7 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
                 .offset(0 as i32 as isize) as *mut i32;
             if (*cinfo).Ss != 0 && *coef_bit_ptr.offset(0 as i32 as isize) < 0 as i32 {
                 /* AC without prior DC scan */
-                (*(*cinfo).err).msg_code =
-                    JWRN_BOGUS_PROGRESSION as i32;
+                (*(*cinfo).err).msg_code = JWRN_BOGUS_PROGRESSION as i32;
                 (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = cindex;
                 (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = 0 as i32;
                 Some(
@@ -1081,8 +1053,7 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
                         .expect("non-null function pointer"),
                 )
                 .expect("non-null function pointer")(
-                    cinfo as j_common_ptr,
-                    -(1 as i32),
+                    cinfo as j_common_ptr, -(1 as i32)
                 );
             }
             coefi = (*cinfo).Ss;
@@ -1093,8 +1064,7 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
                     *coef_bit_ptr.offset(coefi as isize)
                 };
                 if (*cinfo).Ah != expected {
-                    (*(*cinfo).err).msg_code =
-                        JWRN_BOGUS_PROGRESSION as i32;
+                    (*(*cinfo).err).msg_code = JWRN_BOGUS_PROGRESSION as i32;
                     (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = cindex;
                     (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = coefi;
                     Some(
@@ -1103,8 +1073,7 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
                             .expect("non-null function pointer"),
                     )
                     .expect("non-null function pointer")(
-                        cinfo as j_common_ptr,
-                        -(1 as i32),
+                        cinfo as j_common_ptr, -(1 as i32)
                     );
                 }
                 *coef_bit_ptr.offset(coefi as isize) = (*cinfo).Al;
@@ -1117,37 +1086,23 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
             if (*cinfo).Ss == 0 as i32 {
                 (*entropy).pub_0.decode_mcu = Some(
                     decode_mcu_DC_first
-                        as unsafe extern "C" fn(
-                            _: j_decompress_ptr,
-                            _: *mut JBLOCKROW,
-                        )
-                            -> boolean,
+                        as unsafe extern "C" fn(_: j_decompress_ptr, _: *mut JBLOCKROW) -> boolean,
                 )
             } else {
                 (*entropy).pub_0.decode_mcu = Some(
                     decode_mcu_AC_first
-                        as unsafe extern "C" fn(
-                            _: j_decompress_ptr,
-                            _: *mut JBLOCKROW,
-                        )
-                            -> boolean,
+                        as unsafe extern "C" fn(_: j_decompress_ptr, _: *mut JBLOCKROW) -> boolean,
                 )
             }
         } else if (*cinfo).Ss == 0 as i32 {
             (*entropy).pub_0.decode_mcu = Some(
                 decode_mcu_DC_refine
-                    as unsafe extern "C" fn(
-                        _: j_decompress_ptr,
-                        _: *mut JBLOCKROW,
-                    ) -> boolean,
+                    as unsafe extern "C" fn(_: j_decompress_ptr, _: *mut JBLOCKROW) -> boolean,
             )
         } else {
             (*entropy).pub_0.decode_mcu = Some(
                 decode_mcu_AC_refine
-                    as unsafe extern "C" fn(
-                        _: j_decompress_ptr,
-                        _: *mut JBLOCKROW,
-                    ) -> boolean,
+                    as unsafe extern "C" fn(_: j_decompress_ptr, _: *mut JBLOCKROW) -> boolean,
             )
         }
     } else {
@@ -1165,18 +1120,11 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
                     .emit_message
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr,
-                -(1 as i32),
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr, -(1 as i32));
         }
         /* Select MCU decoding routine */
         (*entropy).pub_0.decode_mcu = Some(
-            decode_mcu
-                as unsafe extern "C" fn(
-                    _: j_decompress_ptr,
-                    _: *mut JBLOCKROW,
-                ) -> boolean,
+            decode_mcu as unsafe extern "C" fn(_: j_decompress_ptr, _: *mut JBLOCKROW) -> boolean,
         )
     }
     /* Allocate & initialize requested statistics areas */
@@ -1193,9 +1141,7 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             if (*entropy).dc_stats[tbl as usize].is_null() {
                 (*entropy).dc_stats[tbl as usize] = Some(
@@ -1230,9 +1176,7 @@ unsafe extern "C" fn start_pass(mut cinfo: j_decompress_ptr) {
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             if (*entropy).ac_stats[tbl as usize].is_null() {
                 (*entropy).ac_stats[tbl as usize] = Some(

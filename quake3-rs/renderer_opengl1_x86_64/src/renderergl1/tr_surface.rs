@@ -560,16 +560,13 @@ RB_CheckOverflow
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_CheckOverflow(mut verts: i32, mut indexes: i32) {
-    if tess.numVertexes + verts < 1000 as i32
-        && tess.numIndexes + indexes < 6 as i32 * 1000 as i32
+    if tess.numVertexes + verts < 1000 as i32 && tess.numIndexes + indexes < 6 as i32 * 1000 as i32
     {
         return;
     }
     RB_EndSurface();
     if verts >= 1000 as i32 {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"RB_CheckOverflow: verts > MAX (%d > %d)\x00" as *const u8 as *const libc::c_char,
             verts,
@@ -577,19 +574,14 @@ pub unsafe extern "C" fn RB_CheckOverflow(mut verts: i32, mut indexes: i32) {
         );
     }
     if indexes >= 6 as i32 * 1000 as i32 {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"RB_CheckOverflow: indices > MAX (%d > %d)\x00" as *const u8 as *const libc::c_char,
             indexes,
             6 as i32 * 1000 as i32,
         );
     }
-    RB_BeginSurface(
-        tess.shader as *mut shader_s,
-        tess.fogNum,
-    );
+    RB_BeginSurface(tess.shader as *mut shader_s, tess.fogNum);
 }
 /*
 ==============
@@ -617,180 +609,123 @@ pub unsafe extern "C" fn RB_AddQuadStampExt(
     }
     ndx = tess.numVertexes;
     // triangle indexes for a simple quad
-    tess.indexes
-        [tess.numIndexes as usize] =
-        ndx as glIndex_t;
-    tess.indexes
-        [(tess.numIndexes + 1 as i32) as usize] =
-        (ndx + 1 as i32) as glIndex_t;
-    tess.indexes
-        [(tess.numIndexes + 2 as i32) as usize] =
-        (ndx + 3 as i32) as glIndex_t;
-    tess.indexes
-        [(tess.numIndexes + 3 as i32) as usize] =
-        (ndx + 3 as i32) as glIndex_t;
-    tess.indexes
-        [(tess.numIndexes + 4 as i32) as usize] =
-        (ndx + 1 as i32) as glIndex_t;
-    tess.indexes
-        [(tess.numIndexes + 5 as i32) as usize] =
-        (ndx + 2 as i32) as glIndex_t;
-    tess.xyz[ndx as usize][0 as i32 as usize] = *origin
-        .offset(0 as i32 as isize)
+    tess.indexes[tess.numIndexes as usize] = ndx as glIndex_t;
+    tess.indexes[(tess.numIndexes + 1 as i32) as usize] = (ndx + 1 as i32) as glIndex_t;
+    tess.indexes[(tess.numIndexes + 2 as i32) as usize] = (ndx + 3 as i32) as glIndex_t;
+    tess.indexes[(tess.numIndexes + 3 as i32) as usize] = (ndx + 3 as i32) as glIndex_t;
+    tess.indexes[(tess.numIndexes + 4 as i32) as usize] = (ndx + 1 as i32) as glIndex_t;
+    tess.indexes[(tess.numIndexes + 5 as i32) as usize] = (ndx + 2 as i32) as glIndex_t;
+    tess.xyz[ndx as usize][0 as i32 as usize] = *origin.offset(0 as i32 as isize)
         + *left.offset(0 as i32 as isize)
         + *up.offset(0 as i32 as isize);
-    tess.xyz[ndx as usize][1 as i32 as usize] = *origin
-        .offset(1 as i32 as isize)
+    tess.xyz[ndx as usize][1 as i32 as usize] = *origin.offset(1 as i32 as isize)
         + *left.offset(1 as i32 as isize)
         + *up.offset(1 as i32 as isize);
-    tess.xyz[ndx as usize][2 as i32 as usize] = *origin
-        .offset(2 as i32 as isize)
+    tess.xyz[ndx as usize][2 as i32 as usize] = *origin.offset(2 as i32 as isize)
         + *left.offset(2 as i32 as isize)
         + *up.offset(2 as i32 as isize);
-    tess.xyz[(ndx + 1 as i32) as usize][0 as i32 as usize] =
-        *origin.offset(0 as i32 as isize) - *left.offset(0 as i32 as isize)
-            + *up.offset(0 as i32 as isize);
-    tess.xyz[(ndx + 1 as i32) as usize][1 as i32 as usize] =
-        *origin.offset(1 as i32 as isize) - *left.offset(1 as i32 as isize)
-            + *up.offset(1 as i32 as isize);
-    tess.xyz[(ndx + 1 as i32) as usize][2 as i32 as usize] =
-        *origin.offset(2 as i32 as isize) - *left.offset(2 as i32 as isize)
-            + *up.offset(2 as i32 as isize);
-    tess.xyz[(ndx + 2 as i32) as usize][0 as i32 as usize] =
-        *origin.offset(0 as i32 as isize)
-            - *left.offset(0 as i32 as isize)
-            - *up.offset(0 as i32 as isize);
-    tess.xyz[(ndx + 2 as i32) as usize][1 as i32 as usize] =
-        *origin.offset(1 as i32 as isize)
-            - *left.offset(1 as i32 as isize)
-            - *up.offset(1 as i32 as isize);
-    tess.xyz[(ndx + 2 as i32) as usize][2 as i32 as usize] =
-        *origin.offset(2 as i32 as isize)
-            - *left.offset(2 as i32 as isize)
-            - *up.offset(2 as i32 as isize);
-    tess.xyz[(ndx + 3 as i32) as usize][0 as i32 as usize] =
-        *origin.offset(0 as i32 as isize) + *left.offset(0 as i32 as isize)
-            - *up.offset(0 as i32 as isize);
-    tess.xyz[(ndx + 3 as i32) as usize][1 as i32 as usize] =
-        *origin.offset(1 as i32 as isize) + *left.offset(1 as i32 as isize)
-            - *up.offset(1 as i32 as isize);
-    tess.xyz[(ndx + 3 as i32) as usize][2 as i32 as usize] =
-        *origin.offset(2 as i32 as isize) + *left.offset(2 as i32 as isize)
-            - *up.offset(2 as i32 as isize);
+    tess.xyz[(ndx + 1 as i32) as usize][0 as i32 as usize] = *origin.offset(0 as i32 as isize)
+        - *left.offset(0 as i32 as isize)
+        + *up.offset(0 as i32 as isize);
+    tess.xyz[(ndx + 1 as i32) as usize][1 as i32 as usize] = *origin.offset(1 as i32 as isize)
+        - *left.offset(1 as i32 as isize)
+        + *up.offset(1 as i32 as isize);
+    tess.xyz[(ndx + 1 as i32) as usize][2 as i32 as usize] = *origin.offset(2 as i32 as isize)
+        - *left.offset(2 as i32 as isize)
+        + *up.offset(2 as i32 as isize);
+    tess.xyz[(ndx + 2 as i32) as usize][0 as i32 as usize] = *origin.offset(0 as i32 as isize)
+        - *left.offset(0 as i32 as isize)
+        - *up.offset(0 as i32 as isize);
+    tess.xyz[(ndx + 2 as i32) as usize][1 as i32 as usize] = *origin.offset(1 as i32 as isize)
+        - *left.offset(1 as i32 as isize)
+        - *up.offset(1 as i32 as isize);
+    tess.xyz[(ndx + 2 as i32) as usize][2 as i32 as usize] = *origin.offset(2 as i32 as isize)
+        - *left.offset(2 as i32 as isize)
+        - *up.offset(2 as i32 as isize);
+    tess.xyz[(ndx + 3 as i32) as usize][0 as i32 as usize] = *origin.offset(0 as i32 as isize)
+        + *left.offset(0 as i32 as isize)
+        - *up.offset(0 as i32 as isize);
+    tess.xyz[(ndx + 3 as i32) as usize][1 as i32 as usize] = *origin.offset(1 as i32 as isize)
+        + *left.offset(1 as i32 as isize)
+        - *up.offset(1 as i32 as isize);
+    tess.xyz[(ndx + 3 as i32) as usize][2 as i32 as usize] = *origin.offset(2 as i32 as isize)
+        + *left.offset(2 as i32 as isize)
+        - *up.offset(2 as i32 as isize);
     // constant normal all the way around
     normal[0 as i32 as usize] = vec3_origin[0 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .axis[0 as i32 as usize][0 as i32 as usize];
+        - backEnd.viewParms.or.axis[0 as i32 as usize][0 as i32 as usize];
     normal[1 as i32 as usize] = vec3_origin[1 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .axis[0 as i32 as usize][1 as i32 as usize];
+        - backEnd.viewParms.or.axis[0 as i32 as usize][1 as i32 as usize];
     normal[2 as i32 as usize] = vec3_origin[2 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .axis[0 as i32 as usize][2 as i32 as usize];
-    tess.normal[(ndx + 3 as i32) as usize][0 as i32 as usize] =
-        normal[0 as i32 as usize];
+        - backEnd.viewParms.or.axis[0 as i32 as usize][2 as i32 as usize];
+    tess.normal[(ndx + 3 as i32) as usize][0 as i32 as usize] = normal[0 as i32 as usize];
     tess.normal[(ndx + 2 as i32) as usize][0 as i32 as usize] =
-        tess.normal[(ndx + 3 as i32) as usize]
-            [0 as i32 as usize];
+        tess.normal[(ndx + 3 as i32) as usize][0 as i32 as usize];
     tess.normal[(ndx + 1 as i32) as usize][0 as i32 as usize] =
-        tess.normal[(ndx + 2 as i32) as usize]
-            [0 as i32 as usize];
+        tess.normal[(ndx + 2 as i32) as usize][0 as i32 as usize];
     tess.normal[ndx as usize][0 as i32 as usize] =
-        tess.normal[(ndx + 1 as i32) as usize]
-            [0 as i32 as usize];
-    tess.normal[(ndx + 3 as i32) as usize][1 as i32 as usize] =
-        normal[1 as i32 as usize];
+        tess.normal[(ndx + 1 as i32) as usize][0 as i32 as usize];
+    tess.normal[(ndx + 3 as i32) as usize][1 as i32 as usize] = normal[1 as i32 as usize];
     tess.normal[(ndx + 2 as i32) as usize][1 as i32 as usize] =
-        tess.normal[(ndx + 3 as i32) as usize]
-            [1 as i32 as usize];
+        tess.normal[(ndx + 3 as i32) as usize][1 as i32 as usize];
     tess.normal[(ndx + 1 as i32) as usize][1 as i32 as usize] =
-        tess.normal[(ndx + 2 as i32) as usize]
-            [1 as i32 as usize];
+        tess.normal[(ndx + 2 as i32) as usize][1 as i32 as usize];
     tess.normal[ndx as usize][1 as i32 as usize] =
-        tess.normal[(ndx + 1 as i32) as usize]
-            [1 as i32 as usize];
-    tess.normal[(ndx + 3 as i32) as usize][2 as i32 as usize] =
-        normal[2 as i32 as usize];
+        tess.normal[(ndx + 1 as i32) as usize][1 as i32 as usize];
+    tess.normal[(ndx + 3 as i32) as usize][2 as i32 as usize] = normal[2 as i32 as usize];
     tess.normal[(ndx + 2 as i32) as usize][2 as i32 as usize] =
-        tess.normal[(ndx + 3 as i32) as usize]
-            [2 as i32 as usize];
+        tess.normal[(ndx + 3 as i32) as usize][2 as i32 as usize];
     tess.normal[(ndx + 1 as i32) as usize][2 as i32 as usize] =
-        tess.normal[(ndx + 2 as i32) as usize]
-            [2 as i32 as usize];
+        tess.normal[(ndx + 2 as i32) as usize][2 as i32 as usize];
     tess.normal[ndx as usize][2 as i32 as usize] =
-        tess.normal[(ndx + 1 as i32) as usize]
-            [2 as i32 as usize];
+        tess.normal[(ndx + 1 as i32) as usize][2 as i32 as usize];
     // standard square texture coordinates
-    tess.texCoords[ndx as usize][1 as i32 as usize]
-        [0 as i32 as usize] = s1;
-    tess.texCoords[ndx as usize][0 as i32 as usize]
-        [0 as i32 as usize] = tess.texCoords[ndx as usize]
-        [1 as i32 as usize][0 as i32 as usize];
-    tess.texCoords[ndx as usize][1 as i32 as usize]
-        [1 as i32 as usize] = t1;
-    tess.texCoords[ndx as usize][0 as i32 as usize]
-        [1 as i32 as usize] = tess.texCoords[ndx as usize]
-        [1 as i32 as usize][1 as i32 as usize];
-    tess.texCoords[(ndx + 1 as i32) as usize]
-        [1 as i32 as usize][0 as i32 as usize] = s2;
-    tess.texCoords[(ndx + 1 as i32) as usize]
-        [0 as i32 as usize][0 as i32 as usize] = tess.texCoords
-        [(ndx + 1 as i32) as usize][1 as i32 as usize][0 as i32 as usize];
-    tess.texCoords[(ndx + 1 as i32) as usize]
-        [1 as i32 as usize][1 as i32 as usize] = t1;
-    tess.texCoords[(ndx + 1 as i32) as usize]
-        [0 as i32 as usize][1 as i32 as usize] = tess.texCoords
-        [(ndx + 1 as i32) as usize][1 as i32 as usize][1 as i32 as usize];
-    tess.texCoords[(ndx + 2 as i32) as usize]
-        [1 as i32 as usize][0 as i32 as usize] = s2;
-    tess.texCoords[(ndx + 2 as i32) as usize]
-        [0 as i32 as usize][0 as i32 as usize] = tess.texCoords
-        [(ndx + 2 as i32) as usize][1 as i32 as usize][0 as i32 as usize];
-    tess.texCoords[(ndx + 2 as i32) as usize]
-        [1 as i32 as usize][1 as i32 as usize] = t2;
-    tess.texCoords[(ndx + 2 as i32) as usize]
-        [0 as i32 as usize][1 as i32 as usize] = tess.texCoords
-        [(ndx + 2 as i32) as usize][1 as i32 as usize][1 as i32 as usize];
-    tess.texCoords[(ndx + 3 as i32) as usize]
-        [1 as i32 as usize][0 as i32 as usize] = s1;
-    tess.texCoords[(ndx + 3 as i32) as usize]
-        [0 as i32 as usize][0 as i32 as usize] = tess.texCoords
-        [(ndx + 3 as i32) as usize][1 as i32 as usize][0 as i32 as usize];
-    tess.texCoords[(ndx + 3 as i32) as usize]
-        [1 as i32 as usize][1 as i32 as usize] = t2;
-    tess.texCoords[(ndx + 3 as i32) as usize]
-        [0 as i32 as usize][1 as i32 as usize] = tess.texCoords
-        [(ndx + 3 as i32) as usize][1 as i32 as usize][1 as i32 as usize];
+    tess.texCoords[ndx as usize][1 as i32 as usize][0 as i32 as usize] = s1;
+    tess.texCoords[ndx as usize][0 as i32 as usize][0 as i32 as usize] =
+        tess.texCoords[ndx as usize][1 as i32 as usize][0 as i32 as usize];
+    tess.texCoords[ndx as usize][1 as i32 as usize][1 as i32 as usize] = t1;
+    tess.texCoords[ndx as usize][0 as i32 as usize][1 as i32 as usize] =
+        tess.texCoords[ndx as usize][1 as i32 as usize][1 as i32 as usize];
+    tess.texCoords[(ndx + 1 as i32) as usize][1 as i32 as usize][0 as i32 as usize] = s2;
+    tess.texCoords[(ndx + 1 as i32) as usize][0 as i32 as usize][0 as i32 as usize] =
+        tess.texCoords[(ndx + 1 as i32) as usize][1 as i32 as usize][0 as i32 as usize];
+    tess.texCoords[(ndx + 1 as i32) as usize][1 as i32 as usize][1 as i32 as usize] = t1;
+    tess.texCoords[(ndx + 1 as i32) as usize][0 as i32 as usize][1 as i32 as usize] =
+        tess.texCoords[(ndx + 1 as i32) as usize][1 as i32 as usize][1 as i32 as usize];
+    tess.texCoords[(ndx + 2 as i32) as usize][1 as i32 as usize][0 as i32 as usize] = s2;
+    tess.texCoords[(ndx + 2 as i32) as usize][0 as i32 as usize][0 as i32 as usize] =
+        tess.texCoords[(ndx + 2 as i32) as usize][1 as i32 as usize][0 as i32 as usize];
+    tess.texCoords[(ndx + 2 as i32) as usize][1 as i32 as usize][1 as i32 as usize] = t2;
+    tess.texCoords[(ndx + 2 as i32) as usize][0 as i32 as usize][1 as i32 as usize] =
+        tess.texCoords[(ndx + 2 as i32) as usize][1 as i32 as usize][1 as i32 as usize];
+    tess.texCoords[(ndx + 3 as i32) as usize][1 as i32 as usize][0 as i32 as usize] = s1;
+    tess.texCoords[(ndx + 3 as i32) as usize][0 as i32 as usize][0 as i32 as usize] =
+        tess.texCoords[(ndx + 3 as i32) as usize][1 as i32 as usize][0 as i32 as usize];
+    tess.texCoords[(ndx + 3 as i32) as usize][1 as i32 as usize][1 as i32 as usize] = t2;
+    tess.texCoords[(ndx + 3 as i32) as usize][0 as i32 as usize][1 as i32 as usize] =
+        tess.texCoords[(ndx + 3 as i32) as usize][1 as i32 as usize][1 as i32 as usize];
     // constant color all the way around
     // should this be identity and let the shader specify from entity?
     let ref mut fresh3 = *(&mut *tess
         .vertexColors
         .as_mut_ptr()
-        .offset((ndx + 3 as i32) as isize)
-        as *mut color4ub_t as *mut u32);
+        .offset((ndx + 3 as i32) as isize) as *mut color4ub_t
+        as *mut u32);
     *fresh3 = *(color as *mut u32);
     let ref mut fresh4 = *(&mut *tess
         .vertexColors
         .as_mut_ptr()
-        .offset((ndx + 2 as i32) as isize)
-        as *mut color4ub_t as *mut u32);
+        .offset((ndx + 2 as i32) as isize) as *mut color4ub_t
+        as *mut u32);
     *fresh4 = *fresh3;
     let ref mut fresh5 = *(&mut *tess
         .vertexColors
         .as_mut_ptr()
-        .offset((ndx + 1 as i32) as isize)
-        as *mut color4ub_t as *mut u32);
+        .offset((ndx + 1 as i32) as isize) as *mut color4ub_t
+        as *mut u32);
     *fresh5 = *fresh4;
-    *(&mut *tess
-        .vertexColors
-        .as_mut_ptr()
-        .offset(ndx as isize) as *mut color4ub_t as *mut u32) = *fresh5;
+    *(&mut *tess.vertexColors.as_mut_ptr().offset(ndx as isize) as *mut color4ub_t as *mut u32) =
+        *fresh5;
     tess.numVertexes += 4 as i32;
     tess.numIndexes += 6 as i32;
 }
@@ -829,145 +764,63 @@ unsafe extern "C" fn RB_SurfaceSprite() {
     let mut up: vec3_t = [0.; 3];
     let mut radius: f32 = 0.;
     // calculate the xyz locations for the four corners
-    radius = (*backEnd.currentEntity)
-        .e
-        .radius;
-    if (*backEnd.currentEntity)
-        .e
-        .rotation
-        == 0 as i32 as f32
-    {
-        left[0 as i32 as usize] = backEnd
-            .viewParms
-            .or
-            .axis[1 as i32 as usize][0 as i32 as usize]
-            * radius;
-        left[1 as i32 as usize] = backEnd
-            .viewParms
-            .or
-            .axis[1 as i32 as usize][1 as i32 as usize]
-            * radius;
-        left[2 as i32 as usize] = backEnd
-            .viewParms
-            .or
-            .axis[1 as i32 as usize][2 as i32 as usize]
-            * radius;
-        up[0 as i32 as usize] = backEnd
-            .viewParms
-            .or
-            .axis[2 as i32 as usize][0 as i32 as usize]
-            * radius;
-        up[1 as i32 as usize] = backEnd
-            .viewParms
-            .or
-            .axis[2 as i32 as usize][1 as i32 as usize]
-            * radius;
-        up[2 as i32 as usize] = backEnd
-            .viewParms
-            .or
-            .axis[2 as i32 as usize][2 as i32 as usize]
-            * radius
+    radius = (*backEnd.currentEntity).e.radius;
+    if (*backEnd.currentEntity).e.rotation == 0 as i32 as f32 {
+        left[0 as i32 as usize] =
+            backEnd.viewParms.or.axis[1 as i32 as usize][0 as i32 as usize] * radius;
+        left[1 as i32 as usize] =
+            backEnd.viewParms.or.axis[1 as i32 as usize][1 as i32 as usize] * radius;
+        left[2 as i32 as usize] =
+            backEnd.viewParms.or.axis[1 as i32 as usize][2 as i32 as usize] * radius;
+        up[0 as i32 as usize] =
+            backEnd.viewParms.or.axis[2 as i32 as usize][0 as i32 as usize] * radius;
+        up[1 as i32 as usize] =
+            backEnd.viewParms.or.axis[2 as i32 as usize][1 as i32 as usize] * radius;
+        up[2 as i32 as usize] =
+            backEnd.viewParms.or.axis[2 as i32 as usize][2 as i32 as usize] * radius
     } else {
         let mut s: f32 = 0.;
         let mut c: f32 = 0.;
         let mut ang: f32 = 0.;
-        ang = (3.14159265358979323846f64
-            * (*backEnd.currentEntity)
-                .e
-                .rotation as f64
+        ang = (3.14159265358979323846f64 * (*backEnd.currentEntity).e.rotation as f64
             / 180 as i32 as f64) as f32;
         s = crate::stdlib::sin(ang as f64) as f32;
         c = crate::stdlib::cos(ang as f64) as f32;
-        left[0 as i32 as usize] = backEnd
-            .viewParms
-            .or
-            .axis[1 as i32 as usize][0 as i32 as usize]
-            * (c * radius);
-        left[1 as i32 as usize] = backEnd
-            .viewParms
-            .or
-            .axis[1 as i32 as usize][1 as i32 as usize]
-            * (c * radius);
-        left[2 as i32 as usize] = backEnd
-            .viewParms
-            .or
-            .axis[1 as i32 as usize][2 as i32 as usize]
-            * (c * radius);
-        left[0 as i32 as usize] = left[0 as i32 as usize]
-            + backEnd
-                .viewParms
-                .or
-                .axis[2 as i32 as usize][0 as i32 as usize]
-                * (-s * radius);
-        left[1 as i32 as usize] = left[1 as i32 as usize]
-            + backEnd
-                .viewParms
-                .or
-                .axis[2 as i32 as usize][1 as i32 as usize]
-                * (-s * radius);
-        left[2 as i32 as usize] = left[2 as i32 as usize]
-            + backEnd
-                .viewParms
-                .or
-                .axis[2 as i32 as usize][2 as i32 as usize]
-                * (-s * radius);
-        up[0 as i32 as usize] = backEnd
-            .viewParms
-            .or
-            .axis[2 as i32 as usize][0 as i32 as usize]
-            * (c * radius);
-        up[1 as i32 as usize] = backEnd
-            .viewParms
-            .or
-            .axis[2 as i32 as usize][1 as i32 as usize]
-            * (c * radius);
-        up[2 as i32 as usize] = backEnd
-            .viewParms
-            .or
-            .axis[2 as i32 as usize][2 as i32 as usize]
-            * (c * radius);
-        up[0 as i32 as usize] = up[0 as i32 as usize]
-            + backEnd
-                .viewParms
-                .or
-                .axis[1 as i32 as usize][0 as i32 as usize]
-                * (s * radius);
-        up[1 as i32 as usize] = up[1 as i32 as usize]
-            + backEnd
-                .viewParms
-                .or
-                .axis[1 as i32 as usize][1 as i32 as usize]
-                * (s * radius);
-        up[2 as i32 as usize] = up[2 as i32 as usize]
-            + backEnd
-                .viewParms
-                .or
-                .axis[1 as i32 as usize][2 as i32 as usize]
-                * (s * radius)
-    }
-    if backEnd
-        .viewParms
-        .isMirror as u64
-        != 0
-    {
         left[0 as i32 as usize] =
-            vec3_origin[0 as i32 as usize] - left[0 as i32 as usize];
+            backEnd.viewParms.or.axis[1 as i32 as usize][0 as i32 as usize] * (c * radius);
         left[1 as i32 as usize] =
-            vec3_origin[1 as i32 as usize] - left[1 as i32 as usize];
+            backEnd.viewParms.or.axis[1 as i32 as usize][1 as i32 as usize] * (c * radius);
         left[2 as i32 as usize] =
-            vec3_origin[2 as i32 as usize] - left[2 as i32 as usize]
+            backEnd.viewParms.or.axis[1 as i32 as usize][2 as i32 as usize] * (c * radius);
+        left[0 as i32 as usize] = left[0 as i32 as usize]
+            + backEnd.viewParms.or.axis[2 as i32 as usize][0 as i32 as usize] * (-s * radius);
+        left[1 as i32 as usize] = left[1 as i32 as usize]
+            + backEnd.viewParms.or.axis[2 as i32 as usize][1 as i32 as usize] * (-s * radius);
+        left[2 as i32 as usize] = left[2 as i32 as usize]
+            + backEnd.viewParms.or.axis[2 as i32 as usize][2 as i32 as usize] * (-s * radius);
+        up[0 as i32 as usize] =
+            backEnd.viewParms.or.axis[2 as i32 as usize][0 as i32 as usize] * (c * radius);
+        up[1 as i32 as usize] =
+            backEnd.viewParms.or.axis[2 as i32 as usize][1 as i32 as usize] * (c * radius);
+        up[2 as i32 as usize] =
+            backEnd.viewParms.or.axis[2 as i32 as usize][2 as i32 as usize] * (c * radius);
+        up[0 as i32 as usize] = up[0 as i32 as usize]
+            + backEnd.viewParms.or.axis[1 as i32 as usize][0 as i32 as usize] * (s * radius);
+        up[1 as i32 as usize] = up[1 as i32 as usize]
+            + backEnd.viewParms.or.axis[1 as i32 as usize][1 as i32 as usize] * (s * radius);
+        up[2 as i32 as usize] = up[2 as i32 as usize]
+            + backEnd.viewParms.or.axis[1 as i32 as usize][2 as i32 as usize] * (s * radius)
+    }
+    if backEnd.viewParms.isMirror as u64 != 0 {
+        left[0 as i32 as usize] = vec3_origin[0 as i32 as usize] - left[0 as i32 as usize];
+        left[1 as i32 as usize] = vec3_origin[1 as i32 as usize] - left[1 as i32 as usize];
+        left[2 as i32 as usize] = vec3_origin[2 as i32 as usize] - left[2 as i32 as usize]
     }
     RB_AddQuadStamp(
-        (*backEnd.currentEntity)
-            .e
-            .origin
-            .as_mut_ptr(),
+        (*backEnd.currentEntity).e.origin.as_mut_ptr(),
         left.as_mut_ptr(),
         up.as_mut_ptr(),
-        (*backEnd.currentEntity)
-            .e
-            .shaderRGBA
-            .as_mut_ptr(),
+        (*backEnd.currentEntity).e.shaderRGBA.as_mut_ptr(),
     );
 }
 /*
@@ -980,9 +833,7 @@ unsafe extern "C" fn RB_SurfacePolychain(mut p: *mut srfPoly_t) {
     let mut i: i32 = 0;
     let mut numv: i32 = 0;
     if tess.numVertexes + (*p).numVerts >= 1000 as i32
-        || tess.numIndexes
-            + 3 as i32 * ((*p).numVerts - 2 as i32)
-            >= 6 as i32 * 1000 as i32
+        || tess.numIndexes + 3 as i32 * ((*p).numVerts - 2 as i32) >= 6 as i32 * 1000 as i32
     {
         RB_CheckOverflow((*p).numVerts, 3 as i32 * ((*p).numVerts - 2 as i32));
     }
@@ -996,32 +847,23 @@ unsafe extern "C" fn RB_SurfacePolychain(mut p: *mut srfPoly_t) {
             (*(*p).verts.offset(i as isize)).xyz[1 as i32 as usize];
         tess.xyz[numv as usize][2 as i32 as usize] =
             (*(*p).verts.offset(i as isize)).xyz[2 as i32 as usize];
-        tess.texCoords[numv as usize][0 as i32 as usize]
-            [0 as i32 as usize] = (*(*p).verts.offset(i as isize)).st[0 as i32 as usize];
-        tess.texCoords[numv as usize][0 as i32 as usize]
-            [1 as i32 as usize] = (*(*p).verts.offset(i as isize)).st[1 as i32 as usize];
-        *(&mut *tess
-            .vertexColors
-            .as_mut_ptr()
-            .offset(numv as isize) as *mut color4ub_t as *mut i32) =
-            *((*(*p).verts.offset(i as isize)).modulate.as_mut_ptr() as *mut i32);
+        tess.texCoords[numv as usize][0 as i32 as usize][0 as i32 as usize] =
+            (*(*p).verts.offset(i as isize)).st[0 as i32 as usize];
+        tess.texCoords[numv as usize][0 as i32 as usize][1 as i32 as usize] =
+            (*(*p).verts.offset(i as isize)).st[1 as i32 as usize];
+        *(&mut *tess.vertexColors.as_mut_ptr().offset(numv as isize) as *mut color4ub_t
+            as *mut i32) = *((*(*p).verts.offset(i as isize)).modulate.as_mut_ptr() as *mut i32);
         numv += 1;
         i += 1
     }
     // generate fan indexes into the tess array
     i = 0 as i32;
     while i < (*p).numVerts - 2 as i32 {
-        tess.indexes
-            [(tess.numIndexes + 0 as i32) as usize] =
-            tess.numVertexes as glIndex_t;
-        tess.indexes
-            [(tess.numIndexes + 1 as i32) as usize] =
-            (tess.numVertexes + i + 1 as i32)
-                as glIndex_t;
-        tess.indexes
-            [(tess.numIndexes + 2 as i32) as usize] =
-            (tess.numVertexes + i + 2 as i32)
-                as glIndex_t;
+        tess.indexes[(tess.numIndexes + 0 as i32) as usize] = tess.numVertexes as glIndex_t;
+        tess.indexes[(tess.numIndexes + 1 as i32) as usize] =
+            (tess.numVertexes + i + 1 as i32) as glIndex_t;
+        tess.indexes[(tess.numIndexes + 2 as i32) as usize] =
+            (tess.numVertexes + i + 2 as i32) as glIndex_t;
         tess.numIndexes += 3 as i32;
         i += 1
     }
@@ -1039,52 +881,32 @@ unsafe extern "C" fn RB_SurfaceTriangles(mut srf: *mut srfTriangles_t) {
     let mut xyz: *mut f32 = 0 as *mut f32;
     let mut normal: *mut f32 = 0 as *mut f32;
     let mut texCoords: *mut f32 = 0 as *mut f32;
-    let mut color: *mut byte =
-        0 as *mut byte;
+    let mut color: *mut byte = 0 as *mut byte;
     let mut dlightBits: i32 = 0;
-    let mut needsNormal: qboolean =
-        qfalse;
+    let mut needsNormal: qboolean = qfalse;
     dlightBits = (*srf).dlightBits;
     tess.dlightBits |= dlightBits;
     if tess.numVertexes + (*srf).numVerts >= 1000 as i32
-        || tess.numIndexes + (*srf).numIndexes
-            >= 6 as i32 * 1000 as i32
+        || tess.numIndexes + (*srf).numIndexes >= 6 as i32 * 1000 as i32
     {
         RB_CheckOverflow((*srf).numVerts, (*srf).numIndexes);
     }
     i = 0 as i32;
     while i < (*srf).numIndexes {
-        tess.indexes
-            [(tess.numIndexes + i + 0 as i32) as usize] =
-            (tess.numVertexes
-                + *(*srf).indexes.offset((i + 0 as i32) as isize))
-                as glIndex_t;
-        tess.indexes
-            [(tess.numIndexes + i + 1 as i32) as usize] =
-            (tess.numVertexes
-                + *(*srf).indexes.offset((i + 1 as i32) as isize))
-                as glIndex_t;
-        tess.indexes
-            [(tess.numIndexes + i + 2 as i32) as usize] =
-            (tess.numVertexes
-                + *(*srf).indexes.offset((i + 2 as i32) as isize))
-                as glIndex_t;
+        tess.indexes[(tess.numIndexes + i + 0 as i32) as usize] =
+            (tess.numVertexes + *(*srf).indexes.offset((i + 0 as i32) as isize)) as glIndex_t;
+        tess.indexes[(tess.numIndexes + i + 1 as i32) as usize] =
+            (tess.numVertexes + *(*srf).indexes.offset((i + 1 as i32) as isize)) as glIndex_t;
+        tess.indexes[(tess.numIndexes + i + 2 as i32) as usize] =
+            (tess.numVertexes + *(*srf).indexes.offset((i + 2 as i32) as isize)) as glIndex_t;
         i += 3 as i32
     }
     tess.numIndexes += (*srf).numIndexes;
     dv = (*srf).verts;
-    xyz = tess.xyz
-        [tess.numVertexes as usize]
-        .as_mut_ptr();
-    normal = tess.normal
-        [tess.numVertexes as usize]
-        .as_mut_ptr();
-    texCoords = tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        .as_mut_ptr();
-    color = tess.vertexColors
-        [tess.numVertexes as usize]
-        .as_mut_ptr();
+    xyz = tess.xyz[tess.numVertexes as usize].as_mut_ptr();
+    normal = tess.normal[tess.numVertexes as usize].as_mut_ptr();
+    texCoords = tess.texCoords[tess.numVertexes as usize][0 as i32 as usize].as_mut_ptr();
+    color = tess.vertexColors[tess.numVertexes as usize].as_mut_ptr();
     needsNormal = (*tess.shader).needsNormal;
     i = 0 as i32;
     while i < (*srf).numVerts {
@@ -1110,8 +932,7 @@ unsafe extern "C" fn RB_SurfaceTriangles(mut srf: *mut srfTriangles_t) {
     }
     i = 0 as i32;
     while i < (*srf).numVerts {
-        tess.vertexDlightBits
-            [(tess.numVertexes + i) as usize] = dlightBits;
+        tess.vertexDlightBits[(tess.numVertexes + i) as usize] = dlightBits;
         i += 1
     }
     tess.numVertexes += (*srf).numVerts;
@@ -1145,9 +966,7 @@ unsafe extern "C" fn RB_SurfaceBeam() {
     normalized_direction[1 as i32 as usize] = direction[1 as i32 as usize];
     direction[2 as i32 as usize] = oldorigin[2 as i32 as usize] - origin[2 as i32 as usize];
     normalized_direction[2 as i32 as usize] = direction[2 as i32 as usize];
-    if VectorNormalize(normalized_direction.as_mut_ptr())
-        == 0 as i32 as f32
-    {
+    if VectorNormalize(normalized_direction.as_mut_ptr()) == 0 as i32 as f32 {
         return;
     }
     PerpendicularVector(
@@ -1174,18 +993,14 @@ unsafe extern "C" fn RB_SurfaceBeam() {
             start_points[i as usize][2 as i32 as usize] + direction[2 as i32 as usize];
         i += 1
     }
-    GL_Bind(
-        tr.whiteImage as *mut image_s,
-    );
+    GL_Bind(tr.whiteImage as *mut image_s);
     GL_State((0x2 as i32 | 0x20 as i32) as libc::c_ulong);
     qglColor3f.expect("non-null function pointer")(
         1 as i32 as GLfloat,
         0 as i32 as GLfloat,
         0 as i32 as GLfloat,
     );
-    qglBegin.expect("non-null function pointer")(
-        0x5 as i32 as GLenum,
-    );
+    qglBegin.expect("non-null function pointer")(0x5 as i32 as GLenum);
     i = 0 as i32;
     while i <= 6 as i32 {
         qglVertex3fv.expect("non-null function pointer")(
@@ -1218,163 +1033,90 @@ unsafe extern "C" fn DoRailCore(
     vbase = tess.numVertexes;
     spanWidth2 = -spanWidth;
     // FIXME: use quad stamp?
-    tess.xyz
-        [tess.numVertexes as usize][0 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][0 as i32 as usize] =
         *start.offset(0 as i32 as isize) + *up.offset(0 as i32 as isize) * spanWidth;
-    tess.xyz
-        [tess.numVertexes as usize][1 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][1 as i32 as usize] =
         *start.offset(1 as i32 as isize) + *up.offset(1 as i32 as isize) * spanWidth;
-    tess.xyz
-        [tess.numVertexes as usize][2 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][2 as i32 as usize] =
         *start.offset(2 as i32 as isize) + *up.offset(2 as i32 as isize) * spanWidth;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [0 as i32 as usize] = 0 as i32 as vec_t;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [1 as i32 as usize] = 0 as i32 as vec_t;
-    tess.vertexColors
-        [tess.numVertexes as usize][0 as i32 as usize] =
-        ((*backEnd.currentEntity)
-            .e
-            .shaderRGBA[0 as i32 as usize] as i32 as f64
-            * 0.25f64) as byte;
-    tess.vertexColors
-        [tess.numVertexes as usize][1 as i32 as usize] =
-        ((*backEnd.currentEntity)
-            .e
-            .shaderRGBA[1 as i32 as usize] as i32 as f64
-            * 0.25f64) as byte;
-    tess.vertexColors
-        [tess.numVertexes as usize][2 as i32 as usize] =
-        ((*backEnd.currentEntity)
-            .e
-            .shaderRGBA[2 as i32 as usize] as i32 as f64
-            * 0.25f64) as byte;
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][0 as i32 as usize] =
+        0 as i32 as vec_t;
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][1 as i32 as usize] =
+        0 as i32 as vec_t;
+    tess.vertexColors[tess.numVertexes as usize][0 as i32 as usize] =
+        ((*backEnd.currentEntity).e.shaderRGBA[0 as i32 as usize] as i32 as f64 * 0.25f64) as byte;
+    tess.vertexColors[tess.numVertexes as usize][1 as i32 as usize] =
+        ((*backEnd.currentEntity).e.shaderRGBA[1 as i32 as usize] as i32 as f64 * 0.25f64) as byte;
+    tess.vertexColors[tess.numVertexes as usize][2 as i32 as usize] =
+        ((*backEnd.currentEntity).e.shaderRGBA[2 as i32 as usize] as i32 as f64 * 0.25f64) as byte;
     tess.numVertexes += 1;
-    tess.xyz
-        [tess.numVertexes as usize][0 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][0 as i32 as usize] =
         *start.offset(0 as i32 as isize) + *up.offset(0 as i32 as isize) * spanWidth2;
-    tess.xyz
-        [tess.numVertexes as usize][1 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][1 as i32 as usize] =
         *start.offset(1 as i32 as isize) + *up.offset(1 as i32 as isize) * spanWidth2;
-    tess.xyz
-        [tess.numVertexes as usize][2 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][2 as i32 as usize] =
         *start.offset(2 as i32 as isize) + *up.offset(2 as i32 as isize) * spanWidth2;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [0 as i32 as usize] = 0 as i32 as vec_t;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [1 as i32 as usize] = 1 as i32 as vec_t;
-    tess.vertexColors
-        [tess.numVertexes as usize][0 as i32 as usize] =
-        (*backEnd.currentEntity)
-            .e
-            .shaderRGBA[0 as i32 as usize];
-    tess.vertexColors
-        [tess.numVertexes as usize][1 as i32 as usize] =
-        (*backEnd.currentEntity)
-            .e
-            .shaderRGBA[1 as i32 as usize];
-    tess.vertexColors
-        [tess.numVertexes as usize][2 as i32 as usize] =
-        (*backEnd.currentEntity)
-            .e
-            .shaderRGBA[2 as i32 as usize];
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][0 as i32 as usize] =
+        0 as i32 as vec_t;
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][1 as i32 as usize] =
+        1 as i32 as vec_t;
+    tess.vertexColors[tess.numVertexes as usize][0 as i32 as usize] =
+        (*backEnd.currentEntity).e.shaderRGBA[0 as i32 as usize];
+    tess.vertexColors[tess.numVertexes as usize][1 as i32 as usize] =
+        (*backEnd.currentEntity).e.shaderRGBA[1 as i32 as usize];
+    tess.vertexColors[tess.numVertexes as usize][2 as i32 as usize] =
+        (*backEnd.currentEntity).e.shaderRGBA[2 as i32 as usize];
     tess.numVertexes += 1;
-    tess.xyz
-        [tess.numVertexes as usize][0 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][0 as i32 as usize] =
         *end.offset(0 as i32 as isize) + *up.offset(0 as i32 as isize) * spanWidth;
-    tess.xyz
-        [tess.numVertexes as usize][1 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][1 as i32 as usize] =
         *end.offset(1 as i32 as isize) + *up.offset(1 as i32 as isize) * spanWidth;
-    tess.xyz
-        [tess.numVertexes as usize][2 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][2 as i32 as usize] =
         *end.offset(2 as i32 as isize) + *up.offset(2 as i32 as isize) * spanWidth;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [0 as i32 as usize] = t;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [1 as i32 as usize] = 0 as i32 as vec_t;
-    tess.vertexColors
-        [tess.numVertexes as usize][0 as i32 as usize] =
-        (*backEnd.currentEntity)
-            .e
-            .shaderRGBA[0 as i32 as usize];
-    tess.vertexColors
-        [tess.numVertexes as usize][1 as i32 as usize] =
-        (*backEnd.currentEntity)
-            .e
-            .shaderRGBA[1 as i32 as usize];
-    tess.vertexColors
-        [tess.numVertexes as usize][2 as i32 as usize] =
-        (*backEnd.currentEntity)
-            .e
-            .shaderRGBA[2 as i32 as usize];
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][0 as i32 as usize] = t;
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][1 as i32 as usize] =
+        0 as i32 as vec_t;
+    tess.vertexColors[tess.numVertexes as usize][0 as i32 as usize] =
+        (*backEnd.currentEntity).e.shaderRGBA[0 as i32 as usize];
+    tess.vertexColors[tess.numVertexes as usize][1 as i32 as usize] =
+        (*backEnd.currentEntity).e.shaderRGBA[1 as i32 as usize];
+    tess.vertexColors[tess.numVertexes as usize][2 as i32 as usize] =
+        (*backEnd.currentEntity).e.shaderRGBA[2 as i32 as usize];
     tess.numVertexes += 1;
-    tess.xyz
-        [tess.numVertexes as usize][0 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][0 as i32 as usize] =
         *end.offset(0 as i32 as isize) + *up.offset(0 as i32 as isize) * spanWidth2;
-    tess.xyz
-        [tess.numVertexes as usize][1 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][1 as i32 as usize] =
         *end.offset(1 as i32 as isize) + *up.offset(1 as i32 as isize) * spanWidth2;
-    tess.xyz
-        [tess.numVertexes as usize][2 as i32 as usize] =
+    tess.xyz[tess.numVertexes as usize][2 as i32 as usize] =
         *end.offset(2 as i32 as isize) + *up.offset(2 as i32 as isize) * spanWidth2;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [0 as i32 as usize] = t;
-    tess.texCoords
-        [tess.numVertexes as usize][0 as i32 as usize]
-        [1 as i32 as usize] = 1 as i32 as vec_t;
-    tess.vertexColors
-        [tess.numVertexes as usize][0 as i32 as usize] =
-        (*backEnd.currentEntity)
-            .e
-            .shaderRGBA[0 as i32 as usize];
-    tess.vertexColors
-        [tess.numVertexes as usize][1 as i32 as usize] =
-        (*backEnd.currentEntity)
-            .e
-            .shaderRGBA[1 as i32 as usize];
-    tess.vertexColors
-        [tess.numVertexes as usize][2 as i32 as usize] =
-        (*backEnd.currentEntity)
-            .e
-            .shaderRGBA[2 as i32 as usize];
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][0 as i32 as usize] = t;
+    tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][1 as i32 as usize] =
+        1 as i32 as vec_t;
+    tess.vertexColors[tess.numVertexes as usize][0 as i32 as usize] =
+        (*backEnd.currentEntity).e.shaderRGBA[0 as i32 as usize];
+    tess.vertexColors[tess.numVertexes as usize][1 as i32 as usize] =
+        (*backEnd.currentEntity).e.shaderRGBA[1 as i32 as usize];
+    tess.vertexColors[tess.numVertexes as usize][2 as i32 as usize] =
+        (*backEnd.currentEntity).e.shaderRGBA[2 as i32 as usize];
     tess.numVertexes += 1;
     let fresh6 = tess.numIndexes;
-    tess.numIndexes =
-        tess.numIndexes + 1;
-    tess.indexes[fresh6 as usize] =
-        vbase as glIndex_t;
+    tess.numIndexes = tess.numIndexes + 1;
+    tess.indexes[fresh6 as usize] = vbase as glIndex_t;
     let fresh7 = tess.numIndexes;
-    tess.numIndexes =
-        tess.numIndexes + 1;
-    tess.indexes[fresh7 as usize] =
-        (vbase + 1 as i32) as glIndex_t;
+    tess.numIndexes = tess.numIndexes + 1;
+    tess.indexes[fresh7 as usize] = (vbase + 1 as i32) as glIndex_t;
     let fresh8 = tess.numIndexes;
-    tess.numIndexes =
-        tess.numIndexes + 1;
-    tess.indexes[fresh8 as usize] =
-        (vbase + 2 as i32) as glIndex_t;
+    tess.numIndexes = tess.numIndexes + 1;
+    tess.indexes[fresh8 as usize] = (vbase + 2 as i32) as glIndex_t;
     let fresh9 = tess.numIndexes;
-    tess.numIndexes =
-        tess.numIndexes + 1;
-    tess.indexes[fresh9 as usize] =
-        (vbase + 2 as i32) as glIndex_t;
+    tess.numIndexes = tess.numIndexes + 1;
+    tess.indexes[fresh9 as usize] = (vbase + 2 as i32) as glIndex_t;
     let fresh10 = tess.numIndexes;
-    tess.numIndexes =
-        tess.numIndexes + 1;
-    tess.indexes[fresh10 as usize] =
-        (vbase + 1 as i32) as glIndex_t;
+    tess.numIndexes = tess.numIndexes + 1;
+    tess.indexes[fresh10 as usize] = (vbase + 1 as i32) as glIndex_t;
     let fresh11 = tess.numIndexes;
-    tess.numIndexes =
-        tess.numIndexes + 1;
-    tess.indexes[fresh11 as usize] =
-        (vbase + 3 as i32) as glIndex_t;
+    tess.numIndexes = tess.numIndexes + 1;
+    tess.indexes[fresh11 as usize] = (vbase + 3 as i32) as glIndex_t;
 }
 
 unsafe extern "C" fn DoRailDiscs(
@@ -1439,44 +1181,28 @@ unsafe extern "C" fn DoRailDiscs(
     while i < numSegs {
         let mut j: i32 = 0;
         if tess.numVertexes + 4 as i32 >= 1000 as i32
-            || tess.numIndexes + 6 as i32
-                >= 6 as i32 * 1000 as i32
+            || tess.numIndexes + 6 as i32 >= 6 as i32 * 1000 as i32
         {
             RB_CheckOverflow(4 as i32, 6 as i32);
         }
         j = 0 as i32;
         while j < 4 as i32 {
-            tess.xyz
-                [tess.numVertexes as usize][0 as i32 as usize] =
+            tess.xyz[tess.numVertexes as usize][0 as i32 as usize] =
                 pos[j as usize][0 as i32 as usize];
-            tess.xyz
-                [tess.numVertexes as usize][1 as i32 as usize] =
+            tess.xyz[tess.numVertexes as usize][1 as i32 as usize] =
                 pos[j as usize][1 as i32 as usize];
-            tess.xyz
-                [tess.numVertexes as usize][2 as i32 as usize] =
+            tess.xyz[tess.numVertexes as usize][2 as i32 as usize] =
                 pos[j as usize][2 as i32 as usize];
-            tess.texCoords
-                [tess.numVertexes as usize][0 as i32 as usize]
-                [0 as i32 as usize] = (j < 2 as i32) as i32 as vec_t;
-            tess.texCoords
-                [tess.numVertexes as usize][0 as i32 as usize]
-                [1 as i32 as usize] =
+            tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][0 as i32 as usize] =
+                (j < 2 as i32) as i32 as vec_t;
+            tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][1 as i32 as usize] =
                 (j != 0 && j != 3 as i32) as i32 as vec_t;
-            tess.vertexColors
-                [tess.numVertexes as usize][0 as i32 as usize] =
-                (*backEnd.currentEntity)
-                    .e
-                    .shaderRGBA[0 as i32 as usize];
-            tess.vertexColors
-                [tess.numVertexes as usize][1 as i32 as usize] =
-                (*backEnd.currentEntity)
-                    .e
-                    .shaderRGBA[1 as i32 as usize];
-            tess.vertexColors
-                [tess.numVertexes as usize][2 as i32 as usize] =
-                (*backEnd.currentEntity)
-                    .e
-                    .shaderRGBA[2 as i32 as usize];
+            tess.vertexColors[tess.numVertexes as usize][0 as i32 as usize] =
+                (*backEnd.currentEntity).e.shaderRGBA[0 as i32 as usize];
+            tess.vertexColors[tess.numVertexes as usize][1 as i32 as usize] =
+                (*backEnd.currentEntity).e.shaderRGBA[1 as i32 as usize];
+            tess.vertexColors[tess.numVertexes as usize][2 as i32 as usize] =
+                (*backEnd.currentEntity).e.shaderRGBA[2 as i32 as usize];
             tess.numVertexes += 1;
             pos[j as usize][0 as i32 as usize] =
                 pos[j as usize][0 as i32 as usize] + *dir.offset(0 as i32 as isize);
@@ -1487,41 +1213,23 @@ unsafe extern "C" fn DoRailDiscs(
             j += 1
         }
         let fresh12 = tess.numIndexes;
-        tess.numIndexes =
-            tess.numIndexes + 1;
-        tess.indexes[fresh12 as usize] =
-            (tess.numVertexes - 4 as i32 + 0 as i32)
-                as glIndex_t;
+        tess.numIndexes = tess.numIndexes + 1;
+        tess.indexes[fresh12 as usize] = (tess.numVertexes - 4 as i32 + 0 as i32) as glIndex_t;
         let fresh13 = tess.numIndexes;
-        tess.numIndexes =
-            tess.numIndexes + 1;
-        tess.indexes[fresh13 as usize] =
-            (tess.numVertexes - 4 as i32 + 1 as i32)
-                as glIndex_t;
+        tess.numIndexes = tess.numIndexes + 1;
+        tess.indexes[fresh13 as usize] = (tess.numVertexes - 4 as i32 + 1 as i32) as glIndex_t;
         let fresh14 = tess.numIndexes;
-        tess.numIndexes =
-            tess.numIndexes + 1;
-        tess.indexes[fresh14 as usize] =
-            (tess.numVertexes - 4 as i32 + 3 as i32)
-                as glIndex_t;
+        tess.numIndexes = tess.numIndexes + 1;
+        tess.indexes[fresh14 as usize] = (tess.numVertexes - 4 as i32 + 3 as i32) as glIndex_t;
         let fresh15 = tess.numIndexes;
-        tess.numIndexes =
-            tess.numIndexes + 1;
-        tess.indexes[fresh15 as usize] =
-            (tess.numVertexes - 4 as i32 + 3 as i32)
-                as glIndex_t;
+        tess.numIndexes = tess.numIndexes + 1;
+        tess.indexes[fresh15 as usize] = (tess.numVertexes - 4 as i32 + 3 as i32) as glIndex_t;
         let fresh16 = tess.numIndexes;
-        tess.numIndexes =
-            tess.numIndexes + 1;
-        tess.indexes[fresh16 as usize] =
-            (tess.numVertexes - 4 as i32 + 1 as i32)
-                as glIndex_t;
+        tess.numIndexes = tess.numIndexes + 1;
+        tess.indexes[fresh16 as usize] = (tess.numVertexes - 4 as i32 + 1 as i32) as glIndex_t;
         let fresh17 = tess.numIndexes;
-        tess.numIndexes =
-            tess.numIndexes + 1;
-        tess.indexes[fresh17 as usize] =
-            (tess.numVertexes - 4 as i32 + 2 as i32)
-                as glIndex_t;
+        tess.numIndexes = tess.numIndexes + 1;
+        tess.indexes[fresh17 as usize] = (tess.numVertexes - 4 as i32 + 2 as i32) as glIndex_t;
         i += 1
     }
 }
@@ -1559,12 +1267,9 @@ unsafe extern "C" fn RB_SurfaceRailRings() {
     if numSegs <= 0 as i32 {
         numSegs = 1 as i32
     }
-    vec[0 as i32 as usize] =
-        vec[0 as i32 as usize] * (*r_railSegmentLength).value;
-    vec[1 as i32 as usize] =
-        vec[1 as i32 as usize] * (*r_railSegmentLength).value;
-    vec[2 as i32 as usize] =
-        vec[2 as i32 as usize] * (*r_railSegmentLength).value;
+    vec[0 as i32 as usize] = vec[0 as i32 as usize] * (*r_railSegmentLength).value;
+    vec[1 as i32 as usize] = vec[1 as i32 as usize] * (*r_railSegmentLength).value;
+    vec[2 as i32 as usize] = vec[2 as i32 as usize] * (*r_railSegmentLength).value;
     DoRailDiscs(
         numSegs,
         start.as_mut_ptr() as *const vec_t,
@@ -1598,37 +1303,16 @@ unsafe extern "C" fn RB_SurfaceRailCore() {
     vec[2 as i32 as usize] = end[2 as i32 as usize] - start[2 as i32 as usize];
     len = VectorNormalize(vec.as_mut_ptr()) as i32;
     // compute side vector
-    v1[0 as i32 as usize] = start[0 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .origin[0 as i32 as usize];
-    v1[1 as i32 as usize] = start[1 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .origin[1 as i32 as usize];
-    v1[2 as i32 as usize] = start[2 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .origin[2 as i32 as usize];
+    v1[0 as i32 as usize] =
+        start[0 as i32 as usize] - backEnd.viewParms.or.origin[0 as i32 as usize];
+    v1[1 as i32 as usize] =
+        start[1 as i32 as usize] - backEnd.viewParms.or.origin[1 as i32 as usize];
+    v1[2 as i32 as usize] =
+        start[2 as i32 as usize] - backEnd.viewParms.or.origin[2 as i32 as usize];
     VectorNormalize(v1.as_mut_ptr());
-    v2[0 as i32 as usize] = end[0 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .origin[0 as i32 as usize];
-    v2[1 as i32 as usize] = end[1 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .origin[1 as i32 as usize];
-    v2[2 as i32 as usize] = end[2 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .origin[2 as i32 as usize];
+    v2[0 as i32 as usize] = end[0 as i32 as usize] - backEnd.viewParms.or.origin[0 as i32 as usize];
+    v2[1 as i32 as usize] = end[1 as i32 as usize] - backEnd.viewParms.or.origin[1 as i32 as usize];
+    v2[2 as i32 as usize] = end[2 as i32 as usize] - backEnd.viewParms.or.origin[2 as i32 as usize];
     VectorNormalize(v2.as_mut_ptr());
     CrossProduct(
         v1.as_mut_ptr() as *const vec_t,
@@ -1671,37 +1355,16 @@ unsafe extern "C" fn RB_SurfaceLightningBolt() {
     vec[2 as i32 as usize] = end[2 as i32 as usize] - start[2 as i32 as usize];
     len = VectorNormalize(vec.as_mut_ptr()) as i32;
     // compute side vector
-    v1[0 as i32 as usize] = start[0 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .origin[0 as i32 as usize];
-    v1[1 as i32 as usize] = start[1 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .origin[1 as i32 as usize];
-    v1[2 as i32 as usize] = start[2 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .origin[2 as i32 as usize];
+    v1[0 as i32 as usize] =
+        start[0 as i32 as usize] - backEnd.viewParms.or.origin[0 as i32 as usize];
+    v1[1 as i32 as usize] =
+        start[1 as i32 as usize] - backEnd.viewParms.or.origin[1 as i32 as usize];
+    v1[2 as i32 as usize] =
+        start[2 as i32 as usize] - backEnd.viewParms.or.origin[2 as i32 as usize];
     VectorNormalize(v1.as_mut_ptr());
-    v2[0 as i32 as usize] = end[0 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .origin[0 as i32 as usize];
-    v2[1 as i32 as usize] = end[1 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .origin[1 as i32 as usize];
-    v2[2 as i32 as usize] = end[2 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .origin[2 as i32 as usize];
+    v2[0 as i32 as usize] = end[0 as i32 as usize] - backEnd.viewParms.or.origin[0 as i32 as usize];
+    v2[1 as i32 as usize] = end[1 as i32 as usize] - backEnd.viewParms.or.origin[1 as i32 as usize];
+    v2[2 as i32 as usize] = end[2 as i32 as usize] - backEnd.viewParms.or.origin[2 as i32 as usize];
     VectorNormalize(v2.as_mut_ptr());
     CrossProduct(
         v1.as_mut_ptr() as *const vec_t,
@@ -2166,10 +1829,7 @@ RENDERER BACK END COMMAND QUEUE
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn VectorArrayNormalize(
-    mut normals: *mut vec4_t,
-    mut count: u32,
-) {
+pub unsafe extern "C" fn VectorArrayNormalize(mut normals: *mut vec4_t, mut count: u32) {
     loop
     //    assert(count);
     // No assembly version for this architecture, or C_ONLY defined
@@ -2188,10 +1848,7 @@ pub unsafe extern "C" fn VectorArrayNormalize(
 ** LerpMeshVertexes
 */
 
-unsafe extern "C" fn LerpMeshVertexes_scalar(
-    mut surf: *mut md3Surface_t,
-    mut backlerp: f32,
-) {
+unsafe extern "C" fn LerpMeshVertexes_scalar(mut surf: *mut md3Surface_t, mut backlerp: f32) {
     let mut oldXyz: *mut i16 = 0 as *mut i16;
     let mut newXyz: *mut i16 = 0 as *mut i16;
     let mut oldNormals: *mut i16 = 0 as *mut i16;
@@ -2206,21 +1863,10 @@ unsafe extern "C" fn LerpMeshVertexes_scalar(
     let mut lat: u32 = 0;
     let mut lng: u32 = 0;
     let mut numVerts: i32 = 0;
-    outXyz = tess.xyz
-        [tess.numVertexes as usize]
-        .as_mut_ptr();
-    outNormal = tess.normal
-        [tess.numVertexes as usize]
-        .as_mut_ptr();
-    newXyz = ((surf as *mut byte)
-        .offset((*surf).ofsXyzNormals as isize) as *mut i16)
-        .offset(
-            ((*backEnd.currentEntity)
-                .e
-                .frame
-                * (*surf).numVerts
-                * 4 as i32) as isize,
-        );
+    outXyz = tess.xyz[tess.numVertexes as usize].as_mut_ptr();
+    outNormal = tess.normal[tess.numVertexes as usize].as_mut_ptr();
+    newXyz = ((surf as *mut byte).offset((*surf).ofsXyzNormals as isize) as *mut i16)
+        .offset(((*backEnd.currentEntity).e.frame * (*surf).numVerts * 4 as i32) as isize);
     newNormals = newXyz.offset(3 as i32 as isize);
     newXyzScale = (1.0f64 / 64 as i32 as f64 * (1.0f64 - backlerp as f64)) as f32;
     newNormalScale = (1.0f64 - backlerp as f64) as f32;
@@ -2244,15 +1890,14 @@ unsafe extern "C" fn LerpMeshVertexes_scalar(
             // decode X as cos( lat ) * sin( long )
             // decode Y as sin( lat ) * sin( long )
             // decode Z as cos( long )
-            *outNormal.offset(0 as i32 as isize) = tr.sinTable
-                [(lat.wrapping_add((1024 as i32 / 4 as i32) as u32)
+            *outNormal.offset(0 as i32 as isize) =
+                tr.sinTable[(lat.wrapping_add((1024 as i32 / 4 as i32) as u32)
                     & (1024 as i32 - 1 as i32) as u32) as usize]
-                * tr.sinTable[lng as usize];
-            *outNormal.offset(1 as i32 as isize) = tr.sinTable
-                [lat as usize]
-                * tr.sinTable[lng as usize];
-            *outNormal.offset(2 as i32 as isize) = tr.sinTable
-                [(lng.wrapping_add((1024 as i32 / 4 as i32) as u32)
+                    * tr.sinTable[lng as usize];
+            *outNormal.offset(1 as i32 as isize) =
+                tr.sinTable[lat as usize] * tr.sinTable[lng as usize];
+            *outNormal.offset(2 as i32 as isize) =
+                tr.sinTable[(lng.wrapping_add((1024 as i32 / 4 as i32) as u32)
                     & (1024 as i32 - 1 as i32) as u32) as usize];
             vertNum += 1;
             newXyz = newXyz.offset(4 as i32 as isize);
@@ -2264,15 +1909,8 @@ unsafe extern "C" fn LerpMeshVertexes_scalar(
         //
         // interpolate and copy the vertex and normal
         //
-        oldXyz = ((surf as *mut byte)
-            .offset((*surf).ofsXyzNormals as isize) as *mut i16)
-            .offset(
-                ((*backEnd.currentEntity)
-                    .e
-                    .oldframe
-                    * (*surf).numVerts
-                    * 4 as i32) as isize,
-            );
+        oldXyz = ((surf as *mut byte).offset((*surf).ofsXyzNormals as isize) as *mut i16)
+            .offset(((*backEnd.currentEntity).e.oldframe * (*surf).numVerts * 4 as i32) as isize);
         oldNormals = oldXyz.offset(3 as i32 as isize);
         oldXyzScale = (1.0f64 / 64 as i32 as f64 * backlerp as f64) as f32;
         oldNormalScale = backlerp;
@@ -2294,30 +1932,28 @@ unsafe extern "C" fn LerpMeshVertexes_scalar(
             lng = (*newNormals.offset(0 as i32 as isize) as i32 & 0xff as i32) as u32;
             lat = lat.wrapping_mul(4 as i32 as u32);
             lng = lng.wrapping_mul(4 as i32 as u32);
-            uncompressedNewNormal[0 as i32 as usize] = tr
-                .sinTable[(lat.wrapping_add((1024 as i32 / 4 as i32) as u32)
-                & (1024 as i32 - 1 as i32) as u32) as usize]
-                * tr.sinTable[lng as usize];
-            uncompressedNewNormal[1 as i32 as usize] = tr
-                .sinTable[lat as usize]
-                * tr.sinTable[lng as usize];
-            uncompressedNewNormal[2 as i32 as usize] = tr
-                .sinTable[(lng.wrapping_add((1024 as i32 / 4 as i32) as u32)
-                & (1024 as i32 - 1 as i32) as u32) as usize];
+            uncompressedNewNormal[0 as i32 as usize] =
+                tr.sinTable[(lat.wrapping_add((1024 as i32 / 4 as i32) as u32)
+                    & (1024 as i32 - 1 as i32) as u32) as usize]
+                    * tr.sinTable[lng as usize];
+            uncompressedNewNormal[1 as i32 as usize] =
+                tr.sinTable[lat as usize] * tr.sinTable[lng as usize];
+            uncompressedNewNormal[2 as i32 as usize] =
+                tr.sinTable[(lng.wrapping_add((1024 as i32 / 4 as i32) as u32)
+                    & (1024 as i32 - 1 as i32) as u32) as usize];
             lat = (*oldNormals.offset(0 as i32 as isize) as i32 >> 8 as i32 & 0xff as i32) as u32;
             lng = (*oldNormals.offset(0 as i32 as isize) as i32 & 0xff as i32) as u32;
             lat = lat.wrapping_mul(4 as i32 as u32);
             lng = lng.wrapping_mul(4 as i32 as u32);
-            uncompressedOldNormal[0 as i32 as usize] = tr
-                .sinTable[(lat.wrapping_add((1024 as i32 / 4 as i32) as u32)
-                & (1024 as i32 - 1 as i32) as u32) as usize]
-                * tr.sinTable[lng as usize];
-            uncompressedOldNormal[1 as i32 as usize] = tr
-                .sinTable[lat as usize]
-                * tr.sinTable[lng as usize];
-            uncompressedOldNormal[2 as i32 as usize] = tr
-                .sinTable[(lng.wrapping_add((1024 as i32 / 4 as i32) as u32)
-                & (1024 as i32 - 1 as i32) as u32) as usize];
+            uncompressedOldNormal[0 as i32 as usize] =
+                tr.sinTable[(lat.wrapping_add((1024 as i32 / 4 as i32) as u32)
+                    & (1024 as i32 - 1 as i32) as u32) as usize]
+                    * tr.sinTable[lng as usize];
+            uncompressedOldNormal[1 as i32 as usize] =
+                tr.sinTable[lat as usize] * tr.sinTable[lng as usize];
+            uncompressedOldNormal[2 as i32 as usize] =
+                tr.sinTable[(lng.wrapping_add((1024 as i32 / 4 as i32) as u32)
+                    & (1024 as i32 - 1 as i32) as u32) as usize];
             *outNormal.offset(0 as i32 as isize) = uncompressedOldNormal[0 as i32 as usize]
                 * oldNormalScale
                 + uncompressedNewNormal[0 as i32 as usize] * newNormalScale;
@@ -2336,18 +1972,13 @@ unsafe extern "C" fn LerpMeshVertexes_scalar(
             outNormal = outNormal.offset(4 as i32 as isize)
         }
         VectorArrayNormalize(
-            tess.normal
-                [tess.numVertexes as usize]
-                .as_mut_ptr() as *mut vec4_t,
+            tess.normal[tess.numVertexes as usize].as_mut_ptr() as *mut vec4_t,
             numVerts as u32,
         );
     };
 }
 
-unsafe extern "C" fn LerpMeshVertexes(
-    mut surf: *mut md3Surface_t,
-    mut backlerp: f32,
-) {
+unsafe extern "C" fn LerpMeshVertexes(mut surf: *mut md3Surface_t, mut backlerp: f32) {
     // interpolate the xyz
     // FIXME: interpolate lat/long instead?
     // idppc_altivec
@@ -2368,47 +1999,35 @@ unsafe extern "C" fn RB_SurfaceMesh(mut surface: *mut md3Surface_t) {
     let mut Bob: i32 = 0;
     let mut Doug: i32 = 0;
     let mut numVerts: i32 = 0;
-    if (*backEnd.currentEntity)
-        .e
-        .oldframe
-        == (*backEnd.currentEntity)
-            .e
-            .frame
-    {
+    if (*backEnd.currentEntity).e.oldframe == (*backEnd.currentEntity).e.frame {
         backlerp = 0 as i32 as f32
     } else {
-        backlerp = (*backEnd.currentEntity)
-            .e
-            .backlerp
+        backlerp = (*backEnd.currentEntity).e.backlerp
     }
     if tess.numVertexes + (*surface).numVerts >= 1000 as i32
-        || tess.numIndexes + (*surface).numTriangles * 3 as i32
-            >= 6 as i32 * 1000 as i32
+        || tess.numIndexes + (*surface).numTriangles * 3 as i32 >= 6 as i32 * 1000 as i32
     {
         RB_CheckOverflow((*surface).numVerts, (*surface).numTriangles * 3 as i32);
     }
     LerpMeshVertexes(surface, backlerp);
-    triangles = (surface as *mut byte)
-        .offset((*surface).ofsTriangles as isize) as *mut i32;
+    triangles = (surface as *mut byte).offset((*surface).ofsTriangles as isize) as *mut i32;
     indexes = (*surface).numTriangles * 3 as i32;
     Bob = tess.numIndexes;
     Doug = tess.numVertexes;
     j = 0 as i32;
     while j < indexes {
-        tess.indexes[(Bob + j) as usize] =
-            (Doug + *triangles.offset(j as isize)) as glIndex_t;
+        tess.indexes[(Bob + j) as usize] = (Doug + *triangles.offset(j as isize)) as glIndex_t;
         j += 1
     }
     tess.numIndexes += indexes;
-    texCoords = (surface as *mut byte)
-        .offset((*surface).ofsSt as isize) as *mut f32;
+    texCoords = (surface as *mut byte).offset((*surface).ofsSt as isize) as *mut f32;
     numVerts = (*surface).numVerts;
     j = 0 as i32;
     while j < numVerts {
-        tess.texCoords[(Doug + j) as usize][0 as i32 as usize]
-            [0 as i32 as usize] = *texCoords.offset((j * 2 as i32 + 0 as i32) as isize);
-        tess.texCoords[(Doug + j) as usize][0 as i32 as usize]
-            [1 as i32 as usize] = *texCoords.offset((j * 2 as i32 + 1 as i32) as isize);
+        tess.texCoords[(Doug + j) as usize][0 as i32 as usize][0 as i32 as usize] =
+            *texCoords.offset((j * 2 as i32 + 0 as i32) as isize);
+        tess.texCoords[(Doug + j) as usize][0 as i32 as usize][1 as i32 as usize] =
+            *texCoords.offset((j * 2 as i32 + 1 as i32) as isize);
         j += 1
         // FIXME: fill in lightmapST for completeness?
     }
@@ -2431,8 +2050,7 @@ unsafe extern "C" fn RB_SurfaceFace(mut surf: *mut srfSurfaceFace_t) {
     let mut numPoints: i32 = 0;
     let mut dlightBits: i32 = 0;
     if tess.numVertexes + (*surf).numPoints >= 1000 as i32
-        || tess.numIndexes + (*surf).numIndices
-            >= 6 as i32 * 1000 as i32
+        || tess.numIndexes + (*surf).numIndices >= 6 as i32 * 1000 as i32
     {
         RB_CheckOverflow((*surf).numPoints, (*surf).numIndices);
     }
@@ -2440,10 +2058,7 @@ unsafe extern "C" fn RB_SurfaceFace(mut surf: *mut srfSurfaceFace_t) {
     tess.dlightBits |= dlightBits;
     indices = (surf as *mut libc::c_char).offset((*surf).ofsIndices as isize) as *mut u32;
     Bob = tess.numVertexes;
-    tessIndexes = tess
-        .indexes
-        .as_mut_ptr()
-        .offset(tess.numIndexes as isize);
+    tessIndexes = tess.indexes.as_mut_ptr().offset(tess.numIndexes as isize);
     i = (*surf).numIndices - 1 as i32;
     while i >= 0 as i32 {
         *tessIndexes.offset(i as isize) = (*indices.offset(i as isize)).wrapping_add(Bob as u32);
@@ -2456,12 +2071,9 @@ unsafe extern "C" fn RB_SurfaceFace(mut surf: *mut srfSurfaceFace_t) {
         i = 0 as i32;
         ndx = tess.numVertexes;
         while i < numPoints {
-            tess.normal[ndx as usize][0 as i32 as usize] =
-                *normal.offset(0 as i32 as isize);
-            tess.normal[ndx as usize][1 as i32 as usize] =
-                *normal.offset(1 as i32 as isize);
-            tess.normal[ndx as usize][2 as i32 as usize] =
-                *normal.offset(2 as i32 as isize);
+            tess.normal[ndx as usize][0 as i32 as usize] = *normal.offset(0 as i32 as isize);
+            tess.normal[ndx as usize][1 as i32 as usize] = *normal.offset(1 as i32 as isize);
+            tess.normal[ndx as usize][2 as i32 as usize] = *normal.offset(2 as i32 as isize);
             i += 1;
             ndx += 1
         }
@@ -2470,25 +2082,19 @@ unsafe extern "C" fn RB_SurfaceFace(mut surf: *mut srfSurfaceFace_t) {
     v = (*(*surf).points.as_mut_ptr().offset(0 as i32 as isize)).as_mut_ptr();
     ndx = tess.numVertexes;
     while i < numPoints {
-        tess.xyz[ndx as usize][0 as i32 as usize] =
-            *v.offset(0 as i32 as isize);
-        tess.xyz[ndx as usize][1 as i32 as usize] =
-            *v.offset(1 as i32 as isize);
-        tess.xyz[ndx as usize][2 as i32 as usize] =
-            *v.offset(2 as i32 as isize);
-        tess.texCoords[ndx as usize][0 as i32 as usize]
-            [0 as i32 as usize] = *v.offset(3 as i32 as isize);
-        tess.texCoords[ndx as usize][0 as i32 as usize]
-            [1 as i32 as usize] = *v.offset(4 as i32 as isize);
-        tess.texCoords[ndx as usize][1 as i32 as usize]
-            [0 as i32 as usize] = *v.offset(5 as i32 as isize);
-        tess.texCoords[ndx as usize][1 as i32 as usize]
-            [1 as i32 as usize] = *v.offset(6 as i32 as isize);
-        *(&mut *tess
-            .vertexColors
-            .as_mut_ptr()
-            .offset(ndx as isize) as *mut color4ub_t as *mut u32) =
-            *(&mut *v.offset(7 as i32 as isize) as *mut f32 as *mut u32);
+        tess.xyz[ndx as usize][0 as i32 as usize] = *v.offset(0 as i32 as isize);
+        tess.xyz[ndx as usize][1 as i32 as usize] = *v.offset(1 as i32 as isize);
+        tess.xyz[ndx as usize][2 as i32 as usize] = *v.offset(2 as i32 as isize);
+        tess.texCoords[ndx as usize][0 as i32 as usize][0 as i32 as usize] =
+            *v.offset(3 as i32 as isize);
+        tess.texCoords[ndx as usize][0 as i32 as usize][1 as i32 as usize] =
+            *v.offset(4 as i32 as isize);
+        tess.texCoords[ndx as usize][1 as i32 as usize][0 as i32 as usize] =
+            *v.offset(5 as i32 as isize);
+        tess.texCoords[ndx as usize][1 as i32 as usize][1 as i32 as usize] =
+            *v.offset(6 as i32 as isize);
+        *(&mut *tess.vertexColors.as_mut_ptr().offset(ndx as isize) as *mut color4ub_t
+            as *mut u32) = *(&mut *v.offset(7 as i32 as isize) as *mut f32 as *mut u32);
         tess.vertexDlightBits[ndx as usize] = dlightBits;
         i += 1;
         v = v.offset(8 as i32 as isize);
@@ -2497,10 +2103,7 @@ unsafe extern "C" fn RB_SurfaceFace(mut surf: *mut srfSurfaceFace_t) {
     tess.numVertexes += (*surf).numPoints;
 }
 
-unsafe extern "C" fn LodErrorForVolume(
-    mut local: *mut vec_t,
-    mut radius: f32,
-) -> f32 {
+unsafe extern "C" fn LodErrorForVolume(mut local: *mut vec_t, mut radius: f32) -> f32 {
     let mut world: vec3_t = [0.; 3];
     let mut d: f32 = 0.;
     // never let it go negative
@@ -2508,65 +2111,31 @@ unsafe extern "C" fn LodErrorForVolume(
         return 0 as i32 as f32;
     }
     world[0 as i32 as usize] = *local.offset(0 as i32 as isize)
-        * backEnd.or.axis[0 as i32 as usize]
-            [0 as i32 as usize]
-        + *local.offset(1 as i32 as isize)
-            * backEnd.or.axis[1 as i32 as usize]
-                [0 as i32 as usize]
-        + *local.offset(2 as i32 as isize)
-            * backEnd.or.axis[2 as i32 as usize]
-                [0 as i32 as usize]
+        * backEnd.or.axis[0 as i32 as usize][0 as i32 as usize]
+        + *local.offset(1 as i32 as isize) * backEnd.or.axis[1 as i32 as usize][0 as i32 as usize]
+        + *local.offset(2 as i32 as isize) * backEnd.or.axis[2 as i32 as usize][0 as i32 as usize]
         + backEnd.or.origin[0 as i32 as usize];
     world[1 as i32 as usize] = *local.offset(0 as i32 as isize)
-        * backEnd.or.axis[0 as i32 as usize]
-            [1 as i32 as usize]
-        + *local.offset(1 as i32 as isize)
-            * backEnd.or.axis[1 as i32 as usize]
-                [1 as i32 as usize]
-        + *local.offset(2 as i32 as isize)
-            * backEnd.or.axis[2 as i32 as usize]
-                [1 as i32 as usize]
+        * backEnd.or.axis[0 as i32 as usize][1 as i32 as usize]
+        + *local.offset(1 as i32 as isize) * backEnd.or.axis[1 as i32 as usize][1 as i32 as usize]
+        + *local.offset(2 as i32 as isize) * backEnd.or.axis[2 as i32 as usize][1 as i32 as usize]
         + backEnd.or.origin[1 as i32 as usize];
     world[2 as i32 as usize] = *local.offset(0 as i32 as isize)
-        * backEnd.or.axis[0 as i32 as usize]
-            [2 as i32 as usize]
-        + *local.offset(1 as i32 as isize)
-            * backEnd.or.axis[1 as i32 as usize]
-                [2 as i32 as usize]
-        + *local.offset(2 as i32 as isize)
-            * backEnd.or.axis[2 as i32 as usize]
-                [2 as i32 as usize]
+        * backEnd.or.axis[0 as i32 as usize][2 as i32 as usize]
+        + *local.offset(1 as i32 as isize) * backEnd.or.axis[1 as i32 as usize][2 as i32 as usize]
+        + *local.offset(2 as i32 as isize) * backEnd.or.axis[2 as i32 as usize][2 as i32 as usize]
         + backEnd.or.origin[2 as i32 as usize];
-    world[0 as i32 as usize] = world[0 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .origin[0 as i32 as usize];
-    world[1 as i32 as usize] = world[1 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .origin[1 as i32 as usize];
-    world[2 as i32 as usize] = world[2 as i32 as usize]
-        - backEnd
-            .viewParms
-            .or
-            .origin[2 as i32 as usize];
-    d = world[0 as i32 as usize]
-        * backEnd
-            .viewParms
-            .or
-            .axis[0 as i32 as usize][0 as i32 as usize]
+    world[0 as i32 as usize] =
+        world[0 as i32 as usize] - backEnd.viewParms.or.origin[0 as i32 as usize];
+    world[1 as i32 as usize] =
+        world[1 as i32 as usize] - backEnd.viewParms.or.origin[1 as i32 as usize];
+    world[2 as i32 as usize] =
+        world[2 as i32 as usize] - backEnd.viewParms.or.origin[2 as i32 as usize];
+    d = world[0 as i32 as usize] * backEnd.viewParms.or.axis[0 as i32 as usize][0 as i32 as usize]
         + world[1 as i32 as usize]
-            * backEnd
-                .viewParms
-                .or
-                .axis[0 as i32 as usize][1 as i32 as usize]
+            * backEnd.viewParms.or.axis[0 as i32 as usize][1 as i32 as usize]
         + world[2 as i32 as usize]
-            * backEnd
-                .viewParms
-                .or
-                .axis[0 as i32 as usize][2 as i32 as usize];
+            * backEnd.viewParms.or.axis[0 as i32 as usize][2 as i32 as usize];
     if d < 0 as i32 as f32 {
         d = -d
     }
@@ -2604,8 +2173,7 @@ unsafe extern "C" fn RB_SurfaceGrid(mut cv: *mut srfGridMesh_t) {
     let mut numVertexes: i32 = 0;
     let mut dlightBits: i32 = 0;
     let mut vDlightBits: *mut i32 = 0 as *mut i32;
-    let mut needsNormal: qboolean =
-        qfalse;
+    let mut needsNormal: qboolean = qfalse;
     dlightBits = (*cv).dlightBits;
     tess.dlightBits |= dlightBits;
     // determine the allowable discrepance
@@ -2644,17 +2212,13 @@ unsafe extern "C" fn RB_SurfaceGrid(mut cv: *mut srfGridMesh_t) {
         // see how many rows of both verts and indexes we can add without overflowing
         {
             vrows = (1000 as i32 - tess.numVertexes) / lodWidth;
-            irows = (6 as i32 * 1000 as i32 - tess.numIndexes)
-                / (lodWidth * 6 as i32);
+            irows = (6 as i32 * 1000 as i32 - tess.numIndexes) / (lodWidth * 6 as i32);
             // if we don't have enough space for at least one strip, flush the buffer
             if !(vrows < 2 as i32 || irows < 1 as i32) {
                 break;
             }
             RB_EndSurface();
-            RB_BeginSurface(
-                tess.shader as *mut shader_s,
-                tess.fogNum,
-            );
+            RB_BeginSurface(tess.shader as *mut shader_s, tess.fogNum);
         }
         rows = irows;
         if vrows < irows + 1 as i32 {
@@ -2666,13 +2230,8 @@ unsafe extern "C" fn RB_SurfaceGrid(mut cv: *mut srfGridMesh_t) {
         numVertexes = tess.numVertexes;
         xyz = tess.xyz[numVertexes as usize].as_mut_ptr();
         normal = tess.normal[numVertexes as usize].as_mut_ptr();
-        texCoords = tess.texCoords[numVertexes as usize]
-            [0 as i32 as usize]
-            .as_mut_ptr();
-        color = &mut *tess
-            .vertexColors
-            .as_mut_ptr()
-            .offset(numVertexes as isize) as *mut color4ub_t
+        texCoords = tess.texCoords[numVertexes as usize][0 as i32 as usize].as_mut_ptr();
+        color = &mut *tess.vertexColors.as_mut_ptr().offset(numVertexes as isize) as *mut color4ub_t
             as *mut u8;
         vDlightBits = &mut *tess
             .vertexDlightBits
@@ -2732,18 +2291,12 @@ unsafe extern "C" fn RB_SurfaceGrid(mut cv: *mut srfGridMesh_t) {
                 v2 = v1 - 1 as i32;
                 v3 = v2 + lodWidth;
                 v4 = v3 + 1 as i32;
-                tess.indexes[numIndexes as usize] =
-                    v2 as glIndex_t;
-                tess.indexes[(numIndexes + 1 as i32) as usize] =
-                    v3 as glIndex_t;
-                tess.indexes[(numIndexes + 2 as i32) as usize] =
-                    v1 as glIndex_t;
-                tess.indexes[(numIndexes + 3 as i32) as usize] =
-                    v1 as glIndex_t;
-                tess.indexes[(numIndexes + 4 as i32) as usize] =
-                    v3 as glIndex_t;
-                tess.indexes[(numIndexes + 5 as i32) as usize] =
-                    v4 as glIndex_t;
+                tess.indexes[numIndexes as usize] = v2 as glIndex_t;
+                tess.indexes[(numIndexes + 1 as i32) as usize] = v3 as glIndex_t;
+                tess.indexes[(numIndexes + 2 as i32) as usize] = v1 as glIndex_t;
+                tess.indexes[(numIndexes + 3 as i32) as usize] = v1 as glIndex_t;
+                tess.indexes[(numIndexes + 4 as i32) as usize] = v3 as glIndex_t;
+                tess.indexes[(numIndexes + 5 as i32) as usize] = v4 as glIndex_t;
                 numIndexes += 6 as i32;
                 j += 1
             }
@@ -2770,16 +2323,10 @@ Draws x/y/z lines from the origin for orientation debugging
 */
 
 unsafe extern "C" fn RB_SurfaceAxis() {
-    GL_Bind(
-        tr.whiteImage as *mut image_s,
-    );
+    GL_Bind(tr.whiteImage as *mut image_s);
     GL_State(0x100 as i32 as libc::c_ulong);
-    qglLineWidth.expect("non-null function pointer")(
-        3 as i32 as GLfloat,
-    );
-    qglBegin.expect("non-null function pointer")(
-        0x1 as i32 as GLenum,
-    );
+    qglLineWidth.expect("non-null function pointer")(3 as i32 as GLfloat);
+    qglBegin.expect("non-null function pointer")(0x1 as i32 as GLenum);
     qglColor3f.expect("non-null function pointer")(
         1 as i32 as GLfloat,
         0 as i32 as GLfloat,
@@ -2826,9 +2373,7 @@ unsafe extern "C" fn RB_SurfaceAxis() {
         16 as i32 as GLfloat,
     );
     qglEnd.expect("non-null function pointer")();
-    qglLineWidth.expect("non-null function pointer")(
-        1 as i32 as GLfloat,
-    );
+    qglLineWidth.expect("non-null function pointer")(1 as i32 as GLfloat);
 }
 //===========================================================================
 /*
@@ -2840,10 +2385,7 @@ Entities that have a single procedurally generated surface
 */
 
 unsafe extern "C" fn RB_SurfaceEntity(mut _surfType: *mut surfaceType_t) {
-    match (*backEnd.currentEntity)
-        .e
-        .reType as u32
-    {
+    match (*backEnd.currentEntity).e.reType as u32 {
         2 => {
             RB_SurfaceSprite();
         }
@@ -2866,9 +2408,7 @@ unsafe extern "C" fn RB_SurfaceEntity(mut _surfType: *mut surfaceType_t) {
 }
 
 unsafe extern "C" fn RB_SurfaceBad(mut _surfType: *mut surfaceType_t) {
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"Bad surface tesselated.\n\x00" as *const u8 as *const libc::c_char,
     );
@@ -2907,8 +2447,7 @@ pub static mut rb_surfaceTable: [Option<unsafe extern "C" fn(_: *mut libc::c_voi
             Option<unsafe extern "C" fn(_: *mut srfSurfaceFace_t) -> ()>,
             Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
         >(Some(
-            RB_SurfaceFace
-                as unsafe extern "C" fn(_: *mut srfSurfaceFace_t) -> (),
+            RB_SurfaceFace as unsafe extern "C" fn(_: *mut srfSurfaceFace_t) -> (),
         )),
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: *mut srfGridMesh_t) -> ()>,
@@ -2920,8 +2459,7 @@ pub static mut rb_surfaceTable: [Option<unsafe extern "C" fn(_: *mut libc::c_voi
             Option<unsafe extern "C" fn(_: *mut srfTriangles_t) -> ()>,
             Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
         >(Some(
-            RB_SurfaceTriangles
-                as unsafe extern "C" fn(_: *mut srfTriangles_t) -> (),
+            RB_SurfaceTriangles as unsafe extern "C" fn(_: *mut srfTriangles_t) -> (),
         )),
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: *mut srfPoly_t) -> ()>,
@@ -2939,15 +2477,13 @@ pub static mut rb_surfaceTable: [Option<unsafe extern "C" fn(_: *mut libc::c_voi
             Option<unsafe extern "C" fn(_: *mut mdrSurface_t) -> ()>,
             Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
         >(Some(
-            RB_MDRSurfaceAnim
-                as unsafe extern "C" fn(_: *mut mdrSurface_t) -> (),
+            RB_MDRSurfaceAnim as unsafe extern "C" fn(_: *mut mdrSurface_t) -> (),
         )),
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: *mut surfaceType_t) -> ()>,
             Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
         >(Some(
-            RB_IQMSurfaceAnim
-                as unsafe extern "C" fn(_: *mut surfaceType_t) -> (),
+            RB_IQMSurfaceAnim as unsafe extern "C" fn(_: *mut surfaceType_t) -> (),
         )),
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: *mut srfFlare_t) -> ()>,
@@ -2959,8 +2495,7 @@ pub static mut rb_surfaceTable: [Option<unsafe extern "C" fn(_: *mut libc::c_voi
             Option<unsafe extern "C" fn(_: *mut surfaceType_t) -> ()>,
             Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
         >(Some(
-            RB_SurfaceEntity
-                as unsafe extern "C" fn(_: *mut surfaceType_t) -> (),
+            RB_SurfaceEntity as unsafe extern "C" fn(_: *mut surfaceType_t) -> (),
         )),
     ]
 };

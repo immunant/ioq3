@@ -306,21 +306,16 @@ pub unsafe extern "C" fn silk_decoder_set_fs(
     let mut frame_length: i32 = 0;
     let mut ret: i32 = 0 as i32;
     /* New (sub)frame length */
-    (*psDec).subfr_length = 5 as i32 as opus_int16
-        as opus_int32
-        * fs_kHz as opus_int16 as opus_int32;
-    frame_length = (*psDec).nb_subfr as opus_int16
-        as opus_int32
-        * (*psDec).subfr_length as opus_int16
-            as opus_int32;
+    (*psDec).subfr_length =
+        5 as i32 as opus_int16 as opus_int32 * fs_kHz as opus_int16 as opus_int32;
+    frame_length = (*psDec).nb_subfr as opus_int16 as opus_int32
+        * (*psDec).subfr_length as opus_int16 as opus_int32;
     /* Initialize resampler when switching internal or external sampling frequency */
     if (*psDec).fs_kHz != fs_kHz || (*psDec).fs_API_hz != fs_API_Hz {
         /* Initialize the resampler for dec_API.c preparing resampling from fs_kHz to API_fs_Hz */
         ret += crate::src::opus_1_2_1::silk::resampler::silk_resampler_init(
-            &mut (*psDec).resampler_state as *mut _
-                as *mut _silk_resampler_state_struct,
-            fs_kHz as opus_int16 as opus_int32
-                * 1000 as i32 as opus_int16 as opus_int32,
+            &mut (*psDec).resampler_state as *mut _ as *mut _silk_resampler_state_struct,
+            fs_kHz as opus_int16 as opus_int32 * 1000 as i32 as opus_int16 as opus_int32,
             fs_API_Hz,
             0 as i32,
         );
@@ -346,9 +341,8 @@ pub unsafe extern "C" fn silk_decoder_set_fs(
                     .as_ptr()
         }
         if (*psDec).fs_kHz != fs_kHz {
-            (*psDec).ltp_mem_length = 20 as i32 as opus_int16
-                as opus_int32
-                * fs_kHz as opus_int16 as opus_int32;
+            (*psDec).ltp_mem_length =
+                20 as i32 as opus_int16 as opus_int32 * fs_kHz as opus_int16 as opus_int32;
             if fs_kHz == 8 as i32 || fs_kHz == 12 as i32 {
                 (*psDec).LPC_order = 10 as i32;
                 (*psDec).psNLSF_CB =

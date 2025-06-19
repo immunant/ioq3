@@ -251,10 +251,7 @@ BotGetAirGoal
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotGetAirGoal(
-    mut bs: *mut bot_state_t,
-    mut goal: *mut bot_goal_t,
-) -> i32 {
+pub unsafe extern "C" fn BotGetAirGoal(mut bs: *mut bot_state_t, mut goal: *mut bot_goal_t) -> i32 {
     let mut bsptrace: bsp_trace_t = bsp_trace_t {
         allsolid: qfalse,
         startsolid: qfalse,
@@ -283,11 +280,7 @@ pub unsafe extern "C" fn BotGetAirGoal(
         -(15 as i32) as vec_t,
         -(2 as i32) as vec_t,
     ];
-    let mut maxs: vec3_t = [
-        15 as i32 as vec_t,
-        15 as i32 as vec_t,
-        2 as i32 as vec_t,
-    ];
+    let mut maxs: vec3_t = [15 as i32 as vec_t, 15 as i32 as vec_t, 2 as i32 as vec_t];
     let mut areanum: i32 = 0;
     //trace up until we hit solid
     end[0 as i32 as usize] = (*bs).origin[0 as i32 as usize];
@@ -369,10 +362,7 @@ pub unsafe extern "C" fn BotGoForAir(
         //DEBUG
         //if we can find an air goal
         if BotGetAirGoal(bs, &mut goal) != 0 {
-            trap_BotPushGoal(
-                (*bs).gs,
-                &mut goal as *mut bot_goal_t as *mut libc::c_void,
-            );
+            trap_BotPushGoal((*bs).gs, &mut goal as *mut bot_goal_t as *mut libc::c_void);
             return qtrue as i32;
         } else {
             //get a nearby goal outside the water
@@ -385,10 +375,7 @@ pub unsafe extern "C" fn BotGoForAir(
                 range,
             ) != 0
             {
-                trap_BotGetTopGoal(
-                    (*bs).gs,
-                    &mut goal as *mut bot_goal_t as *mut libc::c_void,
-                );
+                trap_BotGetTopGoal((*bs).gs, &mut goal as *mut bot_goal_t as *mut libc::c_void);
                 //if the goal is not in water
                 if trap_AAS_PointContents(goal.origin.as_mut_ptr())
                     & (32 as i32 | 16 as i32 | 8 as i32)
@@ -422,10 +409,7 @@ pub unsafe extern "C" fn BotNearbyGoal(
         return qtrue as i32;
     }
     // if the bot is carrying a flag or cubes
-    if crate::src::game::ai_dmq3::BotCTFCarryingFlag(
-        bs as *mut bot_state_s,
-    ) != 0
-    {
+    if crate::src::game::ai_dmq3::BotCTFCarryingFlag(bs as *mut bot_state_s) != 0 {
         //if the bot is just a few secs away from the base
         if trap_AAS_AreaTravelTimeToGoalArea(
             (*bs).areanum,
@@ -485,17 +469,9 @@ pub unsafe extern "C" fn BotReachedGoal(
 ) -> i32 {
     if (*goal).flags & 1 as i32 != 0 {
         //if touching the goal
-        if trap_BotTouchingGoal(
-            (*bs).origin.as_mut_ptr(),
-            goal as *mut libc::c_void,
-        ) != 0
-        {
+        if trap_BotTouchingGoal((*bs).origin.as_mut_ptr(), goal as *mut libc::c_void) != 0 {
             if (*goal).flags & 4 as i32 == 0 {
-                trap_BotSetAvoidGoalTime(
-                    (*bs).gs,
-                    (*goal).number,
-                    -(1 as i32) as f32,
-                );
+                trap_BotSetAvoidGoalTime((*bs).gs, (*goal).number, -(1 as i32) as f32);
             }
             return qtrue as i32;
         }
@@ -532,9 +508,7 @@ pub unsafe extern "C" fn BotReachedGoal(
                     && (*bs).origin[1 as i32 as usize]
                         < (*goal).origin[1 as i32 as usize] + (*goal).maxs[1 as i32 as usize]
                 {
-                    if trap_AAS_Swimming((*bs).origin.as_mut_ptr())
-                        == 0
-                    {
+                    if trap_AAS_Swimming((*bs).origin.as_mut_ptr()) == 0 {
                         return qtrue as i32;
                     }
                 }
@@ -542,22 +516,14 @@ pub unsafe extern "C" fn BotReachedGoal(
         }
     } else if (*goal).flags & 128 as i32 != 0 {
         //if touching the goal
-        if trap_BotTouchingGoal(
-            (*bs).origin.as_mut_ptr(),
-            goal as *mut libc::c_void,
-        ) != 0
-        {
+        if trap_BotTouchingGoal((*bs).origin.as_mut_ptr(), goal as *mut libc::c_void) != 0 {
             return qtrue as i32;
         }
         //if the bot got air
         if (*bs).lastair_time > floattime - 1 as i32 as f32 {
             return qtrue as i32;
         }
-    } else if trap_BotTouchingGoal(
-        (*bs).origin.as_mut_ptr(),
-        goal as *mut libc::c_void,
-    ) != 0
-    {
+    } else if trap_BotTouchingGoal((*bs).origin.as_mut_ptr(), goal as *mut libc::c_void) != 0 {
         return qtrue as i32;
     }
     return qfalse as i32;
@@ -580,9 +546,7 @@ pub unsafe extern "C" fn BotGetItemLongTermGoal(
         //BotAI_Print(PRT_MESSAGE, "no ltg on stack\n");
         (*bs).ltg_time = 0 as i32 as f32
     } else if BotReachedGoal(bs, goal) != 0 {
-        crate::src::game::ai_dmq3::BotChooseWeapon(
-            bs as *mut bot_state_s,
-        );
+        crate::src::game::ai_dmq3::BotChooseWeapon(bs as *mut bot_state_s);
         (*bs).ltg_time = 0 as i32 as f32
     }
     //if the bot touches the current goal
@@ -617,10 +581,7 @@ pub unsafe extern "C" fn BotGetItemLongTermGoal(
             trap_BotResetAvoidReach((*bs).ms);
         }
         //get the goal at the top of the stack
-        return trap_BotGetTopGoal(
-            (*bs).gs,
-            goal as *mut libc::c_void,
-        );
+        return trap_BotGetTopGoal((*bs).gs, goal as *mut libc::c_void);
     }
     return qtrue as i32;
 }
@@ -697,13 +658,10 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
         legsAnim: 0,
         torsoAnim: 0,
     };
-    let mut wp: *mut bot_waypoint_t =
-        0 as *mut bot_waypoint_t;
+    let mut wp: *mut bot_waypoint_t = 0 as *mut bot_waypoint_t;
     if (*bs).ltgtype == 1 as i32 && retreat == 0 {
         //check for bot typing status message
-        if (*bs).teammessage_time != 0.
-            && (*bs).teammessage_time < floattime
-        {
+        if (*bs).teammessage_time != 0. && (*bs).teammessage_time < floattime {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"help_start\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -714,11 +672,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 ),
                 0 as *mut libc::c_void,
             );
-            trap_BotEnterChat(
-                (*bs).cs,
-                (*bs).decisionmaker,
-                2 as i32,
-            );
+            trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             crate::src::game::ai_team::BotVoiceChatOnly(
                 bs as *mut bot_state_s,
                 (*bs).decisionmaker,
@@ -769,26 +723,19 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
         //if the entity information is valid (entity in PVS)
         if entinfo.valid != 0 {
             areanum = crate::src::game::ai_dmq3::BotPointAreaNum(entinfo.origin.as_mut_ptr());
-            if areanum != 0 && trap_AAS_AreaReachability(areanum) != 0
-            {
+            if areanum != 0 && trap_AAS_AreaReachability(areanum) != 0 {
                 //update team goal
                 (*bs).teamgoal.entitynum = (*bs).teammate;
                 (*bs).teamgoal.areanum = areanum;
                 (*bs).teamgoal.origin[0 as i32 as usize] = entinfo.origin[0 as i32 as usize];
                 (*bs).teamgoal.origin[1 as i32 as usize] = entinfo.origin[1 as i32 as usize];
                 (*bs).teamgoal.origin[2 as i32 as usize] = entinfo.origin[2 as i32 as usize];
-                (*bs).teamgoal.mins[0 as i32 as usize] =
-                    -(8 as i32) as vec_t;
-                (*bs).teamgoal.mins[1 as i32 as usize] =
-                    -(8 as i32) as vec_t;
-                (*bs).teamgoal.mins[2 as i32 as usize] =
-                    -(8 as i32) as vec_t;
-                (*bs).teamgoal.maxs[0 as i32 as usize] =
-                    8 as i32 as vec_t;
-                (*bs).teamgoal.maxs[1 as i32 as usize] =
-                    8 as i32 as vec_t;
-                (*bs).teamgoal.maxs[2 as i32 as usize] =
-                    8 as i32 as vec_t
+                (*bs).teamgoal.mins[0 as i32 as usize] = -(8 as i32) as vec_t;
+                (*bs).teamgoal.mins[1 as i32 as usize] = -(8 as i32) as vec_t;
+                (*bs).teamgoal.mins[2 as i32 as usize] = -(8 as i32) as vec_t;
+                (*bs).teamgoal.maxs[0 as i32 as usize] = 8 as i32 as vec_t;
+                (*bs).teamgoal.maxs[1 as i32 as usize] = 8 as i32 as vec_t;
+                (*bs).teamgoal.maxs[2 as i32 as usize] = 8 as i32 as vec_t
             }
         }
         crate::stdlib::memcpy(
@@ -801,9 +748,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
     //if the bot accompanies someone
     if (*bs).ltgtype == 2 as i32 && retreat == 0 {
         //check for bot typing status message
-        if (*bs).teammessage_time != 0.
-            && (*bs).teammessage_time < floattime
-        {
+        if (*bs).teammessage_time != 0. && (*bs).teammessage_time < floattime {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"accompany_start\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -814,11 +759,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 ),
                 0 as *mut libc::c_void,
             );
-            trap_BotEnterChat(
-                (*bs).cs,
-                (*bs).decisionmaker,
-                2 as i32,
-            );
+            trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             crate::src::game::ai_team::BotVoiceChatOnly(
                 bs as *mut bot_state_s,
                 (*bs).decisionmaker,
@@ -907,14 +848,12 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                             {
                                 // if the followed client looks in the direction of this bot
                                 AngleVectors(
-                                    entinfo.angles.as_mut_ptr()
-                                        as *const vec_t,
+                                    entinfo.angles.as_mut_ptr() as *const vec_t,
                                     dir.as_mut_ptr(),
                                     0 as *mut vec_t,
                                     0 as *mut vec_t,
                                 );
-                                dir[2 as i32 as usize] =
-                                    0 as i32 as vec_t;
+                                dir[2 as i32 as usize] = 0 as i32 as vec_t;
                                 VectorNormalize(dir.as_mut_ptr());
                                 //VectorSubtract(entinfo.origin, entinfo.lastvisorigin, dir);
                                 dir2[0 as i32 as usize] = (*bs).origin[0 as i32 as usize]
@@ -947,8 +886,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 }
                 //check if the bot wants to crouch
                 //don't crouch if crouched less than 5 seconds ago
-                if (*bs).attackcrouch_time < floattime - 5 as i32 as f32
-                {
+                if (*bs).attackcrouch_time < floattime - 5 as i32 as f32 {
                     croucher = trap_Characteristic_BFloat(
                         (*bs).character,
                         36 as i32,
@@ -958,9 +896,8 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                     if ((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                         < (*bs).thinktime * croucher
                     {
-                        (*bs).attackcrouch_time = floattime
-                            + 5 as i32 as f32
-                            + croucher * 15 as i32 as f32
+                        (*bs).attackcrouch_time =
+                            floattime + 5 as i32 as f32 + croucher * 15 as i32 as f32
                     }
                 }
                 //don't crouch when swimming
@@ -983,11 +920,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                             ),
                             0 as *mut libc::c_void,
                         );
-                        trap_BotEnterChat(
-                            (*bs).cs,
-                            (*bs).teammate,
-                            2 as i32,
-                        );
+                        trap_BotEnterChat((*bs).cs, (*bs).teammate, 2 as i32);
                         (*bs).arrive_time = floattime
                     } else if (*bs).attackcrouch_time > floattime {
                         trap_EA_Crouch((*bs).client);
@@ -1014,8 +947,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                         (*bs).ideal_viewangles.as_mut_ptr(),
                     );
                     (*bs).ideal_viewangles[2 as i32 as usize] =
-                        ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64)
-                            as vec_t
+                        ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64) as vec_t
                 } else if (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64)
                     < (*bs).thinktime as f64 * 0.8f64
                 {
@@ -1034,8 +966,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                         (*bs).ideal_viewangles.as_mut_ptr(),
                     );
                     (*bs).ideal_viewangles[2 as i32 as usize] =
-                        ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64)
-                            as vec_t
+                        ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64) as vec_t
                 }
                 //else look strategically around for enemies
                 //check if the bot wants to go for air
@@ -1062,26 +993,19 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
         //if the entity information is valid (entity in PVS)
         if entinfo.valid != 0 {
             areanum = crate::src::game::ai_dmq3::BotPointAreaNum(entinfo.origin.as_mut_ptr());
-            if areanum != 0 && trap_AAS_AreaReachability(areanum) != 0
-            {
+            if areanum != 0 && trap_AAS_AreaReachability(areanum) != 0 {
                 //update team goal
                 (*bs).teamgoal.entitynum = (*bs).teammate;
                 (*bs).teamgoal.areanum = areanum;
                 (*bs).teamgoal.origin[0 as i32 as usize] = entinfo.origin[0 as i32 as usize];
                 (*bs).teamgoal.origin[1 as i32 as usize] = entinfo.origin[1 as i32 as usize];
                 (*bs).teamgoal.origin[2 as i32 as usize] = entinfo.origin[2 as i32 as usize];
-                (*bs).teamgoal.mins[0 as i32 as usize] =
-                    -(8 as i32) as vec_t;
-                (*bs).teamgoal.mins[1 as i32 as usize] =
-                    -(8 as i32) as vec_t;
-                (*bs).teamgoal.mins[2 as i32 as usize] =
-                    -(8 as i32) as vec_t;
-                (*bs).teamgoal.maxs[0 as i32 as usize] =
-                    8 as i32 as vec_t;
-                (*bs).teamgoal.maxs[1 as i32 as usize] =
-                    8 as i32 as vec_t;
-                (*bs).teamgoal.maxs[2 as i32 as usize] =
-                    8 as i32 as vec_t
+                (*bs).teamgoal.mins[0 as i32 as usize] = -(8 as i32) as vec_t;
+                (*bs).teamgoal.mins[1 as i32 as usize] = -(8 as i32) as vec_t;
+                (*bs).teamgoal.mins[2 as i32 as usize] = -(8 as i32) as vec_t;
+                (*bs).teamgoal.maxs[0 as i32 as usize] = 8 as i32 as vec_t;
+                (*bs).teamgoal.maxs[1 as i32 as usize] = 8 as i32 as vec_t;
+                (*bs).teamgoal.maxs[2 as i32 as usize] = 8 as i32 as vec_t
             }
         }
         //the goal the bot should go for
@@ -1137,14 +1061,9 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
         }
     }
     //if defending a key area
-    if (*bs).ltgtype == 3 as i32
-        && retreat == 0
-        && (*bs).defendaway_time < floattime
-    {
+    if (*bs).ltgtype == 3 as i32 && retreat == 0 && (*bs).defendaway_time < floattime {
         //check for bot typing status message
-        if (*bs).teammessage_time != 0.
-            && (*bs).teammessage_time < floattime
-        {
+        if (*bs).teammessage_time != 0. && (*bs).teammessage_time < floattime {
             trap_BotGoalName(
                 (*bs).teamgoal.number,
                 buf.as_mut_ptr(),
@@ -1193,17 +1112,13 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
             (*goal).origin[1 as i32 as usize] - (*bs).origin[1 as i32 as usize];
         dir[2 as i32 as usize] =
             (*goal).origin[2 as i32 as usize] - (*bs).origin[2 as i32 as usize];
-        if VectorLengthSquared(dir.as_mut_ptr() as *const vec_t)
-            < (70 as i32 * 70 as i32) as f32
-        {
+        if VectorLengthSquared(dir.as_mut_ptr() as *const vec_t) < (70 as i32 * 70 as i32) as f32 {
             trap_BotResetAvoidReach((*bs).ms);
             (*bs).defendaway_time = floattime
                 + 3 as i32 as f32
-                + 3 as i32 as f32
-                    * ((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
-            if crate::src::game::ai_dmq3::BotHasPersistantPowerupAndWeapon(
-                bs as *mut bot_state_s,
-            ) != 0
+                + 3 as i32 as f32 * ((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
+            if crate::src::game::ai_dmq3::BotHasPersistantPowerupAndWeapon(bs as *mut bot_state_s)
+                != 0
             {
                 (*bs).defendaway_range = 100 as i32 as f32
             } else {
@@ -1215,9 +1130,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
     //going to kill someone
     if (*bs).ltgtype == 11 as i32 && retreat == 0 {
         //check for bot typing status message
-        if (*bs).teammessage_time != 0.
-            && (*bs).teammessage_time < floattime
-        {
+        if (*bs).teammessage_time != 0. && (*bs).teammessage_time < floattime {
             crate::src::game::ai_dmq3::EasyClientName(
                 (*bs).teamgoal.entitynum,
                 buf.as_mut_ptr(),
@@ -1229,11 +1142,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 buf.as_mut_ptr(),
                 0 as *mut libc::c_void,
             );
-            trap_BotEnterChat(
-                (*bs).cs,
-                (*bs).decisionmaker,
-                2 as i32,
-            );
+            trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             (*bs).teammessage_time = 0 as i32 as f32
         }
         //
@@ -1251,11 +1160,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 buf.as_mut_ptr(),
                 0 as *mut libc::c_void,
             );
-            trap_BotEnterChat(
-                (*bs).cs,
-                (*bs).decisionmaker,
-                2 as i32,
-            );
+            trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             (*bs).ltgtype = 0 as i32
         }
         //
@@ -1268,9 +1173,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
     //get an item
     if (*bs).ltgtype == 10 as i32 && retreat == 0 {
         //check for bot typing status message
-        if (*bs).teammessage_time != 0.
-            && (*bs).teammessage_time < floattime
-        {
+        if (*bs).teammessage_time != 0. && (*bs).teammessage_time < floattime {
             trap_BotGoalName(
                 (*bs).teamgoal.number,
                 buf.as_mut_ptr(),
@@ -1282,11 +1185,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 buf.as_mut_ptr(),
                 0 as *mut libc::c_void,
             );
-            trap_BotEnterChat(
-                (*bs).cs,
-                (*bs).decisionmaker,
-                2 as i32,
-            );
+            trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             crate::src::game::ai_team::BotVoiceChatOnly(
                 bs as *mut bot_state_s,
                 (*bs).decisionmaker,
@@ -1324,11 +1223,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 buf.as_mut_ptr(),
                 0 as *mut libc::c_void,
             );
-            trap_BotEnterChat(
-                (*bs).cs,
-                (*bs).decisionmaker,
-                2 as i32,
-            );
+            trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             (*bs).ltgtype = 0 as i32
         } else if BotReachedGoal(bs, goal) != 0 {
             trap_BotGoalName(
@@ -1342,11 +1237,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 buf.as_mut_ptr(),
                 0 as *mut libc::c_void,
             );
-            trap_BotEnterChat(
-                (*bs).cs,
-                (*bs).decisionmaker,
-                2 as i32,
-            );
+            trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             (*bs).ltgtype = 0 as i32
         }
         return qtrue as i32;
@@ -1354,9 +1245,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
     //if camping somewhere
     if ((*bs).ltgtype == 7 as i32 || (*bs).ltgtype == 8 as i32) && retreat == 0 {
         //check for bot typing status message
-        if (*bs).teammessage_time != 0.
-            && (*bs).teammessage_time < floattime
-        {
+        if (*bs).teammessage_time != 0. && (*bs).teammessage_time < floattime {
             if (*bs).ltgtype == 8 as i32 {
                 BotAI_BotInitialChat(
                     bs as *mut bot_state_s,
@@ -1368,11 +1257,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                     ),
                     0 as *mut libc::c_void,
                 );
-                trap_BotEnterChat(
-                    (*bs).cs,
-                    (*bs).decisionmaker,
-                    2 as i32,
-                );
+                trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
                 crate::src::game::ai_team::BotVoiceChatOnly(
                     bs as *mut bot_state_s,
                     (*bs).decisionmaker,
@@ -1396,11 +1281,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                     b"camp_stop\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     0 as *mut libc::c_void,
                 );
-                trap_BotEnterChat(
-                    (*bs).cs,
-                    (*bs).decisionmaker,
-                    2 as i32,
-                );
+                trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             }
             (*bs).ltgtype = 0 as i32
         }
@@ -1411,9 +1292,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
             (*goal).origin[1 as i32 as usize] - (*bs).origin[1 as i32 as usize];
         dir[2 as i32 as usize] =
             (*goal).origin[2 as i32 as usize] - (*bs).origin[2 as i32 as usize];
-        if VectorLengthSquared(dir.as_mut_ptr() as *const vec_t)
-            < (60 as i32 * 60 as i32) as f32
-        {
+        if VectorLengthSquared(dir.as_mut_ptr() as *const vec_t) < (60 as i32 * 60 as i32) as f32 {
             //if not arrived yet
             if (*bs).arrive_time == 0. {
                 if (*bs).ltgtype == 8 as i32 {
@@ -1427,11 +1306,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                         ),
                         0 as *mut libc::c_void,
                     );
-                    trap_BotEnterChat(
-                        (*bs).cs,
-                        (*bs).decisionmaker,
-                        2 as i32,
-                    );
+                    trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
                     crate::src::game::ai_team::BotVoiceChatOnly(
                         bs as *mut bot_state_s,
                         (*bs).decisionmaker,
@@ -1444,10 +1319,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
             if (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64)
                 < (*bs).thinktime as f64 * 0.8f64
             {
-                crate::src::game::ai_dmq3::BotRoamGoal(
-                    bs as *mut bot_state_s,
-                    target.as_mut_ptr(),
-                );
+                crate::src::game::ai_dmq3::BotRoamGoal(bs as *mut bot_state_s, target.as_mut_ptr());
                 dir[0 as i32 as usize] =
                     target[0 as i32 as usize] - (*bs).origin[0 as i32 as usize];
                 dir[1 as i32 as usize] =
@@ -1459,8 +1331,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                     (*bs).ideal_viewangles.as_mut_ptr(),
                 );
                 (*bs).ideal_viewangles[2 as i32 as usize] =
-                    ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64)
-                        as vec_t
+                    ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64) as vec_t
             }
             //check if the bot wants to crouch
             //don't crouch if crouched less than 5 seconds ago
@@ -1474,9 +1345,8 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 if ((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                     < (*bs).thinktime * croucher
                 {
-                    (*bs).attackcrouch_time = floattime
-                        + 5 as i32 as f32
-                        + croucher * 15 as i32 as f32
+                    (*bs).attackcrouch_time =
+                        floattime + 5 as i32 as f32 + croucher * 15 as i32 as f32
                 }
             }
             //if the bot wants to crouch
@@ -1488,10 +1358,8 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 (*bs).attackcrouch_time = floattime - 1 as i32 as f32
             }
             //make sure the bot is not gonna drown
-            if trap_PointContents(
-                (*bs).eye.as_mut_ptr() as *const vec_t,
-                (*bs).entitynum,
-            ) & (32 as i32 | 16 as i32 | 8 as i32)
+            if trap_PointContents((*bs).eye.as_mut_ptr() as *const vec_t, (*bs).entitynum)
+                & (32 as i32 | 16 as i32 | 8 as i32)
                 != 0
             {
                 if (*bs).ltgtype == 8 as i32 {
@@ -1500,11 +1368,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                         b"camp_stop\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         0 as *mut libc::c_void,
                     );
-                    trap_BotEnterChat(
-                        (*bs).cs,
-                        (*bs).decisionmaker,
-                        2 as i32,
-                    );
+                    trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
                     //
                     if (*bs).lastgoal_ltgtype == 8 as i32 {
                         (*bs).lastgoal_ltgtype = 0 as i32
@@ -1523,9 +1387,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
     //patrolling along several waypoints
     if (*bs).ltgtype == 9 as i32 && retreat == 0 {
         //check for bot typing status message
-        if (*bs).teammessage_time != 0.
-            && (*bs).teammessage_time < floattime
-        {
+        if (*bs).teammessage_time != 0. && (*bs).teammessage_time < floattime {
             libc::strcpy(
                 buf.as_mut_ptr(),
                 b"\x00" as *const u8 as *const libc::c_char,
@@ -1547,11 +1409,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 buf.as_mut_ptr(),
                 0 as *mut libc::c_void,
             );
-            trap_BotEnterChat(
-                (*bs).cs,
-                (*bs).decisionmaker,
-                2 as i32,
-            );
+            trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             crate::src::game::ai_team::BotVoiceChatOnly(
                 bs as *mut bot_state_s,
                 (*bs).decisionmaker,
@@ -1568,8 +1426,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
         //if the bot touches the current goal
         if trap_BotTouchingGoal(
             (*bs).origin.as_mut_ptr(),
-            &mut (*(*bs).curpatrolpoint).goal as *mut bot_goal_t
-                as *mut libc::c_void,
+            &mut (*(*bs).curpatrolpoint).goal as *mut bot_goal_t as *mut libc::c_void,
         ) != 0
         {
             if (*bs).patrolflags & 4 as i32 != 0 {
@@ -1593,11 +1450,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 b"patrol_stop\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 0 as *mut libc::c_void,
             );
-            trap_BotEnterChat(
-                (*bs).cs,
-                (*bs).decisionmaker,
-                2 as i32,
-            );
+            trap_BotEnterChat((*bs).cs, (*bs).decisionmaker, 2 as i32);
             (*bs).ltgtype = 0 as i32
         }
         if (*bs).curpatrolpoint.is_null() {
@@ -1606,8 +1459,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
         }
         crate::stdlib::memcpy(
             goal as *mut libc::c_void,
-            &mut (*(*bs).curpatrolpoint).goal as *mut bot_goal_t
-                as *const libc::c_void,
+            &mut (*(*bs).curpatrolpoint).goal as *mut bot_goal_t as *const libc::c_void,
             ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
         );
         return qtrue as i32;
@@ -1616,9 +1468,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
         //if going for enemy flag
         if (*bs).ltgtype == 4 as i32 {
             //check for bot typing status message
-            if (*bs).teammessage_time != 0.
-                && (*bs).teammessage_time < floattime
-            {
+            if (*bs).teammessage_time != 0. && (*bs).teammessage_time < floattime {
                 BotAI_BotInitialChat(
                     bs as *mut bot_state_s,
                     b"captureflag_start\x00" as *const u8 as *const libc::c_char
@@ -1634,14 +1484,11 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 (*bs).teammessage_time = 0 as i32 as f32
             }
             //
-            match crate::src::game::ai_dmq3::BotTeam(
-                bs as *mut bot_state_s,
-            ) {
+            match crate::src::game::ai_dmq3::BotTeam(bs as *mut bot_state_s) {
                 1 => {
                     crate::stdlib::memcpy(
                         goal as *mut libc::c_void,
-                        &mut crate::src::game::ai_dmq3::ctf_blueflag
-                            as *mut bot_goal_t
+                        &mut crate::src::game::ai_dmq3::ctf_blueflag as *mut bot_goal_t
                             as *const libc::c_void,
                         ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
                     );
@@ -1649,8 +1496,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 2 => {
                     crate::stdlib::memcpy(
                         goal as *mut libc::c_void,
-                        &mut crate::src::game::ai_dmq3::ctf_redflag
-                            as *mut bot_goal_t
+                        &mut crate::src::game::ai_dmq3::ctf_redflag as *mut bot_goal_t
                             as *const libc::c_void,
                         ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
                     );
@@ -1661,15 +1507,9 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 }
             }
             //if touching the flag
-            if trap_BotTouchingGoal(
-                (*bs).origin.as_mut_ptr(),
-                goal as *mut libc::c_void,
-            ) != 0
-            {
+            if trap_BotTouchingGoal((*bs).origin.as_mut_ptr(), goal as *mut libc::c_void) != 0 {
                 // make sure the bot knows the flag isn't there anymore
-                match crate::src::game::ai_dmq3::BotTeam(
-                    bs as *mut bot_state_s,
-                ) {
+                match crate::src::game::ai_dmq3::BotTeam(bs as *mut bot_state_s) {
                     1 => (*bs).blueflagstatus = 1 as i32,
                     2 => (*bs).redflagstatus = 1 as i32,
                     _ => {}
@@ -1688,17 +1528,12 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
             return qtrue as i32;
         }
         //if rushing to the base
-        if (*bs).ltgtype == 5 as i32
-            && (*bs).rushbaseaway_time < floattime
-        {
-            match crate::src::game::ai_dmq3::BotTeam(
-                bs as *mut bot_state_s,
-            ) {
+        if (*bs).ltgtype == 5 as i32 && (*bs).rushbaseaway_time < floattime {
+            match crate::src::game::ai_dmq3::BotTeam(bs as *mut bot_state_s) {
                 1 => {
                     crate::stdlib::memcpy(
                         goal as *mut libc::c_void,
-                        &mut crate::src::game::ai_dmq3::ctf_redflag
-                            as *mut bot_goal_t
+                        &mut crate::src::game::ai_dmq3::ctf_redflag as *mut bot_goal_t
                             as *const libc::c_void,
                         ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
                     );
@@ -1706,8 +1541,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 2 => {
                     crate::stdlib::memcpy(
                         goal as *mut libc::c_void,
-                        &mut crate::src::game::ai_dmq3::ctf_blueflag
-                            as *mut bot_goal_t
+                        &mut crate::src::game::ai_dmq3::ctf_blueflag as *mut bot_goal_t
                             as *const libc::c_void,
                         ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
                     );
@@ -1718,10 +1552,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 }
             }
             //if not carrying the flag anymore
-            if crate::src::game::ai_dmq3::BotCTFCarryingFlag(
-                bs as *mut bot_state_s,
-            ) == 0
-            {
+            if crate::src::game::ai_dmq3::BotCTFCarryingFlag(bs as *mut bot_state_s) == 0 {
                 (*bs).ltgtype = 0 as i32
             }
             //quit rushing after 2 minutes
@@ -1729,17 +1560,10 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 (*bs).ltgtype = 0 as i32
             }
             //if touching the base flag the bot should loose the enemy flag
-            if trap_BotTouchingGoal(
-                (*bs).origin.as_mut_ptr(),
-                goal as *mut libc::c_void,
-            ) != 0
-            {
+            if trap_BotTouchingGoal((*bs).origin.as_mut_ptr(), goal as *mut libc::c_void) != 0 {
                 //if the bot is still carrying the enemy flag then the
                 //base flag is gone, now just walk near the base a bit
-                if crate::src::game::ai_dmq3::BotCTFCarryingFlag(
-                    bs as *mut bot_state_s,
-                ) != 0
-                {
+                if crate::src::game::ai_dmq3::BotCTFCarryingFlag(bs as *mut bot_state_s) != 0 {
                     trap_BotResetAvoidReach((*bs).ms);
                     (*bs).rushbaseaway_time = floattime
                         + 5 as i32 as f32
@@ -1760,9 +1584,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
         //returning flag
         if (*bs).ltgtype == 6 as i32 {
             //check for bot typing status message
-            if (*bs).teammessage_time != 0.
-                && (*bs).teammessage_time < floattime
-            {
+            if (*bs).teammessage_time != 0. && (*bs).teammessage_time < floattime {
                 BotAI_BotInitialChat(
                     bs as *mut bot_state_s,
                     b"returnflag_start\x00" as *const u8 as *const libc::c_char
@@ -1778,14 +1600,11 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 (*bs).teammessage_time = 0 as i32 as f32
             }
             //
-            match crate::src::game::ai_dmq3::BotTeam(
-                bs as *mut bot_state_s,
-            ) {
+            match crate::src::game::ai_dmq3::BotTeam(bs as *mut bot_state_s) {
                 1 => {
                     crate::stdlib::memcpy(
                         goal as *mut libc::c_void,
-                        &mut crate::src::game::ai_dmq3::ctf_blueflag
-                            as *mut bot_goal_t
+                        &mut crate::src::game::ai_dmq3::ctf_blueflag as *mut bot_goal_t
                             as *const libc::c_void,
                         ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
                     );
@@ -1793,8 +1612,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 2 => {
                     crate::stdlib::memcpy(
                         goal as *mut libc::c_void,
-                        &mut crate::src::game::ai_dmq3::ctf_redflag
-                            as *mut bot_goal_t
+                        &mut crate::src::game::ai_dmq3::ctf_redflag as *mut bot_goal_t
                             as *const libc::c_void,
                         ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
                     );
@@ -1805,11 +1623,7 @@ pub unsafe extern "C" fn BotGetLongTermGoal(
                 }
             }
             //if touching the flag
-            if trap_BotTouchingGoal(
-                (*bs).origin.as_mut_ptr(),
-                goal as *mut libc::c_void,
-            ) != 0
-            {
+            if trap_BotTouchingGoal((*bs).origin.as_mut_ptr(), goal as *mut libc::c_void) != 0 {
                 (*bs).ltgtype = 0 as i32
             }
             //stop after 3 minutes
@@ -1890,9 +1704,7 @@ pub unsafe extern "C" fn BotLongTermGoal(
             return BotGetLongTermGoal(bs, tfl, retreat, goal);
         }
         //
-        if (*bs).leadmessage_time < 0 as i32 as f32
-            && -(*bs).leadmessage_time < floattime
-        {
+        if (*bs).leadmessage_time < 0 as i32 as f32 && -(*bs).leadmessage_time < floattime {
             BotAI_BotInitialChat(
                 bs as *mut bot_state_s,
                 b"followme\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -1914,26 +1726,19 @@ pub unsafe extern "C" fn BotLongTermGoal(
         //
         if entinfo.valid != 0 {
             areanum = crate::src::game::ai_dmq3::BotPointAreaNum(entinfo.origin.as_mut_ptr());
-            if areanum != 0 && trap_AAS_AreaReachability(areanum) != 0
-            {
+            if areanum != 0 && trap_AAS_AreaReachability(areanum) != 0 {
                 //update team goal
                 (*bs).lead_teamgoal.entitynum = (*bs).lead_teammate;
                 (*bs).lead_teamgoal.areanum = areanum;
                 (*bs).lead_teamgoal.origin[0 as i32 as usize] = entinfo.origin[0 as i32 as usize];
                 (*bs).lead_teamgoal.origin[1 as i32 as usize] = entinfo.origin[1 as i32 as usize];
                 (*bs).lead_teamgoal.origin[2 as i32 as usize] = entinfo.origin[2 as i32 as usize];
-                (*bs).lead_teamgoal.mins[0 as i32 as usize] =
-                    -(8 as i32) as vec_t;
-                (*bs).lead_teamgoal.mins[1 as i32 as usize] =
-                    -(8 as i32) as vec_t;
-                (*bs).lead_teamgoal.mins[2 as i32 as usize] =
-                    -(8 as i32) as vec_t;
-                (*bs).lead_teamgoal.maxs[0 as i32 as usize] =
-                    8 as i32 as vec_t;
-                (*bs).lead_teamgoal.maxs[1 as i32 as usize] =
-                    8 as i32 as vec_t;
-                (*bs).lead_teamgoal.maxs[2 as i32 as usize] =
-                    8 as i32 as vec_t
+                (*bs).lead_teamgoal.mins[0 as i32 as usize] = -(8 as i32) as vec_t;
+                (*bs).lead_teamgoal.mins[1 as i32 as usize] = -(8 as i32) as vec_t;
+                (*bs).lead_teamgoal.mins[2 as i32 as usize] = -(8 as i32) as vec_t;
+                (*bs).lead_teamgoal.maxs[0 as i32 as usize] = 8 as i32 as vec_t;
+                (*bs).lead_teamgoal.maxs[1 as i32 as usize] = 8 as i32 as vec_t;
+                (*bs).lead_teamgoal.maxs[2 as i32 as usize] = 8 as i32 as vec_t
             }
         }
         //if the team mate is visible
@@ -1958,8 +1763,7 @@ pub unsafe extern "C" fn BotLongTermGoal(
             (*bs).origin[1 as i32 as usize] - (*bs).lead_teamgoal.origin[1 as i32 as usize];
         dir[2 as i32 as usize] =
             (*bs).origin[2 as i32 as usize] - (*bs).lead_teamgoal.origin[2 as i32 as usize];
-        squaredist =
-            VectorLengthSquared(dir.as_mut_ptr() as *const vec_t);
+        squaredist = VectorLengthSquared(dir.as_mut_ptr() as *const vec_t);
         //if backing up towards the team mate
         if (*bs).leadbackup_time > floattime {
             if (*bs).leadmessage_time < floattime - 20 as i32 as f32 {
@@ -1983,16 +1787,14 @@ pub unsafe extern "C" fn BotLongTermGoal(
             //the bot should go back to the team mate
             crate::stdlib::memcpy(
                 goal as *mut libc::c_void,
-                &mut (*bs).lead_teamgoal as *mut bot_goal_t
-                    as *const libc::c_void,
+                &mut (*bs).lead_teamgoal as *mut bot_goal_t as *const libc::c_void,
                 ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
             );
             return qtrue as i32;
         } else {
             //if quite distant from the team mate
             if squaredist > (500 as i32 * 500 as i32) as f32 {
-                if (*bs).leadmessage_time < floattime - 20 as i32 as f32
-                {
+                if (*bs).leadmessage_time < floattime - 20 as i32 as f32 {
                     BotAI_BotInitialChat(
                         bs as *mut bot_state_s,
                         b"followme\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2003,11 +1805,7 @@ pub unsafe extern "C" fn BotLongTermGoal(
                         ),
                         0 as *mut libc::c_void,
                     );
-                    trap_BotEnterChat(
-                        (*bs).cs,
-                        (*bs).teammate,
-                        2 as i32,
-                    );
+                    trap_BotEnterChat((*bs).cs, (*bs).teammate, 2 as i32);
                     (*bs).leadmessage_time = floattime
                 }
                 //look at the team mate
@@ -2022,8 +1820,7 @@ pub unsafe extern "C" fn BotLongTermGoal(
                     (*bs).ideal_viewangles.as_mut_ptr(),
                 );
                 (*bs).ideal_viewangles[2 as i32 as usize] =
-                    ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64)
-                        as vec_t;
+                    ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
                 //just wait for the team mate
                 return qfalse as i32;
             }
@@ -2038,10 +1835,7 @@ AIEnter_Intermission
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AIEnter_Intermission(
-    mut bs: *mut bot_state_t,
-    mut s: *mut libc::c_char,
-) {
+pub unsafe extern "C" fn AIEnter_Intermission(mut bs: *mut bot_state_t, mut s: *mut libc::c_char) {
     BotRecordNodeSwitch(
         bs,
         b"intermission\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2051,16 +1845,10 @@ pub unsafe extern "C" fn AIEnter_Intermission(
     //reset the bot state
     BotResetState(bs as *mut bot_state_s);
     //check for end level chat
-    if crate::src::game::ai_chat::BotChat_EndLevel(
-        bs as *mut bot_state_s,
-    ) != 0
-    {
+    if crate::src::game::ai_chat::BotChat_EndLevel(bs as *mut bot_state_s) != 0 {
         trap_BotEnterChat((*bs).cs, 0 as i32, (*bs).chatto);
     }
-    (*bs).ainode = Some(
-        AINode_Intermission
-            as unsafe extern "C" fn(_: *mut bot_state_t) -> i32,
-    );
+    (*bs).ainode = Some(AINode_Intermission as unsafe extern "C" fn(_: *mut bot_state_t) -> i32);
 }
 /*
 ==================
@@ -2069,22 +1857,12 @@ AINode_Intermission
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AINode_Intermission(
-    mut bs: *mut bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn AINode_Intermission(mut bs: *mut bot_state_t) -> i32 {
     //if the intermission ended
-    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s)
-        as u64
-        == 0
-    {
-        if crate::src::game::ai_chat::BotChat_StartLevel(
-            bs as *mut bot_state_s,
-        ) != 0
-        {
-            (*bs).stand_time = floattime
-                + crate::src::game::ai_chat::BotChatTime(
-                    bs as *mut bot_state_s,
-                )
+    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s) as u64 == 0 {
+        if crate::src::game::ai_chat::BotChat_StartLevel(bs as *mut bot_state_s) != 0 {
+            (*bs).stand_time =
+                floattime + crate::src::game::ai_chat::BotChatTime(bs as *mut bot_state_s)
         } else {
             (*bs).stand_time = floattime + 2 as i32 as f32
         }
@@ -2102,10 +1880,7 @@ AIEnter_Observer
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AIEnter_Observer(
-    mut bs: *mut bot_state_t,
-    mut s: *mut libc::c_char,
-) {
+pub unsafe extern "C" fn AIEnter_Observer(mut bs: *mut bot_state_t, mut s: *mut libc::c_char) {
     BotRecordNodeSwitch(
         bs,
         b"observer\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2114,10 +1889,7 @@ pub unsafe extern "C" fn AIEnter_Observer(
     );
     //reset the bot state
     BotResetState(bs as *mut bot_state_s);
-    (*bs).ainode = Some(
-        AINode_Observer
-            as unsafe extern "C" fn(_: *mut bot_state_t) -> i32,
-    );
+    (*bs).ainode = Some(AINode_Observer as unsafe extern "C" fn(_: *mut bot_state_t) -> i32);
 }
 /*
 ==================
@@ -2126,14 +1898,9 @@ AINode_Observer
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AINode_Observer(
-    mut bs: *mut bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn AINode_Observer(mut bs: *mut bot_state_t) -> i32 {
     //if the bot left observer mode
-    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s)
-        as u64
-        == 0
-    {
+    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s) as u64 == 0 {
         AIEnter_Stand(
             bs,
             b"observer: left observer\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2148,10 +1915,7 @@ AIEnter_Stand
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AIEnter_Stand(
-    mut bs: *mut bot_state_t,
-    mut s: *mut libc::c_char,
-) {
+pub unsafe extern "C" fn AIEnter_Stand(mut bs: *mut bot_state_t, mut s: *mut libc::c_char) {
     BotRecordNodeSwitch(
         bs,
         b"stand\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2159,9 +1923,7 @@ pub unsafe extern "C" fn AIEnter_Stand(
         s,
     );
     (*bs).standfindenemy_time = floattime + 1 as i32 as f32;
-    (*bs).ainode = Some(
-        AINode_Stand as unsafe extern "C" fn(_: *mut bot_state_t) -> i32,
-    );
+    (*bs).ainode = Some(AINode_Stand as unsafe extern "C" fn(_: *mut bot_state_t) -> i32);
 }
 /*
 ==================
@@ -2173,28 +1935,19 @@ AINode_Stand
 pub unsafe extern "C" fn AINode_Stand(mut bs: *mut bot_state_t) -> i32 {
     //if the bot's health decreased
     if (*bs).lastframe_health > (*bs).inventory[29 as i32 as usize] {
-        if crate::src::game::ai_chat::BotChat_HitTalking(
-            bs as *mut bot_state_s,
-        ) != 0
-        {
+        if crate::src::game::ai_chat::BotChat_HitTalking(bs as *mut bot_state_s) != 0 {
             (*bs).standfindenemy_time = ((floattime
-                + crate::src::game::ai_chat::BotChatTime(
-                    bs as *mut bot_state_s,
-                )) as f64
+                + crate::src::game::ai_chat::BotChatTime(bs as *mut bot_state_s))
+                as f64
                 + 0.1f64) as f32;
             (*bs).stand_time = ((floattime
-                + crate::src::game::ai_chat::BotChatTime(
-                    bs as *mut bot_state_s,
-                )) as f64
+                + crate::src::game::ai_chat::BotChatTime(bs as *mut bot_state_s))
+                as f64
                 + 0.1f64) as f32
         }
     }
     if (*bs).standfindenemy_time < floattime {
-        if crate::src::game::ai_dmq3::BotFindEnemy(
-            bs as *mut bot_state_s,
-            -(1 as i32),
-        ) != 0
-        {
+        if crate::src::game::ai_dmq3::BotFindEnemy(bs as *mut bot_state_s, -(1 as i32)) != 0 {
             AIEnter_Battle_Fight(
                 bs,
                 b"stand: found enemy\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2224,10 +1977,7 @@ AIEnter_Respawn
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AIEnter_Respawn(
-    mut bs: *mut bot_state_t,
-    mut s: *mut libc::c_char,
-) {
+pub unsafe extern "C" fn AIEnter_Respawn(mut bs: *mut bot_state_t, mut s: *mut libc::c_char) {
     BotRecordNodeSwitch(
         bs,
         b"respawn\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2240,13 +1990,9 @@ pub unsafe extern "C" fn AIEnter_Respawn(
     trap_BotResetAvoidGoals((*bs).gs);
     trap_BotResetAvoidReach((*bs).ms);
     //if the bot wants to chat
-    if crate::src::game::ai_chat::BotChat_Death(bs as *mut bot_state_s)
-        != 0
-    {
-        (*bs).respawn_time = floattime
-            + crate::src::game::ai_chat::BotChatTime(
-                bs as *mut bot_state_s,
-            );
+    if crate::src::game::ai_chat::BotChat_Death(bs as *mut bot_state_s) != 0 {
+        (*bs).respawn_time =
+            floattime + crate::src::game::ai_chat::BotChatTime(bs as *mut bot_state_s);
         (*bs).respawnchat_time = floattime
     } else {
         (*bs).respawn_time = floattime
@@ -2256,10 +2002,7 @@ pub unsafe extern "C" fn AIEnter_Respawn(
     }
     //set respawn state
     (*bs).respawn_wait = qfalse as i32;
-    (*bs).ainode = Some(
-        AINode_Respawn
-            as unsafe extern "C" fn(_: *mut bot_state_t) -> i32,
-    );
+    (*bs).ainode = Some(AINode_Respawn as unsafe extern "C" fn(_: *mut bot_state_t) -> i32);
 }
 /*
 ==================
@@ -2268,15 +2011,10 @@ AINode_Respawn
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AINode_Respawn(
-    mut bs: *mut bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn AINode_Respawn(mut bs: *mut bot_state_t) -> i32 {
     // if waiting for the actual respawn
     if (*bs).respawn_wait != 0 {
-        if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s)
-            as u64
-            == 0
-        {
+        if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s) as u64 == 0 {
             AIEnter_Seek_LTG(
                 bs,
                 b"respawn: respawned\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2295,9 +2033,7 @@ pub unsafe extern "C" fn AINode_Respawn(
             (*bs).enemy = -(1 as i32)
         }
     }
-    if (*bs).respawnchat_time != 0.
-        && ((*bs).respawnchat_time as f64) < floattime as f64 - 0.5f64
-    {
+    if (*bs).respawnchat_time != 0. && ((*bs).respawnchat_time as f64) < floattime as f64 - 0.5f64 {
         trap_EA_Talk((*bs).client);
     }
     //
@@ -2310,9 +2046,7 @@ BotSelectActivateWeapon
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotSelectActivateWeapon(
-    mut bs: *mut bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn BotSelectActivateWeapon(mut bs: *mut bot_state_t) -> i32 {
     //
     if (*bs).inventory[6 as i32 as usize] > 0 as i32
         && (*bs).inventory[19 as i32 as usize] > 0 as i32
@@ -2391,49 +2125,48 @@ pub unsafe extern "C" fn BotClearPath(
         contents: 0,
         ent: 0,
     };
-    let mut state: entityState_t =
-        entityState_t {
-            number: 0,
-            eType: 0,
-            eFlags: 0,
-            pos: trajectory_t {
-                trType: TR_STATIONARY,
-                trTime: 0,
-                trDuration: 0,
-                trBase: [0.; 3],
-                trDelta: [0.; 3],
-            },
-            apos: trajectory_t {
-                trType: TR_STATIONARY,
-                trTime: 0,
-                trDuration: 0,
-                trBase: [0.; 3],
-                trDelta: [0.; 3],
-            },
-            time: 0,
-            time2: 0,
-            origin: [0.; 3],
-            origin2: [0.; 3],
-            angles: [0.; 3],
-            angles2: [0.; 3],
-            otherEntityNum: 0,
-            otherEntityNum2: 0,
-            groundEntityNum: 0,
-            constantLight: 0,
-            loopSound: 0,
-            modelindex: 0,
-            modelindex2: 0,
-            clientNum: 0,
-            frame: 0,
-            solid: 0,
-            event: 0,
-            eventParm: 0,
-            powerups: 0,
-            weapon: 0,
-            legsAnim: 0,
-            torsoAnim: 0,
-            generic1: 0,
-        };
+    let mut state: entityState_t = entityState_t {
+        number: 0,
+        eType: 0,
+        eFlags: 0,
+        pos: trajectory_t {
+            trType: TR_STATIONARY,
+            trTime: 0,
+            trDuration: 0,
+            trBase: [0.; 3],
+            trDelta: [0.; 3],
+        },
+        apos: trajectory_t {
+            trType: TR_STATIONARY,
+            trTime: 0,
+            trDuration: 0,
+            trBase: [0.; 3],
+            trDelta: [0.; 3],
+        },
+        time: 0,
+        time2: 0,
+        origin: [0.; 3],
+        origin2: [0.; 3],
+        angles: [0.; 3],
+        angles2: [0.; 3],
+        otherEntityNum: 0,
+        otherEntityNum2: 0,
+        groundEntityNum: 0,
+        constantLight: 0,
+        loopSound: 0,
+        modelindex: 0,
+        modelindex2: 0,
+        clientNum: 0,
+        frame: 0,
+        solid: 0,
+        event: 0,
+        eventParm: 0,
+        powerups: 0,
+        weapon: 0,
+        legsAnim: 0,
+        torsoAnim: 0,
+        generic1: 0,
+    };
     // if there is a dead body wearing kamikze nearby
     if (*bs).kamikazebody != 0 {
         // if the bot's view angles and weapon are not used for movement
@@ -2609,10 +2342,8 @@ pub unsafe extern "C" fn AIEnter_Seek_ActivateEntity(
         b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         s,
     );
-    (*bs).ainode = Some(
-        AINode_Seek_ActivateEntity
-            as unsafe extern "C" fn(_: *mut bot_state_t) -> i32,
-    );
+    (*bs).ainode =
+        Some(AINode_Seek_ActivateEntity as unsafe extern "C" fn(_: *mut bot_state_t) -> i32);
 }
 /*
 ==================
@@ -2621,25 +2352,22 @@ AINode_Seek_Activate_Entity
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AINode_Seek_ActivateEntity(
-    mut bs: *mut bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn AINode_Seek_ActivateEntity(mut bs: *mut bot_state_t) -> i32 {
     let mut goal: *mut bot_goal_t = 0 as *mut bot_goal_t;
     let mut target: vec3_t = [0.; 3];
     let mut dir: vec3_t = [0.; 3];
     let mut ideal_viewangles: vec3_t = [0.; 3];
-    let mut moveresult: bot_moveresult_t =
-        bot_moveresult_t {
-            failure: 0,
-            type_0: 0,
-            blocked: 0,
-            blockentity: 0,
-            traveltype: 0,
-            flags: 0,
-            weapon: 0,
-            movedir: [0.; 3],
-            ideal_viewangles: [0.; 3],
-        };
+    let mut moveresult: bot_moveresult_t = bot_moveresult_t {
+        failure: 0,
+        type_0: 0,
+        blocked: 0,
+        blockentity: 0,
+        traveltype: 0,
+        flags: 0,
+        weapon: 0,
+        movedir: [0.; 3],
+        ideal_viewangles: [0.; 3],
+    };
     let mut targetvisible: i32 = 0;
     let mut bsptrace: bsp_trace_t = bsp_trace_t {
         allsolid: qfalse,
@@ -2688,13 +2416,8 @@ pub unsafe extern "C" fn AINode_Seek_ActivateEntity(
         legsAnim: 0,
         torsoAnim: 0,
     };
-    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
-        crate::src::game::ai_dmq3::BotClearActivateGoalStack(
-            bs as *mut bot_state_s,
-        );
+    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s) as u64 != 0 {
+        crate::src::game::ai_dmq3::BotClearActivateGoalStack(bs as *mut bot_state_s);
         AIEnter_Observer(
             bs,
             b"active entity: observer\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2702,13 +2425,8 @@ pub unsafe extern "C" fn AINode_Seek_ActivateEntity(
         return qfalse as i32;
     }
     //if in the intermission
-    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
-        crate::src::game::ai_dmq3::BotClearActivateGoalStack(
-            bs as *mut bot_state_s,
-        );
+    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s) as u64 != 0 {
+        crate::src::game::ai_dmq3::BotClearActivateGoalStack(bs as *mut bot_state_s);
         AIEnter_Intermission(
             bs,
             b"activate entity: intermission\x00" as *const u8 as *const libc::c_char
@@ -2717,13 +2435,8 @@ pub unsafe extern "C" fn AINode_Seek_ActivateEntity(
         return qfalse as i32;
     }
     //respawn if dead
-    if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
-        crate::src::game::ai_dmq3::BotClearActivateGoalStack(
-            bs as *mut bot_state_s,
-        );
+    if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s) as u64 != 0 {
+        crate::src::game::ai_dmq3::BotClearActivateGoalStack(bs as *mut bot_state_s);
         AIEnter_Respawn(
             bs,
             b"activate entity: bot dead\x00" as *const u8 as *const libc::c_char
@@ -2750,11 +2463,7 @@ pub unsafe extern "C" fn AINode_Seek_ActivateEntity(
         (*bs).tfl |= 0x4000 as i32
     }
     // if in lava or slime the bot should be able to get out
-    if crate::src::game::ai_dmq3::BotInLavaOrSlime(
-        bs as *mut bot_state_s,
-    ) as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotInLavaOrSlime(bs as *mut bot_state_s) as u64 != 0 {
         (*bs).tfl |= 0x400000 as i32 | 0x200000 as i32
     }
     // map specific code
@@ -2763,9 +2472,7 @@ pub unsafe extern "C" fn AINode_Seek_ActivateEntity(
     (*bs).enemy = -(1 as i32);
     // if the bot has no activate goal
     if (*bs).activatestack.is_null() {
-        crate::src::game::ai_dmq3::BotClearActivateGoalStack(
-            bs as *mut bot_state_s,
-        );
+        crate::src::game::ai_dmq3::BotClearActivateGoalStack(bs as *mut bot_state_s);
         AIEnter_Seek_NBG(
             bs,
             b"activate entity: no goal\x00" as *const u8 as *const libc::c_char
@@ -2826,8 +2533,7 @@ pub unsafe extern "C" fn AINode_Seek_ActivateEntity(
         );
         // if the entity the bot shoots at moved
         if VectorCompare(
-            (*(*bs).activatestack).origin.as_mut_ptr()
-                as *const vec_t,
+            (*(*bs).activatestack).origin.as_mut_ptr() as *const vec_t,
             entinfo.origin.as_mut_ptr() as *const vec_t,
         ) == 0
         {
@@ -2836,13 +2542,10 @@ pub unsafe extern "C" fn AINode_Seek_ActivateEntity(
         }
         // if the activate goal has been activated or the bot takes too long
         if (*(*bs).activatestack).time < floattime {
-            crate::src::game::ai_dmq3::BotPopFromActivateGoalStack(
-                bs as *mut bot_state_s,
-            );
+            crate::src::game::ai_dmq3::BotPopFromActivateGoalStack(bs as *mut bot_state_s);
             // if there are more activate goals on the stack
             if !(*bs).activatestack.is_null() {
-                (*(*bs).activatestack).time =
-                    floattime + 10 as i32 as f32;
+                (*(*bs).activatestack).time = floattime + 10 as i32 as f32;
                 return qfalse as i32;
             }
             AIEnter_Seek_NBG(
@@ -2864,24 +2567,17 @@ pub unsafe extern "C" fn AINode_Seek_ActivateEntity(
         } else if (*(*bs).activatestack).shoot == 0 {
             // if the bot does not have a shoot goal
             //if the bot touches the current goal
-            if trap_BotTouchingGoal(
-                (*bs).origin.as_mut_ptr(),
-                goal as *mut libc::c_void,
-            ) != 0
-            {
+            if trap_BotTouchingGoal((*bs).origin.as_mut_ptr(), goal as *mut libc::c_void) != 0 {
                 //DEBUG
                 (*(*bs).activatestack).time = 0 as i32 as f32
             }
         }
         // if the activate goal has been activated or the bot takes too long
         if (*(*bs).activatestack).time < floattime {
-            crate::src::game::ai_dmq3::BotPopFromActivateGoalStack(
-                bs as *mut bot_state_s,
-            );
+            crate::src::game::ai_dmq3::BotPopFromActivateGoalStack(bs as *mut bot_state_s);
             // if there are more activate goals on the stack
             if !(*bs).activatestack.is_null() {
-                (*(*bs).activatestack).time =
-                    floattime + 10 as i32 as f32;
+                (*(*bs).activatestack).time = floattime + 10 as i32 as f32;
                 return qfalse as i32;
             }
             AIEnter_Seek_NBG(
@@ -2900,9 +2596,7 @@ pub unsafe extern "C" fn AINode_Seek_ActivateEntity(
             return qfalse as i32;
         }
         //initialize the movement state
-        crate::src::game::ai_dmq3::BotSetupForMovement(
-            bs as *mut bot_state_s,
-        );
+        crate::src::game::ai_dmq3::BotSetupForMovement(bs as *mut bot_state_s);
         //move towards the goal
         trap_BotMoveToGoal(
             &mut moveresult as *mut bot_moveresult_t as *mut libc::c_void,
@@ -2963,10 +2657,7 @@ pub unsafe extern "C" fn AINode_Seek_ActivateEntity(
         if (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64)
             < (*bs).thinktime as f64 * 0.8f64
         {
-            crate::src::game::ai_dmq3::BotRoamGoal(
-                bs as *mut bot_state_s,
-                target.as_mut_ptr(),
-            );
+            crate::src::game::ai_dmq3::BotRoamGoal(bs as *mut bot_state_s, target.as_mut_ptr());
             dir[0 as i32 as usize] = target[0 as i32 as usize] - (*bs).origin[0 as i32 as usize];
             dir[1 as i32 as usize] = target[1 as i32 as usize] - (*bs).origin[1 as i32 as usize];
             dir[2 as i32 as usize] = target[2 as i32 as usize] - (*bs).origin[2 as i32 as usize];
@@ -2975,8 +2666,7 @@ pub unsafe extern "C" fn AINode_Seek_ActivateEntity(
                 (*bs).ideal_viewangles.as_mut_ptr(),
             );
             (*bs).ideal_viewangles[2 as i32 as usize] =
-                ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64)
-                    as vec_t
+                ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64) as vec_t
         }
     } else if (*bs).flags & 32 as i32 == 0 {
         if trap_BotMovementViewTarget(
@@ -3001,8 +2691,7 @@ pub unsafe extern "C" fn AINode_Seek_ActivateEntity(
             );
         }
         (*bs).ideal_viewangles[2 as i32 as usize] =
-            ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64)
-                as vec_t
+            ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64) as vec_t
     }
     // if waiting for something
     // if the weapon is used for the bot movement
@@ -3010,15 +2699,8 @@ pub unsafe extern "C" fn AINode_Seek_ActivateEntity(
         (*bs).weaponnum = moveresult.weapon
     }
     // if there is an enemy
-    if crate::src::game::ai_dmq3::BotFindEnemy(
-        bs as *mut bot_state_s,
-        -(1 as i32),
-    ) != 0
-    {
-        if crate::src::game::ai_dmq3::BotWantsToRetreat(
-            bs as *mut bot_state_s,
-        ) != 0
-        {
+    if crate::src::game::ai_dmq3::BotFindEnemy(bs as *mut bot_state_s, -(1 as i32)) != 0 {
+        if crate::src::game::ai_dmq3::BotWantsToRetreat(bs as *mut bot_state_s) != 0 {
             //keep the current long term goal and retreat
             AIEnter_Battle_NBG(
                 bs,
@@ -3036,9 +2718,7 @@ pub unsafe extern "C" fn AINode_Seek_ActivateEntity(
                     as *mut libc::c_char,
             );
         }
-        crate::src::game::ai_dmq3::BotClearActivateGoalStack(
-            bs as *mut bot_state_s,
-        );
+        crate::src::game::ai_dmq3::BotClearActivateGoalStack(bs as *mut bot_state_s);
     }
     return qtrue as i32;
 }
@@ -3049,10 +2729,7 @@ AIEnter_Seek_NBG
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AIEnter_Seek_NBG(
-    mut bs: *mut bot_state_t,
-    mut s: *mut libc::c_char,
-) {
+pub unsafe extern "C" fn AIEnter_Seek_NBG(mut bs: *mut bot_state_t, mut s: *mut libc::c_char) {
     let mut goal: bot_goal_t = bot_goal_t {
         origin: [0.; 3],
         areanum: 0,
@@ -3064,11 +2741,7 @@ pub unsafe extern "C" fn AIEnter_Seek_NBG(
         iteminfo: 0,
     };
     let mut buf: [libc::c_char; 144] = [0; 144];
-    if trap_BotGetTopGoal(
-        (*bs).gs,
-        &mut goal as *mut bot_goal_t as *mut libc::c_void,
-    ) != 0
-    {
+    if trap_BotGetTopGoal((*bs).gs, &mut goal as *mut bot_goal_t as *mut libc::c_void) != 0 {
         trap_BotGoalName(goal.number, buf.as_mut_ptr(), 144 as i32);
         BotRecordNodeSwitch(
             bs,
@@ -3084,10 +2757,7 @@ pub unsafe extern "C" fn AIEnter_Seek_NBG(
             s,
         );
     }
-    (*bs).ainode = Some(
-        AINode_Seek_NBG
-            as unsafe extern "C" fn(_: *mut bot_state_t) -> i32,
-    );
+    (*bs).ainode = Some(AINode_Seek_NBG as unsafe extern "C" fn(_: *mut bot_state_t) -> i32);
 }
 /*
 ==================
@@ -3096,9 +2766,7 @@ AINode_Seek_NBG
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AINode_Seek_NBG(
-    mut bs: *mut bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn AINode_Seek_NBG(mut bs: *mut bot_state_t) -> i32 {
     let mut goal: bot_goal_t = bot_goal_t {
         origin: [0.; 3],
         areanum: 0,
@@ -3111,22 +2779,18 @@ pub unsafe extern "C" fn AINode_Seek_NBG(
     };
     let mut target: vec3_t = [0.; 3];
     let mut dir: vec3_t = [0.; 3];
-    let mut moveresult: bot_moveresult_t =
-        bot_moveresult_t {
-            failure: 0,
-            type_0: 0,
-            blocked: 0,
-            blockentity: 0,
-            traveltype: 0,
-            flags: 0,
-            weapon: 0,
-            movedir: [0.; 3],
-            ideal_viewangles: [0.; 3],
-        };
-    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    let mut moveresult: bot_moveresult_t = bot_moveresult_t {
+        failure: 0,
+        type_0: 0,
+        blocked: 0,
+        blockentity: 0,
+        traveltype: 0,
+        flags: 0,
+        weapon: 0,
+        movedir: [0.; 3],
+        ideal_viewangles: [0.; 3],
+    };
+    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Observer(
             bs,
             b"seek nbg: observer\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3134,10 +2798,7 @@ pub unsafe extern "C" fn AINode_Seek_NBG(
         return qfalse as i32;
     }
     //if in the intermission
-    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Intermission(
             bs,
             b"seek nbg: intermision\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3145,10 +2806,7 @@ pub unsafe extern "C" fn AINode_Seek_NBG(
         return qfalse as i32;
     }
     //respawn if dead
-    if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Respawn(
             bs,
             b"seek nbg: bot dead\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3174,18 +2832,11 @@ pub unsafe extern "C" fn AINode_Seek_NBG(
         (*bs).tfl |= 0x4000 as i32
     }
     //if in lava or slime the bot should be able to get out
-    if crate::src::game::ai_dmq3::BotInLavaOrSlime(
-        bs as *mut bot_state_s,
-    ) as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotInLavaOrSlime(bs as *mut bot_state_s) as u64 != 0 {
         (*bs).tfl |= 0x400000 as i32 | 0x200000 as i32
     }
     //
-    if crate::src::game::ai_dmq3::BotCanAndWantsToRocketJump(
-        bs as *mut bot_state_s,
-    ) != 0
-    {
+    if crate::src::game::ai_dmq3::BotCanAndWantsToRocketJump(bs as *mut bot_state_s) != 0 {
         (*bs).tfl |= 0x1000 as i32
     }
     //map specific code
@@ -3193,16 +2844,10 @@ pub unsafe extern "C" fn AINode_Seek_NBG(
     //no enemy
     (*bs).enemy = -(1 as i32);
     //if the bot has no goal
-    if trap_BotGetTopGoal(
-        (*bs).gs,
-        &mut goal as *mut bot_goal_t as *mut libc::c_void,
-    ) == 0
-    {
+    if trap_BotGetTopGoal((*bs).gs, &mut goal as *mut bot_goal_t as *mut libc::c_void) == 0 {
         (*bs).nbg_time = 0 as i32 as f32
     } else if BotReachedGoal(bs, &mut goal) != 0 {
-        crate::src::game::ai_dmq3::BotChooseWeapon(
-            bs as *mut bot_state_s,
-        );
+        crate::src::game::ai_dmq3::BotChooseWeapon(bs as *mut bot_state_s);
         (*bs).nbg_time = 0 as i32 as f32
     }
     //if the bot touches the current goal
@@ -3229,9 +2874,7 @@ pub unsafe extern "C" fn AINode_Seek_NBG(
         return qfalse as i32;
     }
     //initialize the movement state
-    crate::src::game::ai_dmq3::BotSetupForMovement(
-        bs as *mut bot_state_s,
-    );
+    crate::src::game::ai_dmq3::BotSetupForMovement(bs as *mut bot_state_s);
     //move towards the goal
     trap_BotMoveToGoal(
         &mut moveresult as *mut bot_moveresult_t as *mut libc::c_void,
@@ -3262,10 +2905,7 @@ pub unsafe extern "C" fn AINode_Seek_NBG(
         if (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64)
             < (*bs).thinktime as f64 * 0.8f64
         {
-            crate::src::game::ai_dmq3::BotRoamGoal(
-                bs as *mut bot_state_s,
-                target.as_mut_ptr(),
-            );
+            crate::src::game::ai_dmq3::BotRoamGoal(bs as *mut bot_state_s, target.as_mut_ptr());
             dir[0 as i32 as usize] = target[0 as i32 as usize] - (*bs).origin[0 as i32 as usize];
             dir[1 as i32 as usize] = target[1 as i32 as usize] - (*bs).origin[1 as i32 as usize];
             dir[2 as i32 as usize] = target[2 as i32 as usize] - (*bs).origin[2 as i32 as usize];
@@ -3274,19 +2914,11 @@ pub unsafe extern "C" fn AINode_Seek_NBG(
                 (*bs).ideal_viewangles.as_mut_ptr(),
             );
             (*bs).ideal_viewangles[2 as i32 as usize] =
-                ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64)
-                    as vec_t
+                ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64) as vec_t
         }
     } else if (*bs).flags & 32 as i32 == 0 {
-        if trap_BotGetSecondGoal(
-            (*bs).gs,
-            &mut goal as *mut bot_goal_t as *mut libc::c_void,
-        ) == 0
-        {
-            trap_BotGetTopGoal(
-                (*bs).gs,
-                &mut goal as *mut bot_goal_t as *mut libc::c_void,
-            );
+        if trap_BotGetSecondGoal((*bs).gs, &mut goal as *mut bot_goal_t as *mut libc::c_void) == 0 {
+            trap_BotGetTopGoal((*bs).gs, &mut goal as *mut bot_goal_t as *mut libc::c_void);
         }
         if trap_BotMovementViewTarget(
             (*bs).ms,
@@ -3312,23 +2944,15 @@ pub unsafe extern "C" fn AINode_Seek_NBG(
             );
         }
         (*bs).ideal_viewangles[2 as i32 as usize] =
-            ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64)
-                as vec_t
+            ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64) as vec_t
     }
     //if the weapon is used for the bot movement
     if moveresult.flags & 16 as i32 != 0 {
         (*bs).weaponnum = moveresult.weapon
     }
     //if there is an enemy
-    if crate::src::game::ai_dmq3::BotFindEnemy(
-        bs as *mut bot_state_s,
-        -(1 as i32),
-    ) != 0
-    {
-        if crate::src::game::ai_dmq3::BotWantsToRetreat(
-            bs as *mut bot_state_s,
-        ) != 0
-        {
+    if crate::src::game::ai_dmq3::BotFindEnemy(bs as *mut bot_state_s, -(1 as i32)) != 0 {
+        if crate::src::game::ai_dmq3::BotWantsToRetreat(bs as *mut bot_state_s) != 0 {
             //keep the current long term goal and retreat
             AIEnter_Battle_NBG(
                 bs,
@@ -3356,10 +2980,7 @@ AIEnter_Seek_LTG
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AIEnter_Seek_LTG(
-    mut bs: *mut bot_state_t,
-    mut s: *mut libc::c_char,
-) {
+pub unsafe extern "C" fn AIEnter_Seek_LTG(mut bs: *mut bot_state_t, mut s: *mut libc::c_char) {
     let mut goal: bot_goal_t = bot_goal_t {
         origin: [0.; 3],
         areanum: 0,
@@ -3371,11 +2992,7 @@ pub unsafe extern "C" fn AIEnter_Seek_LTG(
         iteminfo: 0,
     };
     let mut buf: [libc::c_char; 144] = [0; 144];
-    if trap_BotGetTopGoal(
-        (*bs).gs,
-        &mut goal as *mut bot_goal_t as *mut libc::c_void,
-    ) != 0
-    {
+    if trap_BotGetTopGoal((*bs).gs, &mut goal as *mut bot_goal_t as *mut libc::c_void) != 0 {
         trap_BotGoalName(goal.number, buf.as_mut_ptr(), 144 as i32);
         BotRecordNodeSwitch(
             bs,
@@ -3391,10 +3008,7 @@ pub unsafe extern "C" fn AIEnter_Seek_LTG(
             s,
         );
     }
-    (*bs).ainode = Some(
-        AINode_Seek_LTG
-            as unsafe extern "C" fn(_: *mut bot_state_t) -> i32,
-    );
+    (*bs).ainode = Some(AINode_Seek_LTG as unsafe extern "C" fn(_: *mut bot_state_t) -> i32);
 }
 /*
 ==================
@@ -3403,9 +3017,7 @@ AINode_Seek_LTG
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AINode_Seek_LTG(
-    mut bs: *mut bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn AINode_Seek_LTG(mut bs: *mut bot_state_t) -> i32 {
     let mut goal: bot_goal_t = bot_goal_t {
         origin: [0.; 3],
         areanum: 0,
@@ -3418,25 +3030,21 @@ pub unsafe extern "C" fn AINode_Seek_LTG(
     };
     let mut target: vec3_t = [0.; 3];
     let mut dir: vec3_t = [0.; 3];
-    let mut moveresult: bot_moveresult_t =
-        bot_moveresult_t {
-            failure: 0,
-            type_0: 0,
-            blocked: 0,
-            blockentity: 0,
-            traveltype: 0,
-            flags: 0,
-            weapon: 0,
-            movedir: [0.; 3],
-            ideal_viewangles: [0.; 3],
-        };
+    let mut moveresult: bot_moveresult_t = bot_moveresult_t {
+        failure: 0,
+        type_0: 0,
+        blocked: 0,
+        blockentity: 0,
+        traveltype: 0,
+        flags: 0,
+        weapon: 0,
+        movedir: [0.; 3],
+        ideal_viewangles: [0.; 3],
+    };
     let mut range: i32 = 0;
     //char buf[128];
     //bot_goal_t tmpgoal;
-    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Observer(
             bs,
             b"seek ltg: observer\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3444,10 +3052,7 @@ pub unsafe extern "C" fn AINode_Seek_LTG(
         return qfalse as i32;
     }
     //if in the intermission
-    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Intermission(
             bs,
             b"seek ltg: intermission\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3455,10 +3060,7 @@ pub unsafe extern "C" fn AINode_Seek_LTG(
         return qfalse as i32;
     }
     //respawn if dead
-    if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Respawn(
             bs,
             b"seek ltg: bot dead\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3466,13 +3068,9 @@ pub unsafe extern "C" fn AINode_Seek_LTG(
         return qfalse as i32;
     }
     //
-    if crate::src::game::ai_chat::BotChat_Random(bs as *mut bot_state_s)
-        != 0
-    {
-        (*bs).stand_time = floattime
-            + crate::src::game::ai_chat::BotChatTime(
-                bs as *mut bot_state_s,
-            );
+    if crate::src::game::ai_chat::BotChat_Random(bs as *mut bot_state_s) != 0 {
+        (*bs).stand_time =
+            floattime + crate::src::game::ai_chat::BotChatTime(bs as *mut bot_state_s);
         AIEnter_Stand(
             bs,
             b"seek ltg: random chat\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3498,18 +3096,11 @@ pub unsafe extern "C" fn AINode_Seek_LTG(
         (*bs).tfl |= 0x4000 as i32
     }
     //if in lava or slime the bot should be able to get out
-    if crate::src::game::ai_dmq3::BotInLavaOrSlime(
-        bs as *mut bot_state_s,
-    ) as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotInLavaOrSlime(bs as *mut bot_state_s) as u64 != 0 {
         (*bs).tfl |= 0x400000 as i32 | 0x200000 as i32
     }
     //
-    if crate::src::game::ai_dmq3::BotCanAndWantsToRocketJump(
-        bs as *mut bot_state_s,
-    ) != 0
-    {
+    if crate::src::game::ai_dmq3::BotCanAndWantsToRocketJump(bs as *mut bot_state_s) != 0 {
         (*bs).tfl |= 0x1000 as i32
     }
     //map specific code
@@ -3525,15 +3116,8 @@ pub unsafe extern "C" fn AINode_Seek_LTG(
         }
     }
     //if there is an enemy
-    if crate::src::game::ai_dmq3::BotFindEnemy(
-        bs as *mut bot_state_s,
-        -(1 as i32),
-    ) != 0
-    {
-        if crate::src::game::ai_dmq3::BotWantsToRetreat(
-            bs as *mut bot_state_s,
-        ) != 0
-        {
+    if crate::src::game::ai_dmq3::BotFindEnemy(bs as *mut bot_state_s, -(1 as i32)) != 0 {
+        if crate::src::game::ai_dmq3::BotWantsToRetreat(bs as *mut bot_state_s) != 0 {
             //keep the current long term goal and retreat
             AIEnter_Battle_Retreat(
                 bs,
@@ -3555,27 +3139,16 @@ pub unsafe extern "C" fn AINode_Seek_LTG(
         }
     }
     //
-    crate::src::game::ai_dmq3::BotTeamGoals(
-        bs as *mut bot_state_s,
-        qfalse as i32,
-    );
+    crate::src::game::ai_dmq3::BotTeamGoals(bs as *mut bot_state_s, qfalse as i32);
     //get the current long term goal
-    if BotLongTermGoal(
-        bs,
-        (*bs).tfl,
-        qfalse as i32,
-        &mut goal,
-    ) == 0
-    {
+    if BotLongTermGoal(bs, (*bs).tfl, qfalse as i32, &mut goal) == 0 {
         return qtrue as i32;
     }
     //check for nearby goals periodicly
     if (*bs).check_time < floattime {
         (*bs).check_time = (floattime as f64 + 0.5f64) as f32;
         //check if the bot wants to camp
-        crate::src::game::ai_dmq3::BotWantsToCamp(
-            bs as *mut bot_state_s,
-        );
+        crate::src::game::ai_dmq3::BotWantsToCamp(bs as *mut bot_state_s);
         //
         if (*bs).ltgtype == 3 as i32 {
             range = 400 as i32
@@ -3585,10 +3158,7 @@ pub unsafe extern "C" fn AINode_Seek_LTG(
         //
         if crate::src::game::ai_dmq3::gametype == GT_CTF as i32 {
             //if carrying a flag the bot shouldn't be distracted too much
-            if crate::src::game::ai_dmq3::BotCTFCarryingFlag(
-                bs as *mut bot_state_s,
-            ) != 0
-            {
+            if crate::src::game::ai_dmq3::BotCTFCarryingFlag(bs as *mut bot_state_s) != 0 {
                 range = 50 as i32
             }
         }
@@ -3601,8 +3171,7 @@ pub unsafe extern "C" fn AINode_Seek_LTG(
             //trap_BotGoalName(tmpgoal.number, buf, 144);
             //BotAI_Print(PRT_MESSAGE, "new nearby goal %s\n", buf);
             //time the bot gets to pick up the nearby goal item
-            (*bs).nbg_time = ((floattime + 4 as i32 as f32) as f64
-                + range as f64 * 0.01f64) as f32;
+            (*bs).nbg_time = ((floattime + 4 as i32 as f32) as f64 + range as f64 * 0.01f64) as f32;
             AIEnter_Seek_NBG(
                 bs,
                 b"ltg seek: nbg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3619,9 +3188,7 @@ pub unsafe extern "C" fn AINode_Seek_LTG(
         return qfalse as i32;
     }
     //initialize the movement state
-    crate::src::game::ai_dmq3::BotSetupForMovement(
-        bs as *mut bot_state_s,
-    );
+    crate::src::game::ai_dmq3::BotSetupForMovement(bs as *mut bot_state_s);
     //move towards the goal
     trap_BotMoveToGoal(
         &mut moveresult as *mut bot_moveresult_t as *mut libc::c_void,
@@ -3653,10 +3220,7 @@ pub unsafe extern "C" fn AINode_Seek_LTG(
         if (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64)
             < (*bs).thinktime as f64 * 0.8f64
         {
-            crate::src::game::ai_dmq3::BotRoamGoal(
-                bs as *mut bot_state_s,
-                target.as_mut_ptr(),
-            );
+            crate::src::game::ai_dmq3::BotRoamGoal(bs as *mut bot_state_s, target.as_mut_ptr());
             dir[0 as i32 as usize] = target[0 as i32 as usize] - (*bs).origin[0 as i32 as usize];
             dir[1 as i32 as usize] = target[1 as i32 as usize] - (*bs).origin[1 as i32 as usize];
             dir[2 as i32 as usize] = target[2 as i32 as usize] - (*bs).origin[2 as i32 as usize];
@@ -3665,8 +3229,7 @@ pub unsafe extern "C" fn AINode_Seek_LTG(
                 (*bs).ideal_viewangles.as_mut_ptr(),
             );
             (*bs).ideal_viewangles[2 as i32 as usize] =
-                ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64)
-                    as vec_t
+                ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64) as vec_t
         }
     } else if (*bs).flags & 32 as i32 == 0 {
         if trap_BotMovementViewTarget(
@@ -3684,10 +3247,7 @@ pub unsafe extern "C" fn AINode_Seek_LTG(
                 dir.as_mut_ptr() as *const vec_t,
                 (*bs).ideal_viewangles.as_mut_ptr(),
             );
-        } else if VectorLengthSquared(
-            moveresult.movedir.as_mut_ptr() as *const vec_t
-        ) != 0.
-        {
+        } else if VectorLengthSquared(moveresult.movedir.as_mut_ptr() as *const vec_t) != 0. {
             vectoangles(
                 moveresult.movedir.as_mut_ptr() as *const vec_t,
                 (*bs).ideal_viewangles.as_mut_ptr(),
@@ -3695,10 +3255,7 @@ pub unsafe extern "C" fn AINode_Seek_LTG(
         } else if (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64)
             < (*bs).thinktime as f64 * 0.8f64
         {
-            crate::src::game::ai_dmq3::BotRoamGoal(
-                bs as *mut bot_state_s,
-                target.as_mut_ptr(),
-            );
+            crate::src::game::ai_dmq3::BotRoamGoal(bs as *mut bot_state_s, target.as_mut_ptr());
             dir[0 as i32 as usize] = target[0 as i32 as usize] - (*bs).origin[0 as i32 as usize];
             dir[1 as i32 as usize] = target[1 as i32 as usize] - (*bs).origin[1 as i32 as usize];
             dir[2 as i32 as usize] = target[2 as i32 as usize] - (*bs).origin[2 as i32 as usize];
@@ -3707,12 +3264,10 @@ pub unsafe extern "C" fn AINode_Seek_LTG(
                 (*bs).ideal_viewangles.as_mut_ptr(),
             );
             (*bs).ideal_viewangles[2 as i32 as usize] =
-                ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64)
-                    as vec_t
+                ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64) as vec_t
         }
         (*bs).ideal_viewangles[2 as i32 as usize] =
-            ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64)
-                as vec_t
+            ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64) as vec_t
     }
     //if waiting for something
     //FIXME: look at cluster portals?
@@ -3730,10 +3285,7 @@ AIEnter_Battle_Fight
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AIEnter_Battle_Fight(
-    mut bs: *mut bot_state_t,
-    mut s: *mut libc::c_char,
-) {
+pub unsafe extern "C" fn AIEnter_Battle_Fight(mut bs: *mut bot_state_t, mut s: *mut libc::c_char) {
     BotRecordNodeSwitch(
         bs,
         b"battle fight\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3741,10 +3293,7 @@ pub unsafe extern "C" fn AIEnter_Battle_Fight(
         s,
     );
     trap_BotResetLastAvoidReach((*bs).ms);
-    (*bs).ainode = Some(
-        AINode_Battle_Fight
-            as unsafe extern "C" fn(_: *mut bot_state_t) -> i32,
-    );
+    (*bs).ainode = Some(AINode_Battle_Fight as unsafe extern "C" fn(_: *mut bot_state_t) -> i32);
     (*bs).flags &= !(64 as i32);
 }
 /*
@@ -3765,10 +3314,7 @@ pub unsafe extern "C" fn AIEnter_Battle_SuicidalFight(
         s,
     );
     trap_BotResetLastAvoidReach((*bs).ms);
-    (*bs).ainode = Some(
-        AINode_Battle_Fight
-            as unsafe extern "C" fn(_: *mut bot_state_t) -> i32,
-    );
+    (*bs).ainode = Some(AINode_Battle_Fight as unsafe extern "C" fn(_: *mut bot_state_t) -> i32);
     (*bs).flags |= 64 as i32;
 }
 /*
@@ -3778,9 +3324,7 @@ AINode_Battle_Fight
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AINode_Battle_Fight(
-    mut bs: *mut bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn AINode_Battle_Fight(mut bs: *mut bot_state_t) -> i32 {
     let mut areanum: i32 = 0;
     let mut target: vec3_t = [0.; 3];
     let mut entinfo: aas_entityinfo_t = aas_entityinfo_t {
@@ -3808,22 +3352,18 @@ pub unsafe extern "C" fn AINode_Battle_Fight(
         legsAnim: 0,
         torsoAnim: 0,
     };
-    let mut moveresult: bot_moveresult_t =
-        bot_moveresult_t {
-            failure: 0,
-            type_0: 0,
-            blocked: 0,
-            blockentity: 0,
-            traveltype: 0,
-            flags: 0,
-            weapon: 0,
-            movedir: [0.; 3],
-            ideal_viewangles: [0.; 3],
-        };
-    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    let mut moveresult: bot_moveresult_t = bot_moveresult_t {
+        failure: 0,
+        type_0: 0,
+        blocked: 0,
+        blockentity: 0,
+        traveltype: 0,
+        flags: 0,
+        weapon: 0,
+        movedir: [0.; 3],
+        ideal_viewangles: [0.; 3],
+    };
+    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Observer(
             bs,
             b"battle fight: observer\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3831,10 +3371,7 @@ pub unsafe extern "C" fn AINode_Battle_Fight(
         return qfalse as i32;
     }
     //if in the intermission
-    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Intermission(
             bs,
             b"battle fight: intermission\x00" as *const u8 as *const libc::c_char
@@ -3843,10 +3380,7 @@ pub unsafe extern "C" fn AINode_Battle_Fight(
         return qfalse as i32;
     }
     //respawn if dead
-    if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Respawn(
             bs,
             b"battle fight: bot dead\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3854,10 +3388,7 @@ pub unsafe extern "C" fn AINode_Battle_Fight(
         return qfalse as i32;
     }
     //if there is another better enemy
-    crate::src::game::ai_dmq3::BotFindEnemy(
-        bs as *mut bot_state_s,
-        (*bs).enemy,
-    );
+    crate::src::game::ai_dmq3::BotFindEnemy(bs as *mut bot_state_s, (*bs).enemy);
     //if no enemy
     if (*bs).enemy < 0 as i32 {
         AIEnter_Seek_LTG(
@@ -3867,28 +3398,19 @@ pub unsafe extern "C" fn AINode_Battle_Fight(
         return qfalse as i32;
     }
     //
-    BotEntityInfo(
-        (*bs).enemy,
-        &mut entinfo as *mut _ as *mut aas_entityinfo_s,
-    );
+    BotEntityInfo((*bs).enemy, &mut entinfo as *mut _ as *mut aas_entityinfo_s);
     //if the enemy is dead
     if (*bs).enemydeath_time != 0. {
         if ((*bs).enemydeath_time as f64) < floattime as f64 - 1.0f64 {
             (*bs).enemydeath_time = 0 as i32 as f32;
             if (*bs).enemysuicide != 0 {
-                crate::src::game::ai_chat::BotChat_EnemySuicide(
-                    bs as *mut bot_state_s,
-                );
+                crate::src::game::ai_chat::BotChat_EnemySuicide(bs as *mut bot_state_s);
             }
             if (*bs).lastkilledplayer == (*bs).enemy
-                && crate::src::game::ai_chat::BotChat_Kill(
-                    bs as *mut bot_state_s,
-                ) != 0
+                && crate::src::game::ai_chat::BotChat_Kill(bs as *mut bot_state_s) != 0
             {
-                (*bs).stand_time = floattime
-                    + crate::src::game::ai_chat::BotChatTime(
-                        bs as *mut bot_state_s,
-                    );
+                (*bs).stand_time =
+                    floattime + crate::src::game::ai_chat::BotChatTime(bs as *mut bot_state_s);
                 AIEnter_Stand(
                     bs,
                     b"battle fight: enemy dead\x00" as *const u8 as *const libc::c_char
@@ -3912,9 +3434,8 @@ pub unsafe extern "C" fn AINode_Battle_Fight(
         (*bs).enemydeath_time = floattime
     }
     //if the enemy is invisible and not shooting the bot looses track easily
-    if crate::src::game::ai_dmq3::EntityIsInvisible(
-        &mut entinfo as *mut _ as *mut aas_entityinfo_s,
-    ) as u32
+    if crate::src::game::ai_dmq3::EntityIsInvisible(&mut entinfo as *mut _ as *mut aas_entityinfo_s)
+        as u32
         != 0
         && crate::src::game::ai_dmq3::EntityIsShooting(
             &mut entinfo as *mut _ as *mut aas_entityinfo_s,
@@ -3945,20 +3466,12 @@ pub unsafe extern "C" fn AINode_Battle_Fight(
         (*bs).lastenemyareanum = areanum
     }
     //update the attack inventory values
-    crate::src::game::ai_dmq3::BotUpdateBattleInventory(
-        bs as *mut bot_state_s,
-        (*bs).enemy,
-    );
+    crate::src::game::ai_dmq3::BotUpdateBattleInventory(bs as *mut bot_state_s, (*bs).enemy);
     //if the bot's health decreased
     if (*bs).lastframe_health > (*bs).inventory[29 as i32 as usize] {
-        if crate::src::game::ai_chat::BotChat_HitNoDeath(
-            bs as *mut bot_state_s,
-        ) != 0
-        {
-            (*bs).stand_time = floattime
-                + crate::src::game::ai_chat::BotChatTime(
-                    bs as *mut bot_state_s,
-                );
+        if crate::src::game::ai_chat::BotChat_HitNoDeath(bs as *mut bot_state_s) != 0 {
+            (*bs).stand_time =
+                floattime + crate::src::game::ai_chat::BotChatTime(bs as *mut bot_state_s);
             AIEnter_Stand(
                 bs,
                 b"battle fight: chat health decreased\x00" as *const u8 as *const libc::c_char
@@ -3969,14 +3482,9 @@ pub unsafe extern "C" fn AINode_Battle_Fight(
     }
     //if the bot hit someone
     if (*bs).cur_ps.persistant[PERS_HITS as i32 as usize] > (*bs).lasthitcount {
-        if crate::src::game::ai_chat::BotChat_HitNoKill(
-            bs as *mut bot_state_s,
-        ) != 0
-        {
-            (*bs).stand_time = floattime
-                + crate::src::game::ai_chat::BotChatTime(
-                    bs as *mut bot_state_s,
-                );
+        if crate::src::game::ai_chat::BotChat_HitNoKill(bs as *mut bot_state_s) != 0 {
+            (*bs).stand_time =
+                floattime + crate::src::game::ai_chat::BotChatTime(bs as *mut bot_state_s);
             AIEnter_Stand(
                 bs,
                 b"battle fight: chat hit someone\x00" as *const u8 as *const libc::c_char
@@ -3994,10 +3502,7 @@ pub unsafe extern "C" fn AINode_Battle_Fight(
         (*bs).enemy,
     ) == 0.
     {
-        if crate::src::game::ai_dmq3::BotWantsToChase(
-            bs as *mut bot_state_s,
-        ) != 0
-        {
+        if crate::src::game::ai_dmq3::BotWantsToChase(bs as *mut bot_state_s) != 0 {
             AIEnter_Battle_Chase(
                 bs,
                 b"battle fight: enemy out of sight\x00" as *const u8 as *const libc::c_char
@@ -4034,27 +3539,18 @@ pub unsafe extern "C" fn AINode_Battle_Fight(
         (*bs).tfl |= 0x4000 as i32
     }
     //if in lava or slime the bot should be able to get out
-    if crate::src::game::ai_dmq3::BotInLavaOrSlime(
-        bs as *mut bot_state_s,
-    ) as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotInLavaOrSlime(bs as *mut bot_state_s) as u64 != 0 {
         (*bs).tfl |= 0x400000 as i32 | 0x200000 as i32
     }
     //
-    if crate::src::game::ai_dmq3::BotCanAndWantsToRocketJump(
-        bs as *mut bot_state_s,
-    ) != 0
-    {
+    if crate::src::game::ai_dmq3::BotCanAndWantsToRocketJump(bs as *mut bot_state_s) != 0 {
         (*bs).tfl |= 0x1000 as i32
     }
     //choose the best weapon to fight with
     crate::src::game::ai_dmq3::BotChooseWeapon(bs as *mut bot_state_s);
     //do attack movements
-    moveresult = crate::src::game::ai_dmq3::BotAttackMove(
-        bs as *mut bot_state_s,
-        (*bs).tfl,
-    ) as bot_moveresult_s;
+    moveresult = crate::src::game::ai_dmq3::BotAttackMove(bs as *mut bot_state_s, (*bs).tfl)
+        as bot_moveresult_s;
     //if the movement failed
     if moveresult.failure != 0 {
         //reset the avoid reach, otherwise bot is stuck in current area
@@ -4074,10 +3570,7 @@ pub unsafe extern "C" fn AINode_Battle_Fight(
     crate::src::game::ai_dmq3::BotCheckAttack(bs as *mut bot_state_s);
     //if the bot wants to retreat
     if (*bs).flags & 64 as i32 == 0 {
-        if crate::src::game::ai_dmq3::BotWantsToRetreat(
-            bs as *mut bot_state_s,
-        ) != 0
-        {
+        if crate::src::game::ai_dmq3::BotWantsToRetreat(bs as *mut bot_state_s) != 0 {
             AIEnter_Battle_Retreat(
                 bs,
                 b"battle fight: wants to retreat\x00" as *const u8 as *const libc::c_char
@@ -4095,10 +3588,7 @@ AIEnter_Battle_Chase
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AIEnter_Battle_Chase(
-    mut bs: *mut bot_state_t,
-    mut s: *mut libc::c_char,
-) {
+pub unsafe extern "C" fn AIEnter_Battle_Chase(mut bs: *mut bot_state_t, mut s: *mut libc::c_char) {
     BotRecordNodeSwitch(
         bs,
         b"battle chase\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -4106,10 +3596,7 @@ pub unsafe extern "C" fn AIEnter_Battle_Chase(
         s,
     );
     (*bs).chase_time = floattime;
-    (*bs).ainode = Some(
-        AINode_Battle_Chase
-            as unsafe extern "C" fn(_: *mut bot_state_t) -> i32,
-    );
+    (*bs).ainode = Some(AINode_Battle_Chase as unsafe extern "C" fn(_: *mut bot_state_t) -> i32);
 }
 /*
 ==================
@@ -4118,9 +3605,7 @@ AINode_Battle_Chase
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AINode_Battle_Chase(
-    mut bs: *mut bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn AINode_Battle_Chase(mut bs: *mut bot_state_t) -> i32 {
     let mut goal: bot_goal_t = bot_goal_t {
         origin: [0.; 3],
         areanum: 0,
@@ -4133,23 +3618,19 @@ pub unsafe extern "C" fn AINode_Battle_Chase(
     };
     let mut target: vec3_t = [0.; 3];
     let mut dir: vec3_t = [0.; 3];
-    let mut moveresult: bot_moveresult_t =
-        bot_moveresult_t {
-            failure: 0,
-            type_0: 0,
-            blocked: 0,
-            blockentity: 0,
-            traveltype: 0,
-            flags: 0,
-            weapon: 0,
-            movedir: [0.; 3],
-            ideal_viewangles: [0.; 3],
-        };
+    let mut moveresult: bot_moveresult_t = bot_moveresult_t {
+        failure: 0,
+        type_0: 0,
+        blocked: 0,
+        blockentity: 0,
+        traveltype: 0,
+        flags: 0,
+        weapon: 0,
+        movedir: [0.; 3],
+        ideal_viewangles: [0.; 3],
+    };
     let mut range: f32 = 0.;
-    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Observer(
             bs,
             b"battle chase: observer\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -4157,10 +3638,7 @@ pub unsafe extern "C" fn AINode_Battle_Chase(
         return qfalse as i32;
     }
     //if in the intermission
-    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Intermission(
             bs,
             b"battle chase: intermission\x00" as *const u8 as *const libc::c_char
@@ -4169,10 +3647,7 @@ pub unsafe extern "C" fn AINode_Battle_Chase(
         return qfalse as i32;
     }
     //respawn if dead
-    if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Respawn(
             bs,
             b"battle chase: bot dead\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -4203,11 +3678,7 @@ pub unsafe extern "C" fn AINode_Battle_Chase(
         return qfalse as i32;
     }
     //if there is another enemy
-    if crate::src::game::ai_dmq3::BotFindEnemy(
-        bs as *mut bot_state_s,
-        -(1 as i32),
-    ) != 0
-    {
+    if crate::src::game::ai_dmq3::BotFindEnemy(bs as *mut bot_state_s, -(1 as i32)) != 0 {
         AIEnter_Battle_Fight(
             bs,
             b"battle chase: better enemy\x00" as *const u8 as *const libc::c_char
@@ -4243,18 +3714,11 @@ pub unsafe extern "C" fn AINode_Battle_Chase(
         (*bs).tfl |= 0x4000 as i32
     }
     //if in lava or slime the bot should be able to get out
-    if crate::src::game::ai_dmq3::BotInLavaOrSlime(
-        bs as *mut bot_state_s,
-    ) as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotInLavaOrSlime(bs as *mut bot_state_s) as u64 != 0 {
         (*bs).tfl |= 0x400000 as i32 | 0x200000 as i32
     }
     //
-    if crate::src::game::ai_dmq3::BotCanAndWantsToRocketJump(
-        bs as *mut bot_state_s,
-    ) != 0
-    {
+    if crate::src::game::ai_dmq3::BotCanAndWantsToRocketJump(bs as *mut bot_state_s) != 0 {
         (*bs).tfl |= 0x1000 as i32
     }
     //map specific code
@@ -4280,9 +3744,7 @@ pub unsafe extern "C" fn AINode_Battle_Chase(
         (*bs).chase_time = 0 as i32 as f32
     }
     //if there's no chase time left
-    if (*bs).chase_time == 0.
-        || (*bs).chase_time < floattime - 10 as i32 as f32
-    {
+    if (*bs).chase_time == 0. || (*bs).chase_time < floattime - 10 as i32 as f32 {
         AIEnter_Seek_LTG(
             bs,
             b"battle chase: time out\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -4296,9 +3758,7 @@ pub unsafe extern "C" fn AINode_Battle_Chase(
         //
         if BotNearbyGoal(bs, (*bs).tfl, &mut goal, range) != 0 {
             //the bot gets 5 seconds to pick up the nearby goal item
-            (*bs).nbg_time = (floattime as f64
-                + 0.1f64 * range as f64
-                + 1 as i32 as f64) as f32;
+            (*bs).nbg_time = (floattime as f64 + 0.1f64 * range as f64 + 1 as i32 as f64) as f32;
             trap_BotResetLastAvoidReach((*bs).ms);
             AIEnter_Battle_NBG(
                 bs,
@@ -4308,14 +3768,9 @@ pub unsafe extern "C" fn AINode_Battle_Chase(
         }
     }
     //
-    crate::src::game::ai_dmq3::BotUpdateBattleInventory(
-        bs as *mut bot_state_s,
-        (*bs).enemy,
-    );
+    crate::src::game::ai_dmq3::BotUpdateBattleInventory(bs as *mut bot_state_s, (*bs).enemy);
     //initialize the movement state
-    crate::src::game::ai_dmq3::BotSetupForMovement(
-        bs as *mut bot_state_s,
-    );
+    crate::src::game::ai_dmq3::BotSetupForMovement(bs as *mut bot_state_s);
     //move towards the goal
     trap_BotMoveToGoal(
         &mut moveresult as *mut bot_moveresult_t as *mut libc::c_void,
@@ -4343,9 +3798,7 @@ pub unsafe extern "C" fn AINode_Battle_Chase(
         (*bs).ideal_viewangles[2 as i32 as usize] = moveresult.ideal_viewangles[2 as i32 as usize]
     } else if (*bs).flags & 32 as i32 == 0 {
         if (*bs).chase_time > floattime - 2 as i32 as f32 {
-            crate::src::game::ai_dmq3::BotAimAtEnemy(
-                bs as *mut bot_state_s,
-            );
+            crate::src::game::ai_dmq3::BotAimAtEnemy(bs as *mut bot_state_s);
         } else if trap_BotMovementViewTarget(
             (*bs).ms,
             &mut goal as *mut bot_goal_t as *mut libc::c_void,
@@ -4368,8 +3821,7 @@ pub unsafe extern "C" fn AINode_Battle_Chase(
             );
         }
         (*bs).ideal_viewangles[2 as i32 as usize] =
-            ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64)
-                as vec_t
+            ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64) as vec_t
     }
     //if the weapon is used for the bot movement
     if moveresult.flags & 16 as i32 != 0 {
@@ -4380,10 +3832,7 @@ pub unsafe extern "C" fn AINode_Battle_Chase(
         (*bs).chase_time = 0 as i32 as f32
     }
     //if the bot wants to retreat (the bot could have been damage during the chase)
-    if crate::src::game::ai_dmq3::BotWantsToRetreat(
-        bs as *mut bot_state_s,
-    ) != 0
-    {
+    if crate::src::game::ai_dmq3::BotWantsToRetreat(bs as *mut bot_state_s) != 0 {
         AIEnter_Battle_Retreat(
             bs,
             b"battle chase: wants to retreat\x00" as *const u8 as *const libc::c_char
@@ -4410,10 +3859,7 @@ pub unsafe extern "C" fn AIEnter_Battle_Retreat(
         b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         s,
     );
-    (*bs).ainode = Some(
-        AINode_Battle_Retreat
-            as unsafe extern "C" fn(_: *mut bot_state_t) -> i32,
-    );
+    (*bs).ainode = Some(AINode_Battle_Retreat as unsafe extern "C" fn(_: *mut bot_state_t) -> i32);
 }
 /*
 ==================
@@ -4422,9 +3868,7 @@ AINode_Battle_Retreat
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AINode_Battle_Retreat(
-    mut bs: *mut bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn AINode_Battle_Retreat(mut bs: *mut bot_state_t) -> i32 {
     let mut goal: bot_goal_t = bot_goal_t {
         origin: [0.; 3],
         areanum: 0,
@@ -4460,27 +3904,23 @@ pub unsafe extern "C" fn AINode_Battle_Retreat(
         legsAnim: 0,
         torsoAnim: 0,
     };
-    let mut moveresult: bot_moveresult_t =
-        bot_moveresult_t {
-            failure: 0,
-            type_0: 0,
-            blocked: 0,
-            blockentity: 0,
-            traveltype: 0,
-            flags: 0,
-            weapon: 0,
-            movedir: [0.; 3],
-            ideal_viewangles: [0.; 3],
-        };
+    let mut moveresult: bot_moveresult_t = bot_moveresult_t {
+        failure: 0,
+        type_0: 0,
+        blocked: 0,
+        blockentity: 0,
+        traveltype: 0,
+        flags: 0,
+        weapon: 0,
+        movedir: [0.; 3],
+        ideal_viewangles: [0.; 3],
+    };
     let mut target: vec3_t = [0.; 3];
     let mut dir: vec3_t = [0.; 3];
     let mut attack_skill: f32 = 0.;
     let mut range: f32 = 0.;
     let mut areanum: i32 = 0;
-    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Observer(
             bs,
             b"battle retreat: observer\x00" as *const u8 as *const libc::c_char
@@ -4489,10 +3929,7 @@ pub unsafe extern "C" fn AINode_Battle_Retreat(
         return qfalse as i32;
     }
     //if in the intermission
-    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Intermission(
             bs,
             b"battle retreat: intermission\x00" as *const u8 as *const libc::c_char
@@ -4501,10 +3938,7 @@ pub unsafe extern "C" fn AINode_Battle_Retreat(
         return qfalse as i32;
     }
     //respawn if dead
-    if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Respawn(
             bs,
             b"battle retreat: bot dead\x00" as *const u8 as *const libc::c_char
@@ -4522,13 +3956,9 @@ pub unsafe extern "C" fn AINode_Battle_Retreat(
         return qfalse as i32;
     }
     //
-    BotEntityInfo(
-        (*bs).enemy,
-        &mut entinfo as *mut _ as *mut aas_entityinfo_s,
-    );
-    if crate::src::game::ai_dmq3::EntityIsDead(
-        &mut entinfo as *mut _ as *mut aas_entityinfo_s,
-    ) as u64
+    BotEntityInfo((*bs).enemy, &mut entinfo as *mut _ as *mut aas_entityinfo_s);
+    if crate::src::game::ai_dmq3::EntityIsDead(&mut entinfo as *mut _ as *mut aas_entityinfo_s)
+        as u64
         != 0
     {
         AIEnter_Seek_LTG(
@@ -4539,10 +3969,7 @@ pub unsafe extern "C" fn AINode_Battle_Retreat(
         return qfalse as i32;
     }
     //if there is another better enemy
-    crate::src::game::ai_dmq3::BotFindEnemy(
-        bs as *mut bot_state_s,
-        (*bs).enemy,
-    );
+    crate::src::game::ai_dmq3::BotFindEnemy(bs as *mut bot_state_s, (*bs).enemy);
     //
     (*bs).tfl = 0x2 as i32
         | 0x4 as i32
@@ -4562,24 +3989,15 @@ pub unsafe extern "C" fn AINode_Battle_Retreat(
         (*bs).tfl |= 0x4000 as i32
     }
     //if in lava or slime the bot should be able to get out
-    if crate::src::game::ai_dmq3::BotInLavaOrSlime(
-        bs as *mut bot_state_s,
-    ) as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotInLavaOrSlime(bs as *mut bot_state_s) as u64 != 0 {
         (*bs).tfl |= 0x400000 as i32 | 0x200000 as i32
     }
     //map specific code
     crate::src::game::ai_dmq3::BotMapScripts(bs as *mut bot_state_s);
     //update the attack inventory values
-    crate::src::game::ai_dmq3::BotUpdateBattleInventory(
-        bs as *mut bot_state_s,
-        (*bs).enemy,
-    );
+    crate::src::game::ai_dmq3::BotUpdateBattleInventory(bs as *mut bot_state_s, (*bs).enemy);
     //if the bot doesn't want to retreat anymore... probably picked up some nice items
-    if crate::src::game::ai_dmq3::BotWantsToChase(bs as *mut bot_state_s)
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotWantsToChase(bs as *mut bot_state_s) != 0 {
         //empty the goal stack, when chasing, only the enemy is the goal
         trap_BotEmptyGoalStack((*bs).gs);
         //go chase the enemy
@@ -4626,11 +4044,7 @@ pub unsafe extern "C" fn AINode_Battle_Retreat(
         //else if the enemy is NOT visible
         if (*bs).enemyvisible_time < floattime {
             //if there is another enemy
-            if crate::src::game::ai_dmq3::BotFindEnemy(
-                bs as *mut bot_state_s,
-                -(1 as i32),
-            ) != 0
-            {
+            if crate::src::game::ai_dmq3::BotFindEnemy(bs as *mut bot_state_s, -(1 as i32)) != 0 {
                 AIEnter_Battle_Fight(
                     bs,
                     b"battle retreat: another enemy\x00" as *const u8 as *const libc::c_char
@@ -4641,20 +4055,11 @@ pub unsafe extern "C" fn AINode_Battle_Retreat(
         }
     }
     //
-    crate::src::game::ai_dmq3::BotTeamGoals(
-        bs as *mut bot_state_s,
-        qtrue as i32,
-    );
+    crate::src::game::ai_dmq3::BotTeamGoals(bs as *mut bot_state_s, qtrue as i32);
     //use holdable items
     crate::src::game::ai_dmq3::BotBattleUseItems(bs as *mut bot_state_s);
     //get the current long term goal while retreating
-    if BotLongTermGoal(
-        bs,
-        (*bs).tfl,
-        qtrue as i32,
-        &mut goal,
-    ) == 0
-    {
+    if BotLongTermGoal(bs, (*bs).tfl, qtrue as i32, &mut goal) == 0 {
         AIEnter_Battle_SuicidalFight(
             bs,
             b"battle retreat: no way out\x00" as *const u8 as *const libc::c_char
@@ -4668,10 +4073,7 @@ pub unsafe extern "C" fn AINode_Battle_Retreat(
         range = 150 as i32 as f32;
         if crate::src::game::ai_dmq3::gametype == GT_CTF as i32 {
             //if carrying a flag the bot shouldn't be distracted too much
-            if crate::src::game::ai_dmq3::BotCTFCarryingFlag(
-                bs as *mut bot_state_s,
-            ) != 0
-            {
+            if crate::src::game::ai_dmq3::BotCTFCarryingFlag(bs as *mut bot_state_s) != 0 {
                 range = 50 as i32 as f32
             }
         }
@@ -4680,8 +4082,7 @@ pub unsafe extern "C" fn AINode_Battle_Retreat(
         if BotNearbyGoal(bs, (*bs).tfl, &mut goal, range) != 0 {
             trap_BotResetLastAvoidReach((*bs).ms);
             //time the bot gets to pick up the nearby goal item
-            (*bs).nbg_time =
-                floattime + range / 100 as i32 as f32 + 1 as i32 as f32;
+            (*bs).nbg_time = floattime + range / 100 as i32 as f32 + 1 as i32 as f32;
             AIEnter_Battle_NBG(
                 bs,
                 b"battle retreat: nbg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -4690,9 +4091,7 @@ pub unsafe extern "C" fn AINode_Battle_Retreat(
         }
     }
     //initialize the movement state
-    crate::src::game::ai_dmq3::BotSetupForMovement(
-        bs as *mut bot_state_s,
-    );
+    crate::src::game::ai_dmq3::BotSetupForMovement(bs as *mut bot_state_s);
     //move towards the goal
     trap_BotMoveToGoal(
         &mut moveresult as *mut bot_moveresult_t as *mut libc::c_void,
@@ -4721,17 +4120,11 @@ pub unsafe extern "C" fn AINode_Battle_Retreat(
         (*bs).ideal_viewangles[1 as i32 as usize] = moveresult.ideal_viewangles[1 as i32 as usize];
         (*bs).ideal_viewangles[2 as i32 as usize] = moveresult.ideal_viewangles[2 as i32 as usize]
     } else if moveresult.flags & 8 as i32 == 0 && (*bs).flags & 32 as i32 == 0 {
-        attack_skill = trap_Characteristic_BFloat(
-            (*bs).character,
-            2 as i32,
-            0 as i32 as f32,
-            1 as i32 as f32,
-        );
+        attack_skill =
+            trap_Characteristic_BFloat((*bs).character, 2 as i32, 0 as i32 as f32, 1 as i32 as f32);
         //if the bot is skilled enough
         if attack_skill as f64 > 0.3f64 {
-            crate::src::game::ai_dmq3::BotAimAtEnemy(
-                bs as *mut bot_state_s,
-            );
+            crate::src::game::ai_dmq3::BotAimAtEnemy(bs as *mut bot_state_s);
         } else {
             if trap_BotMovementViewTarget(
                 (*bs).ms,
@@ -4758,8 +4151,7 @@ pub unsafe extern "C" fn AINode_Battle_Retreat(
                 );
             }
             (*bs).ideal_viewangles[2 as i32 as usize] =
-                ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64)
-                    as vec_t
+                ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64) as vec_t
         }
     }
     //if the weapon is used for the bot movement
@@ -4778,20 +4170,14 @@ AIEnter_Battle_NBG
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AIEnter_Battle_NBG(
-    mut bs: *mut bot_state_t,
-    mut s: *mut libc::c_char,
-) {
+pub unsafe extern "C" fn AIEnter_Battle_NBG(mut bs: *mut bot_state_t, mut s: *mut libc::c_char) {
     BotRecordNodeSwitch(
         bs,
         b"battle NBG\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         s,
     );
-    (*bs).ainode = Some(
-        AINode_Battle_NBG
-            as unsafe extern "C" fn(_: *mut bot_state_t) -> i32,
-    );
+    (*bs).ainode = Some(AINode_Battle_NBG as unsafe extern "C" fn(_: *mut bot_state_t) -> i32);
 }
 /*
 ==================
@@ -4800,9 +4186,7 @@ AINode_Battle_NBG
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AINode_Battle_NBG(
-    mut bs: *mut bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn AINode_Battle_NBG(mut bs: *mut bot_state_t) -> i32 {
     let mut areanum: i32 = 0;
     let mut goal: bot_goal_t = bot_goal_t {
         origin: [0.; 3],
@@ -4839,25 +4223,21 @@ pub unsafe extern "C" fn AINode_Battle_NBG(
         legsAnim: 0,
         torsoAnim: 0,
     };
-    let mut moveresult: bot_moveresult_t =
-        bot_moveresult_t {
-            failure: 0,
-            type_0: 0,
-            blocked: 0,
-            blockentity: 0,
-            traveltype: 0,
-            flags: 0,
-            weapon: 0,
-            movedir: [0.; 3],
-            ideal_viewangles: [0.; 3],
-        };
+    let mut moveresult: bot_moveresult_t = bot_moveresult_t {
+        failure: 0,
+        type_0: 0,
+        blocked: 0,
+        blockentity: 0,
+        traveltype: 0,
+        flags: 0,
+        weapon: 0,
+        movedir: [0.; 3],
+        ideal_viewangles: [0.; 3],
+    };
     let mut attack_skill: f32 = 0.;
     let mut target: vec3_t = [0.; 3];
     let mut dir: vec3_t = [0.; 3];
-    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIsObserver(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Observer(
             bs,
             b"battle nbg: observer\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -4865,10 +4245,7 @@ pub unsafe extern "C" fn AINode_Battle_NBG(
         return qfalse as i32;
     }
     //if in the intermission
-    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIntermission(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Intermission(
             bs,
             b"battle nbg: intermission\x00" as *const u8 as *const libc::c_char
@@ -4877,10 +4254,7 @@ pub unsafe extern "C" fn AINode_Battle_NBG(
         return qfalse as i32;
     }
     //respawn if dead
-    if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s)
-        as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotIsDead(bs as *mut bot_state_s) as u64 != 0 {
         AIEnter_Respawn(
             bs,
             b"battle nbg: bot dead\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -4896,13 +4270,9 @@ pub unsafe extern "C" fn AINode_Battle_NBG(
         return qfalse as i32;
     }
     //
-    BotEntityInfo(
-        (*bs).enemy,
-        &mut entinfo as *mut _ as *mut aas_entityinfo_s,
-    );
-    if crate::src::game::ai_dmq3::EntityIsDead(
-        &mut entinfo as *mut _ as *mut aas_entityinfo_s,
-    ) as u64
+    BotEntityInfo((*bs).enemy, &mut entinfo as *mut _ as *mut aas_entityinfo_s);
+    if crate::src::game::ai_dmq3::EntityIsDead(&mut entinfo as *mut _ as *mut aas_entityinfo_s)
+        as u64
         != 0
     {
         AIEnter_Seek_NBG(
@@ -4930,18 +4300,11 @@ pub unsafe extern "C" fn AINode_Battle_NBG(
         (*bs).tfl |= 0x4000 as i32
     }
     //if in lava or slime the bot should be able to get out
-    if crate::src::game::ai_dmq3::BotInLavaOrSlime(
-        bs as *mut bot_state_s,
-    ) as u64
-        != 0
-    {
+    if crate::src::game::ai_dmq3::BotInLavaOrSlime(bs as *mut bot_state_s) as u64 != 0 {
         (*bs).tfl |= 0x400000 as i32 | 0x200000 as i32
     }
     //
-    if crate::src::game::ai_dmq3::BotCanAndWantsToRocketJump(
-        bs as *mut bot_state_s,
-    ) != 0
-    {
+    if crate::src::game::ai_dmq3::BotCanAndWantsToRocketJump(bs as *mut bot_state_s) != 0 {
         (*bs).tfl |= 0x1000 as i32
     }
     //map specific code
@@ -4971,11 +4334,7 @@ pub unsafe extern "C" fn AINode_Battle_NBG(
         }
     }
     //if the bot has no goal or touches the current goal
-    if trap_BotGetTopGoal(
-        (*bs).gs,
-        &mut goal as *mut bot_goal_t as *mut libc::c_void,
-    ) == 0
-    {
+    if trap_BotGetTopGoal((*bs).gs, &mut goal as *mut bot_goal_t as *mut libc::c_void) == 0 {
         (*bs).nbg_time = 0 as i32 as f32
     } else if BotReachedGoal(bs, &mut goal) != 0 {
         (*bs).nbg_time = 0 as i32 as f32
@@ -4985,11 +4344,7 @@ pub unsafe extern "C" fn AINode_Battle_NBG(
         //pop the current goal from the stack
         trap_BotPopGoal((*bs).gs);
         //if the bot still has a goal
-        if trap_BotGetTopGoal(
-            (*bs).gs,
-            &mut goal as *mut bot_goal_t as *mut libc::c_void,
-        ) != 0
-        {
+        if trap_BotGetTopGoal((*bs).gs, &mut goal as *mut bot_goal_t as *mut libc::c_void) != 0 {
             AIEnter_Battle_Retreat(
                 bs,
                 b"battle nbg: time out\x00" as *const u8 as *const libc::c_char
@@ -5006,9 +4361,7 @@ pub unsafe extern "C" fn AINode_Battle_NBG(
         return qfalse as i32;
     }
     //initialize the movement state
-    crate::src::game::ai_dmq3::BotSetupForMovement(
-        bs as *mut bot_state_s,
-    );
+    crate::src::game::ai_dmq3::BotSetupForMovement(bs as *mut bot_state_s);
     //move towards the goal
     trap_BotMoveToGoal(
         &mut moveresult as *mut bot_moveresult_t as *mut libc::c_void,
@@ -5030,10 +4383,7 @@ pub unsafe extern "C" fn AINode_Battle_NBG(
         qfalse as i32,
     );
     //update the attack inventory values
-    crate::src::game::ai_dmq3::BotUpdateBattleInventory(
-        bs as *mut bot_state_s,
-        (*bs).enemy,
-    );
+    crate::src::game::ai_dmq3::BotUpdateBattleInventory(bs as *mut bot_state_s, (*bs).enemy);
     //choose the best weapon to fight with
     crate::src::game::ai_dmq3::BotChooseWeapon(bs as *mut bot_state_s);
     //if the view is fixed for the movement
@@ -5042,18 +4392,12 @@ pub unsafe extern "C" fn AINode_Battle_NBG(
         (*bs).ideal_viewangles[1 as i32 as usize] = moveresult.ideal_viewangles[1 as i32 as usize];
         (*bs).ideal_viewangles[2 as i32 as usize] = moveresult.ideal_viewangles[2 as i32 as usize]
     } else if moveresult.flags & 8 as i32 == 0 && (*bs).flags & 32 as i32 == 0 {
-        attack_skill = trap_Characteristic_BFloat(
-            (*bs).character,
-            2 as i32,
-            0 as i32 as f32,
-            1 as i32 as f32,
-        );
+        attack_skill =
+            trap_Characteristic_BFloat((*bs).character, 2 as i32, 0 as i32 as f32, 1 as i32 as f32);
         //if the bot is skilled enough and the enemy is visible
         if attack_skill as f64 > 0.3f64 {
             //&& BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, bs->enemy)
-            crate::src::game::ai_dmq3::BotAimAtEnemy(
-                bs as *mut bot_state_s,
-            );
+            crate::src::game::ai_dmq3::BotAimAtEnemy(bs as *mut bot_state_s);
         } else {
             if trap_BotMovementViewTarget(
                 (*bs).ms,
@@ -5080,8 +4424,7 @@ pub unsafe extern "C" fn AINode_Battle_NBG(
                 );
             }
             (*bs).ideal_viewangles[2 as i32 as usize] =
-                ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64)
-                    as vec_t
+                ((*bs).ideal_viewangles[2 as i32 as usize] as f64 * 0.5f64) as vec_t
         }
     }
     //if the weapon is used for the bot movement

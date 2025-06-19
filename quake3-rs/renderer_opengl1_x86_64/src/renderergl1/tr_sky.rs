@@ -494,36 +494,12 @@ POLYGON TO BOX SIDE PROJECTION
 */
 
 static mut sky_clip: [vec3_t; 6] = [
-    [
-        1 as i32 as vec_t,
-        1 as i32 as vec_t,
-        0 as i32 as vec_t,
-    ],
-    [
-        1 as i32 as vec_t,
-        -(1 as i32) as vec_t,
-        0 as i32 as vec_t,
-    ],
-    [
-        0 as i32 as vec_t,
-        -(1 as i32) as vec_t,
-        1 as i32 as vec_t,
-    ],
-    [
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ],
-    [
-        1 as i32 as vec_t,
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ],
-    [
-        -(1 as i32) as vec_t,
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ],
+    [1 as i32 as vec_t, 1 as i32 as vec_t, 0 as i32 as vec_t],
+    [1 as i32 as vec_t, -(1 as i32) as vec_t, 0 as i32 as vec_t],
+    [0 as i32 as vec_t, -(1 as i32) as vec_t, 1 as i32 as vec_t],
+    [0 as i32 as vec_t, 1 as i32 as vec_t, 1 as i32 as vec_t],
+    [1 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t],
+    [-(1 as i32) as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t],
 ];
 
 static mut sky_mins: [[f32; 6]; 2] = [[0.; 6]; 2];
@@ -539,10 +515,7 @@ AddSkyPolygon
 ================
 */
 
-unsafe extern "C" fn AddSkyPolygon(
-    mut nump: i32,
-    mut vecs: *mut vec_t,
-) {
+unsafe extern "C" fn AddSkyPolygon(mut nump: i32, mut vecs: *mut vec_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut v: vec3_t = [0.; 3];
@@ -574,12 +547,9 @@ unsafe extern "C" fn AddSkyPolygon(
         i += 1;
         vp = vp.offset(3 as i32 as isize)
     }
-    av[0 as i32 as usize] =
-        crate::stdlib::fabs(v[0 as i32 as usize] as f64) as vec_t;
-    av[1 as i32 as usize] =
-        crate::stdlib::fabs(v[1 as i32 as usize] as f64) as vec_t;
-    av[2 as i32 as usize] =
-        crate::stdlib::fabs(v[2 as i32 as usize] as f64) as vec_t;
+    av[0 as i32 as usize] = crate::stdlib::fabs(v[0 as i32 as usize] as f64) as vec_t;
+    av[1 as i32 as usize] = crate::stdlib::fabs(v[1 as i32 as usize] as f64) as vec_t;
+    av[2 as i32 as usize] = crate::stdlib::fabs(v[2 as i32 as usize] as f64) as vec_t;
     if av[0 as i32 as usize] > av[1 as i32 as usize]
         && av[0 as i32 as usize] > av[2 as i32 as usize]
     {
@@ -646,11 +616,7 @@ ClipSkyPolygon
 ================
 */
 
-unsafe extern "C" fn ClipSkyPolygon(
-    mut nump: i32,
-    mut vecs: *mut vec_t,
-    mut stage: i32,
-) {
+unsafe extern "C" fn ClipSkyPolygon(mut nump: i32, mut vecs: *mut vec_t, mut stage: i32) {
     let mut norm: *mut f32 = 0 as *mut f32;
     let mut v: *mut f32 = 0 as *mut f32;
     let mut front: qboolean = qfalse;
@@ -664,9 +630,7 @@ unsafe extern "C" fn ClipSkyPolygon(
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     if nump > 64 as i32 - 2 as i32 {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"ClipSkyPolygon: MAX_CLIP_VERTS\x00" as *const u8 as *const libc::c_char,
         );
@@ -823,22 +787,13 @@ pub unsafe extern "C" fn RB_ClipSkyPolygons(mut input: *mut shaderCommands_t) {
         while j < 3 as i32 {
             p[j as usize][0 as i32 as usize] = (*input).xyz
                 [(*input).indexes[(i + j) as usize] as usize][0 as i32 as usize]
-                - backEnd
-                    .viewParms
-                    .or
-                    .origin[0 as i32 as usize];
+                - backEnd.viewParms.or.origin[0 as i32 as usize];
             p[j as usize][1 as i32 as usize] = (*input).xyz
                 [(*input).indexes[(i + j) as usize] as usize][1 as i32 as usize]
-                - backEnd
-                    .viewParms
-                    .or
-                    .origin[1 as i32 as usize];
+                - backEnd.viewParms.or.origin[1 as i32 as usize];
             p[j as usize][2 as i32 as usize] = (*input).xyz
                 [(*input).indexes[(i + j) as usize] as usize][2 as i32 as usize]
-                - backEnd
-                    .viewParms
-                    .or
-                    .origin[2 as i32 as usize];
+                - backEnd.viewParms.or.origin[2 as i32 as usize];
             j += 1
         }
         ClipSkyPolygon(3 as i32, p[0 as i32 as usize].as_mut_ptr(), 0 as i32);
@@ -928,9 +883,7 @@ unsafe extern "C" fn DrawSkySide(
     GL_Bind(image as *mut image_s);
     t = *mins.offset(1 as i32 as isize) + 8 as i32 / 2 as i32;
     while t < *maxs.offset(1 as i32 as isize) + 8 as i32 / 2 as i32 {
-        qglBegin.expect("non-null function pointer")(
-            0x5 as i32 as GLenum,
-        );
+        qglBegin.expect("non-null function pointer")(0x5 as i32 as GLenum);
         s = *mins.offset(0 as i32 as isize) + 8 as i32 / 2 as i32;
         while s <= *maxs.offset(0 as i32 as isize) + 8 as i32 / 2 as i32 {
             qglTexCoord2fv.expect("non-null function pointer")(
@@ -1054,38 +1007,22 @@ unsafe extern "C" fn FillCloudySkySide(
     while t <= *maxs.offset(1 as i32 as isize) + 8 as i32 / 2 as i32 {
         s = *mins.offset(0 as i32 as isize) + 8 as i32 / 2 as i32;
         while s <= *maxs.offset(0 as i32 as isize) + 8 as i32 / 2 as i32 {
-            tess.xyz
-                [tess.numVertexes as usize][0 as i32 as usize] =
-                s_skyPoints[t as usize][s as usize][0 as i32 as usize]
-                    + backEnd
-                        .viewParms
-                        .or
-                        .origin[0 as i32 as usize];
-            tess.xyz
-                [tess.numVertexes as usize][1 as i32 as usize] =
-                s_skyPoints[t as usize][s as usize][1 as i32 as usize]
-                    + backEnd
-                        .viewParms
-                        .or
-                        .origin[1 as i32 as usize];
-            tess.xyz
-                [tess.numVertexes as usize][2 as i32 as usize] =
-                s_skyPoints[t as usize][s as usize][2 as i32 as usize]
-                    + backEnd
-                        .viewParms
-                        .or
-                        .origin[2 as i32 as usize];
-            tess.texCoords
-                [tess.numVertexes as usize][0 as i32 as usize]
-                [0 as i32 as usize] = s_skyTexCoords[t as usize][s as usize][0 as i32 as usize];
-            tess.texCoords
-                [tess.numVertexes as usize][0 as i32 as usize]
-                [1 as i32 as usize] = s_skyTexCoords[t as usize][s as usize][1 as i32 as usize];
+            tess.xyz[tess.numVertexes as usize][0 as i32 as usize] = s_skyPoints[t as usize]
+                [s as usize][0 as i32 as usize]
+                + backEnd.viewParms.or.origin[0 as i32 as usize];
+            tess.xyz[tess.numVertexes as usize][1 as i32 as usize] = s_skyPoints[t as usize]
+                [s as usize][1 as i32 as usize]
+                + backEnd.viewParms.or.origin[1 as i32 as usize];
+            tess.xyz[tess.numVertexes as usize][2 as i32 as usize] = s_skyPoints[t as usize]
+                [s as usize][2 as i32 as usize]
+                + backEnd.viewParms.or.origin[2 as i32 as usize];
+            tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][0 as i32 as usize] =
+                s_skyTexCoords[t as usize][s as usize][0 as i32 as usize];
+            tess.texCoords[tess.numVertexes as usize][0 as i32 as usize][1 as i32 as usize] =
+                s_skyTexCoords[t as usize][s as usize][1 as i32 as usize];
             tess.numVertexes += 1;
             if tess.numVertexes >= 1000 as i32 {
-                ri
-                    .Error
-                    .expect("non-null function pointer")(
+                ri.Error.expect("non-null function pointer")(
                     ERR_DROP as i32,
                     b"SHADER_MAX_VERTEXES hit in FillCloudySkySide()\x00" as *const u8
                         as *const libc::c_char,
@@ -1101,29 +1038,22 @@ unsafe extern "C" fn FillCloudySkySide(
         while t < tHeight - 1 as i32 {
             s = 0 as i32;
             while s < sWidth - 1 as i32 {
-                tess.indexes
-                    [tess.numIndexes as usize] =
+                tess.indexes[tess.numIndexes as usize] =
                     (vertexStart + s + t * sWidth) as glIndex_t;
                 tess.numIndexes += 1;
-                tess.indexes
-                    [tess.numIndexes as usize] =
+                tess.indexes[tess.numIndexes as usize] =
                     (vertexStart + s + (t + 1 as i32) * sWidth) as glIndex_t;
                 tess.numIndexes += 1;
-                tess.indexes
-                    [tess.numIndexes as usize] =
+                tess.indexes[tess.numIndexes as usize] =
                     (vertexStart + s + 1 as i32 + t * sWidth) as glIndex_t;
                 tess.numIndexes += 1;
-                tess.indexes
-                    [tess.numIndexes as usize] =
+                tess.indexes[tess.numIndexes as usize] =
                     (vertexStart + s + (t + 1 as i32) * sWidth) as glIndex_t;
                 tess.numIndexes += 1;
-                tess.indexes
-                    [tess.numIndexes as usize] =
-                    (vertexStart + s + 1 as i32 + (t + 1 as i32) * sWidth)
-                        as glIndex_t;
+                tess.indexes[tess.numIndexes as usize] =
+                    (vertexStart + s + 1 as i32 + (t + 1 as i32) * sWidth) as glIndex_t;
                 tess.numIndexes += 1;
-                tess.indexes
-                    [tess.numIndexes as usize] =
+                tess.indexes[tess.numIndexes as usize] =
                     (vertexStart + s + 1 as i32 + t * sWidth) as glIndex_t;
                 tess.numIndexes += 1;
                 s += 1
@@ -1166,24 +1096,16 @@ unsafe extern "C" fn FillCloudBox(mut _shader: *const shader_t, mut stage: i32) 
                 || sky_mins[1 as i32 as usize][i as usize]
                     >= sky_maxs[1 as i32 as usize][i as usize])
             {
-                sky_mins_subd[0 as i32 as usize] = ri
-                    .ftol
-                    .expect("non-null function pointer")(
+                sky_mins_subd[0 as i32 as usize] = ri.ftol.expect("non-null function pointer")(
                     sky_mins[0 as i32 as usize][i as usize] * (8 as i32 / 2 as i32) as f32,
                 ) as i32;
-                sky_mins_subd[1 as i32 as usize] = ri
-                    .ftol
-                    .expect("non-null function pointer")(
+                sky_mins_subd[1 as i32 as usize] = ri.ftol.expect("non-null function pointer")(
                     sky_mins[1 as i32 as usize][i as usize] * (8 as i32 / 2 as i32) as f32,
                 ) as i32;
-                sky_maxs_subd[0 as i32 as usize] = ri
-                    .ftol
-                    .expect("non-null function pointer")(
+                sky_maxs_subd[0 as i32 as usize] = ri.ftol.expect("non-null function pointer")(
                     sky_maxs[0 as i32 as usize][i as usize] * (8 as i32 / 2 as i32) as f32,
                 ) as i32;
-                sky_maxs_subd[1 as i32 as usize] = ri
-                    .ftol
-                    .expect("non-null function pointer")(
+                sky_maxs_subd[1 as i32 as usize] = ri.ftol.expect("non-null function pointer")(
                     sky_maxs[1 as i32 as usize][i as usize] * (8 as i32 / 2 as i32) as f32,
                 ) as i32;
                 if sky_mins_subd[0 as i32 as usize] < -(8 as i32 / 2 as i32) {
@@ -1257,11 +1179,7 @@ pub unsafe extern "C" fn R_BuildCloudData(mut input: *mut shaderCommands_t) {
     if (*shader).sky.cloudHeight != 0. {
         i = 0 as i32;
         while i < 8 as i32 {
-            if (*tess
-                .xstages
-                .offset(i as isize))
-            .is_null()
-            {
+            if (*tess.xstages.offset(i as isize)).is_null() {
                 break;
             }
             FillCloudBox(shader, i);
@@ -1414,44 +1332,24 @@ pub unsafe extern "C" fn RB_DrawSun(mut scale: f32, mut shader: *mut shader_t) {
         return;
     }
     qglLoadMatrixf.expect("non-null function pointer")(
-        backEnd
-            .viewParms
-            .world
-            .modelMatrix
-            .as_mut_ptr(),
+        backEnd.viewParms.world.modelMatrix.as_mut_ptr(),
     );
     qglTranslatef.expect("non-null function pointer")(
-        backEnd
-            .viewParms
-            .or
-            .origin[0 as i32 as usize],
-        backEnd
-            .viewParms
-            .or
-            .origin[1 as i32 as usize],
-        backEnd
-            .viewParms
-            .or
-            .origin[2 as i32 as usize],
+        backEnd.viewParms.or.origin[0 as i32 as usize],
+        backEnd.viewParms.or.origin[1 as i32 as usize],
+        backEnd.viewParms.or.origin[2 as i32 as usize],
     );
     dist = (backEnd.viewParms.zFar as f64 / 1.75f64) as f32;
     size = dist * scale;
-    origin[0 as i32 as usize] =
-        tr.sunDirection[0 as i32 as usize] * dist;
-    origin[1 as i32 as usize] =
-        tr.sunDirection[1 as i32 as usize] * dist;
-    origin[2 as i32 as usize] =
-        tr.sunDirection[2 as i32 as usize] * dist;
+    origin[0 as i32 as usize] = tr.sunDirection[0 as i32 as usize] * dist;
+    origin[1 as i32 as usize] = tr.sunDirection[1 as i32 as usize] * dist;
+    origin[2 as i32 as usize] = tr.sunDirection[2 as i32 as usize] * dist;
     PerpendicularVector(
         vec1.as_mut_ptr(),
-        tr
-            .sunDirection
-            .as_mut_ptr() as *const vec_t,
+        tr.sunDirection.as_mut_ptr() as *const vec_t,
     );
     CrossProduct(
-        tr
-            .sunDirection
-            .as_mut_ptr() as *const vec_t,
+        tr.sunDirection.as_mut_ptr() as *const vec_t,
         vec1.as_mut_ptr() as *const vec_t,
         vec2.as_mut_ptr(),
     );
@@ -1463,10 +1361,7 @@ pub unsafe extern "C" fn RB_DrawSun(mut scale: f32, mut shader: *mut shader_t) {
     vec2[2 as i32 as usize] = vec2[2 as i32 as usize] * size;
     // farthest depth range
     qglDepthRange.expect("non-null function pointer")(1.0f64, 1.0f64);
-    RB_BeginSurface(
-        shader as *mut shader_s,
-        0 as i32,
-    );
+    RB_BeginSurface(shader as *mut shader_s, 0 as i32);
     RB_AddQuadStamp(
         origin.as_mut_ptr(),
         vec1.as_mut_ptr(),
@@ -1831,23 +1726,13 @@ pub unsafe extern "C" fn RB_StageIteratorSky() {
     // front of everything to allow developers to see how
     // much sky is getting sucked in
     if (*r_showsky).integer != 0 {
-        qglDepthRange.expect("non-null function pointer")(
-            0.0f64, 0.0f64,
-        );
+        qglDepthRange.expect("non-null function pointer")(0.0f64, 0.0f64);
     } else {
-        qglDepthRange.expect("non-null function pointer")(
-            1.0f64, 1.0f64,
-        );
+        qglDepthRange.expect("non-null function pointer")(1.0f64, 1.0f64);
     }
     // draw the outer skybox
-    if !(*tess.shader)
-        .sky
-        .outerbox[0 as i32 as usize]
-        .is_null()
-        && (*tess.shader)
-            .sky
-            .outerbox[0 as i32 as usize]
-            != tr.defaultImage
+    if !(*tess.shader).sky.outerbox[0 as i32 as usize].is_null()
+        && (*tess.shader).sky.outerbox[0 as i32 as usize] != tr.defaultImage
     {
         qglColor3f.expect("non-null function pointer")(
             tr.identityLight,
@@ -1858,18 +1743,9 @@ pub unsafe extern "C" fn RB_StageIteratorSky() {
         GL_State(0 as i32 as libc::c_ulong);
         GL_Cull(CT_FRONT_SIDED as i32);
         qglTranslatef.expect("non-null function pointer")(
-            backEnd
-                .viewParms
-                .or
-                .origin[0 as i32 as usize],
-            backEnd
-                .viewParms
-                .or
-                .origin[1 as i32 as usize],
-            backEnd
-                .viewParms
-                .or
-                .origin[2 as i32 as usize],
+            backEnd.viewParms.or.origin[0 as i32 as usize],
+            backEnd.viewParms.or.origin[1 as i32 as usize],
+            backEnd.viewParms.or.origin[2 as i32 as usize],
         );
         DrawSkyBox(tess.shader);
         qglPopMatrix.expect("non-null function pointer")();
@@ -1882,6 +1758,5 @@ pub unsafe extern "C" fn RB_StageIteratorSky() {
     // back to normal depth range
     qglDepthRange.expect("non-null function pointer")(0.0f64, 1.0f64);
     // note that sky was drawn so we will draw a sun later
-    backEnd.skyRenderedThisView =
-        qtrue;
+    backEnd.skyRenderedThisView = qtrue;
 }

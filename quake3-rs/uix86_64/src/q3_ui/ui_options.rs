@@ -74,8 +74,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -97,8 +96,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -124,8 +122,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -151,8 +148,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -174,8 +170,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -197,8 +192,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -220,8 +214,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -243,8 +236,7 @@ static mut s_options: optionsmenu_t = optionsmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -297,18 +289,10 @@ SystemConfig_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn SystemConfig_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===============
@@ -334,9 +318,7 @@ pub unsafe extern "C" fn Options_MenuInit() {
     );
     SystemConfig_Cache();
     s_options.menu.wrapAround = qtrue;
-    trap_GetClientState(
-        &mut cstate as *mut _ as *mut uiClientState_t,
-    );
+    trap_GetClientState(&mut cstate as *mut _ as *mut uiClientState_t);
     if cstate.connState as u32 >= CA_CONNECTED as i32 as u32 {
         s_options.menu.fullscreen = qfalse
     } else {
@@ -465,7 +447,5 @@ UI_SystemConfigMenu
 
 pub unsafe extern "C" fn UI_SystemConfigMenu() {
     Options_MenuInit();
-    UI_PushMenu(
-        &mut s_options.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_options.menu as *mut _ as *mut _tag_menuframework);
 }

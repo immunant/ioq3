@@ -280,8 +280,7 @@ pub unsafe extern "C" fn silk_inner_prod_aligned_scale(
     i = 0 as i32;
     while i < len {
         sum = sum
-            + (*inVec1.offset(i as isize) as opus_int32
-                * *inVec2.offset(i as isize) as opus_int32
+            + (*inVec1.offset(i as isize) as opus_int32 * *inVec2.offset(i as isize) as opus_int32
                 >> scale);
         i += 1
     }

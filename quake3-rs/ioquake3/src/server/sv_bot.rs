@@ -500,8 +500,7 @@ pub unsafe extern "C" fn SV_BotAllocateClient() -> i32 {
     if i == (*sv_maxclients).integer {
         return -(1 as i32);
     }
-    (*cl).gentity =
-        SV_GentityNum(i) as *mut sharedEntity_t;
+    (*cl).gentity = SV_GentityNum(i) as *mut sharedEntity_t;
     (*(*cl).gentity).s.number = i;
     (*cl).state = CS_ACTIVE;
     (*cl).lastPacketTime = svs.time;
@@ -525,9 +524,7 @@ pub unsafe extern "C" fn SV_BotFreeClient(mut clientNum: i32) {
             clientNum,
         );
     }
-    cl = &mut *svs
-        .clients
-        .offset(clientNum as isize) as *mut client_t;
+    cl = &mut *svs.clients.offset(clientNum as isize) as *mut client_t;
     (*cl).state = CS_FREE;
     (*cl).name[0 as i32 as usize] = 0 as i32 as libc::c_char;
     if !(*cl).gentity.is_null() {
@@ -545,18 +542,10 @@ pub unsafe extern "C" fn BotDrawDebugPolygons(
     mut drawPoly: Option<unsafe extern "C" fn(_: i32, _: i32, _: *mut f32) -> ()>,
     mut _value: i32,
 ) {
-    static mut bot_debug: *mut cvar_t = 0
-        as *const cvar_t
-        as *mut cvar_t;
-    static mut bot_groundonly: *mut cvar_t = 0
-        as *const cvar_t
-        as *mut cvar_t;
-    static mut bot_reachability: *mut cvar_t = 0
-        as *const cvar_t
-        as *mut cvar_t;
-    static mut bot_highlightarea: *mut cvar_t = 0
-        as *const cvar_t
-        as *mut cvar_t;
+    static mut bot_debug: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+    static mut bot_groundonly: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+    static mut bot_reachability: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
+    static mut bot_highlightarea: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
     let mut poly: *mut bot_debugpoly_t = 0 as *mut bot_debugpoly_t;
     let mut i: i32 = 0;
     let mut parm0: i32 = 0;
@@ -600,14 +589,7 @@ pub unsafe extern "C" fn BotDrawDebugPolygons(
         }
         //
         parm0 = 0 as i32;
-        if (*svs
-            .clients
-            .offset(0 as i32 as isize))
-        .lastUsercmd
-        .buttons
-            & 1 as i32
-            != 0
-        {
+        if (*svs.clients.offset(0 as i32 as isize)).lastUsercmd.buttons & 1 as i32 != 0 {
             parm0 |= 1 as i32
         }
         if (*bot_reachability).integer != 0 {
@@ -625,17 +607,11 @@ pub unsafe extern "C" fn BotDrawDebugPolygons(
         (*botlib_export).Test.expect("non-null function pointer")(
             parm0,
             0 as *mut libc::c_char,
-            (*(*svs
-                .clients
-                .offset(0 as i32 as isize))
-            .gentity)
+            (*(*svs.clients.offset(0 as i32 as isize)).gentity)
                 .r
                 .currentOrigin
                 .as_mut_ptr(),
-            (*(*svs
-                .clients
-                .offset(0 as i32 as isize))
-            .gentity)
+            (*(*svs.clients.offset(0 as i32 as isize)).gentity)
                 .r
                 .currentAngles
                 .as_mut_ptr(),
@@ -705,9 +681,7 @@ unsafe extern "C" fn BotImport_Print(mut type_0: i32, mut fmt: *mut libc::c_char
             );
         }
         _ => {
-            Com_Printf(
-                b"unknown print type\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"unknown print type\n\x00" as *const u8 as *const libc::c_char);
         }
     };
 }
@@ -726,23 +700,22 @@ unsafe extern "C" fn BotImport_Trace(
     mut passent: i32,
     mut contentmask: i32,
 ) {
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     SV_Trace(
         &mut trace as *mut _ as *mut trace_t,
         start as *const vec_t,
@@ -788,23 +761,22 @@ unsafe extern "C" fn BotImport_EntityTrace(
     mut entnum: i32,
     mut contentmask: i32,
 ) {
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     SV_ClipToEntity(
         &mut trace as *mut _ as *mut trace_t,
         start as *const vec_t,
@@ -841,13 +813,8 @@ BotImport_PointContents
 ==================
 */
 
-unsafe extern "C" fn BotImport_PointContents(
-    mut point: *mut vec_t,
-) -> i32 {
-    return SV_PointContents(
-        point as *const vec_t,
-        -(1 as i32),
-    );
+unsafe extern "C" fn BotImport_PointContents(mut point: *mut vec_t) -> i32 {
+    return SV_PointContents(point as *const vec_t, -(1 as i32));
 }
 /*
 ==================
@@ -855,14 +822,8 @@ BotImport_inPVS
 ==================
 */
 
-unsafe extern "C" fn BotImport_inPVS(
-    mut p1: *mut vec_t,
-    mut p2: *mut vec_t,
-) -> i32 {
-    return SV_inPVS(
-        p1 as *const vec_t,
-        p2 as *const vec_t,
-    ) as i32;
+unsafe extern "C" fn BotImport_inPVS(mut p1: *mut vec_t, mut p2: *mut vec_t) -> i32 {
+    return SV_inPVS(p1 as *const vec_t, p2 as *const vec_t) as i32;
 }
 /*
 ==================
@@ -998,9 +959,7 @@ pub unsafe extern "C" fn BotImport_DebugPolygonCreate(
     crate::stdlib::memcpy(
         (*poly).points.as_mut_ptr() as *mut libc::c_void,
         points as *const libc::c_void,
-        (numPoints as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            vec3_t,
-        >() as libc::c_ulong),
+        (numPoints as libc::c_ulong).wrapping_mul(::std::mem::size_of::<vec3_t>() as libc::c_ulong),
     );
     //
     return i;
@@ -1028,9 +987,7 @@ unsafe extern "C" fn BotImport_DebugPolygonShow(
     crate::stdlib::memcpy(
         (*poly).points.as_mut_ptr() as *mut libc::c_void,
         points as *const libc::c_void,
-        (numPoints as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            vec3_t,
-        >() as libc::c_ulong),
+        (numPoints as libc::c_ulong).wrapping_mul(::std::mem::size_of::<vec3_t>() as libc::c_ulong),
     );
 }
 /*
@@ -1080,11 +1037,7 @@ unsafe extern "C" fn BotImport_DebugLineShow(
     let mut points: [vec3_t; 4] = [[0.; 3]; 4];
     let mut dir: vec3_t = [0.; 3];
     let mut cross: vec3_t = [0.; 3];
-    let mut up: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ];
+    let mut up: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
     let mut dot: f32 = 0.;
     points[0 as i32 as usize][0 as i32 as usize] = *start.offset(0 as i32 as isize);
     points[0 as i32 as usize][1 as i32 as usize] = *start.offset(1 as i32 as isize);
@@ -1153,9 +1106,7 @@ SV_BotClientCommand
 
 unsafe extern "C" fn BotClientCommand(mut client: i32, mut command: *mut libc::c_char) {
     SV_ExecuteClientCommand(
-        &mut *svs
-            .clients
-            .offset(client as isize) as *mut _ as *mut client_s,
+        &mut *svs.clients.offset(client as isize) as *mut _ as *mut client_s,
         command,
         qtrue,
     );
@@ -1175,11 +1126,7 @@ pub unsafe extern "C" fn SV_BotFrame(mut time: i32) {
     if gvm.is_null() {
         return;
     }
-    VM_Call(
-        gvm,
-        BOTAI_START_FRAME as i32,
-        time,
-    );
+    VM_Call(gvm, BOTAI_START_FRAME as i32, time);
 }
 /*
 ===============
@@ -1451,9 +1398,8 @@ pub unsafe extern "C" fn SV_BotInitBotLib() {
     if !debugpolygons.is_null() {
         Z_Free(debugpolygons as *mut libc::c_void);
     }
-    bot_maxdebugpolys = Cvar_VariableIntegerValue(
-        b"bot_maxdebugpolys\x00" as *const u8 as *const libc::c_char,
-    );
+    bot_maxdebugpolys =
+        Cvar_VariableIntegerValue(b"bot_maxdebugpolys\x00" as *const u8 as *const libc::c_char);
     debugpolygons = Z_Malloc(
         (::std::mem::size_of::<bot_debugpoly_t>() as libc::c_ulong)
             .wrapping_mul(bot_maxdebugpolys as libc::c_ulong) as i32,
@@ -1484,17 +1430,10 @@ pub unsafe extern "C" fn SV_BotInitBotLib() {
                 _: i32,
             ) -> (),
     );
-    botlib_import.PointContents = Some(
-        BotImport_PointContents
-            as unsafe extern "C" fn(_: *mut vec_t) -> i32,
-    );
-    botlib_import.inPVS = Some(
-        BotImport_inPVS
-            as unsafe extern "C" fn(
-                _: *mut vec_t,
-                _: *mut vec_t,
-            ) -> i32,
-    );
+    botlib_import.PointContents =
+        Some(BotImport_PointContents as unsafe extern "C" fn(_: *mut vec_t) -> i32);
+    botlib_import.inPVS =
+        Some(BotImport_inPVS as unsafe extern "C" fn(_: *mut vec_t, _: *mut vec_t) -> i32);
     botlib_import.BSPEntityData =
         Some(BotImport_BSPEntityData as unsafe extern "C" fn() -> *mut libc::c_char);
     botlib_import.BSPModelMinsMaxsOrigin = Some(
@@ -1514,8 +1453,7 @@ pub unsafe extern "C" fn SV_BotInitBotLib() {
         Some(BotImport_GetMemory as unsafe extern "C" fn(_: i32) -> *mut libc::c_void);
     botlib_import.FreeMemory =
         Some(BotImport_FreeMemory as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
-    botlib_import.AvailableMemory =
-        Some(Z_AvailableMemory as unsafe extern "C" fn() -> i32);
+    botlib_import.AvailableMemory = Some(Z_AvailableMemory as unsafe extern "C" fn() -> i32);
     botlib_import.HunkAlloc =
         Some(BotImport_HunkAlloc as unsafe extern "C" fn(_: i32) -> *mut libc::c_void);
     // file system access
@@ -1527,34 +1465,15 @@ pub unsafe extern "C" fn SV_BotInitBotLib() {
                 _: fsMode_t,
             ) -> i32,
     );
-    botlib_import.FS_Read = Some(
-        FS_Read
-            as unsafe extern "C" fn(
-                _: *mut libc::c_void,
-                _: i32,
-                _: fileHandle_t,
-            ) -> i32,
-    );
+    botlib_import.FS_Read =
+        Some(FS_Read as unsafe extern "C" fn(_: *mut libc::c_void, _: i32, _: fileHandle_t) -> i32);
     botlib_import.FS_Write = Some(
-        FS_Write
-            as unsafe extern "C" fn(
-                _: *const libc::c_void,
-                _: i32,
-                _: fileHandle_t,
-            ) -> i32,
+        FS_Write as unsafe extern "C" fn(_: *const libc::c_void, _: i32, _: fileHandle_t) -> i32,
     );
-    botlib_import.FS_FCloseFile = Some(
-        FS_FCloseFile
-            as unsafe extern "C" fn(_: fileHandle_t) -> (),
-    );
-    botlib_import.FS_Seek = Some(
-        FS_Seek
-            as unsafe extern "C" fn(
-                _: fileHandle_t,
-                _: isize,
-                _: i32,
-            ) -> i32,
-    );
+    botlib_import.FS_FCloseFile =
+        Some(FS_FCloseFile as unsafe extern "C" fn(_: fileHandle_t) -> ());
+    botlib_import.FS_Seek =
+        Some(FS_Seek as unsafe extern "C" fn(_: fileHandle_t, _: isize, _: i32) -> i32);
     //debug lines
     botlib_import.DebugLineCreate =
         Some(BotImport_DebugLineCreate as unsafe extern "C" fn() -> i32);
@@ -1562,21 +1481,11 @@ pub unsafe extern "C" fn SV_BotInitBotLib() {
         Some(BotImport_DebugLineDelete as unsafe extern "C" fn(_: i32) -> ());
     botlib_import.DebugLineShow = Some(
         BotImport_DebugLineShow
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut vec_t,
-                _: *mut vec_t,
-                _: i32,
-            ) -> (),
+            as unsafe extern "C" fn(_: i32, _: *mut vec_t, _: *mut vec_t, _: i32) -> (),
     );
     //debug polygons
     botlib_import.DebugPolygonCreate = Some(
-        BotImport_DebugPolygonCreate
-            as unsafe extern "C" fn(
-                _: i32,
-                _: i32,
-                _: *mut vec3_t,
-            ) -> i32,
+        BotImport_DebugPolygonCreate as unsafe extern "C" fn(_: i32, _: i32, _: *mut vec3_t) -> i32,
     );
     botlib_import.DebugPolygonDelete =
         Some(BotImport_DebugPolygonDelete as unsafe extern "C" fn(_: i32) -> ());
@@ -1603,9 +1512,7 @@ pub unsafe extern "C" fn SV_BotGetConsoleMessage(
 ) -> i32 {
     let mut cl: *mut client_t = 0 as *mut client_t;
     let mut index: i32 = 0;
-    cl = &mut *svs
-        .clients
-        .offset(client as isize) as *mut client_t;
+    cl = &mut *svs.clients.offset(client as isize) as *mut client_t;
     (*cl).lastPacketTime = svs.time;
     if (*cl).reliableAcknowledge == (*cl).reliableSequence {
         return qfalse as i32;
@@ -1776,11 +1683,8 @@ SV_BotGetSnapshotEntity
 
 pub unsafe extern "C" fn SV_BotGetSnapshotEntity(mut client: i32, mut sequence: i32) -> i32 {
     let mut cl: *mut client_t = 0 as *mut client_t;
-    let mut frame: *mut clientSnapshot_t =
-        0 as *mut clientSnapshot_t;
-    cl = &mut *svs
-        .clients
-        .offset(client as isize) as *mut client_t;
+    let mut frame: *mut clientSnapshot_t = 0 as *mut clientSnapshot_t;
+    cl = &mut *svs.clients.offset(client as isize) as *mut client_t;
     frame = &mut *(*cl)
         .frames
         .as_mut_ptr()
@@ -1789,9 +1693,8 @@ pub unsafe extern "C" fn SV_BotGetSnapshotEntity(mut client: i32, mut sequence: 
     if sequence < 0 as i32 || sequence >= (*frame).num_entities {
         return -(1 as i32);
     }
-    return (*svs.snapshotEntities.offset(
-        (((*frame).first_entity + sequence) % svs.numSnapshotEntities)
-            as isize,
-    ))
+    return (*svs
+        .snapshotEntities
+        .offset((((*frame).first_entity + sequence) % svs.numSnapshotEntities) as isize))
     .number;
 }

@@ -179,23 +179,21 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
     let mut rc_mult2: opus_int32 = 0;
     let mut tmp1: opus_int32 = 0;
     let mut tmp2: opus_int32 = 0;
-    invGain_Q30 = ((1 as i32 as i64 * ((1 as i32 as i64) << 30 as i32)) as f64 + 0.5f64)
-        as opus_int32;
+    invGain_Q30 =
+        ((1 as i32 as i64 * ((1 as i32 as i64) << 30 as i32)) as f64 + 0.5f64) as opus_int32;
     k = order - 1 as i32;
     while k > 0 as i32 {
         /* Check for stability */
         if *A_QA.offset(k as isize)
-            > (0.99975f64 * ((1 as i32 as i64) << 24 as i32) as f64 + 0.5f64)
-                as opus_int32
+            > (0.99975f64 * ((1 as i32 as i64) << 24 as i32) as f64 + 0.5f64) as opus_int32
             || *A_QA.offset(k as isize)
-                < -((0.99975f64 * ((1 as i32 as i64) << 24 as i32) as f64 + 0.5f64)
-                    as opus_int32)
+                < -((0.99975f64 * ((1 as i32 as i64) << 24 as i32) as f64 + 0.5f64) as opus_int32)
         {
             return 0 as i32;
         }
         /* Set RC equal to negated AR coef */
-        rc_Q31 = -(((*A_QA.offset(k as isize) as opus_uint32)
-            << 31 as i32 - 24 as i32) as opus_int32);
+        rc_Q31 =
+            -(((*A_QA.offset(k as isize) as opus_uint32) << 31 as i32 - 24 as i32) as opus_int32);
         /* rc_mult1_Q30 range: [ 1 : 2^30 ] */
         rc_mult1_Q30 = ((1 as i32 as i64 * ((1 as i32 as i64) << 30 as i32)) as f64 + 0.5f64)
             as opus_int32
@@ -203,8 +201,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
         /* reduce A_LIMIT if fails */
         /* Update inverse gain */
         /* invGain_Q30 range: [ 0 : 2^30 ] */
-        invGain_Q30 = (((invGain_Q30 as i64 * rc_mult1_Q30 as i64 >> 32 as i32)
-            as opus_int32
+        invGain_Q30 = (((invGain_Q30 as i64 * rc_mult1_Q30 as i64 >> 32 as i32) as opus_int32
             as opus_uint32)
             << 2 as i32) as opus_int32;
         if invGain_Q30
@@ -233,8 +230,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                     } else {
                         ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32) + 1 as i32 as i64)
                             >> 1 as i32
-                    }) as opus_int32
-                        as opus_uint32,
+                    }) as opus_int32 as opus_uint32,
                 ) & 0x80000000 as u32
                     == 0 as i32 as u32
                 {
@@ -299,8 +295,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                             ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                 + 1 as i32 as i64)
                                 >> 1 as i32
-                        }) as opus_int32
-                            as opus_uint32,
+                        }) as opus_int32 as opus_uint32,
                     ) & 0x80000000 as u32
                         == 0 as i32 as u32
                     {
@@ -312,8 +307,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as opus_int32
-                                as u32
+                            }) as opus_int32 as u32
                                 ^ 0x80000000 as u32)
                             & 0x80000000 as u32
                             != 0
@@ -328,8 +322,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                     ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                         + 1 as i32 as i64)
                                         >> 1 as i32
-                                })
-                                    as opus_int32
+                                }) as opus_int32
                         })
                     } else {
                         (if (tmp1 as u32 ^ 0x80000000 as u32)
@@ -340,8 +333,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as opus_int32
-                                as u32
+                            }) as opus_int32 as u32
                             & 0x80000000 as u32
                             != 0
                         {
@@ -355,8 +347,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                     ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                         + 1 as i32 as i64)
                                         >> 1 as i32
-                                })
-                                    as opus_int32
+                                }) as opus_int32
                         })
                     }) as i64
                         * rc_mult2 as i64
@@ -369,8 +360,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                     } else {
                         ((tmp2 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32) + 1 as i32 as i64)
                             >> 1 as i32
-                    }) as opus_int32
-                        as opus_uint32,
+                    }) as opus_int32 as opus_uint32,
                 ) & 0x80000000 as u32
                     == 0 as i32 as u32
                 {
@@ -430,9 +420,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                     + 1 as i32 as i64)
                     >> 1 as i32
             };
-            if tmp64 > 0x7fffffff as i32 as i64
-                || tmp64 < 0x80000000 as u32 as opus_int32 as i64
-            {
+            if tmp64 > 0x7fffffff as i32 as i64 || tmp64 < 0x80000000 as u32 as opus_int32 as i64 {
                 return 0 as i32;
             }
             *A_QA.offset(n as isize) = tmp64 as opus_int32;
@@ -444,8 +432,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                     } else {
                         ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32) + 1 as i32 as i64)
                             >> 1 as i32
-                    }) as opus_int32
-                        as opus_uint32,
+                    }) as opus_int32 as opus_uint32,
                 ) & 0x80000000 as u32
                     == 0 as i32 as u32
                 {
@@ -510,8 +497,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                             ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                 + 1 as i32 as i64)
                                 >> 1 as i32
-                        }) as opus_int32
-                            as opus_uint32,
+                        }) as opus_int32 as opus_uint32,
                     ) & 0x80000000 as u32
                         == 0 as i32 as u32
                     {
@@ -523,8 +509,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as opus_int32
-                                as u32
+                            }) as opus_int32 as u32
                                 ^ 0x80000000 as u32)
                             & 0x80000000 as u32
                             != 0
@@ -539,8 +524,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                     ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                         + 1 as i32 as i64)
                                         >> 1 as i32
-                                })
-                                    as opus_int32
+                                }) as opus_int32
                         })
                     } else {
                         (if (tmp2 as u32 ^ 0x80000000 as u32)
@@ -551,8 +535,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                 ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                     + 1 as i32 as i64)
                                     >> 1 as i32
-                            }) as opus_int32
-                                as u32
+                            }) as opus_int32 as u32
                             & 0x80000000 as u32
                             != 0
                         {
@@ -566,8 +549,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                                     ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32)
                                         + 1 as i32 as i64)
                                         >> 1 as i32
-                                })
-                                    as opus_int32
+                                }) as opus_int32
                         })
                     }) as i64
                         * rc_mult2 as i64
@@ -580,8 +562,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                     } else {
                         ((tmp1 as i64 * rc_Q31 as i64 >> 31 as i32 - 1 as i32) + 1 as i32 as i64)
                             >> 1 as i32
-                    }) as opus_int32
-                        as opus_uint32,
+                    }) as opus_int32 as opus_uint32,
                 ) & 0x80000000 as u32
                     == 0 as i32 as u32
                 {
@@ -641,9 +622,7 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
                     + 1 as i32 as i64)
                     >> 1 as i32
             };
-            if tmp64 > 0x7fffffff as i32 as i64
-                || tmp64 < 0x80000000 as u32 as opus_int32 as i64
-            {
+            if tmp64 > 0x7fffffff as i32 as i64 || tmp64 < 0x80000000 as u32 as opus_int32 as i64 {
                 return 0 as i32;
             }
             *A_QA.offset((k - n - 1 as i32) as isize) = tmp64 as opus_int32;
@@ -655,25 +634,23 @@ unsafe extern "C" fn LPC_inverse_pred_gain_QA_c(
     /* Update AR coefficient */
     /* Check for stability */
     if *A_QA.offset(k as isize)
-        > (0.99975f64 * ((1 as i32 as i64) << 24 as i32) as f64 + 0.5f64)
-            as opus_int32
+        > (0.99975f64 * ((1 as i32 as i64) << 24 as i32) as f64 + 0.5f64) as opus_int32
         || *A_QA.offset(k as isize)
-            < -((0.99975f64 * ((1 as i32 as i64) << 24 as i32) as f64 + 0.5f64)
-                as opus_int32)
+            < -((0.99975f64 * ((1 as i32 as i64) << 24 as i32) as f64 + 0.5f64) as opus_int32)
     {
         return 0 as i32;
     }
     /* Set RC equal to negated AR coef */
-    rc_Q31 = -(((*A_QA.offset(0 as i32 as isize) as opus_uint32)
-        << 31 as i32 - 24 as i32) as opus_int32);
+    rc_Q31 = -(((*A_QA.offset(0 as i32 as isize) as opus_uint32) << 31 as i32 - 24 as i32)
+        as opus_int32);
     /* Range: [ 1 : 2^30 ] */
     rc_mult1_Q30 = ((1 as i32 as i64 * ((1 as i32 as i64) << 30 as i32)) as f64 + 0.5f64)
         as opus_int32
         - (rc_Q31 as i64 * rc_Q31 as i64 >> 32 as i32) as opus_int32;
     /* Update inverse gain */
     /* Range: [ 0 : 2^30 ] */
-    invGain_Q30 = (((invGain_Q30 as i64 * rc_mult1_Q30 as i64 >> 32 as i32)
-        as opus_int32 as opus_uint32)
+    invGain_Q30 = (((invGain_Q30 as i64 * rc_mult1_Q30 as i64 >> 32 as i32) as opus_int32
+        as opus_uint32)
         << 2 as i32) as opus_int32;
     if invGain_Q30
         < ((1.0f32 / 1e4f32 * ((1 as i32 as i64) << 30 as i32) as f32) as f64 + 0.5f64)
@@ -793,10 +770,8 @@ pub unsafe extern "C" fn silk_LPC_inverse_pred_gain_c(
     k = 0 as i32;
     while k < order {
         DC_resp += *A_Q12.offset(k as isize) as opus_int32;
-        Atmp_QA[k as usize] = ((*A_Q12.offset(k as isize) as opus_int32
-            as opus_uint32)
-            << 24 as i32 - 12 as i32)
-            as opus_int32;
+        Atmp_QA[k as usize] = ((*A_Q12.offset(k as isize) as opus_int32 as opus_uint32)
+            << 24 as i32 - 12 as i32) as opus_int32;
         k += 1
     }
     /* If the DC is unstable, we don't even need to do the full calculations */

@@ -79,39 +79,33 @@ POSSIBILITY OF SUCH DAMAGE.
 /* High-pass filter with cutoff frequency adaptation based on pitch lag statistics */
 #[no_mangle]
 
-pub unsafe extern "C" fn silk_HP_variable_cutoff(
-    mut state_Fxx: *mut silk_encoder_state_FLP,
-)
+pub unsafe extern "C" fn silk_HP_variable_cutoff(mut state_Fxx: *mut silk_encoder_state_FLP)
 /* I/O  Encoder states                              */
 {
     let mut quality_Q15: i32 = 0;
     let mut pitch_freq_Hz_Q16: opus_int32 = 0;
     let mut pitch_freq_log_Q7: opus_int32 = 0;
     let mut delta_freq_Q7: opus_int32 = 0;
-    let mut psEncC1: *mut silk_encoder_state =
-        &mut (*state_Fxx.offset(0 as i32 as isize)).sCmn;
+    let mut psEncC1: *mut silk_encoder_state = &mut (*state_Fxx.offset(0 as i32 as isize)).sCmn;
     /* Adaptive cutoff frequency: estimate low end of pitch frequency range */
     if (*psEncC1).prevSignalType as i32 == 2 as i32 {
         /* difference, in log domain */
-        pitch_freq_Hz_Q16 = ((((*psEncC1).fs_kHz * 1000 as i32)
-            as opus_uint32)
-            << 16 as i32) as opus_int32
+        pitch_freq_Hz_Q16 = ((((*psEncC1).fs_kHz * 1000 as i32) as opus_uint32) << 16 as i32)
+            as opus_int32
             / (*psEncC1).prevLag;
         pitch_freq_log_Q7 = crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(pitch_freq_Hz_Q16)
             - ((16 as i32) << 7 as i32);
         /* adjustment based on quality */
         quality_Q15 = (*psEncC1).input_quality_bands_Q15[0 as i32 as usize];
         pitch_freq_log_Q7 = (pitch_freq_log_Q7 as i64
-            + ((((-quality_Q15 as opus_uint32) << 2 as i32)
-                as opus_int32 as i64
+            + ((((-quality_Q15 as opus_uint32) << 2 as i32) as opus_int32 as i64
                 * quality_Q15 as opus_int16 as i64
                 >> 16 as i32) as opus_int32 as i64
                 * (pitch_freq_log_Q7
                     - (crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(
                         ((60 as i32 as i64 * ((1 as i32 as i64) << 16 as i32)) as f64 + 0.5f64)
                             as opus_int32,
-                    ) - ((16 as i32) << 7 as i32)))
-                    as opus_int16 as i64
+                    ) - ((16 as i32) << 7 as i32))) as opus_int16 as i64
                 >> 16 as i32)) as opus_int32;
         /* delta_freq = pitch_freq_log - psEnc->variable_HP_smth1; */
         delta_freq_Q7 = pitch_freq_log_Q7 - ((*psEncC1).variable_HP_smth1_Q15 >> 8 as i32);
@@ -122,57 +116,43 @@ pub unsafe extern "C" fn silk_HP_variable_cutoff(
         /* limit delta, to reduce impact of outliers in pitch estimation */
         delta_freq_Q7 = if -(((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
             as opus_int32)
-            > ((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
-                as opus_int32
+            > ((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64) as opus_int32
         {
             if delta_freq_Q7
                 > -(((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
                     as opus_int32)
             {
-                -(((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
-                    as opus_int32)
+                -(((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64) as opus_int32)
             } else if delta_freq_Q7
-                < ((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
-                    as opus_int32
+                < ((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64) as opus_int32
             {
-                ((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
-                    as opus_int32
+                ((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64) as opus_int32
             } else {
                 delta_freq_Q7
             }
         } else if delta_freq_Q7
-            > ((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
-                as opus_int32
+            > ((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64) as opus_int32
         {
-            ((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
-                as opus_int32
+            ((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64) as opus_int32
         } else if delta_freq_Q7
-            < -(((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
-                as opus_int32)
+            < -(((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64) as opus_int32)
         {
-            -(((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
-                as opus_int32)
+            -(((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64) as opus_int32)
         } else {
             delta_freq_Q7
         };
         /* update smoother */
         (*psEncC1).variable_HP_smth1_Q15 = ((*psEncC1).variable_HP_smth1_Q15 as i64
-            + (((*psEncC1).speech_activity_Q8 as opus_int16
-                as opus_int32
-                * delta_freq_Q7 as opus_int16
-                    as opus_int32) as i64
-                * ((0.1f32 * ((1 as i32 as i64) << 16 as i32) as f32) as f64 + 0.5f64)
-                    as opus_int32
+            + (((*psEncC1).speech_activity_Q8 as opus_int16 as opus_int32
+                * delta_freq_Q7 as opus_int16 as opus_int32) as i64
+                * ((0.1f32 * ((1 as i32 as i64) << 16 as i32) as f32) as f64 + 0.5f64) as opus_int32
                     as opus_int16 as i64
-                >> 16 as i32))
-            as opus_int32;
+                >> 16 as i32)) as opus_int32;
         /* limit frequency range */
         (*psEncC1).variable_HP_smth1_Q15 =
-            if ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(60 as i32)
-                as opus_uint32)
+            if ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(60 as i32) as opus_uint32)
                 << 8 as i32) as opus_int32
-                > ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(100 as i32)
-                    as opus_uint32)
+                > ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(100 as i32) as opus_uint32)
                     << 8 as i32) as opus_int32
             {
                 if (*psEncC1).variable_HP_smth1_Q15
@@ -195,20 +175,16 @@ pub unsafe extern "C" fn silk_HP_variable_cutoff(
                     (*psEncC1).variable_HP_smth1_Q15
                 }
             } else if (*psEncC1).variable_HP_smth1_Q15
-                > ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(100 as i32)
-                    as opus_uint32)
+                > ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(100 as i32) as opus_uint32)
                     << 8 as i32) as opus_int32
             {
-                ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(100 as i32)
-                    as opus_uint32)
+                ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(100 as i32) as opus_uint32)
                     << 8 as i32) as opus_int32
             } else if (*psEncC1).variable_HP_smth1_Q15
-                < ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(60 as i32)
-                    as opus_uint32)
+                < ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(60 as i32) as opus_uint32)
                     << 8 as i32) as opus_int32
             {
-                ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(60 as i32)
-                    as opus_uint32)
+                ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(60 as i32) as opus_uint32)
                     << 8 as i32) as opus_int32
             } else {
                 (*psEncC1).variable_HP_smth1_Q15

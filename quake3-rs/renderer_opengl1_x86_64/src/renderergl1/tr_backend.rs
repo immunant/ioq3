@@ -379,8 +379,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #[no_mangle]
 
-pub static mut backEndData: *mut backEndData_t =
-    0 as *const backEndData_t as *mut backEndData_t;
+pub static mut backEndData: *mut backEndData_t = 0 as *const backEndData_t as *mut backEndData_t;
 #[no_mangle]
 
 pub static mut backEnd: backEndState_t = backEndState_t {
@@ -401,8 +400,7 @@ pub static mut backEnd: backEndState_t = backEndState_t {
         floatTime: 0.,
         text: [[0; 32]; 8],
         num_entities: 0,
-        entities: 0 as *const trRefEntity_t
-            as *mut trRefEntity_t,
+        entities: 0 as *const trRefEntity_t as *mut trRefEntity_t,
         num_dlights: 0,
         dlights: 0 as *const dlight_s as *mut dlight_s,
         numPolys: 0,
@@ -474,8 +472,7 @@ pub static mut backEnd: backEndState_t = backEndState_t {
         msec: 0,
     },
     isHyperspace: qfalse,
-    currentEntity: 0 as *const trRefEntity_t
-        as *mut trRefEntity_t,
+    currentEntity: 0 as *const trRefEntity_t as *mut trRefEntity_t,
     skyRenderedThisView: qfalse,
     projection2D: qfalse,
     color2D: [0; 4],
@@ -539,9 +536,7 @@ static mut s_flipMatrix: [f32; 16] = [
 pub unsafe extern "C" fn GL_Bind(mut image: *mut image_t) {
     let mut texnum: i32 = 0;
     if image.is_null() {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"GL_Bind: NULL image\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -549,21 +544,15 @@ pub unsafe extern "C" fn GL_Bind(mut image: *mut image_t) {
     } else {
         texnum = (*image).texnum as i32
     }
-    if (*r_nobind).integer != 0
-        && !tr.dlightImage.is_null()
-    {
+    if (*r_nobind).integer != 0 && !tr.dlightImage.is_null() {
         // performance evaluation option
         texnum = (*tr.dlightImage).texnum as i32
     }
-    if glState.currenttextures
-        [glState.currenttmu as usize]
-        != texnum
-    {
+    if glState.currenttextures[glState.currenttmu as usize] != texnum {
         if !image.is_null() {
             (*image).frameUsed = tr.frameCount
         }
-        glState.currenttextures
-            [glState.currenttmu as usize] = texnum;
+        glState.currenttextures[glState.currenttmu as usize] = texnum;
         qglBindTexture.expect("non-null function pointer")(
             0xde1 as i32 as GLenum,
             texnum as GLuint,
@@ -580,39 +569,29 @@ pub unsafe extern "C" fn GL_SelectTexture(mut unit: i32) {
         return;
     }
     if unit == 0 as i32 {
-        qglActiveTextureARB.expect("non-null function pointer")(
-            0x84c0 as i32 as GLenum,
-        );
+        qglActiveTextureARB.expect("non-null function pointer")(0x84c0 as i32 as GLenum);
         GLimp_LogComment(
             b"glActiveTextureARB( GL_TEXTURE0_ARB )\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         );
-        qglClientActiveTextureARB.expect("non-null function pointer")(
-            0x84c0 as i32 as GLenum,
-        );
+        qglClientActiveTextureARB.expect("non-null function pointer")(0x84c0 as i32 as GLenum);
         GLimp_LogComment(
             b"glClientActiveTextureARB( GL_TEXTURE0_ARB )\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         );
     } else if unit == 1 as i32 {
-        qglActiveTextureARB.expect("non-null function pointer")(
-            0x84c1 as i32 as GLenum,
-        );
+        qglActiveTextureARB.expect("non-null function pointer")(0x84c1 as i32 as GLenum);
         GLimp_LogComment(
             b"glActiveTextureARB( GL_TEXTURE1_ARB )\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         );
-        qglClientActiveTextureARB.expect("non-null function pointer")(
-            0x84c1 as i32 as GLenum,
-        );
+        qglClientActiveTextureARB.expect("non-null function pointer")(0x84c1 as i32 as GLenum);
         GLimp_LogComment(
             b"glClientActiveTextureARB( GL_TEXTURE1_ARB )\n\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
         );
     } else {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"GL_SelectTexture: unit = %i\x00" as *const u8 as *const libc::c_char,
             unit,
@@ -635,9 +614,7 @@ pub unsafe extern "C" fn GL_BindMultitexture(
     let mut texnum1: i32 = 0;
     texnum0 = (*image0).texnum as i32;
     texnum1 = (*image1).texnum as i32;
-    if (*r_nobind).integer != 0
-        && !tr.dlightImage.is_null()
-    {
+    if (*r_nobind).integer != 0 && !tr.dlightImage.is_null() {
         // performance evaluation option
         texnum1 = (*tr.dlightImage).texnum as i32;
         texnum0 = texnum1
@@ -672,29 +649,19 @@ pub unsafe extern "C" fn GL_Cull(mut cullType: i32) {
     }
     glState.faceCulling = cullType;
     if cullType == CT_TWO_SIDED as i32 {
-        qglDisable.expect("non-null function pointer")(
-            0xb44 as i32 as GLenum,
-        );
+        qglDisable.expect("non-null function pointer")(0xb44 as i32 as GLenum);
     } else {
-        let mut cullFront: qboolean =
-            qfalse;
-        qglEnable.expect("non-null function pointer")(
-            0xb44 as i32 as GLenum,
-        );
-        cullFront = (cullType == CT_FRONT_SIDED as i32) as i32
-            as qboolean;
+        let mut cullFront: qboolean = qfalse;
+        qglEnable.expect("non-null function pointer")(0xb44 as i32 as GLenum);
+        cullFront = (cullType == CT_FRONT_SIDED as i32) as i32 as qboolean;
         if backEnd.viewParms.isMirror as u64 != 0 {
             cullFront = (cullFront as u64 == 0) as i32 as qboolean
         }
-        qglCullFace.expect("non-null function pointer")(if cullFront
-            as u32
-            != 0
-        {
+        qglCullFace.expect("non-null function pointer")(if cullFront as u32 != 0 {
             0x404 as i32
         } else {
             0x405 as i32
-        }
-            as GLenum);
+        } as GLenum);
     };
 }
 /*
@@ -703,14 +670,10 @@ pub unsafe extern "C" fn GL_Cull(mut cullType: i32) {
 #[no_mangle]
 
 pub unsafe extern "C" fn GL_TexEnv(mut env: i32) {
-    if env
-        == glState.texEnv
-            [glState.currenttmu as usize]
-    {
+    if env == glState.texEnv[glState.currenttmu as usize] {
         return;
     }
-    glState.texEnv
-        [glState.currenttmu as usize] = env;
+    glState.texEnv[glState.currenttmu as usize] = env;
     match env {
         8448 => {
             qglTexEnvf.expect("non-null function pointer")(
@@ -741,9 +704,7 @@ pub unsafe extern "C" fn GL_TexEnv(mut env: i32) {
             );
         }
         _ => {
-            ri
-                .Error
-                .expect("non-null function pointer")(
+            ri.Error.expect("non-null function pointer")(
                 ERR_DROP as i32,
                 b"GL_TexEnv: invalid env \'%d\' passed\x00" as *const u8 as *const libc::c_char,
                 env,
@@ -769,13 +730,9 @@ pub unsafe extern "C" fn GL_State(mut stateBits: libc::c_ulong) {
     //
     if diff & 0x20000 as i32 as libc::c_ulong != 0 {
         if stateBits & 0x20000 as i32 as libc::c_ulong != 0 {
-            qglDepthFunc.expect("non-null function pointer")(
-                0x202 as i32 as GLenum,
-            );
+            qglDepthFunc.expect("non-null function pointer")(0x202 as i32 as GLenum);
         } else {
-            qglDepthFunc.expect("non-null function pointer")(
-                0x203 as i32 as GLenum,
-            );
+            qglDepthFunc.expect("non-null function pointer")(0x203 as i32 as GLenum);
         }
     }
     //
@@ -796,9 +753,7 @@ pub unsafe extern "C" fn GL_State(mut stateBits: libc::c_ulong) {
                 8 => srcFactor = 0x305 as i32 as GLenum,
                 9 => srcFactor = 0x308 as i32 as GLenum,
                 _ => {
-                    ri
-                        .Error
-                        .expect("non-null function pointer")(
+                    ri.Error.expect("non-null function pointer")(
                         ERR_DROP as i32,
                         b"GL_State: invalid src blend state bits\x00" as *const u8
                             as *const libc::c_char,
@@ -815,25 +770,17 @@ pub unsafe extern "C" fn GL_State(mut stateBits: libc::c_ulong) {
                 112 => dstFactor = 0x304 as i32 as GLenum,
                 128 => dstFactor = 0x305 as i32 as GLenum,
                 _ => {
-                    ri
-                        .Error
-                        .expect("non-null function pointer")(
+                    ri.Error.expect("non-null function pointer")(
                         ERR_DROP as i32,
                         b"GL_State: invalid dst blend state bits\x00" as *const u8
                             as *const libc::c_char,
                     );
                 }
             }
-            qglEnable.expect("non-null function pointer")(
-                0xbe2 as i32 as GLenum,
-            );
-            qglBlendFunc.expect("non-null function pointer")(
-                srcFactor, dstFactor,
-            );
+            qglEnable.expect("non-null function pointer")(0xbe2 as i32 as GLenum);
+            qglBlendFunc.expect("non-null function pointer")(srcFactor, dstFactor);
         } else {
-            qglDisable.expect("non-null function pointer")(
-                0xbe2 as i32 as GLenum,
-            );
+            qglDisable.expect("non-null function pointer")(0xbe2 as i32 as GLenum);
         }
     }
     //
@@ -841,13 +788,9 @@ pub unsafe extern "C" fn GL_State(mut stateBits: libc::c_ulong) {
     //
     if diff & 0x100 as i32 as libc::c_ulong != 0 {
         if stateBits & 0x100 as i32 as libc::c_ulong != 0 {
-            qglDepthMask.expect("non-null function pointer")(
-                1 as i32 as GLboolean,
-            );
+            qglDepthMask.expect("non-null function pointer")(1 as i32 as GLboolean);
         } else {
-            qglDepthMask.expect("non-null function pointer")(
-                0 as i32 as GLboolean,
-            );
+            qglDepthMask.expect("non-null function pointer")(0 as i32 as GLboolean);
         }
     }
     //
@@ -871,13 +814,9 @@ pub unsafe extern "C" fn GL_State(mut stateBits: libc::c_ulong) {
     //
     if diff & 0x10000 as i32 as libc::c_ulong != 0 {
         if stateBits & 0x10000 as i32 as libc::c_ulong != 0 {
-            qglDisable.expect("non-null function pointer")(
-                0xb71 as i32 as GLenum,
-            );
+            qglDisable.expect("non-null function pointer")(0xb71 as i32 as GLenum);
         } else {
-            qglEnable.expect("non-null function pointer")(
-                0xb71 as i32 as GLenum,
-            );
+            qglEnable.expect("non-null function pointer")(0xb71 as i32 as GLenum);
         }
     }
     //
@@ -886,36 +825,19 @@ pub unsafe extern "C" fn GL_State(mut stateBits: libc::c_ulong) {
     if diff & 0x70000000 as i32 as libc::c_ulong != 0 {
         match stateBits & 0x70000000 as i32 as libc::c_ulong {
             0 => {
-                qglDisable.expect("non-null function pointer")(
-                    0xbc0 as i32 as GLenum,
-                );
+                qglDisable.expect("non-null function pointer")(0xbc0 as i32 as GLenum);
             }
             268435456 => {
-                qglEnable.expect("non-null function pointer")(
-                    0xbc0 as i32 as GLenum,
-                );
-                qglAlphaFunc.expect("non-null function pointer")(
-                    0x204 as i32 as GLenum,
-                    0.0f32,
-                );
+                qglEnable.expect("non-null function pointer")(0xbc0 as i32 as GLenum);
+                qglAlphaFunc.expect("non-null function pointer")(0x204 as i32 as GLenum, 0.0f32);
             }
             536870912 => {
-                qglEnable.expect("non-null function pointer")(
-                    0xbc0 as i32 as GLenum,
-                );
-                qglAlphaFunc.expect("non-null function pointer")(
-                    0x201 as i32 as GLenum,
-                    0.5f32,
-                );
+                qglEnable.expect("non-null function pointer")(0xbc0 as i32 as GLenum);
+                qglAlphaFunc.expect("non-null function pointer")(0x201 as i32 as GLenum, 0.5f32);
             }
             1073741824 => {
-                qglEnable.expect("non-null function pointer")(
-                    0xbc0 as i32 as GLenum,
-                );
-                qglAlphaFunc.expect("non-null function pointer")(
-                    0x206 as i32 as GLenum,
-                    0.5f32,
-                );
+                qglEnable.expect("non-null function pointer")(0xbc0 as i32 as GLenum);
+                qglAlphaFunc.expect("non-null function pointer")(0x206 as i32 as GLenum, 0.5f32);
             }
             _ => {}
         }
@@ -934,28 +856,17 @@ unsafe extern "C" fn RB_Hyperspace() {
     let mut c: f32 = 0.;
     // ensure hyperspace flag cleared
     c = (backEnd.refdef.time & 255 as i32) as f32 / 255.0f32;
-    qglClearColor.expect("non-null function pointer")(
-        c,
-        c,
-        c,
-        1 as i32 as GLclampf,
-    );
-    qglClear.expect("non-null function pointer")(
-        0x4000 as i32 as GLbitfield,
-    );
+    qglClearColor.expect("non-null function pointer")(c, c, c, 1 as i32 as GLclampf);
+    qglClear.expect("non-null function pointer")(0x4000 as i32 as GLbitfield);
     backEnd.isHyperspace = qtrue;
 }
 
 unsafe extern "C" fn SetViewportAndScissor() {
-    qglMatrixMode.expect("non-null function pointer")(
-        0x1701 as i32 as GLenum,
-    );
+    qglMatrixMode.expect("non-null function pointer")(0x1701 as i32 as GLenum);
     qglLoadMatrixf.expect("non-null function pointer")(
         backEnd.viewParms.projectionMatrix.as_mut_ptr(),
     );
-    qglMatrixMode.expect("non-null function pointer")(
-        0x1700 as i32 as GLenum,
-    );
+    qglMatrixMode.expect("non-null function pointer")(0x1700 as i32 as GLenum);
     // set the window clipping
     qglViewport.expect("non-null function pointer")(
         backEnd.viewParms.viewportX,
@@ -983,16 +894,12 @@ to actually render the visible surfaces for this view
 pub unsafe extern "C" fn RB_BeginDrawingView() {
     let mut clearBits: i32 = 0 as i32;
     // sync with gl if needed
-    if (*r_finish).integer == 1 as i32
-        && glState.finishCalled as u64 == 0
-    {
+    if (*r_finish).integer == 1 as i32 && glState.finishCalled as u64 == 0 {
         qglFinish.expect("non-null function pointer")();
-        glState.finishCalled =
-            qtrue
+        glState.finishCalled = qtrue
     }
     if (*r_finish).integer == 0 as i32 {
-        glState.finishCalled =
-            qtrue
+        glState.finishCalled = qtrue
     }
     // we will need to change the projection matrix before drawing
     // 2D images again
@@ -1005,23 +912,15 @@ pub unsafe extern "C" fn RB_BeginDrawingView() {
     GL_State(0x100 as i32 as libc::c_ulong);
     // clear relevant buffers
     clearBits = 0x100 as i32; // FIXME: only if sky shaders have been used
-    if (*r_measureOverdraw).integer != 0
-        || (*r_shadows).integer == 2 as i32
-    {
+    if (*r_measureOverdraw).integer != 0 || (*r_shadows).integer == 2 as i32 {
         clearBits |= 0x400 as i32
     }
-    if (*r_fastsky).integer != 0
-        && backEnd.refdef.rdflags & 0x1 as i32 == 0
-    {
+    if (*r_fastsky).integer != 0 && backEnd.refdef.rdflags & 0x1 as i32 == 0 {
         clearBits |= 0x4000 as i32;
-        qglClearColor.expect("non-null function pointer")(
-            0.0f32, 0.0f32, 0.0f32, 1.0f32,
-        );
+        qglClearColor.expect("non-null function pointer")(0.0f32, 0.0f32, 0.0f32, 1.0f32);
         // FIXME: get color of sky
     } // force face culling to set next time
-    qglClear.expect("non-null function pointer")(
-        clearBits as GLbitfield,
-    );
+    qglClear.expect("non-null function pointer")(clearBits as GLbitfield);
     if backEnd.refdef.rdflags & 0x4 as i32 != 0 {
         RB_Hyperspace();
         return;
@@ -1039,46 +938,40 @@ pub unsafe extern "C" fn RB_BeginDrawingView() {
         plane[1 as i32 as usize] = backEnd.viewParms.portalPlane.normal[1 as i32 as usize];
         plane[2 as i32 as usize] = backEnd.viewParms.portalPlane.normal[2 as i32 as usize];
         plane[3 as i32 as usize] = backEnd.viewParms.portalPlane.dist;
-        plane2[0 as i32 as usize] =
-            (backEnd.viewParms.or.axis[0 as i32 as usize][0 as i32 as usize]
-                * plane[0 as i32 as usize]
-                + backEnd.viewParms.or.axis[0 as i32 as usize][1 as i32 as usize]
-                    * plane[1 as i32 as usize]
-                + backEnd.viewParms.or.axis[0 as i32 as usize][2 as i32 as usize]
-                    * plane[2 as i32 as usize]) as GLdouble;
-        plane2[1 as i32 as usize] =
-            (backEnd.viewParms.or.axis[1 as i32 as usize][0 as i32 as usize]
-                * plane[0 as i32 as usize]
-                + backEnd.viewParms.or.axis[1 as i32 as usize][1 as i32 as usize]
-                    * plane[1 as i32 as usize]
-                + backEnd.viewParms.or.axis[1 as i32 as usize][2 as i32 as usize]
-                    * plane[2 as i32 as usize]) as GLdouble;
-        plane2[2 as i32 as usize] =
-            (backEnd.viewParms.or.axis[2 as i32 as usize][0 as i32 as usize]
-                * plane[0 as i32 as usize]
-                + backEnd.viewParms.or.axis[2 as i32 as usize][1 as i32 as usize]
-                    * plane[1 as i32 as usize]
-                + backEnd.viewParms.or.axis[2 as i32 as usize][2 as i32 as usize]
-                    * plane[2 as i32 as usize]) as GLdouble;
-        plane2[3 as i32 as usize] =
-            (plane[0 as i32 as usize] * backEnd.viewParms.or.origin[0 as i32 as usize]
-                + plane[1 as i32 as usize] * backEnd.viewParms.or.origin[1 as i32 as usize]
-                + plane[2 as i32 as usize] * backEnd.viewParms.or.origin[2 as i32 as usize]
-                - plane[3 as i32 as usize]) as GLdouble;
-        qglLoadMatrixf.expect("non-null function pointer")(
-            s_flipMatrix.as_mut_ptr(),
-        );
+        plane2[0 as i32 as usize] = (backEnd.viewParms.or.axis[0 as i32 as usize]
+            [0 as i32 as usize]
+            * plane[0 as i32 as usize]
+            + backEnd.viewParms.or.axis[0 as i32 as usize][1 as i32 as usize]
+                * plane[1 as i32 as usize]
+            + backEnd.viewParms.or.axis[0 as i32 as usize][2 as i32 as usize]
+                * plane[2 as i32 as usize]) as GLdouble;
+        plane2[1 as i32 as usize] = (backEnd.viewParms.or.axis[1 as i32 as usize]
+            [0 as i32 as usize]
+            * plane[0 as i32 as usize]
+            + backEnd.viewParms.or.axis[1 as i32 as usize][1 as i32 as usize]
+                * plane[1 as i32 as usize]
+            + backEnd.viewParms.or.axis[1 as i32 as usize][2 as i32 as usize]
+                * plane[2 as i32 as usize]) as GLdouble;
+        plane2[2 as i32 as usize] = (backEnd.viewParms.or.axis[2 as i32 as usize]
+            [0 as i32 as usize]
+            * plane[0 as i32 as usize]
+            + backEnd.viewParms.or.axis[2 as i32 as usize][1 as i32 as usize]
+                * plane[1 as i32 as usize]
+            + backEnd.viewParms.or.axis[2 as i32 as usize][2 as i32 as usize]
+                * plane[2 as i32 as usize]) as GLdouble;
+        plane2[3 as i32 as usize] = (plane[0 as i32 as usize]
+            * backEnd.viewParms.or.origin[0 as i32 as usize]
+            + plane[1 as i32 as usize] * backEnd.viewParms.or.origin[1 as i32 as usize]
+            + plane[2 as i32 as usize] * backEnd.viewParms.or.origin[2 as i32 as usize]
+            - plane[3 as i32 as usize]) as GLdouble;
+        qglLoadMatrixf.expect("non-null function pointer")(s_flipMatrix.as_mut_ptr());
         qglClipPlane.expect("non-null function pointer")(
             0x3000 as i32 as GLenum,
             plane2.as_mut_ptr(),
         );
-        qglEnable.expect("non-null function pointer")(
-            0x3000 as i32 as GLenum,
-        );
+        qglEnable.expect("non-null function pointer")(0x3000 as i32 as GLenum);
     } else {
-        qglDisable.expect("non-null function pointer")(
-            0x3000 as i32 as GLenum,
-        );
+        qglDisable.expect("non-null function pointer")(0x3000 as i32 as GLenum);
     };
 }
 /*
@@ -1100,14 +993,10 @@ pub unsafe extern "C" fn RB_RenderDrawSurfList(
     let mut oldEntityNum: i32 = 0;
     let mut dlighted: i32 = 0;
     let mut oldDlighted: i32 = 0;
-    let mut depthRange: qboolean =
-        qfalse;
-    let mut oldDepthRange: qboolean =
-        qfalse;
-    let mut isCrosshair: qboolean =
-        qfalse;
-    let mut wasCrosshair: qboolean =
-        qfalse;
+    let mut depthRange: qboolean = qfalse;
+    let mut oldDepthRange: qboolean = qfalse;
+    let mut isCrosshair: qboolean = qfalse;
+    let mut wasCrosshair: qboolean = qfalse;
     let mut i: i32 = 0;
     let mut drawSurf: *mut drawSurf_t = 0 as *mut drawSurf_t;
     let mut oldSort: i32 = 0;
@@ -1132,9 +1021,8 @@ pub unsafe extern "C" fn RB_RenderDrawSurfList(
     while i < numDrawSurfs {
         if (*drawSurf).sort == oldSort as u32 {
             // fast path, same as previous sort
-            rb_surfaceTable[*(*drawSurf).surface as usize]
-                .expect("non-null function pointer")(
-                (*drawSurf).surface as *mut libc::c_void
+            rb_surfaceTable[*(*drawSurf).surface as usize].expect("non-null function pointer")(
+                (*drawSurf).surface as *mut libc::c_void,
             );
         } else {
             oldSort = (*drawSurf).sort as i32;
@@ -1158,10 +1046,7 @@ pub unsafe extern "C" fn RB_RenderDrawSurfList(
                 if !oldShader.is_null() {
                     RB_EndSurface();
                 }
-                RB_BeginSurface(
-                    shader as *mut shader_s,
-                    fogNum,
-                );
+                RB_BeginSurface(shader as *mut shader_s, fogNum);
                 oldShader = shader;
                 oldFogNum = fogNum;
                 oldDlighted = dlighted
@@ -1180,8 +1065,7 @@ pub unsafe extern "C" fn RB_RenderDrawSurfList(
                         originalTime - (*backEnd.currentEntity).e.shaderTime as f64;
                     // we have to reset the shaderTime as well otherwise image animations start
                     // from the wrong frame
-                    tess.shaderTime = backEnd.refdef.floatTime
-                        - (*tess.shader).timeOffset;
+                    tess.shaderTime = backEnd.refdef.floatTime - (*tess.shader).timeOffset;
                     // set up the transformation matrix
                     R_RotateForEntity(
                         backEnd.currentEntity as *const trRefEntity_t,
@@ -1209,8 +1093,7 @@ pub unsafe extern "C" fn RB_RenderDrawSurfList(
                     backEnd.or = backEnd.viewParms.world;
                     // we have to reset the shaderTime as well otherwise image animations on
                     // the world (like water) continue with the wrong frame
-                    tess.shaderTime = backEnd.refdef.floatTime
-                        - (*tess.shader).timeOffset;
+                    tess.shaderTime = backEnd.refdef.floatTime - (*tess.shader).timeOffset;
                     R_TransformDlights(
                         backEnd.refdef.num_dlights,
                         backEnd.refdef.dlights as *mut dlight_s,
@@ -1228,22 +1111,17 @@ pub unsafe extern "C" fn RB_RenderDrawSurfList(
                     || wasCrosshair as u32 != isCrosshair as u32
                 {
                     if depthRange as u64 != 0 {
-                        if backEnd.viewParms.stereoFrame as u32
-                            != STEREO_CENTER as i32 as u32
-                        {
+                        if backEnd.viewParms.stereoFrame as u32 != STEREO_CENTER as i32 as u32 {
                             if isCrosshair as u64 != 0 {
                                 if oldDepthRange as u64 != 0 {
                                     // was not a crosshair but now is, change back proj matrix
-                                    qglMatrixMode
-                                        .expect("non-null function pointer")(
+                                    qglMatrixMode.expect("non-null function pointer")(
                                         0x1701 as i32 as GLenum,
                                     );
-                                    qglLoadMatrixf
-                                        .expect("non-null function pointer")(
+                                    qglLoadMatrixf.expect("non-null function pointer")(
                                         backEnd.viewParms.projectionMatrix.as_mut_ptr(),
                                     );
-                                    qglMatrixMode
-                                        .expect("non-null function pointer")(
+                                    qglMatrixMode.expect("non-null function pointer")(
                                         0x1700 as i32 as GLenum,
                                     );
                                 }
@@ -1254,47 +1132,38 @@ pub unsafe extern "C" fn RB_RenderDrawSurfList(
                                     (*r_znear).value,
                                     qfalse,
                                 );
-                                qglMatrixMode
-                                    .expect("non-null function pointer")(
+                                qglMatrixMode.expect("non-null function pointer")(
                                     0x1701 as i32 as GLenum,
                                 );
-                                qglLoadMatrixf
-                                    .expect("non-null function pointer")(
+                                qglLoadMatrixf.expect("non-null function pointer")(
                                     temp.projectionMatrix.as_mut_ptr(),
                                 );
-                                qglMatrixMode
-                                    .expect("non-null function pointer")(
+                                qglMatrixMode.expect("non-null function pointer")(
                                     0x1700 as i32 as GLenum,
                                 );
                             }
                         }
                         if oldDepthRange as u64 == 0 {
-                            qglDepthRange
-                                .expect("non-null function pointer")(
+                            qglDepthRange.expect("non-null function pointer")(
                                 0 as i32 as GLclampd,
                                 0.3f64,
                             );
                         }
                     } else {
                         if wasCrosshair as u64 == 0
-                            && backEnd.viewParms.stereoFrame as u32
-                                != STEREO_CENTER as i32 as u32
+                            && backEnd.viewParms.stereoFrame as u32 != STEREO_CENTER as i32 as u32
                         {
-                            qglMatrixMode
-                                .expect("non-null function pointer")(
+                            qglMatrixMode.expect("non-null function pointer")(
                                 0x1701 as i32 as GLenum,
                             );
-                            qglLoadMatrixf
-                                .expect("non-null function pointer")(
+                            qglLoadMatrixf.expect("non-null function pointer")(
                                 backEnd.viewParms.projectionMatrix.as_mut_ptr(),
                             );
-                            qglMatrixMode
-                                .expect("non-null function pointer")(
+                            qglMatrixMode.expect("non-null function pointer")(
                                 0x1700 as i32 as GLenum,
                             );
                         }
-                        qglDepthRange
-                            .expect("non-null function pointer")(
+                        qglDepthRange.expect("non-null function pointer")(
                             0 as i32 as GLclampd,
                             1 as i32 as GLclampd,
                         );
@@ -1305,9 +1174,8 @@ pub unsafe extern "C" fn RB_RenderDrawSurfList(
                 oldEntityNum = entityNum
             }
             // add the triangles for this surface
-            rb_surfaceTable[*(*drawSurf).surface as usize]
-                .expect("non-null function pointer")(
-                (*drawSurf).surface as *mut libc::c_void
+            rb_surfaceTable[*(*drawSurf).surface as usize].expect("non-null function pointer")(
+                (*drawSurf).surface as *mut libc::c_void,
             );
         }
         i += 1;
@@ -1329,10 +1197,7 @@ pub unsafe extern "C" fn RB_RenderDrawSurfList(
         );
     }
     if (*r_drawSun).integer != 0 {
-        RB_DrawSun(
-            0.1f64 as f32,
-            tr.sunShader as *mut shader_s,
-        );
+        RB_DrawSun(0.1f64 as f32, tr.sunShader as *mut shader_s);
     }
     // darken down any stencil shadows
     RB_ShadowFinish();
@@ -1369,9 +1234,7 @@ pub unsafe extern "C" fn RB_SetGL2D() {
         glConfig.vidWidth,
         glConfig.vidHeight,
     );
-    qglMatrixMode.expect("non-null function pointer")(
-        0x1701 as i32 as GLenum,
-    );
+    qglMatrixMode.expect("non-null function pointer")(0x1701 as i32 as GLenum);
     qglLoadIdentity.expect("non-null function pointer")();
     qglOrtho.expect("non-null function pointer")(
         0 as i32 as GLdouble,
@@ -1381,19 +1244,13 @@ pub unsafe extern "C" fn RB_SetGL2D() {
         0 as i32 as GLdouble,
         1 as i32 as GLdouble,
     );
-    qglMatrixMode.expect("non-null function pointer")(
-        0x1700 as i32 as GLenum,
-    );
+    qglMatrixMode.expect("non-null function pointer")(0x1700 as i32 as GLenum);
     qglLoadIdentity.expect("non-null function pointer")();
     GL_State((0x10000 as i32 | 0x5 as i32 | 0x60 as i32) as libc::c_ulong);
     GL_Cull(CT_TWO_SIDED as i32);
-    qglDisable.expect("non-null function pointer")(
-        0x3000 as i32 as GLenum,
-    );
+    qglDisable.expect("non-null function pointer")(0x3000 as i32 as GLenum);
     // set time for 2D shaders
-    backEnd.refdef.time = ri
-        .Milliseconds
-        .expect("non-null function pointer")();
+    backEnd.refdef.time = ri.Milliseconds.expect("non-null function pointer")();
     backEnd.refdef.floatTime = backEnd.refdef.time as f64 * 0.001f64;
 }
 /*
@@ -1433,9 +1290,7 @@ pub unsafe extern "C" fn RE_StretchRaw(
     qglFinish.expect("non-null function pointer")();
     start = 0 as i32;
     if (*r_speeds).integer != 0 {
-        start = ri
-            .Milliseconds
-            .expect("non-null function pointer")()
+        start = ri.Milliseconds.expect("non-null function pointer")()
     }
     // make sure rows and cols are powers of 2
     i = 0 as i32;
@@ -1447,9 +1302,7 @@ pub unsafe extern "C" fn RE_StretchRaw(
         j += 1
     }
     if (1 as i32) << i != cols || (1 as i32) << j != rows {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"Draw_StretchRaw: size not a power of 2: %i by %i\x00" as *const u8
                 as *const libc::c_char,
@@ -1460,12 +1313,8 @@ pub unsafe extern "C" fn RE_StretchRaw(
     RE_UploadCinematic(w, h, cols, rows, data, client, dirty);
     GL_Bind(tr.scratchImage[client as usize]);
     if (*r_speeds).integer != 0 {
-        end = ri
-            .Milliseconds
-            .expect("non-null function pointer")();
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        end = ri.Milliseconds.expect("non-null function pointer")();
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"qglTexSubImage2D %i, %i: %i msec\n\x00" as *const u8 as *const libc::c_char,
             cols,
@@ -1479,41 +1328,24 @@ pub unsafe extern "C" fn RE_StretchRaw(
         tr.identityLight,
         tr.identityLight,
     );
-    qglBegin.expect("non-null function pointer")(
-        0x7 as i32 as GLenum,
-    );
-    qglTexCoord2f.expect("non-null function pointer")(
-        0.5f32 / cols as f32,
-        0.5f32 / rows as f32,
-    );
-    qglVertex2f.expect("non-null function pointer")(
-        x as GLfloat,
-        y as GLfloat,
-    );
+    qglBegin.expect("non-null function pointer")(0x7 as i32 as GLenum);
+    qglTexCoord2f.expect("non-null function pointer")(0.5f32 / cols as f32, 0.5f32 / rows as f32);
+    qglVertex2f.expect("non-null function pointer")(x as GLfloat, y as GLfloat);
     qglTexCoord2f.expect("non-null function pointer")(
         (cols as f32 - 0.5f32) / cols as f32,
         0.5f32 / rows as f32,
     );
-    qglVertex2f.expect("non-null function pointer")(
-        (x + w) as GLfloat,
-        y as GLfloat,
-    );
+    qglVertex2f.expect("non-null function pointer")((x + w) as GLfloat, y as GLfloat);
     qglTexCoord2f.expect("non-null function pointer")(
         (cols as f32 - 0.5f32) / cols as f32,
         (rows as f32 - 0.5f32) / rows as f32,
     );
-    qglVertex2f.expect("non-null function pointer")(
-        (x + w) as GLfloat,
-        (y + h) as GLfloat,
-    );
+    qglVertex2f.expect("non-null function pointer")((x + w) as GLfloat, (y + h) as GLfloat);
     qglTexCoord2f.expect("non-null function pointer")(
         0.5f32 / cols as f32,
         (rows as f32 - 0.5f32) / rows as f32,
     );
-    qglVertex2f.expect("non-null function pointer")(
-        x as GLfloat,
-        (y + h) as GLfloat,
-    );
+    qglVertex2f.expect("non-null function pointer")(x as GLfloat, (y + h) as GLfloat);
     qglEnd.expect("non-null function pointer")();
 }
 #[no_mangle]
@@ -1533,8 +1365,7 @@ pub unsafe extern "C" fn RE_UploadCinematic(
         || rows != (*tr.scratchImage[client as usize]).height
     {
         (*tr.scratchImage[client as usize]).uploadWidth = cols;
-        (*tr.scratchImage[client as usize]).width =
-            (*tr.scratchImage[client as usize]).uploadWidth;
+        (*tr.scratchImage[client as usize]).width = (*tr.scratchImage[client as usize]).uploadWidth;
         (*tr.scratchImage[client as usize]).uploadHeight = rows;
         (*tr.scratchImage[client as usize]).height =
             (*tr.scratchImage[client as usize]).uploadHeight;
@@ -1594,17 +1425,16 @@ RB_SetColor
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_SetColor(mut data: *const libc::c_void) -> *const libc::c_void {
-    let mut cmd: *const setColorCommand_t =
-        0 as *const setColorCommand_t;
+    let mut cmd: *const setColorCommand_t = 0 as *const setColorCommand_t;
     cmd = data as *const setColorCommand_t;
-    backEnd.color2D[0 as i32 as usize] = ((*cmd).color[0 as i32 as usize] * 255 as i32 as f32)
-        as byte;
-    backEnd.color2D[1 as i32 as usize] = ((*cmd).color[1 as i32 as usize] * 255 as i32 as f32)
-        as byte;
-    backEnd.color2D[2 as i32 as usize] = ((*cmd).color[2 as i32 as usize] * 255 as i32 as f32)
-        as byte;
-    backEnd.color2D[3 as i32 as usize] = ((*cmd).color[3 as i32 as usize] * 255 as i32 as f32)
-        as byte;
+    backEnd.color2D[0 as i32 as usize] =
+        ((*cmd).color[0 as i32 as usize] * 255 as i32 as f32) as byte;
+    backEnd.color2D[1 as i32 as usize] =
+        ((*cmd).color[1 as i32 as usize] * 255 as i32 as f32) as byte;
+    backEnd.color2D[2 as i32 as usize] =
+        ((*cmd).color[2 as i32 as usize] * 255 as i32 as f32) as byte;
+    backEnd.color2D[3 as i32 as usize] =
+        ((*cmd).color[3 as i32 as usize] * 255 as i32 as f32) as byte;
     return cmd.offset(1 as i32 as isize) as *const libc::c_void;
 }
 /*
@@ -1615,8 +1445,7 @@ RB_StretchPic
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_StretchPic(mut data: *const libc::c_void) -> *const libc::c_void {
-    let mut cmd: *const stretchPicCommand_t =
-        0 as *const stretchPicCommand_t;
+    let mut cmd: *const stretchPicCommand_t = 0 as *const stretchPicCommand_t;
     let mut shader: *mut shader_t = 0 as *mut shader_t;
     let mut numVerts: i32 = 0;
     let mut numIndexes: i32 = 0;
@@ -1630,10 +1459,7 @@ pub unsafe extern "C" fn RB_StretchPic(mut data: *const libc::c_void) -> *const 
             RB_EndSurface();
         }
         backEnd.currentEntity = &mut backEnd.entity2D;
-        RB_BeginSurface(
-            shader as *mut shader_s,
-            0 as i32,
-        );
+        RB_BeginSurface(shader as *mut shader_s, 0 as i32);
     }
     if tess.numVertexes + 4 as i32 >= 1000 as i32
         || tess.numIndexes + 6 as i32 >= 6 as i32 * 1000 as i32
@@ -1644,70 +1470,48 @@ pub unsafe extern "C" fn RB_StretchPic(mut data: *const libc::c_void) -> *const 
     numIndexes = tess.numIndexes;
     tess.numVertexes += 4 as i32;
     tess.numIndexes += 6 as i32;
-    tess.indexes[numIndexes as usize] =
-        (numVerts + 3 as i32) as glIndex_t;
-    tess.indexes[(numIndexes + 1 as i32) as usize] =
-        (numVerts + 0 as i32) as glIndex_t;
-    tess.indexes[(numIndexes + 2 as i32) as usize] =
-        (numVerts + 2 as i32) as glIndex_t;
-    tess.indexes[(numIndexes + 3 as i32) as usize] =
-        (numVerts + 2 as i32) as glIndex_t;
-    tess.indexes[(numIndexes + 4 as i32) as usize] =
-        (numVerts + 0 as i32) as glIndex_t;
-    tess.indexes[(numIndexes + 5 as i32) as usize] =
-        (numVerts + 1 as i32) as glIndex_t;
-    let ref mut fresh0 = *(tess.vertexColors
-        [(numVerts + 3 as i32) as usize]
-        .as_mut_ptr() as *mut i32);
+    tess.indexes[numIndexes as usize] = (numVerts + 3 as i32) as glIndex_t;
+    tess.indexes[(numIndexes + 1 as i32) as usize] = (numVerts + 0 as i32) as glIndex_t;
+    tess.indexes[(numIndexes + 2 as i32) as usize] = (numVerts + 2 as i32) as glIndex_t;
+    tess.indexes[(numIndexes + 3 as i32) as usize] = (numVerts + 2 as i32) as glIndex_t;
+    tess.indexes[(numIndexes + 4 as i32) as usize] = (numVerts + 0 as i32) as glIndex_t;
+    tess.indexes[(numIndexes + 5 as i32) as usize] = (numVerts + 1 as i32) as glIndex_t;
+    let ref mut fresh0 =
+        *(tess.vertexColors[(numVerts + 3 as i32) as usize].as_mut_ptr() as *mut i32);
     *fresh0 = *(backEnd.color2D.as_mut_ptr() as *mut i32);
-    let ref mut fresh1 = *(tess.vertexColors
-        [(numVerts + 2 as i32) as usize]
-        .as_mut_ptr() as *mut i32);
+    let ref mut fresh1 =
+        *(tess.vertexColors[(numVerts + 2 as i32) as usize].as_mut_ptr() as *mut i32);
     *fresh1 = *fresh0;
-    let ref mut fresh2 = *(tess.vertexColors
-        [(numVerts + 1 as i32) as usize]
-        .as_mut_ptr() as *mut i32);
+    let ref mut fresh2 =
+        *(tess.vertexColors[(numVerts + 1 as i32) as usize].as_mut_ptr() as *mut i32);
     *fresh2 = *fresh1;
-    *(tess.vertexColors[numVerts as usize].as_mut_ptr()
-        as *mut i32) = *fresh2;
+    *(tess.vertexColors[numVerts as usize].as_mut_ptr() as *mut i32) = *fresh2;
     tess.xyz[numVerts as usize][0 as i32 as usize] = (*cmd).x;
     tess.xyz[numVerts as usize][1 as i32 as usize] = (*cmd).y;
-    tess.xyz[numVerts as usize][2 as i32 as usize] =
-        0 as i32 as vec_t;
-    tess.texCoords[numVerts as usize][0 as i32 as usize]
-        [0 as i32 as usize] = (*cmd).s1;
-    tess.texCoords[numVerts as usize][0 as i32 as usize]
-        [1 as i32 as usize] = (*cmd).t1;
-    tess.xyz[(numVerts + 1 as i32) as usize]
-        [0 as i32 as usize] = (*cmd).x + (*cmd).w;
-    tess.xyz[(numVerts + 1 as i32) as usize]
-        [1 as i32 as usize] = (*cmd).y;
-    tess.xyz[(numVerts + 1 as i32) as usize]
-        [2 as i32 as usize] = 0 as i32 as vec_t;
-    tess.texCoords[(numVerts + 1 as i32) as usize]
-        [0 as i32 as usize][0 as i32 as usize] = (*cmd).s2;
-    tess.texCoords[(numVerts + 1 as i32) as usize]
-        [0 as i32 as usize][1 as i32 as usize] = (*cmd).t1;
-    tess.xyz[(numVerts + 2 as i32) as usize]
-        [0 as i32 as usize] = (*cmd).x + (*cmd).w;
-    tess.xyz[(numVerts + 2 as i32) as usize]
-        [1 as i32 as usize] = (*cmd).y + (*cmd).h;
-    tess.xyz[(numVerts + 2 as i32) as usize]
-        [2 as i32 as usize] = 0 as i32 as vec_t;
-    tess.texCoords[(numVerts + 2 as i32) as usize]
-        [0 as i32 as usize][0 as i32 as usize] = (*cmd).s2;
-    tess.texCoords[(numVerts + 2 as i32) as usize]
-        [0 as i32 as usize][1 as i32 as usize] = (*cmd).t2;
-    tess.xyz[(numVerts + 3 as i32) as usize]
-        [0 as i32 as usize] = (*cmd).x;
-    tess.xyz[(numVerts + 3 as i32) as usize]
-        [1 as i32 as usize] = (*cmd).y + (*cmd).h;
-    tess.xyz[(numVerts + 3 as i32) as usize]
-        [2 as i32 as usize] = 0 as i32 as vec_t;
-    tess.texCoords[(numVerts + 3 as i32) as usize]
-        [0 as i32 as usize][0 as i32 as usize] = (*cmd).s1;
-    tess.texCoords[(numVerts + 3 as i32) as usize]
-        [0 as i32 as usize][1 as i32 as usize] = (*cmd).t2;
+    tess.xyz[numVerts as usize][2 as i32 as usize] = 0 as i32 as vec_t;
+    tess.texCoords[numVerts as usize][0 as i32 as usize][0 as i32 as usize] = (*cmd).s1;
+    tess.texCoords[numVerts as usize][0 as i32 as usize][1 as i32 as usize] = (*cmd).t1;
+    tess.xyz[(numVerts + 1 as i32) as usize][0 as i32 as usize] = (*cmd).x + (*cmd).w;
+    tess.xyz[(numVerts + 1 as i32) as usize][1 as i32 as usize] = (*cmd).y;
+    tess.xyz[(numVerts + 1 as i32) as usize][2 as i32 as usize] = 0 as i32 as vec_t;
+    tess.texCoords[(numVerts + 1 as i32) as usize][0 as i32 as usize][0 as i32 as usize] =
+        (*cmd).s2;
+    tess.texCoords[(numVerts + 1 as i32) as usize][0 as i32 as usize][1 as i32 as usize] =
+        (*cmd).t1;
+    tess.xyz[(numVerts + 2 as i32) as usize][0 as i32 as usize] = (*cmd).x + (*cmd).w;
+    tess.xyz[(numVerts + 2 as i32) as usize][1 as i32 as usize] = (*cmd).y + (*cmd).h;
+    tess.xyz[(numVerts + 2 as i32) as usize][2 as i32 as usize] = 0 as i32 as vec_t;
+    tess.texCoords[(numVerts + 2 as i32) as usize][0 as i32 as usize][0 as i32 as usize] =
+        (*cmd).s2;
+    tess.texCoords[(numVerts + 2 as i32) as usize][0 as i32 as usize][1 as i32 as usize] =
+        (*cmd).t2;
+    tess.xyz[(numVerts + 3 as i32) as usize][0 as i32 as usize] = (*cmd).x;
+    tess.xyz[(numVerts + 3 as i32) as usize][1 as i32 as usize] = (*cmd).y + (*cmd).h;
+    tess.xyz[(numVerts + 3 as i32) as usize][2 as i32 as usize] = 0 as i32 as vec_t;
+    tess.texCoords[(numVerts + 3 as i32) as usize][0 as i32 as usize][0 as i32 as usize] =
+        (*cmd).s1;
+    tess.texCoords[(numVerts + 3 as i32) as usize][0 as i32 as usize][1 as i32 as usize] =
+        (*cmd).t2;
     return cmd.offset(1 as i32 as isize) as *const libc::c_void;
 }
 /*
@@ -1719,8 +1523,7 @@ RB_DrawSurfs
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_DrawSurfs(mut data: *const libc::c_void) -> *const libc::c_void {
-    let mut cmd: *const drawSurfsCommand_t =
-        0 as *const drawSurfsCommand_t;
+    let mut cmd: *const drawSurfsCommand_t = 0 as *const drawSurfsCommand_t;
     // finish any 2D drawing if needed
     if tess.numIndexes != 0 {
         RB_EndSurface();
@@ -1740,12 +1543,9 @@ RB_DrawBuffer
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_DrawBuffer(mut data: *const libc::c_void) -> *const libc::c_void {
-    let mut cmd: *const drawBufferCommand_t =
-        0 as *const drawBufferCommand_t;
+    let mut cmd: *const drawBufferCommand_t = 0 as *const drawBufferCommand_t;
     cmd = data as *const drawBufferCommand_t;
-    qglDrawBuffer.expect("non-null function pointer")(
-        (*cmd).buffer as GLenum,
-    );
+    qglDrawBuffer.expect("non-null function pointer")((*cmd).buffer as GLenum);
     // clear screen for debugging
     if (*r_clear).integer != 0 {
         qglClearColor.expect("non-null function pointer")(
@@ -1754,9 +1554,7 @@ pub unsafe extern "C" fn RB_DrawBuffer(mut data: *const libc::c_void) -> *const 
             0.5f64 as GLclampf,
             1 as i32 as GLclampf,
         );
-        qglClear.expect("non-null function pointer")(
-            (0x4000 as i32 | 0x100 as i32) as GLbitfield,
-        );
+        qglClear.expect("non-null function pointer")((0x4000 as i32 | 0x100 as i32) as GLbitfield);
     }
     return cmd.offset(1 as i32 as isize) as *const libc::c_void;
 }
@@ -1784,13 +1582,9 @@ pub unsafe extern "C" fn RB_ShowImages() {
     if backEnd.projection2D as u64 == 0 {
         RB_SetGL2D();
     }
-    qglClear.expect("non-null function pointer")(
-        0x4000 as i32 as GLbitfield,
-    );
+    qglClear.expect("non-null function pointer")(0x4000 as i32 as GLbitfield);
     qglFinish.expect("non-null function pointer")();
-    start = ri
-        .Milliseconds
-        .expect("non-null function pointer")();
+    start = ri.Milliseconds.expect("non-null function pointer")();
     i = 0 as i32;
     while i < tr.numImages {
         image = tr.images[i as usize];
@@ -1804,39 +1598,21 @@ pub unsafe extern "C" fn RB_ShowImages() {
             h *= (*image).uploadHeight as f32 / 512.0f32
         }
         GL_Bind(image);
-        qglBegin.expect("non-null function pointer")(
-            0x7 as i32 as GLenum,
-        );
-        qglTexCoord2f.expect("non-null function pointer")(
-            0 as i32 as GLfloat,
-            0 as i32 as GLfloat,
-        );
+        qglBegin.expect("non-null function pointer")(0x7 as i32 as GLenum);
+        qglTexCoord2f.expect("non-null function pointer")(0 as i32 as GLfloat, 0 as i32 as GLfloat);
         qglVertex2f.expect("non-null function pointer")(x, y);
-        qglTexCoord2f.expect("non-null function pointer")(
-            1 as i32 as GLfloat,
-            0 as i32 as GLfloat,
-        );
+        qglTexCoord2f.expect("non-null function pointer")(1 as i32 as GLfloat, 0 as i32 as GLfloat);
         qglVertex2f.expect("non-null function pointer")(x + w, y);
-        qglTexCoord2f.expect("non-null function pointer")(
-            1 as i32 as GLfloat,
-            1 as i32 as GLfloat,
-        );
+        qglTexCoord2f.expect("non-null function pointer")(1 as i32 as GLfloat, 1 as i32 as GLfloat);
         qglVertex2f.expect("non-null function pointer")(x + w, y + h);
-        qglTexCoord2f.expect("non-null function pointer")(
-            0 as i32 as GLfloat,
-            1 as i32 as GLfloat,
-        );
+        qglTexCoord2f.expect("non-null function pointer")(0 as i32 as GLfloat, 1 as i32 as GLfloat);
         qglVertex2f.expect("non-null function pointer")(x, y + h);
         qglEnd.expect("non-null function pointer")();
         i += 1
     }
     qglFinish.expect("non-null function pointer")();
-    end = ri
-        .Milliseconds
-        .expect("non-null function pointer")();
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    end = ri.Milliseconds.expect("non-null function pointer")();
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"%i msec to draw all images\n\x00" as *const u8 as *const libc::c_char,
         end - start,
@@ -1851,8 +1627,7 @@ RB_ColorMask
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_ColorMask(mut data: *const libc::c_void) -> *const libc::c_void {
-    let mut cmd: *const colorMaskCommand_t =
-        data as *const colorMaskCommand_t;
+    let mut cmd: *const colorMaskCommand_t = data as *const colorMaskCommand_t;
     qglColorMask.expect("non-null function pointer")(
         (*cmd).rgba[0 as i32 as usize],
         (*cmd).rgba[1 as i32 as usize],
@@ -1870,8 +1645,7 @@ RB_ClearDepth
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_ClearDepth(mut data: *const libc::c_void) -> *const libc::c_void {
-    let mut cmd: *const clearDepthCommand_t =
-        data as *const clearDepthCommand_t;
+    let mut cmd: *const clearDepthCommand_t = data as *const clearDepthCommand_t;
     if tess.numIndexes != 0 {
         RB_EndSurface();
     }
@@ -1879,9 +1653,7 @@ pub unsafe extern "C" fn RB_ClearDepth(mut data: *const libc::c_void) -> *const 
     if (*r_showImages).integer != 0 {
         RB_ShowImages();
     }
-    qglClear.expect("non-null function pointer")(
-        0x100 as i32 as GLbitfield,
-    );
+    qglClear.expect("non-null function pointer")(0x100 as i32 as GLbitfield);
     return cmd.offset(1 as i32 as isize) as *const libc::c_void;
 }
 /*
@@ -1893,8 +1665,7 @@ RB_SwapBuffers
 #[no_mangle]
 
 pub unsafe extern "C" fn RB_SwapBuffers(mut data: *const libc::c_void) -> *const libc::c_void {
-    let mut cmd: *const swapBuffersCommand_t =
-        0 as *const swapBuffersCommand_t;
+    let mut cmd: *const swapBuffersCommand_t = 0 as *const swapBuffersCommand_t;
     // finish any 2D drawing if needed
     if tess.numIndexes != 0 {
         RB_EndSurface();
@@ -1913,8 +1684,7 @@ pub unsafe extern "C" fn RB_SwapBuffers(mut data: *const libc::c_void) -> *const
         stencilReadback = ri
             .Hunk_AllocateTempMemory
             .expect("non-null function pointer")(
-            glConfig.vidWidth
-                * glConfig.vidHeight,
+            glConfig.vidWidth * glConfig.vidHeight
         ) as *mut u8;
         qglReadPixels.expect("non-null function pointer")(
             0 as i32,
@@ -1926,16 +1696,14 @@ pub unsafe extern "C" fn RB_SwapBuffers(mut data: *const libc::c_void) -> *const
             stencilReadback as *mut libc::c_void,
         );
         i = 0 as i32;
-        while i < glConfig.vidWidth
-            * glConfig.vidHeight
-        {
+        while i < glConfig.vidWidth * glConfig.vidHeight {
             sum += *stencilReadback.offset(i as isize) as isize;
             i += 1
         }
         backEnd.pc.c_overDraw += sum as f32;
-        ri
-            .Hunk_FreeTempMemory
-            .expect("non-null function pointer")(stencilReadback as *mut libc::c_void);
+        ri.Hunk_FreeTempMemory.expect("non-null function pointer")(
+            stencilReadback as *mut libc::c_void,
+        );
     }
     if glState.finishCalled as u64 == 0 {
         qglFinish.expect("non-null function pointer")();
@@ -2370,9 +2138,7 @@ RB_ExecuteRenderCommands
 pub unsafe extern "C" fn RB_ExecuteRenderCommands(mut data: *const libc::c_void) {
     let mut t1: i32 = 0;
     let mut t2: i32 = 0;
-    t1 = ri
-        .Milliseconds
-        .expect("non-null function pointer")();
+    t1 = ri.Milliseconds.expect("non-null function pointer")();
     loop {
         data = ((data as intptr_t as libc::c_ulong)
             .wrapping_add(::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong)
@@ -2391,9 +2157,7 @@ pub unsafe extern "C" fn RB_ExecuteRenderCommands(mut data: *const libc::c_void)
             9 => data = RB_ClearDepth(data),
             0 | _ => {
                 // stop rendering
-                t2 = ri
-                    .Milliseconds
-                    .expect("non-null function pointer")();
+                t2 = ri.Milliseconds.expect("non-null function pointer")();
                 backEnd.pc.msec = t2 - t1;
                 return;
             }

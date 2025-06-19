@@ -134,8 +134,7 @@ static mut s_ingame: ingamemenu_t = ingamemenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -161,8 +160,7 @@ static mut s_ingame: ingamemenu_t = ingamemenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -184,8 +182,7 @@ static mut s_ingame: ingamemenu_t = ingamemenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -207,8 +204,7 @@ static mut s_ingame: ingamemenu_t = ingamemenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -230,8 +226,7 @@ static mut s_ingame: ingamemenu_t = ingamemenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -253,8 +248,7 @@ static mut s_ingame: ingamemenu_t = ingamemenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -276,8 +270,7 @@ static mut s_ingame: ingamemenu_t = ingamemenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -299,8 +292,7 @@ static mut s_ingame: ingamemenu_t = ingamemenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -322,8 +314,7 @@ static mut s_ingame: ingamemenu_t = ingamemenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -345,8 +336,7 @@ static mut s_ingame: ingamemenu_t = ingamemenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -368,8 +358,7 @@ static mut s_ingame: ingamemenu_t = ingamemenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -438,20 +427,14 @@ pub unsafe extern "C" fn InGame_Event(mut ptr: *mut libc::c_void, mut notificati
             UI_ConfirmMenu(
                 b"RESTART ARENA?\x00" as *const u8 as *const libc::c_char,
                 None,
-                Some(
-                    InGame_RestartAction
-                        as unsafe extern "C" fn(_: qboolean) -> (),
-                ),
+                Some(InGame_RestartAction as unsafe extern "C" fn(_: qboolean) -> ()),
             );
         }
         17 => {
             UI_ConfirmMenu(
                 b"EXIT GAME?\x00" as *const u8 as *const libc::c_char,
                 None,
-                Some(
-                    InGame_QuitAction
-                        as unsafe extern "C" fn(_: qboolean) -> (),
-                ),
+                Some(InGame_QuitAction as unsafe extern "C" fn(_: qboolean) -> ()),
             );
         }
         14 => {
@@ -530,15 +513,10 @@ pub unsafe extern "C" fn InGame_MenuInit() {
         b"ADD BOTS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_ingame.addbots.color = color_red.as_mut_ptr();
     s_ingame.addbots.style = 0x1 as i32 | 0x10 as i32;
-    if trap_Cvar_VariableValue(
-        b"sv_running\x00" as *const u8 as *const libc::c_char,
-    ) == 0.
-        || trap_Cvar_VariableValue(
-            b"bot_enable\x00" as *const u8 as *const libc::c_char,
-        ) == 0.
-        || trap_Cvar_VariableValue(
-            b"g_gametype\x00" as *const u8 as *const libc::c_char,
-        ) == GT_SINGLE_PLAYER as i32 as f32
+    if trap_Cvar_VariableValue(b"sv_running\x00" as *const u8 as *const libc::c_char) == 0.
+        || trap_Cvar_VariableValue(b"bot_enable\x00" as *const u8 as *const libc::c_char) == 0.
+        || trap_Cvar_VariableValue(b"g_gametype\x00" as *const u8 as *const libc::c_char)
+            == GT_SINGLE_PLAYER as i32 as f32
     {
         s_ingame.addbots.generic.flags |= 0x2000 as i32 as u32
     }
@@ -554,15 +532,10 @@ pub unsafe extern "C" fn InGame_MenuInit() {
         b"REMOVE BOTS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_ingame.removebots.color = color_red.as_mut_ptr();
     s_ingame.removebots.style = 0x1 as i32 | 0x10 as i32;
-    if trap_Cvar_VariableValue(
-        b"sv_running\x00" as *const u8 as *const libc::c_char,
-    ) == 0.
-        || trap_Cvar_VariableValue(
-            b"bot_enable\x00" as *const u8 as *const libc::c_char,
-        ) == 0.
-        || trap_Cvar_VariableValue(
-            b"g_gametype\x00" as *const u8 as *const libc::c_char,
-        ) == GT_SINGLE_PLAYER as i32 as f32
+    if trap_Cvar_VariableValue(b"sv_running\x00" as *const u8 as *const libc::c_char) == 0.
+        || trap_Cvar_VariableValue(b"bot_enable\x00" as *const u8 as *const libc::c_char) == 0.
+        || trap_Cvar_VariableValue(b"g_gametype\x00" as *const u8 as *const libc::c_char)
+            == GT_SINGLE_PLAYER as i32 as f32
     {
         s_ingame.removebots.generic.flags |= 0x2000 as i32 as u32
     }
@@ -578,15 +551,12 @@ pub unsafe extern "C" fn InGame_MenuInit() {
         b"TEAM ORDERS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_ingame.teamorders.color = color_red.as_mut_ptr();
     s_ingame.teamorders.style = 0x1 as i32 | 0x10 as i32;
-    if !(trap_Cvar_VariableValue(
-        b"g_gametype\x00" as *const u8 as *const libc::c_char,
-    ) >= GT_TEAM as i32 as f32)
+    if !(trap_Cvar_VariableValue(b"g_gametype\x00" as *const u8 as *const libc::c_char)
+        >= GT_TEAM as i32 as f32)
     {
         s_ingame.teamorders.generic.flags |= 0x2000 as i32 as u32
     } else {
-        trap_GetClientState(
-            &mut cs as *mut _ as *mut uiClientState_t,
-        );
+        trap_GetClientState(&mut cs as *mut _ as *mut uiClientState_t);
         trap_GetConfigString(
             32 as i32 + 256 as i32 + 256 as i32 + cs.clientNum,
             info.as_mut_ptr(),
@@ -635,10 +605,7 @@ pub unsafe extern "C" fn InGame_MenuInit() {
         b"RESTART ARENA\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_ingame.restart.color = color_red.as_mut_ptr();
     s_ingame.restart.style = 0x1 as i32 | 0x10 as i32;
-    if trap_Cvar_VariableValue(
-        b"sv_running\x00" as *const u8 as *const libc::c_char,
-    ) == 0.
-    {
+    if trap_Cvar_VariableValue(b"sv_running\x00" as *const u8 as *const libc::c_char) == 0. {
         s_ingame.restart.generic.flags |= 0x2000 as i32 as u32
     }
     y += 28 as i32;
@@ -730,9 +697,7 @@ InGame_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn InGame_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/addbotframe\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/addbotframe\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===========================================================================
@@ -798,7 +763,5 @@ pub unsafe extern "C" fn UI_InGameMenu() {
     uis.cursorx = 319 as i32;
     uis.cursory = 80 as i32;
     InGame_MenuInit();
-    UI_PushMenu(
-        &mut s_ingame.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_ingame.menu as *mut _ as *mut _tag_menuframework);
 }

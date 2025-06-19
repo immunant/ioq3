@@ -70,8 +70,7 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -93,8 +92,7 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -120,8 +118,7 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -147,8 +144,7 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -174,8 +170,7 @@ static mut saveConfig: saveConfig_t = saveConfig_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -242,9 +237,8 @@ unsafe extern "C" fn UI_SaveConfigMenu_SavenameDraw(mut self_0: *mut libc::c_voi
     let mut style: i32 = 0;
     let mut color: *mut f32 = 0 as *mut f32;
     f = self_0 as *mut menufield_s;
-    if f == Menu_ItemAtCursor(
-        &mut saveConfig.menu as *mut _ as *mut _tag_menuframework,
-    ) as *mut menufield_s
+    if f == Menu_ItemAtCursor(&mut saveConfig.menu as *mut _ as *mut _tag_menuframework)
+        as *mut menufield_s
     {
         style = 0 as i32 | 0x4000 as i32 | 0x10 as i32;
         color = text_color_highlight.as_mut_ptr()
@@ -371,21 +365,11 @@ UI_SaveConfigMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_SaveConfigMenu_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/save_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/save_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/cut_frame\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/save_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/save_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/cut_frame\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===========================================================================
@@ -548,7 +532,5 @@ UI_SaveConfigMenu
 
 pub unsafe extern "C" fn UI_SaveConfigMenu() {
     UI_SaveConfigMenu_Init();
-    UI_PushMenu(
-        &mut saveConfig.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut saveConfig.menu as *mut _ as *mut _tag_menuframework);
 }

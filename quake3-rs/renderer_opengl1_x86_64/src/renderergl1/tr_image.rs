@@ -346,17 +346,13 @@ pub static mut gl_filter_min: i32 = 0x2701 as i32;
 
 pub static mut gl_filter_max: i32 = 0x2601 as i32;
 
-static mut hashTable: [*mut image_t; 1024] =
-    [0 as *const image_t as *mut image_t; 1024];
+static mut hashTable: [*mut image_t; 1024] = [0 as *const image_t as *mut image_t; 1024];
 /*
 ** R_GammaCorrect
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_GammaCorrect(
-    mut buffer: *mut byte,
-    mut bufSize: i32,
-) {
+pub unsafe extern "C" fn R_GammaCorrect(mut buffer: *mut byte, mut bufSize: i32) {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < bufSize {
@@ -447,8 +443,7 @@ unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char) -> isize 
                     __res = tolower(*fname.offset(i as isize) as i32)
                 }
             } else {
-                __res = *(*__ctype_tolower_loc())
-                    .offset(*fname.offset(i as isize) as i32 as isize)
+                __res = *(*__ctype_tolower_loc()).offset(*fname.offset(i as isize) as i32 as isize)
             }
             __res
         }) as libc::c_char;
@@ -483,22 +478,15 @@ pub unsafe extern "C" fn GL_TextureMode(mut string: *const libc::c_char) {
     }
     // hack to prevent trilinear from being set on voodoo,
     // because their driver freaks...
-    if i == 5 as i32
-        && glConfig.hardwareType as u32
-            == GLHW_3DFX_2D3D as i32 as u32
-    {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+    if i == 5 as i32 && glConfig.hardwareType as u32 == GLHW_3DFX_2D3D as i32 as u32 {
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"Refusing to set trilinear on a voodoo.\n\x00" as *const u8 as *const libc::c_char,
         );
         i = 3 as i32
     }
     if i == 6 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"bad filter name\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -539,11 +527,8 @@ pub unsafe extern "C" fn R_SumOfUsedImages() -> i32 {
     total = 0 as i32;
     i = 0 as i32;
     while i < tr.numImages {
-        if (*tr.images[i as usize]).frameUsed
-            == tr.frameCount
-        {
-            total += (*tr.images[i as usize]).uploadWidth
-                * (*tr.images[i as usize]).uploadHeight
+        if (*tr.images[i as usize]).frameUsed == tr.frameCount {
+            total += (*tr.images[i as usize]).uploadWidth * (*tr.images[i as usize]).uploadHeight
         }
         i += 1
     }
@@ -559,16 +544,13 @@ R_ImageList_f
 pub unsafe extern "C" fn R_ImageList_f() {
     let mut i: i32 = 0;
     let mut estTotalSize: i32 = 0 as i32;
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"\n      -w-- -h-- type  -size- --name-------\n\x00" as *const u8 as *const libc::c_char,
     );
     i = 0 as i32;
     while i < tr.numImages {
-        let mut image: *mut image_t =
-            tr.images[i as usize];
+        let mut image: *mut image_t = tr.images[i as usize];
         let mut format: *mut libc::c_char =
             b"???? \x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
         let mut sizeSuffix: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -652,9 +634,7 @@ pub unsafe extern "C" fn R_ImageList_f() {
             displaySize /= 1024 as i32;
             sizeSuffix = b"Gb\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
         }
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"%4i: %4ix%4i %s %4i%s %s\n\x00" as *const u8 as *const libc::c_char,
             i,
@@ -668,22 +648,16 @@ pub unsafe extern "C" fn R_ImageList_f() {
         estTotalSize += estSize;
         i += 1
     }
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b" ---------\n\x00" as *const u8 as *const libc::c_char,
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b" approx %i bytes\n\x00" as *const u8 as *const libc::c_char,
         estTotalSize,
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b" %i total images\n\n\x00" as *const u8 as *const libc::c_char,
         tr.numImages,
@@ -720,18 +694,12 @@ unsafe extern "C" fn ResampleTexture(
     let mut fracstep: u32 = 0;
     let mut p1: [u32; 2048] = [0; 2048];
     let mut p2: [u32; 2048] = [0; 2048];
-    let mut pix1: *mut byte =
-        0 as *mut byte;
-    let mut pix2: *mut byte =
-        0 as *mut byte;
-    let mut pix3: *mut byte =
-        0 as *mut byte;
-    let mut pix4: *mut byte =
-        0 as *mut byte;
+    let mut pix1: *mut byte = 0 as *mut byte;
+    let mut pix2: *mut byte = 0 as *mut byte;
+    let mut pix3: *mut byte = 0 as *mut byte;
+    let mut pix4: *mut byte = 0 as *mut byte;
     if outwidth > 2048 as i32 {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"ResampleTexture: max width\x00" as *const u8 as *const libc::c_char,
         );
@@ -761,42 +729,34 @@ unsafe extern "C" fn ResampleTexture(
         );
         j = 0 as i32;
         while j < outwidth {
-            pix1 =
-                (inrow as *mut byte).offset(p1[j as usize] as isize);
-            pix2 =
-                (inrow as *mut byte).offset(p2[j as usize] as isize);
-            pix3 = (inrow2 as *mut byte)
-                .offset(p1[j as usize] as isize);
-            pix4 = (inrow2 as *mut byte)
-                .offset(p2[j as usize] as isize);
-            *(out.offset(j as isize) as *mut byte)
-                .offset(0 as i32 as isize) = (*pix1.offset(0 as i32 as isize) as i32
-                + *pix2.offset(0 as i32 as isize) as i32
-                + *pix3.offset(0 as i32 as isize) as i32
-                + *pix4.offset(0 as i32 as isize) as i32
-                >> 2 as i32)
-                as byte;
-            *(out.offset(j as isize) as *mut byte)
-                .offset(1 as i32 as isize) = (*pix1.offset(1 as i32 as isize) as i32
-                + *pix2.offset(1 as i32 as isize) as i32
-                + *pix3.offset(1 as i32 as isize) as i32
-                + *pix4.offset(1 as i32 as isize) as i32
-                >> 2 as i32)
-                as byte;
-            *(out.offset(j as isize) as *mut byte)
-                .offset(2 as i32 as isize) = (*pix1.offset(2 as i32 as isize) as i32
-                + *pix2.offset(2 as i32 as isize) as i32
-                + *pix3.offset(2 as i32 as isize) as i32
-                + *pix4.offset(2 as i32 as isize) as i32
-                >> 2 as i32)
-                as byte;
-            *(out.offset(j as isize) as *mut byte)
-                .offset(3 as i32 as isize) = (*pix1.offset(3 as i32 as isize) as i32
-                + *pix2.offset(3 as i32 as isize) as i32
-                + *pix3.offset(3 as i32 as isize) as i32
-                + *pix4.offset(3 as i32 as isize) as i32
-                >> 2 as i32)
-                as byte;
+            pix1 = (inrow as *mut byte).offset(p1[j as usize] as isize);
+            pix2 = (inrow as *mut byte).offset(p2[j as usize] as isize);
+            pix3 = (inrow2 as *mut byte).offset(p1[j as usize] as isize);
+            pix4 = (inrow2 as *mut byte).offset(p2[j as usize] as isize);
+            *(out.offset(j as isize) as *mut byte).offset(0 as i32 as isize) =
+                (*pix1.offset(0 as i32 as isize) as i32
+                    + *pix2.offset(0 as i32 as isize) as i32
+                    + *pix3.offset(0 as i32 as isize) as i32
+                    + *pix4.offset(0 as i32 as isize) as i32
+                    >> 2 as i32) as byte;
+            *(out.offset(j as isize) as *mut byte).offset(1 as i32 as isize) =
+                (*pix1.offset(1 as i32 as isize) as i32
+                    + *pix2.offset(1 as i32 as isize) as i32
+                    + *pix3.offset(1 as i32 as isize) as i32
+                    + *pix4.offset(1 as i32 as isize) as i32
+                    >> 2 as i32) as byte;
+            *(out.offset(j as isize) as *mut byte).offset(2 as i32 as isize) =
+                (*pix1.offset(2 as i32 as isize) as i32
+                    + *pix2.offset(2 as i32 as isize) as i32
+                    + *pix3.offset(2 as i32 as isize) as i32
+                    + *pix4.offset(2 as i32 as isize) as i32
+                    >> 2 as i32) as byte;
+            *(out.offset(j as isize) as *mut byte).offset(3 as i32 as isize) =
+                (*pix1.offset(3 as i32 as isize) as i32
+                    + *pix2.offset(3 as i32 as isize) as i32
+                    + *pix3.offset(3 as i32 as isize) as i32
+                    + *pix4.offset(3 as i32 as isize) as i32
+                    >> 2 as i32) as byte;
             j += 1
         }
         i += 1;
@@ -823,8 +783,7 @@ pub unsafe extern "C" fn R_LightScaleTexture(
         if glConfig.deviceSupportsGamma as u64 == 0 {
             let mut i: i32 = 0;
             let mut c: i32 = 0;
-            let mut p: *mut byte =
-                0 as *mut byte;
+            let mut p: *mut byte = 0 as *mut byte;
             p = in_0 as *mut byte;
             c = inwidth * inheight;
             i = 0 as i32;
@@ -839,8 +798,7 @@ pub unsafe extern "C" fn R_LightScaleTexture(
     } else {
         let mut i_0: i32 = 0;
         let mut c_0: i32 = 0;
-        let mut p_0: *mut byte =
-            0 as *mut byte;
+        let mut p_0: *mut byte = 0 as *mut byte;
         p_0 = in_0 as *mut byte;
         c_0 = inwidth * inheight;
         if glConfig.deviceSupportsGamma as u64 != 0 {
@@ -883,8 +841,7 @@ unsafe extern "C" fn R_MipMap2(mut in_0: *mut u32, mut inWidth: i32, mut inHeigh
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
-    let mut outpix: *mut byte =
-        0 as *mut byte;
+    let mut outpix: *mut byte = 0 as *mut byte;
     let mut inWidthMask: i32 = 0;
     let mut inHeightMask: i32 = 0;
     let mut total: i32 = 0;
@@ -903,8 +860,7 @@ unsafe extern "C" fn R_MipMap2(mut in_0: *mut u32, mut inWidth: i32, mut inHeigh
     while i < outHeight {
         j = 0 as i32;
         while j < outWidth {
-            outpix = temp.offset((i * outWidth) as isize).offset(j as isize)
-                as *mut byte;
+            outpix = temp.offset((i * outWidth) as isize).offset(j as isize) as *mut byte;
             k = 0 as i32;
             while k < 4 as i32 {
                 total = 1 as i32
@@ -912,130 +868,113 @@ unsafe extern "C" fn R_MipMap2(mut in_0: *mut u32, mut inWidth: i32, mut inHeigh
                         ((i * 2 as i32 - 1 as i32 & inHeightMask) * inWidth
                             + (j * 2 as i32 - 1 as i32 & inWidthMask))
                             as isize,
-                    ) as *mut u32
-                        as *mut byte)
+                    ) as *mut u32 as *mut byte)
                         .offset(k as isize) as i32
                     + 2 as i32
                         * *(&mut *in_0.offset(
                             ((i * 2 as i32 - 1 as i32 & inHeightMask) * inWidth
                                 + (j * 2 as i32 & inWidthMask))
                                 as isize,
-                        ) as *mut u32
-                            as *mut byte)
+                        ) as *mut u32 as *mut byte)
                             .offset(k as isize) as i32
                     + 2 as i32
                         * *(&mut *in_0.offset(
                             ((i * 2 as i32 - 1 as i32 & inHeightMask) * inWidth
                                 + (j * 2 as i32 + 1 as i32 & inWidthMask))
                                 as isize,
-                        ) as *mut u32
-                            as *mut byte)
+                        ) as *mut u32 as *mut byte)
                             .offset(k as isize) as i32
                     + 1 as i32
                         * *(&mut *in_0.offset(
                             ((i * 2 as i32 - 1 as i32 & inHeightMask) * inWidth
                                 + (j * 2 as i32 + 2 as i32 & inWidthMask))
                                 as isize,
-                        ) as *mut u32
-                            as *mut byte)
+                        ) as *mut u32 as *mut byte)
                             .offset(k as isize) as i32
                     + 2 as i32
                         * *(&mut *in_0.offset(
                             ((i * 2 as i32 & inHeightMask) * inWidth
                                 + (j * 2 as i32 - 1 as i32 & inWidthMask))
                                 as isize,
-                        ) as *mut u32
-                            as *mut byte)
+                        ) as *mut u32 as *mut byte)
                             .offset(k as isize) as i32
                     + 4 as i32
                         * *(&mut *in_0.offset(
                             ((i * 2 as i32 & inHeightMask) * inWidth + (j * 2 as i32 & inWidthMask))
                                 as isize,
-                        ) as *mut u32
-                            as *mut byte)
+                        ) as *mut u32 as *mut byte)
                             .offset(k as isize) as i32
                     + 4 as i32
                         * *(&mut *in_0.offset(
                             ((i * 2 as i32 & inHeightMask) * inWidth
                                 + (j * 2 as i32 + 1 as i32 & inWidthMask))
                                 as isize,
-                        ) as *mut u32
-                            as *mut byte)
+                        ) as *mut u32 as *mut byte)
                             .offset(k as isize) as i32
                     + 2 as i32
                         * *(&mut *in_0.offset(
                             ((i * 2 as i32 & inHeightMask) * inWidth
                                 + (j * 2 as i32 + 2 as i32 & inWidthMask))
                                 as isize,
-                        ) as *mut u32
-                            as *mut byte)
+                        ) as *mut u32 as *mut byte)
                             .offset(k as isize) as i32
                     + 2 as i32
                         * *(&mut *in_0.offset(
                             ((i * 2 as i32 + 1 as i32 & inHeightMask) * inWidth
                                 + (j * 2 as i32 - 1 as i32 & inWidthMask))
                                 as isize,
-                        ) as *mut u32
-                            as *mut byte)
+                        ) as *mut u32 as *mut byte)
                             .offset(k as isize) as i32
                     + 4 as i32
                         * *(&mut *in_0.offset(
                             ((i * 2 as i32 + 1 as i32 & inHeightMask) * inWidth
                                 + (j * 2 as i32 & inWidthMask))
                                 as isize,
-                        ) as *mut u32
-                            as *mut byte)
+                        ) as *mut u32 as *mut byte)
                             .offset(k as isize) as i32
                     + 4 as i32
                         * *(&mut *in_0.offset(
                             ((i * 2 as i32 + 1 as i32 & inHeightMask) * inWidth
                                 + (j * 2 as i32 + 1 as i32 & inWidthMask))
                                 as isize,
-                        ) as *mut u32
-                            as *mut byte)
+                        ) as *mut u32 as *mut byte)
                             .offset(k as isize) as i32
                     + 2 as i32
                         * *(&mut *in_0.offset(
                             ((i * 2 as i32 + 1 as i32 & inHeightMask) * inWidth
                                 + (j * 2 as i32 + 2 as i32 & inWidthMask))
                                 as isize,
-                        ) as *mut u32
-                            as *mut byte)
+                        ) as *mut u32 as *mut byte)
                             .offset(k as isize) as i32
                     + 1 as i32
                         * *(&mut *in_0.offset(
                             ((i * 2 as i32 + 2 as i32 & inHeightMask) * inWidth
                                 + (j * 2 as i32 - 1 as i32 & inWidthMask))
                                 as isize,
-                        ) as *mut u32
-                            as *mut byte)
+                        ) as *mut u32 as *mut byte)
                             .offset(k as isize) as i32
                     + 2 as i32
                         * *(&mut *in_0.offset(
                             ((i * 2 as i32 + 2 as i32 & inHeightMask) * inWidth
                                 + (j * 2 as i32 & inWidthMask))
                                 as isize,
-                        ) as *mut u32
-                            as *mut byte)
+                        ) as *mut u32 as *mut byte)
                             .offset(k as isize) as i32
                     + 2 as i32
                         * *(&mut *in_0.offset(
                             ((i * 2 as i32 + 2 as i32 & inHeightMask) * inWidth
                                 + (j * 2 as i32 + 1 as i32 & inWidthMask))
                                 as isize,
-                        ) as *mut u32
-                            as *mut byte)
+                        ) as *mut u32 as *mut byte)
                             .offset(k as isize) as i32
                     + 1 as i32
                         * *(&mut *in_0.offset(
                             ((i * 2 as i32 + 2 as i32 & inHeightMask) * inWidth
                                 + (j * 2 as i32 + 2 as i32 & inWidthMask))
                                 as isize,
-                        ) as *mut u32
-                            as *mut byte)
+                        ) as *mut u32 as *mut byte)
                             .offset(k as isize) as i32;
-                *outpix.offset(k as isize) =
-                    (total / 36 as i32) as byte;
+                *outpix.offset(k as isize) = (total / 36 as i32) as byte;
                 k += 1
             }
             j += 1
@@ -1047,9 +986,7 @@ unsafe extern "C" fn R_MipMap2(mut in_0: *mut u32, mut inWidth: i32, mut inHeigh
         temp as *const libc::c_void,
         (outWidth * outHeight * 4 as i32) as libc::c_ulong,
     );
-    ri
-        .Hunk_FreeTempMemory
-        .expect("non-null function pointer")(temp as *mut libc::c_void);
+    ri.Hunk_FreeTempMemory.expect("non-null function pointer")(temp as *mut libc::c_void);
 }
 /*
 ================
@@ -1059,15 +996,10 @@ Operates in place, quartering the size of the texture
 ================
 */
 
-unsafe extern "C" fn R_MipMap(
-    mut in_0: *mut byte,
-    mut width: i32,
-    mut height: i32,
-) {
+unsafe extern "C" fn R_MipMap(mut in_0: *mut byte, mut width: i32, mut height: i32) {
     let mut i: i32 = 0; // get largest
     let mut j: i32 = 0;
-    let mut out: *mut byte =
-        0 as *mut byte;
+    let mut out: *mut byte = 0 as *mut byte;
     let mut row: i32 = 0;
     if (*r_simpleMipMaps).integer == 0 {
         R_MipMap2(in_0 as *mut u32, width, height);
@@ -1084,18 +1016,18 @@ unsafe extern "C" fn R_MipMap(
         width += height;
         i = 0 as i32;
         while i < width {
-            *out.offset(0 as i32 as isize) =
-                (*in_0.offset(0 as i32 as isize) as i32 + *in_0.offset(4 as i32 as isize) as i32
-                    >> 1 as i32) as byte;
-            *out.offset(1 as i32 as isize) =
-                (*in_0.offset(1 as i32 as isize) as i32 + *in_0.offset(5 as i32 as isize) as i32
-                    >> 1 as i32) as byte;
-            *out.offset(2 as i32 as isize) =
-                (*in_0.offset(2 as i32 as isize) as i32 + *in_0.offset(6 as i32 as isize) as i32
-                    >> 1 as i32) as byte;
-            *out.offset(3 as i32 as isize) =
-                (*in_0.offset(3 as i32 as isize) as i32 + *in_0.offset(7 as i32 as isize) as i32
-                    >> 1 as i32) as byte;
+            *out.offset(0 as i32 as isize) = (*in_0.offset(0 as i32 as isize) as i32
+                + *in_0.offset(4 as i32 as isize) as i32
+                >> 1 as i32) as byte;
+            *out.offset(1 as i32 as isize) = (*in_0.offset(1 as i32 as isize) as i32
+                + *in_0.offset(5 as i32 as isize) as i32
+                >> 1 as i32) as byte;
+            *out.offset(2 as i32 as isize) = (*in_0.offset(2 as i32 as isize) as i32
+                + *in_0.offset(6 as i32 as isize) as i32
+                >> 1 as i32) as byte;
+            *out.offset(3 as i32 as isize) = (*in_0.offset(3 as i32 as isize) as i32
+                + *in_0.offset(7 as i32 as isize) as i32
+                >> 1 as i32) as byte;
             i += 1;
             out = out.offset(4 as i32 as isize);
             in_0 = in_0.offset(8 as i32 as isize)
@@ -1110,26 +1042,22 @@ unsafe extern "C" fn R_MipMap(
                 + *in_0.offset(4 as i32 as isize) as i32
                 + *in_0.offset((row + 0 as i32) as isize) as i32
                 + *in_0.offset((row + 4 as i32) as isize) as i32
-                >> 2 as i32)
-                as byte;
+                >> 2 as i32) as byte;
             *out.offset(1 as i32 as isize) = (*in_0.offset(1 as i32 as isize) as i32
                 + *in_0.offset(5 as i32 as isize) as i32
                 + *in_0.offset((row + 1 as i32) as isize) as i32
                 + *in_0.offset((row + 5 as i32) as isize) as i32
-                >> 2 as i32)
-                as byte;
+                >> 2 as i32) as byte;
             *out.offset(2 as i32 as isize) = (*in_0.offset(2 as i32 as isize) as i32
                 + *in_0.offset(6 as i32 as isize) as i32
                 + *in_0.offset((row + 2 as i32) as isize) as i32
                 + *in_0.offset((row + 6 as i32) as isize) as i32
-                >> 2 as i32)
-                as byte;
+                >> 2 as i32) as byte;
             *out.offset(3 as i32 as isize) = (*in_0.offset(3 as i32 as isize) as i32
                 + *in_0.offset(7 as i32 as isize) as i32
                 + *in_0.offset((row + 3 as i32) as isize) as i32
                 + *in_0.offset((row + 7 as i32) as isize) as i32
-                >> 2 as i32)
-                as byte;
+                >> 2 as i32) as byte;
             j += 1;
             out = out.offset(4 as i32 as isize);
             in_0 = in_0.offset(8 as i32 as isize)
@@ -1163,15 +1091,15 @@ unsafe extern "C" fn R_BlendOverTexture(
         *blend.offset(2 as i32 as isize) as i32 * *blend.offset(3 as i32 as isize) as i32;
     i = 0 as i32;
     while i < pixelCount {
-        *data.offset(0 as i32 as isize) =
-            (*data.offset(0 as i32 as isize) as i32 * inverseAlpha + premult[0 as i32 as usize]
-                >> 9 as i32) as byte;
-        *data.offset(1 as i32 as isize) =
-            (*data.offset(1 as i32 as isize) as i32 * inverseAlpha + premult[1 as i32 as usize]
-                >> 9 as i32) as byte;
-        *data.offset(2 as i32 as isize) =
-            (*data.offset(2 as i32 as isize) as i32 * inverseAlpha + premult[2 as i32 as usize]
-                >> 9 as i32) as byte;
+        *data.offset(0 as i32 as isize) = (*data.offset(0 as i32 as isize) as i32 * inverseAlpha
+            + premult[0 as i32 as usize]
+            >> 9 as i32) as byte;
+        *data.offset(1 as i32 as isize) = (*data.offset(1 as i32 as isize) as i32 * inverseAlpha
+            + premult[1 as i32 as usize]
+            >> 9 as i32) as byte;
+        *data.offset(2 as i32 as isize) = (*data.offset(2 as i32 as isize) as i32 * inverseAlpha
+            + premult[2 as i32 as usize]
+            >> 9 as i32) as byte;
         i += 1;
         data = data.offset(4 as i32 as isize)
     }
@@ -1303,8 +1231,7 @@ unsafe extern "C" fn Upload32(
     let mut scaled_height: i32 = 0;
     let mut i: i32 = 0;
     let mut c: i32 = 0;
-    let mut scan: *mut byte =
-        0 as *mut byte;
+    let mut scan: *mut byte = 0 as *mut byte;
     let mut internalFormat: GLenum = 0x1907 as i32 as GLenum;
     let mut rMax: f32 = 0 as i32 as f32;
     let mut gMax: f32 = 0 as i32 as f32;
@@ -1323,8 +1250,7 @@ unsafe extern "C" fn Upload32(
     if (*r_roundImagesDown).integer != 0 && scaled_width > width {
         scaled_width >>= 1 as i32
     }
-    if (*r_roundImagesDown).integer != 0 && scaled_height > height
-    {
+    if (*r_roundImagesDown).integer != 0 && scaled_height > height {
         scaled_height >>= 1 as i32
     }
     if scaled_width != width || scaled_height != height {
@@ -1366,9 +1292,7 @@ unsafe extern "C" fn Upload32(
     // scale both axis down equally so we don't have to
     // deal with a half mip resampling
     //
-    while scaled_width > glConfig.maxTextureSize
-        || scaled_height > glConfig.maxTextureSize
-    {
+    while scaled_width > glConfig.maxTextureSize || scaled_height > glConfig.maxTextureSize {
         scaled_width >>= 1 as i32;
         scaled_height >>= 1 as i32
     }
@@ -1389,8 +1313,7 @@ unsafe extern "C" fn Upload32(
     if (*r_greyscale).integer != 0 {
         i = 0 as i32;
         while i < c {
-            let mut luma: byte = (0.2126f32
-                * *scan.offset((i * 4 as i32) as isize) as i32 as f32
+            let mut luma: byte = (0.2126f32 * *scan.offset((i * 4 as i32) as isize) as i32 as f32
                 + 0.7152f32 * *scan.offset((i * 4 as i32 + 1 as i32) as isize) as i32 as f32
                 + 0.0722f32 * *scan.offset((i * 4 as i32 + 2 as i32) as isize) as i32 as f32)
                 as byte;
@@ -1405,21 +1328,18 @@ unsafe extern "C" fn Upload32(
             let mut luma_0: f32 = 0.2126f32 * *scan.offset((i * 4 as i32) as isize) as i32 as f32
                 + 0.7152f32 * *scan.offset((i * 4 as i32 + 1 as i32) as isize) as i32 as f32
                 + 0.0722f32 * *scan.offset((i * 4 as i32 + 2 as i32) as isize) as i32 as f32;
-            *scan.offset((i * 4 as i32) as isize) = (*scan.offset((i * 4 as i32) as isize) as i32
-                as f32
-                * (1.0f32 - (*r_greyscale).value)
-                + luma_0 * (*r_greyscale).value)
-                as byte;
+            *scan.offset((i * 4 as i32) as isize) =
+                (*scan.offset((i * 4 as i32) as isize) as i32 as f32
+                    * (1.0f32 - (*r_greyscale).value)
+                    + luma_0 * (*r_greyscale).value) as byte;
             *scan.offset((i * 4 as i32 + 1 as i32) as isize) =
                 (*scan.offset((i * 4 as i32 + 1 as i32) as isize) as i32 as f32
                     * (1.0f32 - (*r_greyscale).value)
-                    + luma_0 * (*r_greyscale).value)
-                    as byte;
+                    + luma_0 * (*r_greyscale).value) as byte;
             *scan.offset((i * 4 as i32 + 2 as i32) as isize) =
                 (*scan.offset((i * 4 as i32 + 2 as i32) as isize) as i32 as f32
                     * (1.0f32 - (*r_greyscale).value)
-                    + luma_0 * (*r_greyscale).value)
-                    as byte;
+                    + luma_0 * (*r_greyscale).value) as byte;
             i += 1
         }
     }
@@ -1451,21 +1371,17 @@ unsafe extern "C" fn Upload32(
         // select proper internal format
         if samples == 3 as i32 {
             if (*r_greyscale).integer != 0 {
-                if (*r_texturebits).integer == 16 as i32
-                    || (*r_texturebits).integer == 32 as i32
-                {
+                if (*r_texturebits).integer == 16 as i32 || (*r_texturebits).integer == 32 as i32 {
                     internalFormat = 0x8040 as i32 as GLenum
                 } else {
                     internalFormat = 0x1909 as i32 as GLenum
                 }
             } else if allowCompression as u32 != 0
-                && glConfig.textureCompression as u32
-                    == TC_S3TC_ARB as i32 as u32
+                && glConfig.textureCompression as u32 == TC_S3TC_ARB as i32 as u32
             {
                 internalFormat = 0x83f1 as i32 as GLenum
             } else if allowCompression as u32 != 0
-                && glConfig.textureCompression as u32
-                    == TC_S3TC as i32 as u32
+                && glConfig.textureCompression as u32 == TC_S3TC as i32 as u32
             {
                 internalFormat = 0x83a1 as i32 as GLenum
             } else if (*r_texturebits).integer == 16 as i32 {
@@ -1477,9 +1393,7 @@ unsafe extern "C" fn Upload32(
             }
         } else if samples == 4 as i32 {
             if (*r_greyscale).integer != 0 {
-                if (*r_texturebits).integer == 16 as i32
-                    || (*r_texturebits).integer == 32 as i32
-                {
+                if (*r_texturebits).integer == 16 as i32 || (*r_texturebits).integer == 32 as i32 {
                     internalFormat = 0x8045 as i32 as GLenum
                 } else {
                     internalFormat = 0x190a as i32 as GLenum
@@ -1522,11 +1436,7 @@ unsafe extern "C" fn Upload32(
     } else {
         // use the normal mip-mapping function to go down from here
         while width > scaled_width || height > scaled_height {
-            R_MipMap(
-                data as *mut byte,
-                width,
-                height,
-            );
+            R_MipMap(data as *mut byte, width, height);
             width >>= 1 as i32;
             height >>= 1 as i32;
             if width < 1 as i32 {
@@ -1569,11 +1479,7 @@ unsafe extern "C" fn Upload32(
                 let mut miplevel: i32 = 0;
                 miplevel = 0 as i32;
                 while scaled_width > 1 as i32 || scaled_height > 1 as i32 {
-                    R_MipMap(
-                        scaledBuffer as *mut byte,
-                        scaled_width,
-                        scaled_height,
-                    );
+                    R_MipMap(scaledBuffer as *mut byte, scaled_width, scaled_height);
                     scaled_width >>= 1 as i32;
                     scaled_height >>= 1 as i32;
                     if scaled_width < 1 as i32 {
@@ -1649,14 +1555,14 @@ unsafe extern "C" fn Upload32(
     }
     GL_CheckErrors();
     if !scaledBuffer.is_null() {
-        ri
-            .Hunk_FreeTempMemory
-            .expect("non-null function pointer")(scaledBuffer as *mut libc::c_void);
+        ri.Hunk_FreeTempMemory.expect("non-null function pointer")(
+            scaledBuffer as *mut libc::c_void,
+        );
     }
     if !resampledBuffer.is_null() {
-        ri
-            .Hunk_FreeTempMemory
-            .expect("non-null function pointer")(resampledBuffer as *mut libc::c_void);
+        ri.Hunk_FreeTempMemory.expect("non-null function pointer")(
+            resampledBuffer as *mut libc::c_void,
+        );
     };
 }
 /*
@@ -1678,14 +1584,11 @@ pub unsafe extern "C" fn R_CreateImage(
     mut _internalFormat: i32,
 ) -> *mut image_t {
     let mut image: *mut image_t = 0 as *mut image_t;
-    let mut isLightmap: qboolean =
-        qfalse;
+    let mut isLightmap: qboolean = qfalse;
     let mut hash: isize = 0;
     let mut glWrapClampMode: i32 = 0;
     if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"R_CreateImage: \"%s\" is too long\x00" as *const u8 as *const libc::c_char,
             name,
@@ -1700,27 +1603,17 @@ pub unsafe extern "C" fn R_CreateImage(
         isLightmap = qtrue
     }
     if tr.numImages == 2048 as i32 {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"R_CreateImage: MAX_DRAWIMAGES hit\x00" as *const u8 as *const libc::c_char,
         );
     }
-    tr.images
-        [tr.numImages as usize] =
-        ri
-            .Hunk_Alloc
-            .expect("non-null function pointer")(
-            ::std::mem::size_of::<image_t>() as libc::c_ulong as i32,
-            h_low,
-        ) as *mut image_t;
-    image = tr.images
-        [tr.numImages as usize];
-    qglGenTextures.expect("non-null function pointer")(
-        1 as i32,
-        &mut (*image).texnum,
-    );
+    tr.images[tr.numImages as usize] = ri.Hunk_Alloc.expect("non-null function pointer")(
+        ::std::mem::size_of::<image_t>() as libc::c_ulong as i32,
+        h_low,
+    ) as *mut image_t;
+    image = tr.images[tr.numImages as usize];
+    qglGenTextures.expect("non-null function pointer")(1 as i32, &mut (*image).texnum);
     tr.numImages += 1;
     (*image).type_0 = type_0;
     (*image).flags = flags;
@@ -1746,13 +1639,10 @@ pub unsafe extern "C" fn R_CreateImage(
         pic as *mut u32,
         (*image).width,
         (*image).height,
-        ((*image).flags as u32 & IMGFLAG_MIPMAP as i32 as u32)
-            as qboolean,
-        ((*image).flags as u32 & IMGFLAG_PICMIP as i32 as u32)
-            as qboolean,
+        ((*image).flags as u32 & IMGFLAG_MIPMAP as i32 as u32) as qboolean,
+        ((*image).flags as u32 & IMGFLAG_PICMIP as i32 as u32) as qboolean,
         isLightmap,
-        ((*image).flags as u32 & IMGFLAG_NO_COMPRESSION as i32 as u32 == 0)
-            as i32 as qboolean,
+        ((*image).flags as u32 & IMGFLAG_NO_COMPRESSION as i32 as u32 == 0) as i32 as qboolean,
         &mut (*image).internalFormat,
         &mut (*image).uploadWidth,
         &mut (*image).uploadHeight,
@@ -1767,12 +1657,8 @@ pub unsafe extern "C" fn R_CreateImage(
         0x2803 as i32 as GLenum,
         glWrapClampMode as GLfloat,
     );
-    glState.currenttextures
-        [glState.currenttmu as usize] = 0 as i32;
-    qglBindTexture.expect("non-null function pointer")(
-        0xde1 as i32 as GLenum,
-        0 as i32 as GLuint,
-    );
+    glState.currenttextures[glState.currenttmu as usize] = 0 as i32;
+    qglBindTexture.expect("non-null function pointer")(0xde1 as i32 as GLenum, 0 as i32 as GLuint);
     if (*image).TMU == 1 as i32 {
         GL_SelectTexture(0 as i32);
     }
@@ -1897,8 +1783,7 @@ pub unsafe extern "C" fn R_LoadImage(
     mut width: *mut i32,
     mut height: *mut i32,
 ) {
-    let mut orgNameFailed: qboolean =
-        qfalse;
+    let mut orgNameFailed: qboolean = qfalse;
     let mut orgLoader: i32 = -(1 as i32);
     let mut i: i32 = 0;
     let mut localName: [libc::c_char; 64] = [0; 64];
@@ -1935,11 +1820,7 @@ pub unsafe extern "C" fn R_LoadImage(
                 // try again without the extension
                 orgNameFailed = qtrue;
                 orgLoader = i;
-                COM_StripExtension(
-                    name,
-                    localName.as_mut_ptr(),
-                    64 as i32,
-                );
+                COM_StripExtension(name, localName.as_mut_ptr(), 64 as i32);
             } else {
                 // Something loaded
                 return;
@@ -1962,9 +1843,7 @@ pub unsafe extern "C" fn R_LoadImage(
                 .expect("non-null function pointer")(altName, pic, width, height);
             if !(*pic).is_null() {
                 if orgNameFailed as u64 != 0 {
-                    ri
-                        .Printf
-                        .expect("non-null function pointer")(
+                    ri.Printf.expect("non-null function pointer")(
                         PRINT_DEVELOPER as i32,
                         b"WARNING: %s not present, using %s instead\n\x00" as *const u8
                             as *const libc::c_char,
@@ -2049,8 +1928,7 @@ pub unsafe extern "C" fn R_FindImageFile(
     let mut image: *mut image_t = 0 as *mut image_t;
     let mut width: i32 = 0;
     let mut height: i32 = 0;
-    let mut pic: *mut byte =
-        0 as *mut byte;
+    let mut pic: *mut byte = 0 as *mut byte;
     let mut hash: isize = 0;
     if name.is_null() {
         return 0 as *mut image_t;
@@ -2065,9 +1943,7 @@ pub unsafe extern "C" fn R_FindImageFile(
             // the white image can be used with any set of parms, but other mismatches are errors
             if libc::strcmp(name, b"*white\x00" as *const u8 as *const libc::c_char) != 0 {
                 if (*image).flags as u32 != flags as u32 {
-                    ri
-                        .Printf
-                        .expect("non-null function pointer")(
+                    ri.Printf.expect("non-null function pointer")(
                         PRINT_DEVELOPER as i32,
                         b"WARNING: reused image %s with mixed flags (%i vs %i)\n\x00" as *const u8
                             as *const libc::c_char,
@@ -2097,9 +1973,7 @@ pub unsafe extern "C" fn R_FindImageFile(
         flags,
         0 as i32,
     );
-    ri
-        .Free
-        .expect("non-null function pointer")(pic as *mut libc::c_void);
+    ri.Free.expect("non-null function pointer")(pic as *mut libc::c_void);
     return image;
 }
 
@@ -2124,14 +1998,12 @@ unsafe extern "C" fn R_CreateDlightImage() {
             } else if b < 75 as i32 {
                 b = 0 as i32
             }
-            data[y as usize][x as usize][2 as i32 as usize] =
-                b as byte;
+            data[y as usize][x as usize][2 as i32 as usize] = b as byte;
             data[y as usize][x as usize][1 as i32 as usize] =
                 data[y as usize][x as usize][2 as i32 as usize];
             data[y as usize][x as usize][0 as i32 as usize] =
                 data[y as usize][x as usize][1 as i32 as usize];
-            data[y as usize][x as usize][3 as i32 as usize] =
-                255 as i32 as byte;
+            data[y as usize][x as usize][3 as i32 as usize] = 255 as i32 as byte;
             y += 1
         }
         x += 1
@@ -2196,16 +2068,14 @@ pub unsafe extern "C" fn R_FogFactor(mut s: f32, mut t: f32) -> f32 {
     if s as f64 > 1.0f64 {
         s = 1.0f64 as f32
     }
-    d = tr.fogTable
-        [(s * (256 as i32 - 1 as i32) as f32) as i32 as usize];
+    d = tr.fogTable[(s * (256 as i32 - 1 as i32) as f32) as i32 as usize];
     return d;
 }
 
 unsafe extern "C" fn R_CreateFogImage() {
     let mut x: i32 = 0;
     let mut y: i32 = 0;
-    let mut data: *mut byte =
-        0 as *mut byte;
+    let mut data: *mut byte = 0 as *mut byte;
     let mut d: f32 = 0.;
     data = ri
         .Hunk_AllocateTempMemory
@@ -2242,9 +2112,7 @@ unsafe extern "C" fn R_CreateFogImage() {
         IMGFLAG_CLAMPTOEDGE,
         0 as i32,
     );
-    ri
-        .Hunk_FreeTempMemory
-        .expect("non-null function pointer")(data as *mut libc::c_void);
+    ri.Hunk_FreeTempMemory.expect("non-null function pointer")(data as *mut libc::c_void);
 }
 
 unsafe extern "C" fn R_CreateDefaultImage() {
@@ -2254,37 +2122,32 @@ unsafe extern "C" fn R_CreateDefaultImage() {
     crate::stdlib::memset(
         data.as_mut_ptr() as *mut libc::c_void,
         32 as i32,
-        ::std::mem::size_of::<[[[byte; 4]; 16]; 16]>()
-            as libc::c_ulong,
+        ::std::mem::size_of::<[[[byte; 4]; 16]; 16]>() as libc::c_ulong,
     );
     x = 0 as i32;
     while x < 16 as i32 {
-        data[0 as i32 as usize][x as usize][3 as i32 as usize] =
-            255 as i32 as byte;
+        data[0 as i32 as usize][x as usize][3 as i32 as usize] = 255 as i32 as byte;
         data[0 as i32 as usize][x as usize][2 as i32 as usize] =
             data[0 as i32 as usize][x as usize][3 as i32 as usize];
         data[0 as i32 as usize][x as usize][1 as i32 as usize] =
             data[0 as i32 as usize][x as usize][2 as i32 as usize];
         data[0 as i32 as usize][x as usize][0 as i32 as usize] =
             data[0 as i32 as usize][x as usize][1 as i32 as usize];
-        data[x as usize][0 as i32 as usize][3 as i32 as usize] =
-            255 as i32 as byte;
+        data[x as usize][0 as i32 as usize][3 as i32 as usize] = 255 as i32 as byte;
         data[x as usize][0 as i32 as usize][2 as i32 as usize] =
             data[x as usize][0 as i32 as usize][3 as i32 as usize];
         data[x as usize][0 as i32 as usize][1 as i32 as usize] =
             data[x as usize][0 as i32 as usize][2 as i32 as usize];
         data[x as usize][0 as i32 as usize][0 as i32 as usize] =
             data[x as usize][0 as i32 as usize][1 as i32 as usize];
-        data[(16 as i32 - 1 as i32) as usize][x as usize][3 as i32 as usize] =
-            255 as i32 as byte;
+        data[(16 as i32 - 1 as i32) as usize][x as usize][3 as i32 as usize] = 255 as i32 as byte;
         data[(16 as i32 - 1 as i32) as usize][x as usize][2 as i32 as usize] =
             data[(16 as i32 - 1 as i32) as usize][x as usize][3 as i32 as usize];
         data[(16 as i32 - 1 as i32) as usize][x as usize][1 as i32 as usize] =
             data[(16 as i32 - 1 as i32) as usize][x as usize][2 as i32 as usize];
         data[(16 as i32 - 1 as i32) as usize][x as usize][0 as i32 as usize] =
             data[(16 as i32 - 1 as i32) as usize][x as usize][1 as i32 as usize];
-        data[x as usize][(16 as i32 - 1 as i32) as usize][3 as i32 as usize] =
-            255 as i32 as byte;
+        data[x as usize][(16 as i32 - 1 as i32) as usize][3 as i32 as usize] = 255 as i32 as byte;
         data[x as usize][(16 as i32 - 1 as i32) as usize][2 as i32 as usize] =
             data[x as usize][(16 as i32 - 1 as i32) as usize][3 as i32 as usize];
         data[x as usize][(16 as i32 - 1 as i32) as usize][1 as i32 as usize] =
@@ -2319,8 +2182,7 @@ pub unsafe extern "C" fn R_CreateBuiltinImages() {
     crate::stdlib::memset(
         data.as_mut_ptr() as *mut libc::c_void,
         255 as i32,
-        ::std::mem::size_of::<[[[byte; 4]; 16]; 16]>()
-            as libc::c_ulong,
+        ::std::mem::size_of::<[[[byte; 4]; 16]; 16]>() as libc::c_ulong,
     );
     tr.whiteImage = R_CreateImage(
         b"*white\x00" as *const u8 as *const libc::c_char,
@@ -2337,15 +2199,12 @@ pub unsafe extern "C" fn R_CreateBuiltinImages() {
     while x < 16 as i32 {
         y = 0 as i32;
         while y < 16 as i32 {
-            data[y as usize][x as usize][2 as i32 as usize] = tr
-                .identityLightByte
-                as byte;
+            data[y as usize][x as usize][2 as i32 as usize] = tr.identityLightByte as byte;
             data[y as usize][x as usize][1 as i32 as usize] =
                 data[y as usize][x as usize][2 as i32 as usize];
             data[y as usize][x as usize][0 as i32 as usize] =
                 data[y as usize][x as usize][1 as i32 as usize];
-            data[y as usize][x as usize][3 as i32 as usize] =
-                255 as i32 as byte;
+            data[y as usize][x as usize][3 as i32 as usize] = 255 as i32 as byte;
             y += 1
         }
         x += 1
@@ -2368,9 +2227,7 @@ pub unsafe extern "C" fn R_CreateBuiltinImages() {
             16 as i32,
             16 as i32,
             IMGTYPE_COLORALPHA,
-            (IMGFLAG_PICMIP as i32
-                | IMGFLAG_CLAMPTOEDGE as i32)
-                as imgFlags_t,
+            (IMGFLAG_PICMIP as i32 | IMGFLAG_CLAMPTOEDGE as i32) as imgFlags_t,
             0 as i32,
         );
         x += 1
@@ -2392,8 +2249,7 @@ pub unsafe extern "C" fn R_SetColorMappings() {
     let mut inf: i32 = 0;
     let mut shift: i32 = 0;
     // setup the overbright lighting
-    tr.overbrightBits =
-        (*r_overBrightBits).integer;
+    tr.overbrightBits = (*r_overBrightBits).integer;
     if glConfig.deviceSupportsGamma as u64 == 0 {
         tr.overbrightBits = 0 as i32
         // need hardware gamma for overbright
@@ -2413,29 +2269,21 @@ pub unsafe extern "C" fn R_SetColorMappings() {
     if tr.overbrightBits < 0 as i32 {
         tr.overbrightBits = 0 as i32
     }
-    tr.identityLight =
-        1.0f32 / ((1 as i32) << tr.overbrightBits) as f32;
-    tr.identityLightByte =
-        (255 as i32 as f32 * tr.identityLight) as i32;
+    tr.identityLight = 1.0f32 / ((1 as i32) << tr.overbrightBits) as f32;
+    tr.identityLightByte = (255 as i32 as f32 * tr.identityLight) as i32;
     if (*r_intensity).value <= 1 as i32 as f32 {
-        ri
-            .Cvar_Set
-            .expect("non-null function pointer")(
+        ri.Cvar_Set.expect("non-null function pointer")(
             b"r_intensity\x00" as *const u8 as *const libc::c_char,
             b"1\x00" as *const u8 as *const libc::c_char,
         );
     }
     if (*r_gamma).value < 0.5f32 {
-        ri
-            .Cvar_Set
-            .expect("non-null function pointer")(
+        ri.Cvar_Set.expect("non-null function pointer")(
             b"r_gamma\x00" as *const u8 as *const libc::c_char,
             b"0.5\x00" as *const u8 as *const libc::c_char,
         );
     } else if (*r_gamma).value > 3.0f32 {
-        ri
-            .Cvar_Set
-            .expect("non-null function pointer")(
+        ri.Cvar_Set.expect("non-null function pointer")(
             b"r_gamma\x00" as *const u8 as *const libc::c_char,
             b"3.0\x00" as *const u8 as *const libc::c_char,
         );
@@ -2509,11 +2357,7 @@ pub unsafe extern "C" fn R_DeleteTextures() {
     while i < tr.numImages {
         qglDeleteTextures.expect("non-null function pointer")(
             1 as i32,
-            &mut (**tr
-                .images
-                .as_mut_ptr()
-                .offset(i as isize))
-            .texnum,
+            &mut (**tr.images.as_mut_ptr().offset(i as isize)).texnum,
         );
         i += 1
     }
@@ -2524,9 +2368,7 @@ pub unsafe extern "C" fn R_DeleteTextures() {
     );
     tr.numImages = 0 as i32;
     crate::stdlib::memset(
-        glState
-            .currenttextures
-            .as_mut_ptr() as *mut libc::c_void,
+        glState.currenttextures.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<[i32; 2]>() as libc::c_ulong,
     );
@@ -2660,18 +2502,14 @@ RE_RegisterSkin
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RE_RegisterSkin(
-    mut name: *const libc::c_char,
-) -> qhandle_t {
-    let mut parseSurfaces: [skinSurface_t; 256] =
-        [skinSurface_t {
-            name: [0; 64],
-            shader: 0 as *mut shader_t,
-        }; 256];
+pub unsafe extern "C" fn RE_RegisterSkin(mut name: *const libc::c_char) -> qhandle_t {
+    let mut parseSurfaces: [skinSurface_t; 256] = [skinSurface_t {
+        name: [0; 64],
+        shader: 0 as *mut shader_t,
+    }; 256];
     let mut hSkin: qhandle_t = 0;
     let mut skin: *mut skin_t = 0 as *mut skin_t;
-    let mut surf: *mut skinSurface_t =
-        0 as *mut skinSurface_t;
+    let mut surf: *mut skinSurface_t = 0 as *mut skinSurface_t;
     let mut text: C2RustUnnamed_108 = C2RustUnnamed_108 {
         c: 0 as *mut libc::c_char,
     };
@@ -2680,18 +2518,14 @@ pub unsafe extern "C" fn RE_RegisterSkin(
     let mut surfName: [libc::c_char; 64] = [0; 64];
     let mut totalSurfaces: i32 = 0;
     if name.is_null() || *name.offset(0 as i32 as isize) == 0 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_DEVELOPER as i32,
             b"Empty name passed to RE_RegisterSkin\n\x00" as *const u8 as *const libc::c_char,
         );
         return 0 as i32;
     }
     if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_DEVELOPER as i32,
             b"Skin name exceeds MAX_QPATH\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -2712,9 +2546,7 @@ pub unsafe extern "C" fn RE_RegisterSkin(
     }
     // allocate a new skin
     if tr.numSkins == 1024 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: RE_RegisterSkin( \'%s\' ) MAX_SKINS hit\n\x00" as *const u8
                 as *const libc::c_char,
@@ -2723,9 +2555,7 @@ pub unsafe extern "C" fn RE_RegisterSkin(
         return 0 as i32;
     }
     tr.numSkins += 1;
-    skin = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
+    skin = ri.Hunk_Alloc.expect("non-null function pointer")(
         ::std::mem::size_of::<skin_t>() as libc::c_ulong as i32,
         h_low,
     ) as *mut skin_t;
@@ -2745,24 +2575,16 @@ pub unsafe extern "C" fn RE_RegisterSkin(
     ) != 0
     {
         (*skin).numSurfaces = 1 as i32;
-        (*skin).surfaces = ri
-            .Hunk_Alloc
-            .expect("non-null function pointer")(
+        (*skin).surfaces = ri.Hunk_Alloc.expect("non-null function pointer")(
             ::std::mem::size_of::<skinSurface_t>() as libc::c_ulong as i32,
             h_low,
         ) as *mut skinSurface_t;
         let ref mut fresh3 = (*(*skin).surfaces.offset(0 as i32 as isize)).shader;
-        *fresh3 = R_FindShader(
-            name,
-            -(1 as i32),
-            qtrue,
-        ) as *mut shader_s;
+        *fresh3 = R_FindShader(name, -(1 as i32), qtrue) as *mut shader_s;
         return hSkin;
     }
     // load and parse the skin file
-    ri
-        .FS_ReadFile
-        .expect("non-null function pointer")(name, &mut text.v);
+    ri.FS_ReadFile.expect("non-null function pointer")(name, &mut text.v);
     if text.c.is_null() {
         return 0 as i32;
     }
@@ -2792,29 +2614,20 @@ pub unsafe extern "C" fn RE_RegisterSkin(
         if (*skin).numSurfaces < 256 as i32 {
             surf = &mut *parseSurfaces
                 .as_mut_ptr()
-                .offset((*skin).numSurfaces as isize)
-                as *mut skinSurface_t;
+                .offset((*skin).numSurfaces as isize) as *mut skinSurface_t;
             Q_strncpyz(
                 (*surf).name.as_mut_ptr(),
                 surfName.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             );
-            (*surf).shader = R_FindShader(
-                token,
-                -(1 as i32),
-                qtrue,
-            ) as *mut shader_s;
+            (*surf).shader = R_FindShader(token, -(1 as i32), qtrue) as *mut shader_s;
             (*skin).numSurfaces += 1
         }
         totalSurfaces += 1
     }
-    ri
-        .FS_FreeFile
-        .expect("non-null function pointer")(text.v);
+    ri.FS_FreeFile.expect("non-null function pointer")(text.v);
     if totalSurfaces > 256 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: Ignoring excess surfaces (found %d, max is %d) in skin \'%s\'!\n\x00"
                 as *const u8 as *const libc::c_char,
@@ -2829,21 +2642,16 @@ pub unsafe extern "C" fn RE_RegisterSkin(
         // use default skin
     }
     // copy surfaces to skin
-    (*skin).surfaces =
-        ri
-            .Hunk_Alloc
-            .expect("non-null function pointer")(
-            ((*skin).numSurfaces as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                skinSurface_t,
-            >() as libc::c_ulong) as i32,
-            h_low,
-        ) as *mut skinSurface_t;
+    (*skin).surfaces = ri.Hunk_Alloc.expect("non-null function pointer")(
+        ((*skin).numSurfaces as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<skinSurface_t>() as libc::c_ulong) as i32,
+        h_low,
+    ) as *mut skinSurface_t;
     crate::stdlib::memcpy(
         (*skin).surfaces as *mut libc::c_void,
         parseSurfaces.as_mut_ptr() as *const libc::c_void,
-        ((*skin).numSurfaces as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            skinSurface_t,
-        >() as libc::c_ulong),
+        ((*skin).numSurfaces as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<skinSurface_t>() as libc::c_ulong),
     );
     return hSkin;
 }
@@ -2858,13 +2666,10 @@ pub unsafe extern "C" fn R_InitSkins() {
     let mut skin: *mut skin_t = 0 as *mut skin_t;
     tr.numSkins = 1 as i32;
     // make the default skin have all default shaders
-    tr.skins[0 as i32 as usize] =
-        ri
-            .Hunk_Alloc
-            .expect("non-null function pointer")(
-            ::std::mem::size_of::<skin_t>() as libc::c_ulong as i32,
-            h_low,
-        ) as *mut skin_t;
+    tr.skins[0 as i32 as usize] = ri.Hunk_Alloc.expect("non-null function pointer")(
+        ::std::mem::size_of::<skin_t>() as libc::c_ulong as i32,
+        h_low,
+    ) as *mut skin_t;
     skin = tr.skins[0 as i32 as usize];
     Q_strncpyz(
         (*skin).name.as_mut_ptr(),
@@ -2872,9 +2677,7 @@ pub unsafe extern "C" fn R_InitSkins() {
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     (*skin).numSurfaces = 1 as i32;
-    (*skin).surfaces = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
+    (*skin).surfaces = ri.Hunk_Alloc.expect("non-null function pointer")(
         ::std::mem::size_of::<skinSurface_t>() as libc::c_ulong as i32,
         h_low,
     ) as *mut skinSurface_t;
@@ -2889,9 +2692,7 @@ R_GetSkinByHandle
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_GetSkinByHandle(
-    mut hSkin: qhandle_t,
-) -> *mut skin_t {
+pub unsafe extern "C" fn R_GetSkinByHandle(mut hSkin: qhandle_t) -> *mut skin_t {
     if hSkin < 1 as i32 || hSkin >= tr.numSkins {
         return tr.skins[0 as i32 as usize];
     }
@@ -3226,18 +3027,14 @@ pub unsafe extern "C" fn R_SkinList_f() {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut skin: *mut skin_t = 0 as *mut skin_t;
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"------------------\n\x00" as *const u8 as *const libc::c_char,
     );
     i = 0 as i32;
     while i < tr.numSkins {
         skin = tr.skins[i as usize];
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"%3i:%s (%d surfaces)\n\x00" as *const u8 as *const libc::c_char,
             i,
@@ -3246,9 +3043,7 @@ pub unsafe extern "C" fn R_SkinList_f() {
         );
         j = 0 as i32;
         while j < (*skin).numSurfaces {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"       %s = %s\n\x00" as *const u8 as *const libc::c_char,
                 (*(*skin).surfaces.offset(j as isize)).name.as_mut_ptr(),
@@ -3260,9 +3055,7 @@ pub unsafe extern "C" fn R_SkinList_f() {
         }
         i += 1
     }
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"------------------\n\x00" as *const u8 as *const libc::c_char,
     );

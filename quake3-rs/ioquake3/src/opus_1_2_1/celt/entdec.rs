@@ -107,9 +107,7 @@ ec_tell() can be used to determine how many bits were needed to decode
  URL="http://www.stanford.edu/class/ee398a/handouts/papers/Moffat98ArithmCoding.pdf"
 }*/
 
-unsafe extern "C" fn ec_read_byte(
-    mut _this: *mut ec_dec,
-) -> i32 {
+unsafe extern "C" fn ec_read_byte(mut _this: *mut ec_dec) -> i32 {
     return if (*_this).offs < (*_this).storage {
         let fresh0 = (*_this).offs;
         (*_this).offs = (*_this).offs.wrapping_add(1);
@@ -119,9 +117,7 @@ unsafe extern "C" fn ec_read_byte(
     };
 }
 
-unsafe extern "C" fn ec_read_byte_from_end(
-    mut _this: *mut ec_dec,
-) -> i32 {
+unsafe extern "C" fn ec_read_byte_from_end(mut _this: *mut ec_dec) -> i32 {
     return if (*_this).end_offs < (*_this).storage {
         (*_this).end_offs = (*_this).end_offs.wrapping_add(1);
         *(*_this)
@@ -134,9 +130,7 @@ unsafe extern "C" fn ec_read_byte_from_end(
 /*Normalizes the contents of val and rng so that rng lies entirely in the
 high-order symbol.*/
 
-unsafe extern "C" fn ec_dec_normalize(
-    mut _this: *mut ec_dec,
-) {
+unsafe extern "C" fn ec_dec_normalize(mut _this: *mut ec_dec) {
     /*If the range is too small, rescale it and input some bits.*/
     while (*_this).rng <= (1 as u32) << 32 as i32 - 1 as i32 >> 8 as i32 {
         let mut sym: i32 = 0;
@@ -184,10 +178,7 @@ pub unsafe extern "C" fn ec_dec_init(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ec_decode(
-    mut _this: *mut ec_dec,
-    mut _ft: u32,
-) -> u32 {
+pub unsafe extern "C" fn ec_decode(mut _this: *mut ec_dec, mut _ft: u32) -> u32 {
     let mut s: u32 = 0;
     (*_this).ext = celt_udiv((*_this).rng, _ft);
     s = (*_this).val.wrapping_div((*_this).ext);
@@ -198,10 +189,7 @@ pub unsafe extern "C" fn ec_decode(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ec_decode_bin(
-    mut _this: *mut ec_dec,
-    mut _bits: u32,
-) -> u32 {
+pub unsafe extern "C" fn ec_decode_bin(mut _this: *mut ec_dec, mut _bits: u32) -> u32 {
     let mut s: u32 = 0;
     (*_this).ext = (*_this).rng >> _bits;
     s = (*_this).val.wrapping_div((*_this).ext);
@@ -231,10 +219,7 @@ pub unsafe extern "C" fn ec_dec_update(
 /*The probability of having a "one" is 1/(1<<_logp).*/
 #[no_mangle]
 
-pub unsafe extern "C" fn ec_dec_bit_logp(
-    mut _this: *mut ec_dec,
-    mut _logp: u32,
-) -> i32 {
+pub unsafe extern "C" fn ec_dec_bit_logp(mut _this: *mut ec_dec, mut _logp: u32) -> i32 {
     let mut r: opus_uint32 = 0;
     let mut d: opus_uint32 = 0;
     let mut s: opus_uint32 = 0;
@@ -281,10 +266,7 @@ pub unsafe extern "C" fn ec_dec_icdf(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ec_dec_uint(
-    mut _this: *mut ec_dec,
-    mut _ft: opus_uint32,
-) -> opus_uint32 {
+pub unsafe extern "C" fn ec_dec_uint(mut _this: *mut ec_dec, mut _ft: opus_uint32) -> opus_uint32 {
     let mut ft: u32 = 0;
     let mut s: u32 = 0;
     let mut ftb: i32 = 0;
@@ -390,10 +372,7 @@ _ftb: The number of bits to extract.
 Return: The decoded bits.*/
 #[no_mangle]
 
-pub unsafe extern "C" fn ec_dec_bits(
-    mut _this: *mut ec_dec,
-    mut _bits: u32,
-) -> opus_uint32 {
+pub unsafe extern "C" fn ec_dec_bits(mut _this: *mut ec_dec, mut _bits: u32) -> opus_uint32 {
     let mut window: ec_window = 0;
     let mut available: i32 = 0;
     let mut ret: opus_uint32 = 0;
@@ -401,15 +380,10 @@ pub unsafe extern "C" fn ec_dec_bits(
     available = (*_this).nend_bits;
     if (available as u32) < _bits {
         loop {
-            window |= (ec_read_byte_from_end(_this)
-                as ec_window)
-                << available;
+            window |= (ec_read_byte_from_end(_this) as ec_window) << available;
             available += 8 as i32;
             if !(available
-                <= ::std::mem::size_of::<ec_window>()
-                    as libc::c_ulong as i32
-                    * 8 as i32
-                    - 8 as i32)
+                <= ::std::mem::size_of::<ec_window>() as libc::c_ulong as i32 * 8 as i32 - 8 as i32)
             {
                 break;
             }

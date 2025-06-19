@@ -93,10 +93,7 @@ pub static mut weightFileList: [*mut crate::src::botlib::be_ai_weight::weightcon
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn ReadValue(
-    mut source: *mut source_t,
-    mut value: *mut f32,
-) -> i32 {
+pub unsafe extern "C" fn ReadValue(mut source: *mut source_t, mut value: *mut f32) -> i32 {
     let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
@@ -564,8 +561,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
         linescrossed: 0,
         next: 0 as *mut token_s,
     };
-    let mut source: *mut source_t =
-        0 as *mut source_t;
+    let mut source: *mut source_t = 0 as *mut source_t;
     let mut fs: *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t =
         0 as *mut crate::src::botlib::be_ai_weight::fuzzyseperator_t;
     let mut config: *mut crate::src::botlib::be_ai_weight::weightconfig_t =
@@ -605,11 +601,8 @@ pub unsafe extern "C" fn ReadWeightConfig(
             return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
         }
     }
-    PC_SetBaseFolder(
-        b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-    );
-    source = LoadSourceFile(filename)
-        as *mut source_s;
+    PC_SetBaseFolder(b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char);
+    source = LoadSourceFile(filename) as *mut source_s;
     if source.is_null() {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -657,9 +650,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                 ) == 0
                 {
                     FreeWeightConfig(config); //end if
-                    FreeSource(
-                        source as *mut source_s,
-                    ); //end if
+                    FreeSource(source as *mut source_s); //end if
                     return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
                 }
                 StripDoubleQuotes(token.string.as_mut_ptr());
@@ -678,9 +669,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                 ) == 0
                 {
                     FreeWeightConfig(config);
-                    FreeSource(
-                        source as *mut source_s,
-                    );
+                    FreeSource(source as *mut source_s);
                     return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
                 }
                 newindent = qfalse as i32;
@@ -696,9 +685,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                     ) == 0
                     {
                         FreeWeightConfig(config);
-                        FreeSource(
-                            source as *mut source_s,
-                        );
+                        FreeSource(source as *mut source_s);
                         return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
                     }
                     //end if
@@ -711,9 +698,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                     fs = ReadFuzzySeperators_r(source); //end if
                     if fs.is_null() {
                         FreeWeightConfig(config); //end if
-                        FreeSource(
-                            source as *mut source_s,
-                        ); //end else if
+                        FreeSource(source as *mut source_s); //end else if
                         return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
                     } //end if
                     (*config).weights[(*config).numweights as usize].firstseperator = fs
@@ -734,9 +719,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                     if ReadFuzzyWeight(source, fs) == 0 {
                         crate::src::botlib::l_memory::FreeMemory(fs as *mut libc::c_void);
                         FreeWeightConfig(config);
-                        FreeSource(
-                            source as *mut source_s,
-                        );
+                        FreeSource(source as *mut source_s);
                         return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
                     }
                     (*config).weights[(*config).numweights as usize].firstseperator = fs
@@ -748,9 +731,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                         token.string.as_mut_ptr(),
                     );
                     FreeWeightConfig(config);
-                    FreeSource(
-                        source as *mut source_s,
-                    );
+                    FreeSource(source as *mut source_s);
                     return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
                 }
                 if newindent != 0 {
@@ -760,9 +741,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                     ) == 0
                     {
                         FreeWeightConfig(config);
-                        FreeSource(
-                            source as *mut source_s,
-                        );
+                        FreeSource(source as *mut source_s);
                         return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
                     }
                     //end if
@@ -776,17 +755,13 @@ pub unsafe extern "C" fn ReadWeightConfig(
                 token.string.as_mut_ptr(),
             ); //end if
             FreeWeightConfig(config);
-            FreeSource(
-                source as *mut source_s,
-            );
+            FreeSource(source as *mut source_s);
             return 0 as *mut crate::src::botlib::be_ai_weight::weightconfig_t;
         }
         //end else
     }
     //free the source at the end of a pass
-    FreeSource(
-        source as *mut source_s,
-    );
+    FreeSource(source as *mut source_s);
     //if the file was located in a pak file
     crate::src::botlib::be_interface::botimport
         .Print

@@ -274,10 +274,9 @@ pub unsafe extern "C" fn silk_process_NLSFs(
     /* Calculate mu values */
     /* **********************/
     /* NLSF_mu  = 0.003 - 0.0015 * psEnc->speech_activity; */
-    NLSF_mu_Q20 = ((0.003f64 * ((1 as i32 as i64) << 20 as i32) as f64 + 0.5f64)
-        as opus_int32 as i64
-        + ((-0.001f64 * ((1 as i32 as i64) << 28 as i32) as f64 + 0.5f64)
-            as opus_int32 as i64
+    NLSF_mu_Q20 = ((0.003f64 * ((1 as i32 as i64) << 20 as i32) as f64 + 0.5f64) as opus_int32
+        as i64
+        + ((-0.001f64 * ((1 as i32 as i64) << 28 as i32) as f64 + 0.5f64) as opus_int32 as i64
             * (*psEncC).speech_activity_Q8 as opus_int16 as i64
             >> 16 as i32)) as opus_int32;
     if (*psEncC).nb_subfr == 2 as i32 {
@@ -309,20 +308,15 @@ pub unsafe extern "C" fn silk_process_NLSFs(
             (*psEncC).predictLPCOrder,
         );
         /* Update NLSF weights with contribution from first half */
-        i_sqr_Q15 = ((((*psEncC).indices.NLSFInterpCoef_Q2 as opus_int16
-            as opus_int32
-            * (*psEncC).indices.NLSFInterpCoef_Q2 as opus_int16
-                as opus_int32)
+        i_sqr_Q15 = ((((*psEncC).indices.NLSFInterpCoef_Q2 as opus_int16 as opus_int32
+            * (*psEncC).indices.NLSFInterpCoef_Q2 as opus_int16 as opus_int32)
             as opus_uint32)
-            << 11 as i32) as opus_int32
-            as opus_int16;
+            << 11 as i32) as opus_int32 as opus_int16;
         i = 0 as i32;
         while i < (*psEncC).predictLPCOrder {
             pNLSFW_QW[i as usize] = ((pNLSFW_QW[i as usize] as i32 >> 1 as i32)
-                + (pNLSFW0_temp_QW[i as usize] as opus_int32
-                    * i_sqr_Q15 as opus_int32
-                    >> 16 as i32))
-                as opus_int16;
+                + (pNLSFW0_temp_QW[i as usize] as opus_int32 * i_sqr_Q15 as opus_int32
+                    >> 16 as i32)) as opus_int16;
             i += 1
         }
     }
@@ -364,9 +358,7 @@ pub unsafe extern "C" fn silk_process_NLSFs(
             (*PredCoef_Q12.offset(0 as i32 as isize)).as_mut_ptr() as *mut libc::c_void,
             (*PredCoef_Q12.offset(1 as i32 as isize)).as_mut_ptr() as *const libc::c_void,
             ((*psEncC).predictLPCOrder as libc::c_ulong)
-                .wrapping_mul(
-                    ::std::mem::size_of::<opus_int16>() as libc::c_ulong
-                ),
+                .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
         );
     };
 }

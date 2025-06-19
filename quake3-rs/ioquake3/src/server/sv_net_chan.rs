@@ -113,8 +113,7 @@ unsafe extern "C" fn SV_Netchan_Encode(
     let mut i: isize = 0;
     let mut index: isize = 0;
     let mut key: byte = 0;
-    let mut string: *mut byte =
-        0 as *mut byte;
+    let mut string: *mut byte = 0 as *mut byte;
     let mut srdc: i32 = 0;
     let mut sbit: i32 = 0;
     let mut soob: qboolean = qfalse;
@@ -135,8 +134,7 @@ unsafe extern "C" fn SV_Netchan_Encode(
     string = clientCommandString as *mut byte;
     index = 0 as i32 as isize;
     // xor the client challenge with the netchan sequence number
-    key = ((*client).challenge ^ (*client).netchan.outgoingSequence)
-        as byte;
+    key = ((*client).challenge ^ (*client).netchan.outgoingSequence) as byte;
     i = 4 as i32 as isize;
     while i < (*msg).cursize as isize {
         // modify the key with the last received and with this message acknowledged client command
@@ -146,16 +144,15 @@ unsafe extern "C" fn SV_Netchan_Encode(
         if *string.offset(index as isize) as i32 > 127 as i32
             || *string.offset(index as isize) as i32 == '%' as i32
         {
-            key = (key as i32 ^ ('.' as i32) << (i & 1 as i32 as isize))
-                as byte
+            key = (key as i32 ^ ('.' as i32) << (i & 1 as i32 as isize)) as byte
         } else {
             key = (key as i32 ^ (*string.offset(index as isize) as i32) << (i & 1 as i32 as isize))
                 as byte
         }
         index += 1;
         // encode the data with this key
-        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as i32 ^ key as i32)
-            as byte;
+        *(*msg).data.offset(i as isize) =
+            (*(*msg).data.offset(i as isize) as i32 ^ key as i32) as byte;
         i += 1
     }
 }
@@ -171,10 +168,7 @@ SV_Netchan_Decode
 ==============
 */
 
-unsafe extern "C" fn SV_Netchan_Decode(
-    mut client: *mut client_t,
-    mut msg: *mut msg_t,
-) {
+unsafe extern "C" fn SV_Netchan_Decode(mut client: *mut client_t, mut msg: *mut msg_t) {
     let mut serverId: i32 = 0;
     let mut messageAcknowledge: i32 = 0;
     let mut reliableAcknowledge: i32 = 0;
@@ -184,17 +178,14 @@ unsafe extern "C" fn SV_Netchan_Decode(
     let mut sbit: i32 = 0;
     let mut soob: qboolean = qfalse;
     let mut key: byte = 0;
-    let mut string: *mut byte =
-        0 as *mut byte;
+    let mut string: *mut byte = 0 as *mut byte;
     srdc = (*msg).readcount;
     sbit = (*msg).bit;
     soob = (*msg).oob;
     (*msg).oob = qfalse;
     serverId = MSG_ReadLong(msg as *mut msg_t);
-    messageAcknowledge =
-        MSG_ReadLong(msg as *mut msg_t);
-    reliableAcknowledge =
-        MSG_ReadLong(msg as *mut msg_t);
+    messageAcknowledge = MSG_ReadLong(msg as *mut msg_t);
+    reliableAcknowledge = MSG_ReadLong(msg as *mut msg_t);
     (*msg).oob = soob;
     (*msg).bit = sbit;
     (*msg).readcount = srdc;
@@ -202,8 +193,7 @@ unsafe extern "C" fn SV_Netchan_Decode(
         .as_mut_ptr() as *mut byte;
     index = 0 as i32;
     //
-    key = ((*client).challenge ^ serverId ^ messageAcknowledge)
-        as byte;
+    key = ((*client).challenge ^ serverId ^ messageAcknowledge) as byte;
     i = (*msg).readcount + 12 as i32;
     while i < (*msg).cursize {
         // modify the key with the last sent and acknowledged server command
@@ -213,16 +203,14 @@ unsafe extern "C" fn SV_Netchan_Decode(
         if *string.offset(index as isize) as i32 > 127 as i32
             || *string.offset(index as isize) as i32 == '%' as i32
         {
-            key =
-                (key as i32 ^ ('.' as i32) << (i & 1 as i32)) as byte
+            key = (key as i32 ^ ('.' as i32) << (i & 1 as i32)) as byte
         } else {
-            key = (key as i32 ^ (*string.offset(index as isize) as i32) << (i & 1 as i32))
-                as byte
+            key = (key as i32 ^ (*string.offset(index as isize) as i32) << (i & 1 as i32)) as byte
         }
         index += 1;
         // decode the data with this key
-        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as i32 ^ key as i32)
-            as byte;
+        *(*msg).data.offset(i as isize) =
+            (*(*msg).data.offset(i as isize) as i32 ^ key as i32) as byte;
         i += 1
     }
 }
@@ -234,10 +222,8 @@ SV_Netchan_FreeQueue
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_Netchan_FreeQueue(mut client: *mut client_t) {
-    let mut netbuf: *mut netchan_buffer_t =
-        0 as *mut netchan_buffer_t;
-    let mut next: *mut netchan_buffer_t =
-        0 as *mut netchan_buffer_t;
+    let mut netbuf: *mut netchan_buffer_t = 0 as *mut netchan_buffer_t;
+    let mut next: *mut netchan_buffer_t = 0 as *mut netchan_buffer_t;
     netbuf = (*client).netchan_start_queue;
     while !netbuf.is_null() {
         next = (*netbuf).next;
@@ -254,11 +240,8 @@ SV_Netchan_TransmitNextInQueue
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_Netchan_TransmitNextInQueue(
-    mut client: *mut client_t,
-) {
-    let mut netbuf: *mut netchan_buffer_t =
-        0 as *mut netchan_buffer_t;
+pub unsafe extern "C" fn SV_Netchan_TransmitNextInQueue(mut client: *mut client_t) {
+    let mut netbuf: *mut netchan_buffer_t = 0 as *mut netchan_buffer_t;
     Com_DPrintf(
         b"#462 Netchan_TransmitNextFragment: popping a queued message for transmit\n\x00"
             as *const u8 as *const libc::c_char,
@@ -302,20 +285,14 @@ Return number of ms until next message can be sent based on throughput given by 
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_Netchan_TransmitNextFragment(
-    mut client: *mut client_t,
-) -> i32 {
+pub unsafe extern "C" fn SV_Netchan_TransmitNextFragment(mut client: *mut client_t) -> i32 {
     if (*client).netchan.unsentFragments as u64 != 0 {
-        Netchan_TransmitNextFragment(
-            &mut (*client).netchan as *mut _ as *mut netchan_t,
-        );
+        Netchan_TransmitNextFragment(&mut (*client).netchan as *mut _ as *mut netchan_t);
         return SV_RateMsec(client as *mut client_s);
     } else {
         if !(*client).netchan_start_queue.is_null() {
             SV_Netchan_TransmitNextInQueue(client);
-            return SV_RateMsec(
-                client as *mut client_s,
-            );
+            return SV_RateMsec(client as *mut client_s);
         }
     }
     return -(1 as i32);
@@ -336,30 +313,21 @@ then buffer them and make sure they get sent in correct order
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_Netchan_Transmit(
-    mut client: *mut client_t,
-    mut msg: *mut msg_t,
-) {
-    MSG_WriteByte(
-        msg as *mut msg_t,
-        svc_EOF as i32,
-    );
+pub unsafe extern "C" fn SV_Netchan_Transmit(mut client: *mut client_t, mut msg: *mut msg_t) {
+    MSG_WriteByte(msg as *mut msg_t, svc_EOF as i32);
     if (*client).netchan.unsentFragments as u32 != 0 || !(*client).netchan_start_queue.is_null() {
-        let mut netbuf: *mut netchan_buffer_t =
-            0 as *mut netchan_buffer_t;
+        let mut netbuf: *mut netchan_buffer_t = 0 as *mut netchan_buffer_t;
         Com_DPrintf(
             b"#462 SV_Netchan_Transmit: unsent fragments, stacked\n\x00" as *const u8
                 as *const libc::c_char,
         );
-        netbuf = Z_Malloc(::std::mem::size_of::<
-            netchan_buffer_t,
-        >() as libc::c_ulong as i32) as *mut netchan_buffer_t;
+        netbuf = Z_Malloc(::std::mem::size_of::<netchan_buffer_t>() as libc::c_ulong as i32)
+            as *mut netchan_buffer_t;
         // store the msg, we can't store it encoded, as the encoding depends on stuff we still have to finish sending
         MSG_Copy(
             &mut (*netbuf).msg as *mut _ as *mut msg_t,
             (*netbuf).msgBuffer.as_mut_ptr(),
-            ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong
-                as i32,
+            ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
             msg as *mut msg_t,
         );
         if (*client).compat as u64 != 0 {

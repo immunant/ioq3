@@ -202,14 +202,10 @@ pub unsafe extern "C" fn op_test(
     {
         return -(132 as i32);
     }
-    if (_initial_bytes > 9223372036854775807 as isize as size_t) as i32 as isize
-        != 0
-    {
+    if (_initial_bytes > 9223372036854775807 as isize as size_t) as i32 as isize != 0 {
         return -(129 as i32);
     }
-    ogg_sync_init(
-        &mut oy as *mut _ as *mut ogg_sync_state,
-    );
+    ogg_sync_init(&mut oy as *mut _ as *mut ogg_sync_state);
     data = ogg_sync_buffer(
         &mut oy as *mut _ as *mut ogg_sync_state,
         _initial_bytes as isize,
@@ -251,10 +247,7 @@ pub unsafe extern "C" fn op_test(
             &mut oy as *mut _ as *mut ogg_sync_state,
             _initial_bytes as isize,
         );
-        ogg_stream_init(
-            &mut os as *mut _ as *mut ogg_stream_state,
-            -(1 as i32),
-        );
+        ogg_stream_init(&mut os as *mut _ as *mut ogg_stream_state, -(1 as i32));
         err = -(1 as i32);
         loop {
             let mut op: ogg_packet = ogg_packet {
@@ -277,9 +270,7 @@ pub unsafe extern "C" fn op_test(
                 }
                 ogg_stream_reset_serialno(
                     &mut os as *mut _ as *mut ogg_stream_state,
-                    ogg_page_serialno(
-                        &mut og as *mut _ as *const ogg_page,
-                    ),
+                    ogg_page_serialno(&mut og as *mut _ as *const ogg_page),
                 );
                 ogg_stream_pagein(
                     &mut os as *mut _ as *mut ogg_stream_state,
@@ -314,15 +305,11 @@ pub unsafe extern "C" fn op_test(
                 break;
             }
         }
-        ogg_stream_clear(
-            &mut os as *mut _ as *mut ogg_stream_state,
-        );
+        ogg_stream_clear(&mut os as *mut _ as *mut ogg_stream_state);
     } else {
         err = -(129 as i32)
     }
-    ogg_sync_clear(
-        &mut oy as *mut _ as *mut ogg_sync_state,
-    );
+    ogg_sync_clear(&mut oy as *mut _ as *mut ogg_sync_state);
     return err;
 }
 /*Many, many internal helpers.
@@ -338,10 +325,7 @@ _nbytes: The maximum number of bytes to read.
 Return: A positive number of bytes read on success, 0 on end-of-file, or a
          negative value on failure.*/
 
-unsafe extern "C" fn op_get_data(
-    mut _of: *mut OggOpusFile,
-    mut _nbytes: i32,
-) -> i32 {
+unsafe extern "C" fn op_get_data(mut _of: *mut OggOpusFile, mut _nbytes: i32) -> i32 {
     let mut buffer: *mut u8 = 0 as *mut u8;
     let mut nbytes: i32 = 0;
     buffer = ogg_sync_buffer(
@@ -360,10 +344,7 @@ unsafe extern "C" fn op_get_data(
 }
 /*Save a tiny smidge of verbosity to make the code more readable.*/
 
-unsafe extern "C" fn op_seek_helper(
-    mut _of: *mut OggOpusFile,
-    mut _offset: i64,
-) -> i32 {
+unsafe extern "C" fn op_seek_helper(mut _of: *mut OggOpusFile, mut _offset: i64) -> i32 {
     if _offset == (*_of).offset {
         return 0 as i32;
     }
@@ -375,9 +356,7 @@ unsafe extern "C" fn op_seek_helper(
         return -(128 as i32);
     }
     (*_of).offset = _offset;
-    ogg_sync_reset(
-        &mut (*_of).oy as *mut _ as *mut ogg_sync_state,
-    );
+    ogg_sync_reset(&mut (*_of).oy as *mut _ as *mut ogg_sync_state);
     return 0 as i32;
 }
 /*Get the current position indicator of the underlying stream.
@@ -468,22 +447,17 @@ unsafe extern "C" fn op_add_serialno(
     mut _nserialnos: *mut i32,
     mut _cserialnos: *mut i32,
 ) -> i32 {
-    let mut serialnos: *mut ogg_uint32_t =
-        0 as *mut ogg_uint32_t;
+    let mut serialnos: *mut ogg_uint32_t = 0 as *mut ogg_uint32_t;
     let mut nserialnos: i32 = 0;
     let mut cserialnos: i32 = 0;
     let mut s: ogg_uint32_t = 0;
-    s = ogg_page_serialno(
-        _og as *const ogg_page,
-    ) as ogg_uint32_t;
+    s = ogg_page_serialno(_og as *const ogg_page) as ogg_uint32_t;
     serialnos = *_serialnos;
     nserialnos = *_nserialnos;
     cserialnos = *_cserialnos;
     if (nserialnos >= cserialnos) as i32 as isize != 0 {
         if (cserialnos
-            > 2147483647 as i32
-                / ::std::mem::size_of::<ogg_uint32_t>() as libc::c_ulong
-                    as i32
+            > 2147483647 as i32 / ::std::mem::size_of::<ogg_uint32_t>() as libc::c_ulong as i32
                 - 1 as i32
                 >> 1 as i32) as i32 as isize
             != 0
@@ -529,9 +503,7 @@ unsafe extern "C" fn op_lookup_page_serialno(
     mut _nserialnos: i32,
 ) -> i32 {
     return op_lookup_serialno(
-        ogg_page_serialno(
-            _og as *const ogg_page,
-        ) as ogg_uint32_t,
+        ogg_page_serialno(_og as *const ogg_page) as ogg_uint32_t,
         _serialnos,
         _nserialnos,
     );
@@ -619,9 +591,7 @@ unsafe extern "C" fn op_get_prev_page_serial(
                 if llret == -(1 as i32) as i64 {
                     break;
                 }
-                serialno = ogg_page_serialno(
-                    &mut og as *mut _ as *const ogg_page,
-                ) as ogg_uint32_t;
+                serialno = ogg_page_serialno(&mut og as *mut _ as *const ogg_page) as ogg_uint32_t;
                 /*Save the information for this page.
                 We're not interested in the page itself... just the serial number, byte
                  offset, page size, and granule position.*/
@@ -630,9 +600,7 @@ unsafe extern "C" fn op_get_prev_page_serial(
                 (*_sr).offset = _offset;
                 (*_sr).serialno = serialno;
                 (*_sr).size = ((*_of).offset - _offset) as opus_int32;
-                (*_sr).gp = ogg_page_granulepos(
-                    &mut og as *mut _ as *const ogg_page,
-                );
+                (*_sr).gp = ogg_page_granulepos(&mut og as *mut _ as *const ogg_page);
                 /*If this page is from the stream we're looking for, remember it.*/
                 if serialno == _serialno {
                     preferred_found = 1 as i32;
@@ -748,15 +716,11 @@ unsafe extern "C" fn op_get_last_page(
                 if llret == -(1 as i32) as i64 {
                     break;
                 }
-                serialno = ogg_page_serialno(
-                    &mut og as *mut _ as *const ogg_page,
-                ) as ogg_uint32_t;
+                serialno = ogg_page_serialno(&mut og as *mut _ as *const ogg_page) as ogg_uint32_t;
                 if serialno == _serialno {
                     let mut page_gp: ogg_int64_t = 0;
                     /*The page is from the right stream...*/
-                    page_gp = ogg_page_granulepos(
-                        &mut og as *mut _ as *const ogg_page,
-                    );
+                    page_gp = ogg_page_granulepos(&mut og as *mut _ as *const ogg_page);
                     if page_gp != -(1 as i32) as isize {
                         /*And has a valid granule position.
                         Let's remember it.*/
@@ -827,9 +791,7 @@ unsafe extern "C" fn op_fetch_headers_impl(
     }
     /*Extract the serialnos of all BOS pages plus the first set of Opus headers
     we see in the link.*/
-    while ogg_page_bos(_og as *const ogg_page)
-        != 0
-    {
+    while ogg_page_bos(_og as *const ogg_page) != 0 {
         if !_serialnos.is_null() {
             if (op_lookup_page_serialno(_og, *_serialnos, *_nserialnos) != 0) as i32 as isize != 0 {
                 /*A dupe serialnumber in an initial header packet set==invalid stream.*/
@@ -846,9 +808,7 @@ unsafe extern "C" fn op_fetch_headers_impl(
             We need a stream to get packets.*/
             ogg_stream_reset_serialno(
                 &mut (*_of).os as *mut _ as *mut ogg_stream_state,
-                ogg_page_serialno(
-                    _og as *const ogg_page,
-                ),
+                ogg_page_serialno(_og as *const ogg_page),
             );
             ogg_stream_pagein(
                 &mut (*_of).os as *mut _ as *mut ogg_stream_state,
@@ -885,16 +845,14 @@ unsafe extern "C" fn op_fetch_headers_impl(
             _og,
             (if (*_of).offset
                 < ((2 as i32 as isize
-                    * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                        - 1 as i32 as isize)
+                    * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                     | 1 as i32 as isize)
                     - 65536 as i32 as isize) as i64
             {
                 (*_of).offset
             } else {
                 ((2 as i32 as isize
-                    * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                        - 1 as i32 as isize)
+                    * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                     | 1 as i32 as isize)
                     - 65536 as i32 as isize) as i64
             }) + 65536 as i32 as i64,
@@ -912,11 +870,7 @@ unsafe extern "C" fn op_fetch_headers_impl(
         return -(132 as i32);
     }
     /*If the first non-header page belonged to our Opus stream, submit it.*/
-    if (*_of).os.serialno
-        == ogg_page_serialno(
-            _og as *const ogg_page,
-        ) as isize
-    {
+    if (*_of).os.serialno == ogg_page_serialno(_og as *const ogg_page) as isize {
         ogg_stream_pagein(
             &mut (*_of).os as *mut _ as *mut ogg_stream_state,
             _og as *mut ogg_page,
@@ -940,18 +894,14 @@ unsafe extern "C" fn op_fetch_headers_impl(
                         _og,
                         (if (*_of).offset
                             < ((2 as i32 as isize
-                                * (((1 as i32 as ogg_int64_t)
-                                    << 62 as i32)
-                                    - 1 as i32 as isize)
+                                * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                                 | 1 as i32 as isize)
                                 - 65536 as i32 as isize) as i64
                         {
                             (*_of).offset
                         } else {
                             ((2 as i32 as isize
-                                * (((1 as i32 as ogg_int64_t)
-                                    << 62 as i32)
-                                    - 1 as i32 as isize)
+                                * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                                 | 1 as i32 as isize)
                                 - 65536 as i32 as isize) as i64
                         }) + 65536 as i32 as i64,
@@ -961,21 +911,13 @@ unsafe extern "C" fn op_fetch_headers_impl(
                         return -(133 as i32);
                     }
                     /*If this page belongs to the correct stream, go parse it.*/
-                    if (*_of).os.serialno
-                        == ogg_page_serialno(
-                            _og as *const ogg_page,
-                        ) as isize
-                    {
+                    if (*_of).os.serialno == ogg_page_serialno(_og as *const ogg_page) as isize {
                         ogg_stream_pagein(
                             &mut (*_of).os as *mut _ as *mut ogg_stream_state,
                             _og as *mut ogg_page,
                         );
                         break;
-                    } else if (ogg_page_bos(
-                        _og as *const ogg_page,
-                    ) != 0) as i32 as isize
-                        != 0
-                    {
+                    } else if (ogg_page_bos(_og as *const ogg_page) != 0) as i32 as isize != 0 {
                         return -(133 as i32);
                     }
                 }
@@ -1049,16 +991,14 @@ unsafe extern "C" fn op_fetch_headers(
             &mut og,
             (if (*_of).offset
                 < ((2 as i32 as isize
-                    * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                        - 1 as i32 as isize)
+                    * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                     | 1 as i32 as isize)
                     - 65536 as i32 as isize) as i64
             {
                 (*_of).offset
             } else {
                 ((2 as i32 as isize
-                    * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                        - 1 as i32 as isize)
+                    * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                     | 1 as i32 as isize)
                     - 65536 as i32 as isize) as i64
             }) + 65536 as i32 as i64,
@@ -1132,9 +1072,7 @@ unsafe extern "C" fn op_granpos_add(
             return -(131 as i32);
         }
         if (_src_gp
-            > (2 as i32 as isize
-                * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                    - 1 as i32 as isize)
+            > (2 as i32 as isize * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                 | 1 as i32 as isize)
                 - _delta as isize) as i32 as isize
             != 0
@@ -1144,14 +1082,12 @@ unsafe extern "C" fn op_granpos_add(
             Since signed overflow is undefined in C, do it in a way the compiler
              isn't allowed to screw up.*/
             _delta -= ((2 as i32 as isize
-                * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                    - 1 as i32 as isize)
+                * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                 | 1 as i32 as isize)
                 - _src_gp) as opus_int32
                 + 1 as i32;
             _src_gp = -(2 as i32 as isize
-                * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                    - 1 as i32 as isize)
+                * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                 | 1 as i32 as isize)
                 - 1 as i32 as isize
         }
@@ -1162,9 +1098,7 @@ unsafe extern "C" fn op_granpos_add(
             return -(131 as i32);
         }
         if (_src_gp
-            < -(2 as i32 as isize
-                * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                    - 1 as i32 as isize)
+            < -(2 as i32 as isize * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                 | 1 as i32 as isize)
                 - 1 as i32 as isize
                 - _delta as isize) as i32 as isize
@@ -1176,14 +1110,12 @@ unsafe extern "C" fn op_granpos_add(
              isn't allowed to screw up.*/
             _delta += (_src_gp
                 - (-(2 as i32 as isize
-                    * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                        - 1 as i32 as isize)
+                    * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                     | 1 as i32 as isize)
                     - 1 as i32 as isize)) as opus_int32
                 + 1 as i32;
             _src_gp = 2 as i32 as isize
-                * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                    - 1 as i32 as isize)
+                * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                 | 1 as i32 as isize
         }
     }
@@ -1223,22 +1155,19 @@ unsafe extern "C" fn op_granpos_diff(
             /*Step 1: Handle wrapping.*/
             /*_gp_a < 0 => da < 0.*/
             da = -(2 as i32 as isize
-                * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                    - 1 as i32 as isize)
+                * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                 | 1 as i32 as isize)
                 - 1 as i32 as isize
                 - _gp_a
                 - 1 as i32 as isize;
             /*_gp_b >= 0  => db >= 0.*/
             db = (2 as i32 as isize
-                * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                    - 1 as i32 as isize)
+                * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                 | 1 as i32 as isize)
                 - _gp_b;
             /*Step 2: Check for overflow.*/
             if ((2 as i32 as isize
-                * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                    - 1 as i32 as isize)
+                * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                 | 1 as i32 as isize)
                 + da
                 < db) as i32 as isize
@@ -1254,22 +1183,19 @@ unsafe extern "C" fn op_granpos_diff(
             /*_gp_a >= 0 => da <= 0*/
             da = _gp_a
                 + (-(2 as i32 as isize
-                    * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                        - 1 as i32 as isize)
+                    * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                     | 1 as i32 as isize)
                     - 1 as i32 as isize);
             /*_gp_b < 0 => db <= 0*/
             db = -(2 as i32 as isize
-                * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                    - 1 as i32 as isize)
+                * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                 | 1 as i32 as isize)
                 - 1 as i32 as isize
                 - _gp_b;
             /*Step 2: Check for overflow.*/
             if (da
                 < -(2 as i32 as isize
-                    * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                        - 1 as i32 as isize)
+                    * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                     | 1 as i32 as isize)
                     - 1 as i32 as isize
                     - db) as i32 as isize
@@ -1285,10 +1211,7 @@ unsafe extern "C" fn op_granpos_diff(
     return 0 as i32;
 }
 
-unsafe extern "C" fn op_granpos_cmp(
-    mut _gp_a: ogg_int64_t,
-    mut _gp_b: ogg_int64_t,
-) -> i32 {
+unsafe extern "C" fn op_granpos_cmp(mut _gp_a: ogg_int64_t, mut _gp_b: ogg_int64_t) -> i32 {
     /*The invalid granule position -1 should behave like NaN: neither greater
      than nor less than any other granule position, nor equal to any other
      granule position, including itself.
@@ -1473,11 +1396,7 @@ unsafe extern "C" fn op_find_initial_pcm_offset(
             return 0 as i32;
         }
         /*Similarly, if we hit the next link in the chain, we've gone too far.*/
-        if (ogg_page_bos(
-            _og as *const ogg_page,
-        ) != 0) as i32 as isize
-            != 0
-        {
+        if (ogg_page_bos(_og as *const ogg_page) != 0) as i32 as isize != 0 {
             if (*_link).head.pre_skip > 0 as i32 as u32 {
                 return -(139 as i32);
             }
@@ -1492,11 +1411,7 @@ unsafe extern "C" fn op_find_initial_pcm_offset(
         }
         /*Ignore pages from other streams (not strictly necessary, because of the
         checks in ogg_stream_pagein(), but saves some work).*/
-        if !(serialno
-            != ogg_page_serialno(
-                _og as *const ogg_page,
-            ) as ogg_uint32_t)
-        {
+        if !(serialno != ogg_page_serialno(_og as *const ogg_page) as ogg_uint32_t) {
             ogg_stream_pagein(
                 &mut (*_of).os as *mut _ as *mut ogg_stream_state,
                 _og as *mut ogg_page,
@@ -1557,10 +1472,8 @@ unsafe extern "C" fn op_find_initial_pcm_offset(
         pcm_start = 0 as i32 as ogg_int64_t;
         /*However, the end-trimming MUST not ask us to trim more samples than
         exist after applying the pre-skip.*/
-        if (op_granpos_cmp(
-            cur_page_gp,
-            (*_link).head.pre_skip as ogg_int64_t,
-        ) < 0 as i32) as i32 as isize
+        if (op_granpos_cmp(cur_page_gp, (*_link).head.pre_skip as ogg_int64_t) < 0 as i32) as i32
+            as isize
             != 0
         {
             return -(139 as i32);
@@ -1572,8 +1485,7 @@ unsafe extern "C" fn op_find_initial_pcm_offset(
     pi = 0 as i32;
     while pi < op_count {
         if cur_page_eos != 0 {
-            let mut diff: ogg_int64_t =
-                0 as i32 as ogg_int64_t;
+            let mut diff: ogg_int64_t = 0 as i32 as ogg_int64_t;
             diff = durations[pi as usize] as isize - diff;
             /*If we have samples to trim...*/
             if diff > 0 as i32 as isize {
@@ -1668,8 +1580,7 @@ unsafe extern "C" fn op_find_final_pcm_offset(
     64-bit number.*/
     duration -= (*_link).head.pre_skip as isize;
     total_duration = *_total_duration;
-    if ((2 as i32 as isize
-        * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
+    if ((2 as i32 as isize * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
         | 1 as i32 as isize)
         - duration
         < total_duration) as i32 as isize
@@ -1836,8 +1747,7 @@ unsafe extern "C" fn op_bisect_forward_serialno(
     let mut links: *mut OggOpusLink = 0 as *mut OggOpusLink;
     let mut nlinks: i32 = 0;
     let mut clinks: i32 = 0;
-    let mut serialnos: *mut ogg_uint32_t =
-        0 as *mut ogg_uint32_t;
+    let mut serialnos: *mut ogg_uint32_t = 0 as *mut ogg_uint32_t;
     let mut nserialnos: i32 = 0;
     let mut total_duration: ogg_int64_t = 0;
     let mut nsr: i32 = 0;
@@ -1909,8 +1819,7 @@ unsafe extern "C" fn op_bisect_forward_serialno(
                 == (*links.offset((nlinks - 1 as i32) as isize)).serialno
             {
                 end_gp = (*_sr.offset(sri as isize)).gp;
-                end_offset =
-                    (*_sr.offset(sri as isize)).offset as ogg_int64_t
+                end_offset = (*_sr.offset(sri as isize)).offset as ogg_int64_t
             }
         }
         nsr = sri;
@@ -1969,12 +1878,8 @@ unsafe extern "C" fn op_bisect_forward_serialno(
             } else {
                 let mut serialno: ogg_uint32_t = 0;
                 let mut gp: ogg_int64_t = 0;
-                serialno = ogg_page_serialno(
-                    &mut og as *mut _ as *const ogg_page,
-                ) as ogg_uint32_t;
-                gp = ogg_page_granulepos(
-                    &mut og as *mut _ as *const ogg_page,
-                );
+                serialno = ogg_page_serialno(&mut og as *mut _ as *const ogg_page) as ogg_uint32_t;
+                gp = ogg_page_granulepos(&mut og as *mut _ as *const ogg_page);
                 if op_lookup_serialno(serialno, serialnos, nserialnos) == 0 {
                     end_searched = bisect;
                     next = last;
@@ -1982,8 +1887,7 @@ unsafe extern "C" fn op_bisect_forward_serialno(
                     if (nsr < _csr) as i32 as isize != 0 {
                         (*_sr.offset(nsr as isize)).search_start = bisect;
                         (*_sr.offset(nsr as isize)).offset = last;
-                        (*_sr.offset(nsr as isize)).size =
-                            ((*_of).offset - last) as opus_int32;
+                        (*_sr.offset(nsr as isize)).size = ((*_of).offset - last) as opus_int32;
                         (*_sr.offset(nsr as isize)).serialno = serialno;
                         (*_sr.offset(nsr as isize)).gp = gp;
                         nsr += 1
@@ -2061,17 +1965,11 @@ unsafe extern "C" fn op_bisect_forward_serialno(
         }
         (*links.offset(nlinks as isize)).offset = next;
         (*links.offset(nlinks as isize)).data_offset = (*_of).offset;
-        (*links.offset(nlinks as isize)).serialno =
-            (*_of).os.serialno as ogg_uint32_t;
-        (*links.offset(nlinks as isize)).pcm_end =
-            -(1 as i32) as ogg_int64_t;
+        (*links.offset(nlinks as isize)).serialno = (*_of).os.serialno as ogg_uint32_t;
+        (*links.offset(nlinks as isize)).pcm_end = -(1 as i32) as ogg_int64_t;
         /*This might consume a page from the next link, however the next bisection
         always starts with a seek.*/
-        ret = op_find_initial_pcm_offset(
-            _of,
-            links.offset(nlinks as isize),
-            0 as *mut ogg_page,
-        );
+        ret = op_find_initial_pcm_offset(_of, links.offset(nlinks as isize), 0 as *mut ogg_page);
         if (ret < 0 as i32) as i32 as isize != 0 {
             return ret;
         }
@@ -2383,21 +2281,15 @@ unsafe extern "C" fn op_open_seekable2(mut _of: *mut OggOpusFile) -> i32 {
         (::std::mem::size_of::<ogg_packet>() as libc::c_ulong)
             .wrapping_mul(start_op_count as libc::c_ulong),
     );
-    ogg_sync_init(
-        &mut (*_of).oy as *mut _ as *mut ogg_sync_state,
-    );
+    ogg_sync_init(&mut (*_of).oy as *mut _ as *mut ogg_sync_state);
     ogg_stream_init(
         &mut (*_of).os as *mut _ as *mut ogg_stream_state,
         -(1 as i32),
     );
     ret = op_open_seekable2_impl(_of);
     /*Restore the old stream state.*/
-    ogg_stream_clear(
-        &mut (*_of).os as *mut _ as *mut ogg_stream_state,
-    );
-    ogg_sync_clear(
-        &mut (*_of).oy as *mut _ as *mut ogg_sync_state,
-    );
+    ogg_stream_clear(&mut (*_of).os as *mut _ as *mut ogg_stream_state);
+    ogg_sync_clear(&mut (*_of).oy as *mut _ as *mut ogg_sync_state);
     (*_of).oy = oy_start;
     (*_of).os = os_start;
     (*_of).offset = start_offset;
@@ -2474,12 +2366,8 @@ unsafe extern "C" fn op_clear(mut _of: *mut OggOpusFile) {
     }
     libc::free(links as *mut libc::c_void);
     libc::free((*_of).serialnos as *mut libc::c_void);
-    ogg_stream_clear(
-        &mut (*_of).os as *mut _ as *mut ogg_stream_state,
-    );
-    ogg_sync_clear(
-        &mut (*_of).oy as *mut _ as *mut ogg_sync_state,
-    );
+    ogg_stream_clear(&mut (*_of).os as *mut _ as *mut ogg_stream_state);
+    ogg_sync_clear(&mut (*_of).oy as *mut _ as *mut ogg_sync_state);
     if (*_of).callbacks.close.is_some() {
         Some((*_of).callbacks.close.expect("non-null function pointer"))
             .expect("non-null function pointer")((*_of).stream);
@@ -2507,9 +2395,7 @@ unsafe extern "C" fn op_open1(
         0 as i32,
         ::std::mem::size_of::<OggOpusFile>() as libc::c_ulong,
     );
-    if (_initial_bytes > 9223372036854775807 as isize as size_t) as i32 as isize
-        != 0
-    {
+    if (_initial_bytes > 9223372036854775807 as isize as size_t) as i32 as isize != 0 {
         return -(129 as i32);
     }
     (*_of).end = -(1 as i32) as i64;
@@ -2520,9 +2406,7 @@ unsafe extern "C" fn op_open1(
         return -(128 as i32);
     }
     /*Initialize the framing state.*/
-    ogg_sync_init(
-        &mut (*_of).oy as *mut _ as *mut ogg_sync_state,
-    );
+    ogg_sync_init(&mut (*_of).oy as *mut _ as *mut ogg_sync_state);
     /*Perhaps some data was previously read into a buffer for testing against
      other stream types.
     Allow initialization from this previously read data (especially as we may
@@ -2569,9 +2453,8 @@ unsafe extern "C" fn op_open1(
     (*_of).seekable = seekable;
     /*Don't seek yet.
     Set up a 'single' (current) logical bitstream entry for partial open.*/
-    (*_of).links = crate::stdlib::malloc(
-        ::std::mem::size_of::<OggOpusLink>() as libc::c_ulong
-    ) as *mut OggOpusLink;
+    (*_of).links = crate::stdlib::malloc(::std::mem::size_of::<OggOpusLink>() as libc::c_ulong)
+        as *mut OggOpusLink;
     /*The serialno gets filled in later by op_fetch_headers().*/
     ogg_stream_init(
         &mut (*_of).os as *mut _ as *mut ogg_stream_state,
@@ -2596,10 +2479,8 @@ unsafe extern "C" fn op_open1(
         (*_of).nlinks = 1 as i32;
         (*(*_of).links.offset(0 as i32 as isize)).offset = 0 as i32 as i64;
         (*(*_of).links.offset(0 as i32 as isize)).data_offset = (*_of).offset;
-        (*(*_of).links.offset(0 as i32 as isize)).pcm_end =
-            -(1 as i32) as ogg_int64_t;
-        (*(*_of).links.offset(0 as i32 as isize)).serialno =
-            (*_of).os.serialno as ogg_uint32_t;
+        (*(*_of).links.offset(0 as i32 as isize)).pcm_end = -(1 as i32) as ogg_int64_t;
+        (*(*_of).links.offset(0 as i32 as isize)).serialno = (*_of).os.serialno as ogg_uint32_t;
         /*Fetch the initial PCM offset.*/
         ret = op_find_initial_pcm_offset(_of, (*_of).links, &mut og);
         if seekable != 0 || (ret <= 0 as i32) as i32 as isize != 0 {
@@ -2657,9 +2538,8 @@ pub unsafe extern "C" fn op_test_callbacks(
 ) -> *mut OggOpusFile {
     let mut of: *mut OggOpusFile = 0 as *mut OggOpusFile;
     let mut ret: i32 = 0;
-    of = crate::stdlib::malloc(
-        ::std::mem::size_of::<OggOpusFile>() as libc::c_ulong
-    ) as *mut OggOpusFile;
+    of = crate::stdlib::malloc(::std::mem::size_of::<OggOpusFile>() as libc::c_ulong)
+        as *mut OggOpusFile;
     ret = -(129 as i32);
     if !of.is_null() as i32 as isize != 0 {
         ret = op_open1(of, _stream, _cb, _initial_data, _initial_bytes);
@@ -2718,13 +2598,7 @@ unsafe extern "C" fn op_open_close_on_failure(
         }
         return 0 as *mut OggOpusFile;
     }
-    of = op_open_callbacks(
-        _stream,
-        _cb,
-        0 as *const u8,
-        0 as i32 as size_t,
-        _error,
-    );
+    of = op_open_callbacks(_stream, _cb, 0 as *const u8, 0 as i32 as size_t, _error);
     if of.is_null() as i32 as isize != 0 {
         Some((*_cb).close.expect("non-null function pointer")).expect("non-null function pointer")(
             _stream,
@@ -2794,13 +2668,7 @@ unsafe extern "C" fn op_test_close_on_failure(
         }
         return 0 as *mut OggOpusFile;
     }
-    of = op_test_callbacks(
-        _stream,
-        _cb,
-        0 as *const u8,
-        0 as i32 as size_t,
-        _error,
-    );
+    of = op_test_callbacks(_stream, _cb, 0 as *const u8, 0 as i32 as size_t, _error);
     if of.is_null() as i32 as isize != 0 {
         Some((*_cb).close.expect("non-null function pointer")).expect("non-null function pointer")(
             _stream,
@@ -2894,10 +2762,7 @@ pub unsafe extern "C" fn op_link_count(mut _of: *const OggOpusFile) -> i32 {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn op_serialno(
-    mut _of: *const OggOpusFile,
-    mut _li: i32,
-) -> opus_uint32 {
+pub unsafe extern "C" fn op_serialno(mut _of: *const OggOpusFile, mut _li: i32) -> opus_uint32 {
     if (_li >= (*_of).nlinks) as i32 as isize != 0 {
         _li = (*_of).nlinks - 1 as i32
     }
@@ -2911,18 +2776,12 @@ pub unsafe extern "C" fn op_serialno(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn op_channel_count(
-    mut _of: *const OggOpusFile,
-    mut _li: i32,
-) -> i32 {
+pub unsafe extern "C" fn op_channel_count(mut _of: *const OggOpusFile, mut _li: i32) -> i32 {
     return (*op_head(_of, _li)).channel_count;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn op_raw_total(
-    mut _of: *const OggOpusFile,
-    mut _li: i32,
-) -> i64 {
+pub unsafe extern "C" fn op_raw_total(mut _of: *const OggOpusFile, mut _li: i32) -> i64 {
     if ((*_of).ready_state < 2 as i32) as i32 as isize != 0
         || ((*_of).seekable == 0) as i32 as isize != 0
         || (_li >= (*_of).nlinks) as i32 as isize != 0
@@ -2944,14 +2803,10 @@ pub unsafe extern "C" fn op_raw_total(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn op_pcm_total(
-    mut _of: *const OggOpusFile,
-    mut _li: i32,
-) -> ogg_int64_t {
+pub unsafe extern "C" fn op_pcm_total(mut _of: *const OggOpusFile, mut _li: i32) -> ogg_int64_t {
     let mut links: *mut OggOpusLink = 0 as *mut OggOpusLink;
     let mut pcm_total: ogg_int64_t = 0;
-    let mut diff: ogg_int64_t =
-        0 as i32 as ogg_int64_t;
+    let mut diff: ogg_int64_t = 0 as i32 as ogg_int64_t;
     let mut nlinks: i32 = 0;
     nlinks = (*_of).nlinks;
     if ((*_of).ready_state < 2 as i32) as i32 as isize != 0
@@ -3022,15 +2877,10 @@ pub unsafe extern "C" fn op_current_link(mut _of: *const OggOpusFile) -> i32 {
 /*Compute an average bitrate given a byte and sample count.
 Return: The bitrate in bits per second.*/
 
-unsafe extern "C" fn op_calc_bitrate(
-    mut _bytes: i64,
-    mut _samples: ogg_int64_t,
-) -> opus_int32 {
+unsafe extern "C" fn op_calc_bitrate(mut _bytes: i64, mut _samples: ogg_int64_t) -> opus_int32 {
     /*These rates are absurd, but let's handle them anyway.*/
     if (_bytes
-        > (((2 as i32 as isize
-            * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                - 1 as i32 as isize)
+        > (((2 as i32 as isize * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
             | 1 as i32 as isize)
             - (_samples >> 1 as i32))
             / (48000 as i32 * 8 as i32) as isize) as i64) as i32 as isize
@@ -3046,8 +2896,7 @@ unsafe extern "C" fn op_calc_bitrate(
             return 2 as i32 * (((1 as i32) << 30 as i32) - 1 as i32) | 1 as i32;
         }
         den = _samples / (48000 as i32 * 8 as i32) as isize;
-        return ((_bytes + (den >> 1 as i32) as i64) / den as i64)
-            as opus_int32;
+        return ((_bytes + (den >> 1 as i32) as i64) / den as i64) as opus_int32;
     }
     if (_samples <= 0 as i32 as isize) as i32 as isize != 0 {
         return 2 as i32 * (((1 as i32) << 30 as i32) - 1 as i32) | 1 as i32;
@@ -3071,10 +2920,7 @@ unsafe extern "C" fn op_calc_bitrate(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn op_bitrate(
-    mut _of: *const OggOpusFile,
-    mut _li: i32,
-) -> opus_int32 {
+pub unsafe extern "C" fn op_bitrate(mut _of: *const OggOpusFile, mut _li: i32) -> opus_int32 {
     if ((*_of).ready_state < 2 as i32) as i32 as isize != 0
         || ((*_of).seekable == 0) as i32 as isize != 0
         || (_li >= (*_of).nlinks) as i32 as isize != 0
@@ -3085,9 +2931,7 @@ pub unsafe extern "C" fn op_bitrate(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn op_bitrate_instant(
-    mut _of: *mut OggOpusFile,
-) -> opus_int32 {
+pub unsafe extern "C" fn op_bitrate_instant(mut _of: *mut OggOpusFile) -> opus_int32 {
     let mut samples_tracked: ogg_int64_t = 0;
     let mut ret: opus_int32 = 0;
     if ((*_of).ready_state < 2 as i32) as i32 as isize != 0 {
@@ -3112,8 +2956,7 @@ unsafe extern "C" fn op_get_link_from_serialno(
     mut _page_offset: i64,
     mut _serialno: ogg_uint32_t,
 ) -> i32 {
-    let mut links: *const OggOpusLink =
-        0 as *const OggOpusLink;
+    let mut links: *const OggOpusLink = 0 as *const OggOpusLink;
     let mut nlinks: i32 = 0;
     let mut li_lo: i32 = 0;
     let mut li_hi: i32 = 0;
@@ -3202,17 +3045,11 @@ unsafe extern "C" fn op_fetch_and_process_page(
         }
         if ((*_of).ready_state >= 3 as i32) as i32 as isize != 0
             && cur_serialno
-                != ogg_page_serialno(
-                    &mut og as *mut _ as *const ogg_page,
-                ) as ogg_uint32_t
+                != ogg_page_serialno(&mut og as *mut _ as *const ogg_page) as ogg_uint32_t
         {
             /*Two possibilities:
             1) Another stream is multiplexed into this logical section, or*/
-            if (ogg_page_bos(
-                &mut og as *mut _ as *const ogg_page,
-            ) == 0) as i32 as isize
-                != 0
-            {
+            if (ogg_page_bos(&mut og as *mut _ as *const ogg_page) == 0) as i32 as isize != 0 {
                 continue;
             }
             /* 2) Our decoding just traversed a bitstream boundary.*/
@@ -3238,9 +3075,7 @@ unsafe extern "C" fn op_fetch_and_process_page(
         if ((*_of).ready_state < 3 as i32) as i32 as isize != 0 {
             if seekable != 0 {
                 let mut serialno: ogg_uint32_t = 0;
-                serialno = ogg_page_serialno(
-                    &mut og as *mut _ as *const ogg_page,
-                ) as ogg_uint32_t;
+                serialno = ogg_page_serialno(&mut og as *mut _ as *const ogg_page) as ogg_uint32_t;
                 /*Match the serialno to bitstream section.*/
                 if (*links.offset(cur_link as isize)).serialno != serialno {
                     /*It wasn't a page from the current link.
@@ -3274,8 +3109,8 @@ unsafe extern "C" fn op_fetch_and_process_page(
                 if _page_offset <= (*links.offset(cur_link as isize)).data_offset {
                     (*_of).prev_packet_gp = (*links.offset(cur_link as isize)).pcm_start;
                     (*_of).prev_page_offset = -(1 as i32) as i64;
-                    (*_of).cur_discard_count = (*links.offset(cur_link as isize)).head.pre_skip
-                        as opus_int32;
+                    (*_of).cur_discard_count =
+                        (*links.offset(cur_link as isize)).head.pre_skip as opus_int32;
                     /*Ignore a hole at the start of a new link (this is common for
                     streams joined in the middle) or after seeking.*/
                     _ignore_holes = 1 as i32
@@ -3423,8 +3258,7 @@ unsafe extern "C" fn op_fetch_and_process_page(
                          to the end of the pre-skip region.
                         Otherwise, we still use the 80 ms default, which will discard
                          past the end of the pre-skip region.*/
-                        pre_skip = (*links.offset(cur_link as isize)).head.pre_skip
-                            as opus_int32;
+                        pre_skip = (*links.offset(cur_link as isize)).head.pre_skip as opus_int32;
                         if diff >= 0 as i32 as isize
                             && diff
                                 <= (if 0 as i32 > pre_skip - 80 as i32 * 48 as i32 {
@@ -3527,10 +3361,7 @@ unsafe extern "C" fn op_fetch_and_process_page(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn op_raw_seek(
-    mut _of: *mut OggOpusFile,
-    mut _pos: i64,
-) -> i32 {
+pub unsafe extern "C" fn op_raw_seek(mut _of: *mut OggOpusFile, mut _pos: i64) -> i32 {
     let mut ret: i32 = 0;
     if ((*_of).ready_state < 2 as i32) as i32 as isize != 0 {
         return -(131 as i32);
@@ -3578,10 +3409,8 @@ unsafe extern "C" fn op_get_granulepos(
     mut _pcm_offset: ogg_int64_t,
     mut _li: *mut i32,
 ) -> ogg_int64_t {
-    let mut links: *const OggOpusLink =
-        0 as *const OggOpusLink;
-    let mut duration: ogg_int64_t =
-        0 as i32 as ogg_int64_t;
+    let mut links: *const OggOpusLink = 0 as *const OggOpusLink;
+    let mut duration: ogg_int64_t = 0 as i32 as ogg_int64_t;
     let mut pcm_start: ogg_int64_t = 0;
     let mut _pre_skip: opus_int32 = 0;
     let mut nlinks: i32 = 0;
@@ -3612,9 +3441,7 @@ unsafe extern "C" fn op_get_granulepos(
     }
     _pcm_offset += _pre_skip as isize;
     if (pcm_start
-        > (2 as i32 as isize
-            * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                - 1 as i32 as isize)
+        > (2 as i32 as isize * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
             | 1 as i32 as isize)
             - _pcm_offset) as i32 as isize
         != 0
@@ -3624,8 +3451,7 @@ unsafe extern "C" fn op_get_granulepos(
         Since signed overflow is undefined in C, do it in a way the compiler
          isn't allowed to screw up.*/
         _pcm_offset -= (2 as i32 as isize
-            * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                - 1 as i32 as isize)
+            * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
             | 1 as i32 as isize)
             - pcm_start
             + 1 as i32 as isize;
@@ -3653,10 +3479,7 @@ unsafe extern "C" fn op_page_continues(mut _og: *const ogg_page) -> i32 {
 }
 /*A small helper to buffer the continued packet data from a page.*/
 
-unsafe extern "C" fn op_buffer_continued_data(
-    mut _of: *mut OggOpusFile,
-    mut _og: *mut ogg_page,
-) {
+unsafe extern "C" fn op_buffer_continued_data(mut _of: *mut OggOpusFile, mut _og: *mut ogg_page) {
     let mut op: ogg_packet = ogg_packet {
         packet: 0 as *mut u8,
         bytes: 0,
@@ -3693,16 +3516,14 @@ unsafe extern "C" fn op_pcm_seek_page(
     mut _target_gp: ogg_int64_t,
     mut _li: i32,
 ) -> i32 {
-    let mut link: *const OggOpusLink =
-        0 as *const OggOpusLink;
+    let mut link: *const OggOpusLink = 0 as *const OggOpusLink;
     let mut og: ogg_page = ogg_page {
         header: 0 as *mut u8,
         header_len: 0,
         body: 0 as *mut u8,
         body_len: 0,
     };
-    let mut pcm_pre_skip: ogg_int64_t =
-        0 as i32 as ogg_int64_t;
+    let mut pcm_pre_skip: ogg_int64_t = 0 as i32 as ogg_int64_t;
     let mut pcm_start: ogg_int64_t = 0;
     let mut pcm_end: ogg_int64_t = 0;
     let mut best_gp: ogg_int64_t = 0;
@@ -3802,8 +3623,7 @@ unsafe extern "C" fn op_pcm_seek_page(
                             buffering = 1 as i32
                         }
                     } else {
-                        let mut prev_page_gp: ogg_int64_t =
-                            0 as i32 as ogg_int64_t;
+                        let mut prev_page_gp: ogg_int64_t = 0 as i32 as ogg_int64_t;
                         /*We might get lucky and already have the packet with the target
                          buffered.
                         Worth checking.
@@ -3879,9 +3699,7 @@ unsafe extern "C" fn op_pcm_seek_page(
         if bisect != (*_of).offset {
             /*Discard any buffered continued packet data.*/
             if buffering != 0 {
-                ogg_stream_reset(
-                    &mut (*_of).os as *mut _ as *mut ogg_stream_state,
-                );
+                ogg_stream_reset(&mut (*_of).os as *mut _ as *mut ogg_stream_state);
             }
             buffering = 0 as i32;
             page_offset = -(1 as i32) as i64;
@@ -3915,9 +3733,7 @@ unsafe extern "C" fn op_pcm_seek_page(
                     /*Otherwise, back up one chunk.
                     First, discard any data from a continued packet.*/
                     if buffering != 0 {
-                        ogg_stream_reset(
-                            &mut (*_of).os as *mut _ as *mut ogg_stream_state,
-                        );
+                        ogg_stream_reset(&mut (*_of).os as *mut _ as *mut ogg_stream_state);
                     }
                     buffering = 0 as i32;
                     bisect = if bisect - chunk_size as i64 > begin {
@@ -3950,23 +3766,18 @@ unsafe extern "C" fn op_pcm_seek_page(
                     next_boundary
                 };
                 if serialno
-                    != ogg_page_serialno(
-                        &mut og as *mut _ as *const ogg_page,
-                    ) as ogg_uint32_t
+                    != ogg_page_serialno(&mut og as *mut _ as *const ogg_page) as ogg_uint32_t
                 {
                     continue;
                 }
-                has_packets = (ogg_page_packets(
-                    &mut og as *mut _ as *const ogg_page,
-                ) > 0 as i32) as i32;
+                has_packets =
+                    (ogg_page_packets(&mut og as *mut _ as *const ogg_page) > 0 as i32) as i32;
                 /*Force the gp to -1 (as it should be per spec) if no packets end on
                  this page.
                 Otherwise we might get confused when we try to pull out a packet
                  with that timestamp and can't find it.*/
                 gp_0 = if has_packets != 0 {
-                    ogg_page_granulepos(
-                        &mut og as *mut _ as *const ogg_page,
-                    )
+                    ogg_page_granulepos(&mut og as *mut _ as *const ogg_page)
                 } else {
                     -(1 as i32) as isize
                 };
@@ -3983,9 +3794,7 @@ unsafe extern "C" fn op_pcm_seek_page(
                              buffering continued packet data.
                             Otherwise we might continue past the packet we actually
                              wanted.*/
-                            ogg_stream_reset(
-                                &mut (*_of).os as *mut _ as *mut ogg_stream_state,
-                            );
+                            ogg_stream_reset(&mut (*_of).os as *mut _ as *mut ogg_stream_state);
                             buffering = 0 as i32
                         }
                     }
@@ -4006,9 +3815,7 @@ unsafe extern "C" fn op_pcm_seek_page(
                     This avoids the need to seek back here if the next timestamp we
                      encounter while scanning forward lies after our target.*/
                     if buffering != 0 {
-                        ogg_stream_reset(
-                            &mut (*_of).os as *mut _ as *mut ogg_stream_state,
-                        );
+                        ogg_stream_reset(&mut (*_of).os as *mut _ as *mut ogg_stream_state);
                     }
                     if op_page_continues(&mut og) != 0 {
                         op_buffer_continued_data(_of, &mut og);
@@ -4112,8 +3919,7 @@ pub unsafe extern "C" fn op_pcm_seek(
     mut _of: *mut OggOpusFile,
     mut _pcm_offset: ogg_int64_t,
 ) -> i32 {
-    let mut link: *const OggOpusLink =
-        0 as *const OggOpusLink;
+    let mut link: *const OggOpusLink = 0 as *const OggOpusLink;
     let mut pcm_start: ogg_int64_t = 0;
     let mut target_gp: ogg_int64_t = 0;
     let mut prev_packet_gp: ogg_int64_t = 0;
@@ -4248,8 +4054,7 @@ unsafe extern "C" fn op_get_pcm_offset(
     mut _gp: ogg_int64_t,
     mut _li: i32,
 ) -> ogg_int64_t {
-    let mut links: *const OggOpusLink =
-        0 as *const OggOpusLink;
+    let mut links: *const OggOpusLink = 0 as *const OggOpusLink;
     let mut pcm_offset: ogg_int64_t = 0;
     links = (*_of).links;
     pcm_offset = (*links.offset(_li as isize)).pcm_file_offset;
@@ -4270,8 +4075,7 @@ unsafe extern "C" fn op_get_pcm_offset(
             /*This means an unseekable stream claimed to have a page from more than
             2 billion days after we joined.*/
             return 2 as i32 as isize
-                * (((1 as i32 as ogg_int64_t) << 62 as i32)
-                    - 1 as i32 as isize)
+                * (((1 as i32 as ogg_int64_t) << 62 as i32) - 1 as i32 as isize)
                 | 1 as i32 as isize;
         }
         if delta < (*links.offset(_li as isize)).head.pre_skip as isize {
@@ -4287,9 +4091,7 @@ unsafe extern "C" fn op_get_pcm_offset(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn op_pcm_tell(
-    mut _of: *const OggOpusFile,
-) -> ogg_int64_t {
+pub unsafe extern "C" fn op_pcm_tell(mut _of: *const OggOpusFile) -> ogg_int64_t {
     let mut gp: ogg_int64_t = 0;
     let mut _nbuffered: i32 = 0;
     let mut li: i32 = 0;
@@ -4360,10 +4162,7 @@ pub unsafe extern "C" fn op_set_gain_offset(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn op_set_dither_enabled(
-    mut _of: *mut OggOpusFile,
-    mut _enabled: i32,
-) {
+pub unsafe extern "C" fn op_set_dither_enabled(mut _of: *mut OggOpusFile, mut _enabled: i32) {
     (*_of).dither_disabled = (_enabled == 0) as i32;
     if _enabled == 0 {
         (*_of).dither_mute = 65 as i32
@@ -4376,8 +4175,7 @@ This is done lazily, since if the user provides large enough buffers, we'll
 unsafe extern "C" fn op_init_buffer(mut _of: *mut OggOpusFile) -> i32 {
     let mut nchannels_max: i32 = 0;
     if (*_of).seekable != 0 {
-        let mut links: *const OggOpusLink =
-            0 as *const OggOpusLink;
+        let mut links: *const OggOpusLink = 0 as *const OggOpusLink;
         let mut nlinks: i32 = 0;
         let mut li: i32 = 0;
         links = (*_of).links;
@@ -4541,8 +4339,7 @@ unsafe extern "C" fn op_read_native(
                 }
                 (*_of).prev_packet_gp = (*pop).granulepos;
                 if (duration * nchannels > _buf_size) as i32 as isize != 0 {
-                    let mut buf: *mut op_sample =
-                        0 as *mut op_sample;
+                    let mut buf: *mut op_sample = 0 as *mut op_sample;
                     /*If the user's buffer is too small, decode into a scratch buffer.*/
                     buf = (*_of).od_buffer;
                     if buf.is_null() as i32 as isize != 0 {
@@ -4593,8 +4390,7 @@ unsafe extern "C" fn op_read_native(
                                 _pcm as *mut libc::c_void,
                                 _pcm.offset((od_buffer_pos * nchannels) as isize)
                                     as *const libc::c_void,
-                                (::std::mem::size_of::<op_sample>()
-                                    as libc::c_ulong)
+                                (::std::mem::size_of::<op_sample>() as libc::c_ulong)
                                     .wrapping_mul(trimmed_duration as libc::c_ulong)
                                     .wrapping_mul(nchannels as libc::c_ulong),
                             );
@@ -4749,9 +4545,7 @@ static mut OP_STEREO_DOWNMIX: [[[f32; 2]; 8]; 6] = [
 /*The dithering code here is adapted from opusdec, part of opus-tools.
 It was originally written by Greg Maxwell.*/
 
-unsafe extern "C" fn op_rand(
-    mut _seed: opus_uint32,
-) -> opus_uint32 {
+unsafe extern "C" fn op_rand(mut _seed: opus_uint32) -> opus_uint32 {
     return _seed
         .wrapping_mul(96314165 as i32 as u32)
         .wrapping_add(907633515 as i32 as u32)
@@ -5024,9 +4818,7 @@ unsafe extern "C" fn op_stereo_filter(
             _dst,
             _src as *const libc::c_void,
             ((_nsamples * 2 as i32) as libc::c_ulong)
-                .wrapping_mul(
-                    ::std::mem::size_of::<op_sample>() as libc::c_ulong
-                ),
+                .wrapping_mul(::std::mem::size_of::<op_sample>() as libc::c_ulong),
         );
     } else {
         let mut dst: *mut f32 = 0 as *mut f32;

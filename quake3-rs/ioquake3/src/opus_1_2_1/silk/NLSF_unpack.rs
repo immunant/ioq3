@@ -291,20 +291,16 @@ pub unsafe extern "C" fn silk_NLSF_unpack(
         let fresh0 = ec_sel_ptr;
         ec_sel_ptr = ec_sel_ptr.offset(1);
         entry = *fresh0;
-        *ec_ix.offset(i as isize) = ((entry as i32 >> 1 as i32 & 7 as i32)
-            as opus_int16
+        *ec_ix.offset(i as isize) = ((entry as i32 >> 1 as i32 & 7 as i32) as opus_int16
             as opus_int32
-            * (2 as i32 * 4 as i32 + 1 as i32) as opus_int16
-                as opus_int32)
+            * (2 as i32 * 4 as i32 + 1 as i32) as opus_int16 as opus_int32)
             as opus_int16;
         *pred_Q8.offset(i as isize) = *(*psNLSF_CB).pred_Q8.offset(
             (i + (entry as i32 & 1 as i32) * ((*psNLSF_CB).order as i32 - 1 as i32)) as isize,
         );
         *ec_ix.offset((i + 1 as i32) as isize) = ((entry as i32 >> 5 as i32 & 7 as i32)
-            as opus_int16
-            as opus_int32
-            * (2 as i32 * 4 as i32 + 1 as i32) as opus_int16
-                as opus_int32)
+            as opus_int16 as opus_int32
+            * (2 as i32 * 4 as i32 + 1 as i32) as opus_int16 as opus_int32)
             as opus_int16;
         *pred_Q8.offset((i + 1 as i32) as isize) = *(*psNLSF_CB).pred_Q8.offset(
             (i + (entry as i32 >> 4 as i32 & 1 as i32) * ((*psNLSF_CB).order as i32 - 1 as i32)

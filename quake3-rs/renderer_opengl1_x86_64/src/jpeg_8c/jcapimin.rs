@@ -236,9 +236,7 @@ pub unsafe extern "C" fn jpeg_CreateCompress(
         )
         .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
-    if structsize
-        != ::std::mem::size_of::<jpeg_compress_struct>() as libc::c_ulong
-    {
+    if structsize != ::std::mem::size_of::<jpeg_compress_struct>() as libc::c_ulong {
         (*(*cinfo).err).msg_code = JERR_BAD_STRUCT_SIZE as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] =
             ::std::mem::size_of::<jpeg_compress_struct>() as libc::c_ulong as i32;
@@ -267,9 +265,7 @@ pub unsafe extern "C" fn jpeg_CreateCompress(
     (*cinfo).client_data = client_data;
     (*cinfo).is_decompressor = 0 as i32;
     /* Initialize a memory manager instance for this object */
-    jinit_memory_mgr(
-        cinfo as j_common_ptr as *mut jpeg_common_struct,
-    );
+    jinit_memory_mgr(cinfo as j_common_ptr as *mut jpeg_common_struct);
     /* Zero out pointers to permanent structures. */
     (*cinfo).progress = 0 as *mut jpeg_progress_mgr;
     (*cinfo).dest = 0 as *mut jpeg_destination_mgr;
@@ -301,9 +297,7 @@ pub unsafe extern "C" fn jpeg_CreateCompress(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_destroy_compress(mut cinfo: j_compress_ptr) {
-    jpeg_destroy(
-        cinfo as j_common_ptr as *mut jpeg_common_struct,
-    );
+    jpeg_destroy(cinfo as j_common_ptr as *mut jpeg_common_struct);
     /* use common routine */
 }
 /*
@@ -313,9 +307,7 @@ pub unsafe extern "C" fn jpeg_destroy_compress(mut cinfo: j_compress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_abort_compress(mut cinfo: j_compress_ptr) {
-    jpeg_abort(
-        cinfo as j_common_ptr as *mut jpeg_common_struct,
-    );
+    jpeg_abort(cinfo as j_common_ptr as *mut jpeg_common_struct);
     /* use common routine */
 }
 /*
@@ -331,10 +323,7 @@ pub unsafe extern "C" fn jpeg_abort_compress(mut cinfo: j_compress_ptr) {
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_suppress_tables(
-    mut cinfo: j_compress_ptr,
-    mut suppress: boolean,
-) {
+pub unsafe extern "C" fn jpeg_suppress_tables(mut cinfo: j_compress_ptr, mut suppress: boolean) {
     let mut i: i32 = 0;
     let mut qtbl: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
     let mut htbl: *mut JHUFF_TBL = 0 as *mut JHUFF_TBL;
@@ -378,9 +367,7 @@ pub unsafe extern "C" fn jpeg_finish_compress(mut cinfo: j_compress_ptr) {
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         Some(
             (*(*cinfo).master)
@@ -416,9 +403,7 @@ pub unsafe extern "C" fn jpeg_finish_compress(mut cinfo: j_compress_ptr) {
                         .progress_monitor
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             /* We bypass the main controller and invoke coef controller directly;
              * all work is being done from the coefficient buffer.
@@ -429,8 +414,7 @@ pub unsafe extern "C" fn jpeg_finish_compress(mut cinfo: j_compress_ptr) {
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo,
-                0 as *mut libc::c_void as JSAMPIMAGE,
+                cinfo, 0 as *mut libc::c_void as JSAMPIMAGE
             ) == 0
             {
                 (*(*cinfo).err).msg_code = JERR_CANT_SUSPEND as i32;
@@ -439,9 +423,7 @@ pub unsafe extern "C" fn jpeg_finish_compress(mut cinfo: j_compress_ptr) {
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             iMCU_row = iMCU_row.wrapping_add(1)
         }
@@ -466,9 +448,7 @@ pub unsafe extern "C" fn jpeg_finish_compress(mut cinfo: j_compress_ptr) {
     )
     .expect("non-null function pointer")(cinfo);
     /* We can use jpeg_abort to release memory and reset global_state */
-    jpeg_abort(
-        cinfo as j_common_ptr as *mut jpeg_common_struct,
-    );
+    jpeg_abort(cinfo as j_common_ptr as *mut jpeg_common_struct);
 }
 /*
  * Write a special marker.
@@ -484,9 +464,7 @@ pub unsafe extern "C" fn jpeg_write_marker(
     mut dataptr: *const JOCTET,
     mut datalen: u32,
 ) {
-    let mut write_marker_byte: Option<
-        unsafe extern "C" fn(_: j_compress_ptr, _: i32) -> (),
-    > = None; /* copy for speed */
+    let mut write_marker_byte: Option<unsafe extern "C" fn(_: j_compress_ptr, _: i32) -> ()> = None; /* copy for speed */
     if (*cinfo).next_scanline != 0 as i32 as u32
         || (*cinfo).global_state != 101 as i32
             && (*cinfo).global_state != 102 as i32
@@ -550,10 +528,7 @@ pub unsafe extern "C" fn jpeg_write_m_header(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_write_m_byte(
-    mut cinfo: j_compress_ptr,
-    mut val: i32,
-) {
+pub unsafe extern "C" fn jpeg_write_m_byte(mut cinfo: j_compress_ptr, mut val: i32) {
     Some(
         (*(*cinfo).marker)
             .write_marker_byte
@@ -649,9 +624,7 @@ pub unsafe extern "C" fn jpeg_write_tables(mut cinfo: j_compress_ptr) {
     )
     .expect("non-null function pointer")(cinfo);
     /* Initialize the marker writer ... bit of a crock to do it here. */
-    jinit_marker_writer(
-        cinfo as *mut jpeg_compress_struct,
-    );
+    jinit_marker_writer(cinfo as *mut jpeg_compress_struct);
     /* Write them tables! */
     Some(
         (*(*cinfo).marker)

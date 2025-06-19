@@ -273,57 +273,36 @@ pub unsafe extern "C" fn CG_TestModel_f() {
     let mut angles: vec3_t = [0.; 3];
     cg.testGun = qfalse;
     crate::stdlib::memset(
-        &mut cg.testModelEntity as *mut refEntity_t
-            as *mut libc::c_void,
+        &mut cg.testModelEntity as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
     );
     if trap_Argc() < 2 as i32 {
         return;
     }
-    Q_strncpyz(
-        cg.testModelName.as_mut_ptr(),
-        CG_Argv(1 as i32),
-        64 as i32,
-    );
-    cg.testModelEntity.hModel =
-        trap_R_RegisterModel(
-            cg.testModelName.as_mut_ptr(),
-        );
+    Q_strncpyz(cg.testModelName.as_mut_ptr(), CG_Argv(1 as i32), 64 as i32);
+    cg.testModelEntity.hModel = trap_R_RegisterModel(cg.testModelName.as_mut_ptr());
     if trap_Argc() == 3 as i32 {
-        cg.testModelEntity.backlerp =
-            atof(CG_Argv(2 as i32)) as f32;
+        cg.testModelEntity.backlerp = atof(CG_Argv(2 as i32)) as f32;
         cg.testModelEntity.frame = 1 as i32;
         cg.testModelEntity.oldframe = 0 as i32
     }
     if cg.testModelEntity.hModel == 0 {
-        CG_Printf(
-            b"Can\'t register model\n\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Printf(b"Can\'t register model\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
-    cg.testModelEntity.origin[0 as i32 as usize] =
-        cg.refdef.vieworg[0 as i32 as usize]
-            + cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize]
-                * 100 as i32 as f32;
-    cg.testModelEntity.origin[1 as i32 as usize] =
-        cg.refdef.vieworg[1 as i32 as usize]
-            + cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize]
-                * 100 as i32 as f32;
-    cg.testModelEntity.origin[2 as i32 as usize] =
-        cg.refdef.vieworg[2 as i32 as usize]
-            + cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize]
-                * 100 as i32 as f32;
+    cg.testModelEntity.origin[0 as i32 as usize] = cg.refdef.vieworg[0 as i32 as usize]
+        + cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize] * 100 as i32 as f32;
+    cg.testModelEntity.origin[1 as i32 as usize] = cg.refdef.vieworg[1 as i32 as usize]
+        + cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize] * 100 as i32 as f32;
+    cg.testModelEntity.origin[2 as i32 as usize] = cg.refdef.vieworg[2 as i32 as usize]
+        + cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize] * 100 as i32 as f32;
     angles[0 as i32 as usize] = 0 as i32 as vec_t;
-    angles[1 as i32 as usize] =
-        180 as i32 as f32 + cg.refdefViewAngles[1 as i32 as usize];
+    angles[1 as i32 as usize] = 180 as i32 as f32 + cg.refdefViewAngles[1 as i32 as usize];
     angles[2 as i32 as usize] = 0 as i32 as vec_t;
     AnglesToAxis(
         angles.as_mut_ptr() as *const vec_t,
-        cg
-            .testModelEntity
-            .axis
-            .as_mut_ptr(),
+        cg.testModelEntity.axis.as_mut_ptr(),
     );
 }
 /*
@@ -389,24 +368,16 @@ pub unsafe extern "C" fn CG_TestModelPrevSkin_f() {
 unsafe extern "C" fn CG_AddTestModel() {
     let mut i: i32 = 0;
     // re-register the model, because the level may have changed
-    cg.testModelEntity.hModel =
-        trap_R_RegisterModel(
-            cg.testModelName.as_mut_ptr(),
-        );
+    cg.testModelEntity.hModel = trap_R_RegisterModel(cg.testModelName.as_mut_ptr());
     if cg.testModelEntity.hModel == 0 {
-        CG_Printf(
-            b"Can\'t register model\n\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Printf(b"Can\'t register model\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     // if testing a gun, set the origin relative to the view origin
     if cg.testGun as u64 != 0 {
-        cg.testModelEntity.origin[0 as i32 as usize] =
-            cg.refdef.vieworg[0 as i32 as usize];
-        cg.testModelEntity.origin[1 as i32 as usize] =
-            cg.refdef.vieworg[1 as i32 as usize];
-        cg.testModelEntity.origin[2 as i32 as usize] =
-            cg.refdef.vieworg[2 as i32 as usize];
+        cg.testModelEntity.origin[0 as i32 as usize] = cg.refdef.vieworg[0 as i32 as usize];
+        cg.testModelEntity.origin[1 as i32 as usize] = cg.refdef.vieworg[1 as i32 as usize];
+        cg.testModelEntity.origin[2 as i32 as usize] = cg.refdef.vieworg[2 as i32 as usize];
         cg.testModelEntity.axis[0 as i32 as usize][0 as i32 as usize] =
             cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize];
         cg.testModelEntity.axis[0 as i32 as usize][1 as i32 as usize] =
@@ -429,21 +400,15 @@ unsafe extern "C" fn CG_AddTestModel() {
         i = 0 as i32;
         while i < 3 as i32 {
             cg.testModelEntity.origin[i as usize] +=
-                cg.refdef.viewaxis[0 as i32 as usize][i as usize]
-                    * cg_gun_x.value;
+                cg.refdef.viewaxis[0 as i32 as usize][i as usize] * cg_gun_x.value;
             cg.testModelEntity.origin[i as usize] +=
-                cg.refdef.viewaxis[1 as i32 as usize][i as usize]
-                    * cg_gun_y.value;
+                cg.refdef.viewaxis[1 as i32 as usize][i as usize] * cg_gun_y.value;
             cg.testModelEntity.origin[i as usize] +=
-                cg.refdef.viewaxis[2 as i32 as usize][i as usize]
-                    * cg_gun_z.value;
+                cg.refdef.viewaxis[2 as i32 as usize][i as usize] * cg_gun_z.value;
             i += 1
         }
     }
-    trap_R_AddRefEntityToScene(
-        &mut cg.testModelEntity as *mut _
-            as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut cg.testModelEntity as *mut _ as *const refEntity_t);
 }
 //============================================================================
 /*
@@ -457,9 +422,7 @@ Sets the coordinates of the rendered window
 unsafe extern "C" fn CG_CalcVrect() {
     let mut size: i32 = 0;
     // the intermission should allways be full screen
-    if (*cg.snap).ps.pm_type
-        == PM_INTERMISSION as i32
-    {
+    if (*cg.snap).ps.pm_type == PM_INTERMISSION as i32 {
         size = 100 as i32
     } else if cg_viewsize.integer < 30 as i32 {
         trap_Cvar_Set(
@@ -476,18 +439,12 @@ unsafe extern "C" fn CG_CalcVrect() {
     } else {
         size = cg_viewsize.integer
     }
-    cg.refdef.width =
-        cgs.glconfig.vidWidth * size / 100 as i32;
+    cg.refdef.width = cgs.glconfig.vidWidth * size / 100 as i32;
     cg.refdef.width &= !(1 as i32);
-    cg.refdef.height =
-        cgs.glconfig.vidHeight * size / 100 as i32;
+    cg.refdef.height = cgs.glconfig.vidHeight * size / 100 as i32;
     cg.refdef.height &= !(1 as i32);
-    cg.refdef.x = (cgs.glconfig.vidWidth
-        - cg.refdef.width)
-        / 2 as i32;
-    cg.refdef.y = (cgs.glconfig.vidHeight
-        - cg.refdef.height)
-        / 2 as i32;
+    cg.refdef.x = (cgs.glconfig.vidWidth - cg.refdef.width) / 2 as i32;
+    cg.refdef.y = (cgs.glconfig.vidHeight - cg.refdef.height) / 2 as i32;
 }
 // bound normal viewsize
 //==============================================================================
@@ -504,59 +461,42 @@ unsafe extern "C" fn CG_OffsetThirdPersonView() {
     let mut up: vec3_t = [0.; 3];
     let mut view: vec3_t = [0.; 3];
     let mut focusAngles: vec3_t = [0.; 3];
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     static mut mins: vec3_t = [
         -(4 as i32) as vec_t,
         -(4 as i32) as vec_t,
         -(4 as i32) as vec_t,
     ];
-    static mut maxs: vec3_t = [
-        4 as i32 as vec_t,
-        4 as i32 as vec_t,
-        4 as i32 as vec_t,
-    ];
+    static mut maxs: vec3_t = [4 as i32 as vec_t, 4 as i32 as vec_t, 4 as i32 as vec_t];
     let mut focusPoint: vec3_t = [0.; 3];
     let mut focusDist: f32 = 0.;
     let mut forwardScale: f32 = 0.;
     let mut sideScale: f32 = 0.;
-    cg.refdef.vieworg[2 as i32 as usize] +=
-        cg
-            .predictedPlayerState
-            .viewheight as f32;
-    focusAngles[0 as i32 as usize] =
-        cg.refdefViewAngles[0 as i32 as usize];
-    focusAngles[1 as i32 as usize] =
-        cg.refdefViewAngles[1 as i32 as usize];
-    focusAngles[2 as i32 as usize] =
-        cg.refdefViewAngles[2 as i32 as usize];
+    cg.refdef.vieworg[2 as i32 as usize] += cg.predictedPlayerState.viewheight as f32;
+    focusAngles[0 as i32 as usize] = cg.refdefViewAngles[0 as i32 as usize];
+    focusAngles[1 as i32 as usize] = cg.refdefViewAngles[1 as i32 as usize];
+    focusAngles[2 as i32 as usize] = cg.refdefViewAngles[2 as i32 as usize];
     // if dead, look at killer
-    if cg.predictedPlayerState.stats
-        [STAT_HEALTH as i32 as usize]
-        <= 0 as i32
-    {
-        focusAngles[1 as i32 as usize] = cg.predictedPlayerState.stats
-            [STAT_DEAD_YAW as i32 as usize]
-            as vec_t;
+    if cg.predictedPlayerState.stats[STAT_HEALTH as i32 as usize] <= 0 as i32 {
+        focusAngles[1 as i32 as usize] =
+            cg.predictedPlayerState.stats[STAT_DEAD_YAW as i32 as usize] as vec_t;
         cg.refdefViewAngles[1 as i32 as usize] =
-            cg.predictedPlayerState.stats
-                [STAT_DEAD_YAW as i32 as usize]
-                as vec_t
+            cg.predictedPlayerState.stats[STAT_DEAD_YAW as i32 as usize] as vec_t
     }
     if focusAngles[0 as i32 as usize] > 45 as i32 as f32 {
         focusAngles[0 as i32 as usize] = 45 as i32 as vec_t
@@ -568,68 +508,52 @@ unsafe extern "C" fn CG_OffsetThirdPersonView() {
         0 as *mut vec_t,
         0 as *mut vec_t,
     );
-    focusPoint[0 as i32 as usize] = cg.refdef.vieworg
-        [0 as i32 as usize]
-        + forward[0 as i32 as usize] * 512 as i32 as f32;
-    focusPoint[1 as i32 as usize] = cg.refdef.vieworg
-        [1 as i32 as usize]
-        + forward[1 as i32 as usize] * 512 as i32 as f32;
-    focusPoint[2 as i32 as usize] = cg.refdef.vieworg
-        [2 as i32 as usize]
-        + forward[2 as i32 as usize] * 512 as i32 as f32;
+    focusPoint[0 as i32 as usize] =
+        cg.refdef.vieworg[0 as i32 as usize] + forward[0 as i32 as usize] * 512 as i32 as f32;
+    focusPoint[1 as i32 as usize] =
+        cg.refdef.vieworg[1 as i32 as usize] + forward[1 as i32 as usize] * 512 as i32 as f32;
+    focusPoint[2 as i32 as usize] =
+        cg.refdef.vieworg[2 as i32 as usize] + forward[2 as i32 as usize] * 512 as i32 as f32;
     view[0 as i32 as usize] = cg.refdef.vieworg[0 as i32 as usize];
     view[1 as i32 as usize] = cg.refdef.vieworg[1 as i32 as usize];
     view[2 as i32 as usize] = cg.refdef.vieworg[2 as i32 as usize];
     view[2 as i32 as usize] += 8 as i32 as f32;
     cg.refdefViewAngles[0 as i32 as usize] =
-        (cg.refdefViewAngles[0 as i32 as usize] as f64 * 0.5f64)
-            as vec_t;
+        (cg.refdefViewAngles[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
     AngleVectors(
-        cg.refdefViewAngles.as_mut_ptr()
-            as *const vec_t,
+        cg.refdefViewAngles.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
         right.as_mut_ptr(),
         up.as_mut_ptr(),
     );
     forwardScale = crate::stdlib::cos(
-        (cg_thirdPersonAngle.value / 180 as i32 as f32) as f64
-            * 3.14159265358979323846f64,
+        (cg_thirdPersonAngle.value / 180 as i32 as f32) as f64 * 3.14159265358979323846f64,
     ) as f32;
     sideScale = crate::stdlib::sin(
-        (cg_thirdPersonAngle.value / 180 as i32 as f32) as f64
-            * 3.14159265358979323846f64,
+        (cg_thirdPersonAngle.value / 180 as i32 as f32) as f64 * 3.14159265358979323846f64,
     ) as f32;
     view[0 as i32 as usize] = view[0 as i32 as usize]
-        + forward[0 as i32 as usize]
-            * (-cg_thirdPersonRange.value * forwardScale);
+        + forward[0 as i32 as usize] * (-cg_thirdPersonRange.value * forwardScale);
     view[1 as i32 as usize] = view[1 as i32 as usize]
-        + forward[1 as i32 as usize]
-            * (-cg_thirdPersonRange.value * forwardScale);
+        + forward[1 as i32 as usize] * (-cg_thirdPersonRange.value * forwardScale);
     view[2 as i32 as usize] = view[2 as i32 as usize]
-        + forward[2 as i32 as usize]
-            * (-cg_thirdPersonRange.value * forwardScale);
+        + forward[2 as i32 as usize] * (-cg_thirdPersonRange.value * forwardScale);
     view[0 as i32 as usize] = view[0 as i32 as usize]
-        + right[0 as i32 as usize]
-            * (-cg_thirdPersonRange.value * sideScale);
+        + right[0 as i32 as usize] * (-cg_thirdPersonRange.value * sideScale);
     view[1 as i32 as usize] = view[1 as i32 as usize]
-        + right[1 as i32 as usize]
-            * (-cg_thirdPersonRange.value * sideScale);
+        + right[1 as i32 as usize] * (-cg_thirdPersonRange.value * sideScale);
     view[2 as i32 as usize] = view[2 as i32 as usize]
-        + right[2 as i32 as usize]
-            * (-cg_thirdPersonRange.value * sideScale);
+        + right[2 as i32 as usize] * (-cg_thirdPersonRange.value * sideScale);
     // trace a ray from the origin to the viewpoint to make sure the view isn't
     // in a solid block.  Use an 8 by 8 block to prevent the view from near clipping anything
     if cg_cameraMode.integer == 0 {
         CG_Trace(
             &mut trace as *mut _ as *mut trace_t,
-            cg.refdef.vieworg.as_mut_ptr()
-                as *const vec_t,
+            cg.refdef.vieworg.as_mut_ptr() as *const vec_t,
             mins.as_mut_ptr() as *const vec_t,
             maxs.as_mut_ptr() as *const vec_t,
             view.as_mut_ptr() as *const vec_t,
-            cg
-                .predictedPlayerState
-                .clientNum,
+            cg.predictedPlayerState.clientNum,
             1 as i32,
         );
         if trace.fraction as f64 != 1.0f64 {
@@ -643,14 +567,11 @@ unsafe extern "C" fn CG_OffsetThirdPersonView() {
             // close enough that this is poking out
             CG_Trace(
                 &mut trace as *mut _ as *mut trace_t,
-                cg.refdef.vieworg.as_mut_ptr()
-                    as *const vec_t,
+                cg.refdef.vieworg.as_mut_ptr() as *const vec_t,
                 mins.as_mut_ptr() as *const vec_t,
                 maxs.as_mut_ptr() as *const vec_t,
                 view.as_mut_ptr() as *const vec_t,
-                cg
-                    .predictedPlayerState
-                    .clientNum,
+                cg.predictedPlayerState.clientNum,
                 1 as i32,
             );
             view[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
@@ -662,12 +583,12 @@ unsafe extern "C" fn CG_OffsetThirdPersonView() {
     cg.refdef.vieworg[1 as i32 as usize] = view[1 as i32 as usize];
     cg.refdef.vieworg[2 as i32 as usize] = view[2 as i32 as usize];
     // select pitch to look at focus point from vieword
-    focusPoint[0 as i32 as usize] = focusPoint[0 as i32 as usize]
-        - cg.refdef.vieworg[0 as i32 as usize];
-    focusPoint[1 as i32 as usize] = focusPoint[1 as i32 as usize]
-        - cg.refdef.vieworg[1 as i32 as usize];
-    focusPoint[2 as i32 as usize] = focusPoint[2 as i32 as usize]
-        - cg.refdef.vieworg[2 as i32 as usize];
+    focusPoint[0 as i32 as usize] =
+        focusPoint[0 as i32 as usize] - cg.refdef.vieworg[0 as i32 as usize];
+    focusPoint[1 as i32 as usize] =
+        focusPoint[1 as i32 as usize] - cg.refdef.vieworg[1 as i32 as usize];
+    focusPoint[2 as i32 as usize] =
+        focusPoint[2 as i32 as usize] - cg.refdef.vieworg[2 as i32 as usize];
     focusDist = crate::stdlib::sqrt(
         (focusPoint[0 as i32 as usize] * focusPoint[0 as i32 as usize]
             + focusPoint[1 as i32 as usize] * focusPoint[1 as i32 as usize]) as f64,
@@ -676,12 +597,10 @@ unsafe extern "C" fn CG_OffsetThirdPersonView() {
         focusDist = 1 as i32 as f32
         // should never happen
     }
-    cg.refdefViewAngles[0 as i32 as usize] = (-(180 as i32) as f64
-        / 3.14159265358979323846f64
+    cg.refdefViewAngles[0 as i32 as usize] = (-(180 as i32) as f64 / 3.14159265358979323846f64
         * crate::stdlib::atan2(focusPoint[2 as i32 as usize] as f64, focusDist as f64))
         as vec_t;
-    cg.refdefViewAngles[1 as i32 as usize] -=
-        cg_thirdPersonAngle.value;
+    cg.refdefViewAngles[1 as i32 as usize] -= cg_thirdPersonAngle.value;
 }
 // this causes a compiler bug on mac MrC compiler
 
@@ -691,8 +610,7 @@ unsafe extern "C" fn CG_StepOffset() {
     timeDelta = cg.time - cg.stepTime;
     if timeDelta < 200 as i32 {
         cg.refdef.vieworg[2 as i32 as usize] -=
-            cg.stepChange * (200 as i32 - timeDelta) as f32
-                / 200 as i32 as f32
+            cg.stepChange * (200 as i32 - timeDelta) as f32 / 200 as i32 as f32
     };
 }
 /*
@@ -712,32 +630,23 @@ unsafe extern "C" fn CG_OffsetFirstPersonView() {
     let mut f: f32 = 0.;
     let mut predictedVelocity: vec3_t = [0.; 3];
     let mut timeDelta: i32 = 0;
-    if (*cg.snap).ps.pm_type
-        == PM_INTERMISSION as i32
-    {
+    if (*cg.snap).ps.pm_type == PM_INTERMISSION as i32 {
         return;
     }
     origin = cg.refdef.vieworg.as_mut_ptr();
     angles = cg.refdefViewAngles.as_mut_ptr();
     // if dead, fix the angle and don't add any kick
-    if (*cg.snap).ps.stats
-        [STAT_HEALTH as i32 as usize]
-        <= 0 as i32
-    {
+    if (*cg.snap).ps.stats[STAT_HEALTH as i32 as usize] <= 0 as i32 {
         *angles.offset(2 as i32 as isize) = 40 as i32 as f32;
         *angles.offset(0 as i32 as isize) = -(15 as i32) as f32;
-        *angles.offset(1 as i32 as isize) = (*cg.snap).ps.stats
-            [STAT_DEAD_YAW as i32 as usize]
-            as f32;
-        *origin.offset(2 as i32 as isize) += cg
-            .predictedPlayerState
-            .viewheight as f32;
+        *angles.offset(1 as i32 as isize) =
+            (*cg.snap).ps.stats[STAT_DEAD_YAW as i32 as usize] as f32;
+        *origin.offset(2 as i32 as isize) += cg.predictedPlayerState.viewheight as f32;
         return;
     }
     // add angles based on damage kick
     if cg.damageTime != 0. {
-        ratio =
-            cg.time as f32 - cg.damageTime;
+        ratio = cg.time as f32 - cg.damageTime;
         if ratio < 100 as i32 as f32 {
             ratio /= 100 as i32 as f32;
             *angles.offset(0 as i32 as isize) += ratio * cg.v_dmg_pitch;
@@ -745,21 +654,16 @@ unsafe extern "C" fn CG_OffsetFirstPersonView() {
         } else {
             ratio = (1.0f64 - ((ratio - 100 as i32 as f32) / 400 as i32 as f32) as f64) as f32;
             if ratio > 0 as i32 as f32 {
-                *angles.offset(0 as i32 as isize) +=
-                    ratio * cg.v_dmg_pitch;
-                *angles.offset(2 as i32 as isize) +=
-                    ratio * cg.v_dmg_roll
+                *angles.offset(0 as i32 as isize) += ratio * cg.v_dmg_pitch;
+                *angles.offset(2 as i32 as isize) += ratio * cg.v_dmg_roll
             }
         }
     }
     // add pitch based on fall kick
     // add angles based on velocity
-    predictedVelocity[0 as i32 as usize] =
-        cg.predictedPlayerState.velocity[0 as i32 as usize];
-    predictedVelocity[1 as i32 as usize] =
-        cg.predictedPlayerState.velocity[1 as i32 as usize];
-    predictedVelocity[2 as i32 as usize] =
-        cg.predictedPlayerState.velocity[2 as i32 as usize];
+    predictedVelocity[0 as i32 as usize] = cg.predictedPlayerState.velocity[0 as i32 as usize];
+    predictedVelocity[1 as i32 as usize] = cg.predictedPlayerState.velocity[1 as i32 as usize];
+    predictedVelocity[2 as i32 as usize] = cg.predictedPlayerState.velocity[2 as i32 as usize];
     delta = predictedVelocity[0 as i32 as usize]
         * cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize]
         + predictedVelocity[1 as i32 as usize]
@@ -781,16 +685,12 @@ unsafe extern "C" fn CG_OffsetFirstPersonView() {
     } else {
         200 as i32 as f32
     }; // crouching
-    delta = cg.bobfracsin
-        * cg_bobpitch.value
-        * speed; // crouching accentuates roll
+    delta = cg.bobfracsin * cg_bobpitch.value * speed; // crouching accentuates roll
     if cg.predictedPlayerState.pm_flags & 1 as i32 != 0 {
         delta *= 3 as i32 as f32
     }
     *angles.offset(0 as i32 as isize) += delta;
-    delta = cg.bobfracsin
-        * cg_bobroll.value
-        * speed;
+    delta = cg.bobfracsin * cg_bobroll.value * speed;
     if cg.predictedPlayerState.pm_flags & 1 as i32 != 0 {
         delta *= 3 as i32 as f32
     }
@@ -800,20 +700,15 @@ unsafe extern "C" fn CG_OffsetFirstPersonView() {
     *angles.offset(2 as i32 as isize) += delta;
     //===================================
     // add view height
-    *origin.offset(2 as i32 as isize) += cg
-        .predictedPlayerState
-        .viewheight as f32;
+    *origin.offset(2 as i32 as isize) += cg.predictedPlayerState.viewheight as f32;
     // smooth out duck height changes
     timeDelta = cg.time - cg.duckTime;
     if timeDelta < 100 as i32 {
         cg.refdef.vieworg[2 as i32 as usize] -=
-            cg.duckChange * (100 as i32 - timeDelta) as f32
-                / 100 as i32 as f32
+            cg.duckChange * (100 as i32 - timeDelta) as f32 / 100 as i32 as f32
     }
     // add bob height
-    bob = cg.bobfracsin
-        * cg.xyspeed
-        * cg_bobup.value;
+    bob = cg.bobfracsin * cg.xyspeed * cg_bobup.value;
     if bob > 6 as i32 as f32 {
         bob = 6 as i32 as f32
     }
@@ -822,13 +717,11 @@ unsafe extern "C" fn CG_OffsetFirstPersonView() {
     delta = (cg.time - cg.landTime) as f32;
     if delta < 150 as i32 as f32 {
         f = delta / 150 as i32 as f32;
-        cg.refdef.vieworg[2 as i32 as usize] +=
-            cg.landChange * f
+        cg.refdef.vieworg[2 as i32 as usize] += cg.landChange * f
     } else if delta < (150 as i32 + 300 as i32) as f32 {
         delta -= 150 as i32 as f32;
         f = (1.0f64 - (delta / 300 as i32 as f32) as f64) as f32;
-        cg.refdef.vieworg[2 as i32 as usize] +=
-            cg.landChange * f
+        cg.refdef.vieworg[2 as i32 as usize] += cg.landChange * f
     }
     // add step offset
     CG_StepOffset();
@@ -864,9 +757,7 @@ unsafe extern "C" fn CG_CalcFov() -> i32 {
     let mut zoomFov: f32 = 0.;
     let mut f: f32 = 0.;
     let mut inwater: i32 = 0;
-    if cg.predictedPlayerState.pm_type
-        == PM_INTERMISSION as i32
-    {
+    if cg.predictedPlayerState.pm_type == PM_INTERMISSION as i32 {
         // if in intermission, use a fixed value
         fov_x = 90 as i32 as f32
     } else {
@@ -890,18 +781,14 @@ unsafe extern "C" fn CG_CalcFov() -> i32 {
             zoomFov = 160 as i32 as f32
         }
         if cg.zoomed as u64 != 0 {
-            f = (cg.time - cg.zoomTime)
-                as f32
-                / 150 as i32 as f32;
+            f = (cg.time - cg.zoomTime) as f32 / 150 as i32 as f32;
             if f as f64 > 1.0f64 {
                 fov_x = zoomFov
             } else {
                 fov_x = fov_x + f * (zoomFov - fov_x)
             }
         } else {
-            f = (cg.time - cg.zoomTime)
-                as f32
-                / 150 as i32 as f32;
+            f = (cg.time - cg.zoomTime) as f32 / 150 as i32 as f32;
             if f as f64 <= 1.0f64 {
                 fov_x = zoomFov + f * (fov_x - zoomFov)
             }
@@ -910,22 +797,13 @@ unsafe extern "C" fn CG_CalcFov() -> i32 {
     x = (cg.refdef.width as f64
         / crate::stdlib::tan((fov_x / 360 as i32 as f32) as f64 * 3.14159265358979323846f64))
         as f32;
-    fov_y = crate::stdlib::atan2(
-        cg.refdef.height as f64,
-        x as f64,
-    ) as f32;
+    fov_y = crate::stdlib::atan2(cg.refdef.height as f64, x as f64) as f32;
     fov_y = ((fov_y * 360 as i32 as f32) as f64 / 3.14159265358979323846f64) as f32;
     // warp if underwater
-    contents = CG_PointContents(
-        cg.refdef.vieworg.as_mut_ptr()
-            as *const vec_t,
-        -(1 as i32),
-    );
+    contents = CG_PointContents(cg.refdef.vieworg.as_mut_ptr() as *const vec_t, -(1 as i32));
     if contents & (32 as i32 | 16 as i32 | 8 as i32) != 0 {
-        phase = (cg.time as f64 / 1000.0f64
-            * 0.4f64
-            * 3.14159265358979323846f64
-            * 2 as i32 as f64) as f32;
+        phase = (cg.time as f64 / 1000.0f64 * 0.4f64 * 3.14159265358979323846f64 * 2 as i32 as f64)
+            as f32;
         v = (1 as i32 as f64 * crate::stdlib::sin(phase as f64)) as f32;
         fov_x += v;
         fov_y -= v;
@@ -939,8 +817,7 @@ unsafe extern "C" fn CG_CalcFov() -> i32 {
     if cg.zoomed as u64 == 0 {
         cg.zoomSensitivity = 1 as i32 as f32
     } else {
-        cg.zoomSensitivity =
-            (cg.refdef.fov_y as f64 / 75.0f64) as f32
+        cg.zoomSensitivity = (cg.refdef.fov_y as f64 / 75.0f64) as f32
     }
     return inwater;
 }
@@ -986,14 +863,11 @@ unsafe extern "C" fn CG_DamageBlendBlob() {
     //	return;
     //}
     // ragePro systems can't fade blends, so don't obscure the screen
-    if cgs.glconfig.hardwareType as u32
-        == GLHW_RAGEPRO as i32 as u32
-    {
+    if cgs.glconfig.hardwareType as u32 == GLHW_RAGEPRO as i32 as u32 {
         return;
     }
     maxTime = 500 as i32;
-    t = (cg.time as f32 - cg.damageTime)
-        as i32;
+    t = (cg.time as f32 - cg.damageTime) as i32;
     if t <= 0 as i32 || t >= maxTime {
         return;
     }
@@ -1004,18 +878,12 @@ unsafe extern "C" fn CG_DamageBlendBlob() {
     );
     ent.reType = RT_SPRITE;
     ent.renderfx = 0x4 as i32;
-    ent.origin[0 as i32 as usize] = cg.refdef.vieworg
-        [0 as i32 as usize]
-        + cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize]
-            * 8 as i32 as f32;
-    ent.origin[1 as i32 as usize] = cg.refdef.vieworg
-        [1 as i32 as usize]
-        + cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize]
-            * 8 as i32 as f32;
-    ent.origin[2 as i32 as usize] = cg.refdef.vieworg
-        [2 as i32 as usize]
-        + cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize]
-            * 8 as i32 as f32;
+    ent.origin[0 as i32 as usize] = cg.refdef.vieworg[0 as i32 as usize]
+        + cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize] * 8 as i32 as f32;
+    ent.origin[1 as i32 as usize] = cg.refdef.vieworg[1 as i32 as usize]
+        + cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize] * 8 as i32 as f32;
+    ent.origin[2 as i32 as usize] = cg.refdef.vieworg[2 as i32 as usize]
+        + cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize] * 8 as i32 as f32;
     ent.origin[0 as i32 as usize] = ent.origin[0 as i32 as usize]
         + cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
             * (cg.damageX * -(8 as i32) as f32);
@@ -1026,25 +894,19 @@ unsafe extern "C" fn CG_DamageBlendBlob() {
         + cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize]
             * (cg.damageX * -(8 as i32) as f32);
     ent.origin[0 as i32 as usize] = ent.origin[0 as i32 as usize]
-        + cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
-            * (cg.damageY * 8 as i32 as f32);
+        + cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize] * (cg.damageY * 8 as i32 as f32);
     ent.origin[1 as i32 as usize] = ent.origin[1 as i32 as usize]
-        + cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
-            * (cg.damageY * 8 as i32 as f32);
+        + cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize] * (cg.damageY * 8 as i32 as f32);
     ent.origin[2 as i32 as usize] = ent.origin[2 as i32 as usize]
-        + cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize]
-            * (cg.damageY * 8 as i32 as f32);
+        + cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize] * (cg.damageY * 8 as i32 as f32);
     ent.radius = cg.damageValue * 3 as i32 as f32;
     ent.customShader = cgs.media.viewBloodShader;
     ent.shaderRGBA[0 as i32 as usize] = 255 as i32 as byte;
     ent.shaderRGBA[1 as i32 as usize] = 255 as i32 as byte;
     ent.shaderRGBA[2 as i32 as usize] = 255 as i32 as byte;
-    ent.shaderRGBA[3 as i32 as usize] = (200 as i32 as f64
-        * (1.0f64 - (t as f32 / maxTime as f32) as f64))
-        as byte;
-    trap_R_AddRefEntityToScene(
-        &mut ent as *mut _ as *const refEntity_t,
-    );
+    ent.shaderRGBA[3 as i32 as usize] =
+        (200 as i32 as f64 * (1.0f64 - (t as f32 / maxTime as f32) as f64)) as byte;
+    trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
 }
 /*
 ===============
@@ -1055,11 +917,9 @@ Sets cg.refdef view values
 */
 
 unsafe extern "C" fn CG_CalcViewValues() -> i32 {
-    let mut ps: *mut playerState_t =
-        0 as *mut playerState_t;
+    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
     crate::stdlib::memset(
-        &mut cg.refdef as *mut refdef_t
-            as *mut libc::c_void,
+        &mut cg.refdef as *mut refdef_t as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<refdef_t>() as libc::c_ulong,
     );
@@ -1085,21 +945,14 @@ unsafe extern "C" fn CG_CalcViewValues() -> i32 {
     */
     // intermission view
     if (*ps).pm_type == PM_INTERMISSION as i32 {
-        cg.refdef.vieworg[0 as i32 as usize] =
-            (*ps).origin[0 as i32 as usize];
-        cg.refdef.vieworg[1 as i32 as usize] =
-            (*ps).origin[1 as i32 as usize];
-        cg.refdef.vieworg[2 as i32 as usize] =
-            (*ps).origin[2 as i32 as usize];
-        cg.refdefViewAngles[0 as i32 as usize] =
-            (*ps).viewangles[0 as i32 as usize];
-        cg.refdefViewAngles[1 as i32 as usize] =
-            (*ps).viewangles[1 as i32 as usize];
-        cg.refdefViewAngles[2 as i32 as usize] =
-            (*ps).viewangles[2 as i32 as usize];
+        cg.refdef.vieworg[0 as i32 as usize] = (*ps).origin[0 as i32 as usize];
+        cg.refdef.vieworg[1 as i32 as usize] = (*ps).origin[1 as i32 as usize];
+        cg.refdef.vieworg[2 as i32 as usize] = (*ps).origin[2 as i32 as usize];
+        cg.refdefViewAngles[0 as i32 as usize] = (*ps).viewangles[0 as i32 as usize];
+        cg.refdefViewAngles[1 as i32 as usize] = (*ps).viewangles[1 as i32 as usize];
+        cg.refdefViewAngles[2 as i32 as usize] = (*ps).viewangles[2 as i32 as usize];
         AnglesToAxis(
-            cg.refdefViewAngles.as_mut_ptr()
-                as *const vec_t,
+            cg.refdefViewAngles.as_mut_ptr() as *const vec_t,
             cg.refdef.viewaxis.as_mut_ptr(),
         );
         return CG_CalcFov();
@@ -1112,24 +965,16 @@ unsafe extern "C" fn CG_CalcViewValues() -> i32 {
         ((*ps).velocity[0 as i32 as usize] * (*ps).velocity[0 as i32 as usize]
             + (*ps).velocity[1 as i32 as usize] * (*ps).velocity[1 as i32 as usize]) as f64,
     ) as f32;
-    cg.refdef.vieworg[0 as i32 as usize] =
-        (*ps).origin[0 as i32 as usize];
-    cg.refdef.vieworg[1 as i32 as usize] =
-        (*ps).origin[1 as i32 as usize];
-    cg.refdef.vieworg[2 as i32 as usize] =
-        (*ps).origin[2 as i32 as usize];
-    cg.refdefViewAngles[0 as i32 as usize] =
-        (*ps).viewangles[0 as i32 as usize];
-    cg.refdefViewAngles[1 as i32 as usize] =
-        (*ps).viewangles[1 as i32 as usize];
-    cg.refdefViewAngles[2 as i32 as usize] =
-        (*ps).viewangles[2 as i32 as usize];
+    cg.refdef.vieworg[0 as i32 as usize] = (*ps).origin[0 as i32 as usize];
+    cg.refdef.vieworg[1 as i32 as usize] = (*ps).origin[1 as i32 as usize];
+    cg.refdef.vieworg[2 as i32 as usize] = (*ps).origin[2 as i32 as usize];
+    cg.refdefViewAngles[0 as i32 as usize] = (*ps).viewangles[0 as i32 as usize];
+    cg.refdefViewAngles[1 as i32 as usize] = (*ps).viewangles[1 as i32 as usize];
+    cg.refdefViewAngles[2 as i32 as usize] = (*ps).viewangles[2 as i32 as usize];
     if cg_cameraOrbit.integer != 0 {
         if cg.time > cg.nextOrbitTime {
-            cg.nextOrbitTime = cg.time
-                + cg_cameraOrbitDelay.integer;
-            cg_thirdPersonAngle.value +=
-                cg_cameraOrbit.value
+            cg.nextOrbitTime = cg.time + cg_cameraOrbitDelay.integer;
+            cg_thirdPersonAngle.value += cg_cameraOrbit.value
         }
     }
     // add error decay
@@ -1137,18 +982,14 @@ unsafe extern "C" fn CG_CalcViewValues() -> i32 {
         let mut t: i32 = 0;
         let mut f: f32 = 0.;
         t = cg.time - cg.predictedErrorTime;
-        f = (cg_errorDecay.value - t as f32)
-            / cg_errorDecay.value;
+        f = (cg_errorDecay.value - t as f32) / cg_errorDecay.value;
         if f > 0 as i32 as f32 && f < 1 as i32 as f32 {
             cg.refdef.vieworg[0 as i32 as usize] =
-                cg.refdef.vieworg[0 as i32 as usize]
-                    + cg.predictedError[0 as i32 as usize] * f;
+                cg.refdef.vieworg[0 as i32 as usize] + cg.predictedError[0 as i32 as usize] * f;
             cg.refdef.vieworg[1 as i32 as usize] =
-                cg.refdef.vieworg[1 as i32 as usize]
-                    + cg.predictedError[1 as i32 as usize] * f;
+                cg.refdef.vieworg[1 as i32 as usize] + cg.predictedError[1 as i32 as usize] * f;
             cg.refdef.vieworg[2 as i32 as usize] =
-                cg.refdef.vieworg[2 as i32 as usize]
-                    + cg.predictedError[2 as i32 as usize] * f
+                cg.refdef.vieworg[2 as i32 as usize] + cg.predictedError[2 as i32 as usize] * f
         } else {
             cg.predictedErrorTime = 0 as i32
         }
@@ -1162,8 +1003,7 @@ unsafe extern "C" fn CG_CalcViewValues() -> i32 {
     }
     // position eye relative to origin
     AnglesToAxis(
-        cg.refdefViewAngles.as_mut_ptr()
-            as *const vec_t,
+        cg.refdefViewAngles.as_mut_ptr() as *const vec_t,
         cg.refdef.viewaxis.as_mut_ptr(),
     );
     if cg.hyperspace as u64 != 0 {
@@ -1187,9 +1027,7 @@ unsafe extern "C" fn CG_PowerupTimerSounds() {
         t = (*cg.snap).ps.powerups[i as usize];
         if !(t <= cg.time) {
             if !(t - cg.time >= 5 as i32 * 1000 as i32) {
-                if (t - cg.time) / 1000 as i32
-                    != (t - cg.oldTime) / 1000 as i32
-                {
+                if (t - cg.time) / 1000 as i32 != (t - cg.oldTime) / 1000 as i32 {
                     trap_S_StartSound(
                         0 as *mut vec_t,
                         (*cg.snap).ps.clientNum,
@@ -1213,12 +1051,9 @@ pub unsafe extern "C" fn CG_AddBufferedSound(mut sfx: sfxHandle_t) {
     if sfx == 0 {
         return;
     }
-    cg.soundBuffer
-        [cg.soundBufferIn as usize] = sfx;
-    cg.soundBufferIn =
-        (cg.soundBufferIn + 1 as i32) % 20 as i32;
-    if cg.soundBufferIn == cg.soundBufferOut
-    {
+    cg.soundBuffer[cg.soundBufferIn as usize] = sfx;
+    cg.soundBufferIn = (cg.soundBufferIn + 1 as i32) % 20 as i32;
+    if cg.soundBufferIn == cg.soundBufferOut {
         cg.soundBufferOut += 1
     };
 }
@@ -1230,23 +1065,15 @@ CG_PlayBufferedSounds
 
 unsafe extern "C" fn CG_PlayBufferedSounds() {
     if cg.soundTime < cg.time {
-        if cg.soundBufferOut
-            != cg.soundBufferIn
-            && cg.soundBuffer
-                [cg.soundBufferOut as usize]
-                != 0
+        if cg.soundBufferOut != cg.soundBufferIn && cg.soundBuffer[cg.soundBufferOut as usize] != 0
         {
             trap_S_StartLocalSound(
-                cg.soundBuffer
-                    [cg.soundBufferOut as usize],
+                cg.soundBuffer[cg.soundBufferOut as usize],
                 CHAN_ANNOUNCER as i32,
             );
-            cg.soundBuffer
-                [cg.soundBufferOut as usize] = 0 as i32;
-            cg.soundBufferOut =
-                (cg.soundBufferOut + 1 as i32) % 20 as i32;
-            cg.soundTime =
-                cg.time + 750 as i32
+            cg.soundBuffer[cg.soundBufferOut as usize] = 0 as i32;
+            cg.soundBufferOut = (cg.soundBufferOut + 1 as i32) % 20 as i32;
+            cg.soundTime = cg.time + 750 as i32
         }
     };
 }
@@ -1483,39 +1310,29 @@ pub unsafe extern "C" fn CG_DrawActiveFrame(
     }
     // any looped sounds will be respecified as entities
     // are added to the render list
-    trap_S_ClearLoopingSounds(
-        qfalse,
-    );
+    trap_S_ClearLoopingSounds(qfalse);
     // clear all the render lists
     trap_R_ClearScene();
     // set up cg.snap and possibly cg.nextSnap
     CG_ProcessSnapshots();
     // if we haven't received any snapshots yet, all
     // we can draw is the information screen
-    if cg.snap.is_null()
-        || (*cg.snap).snapFlags & 2 as i32 != 0
-    {
+    if cg.snap.is_null() || (*cg.snap).snapFlags & 2 as i32 != 0 {
         CG_DrawInformation();
         return;
     }
     // let the client system know what our weapon and zoom settings are
-    trap_SetUserCmdValue(
-        cg.weaponSelect,
-        cg.zoomSensitivity,
-    );
+    trap_SetUserCmdValue(cg.weaponSelect, cg.zoomSensitivity);
     // this counter will be bumped for every valid scene we generate
     cg.clientFrame += 1;
     // update cg.predictedPlayerState
     CG_PredictPlayerState();
     // decide on third person view
-    cg.renderingThirdPerson =
-        ((*cg.snap).ps.persistant
-            [PERS_TEAM as i32 as usize]
-            != TEAM_SPECTATOR as i32
-            && (cg_thirdPerson.integer != 0
-                || (*cg.snap).ps.stats
-                    [STAT_HEALTH as i32 as usize]
-                    <= 0 as i32)) as i32 as qboolean;
+    cg.renderingThirdPerson = ((*cg.snap).ps.persistant[PERS_TEAM as i32 as usize]
+        != TEAM_SPECTATOR as i32
+        && (cg_thirdPerson.integer != 0
+            || (*cg.snap).ps.stats[STAT_HEALTH as i32 as usize] <= 0 as i32))
+        as i32 as qboolean;
     // build cg.refdef
     inwater = CG_CalcViewValues();
     // first person blend blobs, done after AnglesToAxis
@@ -1529,10 +1346,7 @@ pub unsafe extern "C" fn CG_DrawActiveFrame(
         CG_AddParticles();
         CG_AddLocalEntities();
     }
-    CG_AddViewWeapon(
-        &mut cg.predictedPlayerState as *mut _
-            as *mut playerState_s,
-    );
+    CG_AddViewWeapon(&mut cg.predictedPlayerState as *mut _ as *mut playerState_s);
     // add buffered sounds
     CG_PlayBufferedSounds();
     // finish up the rest of the refdef
@@ -1550,47 +1364,31 @@ pub unsafe extern "C" fn CG_DrawActiveFrame(
     // update audio positions
     trap_S_Respatialize(
         (*cg.snap).ps.clientNum,
-        cg.refdef.vieworg.as_mut_ptr()
-            as *const vec_t,
+        cg.refdef.vieworg.as_mut_ptr() as *const vec_t,
         cg.refdef.viewaxis.as_mut_ptr(),
         inwater,
     );
     // make sure the lagometerSample and frame timing isn't done twice when in stereo
     if stereoView as u32 != STEREO_RIGHT as i32 as u32 {
-        cg.frametime =
-            cg.time - cg.oldTime;
+        cg.frametime = cg.time - cg.oldTime;
         if cg.frametime < 0 as i32 {
             cg.frametime = 0 as i32
         }
         cg.oldTime = cg.time;
         CG_AddLagometerFrameInfo();
     }
-    if cg_timescale.value
-        != cg_timescaleFadeEnd.value
-    {
-        if cg_timescale.value
-            < cg_timescaleFadeEnd.value
-        {
+    if cg_timescale.value != cg_timescaleFadeEnd.value {
+        if cg_timescale.value < cg_timescaleFadeEnd.value {
             cg_timescale.value +=
-                cg_timescaleFadeSpeed.value
-                    * cg.frametime as f32
-                    / 1000 as i32 as f32;
-            if cg_timescale.value
-                > cg_timescaleFadeEnd.value
-            {
-                cg_timescale.value =
-                    cg_timescaleFadeEnd.value
+                cg_timescaleFadeSpeed.value * cg.frametime as f32 / 1000 as i32 as f32;
+            if cg_timescale.value > cg_timescaleFadeEnd.value {
+                cg_timescale.value = cg_timescaleFadeEnd.value
             }
         } else {
             cg_timescale.value -=
-                cg_timescaleFadeSpeed.value
-                    * cg.frametime as f32
-                    / 1000 as i32 as f32;
-            if cg_timescale.value
-                < cg_timescaleFadeEnd.value
-            {
-                cg_timescale.value =
-                    cg_timescaleFadeEnd.value
+                cg_timescaleFadeSpeed.value * cg.frametime as f32 / 1000 as i32 as f32;
+            if cg_timescale.value < cg_timescaleFadeEnd.value {
+                cg_timescale.value = cg_timescaleFadeEnd.value
             }
         }
         if cg_timescaleFadeSpeed.value != 0. {

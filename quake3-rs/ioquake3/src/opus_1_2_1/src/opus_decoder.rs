@@ -521,31 +521,27 @@ unsafe extern "C" fn opus_decode_frame(
     let mut i: i32 = 0;
     let mut silk_ret: i32 = 0 as i32;
     let mut celt_ret: i32 = 0 as i32;
-    let mut dec: ec_dec =
-        ec_dec {
-            buf: 0 as *mut u8,
-            storage: 0,
-            end_offs: 0,
-            end_window: 0,
-            nend_bits: 0,
-            nbits_total: 0,
-            offs: 0,
-            rng: 0,
-            val: 0,
-            ext: 0,
-            rem: 0,
-            error: 0,
-        };
+    let mut dec: ec_dec = ec_dec {
+        buf: 0 as *mut u8,
+        storage: 0,
+        end_offs: 0,
+        end_window: 0,
+        nend_bits: 0,
+        nbits_total: 0,
+        offs: 0,
+        rng: 0,
+        val: 0,
+        ext: 0,
+        rem: 0,
+        error: 0,
+    };
     let mut silk_frame_size: opus_int32 = 0;
     let mut pcm_silk_size: i32 = 0;
-    let mut pcm_silk: *mut opus_int16 =
-        0 as *mut opus_int16;
+    let mut pcm_silk: *mut opus_int16 = 0 as *mut opus_int16;
     let mut pcm_transition_silk_size: i32 = 0;
-    let mut pcm_transition_silk: *mut opus_val16 =
-        0 as *mut opus_val16;
+    let mut pcm_transition_silk: *mut opus_val16 = 0 as *mut opus_val16;
     let mut pcm_transition_celt_size: i32 = 0;
-    let mut pcm_transition_celt: *mut opus_val16 =
-        0 as *mut opus_val16;
+    let mut pcm_transition_celt: *mut opus_val16 = 0 as *mut opus_val16;
     let mut pcm_transition: *mut opus_val16 = 0 as *mut opus_val16;
     let mut redundant_audio_size: i32 = 0;
     let mut redundant_audio: *mut opus_val16 = 0 as *mut opus_val16;
@@ -562,8 +558,7 @@ unsafe extern "C" fn opus_decode_frame(
     let mut F10: i32 = 0;
     let mut F20: i32 = 0;
     let mut window: *const opus_val16 = 0 as *const opus_val16;
-    let mut redundant_rng: opus_uint32 =
-        0 as i32 as opus_uint32;
+    let mut redundant_rng: opus_uint32 = 0 as i32 as opus_uint32;
     let mut celt_accum: i32 = 0;
     silk_dec =
         (st as *mut libc::c_char).offset((*st).silk_dec_offset as isize) as *mut libc::c_void;
@@ -701,8 +696,7 @@ unsafe extern "C" fn opus_decode_frame(
     if mode != 1002 as i32 {
         let mut lost_flag: i32 = 0;
         let mut decoded_samples: i32 = 0;
-        let mut pcm_ptr: *mut opus_int16 =
-            0 as *mut opus_int16;
+        let mut pcm_ptr: *mut opus_int16 = 0 as *mut opus_int16;
         pcm_ptr = pcm_silk;
         if (*st).prev_mode == 1002 as i32 {
             crate::src::opus_1_2_1::silk::dec_API::silk_InitDecoder(silk_dec);
@@ -810,8 +804,7 @@ unsafe extern "C" fn opus_decode_frame(
                 redundancy = 0 as i32
             }
             /* Shrink decoder because of raw bits */
-            dec.storage = (dec.storage as u32).wrapping_sub(redundancy_bytes as u32)
-                as opus_uint32
+            dec.storage = (dec.storage as u32).wrapping_sub(redundancy_bytes as u32) as opus_uint32
                 as opus_uint32
         }
     }
@@ -882,8 +875,7 @@ unsafe extern "C" fn opus_decode_frame(
             redundancy_bytes,
             redundant_audio,
             F5,
-            0 as *mut ec_dec
-                as *mut ec_ctx,
+            0 as *mut ec_dec as *mut ec_ctx,
             0 as i32,
         );
         crate::src::opus_1_2_1::celt::celt_decoder::opus_custom_decoder_ctl(
@@ -891,8 +883,8 @@ unsafe extern "C" fn opus_decode_frame(
             4031 as i32,
             (&mut redundant_rng as *mut opus_uint32).offset(
                 (&mut redundant_rng as *mut opus_uint32)
-                    .offset_from(&mut redundant_rng as *mut opus_uint32)
-                    as isize as isize,
+                    .offset_from(&mut redundant_rng as *mut opus_uint32) as isize
+                    as isize,
             ),
         );
     }
@@ -950,8 +942,7 @@ unsafe extern "C" fn opus_decode_frame(
                 2 as i32,
                 pcm,
                 F2_5,
-                0 as *mut ec_dec
-                    as *mut ec_ctx,
+                0 as *mut ec_dec as *mut ec_ctx,
                 celt_accum,
             );
         }
@@ -964,17 +955,14 @@ unsafe extern "C" fn opus_decode_frame(
             i += 1
         }
     }
-    let mut celt_mode: *const OpusCustomMode =
-        0 as *const OpusCustomMode;
+    let mut celt_mode: *const OpusCustomMode = 0 as *const OpusCustomMode;
     crate::src::opus_1_2_1::celt::celt_decoder::opus_custom_decoder_ctl(
         celt_dec,
         10015 as i32,
         (&mut celt_mode as *mut *const OpusCustomMode).offset(
             (&mut celt_mode as *mut *const OpusCustomMode)
-                .offset_from(
-                    &mut celt_mode
-                        as *mut *const OpusCustomMode,
-                ) as isize as isize,
+                .offset_from(&mut celt_mode as *mut *const OpusCustomMode) as isize
+                as isize,
         ),
     );
     window = (*celt_mode).window;
@@ -992,8 +980,7 @@ unsafe extern "C" fn opus_decode_frame(
             redundancy_bytes,
             redundant_audio,
             F5,
-            0 as *mut ec_dec
-                as *mut ec_ctx,
+            0 as *mut ec_dec as *mut ec_ctx,
             0 as i32,
         );
         crate::src::opus_1_2_1::celt::celt_decoder::opus_custom_decoder_ctl(
@@ -1001,8 +988,8 @@ unsafe extern "C" fn opus_decode_frame(
             4031 as i32,
             (&mut redundant_rng as *mut opus_uint32).offset(
                 (&mut redundant_rng as *mut opus_uint32)
-                    .offset_from(&mut redundant_rng as *mut opus_uint32)
-                    as isize as isize,
+                    .offset_from(&mut redundant_rng as *mut opus_uint32) as isize
+                    as isize,
             ),
         );
         smooth_fade(
@@ -1419,9 +1406,7 @@ pub unsafe extern "C" fn opus_decoder_ctl(
     ap = args.clone();
     match request {
         4009 => {
-            let mut value: *mut opus_int32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_int32>();
+            let mut value: *mut opus_int32 = ap.as_va_list().arg::<*mut opus_int32>();
             if value.is_null() {
                 current_block = 7252614138838059896;
             } else {
@@ -1430,9 +1415,7 @@ pub unsafe extern "C" fn opus_decoder_ctl(
             }
         }
         4031 => {
-            let mut value_0: *mut opus_uint32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_uint32>();
+            let mut value_0: *mut opus_uint32 = ap.as_va_list().arg::<*mut opus_uint32>();
             if value_0.is_null() {
                 current_block = 7252614138838059896;
             } else {
@@ -1462,9 +1445,7 @@ pub unsafe extern "C" fn opus_decoder_ctl(
             current_block = 2116367355679836638;
         }
         4029 => {
-            let mut value_1: *mut opus_int32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_int32>();
+            let mut value_1: *mut opus_int32 = ap.as_va_list().arg::<*mut opus_int32>();
             if value_1.is_null() {
                 current_block = 7252614138838059896;
             } else {
@@ -1473,9 +1454,7 @@ pub unsafe extern "C" fn opus_decoder_ctl(
             }
         }
         4033 => {
-            let mut value_2: *mut opus_int32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_int32>();
+            let mut value_2: *mut opus_int32 = ap.as_va_list().arg::<*mut opus_int32>();
             if value_2.is_null() {
                 current_block = 7252614138838059896;
             } else {
@@ -1492,9 +1471,7 @@ pub unsafe extern "C" fn opus_decoder_ctl(
             }
         }
         4045 => {
-            let mut value_3: *mut opus_int32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_int32>();
+            let mut value_3: *mut opus_int32 = ap.as_va_list().arg::<*mut opus_int32>();
             if value_3.is_null() {
                 current_block = 7252614138838059896;
             } else {
@@ -1503,8 +1480,7 @@ pub unsafe extern "C" fn opus_decoder_ctl(
             }
         }
         4034 => {
-            let mut value_4: opus_int32 =
-                ap.as_va_list().arg::<opus_int32>();
+            let mut value_4: opus_int32 = ap.as_va_list().arg::<opus_int32>();
             if value_4 < -(32768 as i32) || value_4 > 32767 as i32 {
                 current_block = 7252614138838059896;
             } else {
@@ -1513,9 +1489,7 @@ pub unsafe extern "C" fn opus_decoder_ctl(
             }
         }
         4039 => {
-            let mut value_5: *mut opus_int32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_int32>();
+            let mut value_5: *mut opus_int32 = ap.as_va_list().arg::<*mut opus_int32>();
             if value_5.is_null() {
                 current_block = 7252614138838059896;
             } else {
@@ -1524,8 +1498,7 @@ pub unsafe extern "C" fn opus_decoder_ctl(
             }
         }
         4046 => {
-            let mut value_6: opus_int32 =
-                ap.as_va_list().arg::<opus_int32>();
+            let mut value_6: opus_int32 = ap.as_va_list().arg::<opus_int32>();
             if value_6 < 0 as i32 || value_6 > 1 as i32 {
                 current_block = 7252614138838059896;
             } else {
@@ -1538,9 +1511,7 @@ pub unsafe extern "C" fn opus_decoder_ctl(
             }
         }
         4047 => {
-            let mut value_7: *mut opus_int32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_int32>();
+            let mut value_7: *mut opus_int32 = ap.as_va_list().arg::<*mut opus_int32>();
             if value_7.is_null() {
                 current_block = 7252614138838059896;
             } else {

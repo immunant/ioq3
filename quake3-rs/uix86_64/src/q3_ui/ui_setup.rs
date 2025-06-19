@@ -73,8 +73,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -96,8 +95,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -123,8 +121,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -150,8 +147,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -173,8 +169,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -196,8 +191,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -219,8 +213,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -242,8 +235,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -265,8 +257,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -288,8 +279,7 @@ static mut setupMenuInfo: setupMenuInfo_t = setupMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -311,9 +301,7 @@ Setup_ResetDefaults_Action
 =================
 */
 
-unsafe extern "C" fn Setup_ResetDefaults_Action(
-    mut result: qboolean,
-) {
+unsafe extern "C" fn Setup_ResetDefaults_Action(mut result: qboolean) {
     if result as u64 == 0 {
         return;
     }
@@ -388,10 +376,7 @@ unsafe extern "C" fn UI_SetupMenu_Event(mut ptr: *mut libc::c_void, mut event: i
             UI_ConfirmMenu(
                 b"SET TO DEFAULTS?\x00" as *const u8 as *const libc::c_char,
                 Some(Setup_ResetDefaults_Draw as unsafe extern "C" fn() -> ()),
-                Some(
-                    Setup_ResetDefaults_Action
-                        as unsafe extern "C" fn(_: qboolean) -> (),
-                ),
+                Some(Setup_ResetDefaults_Action as unsafe extern "C" fn(_: qboolean) -> ()),
             );
         }
         18 => {
@@ -499,10 +484,7 @@ unsafe extern "C" fn UI_SetupMenu_Init() {
         b"CD Key\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     setupMenuInfo.cdkey.color = color_red.as_mut_ptr();
     setupMenuInfo.cdkey.style = 0x1 as i32;
-    if trap_Cvar_VariableValue(
-        b"cl_paused\x00" as *const u8 as *const libc::c_char,
-    ) == 0.
-    {
+    if trap_Cvar_VariableValue(b"cl_paused\x00" as *const u8 as *const libc::c_char) == 0. {
         y += 34 as i32;
         setupMenuInfo.defaults.generic.type_0 = 9 as i32;
         setupMenuInfo.defaults.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
@@ -562,10 +544,7 @@ unsafe extern "C" fn UI_SetupMenu_Init() {
     );
     //	Menu_AddItem( &setupMenuInfo.menu, &setupMenuInfo.load );
     //	Menu_AddItem( &setupMenuInfo.menu, &setupMenuInfo.save );
-    if trap_Cvar_VariableValue(
-        b"cl_paused\x00" as *const u8 as *const libc::c_char,
-    ) == 0.
-    {
+    if trap_Cvar_VariableValue(b"cl_paused\x00" as *const u8 as *const libc::c_char) == 0. {
         Menu_AddItem(
             &mut setupMenuInfo.menu as *mut _ as *mut _tag_menuframework,
             &mut setupMenuInfo.defaults as *mut menutext_s as *mut libc::c_void,
@@ -584,18 +563,10 @@ UI_SetupMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_SetupMenu_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===========================================================================
@@ -662,7 +633,5 @@ UI_SetupMenu
 
 pub unsafe extern "C" fn UI_SetupMenu() {
     UI_SetupMenu_Init();
-    UI_PushMenu(
-        &mut setupMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut setupMenuInfo.menu as *mut _ as *mut _tag_menuframework);
 }

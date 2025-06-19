@@ -306,47 +306,35 @@ pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
     let mut out1_Q10_table: [i32; 20] = [0; 20];
     i = -(10 as i32);
     while i <= 10 as i32 - 1 as i32 {
-        out0_Q10 = ((i as opus_uint32) << 10 as i32)
-            as opus_int32
-            as opus_int16;
+        out0_Q10 = ((i as opus_uint32) << 10 as i32) as opus_int32 as opus_int16;
         out1_Q10 = (out0_Q10 as i32 + 1024 as i32) as opus_int16;
         if i > 0 as i32 {
             out0_Q10 = (out0_Q10 as i32
-                - (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
-                    as opus_int32)
+                - (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64) as opus_int32)
                 as opus_int16;
             out1_Q10 = (out1_Q10 as i32
-                - (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
-                    as opus_int32)
+                - (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64) as opus_int32)
                 as opus_int16
         } else if i == 0 as i32 {
             out1_Q10 = (out1_Q10 as i32
-                - (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
-                    as opus_int32)
+                - (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64) as opus_int32)
                 as opus_int16
         } else if i == -(1 as i32) {
             out0_Q10 = (out0_Q10 as i32
-                + (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
-                    as opus_int32)
+                + (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64) as opus_int32)
                 as opus_int16
         } else {
             out0_Q10 = (out0_Q10 as i32
-                + (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
-                    as opus_int32)
+                + (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64) as opus_int32)
                 as opus_int16;
             out1_Q10 = (out1_Q10 as i32
-                + (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
-                    as opus_int32)
+                + (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64) as opus_int32)
                 as opus_int16
         }
-        out0_Q10_table[(i + 10 as i32) as usize] = out0_Q10 as opus_int32
-            * quant_step_size_Q16 as opus_int16
-                as opus_int32
-            >> 16 as i32;
-        out1_Q10_table[(i + 10 as i32) as usize] = out1_Q10 as opus_int32
-            * quant_step_size_Q16 as opus_int16
-                as opus_int32
-            >> 16 as i32;
+        out0_Q10_table[(i + 10 as i32) as usize] =
+            out0_Q10 as opus_int32 * quant_step_size_Q16 as opus_int16 as opus_int32 >> 16 as i32;
+        out1_Q10_table[(i + 10 as i32) as usize] =
+            out1_Q10 as opus_int32 * quant_step_size_Q16 as opus_int16 as opus_int32 >> 16 as i32;
         i += 1
     }
     /* must be power of two */
@@ -359,13 +347,11 @@ pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
         in_Q10 = *x_Q10.offset(i as isize) as i32;
         j = 0 as i32;
         while j < nStates {
-            pred_Q10 = *pred_coef_Q8.offset(i as isize) as opus_int16
-                as opus_int32
+            pred_Q10 = *pred_coef_Q8.offset(i as isize) as opus_int16 as opus_int32
                 * prev_out_Q10[j as usize] as opus_int32
                 >> 8 as i32;
             res_Q10 = in_Q10 - pred_Q10;
-            ind_tmp = inv_quant_step_size_Q6 as opus_int32
-                * res_Q10 as opus_int16 as opus_int32
+            ind_tmp = inv_quant_step_size_Q6 as opus_int32 * res_Q10 as opus_int16 as opus_int32
                 >> 16 as i32;
             ind_tmp = if -(10 as i32) > 10 as i32 - 1 as i32 {
                 if ind_tmp > -(10 as i32) {
@@ -384,10 +370,8 @@ pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
             };
             ind[j as usize][i as usize] = ind_tmp as i8;
             /* compute outputs for ind_tmp and ind_tmp + 1 */
-            out0_Q10 =
-                out0_Q10_table[(ind_tmp + 10 as i32) as usize] as opus_int16;
-            out1_Q10 =
-                out1_Q10_table[(ind_tmp + 10 as i32) as usize] as opus_int16;
+            out0_Q10 = out0_Q10_table[(ind_tmp + 10 as i32) as usize] as opus_int16;
+            out1_Q10 = out1_Q10_table[(ind_tmp + 10 as i32) as usize] as opus_int16;
             out0_Q10 = (out0_Q10 as i32 + pred_Q10) as opus_int16;
             out1_Q10 = (out1_Q10 as i32 + pred_Q10) as opus_int16;
             prev_out_Q10[j as usize] = out0_Q10;
@@ -399,10 +383,8 @@ pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
                     rate1_Q5 = 280 as i32
                 } else {
                     rate0_Q5 = 280 as i32 - 43 as i32 * 4 as i32
-                        + 43 as i32 as opus_int16
-                            as opus_int32
-                            * ind_tmp as opus_int16
-                                as opus_int32;
+                        + 43 as i32 as opus_int16 as opus_int32
+                            * ind_tmp as opus_int16 as opus_int32;
                     rate1_Q5 = rate0_Q5 + 43 as i32
                 }
             } else if ind_tmp <= -(4 as i32) {
@@ -411,10 +393,8 @@ pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
                     rate1_Q5 = *rates_Q5.offset((ind_tmp + 1 as i32 + 4 as i32) as isize) as i32
                 } else {
                     rate0_Q5 = 280 as i32 - 43 as i32 * 4 as i32
-                        + -(43 as i32) as opus_int16
-                            as opus_int32
-                            * ind_tmp as opus_int16
-                                as opus_int32;
+                        + -(43 as i32) as opus_int16 as opus_int32
+                            * ind_tmp as opus_int16 as opus_int32;
                     rate1_Q5 = rate0_Q5 - 43 as i32
                 }
             } else {
@@ -425,21 +405,15 @@ pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
             diff_Q10 = in_Q10 - out0_Q10 as i32;
             RD_Q25[j as usize] = RD_tmp_Q25
                 + diff_Q10 as opus_int16 as opus_int32
-                    * diff_Q10 as opus_int16
-                        as opus_int32
+                    * diff_Q10 as opus_int16 as opus_int32
                     * *w_Q5.offset(i as isize) as i32
-                + mu_Q20 as opus_int16 as opus_int32
-                    * rate0_Q5 as opus_int16
-                        as opus_int32;
+                + mu_Q20 as opus_int16 as opus_int32 * rate0_Q5 as opus_int16 as opus_int32;
             diff_Q10 = in_Q10 - out1_Q10 as i32;
             RD_Q25[(j + nStates) as usize] = RD_tmp_Q25
                 + diff_Q10 as opus_int16 as opus_int32
-                    * diff_Q10 as opus_int16
-                        as opus_int32
+                    * diff_Q10 as opus_int16 as opus_int32
                     * *w_Q5.offset(i as isize) as i32
-                + mu_Q20 as opus_int16 as opus_int32
-                    * rate1_Q5 as opus_int16
-                        as opus_int32;
+                + mu_Q20 as opus_int16 as opus_int32 * rate1_Q5 as opus_int16 as opus_int32;
             j += 1
         }
         if nStates <= ((1 as i32) << 2 as i32) / 2 as i32 {
@@ -450,8 +424,7 @@ pub unsafe extern "C" fn silk_NLSF_del_dec_quant(
                     (ind[j as usize][i as usize] as i32 + 1 as i32) as i8;
                 j += 1
             }
-            nStates = ((nStates as opus_uint32) << 1 as i32)
-                as opus_int32;
+            nStates = ((nStates as opus_uint32) << 1 as i32) as opus_int32;
             j = nStates;
             while j < (1 as i32) << 2 as i32 {
                 ind[j as usize][i as usize] = ind[(j - nStates) as usize][i as usize];

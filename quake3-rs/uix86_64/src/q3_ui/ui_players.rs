@@ -195,10 +195,7 @@ UI_PlayerInfo_SetWeapon
 ===============
 */
 
-unsafe extern "C" fn UI_PlayerInfo_SetWeapon(
-    mut pi: *mut playerInfo_t,
-    mut weaponNum: weapon_t,
-) {
+unsafe extern "C" fn UI_PlayerInfo_SetWeapon(mut pi: *mut playerInfo_t, mut weaponNum: weapon_t) {
     let mut item: *mut gitem_t = 0 as *mut gitem_t;
     let mut path: [libc::c_char; 64] = [0; 64];
     (*pi).currentWeapon = weaponNum;
@@ -210,9 +207,7 @@ unsafe extern "C" fn UI_PlayerInfo_SetWeapon(
         if weaponNum as u32 == WP_NONE as i32 as u32 {
             return;
         }
-        item = bg_itemlist
-            .as_mut_ptr()
-            .offset(1 as i32 as isize);
+        item = bg_itemlist.as_mut_ptr().offset(1 as i32 as isize);
         while !(*item).classname.is_null() {
             if !((*item).giType as u32 != IT_WEAPON as i32 as u32) {
                 if (*item).giTag as u32 == weaponNum as u32 {
@@ -222,9 +217,7 @@ unsafe extern "C" fn UI_PlayerInfo_SetWeapon(
             item = item.offset(1)
         }
         if !(*item).classname.is_null() {
-            (*pi).weaponModel = trap_R_RegisterModel(
-                (*item).world_model[0 as i32 as usize],
-            )
+            (*pi).weaponModel = trap_R_RegisterModel((*item).world_model[0 as i32 as usize])
         }
         if !((*pi).weaponModel == 0 as i32) {
             break;
@@ -266,77 +259,57 @@ unsafe extern "C" fn UI_PlayerInfo_SetWeapon(
         1 => {
             (*pi).flashDlightColor[0 as i32 as usize] = 0.6f32;
             (*pi).flashDlightColor[1 as i32 as usize] = 0.6f32;
-            (*pi).flashDlightColor[2 as i32 as usize] =
-                1 as i32 as vec_t
+            (*pi).flashDlightColor[2 as i32 as usize] = 1 as i32 as vec_t
         }
         2 => {
-            (*pi).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
-            (*pi).flashDlightColor[1 as i32 as usize] =
-                1 as i32 as vec_t;
-            (*pi).flashDlightColor[2 as i32 as usize] =
-                0 as i32 as vec_t
+            (*pi).flashDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
+            (*pi).flashDlightColor[1 as i32 as usize] = 1 as i32 as vec_t;
+            (*pi).flashDlightColor[2 as i32 as usize] = 0 as i32 as vec_t
         }
         3 => {
-            (*pi).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
-            (*pi).flashDlightColor[1 as i32 as usize] =
-                1 as i32 as vec_t;
-            (*pi).flashDlightColor[2 as i32 as usize] =
-                0 as i32 as vec_t
+            (*pi).flashDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
+            (*pi).flashDlightColor[1 as i32 as usize] = 1 as i32 as vec_t;
+            (*pi).flashDlightColor[2 as i32 as usize] = 0 as i32 as vec_t
         }
         4 => {
-            (*pi).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
+            (*pi).flashDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
             (*pi).flashDlightColor[1 as i32 as usize] = 0.7f32;
             (*pi).flashDlightColor[2 as i32 as usize] = 0.5f32
         }
         5 => {
-            (*pi).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
+            (*pi).flashDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
             (*pi).flashDlightColor[1 as i32 as usize] = 0.75f32;
-            (*pi).flashDlightColor[2 as i32 as usize] =
-                0 as i32 as vec_t
+            (*pi).flashDlightColor[2 as i32 as usize] = 0 as i32 as vec_t
         }
         6 => {
             (*pi).flashDlightColor[0 as i32 as usize] = 0.6f32;
             (*pi).flashDlightColor[1 as i32 as usize] = 0.6f32;
-            (*pi).flashDlightColor[2 as i32 as usize] =
-                1 as i32 as vec_t
+            (*pi).flashDlightColor[2 as i32 as usize] = 1 as i32 as vec_t
         }
         7 => {
-            (*pi).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
+            (*pi).flashDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
             (*pi).flashDlightColor[1 as i32 as usize] = 0.5f32;
-            (*pi).flashDlightColor[2 as i32 as usize] =
-                0 as i32 as vec_t
+            (*pi).flashDlightColor[2 as i32 as usize] = 0 as i32 as vec_t
         }
         8 => {
             (*pi).flashDlightColor[0 as i32 as usize] = 0.6f32;
             (*pi).flashDlightColor[1 as i32 as usize] = 0.6f32;
-            (*pi).flashDlightColor[2 as i32 as usize] =
-                1 as i32 as vec_t
+            (*pi).flashDlightColor[2 as i32 as usize] = 1 as i32 as vec_t
         }
         9 => {
-            (*pi).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
+            (*pi).flashDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
             (*pi).flashDlightColor[1 as i32 as usize] = 0.7f32;
-            (*pi).flashDlightColor[2 as i32 as usize] =
-                1 as i32 as vec_t
+            (*pi).flashDlightColor[2 as i32 as usize] = 1 as i32 as vec_t
         }
         10 => {
             (*pi).flashDlightColor[0 as i32 as usize] = 0.6f32;
             (*pi).flashDlightColor[1 as i32 as usize] = 0.6f32;
-            (*pi).flashDlightColor[2 as i32 as usize] =
-                1 as i32 as vec_t
+            (*pi).flashDlightColor[2 as i32 as usize] = 1 as i32 as vec_t
         }
         _ => {
-            (*pi).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
-            (*pi).flashDlightColor[1 as i32 as usize] =
-                1 as i32 as vec_t;
-            (*pi).flashDlightColor[2 as i32 as usize] =
-                1 as i32 as vec_t
+            (*pi).flashDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
+            (*pi).flashDlightColor[1 as i32 as usize] = 1 as i32 as vec_t;
+            (*pi).flashDlightColor[2 as i32 as usize] = 1 as i32 as vec_t
         }
     };
 }
@@ -371,17 +344,12 @@ UI_ForceTorsoAnim
 ===============
 */
 
-unsafe extern "C" fn UI_ForceTorsoAnim(
-    mut pi: *mut playerInfo_t,
-    mut anim: i32,
-) {
+unsafe extern "C" fn UI_ForceTorsoAnim(mut pi: *mut playerInfo_t, mut anim: i32) {
     (*pi).torsoAnim = (*pi).torsoAnim & 128 as i32 ^ 128 as i32 | anim;
     if anim == TORSO_GESTURE as i32 {
         (*pi).torsoAnimationTimer = 2300 as i32
     }
-    if anim == TORSO_ATTACK as i32
-        || anim == TORSO_ATTACK2 as i32
-    {
+    if anim == TORSO_ATTACK as i32 || anim == TORSO_ATTACK2 as i32 {
         (*pi).torsoAnimationTimer = 500 as i32
     };
 }
@@ -420,9 +388,7 @@ unsafe extern "C" fn UI_TorsoSequencing(mut pi: *mut playerInfo_t) {
         UI_SetTorsoAnim(pi, TORSO_STAND as i32);
         return;
     }
-    if currentAnim == TORSO_ATTACK as i32
-        || currentAnim == TORSO_ATTACK2 as i32
-    {
+    if currentAnim == TORSO_ATTACK as i32 || currentAnim == TORSO_ATTACK2 as i32 {
         UI_SetTorsoAnim(pi, TORSO_STAND as i32);
         return;
     }
@@ -480,11 +446,10 @@ unsafe extern "C" fn UI_PositionEntityOnTag(
     mut tagName: *mut libc::c_char,
 ) {
     let mut i: i32 = 0;
-    let mut lerped: orientation_t =
-        orientation_t {
-            origin: [0.; 3],
-            axis: [[0.; 3]; 3],
-        };
+    let mut lerped: orientation_t = orientation_t {
+        origin: [0.; 3],
+        axis: [[0.; 3]; 3],
+    };
     // lerp the tag
     trap_CM_LerpTag(
         &mut lerped as *mut _ as *mut orientation_t,
@@ -511,9 +476,7 @@ unsafe extern "C" fn UI_PositionEntityOnTag(
     // cast away const because of compiler problems
     MatrixMultiply(
         lerped.axis.as_mut_ptr(),
-        (*(parent as *mut refEntity_t))
-            .axis
-            .as_mut_ptr(),
+        (*(parent as *mut refEntity_t)).axis.as_mut_ptr(),
         (*entity).axis.as_mut_ptr(),
     );
     (*entity).backlerp = (*parent).backlerp;
@@ -531,11 +494,10 @@ unsafe extern "C" fn UI_PositionRotatedEntityOnTag(
     mut tagName: *mut libc::c_char,
 ) {
     let mut i: i32 = 0;
-    let mut lerped: orientation_t =
-        orientation_t {
-            origin: [0.; 3],
-            axis: [[0.; 3]; 3],
-        };
+    let mut lerped: orientation_t = orientation_t {
+        origin: [0.; 3],
+        axis: [[0.; 3]; 3],
+    };
     let mut tempAxis: [vec3_t; 3] = [[0.; 3]; 3];
     // lerp the tag
     trap_CM_LerpTag(
@@ -568,9 +530,7 @@ unsafe extern "C" fn UI_PositionRotatedEntityOnTag(
     );
     MatrixMultiply(
         tempAxis.as_mut_ptr(),
-        (*(parent as *mut refEntity_t))
-            .axis
-            .as_mut_ptr(),
+        (*(parent as *mut refEntity_t)).axis.as_mut_ptr(),
         (*entity).axis.as_mut_ptr(),
     );
 }
@@ -595,8 +555,7 @@ unsafe extern "C" fn UI_SetLerpFrameAnimation(
             newAnimation,
         ));
     }
-    anim = &mut *(*ci).animations.as_mut_ptr().offset(newAnimation as isize)
-        as *mut animation_t;
+    anim = &mut *(*ci).animations.as_mut_ptr().offset(newAnimation as isize) as *mut animation_t;
     (*lf).animation = anim;
     (*lf).animationTime = (*lf).frameTime + (*anim).initialLerp;
 }
@@ -700,9 +659,7 @@ unsafe extern "C" fn UI_PlayerAnimation(
         (*pi).legsAnimationTimer = 0 as i32
     }
     UI_LegsSequencing(pi);
-    if (*pi).legs.yawing as u32 != 0
-        && (*pi).legsAnim & !(128 as i32) == LEGS_IDLE as i32
-    {
+    if (*pi).legs.yawing as u32 != 0 && (*pi).legsAnim & !(128 as i32) == LEGS_IDLE as i32 {
         UI_RunLerpFrame(pi, &mut (*pi).legs, LEGS_TURN as i32);
     } else {
         UI_RunLerpFrame(pi, &mut (*pi).legs, (*pi).legsAnim);
@@ -778,11 +735,9 @@ unsafe extern "C" fn UI_SwingAngles(
     // clamp to no more than tolerance
     swing = AngleSubtract(destination, *angle);
     if swing > clampTolerance {
-        *angle =
-            AngleMod(destination - (clampTolerance - 1 as i32 as f32))
+        *angle = AngleMod(destination - (clampTolerance - 1 as i32 as f32))
     } else if swing < -clampTolerance {
-        *angle =
-            AngleMod(destination + (clampTolerance - 1 as i32 as f32))
+        *angle = AngleMod(destination + (clampTolerance - 1 as i32 as f32))
     };
 }
 /*
@@ -869,8 +824,7 @@ unsafe extern "C" fn UI_PlayerAngles(
     headAngles[0 as i32 as usize] = (*pi).viewAngles[0 as i32 as usize];
     headAngles[1 as i32 as usize] = (*pi).viewAngles[1 as i32 as usize];
     headAngles[2 as i32 as usize] = (*pi).viewAngles[2 as i32 as usize];
-    headAngles[1 as i32 as usize] =
-        AngleMod(headAngles[1 as i32 as usize]);
+    headAngles[1 as i32 as usize] = AngleMod(headAngles[1 as i32 as usize]);
     legsAngles[2 as i32 as usize] = 0 as i32 as vec_t;
     legsAngles[1 as i32 as usize] = legsAngles[2 as i32 as usize];
     legsAngles[0 as i32 as usize] = legsAngles[1 as i32 as usize];
@@ -884,16 +838,15 @@ unsafe extern "C" fn UI_PlayerAngles(
     {
         // if not standing still, always point all in the same direction
         (*pi).torso.yawing = qtrue; // always center
-                                                                   // always center
+                                    // always center
         (*pi).torso.pitching = qtrue; // always center
         (*pi).legs.yawing = qtrue
     }
     // adjust legs for movement dir
     adjust = UI_MovedirAdjustment(pi);
     legsAngles[1 as i32 as usize] = headAngles[1 as i32 as usize] + adjust;
-    torsoAngles[1 as i32 as usize] = (headAngles[1 as i32 as usize] as f64
-        + 0.25f64 * adjust as f64)
-        as vec_t;
+    torsoAngles[1 as i32 as usize] =
+        (headAngles[1 as i32 as usize] as f64 + 0.25f64 * adjust as f64) as vec_t;
     // torso
     UI_SwingAngles(
         torsoAngles[1 as i32 as usize],
@@ -948,18 +901,9 @@ unsafe extern "C" fn UI_PlayerAngles(
         legsAngles.as_mut_ptr(),
         torsoAngles.as_mut_ptr(),
     );
-    AnglesToAxis(
-        legsAngles.as_mut_ptr() as *const vec_t,
-        legs,
-    );
-    AnglesToAxis(
-        torsoAngles.as_mut_ptr() as *const vec_t,
-        torso,
-    );
-    AnglesToAxis(
-        headAngles.as_mut_ptr() as *const vec_t,
-        head,
-    );
+    AnglesToAxis(legsAngles.as_mut_ptr() as *const vec_t, legs);
+    AnglesToAxis(torsoAngles.as_mut_ptr() as *const vec_t, torso);
+    AnglesToAxis(headAngles.as_mut_ptr() as *const vec_t, head);
 }
 /*
 ===============
@@ -1007,9 +951,7 @@ unsafe extern "C" fn UI_PlayerFloatSprite(
     ent.customShader = shader;
     ent.radius = 10 as i32 as f32;
     ent.renderfx = 0 as i32;
-    trap_R_AddRefEntityToScene(
-        &mut ent as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
 }
 /*
 ======================
@@ -1018,9 +960,7 @@ UI_MachinegunSpinAngle
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_MachinegunSpinAngle(
-    mut pi: *mut playerInfo_t,
-) -> f32 {
+pub unsafe extern "C" fn UI_MachinegunSpinAngle(mut pi: *mut playerInfo_t) -> f32 {
     let mut delta: i32 = 0;
     let mut angle: f32 = 0.;
     let mut speed: f32 = 0.;
@@ -1040,13 +980,10 @@ pub unsafe extern "C" fn UI_MachinegunSpinAngle(
     if torsoAnim == TORSO_ATTACK2 as i32 {
         torsoAnim = TORSO_ATTACK as i32
     }
-    if (*pi).barrelSpinning as u32
-        == !(torsoAnim == TORSO_ATTACK as i32) as i32 as u32
-    {
+    if (*pi).barrelSpinning as u32 == !(torsoAnim == TORSO_ATTACK as i32) as i32 as u32 {
         (*pi).barrelTime = dp_realtime;
         (*pi).barrelAngle = AngleMod(angle);
-        (*pi).barrelSpinning = (torsoAnim == TORSO_ATTACK as i32) as i32
-            as qboolean
+        (*pi).barrelSpinning = (torsoAnim == TORSO_ATTACK as i32) as i32 as qboolean
     }
     return angle;
 }
@@ -1236,11 +1173,7 @@ pub unsafe extern "C" fn UI_DrawPlayer(
         -(16 as i32) as vec_t,
         -(24 as i32) as vec_t,
     ];
-    let mut maxs: vec3_t = [
-        16 as i32 as vec_t,
-        16 as i32 as vec_t,
-        32 as i32 as vec_t,
-    ];
+    let mut maxs: vec3_t = [16 as i32 as vec_t, 16 as i32 as vec_t, 32 as i32 as vec_t];
     let mut len: f32 = 0.;
     let mut xx: f32 = 0.;
     if (*pi).legsModel == 0
@@ -1251,18 +1184,14 @@ pub unsafe extern "C" fn UI_DrawPlayer(
         return;
     }
     dp_realtime = time;
-    if (*pi).pendingWeapon as u32 != WP_NUM_WEAPONS as i32 as u32
-        && dp_realtime > (*pi).weaponTimer
+    if (*pi).pendingWeapon as u32 != WP_NUM_WEAPONS as i32 as u32 && dp_realtime > (*pi).weaponTimer
     {
         (*pi).weapon = (*pi).pendingWeapon;
         (*pi).lastWeapon = (*pi).pendingWeapon;
         (*pi).pendingWeapon = WP_NUM_WEAPONS;
         (*pi).weaponTimer = 0 as i32;
         if (*pi).currentWeapon as u32 != (*pi).weapon as u32 {
-            trap_S_StartLocalSound(
-                weaponChangeSound,
-                CHAN_LOCAL as i32,
-            );
+            trap_S_StartLocalSound(weaponChangeSound, CHAN_LOCAL as i32);
         }
     }
     UI_AdjustFrom640(&mut x, &mut y, &mut w, &mut h);
@@ -1293,15 +1222,12 @@ pub unsafe extern "C" fn UI_DrawPlayer(
     refdef.y = y as i32;
     refdef.width = w as i32;
     refdef.height = h as i32;
-    refdef.fov_x = (refdef.width as f32 / uis.xscale / 640.0f32
-        * 90.0f32) as i32 as f32;
+    refdef.fov_x = (refdef.width as f32 / uis.xscale / 640.0f32 * 90.0f32) as i32 as f32;
     xx = ((refdef.width as f32 / uis.xscale) as f64
         / crate::stdlib::tan((refdef.fov_x / 360 as i32 as f32) as f64 * 3.14159265358979323846f64))
         as f32;
-    refdef.fov_y = crate::stdlib::atan2(
-        (refdef.height as f32 / uis.yscale) as f64,
-        xx as f64,
-    ) as f32;
+    refdef.fov_y =
+        crate::stdlib::atan2((refdef.height as f32 / uis.yscale) as f64, xx as f64) as f32;
     refdef.fov_y = (refdef.fov_y as f64 * (360 as i32 as f64 / 3.14159265358979323846f64)) as f32;
     // calculate distance so the player nearly fills the box
     len = (0.7f64 * (maxs[2 as i32 as usize] - mins[2 as i32 as usize]) as f64) as f32;
@@ -1309,12 +1235,10 @@ pub unsafe extern "C" fn UI_DrawPlayer(
         / crate::stdlib::tan(
             refdef.fov_x as f64 * 3.14159265358979323846f64 / 180.0f32 as f64 * 0.5f64,
         )) as vec_t;
-    origin[1 as i32 as usize] = (0.5f64
-        * (mins[1 as i32 as usize] + maxs[1 as i32 as usize]) as f64)
-        as vec_t;
-    origin[2 as i32 as usize] = (-0.5f64
-        * (mins[2 as i32 as usize] + maxs[2 as i32 as usize]) as f64)
-        as vec_t;
+    origin[1 as i32 as usize] =
+        (0.5f64 * (mins[1 as i32 as usize] + maxs[1 as i32 as usize]) as f64) as vec_t;
+    origin[2 as i32 as usize] =
+        (-0.5f64 * (mins[2 as i32 as usize] + maxs[2 as i32 as usize]) as f64) as vec_t;
     refdef.time = dp_realtime;
     trap_R_ClearScene();
     // get the rotation information
@@ -1350,9 +1274,7 @@ pub unsafe extern "C" fn UI_DrawPlayer(
     legs.oldorigin[0 as i32 as usize] = legs.origin[0 as i32 as usize];
     legs.oldorigin[1 as i32 as usize] = legs.origin[1 as i32 as usize];
     legs.oldorigin[2 as i32 as usize] = legs.origin[2 as i32 as usize];
-    trap_R_AddRefEntityToScene(
-        &mut legs as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut legs as *mut _ as *const refEntity_t);
     if legs.hModel == 0 {
         return;
     }
@@ -1374,9 +1296,7 @@ pub unsafe extern "C" fn UI_DrawPlayer(
         b"tag_torso\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
     torso.renderfx = renderfx;
-    trap_R_AddRefEntityToScene(
-        &mut torso as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut torso as *mut _ as *const refEntity_t);
     //
     // add the head
     //
@@ -1395,9 +1315,7 @@ pub unsafe extern "C" fn UI_DrawPlayer(
         b"tag_head\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
     head.renderfx = renderfx;
-    trap_R_AddRefEntityToScene(
-        &mut head as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut head as *mut _ as *const refEntity_t);
     //
     // add the gun
     //
@@ -1414,18 +1332,10 @@ pub unsafe extern "C" fn UI_DrawPlayer(
             gun.shaderRGBA[2 as i32 as usize] = (*pi).c1RGBA[2 as i32 as usize];
             gun.shaderRGBA[3 as i32 as usize] = (*pi).c1RGBA[3 as i32 as usize]
         } else {
-            gun.shaderRGBA[0 as i32 as usize] = colorWhite
-                [0 as i32 as usize]
-                as byte;
-            gun.shaderRGBA[1 as i32 as usize] = colorWhite
-                [1 as i32 as usize]
-                as byte;
-            gun.shaderRGBA[2 as i32 as usize] = colorWhite
-                [2 as i32 as usize]
-                as byte;
-            gun.shaderRGBA[3 as i32 as usize] = colorWhite
-                [3 as i32 as usize]
-                as byte
+            gun.shaderRGBA[0 as i32 as usize] = colorWhite[0 as i32 as usize] as byte;
+            gun.shaderRGBA[1 as i32 as usize] = colorWhite[1 as i32 as usize] as byte;
+            gun.shaderRGBA[2 as i32 as usize] = colorWhite[2 as i32 as usize] as byte;
+            gun.shaderRGBA[3 as i32 as usize] = colorWhite[3 as i32 as usize] as byte
         }
         gun.lightingOrigin[0 as i32 as usize] = origin[0 as i32 as usize];
         gun.lightingOrigin[1 as i32 as usize] = origin[1 as i32 as usize];
@@ -1437,9 +1347,7 @@ pub unsafe extern "C" fn UI_DrawPlayer(
             b"tag_weapon\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
         gun.renderfx = renderfx;
-        trap_R_AddRefEntityToScene(
-            &mut gun as *mut _ as *const refEntity_t,
-        );
+        trap_R_AddRefEntityToScene(&mut gun as *mut _ as *const refEntity_t);
     }
     //
     // add the spinning barrel
@@ -1472,9 +1380,7 @@ pub unsafe extern "C" fn UI_DrawPlayer(
             (*pi).weaponModel,
             b"tag_barrel\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
-        trap_R_AddRefEntityToScene(
-            &mut barrel as *mut _ as *const refEntity_t,
-        );
+        trap_R_AddRefEntityToScene(&mut barrel as *mut _ as *const refEntity_t);
     }
     //
     // add muzzle flash
@@ -1493,18 +1399,10 @@ pub unsafe extern "C" fn UI_DrawPlayer(
                 flash.shaderRGBA[2 as i32 as usize] = (*pi).c1RGBA[2 as i32 as usize];
                 flash.shaderRGBA[3 as i32 as usize] = (*pi).c1RGBA[3 as i32 as usize]
             } else {
-                flash.shaderRGBA[0 as i32 as usize] = colorWhite
-                    [0 as i32 as usize]
-                    as byte;
-                flash.shaderRGBA[1 as i32 as usize] = colorWhite
-                    [1 as i32 as usize]
-                    as byte;
-                flash.shaderRGBA[2 as i32 as usize] = colorWhite
-                    [2 as i32 as usize]
-                    as byte;
-                flash.shaderRGBA[3 as i32 as usize] = colorWhite
-                    [3 as i32 as usize]
-                    as byte
+                flash.shaderRGBA[0 as i32 as usize] = colorWhite[0 as i32 as usize] as byte;
+                flash.shaderRGBA[1 as i32 as usize] = colorWhite[1 as i32 as usize] as byte;
+                flash.shaderRGBA[2 as i32 as usize] = colorWhite[2 as i32 as usize] as byte;
+                flash.shaderRGBA[3 as i32 as usize] = colorWhite[3 as i32 as usize] as byte
             }
             flash.lightingOrigin[0 as i32 as usize] = origin[0 as i32 as usize];
             flash.lightingOrigin[1 as i32 as usize] = origin[1 as i32 as usize];
@@ -1516,9 +1414,7 @@ pub unsafe extern "C" fn UI_DrawPlayer(
                 b"tag_flash\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             );
             flash.renderfx = renderfx;
-            trap_R_AddRefEntityToScene(
-                &mut flash as *mut _ as *const refEntity_t,
-            );
+            trap_R_AddRefEntityToScene(&mut flash as *mut _ as *const refEntity_t);
         }
         // make a dlight for the flash
         if (*pi).flashDlightColor[0 as i32 as usize] != 0.
@@ -1541,9 +1437,7 @@ pub unsafe extern "C" fn UI_DrawPlayer(
         UI_PlayerFloatSprite(
             pi,
             origin.as_mut_ptr(),
-            trap_R_RegisterShaderNoMip(
-                b"sprites/balloon3\x00" as *const u8 as *const libc::c_char,
-            ),
+            trap_R_RegisterShaderNoMip(b"sprites/balloon3\x00" as *const u8 as *const libc::c_char),
         );
     }
     //
@@ -1569,9 +1463,7 @@ pub unsafe extern "C" fn UI_DrawPlayer(
         0.0f64 as f32,
         0.0f64 as f32,
     );
-    trap_R_RenderScene(
-        &mut refdef as *mut _ as *const refdef_t,
-    );
+    trap_R_RenderScene(&mut refdef as *mut _ as *const refdef_t);
 }
 /*
 ==========================
@@ -1633,8 +1525,7 @@ unsafe extern "C" fn UI_ParseAnimationFile(
     let mut skip: i32 = 0;
     let mut text: [libc::c_char; 20000] = [0; 20000];
     let mut f: fileHandle_t = 0;
-    let mut animations: *mut animation_t =
-        0 as *mut animation_t;
+    let mut animations: *mut animation_t = 0 as *mut animation_t;
     animations = (*pi).animations.as_mut_ptr();
     crate::stdlib::memset(
         animations as *mut libc::c_void,
@@ -1645,11 +1536,7 @@ unsafe extern "C" fn UI_ParseAnimationFile(
     (*pi).fixedlegs = qfalse;
     (*pi).fixedtorso = qfalse;
     // load the file
-    len = trap_FS_FOpenFile(
-        filename,
-        &mut f,
-        FS_READ,
-    );
+    len = trap_FS_FOpenFile(filename, &mut f, FS_READ);
     if len <= 0 as i32 {
         return qfalse;
     }
@@ -1678,20 +1565,12 @@ unsafe extern "C" fn UI_ParseAnimationFile(
         if *token.offset(0 as i32 as isize) == 0 {
             break;
         }
-        if Q_stricmp(
-            token,
-            b"footsteps\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        if Q_stricmp(token, b"footsteps\x00" as *const u8 as *const libc::c_char) == 0 {
             token = COM_Parse(&mut text_p);
             if *token.offset(0 as i32 as isize) == 0 {
                 break;
             }
-        } else if Q_stricmp(
-            token,
-            b"headoffset\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"headoffset\x00" as *const u8 as *const libc::c_char) == 0 {
             i = 0 as i32;
             while i < 3 as i32 {
                 token = COM_Parse(&mut text_p);
@@ -1700,26 +1579,14 @@ unsafe extern "C" fn UI_ParseAnimationFile(
                 }
                 i += 1
             }
-        } else if Q_stricmp(
-            token,
-            b"sex\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"sex\x00" as *const u8 as *const libc::c_char) == 0 {
             token = COM_Parse(&mut text_p);
             if *token.offset(0 as i32 as isize) == 0 {
                 break;
             }
-        } else if Q_stricmp(
-            token,
-            b"fixedlegs\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"fixedlegs\x00" as *const u8 as *const libc::c_char) == 0 {
             (*pi).fixedlegs = qtrue
-        } else if Q_stricmp(
-            token,
-            b"fixedtorso\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"fixedtorso\x00" as *const u8 as *const libc::c_char) == 0 {
             (*pi).fixedtorso = qtrue
         } else if *token.offset(0 as i32 as isize) as i32 >= '0' as i32
             && *token.offset(0 as i32 as isize) as i32 <= '9' as i32
@@ -1740,9 +1607,7 @@ unsafe extern "C" fn UI_ParseAnimationFile(
     while i < MAX_ANIMATIONS as i32 {
         token = COM_Parse(&mut text_p);
         if *token.offset(0 as i32 as isize) == 0 {
-            if !(i >= TORSO_GETFLAG as i32
-                && i <= TORSO_NEGATIVE as i32)
-            {
+            if !(i >= TORSO_GETFLAG as i32 && i <= TORSO_NEGATIVE as i32) {
                 break;
             }
             (*animations.offset(i as isize)).firstFrame =
@@ -1755,21 +1620,16 @@ unsafe extern "C" fn UI_ParseAnimationFile(
                 (*animations.offset(TORSO_GESTURE as i32 as isize)).loopFrames;
             (*animations.offset(i as isize)).numFrames =
                 (*animations.offset(TORSO_GESTURE as i32 as isize)).numFrames;
-            (*animations.offset(i as isize)).reversed =
-                qfalse as i32;
+            (*animations.offset(i as isize)).reversed = qfalse as i32;
             (*animations.offset(i as isize)).flipflop = qfalse as i32
         } else {
             (*animations.offset(i as isize)).firstFrame = atoi(token);
             // leg only frames are adjusted to not count the upper body only frames
             if i == LEGS_WALKCR as i32 {
-                skip = (*animations.offset(LEGS_WALKCR as i32 as isize))
-                    .firstFrame
-                    - (*animations.offset(TORSO_GESTURE as i32 as isize))
-                        .firstFrame
+                skip = (*animations.offset(LEGS_WALKCR as i32 as isize)).firstFrame
+                    - (*animations.offset(TORSO_GESTURE as i32 as isize)).firstFrame
             }
-            if i >= LEGS_WALKCR as i32
-                && i < TORSO_GETFLAG as i32
-            {
+            if i >= LEGS_WALKCR as i32 && i < TORSO_GETFLAG as i32 {
                 (*animations.offset(i as isize)).firstFrame -= skip
             }
             token = COM_Parse(&mut text_p);
@@ -1777,16 +1637,13 @@ unsafe extern "C" fn UI_ParseAnimationFile(
                 break;
             }
             (*animations.offset(i as isize)).numFrames = atoi(token);
-            (*animations.offset(i as isize)).reversed =
-                qfalse as i32;
-            (*animations.offset(i as isize)).flipflop =
-                qfalse as i32;
+            (*animations.offset(i as isize)).reversed = qfalse as i32;
+            (*animations.offset(i as isize)).flipflop = qfalse as i32;
             // if numFrames is negative the animation is reversed
             if (*animations.offset(i as isize)).numFrames < 0 as i32 {
                 (*animations.offset(i as isize)).numFrames =
                     -(*animations.offset(i as isize)).numFrames;
-                (*animations.offset(i as isize)).reversed =
-                    qtrue as i32
+                (*animations.offset(i as isize)).reversed = qtrue as i32
             }
             token = COM_Parse(&mut text_p);
             if *token.offset(0 as i32 as isize) == 0 {
@@ -2096,9 +1953,7 @@ pub unsafe extern "C" fn UI_PlayerInfo_SetInfo(
     let mut weaponNum: weapon_t = WP_NONE;
     let mut c: i32 = 0;
     (*pi).chat = chat;
-    c = trap_Cvar_VariableValue(
-        b"color1\x00" as *const u8 as *const libc::c_char,
-    ) as i32;
+    c = trap_Cvar_VariableValue(b"color1\x00" as *const u8 as *const libc::c_char) as i32;
     (*pi).color1[2 as i32 as usize] = 0 as i32 as vec_t;
     (*pi).color1[1 as i32 as usize] = (*pi).color1[2 as i32 as usize];
     (*pi).color1[0 as i32 as usize] = (*pi).color1[1 as i32 as usize];
@@ -2117,12 +1972,9 @@ pub unsafe extern "C" fn UI_PlayerInfo_SetInfo(
             (*pi).color1[0 as i32 as usize] = 1.0f32
         }
     }
-    (*pi).c1RGBA[0 as i32 as usize] = (255 as i32 as f32 * (*pi).color1[0 as i32 as usize])
-        as byte;
-    (*pi).c1RGBA[1 as i32 as usize] = (255 as i32 as f32 * (*pi).color1[1 as i32 as usize])
-        as byte;
-    (*pi).c1RGBA[2 as i32 as usize] = (255 as i32 as f32 * (*pi).color1[2 as i32 as usize])
-        as byte;
+    (*pi).c1RGBA[0 as i32 as usize] = (255 as i32 as f32 * (*pi).color1[0 as i32 as usize]) as byte;
+    (*pi).c1RGBA[1 as i32 as usize] = (255 as i32 as f32 * (*pi).color1[1 as i32 as usize]) as byte;
+    (*pi).c1RGBA[2 as i32 as usize] = (255 as i32 as f32 * (*pi).color1[2 as i32 as usize]) as byte;
     (*pi).c1RGBA[3 as i32 as usize] = 255 as i32 as byte;
     // view angles
     (*pi).viewAngles[0 as i32 as usize] = *viewAngles.offset(0 as i32 as isize);
@@ -2163,9 +2015,7 @@ pub unsafe extern "C" fn UI_PlayerInfo_SetInfo(
     }
     weaponNum = (*pi).lastWeapon;
     (*pi).weapon = weaponNum;
-    if torsoAnim == BOTH_DEATH1 as i32
-        || legsAnim == BOTH_DEATH1 as i32
-    {
+    if torsoAnim == BOTH_DEATH1 as i32 || legsAnim == BOTH_DEATH1 as i32 {
         legsAnim = BOTH_DEATH1 as i32;
         torsoAnim = legsAnim;
         (*pi).currentWeapon = WP_NONE;
@@ -2181,8 +2031,7 @@ pub unsafe extern "C" fn UI_PlayerInfo_SetInfo(
     // leg animation
     currentAnim = (*pi).legsAnim & !(128 as i32);
     if legsAnim != LEGS_JUMP as i32
-        && (currentAnim == LEGS_JUMP as i32
-            || currentAnim == LEGS_LAND as i32)
+        && (currentAnim == LEGS_JUMP as i32 || currentAnim == LEGS_LAND as i32)
     {
         (*pi).pendingLegsAnim = legsAnim
     } else if legsAnim != currentAnim {
@@ -2191,9 +2040,7 @@ pub unsafe extern "C" fn UI_PlayerInfo_SetInfo(
         UI_ForceLegsAnim(pi, legsAnim);
     }
     // torso animation
-    if torsoAnim == TORSO_STAND as i32
-        || torsoAnim == TORSO_STAND2 as i32
-    {
+    if torsoAnim == TORSO_STAND as i32 || torsoAnim == TORSO_STAND2 as i32 {
         if weaponNum as u32 == WP_NONE as i32 as u32
             || weaponNum as u32 == WP_GAUNTLET as i32 as u32
         {
@@ -2202,9 +2049,7 @@ pub unsafe extern "C" fn UI_PlayerInfo_SetInfo(
             torsoAnim = TORSO_STAND as i32
         }
     }
-    if torsoAnim == TORSO_ATTACK as i32
-        || torsoAnim == TORSO_ATTACK2 as i32
-    {
+    if torsoAnim == TORSO_ATTACK as i32 || torsoAnim == TORSO_ATTACK2 as i32 {
         if weaponNum as u32 == WP_NONE as i32 as u32
             || weaponNum as u32 == WP_GAUNTLET as i32 as u32
         {
@@ -2221,8 +2066,7 @@ pub unsafe extern "C" fn UI_PlayerInfo_SetInfo(
         || currentAnim == TORSO_DROP as i32
     {
         (*pi).pendingTorsoAnim = torsoAnim
-    } else if (currentAnim == TORSO_GESTURE as i32
-        || currentAnim == TORSO_ATTACK as i32)
+    } else if (currentAnim == TORSO_GESTURE as i32 || currentAnim == TORSO_ATTACK as i32)
         && torsoAnim != currentAnim
     {
         (*pi).pendingTorsoAnim = torsoAnim

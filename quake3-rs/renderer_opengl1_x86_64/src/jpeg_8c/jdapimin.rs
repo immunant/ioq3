@@ -245,13 +245,10 @@ pub unsafe extern "C" fn jpeg_CreateDecompress(
         )
         .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
-    if structsize
-        != ::std::mem::size_of::<jpeg_decompress_struct>() as libc::c_ulong
-    {
+    if structsize != ::std::mem::size_of::<jpeg_decompress_struct>() as libc::c_ulong {
         (*(*cinfo).err).msg_code = JERR_BAD_STRUCT_SIZE as i32;
-        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = ::std::mem::size_of::<
-            jpeg_decompress_struct,
-        >() as libc::c_ulong as i32;
+        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] =
+            ::std::mem::size_of::<jpeg_decompress_struct>() as libc::c_ulong as i32;
         (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = structsize as i32;
         Some(
             (*(*cinfo).err)
@@ -277,9 +274,7 @@ pub unsafe extern "C" fn jpeg_CreateDecompress(
     (*cinfo).client_data = client_data;
     (*cinfo).is_decompressor = 1 as i32;
     /* Initialize a memory manager instance for this object */
-    jinit_memory_mgr(
-        cinfo as j_common_ptr as *mut jpeg_common_struct,
-    );
+    jinit_memory_mgr(cinfo as j_common_ptr as *mut jpeg_common_struct);
     /* Zero out pointers to permanent structures. */
     (*cinfo).progress = 0 as *mut jpeg_progress_mgr;
     (*cinfo).src = 0 as *mut jpeg_source_mgr;
@@ -298,13 +293,9 @@ pub unsafe extern "C" fn jpeg_CreateDecompress(
      * for COM, APPn markers before calling jpeg_read_header.
      */
     (*cinfo).marker_list = 0 as jpeg_saved_marker_ptr;
-    jinit_marker_reader(
-        cinfo as *mut jpeg_decompress_struct,
-    );
+    jinit_marker_reader(cinfo as *mut jpeg_decompress_struct);
     /* And initialize the overall input controller. */
-    jinit_input_controller(
-        cinfo as *mut jpeg_decompress_struct,
-    );
+    jinit_input_controller(cinfo as *mut jpeg_decompress_struct);
     /* OK, I'm ready */
     (*cinfo).global_state = 200 as i32;
 }
@@ -314,9 +305,7 @@ pub unsafe extern "C" fn jpeg_CreateDecompress(
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_destroy_decompress(mut cinfo: j_decompress_ptr) {
-    jpeg_destroy(
-        cinfo as j_common_ptr as *mut jpeg_common_struct,
-    );
+    jpeg_destroy(cinfo as j_common_ptr as *mut jpeg_common_struct);
     /* use common routine */
 }
 /* Return value is one of: */
@@ -342,9 +331,7 @@ pub unsafe extern "C" fn jpeg_destroy_decompress(mut cinfo: j_decompress_ptr) {
 #[no_mangle]
 
 pub unsafe extern "C" fn jpeg_abort_decompress(mut cinfo: j_decompress_ptr) {
-    jpeg_abort(
-        cinfo as j_common_ptr as *mut jpeg_common_struct,
-    );
+    jpeg_abort(cinfo as j_common_ptr as *mut jpeg_common_struct);
     /* use common routine */
 }
 /*
@@ -369,8 +356,7 @@ unsafe extern "C" fn default_decompress_parms(mut cinfo: j_decompress_ptr) {
                     0 => (*cinfo).jpeg_color_space = JCS_RGB,
                     1 => (*cinfo).jpeg_color_space = JCS_YCbCr,
                     _ => {
-                        (*(*cinfo).err).msg_code =
-                            JWRN_ADOBE_XFORM as i32; /* assume it's YCbCr */
+                        (*(*cinfo).err).msg_code = JWRN_ADOBE_XFORM as i32; /* assume it's YCbCr */
                         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] =
                             (*cinfo).Adobe_transform as i32;
                         Some(
@@ -379,8 +365,7 @@ unsafe extern "C" fn default_decompress_parms(mut cinfo: j_decompress_ptr) {
                                 .expect("non-null function pointer"),
                         )
                         .expect("non-null function pointer")(
-                            cinfo as j_common_ptr,
-                            -(1 as i32),
+                            cinfo as j_common_ptr, -(1 as i32)
                         );
                         (*cinfo).jpeg_color_space = JCS_YCbCr
                     }
@@ -406,8 +391,7 @@ unsafe extern "C" fn default_decompress_parms(mut cinfo: j_decompress_ptr) {
                             .expect("non-null function pointer"),
                     )
                     .expect("non-null function pointer")(
-                        cinfo as j_common_ptr,
-                        1 as i32,
+                        cinfo as j_common_ptr, 1 as i32
                     );
                     (*cinfo).jpeg_color_space = JCS_YCbCr
                     /* assume it's YCbCr */
@@ -422,8 +406,7 @@ unsafe extern "C" fn default_decompress_parms(mut cinfo: j_decompress_ptr) {
                     0 => (*cinfo).jpeg_color_space = JCS_CMYK,
                     2 => (*cinfo).jpeg_color_space = JCS_YCCK,
                     _ => {
-                        (*(*cinfo).err).msg_code =
-                            JWRN_ADOBE_XFORM as i32; /* assume it's YCCK */
+                        (*(*cinfo).err).msg_code = JWRN_ADOBE_XFORM as i32; /* assume it's YCCK */
                         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] =
                             (*cinfo).Adobe_transform as i32;
                         Some(
@@ -432,8 +415,7 @@ unsafe extern "C" fn default_decompress_parms(mut cinfo: j_decompress_ptr) {
                                 .expect("non-null function pointer"),
                         )
                         .expect("non-null function pointer")(
-                            cinfo as j_common_ptr,
-                            -(1 as i32),
+                            cinfo as j_common_ptr, -(1 as i32)
                         );
                         (*cinfo).jpeg_color_space = JCS_YCCK
                     }
@@ -524,18 +506,13 @@ pub unsafe extern "C" fn jpeg_read_header(
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             /* Reset to start state; it would be safer to require the application to
              * call jpeg_abort, but we can't change it now for compatibility reasons.
              * A side effect is to free any temporary memory (there shouldn't be any).
              */
-            jpeg_abort(
-                cinfo as j_common_ptr
-                    as *mut jpeg_common_struct,
-            ); /* sets state = DSTATE_START */
+            jpeg_abort(cinfo as j_common_ptr as *mut jpeg_common_struct); /* sets state = DSTATE_START */
             retcode = 2 as i32
         }
         0 | _ => {}
@@ -603,9 +580,7 @@ pub unsafe extern "C" fn jpeg_consume_input(mut cinfo: j_decompress_ptr) -> i32 
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
             current_block_10 = 7149356873433890176;
         }
     }
@@ -636,9 +611,7 @@ pub unsafe extern "C" fn jpeg_consume_input(mut cinfo: j_decompress_ptr) -> i32 
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_input_complete(
-    mut cinfo: j_decompress_ptr,
-) -> boolean {
+pub unsafe extern "C" fn jpeg_input_complete(mut cinfo: j_decompress_ptr) -> boolean {
     /* Check for valid jpeg object */
     if (*cinfo).global_state < 200 as i32 || (*cinfo).global_state > 210 as i32 {
         (*(*cinfo).err).msg_code = JERR_BAD_STATE as i32;
@@ -659,9 +632,7 @@ pub unsafe extern "C" fn jpeg_input_complete(
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_has_multiple_scans(
-    mut cinfo: j_decompress_ptr,
-) -> boolean {
+pub unsafe extern "C" fn jpeg_has_multiple_scans(mut cinfo: j_decompress_ptr) -> boolean {
     /* Only valid after jpeg_read_header completes */
     if (*cinfo).global_state < 202 as i32 || (*cinfo).global_state > 210 as i32 {
         (*(*cinfo).err).msg_code = JERR_BAD_STATE as i32;
@@ -737,9 +708,7 @@ pub unsafe extern "C" fn jpeg_has_multiple_scans(
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_finish_decompress(
-    mut cinfo: j_decompress_ptr,
-) -> boolean {
+pub unsafe extern "C" fn jpeg_finish_decompress(mut cinfo: j_decompress_ptr) -> boolean {
     if ((*cinfo).global_state == 205 as i32 || (*cinfo).global_state == 206 as i32)
         && (*cinfo).buffered_image == 0
     {
@@ -751,9 +720,7 @@ pub unsafe extern "C" fn jpeg_finish_decompress(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         Some(
             (*(*cinfo).master)
@@ -798,8 +765,6 @@ pub unsafe extern "C" fn jpeg_finish_decompress(
     )
     .expect("non-null function pointer")(cinfo);
     /* We can use jpeg_abort to release memory and reset global_state */
-    jpeg_abort(
-        cinfo as j_common_ptr as *mut jpeg_common_struct,
-    );
+    jpeg_abort(cinfo as j_common_ptr as *mut jpeg_common_struct);
     return 1 as i32;
 }

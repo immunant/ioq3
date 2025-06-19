@@ -251,10 +251,9 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
                 1 => {
                     /* a single column of (c->entries/c->dim) quantized values for
                     building a full value list algorithmically (square lattice) */
-                    quantvals =
-                        _book_maptype1_quantvals(
-                            c as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
-                        ) as i32
+                    quantvals = _book_maptype1_quantvals(
+                        c as *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
+                    ) as i32
                 }
                 2 => {
                     /* every value (c->entries*c->dim total) specified explicitly */
@@ -270,8 +269,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
             while i < quantvals as isize {
                 oggpack_write(
                     opb as *mut oggpack_buffer,
-                    libc::labs(*(*c).quantlist.offset(i as isize) as libc::c_long)
-                        as libc::c_ulong,
+                    libc::labs(*(*c).quantlist.offset(i as isize) as libc::c_long) as libc::c_ulong,
                     (*c).q_quant,
                 );
                 i += 1
@@ -302,51 +300,31 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
         ) as *mut crate::src::libvorbis_1_3_6::lib::codebook::static_codebook;
     (*s).allocedp = 1 as i32;
     /* make sure alignment is correct */
-    if !(oggpack_read(
-        opb as *mut oggpack_buffer,
-        24 as i32,
-    ) != 0x564342 as i32 as isize)
-    {
+    if !(oggpack_read(opb as *mut oggpack_buffer, 24 as i32) != 0x564342 as i32 as isize) {
         /* first the basic parameters */
-        (*s).dim = oggpack_read(
-            opb as *mut oggpack_buffer,
-            16 as i32,
-        );
-        (*s).entries = oggpack_read(
-            opb as *mut oggpack_buffer,
-            24 as i32,
-        );
+        (*s).dim = oggpack_read(opb as *mut oggpack_buffer, 16 as i32);
+        (*s).entries = oggpack_read(opb as *mut oggpack_buffer, 24 as i32);
         if !((*s).entries == -(1 as i32) as isize) {
-            if !(crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-                (*s).dim as ogg_uint32_t,
-            ) + crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-                (*s).entries as ogg_uint32_t,
-            ) > 24 as i32)
+            if !(crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog((*s).dim as ogg_uint32_t)
+                + crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
+                    (*s).entries as ogg_uint32_t,
+                )
+                > 24 as i32)
             {
                 /* codeword ordering.... length ordered or unordered? */
-                match oggpack_read(
-                    opb as *mut oggpack_buffer,
-                    1 as i32,
-                ) as i32
-                {
+                match oggpack_read(opb as *mut oggpack_buffer, 1 as i32) as i32 {
                     0 => {
                         current_block = 14523784380283086299;
                         match current_block {
                             14523784380283086299 => {
                                 let mut unused: isize = 0;
                                 /* allocated but unused entries? */
-                                unused = oggpack_read(
-                                    opb as *mut oggpack_buffer,
-                                    1 as i32,
-                                );
+                                unused = oggpack_read(opb as *mut oggpack_buffer, 1 as i32);
                                 if (*s).entries
                                     * (if unused != 0 { 1 as i32 } else { 5 as i32 }) as isize
                                     + 7 as i32 as isize
                                     >> 3 as i32
-                                    > (*opb).storage
-                                        - oggpack_bytes(
-                                            opb as *mut oggpack_buffer,
-                                        )
+                                    > (*opb).storage - oggpack_bytes(opb as *mut oggpack_buffer)
                                 {
                                     current_block = 15187751986642917127;
                                 } else {
@@ -365,15 +343,13 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 current_block = 15004371738079956865;
                                                 break;
                                             }
-                                            if oggpack_read(
-                                                opb as *mut oggpack_buffer,
-                                                1 as i32,
-                                            ) != 0
+                                            if oggpack_read(opb as *mut oggpack_buffer, 1 as i32)
+                                                != 0
                                             {
-                                                let mut num: isize =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 5 as
-                                                                     i32);
+                                                let mut num: isize = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    5 as i32,
+                                                );
                                                 if num == -(1 as i32) as isize {
                                                     current_block = 15187751986642917127;
                                                     break;
@@ -395,9 +371,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 break;
                                             }
                                             let mut num_0: isize =
-                                                oggpack_read(opb as *mut oggpack_buffer,
-                                                             5 as
-                                                                 i32);
+                                                oggpack_read(opb as *mut oggpack_buffer, 5 as i32);
                                             if num_0 == -(1 as i32) as isize {
                                                 current_block = 15187751986642917127;
                                                 break;
@@ -413,10 +387,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                             /* ordered */
                             {
                                 let mut length: isize =
-                                    oggpack_read(
-                                        opb as *mut oggpack_buffer,
-                                        5 as i32,
-                                    ) + 1 as i32 as isize;
+                                    oggpack_read(opb as *mut oggpack_buffer, 5 as i32)
+                                        + 1 as i32 as isize;
                                 if length == 0 as i32 as isize {
                                     current_block = 15187751986642917127;
                                 } else {
@@ -431,11 +403,12 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                             current_block = 15004371738079956865;
                                             break;
                                         }
-                                        let mut num_1: isize =
-                                            oggpack_read(opb as *mut oggpack_buffer,
-                                                         crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(((*s).entries
-                                                                      - i) as
-                                                                     ogg_uint32_t));
+                                        let mut num_1: isize = oggpack_read(
+                                            opb as *mut oggpack_buffer,
+                                            crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
+                                                ((*s).entries - i) as ogg_uint32_t,
+                                            ),
+                                        );
                                         if num_1 == -(1 as i32) as isize {
                                             current_block = 15187751986642917127;
                                             break;
@@ -471,10 +444,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                             _ =>
                             /* Do we have a mapping to unpack? */
                             {
-                                (*s).maptype = oggpack_read(
-                                    opb as *mut oggpack_buffer,
-                                    4 as i32,
-                                ) as i32;
+                                (*s).maptype =
+                                    oggpack_read(opb as *mut oggpack_buffer, 4 as i32) as i32;
                                 match (*s).maptype {
                                     0 => {
                                         current_block = 317151059986244064;
@@ -482,27 +453,24 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                             9333025334031379274 => {
                                                 /* implicitly populated value mapping */
                                                 /* explicitly populated value mapping */
-                                                (*s).q_min =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 32 as
-                                                                     i32);
-                                                (*s).q_delta =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 32 as
-                                                                     i32);
-                                                (*s).q_quant =
-                                                    (oggpack_read(opb as *mut oggpack_buffer,
-                                                                  4 as
-                                                                      i32)
-                                                         +
-                                                         1 as i32 as
-                                                             isize) as
-                                                        i32;
-                                                (*s).q_sequencep =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 1 as
-                                                                     i32)
-                                                        as i32;
+                                                (*s).q_min = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    32 as i32,
+                                                );
+                                                (*s).q_delta = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    32 as i32,
+                                                );
+                                                (*s).q_quant = (oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    4 as i32,
+                                                ) + 1 as i32 as isize)
+                                                    as i32;
+                                                (*s).q_sequencep = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    1 as i32,
+                                                )
+                                                    as i32;
                                                 if (*s).q_sequencep == -(1 as i32) {
                                                     current_block = 15187751986642917127;
                                                 } else {
@@ -525,61 +493,41 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                         _ => {}
                                                     }
                                                     /* quantized values */
-                                                    if (quantvals *
-                                                            (*s).q_quant +
-                                                            7 as i32
-                                                            >>
-                                                            3 as i32)
-                                                           as isize >
-                                                           (*opb).storage -
-                                                               oggpack_bytes(opb as *mut oggpack_buffer)
-                                                       {
-                                                        current_block =
-                                                            15187751986642917127;
+                                                    if (quantvals * (*s).q_quant + 7 as i32
+                                                        >> 3 as i32)
+                                                        as isize
+                                                        > (*opb).storage
+                                                            - oggpack_bytes(
+                                                                opb as *mut oggpack_buffer,
+                                                            )
+                                                    {
+                                                        current_block = 15187751986642917127;
                                                     } else {
-                                                        (*s).quantlist =
-                                                            crate::stdlib::malloc((::std::mem::size_of::<isize>()
-                                                                        as
-                                                                        libc::c_ulong).wrapping_mul(quantvals
-                                                                                                        as
-                                                                                                        libc::c_ulong))
-                                                                as
-                                                                *mut isize;
-                                                        i =
-                                                            0 as i32
-                                                                as
-                                                                isize;
-                                                        while i <
-                                                                  quantvals as
-                                                                      isize
-                                                              {
-                                                            *(*s).quantlist.offset(i
-                                                                                       as
-                                                                                       isize)
-                                                                =
-                                                                oggpack_read(opb as *mut oggpack_buffer,
-                                                                             (*s).q_quant);
+                                                        (*s).quantlist = crate::stdlib::malloc(
+                                                            (::std::mem::size_of::<isize>()
+                                                                as libc::c_ulong)
+                                                                .wrapping_mul(
+                                                                    quantvals as libc::c_ulong,
+                                                                ),
+                                                        )
+                                                            as *mut isize;
+                                                        i = 0 as i32 as isize;
+                                                        while i < quantvals as isize {
+                                                            *(*s).quantlist.offset(i as isize) =
+                                                                oggpack_read(
+                                                                    opb as *mut oggpack_buffer,
+                                                                    (*s).q_quant,
+                                                                );
                                                             i += 1
                                                         }
-                                                        if quantvals != 0 &&
-                                                               *(*s).quantlist.offset((quantvals
-                                                                                           -
-                                                                                           1
-                                                                                               as
-                                                                                               i32)
-                                                                                          as
-                                                                                          isize)
-                                                                   ==
-                                                                   -(1 as
-                                                                         i32)
-                                                                       as
-                                                                       isize
-                                                           {
-                                                            current_block =
-                                                                15187751986642917127;
+                                                        if quantvals != 0
+                                                            && *(*s).quantlist.offset(
+                                                                (quantvals - 1 as i32) as isize,
+                                                            ) == -(1 as i32) as isize
+                                                        {
+                                                            current_block = 15187751986642917127;
                                                         } else {
-                                                            current_block =
-                                                                317151059986244064;
+                                                            current_block = 317151059986244064;
                                                         }
                                                     }
                                                 }
@@ -600,27 +548,24 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                         current_block = 9333025334031379274;
                                         match current_block {
                                             9333025334031379274 => {
-                                                (*s).q_min =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 32 as
-                                                                     i32);
-                                                (*s).q_delta =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 32 as
-                                                                     i32);
-                                                (*s).q_quant =
-                                                    (oggpack_read(opb as *mut oggpack_buffer,
-                                                                  4 as
-                                                                      i32)
-                                                         +
-                                                         1 as i32 as
-                                                             isize) as
-                                                        i32;
-                                                (*s).q_sequencep =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 1 as
-                                                                     i32)
-                                                        as i32;
+                                                (*s).q_min = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    32 as i32,
+                                                );
+                                                (*s).q_delta = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    32 as i32,
+                                                );
+                                                (*s).q_quant = (oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    4 as i32,
+                                                ) + 1 as i32 as isize)
+                                                    as i32;
+                                                (*s).q_sequencep = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    1 as i32,
+                                                )
+                                                    as i32;
                                                 if (*s).q_sequencep == -(1 as i32) {
                                                     current_block = 15187751986642917127;
                                                 } else {
@@ -642,61 +587,41 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                         }
                                                         _ => {}
                                                     }
-                                                    if (quantvals *
-                                                            (*s).q_quant +
-                                                            7 as i32
-                                                            >>
-                                                            3 as i32)
-                                                           as isize >
-                                                           (*opb).storage -
-                                                               oggpack_bytes(opb as *mut oggpack_buffer)
-                                                       {
-                                                        current_block =
-                                                            15187751986642917127;
+                                                    if (quantvals * (*s).q_quant + 7 as i32
+                                                        >> 3 as i32)
+                                                        as isize
+                                                        > (*opb).storage
+                                                            - oggpack_bytes(
+                                                                opb as *mut oggpack_buffer,
+                                                            )
+                                                    {
+                                                        current_block = 15187751986642917127;
                                                     } else {
-                                                        (*s).quantlist =
-                                                            crate::stdlib::malloc((::std::mem::size_of::<isize>()
-                                                                        as
-                                                                        libc::c_ulong).wrapping_mul(quantvals
-                                                                                                        as
-                                                                                                        libc::c_ulong))
-                                                                as
-                                                                *mut isize;
-                                                        i =
-                                                            0 as i32
-                                                                as
-                                                                isize;
-                                                        while i <
-                                                                  quantvals as
-                                                                      isize
-                                                              {
-                                                            *(*s).quantlist.offset(i
-                                                                                       as
-                                                                                       isize)
-                                                                =
-                                                                oggpack_read(opb as *mut oggpack_buffer,
-                                                                             (*s).q_quant);
+                                                        (*s).quantlist = crate::stdlib::malloc(
+                                                            (::std::mem::size_of::<isize>()
+                                                                as libc::c_ulong)
+                                                                .wrapping_mul(
+                                                                    quantvals as libc::c_ulong,
+                                                                ),
+                                                        )
+                                                            as *mut isize;
+                                                        i = 0 as i32 as isize;
+                                                        while i < quantvals as isize {
+                                                            *(*s).quantlist.offset(i as isize) =
+                                                                oggpack_read(
+                                                                    opb as *mut oggpack_buffer,
+                                                                    (*s).q_quant,
+                                                                );
                                                             i += 1
                                                         }
-                                                        if quantvals != 0 &&
-                                                               *(*s).quantlist.offset((quantvals
-                                                                                           -
-                                                                                           1
-                                                                                               as
-                                                                                               i32)
-                                                                                          as
-                                                                                          isize)
-                                                                   ==
-                                                                   -(1 as
-                                                                         i32)
-                                                                       as
-                                                                       isize
-                                                           {
-                                                            current_block =
-                                                                15187751986642917127;
+                                                        if quantvals != 0
+                                                            && *(*s).quantlist.offset(
+                                                                (quantvals - 1 as i32) as isize,
+                                                            ) == -(1 as i32) as isize
+                                                        {
+                                                            current_block = 15187751986642917127;
                                                         } else {
-                                                            current_block =
-                                                                317151059986244064;
+                                                            current_block = 317151059986244064;
                                                         }
                                                     }
                                                 }
@@ -718,18 +643,12 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                         match current_block {
                             14523784380283086299 => {
                                 let mut unused: isize = 0;
-                                unused = oggpack_read(
-                                    opb as *mut oggpack_buffer,
-                                    1 as i32,
-                                );
+                                unused = oggpack_read(opb as *mut oggpack_buffer, 1 as i32);
                                 if (*s).entries
                                     * (if unused != 0 { 1 as i32 } else { 5 as i32 }) as isize
                                     + 7 as i32 as isize
                                     >> 3 as i32
-                                    > (*opb).storage
-                                        - oggpack_bytes(
-                                            opb as *mut oggpack_buffer,
-                                        )
+                                    > (*opb).storage - oggpack_bytes(opb as *mut oggpack_buffer)
                                 {
                                     current_block = 15187751986642917127;
                                 } else {
@@ -745,15 +664,13 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 current_block = 15004371738079956865;
                                                 break;
                                             }
-                                            if oggpack_read(
-                                                opb as *mut oggpack_buffer,
-                                                1 as i32,
-                                            ) != 0
+                                            if oggpack_read(opb as *mut oggpack_buffer, 1 as i32)
+                                                != 0
                                             {
-                                                let mut num: isize =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 5 as
-                                                                     i32);
+                                                let mut num: isize = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    5 as i32,
+                                                );
                                                 if num == -(1 as i32) as isize {
                                                     current_block = 15187751986642917127;
                                                     break;
@@ -774,9 +691,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 break;
                                             }
                                             let mut num_0: isize =
-                                                oggpack_read(opb as *mut oggpack_buffer,
-                                                             5 as
-                                                                 i32);
+                                                oggpack_read(opb as *mut oggpack_buffer, 5 as i32);
                                             if num_0 == -(1 as i32) as isize {
                                                 current_block = 15187751986642917127;
                                                 break;
@@ -790,10 +705,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                             }
                             _ => {
                                 let mut length: isize =
-                                    oggpack_read(
-                                        opb as *mut oggpack_buffer,
-                                        5 as i32,
-                                    ) + 1 as i32 as isize;
+                                    oggpack_read(opb as *mut oggpack_buffer, 5 as i32)
+                                        + 1 as i32 as isize;
                                 if length == 0 as i32 as isize {
                                     current_block = 15187751986642917127;
                                 } else {
@@ -808,11 +721,12 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                             current_block = 15004371738079956865;
                                             break;
                                         }
-                                        let mut num_1: isize =
-                                            oggpack_read(opb as *mut oggpack_buffer,
-                                                         crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(((*s).entries
-                                                                      - i) as
-                                                                     ogg_uint32_t));
+                                        let mut num_1: isize = oggpack_read(
+                                            opb as *mut oggpack_buffer,
+                                            crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
+                                                ((*s).entries - i) as ogg_uint32_t,
+                                            ),
+                                        );
                                         if num_1 == -(1 as i32) as isize {
                                             current_block = 15187751986642917127;
                                             break;
@@ -846,36 +760,31 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                         match current_block {
                             15187751986642917127 => {}
                             _ => {
-                                (*s).maptype = oggpack_read(
-                                    opb as *mut oggpack_buffer,
-                                    4 as i32,
-                                ) as i32;
+                                (*s).maptype =
+                                    oggpack_read(opb as *mut oggpack_buffer, 4 as i32) as i32;
                                 match (*s).maptype {
                                     0 => {
                                         current_block = 317151059986244064;
                                         match current_block {
                                             9333025334031379274 => {
-                                                (*s).q_min =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 32 as
-                                                                     i32);
-                                                (*s).q_delta =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 32 as
-                                                                     i32);
-                                                (*s).q_quant =
-                                                    (oggpack_read(opb as *mut oggpack_buffer,
-                                                                  4 as
-                                                                      i32)
-                                                         +
-                                                         1 as i32 as
-                                                             isize) as
-                                                        i32;
-                                                (*s).q_sequencep =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 1 as
-                                                                     i32)
-                                                        as i32;
+                                                (*s).q_min = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    32 as i32,
+                                                );
+                                                (*s).q_delta = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    32 as i32,
+                                                );
+                                                (*s).q_quant = (oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    4 as i32,
+                                                ) + 1 as i32 as isize)
+                                                    as i32;
+                                                (*s).q_sequencep = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    1 as i32,
+                                                )
+                                                    as i32;
                                                 if (*s).q_sequencep == -(1 as i32) {
                                                     current_block = 15187751986642917127;
                                                 } else {
@@ -897,61 +806,41 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                         }
                                                         _ => {}
                                                     }
-                                                    if (quantvals *
-                                                            (*s).q_quant +
-                                                            7 as i32
-                                                            >>
-                                                            3 as i32)
-                                                           as isize >
-                                                           (*opb).storage -
-                                                               oggpack_bytes(opb as *mut oggpack_buffer)
-                                                       {
-                                                        current_block =
-                                                            15187751986642917127;
+                                                    if (quantvals * (*s).q_quant + 7 as i32
+                                                        >> 3 as i32)
+                                                        as isize
+                                                        > (*opb).storage
+                                                            - oggpack_bytes(
+                                                                opb as *mut oggpack_buffer,
+                                                            )
+                                                    {
+                                                        current_block = 15187751986642917127;
                                                     } else {
-                                                        (*s).quantlist =
-                                                            crate::stdlib::malloc((::std::mem::size_of::<isize>()
-                                                                        as
-                                                                        libc::c_ulong).wrapping_mul(quantvals
-                                                                                                        as
-                                                                                                        libc::c_ulong))
-                                                                as
-                                                                *mut isize;
-                                                        i =
-                                                            0 as i32
-                                                                as
-                                                                isize;
-                                                        while i <
-                                                                  quantvals as
-                                                                      isize
-                                                              {
-                                                            *(*s).quantlist.offset(i
-                                                                                       as
-                                                                                       isize)
-                                                                =
-                                                                oggpack_read(opb as *mut oggpack_buffer,
-                                                                             (*s).q_quant);
+                                                        (*s).quantlist = crate::stdlib::malloc(
+                                                            (::std::mem::size_of::<isize>()
+                                                                as libc::c_ulong)
+                                                                .wrapping_mul(
+                                                                    quantvals as libc::c_ulong,
+                                                                ),
+                                                        )
+                                                            as *mut isize;
+                                                        i = 0 as i32 as isize;
+                                                        while i < quantvals as isize {
+                                                            *(*s).quantlist.offset(i as isize) =
+                                                                oggpack_read(
+                                                                    opb as *mut oggpack_buffer,
+                                                                    (*s).q_quant,
+                                                                );
                                                             i += 1
                                                         }
-                                                        if quantvals != 0 &&
-                                                               *(*s).quantlist.offset((quantvals
-                                                                                           -
-                                                                                           1
-                                                                                               as
-                                                                                               i32)
-                                                                                          as
-                                                                                          isize)
-                                                                   ==
-                                                                   -(1 as
-                                                                         i32)
-                                                                       as
-                                                                       isize
-                                                           {
-                                                            current_block =
-                                                                15187751986642917127;
+                                                        if quantvals != 0
+                                                            && *(*s).quantlist.offset(
+                                                                (quantvals - 1 as i32) as isize,
+                                                            ) == -(1 as i32) as isize
+                                                        {
+                                                            current_block = 15187751986642917127;
                                                         } else {
-                                                            current_block =
-                                                                317151059986244064;
+                                                            current_block = 317151059986244064;
                                                         }
                                                     }
                                                 }
@@ -967,27 +856,24 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                         current_block = 9333025334031379274;
                                         match current_block {
                                             9333025334031379274 => {
-                                                (*s).q_min =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 32 as
-                                                                     i32);
-                                                (*s).q_delta =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 32 as
-                                                                     i32);
-                                                (*s).q_quant =
-                                                    (oggpack_read(opb as *mut oggpack_buffer,
-                                                                  4 as
-                                                                      i32)
-                                                         +
-                                                         1 as i32 as
-                                                             isize) as
-                                                        i32;
-                                                (*s).q_sequencep =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 1 as
-                                                                     i32)
-                                                        as i32;
+                                                (*s).q_min = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    32 as i32,
+                                                );
+                                                (*s).q_delta = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    32 as i32,
+                                                );
+                                                (*s).q_quant = (oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    4 as i32,
+                                                ) + 1 as i32 as isize)
+                                                    as i32;
+                                                (*s).q_sequencep = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    1 as i32,
+                                                )
+                                                    as i32;
                                                 if (*s).q_sequencep == -(1 as i32) {
                                                     current_block = 15187751986642917127;
                                                 } else {
@@ -1009,61 +895,41 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                         }
                                                         _ => {}
                                                     }
-                                                    if (quantvals *
-                                                            (*s).q_quant +
-                                                            7 as i32
-                                                            >>
-                                                            3 as i32)
-                                                           as isize >
-                                                           (*opb).storage -
-                                                               oggpack_bytes(opb as *mut oggpack_buffer)
-                                                       {
-                                                        current_block =
-                                                            15187751986642917127;
+                                                    if (quantvals * (*s).q_quant + 7 as i32
+                                                        >> 3 as i32)
+                                                        as isize
+                                                        > (*opb).storage
+                                                            - oggpack_bytes(
+                                                                opb as *mut oggpack_buffer,
+                                                            )
+                                                    {
+                                                        current_block = 15187751986642917127;
                                                     } else {
-                                                        (*s).quantlist =
-                                                            crate::stdlib::malloc((::std::mem::size_of::<isize>()
-                                                                        as
-                                                                        libc::c_ulong).wrapping_mul(quantvals
-                                                                                                        as
-                                                                                                        libc::c_ulong))
-                                                                as
-                                                                *mut isize;
-                                                        i =
-                                                            0 as i32
-                                                                as
-                                                                isize;
-                                                        while i <
-                                                                  quantvals as
-                                                                      isize
-                                                              {
-                                                            *(*s).quantlist.offset(i
-                                                                                       as
-                                                                                       isize)
-                                                                =
-                                                                oggpack_read(opb as *mut oggpack_buffer,
-                                                                             (*s).q_quant);
+                                                        (*s).quantlist = crate::stdlib::malloc(
+                                                            (::std::mem::size_of::<isize>()
+                                                                as libc::c_ulong)
+                                                                .wrapping_mul(
+                                                                    quantvals as libc::c_ulong,
+                                                                ),
+                                                        )
+                                                            as *mut isize;
+                                                        i = 0 as i32 as isize;
+                                                        while i < quantvals as isize {
+                                                            *(*s).quantlist.offset(i as isize) =
+                                                                oggpack_read(
+                                                                    opb as *mut oggpack_buffer,
+                                                                    (*s).q_quant,
+                                                                );
                                                             i += 1
                                                         }
-                                                        if quantvals != 0 &&
-                                                               *(*s).quantlist.offset((quantvals
-                                                                                           -
-                                                                                           1
-                                                                                               as
-                                                                                               i32)
-                                                                                          as
-                                                                                          isize)
-                                                                   ==
-                                                                   -(1 as
-                                                                         i32)
-                                                                       as
-                                                                       isize
-                                                           {
-                                                            current_block =
-                                                                15187751986642917127;
+                                                        if quantvals != 0
+                                                            && *(*s).quantlist.offset(
+                                                                (quantvals - 1 as i32) as isize,
+                                                            ) == -(1 as i32) as isize
+                                                        {
+                                                            current_block = 15187751986642917127;
                                                         } else {
-                                                            current_block =
-                                                                317151059986244064;
+                                                            current_block = 317151059986244064;
                                                         }
                                                     }
                                                 }
@@ -1117,9 +983,7 @@ to an MSb bitpacker), but not actually the huge hit it appears to
 be.  The first-stage decode table catches most words so that
 bitreverse is not in the main execution path. */
 
-unsafe extern "C" fn bitreverse(
-    mut x: ogg_uint32_t,
-) -> ogg_uint32_t {
+unsafe extern "C" fn bitreverse(mut x: ogg_uint32_t) -> ogg_uint32_t {
     x = x >> 16 as i32 & 0xffff as i32 as u32 | x << 16 as i32 & 0xffff0000 as u32;
     x = x >> 8 as i32 & 0xff00ff as i32 as u32 | x << 8 as i32 & 0xff00ff00 as u32;
     x = x >> 4 as i32 & 0xf0f0f0f as i32 as u32 | x << 4 as i32 & 0xf0f0f0f0 as u32;
@@ -1135,10 +999,7 @@ unsafe extern "C" fn decode_packed_entry_number(
     let mut read: i32 = (*book).dec_maxlength;
     let mut lo: isize = 0;
     let mut hi: isize = 0;
-    let mut lok: isize = oggpack_look(
-        b as *mut oggpack_buffer,
-        (*book).dec_firsttablen,
-    );
+    let mut lok: isize = oggpack_look(b as *mut oggpack_buffer, (*book).dec_firsttablen);
     if lok >= 0 as i32 as isize {
         let mut entry: isize = *(*book).dec_firsttable.offset(lok as isize) as isize;
         if entry as libc::c_ulong & 0x80000000 as libc::c_ulong != 0 {
@@ -1162,23 +1023,16 @@ unsafe extern "C" fn decode_packed_entry_number(
     failure to read one bit above), the next look attempt will also
     fail and we'll correctly kick out instead of trying to walk the
     underformed tree */
-    lok = oggpack_look(
-        b as *mut oggpack_buffer,
-        read,
-    );
+    lok = oggpack_look(b as *mut oggpack_buffer, read);
     while lok < 0 as i32 as isize && read > 1 as i32 {
         read -= 1;
-        lok = oggpack_look(
-            b as *mut oggpack_buffer,
-            read,
-        )
+        lok = oggpack_look(b as *mut oggpack_buffer, read)
     }
     if lok < 0 as i32 as isize {
         return -(1 as i32) as isize;
     }
     /* bisect search for the codeword in the ordered list */
-    let mut testword: ogg_uint32_t =
-        bitreverse(lok as ogg_uint32_t);
+    let mut testword: ogg_uint32_t = bitreverse(lok as ogg_uint32_t);
     while hi - lo > 1 as i32 as isize {
         let mut p: isize = hi - lo >> 1 as i32;
         let mut test: isize =
@@ -1193,10 +1047,7 @@ unsafe extern "C" fn decode_packed_entry_number(
         );
         return lo;
     }
-    oggpack_adv(
-        b as *mut oggpack_buffer,
-        read,
-    );
+    oggpack_adv(b as *mut oggpack_buffer, read);
     return -(1 as i32) as isize;
 }
 /* Decode side is specced and easier, because we don't need to find

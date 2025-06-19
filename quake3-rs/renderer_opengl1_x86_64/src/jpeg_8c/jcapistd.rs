@@ -249,10 +249,7 @@ pub unsafe extern "C" fn jpeg_start_compress(
         .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     if write_all_tables != 0 {
-        jpeg_suppress_tables(
-            cinfo as *mut jpeg_compress_struct,
-            0 as i32,
-        );
+        jpeg_suppress_tables(cinfo as *mut jpeg_compress_struct, 0 as i32);
     }
     /* (Re)initialize error mgr and destination modules */
     Some(
@@ -268,9 +265,7 @@ pub unsafe extern "C" fn jpeg_start_compress(
     )
     .expect("non-null function pointer")(cinfo);
     /* Perform master selection of active modules */
-    jinit_compress_master(
-        cinfo as *mut jpeg_compress_struct,
-    );
+    jinit_compress_master(cinfo as *mut jpeg_compress_struct);
     /* Set up for the first pass */
     Some(
         (*(*cinfo).master)
@@ -328,9 +323,7 @@ pub unsafe extern "C" fn jpeg_write_scanlines(
                 .emit_message
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(
-            cinfo as j_common_ptr, -(1 as i32)
-        );
+        .expect("non-null function pointer")(cinfo as j_common_ptr, -(1 as i32));
     }
     /* Call progress monitor hook if present */
     if !(*cinfo).progress.is_null() {
@@ -368,9 +361,8 @@ pub unsafe extern "C" fn jpeg_write_scanlines(
             .expect("non-null function pointer"),
     )
     .expect("non-null function pointer")(cinfo, scanlines, &mut row_ctr, num_lines);
-    (*cinfo).next_scanline = ((*cinfo).next_scanline as u32).wrapping_add(row_ctr)
-        as JDIMENSION
-        as JDIMENSION;
+    (*cinfo).next_scanline =
+        ((*cinfo).next_scanline as u32).wrapping_add(row_ctr) as JDIMENSION as JDIMENSION;
     return row_ctr;
 }
 /* Replaces jpeg_write_scanlines when writing raw downsampled data. */
@@ -403,9 +395,7 @@ pub unsafe extern "C" fn jpeg_write_raw_data(
                 .emit_message
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(
-            cinfo as j_common_ptr, -(1 as i32)
-        );
+        .expect("non-null function pointer")(cinfo as j_common_ptr, -(1 as i32));
         return 0 as i32 as JDIMENSION;
     }
     /* Call progress monitor hook if present */
@@ -457,7 +447,6 @@ pub unsafe extern "C" fn jpeg_write_raw_data(
     }
     /* OK, we processed one iMCU row. */
     (*cinfo).next_scanline = ((*cinfo).next_scanline as u32).wrapping_add(lines_per_iMCU_row)
-        as JDIMENSION
-        as JDIMENSION;
+        as JDIMENSION as JDIMENSION;
     return lines_per_iMCU_row;
 }

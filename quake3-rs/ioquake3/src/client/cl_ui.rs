@@ -372,8 +372,7 @@ extern "C" {
 }
 #[no_mangle]
 
-pub static mut uivm: *mut vm_t =
-    0 as *const vm_t as *mut vm_t;
+pub static mut uivm: *mut vm_t = 0 as *const vm_t as *mut vm_t;
 /*
 ====================
 GetClientState
@@ -390,9 +389,7 @@ unsafe extern "C" fn GetClientState(mut state: *mut uiClientState_t) {
     );
     Q_strncpyz(
         (*state).updateInfoString.as_mut_ptr(),
-        cls
-            .updateInfoString
-            .as_mut_ptr(),
+        cls.updateInfoString.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     Q_strncpyz(
@@ -413,8 +410,7 @@ pub unsafe extern "C" fn LAN_LoadCachedServers() {
     let mut size: i32 = 0;
     let mut fileIn: fileHandle_t = 0;
     cls.numfavoriteservers = 0 as i32;
-    cls.numglobalservers =
-        cls.numfavoriteservers;
+    cls.numglobalservers = cls.numfavoriteservers;
     cls.numGlobalServerAddresses = 0 as i32;
     if FS_SV_FOpenFileRead(
         b"servercache.dat\x00" as *const u8 as *const libc::c_char,
@@ -427,8 +423,7 @@ pub unsafe extern "C" fn LAN_LoadCachedServers() {
             fileIn,
         );
         FS_Read(
-            &mut cls.numfavoriteservers as *mut i32
-                as *mut libc::c_void,
+            &mut cls.numfavoriteservers as *mut i32 as *mut libc::c_void,
             ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
             fileIn,
         );
@@ -439,30 +434,21 @@ pub unsafe extern "C" fn LAN_LoadCachedServers() {
         );
         if size as libc::c_ulong
             == (::std::mem::size_of::<[serverInfo_t; 4096]>() as libc::c_ulong)
-                .wrapping_add(
-                    ::std::mem::size_of::<[serverInfo_t; 128]>() as libc::c_ulong,
-                )
+                .wrapping_add(::std::mem::size_of::<[serverInfo_t; 128]>() as libc::c_ulong)
         {
             FS_Read(
-                &mut cls.globalServers
-                    as *mut [serverInfo_t; 4096]
-                    as *mut libc::c_void,
-                ::std::mem::size_of::<[serverInfo_t; 4096]>() as libc::c_ulong
-                    as i32,
+                &mut cls.globalServers as *mut [serverInfo_t; 4096] as *mut libc::c_void,
+                ::std::mem::size_of::<[serverInfo_t; 4096]>() as libc::c_ulong as i32,
                 fileIn,
             );
             FS_Read(
-                &mut cls.favoriteServers
-                    as *mut [serverInfo_t; 128]
-                    as *mut libc::c_void,
-                ::std::mem::size_of::<[serverInfo_t; 128]>() as libc::c_ulong
-                    as i32,
+                &mut cls.favoriteServers as *mut [serverInfo_t; 128] as *mut libc::c_void,
+                ::std::mem::size_of::<[serverInfo_t; 128]>() as libc::c_ulong as i32,
                 fileIn,
             );
         } else {
             cls.numfavoriteservers = 0 as i32;
-            cls.numglobalservers =
-                cls.numfavoriteservers;
+            cls.numglobalservers = cls.numfavoriteservers;
             cls.numGlobalServerAddresses = 0 as i32
         }
         FS_FCloseFile(fileIn);
@@ -478,9 +464,7 @@ LAN_SaveServersToCache
 pub unsafe extern "C" fn LAN_SaveServersToCache() {
     let mut size: i32 = 0;
     let mut fileOut: fileHandle_t =
-        FS_SV_FOpenFileWrite(
-            b"servercache.dat\x00" as *const u8 as *const libc::c_char,
-        );
+        FS_SV_FOpenFileWrite(b"servercache.dat\x00" as *const u8 as *const libc::c_char);
     FS_Write(
         &mut cls.numglobalservers as *mut i32 as *const libc::c_void,
         ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
@@ -492,23 +476,20 @@ pub unsafe extern "C" fn LAN_SaveServersToCache() {
         fileOut,
     );
     size = (::std::mem::size_of::<[serverInfo_t; 4096]>() as libc::c_ulong)
-        .wrapping_add(
-            ::std::mem::size_of::<[serverInfo_t; 128]>() as libc::c_ulong,
-        ) as i32;
+        .wrapping_add(::std::mem::size_of::<[serverInfo_t; 128]>() as libc::c_ulong)
+        as i32;
     FS_Write(
         &mut size as *mut i32 as *const libc::c_void,
         ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
         fileOut,
     );
     FS_Write(
-        &mut cls.globalServers
-            as *mut [serverInfo_t; 4096] as *const libc::c_void,
+        &mut cls.globalServers as *mut [serverInfo_t; 4096] as *const libc::c_void,
         ::std::mem::size_of::<[serverInfo_t; 4096]>() as libc::c_ulong as i32,
         fileOut,
     );
     FS_Write(
-        &mut cls.favoriteServers
-            as *mut [serverInfo_t; 128] as *const libc::c_void,
+        &mut cls.favoriteServers as *mut [serverInfo_t; 128] as *const libc::c_void,
         ::std::mem::size_of::<[serverInfo_t; 128]>() as libc::c_ulong as i32,
         fileOut,
     );
@@ -527,26 +508,17 @@ unsafe extern "C" fn LAN_ResetPings(mut source: i32) {
     count = 0 as i32;
     match source {
         0 => {
-            servers = &mut *cls
-                .localServers
-                .as_mut_ptr()
-                .offset(0 as i32 as isize)
-                as *mut serverInfo_t;
+            servers =
+                &mut *cls.localServers.as_mut_ptr().offset(0 as i32 as isize) as *mut serverInfo_t;
             count = 128 as i32
         }
         1 | 2 => {
-            servers = &mut *cls
-                .globalServers
-                .as_mut_ptr()
-                .offset(0 as i32 as isize)
-                as *mut serverInfo_t;
+            servers =
+                &mut *cls.globalServers.as_mut_ptr().offset(0 as i32 as isize) as *mut serverInfo_t;
             count = 4096 as i32
         }
         3 => {
-            servers = &mut *cls
-                .favoriteServers
-                .as_mut_ptr()
-                .offset(0 as i32 as isize)
+            servers = &mut *cls.favoriteServers.as_mut_ptr().offset(0 as i32 as isize)
                 as *mut serverInfo_t;
             count = 128 as i32
         }
@@ -587,37 +559,24 @@ unsafe extern "C" fn LAN_AddServer(
     match source {
         0 => {
             count = &mut cls.numlocalservers;
-            servers = &mut *cls
-                .localServers
-                .as_mut_ptr()
-                .offset(0 as i32 as isize)
-                as *mut serverInfo_t
+            servers =
+                &mut *cls.localServers.as_mut_ptr().offset(0 as i32 as isize) as *mut serverInfo_t
         }
         1 | 2 => {
             max = 4096 as i32;
             count = &mut cls.numglobalservers;
-            servers = &mut *cls
-                .globalServers
-                .as_mut_ptr()
-                .offset(0 as i32 as isize)
-                as *mut serverInfo_t
+            servers =
+                &mut *cls.globalServers.as_mut_ptr().offset(0 as i32 as isize) as *mut serverInfo_t
         }
         3 => {
             count = &mut cls.numfavoriteservers;
-            servers = &mut *cls
-                .favoriteServers
-                .as_mut_ptr()
-                .offset(0 as i32 as isize)
+            servers = &mut *cls.favoriteServers.as_mut_ptr().offset(0 as i32 as isize)
                 as *mut serverInfo_t
         }
         _ => {}
     }
     if !servers.is_null() && *count < max {
-        NET_StringToAdr(
-            address,
-            &mut adr as *mut _ as *mut netadr_t,
-            NA_UNSPEC,
-        );
+        NET_StringToAdr(address, &mut adr as *mut _ as *mut netadr_t, NA_UNSPEC);
         i = 0 as i32;
         while i < *count {
             if NET_CompareAdr(
@@ -659,26 +618,17 @@ unsafe extern "C" fn LAN_RemoveServer(mut source: i32, mut addr: *const libc::c_
     match source {
         0 => {
             count = &mut cls.numlocalservers;
-            servers = &mut *cls
-                .localServers
-                .as_mut_ptr()
-                .offset(0 as i32 as isize)
-                as *mut serverInfo_t
+            servers =
+                &mut *cls.localServers.as_mut_ptr().offset(0 as i32 as isize) as *mut serverInfo_t
         }
         1 | 2 => {
             count = &mut cls.numglobalservers;
-            servers = &mut *cls
-                .globalServers
-                .as_mut_ptr()
-                .offset(0 as i32 as isize)
-                as *mut serverInfo_t
+            servers =
+                &mut *cls.globalServers.as_mut_ptr().offset(0 as i32 as isize) as *mut serverInfo_t
         }
         3 => {
             count = &mut cls.numfavoriteservers;
-            servers = &mut *cls
-                .favoriteServers
-                .as_mut_ptr()
-                .offset(0 as i32 as isize)
+            servers = &mut *cls.favoriteServers.as_mut_ptr().offset(0 as i32 as isize)
                 as *mut serverInfo_t
         }
         _ => {}
@@ -691,11 +641,7 @@ unsafe extern "C" fn LAN_RemoveServer(mut source: i32, mut addr: *const libc::c_
             port: 0,
             scope_id: 0,
         };
-        NET_StringToAdr(
-            addr,
-            &mut comp as *mut _ as *mut netadr_t,
-            NA_UNSPEC,
-        );
+        NET_StringToAdr(addr, &mut comp as *mut _ as *mut netadr_t, NA_UNSPEC);
         i = 0 as i32;
         while i < *count {
             if NET_CompareAdr(
@@ -707,10 +653,8 @@ unsafe extern "C" fn LAN_RemoveServer(mut source: i32, mut addr: *const libc::c_
                 let mut j: i32 = i;
                 while j < *count - 1 as i32 {
                     crate::stdlib::memcpy(
-                        &mut *servers.offset(j as isize) as *mut serverInfo_t
-                            as *mut libc::c_void,
-                        &mut *servers.offset((j + 1 as i32) as isize)
-                            as *mut serverInfo_t
+                        &mut *servers.offset(j as isize) as *mut serverInfo_t as *mut libc::c_void,
+                        &mut *servers.offset((j + 1 as i32) as isize) as *mut serverInfo_t
                             as *const libc::c_void,
                         ::std::mem::size_of::<serverInfo_t>() as libc::c_ulong,
                     );
@@ -756,10 +700,7 @@ unsafe extern "C" fn LAN_GetServerAddressString(
             if n >= 0 as i32 && n < 128 as i32 {
                 Q_strncpyz(
                     buf,
-                    NET_AdrToStringwPort(
-                        cls.localServers[n as usize].adr
-                            as netadr_t,
-                    ),
+                    NET_AdrToStringwPort(cls.localServers[n as usize].adr as netadr_t),
                     buflen,
                 );
                 return;
@@ -769,10 +710,7 @@ unsafe extern "C" fn LAN_GetServerAddressString(
             if n >= 0 as i32 && n < 4096 as i32 {
                 Q_strncpyz(
                     buf,
-                    NET_AdrToStringwPort(
-                        cls.globalServers[n as usize].adr
-                            as netadr_t,
-                    ),
+                    NET_AdrToStringwPort(cls.globalServers[n as usize].adr as netadr_t),
                     buflen,
                 );
                 return;
@@ -782,10 +720,7 @@ unsafe extern "C" fn LAN_GetServerAddressString(
             if n >= 0 as i32 && n < 128 as i32 {
                 Q_strncpyz(
                     buf,
-                    NET_AdrToStringwPort(
-                        cls.favoriteServers[n as usize].adr
-                            as netadr_t,
-                    ),
+                    NET_AdrToStringwPort(cls.favoriteServers[n as usize].adr as netadr_t),
                     buflen,
                 );
                 return;
@@ -813,29 +748,19 @@ unsafe extern "C" fn LAN_GetServerInfo(
     match source {
         0 => {
             if n >= 0 as i32 && n < 128 as i32 {
-                server = &mut *cls
-                    .localServers
-                    .as_mut_ptr()
-                    .offset(n as isize)
-                    as *mut serverInfo_t
+                server = &mut *cls.localServers.as_mut_ptr().offset(n as isize) as *mut serverInfo_t
             }
         }
         1 | 2 => {
             if n >= 0 as i32 && n < 4096 as i32 {
-                server = &mut *cls
-                    .globalServers
-                    .as_mut_ptr()
-                    .offset(n as isize)
-                    as *mut serverInfo_t
+                server =
+                    &mut *cls.globalServers.as_mut_ptr().offset(n as isize) as *mut serverInfo_t
             }
         }
         3 => {
             if n >= 0 as i32 && n < 128 as i32 {
-                server = &mut *cls
-                    .favoriteServers
-                    .as_mut_ptr()
-                    .offset(n as isize)
-                    as *mut serverInfo_t
+                server =
+                    &mut *cls.favoriteServers.as_mut_ptr().offset(n as isize) as *mut serverInfo_t
             }
         }
         _ => {}
@@ -916,9 +841,7 @@ unsafe extern "C" fn LAN_GetServerInfo(
         Info_SetValueForKey(
             info.as_mut_ptr(),
             b"addr\x00" as *const u8 as *const libc::c_char,
-            NET_AdrToStringwPort(
-                (*server).adr as netadr_t,
-            ),
+            NET_AdrToStringwPort((*server).adr as netadr_t),
         );
         Info_SetValueForKey(
             info.as_mut_ptr(),
@@ -960,29 +883,19 @@ unsafe extern "C" fn LAN_GetServerPing(mut source: i32, mut n: i32) -> i32 {
     match source {
         0 => {
             if n >= 0 as i32 && n < 128 as i32 {
-                server = &mut *cls
-                    .localServers
-                    .as_mut_ptr()
-                    .offset(n as isize)
-                    as *mut serverInfo_t
+                server = &mut *cls.localServers.as_mut_ptr().offset(n as isize) as *mut serverInfo_t
             }
         }
         1 | 2 => {
             if n >= 0 as i32 && n < 4096 as i32 {
-                server = &mut *cls
-                    .globalServers
-                    .as_mut_ptr()
-                    .offset(n as isize)
-                    as *mut serverInfo_t
+                server =
+                    &mut *cls.globalServers.as_mut_ptr().offset(n as isize) as *mut serverInfo_t
             }
         }
         3 => {
             if n >= 0 as i32 && n < 128 as i32 {
-                server = &mut *cls
-                    .favoriteServers
-                    .as_mut_ptr()
-                    .offset(n as isize)
-                    as *mut serverInfo_t
+                server =
+                    &mut *cls.favoriteServers.as_mut_ptr().offset(n as isize) as *mut serverInfo_t
             }
         }
         _ => {}
@@ -998,35 +911,22 @@ LAN_GetServerPtr
 ====================
 */
 
-unsafe extern "C" fn LAN_GetServerPtr(
-    mut source: i32,
-    mut n: i32,
-) -> *mut serverInfo_t {
+unsafe extern "C" fn LAN_GetServerPtr(mut source: i32, mut n: i32) -> *mut serverInfo_t {
     match source {
         0 => {
             if n >= 0 as i32 && n < 128 as i32 {
-                return &mut *cls
-                    .localServers
-                    .as_mut_ptr()
-                    .offset(n as isize)
-                    as *mut serverInfo_t;
+                return &mut *cls.localServers.as_mut_ptr().offset(n as isize) as *mut serverInfo_t;
             }
         }
         1 | 2 => {
             if n >= 0 as i32 && n < 4096 as i32 {
-                return &mut *cls
-                    .globalServers
-                    .as_mut_ptr()
-                    .offset(n as isize)
+                return &mut *cls.globalServers.as_mut_ptr().offset(n as isize)
                     as *mut serverInfo_t;
             }
         }
         3 => {
             if n >= 0 as i32 && n < 128 as i32 {
-                return &mut *cls
-                    .favoriteServers
-                    .as_mut_ptr()
-                    .offset(n as isize)
+                return &mut *cls.favoriteServers.as_mut_ptr().offset(n as isize)
                     as *mut serverInfo_t;
             }
         }
@@ -1166,36 +1066,22 @@ LAN_MarkServerVisible
 ====================
 */
 
-unsafe extern "C" fn LAN_MarkServerVisible(
-    mut source: i32,
-    mut n: i32,
-    mut visible: qboolean,
-) {
+unsafe extern "C" fn LAN_MarkServerVisible(mut source: i32, mut n: i32, mut visible: qboolean) {
     if n == -(1 as i32) {
         let mut count: i32 = 128 as i32;
-        let mut server: *mut serverInfo_t =
-            0 as *mut serverInfo_t;
+        let mut server: *mut serverInfo_t = 0 as *mut serverInfo_t;
         match source {
             0 => {
-                server = &mut *cls
-                    .localServers
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize)
+                server = &mut *cls.localServers.as_mut_ptr().offset(0 as i32 as isize)
                     as *mut serverInfo_t
             }
             1 | 2 => {
-                server = &mut *cls
-                    .globalServers
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize)
+                server = &mut *cls.globalServers.as_mut_ptr().offset(0 as i32 as isize)
                     as *mut serverInfo_t;
                 count = 4096 as i32
             }
             3 => {
-                server = &mut *cls
-                    .favoriteServers
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize)
+                server = &mut *cls.favoriteServers.as_mut_ptr().offset(0 as i32 as isize)
                     as *mut serverInfo_t
             }
             _ => {}
@@ -1262,9 +1148,7 @@ LAN_UpdateVisiblePings
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn LAN_UpdateVisiblePings(
-    mut source: i32,
-) -> qboolean {
+pub unsafe extern "C" fn LAN_UpdateVisiblePings(mut source: i32) -> qboolean {
     return CL_UpdateVisiblePings_f(source);
 }
 /*
@@ -1317,11 +1201,7 @@ unsafe extern "C" fn Key_KeynumToStringBuf(
     mut buf: *mut libc::c_char,
     mut buflen: i32,
 ) {
-    Q_strncpyz(
-        buf,
-        Key_KeynumToString(keynum),
-        buflen,
-    );
+    Q_strncpyz(buf, Key_KeynumToString(keynum), buflen);
 }
 /*
 ====================
@@ -1350,15 +1230,12 @@ CLUI_GetCDKey
 
 unsafe extern "C" fn CLUI_GetCDKey(mut buf: *mut libc::c_char, mut _buflen: i32) {
     let mut gamedir: *const libc::c_char = 0 as *const libc::c_char;
-    gamedir = Cvar_VariableString(
-        b"fs_game\x00" as *const u8 as *const libc::c_char,
-    );
+    gamedir = Cvar_VariableString(b"fs_game\x00" as *const u8 as *const libc::c_char);
     if UI_usesUniqueCDKey() as u32 != 0 && *gamedir.offset(0 as i32 as isize) as i32 != 0 as i32 {
         crate::stdlib::memcpy(
             buf as *mut libc::c_void,
-            &mut *cl_cdkey
-                .as_mut_ptr()
-                .offset(16 as i32 as isize) as *mut libc::c_char as *const libc::c_void,
+            &mut *cl_cdkey.as_mut_ptr().offset(16 as i32 as isize) as *mut libc::c_char
+                as *const libc::c_void,
             16 as i32 as libc::c_ulong,
         );
         *buf.offset(16 as i32 as isize) = 0 as i32 as libc::c_char
@@ -1379,14 +1256,11 @@ CLUI_SetCDKey
 
 unsafe extern "C" fn CLUI_SetCDKey(mut buf: *mut libc::c_char) {
     let mut gamedir: *const libc::c_char = 0 as *const libc::c_char;
-    gamedir = Cvar_VariableString(
-        b"fs_game\x00" as *const u8 as *const libc::c_char,
-    );
+    gamedir = Cvar_VariableString(b"fs_game\x00" as *const u8 as *const libc::c_char);
     if UI_usesUniqueCDKey() as u32 != 0 && *gamedir.offset(0 as i32 as isize) as i32 != 0 as i32 {
         crate::stdlib::memcpy(
-            &mut *cl_cdkey
-                .as_mut_ptr()
-                .offset(16 as i32 as isize) as *mut libc::c_char as *mut libc::c_void,
+            &mut *cl_cdkey.as_mut_ptr().offset(16 as i32 as isize) as *mut libc::c_char
+                as *mut libc::c_void,
             buf as *const libc::c_void,
             16 as i32 as libc::c_ulong,
         );
@@ -1427,11 +1301,7 @@ unsafe extern "C" fn GetConfigString(
     }
     Q_strncpyz(
         buf,
-        cl
-            .gameState
-            .stringData
-            .as_mut_ptr()
-            .offset(offset as isize),
+        cl.gameState.stringData.as_mut_ptr().offset(offset as isize),
         size,
     );
     return qtrue as i32;
@@ -1443,8 +1313,7 @@ FloatAsInt
 */
 
 unsafe extern "C" fn FloatAsInt(mut f: f32) -> i32 {
-    let mut fi: floatint_t =
-        floatint_t { f: 0. };
+    let mut fi: floatint_t = floatint_t { f: 0. };
     fi.f = f;
     return fi.i;
 }
@@ -1457,95 +1326,74 @@ The ui module is making a system call
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_UISystemCalls(
-    mut args: *mut intptr_t,
-) -> intptr_t {
+pub unsafe extern "C" fn CL_UISystemCalls(mut args: *mut intptr_t) -> intptr_t {
     match *args.offset(0 as i32 as isize) {
         0 => {
             Com_Error(
                 ERR_DROP as i32,
                 b"%s\x00" as *const u8 as *const libc::c_char,
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
             );
         }
         1 => {
             Com_Printf(
                 b"%s\x00" as *const u8 as *const libc::c_char,
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
         2 => return Sys_Milliseconds() as intptr_t,
         50 => {
             Cvar_Register(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut vmCvar_t
-                    as *mut vmCvar_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vmCvar_t as *mut vmCvar_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
         51 => {
-            Cvar_Update(VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            )
-                as *mut vmCvar_t
-                as *mut vmCvar_t);
+            Cvar_Update(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut vmCvar_t as *mut vmCvar_t
+            );
             return 0 as i32 as intptr_t;
         }
         3 => {
             Cvar_SetSafe(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
         4 => {
             return FloatAsInt(Cvar_VariableValue(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
             )) as intptr_t
         }
         5 => {
             Cvar_VariableStringBuffer(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
         6 => {
             Cvar_SetValueSafe(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
                 _vmf(*args.offset(2 as i32 as isize)),
             );
             return 0 as i32 as intptr_t;
         }
         7 => {
-            Cvar_Reset(VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            ) as *const libc::c_char);
+            Cvar_Reset(VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char);
             return 0 as i32 as intptr_t;
         }
         8 => {
             Cvar_Register(
-                0 as *mut vmCvar_t
-                    as *mut vmCvar_t,
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                0 as *mut vmCvar_t as *mut vmCvar_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -1553,8 +1401,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         9 => {
             Cvar_InfoStringBuffer(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -1563,30 +1410,25 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         11 => {
             Cmd_ArgvBuffer(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
         12 => {
-            if *args.offset(1 as i32 as isize)
-                == EXEC_NOW as i32 as isize
+            if *args.offset(1 as i32 as isize) == EXEC_NOW as i32 as isize
                 && (crate::stdlib::strncmp(
-                    VM_ArgPtr(*args.offset(2 as i32 as isize))
-                        as *const libc::c_char,
+                    VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
                     b"snd_restart\x00" as *const u8 as *const libc::c_char,
                     11 as i32 as libc::c_ulong,
                 ) == 0
                     || crate::stdlib::strncmp(
-                        VM_ArgPtr(*args.offset(2 as i32 as isize))
-                            as *const libc::c_char,
+                        VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
                         b"vid_restart\x00" as *const u8 as *const libc::c_char,
                         11 as i32 as libc::c_ulong,
                     ) == 0
                     || crate::stdlib::strncmp(
-                        VM_ArgPtr(*args.offset(2 as i32 as isize))
-                            as *const libc::c_char,
+                        VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
                         b"quit\x00" as *const u8 as *const libc::c_char,
                         5 as i32 as libc::c_ulong,
                     ) == 0)
@@ -1594,25 +1436,20 @@ pub unsafe extern "C" fn CL_UISystemCalls(
                 Com_Printf(
                     b"^3turning EXEC_NOW \'%.11s\' into EXEC_INSERT\n\x00" as *const u8
                         as *const libc::c_char,
-                    VM_ArgPtr(*args.offset(2 as i32 as isize))
-                        as *const libc::c_char,
+                    VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
                 );
-                *args.offset(1 as i32 as isize) =
-                    EXEC_INSERT as i32 as intptr_t
+                *args.offset(1 as i32 as isize) = EXEC_INSERT as i32 as intptr_t
             }
             Cbuf_ExecuteText(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
         13 => {
             return FS_FOpenFileByMode(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut fileHandle_t,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut fileHandle_t,
                 *args.offset(3 as i32 as isize) as fsMode_t,
             ) as intptr_t
         }
@@ -1633,19 +1470,14 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             return 0 as i32 as intptr_t;
         }
         16 => {
-            FS_FCloseFile(
-                *args.offset(1 as i32 as isize) as fileHandle_t
-            );
+            FS_FCloseFile(*args.offset(1 as i32 as isize) as fileHandle_t);
             return 0 as i32 as intptr_t;
         }
         17 => {
             return FS_GetFileList(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
             ) as intptr_t
         }
@@ -1657,64 +1489,46 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             ) as intptr_t
         }
         18 => {
-            return re
-                .RegisterModel
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-            ) as intptr_t
+            return re.RegisterModel.expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            )
+                as *const libc::c_char) as intptr_t
         }
         19 => {
-            return re
-                .RegisterSkin
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-            ) as intptr_t
+            return re.RegisterSkin.expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            )
+                as *const libc::c_char) as intptr_t
         }
         20 => {
-            return re
-                .RegisterShaderNoMip
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-            ) as intptr_t
+            return re.RegisterShaderNoMip.expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            )
+                as *const libc::c_char) as intptr_t
         }
         21 => {
-            re
-                .ClearScene
-                .expect("non-null function pointer")();
+            re.ClearScene.expect("non-null function pointer")();
             return 0 as i32 as intptr_t;
         }
         22 => {
-            re
-                .AddRefEntityToScene
-                .expect("non-null function pointer")(
-                VM_ArgPtr(
+            re.AddRefEntityToScene.expect("non-null function pointer")(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
             )
-                as *const refEntity_t
-            );
+                as *const refEntity_t);
             return 0 as i32 as intptr_t;
         }
         23 => {
-            re
-                .AddPolyToScene
-                .expect("non-null function pointer")(
+            re.AddPolyToScene.expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as qhandle_t,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const polyVert_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const polyVert_t,
                 1 as i32,
             );
             return 0 as i32 as intptr_t;
         }
         24 => {
-            re
-                .AddLightToScene
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const vec_t,
+            re.AddLightToScene.expect("non-null function pointer")(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const vec_t,
                 _vmf(*args.offset(2 as i32 as isize)),
                 _vmf(*args.offset(3 as i32 as isize)),
                 _vmf(*args.offset(4 as i32 as isize)),
@@ -1723,30 +1537,19 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             return 0 as i32 as intptr_t;
         }
         25 => {
-            re
-                .RenderScene
-                .expect("non-null function pointer")(
-                VM_ArgPtr(
+            re.RenderScene.expect("non-null function pointer")(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
-            )
-                as *const refdef_t
-            );
+            ) as *const refdef_t);
             return 0 as i32 as intptr_t;
         }
         26 => {
-            re
-                .SetColor
-                .expect("non-null function pointer")(
-                VM_ArgPtr(
+            re.SetColor.expect("non-null function pointer")(VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
-            ) as *const f32
-            );
+            ) as *const f32);
             return 0 as i32 as intptr_t;
         }
         27 => {
-            re
-                .DrawStretchPic
-                .expect("non-null function pointer")(
+            re.DrawStretchPic.expect("non-null function pointer")(
                 _vmf(*args.offset(1 as i32 as isize)),
                 _vmf(*args.offset(2 as i32 as isize)),
                 _vmf(*args.offset(3 as i32 as isize)),
@@ -1760,14 +1563,10 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             return 0 as i32 as intptr_t;
         }
         56 => {
-            re
-                .ModelBounds
-                .expect("non-null function pointer")(
+            re.ModelBounds.expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as qhandle_t,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut vec_t,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut vec_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut vec_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut vec_t,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1776,24 +1575,19 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             return 0 as i32 as intptr_t;
         }
         29 => {
-            re
-                .LerpTag
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut orientation_t,
+            re.LerpTag.expect("non-null function pointer")(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut orientation_t,
                 *args.offset(2 as i32 as isize) as qhandle_t,
                 *args.offset(3 as i32 as isize) as i32,
                 *args.offset(4 as i32 as isize) as i32,
                 _vmf(*args.offset(5 as i32 as isize)),
-                VM_ArgPtr(*args.offset(6 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(6 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
         31 => {
             return crate::src::client::snd_main::S_RegisterSound(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
                 *args.offset(2 as i32 as isize) as qboolean,
             ) as intptr_t
         }
@@ -1807,8 +1601,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         33 => {
             Key_KeynumToStringBuf(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -1816,8 +1609,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         34 => {
             Key_GetBindingBuf(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -1825,8 +1617,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         35 => {
             crate::src::client::cl_keys::Key_SetBinding(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1834,9 +1625,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             return crate::src::client::cl_keys::Key_IsDown(*args.offset(1 as i32 as isize) as i32)
                 as intptr_t
         }
-        37 => {
-            return crate::src::client::cl_keys::Key_GetOverstrikeMode() as intptr_t
-        }
+        37 => return crate::src::client::cl_keys::Key_GetOverstrikeMode() as intptr_t,
         38 => {
             crate::src::client::cl_keys::Key_SetOverstrikeMode(
                 *args.offset(1 as i32 as isize) as qboolean
@@ -1851,39 +1640,29 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         41 => {
             // Don't allow the ui module to close the console
             Key_SetCatcher(
-                (*args.offset(1 as i32 as isize)
-                    | (Key_GetCatcher() & 0x1 as i32) as isize)
-                    as i32,
+                (*args.offset(1 as i32 as isize) | (Key_GetCatcher() & 0x1 as i32) as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
         42 => {
             CL_GetClipboardData(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(2 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
         44 => {
-            GetClientState(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut uiClientState_t,
-            );
+            GetClientState(VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut uiClientState_t);
             return 0 as i32 as intptr_t;
         }
         43 => {
-            CL_GetGlconfig(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut glconfig_t,
-            );
+            CL_GetGlconfig(VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut glconfig_t);
             return 0 as i32 as intptr_t;
         }
         45 => {
             return GetConfigString(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             ) as intptr_t
         }
@@ -1898,17 +1677,14 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         73 => {
             return LAN_AddServer(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const libc::c_char,
             ) as intptr_t
         }
         74 => {
             LAN_RemoveServer(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
@@ -1920,8 +1696,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         48 => {
             LAN_GetPing(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
                 VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut i32,
             );
@@ -1930,22 +1705,17 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         49 => {
             LAN_GetPingInfo(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
-        65 => {
-            return LAN_GetServerCount(*args.offset(1 as i32 as isize) as i32)
-                as intptr_t
-        }
+        65 => return LAN_GetServerCount(*args.offset(1 as i32 as isize) as i32) as intptr_t,
         66 => {
             LAN_GetServerAddressString(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -1954,8 +1724,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             LAN_GetServerInfo(
                 *args.offset(1 as i32 as isize) as i32,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(4 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
@@ -1980,20 +1749,15 @@ pub unsafe extern "C" fn CL_UISystemCalls(
                 *args.offset(2 as i32 as isize) as i32,
             ) as intptr_t
         }
-        69 => {
-            return LAN_UpdateVisiblePings(*args.offset(1 as i32 as isize) as i32)
-                as intptr_t
-        }
+        69 => return LAN_UpdateVisiblePings(*args.offset(1 as i32 as isize) as i32) as intptr_t,
         70 => {
             LAN_ResetPings(*args.offset(1 as i32 as isize) as i32);
             return 0 as i32 as intptr_t;
         }
         82 => {
             return LAN_GetServerStatus(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
             ) as intptr_t
         }
@@ -2006,34 +1770,24 @@ pub unsafe extern "C" fn CL_UISystemCalls(
                 *args.offset(5 as i32 as isize) as i32,
             ) as intptr_t
         }
-        52 => {
-            return Hunk_MemoryRemaining() as intptr_t
-        }
+        52 => return Hunk_MemoryRemaining() as intptr_t,
         53 => {
             CLUI_GetCDKey(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
                 *args.offset(2 as i32 as isize) as i32,
             );
             return 0 as i32 as intptr_t;
         }
         54 => {
-            CLUI_SetCDKey(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
-            );
+            CLUI_SetCDKey(VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char);
             return 0 as i32 as intptr_t;
         }
         87 => return 0 as i32 as intptr_t,
         55 => {
-            re
-                .RegisterFont
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+            re.RegisterFont.expect("non-null function pointer")(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
                 *args.offset(2 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut fontInfo_t,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut fontInfo_t,
             );
             return 0 as i32 as intptr_t;
         }
@@ -2055,10 +1809,8 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         }
         102 => {
             crate::stdlib::strncpy(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
                 *args.offset(3 as i32 as isize) as libc::c_ulong,
             );
             return *args.offset(1 as i32 as isize);
@@ -2097,18 +1849,18 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         57 => {
             return (*botlib_export)
                 .PC_AddGlobalDefine
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *mut libc::c_char,
-            ) as intptr_t
+                .expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            )
+                as *mut libc::c_char) as intptr_t
         }
         58 => {
             return (*botlib_export)
                 .PC_LoadSourceHandle
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-            ) as intptr_t
+                .expect("non-null function pointer")(VM_ArgPtr(
+                *args.offset(1 as i32 as isize),
+            )
+                as *const libc::c_char) as intptr_t
         }
         59 => {
             return (*botlib_export)
@@ -2122,8 +1874,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
                 .PC_ReadTokenHandle
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut pc_token_t,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut pc_token_t,
             ) as intptr_t
         }
         61 => {
@@ -2131,8 +1882,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
                 .PC_SourceFileAndLine
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut libc::c_char,
                 VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
             ) as intptr_t
         }
@@ -2142,28 +1892,20 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         }
         63 => {
             crate::src::client::snd_main::S_StartBackgroundTrack(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
         64 => {
-            return Com_RealTime(VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            )
-                as *mut qtime_t
-                as *mut qtime_s)
-                as intptr_t
+            return Com_RealTime(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *mut qtime_t as *mut qtime_s
+            ) as intptr_t
         }
         75 => {
-            Com_DPrintf(
-                b"UI_CIN_PlayCinematic\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_DPrintf(b"UI_CIN_PlayCinematic\n\x00" as *const u8 as *const libc::c_char);
             return CIN_PlayCinematic(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
                 *args.offset(2 as i32 as isize) as i32,
                 *args.offset(3 as i32 as isize) as i32,
                 *args.offset(4 as i32 as isize) as i32,
@@ -2171,16 +1913,8 @@ pub unsafe extern "C" fn CL_UISystemCalls(
                 *args.offset(6 as i32 as isize) as i32,
             ) as intptr_t;
         }
-        76 => {
-            return CIN_StopCinematic(
-                *args.offset(1 as i32 as isize) as i32
-            ) as intptr_t
-        }
-        77 => {
-            return CIN_RunCinematic(
-                *args.offset(1 as i32 as isize) as i32
-            ) as intptr_t
-        }
+        76 => return CIN_StopCinematic(*args.offset(1 as i32 as isize) as i32) as intptr_t,
+        77 => return CIN_RunCinematic(*args.offset(1 as i32 as isize) as i32) as intptr_t,
         78 => {
             CIN_DrawCinematic(*args.offset(1 as i32 as isize) as i32);
             return 0 as i32 as intptr_t;
@@ -2196,24 +1930,17 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             return 0 as i32 as intptr_t;
         }
         80 => {
-            re
-                .RemapShader
-                .expect("non-null function pointer")(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *const libc::c_char,
+            re.RemapShader.expect("non-null function pointer")(
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(3 as i32 as isize)) as *const libc::c_char,
             );
             return 0 as i32 as intptr_t;
         }
         81 => {
             return CL_CDKeyValidate(
-                VM_ArgPtr(*args.offset(1 as i32 as isize))
-                    as *const libc::c_char,
-                VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *const libc::c_char,
+                VM_ArgPtr(*args.offset(1 as i32 as isize)) as *const libc::c_char,
+                VM_ArgPtr(*args.offset(2 as i32 as isize)) as *const libc::c_char,
             ) as intptr_t
         }
         _ => {
@@ -2233,9 +1960,7 @@ CL_ShutdownUI
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_ShutdownUI() {
-    Key_SetCatcher(
-        Key_GetCatcher() & !(0x2 as i32),
-    );
+    Key_SetCatcher(Key_GetCatcher() & !(0x2 as i32));
     cls.uiStarted = qfalse;
     if uivm.is_null() {
         return;
@@ -2452,9 +2177,8 @@ pub unsafe extern "C" fn CL_InitUI() {
     let mut v: i32 = 0;
     let mut interpret: vmInterpret_t = VMI_NATIVE;
     // load the dll or bytecode
-    interpret = Cvar_VariableValue(
-        b"vm_ui\x00" as *const u8 as *const libc::c_char,
-    ) as vmInterpret_t;
+    interpret =
+        Cvar_VariableValue(b"vm_ui\x00" as *const u8 as *const libc::c_char) as vmInterpret_t;
     if cl_connectedToPureServer != 0 {
         // if sv_pure is set we only allow qvms to be loaded
         if interpret as u32 != VMI_COMPILED as i32 as u32
@@ -2465,10 +2189,7 @@ pub unsafe extern "C" fn CL_InitUI() {
     }
     uivm = VM_Create(
         b"ui\x00" as *const u8 as *const libc::c_char,
-        Some(
-            CL_UISystemCalls
-                as unsafe extern "C" fn(_: *mut intptr_t) -> intptr_t,
-        ),
+        Some(CL_UISystemCalls as unsafe extern "C" fn(_: *mut intptr_t) -> intptr_t),
         interpret,
     );
     if uivm.is_null() {
@@ -2485,10 +2206,8 @@ pub unsafe extern "C" fn CL_InitUI() {
         VM_Call(
             uivm,
             UI_INIT as i32,
-            (clc.state as u32
-                >= CA_AUTHORIZING as i32 as u32
-                && (clc.state as u32)
-                    < CA_ACTIVE as i32 as u32) as i32,
+            (clc.state as u32 >= CA_AUTHORIZING as i32 as u32
+                && (clc.state as u32) < CA_ACTIVE as i32 as u32) as i32,
         );
     } else if v != 6 as i32 {
         // Free uivm now, so UI_SHUTDOWN doesn't get called later.
@@ -2505,10 +2224,8 @@ pub unsafe extern "C" fn CL_InitUI() {
         VM_Call(
             uivm,
             UI_INIT as i32,
-            (clc.state as u32
-                >= CA_AUTHORIZING as i32 as u32
-                && (clc.state as u32)
-                    < CA_ACTIVE as i32 as u32) as i32,
+            (clc.state as u32 >= CA_AUTHORIZING as i32 as u32
+                && (clc.state as u32) < CA_ACTIVE as i32 as u32) as i32,
         );
     };
 }
@@ -2516,10 +2233,7 @@ pub unsafe extern "C" fn CL_InitUI() {
 
 pub unsafe extern "C" fn UI_usesUniqueCDKey() -> qboolean {
     if !uivm.is_null() {
-        return (VM_Call(
-            uivm,
-            UI_HASUNIQUECDKEY as i32,
-        ) == qtrue as i32 as isize) as i32
+        return (VM_Call(uivm, UI_HASUNIQUECDKEY as i32) == qtrue as i32 as isize) as i32
             as qboolean;
     } else {
         return qfalse;
@@ -2887,9 +2601,5 @@ pub unsafe extern "C" fn UI_GameCommand() -> qboolean {
     if uivm.is_null() {
         return qfalse;
     }
-    return VM_Call(
-        uivm,
-        UI_CONSOLE_COMMAND as i32,
-        cls.realtime,
-    ) as qboolean;
+    return VM_Call(uivm, UI_CONSOLE_COMMAND as i32, cls.realtime) as qboolean;
 }

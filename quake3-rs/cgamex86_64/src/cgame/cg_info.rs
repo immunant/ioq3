@@ -209,14 +209,11 @@ CG_LoadingItem
 
 pub unsafe extern "C" fn CG_LoadingItem(mut itemNum: i32) {
     let mut item: *mut gitem_t = 0 as *mut gitem_t;
-    item = &mut *bg_itemlist
-        .as_mut_ptr()
-        .offset(itemNum as isize) as *mut gitem_t;
+    item = &mut *bg_itemlist.as_mut_ptr().offset(itemNum as isize) as *mut gitem_t;
     if !(*item).icon.is_null() && loadingItemIconCount < 26 as i32 {
         let fresh0 = loadingItemIconCount;
         loadingItemIconCount = loadingItemIconCount + 1;
-        loadingItemIcons[fresh0 as usize] =
-            trap_R_RegisterShaderNoMip((*item).icon)
+        loadingItemIcons[fresh0 as usize] = trap_R_RegisterShaderNoMip((*item).icon)
     }
     CG_LoadingString((*item).pickup_name);
 }
@@ -233,16 +230,11 @@ pub unsafe extern "C" fn CG_LoadingClient(mut clientNum: i32) {
     let mut personality: [libc::c_char; 64] = [0; 64];
     let mut model: [libc::c_char; 64] = [0; 64];
     let mut iconName: [libc::c_char; 64] = [0; 64];
-    info = CG_ConfigString(
-        32 as i32 + 256 as i32 + 256 as i32 + clientNum,
-    );
+    info = CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + clientNum);
     if loadingPlayerIconCount < 16 as i32 {
         Q_strncpyz(
             model.as_mut_ptr(),
-            Info_ValueForKey(
-                info,
-                b"model\x00" as *const u8 as *const libc::c_char,
-            ),
+            Info_ValueForKey(info, b"model\x00" as *const u8 as *const libc::c_char),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         );
         skin = libc::strrchr(model.as_mut_ptr(), '/' as i32);
@@ -290,16 +282,11 @@ pub unsafe extern "C" fn CG_LoadingClient(mut clientNum: i32) {
     }
     Q_strncpyz(
         personality.as_mut_ptr(),
-        Info_ValueForKey(
-            info,
-            b"n\x00" as *const u8 as *const libc::c_char,
-        ),
+        Info_ValueForKey(info, b"n\x00" as *const u8 as *const libc::c_char),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     Q_CleanStr(personality.as_mut_ptr());
-    if cgs.gametype as u32
-        == GT_SINGLE_PLAYER as i32 as u32
-    {
+    if cgs.gametype as u32 == GT_SINGLE_PLAYER as i32 as u32 {
         trap_S_RegisterSound(
             va(
                 b"sound/player/announce/%s.wav\x00" as *const u8 as *const libc::c_char
@@ -573,16 +560,11 @@ pub unsafe extern "C" fn CG_DrawInformation() {
     let mut buf: [libc::c_char; 1024] = [0; 1024];
     info = CG_ConfigString(0 as i32);
     sysInfo = CG_ConfigString(1 as i32);
-    s = Info_ValueForKey(
-        info,
-        b"mapname\x00" as *const u8 as *const libc::c_char,
-    );
-    levelshot = trap_R_RegisterShaderNoMip(
-        va(
-            b"levelshots/%s.tga\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            s,
-        ),
-    );
+    s = Info_ValueForKey(info, b"mapname\x00" as *const u8 as *const libc::c_char);
+    levelshot = trap_R_RegisterShaderNoMip(va(
+        b"levelshots/%s.tga\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
+        s,
+    ));
     if levelshot == 0 {
         levelshot = trap_R_RegisterShaderNoMip(
             b"menu/art/unknownmap\x00" as *const u8 as *const libc::c_char,
@@ -597,9 +579,7 @@ pub unsafe extern "C" fn CG_DrawInformation() {
         levelshot,
     );
     // blend a detail texture over it
-    detail = trap_R_RegisterShader(
-        b"levelShotDetail\x00" as *const u8 as *const libc::c_char,
-    );
+    detail = trap_R_RegisterShader(b"levelShotDetail\x00" as *const u8 as *const libc::c_char);
     trap_R_DrawStretchPic(
         0 as i32 as f32,
         0 as i32 as f32,
@@ -647,10 +627,7 @@ pub unsafe extern "C" fn CG_DrawInformation() {
         // server hostname
         Q_strncpyz(
             buf.as_mut_ptr(),
-            Info_ValueForKey(
-                info,
-                b"sv_hostname\x00" as *const u8 as *const libc::c_char,
-            ),
+            Info_ValueForKey(info, b"sv_hostname\x00" as *const u8 as *const libc::c_char),
             1024 as i32,
         );
         Q_CleanStr(buf.as_mut_ptr());
@@ -663,10 +640,7 @@ pub unsafe extern "C" fn CG_DrawInformation() {
         );
         y += 27 as i32;
         // pure server
-        s = Info_ValueForKey(
-            sysInfo,
-            b"sv_pure\x00" as *const u8 as *const libc::c_char,
-        );
+        s = Info_ValueForKey(sysInfo, b"sv_pure\x00" as *const u8 as *const libc::c_char);
         if *s.offset(0 as i32 as isize) as i32 == '1' as i32 {
             UI_DrawProportionalString(
                 320 as i32,
@@ -753,8 +727,7 @@ pub unsafe extern "C" fn CG_DrawInformation() {
         );
         y += 27 as i32
     }
-    if (cgs.gametype as u32) < GT_CTF as i32 as u32
-    {
+    if (cgs.gametype as u32) < GT_CTF as i32 as u32 {
         value = atoi(Info_ValueForKey(
             info,
             b"fraglimit\x00" as *const u8 as *const libc::c_char,

@@ -486,17 +486,14 @@ pub unsafe extern "C" fn CL_DeltaEntity(
     mut old: *mut entityState_t,
     mut unchanged: qboolean,
 ) {
-    let mut state: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut state: *mut entityState_t = 0 as *mut entityState_t;
     // save the parsed entity state into the big circular buffer so
     // it can be used as the source for a later delta
     state = &mut *cl
         .parseEntities
         .as_mut_ptr()
-        .offset(
-            (cl.parseEntitiesNum & 32 as i32 * 256 as i32 - 1 as i32)
-                as isize,
-        ) as *mut entityState_t;
+        .offset((cl.parseEntitiesNum & 32 as i32 * 256 as i32 - 1 as i32) as isize)
+        as *mut entityState_t;
     if unchanged as u64 != 0 {
         *state = *old
     } else {
@@ -528,8 +525,7 @@ pub unsafe extern "C" fn CL_ParsePacketEntities(
     mut newframe: *mut clSnapshot_t,
 ) {
     let mut newnum: i32 = 0;
-    let mut oldstate: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut oldstate: *mut entityState_t = 0 as *mut entityState_t;
     let mut oldindex: i32 = 0;
     let mut oldnum: i32 = 0;
     (*newframe).parseEntitiesNum = cl.parseEntitiesNum;
@@ -542,19 +538,14 @@ pub unsafe extern "C" fn CL_ParsePacketEntities(
     } else if oldindex >= (*oldframe).numEntities {
         oldnum = 99999 as i32
     } else {
-        oldstate = &mut *cl
-            .parseEntities
-            .as_mut_ptr()
-            .offset(
-                ((*oldframe).parseEntitiesNum + oldindex & 32 as i32 * 256 as i32 - 1 as i32)
-                    as isize,
-            ) as *mut entityState_t;
+        oldstate = &mut *cl.parseEntities.as_mut_ptr().offset(
+            ((*oldframe).parseEntitiesNum + oldindex & 32 as i32 * 256 as i32 - 1 as i32) as isize,
+        ) as *mut entityState_t;
         oldnum = (*oldstate).number
     }
     loop {
         // read the entity index number
-        newnum =
-            MSG_ReadBits(msg as *mut msg_t, 10 as i32);
+        newnum = MSG_ReadBits(msg as *mut msg_t, 10 as i32);
         if newnum == ((1 as i32) << 10 as i32) - 1 as i32 {
             break;
         }
@@ -573,25 +564,15 @@ pub unsafe extern "C" fn CL_ParsePacketEntities(
                     oldnum,
                 );
             }
-            CL_DeltaEntity(
-                msg,
-                newframe,
-                oldnum,
-                oldstate,
-                qtrue,
-            );
+            CL_DeltaEntity(msg, newframe, oldnum, oldstate, qtrue);
             oldindex += 1;
             if oldindex >= (*oldframe).numEntities {
                 oldnum = 99999 as i32
             } else {
-                oldstate = &mut *cl
-                    .parseEntities
-                    .as_mut_ptr()
-                    .offset(
-                        ((*oldframe).parseEntitiesNum + oldindex
-                            & 32 as i32 * 256 as i32 - 1 as i32) as isize,
-                    )
-                    as *mut entityState_t;
+                oldstate = &mut *cl.parseEntities.as_mut_ptr().offset(
+                    ((*oldframe).parseEntitiesNum + oldindex & 32 as i32 * 256 as i32 - 1 as i32)
+                        as isize,
+                ) as *mut entityState_t;
                 oldnum = (*oldstate).number
             }
         }
@@ -604,25 +585,15 @@ pub unsafe extern "C" fn CL_ParsePacketEntities(
                     newnum,
                 );
             }
-            CL_DeltaEntity(
-                msg,
-                newframe,
-                newnum,
-                oldstate,
-                qfalse,
-            );
+            CL_DeltaEntity(msg, newframe, newnum, oldstate, qfalse);
             oldindex += 1;
             if oldindex >= (*oldframe).numEntities {
                 oldnum = 99999 as i32
             } else {
-                oldstate = &mut *cl
-                    .parseEntities
-                    .as_mut_ptr()
-                    .offset(
-                        ((*oldframe).parseEntitiesNum + oldindex
-                            & 32 as i32 * 256 as i32 - 1 as i32) as isize,
-                    )
-                    as *mut entityState_t;
+                oldstate = &mut *cl.parseEntities.as_mut_ptr().offset(
+                    ((*oldframe).parseEntitiesNum + oldindex & 32 as i32 * 256 as i32 - 1 as i32)
+                        as isize,
+                ) as *mut entityState_t;
                 oldnum = (*oldstate).number
             }
         } else {
@@ -641,10 +612,7 @@ pub unsafe extern "C" fn CL_ParsePacketEntities(
                 msg,
                 newframe,
                 newnum,
-                &mut *cl
-                    .entityBaselines
-                    .as_mut_ptr()
-                    .offset(newnum as isize),
+                &mut *cl.entityBaselines.as_mut_ptr().offset(newnum as isize),
                 qfalse,
             );
         }
@@ -659,24 +627,15 @@ pub unsafe extern "C" fn CL_ParsePacketEntities(
                 oldnum,
             );
         }
-        CL_DeltaEntity(
-            msg,
-            newframe,
-            oldnum,
-            oldstate,
-            qtrue,
-        );
+        CL_DeltaEntity(msg, newframe, oldnum, oldstate, qtrue);
         oldindex += 1;
         if oldindex >= (*oldframe).numEntities {
             oldnum = 99999 as i32
         } else {
-            oldstate = &mut *cl
-                .parseEntities
-                .as_mut_ptr()
-                .offset(
-                    ((*oldframe).parseEntitiesNum + oldindex & 32 as i32 * 256 as i32 - 1 as i32)
-                        as isize,
-                ) as *mut entityState_t;
+            oldstate = &mut *cl.parseEntities.as_mut_ptr().offset(
+                ((*oldframe).parseEntitiesNum + oldindex & 32 as i32 * 256 as i32 - 1 as i32)
+                    as isize,
+            ) as *mut entityState_t;
             oldnum = (*oldstate).number
         }
     }
@@ -772,8 +731,7 @@ pub unsafe extern "C" fn CL_ParseSnapshot(mut msg: *mut msg_t) {
     // we will have read any new server commands in this
     // message before we got to svc_snapshot
     newSnap.serverCommandNum = clc.serverCommandSequence;
-    newSnap.serverTime =
-        MSG_ReadLong(msg as *mut msg_t);
+    newSnap.serverTime = MSG_ReadLong(msg as *mut msg_t);
     // if we were just unpaused, we can only *now* really let the
     // change come into effect or the client hangs.
     (*cl_paused).modified = qfalse;
@@ -810,9 +768,7 @@ pub unsafe extern "C" fn CL_ParseSnapshot(mut msg: *mut msg_t) {
         } else if (*old).messageNum != newSnap.deltaNum {
             // The frame that the server did the delta from
             // is too old, so we can't reconstruct it properly.
-            Com_Printf(
-                b"Delta frame too old.\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"Delta frame too old.\n\x00" as *const u8 as *const libc::c_char);
         } else if cl.parseEntitiesNum - (*old).parseEntitiesNum
             > 32 as i32 * 256 as i32 - 256 as i32
         {
@@ -826,9 +782,7 @@ pub unsafe extern "C" fn CL_ParseSnapshot(mut msg: *mut msg_t) {
     }
     // read areamask
     len = MSG_ReadByte(msg as *mut msg_t);
-    if len as libc::c_ulong
-        > ::std::mem::size_of::<[byte; 32]>() as libc::c_ulong
-    {
+    if len as libc::c_ulong > ::std::mem::size_of::<[byte; 32]>() as libc::c_ulong {
         Com_Error(
             ERR_DROP as i32,
             b"CL_ParseSnapshot: Invalid size %d for areamask\x00" as *const u8
@@ -838,8 +792,7 @@ pub unsafe extern "C" fn CL_ParseSnapshot(mut msg: *mut msg_t) {
     }
     MSG_ReadData(
         msg as *mut msg_t,
-        &mut newSnap.areamask as *mut [byte; 32]
-            as *mut libc::c_void,
+        &mut newSnap.areamask as *mut [byte; 32] as *mut libc::c_void,
         len,
     );
     // read playerinfo
@@ -856,8 +809,7 @@ pub unsafe extern "C" fn CL_ParseSnapshot(mut msg: *mut msg_t) {
     } else {
         MSG_ReadDeltaPlayerstate(
             msg as *mut msg_t,
-            0 as *mut playerState_s
-                as *mut playerState_s,
+            0 as *mut playerState_s as *mut playerState_s,
             &mut newSnap.ps as *mut _ as *mut playerState_s,
         );
     }
@@ -881,9 +833,7 @@ pub unsafe extern "C" fn CL_ParseSnapshot(mut msg: *mut msg_t) {
         oldMessageNum = newSnap.messageNum - (32 as i32 - 1 as i32)
     }
     while oldMessageNum < newSnap.messageNum {
-        cl.snapshots
-            [(oldMessageNum & 32 as i32 - 1 as i32) as usize]
-            .valid = qfalse;
+        cl.snapshots[(oldMessageNum & 32 as i32 - 1 as i32) as usize].valid = qfalse;
         oldMessageNum += 1
     }
     // copy to the current good spot
@@ -892,22 +842,16 @@ pub unsafe extern "C" fn CL_ParseSnapshot(mut msg: *mut msg_t) {
     // calculate ping time
     i = 0 as i32;
     while i < 32 as i32 {
-        packetNum = clc.netchan.outgoingSequence - 1 as i32 - i
-            & 32 as i32 - 1 as i32;
-        if cl.snap.ps.commandTime
-            >= cl.outPackets[packetNum as usize].p_serverTime
-        {
-            cl.snap.ping = cls.realtime
-                - cl.outPackets[packetNum as usize].p_realtime;
+        packetNum = clc.netchan.outgoingSequence - 1 as i32 - i & 32 as i32 - 1 as i32;
+        if cl.snap.ps.commandTime >= cl.outPackets[packetNum as usize].p_serverTime {
+            cl.snap.ping = cls.realtime - cl.outPackets[packetNum as usize].p_realtime;
             break;
         } else {
             i += 1
         }
     }
     // save the frame off in the backup array for later delta comparisons
-    cl.snapshots
-        [(cl.snap.messageNum & 32 as i32 - 1 as i32) as usize] =
-        cl.snap;
+    cl.snapshots[(cl.snap.messageNum & 32 as i32 - 1 as i32) as usize] = cl.snap;
     if (*cl_shownet).integer == 3 as i32 {
         Com_Printf(
             b"   snapshot:%i  delta:%i  ping:%i\n\x00" as *const u8 as *const libc::c_char,
@@ -942,24 +886,20 @@ pub unsafe extern "C" fn CL_SystemInfoChanged() {
     let mut t: *const libc::c_char = 0 as *const libc::c_char;
     let mut key: [libc::c_char; 8192] = [0; 8192];
     let mut value: [libc::c_char; 8192] = [0; 8192];
-    let mut gameSet: qboolean =
-        qfalse;
+    let mut gameSet: qboolean = qfalse;
     systemInfo = cl
         .gameState
         .stringData
         .as_mut_ptr()
-        .offset(
-            cl.gameState.stringOffsets[1 as i32 as usize] as isize,
-        );
+        .offset(cl.gameState.stringOffsets[1 as i32 as usize] as isize);
     // NOTE TTimo:
     // when the serverId changes, any further messages we send to the server will use this new serverId
     // https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=475
     // in some cases, outdated cp commands might get sent with this news serverId
-    cl.serverId =
-        atoi(Info_ValueForKey(
-            systemInfo,
-            b"sv_serverid\x00" as *const u8 as *const libc::c_char,
-        ));
+    cl.serverId = atoi(Info_ValueForKey(
+        systemInfo,
+        b"sv_serverid\x00" as *const u8 as *const libc::c_char,
+    ));
     if clc.compat as u64 != 0 {
         clc.voipEnabled = qfalse
     } else {
@@ -967,11 +907,8 @@ pub unsafe extern "C" fn CL_SystemInfoChanged() {
             systemInfo,
             b"sv_voipProtocol\x00" as *const u8 as *const libc::c_char,
         );
-        clc.voipEnabled = (Q_stricmp(
-            s,
-            b"opus\x00" as *const u8 as *const libc::c_char,
-        ) == 0) as i32
-            as qboolean
+        clc.voipEnabled =
+            (Q_stricmp(s, b"opus\x00" as *const u8 as *const libc::c_char) == 0) as i32 as qboolean
     }
     // don't set any vars when playing a demo
     if clc.demoplaying as u64 != 0 {
@@ -1067,19 +1004,15 @@ pub unsafe extern "C" fn CL_SystemInfoChanged() {
     }
     // if game folder should not be set and it is set at the client side
     if gameSet as u64 == 0
-        && *Cvar_VariableString(
-            b"fs_game\x00" as *const u8 as *const libc::c_char,
-        ) as i32
-            != 0
+        && *Cvar_VariableString(b"fs_game\x00" as *const u8 as *const libc::c_char) as i32 != 0
     {
         Cvar_Set(
             b"fs_game\x00" as *const u8 as *const libc::c_char,
             b"\x00" as *const u8 as *const libc::c_char,
         );
     }
-    cl_connectedToPureServer = Cvar_VariableValue(
-        b"sv_pure\x00" as *const u8 as *const libc::c_char,
-    ) as i32;
+    cl_connectedToPureServer =
+        Cvar_VariableValue(b"sv_pure\x00" as *const u8 as *const libc::c_char) as i32;
 }
 /*
 ==================
@@ -1093,14 +1026,11 @@ unsafe extern "C" fn CL_ParseServerInfo() {
         .gameState
         .stringData
         .as_mut_ptr()
-        .offset(
-            cl.gameState.stringOffsets[0 as i32 as usize] as isize,
-        );
-    clc.sv_allowDownload =
-        atoi(Info_ValueForKey(
-            serverInfo,
-            b"sv_allowDownload\x00" as *const u8 as *const libc::c_char,
-        ));
+        .offset(cl.gameState.stringOffsets[0 as i32 as usize] as isize);
+    clc.sv_allowDownload = atoi(Info_ValueForKey(
+        serverInfo,
+        b"sv_allowDownload\x00" as *const u8 as *const libc::c_char,
+    ));
     Q_strncpyz(
         clc.sv_dlURL.as_mut_ptr(),
         Info_ValueForKey(
@@ -1119,52 +1049,50 @@ CL_ParseGamestate
 
 pub unsafe extern "C" fn CL_ParseGamestate(mut msg: *mut msg_t) {
     let mut i: i32 = 0;
-    let mut es: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut es: *mut entityState_t = 0 as *mut entityState_t;
     let mut newnum: i32 = 0;
-    let mut nullstate: entityState_t =
-        entityState_t {
-            number: 0,
-            eType: 0,
-            eFlags: 0,
-            pos: trajectory_t {
-                trType: TR_STATIONARY,
-                trTime: 0,
-                trDuration: 0,
-                trBase: [0.; 3],
-                trDelta: [0.; 3],
-            },
-            apos: trajectory_t {
-                trType: TR_STATIONARY,
-                trTime: 0,
-                trDuration: 0,
-                trBase: [0.; 3],
-                trDelta: [0.; 3],
-            },
-            time: 0,
-            time2: 0,
-            origin: [0.; 3],
-            origin2: [0.; 3],
-            angles: [0.; 3],
-            angles2: [0.; 3],
-            otherEntityNum: 0,
-            otherEntityNum2: 0,
-            groundEntityNum: 0,
-            constantLight: 0,
-            loopSound: 0,
-            modelindex: 0,
-            modelindex2: 0,
-            clientNum: 0,
-            frame: 0,
-            solid: 0,
-            event: 0,
-            eventParm: 0,
-            powerups: 0,
-            weapon: 0,
-            legsAnim: 0,
-            torsoAnim: 0,
-            generic1: 0,
-        };
+    let mut nullstate: entityState_t = entityState_t {
+        number: 0,
+        eType: 0,
+        eFlags: 0,
+        pos: trajectory_t {
+            trType: TR_STATIONARY,
+            trTime: 0,
+            trDuration: 0,
+            trBase: [0.; 3],
+            trDelta: [0.; 3],
+        },
+        apos: trajectory_t {
+            trType: TR_STATIONARY,
+            trTime: 0,
+            trDuration: 0,
+            trBase: [0.; 3],
+            trDelta: [0.; 3],
+        },
+        time: 0,
+        time2: 0,
+        origin: [0.; 3],
+        origin2: [0.; 3],
+        angles: [0.; 3],
+        angles2: [0.; 3],
+        otherEntityNum: 0,
+        otherEntityNum2: 0,
+        groundEntityNum: 0,
+        constantLight: 0,
+        loopSound: 0,
+        modelindex: 0,
+        modelindex2: 0,
+        clientNum: 0,
+        frame: 0,
+        solid: 0,
+        event: 0,
+        eventParm: 0,
+        powerups: 0,
+        weapon: 0,
+        legsAnim: 0,
+        torsoAnim: 0,
+        generic1: 0,
+    };
     let mut cmd: i32 = 0;
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut oldGame: [libc::c_char; 64] = [0; 64];
@@ -1173,8 +1101,7 @@ pub unsafe extern "C" fn CL_ParseGamestate(mut msg: *mut msg_t) {
     // wipe local client state
     CL_ClearState();
     // a gamestate always marks a server command sequence
-    clc.serverCommandSequence =
-        MSG_ReadLong(msg as *mut msg_t);
+    clc.serverCommandSequence = MSG_ReadLong(msg as *mut msg_t);
     // parse all the configstrings and baselines
     cl.gameState.dataCount = 1 as i32; // leave a 0 at the beginning for uninitialized configstrings
     loop {
@@ -1200,24 +1127,18 @@ pub unsafe extern "C" fn CL_ParseGamestate(mut msg: *mut msg_t) {
                 );
             }
             // append it to the gameState string buffer
-            cl.gameState.stringOffsets[i as usize] =
-                cl.gameState.dataCount;
+            cl.gameState.stringOffsets[i as usize] = cl.gameState.dataCount;
             crate::stdlib::memcpy(
-                cl
-                    .gameState
+                cl.gameState
                     .stringData
                     .as_mut_ptr()
-                    .offset(cl.gameState.dataCount as isize)
-                    as *mut libc::c_void,
+                    .offset(cl.gameState.dataCount as isize) as *mut libc::c_void,
                 s as *const libc::c_void,
                 (len + 1 as i32) as libc::c_ulong,
             );
             cl.gameState.dataCount += len + 1 as i32
         } else if cmd == svc_baseline as i32 {
-            newnum = MSG_ReadBits(
-                msg as *mut msg_t,
-                10 as i32,
-            );
+            newnum = MSG_ReadBits(msg as *mut msg_t, 10 as i32);
             if newnum < 0 as i32 || newnum >= (1 as i32) << 10 as i32 {
                 Com_Error(
                     ERR_DROP as i32,
@@ -1226,17 +1147,12 @@ pub unsafe extern "C" fn CL_ParseGamestate(mut msg: *mut msg_t) {
                 );
             }
             crate::stdlib::memset(
-                &mut nullstate as *mut entityState_t
-                    as *mut libc::c_void,
+                &mut nullstate as *mut entityState_t as *mut libc::c_void,
                 0 as i32,
-                ::std::mem::size_of::<entityState_t>()
-                    as libc::c_ulong,
+                ::std::mem::size_of::<entityState_t>() as libc::c_ulong,
             );
-            es = &mut *cl
-                .entityBaselines
-                .as_mut_ptr()
-                .offset(newnum as isize)
-                as *mut entityState_t;
+            es =
+                &mut *cl.entityBaselines.as_mut_ptr().offset(newnum as isize) as *mut entityState_t;
             MSG_ReadDeltaEntity(
                 msg as *mut msg_t,
                 &mut nullstate as *mut _ as *mut entityState_s,
@@ -1250,11 +1166,9 @@ pub unsafe extern "C" fn CL_ParseGamestate(mut msg: *mut msg_t) {
             );
         }
     }
-    clc.clientNum =
-        MSG_ReadLong(msg as *mut msg_t);
+    clc.clientNum = MSG_ReadLong(msg as *mut msg_t);
     // read the checksum feed
-    clc.checksumFeed =
-        MSG_ReadLong(msg as *mut msg_t);
+    clc.checksumFeed = MSG_ReadLong(msg as *mut msg_t);
     // save old gamedir
     Cvar_VariableStringBuffer(
         b"fs_game\x00" as *const u8 as *const libc::c_char,
@@ -1266,16 +1180,12 @@ pub unsafe extern "C" fn CL_ParseGamestate(mut msg: *mut msg_t) {
     // parse serverId and other cvars
     CL_SystemInfoChanged();
     // stop recording now so the demo won't have an unnecessary level load at the end.
-    if (*cl_autoRecordDemo).integer != 0
-        && clc.demorecording as u32 != 0
-    {
+    if (*cl_autoRecordDemo).integer != 0 && clc.demorecording as u32 != 0 {
         CL_StopRecord_f();
     }
     // reinitialize the filesystem if the game directory has changed
     if cl_oldGameSet as u64 == 0
-        && Cvar_Flags(b"fs_game\x00" as *const u8 as *const libc::c_char)
-            & 0x40000000 as i32
-            != 0
+        && Cvar_Flags(b"fs_game\x00" as *const u8 as *const libc::c_char) & 0x40000000 as i32 != 0
     {
         cl_oldGameSet = qtrue;
         Q_strncpyz(
@@ -1284,10 +1194,7 @@ pub unsafe extern "C" fn CL_ParseGamestate(mut msg: *mut msg_t) {
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         );
     }
-    FS_ConditionalRestart(
-        clc.checksumFeed,
-        qfalse,
-    );
+    FS_ConditionalRestart(clc.checksumFeed, qfalse);
     // This used to call CL_StartHunkUsers, but now we enter the download state before loading the
     // cgame
     CL_InitDownloads();
@@ -1311,28 +1218,19 @@ pub unsafe extern "C" fn CL_ParseDownload(mut msg: *mut msg_t) {
     let mut size: i32 = 0;
     let mut data: [u8; 16384] = [0; 16384];
     let mut block: uint16_t = 0;
-    if *clc
-        .downloadTempName
-        .as_mut_ptr()
-        == 0
-    {
+    if *clc.downloadTempName.as_mut_ptr() == 0 {
         Com_Printf(
             b"Server sending download, but no download was requested\n\x00" as *const u8
                 as *const libc::c_char,
         );
-        CL_AddReliableCommand(
-            b"stopdl\x00" as *const u8 as *const libc::c_char,
-            qfalse,
-        );
+        CL_AddReliableCommand(b"stopdl\x00" as *const u8 as *const libc::c_char, qfalse);
         return;
     }
     // read the data
-    block = MSG_ReadShort(msg as *mut msg_t)
-        as uint16_t;
+    block = MSG_ReadShort(msg as *mut msg_t) as uint16_t;
     if block == 0 && clc.downloadBlock == 0 {
         // block zero is special, contains file size
-        clc.downloadSize =
-            MSG_ReadLong(msg as *mut msg_t);
+        clc.downloadSize = MSG_ReadLong(msg as *mut msg_t);
         Cvar_SetValue(
             b"cl_downloadSize\x00" as *const u8 as *const libc::c_char,
             clc.downloadSize as f32,
@@ -1372,33 +1270,19 @@ pub unsafe extern "C" fn CL_ParseDownload(mut msg: *mut msg_t) {
     }
     // open the file if not opened yet
     if clc.download == 0 {
-        clc.download =
-            FS_SV_FOpenFileWrite(
-                clc
-                    .downloadTempName
-                    .as_mut_ptr(),
-            );
+        clc.download = FS_SV_FOpenFileWrite(clc.downloadTempName.as_mut_ptr());
         if clc.download == 0 {
             Com_Printf(
                 b"Could not create %s\n\x00" as *const u8 as *const libc::c_char,
-                clc
-                    .downloadTempName
-                    .as_mut_ptr(),
+                clc.downloadTempName.as_mut_ptr(),
             );
-            CL_AddReliableCommand(
-                b"stopdl\x00" as *const u8 as *const libc::c_char,
-                qfalse,
-            );
+            CL_AddReliableCommand(b"stopdl\x00" as *const u8 as *const libc::c_char, qfalse);
             CL_NextDownload();
             return;
         }
     }
     if size != 0 {
-        FS_Write(
-            data.as_mut_ptr() as *const libc::c_void,
-            size,
-            clc.download,
-        );
+        FS_Write(data.as_mut_ptr() as *const libc::c_void, size, clc.download);
     }
     CL_AddReliableCommand(
         va(
@@ -1421,9 +1305,7 @@ pub unsafe extern "C" fn CL_ParseDownload(mut msg: *mut msg_t) {
             clc.download = 0 as i32;
             // rename the file
             FS_SV_Rename(
-                clc
-                    .downloadTempName
-                    .as_mut_ptr(),
+                clc.downloadTempName.as_mut_ptr(),
                 clc.downloadName.as_mut_ptr(),
                 qfalse,
             );
@@ -1440,15 +1322,11 @@ pub unsafe extern "C" fn CL_ParseDownload(mut msg: *mut msg_t) {
     }; // VoIP is disabled.
 }
 
-unsafe extern "C" fn CL_ShouldIgnoreVoipSender(
-    mut sender: i32,
-) -> qboolean {
+unsafe extern "C" fn CL_ShouldIgnoreVoipSender(mut sender: i32) -> qboolean {
     if (*cl_voip).integer == 0 {
         return qtrue;
     } else {
-        if sender == clc.clientNum
-            && clc.demoplaying as u64 == 0
-        {
+        if sender == clc.clientNum && clc.demoplaying as u64 == 0 {
             return qtrue;
         } else {
             if clc.voipMuteAll as u64 != 0 {
@@ -1515,20 +1393,14 @@ A VoIP message has been received from the server
 =====================
 */
 
-unsafe extern "C" fn CL_ParseVoip(
-    mut msg: *mut msg_t,
-    mut ignoreData: qboolean,
-) {
+unsafe extern "C" fn CL_ParseVoip(mut msg: *mut msg_t, mut ignoreData: qboolean) {
     static mut decoded: [i16; 11520] = [0; 11520]; // !!! FIXME: don't hard code
     let sender: i32 = MSG_ReadShort(msg as *mut msg_t); // short/invalid packet, bail.
-    let generation: i32 =
-        MSG_ReadByte(msg as *mut msg_t); // short/invalid packet, bail.
+    let generation: i32 = MSG_ReadByte(msg as *mut msg_t); // short/invalid packet, bail.
     let sequence: i32 = MSG_ReadLong(msg as *mut msg_t); // short/invalid packet, bail.
     let frames: i32 = MSG_ReadByte(msg as *mut msg_t); // short/invalid packet, bail.
-    let packetsize: i32 =
-        MSG_ReadShort(msg as *mut msg_t); // short/invalid packet, bail.
-    let flags: i32 =
-        MSG_ReadBits(msg as *mut msg_t, 2 as i32);
+    let packetsize: i32 = MSG_ReadShort(msg as *mut msg_t); // short/invalid packet, bail.
+    let flags: i32 = MSG_ReadBits(msg as *mut msg_t, 2 as i32);
     let mut encoded: [u8; 4000] = [0; 4000];
     let mut numSamples: i32 = 0;
     let mut seqdiff: i32 = 0;
@@ -1601,13 +1473,10 @@ unsafe extern "C" fn CL_ParseVoip(
         }
     }
     // !!! FIXME: make sure data is narrowband? Does decoder handle this?
-    Com_DPrintf(
-        b"VoIP: packet accepted!\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_DPrintf(b"VoIP: packet accepted!\n\x00" as *const u8 as *const libc::c_char);
     seqdiff = sequence - clc.voipIncomingSequence[sender as usize];
     // This is a new "generation" ... a new recording started, reset the bits.
-    if generation != clc.voipIncomingGeneration[sender as usize] as i32
-    {
+    if generation != clc.voipIncomingGeneration[sender as usize] as i32 {
         Com_DPrintf(
             b"VoIP: new generation %d!\n\x00" as *const u8 as *const libc::c_char,
             generation,
@@ -1616,8 +1485,7 @@ unsafe extern "C" fn CL_ParseVoip(
             clc.opusDecoder[sender as usize],
             4028 as i32,
         );
-        clc.voipIncomingGeneration[sender as usize] =
-            generation as byte;
+        clc.voipIncomingGeneration[sender as usize] = generation as byte;
         seqdiff = 0 as i32
     } else if seqdiff < 0 as i32 {
         // we're ahead of the sequence?!
@@ -1706,12 +1574,7 @@ unsafe extern "C" fn CL_ParseVoip(
         frames,
     );
     if written > 0 as i32 {
-        CL_PlayVoip(
-            sender,
-            written,
-            decoded.as_mut_ptr() as *const byte,
-            flags,
-        );
+        CL_PlayVoip(sender, written, decoded.as_mut_ptr() as *const byte, flags);
     }
     clc.voipIncomingSequence[sender as usize] = sequence + frames;
 }
@@ -1941,20 +1804,14 @@ pub unsafe extern "C" fn CL_ParseServerMessage(mut msg: *mut msg_t) {
             (*msg).cursize,
         );
     } else if (*cl_shownet).integer >= 2 as i32 {
-        Com_Printf(
-            b"------------------\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"------------------\n\x00" as *const u8 as *const libc::c_char);
     }
     MSG_Bitstream(msg as *mut msg_t);
     // get the reliable sequence acknowledge number
-    clc.reliableAcknowledge =
-        MSG_ReadLong(msg as *mut msg_t);
+    clc.reliableAcknowledge = MSG_ReadLong(msg as *mut msg_t);
     //
-    if clc.reliableAcknowledge
-        < clc.reliableSequence - 64 as i32
-    {
-        clc.reliableAcknowledge =
-            clc.reliableSequence
+    if clc.reliableAcknowledge < clc.reliableSequence - 64 as i32 {
+        clc.reliableAcknowledge = clc.reliableSequence
     }
     loop
     //
@@ -2006,11 +1863,7 @@ pub unsafe extern "C" fn CL_ParseServerMessage(mut msg: *mut msg_t) {
                         CL_ParseVoip(msg, qtrue);
                     }
                     10 => {
-                        CL_ParseVoip(
-                            msg,
-                            (clc.voipEnabled as u64 == 0) as i32
-                                as qboolean,
-                        );
+                        CL_ParseVoip(msg, (clc.voipEnabled as u64 == 0) as i32 as qboolean);
                     }
                     _ => {
                         Com_Error(

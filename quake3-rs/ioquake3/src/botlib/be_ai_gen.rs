@@ -88,8 +88,7 @@ pub unsafe extern "C" fn GeneticSelection(mut numranks: i32, mut rankings: *mut 
         //end for
     }
     //select a bot randomly
-    index =
-        ((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * numranks as f32) as i32; //end for
+    index = ((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * numranks as f32) as i32; //end for
     i = 0 as i32;
     while i < numranks {
         if *rankings.offset(index as isize) >= 0 as i32 as f32 {

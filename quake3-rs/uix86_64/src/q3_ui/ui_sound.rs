@@ -94,8 +94,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -117,8 +116,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -144,8 +142,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -171,8 +168,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -194,8 +190,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -217,8 +212,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -240,8 +234,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -263,8 +256,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -287,8 +279,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -311,8 +302,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -340,8 +330,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -369,8 +358,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -396,8 +384,7 @@ static mut soundOptionsInfo: soundOptionsInfo_t = soundOptionsInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -534,9 +521,7 @@ SoundOptions_MenuDraw
 pub unsafe extern "C" fn SoundOptions_MenuDraw() {
     //APSFIX - rework this
     SoundOptions_UpdateMenuItems();
-    Menu_Draw(
-        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    Menu_Draw(&mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework);
 }
 /*
 ===============
@@ -736,18 +721,15 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Init() {
     );
     Menu_AddItem(
         &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut soundOptionsInfo.sfxvolume as *mut menuslider_s
-            as *mut libc::c_void,
+        &mut soundOptionsInfo.sfxvolume as *mut menuslider_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut soundOptionsInfo.musicvolume as *mut menuslider_s
-            as *mut libc::c_void,
+        &mut soundOptionsInfo.musicvolume as *mut menuslider_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut soundOptionsInfo.soundSystem as *mut menulist_s
-            as *mut libc::c_void,
+        &mut soundOptionsInfo.soundSystem as *mut menulist_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
@@ -762,26 +744,21 @@ unsafe extern "C" fn UI_SoundOptionsMenu_Init() {
         &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
         &mut soundOptionsInfo.apply as *mut menubitmap_s as *mut libc::c_void,
     );
-    soundOptionsInfo.sfxvolume_original = trap_Cvar_VariableValue(
-        b"s_volume\x00" as *const u8 as *const libc::c_char,
-    ) * 10 as i32 as f32;
+    soundOptionsInfo.sfxvolume_original =
+        trap_Cvar_VariableValue(b"s_volume\x00" as *const u8 as *const libc::c_char)
+            * 10 as i32 as f32;
     soundOptionsInfo.sfxvolume.curvalue = soundOptionsInfo.sfxvolume_original;
-    soundOptionsInfo.musicvolume_original = trap_Cvar_VariableValue(
-        b"s_musicvolume\x00" as *const u8 as *const libc::c_char,
-    ) * 10 as i32 as f32;
+    soundOptionsInfo.musicvolume_original =
+        trap_Cvar_VariableValue(b"s_musicvolume\x00" as *const u8 as *const libc::c_char)
+            * 10 as i32 as f32;
     soundOptionsInfo.musicvolume.curvalue = soundOptionsInfo.musicvolume_original;
-    if trap_Cvar_VariableValue(
-        b"s_useOpenAL\x00" as *const u8 as *const libc::c_char,
-    ) != 0.
-    {
+    if trap_Cvar_VariableValue(b"s_useOpenAL\x00" as *const u8 as *const libc::c_char) != 0. {
         soundOptionsInfo.soundSystem_original = 1 as i32
     } else {
         soundOptionsInfo.soundSystem_original = 0 as i32
     }
     soundOptionsInfo.soundSystem.curvalue = soundOptionsInfo.soundSystem_original;
-    speed = trap_Cvar_VariableValue(
-        b"s_sdlSpeed\x00" as *const u8 as *const libc::c_char,
-    ) as i32;
+    speed = trap_Cvar_VariableValue(b"s_sdlSpeed\x00" as *const u8 as *const libc::c_char) as i32;
     if speed == 0 {
         // Check for default
         speed = 22050 as i32
@@ -805,24 +782,12 @@ UI_SoundOptionsMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_SoundOptionsMenu_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===========================================================================
@@ -991,9 +956,7 @@ UI_SoundOptionsMenu
 
 pub unsafe extern "C" fn UI_SoundOptionsMenu() {
     UI_SoundOptionsMenu_Init();
-    UI_PushMenu(
-        &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework);
     Menu_SetCursorToItem(
         &mut soundOptionsInfo.menu as *mut _ as *mut _tag_menuframework,
         &mut soundOptionsInfo.sound as *mut menutext_s as *mut libc::c_void,

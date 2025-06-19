@@ -71,8 +71,7 @@ static mut s_mods: mods_t = mods_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -94,8 +93,7 @@ static mut s_mods: mods_t = mods_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -121,8 +119,7 @@ static mut s_mods: mods_t = mods_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -148,8 +145,7 @@ static mut s_mods: mods_t = mods_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -177,8 +173,7 @@ static mut s_mods: mods_t = mods_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -204,8 +199,7 @@ static mut s_mods: mods_t = mods_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -434,24 +428,12 @@ UI_Mods_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_ModsMenu_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/load_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/load_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/load_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/load_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===========================================================================
@@ -536,7 +518,5 @@ UI_ModsMenu
 
 pub unsafe extern "C" fn UI_ModsMenu() {
     UI_Mods_MenuInit();
-    UI_PushMenu(
-        &mut s_mods.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_mods.menu as *mut _ as *mut _tag_menuframework);
 }

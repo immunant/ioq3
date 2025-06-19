@@ -510,8 +510,7 @@ pub unsafe extern "C" fn Q_IsColorString(
     if (*p.offset(1 as i32 as isize) as i32) < 0 as i32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    if *(*__ctype_b_loc()).offset(*p.offset(1 as i32 as isize) as i32 as isize)
-        as i32
+    if *(*__ctype_b_loc()).offset(*p.offset(1 as i32 as isize) as i32 as isize) as i32
         & _ISalnum as i32 as u16 as i32
         == 0 as i32
     {
@@ -1342,8 +1341,8 @@ pub unsafe extern "C" fn Com_HexStrToInt(mut str: *const libc::c_char) -> i32 {
                         __res = tolower(*str.offset(i as isize) as i32)
                     }
                 } else {
-                    __res = *(*__ctype_tolower_loc())
-                        .offset(*str.offset(i as isize) as i32 as isize)
+                    __res =
+                        *(*__ctype_tolower_loc()).offset(*str.offset(i as isize) as i32 as isize)
                 }
                 __res
             }) as libc::c_char;
@@ -2129,9 +2128,7 @@ pub unsafe extern "C" fn Info_SetValueForKey(
     if crate::stdlib::strlen(newi.as_mut_ptr()).wrapping_add(crate::stdlib::strlen(s))
         >= 1024 as i32 as libc::c_ulong
     {
-        Com_Printf(
-            b"Info string length exceeded\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Info string length exceeded\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     libc::strcat(newi.as_mut_ptr(), s);
@@ -2216,9 +2213,7 @@ pub unsafe extern "C" fn Info_SetValueForKey_Big(
     if crate::stdlib::strlen(newi.as_mut_ptr()).wrapping_add(crate::stdlib::strlen(s))
         >= 8192 as i32 as libc::c_ulong
     {
-        Com_Printf(
-            b"BIG Info string length exceeded\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"BIG Info string length exceeded\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     libc::strcat(s, newi.as_mut_ptr());

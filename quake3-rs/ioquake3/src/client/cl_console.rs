@@ -469,16 +469,13 @@ pub static mut con: console_t = console_t {
 };
 #[no_mangle]
 
-pub static mut con_conspeed: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut con_conspeed: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut con_autoclear: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut con_autoclear: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut con_notifytime: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut con_notifytime: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 /*
 ================
 Con_ToggleConsole_f
@@ -488,23 +485,15 @@ Con_ToggleConsole_f
 
 pub unsafe extern "C" fn Con_ToggleConsole_f() {
     // Can't toggle the console when it's the only thing available
-    if clc.state as u32
-        == CA_DISCONNECTED as i32 as u32
-        && Key_GetCatcher() == 0x1 as i32
-    {
+    if clc.state as u32 == CA_DISCONNECTED as i32 as u32 && Key_GetCatcher() == 0x1 as i32 {
         return;
     }
     if (*con_autoclear).integer != 0 {
-        Field_Clear(
-            &mut crate::src::client::cl_keys::g_consoleField as *mut _
-                as *mut field_t,
-        );
+        Field_Clear(&mut crate::src::client::cl_keys::g_consoleField as *mut _ as *mut field_t);
     }
     crate::src::client::cl_keys::g_consoleField.widthInChars = g_console_field_width;
     Con_ClearNotify();
-    Key_SetCatcher(
-        Key_GetCatcher() ^ 0x1 as i32,
-    );
+    Key_SetCatcher(Key_GetCatcher() ^ 0x1 as i32);
 }
 /*
 ===================
@@ -514,16 +503,8 @@ Con_ToggleMenu_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Con_ToggleMenu_f() {
-    CL_KeyEvent(
-        K_ESCAPE as i32,
-        qtrue,
-        Sys_Milliseconds() as u32,
-    );
-    CL_KeyEvent(
-        K_ESCAPE as i32,
-        qfalse,
-        Sys_Milliseconds() as u32,
-    );
+    CL_KeyEvent(K_ESCAPE as i32, qtrue, Sys_Milliseconds() as u32);
+    CL_KeyEvent(K_ESCAPE as i32, qfalse, Sys_Milliseconds() as u32);
 }
 /*
 ================
@@ -535,13 +516,9 @@ Con_MessageMode_f
 pub unsafe extern "C" fn Con_MessageMode_f() {
     crate::src::client::cl_keys::chat_playerNum = -(1 as i32);
     crate::src::client::cl_keys::chat_team = qfalse;
-    Field_Clear(
-        &mut crate::src::client::cl_keys::chatField as *mut _ as *mut field_t,
-    );
+    Field_Clear(&mut crate::src::client::cl_keys::chatField as *mut _ as *mut field_t);
     crate::src::client::cl_keys::chatField.widthInChars = 30 as i32;
-    Key_SetCatcher(
-        Key_GetCatcher() ^ 0x4 as i32,
-    );
+    Key_SetCatcher(Key_GetCatcher() ^ 0x4 as i32);
 }
 /*
 ================
@@ -553,13 +530,9 @@ Con_MessageMode2_f
 pub unsafe extern "C" fn Con_MessageMode2_f() {
     crate::src::client::cl_keys::chat_playerNum = -(1 as i32);
     crate::src::client::cl_keys::chat_team = qtrue;
-    Field_Clear(
-        &mut crate::src::client::cl_keys::chatField as *mut _ as *mut field_t,
-    );
+    Field_Clear(&mut crate::src::client::cl_keys::chatField as *mut _ as *mut field_t);
     crate::src::client::cl_keys::chatField.widthInChars = 25 as i32;
-    Key_SetCatcher(
-        Key_GetCatcher() ^ 0x4 as i32,
-    );
+    Key_SetCatcher(Key_GetCatcher() ^ 0x4 as i32);
 }
 /*
 ================
@@ -569,10 +542,7 @@ Con_MessageMode3_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Con_MessageMode3_f() {
-    crate::src::client::cl_keys::chat_playerNum = VM_Call(
-        cgvm,
-        CG_CROSSHAIR_PLAYER as i32,
-    ) as i32;
+    crate::src::client::cl_keys::chat_playerNum = VM_Call(cgvm, CG_CROSSHAIR_PLAYER as i32) as i32;
     if crate::src::client::cl_keys::chat_playerNum < 0 as i32
         || crate::src::client::cl_keys::chat_playerNum >= 64 as i32
     {
@@ -580,13 +550,9 @@ pub unsafe extern "C" fn Con_MessageMode3_f() {
         return;
     }
     crate::src::client::cl_keys::chat_team = qfalse;
-    Field_Clear(
-        &mut crate::src::client::cl_keys::chatField as *mut _ as *mut field_t,
-    );
+    Field_Clear(&mut crate::src::client::cl_keys::chatField as *mut _ as *mut field_t);
     crate::src::client::cl_keys::chatField.widthInChars = 30 as i32;
-    Key_SetCatcher(
-        Key_GetCatcher() ^ 0x4 as i32,
-    );
+    Key_SetCatcher(Key_GetCatcher() ^ 0x4 as i32);
 }
 /*
 ================
@@ -596,10 +562,7 @@ Con_MessageMode4_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Con_MessageMode4_f() {
-    crate::src::client::cl_keys::chat_playerNum = VM_Call(
-        cgvm,
-        CG_LAST_ATTACKER as i32,
-    ) as i32;
+    crate::src::client::cl_keys::chat_playerNum = VM_Call(cgvm, CG_LAST_ATTACKER as i32) as i32;
     if crate::src::client::cl_keys::chat_playerNum < 0 as i32
         || crate::src::client::cl_keys::chat_playerNum >= 64 as i32
     {
@@ -607,13 +570,9 @@ pub unsafe extern "C" fn Con_MessageMode4_f() {
         return;
     }
     crate::src::client::cl_keys::chat_team = qfalse;
-    Field_Clear(
-        &mut crate::src::client::cl_keys::chatField as *mut _ as *mut field_t,
-    );
+    Field_Clear(&mut crate::src::client::cl_keys::chatField as *mut _ as *mut field_t);
     crate::src::client::cl_keys::chatField.widthInChars = 30 as i32;
-    Key_SetCatcher(
-        Key_GetCatcher() ^ 0x4 as i32,
-    );
+    Key_SetCatcher(Key_GetCatcher() ^ 0x4 as i32);
 }
 /*
 ================
@@ -652,9 +611,7 @@ pub unsafe extern "C" fn Con_Dump_f() {
     let mut buffer: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut filename: [libc::c_char; 64] = [0; 64];
     if Cmd_Argc() != 2 as i32 {
-        Com_Printf(
-            b"usage: condump <filename>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"usage: condump <filename>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     Q_strncpyz(
@@ -880,10 +837,7 @@ pub unsafe extern "C" fn Con_Init() {
         b"1\x00" as *const u8 as *const libc::c_char,
         0x1 as i32,
     ) as *mut cvar_s;
-    Field_Clear(
-        &mut crate::src::client::cl_keys::g_consoleField as *mut _
-            as *mut field_t,
-    );
+    Field_Clear(&mut crate::src::client::cl_keys::g_consoleField as *mut _ as *mut field_t);
     crate::src::client::cl_keys::g_consoleField.widthInChars = g_console_field_width;
     i = 0 as i32;
     while i < 32 as i32 {
@@ -942,24 +896,12 @@ Con_Shutdown
 #[no_mangle]
 
 pub unsafe extern "C" fn Con_Shutdown() {
-    Cmd_RemoveCommand(
-        b"toggleconsole\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"togglemenu\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"messagemode\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"messagemode2\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"messagemode3\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"messagemode4\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"toggleconsole\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"togglemenu\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"messagemode\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"messagemode2\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"messagemode3\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"messagemode4\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"clear\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"condump\x00" as *const u8 as *const libc::c_char);
 }
@@ -1008,8 +950,7 @@ pub unsafe extern "C" fn CL_ConsolePrint(mut txt: *mut libc::c_char) {
     let mut l: i32 = 0; // NERVE - SMF
     let mut c: u8 = 0;
     let mut color: u16 = 0;
-    let mut skipnotify: qboolean =
-        qfalse;
+    let mut skipnotify: qboolean = qfalse;
     let mut prev: i32 = 0;
     // TTimo - prefix for text that shows up in console but not in notify
     // backported from RTCW
@@ -1023,9 +964,7 @@ pub unsafe extern "C" fn CL_ConsolePrint(mut txt: *mut libc::c_char) {
         txt = txt.offset(12 as i32 as isize)
     }
     // for some demos we don't want to ever show anything on the console
-    if !cl_noprint.is_null()
-        && (*cl_noprint).integer != 0
-    {
+    if !cl_noprint.is_null() && (*cl_noprint).integer != 0 {
         return;
     }
     if con.initialized as u64 == 0 {
@@ -1111,24 +1050,18 @@ Draw the editline after a ] prompt
 
 pub unsafe extern "C" fn Con_DrawInput() {
     let mut y: i32 = 0;
-    if clc.state as u32
-        != CA_DISCONNECTED as i32 as u32
-        && Key_GetCatcher() & 0x1 as i32 == 0
-    {
+    if clc.state as u32 != CA_DISCONNECTED as i32 as u32 && Key_GetCatcher() & 0x1 as i32 == 0 {
         return;
     }
     y = con.vislines - 16 as i32 * 2 as i32;
-    re
-        .SetColor
-        .expect("non-null function pointer")(con.color.as_mut_ptr());
+    re.SetColor.expect("non-null function pointer")(con.color.as_mut_ptr());
     SCR_DrawSmallChar(
         (con.xadjust + (1 as i32 * 8 as i32) as f32) as i32,
         y,
         ']' as i32,
     );
     crate::src::client::cl_keys::Field_Draw(
-        &mut crate::src::client::cl_keys::g_consoleField as *mut _
-            as *mut field_t,
+        &mut crate::src::client::cl_keys::g_consoleField as *mut _ as *mut field_t,
         (con.xadjust + (2 as i32 * 8 as i32) as f32) as i32,
         y,
         640 as i32 - 3 as i32 * 8 as i32,
@@ -1154,9 +1087,7 @@ pub unsafe extern "C" fn Con_DrawNotify() {
     let mut skip: i32 = 0;
     let mut currentColor: i32 = 0;
     currentColor = 7 as i32;
-    re
-        .SetColor
-        .expect("non-null function pointer")(
+    re.SetColor.expect("non-null function pointer")(
         g_color_table[currentColor as usize].as_mut_ptr(),
     );
     v = 0 as i32;
@@ -1171,11 +1102,8 @@ pub unsafe extern "C" fn Con_DrawNotify() {
                         .text
                         .as_mut_ptr()
                         .offset((i % con.totallines * con.linewidth) as isize);
-                    if !(cl.snap.ps.pm_type
-                        != PM_INTERMISSION as i32
-                        && Key_GetCatcher()
-                            & (0x2 as i32 | 0x8 as i32)
-                            != 0)
+                    if !(cl.snap.ps.pm_type != PM_INTERMISSION as i32
+                        && Key_GetCatcher() & (0x2 as i32 | 0x8 as i32) != 0)
                     {
                         x = 0 as i32;
                         while x < con.linewidth {
@@ -1185,12 +1113,8 @@ pub unsafe extern "C" fn Con_DrawNotify() {
                                 {
                                     currentColor =
                                         *text.offset(x as isize) as i32 >> 8 as i32 & 0x7 as i32;
-                                    re
-                                        .SetColor
-                                        .expect("non-null function pointer")(
-                                        g_color_table
-                                            [currentColor as usize]
-                                            .as_mut_ptr(),
+                                    re.SetColor.expect("non-null function pointer")(
+                                        g_color_table[currentColor as usize].as_mut_ptr(),
                                     );
                                 }
                                 SCR_DrawSmallChar(
@@ -1211,9 +1135,7 @@ pub unsafe extern "C" fn Con_DrawNotify() {
         }
         i += 1
     }
-    re
-        .SetColor
-        .expect("non-null function pointer")(0 as *const f32);
+    re.SetColor.expect("non-null function pointer")(0 as *const f32);
     if Key_GetCatcher() & (0x2 as i32 | 0x8 as i32) != 0 {
         return;
     }
@@ -1308,11 +1230,8 @@ pub unsafe extern "C" fn Con_DrawSolidConsole(mut frac: f32) {
         color.as_mut_ptr(),
     );
     // draw the version number
-    re
-        .SetColor
-        .expect("non-null function pointer")(
-        g_color_table[('1' as i32 - '0' as i32 & 0x7 as i32) as usize]
-            .as_mut_ptr(),
+    re.SetColor.expect("non-null function pointer")(
+        g_color_table[('1' as i32 - '0' as i32 & 0x7 as i32) as usize].as_mut_ptr(),
     );
     i = crate::stdlib::strlen(
         b"ioq3 1.36_GIT_d0fe4462-2020-01-10\x00" as *const u8 as *const libc::c_char,
@@ -1335,12 +1254,8 @@ pub unsafe extern "C" fn Con_DrawSolidConsole(mut frac: f32) {
     // draw from the bottom up
     if con.display != con.current {
         // draw arrows to show the buffer is backscrolled
-        re
-            .SetColor
-            .expect("non-null function pointer")(
-            g_color_table
-                [('1' as i32 - '0' as i32 & 0x7 as i32) as usize]
-                .as_mut_ptr(),
+        re.SetColor.expect("non-null function pointer")(
+            g_color_table[('1' as i32 - '0' as i32 & 0x7 as i32) as usize].as_mut_ptr(),
         );
         x = 0 as i32;
         while x < con.linewidth {
@@ -1359,9 +1274,7 @@ pub unsafe extern "C" fn Con_DrawSolidConsole(mut frac: f32) {
         row -= 1
     }
     currentColor = 7 as i32;
-    re
-        .SetColor
-        .expect("non-null function pointer")(
+    re.SetColor.expect("non-null function pointer")(
         g_color_table[currentColor as usize].as_mut_ptr(),
     );
     i = 0 as i32;
@@ -1379,11 +1292,8 @@ pub unsafe extern "C" fn Con_DrawSolidConsole(mut frac: f32) {
                 if !(*text.offset(x as isize) as i32 & 0xff as i32 == ' ' as i32) {
                     if *text.offset(x as isize) as i32 >> 8 as i32 & 0x7 as i32 != currentColor {
                         currentColor = *text.offset(x as isize) as i32 >> 8 as i32 & 0x7 as i32;
-                        re
-                            .SetColor
-                            .expect("non-null function pointer")(
-                            g_color_table[currentColor as usize]
-                                .as_mut_ptr(),
+                        re.SetColor.expect("non-null function pointer")(
+                            g_color_table[currentColor as usize].as_mut_ptr(),
                         );
                     }
                     SCR_DrawSmallChar(
@@ -1402,9 +1312,7 @@ pub unsafe extern "C" fn Con_DrawSolidConsole(mut frac: f32) {
     }
     // draw the input prompt, user text, and cursor if desired
     Con_DrawInput();
-    re
-        .SetColor
-        .expect("non-null function pointer")(0 as *const f32);
+    re.SetColor.expect("non-null function pointer")(0 as *const f32);
 }
 /*
 ==================
@@ -1417,9 +1325,7 @@ pub unsafe extern "C" fn Con_DrawConsole() {
     // check for console width changes from a vid mode change
     Con_CheckResize();
     // if disconnected, render console full screen
-    if clc.state as u32
-        == CA_DISCONNECTED as i32 as u32
-    {
+    if clc.state as u32 == CA_DISCONNECTED as i32 as u32 {
         if Key_GetCatcher() & (0x2 as i32 | 0x8 as i32) == 0 {
             Con_DrawSolidConsole(1.0f64 as f32);
             return;
@@ -1427,9 +1333,7 @@ pub unsafe extern "C" fn Con_DrawConsole() {
     }
     if con.displayFrac != 0. {
         Con_DrawSolidConsole(con.displayFrac);
-    } else if clc.state as u32
-        == CA_ACTIVE as i32 as u32
-    {
+    } else if clc.state as u32 == CA_ACTIVE as i32 as u32 {
         Con_DrawNotify();
     };
 }
@@ -1455,17 +1359,15 @@ pub unsafe extern "C" fn Con_RunConsole() {
       // scroll towards the destination height
     if con.finalFrac < con.displayFrac {
         con.displayFrac = (con.displayFrac as f64
-            - ((*con_conspeed).value * cls.realFrametime as f32)
-                as f64
-                * 0.001f64) as f32; // none visible
+            - ((*con_conspeed).value * cls.realFrametime as f32) as f64 * 0.001f64)
+            as f32; // none visible
         if con.finalFrac > con.displayFrac {
             con.displayFrac = con.finalFrac
         }
     } else if con.finalFrac > con.displayFrac {
         con.displayFrac = (con.displayFrac as f64
-            + ((*con_conspeed).value * cls.realFrametime as f32)
-                as f64
-                * 0.001f64) as f32;
+            + ((*con_conspeed).value * cls.realFrametime as f32) as f64 * 0.001f64)
+            as f32;
         if con.finalFrac < con.displayFrac {
             con.displayFrac = con.finalFrac
         }
@@ -1506,14 +1408,9 @@ pub unsafe extern "C" fn Con_Close() {
     if (*com_cl_running).integer == 0 {
         return;
     }
-    Field_Clear(
-        &mut crate::src::client::cl_keys::g_consoleField as *mut _
-            as *mut field_t,
-    );
+    Field_Clear(&mut crate::src::client::cl_keys::g_consoleField as *mut _ as *mut field_t);
     Con_ClearNotify();
-    Key_SetCatcher(
-        Key_GetCatcher() & !(0x1 as i32),
-    );
+    Key_SetCatcher(Key_GetCatcher() & !(0x1 as i32));
     con.finalFrac = 0 as i32 as f32;
     con.displayFrac = 0 as i32 as f32;
 }

@@ -83,8 +83,7 @@ static mut s_teammain: teammain_t = teammain_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -110,8 +109,7 @@ static mut s_teammain: teammain_t = teammain_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -133,8 +131,7 @@ static mut s_teammain: teammain_t = teammain_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -156,8 +153,7 @@ static mut s_teammain: teammain_t = teammain_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -179,8 +175,7 @@ static mut s_teammain: teammain_t = teammain_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -350,9 +345,7 @@ TeamMain_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn TeamMain_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/cut_frame\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/cut_frame\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===========================================================================
@@ -422,7 +415,5 @@ UI_TeamMainMenu
 
 pub unsafe extern "C" fn UI_TeamMainMenu() {
     TeamMain_MenuInit();
-    UI_PushMenu(
-        &mut s_teammain.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_teammain.menu as *mut _ as *mut _tag_menuframework);
 }

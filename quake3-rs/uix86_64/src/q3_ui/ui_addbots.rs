@@ -108,8 +108,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -131,8 +130,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -158,8 +156,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -185,8 +182,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -212,8 +208,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -239,8 +234,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -262,8 +256,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -291,8 +284,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -320,8 +312,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -347,8 +338,7 @@ static mut addBotsMenuInfo: addBotsMenuInfo_t = addBotsMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -409,12 +399,9 @@ unsafe extern "C" fn UI_AddBotsMenu_BotEvent(mut ptr: *mut libc::c_void, mut eve
     if event != 3 as i32 {
         return;
     }
-    addBotsMenuInfo.bots[addBotsMenuInfo.selectedBotNum as usize].color =
-        color_orange.as_mut_ptr();
-    addBotsMenuInfo.selectedBotNum =
-        (*(ptr as *mut menucommon_s)).id - 20 as i32;
-    addBotsMenuInfo.bots[addBotsMenuInfo.selectedBotNum as usize].color =
-        color_white.as_mut_ptr();
+    addBotsMenuInfo.bots[addBotsMenuInfo.selectedBotNum as usize].color = color_orange.as_mut_ptr();
+    addBotsMenuInfo.selectedBotNum = (*(ptr as *mut menucommon_s)).id - 20 as i32;
+    addBotsMenuInfo.bots[addBotsMenuInfo.selectedBotNum as usize].color = color_white.as_mut_ptr();
 }
 /*
 =================
@@ -444,10 +431,7 @@ unsafe extern "C" fn UI_AddBotsMenu_SetBotNames() {
         );
         Q_strncpyz(
             addBotsMenuInfo.botnames[n as usize].as_mut_ptr(),
-            Info_ValueForKey(
-                info,
-                b"name\x00" as *const u8 as *const libc::c_char,
-            ),
+            Info_ValueForKey(info, b"name\x00" as *const u8 as *const libc::c_char),
             ::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong as i32,
         );
         n += 1
@@ -503,14 +487,8 @@ unsafe extern "C" fn UI_AddBotsMenu_SortCompare(
     num2 = *(arg2 as *mut i32);
     info1 = UI_GetBotInfoByNumber(num1);
     info2 = UI_GetBotInfoByNumber(num2);
-    name1 = Info_ValueForKey(
-        info1,
-        b"name\x00" as *const u8 as *const libc::c_char,
-    );
-    name2 = Info_ValueForKey(
-        info2,
-        b"name\x00" as *const u8 as *const libc::c_char,
-    );
+    name1 = Info_ValueForKey(info1, b"name\x00" as *const u8 as *const libc::c_char);
+    name2 = Info_ValueForKey(info2, b"name\x00" as *const u8 as *const libc::c_char);
     return Q_stricmp(name1, name2);
 }
 
@@ -641,8 +619,7 @@ unsafe extern "C" fn UI_AddBotsMenu_Init() {
             UI_AddBotsMenu_BotEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
         );
         addBotsMenuInfo.bots[n as usize].string = addBotsMenuInfo.botnames[n as usize].as_mut_ptr();
-        addBotsMenuInfo.bots[n as usize].color =
-            color_orange.as_mut_ptr();
+        addBotsMenuInfo.bots[n as usize].color = color_orange.as_mut_ptr();
         addBotsMenuInfo.bots[n as usize].style = 0 as i32 | 0x10 as i32;
         n += 1;
         y += 20 as i32
@@ -658,9 +635,7 @@ unsafe extern "C" fn UI_AddBotsMenu_Init() {
     addBotsMenuInfo.skill.curvalue = Com_Clamp(
         0 as i32 as f32,
         4 as i32 as f32,
-        (trap_Cvar_VariableValue(
-            b"g_spSkill\x00" as *const u8 as *const libc::c_char,
-        ) as i32
+        (trap_Cvar_VariableValue(b"g_spSkill\x00" as *const u8 as *const libc::c_char) as i32
             - 1 as i32) as f32,
     ) as i32;
     y += 16 as i32;
@@ -702,14 +677,12 @@ unsafe extern "C" fn UI_AddBotsMenu_Init() {
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     addBotsMenuInfo.baseBotNum = 0 as i32;
     addBotsMenuInfo.selectedBotNum = 0 as i32;
-    addBotsMenuInfo.bots[0 as i32 as usize].color =
-        color_white.as_mut_ptr();
+    addBotsMenuInfo.bots[0 as i32 as usize].color = color_white.as_mut_ptr();
     UI_AddBotsMenu_GetSortedBotNums();
     UI_AddBotsMenu_SetBotNames();
     Menu_AddItem(
         &mut addBotsMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut addBotsMenuInfo.background as *mut menubitmap_s
-            as *mut libc::c_void,
+        &mut addBotsMenuInfo.background as *mut menubitmap_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut addBotsMenuInfo.menu as *mut _ as *mut _tag_menuframework,
@@ -731,8 +704,8 @@ unsafe extern "C" fn UI_AddBotsMenu_Init() {
     while n < count {
         Menu_AddItem(
             &mut addBotsMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-            &mut *addBotsMenuInfo.bots.as_mut_ptr().offset(n as isize)
-                as *mut menutext_s as *mut libc::c_void,
+            &mut *addBotsMenuInfo.bots.as_mut_ptr().offset(n as isize) as *mut menutext_s
+                as *mut libc::c_void,
         );
         n += 1
     }
@@ -761,30 +734,14 @@ UI_AddBots_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_AddBots_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/addbotframe\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/arrows_vert_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/arrows_vert_top\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/arrows_vert_bot\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/addbotframe\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/arrows_vert_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/arrows_vert_top\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/arrows_vert_bot\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===========================================================================
@@ -935,7 +892,5 @@ UI_AddBotsMenu
 
 pub unsafe extern "C" fn UI_AddBotsMenu() {
     UI_AddBotsMenu_Init();
-    UI_PushMenu(
-        &mut addBotsMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut addBotsMenuInfo.menu as *mut _ as *mut _tag_menuframework);
 }

@@ -115,12 +115,10 @@ extern "C" {
     pub static mut stdinIsATTY: qboolean;
 }
 
-static mut stdin_active: qboolean =
-    qfalse;
+static mut stdin_active: qboolean = qfalse;
 // general flag to tell about tty console mode
 
-static mut ttycon_on: qboolean =
-    qfalse;
+static mut ttycon_on: qboolean = qfalse;
 
 static mut ttycon_hide: i32 = 0 as i32;
 
@@ -269,11 +267,7 @@ Never exit without calling this, or your terminal will be left in a pretty bad s
 pub unsafe extern "C" fn CON_Shutdown() {
     if ttycon_on as u64 != 0 {
         CON_Hide();
-        libc::tcsetattr(
-            0 as i32,
-            1 as i32,
-            &mut TTY_tc as *mut _ as *const termios,
-        );
+        libc::tcsetattr(0 as i32, 1 as i32, &mut TTY_tc as *mut _ as *const termios);
     }
     // Restore blocking to stdin reads
     libc::fcntl(
@@ -322,8 +316,7 @@ pub unsafe extern "C" fn Hist_Prev() -> *mut field_t {
         return 0 as *mut field_t;
     }
     hist_current += 1;
-    return &mut *ttyEditLines.as_mut_ptr().offset(hist_current as isize)
-        as *mut field_t;
+    return &mut *ttyEditLines.as_mut_ptr().offset(hist_current as isize) as *mut field_t;
 }
 /*
 ==================
@@ -339,8 +332,7 @@ pub unsafe extern "C" fn Hist_Next() -> *mut field_t {
     if hist_current == -(1 as i32) {
         return 0 as *mut field_t;
     }
-    return &mut *ttyEditLines.as_mut_ptr().offset(hist_current as isize)
-        as *mut field_t;
+    return &mut *ttyEditLines.as_mut_ptr().offset(hist_current as isize) as *mut field_t;
 }
 /*
 ==================
@@ -396,16 +388,12 @@ pub unsafe extern "C" fn CON_Init() {
         libc::fcntl(0 as i32, 3 as i32, 0 as i32) | 0o4000 as i32,
     );
     if stdinIsATTY as u64 == 0 {
-        Com_Printf(
-            b"tty console mode disabled\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"tty console mode disabled\n\x00" as *const u8 as *const libc::c_char);
         ttycon_on = qfalse;
         stdin_active = qtrue;
         return;
     }
-    Field_Clear(
-        &mut TTY_con as *mut _ as *mut field_t,
-    );
+    Field_Clear(&mut TTY_con as *mut _ as *mut field_t);
     libc::tcgetattr(0 as i32, &mut TTY_tc as *mut _ as *mut termios);
     TTY_erase = TTY_tc.c_cc[2 as i32 as usize] as i32;
     TTY_eof = TTY_tc.c_cc[4 as i32 as usize] as i32;
@@ -426,11 +414,7 @@ pub unsafe extern "C" fn CON_Init() {
     tc.c_iflag &= !(0o40 as i32 | 0o20 as i32) as u32; // Mark as hidden, so prompt is shown in CON_Show
     tc.c_cc[6 as i32 as usize] = 1 as i32 as cc_t;
     tc.c_cc[5 as i32 as usize] = 0 as i32 as cc_t;
-    libc::tcsetattr(
-        0 as i32,
-        1 as i32,
-        &mut tc as *mut _ as *const termios,
-    );
+    libc::tcsetattr(0 as i32, 1 as i32, &mut tc as *mut _ as *const termios);
     ttycon_on = qtrue;
     ttycon_hide = 1 as i32;
     CON_Show();
@@ -470,8 +454,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             if key as i32 != 0 && (key as i32) < ' ' as i32 {
                 if key as i32 == '\n' as i32 {
                     // if not in the game explicitly prepend a slash if needed
-                    if clc.state as u32
-                        != CA_ACTIVE as i32 as u32
+                    if clc.state as u32 != CA_ACTIVE as i32 as u32
                         && (*con_autochat).integer != 0
                         && TTY_con.cursor != 0
                         && TTY_con.buffer[0 as i32 as usize] as i32 != '/' as i32
@@ -523,17 +506,13 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                         b"tty]\x00" as *const u8 as *const libc::c_char,
                         TTY_con.buffer.as_mut_ptr(),
                     );
-                    Field_Clear(
-                        &mut TTY_con as *mut _ as *mut field_t,
-                    );
+                    Field_Clear(&mut TTY_con as *mut _ as *mut field_t);
                     CON_Show();
                     return text.as_mut_ptr();
                 }
                 if key as i32 == '\t' as i32 {
                     CON_Hide();
-                    Field_AutoComplete(
-                        &mut TTY_con as *mut _ as *mut field_t,
-                    );
+                    Field_AutoComplete(&mut TTY_con as *mut _ as *mut field_t);
                     CON_Show();
                     return 0 as *mut libc::c_char;
                 }
@@ -568,10 +547,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                                     if !history.is_null() {
                                         TTY_con = *history
                                     } else {
-                                        Field_Clear(
-                                            &mut TTY_con as *mut _
-                                                as *mut field_t,
-                                        );
+                                        Field_Clear(&mut TTY_con as *mut _ as *mut field_t);
                                     }
                                     CON_Show();
                                     libc::tcflush(0 as i32, 0 as i32);
@@ -628,8 +604,8 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             let fresh3;
             let fresh4 = (::std::mem::size_of::<fd_set>() as libc::c_ulong)
                 .wrapping_div(::std::mem::size_of::<__fd_mask>() as libc::c_ulong);
-            let fresh5 = &mut *fdset.__fds_bits.as_mut_ptr().offset(0 as i32 as isize)
-                as *mut __fd_mask;
+            let fresh5 =
+                &mut *fdset.__fds_bits.as_mut_ptr().offset(0 as i32 as isize) as *mut __fd_mask;
             asm!("cld; rep; stosq" : "={cx}" (fresh1), "={di}" (fresh3) : "{ax}"
      (0 as i32), "0"
      (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh4)), "1"
@@ -638,13 +614,11 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             c2rust_asm_casts::AsmCast::cast_out(fresh0, fresh4, fresh1);
             c2rust_asm_casts::AsmCast::cast_out(fresh2, fresh5, fresh3);
             fdset.__fds_bits[(0 as i32
-                / (8 as i32
-                    * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+                / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
                 as usize] |= ((1 as libc::c_ulong)
                 << 0 as i32
-                    % (8 as i32
-                        * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong
-                            as i32)) as __fd_mask;
+                    % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+                as __fd_mask;
             timeout.tv_sec = (0 as i32 as __time_t) as libc::time_t;
             timeout.tv_usec = (0 as i32 as __suseconds_t) as libc::suseconds_t;
             if select(
@@ -655,14 +629,13 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                 &mut timeout,
             ) == -(1 as i32)
                 || !(fdset.__fds_bits[(0 as i32
-                    / (8 as i32
-                        * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong
-                            as i32)) as usize]
+                    / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+                    as usize]
                     & ((1 as libc::c_ulong)
                         << 0 as i32
                             % (8 as i32
-                                * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong
-                                    as i32)) as __fd_mask
+                                * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+                        as __fd_mask
                     != 0 as i32 as isize)
             {
                 return 0 as *mut libc::c_char;
@@ -721,9 +694,7 @@ pub unsafe extern "C" fn CON_Print(mut msg: *const libc::c_char) {
         return;
     }
     CON_Hide();
-    if !com_ansiColor.is_null()
-        && (*com_ansiColor).integer != 0
-    {
+    if !com_ansiColor.is_null() && (*com_ansiColor).integer != 0 {
         crate::src::sys::sys_main::Sys_AnsiColorPrint(msg);
     } else {
         fputs(msg, stderr);

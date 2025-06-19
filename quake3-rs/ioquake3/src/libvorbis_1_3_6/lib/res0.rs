@@ -54,8 +54,7 @@ pub struct vorbis_look_residue0 {
 #[no_mangle]
 
 pub unsafe extern "C" fn res0_free_info(mut i: *mut libc::c_void) {
-    let mut info: *mut vorbis_info_residue0 =
-        i as *mut vorbis_info_residue0;
+    let mut info: *mut vorbis_info_residue0 = i as *mut vorbis_info_residue0;
     if !info.is_null() {
         crate::stdlib::memset(
             info as *mut libc::c_void,
@@ -127,12 +126,8 @@ unsafe extern "C" fn icount(mut v: u32) -> i32 {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn res0_pack(
-    mut vr: *mut libc::c_void,
-    mut opb: *mut oggpack_buffer,
-) {
-    let mut info: *mut vorbis_info_residue0 =
-        vr as *mut vorbis_info_residue0;
+pub unsafe extern "C" fn res0_pack(mut vr: *mut libc::c_void, mut opb: *mut oggpack_buffer) {
+    let mut info: *mut vorbis_info_residue0 = vr as *mut vorbis_info_residue0;
     let mut j: i32 = 0;
     let mut acc: i32 = 0 as i32;
     oggpack_write(
@@ -218,30 +213,15 @@ pub unsafe extern "C" fn res0_unpack(
     let mut info: *mut vorbis_info_residue0 = crate::stdlib::calloc(
         1 as i32 as libc::c_ulong,
         ::std::mem::size_of::<vorbis_info_residue0>() as libc::c_ulong,
-    )
-        as *mut vorbis_info_residue0;
-    let mut ci: *mut codec_setup_info =
-        (*vi).codec_setup as *mut codec_setup_info;
-    (*info).begin = oggpack_read(
-        opb as *mut oggpack_buffer,
-        24 as i32,
-    );
-    (*info).end = oggpack_read(
-        opb as *mut oggpack_buffer,
-        24 as i32,
-    );
-    (*info).grouping = (oggpack_read(
-        opb as *mut oggpack_buffer,
-        24 as i32,
-    ) + 1 as i32 as isize) as i32;
-    (*info).partitions = (oggpack_read(
-        opb as *mut oggpack_buffer,
-        6 as i32,
-    ) + 1 as i32 as isize) as i32;
-    (*info).groupbook = oggpack_read(
-        opb as *mut oggpack_buffer,
-        8 as i32,
-    ) as i32;
+    ) as *mut vorbis_info_residue0;
+    let mut ci: *mut codec_setup_info = (*vi).codec_setup as *mut codec_setup_info;
+    (*info).begin = oggpack_read(opb as *mut oggpack_buffer, 24 as i32);
+    (*info).end = oggpack_read(opb as *mut oggpack_buffer, 24 as i32);
+    (*info).grouping =
+        (oggpack_read(opb as *mut oggpack_buffer, 24 as i32) + 1 as i32 as isize) as i32;
+    (*info).partitions =
+        (oggpack_read(opb as *mut oggpack_buffer, 6 as i32) + 1 as i32 as isize) as i32;
+    (*info).groupbook = oggpack_read(opb as *mut oggpack_buffer, 8 as i32) as i32;
     /* check for premature EOP */
     if !((*info).groupbook < 0 as i32) {
         j = 0 as i32;
@@ -250,23 +230,14 @@ pub unsafe extern "C" fn res0_unpack(
                 current_block = 5689001924483802034;
                 break;
             }
-            let mut cascade: i32 = oggpack_read(
-                opb as *mut oggpack_buffer,
-                3 as i32,
-            ) as i32;
-            let mut cflag: i32 = oggpack_read(
-                opb as *mut oggpack_buffer,
-                1 as i32,
-            ) as i32;
+            let mut cascade: i32 = oggpack_read(opb as *mut oggpack_buffer, 3 as i32) as i32;
+            let mut cflag: i32 = oggpack_read(opb as *mut oggpack_buffer, 1 as i32) as i32;
             if cflag < 0 as i32 {
                 current_block = 3462665044408642796;
                 break;
             }
             if cflag != 0 {
-                let mut c: i32 = oggpack_read(
-                    opb as *mut oggpack_buffer,
-                    5 as i32,
-                ) as i32;
+                let mut c: i32 = oggpack_read(opb as *mut oggpack_buffer, 5 as i32) as i32;
                 if c < 0 as i32 {
                     current_block = 3462665044408642796;
                     break;
@@ -286,10 +257,7 @@ pub unsafe extern "C" fn res0_unpack(
                         current_block = 5634871135123216486;
                         break;
                     }
-                    let mut book: i32 = oggpack_read(
-                        opb as *mut oggpack_buffer,
-                        8 as i32,
-                    ) as i32;
+                    let mut book: i32 = oggpack_read(opb as *mut oggpack_buffer, 8 as i32) as i32;
                     if book < 0 as i32 {
                         current_block = 3462665044408642796;
                         break;
@@ -374,14 +342,12 @@ pub unsafe extern "C" fn res0_look(
     mut vd: *mut vorbis_dsp_state,
     mut vr: *mut libc::c_void,
 ) -> *mut libc::c_void {
-    let mut info: *mut vorbis_info_residue0 =
-        vr as *mut vorbis_info_residue0;
+    let mut info: *mut vorbis_info_residue0 = vr as *mut vorbis_info_residue0;
     let mut look: *mut vorbis_look_residue0 = crate::stdlib::calloc(
         1 as i32 as libc::c_ulong,
         ::std::mem::size_of::<vorbis_look_residue0>() as libc::c_ulong,
     ) as *mut vorbis_look_residue0;
-    let mut ci: *mut codec_setup_info =
-        (*(*vd).vi).codec_setup as *mut codec_setup_info;
+    let mut ci: *mut codec_setup_info = (*(*vd).vi).codec_setup as *mut codec_setup_info;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     let mut acc: i32 = 0 as i32;
@@ -394,10 +360,8 @@ pub unsafe extern "C" fn res0_look(
     dim = (*(*look).phrasebook).dim as i32;
     (*look).partbooks = crate::stdlib::calloc(
         (*look).parts as libc::c_ulong,
-        ::std::mem::size_of::<*mut *mut codebook>()
-            as libc::c_ulong,
-    )
-        as *mut *mut *mut codebook;
+        ::std::mem::size_of::<*mut *mut codebook>() as libc::c_ulong,
+    ) as *mut *mut *mut codebook;
     j = 0 as i32;
     while j < (*look).parts {
         let mut stages: i32 = crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
@@ -410,10 +374,8 @@ pub unsafe extern "C" fn res0_look(
             let ref mut fresh0 = *(*look).partbooks.offset(j as isize);
             *fresh0 = crate::stdlib::calloc(
                 stages as libc::c_ulong,
-                ::std::mem::size_of::<*mut codebook>()
-                    as libc::c_ulong,
-            )
-                as *mut *mut codebook;
+                ::std::mem::size_of::<*mut codebook>() as libc::c_ulong,
+            ) as *mut *mut codebook;
             k = 0 as i32;
             while k < stages {
                 if (*info).secondstages[j as usize] & (1 as i32) << k != 0 {
@@ -463,10 +425,7 @@ pub unsafe extern "C" fn res0_look(
 }
 /* break an abstraction and copy some code for performance purposes */
 
-unsafe extern "C" fn local_book_besterror(
-    mut book: *mut codebook,
-    mut a: *mut i32,
-) -> i32 {
+unsafe extern "C" fn local_book_besterror(mut book: *mut codebook, mut a: *mut i32) -> i32 {
     let mut dim: i32 = (*book).dim as i32;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -588,11 +547,7 @@ unsafe extern "C" fn _encodepart(
     i = 0 as i32;
     while i < step {
         let mut entry: i32 = local_book_besterror(book, vec.offset((i * dim) as isize));
-        bits += vorbis_book_encode(
-            book as *mut codebook,
-            entry,
-            opb as *mut oggpack_buffer,
-        );
+        bits += vorbis_book_encode(book as *mut codebook, entry, opb as *mut oggpack_buffer);
         i += 1
     }
     return bits;
@@ -757,12 +712,7 @@ unsafe extern "C" fn _01forward(
     mut ch: i32,
     mut partword: *mut *mut isize,
     mut encode: Option<
-        unsafe extern "C" fn(
-            _: *mut oggpack_buffer,
-            _: *mut i32,
-            _: i32,
-            _: *mut codebook,
-        ) -> i32,
+        unsafe extern "C" fn(_: *mut oggpack_buffer, _: *mut i32, _: i32, _: *mut codebook) -> i32,
     >,
 ) -> i32 {
     let mut i: isize = 0;
@@ -812,13 +762,11 @@ unsafe extern "C" fn _01forward(
                     }
                     /*def TRAIN_RES*/
                     if val < (*(*look).phrasebook).entries {
-                        (*look).phrasebits +=
-                            vorbis_book_encode(
-                                (*look).phrasebook
-                                    as *mut codebook,
-                                val as i32,
-                                opb as *mut oggpack_buffer,
-                            ) as isize
+                        (*look).phrasebits += vorbis_book_encode(
+                            (*look).phrasebook as *mut codebook,
+                            val as i32,
+                            opb as *mut oggpack_buffer,
+                        ) as isize
                     }
                     j += 1
                 }
@@ -839,16 +787,10 @@ unsafe extern "C" fn _01forward(
                         & (1 as i32) << s
                         != 0
                     {
-                        let mut statebook: *mut codebook =
-                            *(*(*look).partbooks.offset(*(*partword.offset(j
-                                                                               as
-                                                                               isize)).offset(i
-                                                                                                  as
-                                                                                                  isize)
-                                                            as
-                                                            isize)).offset(s
-                                                                               as
-                                                                               isize);
+                        let mut statebook: *mut codebook = *(*(*look)
+                            .partbooks
+                            .offset(*(*partword.offset(j as isize)).offset(i as isize) as isize))
+                        .offset(s as isize);
                         if !statebook.is_null() {
                             let mut ret: i32 = 0;
                             ret = encode.expect("non-null function pointer")(
@@ -937,12 +879,10 @@ unsafe extern "C" fn _01inverse(
                     /* fetch the partition word for each channel */
                     j = 0 as i32 as isize;
                     while j < ch as isize {
-                        let mut temp: i32 =
-                            vorbis_book_decode(
-                                (*look).phrasebook
-                                    as *mut codebook,
-                                &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
-                            ) as i32;
+                        let mut temp: i32 = vorbis_book_decode(
+                            (*look).phrasebook as *mut codebook,
+                            &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
+                        ) as i32;
                         if temp == -(1 as i32) || temp >= (*info).partvals {
                             break 's_55;
                         }
@@ -967,18 +907,11 @@ unsafe extern "C" fn _01inverse(
                             & (1 as i32) << s
                             != 0
                         {
-                            let mut stagebook: *mut codebook =
-                                    *(*(*look).partbooks.offset(*(*(*partword.offset(j
-                                                                                         as
-                                                                                         isize)).offset(l
-                                                                                                            as
-                                                                                                            isize)).offset(k
-                                                                                                                               as
-                                                                                                                               isize)
-                                                                    as
-                                                                    isize)).offset(s
-                                                                                       as
-                                                                                       isize);
+                            let mut stagebook: *mut codebook = *(*(*look).partbooks.offset(
+                                *(*(*partword.offset(j as isize)).offset(l as isize))
+                                    .offset(k as isize) as isize,
+                            ))
+                            .offset(s as isize);
                             if !stagebook.is_null() {
                                 if decodepart.expect("non-null function pointer")(
                                     stagebook,
@@ -1297,12 +1230,10 @@ pub unsafe extern "C" fn res2_inverse(
             while i < partvals as isize {
                 if s == 0 as i32 as isize {
                     /* fetch the partition word */
-                    let mut temp: i32 =
-                        vorbis_book_decode(
-                            (*look).phrasebook
-                                as *mut codebook,
-                            &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
-                        ) as i32;
+                    let mut temp: i32 = vorbis_book_decode(
+                        (*look).phrasebook as *mut codebook,
+                        &mut (*vb).opb as *mut _ as *mut oggpack_buffer,
+                    ) as i32;
                     if temp == -(1 as i32) || temp >= (*info).partvals {
                         break 's_65;
                     }
@@ -1320,20 +1251,13 @@ pub unsafe extern "C" fn res2_inverse(
                         & (1 as i32) << s
                         != 0
                     {
-                        let mut stagebook: *mut codebook =
-                                *(*(*look).partbooks.offset(*(*partword.offset(l
-                                                                                   as
-                                                                                   isize)).offset(k
-                                                                                                      as
-                                                                                                      isize)
-                                                                as
-                                                                isize)).offset(s
-                                                                                   as
-                                                                                   isize);
+                        let mut stagebook: *mut codebook = *(*(*look)
+                            .partbooks
+                            .offset(*(*partword.offset(l as isize)).offset(k as isize) as isize))
+                        .offset(s as isize);
                         if !stagebook.is_null() {
                             if vorbis_book_decodevv_add(
-                                stagebook
-                                    as *mut codebook,
+                                stagebook as *mut codebook,
                                 in_0,
                                 i * samples_per_partition as isize + (*info).begin,
                                 ch,
@@ -1396,11 +1320,7 @@ pub static mut residue0_exportbundle: vorbis_func_residue = {
 pub static mut residue1_exportbundle: vorbis_func_residue = {
     let mut init = vorbis_func_residue {
         pack: Some(
-            res0_pack
-                as unsafe extern "C" fn(
-                    _: *mut libc::c_void,
-                    _: *mut oggpack_buffer,
-                ) -> (),
+            res0_pack as unsafe extern "C" fn(_: *mut libc::c_void, _: *mut oggpack_buffer) -> (),
         ),
         unpack: Some(
             res0_unpack
@@ -1459,11 +1379,7 @@ pub static mut residue1_exportbundle: vorbis_func_residue = {
 pub static mut residue2_exportbundle: vorbis_func_residue = {
     let mut init = vorbis_func_residue {
         pack: Some(
-            res0_pack
-                as unsafe extern "C" fn(
-                    _: *mut libc::c_void,
-                    _: *mut oggpack_buffer,
-                ) -> (),
+            res0_pack as unsafe extern "C" fn(_: *mut libc::c_void, _: *mut oggpack_buffer) -> (),
         ),
         unpack: Some(
             res0_unpack

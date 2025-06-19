@@ -58,13 +58,10 @@ pub unsafe extern "C" fn ogg_page_eos(mut og: *const ogg_page) -> i32 {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_page_granulepos(
-    mut og: *const ogg_page,
-) -> ogg_int64_t {
+pub unsafe extern "C" fn ogg_page_granulepos(mut og: *const ogg_page) -> ogg_int64_t {
     let mut page: *mut u8 = (*og).header;
     let mut granulepos: ogg_int64_t =
-        (*page.offset(13 as i32 as isize) as i32 & 0xff as i32)
-            as ogg_int64_t;
+        (*page.offset(13 as i32 as isize) as i32 & 0xff as i32) as ogg_int64_t;
     granulepos =
         granulepos << 8 as i32 | (*page.offset(12 as i32 as isize) as i32 & 0xff as i32) as isize;
     granulepos =
@@ -390,10 +387,7 @@ static mut crc_lookup: [ogg_uint32_t; 256] = [
 /* init the encode/decode logical stream state */
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_stream_init(
-    mut os: *mut ogg_stream_state,
-    mut serialno: i32,
-) -> i32 {
+pub unsafe extern "C" fn ogg_stream_init(mut os: *mut ogg_stream_state, mut serialno: i32) -> i32 {
     if !os.is_null() {
         crate::stdlib::memset(
             os as *mut libc::c_void,
@@ -410,10 +404,10 @@ pub unsafe extern "C" fn ogg_stream_init(
             ((*os).lacing_storage as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
         ) as *mut i32;
-        (*os).granule_vals =
-            crate::stdlib::malloc(((*os).lacing_storage as libc::c_ulong).wrapping_mul(
-                ::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong,
-            )) as *mut ogg_int64_t;
+        (*os).granule_vals = crate::stdlib::malloc(
+            ((*os).lacing_storage as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong),
+        ) as *mut ogg_int64_t;
         if (*os).body_data.is_null() || (*os).lacing_vals.is_null() || (*os).granule_vals.is_null()
         {
             ogg_stream_clear(os);
@@ -467,10 +461,7 @@ pub unsafe extern "C" fn ogg_stream_destroy(mut os: *mut ogg_stream_state) -> i3
 /* Helpers for ogg_stream_encode; this keeps the structure and
 what's happening fairly clear */
 
-unsafe extern "C" fn _os_body_expand(
-    mut os: *mut ogg_stream_state,
-    mut needed: isize,
-) -> i32 {
+unsafe extern "C" fn _os_body_expand(mut os: *mut ogg_stream_state, mut needed: isize) -> i32 {
     if (*os).body_storage - needed <= (*os).body_fill {
         let mut body_storage: isize = 0;
         let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
@@ -497,10 +488,7 @@ unsafe extern "C" fn _os_body_expand(
     return 0 as i32;
 }
 
-unsafe extern "C" fn _os_lacing_expand(
-    mut os: *mut ogg_stream_state,
-    mut needed: isize,
-) -> i32 {
+unsafe extern "C" fn _os_lacing_expand(mut os: *mut ogg_stream_state, mut needed: isize) -> i32 {
     if (*os).lacing_storage - needed <= (*os).lacing_fill {
         let mut lacing_storage: isize = 0;
         let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
@@ -524,9 +512,8 @@ unsafe extern "C" fn _os_lacing_expand(
         (*os).lacing_vals = ret as *mut i32;
         ret = crate::stdlib::realloc(
             (*os).granule_vals as *mut libc::c_void,
-            (lacing_storage as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                ogg_int64_t,
-            >() as libc::c_ulong),
+            (lacing_storage as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong),
         );
         if ret.is_null() {
             ogg_stream_clear(os);
@@ -544,8 +531,7 @@ perform the checksum simultaneously with other copies */
 
 pub unsafe extern "C" fn ogg_page_checksum_set(mut og: *mut ogg_page) {
     if !og.is_null() {
-        let mut crc_reg: ogg_uint32_t =
-            0 as i32 as ogg_uint32_t;
+        let mut crc_reg: ogg_uint32_t = 0 as i32 as ogg_uint32_t;
         let mut i: i32 = 0;
         /* safety; needed for API behavior, but not framing code */
         *(*og).header.offset(22 as i32 as isize) = 0 as i32 as u8;
@@ -700,8 +686,7 @@ unsafe extern "C" fn ogg_stream_flush_i(
     } as i32;
     let mut bytes: i32 = 0 as i32;
     let mut acc: isize = 0 as i32 as isize;
-    let mut granule_pos: ogg_int64_t =
-        -(1 as i32) as ogg_int64_t;
+    let mut granule_pos: ogg_int64_t = -(1 as i32) as ogg_int64_t;
     if ogg_stream_check(os) != 0 {
         return 0 as i32;
     }
@@ -848,9 +833,8 @@ unsafe extern "C" fn ogg_stream_flush_i(
     crate::stdlib::memmove(
         (*os).granule_vals as *mut libc::c_void,
         (*os).granule_vals.offset(vals as isize) as *const libc::c_void,
-        ((*os).lacing_fill as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            ogg_int64_t,
-        >() as libc::c_ulong),
+        ((*os).lacing_fill as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong),
     );
     (*os).body_returned += bytes as isize;
     /* calculate the checksum */
@@ -1041,10 +1025,7 @@ pub unsafe extern "C" fn ogg_sync_buffer(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_sync_wrote(
-    mut oy: *mut ogg_sync_state,
-    mut bytes: isize,
-) -> i32 {
+pub unsafe extern "C" fn ogg_sync_wrote(mut oy: *mut ogg_sync_state, mut bytes: isize) -> i32 {
     if ogg_sync_check(oy) != 0 {
         return -(1 as i32);
     }
@@ -1279,8 +1260,7 @@ pub unsafe extern "C" fn ogg_stream_pagein(
                 (*os).granule_vals as *mut libc::c_void,
                 (*os).granule_vals.offset(lr as isize) as *const libc::c_void,
                 (((*os).lacing_fill - lr) as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<ogg_int64_t>()
-                        as libc::c_ulong),
+                    .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong),
             );
         }
         (*os).lacing_fill -= lr;
@@ -1358,8 +1338,7 @@ pub unsafe extern "C" fn ogg_stream_pagein(
     while segptr < segments {
         let mut val_0: i32 = *header.offset((27 as i32 + segptr) as isize) as i32;
         *(*os).lacing_vals.offset((*os).lacing_fill as isize) = val_0;
-        *(*os).granule_vals.offset((*os).lacing_fill as isize) =
-            -(1 as i32) as ogg_int64_t;
+        *(*os).granule_vals.offset((*os).lacing_fill as isize) = -(1 as i32) as ogg_int64_t;
         if bos != 0 {
             *(*os).lacing_vals.offset((*os).lacing_fill as isize) |= 0x100 as i32;
             bos = 0 as i32

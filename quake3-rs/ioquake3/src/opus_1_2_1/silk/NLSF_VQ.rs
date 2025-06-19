@@ -270,8 +270,7 @@ pub unsafe extern "C" fn silk_NLSF_VQ(
     let mut diffw_Q24: opus_int32 = 0;
     let mut sum_error_Q24: opus_int32 = 0;
     let mut pred_Q24: opus_int32 = 0;
-    let mut w_Q9_ptr: *const opus_int16 =
-        0 as *const opus_int16;
+    let mut w_Q9_ptr: *const opus_int16 = 0 as *const opus_int16;
     let mut cb_Q8_ptr: *const u8 = 0 as *const u8;
     /* Loop over codebook */
     cb_Q8_ptr = pCB_Q8;
@@ -284,11 +283,9 @@ pub unsafe extern "C" fn silk_NLSF_VQ(
         while m >= 0 as i32 {
             /* Compute weighted absolute predictive quantization error for index m + 1 */
             diff_Q15 = *in_Q15.offset((m + 1 as i32) as isize) as i32
-                - ((*cb_Q8_ptr.offset((m + 1 as i32) as isize) as opus_int32
-                    as opus_uint32)
+                - ((*cb_Q8_ptr.offset((m + 1 as i32) as isize) as opus_int32 as opus_uint32)
                     << 7 as i32) as opus_int32; /* range: [ -32767 : 32767 ]*/
-            diffw_Q24 = diff_Q15 as opus_int16
-                as opus_int32
+            diffw_Q24 = diff_Q15 as opus_int16 as opus_int32
                 * *w_Q9_ptr.offset((m + 1 as i32) as isize) as opus_int32;
             sum_error_Q24 = sum_error_Q24
                 + (if diffw_Q24 - (pred_Q24 >> 1 as i32) > 0 as i32 {
@@ -299,12 +296,10 @@ pub unsafe extern "C" fn silk_NLSF_VQ(
             pred_Q24 = diffw_Q24;
             /* Compute weighted absolute predictive quantization error for index m */
             diff_Q15 = *in_Q15.offset(m as isize) as i32
-                - ((*cb_Q8_ptr.offset(m as isize) as opus_int32
-                    as opus_uint32)
-                    << 7 as i32) as opus_int32; /* range: [ -32767 : 32767 ]*/
-            diffw_Q24 = diff_Q15 as opus_int16
-                as opus_int32
-                * *w_Q9_ptr.offset(m as isize) as opus_int32;
+                - ((*cb_Q8_ptr.offset(m as isize) as opus_int32 as opus_uint32) << 7 as i32)
+                    as opus_int32; /* range: [ -32767 : 32767 ]*/
+            diffw_Q24 =
+                diff_Q15 as opus_int16 as opus_int32 * *w_Q9_ptr.offset(m as isize) as opus_int32;
             sum_error_Q24 = sum_error_Q24
                 + (if diffw_Q24 - (pred_Q24 >> 1 as i32) > 0 as i32 {
                     (diffw_Q24) - (pred_Q24 >> 1 as i32)

@@ -269,9 +269,7 @@ unsafe extern "C" fn emit_byte(mut val: i32, mut cinfo: j_compress_ptr)
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
     };
 }
@@ -394,11 +392,7 @@ unsafe extern "C" fn finish_pass(mut cinfo: j_compress_ptr) {
  * derived from Markus Kuhn's JBIG implementation.
  */
 
-unsafe extern "C" fn arith_encode(
-    mut cinfo: j_compress_ptr,
-    mut st: *mut u8,
-    mut val: i32,
-) {
+unsafe extern "C" fn arith_encode(mut cinfo: j_compress_ptr, mut st: *mut u8, mut val: i32) {
     let mut e: arith_entropy_ptr = (*cinfo).entropy as arith_entropy_ptr;
     let mut nl: u8 = 0;
     let mut nm: u8 = 0;
@@ -409,9 +403,7 @@ unsafe extern "C" fn arith_encode(
      * Qe values and probability estimation state machine
      */
     sv = *st as i32; /* => Qe_Value */
-    qe = *jpeg_aritab
-        .as_ptr()
-        .offset((sv & 0x7f as i32) as isize); /* Next_Index_LPS + Switch_MPS */
+    qe = *jpeg_aritab.as_ptr().offset((sv & 0x7f as i32) as isize); /* Next_Index_LPS + Switch_MPS */
     nl = (qe & 0xff as i32 as isize) as u8; /* Next_Index_MPS */
     qe >>= 8 as i32;
     nm = (qe & 0xff as i32 as isize) as u8;
@@ -532,14 +524,10 @@ unsafe extern "C" fn arith_encode(
  * Emit a restart marker & resynchronize predictions.
  */
 
-unsafe extern "C" fn emit_restart(
-    mut cinfo: j_compress_ptr,
-    mut restart_num: i32,
-) {
+unsafe extern "C" fn emit_restart(mut cinfo: j_compress_ptr, mut restart_num: i32) {
     let mut entropy: arith_entropy_ptr = (*cinfo).entropy as arith_entropy_ptr;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     finish_pass(cinfo);
     emit_byte(0xff as i32, cinfo);
     emit_byte(0xd0 as i32 + restart_num, cinfo);
@@ -986,8 +974,7 @@ unsafe extern "C" fn encode_mcu(
     mut MCU_data: *mut JBLOCKROW,
 ) -> boolean {
     let mut entropy: arith_entropy_ptr = (*cinfo).entropy as arith_entropy_ptr;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut block: JBLOCKROW = 0 as *mut JBLOCK;
     let mut st: *mut u8 = 0 as *mut u8;
     let mut blkn: i32 = 0;
@@ -1169,15 +1156,11 @@ unsafe extern "C" fn encode_mcu(
  * Initialize for an arithmetic-compressed scan.
  */
 
-unsafe extern "C" fn start_pass(
-    mut cinfo: j_compress_ptr,
-    mut gather_statistics: boolean,
-) {
+unsafe extern "C" fn start_pass(mut cinfo: j_compress_ptr, mut gather_statistics: boolean) {
     let mut entropy: arith_entropy_ptr = (*cinfo).entropy as arith_entropy_ptr;
     let mut ci: i32 = 0;
     let mut tbl: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     if gather_statistics != 0 {
         /* Make sure to avoid that in the master control logic!
          * We are fully adaptive here and need no extra
@@ -1198,46 +1181,28 @@ unsafe extern "C" fn start_pass(
             if (*cinfo).Ss == 0 as i32 {
                 (*entropy).pub_0.encode_mcu = Some(
                     encode_mcu_DC_first
-                        as unsafe extern "C" fn(
-                            _: j_compress_ptr,
-                            _: *mut JBLOCKROW,
-                        )
-                            -> boolean,
+                        as unsafe extern "C" fn(_: j_compress_ptr, _: *mut JBLOCKROW) -> boolean,
                 )
             } else {
                 (*entropy).pub_0.encode_mcu = Some(
                     encode_mcu_AC_first
-                        as unsafe extern "C" fn(
-                            _: j_compress_ptr,
-                            _: *mut JBLOCKROW,
-                        )
-                            -> boolean,
+                        as unsafe extern "C" fn(_: j_compress_ptr, _: *mut JBLOCKROW) -> boolean,
                 )
             }
         } else if (*cinfo).Ss == 0 as i32 {
             (*entropy).pub_0.encode_mcu = Some(
                 encode_mcu_DC_refine
-                    as unsafe extern "C" fn(
-                        _: j_compress_ptr,
-                        _: *mut JBLOCKROW,
-                    ) -> boolean,
+                    as unsafe extern "C" fn(_: j_compress_ptr, _: *mut JBLOCKROW) -> boolean,
             )
         } else {
             (*entropy).pub_0.encode_mcu = Some(
                 encode_mcu_AC_refine
-                    as unsafe extern "C" fn(
-                        _: j_compress_ptr,
-                        _: *mut JBLOCKROW,
-                    ) -> boolean,
+                    as unsafe extern "C" fn(_: j_compress_ptr, _: *mut JBLOCKROW) -> boolean,
             )
         }
     } else {
         (*entropy).pub_0.encode_mcu = Some(
-            encode_mcu
-                as unsafe extern "C" fn(
-                    _: j_compress_ptr,
-                    _: *mut JBLOCKROW,
-                ) -> boolean,
+            encode_mcu as unsafe extern "C" fn(_: j_compress_ptr, _: *mut JBLOCKROW) -> boolean,
         )
     }
     /* Allocate & initialize requested statistics areas */
@@ -1255,9 +1220,7 @@ unsafe extern "C" fn start_pass(
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             if (*entropy).dc_stats[tbl as usize].is_null() {
                 (*entropy).dc_stats[tbl as usize] = Some(
@@ -1291,9 +1254,7 @@ unsafe extern "C" fn start_pass(
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             if (*entropy).ac_stats[tbl as usize].is_null() {
                 (*entropy).ac_stats[tbl as usize] = Some(
@@ -1363,13 +1324,8 @@ pub unsafe extern "C" fn jinit_arith_encoder(mut cinfo: j_compress_ptr) {
         ::std::mem::size_of::<arith_entropy_encoder>() as libc::c_ulong,
     ) as arith_entropy_ptr;
     (*cinfo).entropy = entropy as *mut jpeg_entropy_encoder;
-    (*entropy).pub_0.start_pass = Some(
-        start_pass
-            as unsafe extern "C" fn(
-                _: j_compress_ptr,
-                _: boolean,
-            ) -> (),
-    );
+    (*entropy).pub_0.start_pass =
+        Some(start_pass as unsafe extern "C" fn(_: j_compress_ptr, _: boolean) -> ());
     (*entropy).pub_0.finish_pass =
         Some(finish_pass as unsafe extern "C" fn(_: j_compress_ptr) -> ());
     /* Mark tables unallocated */

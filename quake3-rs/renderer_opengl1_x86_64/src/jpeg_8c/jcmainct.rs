@@ -219,10 +219,7 @@ pub struct my_main_controller {
  * Initialize for a processing pass.
  */
 
-unsafe extern "C" fn start_pass_main(
-    mut cinfo: j_compress_ptr,
-    mut pass_mode: J_BUF_MODE,
-) {
+unsafe extern "C" fn start_pass_main(mut cinfo: j_compress_ptr, mut pass_mode: J_BUF_MODE) {
     let mut main_ptr: my_main_ptr = (*cinfo).main as my_main_ptr;
     /* Do nothing in raw-data mode. */
     if (*cinfo).raw_data_in != 0 {
@@ -251,9 +248,7 @@ unsafe extern "C" fn start_pass_main(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
     };
 }
@@ -273,9 +268,7 @@ unsafe extern "C" fn process_data_simple_main(
     let mut main_ptr: my_main_ptr = (*cinfo).main as my_main_ptr;
     while (*main_ptr).cur_iMCU_row < (*cinfo).total_iMCU_rows {
         /* Read input data if we haven't filled the main buffer yet */
-        if (*main_ptr).rowgroup_ctr
-            < (*cinfo).min_DCT_v_scaled_size as JDIMENSION
-        {
+        if (*main_ptr).rowgroup_ctr < (*cinfo).min_DCT_v_scaled_size as JDIMENSION {
             Some(
                 (*(*cinfo).prep)
                     .pre_process_data
@@ -295,9 +288,7 @@ unsafe extern "C" fn process_data_simple_main(
          * more data.  Note that preprocessor will always pad to fill the iMCU row
          * at the bottom of the image.
          */
-        if (*main_ptr).rowgroup_ctr
-            != (*cinfo).min_DCT_v_scaled_size as JDIMENSION
-        {
+        if (*main_ptr).rowgroup_ctr != (*cinfo).min_DCT_v_scaled_size as JDIMENSION {
             return;
         }
         /* Send the completed row to the compressor */
@@ -358,8 +349,7 @@ pub unsafe extern "C" fn jinit_c_main_controller(
 ) {
     let mut main_ptr: my_main_ptr = 0 as *mut my_main_controller;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     main_ptr = Some(
         (*(*cinfo).mem)
             .alloc_small
@@ -371,13 +361,8 @@ pub unsafe extern "C" fn jinit_c_main_controller(
         ::std::mem::size_of::<my_main_controller>() as libc::c_ulong,
     ) as my_main_ptr;
     (*cinfo).main = main_ptr as *mut jpeg_c_main_controller;
-    (*main_ptr).pub_0.start_pass = Some(
-        start_pass_main
-            as unsafe extern "C" fn(
-                _: j_compress_ptr,
-                _: J_BUF_MODE,
-            ) -> (),
-    );
+    (*main_ptr).pub_0.start_pass =
+        Some(start_pass_main as unsafe extern "C" fn(_: j_compress_ptr, _: J_BUF_MODE) -> ());
     /* We don't need to create a buffer in raw-data mode. */
     if (*cinfo).raw_data_in != 0 {
         return;
@@ -409,8 +394,7 @@ pub unsafe extern "C" fn jinit_c_main_controller(
                 (*compptr)
                     .width_in_blocks
                     .wrapping_mul((*compptr).DCT_h_scaled_size as u32),
-                ((*compptr).v_samp_factor * (*compptr).DCT_v_scaled_size)
-                    as JDIMENSION,
+                ((*compptr).v_samp_factor * (*compptr).DCT_v_scaled_size) as JDIMENSION,
             );
             ci += 1;
             compptr = compptr.offset(1)

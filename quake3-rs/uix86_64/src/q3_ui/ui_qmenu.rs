@@ -357,73 +357,57 @@ static mut sliderButton_0: qhandle_t = 0;
 static mut sliderButton_1: qhandle_t = 0;
 #[no_mangle]
 
-pub static mut menu_text_color: vec4_t =
-    [1.0f32, 1.0f32, 1.0f32, 1.0f32];
+pub static mut menu_text_color: vec4_t = [1.0f32, 1.0f32, 1.0f32, 1.0f32];
 #[no_mangle]
 
-pub static mut menu_dim_color: vec4_t =
-    [0.0f32, 0.0f32, 0.0f32, 0.75f32];
+pub static mut menu_dim_color: vec4_t = [0.0f32, 0.0f32, 0.0f32, 0.75f32];
 #[no_mangle]
 
-pub static mut color_black: vec4_t =
-    [0.00f32, 0.00f32, 0.00f32, 1.00f32];
+pub static mut color_black: vec4_t = [0.00f32, 0.00f32, 0.00f32, 1.00f32];
 #[no_mangle]
 
-pub static mut color_white: vec4_t =
-    [1.00f32, 1.00f32, 1.00f32, 1.00f32];
+pub static mut color_white: vec4_t = [1.00f32, 1.00f32, 1.00f32, 1.00f32];
 #[no_mangle]
 
-pub static mut color_yellow: vec4_t =
-    [1.00f32, 1.00f32, 0.00f32, 1.00f32];
+pub static mut color_yellow: vec4_t = [1.00f32, 1.00f32, 0.00f32, 1.00f32];
 #[no_mangle]
 
-pub static mut color_blue: vec4_t =
-    [0.00f32, 0.00f32, 1.00f32, 1.00f32];
+pub static mut color_blue: vec4_t = [0.00f32, 0.00f32, 1.00f32, 1.00f32];
 #[no_mangle]
 
-pub static mut color_lightOrange: vec4_t =
-    [1.00f32, 0.68f32, 0.00f32, 1.00f32];
+pub static mut color_lightOrange: vec4_t = [1.00f32, 0.68f32, 0.00f32, 1.00f32];
 #[no_mangle]
 
-pub static mut color_orange: vec4_t =
-    [1.00f32, 0.43f32, 0.00f32, 1.00f32];
+pub static mut color_orange: vec4_t = [1.00f32, 0.43f32, 0.00f32, 1.00f32];
 #[no_mangle]
 
-pub static mut color_red: vec4_t =
-    [1.00f32, 0.00f32, 0.00f32, 1.00f32];
+pub static mut color_red: vec4_t = [1.00f32, 0.00f32, 0.00f32, 1.00f32];
 #[no_mangle]
 
-pub static mut color_dim: vec4_t =
-    [0.00f32, 0.00f32, 0.00f32, 0.25f32];
+pub static mut color_dim: vec4_t = [0.00f32, 0.00f32, 0.00f32, 0.25f32];
 // current color scheme
 #[no_mangle]
 
-pub static mut pulse_color: vec4_t =
-    [1.00f32, 1.00f32, 1.00f32, 1.00f32];
+pub static mut pulse_color: vec4_t = [1.00f32, 1.00f32, 1.00f32, 1.00f32];
 #[no_mangle]
 
-pub static mut text_color_disabled: vec4_t =
-    [0.50f32, 0.50f32, 0.50f32, 1.00f32];
+pub static mut text_color_disabled: vec4_t = [0.50f32, 0.50f32, 0.50f32, 1.00f32];
 // light gray
 #[no_mangle]
 
-pub static mut text_color_normal: vec4_t =
-    [1.00f32, 0.43f32, 0.00f32, 1.00f32];
+pub static mut text_color_normal: vec4_t = [1.00f32, 0.43f32, 0.00f32, 1.00f32];
 // light orange
 #[no_mangle]
 
-pub static mut text_color_highlight: vec4_t =
-    [1.00f32, 1.00f32, 0.00f32, 1.00f32];
+pub static mut text_color_highlight: vec4_t = [1.00f32, 1.00f32, 0.00f32, 1.00f32];
 // bright yellow
 #[no_mangle]
 
-pub static mut listbar_color: vec4_t =
-    [1.00f32, 0.43f32, 0.00f32, 0.30f32];
+pub static mut listbar_color: vec4_t = [1.00f32, 0.43f32, 0.00f32, 0.30f32];
 // transluscent orange
 #[no_mangle]
 
-pub static mut text_color_status: vec4_t =
-    [1.00f32, 1.00f32, 1.00f32, 1.00f32];
+pub static mut text_color_status: vec4_t = [1.00f32, 1.00f32, 1.00f32, 1.00f32];
 // text widget
 /*
 =================
@@ -508,8 +492,7 @@ unsafe extern "C" fn PText_Init(mut t: *mut menutext_s) {
     sizeScale = UI_ProportionalSizeScale((*t).style);
     x = (*t).generic.x;
     y = (*t).generic.y;
-    w = (UI_ProportionalStringWidth((*t).string) as f32 * sizeScale)
-        as i32;
+    w = (UI_ProportionalStringWidth((*t).string) as f32 * sizeScale) as i32;
     h = (27 as i32 as f32 * sizeScale) as i32;
     if (*t).generic.flags & 0x10 as i32 as u32 != 0 {
         x -= w
@@ -618,9 +601,7 @@ pub unsafe extern "C" fn Bitmap_Draw(mut b: *mut menubitmap_s) {
     }
     if (*b).generic.flags & 0x2000 as i32 as u32 != 0 {
         if (*b).shader != 0 {
-            trap_R_SetColor(
-                colorMdGrey.as_mut_ptr(),
-            );
+            trap_R_SetColor(colorMdGrey.as_mut_ptr());
             UI_DrawHandlePic(x, y, w, h, (*b).shader);
             trap_R_SetColor(0 as *const f32);
         }
@@ -640,11 +621,8 @@ pub unsafe extern "C" fn Bitmap_Draw(mut b: *mut menubitmap_s) {
             } else {
                 color = pulse_color.as_mut_ptr()
             }
-            *color.offset(3 as i32 as isize) = (0.5f64
-                + 0.5f64
-                    * crate::stdlib::sin(
-                        (uis.realtime / 75 as i32) as f64,
-                    )) as f32;
+            *color.offset(3 as i32 as isize) =
+                (0.5f64 + 0.5f64 * crate::stdlib::sin((uis.realtime / 75 as i32) as f64)) as f32;
             trap_R_SetColor(color);
             UI_DrawHandlePic(x, y, w, h, (*b).focusshader);
             trap_R_SetColor(0 as *const f32);
@@ -717,13 +695,7 @@ unsafe extern "C" fn Action_Draw(mut a: *mut menuaction_s) {
     UI_DrawString(x, y, (*a).generic.name, 0 as i32 | style, color);
     if (*(*a).generic.parent).cursor == (*a).generic.menuPosition {
         // draw cursor
-        UI_DrawChar(
-            x - 16 as i32,
-            y,
-            13 as i32,
-            0 as i32 | 0x1000 as i32,
-            color,
-        );
+        UI_DrawChar(x - 16 as i32, y, 13 as i32, 0 as i32 | 0x1000 as i32, color);
     };
 }
 // radio button widget
@@ -752,10 +724,7 @@ RadioButton_Key
 =================
 */
 
-unsafe extern "C" fn RadioButton_Key(
-    mut rb: *mut menuradiobutton_s,
-    mut key: i32,
-) -> sfxHandle_t {
+unsafe extern "C" fn RadioButton_Key(mut rb: *mut menuradiobutton_s, mut key: i32) -> sfxHandle_t {
     let mut current_block_3: u64;
     match key {
         178 => {
@@ -802,8 +771,7 @@ unsafe extern "C" fn RadioButton_Draw(mut rb: *mut menuradiobutton_s) {
     let mut focus: qboolean = qfalse;
     x = (*rb).generic.x;
     y = (*rb).generic.y;
-    focus = ((*(*rb).generic.parent).cursor == (*rb).generic.menuPosition) as i32
-        as qboolean;
+    focus = ((*(*rb).generic.parent).cursor == (*rb).generic.menuPosition) as i32 as qboolean;
     if (*rb).generic.flags & 0x2000 as i32 as u32 != 0 {
         color = text_color_disabled.as_mut_ptr();
         style = 0 as i32 | 0x10 as i32
@@ -898,10 +866,7 @@ Slider_Key
 =================
 */
 
-unsafe extern "C" fn Slider_Key(
-    mut s: *mut menuslider_s,
-    mut key: i32,
-) -> sfxHandle_t {
+unsafe extern "C" fn Slider_Key(mut s: *mut menuslider_s, mut key: i32) -> sfxHandle_t {
     let mut sound: sfxHandle_t = 0;
     let mut x: i32 = 0;
     let mut oldvalue: i32 = 0;
@@ -964,8 +929,7 @@ unsafe extern "C" fn Slider_Draw(mut s: *mut menuslider_s) {
     let mut focus: qboolean = qfalse;
     x = (*s).generic.x;
     y = (*s).generic.y;
-    focus = ((*(*s).generic.parent).cursor == (*s).generic.menuPosition) as i32
-        as qboolean;
+    focus = ((*(*s).generic.parent).cursor == (*s).generic.menuPosition) as i32 as qboolean;
     if (*s).generic.flags & 0x2000 as i32 as u32 != 0 {
         color = text_color_disabled.as_mut_ptr();
         style = 0x10 as i32
@@ -1062,10 +1026,7 @@ SpinControl_Key
 =================
 */
 
-unsafe extern "C" fn SpinControl_Key(
-    mut s: *mut menulist_s,
-    mut key: i32,
-) -> sfxHandle_t {
+unsafe extern "C" fn SpinControl_Key(mut s: *mut menulist_s, mut key: i32) -> sfxHandle_t {
     let mut sound: sfxHandle_t = 0;
     sound = 0 as i32;
     match key {
@@ -1105,8 +1066,7 @@ unsafe extern "C" fn SpinControl_Draw(mut s: *mut menulist_s) {
     x = (*s).generic.x;
     y = (*s).generic.y;
     style = 0x10 as i32;
-    focus = ((*(*s).generic.parent).cursor == (*s).generic.menuPosition) as i32
-        as qboolean;
+    focus = ((*(*s).generic.parent).cursor == (*s).generic.menuPosition) as i32 as qboolean;
     if (*s).generic.flags & 0x2000 as i32 as u32 != 0 {
         color = text_color_disabled.as_mut_ptr()
     } else if focus as u64 != 0 {
@@ -1185,10 +1145,7 @@ ScrollList_Key
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn ScrollList_Key(
-    mut l: *mut menulist_s,
-    mut key: i32,
-) -> sfxHandle_t {
+pub unsafe extern "C" fn ScrollList_Key(mut l: *mut menulist_s, mut key: i32) -> sfxHandle_t {
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     let mut w: i32 = 0;
@@ -1209,10 +1166,7 @@ pub unsafe extern "C" fn ScrollList_Key(
                 if (*l).generic.flags & 0x8 as i32 as u32 != 0 {
                     x -= w / 2 as i32
                 }
-                if UI_CursorInRect(x, y, w, (*l).height * 16 as i32)
-                    as u64
-                    != 0
-                {
+                if UI_CursorInRect(x, y, w, (*l).height * 16 as i32) as u64 != 0 {
                     cursorx = (uis.cursorx - x) / 8 as i32;
                     column = cursorx / ((*l).width + (*l).separation);
                     cursory = (uis.cursory - y) / 16 as i32;
@@ -1511,11 +1465,9 @@ pub unsafe extern "C" fn ScrollList_Draw(mut l: *mut menulist_s) {
     let mut base: i32 = 0;
     let mut column: i32 = 0;
     let mut color: *mut f32 = 0 as *mut f32;
-    let mut hasfocus: qboolean =
-        qfalse;
+    let mut hasfocus: qboolean = qfalse;
     let mut style: i32 = 0;
-    hasfocus = ((*(*l).generic.parent).cursor == (*l).generic.menuPosition) as i32
-        as qboolean;
+    hasfocus = ((*(*l).generic.parent).cursor == (*l).generic.menuPosition) as i32 as qboolean;
     x = (*l).generic.x;
     column = 0 as i32;
     while column < (*l).columns {
@@ -1551,13 +1503,7 @@ pub unsafe extern "C" fn ScrollList_Draw(mut l: *mut menulist_s) {
             if (*l).generic.flags & 0x8 as i32 as u32 != 0 {
                 style |= 0x1 as i32
             }
-            UI_DrawString(
-                x,
-                y,
-                *(*l).itemnames.offset(i as isize),
-                style,
-                color,
-            );
+            UI_DrawString(x, y, *(*l).itemnames.offset(i as isize), style, color);
             y += 16 as i32;
             i += 1
         }
@@ -1572,23 +1518,15 @@ Menu_AddItem
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Menu_AddItem(
-    mut menu: *mut menuframework_s,
-    mut item: *mut libc::c_void,
-) {
-    let mut itemptr: *mut menucommon_s =
-        0 as *mut menucommon_s;
+pub unsafe extern "C" fn Menu_AddItem(mut menu: *mut menuframework_s, mut item: *mut libc::c_void) {
+    let mut itemptr: *mut menucommon_s = 0 as *mut menucommon_s;
     if (*menu).nitems >= 64 as i32 {
-        trap_Error(
-            b"Menu_AddItem: excessive items\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_Error(b"Menu_AddItem: excessive items\x00" as *const u8 as *const libc::c_char);
     }
     (*menu).items[(*menu).nitems as usize] = item;
-    let ref mut fresh0 =
-        (*((*menu).items[(*menu).nitems as usize] as *mut menucommon_s)).parent;
+    let ref mut fresh0 = (*((*menu).items[(*menu).nitems as usize] as *mut menucommon_s)).parent;
     *fresh0 = menu;
-    (*((*menu).items[(*menu).nitems as usize] as *mut menucommon_s))
-        .menuPosition = (*menu).nitems;
+    (*((*menu).items[(*menu).nitems as usize] as *mut menucommon_s)).menuPosition = (*menu).nitems;
     (*((*menu).items[(*menu).nitems as usize] as *mut menucommon_s)).flags &=
         !(0x200 as i32 as u32);
     // perform any item specific initializations
@@ -1599,10 +1537,7 @@ pub unsafe extern "C" fn Menu_AddItem(
                 Action_Init(item as *mut menuaction_s);
             }
             4 => {
-                MenuField_Init(
-                    item as *mut menufield_s
-                        as *mut menufield_s,
-                );
+                MenuField_Init(item as *mut menufield_s as *mut menufield_s);
             }
             3 => {
                 SpinControl_Init(item as *mut menulist_s);
@@ -1652,9 +1587,7 @@ pub unsafe extern "C" fn Menu_CursorMoved(mut m: *mut menuframework_s) {
         return;
     }
     if (*m).cursor_prev >= 0 as i32 && (*m).cursor_prev < (*m).nitems {
-        callback = (*((*m).items[(*m).cursor_prev as usize]
-            as *mut menucommon_s))
-            .callback;
+        callback = (*((*m).items[(*m).cursor_prev as usize] as *mut menucommon_s)).callback;
         if callback.is_some() {
             callback.expect("non-null function pointer")(
                 (*m).items[(*m).cursor_prev as usize],
@@ -1663,8 +1596,7 @@ pub unsafe extern "C" fn Menu_CursorMoved(mut m: *mut menuframework_s) {
         }
     }
     if (*m).cursor >= 0 as i32 && (*m).cursor < (*m).nitems {
-        callback =
-            (*((*m).items[(*m).cursor as usize] as *mut menucommon_s)).callback;
+        callback = (*((*m).items[(*m).cursor as usize] as *mut menucommon_s)).callback;
         if callback.is_some() {
             callback.expect("non-null function pointer")(
                 (*m).items[(*m).cursor as usize],
@@ -1680,10 +1612,7 @@ Menu_SetCursor
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Menu_SetCursor(
-    mut m: *mut menuframework_s,
-    mut cursor: i32,
-) {
+pub unsafe extern "C" fn Menu_SetCursor(mut m: *mut menuframework_s, mut cursor: i32) {
     if (*((*m).items[cursor as usize] as *mut menucommon_s)).flags
         & (0x2000 as i32 as u32 | 0x4000 as i32 as u32)
         != 0
@@ -1725,13 +1654,9 @@ pub unsafe extern "C" fn Menu_SetCursorToItem(
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Menu_AdjustCursor(
-    mut m: *mut menuframework_s,
-    mut dir: i32,
-) {
+pub unsafe extern "C" fn Menu_AdjustCursor(mut m: *mut menuframework_s, mut dir: i32) {
     let mut item: *mut menucommon_s = 0 as *mut menucommon_s;
-    let mut wrapped: qboolean =
-        qfalse;
+    let mut wrapped: qboolean = qfalse;
     loop {
         while (*m).cursor >= 0 as i32 && (*m).cursor < (*m).nitems {
             item = (*m).items[(*m).cursor as usize] as *mut menucommon_s;
@@ -1785,8 +1710,7 @@ Menu_Draw
 
 pub unsafe extern "C" fn Menu_Draw(mut menu: *mut menuframework_s) {
     let mut i: i32 = 0;
-    let mut itemptr: *mut menucommon_s =
-        0 as *mut menucommon_s;
+    let mut itemptr: *mut menucommon_s = 0 as *mut menucommon_s;
     // draw menu
     i = 0 as i32;
     while i < (*menu).nitems {
@@ -1803,10 +1727,7 @@ pub unsafe extern "C" fn Menu_Draw(mut menu: *mut menuframework_s) {
                         RadioButton_Draw(itemptr as *mut menuradiobutton_s);
                     }
                     4 => {
-                        MenuField_Draw(
-                            itemptr as *mut menufield_s
-                                as *mut menufield_s,
-                        );
+                        MenuField_Draw(itemptr as *mut menufield_s as *mut menufield_s);
                     }
                     1 => {
                         Slider_Draw(itemptr as *mut menuslider_s);
@@ -1856,9 +1777,7 @@ Menu_ItemAtCursor
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Menu_ItemAtCursor(
-    mut m: *mut menuframework_s,
-) -> *mut libc::c_void {
+pub unsafe extern "C" fn Menu_ItemAtCursor(mut m: *mut menuframework_s) -> *mut libc::c_void {
     if (*m).cursor < 0 as i32 || (*m).cursor >= (*m).nitems {
         return 0 as *mut libc::c_void;
     }
@@ -1890,10 +1809,7 @@ Menu_DefaultKey
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Menu_DefaultKey(
-    mut m: *mut menuframework_s,
-    mut key: i32,
-) -> sfxHandle_t {
+pub unsafe extern "C" fn Menu_DefaultKey(mut m: *mut menuframework_s, mut key: i32) -> sfxHandle_t {
     let mut sound: sfxHandle_t = 0 as i32;
     let mut item: *mut menucommon_s = 0 as *mut menucommon_s;
     let mut cursor_prev: i32 = 0;
@@ -1916,13 +1832,7 @@ pub unsafe extern "C" fn Menu_DefaultKey(
             5 => sound = RadioButton_Key(item as *mut menuradiobutton_s, key),
             1 => sound = Slider_Key(item as *mut menuslider_s, key),
             8 => sound = ScrollList_Key(item as *mut menulist_s, key),
-            4 => {
-                sound = MenuField_Key(
-                    item as *mut menufield_s
-                        as *mut menufield_s,
-                    &mut key,
-                )
-            }
+            4 => sound = MenuField_Key(item as *mut menufield_s as *mut menufield_s, &mut key),
             _ => {}
         }
         if sound != 0 {
@@ -1995,55 +1905,33 @@ Menu_Cache
 
 pub unsafe extern "C" fn Menu_Cache() {
     uis.charset =
-        trap_R_RegisterShaderNoMip(
-            b"gfx/2d/bigchars\x00" as *const u8 as *const libc::c_char,
-        );
-    uis.charsetProp =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/font1_prop.tga\x00" as *const u8 as *const libc::c_char,
-        );
-    uis.charsetPropGlow =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/font1_prop_glo.tga\x00" as *const u8 as *const libc::c_char,
-        );
-    uis.charsetPropB =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/font2_prop.tga\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_R_RegisterShaderNoMip(b"gfx/2d/bigchars\x00" as *const u8 as *const libc::c_char);
+    uis.charsetProp = trap_R_RegisterShaderNoMip(
+        b"menu/art/font1_prop.tga\x00" as *const u8 as *const libc::c_char,
+    );
+    uis.charsetPropGlow = trap_R_RegisterShaderNoMip(
+        b"menu/art/font1_prop_glo.tga\x00" as *const u8 as *const libc::c_char,
+    );
+    uis.charsetPropB = trap_R_RegisterShaderNoMip(
+        b"menu/art/font2_prop.tga\x00" as *const u8 as *const libc::c_char,
+    );
     uis.cursor =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/3_cursor2\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_R_RegisterShaderNoMip(b"menu/art/3_cursor2\x00" as *const u8 as *const libc::c_char);
     uis.rb_on =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/switch_on\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_R_RegisterShaderNoMip(b"menu/art/switch_on\x00" as *const u8 as *const libc::c_char);
     uis.rb_off =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/switch_off\x00" as *const u8 as *const libc::c_char,
-        );
-    uis.whiteShader =
-        trap_R_RegisterShaderNoMip(
-            b"white\x00" as *const u8 as *const libc::c_char,
-        );
-    if uis.glconfig.hardwareType as u32
-        == GLHW_RAGEPRO as i32 as u32
-    {
+        trap_R_RegisterShaderNoMip(b"menu/art/switch_off\x00" as *const u8 as *const libc::c_char);
+    uis.whiteShader = trap_R_RegisterShaderNoMip(b"white\x00" as *const u8 as *const libc::c_char);
+    if uis.glconfig.hardwareType as u32 == GLHW_RAGEPRO as i32 as u32 {
         // the blend effect turns to shit with the normal
         uis.menuBackShader =
-            trap_R_RegisterShaderNoMip(
-                b"menubackRagePro\x00" as *const u8 as *const libc::c_char,
-            )
+            trap_R_RegisterShaderNoMip(b"menubackRagePro\x00" as *const u8 as *const libc::c_char)
     } else {
         uis.menuBackShader =
-            trap_R_RegisterShaderNoMip(
-                b"menuback\x00" as *const u8 as *const libc::c_char,
-            )
+            trap_R_RegisterShaderNoMip(b"menuback\x00" as *const u8 as *const libc::c_char)
     }
     uis.menuBackNoLogoShader =
-        trap_R_RegisterShaderNoMip(
-            b"menubacknologo\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_R_RegisterShaderNoMip(b"menubacknologo\x00" as *const u8 as *const libc::c_char);
     menu_in_sound = trap_S_RegisterSound(
         b"sound/misc/menu1.wav\x00" as *const u8 as *const libc::c_char,
         qfalse,
@@ -2066,9 +1954,8 @@ pub unsafe extern "C" fn Menu_Cache() {
     );
     // need a nonzero sound, make an empty sound for this
     menu_null_sound = -(1 as i32);
-    sliderBar = trap_R_RegisterShaderNoMip(
-        b"menu/art/slider2\x00" as *const u8 as *const libc::c_char,
-    );
+    sliderBar =
+        trap_R_RegisterShaderNoMip(b"menu/art/slider2\x00" as *const u8 as *const libc::c_char);
     sliderButton_0 = trap_R_RegisterShaderNoMip(
         b"menu/art/sliderbutt_0\x00" as *const u8 as *const libc::c_char,
     );

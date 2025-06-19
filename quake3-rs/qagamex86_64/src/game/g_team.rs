@@ -484,8 +484,7 @@ pub static mut teamgame: teamgame_t = teamgame_t {
 };
 #[no_mangle]
 
-pub static mut neutralObelisk: *mut gentity_t =
-    0 as *const gentity_t as *mut gentity_t;
+pub static mut neutralObelisk: *mut gentity_t = 0 as *const gentity_t as *mut gentity_t;
 #[no_mangle]
 
 pub unsafe extern "C" fn Team_InitGame() {
@@ -500,15 +499,9 @@ pub unsafe extern "C" fn Team_InitGame() {
             // CTF
             // One Flag CTF
             teamgame.redStatus = 4294967295 as flagStatus_t; // Invalid to force update
-            Team_SetFlagStatus(
-                TEAM_RED as i32,
-                FLAG_ATBASE,
-            ); // Invalid to force update
+            Team_SetFlagStatus(TEAM_RED as i32, FLAG_ATBASE); // Invalid to force update
             teamgame.blueStatus = 4294967295 as flagStatus_t;
-            Team_SetFlagStatus(
-                TEAM_BLUE as i32,
-                FLAG_ATBASE,
-            );
+            Team_SetFlagStatus(TEAM_BLUE as i32, FLAG_ATBASE);
         }
         _ => {}
     };
@@ -576,9 +569,7 @@ unsafe extern "C" fn PrintMsg(
     ) as libc::c_ulong
         >= ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
     {
-        G_Error(
-            b"PrintMsg overrun\x00" as *const u8 as *const libc::c_char,
-        );
+        G_Error(b"PrintMsg overrun\x00" as *const u8 as *const libc::c_char);
     }
     loop
     // double quotes are bad
@@ -611,34 +602,20 @@ AddTeamScore
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AddTeamScore(
-    mut origin: *mut vec_t,
-    mut team: i32,
-    mut score: i32,
-) {
+pub unsafe extern "C" fn AddTeamScore(mut origin: *mut vec_t, mut team: i32, mut score: i32) {
     let mut te: *mut gentity_t = 0 as *mut gentity_t;
-    te = G_TempEntity(
-        origin,
-        EV_GLOBAL_TEAM_SOUND as i32,
-    ) as *mut gentity_s;
+    te = G_TempEntity(origin, EV_GLOBAL_TEAM_SOUND as i32) as *mut gentity_s;
     (*te).r.svFlags |= 0x20 as i32;
     if team == TEAM_RED as i32 {
-        if level.teamScores[TEAM_RED as i32 as usize]
-            + score
-            == level.teamScores
-                [TEAM_BLUE as i32 as usize]
+        if level.teamScores[TEAM_RED as i32 as usize] + score
+            == level.teamScores[TEAM_BLUE as i32 as usize]
         {
             //teams are tied sound
             (*te).s.eventParm = GTS_TEAMS_ARE_TIED as i32
-        } else if level.teamScores
-            [TEAM_RED as i32 as usize]
-            <= level.teamScores
-                [TEAM_BLUE as i32 as usize]
-            && level.teamScores
-                [TEAM_RED as i32 as usize]
-                + score
-                > level.teamScores
-                    [TEAM_BLUE as i32 as usize]
+        } else if level.teamScores[TEAM_RED as i32 as usize]
+            <= level.teamScores[TEAM_BLUE as i32 as usize]
+            && level.teamScores[TEAM_RED as i32 as usize] + score
+                > level.teamScores[TEAM_BLUE as i32 as usize]
         {
             // red took the lead sound
             (*te).s.eventParm = GTS_REDTEAM_TOOK_LEAD as i32
@@ -646,20 +623,15 @@ pub unsafe extern "C" fn AddTeamScore(
             // red scored sound
             (*te).s.eventParm = GTS_REDTEAM_SCORED as i32
         }
-    } else if level.teamScores
-        [TEAM_BLUE as i32 as usize]
-        + score
+    } else if level.teamScores[TEAM_BLUE as i32 as usize] + score
         == level.teamScores[TEAM_RED as i32 as usize]
     {
         //teams are tied sound
         (*te).s.eventParm = GTS_TEAMS_ARE_TIED as i32
-    } else if level.teamScores
-        [TEAM_BLUE as i32 as usize]
+    } else if level.teamScores[TEAM_BLUE as i32 as usize]
         <= level.teamScores[TEAM_RED as i32 as usize]
-        && level.teamScores[TEAM_BLUE as i32 as usize]
-            + score
-            > level.teamScores
-                [TEAM_RED as i32 as usize]
+        && level.teamScores[TEAM_BLUE as i32 as usize] + score
+            > level.teamScores[TEAM_RED as i32 as usize]
     {
         // blue took the lead sound
         (*te).s.eventParm = GTS_BLUETEAM_TOOK_LEAD as i32
@@ -709,12 +681,8 @@ static mut oneFlagStatusRemap: [libc::c_char; 5] = [
 ];
 #[no_mangle]
 
-pub unsafe extern "C" fn Team_SetFlagStatus(
-    mut team: i32,
-    mut status: flagStatus_t,
-) {
-    let mut modified: qboolean =
-        qfalse;
+pub unsafe extern "C" fn Team_SetFlagStatus(mut team: i32, mut status: flagStatus_t) {
+    let mut modified: qboolean = qfalse;
     match team {
         1 => {
             // CTF
@@ -757,20 +725,11 @@ pub unsafe extern "C" fn Team_SetFlagStatus(
 
 pub unsafe extern "C" fn Team_CheckDroppedItem(mut dropped: *mut gentity_t) {
     if (*(*dropped).item).giTag == PW_REDFLAG as i32 {
-        Team_SetFlagStatus(
-            TEAM_RED as i32,
-            FLAG_DROPPED,
-        );
+        Team_SetFlagStatus(TEAM_RED as i32, FLAG_DROPPED);
     } else if (*(*dropped).item).giTag == PW_BLUEFLAG as i32 {
-        Team_SetFlagStatus(
-            TEAM_BLUE as i32,
-            FLAG_DROPPED,
-        );
+        Team_SetFlagStatus(TEAM_BLUE as i32, FLAG_DROPPED);
     } else if (*(*dropped).item).giTag == PW_NEUTRALFLAG as i32 {
-        Team_SetFlagStatus(
-            TEAM_FREE as i32,
-            FLAG_DROPPED,
-        );
+        Team_SetFlagStatus(TEAM_FREE as i32, FLAG_DROPPED);
     };
 }
 /*
@@ -785,9 +744,7 @@ pub unsafe extern "C" fn Team_ForceGesture(mut team: i32) {
     let mut ent: *mut gentity_t = 0 as *mut gentity_t;
     i = 0 as i32;
     while i < 64 as i32 {
-        ent = &mut *g_entities
-            .as_mut_ptr()
-            .offset(i as isize) as *mut gentity_t;
+        ent = &mut *g_entities.as_mut_ptr().offset(i as isize) as *mut gentity_t;
         if !((*ent).inuse as u64 == 0) {
             if !(*ent).client.is_null() {
                 if !((*(*ent).client).sess.sessionTeam as u32 != team as u32) {
@@ -851,8 +808,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
     // did the attacker frag the flag carrier?
     tokens = 0 as i32;
     if (*(*targ).client).ps.powerups[enemy_flag_pw as usize] != 0 {
-        (*(*attacker).client).pers.teamState.lastfraggedcarrier =
-            level.time as f32;
+        (*(*attacker).client).pers.teamState.lastfraggedcarrier = level.time as f32;
         AddScore(
             attacker as *mut gentity_s,
             (*targ).r.currentOrigin.as_mut_ptr(),
@@ -869,9 +825,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
         // field on the other team
         i = 0 as i32;
         while i < g_maxclients.integer {
-            ent = g_entities
-                .as_mut_ptr()
-                .offset(i as isize);
+            ent = g_entities.as_mut_ptr().offset(i as isize);
             if (*ent).inuse as u32 != 0
                 && (*(*ent).client).sess.sessionTeam as u32 == otherteam as u32
             {
@@ -883,8 +837,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
     }
     // did the attacker frag a head carrier? other->client->ps.generic1
     if tokens != 0 {
-        (*(*attacker).client).pers.teamState.lastfraggedcarrier =
-            level.time as f32;
+        (*(*attacker).client).pers.teamState.lastfraggedcarrier = level.time as f32;
         AddScore(
             attacker as *mut gentity_s,
             (*targ).r.currentOrigin.as_mut_ptr(),
@@ -901,9 +854,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
         // field on the other team
         i = 0 as i32;
         while i < g_maxclients.integer {
-            ent = g_entities
-                .as_mut_ptr()
-                .offset(i as isize);
+            ent = g_entities.as_mut_ptr().offset(i as isize);
             if (*ent).inuse as u32 != 0
                 && (*(*ent).client).sess.sessionTeam as u32 == otherteam as u32
             {
@@ -914,9 +865,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
         return;
     }
     if (*(*targ).client).pers.teamState.lasthurtcarrier != 0.
-        && level.time as f32
-            - (*(*targ).client).pers.teamState.lasthurtcarrier
-            < 8000 as i32 as f32
+        && level.time as f32 - (*(*targ).client).pers.teamState.lasthurtcarrier < 8000 as i32 as f32
         && (*(*attacker).client).ps.powerups[flag_pw as usize] == 0
     {
         // attacker is on the same team as the flag carrier and
@@ -928,8 +877,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
         );
         (*(*attacker).client).pers.teamState.carrierdefense += 1;
         (*(*targ).client).pers.teamState.lasthurtcarrier = 0 as i32 as f32;
-        (*(*attacker).client).ps.persistant
-            [PERS_DEFEND_COUNT as i32 as usize] += 1;
+        (*(*attacker).client).ps.persistant[PERS_DEFEND_COUNT as i32 as usize] += 1;
         // add the sprite over the player's head
         (*(*attacker).client).ps.eFlags &= !(0x8000 as i32
             | 0x8 as i32
@@ -952,9 +900,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
     // find attacker's team's flag carrier
     i = 0 as i32; // can't find attacker's flag
     while i < g_maxclients.integer {
-        carrier = g_entities
-            .as_mut_ptr()
-            .offset(i as isize);
+        carrier = g_entities.as_mut_ptr().offset(i as isize);
         if (*carrier).inuse as u32 != 0 && (*(*carrier).client).ps.powerups[flag_pw as usize] != 0 {
             break;
         }
@@ -965,8 +911,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
     loop {
         flag = G_Find(
             flag as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char
-                as size_t as i32,
+            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
             c,
         ) as *mut gentity_s;
         if flag.is_null() {
@@ -993,19 +938,16 @@ pub unsafe extern "C" fn Team_FragBonuses(
         (*attacker).r.currentOrigin[1 as i32 as usize] - (*flag).r.currentOrigin[1 as i32 as usize];
     v2[2 as i32 as usize] =
         (*attacker).r.currentOrigin[2 as i32 as usize] - (*flag).r.currentOrigin[2 as i32 as usize];
-    if (VectorLength(v1.as_mut_ptr() as *const vec_t)
-        < 1000 as i32 as f32
+    if (VectorLength(v1.as_mut_ptr() as *const vec_t) < 1000 as i32 as f32
         && trap_InPVS(
             (*flag).r.currentOrigin.as_mut_ptr() as *const vec_t,
             (*targ).r.currentOrigin.as_mut_ptr() as *const vec_t,
         ) as u32
             != 0
-        || VectorLength(v2.as_mut_ptr() as *const vec_t)
-            < 1000 as i32 as f32
+        || VectorLength(v2.as_mut_ptr() as *const vec_t) < 1000 as i32 as f32
             && trap_InPVS(
                 (*flag).r.currentOrigin.as_mut_ptr() as *const vec_t,
-                (*attacker).r.currentOrigin.as_mut_ptr()
-                    as *const vec_t,
+                (*attacker).r.currentOrigin.as_mut_ptr() as *const vec_t,
             ) as u32
                 != 0)
         && (*(*attacker).client).sess.sessionTeam as u32
@@ -1018,8 +960,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
             1 as i32,
         );
         (*(*attacker).client).pers.teamState.basedefense += 1;
-        (*(*attacker).client).ps.persistant
-            [PERS_DEFEND_COUNT as i32 as usize] += 1;
+        (*(*attacker).client).ps.persistant[PERS_DEFEND_COUNT as i32 as usize] += 1;
         // add the sprite over the player's head
         (*(*attacker).client).ps.eFlags &= !(0x8000 as i32
             | 0x8 as i32
@@ -1044,21 +985,16 @@ pub unsafe extern "C" fn Team_FragBonuses(
             - (*carrier).r.currentOrigin[1 as i32 as usize];
         v2[2 as i32 as usize] = (*attacker).r.currentOrigin[2 as i32 as usize]
             - (*carrier).r.currentOrigin[2 as i32 as usize];
-        if (VectorLength(v1.as_mut_ptr() as *const vec_t)
-            < 1000 as i32 as f32
+        if (VectorLength(v1.as_mut_ptr() as *const vec_t) < 1000 as i32 as f32
             && trap_InPVS(
-                (*carrier).r.currentOrigin.as_mut_ptr()
-                    as *const vec_t,
+                (*carrier).r.currentOrigin.as_mut_ptr() as *const vec_t,
                 (*targ).r.currentOrigin.as_mut_ptr() as *const vec_t,
             ) as u32
                 != 0
-            || VectorLength(v2.as_mut_ptr() as *const vec_t)
-                < 1000 as i32 as f32
+            || VectorLength(v2.as_mut_ptr() as *const vec_t) < 1000 as i32 as f32
                 && trap_InPVS(
-                    (*carrier).r.currentOrigin.as_mut_ptr()
-                        as *const vec_t,
-                    (*attacker).r.currentOrigin.as_mut_ptr()
-                        as *const vec_t,
+                    (*carrier).r.currentOrigin.as_mut_ptr() as *const vec_t,
+                    (*attacker).r.currentOrigin.as_mut_ptr() as *const vec_t,
                 ) as u32
                     != 0)
             && (*(*attacker).client).sess.sessionTeam as u32
@@ -1070,8 +1006,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
                 1 as i32,
             );
             (*(*attacker).client).pers.teamState.carrierdefense += 1;
-            (*(*attacker).client).ps.persistant
-                [PERS_DEFEND_COUNT as i32 as usize] += 1;
+            (*(*attacker).client).ps.persistant[PERS_DEFEND_COUNT as i32 as usize] += 1;
             // add the sprite over the player's head
             (*(*attacker).client).ps.eFlags &= !(0x8000 as i32
                 | 0x8 as i32
@@ -1113,16 +1048,14 @@ pub unsafe extern "C" fn Team_CheckHurtCarrier(
         && (*(*targ).client).sess.sessionTeam as u32
             != (*(*attacker).client).sess.sessionTeam as u32
     {
-        (*(*attacker).client).pers.teamState.lasthurtcarrier =
-            level.time as f32
+        (*(*attacker).client).pers.teamState.lasthurtcarrier = level.time as f32
     }
     // skulls
     if (*(*targ).client).ps.generic1 != 0
         && (*(*targ).client).sess.sessionTeam as u32
             != (*(*attacker).client).sess.sessionTeam as u32
     {
-        (*(*attacker).client).pers.teamState.lasthurtcarrier =
-            level.time as f32
+        (*(*attacker).client).pers.teamState.lasthurtcarrier = level.time as f32
     };
 }
 #[no_mangle]
@@ -1143,8 +1076,7 @@ pub unsafe extern "C" fn Team_ResetFlag(mut team: i32) -> *mut gentity_t {
     loop {
         ent = G_Find(
             ent as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char
-                as size_t as i32,
+            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
             c,
         ) as *mut gentity_s;
         if ent.is_null() {
@@ -1170,10 +1102,7 @@ pub unsafe extern "C" fn Team_ResetFlags() {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn Team_ReturnFlagSound(
-    mut ent: *mut gentity_t,
-    mut team: i32,
-) {
+pub unsafe extern "C" fn Team_ReturnFlagSound(mut ent: *mut gentity_t, mut team: i32) {
     let mut te: *mut gentity_t = 0 as *mut gentity_t;
     if ent.is_null() {
         G_Printf(
@@ -1195,10 +1124,7 @@ pub unsafe extern "C" fn Team_ReturnFlagSound(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn Team_TakeFlagSound(
-    mut ent: *mut gentity_t,
-    mut team: i32,
-) {
+pub unsafe extern "C" fn Team_TakeFlagSound(mut ent: *mut gentity_t, mut team: i32) {
     let mut te: *mut gentity_t = 0 as *mut gentity_t;
     if ent.is_null() {
         G_Printf(
@@ -1211,9 +1137,7 @@ pub unsafe extern "C" fn Team_TakeFlagSound(
     // or not picked up the last 10 seconds
     match team {
         1 => {
-            if teamgame.blueStatus as u32
-                != FLAG_ATBASE as i32 as u32
-            {
+            if teamgame.blueStatus as u32 != FLAG_ATBASE as i32 as u32 {
                 if teamgame.blueTakenTime > level.time - 10000 as i32 {
                     return;
                 }
@@ -1222,8 +1146,7 @@ pub unsafe extern "C" fn Team_TakeFlagSound(
         }
         2 => {
             // CTF
-            if teamgame.redStatus as u32 != FLAG_ATBASE as i32 as u32
-            {
+            if teamgame.redStatus as u32 != FLAG_ATBASE as i32 as u32 {
                 if teamgame.redTakenTime > level.time - 10000 as i32 {
                     return;
                 }
@@ -1245,10 +1168,7 @@ pub unsafe extern "C" fn Team_TakeFlagSound(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn Team_CaptureFlagSound(
-    mut ent: *mut gentity_t,
-    mut team: i32,
-) {
+pub unsafe extern "C" fn Team_CaptureFlagSound(mut ent: *mut gentity_t, mut team: i32) {
     let mut te: *mut gentity_t = 0 as *mut gentity_t;
     if ent.is_null() {
         G_Printf(
@@ -1354,8 +1274,7 @@ pub unsafe extern "C" fn Team_TouchOurFlag(
             1 as i32,
         );
         (*(*other).client).pers.teamState.flagrecovery += 1;
-        (*(*other).client).pers.teamState.lastreturnedflag =
-            level.time as f32;
+        (*(*other).client).pers.teamState.lastreturnedflag = level.time as f32;
         //ResetFlag will remove this entity!  We must return zero
         Team_ReturnFlagSound(Team_ResetFlag(team), team);
         return 0 as i32;
@@ -1402,9 +1321,7 @@ pub unsafe extern "C" fn Team_TouchOurFlag(
     // Ok, let's do the player loop, hand out the bonuses
     i = 0 as i32;
     while i < g_maxclients.integer {
-        player = &mut *g_entities
-            .as_mut_ptr()
-            .offset(i as isize) as *mut gentity_t;
+        player = &mut *g_entities.as_mut_ptr().offset(i as isize) as *mut gentity_t;
         // also make sure we don't award assist bonuses to the flag carrier himself.
         if !((*player).inuse as u64 == 0 || player == other) {
             if (*(*player).client).sess.sessionTeam as u32 != (*cl).sess.sessionTeam as u32 {
@@ -1420,8 +1337,7 @@ pub unsafe extern "C" fn Team_TouchOurFlag(
                         1 as i32,
                     );
                     (*(*other).client).pers.teamState.assists += 1;
-                    (*(*player).client).ps.persistant
-                        [PERS_ASSIST_COUNT as i32 as usize] += 1;
+                    (*(*player).client).ps.persistant[PERS_ASSIST_COUNT as i32 as usize] += 1;
                     // add the sprite over the player's head
                     (*(*player).client).ps.eFlags &= !(0x8000 as i32
                         | 0x8 as i32
@@ -1430,8 +1346,7 @@ pub unsafe extern "C" fn Team_TouchOurFlag(
                         | 0x10000 as i32
                         | 0x800 as i32);
                     (*(*player).client).ps.eFlags |= 0x20000 as i32;
-                    (*(*player).client).rewardTime =
-                        level.time + 2000 as i32
+                    (*(*player).client).rewardTime = level.time + 2000 as i32
                 }
                 if (*(*player).client).pers.teamState.lastfraggedcarrier + 10000 as i32 as f32
                     > level.time as f32
@@ -1442,8 +1357,7 @@ pub unsafe extern "C" fn Team_TouchOurFlag(
                         2 as i32,
                     );
                     (*(*other).client).pers.teamState.assists += 1;
-                    (*(*player).client).ps.persistant
-                        [PERS_ASSIST_COUNT as i32 as usize] += 1;
+                    (*(*player).client).ps.persistant[PERS_ASSIST_COUNT as i32 as usize] += 1;
                     // add the sprite over the player's head
                     (*(*player).client).ps.eFlags &= !(0x8000 as i32
                         | 0x8 as i32
@@ -1452,8 +1366,7 @@ pub unsafe extern "C" fn Team_TouchOurFlag(
                         | 0x10000 as i32
                         | 0x800 as i32);
                     (*(*player).client).ps.eFlags |= 0x20000 as i32;
-                    (*(*player).client).rewardTime =
-                        level.time + 2000 as i32
+                    (*(*player).client).rewardTime = level.time + 2000 as i32
                 }
             }
         }
@@ -1491,10 +1404,7 @@ pub unsafe extern "C" fn Team_TouchEnemyFlag(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn Pickup_Team(
-    mut ent: *mut gentity_t,
-    mut other: *mut gentity_t,
-) -> i32 {
+pub unsafe extern "C" fn Pickup_Team(mut ent: *mut gentity_t, mut other: *mut gentity_t) -> i32 {
     let mut team: i32 = 0;
     let mut cl: *mut gclient_t = (*other).client;
     // figure out what team this flag is
@@ -1532,9 +1442,7 @@ Report a location for the player. Uses placed nearby target_location entities
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Team_GetLocation(
-    mut ent: *mut gentity_t,
-) -> *mut gentity_t {
+pub unsafe extern "C" fn Team_GetLocation(mut ent: *mut gentity_t) -> *mut gentity_t {
     let mut eloc: *mut gentity_t = 0 as *mut gentity_t;
     let mut best: *mut gentity_t = 0 as *mut gentity_t;
     let mut bestlen: f32 = 0.;
@@ -1621,8 +1529,7 @@ pub unsafe extern "C" fn SelectRandomTeamSpawnPoint(
     let mut spot: *mut gentity_t = 0 as *mut gentity_t;
     let mut count: i32 = 0;
     let mut selection: i32 = 0;
-    let mut spots: [*mut gentity_t; 32] =
-        [0 as *mut gentity_t; 32];
+    let mut spots: [*mut gentity_t; 32] = [0 as *mut gentity_t; 32];
     let mut classname: *mut libc::c_char = 0 as *mut libc::c_char;
     if teamstate == TEAM_BEGIN as i32 {
         if team as u32 == TEAM_RED as i32 as u32 {
@@ -1648,17 +1555,13 @@ pub unsafe extern "C" fn SelectRandomTeamSpawnPoint(
     loop {
         spot = G_Find(
             spot as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char
-                as size_t as i32,
+            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
             classname,
         ) as *mut gentity_s;
         if spot.is_null() {
             break;
         }
-        if SpotWouldTelefrag(spot as *mut gentity_s)
-            as u64
-            != 0
-        {
+        if SpotWouldTelefrag(spot as *mut gentity_s) as u64 != 0 {
             continue;
         }
         spots[count as usize] = spot;
@@ -1671,8 +1574,7 @@ pub unsafe extern "C" fn SelectRandomTeamSpawnPoint(
         // no spots that won't telefrag
         return G_Find(
             0 as *mut gentity_t as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char
-                as size_t as i32,
+            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
             classname,
         ) as *mut gentity_s;
     }
@@ -1697,12 +1599,7 @@ pub unsafe extern "C" fn SelectCTFSpawnPoint(
     let mut spot: *mut gentity_t = 0 as *mut gentity_t;
     spot = SelectRandomTeamSpawnPoint(teamstate, team);
     if spot.is_null() {
-        return SelectSpawnPoint(
-            vec3_origin.as_mut_ptr(),
-            origin,
-            angles,
-            isbot,
-        ) as *mut gentity_s;
+        return SelectSpawnPoint(vec3_origin.as_mut_ptr(), origin, angles, isbot) as *mut gentity_s;
     }
     *origin.offset(0 as i32 as isize) = (*spot).s.origin[0 as i32 as usize];
     *origin.offset(1 as i32 as isize) = (*spot).s.origin[1 as i32 as usize];
@@ -1746,17 +1643,13 @@ pub unsafe extern "C" fn TeamplayInfoMessage(mut ent: *mut gentity_t) {
         return;
     }
     // send team info to spectator for team of followed client
-    if (*(*ent).client).sess.sessionTeam as u32 == TEAM_SPECTATOR as i32 as u32
-    {
-        if (*(*ent).client).sess.spectatorState as u32
-            != SPECTATOR_FOLLOW as i32 as u32
+    if (*(*ent).client).sess.sessionTeam as u32 == TEAM_SPECTATOR as i32 as u32 {
+        if (*(*ent).client).sess.spectatorState as u32 != SPECTATOR_FOLLOW as i32 as u32
             || (*(*ent).client).sess.spectatorClient < 0 as i32
         {
             return;
         }
-        team = (*g_entities
-            [(*(*ent).client).sess.spectatorClient as usize]
-            .client)
+        team = (*g_entities[(*(*ent).client).sess.spectatorClient as usize].client)
             .sess
             .sessionTeam as i32
     } else {
@@ -1798,9 +1691,7 @@ pub unsafe extern "C" fn TeamplayInfoMessage(mut ent: *mut gentity_t) {
     i = 0 as i32;
     cnt = 0 as i32;
     while i < g_maxclients.integer && cnt < 32 as i32 {
-        player = g_entities
-            .as_mut_ptr()
-            .offset(i as isize);
+        player = g_entities.as_mut_ptr().offset(i as isize);
         if (*player).inuse as u32 != 0 && (*(*player).client).sess.sessionTeam as u32 == team as u32
         {
             h = (*(*player).client).ps.stats[STAT_HEALTH as i32 as usize];
@@ -1890,23 +1781,15 @@ pub unsafe extern "C" fn CheckTeamStatus() {
     let mut i: i32 = 0;
     let mut loc: *mut gentity_t = 0 as *mut gentity_t;
     let mut ent: *mut gentity_t = 0 as *mut gentity_t;
-    if level.time - level.lastTeamLocationTime
-        > 1000 as i32
-    {
+    if level.time - level.lastTeamLocationTime > 1000 as i32 {
         level.lastTeamLocationTime = level.time;
         i = 0 as i32;
         while i < g_maxclients.integer {
-            ent = g_entities
-                .as_mut_ptr()
-                .offset(i as isize);
-            if !((*(*ent).client).pers.connected as u32
-                != CON_CONNECTED as i32 as u32)
-            {
+            ent = g_entities.as_mut_ptr().offset(i as isize);
+            if !((*(*ent).client).pers.connected as u32 != CON_CONNECTED as i32 as u32) {
                 if (*ent).inuse as u32 != 0
-                    && ((*(*ent).client).sess.sessionTeam as u32
-                        == TEAM_RED as i32 as u32
-                        || (*(*ent).client).sess.sessionTeam as u32
-                            == TEAM_BLUE as i32 as u32)
+                    && ((*(*ent).client).sess.sessionTeam as u32 == TEAM_RED as i32 as u32
+                        || (*(*ent).client).sess.sessionTeam as u32 == TEAM_BLUE as i32 as u32)
                 {
                     loc = Team_GetLocation(ent);
                     if !loc.is_null() {
@@ -1920,12 +1803,8 @@ pub unsafe extern "C" fn CheckTeamStatus() {
         }
         i = 0 as i32;
         while i < g_maxclients.integer {
-            ent = g_entities
-                .as_mut_ptr()
-                .offset(i as isize);
-            if !((*(*ent).client).pers.connected as u32
-                != CON_CONNECTED as i32 as u32)
-            {
+            ent = g_entities.as_mut_ptr().offset(i as isize);
+            if !((*(*ent).client).pers.connected as u32 != CON_CONNECTED as i32 as u32) {
                 if (*ent).inuse as u64 != 0 {
                     TeamplayInfoMessage(ent);
                 }

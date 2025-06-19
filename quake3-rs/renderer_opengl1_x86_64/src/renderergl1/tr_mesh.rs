@@ -257,32 +257,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 // tr_mesh.c: triangle model functions
 
-unsafe extern "C" fn ProjectRadius(
-    mut r: f32,
-    mut location: *mut vec_t,
-) -> f32 {
+unsafe extern "C" fn ProjectRadius(mut r: f32, mut location: *mut vec_t) -> f32 {
     let mut pr: f32 = 0.;
     let mut dist: f32 = 0.;
     let mut c: f32 = 0.;
     let mut p: vec3_t = [0.; 3];
     let mut projected: [f32; 4] = [0.; 4];
-    c = tr.viewParms.or.axis[0 as i32 as usize]
-        [0 as i32 as usize]
+    c = tr.viewParms.or.axis[0 as i32 as usize][0 as i32 as usize]
         * tr.viewParms.or.origin[0 as i32 as usize]
-        + tr.viewParms.or.axis[0 as i32 as usize]
-            [1 as i32 as usize]
+        + tr.viewParms.or.axis[0 as i32 as usize][1 as i32 as usize]
             * tr.viewParms.or.origin[1 as i32 as usize]
-        + tr.viewParms.or.axis[0 as i32 as usize]
-            [2 as i32 as usize]
+        + tr.viewParms.or.axis[0 as i32 as usize][2 as i32 as usize]
             * tr.viewParms.or.origin[2 as i32 as usize];
-    dist = tr.viewParms.or.axis[0 as i32 as usize]
-        [0 as i32 as usize]
+    dist = tr.viewParms.or.axis[0 as i32 as usize][0 as i32 as usize]
         * *location.offset(0 as i32 as isize)
-        + tr.viewParms.or.axis[0 as i32 as usize]
-            [1 as i32 as usize]
+        + tr.viewParms.or.axis[0 as i32 as usize][1 as i32 as usize]
             * *location.offset(1 as i32 as isize)
-        + tr.viewParms.or.axis[0 as i32 as usize]
-            [2 as i32 as usize]
+        + tr.viewParms.or.axis[0 as i32 as usize][2 as i32 as usize]
             * *location.offset(2 as i32 as isize)
         - c;
     if dist <= 0 as i32 as f32 {
@@ -292,65 +283,25 @@ unsafe extern "C" fn ProjectRadius(
     p[1 as i32 as usize] = crate::stdlib::fabs(r as f64) as vec_t;
     p[2 as i32 as usize] = -dist;
     projected[0 as i32 as usize] = p[0 as i32 as usize]
-        * tr
-            .viewParms
-            .projectionMatrix[0 as i32 as usize]
-        + p[1 as i32 as usize]
-            * tr
-                .viewParms
-                .projectionMatrix[4 as i32 as usize]
-        + p[2 as i32 as usize]
-            * tr
-                .viewParms
-                .projectionMatrix[8 as i32 as usize]
-        + tr
-            .viewParms
-            .projectionMatrix[12 as i32 as usize];
+        * tr.viewParms.projectionMatrix[0 as i32 as usize]
+        + p[1 as i32 as usize] * tr.viewParms.projectionMatrix[4 as i32 as usize]
+        + p[2 as i32 as usize] * tr.viewParms.projectionMatrix[8 as i32 as usize]
+        + tr.viewParms.projectionMatrix[12 as i32 as usize];
     projected[1 as i32 as usize] = p[0 as i32 as usize]
-        * tr
-            .viewParms
-            .projectionMatrix[1 as i32 as usize]
-        + p[1 as i32 as usize]
-            * tr
-                .viewParms
-                .projectionMatrix[5 as i32 as usize]
-        + p[2 as i32 as usize]
-            * tr
-                .viewParms
-                .projectionMatrix[9 as i32 as usize]
-        + tr
-            .viewParms
-            .projectionMatrix[13 as i32 as usize];
+        * tr.viewParms.projectionMatrix[1 as i32 as usize]
+        + p[1 as i32 as usize] * tr.viewParms.projectionMatrix[5 as i32 as usize]
+        + p[2 as i32 as usize] * tr.viewParms.projectionMatrix[9 as i32 as usize]
+        + tr.viewParms.projectionMatrix[13 as i32 as usize];
     projected[2 as i32 as usize] = p[0 as i32 as usize]
-        * tr
-            .viewParms
-            .projectionMatrix[2 as i32 as usize]
-        + p[1 as i32 as usize]
-            * tr
-                .viewParms
-                .projectionMatrix[6 as i32 as usize]
-        + p[2 as i32 as usize]
-            * tr
-                .viewParms
-                .projectionMatrix[10 as i32 as usize]
-        + tr
-            .viewParms
-            .projectionMatrix[14 as i32 as usize];
+        * tr.viewParms.projectionMatrix[2 as i32 as usize]
+        + p[1 as i32 as usize] * tr.viewParms.projectionMatrix[6 as i32 as usize]
+        + p[2 as i32 as usize] * tr.viewParms.projectionMatrix[10 as i32 as usize]
+        + tr.viewParms.projectionMatrix[14 as i32 as usize];
     projected[3 as i32 as usize] = p[0 as i32 as usize]
-        * tr
-            .viewParms
-            .projectionMatrix[3 as i32 as usize]
-        + p[1 as i32 as usize]
-            * tr
-                .viewParms
-                .projectionMatrix[7 as i32 as usize]
-        + p[2 as i32 as usize]
-            * tr
-                .viewParms
-                .projectionMatrix[11 as i32 as usize]
-        + tr
-            .viewParms
-            .projectionMatrix[15 as i32 as usize];
+        * tr.viewParms.projectionMatrix[3 as i32 as usize]
+        + p[1 as i32 as usize] * tr.viewParms.projectionMatrix[7 as i32 as usize]
+        + p[2 as i32 as usize] * tr.viewParms.projectionMatrix[11 as i32 as usize]
+        + tr.viewParms.projectionMatrix[15 as i32 as usize];
     pr = projected[1 as i32 as usize] / projected[3 as i32 as usize];
     if pr > 1.0f32 {
         pr = 1.0f32
@@ -363,20 +314,15 @@ R_CullModel
 =============
 */
 
-unsafe extern "C" fn R_CullModel(
-    mut header: *mut md3Header_t,
-    mut ent: *mut trRefEntity_t,
-) -> i32 {
+unsafe extern "C" fn R_CullModel(mut header: *mut md3Header_t, mut ent: *mut trRefEntity_t) -> i32 {
     let mut bounds: [vec3_t; 2] = [[0.; 3]; 2];
     let mut oldFrame: *mut md3Frame_t = 0 as *mut md3Frame_t;
     let mut newFrame: *mut md3Frame_t = 0 as *mut md3Frame_t;
     let mut i: i32 = 0;
     // compute frame pointers
-    newFrame = ((header as *mut byte)
-        .offset((*header).ofsFrames as isize) as *mut md3Frame_t)
+    newFrame = ((header as *mut byte).offset((*header).ofsFrames as isize) as *mut md3Frame_t)
         .offset((*ent).e.frame as isize);
-    oldFrame = ((header as *mut byte)
-        .offset((*header).ofsFrames as isize) as *mut md3Frame_t)
+    oldFrame = ((header as *mut byte).offset((*header).ofsFrames as isize) as *mut md3Frame_t)
         .offset((*ent).e.oldframe as isize);
     // cull bounding sphere ONLY if this is not an upscaled entity
     if (*ent).e.nonNormalizedAxes as u64 == 0 {
@@ -386,29 +332,21 @@ unsafe extern "C" fn R_CullModel(
                 (*newFrame).radius,
             ) {
                 2 => {
-                    tr
-                        .pc
-                        .c_sphere_cull_md3_out += 1;
+                    tr.pc.c_sphere_cull_md3_out += 1;
                     return 2 as i32;
                 }
                 0 => {
                     tr.pc.c_sphere_cull_md3_in += 1;
                     return 0 as i32;
                 }
-                1 => {
-                    tr
-                        .pc
-                        .c_sphere_cull_md3_clip += 1
-                }
+                1 => tr.pc.c_sphere_cull_md3_clip += 1,
                 _ => {}
             }
         } else {
             let mut sphereCull: i32 = 0;
             let mut sphereCullB: i32 = 0;
-            sphereCull = R_CullLocalPointAndRadius(
-                (*newFrame).localOrigin.as_mut_ptr(),
-                (*newFrame).radius,
-            );
+            sphereCull =
+                R_CullLocalPointAndRadius((*newFrame).localOrigin.as_mut_ptr(), (*newFrame).radius);
             if newFrame == oldFrame {
                 sphereCullB = sphereCull
             } else {
@@ -419,18 +357,14 @@ unsafe extern "C" fn R_CullModel(
             }
             if sphereCull == sphereCullB {
                 if sphereCull == 2 as i32 {
-                    tr
-                        .pc
-                        .c_sphere_cull_md3_out += 1;
+                    tr.pc.c_sphere_cull_md3_out += 1;
                     return 2 as i32;
                 } else {
                     if sphereCull == 0 as i32 {
                         tr.pc.c_sphere_cull_md3_in += 1;
                         return 0 as i32;
                     } else {
-                        tr
-                            .pc
-                            .c_sphere_cull_md3_clip += 1
+                        tr.pc.c_sphere_cull_md3_clip += 1
                     }
                 }
             }
@@ -500,41 +434,30 @@ pub unsafe extern "C" fn R_ComputeLOD(mut ent: *mut trRefEntity_t) -> i32 {
     } else {
         // multiple LODs exist, so compute projected bounding sphere
         // and use that as a criteria for selecting LOD
-        if (*tr.currentModel).type_0 as u32
-            == MOD_MDR as i32 as u32
-        {
+        if (*tr.currentModel).type_0 as u32 == MOD_MDR as i32 as u32 {
             let mut frameSize: i32 = 0;
-            mdr = (*tr.currentModel).modelData
-                as *mut mdrHeader_t;
+            mdr = (*tr.currentModel).modelData as *mut mdrHeader_t;
             frameSize = &mut *(*(0 as *mut mdrFrame_t))
                 .bones
                 .as_mut_ptr()
-                .offset((*mdr).numBones as isize)
-                as *mut mdrBone_t
+                .offset((*mdr).numBones as isize) as *mut mdrBone_t
                 as size_t as i32;
             mdrframe = (mdr as *mut byte)
                 .offset((*mdr).ofsFrames as isize)
                 .offset((frameSize * (*ent).e.frame) as isize)
                 as *mut mdrFrame_t;
             radius = RadiusFromBounds(
-                (*mdrframe).bounds[0 as i32 as usize].as_mut_ptr()
-                    as *const vec_t,
-                (*mdrframe).bounds[1 as i32 as usize].as_mut_ptr()
-                    as *const vec_t,
+                (*mdrframe).bounds[0 as i32 as usize].as_mut_ptr() as *const vec_t,
+                (*mdrframe).bounds[1 as i32 as usize].as_mut_ptr() as *const vec_t,
             )
         } else {
-            frame = ((*tr.currentModel).md3[0 as i32 as usize]
-                as *mut u8)
-                .offset(
-                    (*(*tr.currentModel).md3[0 as i32 as usize])
-                        .ofsFrames as isize,
-                ) as *mut md3Frame_t;
+            frame = ((*tr.currentModel).md3[0 as i32 as usize] as *mut u8)
+                .offset((*(*tr.currentModel).md3[0 as i32 as usize]).ofsFrames as isize)
+                as *mut md3Frame_t;
             frame = frame.offset((*ent).e.frame as isize);
             radius = RadiusFromBounds(
-                (*frame).bounds[0 as i32 as usize].as_mut_ptr()
-                    as *const vec_t,
-                (*frame).bounds[1 as i32 as usize].as_mut_ptr()
-                    as *const vec_t,
+                (*frame).bounds[0 as i32 as usize].as_mut_ptr() as *const vec_t,
+                (*frame).bounds[1 as i32 as usize].as_mut_ptr() as *const vec_t,
             )
         }
         projectedRadius = ProjectRadius(radius, (*ent).e.origin.as_mut_ptr());
@@ -549,9 +472,7 @@ pub unsafe extern "C" fn R_ComputeLOD(mut ent: *mut trRefEntity_t) -> i32 {
             flod = 0 as i32 as f32
         }
         flod *= (*tr.currentModel).numLods as f32;
-        lod = ri
-            .ftol
-            .expect("non-null function pointer")(flod) as i32;
+        lod = ri.ftol.expect("non-null function pointer")(flod) as i32;
         if lod < 0 as i32 {
             lod = 0 as i32
         } else if lod >= (*tr.currentModel).numLods {
@@ -588,8 +509,7 @@ pub unsafe extern "C" fn R_ComputeFogNum(
         return 0 as i32;
     }
     // FIXME: non-normalized axis issues
-    md3Frame = ((header as *mut byte)
-        .offset((*header).ofsFrames as isize) as *mut md3Frame_t)
+    md3Frame = ((header as *mut byte).offset((*header).ofsFrames as isize) as *mut md3Frame_t)
         .offset((*ent).e.frame as isize);
     localOrigin[0 as i32 as usize] =
         (*ent).e.origin[0 as i32 as usize] + (*md3Frame).localOrigin[0 as i32 as usize];
@@ -599,9 +519,7 @@ pub unsafe extern "C" fn R_ComputeFogNum(
         (*ent).e.origin[2 as i32 as usize] + (*md3Frame).localOrigin[2 as i32 as usize];
     i = 1 as i32;
     while i < (*tr.world).numfogs {
-        fog = &mut *(*tr.world)
-            .fogs
-            .offset(i as isize) as *mut fog_t;
+        fog = &mut *(*tr.world).fogs.offset(i as isize) as *mut fog_t;
         j = 0 as i32;
         while j < 3 as i32 {
             if localOrigin[j as usize] - (*md3Frame).radius
@@ -952,18 +870,13 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut trRefEntity_t) {
     let mut cull: i32 = 0;
     let mut lod: i32 = 0;
     let mut fogNum: i32 = 0;
-    let mut personalModel: qboolean =
-        qfalse;
+    let mut personalModel: qboolean = qfalse;
     // don't add third_person objects if not in a portal
-    personalModel = ((*ent).e.renderfx & 0x2 as i32 != 0
-        && tr.viewParms.isPortal as u64 == 0)
+    personalModel = ((*ent).e.renderfx & 0x2 as i32 != 0 && tr.viewParms.isPortal as u64 == 0)
         as i32 as qboolean;
     if (*ent).e.renderfx & 0x200 as i32 != 0 {
-        (*ent).e.frame %= (*(*tr.currentModel).md3
-            [0 as i32 as usize])
-            .numFrames;
-        (*ent).e.oldframe %=
-            (*(*tr.currentModel).md3[0 as i32 as usize]).numFrames
+        (*ent).e.frame %= (*(*tr.currentModel).md3[0 as i32 as usize]).numFrames;
+        (*ent).e.oldframe %= (*(*tr.currentModel).md3[0 as i32 as usize]).numFrames
     }
     //
     // Validate the frames so there is no chance of a crash.
@@ -971,25 +884,18 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut trRefEntity_t) {
     // when the surfaces are rendered, they don't need to be
     // range checked again.
     //
-    if (*ent).e.frame
-        >= (*(*tr.currentModel).md3[0 as i32 as usize]).numFrames
+    if (*ent).e.frame >= (*(*tr.currentModel).md3[0 as i32 as usize]).numFrames
         || (*ent).e.frame < 0 as i32
-        || (*ent).e.oldframe
-            >= (*(*tr.currentModel).md3[0 as i32 as usize])
-                .numFrames
+        || (*ent).e.oldframe >= (*(*tr.currentModel).md3[0 as i32 as usize]).numFrames
         || (*ent).e.oldframe < 0 as i32
     {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_DEVELOPER as i32,
             b"R_AddMD3Surfaces: no such frame %d to %d for \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
             (*ent).e.oldframe,
             (*ent).e.frame,
-            (*tr.currentModel)
-                .name
-                .as_mut_ptr(),
+            (*tr.currentModel).name.as_mut_ptr(),
         );
         (*ent).e.frame = 0 as i32;
         (*ent).e.oldframe = 0 as i32
@@ -1010,12 +916,9 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut trRefEntity_t) {
     //
     // set up lighting now that we know we aren't culled
     //
-    if personalModel as u64 == 0
-        || (*r_shadows).integer > 1 as i32
-    {
+    if personalModel as u64 == 0 || (*r_shadows).integer > 1 as i32 {
         R_SetupEntityLighting(
-            &mut tr.refdef as *mut _
-                as *const trRefdef_t,
+            &mut tr.refdef as *mut _ as *const trRefdef_t,
             ent as *mut trRefEntity_t,
         );
     }
@@ -1026,20 +929,15 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut trRefEntity_t) {
     //
     // draw all surfaces
     //
-    surface = (header as *mut byte)
-        .offset((*header).ofsSurfaces as isize) as *mut md3Surface_t;
+    surface = (header as *mut byte).offset((*header).ofsSurfaces as isize) as *mut md3Surface_t;
     i = 0 as i32;
     while i < (*header).numSurfaces {
         if (*ent).e.customShader != 0 {
-            shader = R_GetShaderByHandle((*ent).e.customShader)
-                as *mut shader_s
-        } else if (*ent).e.customSkin > 0 as i32
-            && (*ent).e.customSkin < tr.numSkins
-        {
+            shader = R_GetShaderByHandle((*ent).e.customShader) as *mut shader_s
+        } else if (*ent).e.customSkin > 0 as i32 && (*ent).e.customSkin < tr.numSkins {
             let mut skin: *mut skin_t = 0 as *mut skin_t;
             let mut j: i32 = 0;
-            skin = R_GetSkinByHandle((*ent).e.customSkin)
-                as *mut skin_s;
+            skin = R_GetSkinByHandle((*ent).e.customSkin) as *mut skin_s;
             // match the surface name to something in the skin file
             shader = tr.defaultShader;
             j = 0 as i32;
@@ -1057,9 +955,7 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut trRefEntity_t) {
                 }
             }
             if shader == tr.defaultShader {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_DEVELOPER as i32,
                     b"WARNING: no shader for surface %s in skin %s\n\x00" as *const u8
                         as *const libc::c_char,
@@ -1067,9 +963,7 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut trRefEntity_t) {
                     (*skin).name.as_mut_ptr(),
                 );
             } else if (*shader).defaultShader as u64 != 0 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_DEVELOPER as i32,
                     b"WARNING: shader %s in skin %s not found\n\x00" as *const u8
                         as *const libc::c_char,
@@ -1080,9 +974,8 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut trRefEntity_t) {
         } else if (*surface).numShaders <= 0 as i32 {
             shader = tr.defaultShader
         } else {
-            md3Shader = (surface as *mut byte)
-                .offset((*surface).ofsShaders as isize)
-                as *mut md3Shader_t;
+            md3Shader =
+                (surface as *mut byte).offset((*surface).ofsShaders as isize) as *mut md3Shader_t;
             md3Shader = md3Shader.offset(((*ent).e.skinNum % (*surface).numShaders) as isize);
             shader = tr.shaders[(*md3Shader).shaderIndex as usize]
         }
@@ -1096,8 +989,7 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut trRefEntity_t) {
         {
             R_AddDrawSurf(
                 surface as *mut libc::c_void as *mut surfaceType_t,
-                tr.shadowShader
-                    as *mut shader_s,
+                tr.shadowShader as *mut shader_s,
                 0 as i32,
                 qfalse as i32,
             );
@@ -1110,8 +1002,7 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut trRefEntity_t) {
         {
             R_AddDrawSurf(
                 surface as *mut libc::c_void as *mut surfaceType_t,
-                tr.projectionShadowShader
-                    as *mut shader_s,
+                tr.projectionShadowShader as *mut shader_s,
                 0 as i32,
                 qfalse as i32,
             );
@@ -1125,9 +1016,7 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut trRefEntity_t) {
                 qfalse as i32,
             );
         }
-        surface = (surface as *mut byte)
-            .offset((*surface).ofsEnd as isize)
-            as *mut md3Surface_t;
+        surface = (surface as *mut byte).offset((*surface).ofsEnd as isize) as *mut md3Surface_t;
         i += 1
     }
 }

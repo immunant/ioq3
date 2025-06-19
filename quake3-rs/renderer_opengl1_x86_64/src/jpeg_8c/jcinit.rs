@@ -94,49 +94,28 @@ pub use crate::src::jpeg_8c::jcsample::jinit_downsampler;
 
 pub unsafe extern "C" fn jinit_compress_master(mut cinfo: j_compress_ptr) {
     /* Initialize master control (includes parameter checking/processing) */
-    jinit_c_master_control(
-        cinfo as *mut jpeg_compress_struct,
-        0 as i32,
-    );
+    jinit_c_master_control(cinfo as *mut jpeg_compress_struct, 0 as i32);
     /* Preprocessing */
     if (*cinfo).raw_data_in == 0 {
-        jinit_color_converter(
-            cinfo as *mut jpeg_compress_struct,
-        );
-        jinit_downsampler(
-            cinfo as *mut jpeg_compress_struct,
-        );
-        jinit_c_prep_controller(
-            cinfo as *mut jpeg_compress_struct,
-            0 as i32,
-        );
+        jinit_color_converter(cinfo as *mut jpeg_compress_struct);
+        jinit_downsampler(cinfo as *mut jpeg_compress_struct);
+        jinit_c_prep_controller(cinfo as *mut jpeg_compress_struct, 0 as i32);
     }
     /* Forward DCT */
-    jinit_forward_dct(
-        cinfo as *mut jpeg_compress_struct,
-    );
+    jinit_forward_dct(cinfo as *mut jpeg_compress_struct);
     /* Entropy encoding: either Huffman or arithmetic coding. */
     if (*cinfo).arith_code != 0 {
-        jinit_arith_encoder(
-            cinfo as *mut jpeg_compress_struct,
-        );
+        jinit_arith_encoder(cinfo as *mut jpeg_compress_struct);
     } else {
-        jinit_huff_encoder(
-            cinfo as *mut jpeg_compress_struct,
-        );
+        jinit_huff_encoder(cinfo as *mut jpeg_compress_struct);
     }
     /* Need a full-image coefficient buffer in any multi-pass mode. */
     jinit_c_coef_controller(
         cinfo as *mut jpeg_compress_struct,
         ((*cinfo).num_scans > 1 as i32 || (*cinfo).optimize_coding != 0) as i32,
     );
-    jinit_c_main_controller(
-        cinfo as *mut jpeg_compress_struct,
-        0 as i32,
-    );
-    jinit_marker_writer(
-        cinfo as *mut jpeg_compress_struct,
-    );
+    jinit_c_main_controller(cinfo as *mut jpeg_compress_struct, 0 as i32);
+    jinit_marker_writer(cinfo as *mut jpeg_compress_struct);
     /* We can now tell the memory manager to allocate virtual arrays. */
     Some(
         (*(*cinfo).mem)

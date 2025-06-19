@@ -67,14 +67,10 @@ CM_PointLeafnum_r
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_PointLeafnum_r(
-    mut p: *const vec_t,
-    mut num: i32,
-) -> i32 {
+pub unsafe extern "C" fn CM_PointLeafnum_r(mut p: *const vec_t, mut num: i32) -> i32 {
     let mut d: f32 = 0.; // optimize counter
     let mut node: *mut cNode_t = 0 as *mut cNode_t;
-    let mut plane: *mut cplane_t =
-        0 as *mut cplane_t;
+    let mut plane: *mut cplane_t = 0 as *mut cplane_t;
     while num >= 0 as i32 {
         node = cm.nodes.offset(num as isize);
         plane = (*node).plane;
@@ -97,9 +93,7 @@ pub unsafe extern "C" fn CM_PointLeafnum_r(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_PointLeafnum(
-    mut p: *const vec_t,
-) -> i32 {
+pub unsafe extern "C" fn CM_PointLeafnum(mut p: *const vec_t) -> i32 {
     if cm.numNodes == 0 {
         // map not loaded
         return 0 as i32;
@@ -115,19 +109,11 @@ LEAF LISTING
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_StoreLeafs(
-    mut ll: *mut leafList_t,
-    mut nodenum: i32,
-) {
+pub unsafe extern "C" fn CM_StoreLeafs(mut ll: *mut leafList_t, mut nodenum: i32) {
     let mut leafNum: i32 = 0;
     leafNum = -(1 as i32) - nodenum;
     // store the lastLeaf even if the list is overflowed
-    if (*cm
-        .leafs
-        .offset(leafNum as isize))
-    .cluster
-        != -(1 as i32)
-    {
+    if (*cm.leafs.offset(leafNum as isize)).cluster != -(1 as i32) {
         (*ll).lastLeaf = leafNum
     }
     if (*ll).count >= (*ll).maxcount {
@@ -140,10 +126,7 @@ pub unsafe extern "C" fn CM_StoreLeafs(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_StoreBrushes(
-    mut ll: *mut leafList_t,
-    mut nodenum: i32,
-) {
+pub unsafe extern "C" fn CM_StoreBrushes(mut ll: *mut leafList_t, mut nodenum: i32) {
     let mut i: i32 = 0;
     let mut k: i32 = 0;
     let mut leafnum: i32 = 0;
@@ -151,17 +134,11 @@ pub unsafe extern "C" fn CM_StoreBrushes(
     let mut leaf: *mut cLeaf_t = 0 as *mut cLeaf_t;
     let mut b: *mut cbrush_t = 0 as *mut cbrush_t;
     leafnum = -(1 as i32) - nodenum;
-    leaf = &mut *cm
-        .leafs
-        .offset(leafnum as isize) as *mut cLeaf_t;
+    leaf = &mut *cm.leafs.offset(leafnum as isize) as *mut cLeaf_t;
     k = 0 as i32;
     while k < (*leaf).numLeafBrushes {
-        brushnum = *cm
-            .leafbrushes
-            .offset(((*leaf).firstLeafBrush + k) as isize);
-        b = &mut *cm
-            .brushes
-            .offset(brushnum as isize) as *mut cbrush_t;
+        brushnum = *cm.leafbrushes.offset(((*leaf).firstLeafBrush + k) as isize);
+        b = &mut *cm.brushes.offset(brushnum as isize) as *mut cbrush_t;
         if !((*b).checkcount == cm.checkcount) {
             (*b).checkcount = cm.checkcount;
             i = 0 as i32;
@@ -182,8 +159,7 @@ pub unsafe extern "C" fn CM_StoreBrushes(
                 }
                 let fresh1 = (*ll).count;
                 (*ll).count = (*ll).count + 1;
-                let ref mut fresh2 =
-                    *((*ll).list as *mut *mut cbrush_t).offset(fresh1 as isize);
+                let ref mut fresh2 = *((*ll).list as *mut *mut cbrush_t).offset(fresh1 as isize);
                 *fresh2 = b
             }
         }
@@ -200,12 +176,8 @@ Fills in a list of all the leafs touched
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_BoxLeafnums_r(
-    mut ll: *mut leafList_t,
-    mut nodenum: i32,
-) {
-    let mut plane: *mut cplane_t =
-        0 as *mut cplane_t;
+pub unsafe extern "C" fn CM_BoxLeafnums_r(mut ll: *mut leafList_t, mut nodenum: i32) {
+    let mut plane: *mut cplane_t = 0 as *mut cplane_t;
     let mut node: *mut cNode_t = 0 as *mut cNode_t;
     let mut s: i32 = 0;
     loop {
@@ -213,9 +185,7 @@ pub unsafe extern "C" fn CM_BoxLeafnums_r(
             (*ll).storeLeafs.expect("non-null function pointer")(ll, nodenum);
             return;
         }
-        node = &mut *cm
-            .nodes
-            .offset(nodenum as isize) as *mut cNode_t;
+        node = &mut *cm.nodes.offset(nodenum as isize) as *mut cNode_t;
         plane = (*node).plane;
         s = BoxOnPlaneSide(
             (*ll).bounds[0 as i32 as usize].as_mut_ptr(),
@@ -266,9 +236,7 @@ pub unsafe extern "C" fn CM_BoxLeafnums(
     ll.count = 0 as i32;
     ll.maxcount = listsize;
     ll.list = list;
-    ll.storeLeafs = Some(
-        CM_StoreLeafs as unsafe extern "C" fn(_: *mut leafList_t, _: i32) -> (),
-    );
+    ll.storeLeafs = Some(CM_StoreLeafs as unsafe extern "C" fn(_: *mut leafList_t, _: i32) -> ());
     ll.lastLeaf = 0 as i32;
     ll.overflowed = qfalse;
     CM_BoxLeafnums_r(&mut ll, 0 as i32);
@@ -307,10 +275,7 @@ pub unsafe extern "C" fn CM_BoxBrushes(
     ll.count = 0 as i32;
     ll.maxcount = listsize;
     ll.list = list as *mut libc::c_void as *mut i32;
-    ll.storeLeafs = Some(
-        CM_StoreBrushes
-            as unsafe extern "C" fn(_: *mut leafList_t, _: i32) -> (),
-    );
+    ll.storeLeafs = Some(CM_StoreBrushes as unsafe extern "C" fn(_: *mut leafList_t, _: i32) -> ());
     ll.lastLeaf = 0 as i32;
     ll.overflowed = qfalse;
     CM_BoxLeafnums_r(&mut ll, 0 as i32);
@@ -325,10 +290,7 @@ CM_PointContents
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_PointContents(
-    mut p: *const vec_t,
-    mut model: clipHandle_t,
-) -> i32 {
+pub unsafe extern "C" fn CM_PointContents(mut p: *const vec_t, mut model: clipHandle_t) -> i32 {
     let mut leafnum: i32 = 0;
     let mut i: i32 = 0;
     let mut k: i32 = 0;
@@ -343,29 +305,20 @@ pub unsafe extern "C" fn CM_PointContents(
         return 0 as i32;
     }
     if model != 0 {
-        clipm = CM_ClipHandleToModel(model)
-            as *mut cmodel_s;
+        clipm = CM_ClipHandleToModel(model) as *mut cmodel_s;
         leaf = &mut (*clipm).leaf
     } else {
         leafnum = CM_PointLeafnum_r(p, 0 as i32);
-        leaf = &mut *cm
-            .leafs
-            .offset(leafnum as isize) as *mut cLeaf_t
+        leaf = &mut *cm.leafs.offset(leafnum as isize) as *mut cLeaf_t
     }
     contents = 0 as i32;
     k = 0 as i32;
     while k < (*leaf).numLeafBrushes {
-        brushnum = *cm
-            .leafbrushes
-            .offset(((*leaf).firstLeafBrush + k) as isize);
-        b = &mut *cm
-            .brushes
-            .offset(brushnum as isize) as *mut cbrush_t;
+        brushnum = *cm.leafbrushes.offset(((*leaf).firstLeafBrush + k) as isize);
+        b = &mut *cm.brushes.offset(brushnum as isize) as *mut cbrush_t;
         if !(CM_BoundsIntersectPoint(
-            (*b).bounds[0 as i32 as usize].as_mut_ptr()
-                as *const vec_t,
-            (*b).bounds[1 as i32 as usize].as_mut_ptr()
-                as *const vec_t,
+            (*b).bounds[0 as i32 as usize].as_mut_ptr() as *const vec_t,
+            (*b).bounds[1 as i32 as usize].as_mut_ptr() as *const vec_t,
             p,
         ) as u64
             == 0)
@@ -444,10 +397,7 @@ pub unsafe extern "C" fn CM_TransformedPointContents(
             + temp[1 as i32 as usize] * up[1 as i32 as usize]
             + temp[2 as i32 as usize] * up[2 as i32 as usize]
     }
-    return CM_PointContents(
-        p_l.as_mut_ptr() as *const vec_t,
-        model,
-    );
+    return CM_PointContents(p_l.as_mut_ptr() as *const vec_t, model);
 }
 /*
 ===============================================================================
@@ -458,18 +408,11 @@ PVS
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_ClusterPVS(
-    mut cluster: i32,
-) -> *mut byte {
-    if cluster < 0 as i32
-        || cluster >= cm.numClusters
-        || cm.vised as u64 == 0
-    {
+pub unsafe extern "C" fn CM_ClusterPVS(mut cluster: i32) -> *mut byte {
+    if cluster < 0 as i32 || cluster >= cm.numClusters || cm.vised as u64 == 0 {
         return cm.visibility;
     }
-    return cm
-        .visibility
-        .offset((cluster * cm.clusterBytes) as isize);
+    return cm.visibility.offset((cluster * cm.clusterBytes) as isize);
 }
 /*
 ===============================================================================
@@ -484,9 +427,7 @@ pub unsafe extern "C" fn CM_FloodArea_r(mut areaNum: i32, mut floodnum: i32) {
     let mut i: i32 = 0;
     let mut area: *mut cArea_t = 0 as *mut cArea_t;
     let mut con: *mut i32 = 0 as *mut i32;
-    area = &mut *cm
-        .areas
-        .offset(areaNum as isize) as *mut cArea_t;
+    area = &mut *cm.areas.offset(areaNum as isize) as *mut cArea_t;
     if (*area).floodvalid == cm.floodvalid {
         if (*area).floodnum == floodnum {
             return;
@@ -498,9 +439,7 @@ pub unsafe extern "C" fn CM_FloodArea_r(mut areaNum: i32, mut floodnum: i32) {
     }
     (*area).floodnum = floodnum;
     (*area).floodvalid = cm.floodvalid;
-    con = cm
-        .areaPortals
-        .offset((areaNum * cm.numAreas) as isize);
+    con = cm.areaPortals.offset((areaNum * cm.numAreas) as isize);
     i = 0 as i32;
     while i < cm.numAreas {
         if *con.offset(i as isize) > 0 as i32 {
@@ -526,8 +465,7 @@ pub unsafe extern "C" fn CM_FloodAreaConnections() {
     floodnum = 0 as i32;
     i = 0 as i32;
     while i < cm.numAreas {
-        area = &mut *cm.areas.offset(i as isize)
-            as *mut cArea_t;
+        area = &mut *cm.areas.offset(i as isize) as *mut cArea_t;
         if !((*area).floodvalid == cm.floodvalid) {
             floodnum += 1;
             CM_FloodArea_r(i, floodnum);
@@ -552,9 +490,7 @@ pub unsafe extern "C" fn CM_AdjustAreaPortalState(
     if area1 < 0 as i32 || area2 < 0 as i32 {
         return;
     }
-    if area1 >= cm.numAreas
-        || area2 >= cm.numAreas
-    {
+    if area1 >= cm.numAreas || area2 >= cm.numAreas {
         Com_Error(
             ERR_DROP as i32,
             b"CM_ChangeAreaPortalState: bad area number\x00" as *const u8 as *const libc::c_char,
@@ -600,33 +536,20 @@ CM_AreasConnected
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_AreasConnected(
-    mut area1: i32,
-    mut area2: i32,
-) -> qboolean {
+pub unsafe extern "C" fn CM_AreasConnected(mut area1: i32, mut area2: i32) -> qboolean {
     if (*cm_noAreas).integer != 0 {
         return qtrue;
     }
     if area1 < 0 as i32 || area2 < 0 as i32 {
         return qfalse;
     }
-    if area1 >= cm.numAreas
-        || area2 >= cm.numAreas
-    {
+    if area1 >= cm.numAreas || area2 >= cm.numAreas {
         Com_Error(
             ERR_DROP as i32,
             b"area >= cm.numAreas\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*cm
-        .areas
-        .offset(area1 as isize))
-    .floodnum
-        == (*cm
-            .areas
-            .offset(area2 as isize))
-        .floodnum
-    {
+    if (*cm.areas.offset(area1 as isize)).floodnum == (*cm.areas.offset(area2 as isize)).floodnum {
         return qtrue;
     }
     return qfalse;
@@ -672,10 +595,7 @@ This is used to cull non-visible entities from snapshots
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_WriteAreaBits(
-    mut buffer: *mut byte,
-    mut area: i32,
-) -> i32 {
+pub unsafe extern "C" fn CM_WriteAreaBits(mut buffer: *mut byte, mut area: i32) -> i32 {
     let mut i: i32 = 0;
     let mut floodnum: i32 = 0;
     let mut bytes: i32 = 0;
@@ -691,12 +611,9 @@ pub unsafe extern "C" fn CM_WriteAreaBits(
         floodnum = (*cm.areas.offset(area as isize)).floodnum;
         i = 0 as i32;
         while i < cm.numAreas {
-            if (*cm.areas.offset(i as isize)).floodnum == floodnum
-                || area == -(1 as i32)
-            {
+            if (*cm.areas.offset(i as isize)).floodnum == floodnum || area == -(1 as i32) {
                 let ref mut fresh7 = *buffer.offset((i >> 3 as i32) as isize);
-                *fresh7 = (*fresh7 as i32 | (1 as i32) << (i & 7 as i32))
-                    as byte
+                *fresh7 = (*fresh7 as i32 | (1 as i32) << (i & 7 as i32)) as byte
             }
             i += 1
         }

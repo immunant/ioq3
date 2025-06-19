@@ -76,8 +76,7 @@ pub static mut cm: clipMap_t = clipMap_t {
     numBrushSides: 0,
     brushsides: 0 as *const cbrushside_t as *mut cbrushside_t,
     numPlanes: 0,
-    planes: 0 as *const cplane_t
-        as *mut cplane_t,
+    planes: 0 as *const cplane_t as *mut cplane_t,
     numNodes: 0,
     nodes: 0 as *const cNode_t as *mut cNode_t,
     numLeafs: 0,
@@ -92,8 +91,7 @@ pub static mut cm: clipMap_t = clipMap_t {
     brushes: 0 as *const cbrush_t as *mut cbrush_t,
     numClusters: 0,
     clusterBytes: 0,
-    visibility: 0 as *const byte
-        as *mut byte,
+    visibility: 0 as *const byte as *mut byte,
     vised: qfalse,
     numEntityChars: 0,
     entityString: 0 as *const libc::c_char as *mut libc::c_char,
@@ -119,20 +117,16 @@ pub static mut c_brush_traces: i32 = 0;
 pub static mut c_patch_traces: i32 = 0;
 #[no_mangle]
 
-pub static mut cmod_base: *mut byte =
-    0 as *const byte as *mut byte;
+pub static mut cmod_base: *mut byte = 0 as *const byte as *mut byte;
 #[no_mangle]
 
-pub static mut cm_noAreas: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cm_noAreas: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cm_noCurves: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cm_noCurves: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cm_playerCurveClip: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cm_playerCurveClip: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
 pub static mut box_model: cmodel_t = cmodel_t {
@@ -149,13 +143,10 @@ pub static mut box_model: cmodel_t = cmodel_t {
 };
 #[no_mangle]
 
-pub static mut box_planes: *mut cplane_t = 0
-    as *const cplane_t
-    as *mut cplane_t;
+pub static mut box_planes: *mut cplane_t = 0 as *const cplane_t as *mut cplane_t;
 #[no_mangle]
 
-pub static mut box_brush: *mut cbrush_t =
-    0 as *const cbrush_t as *mut cbrush_t;
+pub static mut box_brush: *mut cbrush_t = 0 as *const cbrush_t as *mut cbrush_t;
 /*
 ===============================================================================
 
@@ -175,8 +166,7 @@ pub unsafe extern "C" fn CMod_LoadShaders(mut l: *mut lump_t) {
     let mut out: *mut dshader_t = 0 as *mut dshader_t;
     let mut i: i32 = 0;
     let mut count: i32 = 0;
-    in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void
-        as *mut dshader_t;
+    in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dshader_t;
     if ((*l).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dshader_t>() as libc::c_ulong)
         != 0
@@ -187,8 +177,7 @@ pub unsafe extern "C" fn CMod_LoadShaders(mut l: *mut lump_t) {
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dshader_t>() as libc::c_ulong)
-        as i32;
+        .wrapping_div(::std::mem::size_of::<dshader_t>() as libc::c_ulong) as i32;
     if count < 1 as i32 {
         Com_Error(
             ERR_DROP as i32,
@@ -196,8 +185,7 @@ pub unsafe extern "C" fn CMod_LoadShaders(mut l: *mut lump_t) {
         );
     }
     cm.shaders = Hunk_Alloc(
-        (count as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<dshader_t>() as libc::c_ulong)
+        (count as libc::c_ulong).wrapping_mul(::std::mem::size_of::<dshader_t>() as libc::c_ulong)
             as i32,
         h_high,
     ) as *mut dshader_t;
@@ -205,8 +193,7 @@ pub unsafe extern "C" fn CMod_LoadShaders(mut l: *mut lump_t) {
     crate::stdlib::memcpy(
         cm.shaders as *mut libc::c_void,
         in_0 as *const libc::c_void,
-        (count as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<dshader_t>() as libc::c_ulong),
+        (count as libc::c_ulong).wrapping_mul(::std::mem::size_of::<dshader_t>() as libc::c_ulong),
     );
     out = cm.shaders;
     i = 0 as i32;
@@ -232,8 +219,7 @@ pub unsafe extern "C" fn CMod_LoadSubmodels(mut l: *mut lump_t) {
     let mut j: i32 = 0;
     let mut count: i32 = 0;
     let mut indexes: *mut i32 = 0 as *mut i32;
-    in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void
-        as *mut dmodel_t;
+    in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dmodel_t;
     if ((*l).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dmodel_t>() as libc::c_ulong)
         != 0
@@ -244,8 +230,7 @@ pub unsafe extern "C" fn CMod_LoadSubmodels(mut l: *mut lump_t) {
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dmodel_t>() as libc::c_ulong)
-        as i32;
+        .wrapping_div(::std::mem::size_of::<dmodel_t>() as libc::c_ulong) as i32;
     if count < 1 as i32 {
         Com_Error(
             ERR_DROP as i32,
@@ -253,8 +238,7 @@ pub unsafe extern "C" fn CMod_LoadSubmodels(mut l: *mut lump_t) {
         );
     }
     cm.cmodels = Hunk_Alloc(
-        (count as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<cmodel_t>() as libc::c_ulong)
+        (count as libc::c_ulong).wrapping_mul(::std::mem::size_of::<cmodel_t>() as libc::c_ulong)
             as i32,
         h_high,
     ) as *mut cmodel_t;
@@ -278,10 +262,7 @@ pub unsafe extern "C" fn CMod_LoadSubmodels(mut l: *mut lump_t) {
         if !(i == 0 as i32) {
             // make a "leaf" just to hold the model's brushes and surfaces
             (*out).leaf.numLeafBrushes = (*in_0).numBrushes;
-            indexes = Hunk_Alloc(
-                (*out).leaf.numLeafBrushes * 4 as i32,
-                h_high,
-            ) as *mut i32;
+            indexes = Hunk_Alloc((*out).leaf.numLeafBrushes * 4 as i32, h_high) as *mut i32;
             (*out).leaf.firstLeafBrush = indexes.offset_from(cm.leafbrushes) as isize as i32;
             j = 0 as i32;
             while j < (*out).leaf.numLeafBrushes {
@@ -289,10 +270,7 @@ pub unsafe extern "C" fn CMod_LoadSubmodels(mut l: *mut lump_t) {
                 j += 1
             }
             (*out).leaf.numLeafSurfaces = (*in_0).numSurfaces;
-            indexes = Hunk_Alloc(
-                (*out).leaf.numLeafSurfaces * 4 as i32,
-                h_high,
-            ) as *mut i32;
+            indexes = Hunk_Alloc((*out).leaf.numLeafSurfaces * 4 as i32, h_high) as *mut i32;
             (*out).leaf.firstLeafSurface = indexes.offset_from(cm.leafsurfaces) as isize as i32;
             j = 0 as i32;
             while j < (*out).leaf.numLeafSurfaces {
@@ -320,8 +298,7 @@ pub unsafe extern "C" fn CMod_LoadNodes(mut l: *mut lump_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut count: i32 = 0;
-    in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void
-        as *mut dnode_t;
+    in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dnode_t;
     if ((*l).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dnode_t>() as libc::c_ulong)
         != 0
@@ -332,8 +309,7 @@ pub unsafe extern "C" fn CMod_LoadNodes(mut l: *mut lump_t) {
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dnode_t>() as libc::c_ulong)
-        as i32;
+        .wrapping_div(::std::mem::size_of::<dnode_t>() as libc::c_ulong) as i32;
     if count < 1 as i32 {
         Com_Error(
             ERR_DROP as i32,
@@ -341,8 +317,7 @@ pub unsafe extern "C" fn CMod_LoadNodes(mut l: *mut lump_t) {
         );
     }
     cm.nodes = Hunk_Alloc(
-        (count as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<cNode_t>() as libc::c_ulong)
+        (count as libc::c_ulong).wrapping_mul(::std::mem::size_of::<cNode_t>() as libc::c_ulong)
             as i32,
         h_high,
     ) as *mut cNode_t;
@@ -397,8 +372,7 @@ pub unsafe extern "C" fn CMod_LoadBrushes(mut l: *mut lump_t) {
     let mut out: *mut cbrush_t = 0 as *mut cbrush_t;
     let mut i: i32 = 0;
     let mut count: i32 = 0;
-    in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void
-        as *mut dbrush_t;
+    in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dbrush_t;
     if ((*l).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dbrush_t>() as libc::c_ulong)
         != 0
@@ -409,12 +383,10 @@ pub unsafe extern "C" fn CMod_LoadBrushes(mut l: *mut lump_t) {
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dbrush_t>() as libc::c_ulong)
-        as i32;
+        .wrapping_div(::std::mem::size_of::<dbrush_t>() as libc::c_ulong) as i32;
     cm.brushes = Hunk_Alloc(
         ((1 as i32 + count) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<cbrush_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<cbrush_t>() as libc::c_ulong) as i32,
         h_high,
     ) as *mut cbrush_t;
     cm.numBrushes = count;
@@ -450,8 +422,7 @@ pub unsafe extern "C" fn CMod_LoadLeafs(mut l: *mut lump_t) {
     let mut out: *mut cLeaf_t = 0 as *mut cLeaf_t;
     let mut in_0: *mut dleaf_t = 0 as *mut dleaf_t;
     let mut count: i32 = 0;
-    in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void
-        as *mut dleaf_t;
+    in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dleaf_t;
     if ((*l).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dleaf_t>() as libc::c_ulong)
         != 0
@@ -462,8 +433,7 @@ pub unsafe extern "C" fn CMod_LoadLeafs(mut l: *mut lump_t) {
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dleaf_t>() as libc::c_ulong)
-        as i32;
+        .wrapping_div(::std::mem::size_of::<dleaf_t>() as libc::c_ulong) as i32;
     if count < 1 as i32 {
         Com_Error(
             ERR_DROP as i32,
@@ -472,8 +442,7 @@ pub unsafe extern "C" fn CMod_LoadLeafs(mut l: *mut lump_t) {
     }
     cm.leafs = Hunk_Alloc(
         ((2 as i32 + count) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<cLeaf_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<cLeaf_t>() as libc::c_ulong) as i32,
         h_high,
     ) as *mut cLeaf_t;
     cm.numLeafs = count;
@@ -498,8 +467,7 @@ pub unsafe extern "C" fn CMod_LoadLeafs(mut l: *mut lump_t) {
     }
     cm.areas = Hunk_Alloc(
         (cm.numAreas as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<cArea_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<cArea_t>() as libc::c_ulong) as i32,
         h_high,
     ) as *mut cArea_t;
     cm.areaPortals = Hunk_Alloc(
@@ -518,13 +486,11 @@ CMod_LoadPlanes
 pub unsafe extern "C" fn CMod_LoadPlanes(mut l: *mut lump_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut out: *mut cplane_t =
-        0 as *mut cplane_t;
+    let mut out: *mut cplane_t = 0 as *mut cplane_t;
     let mut in_0: *mut dplane_t = 0 as *mut dplane_t;
     let mut count: i32 = 0;
     let mut bits: i32 = 0;
-    in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void
-        as *mut dplane_t;
+    in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dplane_t;
     if ((*l).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dplane_t>() as libc::c_ulong)
         != 0
@@ -535,8 +501,7 @@ pub unsafe extern "C" fn CMod_LoadPlanes(mut l: *mut lump_t) {
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dplane_t>() as libc::c_ulong)
-        as i32;
+        .wrapping_div(::std::mem::size_of::<dplane_t>() as libc::c_ulong) as i32;
     if count < 1 as i32 {
         Com_Error(
             ERR_DROP as i32,
@@ -544,9 +509,8 @@ pub unsafe extern "C" fn CMod_LoadPlanes(mut l: *mut lump_t) {
         );
     }
     cm.planes = Hunk_Alloc(
-        ((12 as i32 + count) as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            cplane_t,
-        >() as libc::c_ulong) as i32,
+        ((12 as i32 + count) as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<cplane_t>() as libc::c_ulong) as i32,
         h_high,
     ) as *mut cplane_t;
     cm.numPlanes = count;
@@ -666,8 +630,7 @@ pub unsafe extern "C" fn CMod_LoadBrushSides(mut l: *mut lump_t) {
     let mut in_0: *mut dbrushside_t = 0 as *mut dbrushside_t;
     let mut count: i32 = 0;
     let mut num: i32 = 0;
-    in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void
-        as *mut dbrushside_t;
+    in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut dbrushside_t;
     if ((*l).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dbrushside_t>() as libc::c_ulong)
         != 0
@@ -678,12 +641,10 @@ pub unsafe extern "C" fn CMod_LoadBrushSides(mut l: *mut lump_t) {
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dbrushside_t>() as libc::c_ulong)
-        as i32;
+        .wrapping_div(::std::mem::size_of::<dbrushside_t>() as libc::c_ulong) as i32;
     cm.brushsides = Hunk_Alloc(
         ((6 as i32 + count) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<cbrushside_t>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<cbrushside_t>() as libc::c_ulong) as i32,
         h_high,
     ) as *mut cbrushside_t;
     cm.numBrushSides = count;
@@ -691,8 +652,7 @@ pub unsafe extern "C" fn CMod_LoadBrushSides(mut l: *mut lump_t) {
     i = 0 as i32;
     while i < count {
         num = (*in_0).planeNum;
-        (*out).plane =
-            &mut *cm.planes.offset(num as isize) as *mut cplane_t;
+        (*out).plane = &mut *cm.planes.offset(num as isize) as *mut cplane_t;
         (*out).shaderNum = (*in_0).shaderNum;
         if (*out).shaderNum < 0 as i32 || (*out).shaderNum >= cm.numShaders {
             Com_Error(
@@ -715,10 +675,7 @@ CMod_LoadEntityString
 #[no_mangle]
 
 pub unsafe extern "C" fn CMod_LoadEntityString(mut l: *mut lump_t) {
-    cm.entityString = Hunk_Alloc(
-        (*l).filelen,
-        h_high,
-    ) as *mut libc::c_char;
+    cm.entityString = Hunk_Alloc((*l).filelen, h_high) as *mut libc::c_char;
     cm.numEntityChars = (*l).filelen;
     crate::stdlib::memcpy(
         cm.entityString as *mut libc::c_void,
@@ -730,15 +687,11 @@ pub unsafe extern "C" fn CMod_LoadEntityString(mut l: *mut lump_t) {
 
 pub unsafe extern "C" fn CMod_LoadVisibility(mut l: *mut lump_t) {
     let mut len: i32 = 0;
-    let mut buf: *mut byte =
-        0 as *mut byte;
+    let mut buf: *mut byte = 0 as *mut byte;
     len = (*l).filelen;
     if len == 0 {
         cm.clusterBytes = cm.numClusters + 31 as i32 & !(31 as i32);
-        cm.visibility = Hunk_Alloc(
-            cm.clusterBytes,
-            h_high,
-        ) as *mut byte;
+        cm.visibility = Hunk_Alloc(cm.clusterBytes, h_high) as *mut byte;
         crate::stdlib::memset(
             cm.visibility as *mut libc::c_void,
             255 as i32,
@@ -748,9 +701,7 @@ pub unsafe extern "C" fn CMod_LoadVisibility(mut l: *mut lump_t) {
     }
     buf = cmod_base.offset((*l).fileofs as isize);
     cm.vised = qtrue;
-    cm.visibility =
-        Hunk_Alloc(len, h_high)
-            as *mut byte;
+    cm.visibility = Hunk_Alloc(len, h_high) as *mut byte;
     cm.numClusters = *(buf as *mut i32).offset(0 as i32 as isize);
     cm.clusterBytes = *(buf as *mut i32).offset(1 as i32 as isize);
     crate::stdlib::memcpy(
@@ -761,10 +712,7 @@ pub unsafe extern "C" fn CMod_LoadVisibility(mut l: *mut lump_t) {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn CMod_LoadPatches(
-    mut surfs: *mut lump_t,
-    mut verts: *mut lump_t,
-) {
+pub unsafe extern "C" fn CMod_LoadPatches(mut surfs: *mut lump_t, mut verts: *mut lump_t) {
     let mut dv: *mut drawVert_t = 0 as *mut drawVert_t;
     let mut dv_p: *mut drawVert_t = 0 as *mut drawVert_t;
     let mut in_0: *mut dsurface_t = 0 as *mut dsurface_t;
@@ -777,8 +725,7 @@ pub unsafe extern "C" fn CMod_LoadPatches(
     let mut width: i32 = 0;
     let mut height: i32 = 0;
     let mut shaderNum: i32 = 0;
-    in_0 = cmod_base.offset((*surfs).fileofs as isize) as *mut libc::c_void
-        as *mut dsurface_t;
+    in_0 = cmod_base.offset((*surfs).fileofs as isize) as *mut libc::c_void as *mut dsurface_t;
     if ((*surfs).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<dsurface_t>() as libc::c_ulong)
         != 0
@@ -789,18 +736,14 @@ pub unsafe extern "C" fn CMod_LoadPatches(
         );
     }
     count = ((*surfs).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<dsurface_t>() as libc::c_ulong)
-        as i32;
+        .wrapping_div(::std::mem::size_of::<dsurface_t>() as libc::c_ulong) as i32;
     cm.numSurfaces = count;
-    cm.surfaces =
-        Hunk_Alloc(
-            (cm.numSurfaces as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                *mut cPatch_t,
-            >() as libc::c_ulong) as i32,
-            h_high,
-        ) as *mut *mut cPatch_t;
-    dv = cmod_base.offset((*verts).fileofs as isize) as *mut libc::c_void
-        as *mut drawVert_t;
+    cm.surfaces = Hunk_Alloc(
+        (cm.numSurfaces as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<*mut cPatch_t>() as libc::c_ulong) as i32,
+        h_high,
+    ) as *mut *mut cPatch_t;
+    dv = cmod_base.offset((*verts).fileofs as isize) as *mut libc::c_void as *mut drawVert_t;
     if ((*verts).filelen as libc::c_ulong)
         .wrapping_rem(::std::mem::size_of::<drawVert_t>() as libc::c_ulong)
         != 0
@@ -845,11 +788,7 @@ pub unsafe extern "C" fn CMod_LoadPatches(
             (*patch).contents = (*cm.shaders.offset(shaderNum as isize)).contentFlags;
             (*patch).surfaceFlags = (*cm.shaders.offset(shaderNum as isize)).surfaceFlags;
             // create the internal facet structure
-            (*patch).pc = CM_GeneratePatchCollide(
-                width,
-                height,
-                points.as_mut_ptr(),
-            )
+            (*patch).pc = CM_GeneratePatchCollide(width, height, points.as_mut_ptr())
         }
         i += 1;
         in_0 = in_0.offset(1)
@@ -1101,9 +1040,7 @@ CM_ClipHandleToModel
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_ClipHandleToModel(
-    mut handle: clipHandle_t,
-) -> *mut cmodel_t {
+pub unsafe extern "C" fn CM_ClipHandleToModel(mut handle: clipHandle_t) -> *mut cmodel_t {
     if handle < 0 as i32 {
         Com_Error(
             ERR_DROP as i32,
@@ -1140,9 +1077,7 @@ CM_InlineModel
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_InlineModel(
-    mut index: i32,
-) -> clipHandle_t {
+pub unsafe extern "C" fn CM_InlineModel(mut index: i32) -> clipHandle_t {
     if index < 0 as i32 || index >= cm.numSubModels {
         Com_Error(
             ERR_DROP as i32,
@@ -1205,11 +1140,9 @@ can just be stored out and get a proper clipping hull structure.
 pub unsafe extern "C" fn CM_InitBoxHull() {
     let mut i: i32 = 0;
     let mut side: i32 = 0;
-    let mut p: *mut cplane_t =
-        0 as *mut cplane_t;
+    let mut p: *mut cplane_t = 0 as *mut cplane_t;
     let mut s: *mut cbrushside_t = 0 as *mut cbrushside_t;
-    box_planes = &mut *cm.planes.offset(cm.numPlanes as isize)
-        as *mut cplane_t;
+    box_planes = &mut *cm.planes.offset(cm.numPlanes as isize) as *mut cplane_t;
     box_brush = &mut *cm.brushes.offset(cm.numBrushes as isize) as *mut cbrush_t;
     (*box_brush).numsides = 6 as i32;
     (*box_brush).sides = cm.brushsides.offset(cm.numBrushSides as isize);
@@ -1222,32 +1155,27 @@ pub unsafe extern "C" fn CM_InitBoxHull() {
     while i < 6 as i32 {
         side = i & 1 as i32;
         // brush sides
-        s = &mut *cm.brushsides.offset((cm.numBrushSides + i) as isize)
-            as *mut cbrushside_t;
+        s = &mut *cm.brushsides.offset((cm.numBrushSides + i) as isize) as *mut cbrushside_t;
         (*s).plane = cm
             .planes
             .offset((cm.numPlanes + i * 2 as i32 + side) as isize);
         (*s).surfaceFlags = 0 as i32;
         // planes
-        p = &mut *box_planes.offset((i * 2 as i32) as isize)
-            as *mut cplane_t;
+        p = &mut *box_planes.offset((i * 2 as i32) as isize) as *mut cplane_t;
         (*p).type_0 = (i >> 1 as i32) as byte;
         (*p).signbits = 0 as i32 as byte;
         (*p).normal[2 as i32 as usize] = 0 as i32 as vec_t;
         (*p).normal[1 as i32 as usize] = (*p).normal[2 as i32 as usize];
         (*p).normal[0 as i32 as usize] = (*p).normal[1 as i32 as usize];
         (*p).normal[(i >> 1 as i32) as usize] = 1 as i32 as vec_t;
-        p = &mut *box_planes.offset((i * 2 as i32 + 1 as i32) as isize)
-            as *mut cplane_t;
+        p = &mut *box_planes.offset((i * 2 as i32 + 1 as i32) as isize) as *mut cplane_t;
         (*p).type_0 = (3 as i32 + (i >> 1 as i32)) as byte;
         (*p).signbits = 0 as i32 as byte;
         (*p).normal[2 as i32 as usize] = 0 as i32 as vec_t;
         (*p).normal[1 as i32 as usize] = (*p).normal[2 as i32 as usize];
         (*p).normal[0 as i32 as usize] = (*p).normal[1 as i32 as usize];
         (*p).normal[(i >> 1 as i32) as usize] = -(1 as i32) as vec_t;
-        SetPlaneSignbits(
-            p as *mut cplane_s,
-        );
+        SetPlaneSignbits(p as *mut cplane_s);
         i += 1
     }
 }

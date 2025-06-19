@@ -266,69 +266,52 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // Console variables specific to OpenAL
 #[no_mangle]
 
-pub static mut s_alPrecache: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alPrecache: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alGain: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alGain: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alSources: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alSources: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alDopplerFactor: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alDopplerFactor: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alDopplerSpeed: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alDopplerSpeed: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alMinDistance: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alMinDistance: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alMaxDistance: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alMaxDistance: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alRolloff: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alRolloff: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alGraceDistance: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alGraceDistance: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alDriver: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alDriver: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alDevice: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alDevice: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alInputDevice: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alInputDevice: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alAvailableDevices: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alAvailableDevices: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut s_alAvailableInputDevices: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut s_alAvailableInputDevices: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
-static mut enumeration_ext: qboolean =
-    qfalse;
+static mut enumeration_ext: qboolean = qfalse;
 
-static mut enumeration_all_ext: qboolean =
-    qfalse;
+static mut enumeration_all_ext: qboolean = qfalse;
 
-static mut capture_ext: qboolean =
-    qfalse;
+static mut capture_ext: qboolean = qfalse;
 /*
 =================
 S_AL_Format
@@ -389,8 +372,7 @@ unsafe extern "C" fn S_AL_ClearError(mut quiet: qboolean) {
     };
 }
 
-static mut alBuffersInitialised: qboolean =
-    qfalse;
+static mut alBuffersInitialised: qboolean = qfalse;
 
 static mut knownSfx: [alSfx_t; 4096] = [alSfx_t {
     filename: [0; 64],
@@ -451,9 +433,7 @@ Find a sound effect if loaded, set up a handle otherwise
 =================
 */
 
-unsafe extern "C" fn S_AL_BufferFind(
-    mut filename: *const libc::c_char,
-) -> sfxHandle_t {
+unsafe extern "C" fn S_AL_BufferFind(mut filename: *const libc::c_char) -> sfxHandle_t {
     // Look it up in the table
     let mut sfx: sfxHandle_t = -(1 as i32);
     let mut i: i32 = 0;
@@ -464,9 +444,7 @@ unsafe extern "C" fn S_AL_BufferFind(
         );
     }
     if *filename.offset(0 as i32 as isize) == 0 {
-        Com_Printf(
-            b"^3WARNING: Sound name is empty\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"^3WARNING: Sound name is empty\n\x00" as *const u8 as *const libc::c_char);
         return 0 as i32;
     }
     if crate::stdlib::strlen(filename) >= 64 as i32 as libc::c_ulong {
@@ -486,11 +464,7 @@ unsafe extern "C" fn S_AL_BufferFind(
     }
     i = 0 as i32;
     while i < numSfx {
-        if Q_stricmp(
-            knownSfx[i as usize].filename.as_mut_ptr(),
-            filename,
-        ) == 0
-        {
+        if Q_stricmp(knownSfx[i as usize].filename.as_mut_ptr(), filename) == 0 {
             sfx = i;
             break;
         } else {
@@ -609,9 +583,7 @@ unsafe extern "C" fn S_AL_GenBuffers(
     // If we ran out of buffers, start evicting the least recently used sounds
     while error == 0xa003 as i32 {
         if S_AL_BufferEvict() as u64 == 0 {
-            Com_Printf(
-                b"^1ERROR: Out of audio buffers\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"^1ERROR: Out of audio buffers\n\x00" as *const u8 as *const libc::c_char);
             return qfalse;
         }
         // Try again
@@ -638,22 +610,18 @@ S_AL_BufferLoad
 =================
 */
 
-unsafe extern "C" fn S_AL_BufferLoad(
-    mut sfx: sfxHandle_t,
-    mut cache: qboolean,
-) {
+unsafe extern "C" fn S_AL_BufferLoad(mut sfx: sfxHandle_t, mut cache: qboolean) {
     let mut error: ALenum = 0;
     let mut format: ALuint = 0;
     let mut data: *mut libc::c_void = 0 as *mut libc::c_void;
-    let mut info: snd_info_t =
-        snd_info_t {
-            rate: 0,
-            width: 0,
-            channels: 0,
-            samples: 0,
-            size: 0,
-            dataofs: 0,
-        };
+    let mut info: snd_info_t = snd_info_t {
+        rate: 0,
+        width: 0,
+        channels: 0,
+        samples: 0,
+        size: 0,
+        dataofs: 0,
+    };
     let mut curSfx: *mut alSfx_t = &mut *knownSfx.as_mut_ptr().offset(sfx as isize) as *mut alSfx_t;
     // Nothing?
     if (*curSfx).filename[0 as i32 as usize] as i32 == '\u{0}' as i32 {
@@ -697,8 +665,7 @@ unsafe extern "C" fn S_AL_BufferLoad(
     // Fill the buffer
     if info.size == 0 as i32 {
         // We have no data to buffer, so buffer silence
-        let mut dummyData: [byte; 2] =
-            [0 as i32 as byte, 0];
+        let mut dummyData: [byte; 2] = [0 as i32 as byte, 0];
         crate::src::client::qal::qalBufferData.expect("non-null function pointer")(
             (*curSfx).buffer,
             0x1101 as i32,
@@ -840,10 +807,7 @@ unsafe extern "C" fn S_AL_RegisterSound(
 ) -> sfxHandle_t {
     let mut sfx: sfxHandle_t = S_AL_BufferFind(sample);
     if knownSfx[sfx as usize].inMemory as u64 == 0 && knownSfx[sfx as usize].isDefault as u64 == 0 {
-        S_AL_BufferLoad(
-            sfx,
-            (*s_alPrecache).integer as qboolean,
-        );
+        S_AL_BufferLoad(sfx, (*s_alPrecache).integer as qboolean);
     }
     knownSfx[sfx as usize].lastUsedTime = crate::src::qcommon::common::Com_Milliseconds();
     if knownSfx[sfx as usize].isDefault as u64 != 0 {
@@ -859,9 +823,7 @@ Return's a sfx's buffer
 =================
 */
 
-unsafe extern "C" fn S_AL_BufferGet(
-    mut sfx: sfxHandle_t,
-) -> ALuint {
+unsafe extern "C" fn S_AL_BufferGet(mut sfx: sfxHandle_t) -> ALuint {
     return knownSfx[sfx as usize].buffer;
 }
 
@@ -890,8 +852,7 @@ static mut srcCount: i32 = 0 as i32;
 
 static mut srcActiveCnt: i32 = 0 as i32;
 
-static mut alSourcesInitialised: qboolean =
-    qfalse;
+static mut alSourcesInitialised: qboolean = qfalse;
 
 static mut lastListenerNumber: i32 = -(1 as i32);
 
@@ -912,10 +873,7 @@ S_AL_SanitiseVector
 =================
 */
 
-unsafe extern "C" fn _S_AL_SanitiseVector(
-    mut v: *mut vec_t,
-    mut line: i32,
-) {
+unsafe extern "C" fn _S_AL_SanitiseVector(mut v: *mut vec_t, mut line: i32) {
     if Q_isnan(*v.offset(0 as i32 as isize)) != 0
         || Q_isnan(*v.offset(1 as i32 as isize)) != 0
         || Q_isnan(*v.offset(2 as i32 as isize)) != 0
@@ -960,10 +918,7 @@ Adapt the gain if necessary to get a quicker fadeout when the source is too far 
 =================
 */
 
-unsafe extern "C" fn S_AL_ScaleGain(
-    mut chksrc: *mut src_t,
-    mut origin: *mut vec_t,
-) {
+unsafe extern "C" fn S_AL_ScaleGain(mut chksrc: *mut src_t, mut origin: *mut vec_t) {
     let mut distance: f32 = 0.;
     if (*chksrc).local as u64 == 0 {
         distance = Distance(
@@ -1001,9 +956,7 @@ Also see S_Base_HearingThroughEntity
 =================
 */
 
-unsafe extern "C" fn S_AL_HearingThroughEntity(
-    mut entityNum: i32,
-) -> qboolean {
+unsafe extern "C" fn S_AL_HearingThroughEntity(mut entityNum: i32) -> qboolean {
     let mut distanceSq: f32 = 0.;
     if lastListenerNumber == entityNum {
         // This is an outrageous hack to detect
@@ -1013,8 +966,7 @@ unsafe extern "C" fn S_AL_HearingThroughEntity(
         // compatibility. I don't think there is any way around this, but I'll leave
         // the FIXME just in case anyone has a bright idea.
         distanceSq = DistanceSquared(
-            entityList[entityNum as usize].origin.as_mut_ptr()
-                as *const vec_t,
+            entityList[entityNum as usize].origin.as_mut_ptr() as *const vec_t,
             lastListenerOrigin.as_mut_ptr() as *const vec_t,
         );
         if distanceSq > 48.0f32 * 48.0f32 {
@@ -1097,8 +1049,7 @@ unsafe extern "C" fn S_AL_SrcShutdown() {
             );
         }
         if (*curSource).entity > 0 as i32 {
-            entityList[(*curSource).entity as usize].srcAllocated =
-                qfalse
+            entityList[(*curSource).entity as usize].srcAllocated = qfalse
         }
         crate::src::client::qal::qalSourceStop.expect("non-null function pointer")(
             srcList[i as usize].alSource,
@@ -1244,10 +1195,7 @@ Remove given source as loop master if it is the master and hand off master statu
 =================
 */
 
-unsafe extern "C" fn S_AL_NewLoopMaster(
-    mut rmSource: *mut src_t,
-    mut iskilled: qboolean,
-) {
+unsafe extern "C" fn S_AL_NewLoopMaster(mut rmSource: *mut src_t, mut iskilled: qboolean) {
     let mut index: i32 = 0;
     let mut curSource: *mut src_t = 0 as *mut src_t;
     let mut curSfx: *mut alSfx_t = 0 as *mut alSfx_t;
@@ -1282,8 +1230,7 @@ unsafe extern "C" fn S_AL_NewLoopMaster(
                         && curSource != rmSource
                         && (*curSource).isActive as u32 != 0
                         && (*curSource).isLooping as u32 != 0
-                        && (*curSource).priority as u32
-                            == SRCPRI_AMBIENT as i32 as u32
+                        && (*curSource).priority as u32 == SRCPRI_AMBIENT as i32 as u32
                     {
                         if (*curSource).isPlaying as u64 != 0 {
                             (*curSfx).masterLoopSrc = index;
@@ -1392,8 +1339,7 @@ unsafe extern "C" fn S_AL_SrcAlloc(
     let mut weakest_time: i32 = crate::src::sys::sys_unix::Sys_Milliseconds();
     let mut weakest_pri: i32 = 999 as i32;
     let mut weakest_gain: f32 = 1000.0f64 as f32;
-    let mut weakest_isplaying: qboolean =
-        qtrue;
+    let mut weakest_isplaying: qboolean = qtrue;
     let mut weakest_numloops: i32 = 0 as i32;
     let mut curSource: *mut src_t = 0 as *mut src_t;
     i = 0 as i32;
@@ -1488,10 +1434,7 @@ S_AL_UpdateEntityPosition
 =================
 */
 
-unsafe extern "C" fn S_AL_UpdateEntityPosition(
-    mut entityNum: i32,
-    mut origin: *const vec_t,
-) {
+unsafe extern "C" fn S_AL_UpdateEntityPosition(mut entityNum: i32, mut origin: *const vec_t) {
     let mut sanOrigin: vec3_t = [0.; 3];
     sanOrigin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     sanOrigin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
@@ -1516,10 +1459,7 @@ Necessary for i.g. Western Quake3 mod which is buggy.
 =================
 */
 
-unsafe extern "C" fn S_AL_CheckInput(
-    mut entityNum: i32,
-    mut sfx: sfxHandle_t,
-) -> qboolean {
+unsafe extern "C" fn S_AL_CheckInput(mut entityNum: i32, mut sfx: sfxHandle_t) -> qboolean {
     if entityNum < 0 as i32 || entityNum >= (1 as i32) << 10 as i32 {
         Com_Error(
             ERR_DROP as i32,
@@ -1545,10 +1485,7 @@ Play a local (non-spatialized) sound effect
 =================
 */
 
-unsafe extern "C" fn S_AL_StartLocalSound(
-    mut sfx: sfxHandle_t,
-    mut channel: i32,
-) {
+unsafe extern "C" fn S_AL_StartLocalSound(mut sfx: sfxHandle_t, mut channel: i32) {
     let mut src: srcHandle_t = 0;
     if S_AL_CheckInput(0 as i32, sfx) as u64 != 0 {
         return;
@@ -1559,14 +1496,7 @@ unsafe extern "C" fn S_AL_StartLocalSound(
         return;
     }
     // Set up the effect
-    S_AL_SrcSetup(
-        src,
-        sfx,
-        SRCPRI_LOCAL,
-        -(1 as i32),
-        channel,
-        qtrue,
-    );
+    S_AL_SrcSetup(src, sfx, SRCPRI_LOCAL, -(1 as i32), channel, qtrue);
     // Start it playing
     srcList[src as usize].isPlaying = qtrue;
     crate::src::client::qal::qalSourcePlay.expect("non-null function pointer")(
@@ -1625,14 +1555,7 @@ unsafe extern "C" fn S_AL_StartSound(
     if src == -(1 as i32) {
         return;
     }
-    S_AL_SrcSetup(
-        src,
-        sfx,
-        SRCPRI_ONESHOT,
-        entnum,
-        entchannel,
-        qfalse,
-    );
+    S_AL_SrcSetup(src, sfx, SRCPRI_ONESHOT, entnum, entchannel, qfalse);
     curSource = &mut *srcList.as_mut_ptr().offset(src as isize) as *mut src_t;
     if origin.is_null() {
         (*curSource).isTracking = qtrue
@@ -1655,15 +1578,12 @@ S_AL_ClearLoopingSounds
 =================
 */
 
-unsafe extern "C" fn S_AL_ClearLoopingSounds(
-    mut _killall: qboolean,
-) {
+unsafe extern "C" fn S_AL_ClearLoopingSounds(mut _killall: qboolean) {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < srcCount {
         if srcList[i as usize].isLooping as u32 != 0 && srcList[i as usize].entity != -(1 as i32) {
-            entityList[srcList[i as usize].entity as usize].loopAddedThisFrame =
-                qfalse
+            entityList[srcList[i as usize].entity as usize].loopAddedThisFrame = qfalse
         }
         i += 1
     }
@@ -1787,13 +1707,7 @@ unsafe extern "C" fn S_AL_AddLoopingSound(
     mut velocity: *const vec_t,
     mut sfx: sfxHandle_t,
 ) {
-    S_AL_SrcLoop(
-        SRCPRI_ENTITY,
-        sfx,
-        origin,
-        velocity,
-        entityNum,
-    );
+    S_AL_SrcLoop(SRCPRI_ENTITY, sfx, origin, velocity, entityNum);
 }
 /*
 =================
@@ -1807,13 +1721,7 @@ unsafe extern "C" fn S_AL_AddRealLoopingSound(
     mut velocity: *const vec_t,
     mut sfx: sfxHandle_t,
 ) {
-    S_AL_SrcLoop(
-        SRCPRI_AMBIENT,
-        sfx,
-        origin,
-        velocity,
-        entityNum,
-    );
+    S_AL_SrcLoop(SRCPRI_AMBIENT, sfx, origin, velocity, entityNum);
 }
 /*
 =================
@@ -1847,11 +1755,8 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
         if !((*curSource).isLocked as u64 != 0) {
             if !((*curSource).isActive as u64 == 0) {
                 // Update source parameters
-                if (*s_alGain).modified as u32 != 0
-                    || (*s_volume).modified as u32 != 0
-                {
-                    (*curSource).curGain =
-                        (*s_alGain).value * (*s_volume).value
+                if (*s_alGain).modified as u32 != 0 || (*s_volume).modified as u32 != 0 {
+                    (*curSource).curGain = (*s_alGain).value * (*s_volume).value
                 }
                 if (*s_alRolloff).modified as u32 != 0 && (*curSource).local as u64 == 0 {
                     crate::src::client::qal::qalSourcef.expect("non-null function pointer")(
@@ -1911,10 +1816,7 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                         if (*curSource).scaleGain == 0. {
                             if (*curSource).isPlaying as u64 != 0 {
                                 // Sound is mute, stop playback until we are in range again
-                                S_AL_NewLoopMaster(
-                                    curSource,
-                                    qfalse,
-                                );
+                                S_AL_NewLoopMaster(curSource, qfalse);
                                 crate::src::client::qal::qalSourceStop
                                     .expect("non-null function pointer")(
                                     (*curSource).alSource
@@ -1938,9 +1840,7 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                                     .expect("non-null function pointer")(
                                     (*curSource).alSource
                                 );
-                                if (*curSource).priority as u32
-                                    == SRCPRI_AMBIENT as i32 as u32
-                                {
+                                if (*curSource).priority as u32 == SRCPRI_AMBIENT as i32 as u32 {
                                     // If there are other ambient looping sources with the same sound,
                                     // make sure the sound of these sources are in sync.
                                     if (*curSfx).loopActiveCnt != 0 {
@@ -2056,9 +1956,7 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                                 );
                             }
                         }
-                    } else if (*curSource).priority as u32
-                        == SRCPRI_AMBIENT as i32 as u32
-                    {
+                    } else if (*curSource).priority as u32 == SRCPRI_AMBIENT as i32 as u32 {
                         if (*curSource).isPlaying as u64 != 0 {
                             S_AL_NewLoopMaster(curSource, qfalse);
                             crate::src::client::qal::qalSourceStop
@@ -2145,8 +2043,7 @@ unsafe extern "C" fn S_AL_SrcGet(mut src: srcHandle_t) -> ALuint {
 
 static mut streamSourceHandles: [srcHandle_t; 129] = [0; 129];
 
-static mut streamPlaying: [qboolean; 129] =
-    [qfalse; 129];
+static mut streamPlaying: [qboolean; 129] = [qfalse; 129];
 
 static mut streamSources: [ALuint; 129] = [0; 129];
 
@@ -2338,8 +2235,8 @@ unsafe extern "C" fn S_AL_RawSamples(
         }
         crate::stdlib::memcpy(
             oldBuffers.as_mut_ptr() as *mut libc::c_void,
-            &mut *streamBuffers.as_mut_ptr().offset(stream as isize)
-                as *mut [ALuint; 20] as *const libc::c_void,
+            &mut *streamBuffers.as_mut_ptr().offset(stream as isize) as *mut [ALuint; 20]
+                as *const libc::c_void,
             ::std::mem::size_of::<[ALuint; 20]>() as libc::c_ulong,
         );
         // Reorder buffer array in order of oldest to newest
@@ -2467,8 +2364,7 @@ unsafe extern "C" fn S_AL_StreamDie(mut stream: i32) {
     S_AL_FreeStreamChannel(stream);
 }
 
-static mut musicPlaying: qboolean =
-    qfalse;
+static mut musicPlaying: qboolean = qfalse;
 
 static mut musicSourceHandle: srcHandle_t = -(1 as i32);
 
@@ -2476,13 +2372,9 @@ static mut musicSource: ALuint = 0;
 
 static mut musicBuffers: [ALuint; 4] = [0; 4];
 
-static mut mus_stream: *mut snd_stream_t = 0
-    as *const snd_stream_t
-    as *mut snd_stream_t;
+static mut mus_stream: *mut snd_stream_t = 0 as *const snd_stream_t as *mut snd_stream_t;
 
-static mut intro_stream: *mut snd_stream_t = 0
-    as *const snd_stream_t
-    as *mut snd_stream_t;
+static mut intro_stream: *mut snd_stream_t = 0 as *const snd_stream_t as *mut snd_stream_t;
 
 static mut s_backgroundLoop: [libc::c_char; 64] = [0; 64];
 
@@ -2559,15 +2451,11 @@ S_AL_CloseMusicFiles
 
 unsafe extern "C" fn S_AL_CloseMusicFiles() {
     if !intro_stream.is_null() {
-        S_CodecCloseStream(
-            intro_stream as *mut snd_stream_s,
-        );
+        S_CodecCloseStream(intro_stream as *mut snd_stream_s);
         intro_stream = 0 as *mut snd_stream_t
     }
     if !mus_stream.is_null() {
-        S_CodecCloseStream(
-            mus_stream as *mut snd_stream_s,
-        );
+        S_CodecCloseStream(mus_stream as *mut snd_stream_s);
         mus_stream = 0 as *mut snd_stream_t
     };
 }
@@ -2610,8 +2498,7 @@ unsafe extern "C" fn S_AL_MusicProcess(mut b: ALuint) {
     let mut error: ALenum = 0;
     let mut l: i32 = 0;
     let mut format: ALuint = 0;
-    let mut curstream: *mut snd_stream_t =
-        0 as *mut snd_stream_t;
+    let mut curstream: *mut snd_stream_t = 0 as *mut snd_stream_t;
     S_AL_ClearError(qfalse);
     if !intro_stream.is_null() {
         curstream = intro_stream
@@ -2628,17 +2515,13 @@ unsafe extern "C" fn S_AL_MusicProcess(mut b: ALuint) {
     );
     // Run out data to read, start at the beginning again
     if l == 0 as i32 {
-        S_CodecCloseStream(
-            curstream as *mut snd_stream_s,
-        );
+        S_CodecCloseStream(curstream as *mut snd_stream_s);
         // the intro stream just finished playing so we don't need to reopen
         // the music stream.
         if !intro_stream.is_null() {
             intro_stream = 0 as *mut snd_stream_t
         } else {
-            mus_stream =
-                S_CodecOpenStream(s_backgroundLoop.as_mut_ptr())
-                    as *mut snd_stream_s
+            mus_stream = S_CodecOpenStream(s_backgroundLoop.as_mut_ptr()) as *mut snd_stream_s
         }
         curstream = mus_stream;
         if curstream.is_null() {
@@ -2654,8 +2537,7 @@ unsafe extern "C" fn S_AL_MusicProcess(mut b: ALuint) {
     format = S_AL_Format((*curstream).info.width, (*curstream).info.channels);
     if l == 0 as i32 {
         // We have no data to buffer, so buffer silence
-        let mut dummyData: [byte; 2] =
-            [0 as i32 as byte, 0];
+        let mut dummyData: [byte; 2] = [0 as i32 as byte, 0];
         crate::src::client::qal::qalBufferData.expect("non-null function pointer")(
             b,
             0x1101 as i32,
@@ -2722,13 +2604,11 @@ unsafe extern "C" fn S_AL_StartBackgroundTrack(
     if issame as u64 == 0 {
         // Open the intro and don't mind whether it succeeds.
         // The important part is the loop.
-        intro_stream = S_CodecOpenStream(intro)
-            as *mut snd_stream_s
+        intro_stream = S_CodecOpenStream(intro) as *mut snd_stream_s
     } else {
         intro_stream = 0 as *mut snd_stream_t
     }
-    mus_stream = S_CodecOpenStream(s_backgroundLoop.as_mut_ptr())
-        as *mut snd_stream_s;
+    mus_stream = S_CodecOpenStream(s_backgroundLoop.as_mut_ptr()) as *mut snd_stream_s;
     if mus_stream.is_null() {
         S_AL_CloseMusicFiles();
         S_AL_MusicSourceFree();
@@ -2756,10 +2636,7 @@ unsafe extern "C" fn S_AL_StartBackgroundTrack(
         musicBuffers.as_mut_ptr(),
     );
     // Set the initial gain property
-    S_AL_Gain(
-        musicSource,
-        (*s_alGain).value * (*s_musicVolume).value,
-    );
+    S_AL_Gain(musicSource, (*s_alGain).value * (*s_musicVolume).value);
     // Start playing
     crate::src::client::qal::qalSourcePlay.expect("non-null function pointer")(musicSource);
     musicPlaying = qtrue;
@@ -2820,25 +2697,18 @@ unsafe extern "C" fn S_AL_MusicUpdate() {
         crate::src::client::qal::qalSourcePlay.expect("non-null function pointer")(musicSource);
     }
     // Set the gain property
-    S_AL_Gain(
-        musicSource,
-        (*s_alGain).value * (*s_musicVolume).value,
-    );
+    S_AL_Gain(musicSource, (*s_alGain).value * (*s_musicVolume).value);
 }
 //===========================================================================
 // Local state variables
 
-static mut alDevice: *mut ALCdevice =
-    0 as *const ALCdevice as *mut ALCdevice;
+static mut alDevice: *mut ALCdevice = 0 as *const ALCdevice as *mut ALCdevice;
 
-static mut alContext: *mut ALCcontext =
-    0 as *const ALCcontext as *mut ALCcontext;
+static mut alContext: *mut ALCcontext = 0 as *const ALCcontext as *mut ALCcontext;
 
-static mut alCaptureDevice: *mut ALCdevice =
-    0 as *const ALCdevice as *mut ALCdevice;
+static mut alCaptureDevice: *mut ALCdevice = 0 as *const ALCdevice as *mut ALCdevice;
 
-static mut s_alCapture: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut s_alCapture: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 /*
 =================
 S_AL_StopAllSounds
@@ -3015,10 +2885,7 @@ unsafe extern "C" fn S_AL_AvailableCaptureSamples() -> i32 {
     return retval;
 }
 
-unsafe extern "C" fn S_AL_Capture(
-    mut samples: i32,
-    mut data: *mut byte,
-) {
+unsafe extern "C" fn S_AL_Capture(mut samples: i32, mut data: *mut byte) {
     if !alCaptureDevice.is_null() {
         crate::src::client::qal::qalcCaptureSamples.expect("non-null function pointer")(
             alCaptureDevice,
@@ -3048,9 +2915,7 @@ S_AL_SoundInfo
 */
 
 unsafe extern "C" fn S_AL_SoundInfo() {
-    Com_Printf(
-        b"OpenAL info:\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"OpenAL info:\n\x00" as *const u8 as *const libc::c_char);
     Com_Printf(
         b"  Vendor:         %s\n\x00" as *const u8 as *const libc::c_char,
         crate::src::client::qal::qalGetString.expect("non-null function pointer")(0xb001 as i32),
@@ -3138,9 +3003,7 @@ unsafe extern "C" fn S_AL_Shutdown() {
             alCaptureDevice,
         );
         alCaptureDevice = 0 as *mut ALCdevice;
-        Com_Printf(
-            b"OpenAL capture device closed.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"OpenAL capture device closed.\n\x00" as *const u8 as *const libc::c_char);
     }
     i = 0 as i32;
     while i < 64 as i32 * 2 as i32 + 1 as i32 {
@@ -3225,9 +3088,7 @@ S_AL_Init
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn S_AL_Init(
-    mut si: *mut soundInterface_t,
-) -> qboolean {
+pub unsafe extern "C" fn S_AL_Init(mut si: *mut soundInterface_t) -> qboolean {
     let mut device: *const libc::c_char = 0 as *const libc::c_char;
     let mut inputdevice: *const libc::c_char = 0 as *const libc::c_char;
     let mut i: i32 = 0;
@@ -3400,9 +3261,7 @@ pub unsafe extern "C" fn S_AL_Init(
     }
     if alDevice.is_null() {
         crate::src::client::qal::QAL_Shutdown();
-        Com_Printf(
-            b"Failed to open OpenAL device.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Failed to open OpenAL device.\n\x00" as *const u8 as *const libc::c_char);
         return qfalse;
     }
     // Create OpenAL context
@@ -3413,9 +3272,7 @@ pub unsafe extern "C" fn S_AL_Init(
     if alContext.is_null() {
         crate::src::client::qal::QAL_Shutdown();
         crate::src::client::qal::qalcCloseDevice.expect("non-null function pointer")(alDevice);
-        Com_Printf(
-            b"Failed to create OpenAL context.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Failed to create OpenAL context.\n\x00" as *const u8 as *const libc::c_char);
         return qfalse;
     }
     crate::src::client::qal::qalcMakeContextCurrent.expect("non-null function pointer")(alContext);
@@ -3540,17 +3397,10 @@ pub unsafe extern "C" fn S_AL_Init(
     (*si).Shutdown = Some(S_AL_Shutdown as unsafe extern "C" fn() -> ());
     (*si).StartSound = Some(
         S_AL_StartSound
-            as unsafe extern "C" fn(
-                _: *mut vec_t,
-                _: i32,
-                _: i32,
-                _: sfxHandle_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut vec_t, _: i32, _: i32, _: sfxHandle_t) -> (),
     );
-    (*si).StartLocalSound = Some(
-        S_AL_StartLocalSound
-            as unsafe extern "C" fn(_: sfxHandle_t, _: i32) -> (),
-    );
+    (*si).StartLocalSound =
+        Some(S_AL_StartLocalSound as unsafe extern "C" fn(_: sfxHandle_t, _: i32) -> ());
     (*si).StartBackgroundTrack = Some(
         S_AL_StartBackgroundTrack
             as unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> (),
@@ -3570,51 +3420,29 @@ pub unsafe extern "C" fn S_AL_Init(
             ) -> (),
     );
     (*si).StopAllSounds = Some(S_AL_StopAllSounds as unsafe extern "C" fn() -> ());
-    (*si).ClearLoopingSounds = Some(
-        S_AL_ClearLoopingSounds
-            as unsafe extern "C" fn(_: qboolean) -> (),
-    );
+    (*si).ClearLoopingSounds =
+        Some(S_AL_ClearLoopingSounds as unsafe extern "C" fn(_: qboolean) -> ());
     (*si).AddLoopingSound = Some(
         S_AL_AddLoopingSound
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *const vec_t,
-                _: *const vec_t,
-                _: sfxHandle_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: i32, _: *const vec_t, _: *const vec_t, _: sfxHandle_t) -> (),
     );
     (*si).AddRealLoopingSound = Some(
         S_AL_AddRealLoopingSound
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *const vec_t,
-                _: *const vec_t,
-                _: sfxHandle_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: i32, _: *const vec_t, _: *const vec_t, _: sfxHandle_t) -> (),
     );
     (*si).StopLoopingSound = Some(S_AL_StopLoopingSound as unsafe extern "C" fn(_: i32) -> ());
     (*si).Respatialize = Some(
         S_AL_Respatialize
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *const vec_t,
-                _: *mut vec3_t,
-                _: i32,
-            ) -> (),
+            as unsafe extern "C" fn(_: i32, _: *const vec_t, _: *mut vec3_t, _: i32) -> (),
     );
-    (*si).UpdateEntityPosition = Some(
-        S_AL_UpdateEntityPosition
-            as unsafe extern "C" fn(_: i32, _: *const vec_t) -> (),
-    );
+    (*si).UpdateEntityPosition =
+        Some(S_AL_UpdateEntityPosition as unsafe extern "C" fn(_: i32, _: *const vec_t) -> ());
     (*si).Update = Some(S_AL_Update as unsafe extern "C" fn() -> ());
     (*si).DisableSounds = Some(S_AL_DisableSounds as unsafe extern "C" fn() -> ());
     (*si).BeginRegistration = Some(S_AL_BeginRegistration as unsafe extern "C" fn() -> ());
     (*si).RegisterSound = Some(
         S_AL_RegisterSound
-            as unsafe extern "C" fn(
-                _: *const libc::c_char,
-                _: qboolean,
-            ) -> sfxHandle_t,
+            as unsafe extern "C" fn(_: *const libc::c_char, _: qboolean) -> sfxHandle_t,
     );
     (*si).ClearSoundBuffer = Some(S_AL_ClearSoundBuffer as unsafe extern "C" fn() -> ());
     (*si).SoundInfo = Some(S_AL_SoundInfo as unsafe extern "C" fn() -> ());
@@ -3622,10 +3450,7 @@ pub unsafe extern "C" fn S_AL_Init(
     (*si).StartCapture = Some(S_AL_StartCapture as unsafe extern "C" fn() -> ());
     (*si).AvailableCaptureSamples =
         Some(S_AL_AvailableCaptureSamples as unsafe extern "C" fn() -> i32);
-    (*si).Capture = Some(
-        S_AL_Capture
-            as unsafe extern "C" fn(_: i32, _: *mut byte) -> (),
-    );
+    (*si).Capture = Some(S_AL_Capture as unsafe extern "C" fn(_: i32, _: *mut byte) -> ());
     (*si).StopCapture = Some(S_AL_StopCapture as unsafe extern "C" fn() -> ());
     (*si).MasterGain = Some(S_AL_MasterGain as unsafe extern "C" fn(_: f32) -> ());
     return qtrue;

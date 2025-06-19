@@ -113,9 +113,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /* Check encoder control struct */
 #[no_mangle]
 
-pub unsafe extern "C" fn check_control_input(
-    mut encControl: *mut silk_EncControlStruct,
-) -> i32
+pub unsafe extern "C" fn check_control_input(mut encControl: *mut silk_EncControlStruct) -> i32
 /* I    Control structure                           */ {
     if (*encControl).API_sampleRate != 8000 as i32
         && (*encControl).API_sampleRate != 12000 as i32

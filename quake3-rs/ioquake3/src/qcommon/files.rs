@@ -271,26 +271,19 @@ static mut fs_gamedir: [libc::c_char; 4096] = [0; 4096];
 // next file in the hash
 // this will be a single file name with no separators
 
-static mut fs_debug: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut fs_debug: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
-static mut fs_homepath: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut fs_homepath: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
-static mut fs_steampath: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut fs_steampath: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
-static mut fs_gogpath: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut fs_gogpath: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
-static mut fs_basepath: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut fs_basepath: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
-static mut fs_basegame: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut fs_basegame: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
-static mut fs_gamedirvar: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut fs_gamedirvar: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
 static mut fs_searchpaths: *mut searchpath_t = 0 as *const searchpath_t as *mut searchpath_t;
 
@@ -325,8 +318,7 @@ static mut fsh: [fileHandleData_t; 64] = [fileHandleData_t {
 // TTimo - https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=540
 // wether we did a reorder on the current search path when joining the server
 
-static mut fs_reordered: qboolean =
-    qfalse;
+static mut fs_reordered: qboolean = qfalse;
 // never load anything from pk3 files that are not present at the server when pure
 
 static mut fs_numServerPaks: i32 = 0 as i32;
@@ -370,8 +362,7 @@ FS_Initialized
 #[no_mangle]
 
 pub unsafe extern "C" fn FS_Initialized() -> qboolean {
-    return (fs_searchpaths != 0 as *mut libc::c_void as *mut searchpath_t) as i32
-        as qboolean;
+    return (fs_searchpaths != 0 as *mut libc::c_void as *mut searchpath_t) as i32 as qboolean;
 }
 /*
 =================
@@ -380,9 +371,7 @@ FS_PakIsPure
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_PakIsPure(
-    mut pack: *mut pack_t,
-) -> qboolean {
+pub unsafe extern "C" fn FS_PakIsPure(mut pack: *mut pack_t) -> qboolean {
     let mut i: i32 = 0;
     if fs_numServerPaks != 0 {
         i = 0 as i32;
@@ -439,8 +428,7 @@ unsafe extern "C" fn FS_HashFileName(mut fname: *const libc::c_char, mut hashSiz
                     __res = tolower(*fname.offset(i as isize) as i32)
                 }
             } else {
-                __res = *(*__ctype_tolower_loc())
-                    .offset(*fname.offset(i as isize) as i32 as isize)
+                __res = *(*__ctype_tolower_loc()).offset(*fname.offset(i as isize) as i32 as isize)
             }
             __res
         }) as libc::c_char;
@@ -476,9 +464,7 @@ unsafe extern "C" fn FS_HandleForFile() -> fileHandle_t {
     );
 }
 
-unsafe extern "C" fn FS_FileForHandle(
-    mut f: fileHandle_t,
-) -> *mut FILE {
+unsafe extern "C" fn FS_FileForHandle(mut f: fileHandle_t) -> *mut FILE {
     if f < 1 as i32 || f >= 64 as i32 {
         Com_Error(
             ERR_DROP as i32,
@@ -505,12 +491,7 @@ unsafe extern "C" fn FS_FileForHandle(
 pub unsafe extern "C" fn FS_ForceFlush(mut f: fileHandle_t) {
     let mut file: *mut FILE = 0 as *mut FILE;
     file = FS_FileForHandle(f);
-    setvbuf(
-        file,
-        0 as *mut libc::c_char,
-        2 as i32,
-        0 as i32 as size_t,
-    );
+    setvbuf(file, 0 as *mut libc::c_char, 2 as i32, 0 as i32 as size_t);
 }
 /*
 ================
@@ -539,9 +520,7 @@ size of the file.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_filelength(
-    mut f: fileHandle_t,
-) -> isize {
+pub unsafe extern "C" fn FS_filelength(mut f: fileHandle_t) -> isize {
     let mut h: *mut FILE = 0 as *mut FILE;
     h = FS_FileForHandle(f);
     if h.is_null() {
@@ -560,8 +539,7 @@ Fix things up differently for win/unix/mac
 
 unsafe extern "C" fn FS_ReplaceSeparators(mut path: *mut libc::c_char) {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut lastCharWasSep: qboolean =
-        qfalse;
+    let mut lastCharWasSep: qboolean = qfalse;
     s = path;
     while *s != 0 {
         if *s as i32 == '/' as i32 || *s as i32 == '\\' as i32 {
@@ -628,9 +606,7 @@ Creates any directories needed to store the given filename
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_CreatePath(
-    mut OSPath: *mut libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn FS_CreatePath(mut OSPath: *mut libc::c_char) -> qboolean {
     let mut ofs: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut path: [libc::c_char; 4096] = [0; 4096];
     // make absolutely sure that it can't back up the path
@@ -688,15 +664,9 @@ unsafe extern "C" fn FS_CheckFilenameIsMutable(
 ) {
     // Check if the filename ends with the library, QVM, or pk3 extension
     if Sys_DllExtension(filename) as u32 != 0
-        || COM_CompareExtension(
-            filename,
-            b".qvm\x00" as *const u8 as *const libc::c_char,
-        ) as u32
+        || COM_CompareExtension(filename, b".qvm\x00" as *const u8 as *const libc::c_char) as u32
             != 0
-        || COM_CompareExtension(
-            filename,
-            b".pk3\x00" as *const u8 as *const libc::c_char,
-        ) as u32
+        || COM_CompareExtension(filename, b".pk3\x00" as *const u8 as *const libc::c_char) as u32
             != 0
     {
         Com_Error(
@@ -752,14 +722,9 @@ Tests if path and file exists
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_FileInPathExists(
-    mut testpath: *const libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn FS_FileInPathExists(mut testpath: *const libc::c_char) -> qboolean {
     let mut filep: *mut FILE = 0 as *mut FILE;
-    filep = Sys_FOpen(
-        testpath,
-        b"rb\x00" as *const u8 as *const libc::c_char,
-    ) as *mut _IO_FILE;
+    filep = Sys_FOpen(testpath, b"rb\x00" as *const u8 as *const libc::c_char) as *mut _IO_FILE;
     if !filep.is_null() {
         fclose(filep);
         return qtrue;
@@ -778,9 +743,7 @@ NOTE TTimo: this goes with FS_FOpenFileWrite for opening the file afterwards
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_FileExists(
-    mut file: *const libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn FS_FileExists(mut file: *const libc::c_char) -> qboolean {
     return FS_FileInPathExists(FS_BuildOSPath(
         (*fs_homepath).string,
         fs_gamedir.as_mut_ptr(),
@@ -796,9 +759,7 @@ Tests if the file exists
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_SV_FileExists(
-    mut file: *const libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn FS_SV_FileExists(mut file: *const libc::c_char) -> qboolean {
     let mut testpath: *mut libc::c_char = 0 as *mut libc::c_char;
     testpath = FS_BuildOSPath(
         (*fs_homepath).string,
@@ -818,9 +779,7 @@ FS_SV_FOpenFileWrite
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_SV_FOpenFileWrite(
-    mut filename: *const libc::c_char,
-) -> fileHandle_t {
+pub unsafe extern "C" fn FS_SV_FOpenFileWrite(mut filename: *const libc::c_char) -> fileHandle_t {
     let mut ospath: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut f: fileHandle_t = 0;
     if fs_searchpaths.is_null() {
@@ -858,8 +817,7 @@ pub unsafe extern "C" fn FS_SV_FOpenFileWrite(
         ospath,
     );
     fsh[f as usize].handleFiles.file.o =
-        Sys_FOpen(ospath, b"wb\x00" as *const u8 as *const libc::c_char)
-            as *mut _IO_FILE;
+        Sys_FOpen(ospath, b"wb\x00" as *const u8 as *const libc::c_char) as *mut _IO_FILE;
     Q_strncpyz(
         fsh[f as usize].name.as_mut_ptr(),
         filename,
@@ -919,14 +877,11 @@ pub unsafe extern "C" fn FS_SV_FOpenFileRead(
         );
     }
     fsh[f as usize].handleFiles.file.o =
-        Sys_FOpen(ospath, b"rb\x00" as *const u8 as *const libc::c_char)
-            as *mut _IO_FILE;
+        Sys_FOpen(ospath, b"rb\x00" as *const u8 as *const libc::c_char) as *mut _IO_FILE;
     fsh[f as usize].handleSync = qfalse;
     if fsh[f as usize].handleFiles.file.o.is_null() {
         // If fs_homepath == fs_basepath, don't bother
-        if Q_stricmp((*fs_homepath).string, (*fs_basepath).string)
-            != 0
-        {
+        if Q_stricmp((*fs_homepath).string, (*fs_basepath).string) != 0 {
             // search basepath
             ospath = FS_BuildOSPath(
                 (*fs_basepath).string,
@@ -943,10 +898,8 @@ pub unsafe extern "C" fn FS_SV_FOpenFileRead(
                     ospath,
                 );
             }
-            fsh[f as usize].handleFiles.file.o = Sys_FOpen(
-                ospath,
-                b"rb\x00" as *const u8 as *const libc::c_char,
-            ) as *mut _IO_FILE;
+            fsh[f as usize].handleFiles.file.o =
+                Sys_FOpen(ospath, b"rb\x00" as *const u8 as *const libc::c_char) as *mut _IO_FILE;
             fsh[f as usize].handleSync = qfalse
         }
         // Check fs_steampath
@@ -968,10 +921,8 @@ pub unsafe extern "C" fn FS_SV_FOpenFileRead(
                     ospath,
                 );
             }
-            fsh[f as usize].handleFiles.file.o = Sys_FOpen(
-                ospath,
-                b"rb\x00" as *const u8 as *const libc::c_char,
-            ) as *mut _IO_FILE;
+            fsh[f as usize].handleFiles.file.o =
+                Sys_FOpen(ospath, b"rb\x00" as *const u8 as *const libc::c_char) as *mut _IO_FILE;
             fsh[f as usize].handleSync = qfalse
         }
         // Check fs_gogpath
@@ -993,10 +944,8 @@ pub unsafe extern "C" fn FS_SV_FOpenFileRead(
                     ospath,
                 );
             }
-            fsh[f as usize].handleFiles.file.o = Sys_FOpen(
-                ospath,
-                b"rb\x00" as *const u8 as *const libc::c_char,
-            ) as *mut _IO_FILE;
+            fsh[f as usize].handleFiles.file.o =
+                Sys_FOpen(ospath, b"rb\x00" as *const u8 as *const libc::c_char) as *mut _IO_FILE;
             fsh[f as usize].handleSync = qfalse
         }
         if fsh[f as usize].handleFiles.file.o.is_null() {
@@ -1147,9 +1096,7 @@ FS_FOpenFileWrite
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_FOpenFileWrite(
-    mut filename: *const libc::c_char,
-) -> fileHandle_t {
+pub unsafe extern "C" fn FS_FOpenFileWrite(mut filename: *const libc::c_char) -> fileHandle_t {
     let mut ospath: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut f: fileHandle_t = 0;
     if fs_searchpaths.is_null() {
@@ -1179,8 +1126,7 @@ pub unsafe extern "C" fn FS_FOpenFileWrite(
     // when running with +set logfile 1 +set developer 1
     //Com_DPrintf( "writing to: %s\n", ospath );
     fsh[f as usize].handleFiles.file.o =
-        Sys_FOpen(ospath, b"wb\x00" as *const u8 as *const libc::c_char)
-            as *mut _IO_FILE;
+        Sys_FOpen(ospath, b"wb\x00" as *const u8 as *const libc::c_char) as *mut _IO_FILE;
     Q_strncpyz(
         fsh[f as usize].name.as_mut_ptr(),
         filename,
@@ -1200,9 +1146,7 @@ FS_FOpenFileAppend
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_FOpenFileAppend(
-    mut filename: *const libc::c_char,
-) -> fileHandle_t {
+pub unsafe extern "C" fn FS_FOpenFileAppend(mut filename: *const libc::c_char) -> fileHandle_t {
     let mut ospath: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut f: fileHandle_t = 0;
     if fs_searchpaths.is_null() {
@@ -1236,8 +1180,7 @@ pub unsafe extern "C" fn FS_FOpenFileAppend(
         return 0 as i32;
     }
     fsh[f as usize].handleFiles.file.o =
-        Sys_FOpen(ospath, b"ab\x00" as *const u8 as *const libc::c_char)
-            as *mut _IO_FILE;
+        Sys_FOpen(ospath, b"ab\x00" as *const u8 as *const libc::c_char) as *mut _IO_FILE;
     fsh[f as usize].handleSync = qfalse;
     if fsh[f as usize].handleFiles.file.o.is_null() {
         f = 0 as i32
@@ -1252,9 +1195,7 @@ FS_FCreateOpenPipeFile
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_FCreateOpenPipeFile(
-    mut filename: *const libc::c_char,
-) -> fileHandle_t {
+pub unsafe extern "C" fn FS_FCreateOpenPipeFile(mut filename: *const libc::c_char) -> fileHandle_t {
     let mut ospath: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut fifo: *mut FILE = 0 as *mut FILE;
     let mut f: fileHandle_t = 0;
@@ -1361,8 +1302,7 @@ pub unsafe extern "C" fn FS_IsExt(
         return qfalse;
     }
     filename = filename.offset((namelen - extlen) as isize);
-    return (Q_stricmp(filename, ext) == 0) as i32
-        as qboolean;
+    return (Q_stricmp(filename, ext) == 0) as i32 as qboolean;
 }
 /*
 ===========
@@ -1404,16 +1344,8 @@ pub unsafe extern "C" fn FS_IsDemoExt(
             return qtrue;
         }
         index = 0 as i32;
-        while *demo_protocols
-            .as_mut_ptr()
-            .offset(index as isize)
-            != 0
-        {
-            if *demo_protocols
-                .as_mut_ptr()
-                .offset(index as isize)
-                == protocol
-            {
+        while *demo_protocols.as_mut_ptr().offset(index as isize) != 0 {
+            if *demo_protocols.as_mut_ptr().offset(index as isize) == protocol {
                 return qtrue;
             }
             index += 1
@@ -1516,10 +1448,8 @@ pub unsafe extern "C" fn FS_FOpenFileReadDir(
                 (*dir).gamedir.as_mut_ptr(),
                 filename,
             );
-            filep = Sys_FOpen(
-                netpath,
-                b"rb\x00" as *const u8 as *const libc::c_char,
-            ) as *mut _IO_FILE;
+            filep =
+                Sys_FOpen(netpath, b"rb\x00" as *const u8 as *const libc::c_char) as *mut _IO_FILE;
             if !filep.is_null() {
                 len = FS_fplength(filep) as i32;
                 fclose(filep);
@@ -1645,14 +1575,9 @@ pub unsafe extern "C" fn FS_FOpenFileReadDir(
                     );
                     fsh[*file as usize].zipFile = qtrue;
                     // set the file position in the zip file (also sets the current file info)
-                    unzSetOffset(
-                        fsh[*file as usize].handleFiles.file.z,
-                        (*pakFile).pos,
-                    );
+                    unzSetOffset(fsh[*file as usize].handleFiles.file.z, (*pakFile).pos);
                     // open the file in the zip
-                    unzOpenCurrentFile(
-                        fsh[*file as usize].handleFiles.file.z,
-                    );
+                    unzOpenCurrentFile(fsh[*file as usize].handleFiles.file.z);
                     fsh[*file as usize].zipFilePos = (*pakFile).pos as i32;
                     fsh[*file as usize].zipFileLen = (*pakFile).len as i32;
                     if (*fs_debug).integer != 0 {
@@ -1719,10 +1644,7 @@ pub unsafe extern "C" fn FS_FOpenFileReadDir(
             (*dir).gamedir.as_mut_ptr(),
             filename,
         );
-        filep = Sys_FOpen(
-            netpath,
-            b"rb\x00" as *const u8 as *const libc::c_char,
-        ) as *mut _IO_FILE;
+        filep = Sys_FOpen(netpath, b"rb\x00" as *const u8 as *const libc::c_char) as *mut _IO_FILE;
         if filep.is_null() {
             *file = 0 as i32;
             return -(1 as i32) as isize;
@@ -1768,8 +1690,7 @@ pub unsafe extern "C" fn FS_FOpenFileRead(
 ) -> isize {
     let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
     let mut len: isize = 0;
-    let mut isLocalConfig: qboolean =
-        qfalse;
+    let mut isLocalConfig: qboolean = qfalse;
     if fs_searchpaths.is_null() {
         Com_Error(
             ERR_FATAL as i32,
@@ -1788,13 +1709,7 @@ pub unsafe extern "C" fn FS_FOpenFileRead(
     while !search.is_null() {
         // autoexec.cfg and q3config.cfg can only be loaded outside of pk3 files.
         if !(isLocalConfig as u32 != 0 && !(*search).pack.is_null()) {
-            len = FS_FOpenFileReadDir(
-                filename,
-                search,
-                file,
-                uniqueFILE,
-                qfalse,
-            );
+            len = FS_FOpenFileReadDir(filename, search, file, uniqueFILE, qfalse);
             if file.is_null() {
                 if len > 0 as i32 as isize {
                     return len;
@@ -1946,8 +1861,7 @@ pub unsafe extern "C" fn FS_Read(
     let mut block: i32 = 0;
     let mut remaining: i32 = 0;
     let mut read: i32 = 0;
-    let mut buf: *mut byte =
-        0 as *mut byte;
+    let mut buf: *mut byte = 0 as *mut byte;
     let mut tries: i32 = 0;
     if fs_searchpaths.is_null() {
         Com_Error(
@@ -1992,11 +1906,7 @@ pub unsafe extern "C" fn FS_Read(
         }
         return len;
     } else {
-        return unzReadCurrentFile(
-            fsh[f as usize].handleFiles.file.z,
-            buffer,
-            len as u32,
-        );
+        return unzReadCurrentFile(fsh[f as usize].handleFiles.file.z, buffer, len as u32);
     };
 }
 /*
@@ -2016,8 +1926,7 @@ pub unsafe extern "C" fn FS_Write(
     let mut block: i32 = 0;
     let mut remaining: i32 = 0;
     let mut written: i32 = 0;
-    let mut buf: *mut byte =
-        0 as *mut byte;
+    let mut buf: *mut byte = 0 as *mut byte;
     let mut tries: i32 = 0;
     let mut f: *mut FILE = 0 as *mut FILE;
     if fs_searchpaths.is_null() {
@@ -2045,16 +1954,12 @@ pub unsafe extern "C" fn FS_Write(
             if tries == 0 {
                 tries = 1 as i32
             } else {
-                Com_Printf(
-                    b"FS_Write: 0 bytes written\n\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_Printf(b"FS_Write: 0 bytes written\n\x00" as *const u8 as *const libc::c_char);
                 return 0 as i32;
             }
         }
         if written == -(1 as i32) {
-            Com_Printf(
-                b"FS_Write: -1 bytes written\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Com_Printf(b"FS_Write: -1 bytes written\n\x00" as *const u8 as *const libc::c_char);
             return 0 as i32;
         }
         remaining -= written;
@@ -2095,11 +2000,7 @@ FS_Seek
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_Seek(
-    mut f: fileHandle_t,
-    mut offset: isize,
-    mut origin: i32,
-) -> i32 {
+pub unsafe extern "C" fn FS_Seek(mut f: fileHandle_t, mut offset: isize, mut origin: i32) -> i32 {
     let mut _origin: i32 = 0;
     if fs_searchpaths.is_null() {
         Com_Error(
@@ -2272,10 +2173,8 @@ pub unsafe extern "C" fn FS_ReadFileDir(
 ) -> isize {
     let mut h: fileHandle_t = 0; // quiet compiler warning
     let mut search: *mut searchpath_t = 0 as *mut searchpath_t;
-    let mut buf: *mut byte =
-        0 as *mut byte;
-    let mut isConfig: qboolean =
-        qfalse;
+    let mut buf: *mut byte = 0 as *mut byte;
+    let mut isConfig: qboolean = qfalse;
     let mut len: isize = 0;
     if fs_searchpaths.is_null() {
         Com_Error(
@@ -2294,9 +2193,7 @@ pub unsafe extern "C" fn FS_ReadFileDir(
     // it from the journal file
     if !libc::strstr(qpath, b".cfg\x00" as *const u8 as *const libc::c_char).is_null() {
         isConfig = qtrue;
-        if !com_journal.is_null()
-            && (*com_journal).integer == 2 as i32
-        {
+        if !com_journal.is_null() && (*com_journal).integer == 2 as i32 {
             let mut r: i32 = 0;
             Com_DPrintf(
                 b"Loading %s from journal file.\n\x00" as *const u8 as *const libc::c_char,
@@ -2325,15 +2222,9 @@ pub unsafe extern "C" fn FS_ReadFileDir(
             if buffer.is_null() {
                 return len;
             }
-            buf = Hunk_AllocateTempMemory(
-                (len + 1 as i32 as isize) as i32,
-            ) as *mut byte;
+            buf = Hunk_AllocateTempMemory((len + 1 as i32 as isize) as i32) as *mut byte;
             *buffer = buf as *mut libc::c_void;
-            r = FS_Read(
-                buf as *mut libc::c_void,
-                len as i32,
-                com_journalDataFile,
-            );
+            r = FS_Read(buf as *mut libc::c_void, len as i32, com_journalDataFile);
             if r as isize != len {
                 Com_Error(
                     ERR_FATAL as i32,
@@ -2355,23 +2246,14 @@ pub unsafe extern "C" fn FS_ReadFileDir(
         len = FS_FOpenFileRead(qpath, &mut h, qfalse)
     } else {
         // look for it in a specific search path only
-        len = FS_FOpenFileReadDir(
-            qpath,
-            search,
-            &mut h,
-            qfalse,
-            unpure,
-        )
+        len = FS_FOpenFileReadDir(qpath, search, &mut h, qfalse, unpure)
     }
     if h == 0 as i32 {
         if !buffer.is_null() {
             *buffer = 0 as *mut libc::c_void
         }
         // if we are journalling and it is a config file, write a zero to the journal file
-        if isConfig as u32 != 0
-            && !com_journal.is_null()
-            && (*com_journal).integer == 1 as i32
-        {
+        if isConfig as u32 != 0 && !com_journal.is_null() && (*com_journal).integer == 1 as i32 {
             Com_DPrintf(
                 b"Writing zero for %s to journal file.\n\x00" as *const u8 as *const libc::c_char,
                 qpath,
@@ -2387,10 +2269,7 @@ pub unsafe extern "C" fn FS_ReadFileDir(
         return -(1 as i32) as isize;
     }
     if buffer.is_null() {
-        if isConfig as u32 != 0
-            && !com_journal.is_null()
-            && (*com_journal).integer == 1 as i32
-        {
+        if isConfig as u32 != 0 && !com_journal.is_null() && (*com_journal).integer == 1 as i32 {
             Com_DPrintf(
                 b"Writing len for %s to journal file.\n\x00" as *const u8 as *const libc::c_char,
                 qpath,
@@ -2407,18 +2286,14 @@ pub unsafe extern "C" fn FS_ReadFileDir(
     }
     fs_loadCount += 1;
     fs_loadStack += 1;
-    buf = Hunk_AllocateTempMemory((len + 1 as i32 as isize) as i32)
-        as *mut byte;
+    buf = Hunk_AllocateTempMemory((len + 1 as i32 as isize) as i32) as *mut byte;
     *buffer = buf as *mut libc::c_void;
     FS_Read(buf as *mut libc::c_void, len as i32, h);
     // guarantee that it will have a trailing 0 for string operations
     *buf.offset(len as isize) = 0 as i32 as byte;
     FS_FCloseFile(h);
     // if we are journalling and it is a config file, write it to the journal file
-    if isConfig as u32 != 0
-        && !com_journal.is_null()
-        && (*com_journal).integer == 1 as i32
-    {
+    if isConfig as u32 != 0 && !com_journal.is_null() && (*com_journal).integer == 1 as i32 {
         Com_DPrintf(
             b"Writing %s to journal file.\n\x00" as *const u8 as *const libc::c_char,
             qpath,
@@ -2428,11 +2303,7 @@ pub unsafe extern "C" fn FS_ReadFileDir(
             ::std::mem::size_of::<isize>() as libc::c_ulong as i32,
             com_journalDataFile,
         );
-        FS_Write(
-            buf as *const libc::c_void,
-            len as i32,
-            com_journalDataFile,
-        );
+        FS_Write(buf as *const libc::c_void, len as i32, com_journalDataFile);
         FS_Flush(com_journalDataFile);
     }
     return len;
@@ -2451,12 +2322,7 @@ pub unsafe extern "C" fn FS_ReadFile(
     mut qpath: *const libc::c_char,
     mut buffer: *mut *mut libc::c_void,
 ) -> isize {
-    return FS_ReadFileDir(
-        qpath,
-        0 as *mut libc::c_void,
-        qfalse,
-        buffer,
-    );
+    return FS_ReadFileDir(qpath, 0 as *mut libc::c_void, qfalse, buffer);
 }
 /*
 =============
@@ -2547,37 +2413,35 @@ unsafe extern "C" fn FS_LoadZipFile(
     let mut pack: *mut pack_t = 0 as *mut pack_t;
     let mut uf: unzFile = 0 as *mut libc::c_void;
     let mut err: i32 = 0;
-    let mut gi: unz_global_info =
-        unz_global_info {
-            number_entry: 0,
-            size_comment: 0,
-        };
+    let mut gi: unz_global_info = unz_global_info {
+        number_entry: 0,
+        size_comment: 0,
+    };
     let mut filename_inzip: [libc::c_char; 256] = [0; 256];
-    let mut file_info: unz_file_info =
-        unz_file_info {
-            version: 0,
-            version_needed: 0,
-            flag: 0,
-            compression_method: 0,
-            dosDate: 0,
-            crc: 0,
-            compressed_size: 0,
-            uncompressed_size: 0,
-            size_filename: 0,
-            size_file_extra: 0,
-            size_file_comment: 0,
-            disk_num_start: 0,
-            internal_fa: 0,
-            external_fa: 0,
-            tmu_date: tm_unz {
-                tm_sec: 0,
-                tm_min: 0,
-                tm_hour: 0,
-                tm_mday: 0,
-                tm_mon: 0,
-                tm_year: 0,
-            },
-        };
+    let mut file_info: unz_file_info = unz_file_info {
+        version: 0,
+        version_needed: 0,
+        flag: 0,
+        compression_method: 0,
+        dosDate: 0,
+        crc: 0,
+        compressed_size: 0,
+        uncompressed_size: 0,
+        size_filename: 0,
+        size_file_extra: 0,
+        size_file_comment: 0,
+        disk_num_start: 0,
+        internal_fa: 0,
+        external_fa: 0,
+        tmu_date: tm_unz {
+            tm_sec: 0,
+            tm_min: 0,
+            tm_hour: 0,
+            tm_mday: 0,
+            tm_mon: 0,
+            tm_year: 0,
+        },
+    };
     let mut i: i32 = 0;
     let mut len: i32 = 0;
     let mut hash: isize = 0;
@@ -2586,10 +2450,7 @@ unsafe extern "C" fn FS_LoadZipFile(
     let mut namePtr: *mut libc::c_char = 0 as *mut libc::c_char;
     fs_numHeaderLongs = 0 as i32;
     uf = unzOpen(zipfile);
-    err = unzGetGlobalInfo(
-        uf,
-        &mut gi as *mut _ as *mut unz_global_info_s,
-    );
+    err = unzGetGlobalInfo(uf, &mut gi as *mut _ as *mut unz_global_info_s);
     if err != 0 as i32 {
         return 0 as *mut pack_t;
     }
@@ -2766,9 +2627,7 @@ Compares whether the given pak file matches a referenced checksum
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_CompareZipChecksum(
-    mut zipfile: *const libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn FS_CompareZipChecksum(mut zipfile: *const libc::c_char) -> qboolean {
     let mut thepak: *mut pack_t = 0 as *mut pack_t;
     let mut index: i32 = 0;
     let mut checksum: i32 = 0;
@@ -2917,12 +2776,7 @@ pub unsafe extern "C" fn FS_ListFilteredFiles(
                     //
                     if !filter.is_null() {
                         // case insensitive
-                        if !(Com_FilterPath(
-                            filter,
-                            name,
-                            qfalse as i32,
-                        ) == 0)
-                        {
+                        if !(Com_FilterPath(filter, name, qfalse as i32) == 0) {
                             // unique the match
                             nfiles = FS_AddFileToList(name, list.as_mut_ptr(), nfiles)
                         }
@@ -2930,8 +2784,7 @@ pub unsafe extern "C" fn FS_ListFilteredFiles(
                         zpathLen = FS_ReturnPath(name, zpath.as_mut_ptr(), &mut depth);
                         if !(depth - pathDepth > 2 as i32
                             || pathLength > zpathLen
-                            || Q_stricmpn(name, path, pathLength)
-                                != 0)
+                            || Q_stricmpn(name, path, pathLength) != 0)
                         {
                             // check for extension match
                             length = crate::stdlib::strlen(name) as i32;
@@ -2973,13 +2826,7 @@ pub unsafe extern "C" fn FS_ListFilteredFiles(
                     (*(*search).dir).gamedir.as_mut_ptr(),
                     path,
                 );
-                sysFiles = Sys_ListFiles(
-                    netpath,
-                    extension,
-                    filter,
-                    &mut numSysFiles,
-                    qfalse,
-                );
+                sysFiles = Sys_ListFiles(netpath, extension, filter, &mut numSysFiles, qfalse);
                 i = 0 as i32;
                 while i < numSysFiles {
                     // unique the match
@@ -3024,13 +2871,7 @@ pub unsafe extern "C" fn FS_ListFiles(
     mut extension: *const libc::c_char,
     mut numfiles: *mut i32,
 ) -> *mut *mut libc::c_char {
-    return FS_ListFilteredFiles(
-        path,
-        extension,
-        0 as *mut libc::c_char,
-        numfiles,
-        qfalse,
-    );
+    return FS_ListFilteredFiles(path, extension, 0 as *mut libc::c_char, numfiles, qfalse);
 }
 /*
 =================
@@ -3078,11 +2919,7 @@ pub unsafe extern "C" fn FS_GetFileList(
     *listbuf = 0 as i32 as libc::c_char;
     nFiles = 0 as i32;
     nTotal = 0 as i32;
-    if Q_stricmp(
-        path,
-        b"$modlist\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    if Q_stricmp(path, b"$modlist\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         return FS_GetModList(listbuf, bufsize);
     }
     pFiles = FS_ListFiles(path, extension, &mut nFiles);
@@ -3287,9 +3124,7 @@ pub unsafe extern "C" fn FS_GetModList(mut listbuf: *mut libc::c_char, mut bufsi
             bDrop = qfalse;
             j = 0 as i32;
             while j < i {
-                if Q_stricmp(*pFiles.offset(j as isize), name)
-                    == 0 as i32
-                {
+                if Q_stricmp(*pFiles.offset(j as isize), name) == 0 as i32 {
                     // this one can be dropped
                     bDrop = qtrue;
                     break;
@@ -3300,15 +3135,8 @@ pub unsafe extern "C" fn FS_GetModList(mut listbuf: *mut libc::c_char, mut bufsi
         }
         // we also drop "baseq3" "." and ".."
         if !(bDrop as u32 != 0
-            || Q_stricmp(
-                name,
-                (*com_basegame).string,
-            ) == 0 as i32
-            || Q_stricmpn(
-                name,
-                b".\x00" as *const u8 as *const libc::c_char,
-                1 as i32,
-            ) == 0 as i32)
+            || Q_stricmp(name, (*com_basegame).string) == 0 as i32
+            || Q_stricmpn(name, b".\x00" as *const u8 as *const libc::c_char, 1 as i32) == 0 as i32)
         {
             // in order to be a valid mod the directory must contain at least one .pk3 or .pk3dir
             // we didn't keep the information when we merged the directory names, as to what OS Path it was found under
@@ -3403,12 +3231,8 @@ pub unsafe extern "C" fn FS_Dir_f() {
     let mut dirnames: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
     let mut ndirs: i32 = 0;
     let mut i: i32 = 0;
-    if Cmd_Argc() < 2 as i32
-        || Cmd_Argc() > 3 as i32
-    {
-        Com_Printf(
-            b"usage: dir <directory> [extension]\n\x00" as *const u8 as *const libc::c_char,
-        );
+    if Cmd_Argc() < 2 as i32 || Cmd_Argc() > 3 as i32 {
+        Com_Printf(b"usage: dir <directory> [extension]\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     if Cmd_Argc() == 2 as i32 {
@@ -3423,9 +3247,7 @@ pub unsafe extern "C" fn FS_Dir_f() {
         path,
         extension,
     );
-    Com_Printf(
-        b"---------------\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"---------------\n\x00" as *const u8 as *const libc::c_char);
     dirnames = FS_ListFiles(path, extension, &mut ndirs);
     i = 0 as i32;
     while i < ndirs {
@@ -3562,18 +3384,12 @@ pub unsafe extern "C" fn FS_NewDir_f() {
     let mut ndirs: i32 = 0;
     let mut i: i32 = 0;
     if Cmd_Argc() < 2 as i32 {
-        Com_Printf(
-            b"usage: fdir <filter>\n\x00" as *const u8 as *const libc::c_char,
-        );
-        Com_Printf(
-            b"example: fdir *q3dm*.bsp\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"usage: fdir <filter>\n\x00" as *const u8 as *const libc::c_char);
+        Com_Printf(b"example: fdir *q3dm*.bsp\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     filter = Cmd_Argv(1 as i32);
-    Com_Printf(
-        b"---------------\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"---------------\n\x00" as *const u8 as *const libc::c_char);
     dirnames = FS_ListFilteredFiles(
         b"\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
@@ -3625,9 +3441,7 @@ pub unsafe extern "C" fn FS_Path_f() {
                         b"    not on the pure list\n\x00" as *const u8 as *const libc::c_char,
                     );
                 } else {
-                    Com_Printf(
-                        b"    on the pure list\n\x00" as *const u8 as *const libc::c_char,
-                    );
+                    Com_Printf(b"    on the pure list\n\x00" as *const u8 as *const libc::c_char);
                 }
             }
         } else {
@@ -3663,16 +3477,10 @@ FS_TouchFile_f
 pub unsafe extern "C" fn FS_TouchFile_f() {
     let mut f: fileHandle_t = 0;
     if Cmd_Argc() != 2 as i32 {
-        Com_Printf(
-            b"Usage: touchFile <file>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Usage: touchFile <file>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
-    FS_FOpenFileRead(
-        Cmd_Argv(1 as i32),
-        &mut f,
-        qfalse,
-    );
+    FS_FOpenFileRead(Cmd_Argv(1 as i32), &mut f, qfalse);
     if f != 0 {
         FS_FCloseFile(f);
     };
@@ -3689,13 +3497,8 @@ pub unsafe extern "C" fn FS_Which(
     mut searchPath: *mut libc::c_void,
 ) -> qboolean {
     let mut search: *mut searchpath_t = searchPath as *mut searchpath_t;
-    if FS_FOpenFileReadDir(
-        filename,
-        search,
-        0 as *mut fileHandle_t,
-        qfalse,
-        qfalse,
-    ) > 0 as i32 as isize
+    if FS_FOpenFileReadDir(filename, search, 0 as *mut fileHandle_t, qfalse, qfalse)
+        > 0 as i32 as isize
     {
         if !(*search).pack.is_null() {
             Com_Printf(
@@ -3729,9 +3532,7 @@ pub unsafe extern "C" fn FS_Which_f() {
     let mut filename: *mut libc::c_char = 0 as *mut libc::c_char;
     filename = Cmd_Argv(1 as i32);
     if *filename.offset(0 as i32 as isize) == 0 {
-        Com_Printf(
-            b"Usage: which <file>\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Usage: which <file>\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     // qpaths are not supposed to have a leading slash
@@ -3894,10 +3695,8 @@ pub unsafe extern "C" fn FS_AddGameDirectory(
                     ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
                 );
                 fs_packFiles += (*pak).numfiles;
-                search =
-                    Z_Malloc(::std::mem::size_of::<searchpath_t>()
-                        as libc::c_ulong
-                        as i32) as *mut searchpath_t;
+                search = Z_Malloc(::std::mem::size_of::<searchpath_t>() as libc::c_ulong as i32)
+                    as *mut searchpath_t;
                 (*search).pack = pak;
                 (*search).next = fs_searchpaths;
                 fs_searchpaths = search;
@@ -3919,14 +3718,11 @@ pub unsafe extern "C" fn FS_AddGameDirectory(
             } else {
                 pakfile = FS_BuildOSPath(path, dir, *pakdirs.offset(pakdirsi as isize));
                 // add the directory to the search path
-                search =
-                    Z_Malloc(::std::mem::size_of::<searchpath_t>()
-                        as libc::c_ulong
-                        as i32) as *mut searchpath_t; // c:\quake3\baseq3
+                search = Z_Malloc(::std::mem::size_of::<searchpath_t>() as libc::c_ulong as i32)
+                    as *mut searchpath_t; // c:\quake3\baseq3
                 (*search).dir =
-                    Z_Malloc(::std::mem::size_of::<directory_t>()
-                        as libc::c_ulong
-                        as i32) as *mut directory_t; // c:\quake3\baseq3\mypak.pk3dir
+                    Z_Malloc(::std::mem::size_of::<directory_t>() as libc::c_ulong as i32)
+                        as *mut directory_t; // c:\quake3\baseq3\mypak.pk3dir
                 Q_strncpyz(
                     (*(*search).dir).path.as_mut_ptr(),
                     curpath.as_mut_ptr(),
@@ -3954,12 +3750,10 @@ pub unsafe extern "C" fn FS_AddGameDirectory(
     //
     // add the directory to the search path
     //
-    search = Z_Malloc(
-        ::std::mem::size_of::<searchpath_t>() as libc::c_ulong as i32
-    ) as *mut searchpath_t;
-    (*search).dir = Z_Malloc(
-        ::std::mem::size_of::<directory_t>() as libc::c_ulong as i32
-    ) as *mut directory_t;
+    search = Z_Malloc(::std::mem::size_of::<searchpath_t>() as libc::c_ulong as i32)
+        as *mut searchpath_t;
+    (*search).dir =
+        Z_Malloc(::std::mem::size_of::<directory_t>() as libc::c_ulong as i32) as *mut directory_t;
     Q_strncpyz(
         (*(*search).dir).path.as_mut_ptr(),
         path,
@@ -4022,9 +3816,7 @@ and return qtrue if it does.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_CheckDirTraversal(
-    mut checkdir: *const libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn FS_CheckDirTraversal(mut checkdir: *const libc::c_char) -> qboolean {
     if !libc::strstr(checkdir, b"../\x00" as *const u8 as *const libc::c_char).is_null()
         || !libc::strstr(checkdir, b"..\\\x00" as *const u8 as *const libc::c_char).is_null()
     {
@@ -4042,9 +3834,7 @@ or a sub-directory
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_InvalidGameDir(
-    mut gamedir: *const libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn FS_InvalidGameDir(mut gamedir: *const libc::c_char) -> qboolean {
     if libc::strcmp(gamedir, b".\x00" as *const u8 as *const libc::c_char) == 0
         || libc::strcmp(gamedir, b"..\x00" as *const u8 as *const libc::c_char) == 0
         || !libc::strchr(gamedir, '/' as i32).is_null()
@@ -4088,8 +3878,7 @@ pub unsafe extern "C" fn FS_ComparePaks(
     mut dlstring: qboolean,
 ) -> qboolean {
     let mut sp: *mut searchpath_t = 0 as *mut searchpath_t; // Server didn't send any pack information along
-    let mut havepak: qboolean =
-        qfalse;
+    let mut havepak: qboolean = qfalse;
     let mut origpos: *mut libc::c_char = neededpaks;
     let mut i: i32 = 0;
     if fs_numServerReferencedPaks == 0 {
@@ -4148,11 +3937,7 @@ pub unsafe extern "C" fn FS_ComparePaks(
                             len,
                             b"@\x00" as *const u8 as *const libc::c_char,
                         );
-                        Q_strcat(
-                            neededpaks,
-                            len,
-                            fs_serverReferencedPakNames[i as usize],
-                        );
+                        Q_strcat(neededpaks, len, fs_serverReferencedPakNames[i as usize]);
                         Q_strcat(
                             neededpaks,
                             len,
@@ -4182,17 +3967,9 @@ pub unsafe extern "C" fn FS_ComparePaks(
                                 fs_serverReferencedPakNames[i as usize],
                                 fs_serverReferencedPaks[i as usize],
                             );
-                            Q_strcat(
-                                neededpaks,
-                                len,
-                                st.as_mut_ptr(),
-                            );
+                            Q_strcat(neededpaks, len, st.as_mut_ptr());
                         } else {
-                            Q_strcat(
-                                neededpaks,
-                                len,
-                                fs_serverReferencedPakNames[i as usize],
-                            );
+                            Q_strcat(neededpaks, len, fs_serverReferencedPakNames[i as usize]);
                             Q_strcat(
                                 neededpaks,
                                 len,
@@ -4209,11 +3986,7 @@ pub unsafe extern "C" fn FS_ComparePaks(
                             break;
                         }
                     } else {
-                        Q_strcat(
-                            neededpaks,
-                            len,
-                            fs_serverReferencedPakNames[i as usize],
-                        );
+                        Q_strcat(neededpaks, len, fs_serverReferencedPakNames[i as usize]);
                         Q_strcat(
                             neededpaks,
                             len,
@@ -4288,9 +4061,7 @@ pub unsafe extern "C" fn FS_Shutdown(mut _closemfp: qboolean) {
     Cmd_RemoveCommand(b"path\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"dir\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"fdir\x00" as *const u8 as *const libc::c_char);
-    Cmd_RemoveCommand(
-        b"touchFile\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"touchFile\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"which\x00" as *const u8 as *const libc::c_char);
 }
 /*
@@ -4344,9 +4115,7 @@ FS_Startup
 
 unsafe extern "C" fn FS_Startup(mut gameName: *const libc::c_char) {
     let mut homePath: *const libc::c_char = 0 as *const libc::c_char;
-    Com_Printf(
-        b"----- FS_Startup -----\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"----- FS_Startup -----\n\x00" as *const u8 as *const libc::c_char);
     fs_packFiles = 0 as i32;
     fs_debug = Cvar_Get(
         b"fs_debug\x00" as *const u8 as *const libc::c_char,
@@ -4378,17 +4147,13 @@ unsafe extern "C" fn FS_Startup(mut gameName: *const libc::c_char) {
         0x10 as i32 | 0x8 as i32,
     ) as *mut cvar_s;
     if *gameName.offset(0 as i32 as isize) == 0 {
-        Cvar_ForceReset(
-            b"com_basegame\x00" as *const u8 as *const libc::c_char,
-        );
+        Cvar_ForceReset(b"com_basegame\x00" as *const u8 as *const libc::c_char);
     }
     if FS_FilenameCompare((*fs_gamedirvar).string, gameName) as u64 == 0 {
         // This is the standard base game. Servers and clients should
         // use "" and not the standard basegame name because this messes
         // up pak file negotiation and lots of other stuff
-        Cvar_ForceReset(
-            b"fs_game\x00" as *const u8 as *const libc::c_char,
-        );
+        Cvar_ForceReset(b"fs_game\x00" as *const u8 as *const libc::c_char);
     }
     if FS_InvalidGameDir(gameName) as u64 != 0 {
         Com_Error(
@@ -4434,8 +4199,7 @@ unsafe extern "C" fn FS_Startup(mut gameName: *const libc::c_char) {
     // fs_homepath is somewhat particular to *nix systems, only add if relevant
     // NOTE: same filtering below for mods and basegame
     if *(*fs_homepath).string.offset(0 as i32 as isize) as i32 != 0
-        && Q_stricmp((*fs_homepath).string, (*fs_basepath).string)
-            != 0
+        && Q_stricmp((*fs_homepath).string, (*fs_basepath).string) != 0
     {
         FS_CreatePath((*fs_homepath).string);
         FS_AddGameDirectory((*fs_homepath).string, gameName);
@@ -4454,10 +4218,7 @@ unsafe extern "C" fn FS_Startup(mut gameName: *const libc::c_char) {
             FS_AddGameDirectory((*fs_basepath).string, (*fs_basegame).string);
         }
         if *(*fs_homepath).string.offset(0 as i32 as isize) as i32 != 0
-            && Q_stricmp(
-                (*fs_homepath).string,
-                (*fs_basepath).string,
-            ) != 0
+            && Q_stricmp((*fs_homepath).string, (*fs_basepath).string) != 0
         {
             FS_AddGameDirectory((*fs_homepath).string, (*fs_basegame).string);
         }
@@ -4476,10 +4237,7 @@ unsafe extern "C" fn FS_Startup(mut gameName: *const libc::c_char) {
             FS_AddGameDirectory((*fs_basepath).string, (*fs_gamedirvar).string);
         }
         if *(*fs_homepath).string.offset(0 as i32 as isize) as i32 != 0
-            && Q_stricmp(
-                (*fs_homepath).string,
-                (*fs_basepath).string,
-            ) != 0
+            && Q_stricmp((*fs_homepath).string, (*fs_basepath).string) != 0
         {
             FS_AddGameDirectory((*fs_homepath).string, (*fs_gamedirvar).string);
         }
@@ -4517,9 +4275,7 @@ unsafe extern "C" fn FS_Startup(mut gameName: *const libc::c_char) {
     // print the current search paths
     FS_Path_f(); // We just loaded, it's not modified
     (*fs_gamedirvar).modified = qfalse;
-    Com_Printf(
-        b"----------------------\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_Printf(b"----------------------\n\x00" as *const u8 as *const libc::c_char);
     Com_Printf(
         b"%d files in pk3 files\n\x00" as *const u8 as *const libc::c_char,
         fs_packFiles,
@@ -4542,8 +4298,7 @@ unsafe extern "C" fn FS_CheckPak0() {
     let mut path: *mut searchpath_t = 0 as *mut searchpath_t;
     let mut curpack: *mut pack_t = 0 as *mut pack_t;
     let mut pakBasename: *const libc::c_char = 0 as *const libc::c_char;
-    let mut founddemo: qboolean =
-        qfalse;
+    let mut founddemo: qboolean = qfalse;
     let mut foundPak: u32 = 0 as i32 as u32;
     let mut foundTA: u32 = 0 as i32 as u32;
     path = fs_searchpaths;
@@ -4692,9 +4447,7 @@ unsafe extern "C" fn FS_CheckPak0() {
             }
         }
     }
-    if (*com_standalone).integer == 0
-        && foundPak & 0x1ff as i32 as u32 != 0x1ff as i32 as u32
-    {
+    if (*com_standalone).integer == 0 && foundPak & 0x1ff as i32 as u32 != 0x1ff as i32 as u32 {
         let mut errorText: [libc::c_char; 1024] =
             *::std::mem::transmute::<&[u8; 1024],
                                      &mut [libc::c_char; 1024]>(b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00");
@@ -4875,8 +4628,7 @@ pub unsafe extern "C" fn FS_ReferencedPakChecksums() -> *const libc::c_char {
                 || Q_stricmpn(
                     (*(*search).pack).pakGamename.as_mut_ptr(),
                     (*com_basegame).string,
-                    crate::stdlib::strlen((*com_basegame).string)
-                        as i32,
+                    crate::stdlib::strlen((*com_basegame).string) as i32,
                 ) != 0
             {
                 Q_strcat(
@@ -4984,8 +4736,7 @@ pub unsafe extern "C" fn FS_ReferencedPakNames() -> *const libc::c_char {
                 || Q_stricmpn(
                     (*(*search).pack).pakGamename.as_mut_ptr(),
                     (*com_basegame).string,
-                    crate::stdlib::strlen((*com_basegame).string)
-                        as i32,
+                    crate::stdlib::strlen((*com_basegame).string) as i32,
                 ) != 0
             {
                 if *info.as_mut_ptr() != 0 {
@@ -5068,15 +4819,11 @@ pub unsafe extern "C" fn FS_PureServerSetLoadedPaks(
         i += 1
     }
     if fs_numServerPaks != 0 {
-        Com_DPrintf(
-            b"Connected to a pure server.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_DPrintf(b"Connected to a pure server.\n\x00" as *const u8 as *const libc::c_char);
     } else if fs_reordered as u64 != 0 {
         // https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=540
         // force a restart to make sure the search order will be correct
-        Com_DPrintf(
-            b"FS search reorder is required\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_DPrintf(b"FS search reorder is required\n\x00" as *const u8 as *const libc::c_char);
         FS_Restart(fs_checksumFeed);
         return;
     }
@@ -5096,8 +4843,7 @@ pub unsafe extern "C" fn FS_PureServerSetLoadedPaks(
         }
         i = 0 as i32;
         while i < d {
-            fs_serverPakNames[i as usize] =
-                CopyString(Cmd_Argv(i));
+            fs_serverPakNames[i as usize] = CopyString(Cmd_Argv(i));
             i += 1
         }
     };
@@ -5136,9 +4882,7 @@ pub unsafe extern "C" fn FS_PureServerSetReferencedPaks(
             .wrapping_div(::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong)
     {
         if !fs_serverReferencedPakNames[i as usize].is_null() {
-            Z_Free(
-                fs_serverReferencedPakNames[i as usize] as *mut libc::c_void,
-            );
+            Z_Free(fs_serverReferencedPakNames[i as usize] as *mut libc::c_void);
         }
         fs_serverReferencedPakNames[i as usize] = 0 as *mut libc::c_char;
         i += 1
@@ -5151,8 +4895,7 @@ pub unsafe extern "C" fn FS_PureServerSetReferencedPaks(
         }
         i = 0 as i32;
         while i < d {
-            fs_serverReferencedPakNames[i as usize] =
-                CopyString(Cmd_Argv(i));
+            fs_serverReferencedPakNames[i as usize] = CopyString(Cmd_Argv(i));
             i += 1
         }
     }
@@ -5177,19 +4920,11 @@ pub unsafe extern "C" fn FS_InitFilesystem() {
     // we have to specially handle this, because normal command
     // line variable sets don't happen until after the filesystem
     // has already been initialized
-    Com_StartupVariable(
-        b"fs_basepath\x00" as *const u8 as *const libc::c_char,
-    );
-    Com_StartupVariable(
-        b"fs_homepath\x00" as *const u8 as *const libc::c_char,
-    );
-    Com_StartupVariable(
-        b"fs_game\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_StartupVariable(b"fs_basepath\x00" as *const u8 as *const libc::c_char);
+    Com_StartupVariable(b"fs_homepath\x00" as *const u8 as *const libc::c_char);
+    Com_StartupVariable(b"fs_game\x00" as *const u8 as *const libc::c_char);
     if FS_FilenameCompare(
-        Cvar_VariableString(
-            b"fs_game\x00" as *const u8 as *const libc::c_char,
-        ),
+        Cvar_VariableString(b"fs_game\x00" as *const u8 as *const libc::c_char),
         (*com_basegame).string,
     ) as u64
         == 0
@@ -5310,9 +5045,7 @@ pub unsafe extern "C" fn FS_Restart(mut checksumFeed: i32) {
         Sys_InitPIDFile(FS_GetCurrentGameDir());
         // skip the q3config.cfg if "safe" is on the command line
         if Com_SafeMode() as u64 == 0 {
-            Cbuf_AddText(
-                b"exec q3config.cfg\n\x00" as *const u8 as *const libc::c_char,
-            );
+            Cbuf_AddText(b"exec q3config.cfg\n\x00" as *const u8 as *const libc::c_char);
         }
     }
     Q_strncpyz(
@@ -5353,16 +5086,9 @@ pub unsafe extern "C" fn FS_ConditionalRestart(
     if (*fs_gamedirvar).modified as u64 != 0 {
         if FS_FilenameCompare(lastValidGame.as_mut_ptr(), (*fs_gamedirvar).string) as u32 != 0
             && (*lastValidGame.as_mut_ptr() as i32 != 0
-                || FS_FilenameCompare(
-                    (*fs_gamedirvar).string,
-                    (*com_basegame).string,
-                ) as u32
-                    != 0)
+                || FS_FilenameCompare((*fs_gamedirvar).string, (*com_basegame).string) as u32 != 0)
             && (*(*fs_gamedirvar).string as i32 != 0
-                || FS_FilenameCompare(
-                    lastValidGame.as_mut_ptr(),
-                    (*com_basegame).string,
-                ) as u32
+                || FS_FilenameCompare(lastValidGame.as_mut_ptr(), (*com_basegame).string) as u32
                     != 0)
         {
             Com_GameRestart(checksumFeed, disconnect);

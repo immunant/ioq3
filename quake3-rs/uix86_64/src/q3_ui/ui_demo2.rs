@@ -316,8 +316,7 @@ static mut s_demos: demos_t = demos_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -339,8 +338,7 @@ static mut s_demos: demos_t = demos_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -366,8 +364,7 @@ static mut s_demos: demos_t = demos_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -393,8 +390,7 @@ static mut s_demos: demos_t = demos_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -422,8 +418,7 @@ static mut s_demos: demos_t = demos_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -449,8 +444,7 @@ static mut s_demos: demos_t = demos_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -476,8 +470,7 @@ static mut s_demos: demos_t = demos_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -503,8 +496,7 @@ static mut s_demos: demos_t = demos_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -530,8 +522,7 @@ static mut s_demos: demos_t = demos_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -698,16 +689,14 @@ unsafe extern "C" fn Demos_MenuInit() {
     s_demos.list.height = 14 as i32;
     s_demos.list.itemnames = s_demos.demolist.as_mut_ptr() as *mut *const libc::c_char;
     s_demos.list.columns = 3 as i32;
-    protocolLegacy = trap_Cvar_VariableValue(
-        b"com_legacyprotocol\x00" as *const u8 as *const libc::c_char,
-    ) as i32;
-    protocol = trap_Cvar_VariableValue(
-        b"com_protocol\x00" as *const u8 as *const libc::c_char,
-    ) as i32;
+    protocolLegacy =
+        trap_Cvar_VariableValue(b"com_legacyprotocol\x00" as *const u8 as *const libc::c_char)
+            as i32;
+    protocol =
+        trap_Cvar_VariableValue(b"com_protocol\x00" as *const u8 as *const libc::c_char) as i32;
     if protocol == 0 {
-        protocol = trap_Cvar_VariableValue(
-            b"protocol\x00" as *const u8 as *const libc::c_char,
-        ) as i32
+        protocol =
+            trap_Cvar_VariableValue(b"protocol\x00" as *const u8 as *const libc::c_char) as i32
     }
     if protocolLegacy == protocol {
         protocolLegacy = 0 as i32
@@ -817,27 +806,13 @@ Demos_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn Demos_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/play_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/play_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/arrows_horz_0\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/play_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/play_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/arrows_horz_0\x00" as *const u8 as *const libc::c_char);
     trap_R_RegisterShaderNoMip(
         b"menu/art/arrows_horz_left\x00" as *const u8 as *const libc::c_char,
     );
@@ -922,7 +897,5 @@ UI_DemosMenu
 
 pub unsafe extern "C" fn UI_DemosMenu() {
     Demos_MenuInit();
-    UI_PushMenu(
-        &mut s_demos.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_demos.menu as *mut _ as *mut _tag_menuframework);
 }

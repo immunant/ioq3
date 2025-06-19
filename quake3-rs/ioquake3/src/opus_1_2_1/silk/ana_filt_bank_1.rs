@@ -35,11 +35,9 @@ POSSIBILITY OF SUCH DAMAGE.
 ***********************************************************************/
 /* Coefficients for 2-band filter bank based on first-order allpass filters */
 
-static mut A_fb1_20: opus_int16 =
-    ((5394 as i32) << 1 as i32) as opus_int16;
+static mut A_fb1_20: opus_int16 = ((5394 as i32) << 1 as i32) as opus_int16;
 
-static mut A_fb1_21: opus_int16 =
-    -(24290 as i32) as opus_int16;
+static mut A_fb1_21: opus_int16 = -(24290 as i32) as opus_int16;
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
 Redistribution and use in source and binary forms, with or without
@@ -163,18 +161,15 @@ pub unsafe extern "C" fn silk_ana_filt_bank_1(
     k = 0 as i32;
     while k < N2 {
         /* Convert to Q10 */
-        in32 = ((*in_0.offset((2 as i32 * k) as isize) as opus_int32
-            as opus_uint32)
-            << 10 as i32) as opus_int32;
+        in32 = ((*in_0.offset((2 as i32 * k) as isize) as opus_int32 as opus_uint32) << 10 as i32)
+            as opus_int32;
         /* All-pass section for even input sample */
         Y = in32 - *S.offset(0 as i32 as isize);
-        X = (Y as i64 + (Y as i64 * A_fb1_21 as i64 >> 16 as i32))
-            as opus_int32;
+        X = (Y as i64 + (Y as i64 * A_fb1_21 as i64 >> 16 as i32)) as opus_int32;
         out_1 = *S.offset(0 as i32 as isize) + X;
         *S.offset(0 as i32 as isize) = in32 + X;
         /* Convert to Q10 */
-        in32 = ((*in_0.offset((2 as i32 * k + 1 as i32) as isize) as opus_int32
-            as opus_uint32)
+        in32 = ((*in_0.offset((2 as i32 * k + 1 as i32) as isize) as opus_int32 as opus_uint32)
             << 10 as i32) as opus_int32;
         /* All-pass section for odd input sample, and add to output of previous section */
         Y = in32 - *S.offset(1 as i32 as isize);

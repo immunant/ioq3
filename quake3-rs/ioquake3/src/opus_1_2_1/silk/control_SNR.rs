@@ -142,8 +142,7 @@ pub unsafe extern "C" fn silk_control_SNR(
     let mut k: i32 = 0;
     let mut ret: i32 = 0 as i32;
     let mut frac_Q6: opus_int32 = 0;
-    let mut rateTable: *const opus_int32 =
-        0 as *const opus_int32;
+    let mut rateTable: *const opus_int32 = 0 as *const opus_int32;
     /* Set bitrate/coding quality */
     TargetRate_bps = if 5000 as i32 > 80000 as i32 {
         if TargetRate_bps > 5000 as i32 {
@@ -187,8 +186,7 @@ pub unsafe extern "C" fn silk_control_SNR(
                     / (*rateTable.offset(k as isize) - *rateTable.offset((k - 1 as i32) as isize));
                 (*psEncC).SNR_dB_Q7 =
                     ((crate::src::opus_1_2_1::silk::tables_other::silk_SNR_table_Q1
-                        [(k - 1 as i32) as usize]
-                        as opus_uint32)
+                        [(k - 1 as i32) as usize] as opus_uint32)
                         << 6 as i32) as opus_int32
                         + frac_Q6
                             * (crate::src::opus_1_2_1::silk::tables_other::silk_SNR_table_Q1

@@ -364,14 +364,12 @@ pub unsafe extern "C" fn silk_encode_indices(
     let mut delta_lagIndex: i32 = 0;
     let mut ec_ix: [opus_int16; 16] = [0; 16];
     let mut pred_Q8: [u8; 16] = [0; 16];
-    let mut psIndices: *const SideInfoIndices =
-        0 as *const SideInfoIndices;
+    let mut psIndices: *const SideInfoIndices = 0 as *const SideInfoIndices;
     if encode_LBRR != 0 {
         psIndices = &mut *(*psEncC)
             .indices_LBRR
             .as_mut_ptr()
-            .offset(FrameIndex as isize)
-            as *mut SideInfoIndices
+            .offset(FrameIndex as isize) as *mut SideInfoIndices
     } else {
         psIndices = &mut (*psEncC).indices
     }
@@ -535,10 +533,8 @@ pub unsafe extern "C" fn silk_encode_indices(
             let mut pitch_low_bits: opus_int32 = 0;
             pitch_high_bits = (*psIndices).lagIndex as i32 / ((*psEncC).fs_kHz >> 1 as i32);
             pitch_low_bits = (*psIndices).lagIndex as i32
-                - pitch_high_bits as opus_int16
-                    as opus_int32
-                    * ((*psEncC).fs_kHz >> 1 as i32) as opus_int16
-                        as opus_int32;
+                - pitch_high_bits as opus_int16 as opus_int32
+                    * ((*psEncC).fs_kHz >> 1 as i32) as opus_int16 as opus_int32;
             crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
                 psRangeEnc as *mut ec_ctx,
                 pitch_high_bits,

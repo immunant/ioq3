@@ -110,12 +110,7 @@ pub unsafe extern "C" fn fread_file_func(
     mut size: uLong,
 ) -> uLong {
     let mut ret: uLong = 0;
-    ret = crate::stdlib::fread(
-        buf,
-        1 as i32 as libc::c_ulong,
-        size,
-        stream as *mut FILE,
-    );
+    ret = crate::stdlib::fread(buf, 1 as i32 as libc::c_ulong, size, stream as *mut FILE);
     return ret;
 }
 #[no_mangle]
@@ -127,20 +122,12 @@ pub unsafe extern "C" fn fwrite_file_func(
     mut size: uLong,
 ) -> uLong {
     let mut ret: uLong = 0;
-    ret = crate::stdlib::fwrite(
-        buf,
-        1 as i32 as libc::c_ulong,
-        size,
-        stream as *mut FILE,
-    );
+    ret = crate::stdlib::fwrite(buf, 1 as i32 as libc::c_ulong, size, stream as *mut FILE);
     return ret;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ftell_file_func(
-    mut _opaque: voidpf,
-    mut stream: voidpf,
-) -> isize {
+pub unsafe extern "C" fn ftell_file_func(mut _opaque: voidpf, mut stream: voidpf) -> isize {
     let mut ret: isize = 0;
     ret = crate::stdlib::ftell(stream as *mut FILE);
     return ret;
@@ -162,29 +149,19 @@ pub unsafe extern "C" fn fseek_file_func(
         _ => return -(1 as i32) as isize,
     }
     ret = 0 as i32 as isize;
-    crate::stdlib::fseek(
-        stream as *mut FILE,
-        offset as isize,
-        fseek_origin,
-    );
+    crate::stdlib::fseek(stream as *mut FILE, offset as isize, fseek_origin);
     return ret;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn fclose_file_func(
-    mut _opaque: voidpf,
-    mut stream: voidpf,
-) -> i32 {
+pub unsafe extern "C" fn fclose_file_func(mut _opaque: voidpf, mut stream: voidpf) -> i32 {
     let mut ret: i32 = 0;
     ret = crate::stdlib::fclose(stream as *mut FILE);
     return ret;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ferror_file_func(
-    mut _opaque: voidpf,
-    mut stream: voidpf,
-) -> i32 {
+pub unsafe extern "C" fn ferror_file_func(mut _opaque: voidpf, mut stream: voidpf) -> i32 {
     let mut ret: i32 = 0;
     ret = crate::stdlib::ferror(stream as *mut FILE);
     return ret;
@@ -198,35 +175,21 @@ pub unsafe extern "C" fn fill_fopen_filefunc(
         Option<unsafe extern "C" fn() -> voidpf>,
         crate::src::qcommon::ioapi::open_file_func,
     >(Some(::std::mem::transmute::<
-        unsafe extern "C" fn(
-            _: voidpf,
-            _: *const libc::c_char,
-            _: i32,
-        ) -> voidpf,
+        unsafe extern "C" fn(_: voidpf, _: *const libc::c_char, _: i32) -> voidpf,
         unsafe extern "C" fn() -> voidpf,
     >(fopen_file_func)));
     (*pzlib_filefunc_def).zread_file = ::std::mem::transmute::<
         Option<unsafe extern "C" fn() -> uLong>,
         crate::src::qcommon::ioapi::read_file_func,
     >(Some(::std::mem::transmute::<
-        unsafe extern "C" fn(
-            _: voidpf,
-            _: voidpf,
-            _: *mut libc::c_void,
-            _: uLong,
-        ) -> uLong,
+        unsafe extern "C" fn(_: voidpf, _: voidpf, _: *mut libc::c_void, _: uLong) -> uLong,
         unsafe extern "C" fn() -> uLong,
     >(fread_file_func)));
     (*pzlib_filefunc_def).zwrite_file = ::std::mem::transmute::<
         Option<unsafe extern "C" fn() -> uLong>,
         crate::src::qcommon::ioapi::write_file_func,
     >(Some(::std::mem::transmute::<
-        unsafe extern "C" fn(
-            _: voidpf,
-            _: voidpf,
-            _: *const libc::c_void,
-            _: uLong,
-        ) -> uLong,
+        unsafe extern "C" fn(_: voidpf, _: voidpf, _: *const libc::c_void, _: uLong) -> uLong,
         unsafe extern "C" fn() -> uLong,
     >(fwrite_file_func)));
     (*pzlib_filefunc_def).ztell_file = ::std::mem::transmute::<
@@ -240,12 +203,7 @@ pub unsafe extern "C" fn fill_fopen_filefunc(
         Option<unsafe extern "C" fn() -> isize>,
         crate::src::qcommon::ioapi::seek_file_func,
     >(Some(::std::mem::transmute::<
-        unsafe extern "C" fn(
-            _: voidpf,
-            _: voidpf,
-            _: uLong,
-            _: i32,
-        ) -> isize,
+        unsafe extern "C" fn(_: voidpf, _: voidpf, _: uLong, _: i32) -> isize,
         unsafe extern "C" fn() -> isize,
     >(fseek_file_func)));
     (*pzlib_filefunc_def).zclose_file = ::std::mem::transmute::<

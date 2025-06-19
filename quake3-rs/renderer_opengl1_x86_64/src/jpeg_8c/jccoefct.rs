@@ -241,10 +241,7 @@ unsafe extern "C" fn start_iMCU_row(mut cinfo: j_compress_ptr)
  * Initialize for a processing pass.
  */
 
-unsafe extern "C" fn start_pass_coef(
-    mut cinfo: j_compress_ptr,
-    mut pass_mode: J_BUF_MODE,
-) {
+unsafe extern "C" fn start_pass_coef(mut cinfo: j_compress_ptr, mut pass_mode: J_BUF_MODE) {
     let mut coef: my_coef_ptr = (*cinfo).coef as my_coef_ptr;
     (*coef).iMCU_row_num = 0 as i32 as JDIMENSION;
     start_iMCU_row(cinfo);
@@ -257,16 +254,10 @@ unsafe extern "C" fn start_pass_coef(
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             (*coef).pub_0.compress_data = Some(
-                compress_data
-                    as unsafe extern "C" fn(
-                        _: j_compress_ptr,
-                        _: JSAMPIMAGE,
-                    ) -> boolean,
+                compress_data as unsafe extern "C" fn(_: j_compress_ptr, _: JSAMPIMAGE) -> boolean,
             )
         }
         3 => {
@@ -277,16 +268,11 @@ unsafe extern "C" fn start_pass_coef(
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             (*coef).pub_0.compress_data = Some(
                 compress_first_pass
-                    as unsafe extern "C" fn(
-                        _: j_compress_ptr,
-                        _: JSAMPIMAGE,
-                    ) -> boolean,
+                    as unsafe extern "C" fn(_: j_compress_ptr, _: JSAMPIMAGE) -> boolean,
             )
         }
         2 => {
@@ -297,16 +283,11 @@ unsafe extern "C" fn start_pass_coef(
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             (*coef).pub_0.compress_data = Some(
                 compress_output
-                    as unsafe extern "C" fn(
-                        _: j_compress_ptr,
-                        _: JSAMPIMAGE,
-                    ) -> boolean,
+                    as unsafe extern "C" fn(_: j_compress_ptr, _: JSAMPIMAGE) -> boolean,
             )
         }
         _ => {
@@ -316,9 +297,7 @@ unsafe extern "C" fn start_pass_coef(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
     };
 }
@@ -339,10 +318,8 @@ unsafe extern "C" fn compress_data(
 ) -> boolean {
     let mut coef: my_coef_ptr = (*cinfo).coef as my_coef_ptr; /* index of current MCU within row */
     let mut MCU_col_num: JDIMENSION = 0;
-    let mut last_MCU_col: JDIMENSION =
-        (*cinfo).MCUs_per_row.wrapping_sub(1 as i32 as u32);
-    let mut last_iMCU_row: JDIMENSION =
-        (*cinfo).total_iMCU_rows.wrapping_sub(1 as i32 as u32);
+    let mut last_MCU_col: JDIMENSION = (*cinfo).MCUs_per_row.wrapping_sub(1 as i32 as u32);
+    let mut last_iMCU_row: JDIMENSION = (*cinfo).total_iMCU_rows.wrapping_sub(1 as i32 as u32);
     let mut blkn: i32 = 0;
     let mut bi: i32 = 0;
     let mut ci: i32 = 0;
@@ -351,8 +328,7 @@ unsafe extern "C" fn compress_data(
     let mut blockcnt: i32 = 0;
     let mut ypos: JDIMENSION = 0;
     let mut xpos: JDIMENSION = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut forward_DCT: forward_DCT_ptr = None;
     /* Loop to write as much as one whole iMCU row */
     yoffset = (*coef).MCU_vert_offset;
@@ -400,10 +376,8 @@ unsafe extern "C" fn compress_data(
                             /* Create some dummy blocks at the right edge of the image. */
                             jzero_far(
                                 (*coef).MCU_buffer[(blkn + blockcnt) as usize] as *mut libc::c_void,
-                                (((*compptr).MCU_width - blockcnt) as libc::c_ulong).wrapping_mul(
-                                    ::std::mem::size_of::<JBLOCK>()
-                                        as libc::c_ulong,
-                                ),
+                                (((*compptr).MCU_width - blockcnt) as libc::c_ulong)
+                                    .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
                             );
                             bi = blockcnt;
                             while bi < (*compptr).MCU_width {
@@ -421,8 +395,7 @@ unsafe extern "C" fn compress_data(
                         jzero_far(
                             (*coef).MCU_buffer[blkn as usize] as *mut libc::c_void,
                             ((*compptr).MCU_width as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<JBLOCK>()
-                                    as libc::c_ulong),
+                                .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
                         );
                         bi = 0 as i32;
                         while bi < (*compptr).MCU_width {
@@ -435,8 +408,7 @@ unsafe extern "C" fn compress_data(
                     }
                     blkn += (*compptr).MCU_width;
                     ypos = (ypos as u32).wrapping_add((*compptr).DCT_v_scaled_size as u32)
-                        as JDIMENSION
-                        as JDIMENSION;
+                        as JDIMENSION as JDIMENSION;
                     yindex += 1
                 }
                 ci += 1
@@ -495,8 +467,7 @@ unsafe extern "C" fn compress_first_pass(
     mut input_buf: JSAMPIMAGE,
 ) -> boolean {
     let mut coef: my_coef_ptr = (*cinfo).coef as my_coef_ptr;
-    let mut last_iMCU_row: JDIMENSION =
-        (*cinfo).total_iMCU_rows.wrapping_sub(1 as i32 as u32);
+    let mut last_iMCU_row: JDIMENSION = (*cinfo).total_iMCU_rows.wrapping_sub(1 as i32 as u32);
     let mut blocks_across: JDIMENSION = 0;
     let mut MCUs_across: JDIMENSION = 0;
     let mut MCUindex: JDIMENSION = 0;
@@ -507,8 +478,7 @@ unsafe extern "C" fn compress_first_pass(
     let mut block_rows: i32 = 0;
     let mut ndummy: i32 = 0;
     let mut lastDC: JCOEF = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut buffer: JBLOCKARRAY = 0 as *mut JBLOCKROW;
     let mut thisblockrow: JBLOCKROW = 0 as *mut JBLOCK;
     let mut lastblockrow: JBLOCKROW = 0 as *mut JBLOCK;
@@ -573,9 +543,7 @@ unsafe extern "C" fn compress_first_pass(
                 jzero_far(
                     thisblockrow as *mut libc::c_void,
                     (ndummy as libc::c_ulong)
-                        .wrapping_mul(
-                            ::std::mem::size_of::<JBLOCK>() as libc::c_ulong
-                        ),
+                        .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
                 );
                 lastDC = (*thisblockrow.offset(-(1 as i32) as isize))[0 as i32 as usize];
                 bi = 0 as i32;
@@ -592,9 +560,8 @@ unsafe extern "C" fn compress_first_pass(
          * This squeezes a few more bytes out of the resulting file...
          */
         if (*coef).iMCU_row_num == last_iMCU_row {
-            blocks_across = (blocks_across as u32).wrapping_add(ndummy as u32)
-                as JDIMENSION
-                as JDIMENSION; /* include lower right corner */
+            blocks_across =
+                (blocks_across as u32).wrapping_add(ndummy as u32) as JDIMENSION as JDIMENSION; /* include lower right corner */
             MCUs_across = blocks_across.wrapping_div(h_samp_factor as u32); /* advance to next MCU in row */
             block_row = block_rows;
             while block_row < (*compptr).v_samp_factor {
@@ -603,9 +570,7 @@ unsafe extern "C" fn compress_first_pass(
                 jzero_far(
                     thisblockrow as *mut libc::c_void,
                     (blocks_across as libc::c_ulong)
-                        .wrapping_mul(
-                            ::std::mem::size_of::<JBLOCK>() as libc::c_ulong
-                        ),
+                        .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
                 );
                 MCUindex = 0 as i32 as JDIMENSION;
                 while MCUindex < MCUs_across {
@@ -656,8 +621,7 @@ unsafe extern "C" fn compress_output(
     let mut start_col: JDIMENSION = 0;
     let mut buffer: [JBLOCKARRAY; 4] = [0 as *mut JBLOCKROW; 4];
     let mut buffer_ptr: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     /* Align the virtual buffers for the components used in this scan.
      * NB: during first pass, this is safe only because the buffers will
      * already be aligned properly, so jmemmgr.c won't need to do any I/O.
@@ -757,20 +721,14 @@ pub unsafe extern "C" fn jinit_c_coef_controller(
         ::std::mem::size_of::<my_coef_controller>() as libc::c_ulong,
     ) as my_coef_ptr;
     (*cinfo).coef = coef as *mut jpeg_c_coef_controller;
-    (*coef).pub_0.start_pass = Some(
-        start_pass_coef
-            as unsafe extern "C" fn(
-                _: j_compress_ptr,
-                _: J_BUF_MODE,
-            ) -> (),
-    );
+    (*coef).pub_0.start_pass =
+        Some(start_pass_coef as unsafe extern "C" fn(_: j_compress_ptr, _: J_BUF_MODE) -> ());
     /* Create the coefficient buffer. */
     if need_full_buffer != 0 {
         /* Allocate a full-image virtual array for each component, */
         /* padded to a multiple of samp_factor DCT blocks in each direction. */
         let mut ci: i32 = 0;
-        let mut compptr: *mut jpeg_component_info =
-            0 as *mut jpeg_component_info;
+        let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
         ci = 0 as i32;
         compptr = (*cinfo).comp_info;
         while ci < (*cinfo).num_components {

@@ -110,8 +110,7 @@ blocksize is set by the mode, and low backend lookups may require
 parameters from other areas of the mode/mapping */
 
 unsafe extern "C" fn mapping0_free_info(mut i: *mut libc::c_void) {
-    let mut info: *mut vorbis_info_mapping0 =
-        i as *mut vorbis_info_mapping0;
+    let mut info: *mut vorbis_info_mapping0 = i as *mut vorbis_info_mapping0;
     if !info.is_null() {
         crate::stdlib::memset(
             info as *mut libc::c_void,
@@ -128,8 +127,7 @@ unsafe extern "C" fn mapping0_pack(
     mut opb: *mut oggpack_buffer,
 ) {
     let mut i: i32 = 0;
-    let mut info: *mut vorbis_info_mapping0 =
-        vm as *mut vorbis_info_mapping0;
+    let mut info: *mut vorbis_info_mapping0 = vm as *mut vorbis_info_mapping0;
     /* another 'we meant to do it this way' hack...  up to beta 4, we
     packed 4 binary zeros here to signify one submapping in use.  We
     now redefine that to mean four bitflags that indicate use of
@@ -239,21 +237,14 @@ unsafe extern "C" fn mapping0_unpack(
     let mut info: *mut vorbis_info_mapping0 = crate::stdlib::calloc(
         1 as i32 as libc::c_ulong,
         ::std::mem::size_of::<vorbis_info_mapping0>() as libc::c_ulong,
-    )
-        as *mut vorbis_info_mapping0;
-    let mut ci: *mut codec_setup_info =
-        (*vi).codec_setup as *mut codec_setup_info;
+    ) as *mut vorbis_info_mapping0;
+    let mut ci: *mut codec_setup_info = (*vi).codec_setup as *mut codec_setup_info;
     if !((*vi).channels <= 0 as i32) {
-        b = oggpack_read(
-            opb as *mut oggpack_buffer,
-            1 as i32,
-        ) as i32;
+        b = oggpack_read(opb as *mut oggpack_buffer, 1 as i32) as i32;
         if !(b < 0 as i32) {
             if b != 0 {
-                (*info).submaps = (oggpack_read(
-                    opb as *mut oggpack_buffer,
-                    4 as i32,
-                ) + 1 as i32 as isize) as i32;
+                (*info).submaps =
+                    (oggpack_read(opb as *mut oggpack_buffer, 4 as i32) + 1 as i32 as isize) as i32;
                 if (*info).submaps <= 0 as i32 {
                     current_block = 1977384903651761240;
                 } else {
@@ -266,17 +257,12 @@ unsafe extern "C" fn mapping0_unpack(
             match current_block {
                 1977384903651761240 => {}
                 _ => {
-                    b = oggpack_read(
-                        opb as *mut oggpack_buffer,
-                        1 as i32,
-                    ) as i32;
+                    b = oggpack_read(opb as *mut oggpack_buffer, 1 as i32) as i32;
                     if !(b < 0 as i32) {
                         if b != 0 {
                             (*info).coupling_steps =
-                                (oggpack_read(
-                                    opb as *mut oggpack_buffer,
-                                    8 as i32,
-                                ) + 1 as i32 as isize) as i32;
+                                (oggpack_read(opb as *mut oggpack_buffer, 8 as i32)
+                                    + 1 as i32 as isize) as i32;
                             if (*info).coupling_steps <= 0 as i32 {
                                 current_block = 1977384903651761240;
                             } else {
@@ -287,36 +273,34 @@ unsafe extern "C" fn mapping0_unpack(
                                         break;
                                     }
                                     /* vi->channels > 0 is enforced in the caller */
-                                    (*info).coupling_mag[i as usize] =
-                                        oggpack_read(
-                                            opb as *mut oggpack_buffer,
-                                            crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-                                                ((*vi).channels - 1 as i32)
-                                                    as ogg_uint32_t,
-                                            ),
-                                        ) as i32; /* 2,3:reserved */
+                                    (*info).coupling_mag[i as usize] = oggpack_read(
+                                        opb as *mut oggpack_buffer,
+                                        crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
+                                            ((*vi).channels - 1 as i32) as ogg_uint32_t,
+                                        ),
+                                    )
+                                        as i32; /* 2,3:reserved */
                                     let mut testM: i32 = (*info).coupling_mag[i as usize]; /* time submap unused */
-                                    (*info).coupling_ang[i as usize] =
-                                        oggpack_read(
-                                            opb as *mut oggpack_buffer,
-                                            crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-                                                ((*vi).channels - 1 as i32)
-                                                    as ogg_uint32_t,
-                                            ),
-                                        ) as i32; /* + .345 is a hack; the original
-                                                  todB estimation used on IEEE 754
-                                                  compliant machines had a bug that
-                                                  returned dB values about a third
-                                                  of a decibel too high.  The bug
-                                                  was harmless because tunings
-                                                  implicitly took that into
-                                                  account.  However, fixing the bug
-                                                  in the estimator requires
-                                                  changing all the tunings as well.
-                                                  For now, it's easier to sync
-                                                  things back up here, and
-                                                  recalibrate the tunings in the
-                                                  next major model upgrade. */
+                                    (*info).coupling_ang[i as usize] = oggpack_read(
+                                        opb as *mut oggpack_buffer,
+                                        crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
+                                            ((*vi).channels - 1 as i32) as ogg_uint32_t,
+                                        ),
+                                    )
+                                        as i32; /* + .345 is a hack; the original
+                                                todB estimation used on IEEE 754
+                                                compliant machines had a bug that
+                                                returned dB values about a third
+                                                of a decibel too high.  The bug
+                                                was harmless because tunings
+                                                implicitly took that into
+                                                account.  However, fixing the bug
+                                                in the estimator requires
+                                                changing all the tunings as well.
+                                                For now, it's easier to sync
+                                                things back up here, and
+                                                recalibrate the tunings in the
+                                                next major model upgrade. */
                                     let mut testA: i32 = (*info).coupling_ang[i as usize];
                                     if testM < 0 as i32
                                         || testA < 0 as i32
@@ -336,10 +320,8 @@ unsafe extern "C" fn mapping0_unpack(
                         match current_block {
                             1977384903651761240 => {}
                             _ => {
-                                if !(oggpack_read(
-                                    opb as *mut oggpack_buffer,
-                                    2 as i32,
-                                ) != 0 as i32 as isize)
+                                if !(oggpack_read(opb as *mut oggpack_buffer, 2 as i32)
+                                    != 0 as i32 as isize)
                                 {
                                     if (*info).submaps > 1 as i32 {
                                         i = 0 as i32;
@@ -349,10 +331,7 @@ unsafe extern "C" fn mapping0_unpack(
                                                 break;
                                             }
                                             (*info).chmuxlist[i as usize] =
-                                                oggpack_read(
-                                                    opb as *mut oggpack_buffer,
-                                                    4 as i32,
-                                                )
+                                                oggpack_read(opb as *mut oggpack_buffer, 4 as i32)
                                                     as i32;
                                             if (*info).chmuxlist[i as usize] >= (*info).submaps
                                                 || (*info).chmuxlist[i as usize] < 0 as i32
@@ -374,29 +353,23 @@ unsafe extern "C" fn mapping0_unpack(
                                                     current_block = 2873832966593178012;
                                                     break;
                                                 }
-                                                oggpack_read(opb as *mut oggpack_buffer,
-                                                             8 as
-                                                                 i32);
-                                                (*info).floorsubmap[i as
-                                                                        usize]
-                                                    =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 8 as
-                                                                     i32)
-                                                        as i32;
+                                                oggpack_read(opb as *mut oggpack_buffer, 8 as i32);
+                                                (*info).floorsubmap[i as usize] = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    8 as i32,
+                                                )
+                                                    as i32;
                                                 if (*info).floorsubmap[i as usize] >= (*ci).floors
                                                     || (*info).floorsubmap[i as usize] < 0 as i32
                                                 {
                                                     current_block = 1977384903651761240;
                                                     break;
                                                 }
-                                                (*info).residuesubmap[i as
-                                                                          usize]
-                                                    =
-                                                    oggpack_read(opb as *mut oggpack_buffer,
-                                                                 8 as
-                                                                     i32)
-                                                        as i32;
+                                                (*info).residuesubmap[i as usize] = oggpack_read(
+                                                    opb as *mut oggpack_buffer,
+                                                    8 as i32,
+                                                )
+                                                    as i32;
                                                 if (*info).residuesubmap[i as usize]
                                                     >= (*ci).residues
                                                     || (*info).residuesubmap[i as usize] < 0 as i32
@@ -427,12 +400,9 @@ unsafe extern "C" fn mapping0_unpack(
 unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
     let mut vd: *mut vorbis_dsp_state = (*vb).vd;
     let mut vi: *mut vorbis_info = (*vd).vi;
-    let mut ci: *mut codec_setup_info =
-        (*vi).codec_setup as *mut codec_setup_info;
-    let mut b: *mut private_state =
-        (*(*vb).vd).backend_state as *mut private_state;
-    let mut vbi: *mut vorbis_block_internal =
-        (*vb).internal as *mut vorbis_block_internal;
+    let mut ci: *mut codec_setup_info = (*vi).codec_setup as *mut codec_setup_info;
+    let mut b: *mut private_state = (*(*vb).vd).backend_state as *mut private_state;
+    let mut vbi: *mut vorbis_block_internal = (*vb).internal as *mut vorbis_block_internal;
     let mut n: i32 = (*vb).pcmend;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -507,16 +477,14 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
         /* transform the PCM data */
         /* only MDCT right now.... */
         mdct_forward(
-            *(*b).transform[(*vb).W as usize].offset(0 as i32 as isize)
-                as *mut mdct_lookup
+            *(*b).transform[(*vb).W as usize].offset(0 as i32 as isize) as *mut mdct_lookup
                 as *mut mdct_lookup,
             pcm,
             *gmdct.offset(i as isize),
         );
         /* FFT yields more accurate tonal estimation (not phase sensitive) */
         drft_forward(
-            &mut *(*b).fft_look.as_mut_ptr().offset((*vb).W as isize) as *mut _
-                as *mut drft_lookup,
+            &mut *(*b).fft_look.as_mut_ptr().offset((*vb).W as isize) as *mut _ as *mut drft_lookup,
             pcm,
         ); /* + .345 is a hack; the
            original todB estimation used on
@@ -625,12 +593,8 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
         to give noise parts of the spectrum, it also implicitly hands
         us a tonality estimate (the larger the value in the
         'noise_depth' vector, the more tonal that area is) */
-        _vp_noisemask(
-            psy_look as *mut vorbis_look_psy,
-            logmdct,
-            noise,
-        ); /* noise does not have by-frequency offset
-           bias applied yet */
+        _vp_noisemask(psy_look as *mut vorbis_look_psy, logmdct, noise); /* noise does not have by-frequency offset
+                                                                         bias applied yet */
         /* second step: 'all the other crap'; all the stuff that isn't
         computed/fit for bitrate management goes in the second psy
         vector.  This includes tone masking, peak limiting and ATH */
@@ -667,16 +631,13 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
             *(*b)
                 .flr
                 .offset((*info).floorsubmap[submap as usize] as isize)
-                as *mut vorbis_look_floor1
-                as *mut vorbis_look_floor1,
+                as *mut vorbis_look_floor1 as *mut vorbis_look_floor1,
             logmdct,
             logmask,
         );
         /* are we managing bitrate?  If so, perform two more fits for
         later rate tweaking (fits represent hi/lo) */
-        if vorbis_bitrate_managed(
-            vb as *mut vorbis_block,
-        ) != 0
+        if vorbis_bitrate_managed(vb as *mut vorbis_block) != 0
             && !(*(*floor_posts.offset(i as isize)).offset((15 as i32 / 2 as i32) as isize))
                 .is_null()
         {
@@ -697,8 +658,7 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
                 *(*b)
                     .flr
                     .offset((*info).floorsubmap[submap as usize] as isize)
-                    as *mut vorbis_look_floor1
-                    as *mut vorbis_look_floor1,
+                    as *mut vorbis_look_floor1 as *mut vorbis_look_floor1,
                 logmdct,
                 logmask,
             );
@@ -718,8 +678,7 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
                 *(*b)
                     .flr
                     .offset((*info).floorsubmap[submap as usize] as isize)
-                    as *mut vorbis_look_floor1
-                    as *mut vorbis_look_floor1,
+                    as *mut vorbis_look_floor1 as *mut vorbis_look_floor1,
                 logmdct,
                 logmask,
             );
@@ -733,8 +692,7 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
                     *(*b)
                         .flr
                         .offset((*info).floorsubmap[submap as usize] as isize)
-                        as *mut vorbis_look_floor1
-                        as *mut vorbis_look_floor1,
+                        as *mut vorbis_look_floor1 as *mut vorbis_look_floor1,
                     *(*floor_posts.offset(i as isize)).offset(0 as i32 as isize),
                     *(*floor_posts.offset(i as isize)).offset((15 as i32 / 2 as i32) as isize),
                     k * 65536 as i32 / (15 as i32 / 2 as i32),
@@ -749,8 +707,7 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
                     *(*b)
                         .flr
                         .offset((*info).floorsubmap[submap as usize] as isize)
-                        as *mut vorbis_look_floor1
-                        as *mut vorbis_look_floor1,
+                        as *mut vorbis_look_floor1 as *mut vorbis_look_floor1,
                     *(*floor_posts.offset(i as isize)).offset((15 as i32 / 2 as i32) as isize),
                     *(*floor_posts.offset(i as isize)).offset((15 as i32 - 1 as i32) as isize),
                     (k - 15 as i32 / 2 as i32) * 65536 as i32 / (15 as i32 / 2 as i32),
@@ -785,19 +742,13 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
             .wrapping_mul((*vi).channels as libc::c_ulong) as usize,
     );
     let mut zerobundle: *mut i32 = fresh12.as_mut_ptr() as *mut i32;
-    k = if vorbis_bitrate_managed(
-        vb as *mut vorbis_block,
-    ) != 0
-    {
+    k = if vorbis_bitrate_managed(vb as *mut vorbis_block) != 0 {
         0 as i32
     } else {
         (15 as i32) / 2 as i32
     };
     while k
-        <= (if vorbis_bitrate_managed(
-            vb as *mut vorbis_block,
-        ) != 0
-        {
+        <= (if vorbis_bitrate_managed(vb as *mut vorbis_block) != 0 {
             (15 as i32) - 1 as i32
         } else {
             (15 as i32) / 2 as i32
@@ -837,8 +788,7 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
                 *(*b)
                     .flr
                     .offset((*info).floorsubmap[submap_0 as usize] as isize)
-                    as *mut vorbis_look_floor1
-                    as *mut vorbis_look_floor1,
+                    as *mut vorbis_look_floor1 as *mut vorbis_look_floor1,
                 *(*floor_posts.offset(i as isize)).offset(k as isize),
                 ilogmask,
             );
@@ -846,8 +796,7 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
         }
         _vp_couple_quantize_normalize(
             k,
-            &mut (*ci).psy_g_param as *mut _
-                as *mut vorbis_info_psy_global,
+            &mut (*ci).psy_g_param as *mut _ as *mut vorbis_info_psy_global,
             psy_look as *mut vorbis_look_psy,
             info as *mut vorbis_info_mapping0,
             gmdct,
@@ -918,18 +867,12 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut vorbis_block) -> i32 {
     return 0 as i32;
 }
 
-unsafe extern "C" fn mapping0_inverse(
-    mut vb: *mut vorbis_block,
-    mut l: *mut libc::c_void,
-) -> i32 {
+unsafe extern "C" fn mapping0_inverse(mut vb: *mut vorbis_block, mut l: *mut libc::c_void) -> i32 {
     let mut vd: *mut vorbis_dsp_state = (*vb).vd;
     let mut vi: *mut vorbis_info = (*vd).vi;
-    let mut ci: *mut codec_setup_info =
-        (*vi).codec_setup as *mut codec_setup_info;
-    let mut b: *mut private_state =
-        (*vd).backend_state as *mut private_state;
-    let mut info: *mut vorbis_info_mapping0 =
-        l as *mut vorbis_info_mapping0;
+    let mut ci: *mut codec_setup_info = (*vi).codec_setup as *mut codec_setup_info;
+    let mut b: *mut private_state = (*vd).backend_state as *mut private_state;
+    let mut info: *mut vorbis_info_mapping0 = l as *mut vorbis_info_mapping0;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     (*vb).pcmend = (*ci).blocksizes[(*vb).W as usize] as i32;
@@ -1096,8 +1039,7 @@ unsafe extern "C" fn mapping0_inverse(
     while i < (*vi).channels {
         let mut pcm_0: *mut f32 = *(*vb).pcm.offset(i as isize);
         mdct_backward(
-            *(*b).transform[(*vb).W as usize].offset(0 as i32 as isize)
-                as *mut mdct_lookup
+            *(*b).transform[(*vb).W as usize].offset(0 as i32 as isize) as *mut mdct_lookup
                 as *mut mdct_lookup,
             pcm_0,
             pcm_0,
@@ -1128,15 +1070,10 @@ pub static mut mapping0_exportbundle: vorbis_func_mapping = {
                 ) -> *mut libc::c_void,
         ),
         free_info: Some(mapping0_free_info as unsafe extern "C" fn(_: *mut libc::c_void) -> ()),
-        forward: Some(
-            mapping0_forward as unsafe extern "C" fn(_: *mut vorbis_block) -> i32,
-        ),
+        forward: Some(mapping0_forward as unsafe extern "C" fn(_: *mut vorbis_block) -> i32),
         inverse: Some(
             mapping0_inverse
-                as unsafe extern "C" fn(
-                    _: *mut vorbis_block,
-                    _: *mut libc::c_void,
-                ) -> i32,
+                as unsafe extern "C" fn(_: *mut vorbis_block, _: *mut libc::c_void) -> i32,
         ),
     };
     init

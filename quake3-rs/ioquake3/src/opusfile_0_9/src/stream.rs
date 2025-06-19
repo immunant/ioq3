@@ -65,11 +65,7 @@ unsafe extern "C" fn op_fseek(
 ) -> i32 {
     /*This function actually conforms to the SUSv2 and POSIX.1-2001, so we prefer
     it except on Windows.*/
-    return crate::stdlib::fseeko(
-        _stream as *mut FILE,
-        _offset as off_t,
-        _whence,
-    );
+    return crate::stdlib::fseeko(_stream as *mut FILE, _offset as off_t, _whence);
 }
 
 unsafe extern "C" fn op_ftell(mut _stream: *mut libc::c_void) -> i64 {
@@ -190,9 +186,7 @@ unsafe extern "C" fn op_mem_seek(
         0 => {
             /*Check for overflow:*/
             if _offset < 0 as i32 as i64
-                || _offset
-                    > (!(0 as i32 as size_t) >> 1 as i32)
-                        as ptrdiff_t as i64
+                || _offset > (!(0 as i32 as size_t) >> 1 as i32) as ptrdiff_t as i64
             {
                 return -(1 as i32);
             }
@@ -201,10 +195,7 @@ unsafe extern "C" fn op_mem_seek(
         1 => {
             /*Check for overflow:*/
             if _offset < -pos as i64
-                || _offset
-                    > ((!(0 as i32 as size_t) >> 1 as i32)
-                        as ptrdiff_t
-                        - pos) as i64
+                || _offset > ((!(0 as i32 as size_t) >> 1 as i32) as ptrdiff_t - pos) as i64
             {
                 return -(1 as i32);
             }
@@ -215,10 +206,7 @@ unsafe extern "C" fn op_mem_seek(
             size = (*stream).size;
             /*Check for overflow:*/
             if _offset > size as i64
-                || _offset
-                    < (size
-                        - (!(0 as i32 as size_t) >> 1 as i32)
-                            as ptrdiff_t) as i64
+                || _offset < (size - (!(0 as i32 as size_t) >> 1 as i32) as ptrdiff_t) as i64
             {
                 return -(1 as i32);
             }

@@ -155,11 +155,7 @@ pub unsafe extern "C" fn AAS_PresenceTypeBoundingBox(
     let mut index: i32 = 0;
     //bounding box size for each presence type
     let mut boxmins: [vec3_t; 3] = [
-        [
-            0 as i32 as vec_t,
-            0 as i32 as vec_t,
-            0 as i32 as vec_t,
-        ],
+        [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         [
             -(15 as i32) as vec_t,
             -(15 as i32) as vec_t,
@@ -172,21 +168,9 @@ pub unsafe extern "C" fn AAS_PresenceTypeBoundingBox(
         ],
     ]; //end if
     let mut boxmaxs: [vec3_t; 3] = [
-        [
-            0 as i32 as vec_t,
-            0 as i32 as vec_t,
-            0 as i32 as vec_t,
-        ],
-        [
-            15 as i32 as vec_t,
-            15 as i32 as vec_t,
-            32 as i32 as vec_t,
-        ],
-        [
-            15 as i32 as vec_t,
-            15 as i32 as vec_t,
-            8 as i32 as vec_t,
-        ],
+        [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+        [15 as i32 as vec_t, 15 as i32 as vec_t, 32 as i32 as vec_t],
+        [15 as i32 as vec_t, 15 as i32 as vec_t, 8 as i32 as vec_t],
     ];
     if presencetype == 2 as i32 {
         index = 1 as i32
@@ -234,9 +218,8 @@ pub unsafe extern "C" fn AAS_InitAASLinkHeap() {
         crate::src::botlib::be_aas_main::aasworld.linkheapsize = max_aaslinks;
         crate::src::botlib::be_aas_main::aasworld.linkheap =
             crate::src::botlib::l_memory::GetHunkMemory(
-                (max_aaslinks as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                    aas_link_t,
-                >() as libc::c_ulong),
+                (max_aaslinks as libc::c_ulong)
+                    .wrapping_mul(::std::mem::size_of::<aas_link_t>() as libc::c_ulong),
             ) as *mut aas_link_t
     }
     //link the links on the heap
@@ -260,16 +243,14 @@ pub unsafe extern "C" fn AAS_InitAASLinkHeap() {
         .prev_ent;
         *fresh2 = &mut *crate::src::botlib::be_aas_main::aasworld
             .linkheap
-            .offset((i - 1 as i32) as isize)
-            as *mut aas_link_t;
+            .offset((i - 1 as i32) as isize) as *mut aas_link_t;
         let ref mut fresh3 = (*crate::src::botlib::be_aas_main::aasworld
             .linkheap
             .offset(i as isize))
         .next_ent;
         *fresh3 = &mut *crate::src::botlib::be_aas_main::aasworld
             .linkheap
-            .offset((i + 1 as i32) as isize)
-            as *mut aas_link_t;
+            .offset((i + 1 as i32) as isize) as *mut aas_link_t;
         i += 1
     }
     let ref mut fresh4 = (*crate::src::botlib::be_aas_main::aasworld
@@ -278,8 +259,7 @@ pub unsafe extern "C" fn AAS_InitAASLinkHeap() {
     .prev_ent;
     *fresh4 = &mut *crate::src::botlib::be_aas_main::aasworld
         .linkheap
-        .offset((max_aaslinks - 2 as i32) as isize)
-        as *mut aas_link_t;
+        .offset((max_aaslinks - 2 as i32) as isize) as *mut aas_link_t;
     let ref mut fresh5 = (*crate::src::botlib::be_aas_main::aasworld
         .linkheap
         .offset((max_aaslinks - 1 as i32) as isize))
@@ -346,8 +326,7 @@ pub unsafe extern "C" fn AAS_AllocAASLink() -> *mut aas_link_t {
         .freelinks
         .is_null()
     {
-        (*crate::src::botlib::be_aas_main::aasworld.freelinks).prev_ent =
-            0 as *mut aas_link_s
+        (*crate::src::botlib::be_aas_main::aasworld.freelinks).prev_ent = 0 as *mut aas_link_s
     }
     numaaslinks -= 1;
     return link;
@@ -398,9 +377,8 @@ pub unsafe extern "C" fn AAS_InitAASLinkedEntities() {
     }
     crate::src::botlib::be_aas_main::aasworld.arealinkedentities =
         crate::src::botlib::l_memory::GetClearedHunkMemory(
-            (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong).wrapping_mul(
-                ::std::mem::size_of::<*mut aas_link_t>() as libc::c_ulong,
-            ),
+            (crate::src::botlib::be_aas_main::aasworld.numareas as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<*mut aas_link_t>() as libc::c_ulong),
         ) as *mut *mut aas_link_t;
 }
 //end of the function AAS_InitAASLinkedEntities
@@ -421,8 +399,7 @@ pub unsafe extern "C" fn AAS_FreeAASLinkedEntities() {
             crate::src::botlib::be_aas_main::aasworld.arealinkedentities as *mut libc::c_void,
         );
     }
-    crate::src::botlib::be_aas_main::aasworld.arealinkedentities =
-        0 as *mut *mut aas_link_t;
+    crate::src::botlib::be_aas_main::aasworld.arealinkedentities = 0 as *mut *mut aas_link_t;
 }
 //end of the function AAS_InitAASLinkedEntities
 //===========================================================================
@@ -434,9 +411,7 @@ pub unsafe extern "C" fn AAS_FreeAASLinkedEntities() {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_PointAreaNum(
-    mut point: *mut vec_t,
-) -> i32 {
+pub unsafe extern "C" fn AAS_PointAreaNum(mut point: *mut vec_t) -> i32 {
     let mut nodenum: i32 = 0; //end if
     let mut dist: vec_t = 0.;
     let mut node: *mut aas_node_t = 0 as *mut aas_node_t;
@@ -462,8 +437,7 @@ pub unsafe extern "C" fn AAS_PointAreaNum(
         //AAS_SAMPLE_DEBUG
         plane = &mut *crate::src::botlib::be_aas_main::aasworld
             .planes
-            .offset((*node).planenum as isize)
-            as *mut aas_plane_t; //end if
+            .offset((*node).planenum as isize) as *mut aas_plane_t; //end if
         dist = *point.offset(0 as i32 as isize) * (*plane).normal[0 as i32 as usize]
             + *point.offset(1 as i32 as isize) * (*plane).normal[1 as i32 as usize]
             + *point.offset(2 as i32 as isize) * (*plane).normal[2 as i32 as usize]
@@ -489,9 +463,7 @@ pub unsafe extern "C" fn AAS_PointAreaNum(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_PointReachabilityAreaIndex(
-    mut origin: *mut vec_t,
-) -> i32 {
+pub unsafe extern "C" fn AAS_PointReachabilityAreaIndex(mut origin: *mut vec_t) -> i32 {
     let mut areanum: i32 = 0; //end if
     let mut cluster: i32 = 0; //end for
     let mut i: i32 = 0; //end if
@@ -609,9 +581,7 @@ pub unsafe extern "C" fn AAS_AreaPresenceType(mut areanum: i32) -> i32 {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_PointPresenceType(
-    mut point: *mut vec_t,
-) -> i32 {
+pub unsafe extern "C" fn AAS_PointPresenceType(mut point: *mut vec_t) -> i32 {
     let mut areanum: i32 = 0;
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
         return 0 as i32;
@@ -914,11 +884,8 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                         (*tstack_p).start[1 as i32 as usize] - *start.offset(1 as i32 as isize);
                     v2[2 as i32 as usize] =
                         (*tstack_p).start[2 as i32 as usize] - *start.offset(2 as i32 as isize);
-                    trace.fraction = VectorLength(
-                        v2.as_mut_ptr() as *const vec_t
-                    ) / VectorNormalize(
-                        v1.as_mut_ptr(),
-                    );
+                    trace.fraction = VectorLength(v2.as_mut_ptr() as *const vec_t)
+                        / VectorNormalize(v1.as_mut_ptr());
                     (*tstack_p).start[0 as i32 as usize] = ((*tstack_p).start[0 as i32 as usize]
                         as f64
                         + v1[0 as i32 as usize] as f64 * -0.125f64)
@@ -942,8 +909,7 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                 //always take the plane with normal facing towards the trace start
                 plane = &mut *crate::src::botlib::be_aas_main::aasworld
                     .planes
-                    .offset(trace.planenum as isize)
-                    as *mut aas_plane_t; //end if
+                    .offset(trace.planenum as isize) as *mut aas_plane_t; //end if
                 if v1[0 as i32 as usize] * (*plane).normal[0 as i32 as usize]
                     + v1[1 as i32 as usize] * (*plane).normal[1 as i32 as usize]
                     + v1[2 as i32 as usize] * (*plane).normal[2 as i32 as usize]
@@ -977,11 +943,8 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                                 trace.endpos[1 as i32 as usize] - *start.offset(1 as i32 as isize);
                             v2[2 as i32 as usize] =
                                 trace.endpos[2 as i32 as usize] - *start.offset(2 as i32 as isize);
-                            trace.fraction = VectorLength(
-                                v2.as_mut_ptr() as *const vec_t
-                            ) / VectorLength(
-                                v1.as_mut_ptr() as *const vec_t
-                            )
+                            trace.fraction = VectorLength(v2.as_mut_ptr() as *const vec_t)
+                                / VectorLength(v1.as_mut_ptr() as *const vec_t)
                         }
                         return trace;
                     }
@@ -1021,11 +984,8 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                         (*tstack_p).start[1 as i32 as usize] - *start.offset(1 as i32 as isize);
                     v2[2 as i32 as usize] =
                         (*tstack_p).start[2 as i32 as usize] - *start.offset(2 as i32 as isize);
-                    trace.fraction = VectorLength(
-                        v2.as_mut_ptr() as *const vec_t
-                    ) / VectorNormalize(
-                        v1.as_mut_ptr(),
-                    );
+                    trace.fraction = VectorLength(v2.as_mut_ptr() as *const vec_t)
+                        / VectorNormalize(v1.as_mut_ptr());
                     (*tstack_p).start[0 as i32 as usize] = ((*tstack_p).start[0 as i32 as usize]
                         as f64
                         + v1[0 as i32 as usize] as f64 * -0.125f64)
@@ -1049,8 +1009,7 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                 //always take the plane with normal facing towards the trace start
                 plane = &mut *crate::src::botlib::be_aas_main::aasworld
                     .planes
-                    .offset(trace.planenum as isize)
-                    as *mut aas_plane_t;
+                    .offset(trace.planenum as isize) as *mut aas_plane_t;
                 if v1[0 as i32 as usize] * (*plane).normal[0 as i32 as usize]
                     + v1[1 as i32 as usize] * (*plane).normal[1 as i32 as usize]
                     + v1[2 as i32 as usize] * (*plane).normal[2 as i32 as usize]
@@ -1064,8 +1023,7 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
             //the node to test against
             aasnode = &mut *crate::src::botlib::be_aas_main::aasworld
                 .nodes
-                .offset(nodenum as isize)
-                as *mut aas_node_t;
+                .offset(nodenum as isize) as *mut aas_node_t;
             //start point of current line to test against node
             cur_start[0 as i32 as usize] = (*tstack_p).start[0 as i32 as usize];
             cur_start[1 as i32 as usize] = (*tstack_p).start[1 as i32 as usize];
@@ -1077,8 +1035,7 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
             //the current node plane
             plane = &mut *crate::src::botlib::be_aas_main::aasworld
                 .planes
-                .offset((*aasnode).planenum as isize)
-                as *mut aas_plane_t;
+                .offset((*aasnode).planenum as isize) as *mut aas_plane_t;
             //end default
             match (*plane).type_0 {
                 _ => {}
@@ -1315,8 +1272,7 @@ pub unsafe extern "C" fn AAS_TraceAreas(
             //the node to test against
             aasnode = &mut *crate::src::botlib::be_aas_main::aasworld
                 .nodes
-                .offset(nodenum as isize)
-                as *mut aas_node_t;
+                .offset(nodenum as isize) as *mut aas_node_t;
             //start point of current line to test against node
             cur_start[0 as i32 as usize] = (*tstack_p).start[0 as i32 as usize];
             cur_start[1 as i32 as usize] = (*tstack_p).start[1 as i32 as usize];
@@ -1328,8 +1284,7 @@ pub unsafe extern "C" fn AAS_TraceAreas(
             //the current node plane
             plane = &mut *crate::src::botlib::be_aas_main::aasworld
                 .planes
-                .offset((*aasnode).planenum as isize)
-                as *mut aas_plane_t;
+                .offset((*aasnode).planenum as isize) as *mut aas_plane_t;
             //end default
             match (*plane).type_0 {
                 _ => {}
@@ -1590,10 +1545,8 @@ pub unsafe extern "C" fn AAS_PointInsideFace(
     let mut i: i32 = 0;
     let mut firstvertex: i32 = 0;
     let mut edgenum: i32 = 0;
-    let mut v1: *mut vec_t =
-        0 as *mut vec_t;
-    let mut v2: *mut vec_t =
-        0 as *mut vec_t;
+    let mut v1: *mut vec_t = 0 as *mut vec_t;
+    let mut v2: *mut vec_t = 0 as *mut vec_t;
     let mut edgevec: vec3_t = [0.; 3];
     let mut pointvec: vec3_t = [0.; 3];
     let mut sepnormal: vec3_t = [0.; 3];
@@ -1674,11 +1627,7 @@ pub unsafe extern "C" fn AAS_AreaGroundFace(
 ) -> *mut aas_face_t {
     let mut i: i32 = 0; //end for
     let mut facenum: i32 = 0;
-    let mut up: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ];
+    let mut up: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
     let mut normal: vec3_t = [0.; 3];
     let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
     let mut face: *mut aas_face_t = 0 as *mut aas_face_t;
@@ -1767,9 +1716,7 @@ pub unsafe extern "C" fn AAS_FacePlane(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_TraceEndFace(
-    mut trace: *mut aas_trace_t,
-) -> *mut aas_face_t {
+pub unsafe extern "C" fn AAS_TraceEndFace(mut trace: *mut aas_trace_t) -> *mut aas_face_t {
     let mut i: i32 = 0;
     let mut facenum: i32 = 0;
     let mut area: *mut aas_area_t = 0 as *mut aas_area_t;
@@ -1914,8 +1861,7 @@ pub unsafe extern "C" fn AAS_BoxOnPlaneSide2(
 
 pub unsafe extern "C" fn AAS_UnlinkFromAreas(mut areas: *mut aas_link_t) {
     let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
-    let mut nextlink: *mut aas_link_t =
-        0 as *mut aas_link_t;
+    let mut nextlink: *mut aas_link_t = 0 as *mut aas_link_t;
     link = areas;
     while !link.is_null() {
         //next area the entity is linked in
@@ -2040,13 +1986,11 @@ pub unsafe extern "C" fn AAS_AASLinkEntity(
             //the node to test against
             aasnode = &mut *crate::src::botlib::be_aas_main::aasworld
                 .nodes
-                .offset(nodenum as isize)
-                as *mut aas_node_t;
+                .offset(nodenum as isize) as *mut aas_node_t;
             //the current node plane
             plane = &mut *crate::src::botlib::be_aas_main::aasworld
                 .planes
-                .offset((*aasnode).planenum as isize)
-                as *mut aas_plane_t;
+                .offset((*aasnode).planenum as isize) as *mut aas_plane_t;
             //get the side(s) the box is situated relative to the plane
             side = AAS_BoxOnPlaneSide2(absmins, absmaxs, plane);
             //if on the front side of the node
@@ -2134,8 +2078,7 @@ pub unsafe extern "C" fn AAS_BBoxAreas(
     mut areas: *mut i32,
     mut maxareas: i32,
 ) -> i32 {
-    let mut linkedareas: *mut aas_link_t =
-        0 as *mut aas_link_t; //end for
+    let mut linkedareas: *mut aas_link_t = 0 as *mut aas_link_t; //end for
     let mut link: *mut aas_link_t = 0 as *mut aas_link_t;
     let mut num: i32 = 0;
     linkedareas = AAS_AASLinkEntity(absmins, absmaxs, -(1 as i32));
@@ -2179,12 +2122,8 @@ pub unsafe extern "C" fn AAS_BBoxAreas(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_AreaInfo(
-    mut areanum: i32,
-    mut info: *mut aas_areainfo_t,
-) -> i32 {
-    let mut settings: *mut aas_areasettings_t =
-        0 as *mut aas_areasettings_t; //end if
+pub unsafe extern "C" fn AAS_AreaInfo(mut areanum: i32, mut info: *mut aas_areainfo_t) -> i32 {
+    let mut settings: *mut aas_areasettings_t = 0 as *mut aas_areasettings_t; //end if
     if info.is_null() {
         return 0 as i32;
     }

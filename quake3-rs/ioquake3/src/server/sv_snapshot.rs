@@ -232,10 +232,8 @@ unsafe extern "C" fn SV_EmitPacketEntities(
     mut to: *mut clientSnapshot_t,
     mut msg: *mut msg_t,
 ) {
-    let mut oldent: *mut entityState_t =
-        0 as *mut entityState_t;
-    let mut newent: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut oldent: *mut entityState_t = 0 as *mut entityState_t;
+    let mut newent: *mut entityState_t = 0 as *mut entityState_t;
     let mut oldindex: i32 = 0;
     let mut newindex: i32 = 0;
     let mut oldnum: i32 = 0;
@@ -255,21 +253,19 @@ unsafe extern "C" fn SV_EmitPacketEntities(
         if newindex >= (*to).num_entities {
             newnum = 9999 as i32
         } else {
-            newent = &mut *svs.snapshotEntities.offset(
-                (((*to).first_entity + newindex)
-                    % svs.numSnapshotEntities)
-                    as isize,
-            ) as *mut entityState_t;
+            newent = &mut *svs
+                .snapshotEntities
+                .offset((((*to).first_entity + newindex) % svs.numSnapshotEntities) as isize)
+                as *mut entityState_t;
             newnum = (*newent).number
         }
         if oldindex >= from_num_entities {
             oldnum = 9999 as i32
         } else {
-            oldent = &mut *svs.snapshotEntities.offset(
-                (((*from).first_entity + oldindex)
-                    % svs.numSnapshotEntities)
-                    as isize,
-            ) as *mut entityState_t;
+            oldent = &mut *svs
+                .snapshotEntities
+                .offset((((*from).first_entity + oldindex) % svs.numSnapshotEntities) as isize)
+                as *mut entityState_t;
             oldnum = (*oldent).number
         }
         if newnum == oldnum {
@@ -288,11 +284,7 @@ unsafe extern "C" fn SV_EmitPacketEntities(
             // this is a new entity, send it from the baseline
             MSG_WriteDeltaEntity(
                 msg as *mut msg_t,
-                &mut (*sv
-                    .svEntities
-                    .as_mut_ptr()
-                    .offset(newnum as isize))
-                .baseline as *mut _
+                &mut (*sv.svEntities.as_mut_ptr().offset(newnum as isize)).baseline as *mut _
                     as *mut entityState_s,
                 newent as *mut entityState_s,
                 qtrue,
@@ -306,8 +298,7 @@ unsafe extern "C" fn SV_EmitPacketEntities(
             MSG_WriteDeltaEntity(
                 msg as *mut msg_t,
                 oldent as *mut entityState_s,
-                0 as *mut entityState_s
-                    as *mut entityState_s,
+                0 as *mut entityState_s as *mut entityState_s,
                 qtrue,
             );
             oldindex += 1
@@ -326,14 +317,9 @@ SV_WriteSnapshotToClient
 ==================
 */
 
-unsafe extern "C" fn SV_WriteSnapshotToClient(
-    mut client: *mut client_t,
-    mut msg: *mut msg_t,
-) {
-    let mut frame: *mut clientSnapshot_t =
-        0 as *mut clientSnapshot_t;
-    let mut oldframe: *mut clientSnapshot_t =
-        0 as *mut clientSnapshot_t;
+unsafe extern "C" fn SV_WriteSnapshotToClient(mut client: *mut client_t, mut msg: *mut msg_t) {
+    let mut frame: *mut clientSnapshot_t = 0 as *mut clientSnapshot_t;
+    let mut oldframe: *mut clientSnapshot_t = 0 as *mut clientSnapshot_t;
     let mut lastframe: i32 = 0;
     let mut i: i32 = 0;
     let mut snapFlags: i32 = 0;
@@ -344,9 +330,7 @@ unsafe extern "C" fn SV_WriteSnapshotToClient(
         .offset(((*client).netchan.outgoingSequence & 32 as i32 - 1 as i32) as isize)
         as *mut clientSnapshot_t;
     // try to use a previous frame as the source for delta compressing the snapshot
-    if (*client).deltaMessage <= 0 as i32
-        || (*client).state as u32 != CS_ACTIVE as i32 as u32
-    {
+    if (*client).deltaMessage <= 0 as i32 || (*client).state as u32 != CS_ACTIVE as i32 as u32 {
         // client is asking for a retransmit
         oldframe = 0 as *mut clientSnapshot_t;
         lastframe = 0 as i32
@@ -367,10 +351,7 @@ unsafe extern "C" fn SV_WriteSnapshotToClient(
             as *mut clientSnapshot_t;
         lastframe = (*client).netchan.outgoingSequence - (*client).deltaMessage;
         // the snapshot's entities may still have rolled off the buffer, though
-        if (*oldframe).first_entity
-            <= svs.nextSnapshotEntities
-                - svs.numSnapshotEntities
-        {
+        if (*oldframe).first_entity <= svs.nextSnapshotEntities - svs.numSnapshotEntities {
             Com_DPrintf(
                 b"%s: Delta request from out of date entities.\n\x00" as *const u8
                     as *const libc::c_char,
@@ -380,10 +361,7 @@ unsafe extern "C" fn SV_WriteSnapshotToClient(
             lastframe = 0 as i32
         }
     }
-    MSG_WriteByte(
-        msg as *mut msg_t,
-        svc_snapshot as i32,
-    );
+    MSG_WriteByte(msg as *mut msg_t, svc_snapshot as i32);
     // NOTE, MRE: now sent at the start of every message from server to client
     // let the client know which reliable clientCommands we have received
     //MSG_WriteLong( msg, client->lastClientCommand );
@@ -396,15 +374,9 @@ unsafe extern "C" fn SV_WriteSnapshotToClient(
         // the client's perspective this time is strictly speaking
         // incorrect, but since it'll be busy loading a map at
         // the time it doesn't really matter.
-        MSG_WriteLong(
-            msg as *mut msg_t,
-            sv.time + (*client).oldServerTime,
-        );
+        MSG_WriteLong(msg as *mut msg_t, sv.time + (*client).oldServerTime);
     } else {
-        MSG_WriteLong(
-            msg as *mut msg_t,
-            sv.time,
-        );
+        MSG_WriteLong(msg as *mut msg_t, sv.time);
     }
     // what we are delta'ing from
     MSG_WriteByte(msg as *mut msg_t, lastframe);
@@ -417,10 +389,7 @@ unsafe extern "C" fn SV_WriteSnapshotToClient(
     }
     MSG_WriteByte(msg as *mut msg_t, snapFlags);
     // send over the areabits
-    MSG_WriteByte(
-        msg as *mut msg_t,
-        (*frame).areabytes,
-    );
+    MSG_WriteByte(msg as *mut msg_t, (*frame).areabytes);
     MSG_WriteData(
         msg as *mut msg_t,
         (*frame).areabits.as_mut_ptr() as *const libc::c_void,
@@ -436,8 +405,7 @@ unsafe extern "C" fn SV_WriteSnapshotToClient(
     } else {
         MSG_WriteDeltaPlayerstate(
             msg as *mut msg_t,
-            0 as *mut playerState_s
-                as *mut playerState_s,
+            0 as *mut playerState_s as *mut playerState_s,
             &mut (*frame).ps as *mut _ as *mut playerState_s,
         );
     }
@@ -447,10 +415,7 @@ unsafe extern "C" fn SV_WriteSnapshotToClient(
     if (*sv_padPackets).integer != 0 {
         i = 0 as i32;
         while i < (*sv_padPackets).integer {
-            MSG_WriteByte(
-                msg as *mut msg_t,
-                svc_nop as i32,
-            );
+            MSG_WriteByte(msg as *mut msg_t, svc_nop as i32);
             i += 1
         }
     };
@@ -472,10 +437,7 @@ pub unsafe extern "C" fn SV_UpdateServerCommandsToClient(
     // write any unacknowledged serverCommands
     i = (*client).reliableAcknowledge + 1 as i32;
     while i <= (*client).reliableSequence {
-        MSG_WriteByte(
-            msg as *mut msg_t,
-            svc_serverCommand as i32,
-        );
+        MSG_WriteByte(msg as *mut msg_t, svc_serverCommand as i32);
         MSG_WriteLong(msg as *mut msg_t, i);
         MSG_WriteString(
             msg as *mut msg_t,
@@ -547,26 +509,21 @@ unsafe extern "C" fn SV_AddEntitiesVisibleFromPoint(
 ) {
     let mut e: i32 = 0;
     let mut i: i32 = 0;
-    let mut ent: *mut sharedEntity_t =
-        0 as *mut sharedEntity_t;
+    let mut ent: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
     let mut svEnt: *mut svEntity_t = 0 as *mut svEntity_t;
     let mut l: i32 = 0;
     let mut clientarea: i32 = 0;
     let mut clientcluster: i32 = 0;
     let mut leafnum: i32 = 0;
-    let mut clientpvs: *mut byte =
-        0 as *mut byte;
-    let mut bitvector: *mut byte =
-        0 as *mut byte;
+    let mut clientpvs: *mut byte = 0 as *mut byte;
+    let mut bitvector: *mut byte = 0 as *mut byte;
     // during an error shutdown message we may need to transmit
     // the shutdown message after the server has shutdown, so
     // specfically check for it
     if sv.state as u64 == 0 {
         return;
     }
-    leafnum = crate::src::qcommon::cm_test::CM_PointLeafnum(
-        origin as *const vec_t,
-    );
+    leafnum = crate::src::qcommon::cm_test::CM_PointLeafnum(origin as *const vec_t);
     clientarea = crate::src::qcommon::cm_load::CM_LeafArea(leafnum);
     clientcluster = crate::src::qcommon::cm_load::CM_LeafCluster(leafnum);
     // calculate the visible areas
@@ -576,14 +533,11 @@ unsafe extern "C" fn SV_AddEntitiesVisibleFromPoint(
     let mut current_block_26: u64;
     e = 0 as i32;
     while e < sv.num_entities {
-        ent =
-            SV_GentityNum(e) as *mut sharedEntity_t;
+        ent = SV_GentityNum(e) as *mut sharedEntity_t;
         // never send entities that aren't linked in
         if !((*ent).r.linked as u64 == 0) {
             if (*ent).s.number != e {
-                Com_DPrintf(
-                    b"FIXING ENT->S.NUMBER!!!\n\x00" as *const u8 as *const libc::c_char,
-                );
+                Com_DPrintf(b"FIXING ENT->S.NUMBER!!!\n\x00" as *const u8 as *const libc::c_char);
                 (*ent).s.number = e
             }
             // entities can be flagged to explicitly not be sent to the client
@@ -638,14 +592,10 @@ unsafe extern "C" fn SV_AddEntitiesVisibleFromPoint(
                                 match current_block_26 {
                                     7651349459974463963 => {}
                                     _ => {
-                                        svEnt = SV_SvEntityForGentity(
-                                            ent as *mut sharedEntity_t,
-                                        )
+                                        svEnt = SV_SvEntityForGentity(ent as *mut sharedEntity_t)
                                             as *mut svEntity_s;
                                         // don't double add an entity through portals
-                                        if !((*svEnt).snapshotCounter
-                                            == sv.snapshotCounter)
-                                        {
+                                        if !((*svEnt).snapshotCounter == sv.snapshotCounter) {
                                             // broadcast entities are always sent
                                             if (*ent).r.svFlags & 0x20 as i32 != 0 {
                                                 SV_AddEntToSnapshot(svEnt, ent, eNums);
@@ -743,10 +693,8 @@ unsafe extern "C" fn SV_AddEntitiesVisibleFromPoint(
                                                                         != 0
                                                                     {
                                                                         if (*ent).s.generic1 != 0 {
-                                                                            let mut dir:
-                                                                                    vec3_t =
-                                                                                [0.;
-                                                                                    3];
+                                                                            let mut dir: vec3_t =
+                                                                                [0.; 3];
                                                                             dir[0 as i32
                                                                                 as usize] = (*ent)
                                                                                 .s
@@ -774,18 +722,14 @@ unsafe extern "C" fn SV_AddEntitiesVisibleFromPoint(
                                                                                     2 as i32
                                                                                         as isize,
                                                                                 );
-                                                                            if VectorLengthSquared(dir.as_mut_ptr()
-                                                                                                       as
-                                                                                                       *const vec_t)
-                                                                                   >
-                                                                                   (*ent).s.generic1
-                                                                                       as
-                                                                                       f32
-                                                                                       *
-                                                                                       (*ent).s.generic1
-                                                                                           as
-                                                                                           f32
-                                                                               {
+                                                                            if VectorLengthSquared(
+                                                                                dir.as_mut_ptr()
+                                                                                    as *const vec_t,
+                                                                            ) > (*ent).s.generic1
+                                                                                as f32
+                                                                                * (*ent).s.generic1
+                                                                                    as f32
+                                                                            {
                                                                                 current_block_26
                                                                                     =
                                                                                     7651349459974463963;
@@ -844,23 +788,18 @@ For viewing through other player's eyes, clent can be something other than clien
 
 unsafe extern "C" fn SV_BuildClientSnapshot(mut client: *mut client_t) {
     let mut org: vec3_t = [0.; 3];
-    let mut frame: *mut clientSnapshot_t =
-        0 as *mut clientSnapshot_t;
+    let mut frame: *mut clientSnapshot_t = 0 as *mut clientSnapshot_t;
     let mut entityNumbers: snapshotEntityNumbers_t = snapshotEntityNumbers_t {
         numSnapshotEntities: 0,
         snapshotEntities: [0; 256],
     };
     let mut i: i32 = 0;
-    let mut ent: *mut sharedEntity_t =
-        0 as *mut sharedEntity_t;
-    let mut state: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut ent: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
+    let mut state: *mut entityState_t = 0 as *mut entityState_t;
     let mut svEnt: *mut svEntity_t = 0 as *mut svEntity_t;
-    let mut clent: *mut sharedEntity_t =
-        0 as *mut sharedEntity_t;
+    let mut clent: *mut sharedEntity_t = 0 as *mut sharedEntity_t;
     let mut clientNum: i32 = 0;
-    let mut ps: *mut playerState_t =
-        0 as *mut playerState_t;
+    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
     // bump the counter used to prevent double adding
     sv.snapshotCounter += 1;
     // this is the frame we are creating
@@ -883,9 +822,7 @@ unsafe extern "C" fn SV_BuildClientSnapshot(mut client: *mut client_t) {
         return;
     }
     // grab the current playerState_t
-    ps = SV_GameClientNum(
-        client.offset_from(svs.clients) as isize as i32,
-    ) as *mut playerState_s;
+    ps = SV_GameClientNum(client.offset_from(svs.clients) as isize as i32) as *mut playerState_s;
     (*frame).ps = *ps;
     // never send client's own entity, because it can
     // be regenerated from the playerstate
@@ -896,10 +833,7 @@ unsafe extern "C" fn SV_BuildClientSnapshot(mut client: *mut client_t) {
             b"SV_SvEntityForGentity: bad gEnt\x00" as *const u8 as *const libc::c_char,
         );
     }
-    svEnt = &mut *sv
-        .svEntities
-        .as_mut_ptr()
-        .offset(clientNum as isize) as *mut svEntity_t;
+    svEnt = &mut *sv.svEntities.as_mut_ptr().offset(clientNum as isize) as *mut svEntity_t;
     (*svEnt).snapshotCounter = sv.snapshotCounter;
     // find the client's viewpoint
     org[0 as i32 as usize] = (*ps).origin[0 as i32 as usize];
@@ -908,12 +842,7 @@ unsafe extern "C" fn SV_BuildClientSnapshot(mut client: *mut client_t) {
     org[2 as i32 as usize] += (*ps).viewheight as f32;
     // add all the entities directly visible to the eye, which
     // may include portal entities that merge other viewpoints
-    SV_AddEntitiesVisibleFromPoint(
-        org.as_mut_ptr(),
-        frame,
-        &mut entityNumbers,
-        qfalse,
-    );
+    SV_AddEntitiesVisibleFromPoint(org.as_mut_ptr(), frame, &mut entityNumbers, qfalse);
     // if there were portals visible, there may be out of order entities
     // in the list which will need to be resorted for the delta compression
     // to work correctly.  This also catches the error condition
@@ -940,12 +869,11 @@ unsafe extern "C" fn SV_BuildClientSnapshot(mut client: *mut client_t) {
     (*frame).first_entity = svs.nextSnapshotEntities;
     i = 0 as i32;
     while i < entityNumbers.numSnapshotEntities {
-        ent = SV_GentityNum(entityNumbers.snapshotEntities[i as usize])
-            as *mut sharedEntity_t;
-        state = &mut *svs.snapshotEntities.offset(
-            (svs.nextSnapshotEntities
-                % svs.numSnapshotEntities) as isize,
-        ) as *mut entityState_t;
+        ent = SV_GentityNum(entityNumbers.snapshotEntities[i as usize]) as *mut sharedEntity_t;
+        state = &mut *svs
+            .snapshotEntities
+            .offset((svs.nextSnapshotEntities % svs.numSnapshotEntities) as isize)
+            as *mut entityState_t;
         *state = (*ent).s;
         svs.nextSnapshotEntities += 1;
         // this should never hit, map should always be restarted first in SV_Frame
@@ -967,60 +895,33 @@ Check to see if there is any VoIP queued for a client, and send if there is.
 ==================
 */
 
-unsafe extern "C" fn SV_WriteVoipToClient(
-    mut cl: *mut client_t,
-    mut msg: *mut msg_t,
-) {
+unsafe extern "C" fn SV_WriteVoipToClient(mut cl: *mut client_t, mut msg: *mut msg_t) {
     let mut totalbytes: i32 = 0 as i32;
     let mut i: i32 = 0;
-    let mut packet: *mut voipServerPacket_t =
-        0 as *mut voipServerPacket_t;
+    let mut packet: *mut voipServerPacket_t = 0 as *mut voipServerPacket_t;
     if (*cl).queuedVoipPackets != 0 {
         // Write as many VoIP packets as we reasonably can...
         i = 0 as i32;
         while i < (*cl).queuedVoipPackets {
-            packet = (*cl).voipPacket[((i + (*cl).queuedVoipIndex) as libc::c_ulong).wrapping_rem(
-                (::std::mem::size_of::<[*mut voipServerPacket_t; 64]>()
-                    as libc::c_ulong)
-                    .wrapping_div(
-                        ::std::mem::size_of::<*mut voipServerPacket_t>()
-                            as libc::c_ulong,
-                    ),
-            ) as usize];
+            packet = (*cl).voipPacket
+                [((i + (*cl).queuedVoipIndex) as libc::c_ulong).wrapping_rem(
+                    (::std::mem::size_of::<[*mut voipServerPacket_t; 64]>() as libc::c_ulong)
+                        .wrapping_div(
+                            ::std::mem::size_of::<*mut voipServerPacket_t>() as libc::c_ulong
+                        ),
+                ) as usize];
             if *(*cl).downloadName.as_mut_ptr() == 0 {
                 totalbytes += (*packet).len;
                 if totalbytes > ((*msg).maxsize - (*msg).cursize) / 2 as i32 {
                     break;
                 }
-                MSG_WriteByte(
-                    msg as *mut msg_t,
-                    svc_voipOpus as i32,
-                );
-                MSG_WriteShort(
-                    msg as *mut msg_t,
-                    (*packet).sender,
-                );
-                MSG_WriteByte(
-                    msg as *mut msg_t,
-                    (*packet).generation as byte as i32,
-                );
-                MSG_WriteLong(
-                    msg as *mut msg_t,
-                    (*packet).sequence,
-                );
-                MSG_WriteByte(
-                    msg as *mut msg_t,
-                    (*packet).frames,
-                );
-                MSG_WriteShort(
-                    msg as *mut msg_t,
-                    (*packet).len,
-                );
-                MSG_WriteBits(
-                    msg as *mut msg_t,
-                    (*packet).flags,
-                    2 as i32,
-                );
+                MSG_WriteByte(msg as *mut msg_t, svc_voipOpus as i32);
+                MSG_WriteShort(msg as *mut msg_t, (*packet).sender);
+                MSG_WriteByte(msg as *mut msg_t, (*packet).generation as byte as i32);
+                MSG_WriteLong(msg as *mut msg_t, (*packet).sequence);
+                MSG_WriteByte(msg as *mut msg_t, (*packet).frames);
+                MSG_WriteShort(msg as *mut msg_t, (*packet).len);
+                MSG_WriteBits(msg as *mut msg_t, (*packet).flags, 2 as i32);
                 MSG_WriteData(
                     msg as *mut msg_t,
                     (*packet).data.as_mut_ptr() as *const libc::c_void,
@@ -1033,12 +934,8 @@ unsafe extern "C" fn SV_WriteVoipToClient(
         (*cl).queuedVoipPackets -= i;
         (*cl).queuedVoipIndex += i;
         (*cl).queuedVoipIndex = ((*cl).queuedVoipIndex as libc::c_ulong).wrapping_rem(
-            (::std::mem::size_of::<[*mut voipServerPacket_t; 64]>()
-                as libc::c_ulong)
-                .wrapping_div(
-                    ::std::mem::size_of::<*mut voipServerPacket_t>()
-                        as libc::c_ulong,
-                ),
+            (::std::mem::size_of::<[*mut voipServerPacket_t; 64]>() as libc::c_ulong)
+                .wrapping_div(::std::mem::size_of::<*mut voipServerPacket_t>() as libc::c_ulong),
         ) as i32
     };
 }
@@ -1051,10 +948,7 @@ Called by SV_SendClientSnapshot and SV_SendClientGameState
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_SendMessageToClient(
-    mut msg: *mut msg_t,
-    mut client: *mut client_t,
-) {
+pub unsafe extern "C" fn SV_SendMessageToClient(mut msg: *mut msg_t, mut client: *mut client_t) {
     // record information about the message
     (*client).frames[((*client).netchan.outgoingSequence & 32 as i32 - 1 as i32) as usize]
         .messageSize = (*msg).cursize;
@@ -1063,10 +957,7 @@ pub unsafe extern "C" fn SV_SendMessageToClient(
     (*client).frames[((*client).netchan.outgoingSequence & 32 as i32 - 1 as i32) as usize]
         .messageAcked = -(1 as i32);
     // send the datagram
-    SV_Netchan_Transmit(
-        client as *mut client_s,
-        msg as *mut msg_t,
-    );
+    SV_Netchan_Transmit(client as *mut client_s, msg as *mut msg_t);
 }
 /*
 =======================
@@ -1100,8 +991,7 @@ pub unsafe extern "C" fn SV_SendClientSnapshot(mut client: *mut client_t) {
     MSG_Init(
         &mut msg as *mut _ as *mut msg_t,
         msg_buf.as_mut_ptr(),
-        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong
-            as i32,
+        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
     );
     msg.allowoverflow = qtrue;
     // NOTE, MRE: all server->client messages now acknowledge
@@ -1279,8 +1169,7 @@ pub unsafe extern "C" fn SV_SendClientMessages() {
     // send a message to each connected client
     i = 0 as i32; // not connected
     while i < (*sv_maxclients).integer {
-        c = &mut *svs.clients.offset(i as isize)
-            as *mut client_t; // It's not time yet
+        c = &mut *svs.clients.offset(i as isize) as *mut client_t; // It's not time yet
         if !((*c).state as u64 == 0) {
             if !(((svs.time - (*c).lastSnapshotTime) as f32)
                 < (*c).snapshotMsec as f32 * (*com_timescale).value)
@@ -1290,21 +1179,15 @@ pub unsafe extern "C" fn SV_SendClientMessages() {
                         || !(*c).netchan_start_queue.is_null()
                     {
                         (*c).rateDelayed = qtrue // Client is downloading, don't send snapshots
-                                                                                // Drop this snapshot if the packet queue is still full or delta compression will break
+                                                 // Drop this snapshot if the packet queue is still full or delta compression will break
                     } else {
-                        if !((*c).netchan.remoteAddress.type_0 as u32
-                            == NA_LOOPBACK as i32 as u32
+                        if !((*c).netchan.remoteAddress.type_0 as u32 == NA_LOOPBACK as i32 as u32
                             || (*sv_lanForceRate).integer != 0
-                                && Sys_IsLANAddress(
-                                    (*c).netchan.remoteAddress as netadr_t,
-                                ) as u32
+                                && Sys_IsLANAddress((*c).netchan.remoteAddress as netadr_t) as u32
                                     != 0)
                         {
                             // rate control for clients not on LAN
-                            if SV_RateMsec(
-                                c as *mut client_s,
-                            ) > 0 as i32
-                            {
+                            if SV_RateMsec(c as *mut client_s) > 0 as i32 {
                                 // Not enough time since last packet passed through the line
                                 (*c).rateDelayed = qtrue;
                                 current_block_6 = 16559507199688588974;

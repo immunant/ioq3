@@ -53,11 +53,9 @@ unsafe extern "C" fn silk_resampler_private_down_FIR_INTERPOL(
 ) -> *mut opus_int16 {
     let mut index_Q16: opus_int32 = 0;
     let mut res_Q6: opus_int32 = 0;
-    let mut buf_ptr: *mut opus_int32 =
-        0 as *mut opus_int32;
+    let mut buf_ptr: *mut opus_int32 = 0 as *mut opus_int32;
     let mut interpol_ind: opus_int32 = 0;
-    let mut interpol_ptr: *const opus_int16 =
-        0 as *const opus_int16;
+    let mut interpol_ptr: *const opus_int16 = 0 as *const opus_int16;
     match FIR_Order {
         18 => {
             index_Q16 = 0 as i32;
@@ -65,8 +63,7 @@ unsafe extern "C" fn silk_resampler_private_down_FIR_INTERPOL(
                 /* Integer part gives pointer to buffered input */
                 buf_ptr = buf.offset((index_Q16 >> 16 as i32) as isize);
                 /* Fractional part gives interpolation coefficients */
-                interpol_ind = ((index_Q16 & 0xffff as i32) as i64
-                    * FIR_Fracs as opus_int16 as i64
+                interpol_ind = ((index_Q16 & 0xffff as i32) as i64 * FIR_Fracs as opus_int16 as i64
                     >> 16 as i32) as opus_int32;
                 /* Inner product */
                 interpol_ptr = &*FIR_Coefs.offset((18 as i32 / 2 as i32 * interpol_ind) as isize)
@@ -396,14 +393,12 @@ pub unsafe extern "C" fn silk_resampler_private_down_FIR(
 )
 /* I    Number of input samples     */
 {
-    let mut S: *mut silk_resampler_state_struct =
-        SS as *mut silk_resampler_state_struct;
+    let mut S: *mut silk_resampler_state_struct = SS as *mut silk_resampler_state_struct;
     let mut nSamplesIn: opus_int32 = 0;
     let mut max_index_Q16: opus_int32 = 0;
     let mut index_increment_Q16: opus_int32 = 0;
     let mut buf: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut FIR_Coefs: *const opus_int16 =
-        0 as *const opus_int16;
+    let mut FIR_Coefs: *const opus_int16 = 0 as *const opus_int16;
     let mut fresh3 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
@@ -411,11 +406,12 @@ pub unsafe extern "C" fn silk_resampler_private_down_FIR(
     );
     buf = fresh3.as_mut_ptr() as *mut opus_int32;
     /* Copy buffered samples to start of buffer */
-    crate::stdlib::memcpy(buf as *mut libc::c_void,
-           (*S).sFIR.i32_0.as_mut_ptr() as *const libc::c_void,
-           ((*S).FIR_Order as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
-                                                as libc::c_ulong));
+    crate::stdlib::memcpy(
+        buf as *mut libc::c_void,
+        (*S).sFIR.i32_0.as_mut_ptr() as *const libc::c_void,
+        ((*S).FIR_Order as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+    );
     FIR_Coefs = &*(*S).Coefs.offset(2 as i32 as isize) as *const opus_int16;
     /* Iterate over blocks of frameSizeIn input samples */
     index_increment_Q16 = (*S).invRatio_Q16;
@@ -433,8 +429,7 @@ pub unsafe extern "C" fn silk_resampler_private_down_FIR(
             (*S).Coefs,
             nSamplesIn,
         );
-        max_index_Q16 = ((nSamplesIn as opus_uint32) << 16 as i32)
-            as opus_int32;
+        max_index_Q16 = ((nSamplesIn as opus_uint32) << 16 as i32) as opus_int32;
         /* Interpolate filtered signal */
         out = silk_resampler_private_down_FIR_INTERPOL(
             out,
@@ -453,18 +448,16 @@ pub unsafe extern "C" fn silk_resampler_private_down_FIR(
         /* More iterations to do; copy last part of filtered signal to beginning of buffer */
         crate::stdlib::memcpy(
             buf as *mut libc::c_void,
-            &mut *buf.offset(nSamplesIn as isize) as *mut opus_int32
-                as *const libc::c_void,
-            ((*S).FIR_Order as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                opus_int32,
-            >() as libc::c_ulong),
+            &mut *buf.offset(nSamplesIn as isize) as *mut opus_int32 as *const libc::c_void,
+            ((*S).FIR_Order as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
         );
     }
     /* Copy last part of filtered signal to the state for the next call */
-    crate::stdlib::memcpy((*S).sFIR.i32_0.as_mut_ptr() as *mut libc::c_void,
-           &mut *buf.offset(nSamplesIn as isize) as *mut opus_int32 as
-               *const libc::c_void,
-           ((*S).FIR_Order as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
-                                                as libc::c_ulong));
+    crate::stdlib::memcpy(
+        (*S).sFIR.i32_0.as_mut_ptr() as *mut libc::c_void,
+        &mut *buf.offset(nSamplesIn as isize) as *mut opus_int32 as *const libc::c_void,
+        ((*S).FIR_Order as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+    );
 }

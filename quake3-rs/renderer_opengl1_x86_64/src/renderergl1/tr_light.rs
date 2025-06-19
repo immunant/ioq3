@@ -444,18 +444,11 @@ pub unsafe extern "C" fn R_DlightBmodel(mut bmodel: *mut bmodel_t) {
     let mut mask: i32 = 0;
     let mut surf: *mut msurface_t = 0 as *mut msurface_t;
     // transform all the lights
-    R_TransformDlights(
-        tr.refdef.num_dlights,
-        tr.refdef.dlights,
-        &mut tr.or,
-    );
+    R_TransformDlights(tr.refdef.num_dlights, tr.refdef.dlights, &mut tr.or);
     mask = 0 as i32;
     i = 0 as i32;
     while i < tr.refdef.num_dlights {
-        dl = &mut *tr
-            .refdef
-            .dlights
-            .offset(i as isize) as *mut dlight_s;
+        dl = &mut *tr.refdef.dlights.offset(i as isize) as *mut dlight_s;
         // see if the point is close enough to the bounds to matter
         j = 0 as i32;
         while j < 3 as i32 {
@@ -477,8 +470,7 @@ pub unsafe extern "C" fn R_DlightBmodel(mut bmodel: *mut bmodel_t) {
         }
         i += 1
     }
-    (*tr.currentEntity).needDlights =
-        (mask != 0 as i32) as i32 as qboolean;
+    (*tr.currentEntity).needDlights = (mask != 0 as i32) as i32 as qboolean;
     // set the dlight bits in all the surfaces
     i = 0 as i32;
     while i < (*bmodel).numSurfaces {
@@ -505,8 +497,7 @@ unsafe extern "C" fn R_SetupEntityLightingGrid(mut ent: *mut trRefEntity_t) {
     let mut pos: [i32; 3] = [0; 3];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut gridData: *mut byte =
-        0 as *mut byte;
+    let mut gridData: *mut byte = 0 as *mut byte;
     let mut frac: [f32; 3] = [0.; 3];
     let mut gridStep: [i32; 3] = [0; 3];
     let mut direction: vec3_t = [0.; 3];
@@ -523,26 +514,22 @@ unsafe extern "C" fn R_SetupEntityLightingGrid(mut ent: *mut trRefEntity_t) {
         lightOrigin[1 as i32 as usize] = (*ent).e.origin[1 as i32 as usize];
         lightOrigin[2 as i32 as usize] = (*ent).e.origin[2 as i32 as usize]
     }
-    lightOrigin[0 as i32 as usize] = lightOrigin[0 as i32 as usize]
-        - (*tr.world).lightGridOrigin[0 as i32 as usize];
-    lightOrigin[1 as i32 as usize] = lightOrigin[1 as i32 as usize]
-        - (*tr.world).lightGridOrigin[1 as i32 as usize];
-    lightOrigin[2 as i32 as usize] = lightOrigin[2 as i32 as usize]
-        - (*tr.world).lightGridOrigin[2 as i32 as usize];
+    lightOrigin[0 as i32 as usize] =
+        lightOrigin[0 as i32 as usize] - (*tr.world).lightGridOrigin[0 as i32 as usize];
+    lightOrigin[1 as i32 as usize] =
+        lightOrigin[1 as i32 as usize] - (*tr.world).lightGridOrigin[1 as i32 as usize];
+    lightOrigin[2 as i32 as usize] =
+        lightOrigin[2 as i32 as usize] - (*tr.world).lightGridOrigin[2 as i32 as usize];
     i = 0 as i32;
     while i < 3 as i32 {
         let mut v: f32 = 0.;
-        v = lightOrigin[i as usize]
-            * (*tr.world).lightGridInverseSize[i as usize];
+        v = lightOrigin[i as usize] * (*tr.world).lightGridInverseSize[i as usize];
         pos[i as usize] = crate::stdlib::floor(v as f64) as i32;
         frac[i as usize] = v - pos[i as usize] as f32;
         if pos[i as usize] < 0 as i32 {
             pos[i as usize] = 0 as i32
-        } else if pos[i as usize]
-            > (*tr.world).lightGridBounds[i as usize] - 1 as i32
-        {
-            pos[i as usize] =
-                (*tr.world).lightGridBounds[i as usize] - 1 as i32
+        } else if pos[i as usize] > (*tr.world).lightGridBounds[i as usize] - 1 as i32 {
+            pos[i as usize] = (*tr.world).lightGridBounds[i as usize] - 1 as i32
         }
         i += 1
     }
@@ -558,8 +545,7 @@ unsafe extern "C" fn R_SetupEntityLightingGrid(mut ent: *mut trRefEntity_t) {
     // NULL with -nolight maps
     // trilerp the light value
     gridStep[0 as i32 as usize] = 8 as i32;
-    gridStep[1 as i32 as usize] =
-        8 as i32 * (*tr.world).lightGridBounds[0 as i32 as usize];
+    gridStep[1 as i32 as usize] = 8 as i32 * (*tr.world).lightGridBounds[0 as i32 as usize];
     gridStep[2 as i32 as usize] = 8 as i32
         * (*tr.world).lightGridBounds[0 as i32 as usize]
         * (*tr.world).lightGridBounds[1 as i32 as usize];
@@ -572,8 +558,7 @@ unsafe extern "C" fn R_SetupEntityLightingGrid(mut ent: *mut trRefEntity_t) {
     i = 0 as i32;
     while i < 8 as i32 {
         let mut factor: f32 = 0.;
-        let mut data: *mut byte =
-            0 as *mut byte;
+        let mut data: *mut byte = 0 as *mut byte;
         let mut lat: i32 = 0;
         let mut lng: i32 = 0;
         let mut normal: vec3_t = [0.; 3];
@@ -582,10 +567,7 @@ unsafe extern "C" fn R_SetupEntityLightingGrid(mut ent: *mut trRefEntity_t) {
         j = 0 as i32;
         while j < 3 as i32 {
             if i & (1 as i32) << j != 0 {
-                if pos[j as usize] + 1 as i32
-                    > (*tr.world).lightGridBounds[j as usize]
-                        - 1 as i32
-                {
+                if pos[j as usize] + 1 as i32 > (*tr.world).lightGridBounds[j as usize] - 1 as i32 {
                     break;
                 }
                 factor *= frac[j as usize];
@@ -624,11 +606,9 @@ unsafe extern "C" fn R_SetupEntityLightingGrid(mut ent: *mut trRefEntity_t) {
                 normal[0 as i32 as usize] = tr.sinTable
                     [(lat + 1024 as i32 / 4 as i32 & 1024 as i32 - 1 as i32) as usize]
                     * tr.sinTable[lng as usize];
-                normal[1 as i32 as usize] = tr.sinTable
-                    [lat as usize]
-                    * tr.sinTable[lng as usize];
-                normal[2 as i32 as usize] = tr.sinTable
-                    [(lng + 1024 as i32 / 4 as i32 & 1024 as i32 - 1 as i32) as usize];
+                normal[1 as i32 as usize] = tr.sinTable[lat as usize] * tr.sinTable[lng as usize];
+                normal[2 as i32 as usize] =
+                    tr.sinTable[(lng + 1024 as i32 / 4 as i32 & 1024 as i32 - 1 as i32) as usize];
                 direction[0 as i32 as usize] =
                     direction[0 as i32 as usize] + normal[0 as i32 as usize] * factor;
                 direction[1 as i32 as usize] =
@@ -696,9 +676,7 @@ unsafe extern "C" fn LogLight(mut ent: *mut trRefEntity_t) {
     } else if (*ent).directedLight[2 as i32 as usize] > max2 as f32 {
         max2 = (*ent).directedLight[2 as i32 as usize] as i32
     }
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"amb:%i  dir:%i\n\x00" as *const u8 as *const libc::c_char,
         max1,
@@ -747,43 +725,29 @@ pub unsafe extern "C" fn R_SetupEntityLighting(
         lightOrigin[2 as i32 as usize] = (*ent).e.origin[2 as i32 as usize]
     }
     // if NOWORLDMODEL, only use dynamic lights (menu system, etc)
-    if (*refdef).rdflags & 0x1 as i32 == 0
-        && !(*tr.world)
-            .lightGridData
-            .is_null()
-    {
+    if (*refdef).rdflags & 0x1 as i32 == 0 && !(*tr.world).lightGridData.is_null() {
         R_SetupEntityLightingGrid(ent);
     } else {
-        (*ent).ambientLight[2 as i32 as usize] =
-            tr.identityLight * 150 as i32 as f32;
+        (*ent).ambientLight[2 as i32 as usize] = tr.identityLight * 150 as i32 as f32;
         (*ent).ambientLight[1 as i32 as usize] = (*ent).ambientLight[2 as i32 as usize];
         (*ent).ambientLight[0 as i32 as usize] = (*ent).ambientLight[1 as i32 as usize];
-        (*ent).directedLight[2 as i32 as usize] =
-            tr.identityLight * 150 as i32 as f32;
+        (*ent).directedLight[2 as i32 as usize] = tr.identityLight * 150 as i32 as f32;
         (*ent).directedLight[1 as i32 as usize] = (*ent).directedLight[2 as i32 as usize];
         (*ent).directedLight[0 as i32 as usize] = (*ent).directedLight[1 as i32 as usize];
-        (*ent).lightDir[0 as i32 as usize] =
-            tr.sunDirection[0 as i32 as usize];
-        (*ent).lightDir[1 as i32 as usize] =
-            tr.sunDirection[1 as i32 as usize];
-        (*ent).lightDir[2 as i32 as usize] =
-            tr.sunDirection[2 as i32 as usize]
+        (*ent).lightDir[0 as i32 as usize] = tr.sunDirection[0 as i32 as usize];
+        (*ent).lightDir[1 as i32 as usize] = tr.sunDirection[1 as i32 as usize];
+        (*ent).lightDir[2 as i32 as usize] = tr.sunDirection[2 as i32 as usize]
     }
     // bonus items and view weapons have a fixed minimum add
     /* ent->e.renderfx & RF_MINLIGHT */
     // give everything a minimum light add
-    (*ent).ambientLight[0 as i32 as usize] +=
-        tr.identityLight * 32 as i32 as f32;
-    (*ent).ambientLight[1 as i32 as usize] +=
-        tr.identityLight * 32 as i32 as f32;
-    (*ent).ambientLight[2 as i32 as usize] +=
-        tr.identityLight * 32 as i32 as f32;
+    (*ent).ambientLight[0 as i32 as usize] += tr.identityLight * 32 as i32 as f32;
+    (*ent).ambientLight[1 as i32 as usize] += tr.identityLight * 32 as i32 as f32;
+    (*ent).ambientLight[2 as i32 as usize] += tr.identityLight * 32 as i32 as f32;
     //
     // modify the light by dynamic lights
     //
-    d = VectorLength(
-        (*ent).directedLight.as_mut_ptr() as *const vec_t
-    );
+    d = VectorLength((*ent).directedLight.as_mut_ptr() as *const vec_t);
     lightDir[0 as i32 as usize] = (*ent).lightDir[0 as i32 as usize] * d;
     lightDir[1 as i32 as usize] = (*ent).lightDir[1 as i32 as usize] * d;
     lightDir[2 as i32 as usize] = (*ent).lightDir[2 as i32 as usize] * d;
@@ -813,11 +777,8 @@ pub unsafe extern "C" fn R_SetupEntityLighting(
     // clamp ambient
     i = 0 as i32;
     while i < 3 as i32 {
-        if (*ent).ambientLight[i as usize]
-            > tr.identityLightByte as f32
-        {
-            (*ent).ambientLight[i as usize] = tr.identityLightByte
-                as vec_t
+        if (*ent).ambientLight[i as usize] > tr.identityLightByte as f32 {
+            (*ent).ambientLight[i as usize] = tr.identityLightByte as vec_t
         }
         i += 1
     }
@@ -825,26 +786,14 @@ pub unsafe extern "C" fn R_SetupEntityLighting(
         LogLight(ent);
     }
     // save out the byte packet version
-    *(&mut (*ent).ambientLightInt as *mut i32 as *mut byte)
-        .offset(0 as i32 as isize) = ri
-        .ftol
-        .expect("non-null function pointer")(
-        (*ent).ambientLight[0 as i32 as usize]
-    ) as byte;
-    *(&mut (*ent).ambientLightInt as *mut i32 as *mut byte)
-        .offset(1 as i32 as isize) = ri
-        .ftol
-        .expect("non-null function pointer")(
-        (*ent).ambientLight[1 as i32 as usize]
-    ) as byte;
-    *(&mut (*ent).ambientLightInt as *mut i32 as *mut byte)
-        .offset(2 as i32 as isize) = ri
-        .ftol
-        .expect("non-null function pointer")(
-        (*ent).ambientLight[2 as i32 as usize]
-    ) as byte;
-    *(&mut (*ent).ambientLightInt as *mut i32 as *mut byte)
-        .offset(3 as i32 as isize) = 0xff as i32 as byte;
+    *(&mut (*ent).ambientLightInt as *mut i32 as *mut byte).offset(0 as i32 as isize) =
+        ri.ftol.expect("non-null function pointer")((*ent).ambientLight[0 as i32 as usize]) as byte;
+    *(&mut (*ent).ambientLightInt as *mut i32 as *mut byte).offset(1 as i32 as isize) =
+        ri.ftol.expect("non-null function pointer")((*ent).ambientLight[1 as i32 as usize]) as byte;
+    *(&mut (*ent).ambientLightInt as *mut i32 as *mut byte).offset(2 as i32 as isize) =
+        ri.ftol.expect("non-null function pointer")((*ent).ambientLight[2 as i32 as usize]) as byte;
+    *(&mut (*ent).ambientLightInt as *mut i32 as *mut byte).offset(3 as i32 as isize) =
+        0xff as i32 as byte;
     // transform the direction to local space
     VectorNormalize(lightDir.as_mut_ptr());
     (*ent).lightDir[0 as i32 as usize] = lightDir[0 as i32 as usize]
@@ -1256,10 +1205,7 @@ pub unsafe extern "C" fn R_LightForPoint(
         ambientLightInt: 0,
         directedLight: [0.; 3],
     };
-    if (*tr.world)
-        .lightGridData
-        .is_null()
-    {
+    if (*tr.world).lightGridData.is_null() {
         return qfalse as i32;
     }
     crate::stdlib::memset(

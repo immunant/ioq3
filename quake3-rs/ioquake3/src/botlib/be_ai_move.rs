@@ -192,54 +192,34 @@ pub struct bot_movestate_s {
 }
 #[no_mangle]
 
-pub static mut sv_maxstep: *mut libvar_t = 0
-    as *const libvar_t
-    as *mut libvar_t;
+pub static mut sv_maxstep: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
 #[no_mangle]
 
-pub static mut sv_maxbarrier: *mut libvar_t = 0
-    as *const libvar_t
-    as *mut libvar_t;
+pub static mut sv_maxbarrier: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
 #[no_mangle]
 
-pub static mut sv_gravity: *mut libvar_t = 0
-    as *const libvar_t
-    as *mut libvar_t;
+pub static mut sv_gravity: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
 #[no_mangle]
 
-pub static mut weapindex_rocketlauncher: *mut libvar_t = 0
-    as *const libvar_t
-    as *mut libvar_t;
+pub static mut weapindex_rocketlauncher: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
 #[no_mangle]
 
-pub static mut weapindex_bfg10k: *mut libvar_t = 0
-    as *const libvar_t
-    as *mut libvar_t;
+pub static mut weapindex_bfg10k: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
 #[no_mangle]
 
-pub static mut weapindex_grapple: *mut libvar_t = 0
-    as *const libvar_t
-    as *mut libvar_t;
+pub static mut weapindex_grapple: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
 #[no_mangle]
 
-pub static mut entitytypemissile: *mut libvar_t = 0
-    as *const libvar_t
-    as *mut libvar_t;
+pub static mut entitytypemissile: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
 #[no_mangle]
 
-pub static mut offhandgrapple: *mut libvar_t = 0
-    as *const libvar_t
-    as *mut libvar_t;
+pub static mut offhandgrapple: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
 #[no_mangle]
 
-pub static mut cmd_grappleoff: *mut libvar_t = 0
-    as *const libvar_t
-    as *mut libvar_t;
+pub static mut cmd_grappleoff: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
 #[no_mangle]
 
-pub static mut cmd_grappleon: *mut libvar_t = 0
-    as *const libvar_t
-    as *mut libvar_t;
+pub static mut cmd_grappleon: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
 //input vars (all set outside the movement code)
 //origin of the bot
 //velocity of the bot
@@ -453,9 +433,7 @@ pub unsafe extern "C" fn AngleDiff(mut ang1: f32, mut ang2: f32) -> f32 {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn BotFuzzyPointReachabilityArea(
-    mut origin: *mut vec_t,
-) -> i32 {
+pub unsafe extern "C" fn BotFuzzyPointReachabilityArea(mut origin: *mut vec_t) -> i32 {
     let mut firstareanum: i32 = 0; //end if
     let mut j: i32 = 0; //end for
     let mut x: i32 = 0; //end for
@@ -529,9 +507,7 @@ pub unsafe extern "C" fn BotFuzzyPointReachabilityArea(
                             - *origin.offset(1 as i32 as isize);
                         v[2 as i32 as usize] = points[j as usize][2 as i32 as usize]
                             - *origin.offset(2 as i32 as isize);
-                        dist = VectorLength(
-                            v.as_mut_ptr() as *const vec_t
-                        );
+                        dist = VectorLength(v.as_mut_ptr() as *const vec_t);
                         if dist < bestdist {
                             bestareanum = areas[j as usize];
                             bestdist = dist
@@ -565,10 +541,7 @@ pub unsafe extern "C" fn BotFuzzyPointReachabilityArea(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn BotReachabilityArea(
-    mut origin: *mut vec_t,
-    mut client: i32,
-) -> i32 {
+pub unsafe extern "C" fn BotReachabilityArea(mut origin: *mut vec_t, mut client: i32) -> i32 {
     let mut modelnum: i32 = 0;
     let mut modeltype: i32 = 0;
     let mut reachnum: i32 = 0;
@@ -586,11 +559,7 @@ pub unsafe extern "C" fn BotReachabilityArea(
     let mut end: vec3_t = [0.; 3];
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
-    let mut up: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ];
+    let mut up: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
     let mut bsptrace: bsp_trace_t = bsp_trace_t {
         allsolid: qfalse,
         startsolid: qfalse,
@@ -798,21 +767,13 @@ pub unsafe extern "C" fn BotOnMover(
     let mut modelorigin: vec3_t = [0.; 3];
     let mut org: vec3_t = [0.; 3];
     let mut end: vec3_t = [0.; 3];
-    let mut angles: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-    ];
+    let mut angles: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t];
     let mut boxmins: vec3_t = [
         -(16 as i32) as vec_t,
         -(16 as i32) as vec_t,
         -(8 as i32) as vec_t,
     ];
-    let mut boxmaxs: vec3_t = [
-        16 as i32 as vec_t,
-        16 as i32 as vec_t,
-        8 as i32 as vec_t,
-    ];
+    let mut boxmaxs: vec3_t = [16 as i32 as vec_t, 16 as i32 as vec_t, 8 as i32 as vec_t];
     let mut trace: bsp_trace_t = bsp_trace_t {
         allsolid: qfalse,
         startsolid: qfalse,
@@ -918,11 +879,7 @@ pub unsafe extern "C" fn MoverDown(mut reach: *mut aas_reachability_t) -> i32 {
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
     let mut origin: vec3_t = [0.; 3];
-    let mut angles: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-    ];
+    let mut angles: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t];
     modelnum = (*reach).facenum & 0xffff as i32;
     //get some bsp model info
     crate::src::botlib::be_aas_bspq3::AAS_BSPModelMinsMaxsOrigin(
@@ -1049,11 +1006,7 @@ pub unsafe extern "C" fn BotOnTopOfEntity(mut ms: *mut bot_movestate_t) -> i32 {
     let mut mins: vec3_t = [0.; 3]; //end if
     let mut maxs: vec3_t = [0.; 3];
     let mut end: vec3_t = [0.; 3];
-    let mut up: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ];
+    let mut up: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
     let mut trace: bsp_trace_t = bsp_trace_t {
         allsolid: qfalse,
         startsolid: qfalse,
@@ -1233,10 +1186,7 @@ pub unsafe extern "C" fn DistanceFromLineSquared(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn VectorDistanceSquared(
-    mut p1: *mut vec_t,
-    mut p2: *mut vec_t,
-) -> f32 {
+pub unsafe extern "C" fn VectorDistanceSquared(mut p1: *mut vec_t, mut p2: *mut vec_t) -> f32 {
     let mut dir: vec3_t = [0.; 3];
     dir[0 as i32 as usize] = *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
     dir[1 as i32 as usize] = *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
@@ -1836,11 +1786,7 @@ pub unsafe extern "C" fn MoverBottomCenter(
     let mut maxs: vec3_t = [0.; 3];
     let mut origin: vec3_t = [0.; 3];
     let mut mids: vec3_t = [0.; 3];
-    let mut angles: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-    ];
+    let mut angles: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t];
     modelnum = (*reach).facenum & 0xffff as i32;
     //get some bsp model info
     crate::src::botlib::be_aas_bspq3::AAS_BSPModelMinsMaxsOrigin(
@@ -1869,15 +1815,12 @@ pub unsafe extern "C" fn MoverBottomCenter(
     mids[0 as i32 as usize] = mins[0 as i32 as usize] + maxs[0 as i32 as usize];
     mids[1 as i32 as usize] = mins[1 as i32 as usize] + maxs[1 as i32 as usize];
     mids[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
-    *bottomcenter.offset(0 as i32 as isize) = (origin[0 as i32 as usize] as f64
-        + mids[0 as i32 as usize] as f64 * 0.5f64)
-        as vec_t;
-    *bottomcenter.offset(1 as i32 as isize) = (origin[1 as i32 as usize] as f64
-        + mids[1 as i32 as usize] as f64 * 0.5f64)
-        as vec_t;
-    *bottomcenter.offset(2 as i32 as isize) = (origin[2 as i32 as usize] as f64
-        + mids[2 as i32 as usize] as f64 * 0.5f64)
-        as vec_t;
+    *bottomcenter.offset(0 as i32 as isize) =
+        (origin[0 as i32 as usize] as f64 + mids[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    *bottomcenter.offset(1 as i32 as isize) =
+        (origin[1 as i32 as usize] as f64 + mids[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    *bottomcenter.offset(2 as i32 as isize) =
+        (origin[2 as i32 as usize] as f64 + mids[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
     *bottomcenter.offset(2 as i32 as isize) = (*reach).start[2 as i32 as usize];
 }
 //end of the function MoverBottomCenter
@@ -2212,8 +2155,7 @@ pub unsafe extern "C" fn BotWalkInDirection(
         origin[0 as i32 as usize] = (*ms).origin[0 as i32 as usize]; //qtrue);
         origin[1 as i32 as usize] = (*ms).origin[1 as i32 as usize];
         origin[2 as i32 as usize] = (*ms).origin[2 as i32 as usize];
-        origin[2 as i32 as usize] =
-            (origin[2 as i32 as usize] as f64 + 0.5f64) as vec_t;
+        origin[2 as i32 as usize] = (origin[2 as i32 as usize] as f64 + 0.5f64) as vec_t;
         crate::src::botlib::be_aas_move::AAS_PredictClientMovement(
             &mut move_0 as *mut _ as *mut aas_clientmove_s,
             (*ms).entitynum,
@@ -2368,10 +2310,8 @@ pub unsafe extern "C" fn Intersection(
     if d != 0 as i32 as f32 {
         x1 = *p1.offset(1 as i32 as isize) * dx1 - *p1.offset(0 as i32 as isize) * dy1;
         x2 = *p3.offset(1 as i32 as isize) * dx2 - *p3.offset(0 as i32 as isize) * dy2;
-        *out.offset(0 as i32 as isize) =
-            ((dx1 * x2 - dx2 * x1) / d) as i32 as vec_t;
-        *out.offset(1 as i32 as isize) =
-            ((dy1 * x2 - dy2 * x1) / d) as i32 as vec_t;
+        *out.offset(0 as i32 as isize) = ((dx1 * x2 - dx2 * x1) / d) as i32 as vec_t;
+        *out.offset(1 as i32 as isize) = ((dy1 * x2 - dy2 * x1) / d) as i32 as vec_t;
         return qtrue as i32;
     } else {
         return qfalse as i32;
@@ -2396,11 +2336,7 @@ pub unsafe extern "C" fn BotCheckBlocked(
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
     let mut end: vec3_t = [0.; 3];
-    let mut up: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ];
+    let mut up: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
     let mut trace: bsp_trace_t = bsp_trace_t {
         allsolid: qfalse,
         startsolid: qfalse,
@@ -2525,16 +2461,8 @@ pub unsafe extern "C" fn BotTravel_Walk(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -2544,12 +2472,7 @@ pub unsafe extern "C" fn BotTravel_Walk(
     hordir[2 as i32 as usize] = 0 as i32 as vec_t;
     dist = VectorNormalize(hordir.as_mut_ptr());
     //
-    BotCheckBlocked(
-        ms,
-        hordir.as_mut_ptr(),
-        qtrue as i32,
-        &mut result,
-    );
+    BotCheckBlocked(ms, hordir.as_mut_ptr(), qtrue as i32, &mut result);
     //
     if dist < 10 as i32 as f32 {
         //end if
@@ -2622,16 +2545,8 @@ pub unsafe extern "C" fn BotFinishTravel_Walk(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -2688,16 +2603,8 @@ pub unsafe extern "C" fn BotTravel_Crouch(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -2709,12 +2616,7 @@ pub unsafe extern "C" fn BotTravel_Crouch(
     hordir[2 as i32 as usize] = 0 as i32 as vec_t;
     VectorNormalize(hordir.as_mut_ptr());
     //
-    BotCheckBlocked(
-        ms,
-        hordir.as_mut_ptr(),
-        qtrue as i32,
-        &mut result,
-    );
+    BotCheckBlocked(ms, hordir.as_mut_ptr(), qtrue as i32, &mut result);
     //elemantary actions
     crate::src::botlib::be_ea::EA_Crouch((*ms).client);
     crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), speed);
@@ -2750,16 +2652,8 @@ pub unsafe extern "C" fn BotTravel_BarrierJump(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -2769,12 +2663,7 @@ pub unsafe extern "C" fn BotTravel_BarrierJump(
     hordir[2 as i32 as usize] = 0 as i32 as vec_t;
     dist = VectorNormalize(hordir.as_mut_ptr());
     //
-    BotCheckBlocked(
-        ms,
-        hordir.as_mut_ptr(),
-        qtrue as i32,
-        &mut result,
-    );
+    BotCheckBlocked(ms, hordir.as_mut_ptr(), qtrue as i32, &mut result);
     //if pretty close to the barrier
     if dist < 9 as i32 as f32 {
         //end else
@@ -2815,16 +2704,8 @@ pub unsafe extern "C" fn BotFinishTravel_BarrierJump(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -2836,12 +2717,7 @@ pub unsafe extern "C" fn BotFinishTravel_BarrierJump(
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
         hordir[2 as i32 as usize] = 0 as i32 as vec_t;
         //
-        BotCheckBlocked(
-            ms,
-            hordir.as_mut_ptr(),
-            qtrue as i32,
-            &mut result,
-        );
+        BotCheckBlocked(ms, hordir.as_mut_ptr(), qtrue as i32, &mut result);
         //
         crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), 400 as i32 as f32);
         result.movedir[0 as i32 as usize] = hordir[0 as i32 as usize];
@@ -2874,16 +2750,8 @@ pub unsafe extern "C" fn BotTravel_Swim(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -2893,12 +2761,7 @@ pub unsafe extern "C" fn BotTravel_Swim(
     dir[2 as i32 as usize] = (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
     VectorNormalize(dir.as_mut_ptr());
     //
-    BotCheckBlocked(
-        ms,
-        dir.as_mut_ptr(),
-        qtrue as i32,
-        &mut result,
-    );
+    BotCheckBlocked(ms, dir.as_mut_ptr(), qtrue as i32, &mut result);
     //elemantary actions
     crate::src::botlib::be_ea::EA_Move((*ms).client, dir.as_mut_ptr(), 400 as i32 as f32);
     //
@@ -2938,16 +2801,8 @@ pub unsafe extern "C" fn BotTravel_WaterJump(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -2962,10 +2817,8 @@ pub unsafe extern "C" fn BotTravel_WaterJump(
     dir[2 as i32 as usize] = (dir[2 as i32 as usize] as f64
         + (15 as i32 as f64
             + 2.0f64
-                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                    - 0.5f64)
-                * 40 as i32 as f64))
-        as vec_t;
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+                * 40 as i32 as f64)) as vec_t;
     //botimport.Print(PRT_MESSAGE, "BotTravel_WaterJump: dir[2] = %f\n", dir[2]);
     VectorNormalize(dir.as_mut_ptr());
     dist = VectorNormalize(hordir.as_mut_ptr());
@@ -3013,16 +2866,8 @@ pub unsafe extern "C" fn BotFinishTravel_WaterJump(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -3050,20 +2895,16 @@ pub unsafe extern "C" fn BotFinishTravel_WaterJump(
     dir[0 as i32 as usize] = (dir[0 as i32 as usize] as f64
         + 2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 10 as i32 as f64)
-        as vec_t;
+            * 10 as i32 as f64) as vec_t;
     dir[1 as i32 as usize] = (dir[1 as i32 as usize] as f64
         + 2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 10 as i32 as f64)
-        as vec_t;
+            * 10 as i32 as f64) as vec_t;
     dir[2 as i32 as usize] = (dir[2 as i32 as usize] as f64
         + (70 as i32 as f64
             + 2.0f64
-                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                    - 0.5f64)
-                * 10 as i32 as f64))
-        as vec_t;
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+                * 10 as i32 as f64)) as vec_t;
     //elemantary actions
     crate::src::botlib::be_ea::EA_Move((*ms).client, dir.as_mut_ptr(), 400 as i32 as f32);
     //set the ideal view angles
@@ -3106,16 +2947,8 @@ pub unsafe extern "C" fn BotTravel_WalkOffLedge(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -3124,12 +2957,7 @@ pub unsafe extern "C" fn BotTravel_WalkOffLedge(
     dir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     dir[2 as i32 as usize] = (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
     VectorNormalize(dir.as_mut_ptr());
-    BotCheckBlocked(
-        ms,
-        dir.as_mut_ptr(),
-        qtrue as i32,
-        &mut result,
-    );
+    BotCheckBlocked(ms, dir.as_mut_ptr(), qtrue as i32, &mut result);
     //if the reachability start and end are practically above each other
     dir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*reach).start[0 as i32 as usize];
     dir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*reach).start[1 as i32 as usize];
@@ -3149,7 +2977,7 @@ pub unsafe extern "C" fn BotTravel_WalkOffLedge(
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
         hordir[2 as i32 as usize] = 0 as i32 as vec_t;
         VectorNormalize(hordir.as_mut_ptr()); //end else
-                                                                           //end if
+                                              //end if
         if reachhordist < 20 as i32 as f32 {
             //
             speed = 100 as i32 as f32
@@ -3173,12 +3001,7 @@ pub unsafe extern "C" fn BotTravel_WalkOffLedge(
     }
     //end else
     //
-    BotCheckBlocked(
-        ms,
-        hordir.as_mut_ptr(),
-        qtrue as i32,
-        &mut result,
-    );
+    BotCheckBlocked(ms, hordir.as_mut_ptr(), qtrue as i32, &mut result);
     //elemantary action
     crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), speed);
     result.movedir[0 as i32 as usize] = hordir[0 as i32 as usize];
@@ -3210,17 +3033,13 @@ pub unsafe extern "C" fn BotAirControl(
     org[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     org[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     org[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
-    vel[0 as i32 as usize] = (*velocity.offset(0 as i32 as isize) as f64 * 0.1f64)
-        as vec_t;
-    vel[1 as i32 as usize] = (*velocity.offset(1 as i32 as isize) as f64 * 0.1f64)
-        as vec_t;
-    vel[2 as i32 as usize] = (*velocity.offset(2 as i32 as isize) as f64 * 0.1f64)
-        as vec_t;
+    vel[0 as i32 as usize] = (*velocity.offset(0 as i32 as isize) as f64 * 0.1f64) as vec_t;
+    vel[1 as i32 as usize] = (*velocity.offset(1 as i32 as isize) as f64 * 0.1f64) as vec_t;
+    vel[2 as i32 as usize] = (*velocity.offset(2 as i32 as isize) as f64 * 0.1f64) as vec_t;
     i = 0 as i32;
     while i < 50 as i32 {
-        vel[2 as i32 as usize] = (vel[2 as i32 as usize] as f64
-            - (*sv_gravity).value as f64 * 0.01f64)
-            as vec_t;
+        vel[2 as i32 as usize] =
+            (vel[2 as i32 as usize] as f64 - (*sv_gravity).value as f64 * 0.01f64) as vec_t;
         //end else
         if vel[2 as i32 as usize] < 0 as i32 as f32
             && org[2 as i32 as usize] + vel[2 as i32 as usize] < *goal.offset(2 as i32 as isize)
@@ -3291,16 +3110,8 @@ pub unsafe extern "C" fn BotFinishTravel_WalkOffLedge(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -3308,12 +3119,7 @@ pub unsafe extern "C" fn BotFinishTravel_WalkOffLedge(
     dir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
     dir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     dir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-    BotCheckBlocked(
-        ms,
-        dir.as_mut_ptr(),
-        qtrue as i32,
-        &mut result,
-    );
+    BotCheckBlocked(ms, dir.as_mut_ptr(), qtrue as i32, &mut result);
     //
     v[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
     v[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
@@ -3512,16 +3318,8 @@ pub unsafe extern "C" fn BotTravel_Jump(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -3651,16 +3449,8 @@ pub unsafe extern "C" fn BotFinishTravel_Jump(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -3715,11 +3505,7 @@ pub unsafe extern "C" fn BotTravel_Ladder(
     //float dist, speed;
     let mut dir: vec3_t = [0.; 3]; //, hordir;
     let mut viewdir: vec3_t = [0.; 3];
-    let mut origin: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-    ];
+    let mut origin: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t];
     //	vec3_t up = {0, 0, 1};
     let mut result: crate::src::botlib::be_ai_move::bot_moveresult_t = {
         let mut init = crate::src::botlib::be_ai_move::bot_moveresult_s {
@@ -3730,16 +3516,8 @@ pub unsafe extern "C" fn BotTravel_Ladder(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -3813,16 +3591,8 @@ pub unsafe extern "C" fn BotTravel_Teleport(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -3839,12 +3609,7 @@ pub unsafe extern "C" fn BotTravel_Teleport(
     }
     dist = VectorNormalize(hordir.as_mut_ptr());
     //
-    BotCheckBlocked(
-        ms,
-        hordir.as_mut_ptr(),
-        qtrue as i32,
-        &mut result,
-    );
+    BotCheckBlocked(ms, hordir.as_mut_ptr(), qtrue as i32, &mut result);
     if dist < 30 as i32 as f32 {
         crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), 200 as i32 as f32);
     } else {
@@ -3889,16 +3654,8 @@ pub unsafe extern "C" fn BotTravel_Elevator(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -4010,12 +3767,7 @@ pub unsafe extern "C" fn BotTravel_Elevator(
             dir[1 as i32 as usize] = dir1[1 as i32 as usize];
             dir[2 as i32 as usize] = dir1[2 as i32 as usize];
             //
-            BotCheckBlocked(
-                ms,
-                dir.as_mut_ptr(),
-                qfalse as i32,
-                &mut result,
-            );
+            BotCheckBlocked(ms, dir.as_mut_ptr(), qfalse as i32, &mut result);
             //
             if dist > 60 as i32 as f32 {
                 dist = 60 as i32 as f32
@@ -4076,12 +3828,7 @@ pub unsafe extern "C" fn BotTravel_Elevator(
             dir[2 as i32 as usize] = dir1[2 as i32 as usize]
         }
         //
-        BotCheckBlocked(
-            ms,
-            dir.as_mut_ptr(),
-            qfalse as i32,
-            &mut result,
-        );
+        BotCheckBlocked(ms, dir.as_mut_ptr(), qfalse as i32, &mut result);
         //
         if dist > 60 as i32 as f32 {
             dist = 60 as i32 as f32
@@ -4129,16 +3876,8 @@ pub unsafe extern "C" fn BotFinishTravel_Elevator(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -4187,11 +3926,7 @@ pub unsafe extern "C" fn BotFuncBobStartEnd(
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
     let mut mid: vec3_t = [0.; 3];
-    let mut angles: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-    ];
+    let mut angles: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t];
     let mut num0: i32 = 0;
     let mut num1: i32 = 0;
     modelnum = (*reach).facenum & 0xffff as i32;
@@ -4222,12 +3957,9 @@ pub unsafe extern "C" fn BotFuncBobStartEnd(
     mid[0 as i32 as usize] = mins[0 as i32 as usize] + maxs[0 as i32 as usize];
     mid[1 as i32 as usize] = mins[1 as i32 as usize] + maxs[1 as i32 as usize];
     mid[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
-    mid[0 as i32 as usize] =
-        (mid[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
-    mid[1 as i32 as usize] =
-        (mid[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
-    mid[2 as i32 as usize] =
-        (mid[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    mid[0 as i32 as usize] = (mid[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    mid[1 as i32 as usize] = (mid[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    mid[2 as i32 as usize] = (mid[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
     *start.offset(0 as i32 as isize) = mid[0 as i32 as usize];
     *start.offset(1 as i32 as isize) = mid[1 as i32 as usize];
     *start.offset(2 as i32 as isize) = mid[2 as i32 as usize];
@@ -4304,16 +4036,8 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -4331,9 +4055,7 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
         dir[0 as i32 as usize] = bob_origin[0 as i32 as usize] - bob_end[0 as i32 as usize];
         dir[1 as i32 as usize] = bob_origin[1 as i32 as usize] - bob_end[1 as i32 as usize];
         dir[2 as i32 as usize] = bob_origin[2 as i32 as usize] - bob_end[2 as i32 as usize];
-        if VectorLength(dir.as_mut_ptr() as *const vec_t)
-            < 24 as i32 as f32
-        {
+        if VectorLength(dir.as_mut_ptr() as *const vec_t) < 24 as i32 as f32 {
             //end else
             hordir[0 as i32 as usize] =
                 (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end else
@@ -4426,20 +4148,13 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
         dir[0 as i32 as usize] = bob_origin[0 as i32 as usize] - bob_start[0 as i32 as usize]; //end if
         dir[1 as i32 as usize] = bob_origin[1 as i32 as usize] - bob_start[1 as i32 as usize];
         dir[2 as i32 as usize] = bob_origin[2 as i32 as usize] - bob_start[2 as i32 as usize];
-        if VectorLength(dir.as_mut_ptr() as *const vec_t)
-            > 16 as i32 as f32
-        {
+        if VectorLength(dir.as_mut_ptr() as *const vec_t) > 16 as i32 as f32 {
             dist = dist1;
             dir[0 as i32 as usize] = dir1[0 as i32 as usize];
             dir[1 as i32 as usize] = dir1[1 as i32 as usize];
             dir[2 as i32 as usize] = dir1[2 as i32 as usize];
             //
-            BotCheckBlocked(
-                ms,
-                dir.as_mut_ptr(),
-                qfalse as i32,
-                &mut result,
-            );
+            BotCheckBlocked(ms, dir.as_mut_ptr(), qfalse as i32, &mut result);
             //
             if dist > 60 as i32 as f32 {
                 dist = 60 as i32 as f32
@@ -4498,12 +4213,7 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
             dir[2 as i32 as usize] = dir1[2 as i32 as usize]
         }
         //
-        BotCheckBlocked(
-            ms,
-            dir.as_mut_ptr(),
-            qfalse as i32,
-            &mut result,
-        );
+        BotCheckBlocked(ms, dir.as_mut_ptr(), qfalse as i32, &mut result);
         //
         if dist > 60 as i32 as f32 {
             dist = 60 as i32 as f32
@@ -4554,16 +4264,8 @@ pub unsafe extern "C" fn BotFinishTravel_FuncBobbing(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -4765,16 +4467,8 @@ pub unsafe extern "C" fn BotTravel_Grapple(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -4943,9 +4637,7 @@ pub unsafe extern "C" fn BotTravel_Grapple(
                 (*reach).end[2 as i32 as usize] - trace.endpos[2 as i32 as usize];
             //DEBUG_GRAPPLE
             //check if the grapple missile path is clear
-            if VectorLength(dir.as_mut_ptr() as *const vec_t)
-                > 16 as i32 as f32
-            {
+            if VectorLength(dir.as_mut_ptr() as *const vec_t) > 16 as i32 as f32 {
                 result.failure = qtrue as i32; //end if
                 return result;
             }
@@ -4966,12 +4658,7 @@ pub unsafe extern "C" fn BotTravel_Grapple(
                 speed = 400 as i32 as f32
             }
             //
-            BotCheckBlocked(
-                ms,
-                dir.as_mut_ptr(),
-                qtrue as i32,
-                &mut result,
-            );
+            BotCheckBlocked(ms, dir.as_mut_ptr(), qtrue as i32, &mut result);
             //elemantary action move in direction
             crate::src::botlib::be_ea::EA_Move((*ms).client, dir.as_mut_ptr(), speed);
             result.movedir[0 as i32 as usize] = dir[0 as i32 as usize];
@@ -5011,16 +4698,8 @@ pub unsafe extern "C" fn BotTravel_RocketJump(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -5123,16 +4802,8 @@ pub unsafe extern "C" fn BotTravel_BFGJump(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -5224,16 +4895,8 @@ pub unsafe extern "C" fn BotFinishTravel_WeaponJump(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -5303,16 +4966,8 @@ pub unsafe extern "C" fn BotTravel_JumpPad(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -5321,12 +4976,7 @@ pub unsafe extern "C" fn BotTravel_JumpPad(
     hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     hordir[2 as i32 as usize] = 0 as i32 as vec_t;
     //
-    BotCheckBlocked(
-        ms,
-        hordir.as_mut_ptr(),
-        qtrue as i32,
-        &mut result,
-    );
+    BotCheckBlocked(ms, hordir.as_mut_ptr(), qtrue as i32, &mut result);
     //elemantary action move in direction
     crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), 400 as i32 as f32);
     result.movedir[0 as i32 as usize] = hordir[0 as i32 as usize];
@@ -5359,16 +5009,8 @@ pub unsafe extern "C" fn BotFinishTravel_JumpPad(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -5388,12 +5030,7 @@ pub unsafe extern "C" fn BotFinishTravel_JumpPad(
         VectorNormalize(hordir.as_mut_ptr());
         speed = 400 as i32 as f32
     }
-    BotCheckBlocked(
-        ms,
-        hordir.as_mut_ptr(),
-        qtrue as i32,
-        &mut result,
-    );
+    BotCheckBlocked(ms, hordir.as_mut_ptr(), qtrue as i32, &mut result);
     //elemantary action move in direction
     crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), speed);
     result.movedir[0 as i32 as usize] = hordir[0 as i32 as usize];
@@ -5412,9 +5049,7 @@ pub unsafe extern "C" fn BotFinishTravel_JumpPad(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn BotReachabilityTime(
-    mut reach: *mut aas_reachability_t,
-) -> i32 {
+pub unsafe extern "C" fn BotReachabilityTime(mut reach: *mut aas_reachability_t) -> i32 {
     match (*reach).traveltype & 0xffffff as i32 {
         2 => {
             return 5 as i32;
@@ -5470,16 +5105,8 @@ pub unsafe extern "C" fn BotMoveInGoalArea(
             traveltype: 0 as i32,
             flags: 0 as i32,
             weapon: 0 as i32,
-            movedir: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
-            ideal_viewangles: [
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-                0 as i32 as vec_t,
-            ],
+            movedir: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
+            ideal_viewangles: [0 as i32 as vec_t, 0 as i32 as vec_t, 0 as i32 as vec_t],
         };
         init
     };
@@ -5508,12 +5135,7 @@ pub unsafe extern "C" fn BotMoveInGoalArea(
         speed = 0 as i32 as f32
     }
     //
-    BotCheckBlocked(
-        ms,
-        dir.as_mut_ptr(),
-        qtrue as i32,
-        &mut result,
-    );
+    BotCheckBlocked(ms, dir.as_mut_ptr(), qtrue as i32, &mut result);
     //elemantary action move in direction
     crate::src::botlib::be_ea::EA_Move((*ms).client, dir.as_mut_ptr(), speed);
     result.movedir[0 as i32 as usize] = dir[0 as i32 as usize];
@@ -5569,16 +5191,15 @@ pub unsafe extern "C" fn BotMoveToGoal(
         traveltype: 0,
         traveltime: 0,
     };
-    let mut lastreach: aas_reachability_t =
-        aas_reachability_t {
-            areanum: 0,
-            facenum: 0,
-            edgenum: 0,
-            start: [0.; 3],
-            end: [0.; 3],
-            traveltype: 0,
-            traveltime: 0,
-        };
+    let mut lastreach: aas_reachability_t = aas_reachability_t {
+        areanum: 0,
+        facenum: 0,
+        edgenum: 0,
+        start: [0.; 3],
+        end: [0.; 3],
+        traveltype: 0,
+        traveltime: 0,
+    };
     let mut ms: *mut bot_movestate_t = 0 as *mut bot_movestate_t;
     //vec3_t mins, maxs, up = {0, 0, 1};
     //bsp_trace_t trace;

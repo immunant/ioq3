@@ -381,8 +381,7 @@ pub static mut in_buttons: [kbutton_t; 16] = [kbutton_t {
 }; 16];
 #[no_mangle]
 
-pub static mut in_mlooking: qboolean =
-    qfalse;
+pub static mut in_mlooking: qboolean = qfalse;
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_MLookDown() {
@@ -417,9 +416,7 @@ pub unsafe extern "C" fn IN_KeyDown(mut b: *mut kbutton_t) {
     } else if (*b).down[1 as i32 as usize] == 0 {
         (*b).down[1 as i32 as usize] = k
     } else {
-        Com_Printf(
-            b"Three keys down for a button!\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Three keys down for a button!\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     if (*b).active as u64 != 0 {
@@ -492,9 +489,8 @@ pub unsafe extern "C" fn CL_KeyState(mut key: *mut kbutton_t) -> f32 {
         if (*key).downtime == 0 {
             msec = com_frameTime
         } else {
-            msec = (msec as u32).wrapping_add(
-                (com_frameTime as u32).wrapping_sub((*key).downtime),
-            ) as i32
+            msec = (msec as u32).wrapping_add((com_frameTime as u32).wrapping_sub((*key).downtime))
+                as i32
         }
         (*key).downtime = com_frameTime as u32
     }
@@ -808,27 +804,22 @@ pub unsafe extern "C" fn IN_Button15Up() {
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_CenterView() {
-    cl.viewangles[0 as i32 as usize] =
-        -(cl.snap.ps.delta_angles[0 as i32 as usize] as f64
-            * (360.0f64 / 65536 as i32 as f64)) as vec_t;
+    cl.viewangles[0 as i32 as usize] = -(cl.snap.ps.delta_angles[0 as i32 as usize] as f64
+        * (360.0f64 / 65536 as i32 as f64)) as vec_t;
 }
 //==========================================================================
 #[no_mangle]
 
-pub static mut cl_yawspeed: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_yawspeed: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_pitchspeed: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_pitchspeed: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_run: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_run: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_anglespeedkey: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_anglespeedkey: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 /*
 ================
 CL_AdjustAngles
@@ -841,17 +832,14 @@ Moves the local angle positions
 pub unsafe extern "C" fn CL_AdjustAngles() {
     let mut speed: f32 = 0.;
     if in_speed.active as u64 != 0 {
-        speed = (0.001f64
-            * cls.frametime as f64
-            * (*cl_anglespeedkey).value as f64) as f32
+        speed = (0.001f64 * cls.frametime as f64 * (*cl_anglespeedkey).value as f64) as f32
     } else {
         speed = (0.001f64 * cls.frametime as f64) as f32
     }
     if in_strafe.active as u64 == 0 {
         cl.viewangles[1 as i32 as usize] -=
             speed * (*cl_yawspeed).value * CL_KeyState(&mut in_right);
-        cl.viewangles[1 as i32 as usize] +=
-            speed * (*cl_yawspeed).value * CL_KeyState(&mut in_left)
+        cl.viewangles[1 as i32 as usize] += speed * (*cl_yawspeed).value * CL_KeyState(&mut in_left)
     }
     cl.viewangles[0 as i32 as usize] -=
         speed * (*cl_pitchspeed).value * CL_KeyState(&mut in_lookup);
@@ -910,24 +898,12 @@ CL_MouseEvent
 
 pub unsafe extern "C" fn CL_MouseEvent(mut dx: i32, mut dy: i32, mut _time: i32) {
     if Key_GetCatcher() & 0x2 as i32 != 0 {
-        VM_Call(
-            uivm,
-            UI_MOUSE_EVENT as i32,
-            dx,
-            dy,
-        );
+        VM_Call(uivm, UI_MOUSE_EVENT as i32, dx, dy);
     } else if Key_GetCatcher() & 0x8 as i32 != 0 {
-        VM_Call(
-            cgvm,
-            CG_MOUSE_EVENT as i32,
-            dx,
-            dy,
-        );
+        VM_Call(cgvm, CG_MOUSE_EVENT as i32, dx, dy);
     } else {
-        cl.mouseDx
-            [cl.mouseIndex as usize] += dx;
-        cl.mouseDy
-            [cl.mouseIndex as usize] += dy
+        cl.mouseDx[cl.mouseIndex as usize] += dx;
+        cl.mouseDy[cl.mouseIndex as usize] += dy
     };
 }
 /*
@@ -958,48 +934,34 @@ CL_JoystickMove
 
 pub unsafe extern "C" fn CL_JoystickMove(mut cmd: *mut usercmd_t) {
     let mut anglespeed: f32 = 0.;
-    let mut yaw: f32 = (*j_yaw).value
-        * cl.joystickAxis
-            [(*j_yaw_axis).integer as usize] as f32;
-    let mut right: f32 = (*j_side).value
-        * cl.joystickAxis
-            [(*j_side_axis).integer as usize] as f32;
-    let mut forward: f32 = (*j_forward).value
-        * cl.joystickAxis
-            [(*j_forward_axis).integer as usize] as f32;
-    let mut pitch: f32 = (*j_pitch).value
-        * cl.joystickAxis
-            [(*j_pitch_axis).integer as usize] as f32;
-    let mut up: f32 = (*j_up).value
-        * cl.joystickAxis
-            [(*j_up_axis).integer as usize] as f32;
+    let mut yaw: f32 = (*j_yaw).value * cl.joystickAxis[(*j_yaw_axis).integer as usize] as f32;
+    let mut right: f32 = (*j_side).value * cl.joystickAxis[(*j_side_axis).integer as usize] as f32;
+    let mut forward: f32 =
+        (*j_forward).value * cl.joystickAxis[(*j_forward_axis).integer as usize] as f32;
+    let mut pitch: f32 =
+        (*j_pitch).value * cl.joystickAxis[(*j_pitch_axis).integer as usize] as f32;
+    let mut up: f32 = (*j_up).value * cl.joystickAxis[(*j_up_axis).integer as usize] as f32;
     if in_speed.active as u32 ^ (*cl_run).integer as u32 == 0 {
         (*cmd).buttons |= 16 as i32
     }
     if in_speed.active as u64 != 0 {
-        anglespeed = (0.001f64
-            * cls.frametime as f64
-            * (*cl_anglespeedkey).value as f64) as f32
+        anglespeed = (0.001f64 * cls.frametime as f64 * (*cl_anglespeedkey).value as f64) as f32
     } else {
         anglespeed = (0.001f64 * cls.frametime as f64) as f32
     }
     if in_strafe.active as u64 == 0 {
         cl.viewangles[1 as i32 as usize] += anglespeed * yaw;
-        (*cmd).rightmove =
-            ClampChar((*cmd).rightmove as i32 + right as i32)
+        (*cmd).rightmove = ClampChar((*cmd).rightmove as i32 + right as i32)
     } else {
         cl.viewangles[1 as i32 as usize] += anglespeed * right;
-        (*cmd).rightmove =
-            ClampChar((*cmd).rightmove as i32 + yaw as i32)
+        (*cmd).rightmove = ClampChar((*cmd).rightmove as i32 + yaw as i32)
     }
     if in_mlooking as u64 != 0 {
         cl.viewangles[0 as i32 as usize] += anglespeed * forward;
-        (*cmd).forwardmove =
-            ClampChar((*cmd).forwardmove as i32 + pitch as i32)
+        (*cmd).forwardmove = ClampChar((*cmd).forwardmove as i32 + pitch as i32)
     } else {
         cl.viewangles[0 as i32 as usize] += anglespeed * pitch;
-        (*cmd).forwardmove =
-            ClampChar((*cmd).forwardmove as i32 + forward as i32)
+        (*cmd).forwardmove = ClampChar((*cmd).forwardmove as i32 + forward as i32)
     }
     (*cmd).upmove = ClampChar((*cmd).upmove as i32 + up as i32);
 }
@@ -1015,23 +977,15 @@ pub unsafe extern "C" fn CL_MouseMove(mut cmd: *mut usercmd_t) {
     let mut my: f32 = 0.;
     // allow mouse smoothing
     if (*m_filter).integer != 0 {
-        mx = (cl.mouseDx[0 as i32 as usize]
-            + cl.mouseDx[1 as i32 as usize]) as f32
-            * 0.5f32;
-        my = (cl.mouseDy[0 as i32 as usize]
-            + cl.mouseDy[1 as i32 as usize]) as f32
-            * 0.5f32
+        mx = (cl.mouseDx[0 as i32 as usize] + cl.mouseDx[1 as i32 as usize]) as f32 * 0.5f32;
+        my = (cl.mouseDy[0 as i32 as usize] + cl.mouseDy[1 as i32 as usize]) as f32 * 0.5f32
     } else {
-        mx = cl.mouseDx
-            [cl.mouseIndex as usize] as f32;
-        my = cl.mouseDy
-            [cl.mouseIndex as usize] as f32
+        mx = cl.mouseDx[cl.mouseIndex as usize] as f32;
+        my = cl.mouseDy[cl.mouseIndex as usize] as f32
     }
     cl.mouseIndex ^= 1 as i32;
-    cl.mouseDx[cl.mouseIndex as usize] =
-        0 as i32;
-    cl.mouseDy[cl.mouseIndex as usize] =
-        0 as i32;
+    cl.mouseDx[cl.mouseIndex as usize] = 0 as i32;
+    cl.mouseDy[cl.mouseIndex as usize] = 0 as i32;
     if mx == 0.0f32 && my == 0.0f32 {
         return;
     }
@@ -1041,8 +995,7 @@ pub unsafe extern "C" fn CL_MouseMove(mut cmd: *mut usercmd_t) {
             let mut rate: f32 = 0.;
             rate =
                 (crate::stdlib::sqrt((mx * mx + my * my) as f64) / frame_msec as f32 as f64) as f32;
-            accelSensitivity = (*cl_sensitivity).value
-                + rate * (*cl_mouseAccel).value;
+            accelSensitivity = (*cl_sensitivity).value + rate * (*cl_mouseAccel).value;
             mx *= accelSensitivity;
             my *= accelSensitivity;
             if (*cl_showMouseRate).integer != 0 {
@@ -1064,13 +1017,11 @@ pub unsafe extern "C" fn CL_MouseMove(mut cmd: *mut usercmd_t) {
             rate_0[1 as i32 as usize] =
                 (crate::stdlib::fabs(my as f64) / frame_msec as f32 as f64) as f32;
             power[0 as i32 as usize] = crate::stdlib::powf(
-                rate_0[0 as i32 as usize]
-                    / (*cl_mouseAccelOffset).value,
+                rate_0[0 as i32 as usize] / (*cl_mouseAccelOffset).value,
                 (*cl_mouseAccel).value,
             );
             power[1 as i32 as usize] = crate::stdlib::powf(
-                rate_0[1 as i32 as usize]
-                    / (*cl_mouseAccelOffset).value,
+                rate_0[1 as i32 as usize] / (*cl_mouseAccelOffset).value,
                 (*cl_mouseAccel).value,
             );
             mx = (*cl_sensitivity).value
@@ -1107,24 +1058,15 @@ pub unsafe extern "C" fn CL_MouseMove(mut cmd: *mut usercmd_t) {
     my *= cl.cgameSensitivity;
     // add mouse X/Y movement to cmd
     if in_strafe.active as u64 != 0 {
-        (*cmd).rightmove = ClampChar(
-            ((*cmd).rightmove as i32 as f32 + (*m_side).value * mx)
-                as i32,
-        )
+        (*cmd).rightmove = ClampChar(((*cmd).rightmove as i32 as f32 + (*m_side).value * mx) as i32)
     } else {
-        cl.viewangles[1 as i32 as usize] -=
-            (*m_yaw).value * mx
+        cl.viewangles[1 as i32 as usize] -= (*m_yaw).value * mx
     }
-    if (in_mlooking as u32 != 0 || (*cl_freelook).integer != 0)
-        && in_strafe.active as u64 == 0
-    {
-        cl.viewangles[0 as i32 as usize] +=
-            (*m_pitch).value * my
+    if (in_mlooking as u32 != 0 || (*cl_freelook).integer != 0) && in_strafe.active as u64 == 0 {
+        cl.viewangles[0 as i32 as usize] += (*m_pitch).value * my
     } else {
-        (*cmd).forwardmove = ClampChar(
-            ((*cmd).forwardmove as i32 as f32
-                - (*m_forward).value * my) as i32,
-        )
+        (*cmd).forwardmove =
+            ClampChar(((*cmd).forwardmove as i32 as f32 - (*m_forward).value * my) as i32)
     };
 }
 /*
@@ -1156,9 +1098,7 @@ pub unsafe extern "C" fn CL_CmdButtons(mut cmd: *mut usercmd_t) {
     }
     // allow the game to know if any key at all is
     // currently pressed, even if it isn't bound to anything
-    if crate::src::client::cl_keys::anykeydown != 0
-        && Key_GetCatcher() == 0 as i32
-    {
+    if crate::src::client::cl_keys::anykeydown != 0 && Key_GetCatcher() == 0 as i32 {
         (*cmd).buttons |= 2048 as i32
     };
 }
@@ -1172,15 +1112,13 @@ CL_FinishMove
 pub unsafe extern "C" fn CL_FinishMove(mut cmd: *mut usercmd_t) {
     let mut i: i32 = 0;
     // copy the state that the cgame is currently sending
-    (*cmd).weapon =
-        cl.cgameUserCmdValue as byte;
+    (*cmd).weapon = cl.cgameUserCmdValue as byte;
     // send the current server time so the amount of movement
     // can be determined without allowing cheating
     (*cmd).serverTime = cl.serverTime;
     i = 0 as i32;
     while i < 3 as i32 {
-        (*cmd).angles[i as usize] = (cl.viewangles[i as usize]
-            * 65536 as i32 as f32
+        (*cmd).angles[i as usize] = (cl.viewangles[i as usize] * 65536 as i32 as f32
             / 360 as i32 as f32) as i32
             & 65535 as i32;
         i += 1
@@ -1194,16 +1132,15 @@ CL_CreateCmd
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_CreateCmd() -> usercmd_t {
-    let mut cmd: usercmd_t =
-        usercmd_t {
-            serverTime: 0,
-            angles: [0; 3],
-            buttons: 0,
-            weapon: 0,
-            forwardmove: 0,
-            rightmove: 0,
-            upmove: 0,
-        };
+    let mut cmd: usercmd_t = usercmd_t {
+        serverTime: 0,
+        angles: [0; 3],
+        buttons: 0,
+        weapon: 0,
+        forwardmove: 0,
+        rightmove: 0,
+        upmove: 0,
+    };
     let mut oldAngles: vec3_t = [0.; 3];
     oldAngles[0 as i32 as usize] = cl.viewangles[0 as i32 as usize];
     oldAngles[1 as i32 as usize] = cl.viewangles[1 as i32 as usize];
@@ -1223,17 +1160,10 @@ pub unsafe extern "C" fn CL_CreateCmd() -> usercmd_t {
     // get basic movement from joystick
     CL_JoystickMove(&mut cmd);
     // check to make sure the angles haven't wrapped
-    if cl.viewangles[0 as i32 as usize] - oldAngles[0 as i32 as usize]
-        > 90 as i32 as f32
-    {
-        cl.viewangles[0 as i32 as usize] =
-            oldAngles[0 as i32 as usize] + 90 as i32 as f32
-    } else if oldAngles[0 as i32 as usize]
-        - cl.viewangles[0 as i32 as usize]
-        > 90 as i32 as f32
-    {
-        cl.viewangles[0 as i32 as usize] =
-            oldAngles[0 as i32 as usize] - 90 as i32 as f32
+    if cl.viewangles[0 as i32 as usize] - oldAngles[0 as i32 as usize] > 90 as i32 as f32 {
+        cl.viewangles[0 as i32 as usize] = oldAngles[0 as i32 as usize] + 90 as i32 as f32
+    } else if oldAngles[0 as i32 as usize] - cl.viewangles[0 as i32 as usize] > 90 as i32 as f32 {
+        cl.viewangles[0 as i32 as usize] = oldAngles[0 as i32 as usize] - 90 as i32 as f32
     }
     // store out the final values
     CL_FinishMove(&mut cmd);
@@ -1241,14 +1171,12 @@ pub unsafe extern "C" fn CL_CreateCmd() -> usercmd_t {
     if (*cl_debugMove).integer != 0 {
         if (*cl_debugMove).integer == 1 as i32 {
             SCR_DebugGraph(crate::stdlib::fabs(
-                (cl.viewangles[1 as i32 as usize]
-                    - oldAngles[1 as i32 as usize]) as f64,
+                (cl.viewangles[1 as i32 as usize] - oldAngles[1 as i32 as usize]) as f64,
             ) as f32);
         }
         if (*cl_debugMove).integer == 2 as i32 {
             SCR_DebugGraph(crate::stdlib::fabs(
-                (cl.viewangles[0 as i32 as usize]
-                    - oldAngles[0 as i32 as usize]) as f64,
+                (cl.viewangles[0 as i32 as usize] - oldAngles[0 as i32 as usize]) as f64,
             ) as f32);
         }
     }
@@ -1266,9 +1194,7 @@ Create a new usercmd_t structure for this frame
 pub unsafe extern "C" fn CL_CreateNewCommands() {
     let mut cmdNum: i32 = 0;
     // no need to create usercmds until we have a gamestate
-    if (clc.state as u32)
-        < CA_PRIMED as i32 as u32
-    {
+    if (clc.state as u32) < CA_PRIMED as i32 as u32 {
         return;
     }
     frame_msec = (com_frameTime - old_com_frameTime) as u32;
@@ -1305,54 +1231,31 @@ pub unsafe extern "C" fn CL_ReadyToSendPacket() -> qboolean {
     let mut oldPacketNum: i32 = 0;
     let mut delta: i32 = 0;
     // don't send anything if playing back a demo
-    if clc.demoplaying as u32 != 0
-        || clc.state as u32
-            == CA_CINEMATIC as i32 as u32
-    {
+    if clc.demoplaying as u32 != 0 || clc.state as u32 == CA_CINEMATIC as i32 as u32 {
         return qfalse;
     }
     // If we are downloading, we send no less than 50ms between packets
-    if *clc
-        .downloadTempName
-        .as_mut_ptr() as i32
-        != 0
-        && cls.realtime
-            - clc.lastPacketSentTime
-            < 50 as i32
+    if *clc.downloadTempName.as_mut_ptr() as i32 != 0
+        && cls.realtime - clc.lastPacketSentTime < 50 as i32
     {
         return qfalse;
     }
     // if we don't have a valid gamestate yet, only send
     // one packet a second
-    if clc.state as u32
-        != CA_ACTIVE as i32 as u32
-        && clc.state as u32
-            != CA_PRIMED as i32 as u32
-        && *clc
-            .downloadTempName
-            .as_mut_ptr()
-            == 0
-        && cls.realtime
-            - clc.lastPacketSentTime
-            < 1000 as i32
+    if clc.state as u32 != CA_ACTIVE as i32 as u32
+        && clc.state as u32 != CA_PRIMED as i32 as u32
+        && *clc.downloadTempName.as_mut_ptr() == 0
+        && cls.realtime - clc.lastPacketSentTime < 1000 as i32
     {
         return qfalse;
     }
     // send every frame for loopbacks
-    if clc
-        .netchan
-        .remoteAddress
-        .type_0 as u32
-        == NA_LOOPBACK as i32 as u32
-    {
+    if clc.netchan.remoteAddress.type_0 as u32 == NA_LOOPBACK as i32 as u32 {
         return qtrue;
     }
     // send every frame for LAN
     if (*cl_lanForcePackets).integer != 0
-        && Sys_IsLANAddress(
-            clc.netchan.remoteAddress as netadr_t,
-        ) as u32
-            != 0
+        && Sys_IsLANAddress(clc.netchan.remoteAddress as netadr_t) as u32 != 0
     {
         return qtrue;
     }
@@ -1368,10 +1271,8 @@ pub unsafe extern "C" fn CL_ReadyToSendPacket() -> qboolean {
             b"125\x00" as *const u8 as *const libc::c_char,
         );
     }
-    oldPacketNum =
-        clc.netchan.outgoingSequence - 1 as i32 & 32 as i32 - 1 as i32;
-    delta = cls.realtime
-        - cl.outPackets[oldPacketNum as usize].p_realtime;
+    oldPacketNum = clc.netchan.outgoingSequence - 1 as i32 & 32 as i32 - 1 as i32;
+    delta = cls.realtime - cl.outPackets[oldPacketNum as usize].p_realtime;
     if delta < 1000 as i32 / (*cl_maxpackets).integer {
         // the accumulated commands will go out in the next packet
         return qfalse;
@@ -1415,29 +1316,23 @@ pub unsafe extern "C" fn CL_WritePacket() {
     let mut data: [byte; 16384] = [0; 16384];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut cmd: *mut usercmd_t =
-        0 as *mut usercmd_t;
-    let mut oldcmd: *mut usercmd_t =
-        0 as *mut usercmd_t;
-    let mut nullcmd: usercmd_t =
-        usercmd_t {
-            serverTime: 0,
-            angles: [0; 3],
-            buttons: 0,
-            weapon: 0,
-            forwardmove: 0,
-            rightmove: 0,
-            upmove: 0,
-        };
+    let mut cmd: *mut usercmd_t = 0 as *mut usercmd_t;
+    let mut oldcmd: *mut usercmd_t = 0 as *mut usercmd_t;
+    let mut nullcmd: usercmd_t = usercmd_t {
+        serverTime: 0,
+        angles: [0; 3],
+        buttons: 0,
+        weapon: 0,
+        forwardmove: 0,
+        rightmove: 0,
+        upmove: 0,
+    };
     let mut packetNum: i32 = 0;
     let mut oldPacketNum: i32 = 0;
     let mut count: i32 = 0;
     let mut key: i32 = 0;
     // don't send anything if playing back a demo
-    if clc.demoplaying as u32 != 0
-        || clc.state as u32
-            == CA_CINEMATIC as i32 as u32
-    {
+    if clc.demoplaying as u32 != 0 || clc.state as u32 == CA_CINEMATIC as i32 as u32 {
         return;
     }
     crate::stdlib::memset(
@@ -1449,43 +1344,26 @@ pub unsafe extern "C" fn CL_WritePacket() {
     MSG_Init(
         &mut buf as *mut _ as *mut msg_t,
         data.as_mut_ptr(),
-        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong
-            as i32,
+        ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
     );
     MSG_Bitstream(&mut buf as *mut _ as *mut msg_t);
     // write the current serverId so the server
     // can tell if this is from the current gameState
-    MSG_WriteLong(
-        &mut buf as *mut _ as *mut msg_t,
-        cl.serverId,
-    );
+    MSG_WriteLong(&mut buf as *mut _ as *mut msg_t, cl.serverId);
     // write the last message we received, which can
     // be used for delta compression, and is also used
     // to tell if we dropped a gamestate
-    MSG_WriteLong(
-        &mut buf as *mut _ as *mut msg_t,
-        clc.serverMessageSequence,
-    );
+    MSG_WriteLong(&mut buf as *mut _ as *mut msg_t, clc.serverMessageSequence);
     // write the last reliable message we received
-    MSG_WriteLong(
-        &mut buf as *mut _ as *mut msg_t,
-        clc.serverCommandSequence,
-    );
+    MSG_WriteLong(&mut buf as *mut _ as *mut msg_t, clc.serverCommandSequence);
     // write any unacknowledged clientCommands
     i = clc.reliableAcknowledge + 1 as i32;
     while i <= clc.reliableSequence {
-        MSG_WriteByte(
-            &mut buf as *mut _ as *mut msg_t,
-            clc_clientCommand as i32,
-        );
-        MSG_WriteLong(
-            &mut buf as *mut _ as *mut msg_t,
-            i,
-        );
+        MSG_WriteByte(&mut buf as *mut _ as *mut msg_t, clc_clientCommand as i32);
+        MSG_WriteLong(&mut buf as *mut _ as *mut msg_t, i);
         MSG_WriteString(
             &mut buf as *mut _ as *mut msg_t,
-            clc.reliableCommands[(i & 64 as i32 - 1 as i32) as usize]
-                .as_mut_ptr(),
+            clc.reliableCommands[(i & 64 as i32 - 1 as i32) as usize].as_mut_ptr(),
         );
         i += 1
     }
@@ -1503,17 +1381,12 @@ pub unsafe extern "C" fn CL_WritePacket() {
             b"5\x00" as *const u8 as *const libc::c_char,
         );
     }
-    oldPacketNum = clc.netchan.outgoingSequence
-        - 1 as i32
-        - (*cl_packetdup).integer
-        & 32 as i32 - 1 as i32;
-    count = cl.cmdNumber
-        - cl.outPackets[oldPacketNum as usize].p_cmdNumber;
+    oldPacketNum =
+        clc.netchan.outgoingSequence - 1 as i32 - (*cl_packetdup).integer & 32 as i32 - 1 as i32;
+    count = cl.cmdNumber - cl.outPackets[oldPacketNum as usize].p_cmdNumber;
     if count > 32 as i32 {
         count = 32 as i32;
-        Com_Printf(
-            b"MAX_PACKET_USERCMDS\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"MAX_PACKET_USERCMDS\n\x00" as *const u8 as *const libc::c_char);
     }
     if clc.voipOutgoingDataSize > 0 as i32 {
         if clc.voipFlags as i32 & 0x1 as i32 != 0
@@ -1524,49 +1397,30 @@ pub unsafe extern "C" fn CL_WritePacket() {
             ) as u32
                 != 0
         {
-            MSG_WriteByte(
-                &mut buf as *mut _ as *mut msg_t,
-                clc_voipOpus as i32,
-            );
+            MSG_WriteByte(&mut buf as *mut _ as *mut msg_t, clc_voipOpus as i32);
             MSG_WriteByte(
                 &mut buf as *mut _ as *mut msg_t,
                 clc.voipOutgoingGeneration as i32,
             );
-            MSG_WriteLong(
-                &mut buf as *mut _ as *mut msg_t,
-                clc.voipOutgoingSequence,
-            );
-            MSG_WriteByte(
-                &mut buf as *mut _ as *mut msg_t,
-                clc.voipOutgoingDataFrames,
-            );
+            MSG_WriteLong(&mut buf as *mut _ as *mut msg_t, clc.voipOutgoingSequence);
+            MSG_WriteByte(&mut buf as *mut _ as *mut msg_t, clc.voipOutgoingDataFrames);
             MSG_WriteData(
                 &mut buf as *mut _ as *mut msg_t,
                 clc.voipTargets.as_mut_ptr() as *const libc::c_void,
                 ::std::mem::size_of::<[uint8_t; 8]>() as libc::c_ulong as i32,
             );
-            MSG_WriteByte(
-                &mut buf as *mut _ as *mut msg_t,
-                clc.voipFlags as i32,
-            );
-            MSG_WriteShort(
-                &mut buf as *mut _ as *mut msg_t,
-                clc.voipOutgoingDataSize,
-            );
+            MSG_WriteByte(&mut buf as *mut _ as *mut msg_t, clc.voipFlags as i32);
+            MSG_WriteShort(&mut buf as *mut _ as *mut msg_t, clc.voipOutgoingDataSize);
             MSG_WriteData(
                 &mut buf as *mut _ as *mut msg_t,
-                clc
-                    .voipOutgoingData
-                    .as_mut_ptr() as *const libc::c_void,
+                clc.voipOutgoingData.as_mut_ptr() as *const libc::c_void,
                 clc.voipOutgoingDataSize,
             );
             // If we're recording a demo, we have to fake a server packet with
             //  this VoIP data so it gets to disk; the server doesn't send it
             //  back to us, and we might as well eliminate concerns about dropped
             //  and misordered packets here.
-            if clc.demorecording as u32 != 0
-                && clc.demowaiting as u64 == 0
-            {
+            if clc.demorecording as u32 != 0 && clc.demowaiting as u64 == 0 {
                 let voipSize: i32 = clc.voipOutgoingDataSize;
                 let mut fakemsg: msg_t = msg_t {
                     allowoverflow: qfalse,
@@ -1582,24 +1436,15 @@ pub unsafe extern "C" fn CL_WritePacket() {
                 MSG_Init(
                     &mut fakemsg as *mut _ as *mut msg_t,
                     fakedata.as_mut_ptr(),
-                    ::std::mem::size_of::<[byte; 16384]>()
-                        as libc::c_ulong as i32,
+                    ::std::mem::size_of::<[byte; 16384]>() as libc::c_ulong as i32,
                 );
-                MSG_Bitstream(
-                    &mut fakemsg as *mut _ as *mut msg_t,
-                );
+                MSG_Bitstream(&mut fakemsg as *mut _ as *mut msg_t);
                 MSG_WriteLong(
                     &mut fakemsg as *mut _ as *mut msg_t,
                     clc.reliableAcknowledge,
                 );
-                MSG_WriteByte(
-                    &mut fakemsg as *mut _ as *mut msg_t,
-                    svc_voipOpus as i32,
-                );
-                MSG_WriteShort(
-                    &mut fakemsg as *mut _ as *mut msg_t,
-                    clc.clientNum,
-                );
+                MSG_WriteByte(&mut fakemsg as *mut _ as *mut msg_t, svc_voipOpus as i32);
+                MSG_WriteShort(&mut fakemsg as *mut _ as *mut msg_t, clc.clientNum);
                 MSG_WriteByte(
                     &mut fakemsg as *mut _ as *mut msg_t,
                     clc.voipOutgoingGeneration as i32,
@@ -1623,22 +1468,13 @@ pub unsafe extern "C" fn CL_WritePacket() {
                 );
                 MSG_WriteData(
                     &mut fakemsg as *mut _ as *mut msg_t,
-                    clc
-                        .voipOutgoingData
-                        .as_mut_ptr() as *const libc::c_void,
+                    clc.voipOutgoingData.as_mut_ptr() as *const libc::c_void,
                     voipSize,
                 );
-                MSG_WriteByte(
-                    &mut fakemsg as *mut _ as *mut msg_t,
-                    svc_EOF as i32,
-                );
-                CL_WriteDemoMessage(
-                    &mut fakemsg as *mut _ as *mut msg_t,
-                    0 as i32,
-                );
+                MSG_WriteByte(&mut fakemsg as *mut _ as *mut msg_t, svc_EOF as i32);
+                CL_WriteDemoMessage(&mut fakemsg as *mut _ as *mut msg_t, 0 as i32);
             }
-            clc.voipOutgoingSequence +=
-                clc.voipOutgoingDataFrames;
+            clc.voipOutgoingSequence += clc.voipOutgoingDataFrames;
             clc.voipOutgoingDataSize = 0 as i32;
             clc.voipOutgoingDataFrames = 0 as i32
         } else {
@@ -1649,56 +1485,35 @@ pub unsafe extern "C" fn CL_WritePacket() {
     }
     if count >= 1 as i32 {
         if (*cl_showSend).integer != 0 {
-            Com_Printf(
-                b"(%i)\x00" as *const u8 as *const libc::c_char,
-                count,
-            );
+            Com_Printf(b"(%i)\x00" as *const u8 as *const libc::c_char, count);
         }
         // begin a client move command
         if (*cl_nodelta).integer != 0
             || cl.snap.valid as u64 == 0
             || clc.demowaiting as u32 != 0
-            || clc.serverMessageSequence
-                != cl.snap.messageNum
+            || clc.serverMessageSequence != cl.snap.messageNum
         {
-            MSG_WriteByte(
-                &mut buf as *mut _ as *mut msg_t,
-                clc_moveNoDelta as i32,
-            );
+            MSG_WriteByte(&mut buf as *mut _ as *mut msg_t, clc_moveNoDelta as i32);
         } else {
-            MSG_WriteByte(
-                &mut buf as *mut _ as *mut msg_t,
-                clc_move as i32,
-            );
+            MSG_WriteByte(&mut buf as *mut _ as *mut msg_t, clc_move as i32);
         }
         // write the command count
-        MSG_WriteByte(
-            &mut buf as *mut _ as *mut msg_t,
-            count,
-        );
+        MSG_WriteByte(&mut buf as *mut _ as *mut msg_t, count);
         // use the checksum feed in the key
         key = clc.checksumFeed;
         // also use the message acknowledge
         key ^= clc.serverMessageSequence;
         // also use the last acknowledged server command in the key
         key ^= MSG_HashKey(
-            clc.serverCommands[(clc
-                .serverCommandSequence
-                & 64 as i32 - 1 as i32)
-                as usize]
+            clc.serverCommands[(clc.serverCommandSequence & 64 as i32 - 1 as i32) as usize]
                 .as_mut_ptr(),
             32 as i32,
         );
         // write all the commands, including the predicted command
         i = 0 as i32;
         while i < count {
-            j = cl.cmdNumber - count + i + 1 as i32
-                & 64 as i32 - 1 as i32;
-            cmd = &mut *cl
-                .cmds
-                .as_mut_ptr()
-                .offset(j as isize)
-                as *mut usercmd_t;
+            j = cl.cmdNumber - count + i + 1 as i32 & 64 as i32 - 1 as i32;
+            cmd = &mut *cl.cmds.as_mut_ptr().offset(j as isize) as *mut usercmd_t;
             MSG_WriteDeltaUsercmdKey(
                 &mut buf as *mut _ as *mut msg_t,
                 key,
@@ -1713,18 +1528,12 @@ pub unsafe extern "C" fn CL_WritePacket() {
     // deliver the message
     //
     packetNum = clc.netchan.outgoingSequence & 32 as i32 - 1 as i32;
-    cl.outPackets[packetNum as usize].p_realtime =
-        cls.realtime;
-    cl.outPackets[packetNum as usize].p_serverTime =
-        (*oldcmd).serverTime;
-    cl.outPackets[packetNum as usize].p_cmdNumber =
-        cl.cmdNumber;
+    cl.outPackets[packetNum as usize].p_realtime = cls.realtime;
+    cl.outPackets[packetNum as usize].p_serverTime = (*oldcmd).serverTime;
+    cl.outPackets[packetNum as usize].p_cmdNumber = cl.cmdNumber;
     clc.lastPacketSentTime = cls.realtime;
     if (*cl_showSend).integer != 0 {
-        Com_Printf(
-            b"%i \x00" as *const u8 as *const libc::c_char,
-            buf.cursize,
-        );
+        Com_Printf(b"%i \x00" as *const u8 as *const libc::c_char, buf.cursize);
     }
     CL_Netchan_Transmit(
         &mut clc.netchan as *mut _ as *mut netchan_t,
@@ -1742,16 +1551,11 @@ Called every frame to builds and sends a command packet to the server.
 
 pub unsafe extern "C" fn CL_SendCmd() {
     // don't send any message if not connected
-    if (clc.state as u32)
-        < CA_CONNECTED as i32 as u32
-    {
+    if (clc.state as u32) < CA_CONNECTED as i32 as u32 {
         return;
     }
     // don't send commands if paused
-    if (*com_sv_running).integer != 0
-        && (*sv_paused).integer != 0
-        && (*cl_paused).integer != 0
-    {
+    if (*com_sv_running).integer != 0 && (*sv_paused).integer != 0 && (*cl_paused).integer != 0 {
         return;
     }
     // we create commands even if a demo is playing,
@@ -2216,151 +2020,65 @@ CL_ShutdownInput
 #[no_mangle]
 
 pub unsafe extern "C" fn CL_ShutdownInput() {
-    Cmd_RemoveCommand(
-        b"centerview\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"centerview\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"+moveup\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"-moveup\x00" as *const u8 as *const libc::c_char);
-    Cmd_RemoveCommand(
-        b"+movedown\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-movedown\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"+movedown\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-movedown\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"+left\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"-left\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"+right\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"-right\x00" as *const u8 as *const libc::c_char);
-    Cmd_RemoveCommand(
-        b"+forward\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-forward\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"+forward\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-forward\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"+back\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"-back\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"+lookup\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"-lookup\x00" as *const u8 as *const libc::c_char);
-    Cmd_RemoveCommand(
-        b"+lookdown\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-lookdown\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"+lookdown\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-lookdown\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"+strafe\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"-strafe\x00" as *const u8 as *const libc::c_char);
-    Cmd_RemoveCommand(
-        b"+moveleft\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-moveleft\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"+moveright\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-moveright\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"+moveleft\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-moveleft\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"+moveright\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-moveright\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"+speed\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"-speed\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"+attack\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"-attack\x00" as *const u8 as *const libc::c_char);
-    Cmd_RemoveCommand(
-        b"+button0\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-button0\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"+button1\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-button1\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"+button2\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-button2\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"+button3\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-button3\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"+button4\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-button4\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"+button5\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-button5\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"+button6\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-button6\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"+button7\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-button7\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"+button8\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-button8\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"+button9\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-button9\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"+button10\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-button10\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"+button11\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-button11\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"+button12\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-button12\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"+button13\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-button13\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"+button14\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-button14\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"+button0\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-button0\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"+button1\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-button1\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"+button2\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-button2\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"+button3\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-button3\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"+button4\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-button4\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"+button5\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-button5\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"+button6\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-button6\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"+button7\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-button7\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"+button8\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-button8\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"+button9\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-button9\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"+button10\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-button10\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"+button11\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-button11\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"+button12\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-button12\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"+button13\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-button13\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"+button14\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-button14\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"+mlook\x00" as *const u8 as *const libc::c_char);
     Cmd_RemoveCommand(b"-mlook\x00" as *const u8 as *const libc::c_char);
-    Cmd_RemoveCommand(
-        b"+voiprecord\x00" as *const u8 as *const libc::c_char,
-    );
-    Cmd_RemoveCommand(
-        b"-voiprecord\x00" as *const u8 as *const libc::c_char,
-    );
+    Cmd_RemoveCommand(b"+voiprecord\x00" as *const u8 as *const libc::c_char);
+    Cmd_RemoveCommand(b"-voiprecord\x00" as *const u8 as *const libc::c_char);
 }

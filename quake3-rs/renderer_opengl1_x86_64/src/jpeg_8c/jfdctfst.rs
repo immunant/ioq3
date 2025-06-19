@@ -133,23 +133,16 @@ pub unsafe extern "C" fn jpeg_fdct_ifast(
         tmp12 = tmp1 - tmp2;
         *dataptr.offset(0 as i32 as isize) = tmp10 + tmp11 - 8 as i32 * 128 as i32;
         *dataptr.offset(4 as i32 as isize) = tmp10 - tmp11;
-        z1 = ((tmp12 + tmp13) as isize * 181 as i32 as INT32 >> 8 as i32)
-            as DCTELEM;
+        z1 = ((tmp12 + tmp13) as isize * 181 as i32 as INT32 >> 8 as i32) as DCTELEM;
         *dataptr.offset(2 as i32 as isize) = tmp13 + z1;
         *dataptr.offset(6 as i32 as isize) = tmp13 - z1;
         tmp10 = tmp4 + tmp5;
         tmp11 = tmp5 + tmp6;
         tmp12 = tmp6 + tmp7;
-        z5 = ((tmp10 - tmp12) as isize * 98 as i32 as INT32 >> 8 as i32)
-            as DCTELEM;
-        z2 = (tmp10 as isize * 139 as i32 as INT32 >> 8 as i32)
-            as DCTELEM
-            + z5;
-        z4 = (tmp12 as isize * 334 as i32 as INT32 >> 8 as i32)
-            as DCTELEM
-            + z5;
-        z3 = (tmp11 as isize * 181 as i32 as INT32 >> 8 as i32)
-            as DCTELEM;
+        z5 = ((tmp10 - tmp12) as isize * 98 as i32 as INT32 >> 8 as i32) as DCTELEM;
+        z2 = (tmp10 as isize * 139 as i32 as INT32 >> 8 as i32) as DCTELEM + z5;
+        z4 = (tmp12 as isize * 334 as i32 as INT32 >> 8 as i32) as DCTELEM + z5;
+        z3 = (tmp11 as isize * 181 as i32 as INT32 >> 8 as i32) as DCTELEM;
         z11 = tmp7 + z3;
         z13 = tmp7 - z3;
         *dataptr.offset(5 as i32 as isize) = z13 + z2;
@@ -202,23 +195,16 @@ pub unsafe extern "C" fn jpeg_fdct_ifast(
         tmp12 = tmp1 - tmp2;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = tmp10 + tmp11;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = tmp10 - tmp11;
-        z1 = ((tmp12 + tmp13) as isize * 181 as i32 as INT32 >> 8 as i32)
-            as DCTELEM;
+        z1 = ((tmp12 + tmp13) as isize * 181 as i32 as INT32 >> 8 as i32) as DCTELEM;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = tmp13 + z1;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) = tmp13 - z1;
         tmp10 = tmp4 + tmp5;
         tmp11 = tmp5 + tmp6;
         tmp12 = tmp6 + tmp7;
-        z5 = ((tmp10 - tmp12) as isize * 98 as i32 as INT32 >> 8 as i32)
-            as DCTELEM;
-        z2 = (tmp10 as isize * 139 as i32 as INT32 >> 8 as i32)
-            as DCTELEM
-            + z5;
-        z4 = (tmp12 as isize * 334 as i32 as INT32 >> 8 as i32)
-            as DCTELEM
-            + z5;
-        z3 = (tmp11 as isize * 181 as i32 as INT32 >> 8 as i32)
-            as DCTELEM;
+        z5 = ((tmp10 - tmp12) as isize * 98 as i32 as INT32 >> 8 as i32) as DCTELEM;
+        z2 = (tmp10 as isize * 139 as i32 as INT32 >> 8 as i32) as DCTELEM + z5;
+        z4 = (tmp12 as isize * 334 as i32 as INT32 >> 8 as i32) as DCTELEM + z5;
+        z3 = (tmp11 as isize * 181 as i32 as INT32 >> 8 as i32) as DCTELEM;
         z11 = tmp7 + z3;
         z13 = tmp7 - z3;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) = z13 + z2;

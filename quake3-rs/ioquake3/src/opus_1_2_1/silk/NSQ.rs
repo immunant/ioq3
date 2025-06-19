@@ -520,20 +520,15 @@ pub unsafe extern "C" fn silk_NSQ_c(
     let mut lag: i32 = 0;
     let mut start_idx: i32 = 0;
     let mut LSF_interpolation_flag: i32 = 0;
-    let mut A_Q12: *const opus_int16 =
-        0 as *const opus_int16;
-    let mut B_Q14: *const opus_int16 =
-        0 as *const opus_int16;
-    let mut AR_shp_Q13: *const opus_int16 =
-        0 as *const opus_int16;
+    let mut A_Q12: *const opus_int16 = 0 as *const opus_int16;
+    let mut B_Q14: *const opus_int16 = 0 as *const opus_int16;
+    let mut AR_shp_Q13: *const opus_int16 = 0 as *const opus_int16;
     let mut pxq: *mut opus_int16 = 0 as *mut opus_int16;
-    let mut sLTP_Q15: *mut opus_int32 =
-        0 as *mut opus_int32;
+    let mut sLTP_Q15: *mut opus_int32 = 0 as *mut opus_int32;
     let mut sLTP: *mut opus_int16 = 0 as *mut opus_int16;
     let mut HarmShapeFIRPacked_Q14: opus_int32 = 0;
     let mut offset_Q10: i32 = 0;
-    let mut x_sc_Q10: *mut opus_int32 =
-        0 as *mut opus_int32;
+    let mut x_sc_Q10: *mut opus_int32 = 0 as *mut opus_int32;
     (*NSQ).rand_seed = (*psIndices).Seed as opus_int32;
     /* Set unvoiced lag to the previous one, overwrite later for voiced */
     lag = (*NSQ).lagPrev;
@@ -571,17 +566,14 @@ pub unsafe extern "C" fn silk_NSQ_c(
     pxq = &mut *(*NSQ)
         .xq
         .as_mut_ptr()
-        .offset((*psEncC).ltp_mem_length as isize)
-        as *mut opus_int16;
+        .offset((*psEncC).ltp_mem_length as isize) as *mut opus_int16;
     k = 0 as i32;
     while k < (*psEncC).nb_subfr {
         A_Q12 = &*PredCoef_Q12
             .offset(((k >> 1 as i32 | 1 as i32 - LSF_interpolation_flag) * 16 as i32) as isize)
             as *const opus_int16;
-        B_Q14 =
-            &*LTPCoef_Q14.offset((k * 5 as i32) as isize) as *const opus_int16;
-        AR_shp_Q13 =
-            &*AR_Q13.offset((k * 24 as i32) as isize) as *const opus_int16;
+        B_Q14 = &*LTPCoef_Q14.offset((k * 5 as i32) as isize) as *const opus_int16;
+        AR_shp_Q13 = &*AR_Q13.offset((k * 24 as i32) as isize) as *const opus_int16;
         /* Noise shape parameters */
         HarmShapeFIRPacked_Q14 = *HarmShapeGain_Q14.offset(k as isize) >> 2 as i32;
         HarmShapeFIRPacked_Q14 |= (((*HarmShapeGain_Q14.offset(k as isize) >> 1 as i32)
@@ -592,9 +584,7 @@ pub unsafe extern "C" fn silk_NSQ_c(
             /* Voiced */
             lag = *pitchL.offset(k as isize);
             /* Re-whitening */
-            if k & 3 as i32
-                - ((LSF_interpolation_flag as opus_uint32) << 1 as i32)
-                    as opus_int32
+            if k & 3 as i32 - ((LSF_interpolation_flag as opus_uint32) << 1 as i32) as opus_int32
                 == 0 as i32
             {
                 /* Rewhiten with new A coefs */
@@ -660,20 +650,26 @@ pub unsafe extern "C" fn silk_NSQ_c(
     /* Update lagPrev for next frame */
     (*NSQ).lagPrev = *pitchL.offset(((*psEncC).nb_subfr - 1 as i32) as isize);
     /* Save quantized speech and noise shaping signals */
-    crate::stdlib::memmove((*NSQ).xq.as_mut_ptr() as *mut libc::c_void,
-            &mut *(*NSQ).xq.as_mut_ptr().offset((*psEncC).frame_length as
-                                                    isize) as *mut opus_int16
-                as *const libc::c_void,
-            ((*psEncC).ltp_mem_length as
-                 libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
-                                                 as libc::c_ulong));
-    crate::stdlib::memmove((*NSQ).sLTP_shp_Q14.as_mut_ptr() as *mut libc::c_void,
-            &mut *(*NSQ).sLTP_shp_Q14.as_mut_ptr().offset((*psEncC).frame_length
-                                                              as isize) as
-                *mut opus_int32 as *const libc::c_void,
-            ((*psEncC).ltp_mem_length as
-                 libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
-                                                 as libc::c_ulong));
+    crate::stdlib::memmove(
+        (*NSQ).xq.as_mut_ptr() as *mut libc::c_void,
+        &mut *(*NSQ)
+            .xq
+            .as_mut_ptr()
+            .offset((*psEncC).frame_length as isize) as *mut opus_int16
+            as *const libc::c_void,
+        ((*psEncC).ltp_mem_length as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+    );
+    crate::stdlib::memmove(
+        (*NSQ).sLTP_shp_Q14.as_mut_ptr() as *mut libc::c_void,
+        &mut *(*NSQ)
+            .sLTP_shp_Q14
+            .as_mut_ptr()
+            .offset((*psEncC).frame_length as isize) as *mut opus_int32
+            as *const libc::c_void,
+        ((*psEncC).ltp_mem_length as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+    );
 }
 /* **********************************/
 /* silk_noise_shape_quantizer  */
@@ -724,12 +720,9 @@ unsafe extern "C" fn silk_noise_shape_quantizer(
     let mut tmp1: opus_int32 = 0;
     let mut tmp2: opus_int32 = 0;
     let mut sLF_AR_shp_Q14: opus_int32 = 0;
-    let mut psLPC_Q14: *mut opus_int32 =
-        0 as *mut opus_int32;
-    let mut shp_lag_ptr: *mut opus_int32 =
-        0 as *mut opus_int32;
-    let mut pred_lag_ptr: *mut opus_int32 =
-        0 as *mut opus_int32;
+    let mut psLPC_Q14: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut shp_lag_ptr: *mut opus_int32 = 0 as *mut opus_int32;
+    let mut pred_lag_ptr: *mut opus_int32 = 0 as *mut opus_int32;
     shp_lag_ptr = &mut *(*NSQ)
         .sLTP_shp_Q14
         .as_mut_ptr()
@@ -742,14 +735,12 @@ unsafe extern "C" fn silk_noise_shape_quantizer(
     psLPC_Q14 = &mut *(*NSQ)
         .sLPC_Q14
         .as_mut_ptr()
-        .offset((16 as i32 - 1 as i32) as isize)
-        as *mut opus_int32;
+        .offset((16 as i32 - 1 as i32) as isize) as *mut opus_int32;
     i = 0 as i32;
     while i < length {
         /* Generate dither */
         (*NSQ).rand_seed = (907633515 as i32 as opus_uint32).wrapping_add(
-            ((*NSQ).rand_seed as opus_uint32)
-                .wrapping_mul(196314165 as i32 as opus_uint32),
+            ((*NSQ).rand_seed as opus_uint32).wrapping_mul(196314165 as i32 as opus_uint32),
         ) as opus_int32;
         /* Short-term prediction */
         LPC_pred_Q10 =
@@ -792,8 +783,8 @@ unsafe extern "C" fn silk_noise_shape_quantizer(
             shapingLPCOrder,
         );
         n_AR_Q12 = (n_AR_Q12 as i64
-            + ((*NSQ).sLF_AR_shp_Q14 as i64 * Tilt_Q14 as opus_int16 as i64
-                >> 16 as i32)) as opus_int32;
+            + ((*NSQ).sLF_AR_shp_Q14 as i64 * Tilt_Q14 as opus_int16 as i64 >> 16 as i32))
+            as opus_int32;
         n_LF_Q12 = ((*NSQ).sLTP_shp_Q14[((*NSQ).sLTP_shp_buf_idx - 1 as i32) as usize] as i64
             * LF_shp_Q14 as opus_int16 as i64
             >> 16 as i32) as opus_int32;
@@ -801,9 +792,7 @@ unsafe extern "C" fn silk_noise_shape_quantizer(
             + ((*NSQ).sLF_AR_shp_Q14 as i64 * (LF_shp_Q14 as i64 >> 16 as i32) >> 16 as i32))
             as opus_int32;
         /* Combine prediction and noise shaping signals */
-        tmp1 = ((LPC_pred_Q10 as opus_uint32) << 2 as i32)
-            as opus_int32
-            - n_AR_Q12; /* Q12 */
+        tmp1 = ((LPC_pred_Q10 as opus_uint32) << 2 as i32) as opus_int32 - n_AR_Q12; /* Q12 */
         tmp1 = tmp1 - n_LF_Q12; /* Q12 */
         if lag > 0 as i32 {
             /* Symmetric, packed FIR coefficients */
@@ -815,14 +804,11 @@ unsafe extern "C" fn silk_noise_shape_quantizer(
                 + (*shp_lag_ptr.offset(-(1 as i32) as isize) as i64
                     * (HarmShapeFIRPacked_Q14 as i64 >> 16 as i32)
                     >> 16 as i32)) as opus_int32;
-            n_LTP_Q13 = ((n_LTP_Q13 as opus_uint32) << 1 as i32)
-                as opus_int32;
+            n_LTP_Q13 = ((n_LTP_Q13 as opus_uint32) << 1 as i32) as opus_int32;
             shp_lag_ptr = shp_lag_ptr.offset(1);
             /* Q10 */
             tmp2 = LTP_pred_Q13 - n_LTP_Q13; /* Q13 */
-            tmp1 = tmp2
-                + ((tmp1 as opus_uint32) << 1 as i32)
-                    as opus_int32; /* Q13 */
+            tmp1 = tmp2 + ((tmp1 as opus_uint32) << 1 as i32) as opus_int32; /* Q13 */
             tmp1 = if 3 as i32 == 1 as i32 {
                 (tmp1 >> 1 as i32) + (tmp1 & 1 as i32)
             } else {
@@ -873,48 +859,32 @@ unsafe extern "C" fn silk_noise_shape_quantizer(
             }
         }
         if q1_Q0 > 0 as i32 {
-            q1_Q10 = ((q1_Q0 as opus_uint32) << 10 as i32)
-                as opus_int32
-                - 80 as i32;
+            q1_Q10 = ((q1_Q0 as opus_uint32) << 10 as i32) as opus_int32 - 80 as i32;
             q1_Q10 = q1_Q10 + offset_Q10;
             q2_Q10 = q1_Q10 + 1024 as i32;
-            rd1_Q20 = q1_Q10 as opus_int16 as opus_int32
-                * Lambda_Q10 as opus_int16 as opus_int32;
-            rd2_Q20 = q2_Q10 as opus_int16 as opus_int32
-                * Lambda_Q10 as opus_int16 as opus_int32
+            rd1_Q20 = q1_Q10 as opus_int16 as opus_int32 * Lambda_Q10 as opus_int16 as opus_int32;
+            rd2_Q20 = q2_Q10 as opus_int16 as opus_int32 * Lambda_Q10 as opus_int16 as opus_int32
         } else if q1_Q0 == 0 as i32 {
             q1_Q10 = offset_Q10;
             q2_Q10 = q1_Q10 + (1024 as i32 - 80 as i32);
-            rd1_Q20 = q1_Q10 as opus_int16 as opus_int32
-                * Lambda_Q10 as opus_int16 as opus_int32;
-            rd2_Q20 = q2_Q10 as opus_int16 as opus_int32
-                * Lambda_Q10 as opus_int16 as opus_int32
+            rd1_Q20 = q1_Q10 as opus_int16 as opus_int32 * Lambda_Q10 as opus_int16 as opus_int32;
+            rd2_Q20 = q2_Q10 as opus_int16 as opus_int32 * Lambda_Q10 as opus_int16 as opus_int32
         } else if q1_Q0 == -(1 as i32) {
             q2_Q10 = offset_Q10;
             q1_Q10 = q2_Q10 - (1024 as i32 - 80 as i32);
-            rd1_Q20 = -q1_Q10 as opus_int16 as opus_int32
-                * Lambda_Q10 as opus_int16 as opus_int32;
-            rd2_Q20 = q2_Q10 as opus_int16 as opus_int32
-                * Lambda_Q10 as opus_int16 as opus_int32
+            rd1_Q20 = -q1_Q10 as opus_int16 as opus_int32 * Lambda_Q10 as opus_int16 as opus_int32;
+            rd2_Q20 = q2_Q10 as opus_int16 as opus_int32 * Lambda_Q10 as opus_int16 as opus_int32
         } else {
-            q1_Q10 = ((q1_Q0 as opus_uint32) << 10 as i32)
-                as opus_int32
-                + 80 as i32;
+            q1_Q10 = ((q1_Q0 as opus_uint32) << 10 as i32) as opus_int32 + 80 as i32;
             q1_Q10 = q1_Q10 + offset_Q10;
             q2_Q10 = q1_Q10 + 1024 as i32;
-            rd1_Q20 = -q1_Q10 as opus_int16 as opus_int32
-                * Lambda_Q10 as opus_int16 as opus_int32;
-            rd2_Q20 = -q2_Q10 as opus_int16 as opus_int32
-                * Lambda_Q10 as opus_int16 as opus_int32
+            rd1_Q20 = -q1_Q10 as opus_int16 as opus_int32 * Lambda_Q10 as opus_int16 as opus_int32;
+            rd2_Q20 = -q2_Q10 as opus_int16 as opus_int32 * Lambda_Q10 as opus_int16 as opus_int32
         }
         rr_Q10 = r_Q10 - q1_Q10;
-        rd1_Q20 = rd1_Q20
-            + rr_Q10 as opus_int16 as opus_int32
-                * rr_Q10 as opus_int16 as opus_int32;
+        rd1_Q20 = rd1_Q20 + rr_Q10 as opus_int16 as opus_int32 * rr_Q10 as opus_int16 as opus_int32;
         rr_Q10 = r_Q10 - q2_Q10;
-        rd2_Q20 = rd2_Q20
-            + rr_Q10 as opus_int16 as opus_int32
-                * rr_Q10 as opus_int16 as opus_int32;
+        rd2_Q20 = rd2_Q20 + rr_Q10 as opus_int16 as opus_int32 * rr_Q10 as opus_int16 as opus_int32;
         if rd2_Q20 < rd1_Q20 {
             q1_Q10 = q2_Q10
         }
@@ -924,75 +894,54 @@ unsafe extern "C" fn silk_noise_shape_quantizer(
             ((q1_Q10 >> 10 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
         } as i8;
         /* Excitation */
-        exc_Q14 = ((q1_Q10 as opus_uint32) << 4 as i32)
-            as opus_int32;
+        exc_Q14 = ((q1_Q10 as opus_uint32) << 4 as i32) as opus_int32;
         if (*NSQ).rand_seed < 0 as i32 {
             exc_Q14 = -exc_Q14
         }
         /* Add predictions */
-        LPC_exc_Q14 = exc_Q14
-            + ((LTP_pred_Q13 as opus_uint32) << 1 as i32)
-                as opus_int32;
-        xq_Q14 = LPC_exc_Q14
-            + ((LPC_pred_Q10 as opus_uint32) << 4 as i32)
-                as opus_int32;
+        LPC_exc_Q14 = exc_Q14 + ((LTP_pred_Q13 as opus_uint32) << 1 as i32) as opus_int32;
+        xq_Q14 = LPC_exc_Q14 + ((LPC_pred_Q10 as opus_uint32) << 4 as i32) as opus_int32;
         /* Scale XQ back to normal level before saving */
         *xq.offset(i as isize) = if (if 8 as i32 == 1 as i32 {
-            ((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32) as opus_int32
-                >> 1 as i32)
-                + ((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32)
-                    as opus_int32
-                    & 1 as i32)
+            ((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32) as opus_int32 >> 1 as i32)
+                + ((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32) as opus_int32 & 1 as i32)
         } else {
-            (((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32) as opus_int32
-                >> 8 as i32 - 1 as i32)
+            (((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32) as opus_int32 >> 8 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
         }) > 0x7fff as i32
         {
             0x7fff as i32
         } else if (if 8 as i32 == 1 as i32 {
-            ((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32) as opus_int32
-                >> 1 as i32)
-                + ((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32)
-                    as opus_int32
-                    & 1 as i32)
+            ((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32) as opus_int32 >> 1 as i32)
+                + ((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32) as opus_int32 & 1 as i32)
         } else {
-            (((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32) as opus_int32
-                >> 8 as i32 - 1 as i32)
+            (((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32) as opus_int32 >> 8 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
         }) < 0x8000 as i32 as opus_int16 as i32
         {
             0x8000 as i32 as opus_int16 as i32
         } else if 8 as i32 == 1 as i32 {
-            ((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32) as opus_int32
-                >> 1 as i32)
-                + ((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32)
-                    as opus_int32
-                    & 1 as i32)
+            ((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32) as opus_int32 >> 1 as i32)
+                + ((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32) as opus_int32 & 1 as i32)
         } else {
-            (((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32) as opus_int32
-                >> 8 as i32 - 1 as i32)
+            (((xq_Q14 as i64 * Gain_Q10 as i64 >> 16 as i32) as opus_int32 >> 8 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
         } as opus_int16;
         /* Update states */
         psLPC_Q14 = psLPC_Q14.offset(1);
         *psLPC_Q14 = xq_Q14;
-        (*NSQ).sDiff_shp_Q14 = xq_Q14
-            - ((*x_sc_Q10.offset(i as isize) as opus_uint32) << 4 as i32)
-                as opus_int32;
-        sLF_AR_shp_Q14 = (*NSQ).sDiff_shp_Q14
-            - ((n_AR_Q12 as opus_uint32) << 2 as i32)
-                as opus_int32;
+        (*NSQ).sDiff_shp_Q14 =
+            xq_Q14 - ((*x_sc_Q10.offset(i as isize) as opus_uint32) << 4 as i32) as opus_int32;
+        sLF_AR_shp_Q14 =
+            (*NSQ).sDiff_shp_Q14 - ((n_AR_Q12 as opus_uint32) << 2 as i32) as opus_int32;
         (*NSQ).sLF_AR_shp_Q14 = sLF_AR_shp_Q14;
-        (*NSQ).sLTP_shp_Q14[(*NSQ).sLTP_shp_buf_idx as usize] = sLF_AR_shp_Q14
-            - ((n_LF_Q12 as opus_uint32) << 2 as i32)
-                as opus_int32;
+        (*NSQ).sLTP_shp_Q14[(*NSQ).sLTP_shp_buf_idx as usize] =
+            sLF_AR_shp_Q14 - ((n_LF_Q12 as opus_uint32) << 2 as i32) as opus_int32;
         *sLTP_Q15.offset((*NSQ).sLTP_buf_idx as isize) =
-            ((LPC_exc_Q14 as opus_uint32) << 1 as i32)
-                as opus_int32;
+            ((LPC_exc_Q14 as opus_uint32) << 1 as i32) as opus_int32;
         (*NSQ).sLTP_shp_buf_idx += 1;
         (*NSQ).sLTP_buf_idx += 1;
         /* Make dither dependent on quantized signal */
@@ -1002,12 +951,13 @@ unsafe extern "C" fn silk_noise_shape_quantizer(
         i += 1
     }
     /* Update LPC synth buffer */
-    crate::stdlib::memcpy((*NSQ).sLPC_Q14.as_mut_ptr() as *mut libc::c_void,
-           &mut *(*NSQ).sLPC_Q14.as_mut_ptr().offset(length as isize) as
-               *mut opus_int32 as *const libc::c_void,
-           (16 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
-                                                as libc::c_ulong));
+    crate::stdlib::memcpy(
+        (*NSQ).sLPC_Q14.as_mut_ptr() as *mut libc::c_void,
+        &mut *(*NSQ).sLPC_Q14.as_mut_ptr().offset(length as isize) as *mut opus_int32
+            as *const libc::c_void,
+        (16 as i32 as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+    );
 }
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.
@@ -1074,25 +1024,22 @@ unsafe extern "C" fn silk_nsq_scale_states(
     };
     i = 0 as i32;
     while i < (*psEncC).subfr_length {
-        *x_sc_Q10.offset(i as isize) = (*x16.offset(i as isize) as i64 * inv_gain_Q26 as i64
-            >> 16 as i32) as opus_int32;
+        *x_sc_Q10.offset(i as isize) =
+            (*x16.offset(i as isize) as i64 * inv_gain_Q26 as i64 >> 16 as i32) as opus_int32;
         i += 1
     }
     /* After rewhitening the LTP state is un-scaled, so scale with inv_gain_Q16 */
     if (*NSQ).rewhite_flag != 0 {
         if subfr == 0 as i32 {
             /* Do LTP downscaling */
-            inv_gain_Q31 = (((inv_gain_Q31 as i64
-                * LTP_scale_Q14 as opus_int16 as i64
-                >> 16 as i32) as opus_int32
-                as opus_uint32)
+            inv_gain_Q31 = (((inv_gain_Q31 as i64 * LTP_scale_Q14 as opus_int16 as i64 >> 16 as i32)
+                as opus_int32 as opus_uint32)
                 << 2 as i32) as opus_int32
         }
         i = (*NSQ).sLTP_buf_idx - lag - 5 as i32 / 2 as i32;
         while i < (*NSQ).sLTP_buf_idx {
-            *sLTP_Q15.offset(i as isize) = (inv_gain_Q31 as i64 * *sLTP.offset(i as isize) as i64
-                >> 16 as i32)
-                as opus_int32;
+            *sLTP_Q15.offset(i as isize) =
+                (inv_gain_Q31 as i64 * *sLTP.offset(i as isize) as i64 >> 16 as i32) as opus_int32;
             i += 1
         }
     }
@@ -1106,38 +1053,36 @@ unsafe extern "C" fn silk_nsq_scale_states(
         /* Scale long-term shaping state */
         i = (*NSQ).sLTP_shp_buf_idx - (*psEncC).ltp_mem_length;
         while i < (*NSQ).sLTP_shp_buf_idx {
-            (*NSQ).sLTP_shp_Q14[i as usize] =
-                (gain_adj_Q16 as i64 * (*NSQ).sLTP_shp_Q14[i as usize] as i64 >> 16 as i32)
-                    as opus_int32;
+            (*NSQ).sLTP_shp_Q14[i as usize] = (gain_adj_Q16 as i64
+                * (*NSQ).sLTP_shp_Q14[i as usize] as i64
+                >> 16 as i32) as opus_int32;
             i += 1
         }
         /* Scale long-term prediction state */
         if signal_type == 2 as i32 && (*NSQ).rewhite_flag == 0 as i32 {
             i = (*NSQ).sLTP_buf_idx - lag - 5 as i32 / 2 as i32;
             while i < (*NSQ).sLTP_buf_idx {
-                *sLTP_Q15.offset(i as isize) =
-                    (gain_adj_Q16 as i64 * *sLTP_Q15.offset(i as isize) as i64 >> 16 as i32)
-                        as opus_int32;
+                *sLTP_Q15.offset(i as isize) = (gain_adj_Q16 as i64
+                    * *sLTP_Q15.offset(i as isize) as i64
+                    >> 16 as i32) as opus_int32;
                 i += 1
             }
         }
-        (*NSQ).sLF_AR_shp_Q14 = (gain_adj_Q16 as i64 * (*NSQ).sLF_AR_shp_Q14 as i64 >> 16 as i32)
-            as opus_int32;
-        (*NSQ).sDiff_shp_Q14 = (gain_adj_Q16 as i64 * (*NSQ).sDiff_shp_Q14 as i64 >> 16 as i32)
-            as opus_int32;
+        (*NSQ).sLF_AR_shp_Q14 =
+            (gain_adj_Q16 as i64 * (*NSQ).sLF_AR_shp_Q14 as i64 >> 16 as i32) as opus_int32;
+        (*NSQ).sDiff_shp_Q14 =
+            (gain_adj_Q16 as i64 * (*NSQ).sDiff_shp_Q14 as i64 >> 16 as i32) as opus_int32;
         /* Scale short-term prediction and shaping states */
         i = 0 as i32;
         while i < 16 as i32 {
             (*NSQ).sLPC_Q14[i as usize] = (gain_adj_Q16 as i64 * (*NSQ).sLPC_Q14[i as usize] as i64
-                >> 16 as i32)
-                as opus_int32;
+                >> 16 as i32) as opus_int32;
             i += 1
         }
         i = 0 as i32;
         while i < 24 as i32 {
             (*NSQ).sAR2_Q14[i as usize] = (gain_adj_Q16 as i64 * (*NSQ).sAR2_Q14[i as usize] as i64
-                >> 16 as i32)
-                as opus_int32;
+                >> 16 as i32) as opus_int32;
             i += 1
         }
         /* Save inverse gain */

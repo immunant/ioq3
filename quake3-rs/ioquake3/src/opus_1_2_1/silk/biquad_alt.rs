@@ -70,22 +70,18 @@ pub unsafe extern "C" fn silk_biquad_alt_stride1(
         /* S[ 0 ], S[ 1 ]: Q12 */
         inval = *in_0.offset(k as isize) as opus_int32;
         out32_Q14 = (((*S.offset(0 as i32 as isize) as i64
-            + (*B_Q28.offset(0 as i32 as isize) as i64
-                * inval as opus_int16 as i64
-                >> 16 as i32)) as opus_int32
-            as opus_uint32)
+            + (*B_Q28.offset(0 as i32 as isize) as i64 * inval as opus_int16 as i64 >> 16 as i32))
+            as opus_int32 as opus_uint32)
             << 2 as i32) as opus_int32;
         *S.offset(0 as i32 as isize) = *S.offset(1 as i32 as isize)
             + (if 14 as i32 == 1 as i32 {
-                ((out32_Q14 as i64 * A0_L_Q28 as opus_int16 as i64
-                    >> 16 as i32) as opus_int32
+                ((out32_Q14 as i64 * A0_L_Q28 as opus_int16 as i64 >> 16 as i32) as opus_int32
                     >> 1 as i32)
-                    + ((out32_Q14 as i64 * A0_L_Q28 as opus_int16 as i64
-                        >> 16 as i32) as opus_int32
+                    + ((out32_Q14 as i64 * A0_L_Q28 as opus_int16 as i64 >> 16 as i32)
+                        as opus_int32
                         & 1 as i32)
             } else {
-                (((out32_Q14 as i64 * A0_L_Q28 as opus_int16 as i64
-                    >> 16 as i32) as opus_int32
+                (((out32_Q14 as i64 * A0_L_Q28 as opus_int16 as i64 >> 16 as i32) as opus_int32
                     >> 14 as i32 - 1 as i32)
                     + 1 as i32)
                     >> 1 as i32
@@ -94,20 +90,15 @@ pub unsafe extern "C" fn silk_biquad_alt_stride1(
             + (out32_Q14 as i64 * A0_U_Q28 as opus_int16 as i64 >> 16 as i32))
             as opus_int32;
         *S.offset(0 as i32 as isize) = (*S.offset(0 as i32 as isize) as i64
-            + (*B_Q28.offset(1 as i32 as isize) as i64
-                * inval as opus_int16 as i64
-                >> 16 as i32))
+            + (*B_Q28.offset(1 as i32 as isize) as i64 * inval as opus_int16 as i64 >> 16 as i32))
             as opus_int32;
         *S.offset(1 as i32 as isize) = if 14 as i32 == 1 as i32 {
-            ((out32_Q14 as i64 * A1_L_Q28 as opus_int16 as i64 >> 16 as i32)
-                as opus_int32
+            ((out32_Q14 as i64 * A1_L_Q28 as opus_int16 as i64 >> 16 as i32) as opus_int32
                 >> 1 as i32)
-                + ((out32_Q14 as i64 * A1_L_Q28 as opus_int16 as i64
-                    >> 16 as i32) as opus_int32
+                + ((out32_Q14 as i64 * A1_L_Q28 as opus_int16 as i64 >> 16 as i32) as opus_int32
                     & 1 as i32)
         } else {
-            (((out32_Q14 as i64 * A1_L_Q28 as opus_int16 as i64 >> 16 as i32)
-                as opus_int32
+            (((out32_Q14 as i64 * A1_L_Q28 as opus_int16 as i64 >> 16 as i32) as opus_int32
                 >> 14 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
@@ -116,9 +107,7 @@ pub unsafe extern "C" fn silk_biquad_alt_stride1(
             + (out32_Q14 as i64 * A1_U_Q28 as opus_int16 as i64 >> 16 as i32))
             as opus_int32;
         *S.offset(1 as i32 as isize) = (*S.offset(1 as i32 as isize) as i64
-            + (*B_Q28.offset(2 as i32 as isize) as i64
-                * inval as opus_int16 as i64
-                >> 16 as i32))
+            + (*B_Q28.offset(2 as i32 as isize) as i64 * inval as opus_int16 as i64 >> 16 as i32))
             as opus_int32;
         /* Scale back to Q0 and saturate */
         *out.offset(k as isize) =
@@ -236,127 +225,101 @@ pub unsafe extern "C" fn silk_biquad_alt_stride2_c(
         out32_Q14[0 as i32 as usize] = (((*S.offset(0 as i32 as isize) as i64
             + (*B_Q28.offset(0 as i32 as isize) as i64
                 * *in_0.offset((2 as i32 * k + 0 as i32) as isize) as i64
-                >> 16 as i32))
-            as opus_int32
+                >> 16 as i32)) as opus_int32
             as opus_uint32)
             << 2 as i32) as opus_int32;
         out32_Q14[1 as i32 as usize] = (((*S.offset(2 as i32 as isize) as i64
             + (*B_Q28.offset(0 as i32 as isize) as i64
                 * *in_0.offset((2 as i32 * k + 1 as i32) as isize) as i64
-                >> 16 as i32))
-            as opus_int32
+                >> 16 as i32)) as opus_int32
             as opus_uint32)
             << 2 as i32) as opus_int32;
         *S.offset(0 as i32 as isize) = *S.offset(1 as i32 as isize)
             + (if 14 as i32 == 1 as i32 {
-                ((out32_Q14[0 as i32 as usize] as i64
-                    * A0_L_Q28 as opus_int16 as i64
-                    >> 16 as i32) as opus_int32
+                ((out32_Q14[0 as i32 as usize] as i64 * A0_L_Q28 as opus_int16 as i64 >> 16 as i32)
+                    as opus_int32
                     >> 1 as i32)
-                    + ((out32_Q14[0 as i32 as usize] as i64
-                        * A0_L_Q28 as opus_int16 as i64
+                    + ((out32_Q14[0 as i32 as usize] as i64 * A0_L_Q28 as opus_int16 as i64
                         >> 16 as i32) as opus_int32
                         & 1 as i32)
             } else {
-                (((out32_Q14[0 as i32 as usize] as i64
-                    * A0_L_Q28 as opus_int16 as i64
-                    >> 16 as i32) as opus_int32
+                (((out32_Q14[0 as i32 as usize] as i64 * A0_L_Q28 as opus_int16 as i64 >> 16 as i32)
+                    as opus_int32
                     >> 14 as i32 - 1 as i32)
                     + 1 as i32)
                     >> 1 as i32
             });
         *S.offset(2 as i32 as isize) = *S.offset(3 as i32 as isize)
             + (if 14 as i32 == 1 as i32 {
-                ((out32_Q14[1 as i32 as usize] as i64
-                    * A0_L_Q28 as opus_int16 as i64
-                    >> 16 as i32) as opus_int32
+                ((out32_Q14[1 as i32 as usize] as i64 * A0_L_Q28 as opus_int16 as i64 >> 16 as i32)
+                    as opus_int32
                     >> 1 as i32)
-                    + ((out32_Q14[1 as i32 as usize] as i64
-                        * A0_L_Q28 as opus_int16 as i64
+                    + ((out32_Q14[1 as i32 as usize] as i64 * A0_L_Q28 as opus_int16 as i64
                         >> 16 as i32) as opus_int32
                         & 1 as i32)
             } else {
-                (((out32_Q14[1 as i32 as usize] as i64
-                    * A0_L_Q28 as opus_int16 as i64
-                    >> 16 as i32) as opus_int32
+                (((out32_Q14[1 as i32 as usize] as i64 * A0_L_Q28 as opus_int16 as i64 >> 16 as i32)
+                    as opus_int32
                     >> 14 as i32 - 1 as i32)
                     + 1 as i32)
                     >> 1 as i32
             });
         *S.offset(0 as i32 as isize) = (*S.offset(0 as i32 as isize) as i64
-            + (out32_Q14[0 as i32 as usize] as i64
-                * A0_U_Q28 as opus_int16 as i64
-                >> 16 as i32))
+            + (out32_Q14[0 as i32 as usize] as i64 * A0_U_Q28 as opus_int16 as i64 >> 16 as i32))
             as opus_int32;
         *S.offset(2 as i32 as isize) = (*S.offset(2 as i32 as isize) as i64
-            + (out32_Q14[1 as i32 as usize] as i64
-                * A0_U_Q28 as opus_int16 as i64
-                >> 16 as i32))
+            + (out32_Q14[1 as i32 as usize] as i64 * A0_U_Q28 as opus_int16 as i64 >> 16 as i32))
             as opus_int32;
         *S.offset(0 as i32 as isize) = (*S.offset(0 as i32 as isize) as i64
             + (*B_Q28.offset(1 as i32 as isize) as i64
                 * *in_0.offset((2 as i32 * k + 0 as i32) as isize) as i64
-                >> 16 as i32))
-            as opus_int32;
+                >> 16 as i32)) as opus_int32;
         *S.offset(2 as i32 as isize) = (*S.offset(2 as i32 as isize) as i64
             + (*B_Q28.offset(1 as i32 as isize) as i64
                 * *in_0.offset((2 as i32 * k + 1 as i32) as isize) as i64
-                >> 16 as i32))
-            as opus_int32;
+                >> 16 as i32)) as opus_int32;
         *S.offset(1 as i32 as isize) = if 14 as i32 == 1 as i32 {
-            ((out32_Q14[0 as i32 as usize] as i64
-                * A1_L_Q28 as opus_int16 as i64
-                >> 16 as i32) as opus_int32
+            ((out32_Q14[0 as i32 as usize] as i64 * A1_L_Q28 as opus_int16 as i64 >> 16 as i32)
+                as opus_int32
                 >> 1 as i32)
-                + ((out32_Q14[0 as i32 as usize] as i64
-                    * A1_L_Q28 as opus_int16 as i64
+                + ((out32_Q14[0 as i32 as usize] as i64 * A1_L_Q28 as opus_int16 as i64
                     >> 16 as i32) as opus_int32
                     & 1 as i32)
         } else {
-            (((out32_Q14[0 as i32 as usize] as i64
-                * A1_L_Q28 as opus_int16 as i64
-                >> 16 as i32) as opus_int32
+            (((out32_Q14[0 as i32 as usize] as i64 * A1_L_Q28 as opus_int16 as i64 >> 16 as i32)
+                as opus_int32
                 >> 14 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
         };
         *S.offset(3 as i32 as isize) = if 14 as i32 == 1 as i32 {
-            ((out32_Q14[1 as i32 as usize] as i64
-                * A1_L_Q28 as opus_int16 as i64
-                >> 16 as i32) as opus_int32
+            ((out32_Q14[1 as i32 as usize] as i64 * A1_L_Q28 as opus_int16 as i64 >> 16 as i32)
+                as opus_int32
                 >> 1 as i32)
-                + ((out32_Q14[1 as i32 as usize] as i64
-                    * A1_L_Q28 as opus_int16 as i64
+                + ((out32_Q14[1 as i32 as usize] as i64 * A1_L_Q28 as opus_int16 as i64
                     >> 16 as i32) as opus_int32
                     & 1 as i32)
         } else {
-            (((out32_Q14[1 as i32 as usize] as i64
-                * A1_L_Q28 as opus_int16 as i64
-                >> 16 as i32) as opus_int32
+            (((out32_Q14[1 as i32 as usize] as i64 * A1_L_Q28 as opus_int16 as i64 >> 16 as i32)
+                as opus_int32
                 >> 14 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
         };
         *S.offset(1 as i32 as isize) = (*S.offset(1 as i32 as isize) as i64
-            + (out32_Q14[0 as i32 as usize] as i64
-                * A1_U_Q28 as opus_int16 as i64
-                >> 16 as i32))
+            + (out32_Q14[0 as i32 as usize] as i64 * A1_U_Q28 as opus_int16 as i64 >> 16 as i32))
             as opus_int32;
         *S.offset(3 as i32 as isize) = (*S.offset(3 as i32 as isize) as i64
-            + (out32_Q14[1 as i32 as usize] as i64
-                * A1_U_Q28 as opus_int16 as i64
-                >> 16 as i32))
+            + (out32_Q14[1 as i32 as usize] as i64 * A1_U_Q28 as opus_int16 as i64 >> 16 as i32))
             as opus_int32;
         *S.offset(1 as i32 as isize) = (*S.offset(1 as i32 as isize) as i64
             + (*B_Q28.offset(2 as i32 as isize) as i64
                 * *in_0.offset((2 as i32 * k + 0 as i32) as isize) as i64
-                >> 16 as i32))
-            as opus_int32;
+                >> 16 as i32)) as opus_int32;
         *S.offset(3 as i32 as isize) = (*S.offset(3 as i32 as isize) as i64
             + (*B_Q28.offset(2 as i32 as isize) as i64
                 * *in_0.offset((2 as i32 * k + 1 as i32) as isize) as i64
-                >> 16 as i32))
-            as opus_int32;
+                >> 16 as i32)) as opus_int32;
         /* Scale back to Q0 and saturate */
         *out.offset((2 as i32 * k + 0 as i32) as isize) =
             if out32_Q14[0 as i32 as usize] + ((1 as i32) << 14 as i32) - 1 as i32 >> 14 as i32

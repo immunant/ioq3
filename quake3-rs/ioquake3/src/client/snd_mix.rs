@@ -155,36 +155,29 @@ pub unsafe extern "C" fn S_TransferPaintBuffer(mut endtime: i32) {
         count = endtime - s_paintedtime;
         i = 0 as i32;
         while i < count {
-            paintbuffer[i as usize].right = (crate::stdlib::sin(
-                (s_paintedtime + i) as f64 * 0.1f64,
-            ) * 20000 as i32 as f64
-                * 256 as i32 as f64) as i32;
+            paintbuffer[i as usize].right =
+                (crate::stdlib::sin((s_paintedtime + i) as f64 * 0.1f64)
+                    * 20000 as i32 as f64
+                    * 256 as i32 as f64) as i32;
             paintbuffer[i as usize].left = paintbuffer[i as usize].right;
             i += 1
         }
     }
-    if dma.samplebits == 16 as i32
-        && dma.channels == 2 as i32
-    {
+    if dma.samplebits == 16 as i32 && dma.channels == 2 as i32 {
         // optimized case
         S_TransferStereo16(pbuf, endtime);
     } else {
         // general case
         p = paintbuffer.as_mut_ptr() as *mut i32;
-        count = (endtime - s_paintedtime)
-            * dma.channels;
-        out_idx = s_paintedtime
-            * dma.channels
-            % dma.samples;
+        count = (endtime - s_paintedtime) * dma.channels;
+        out_idx = s_paintedtime * dma.channels % dma.samples;
         step = 3 as i32
             - (if dma.channels < 2 as i32 {
                 dma.channels
             } else {
                 2 as i32
             });
-        if dma.isfloat != 0
-            && dma.samplebits == 32 as i32
-        {
+        if dma.isfloat != 0 && dma.samplebits == 32 as i32 {
             let mut out: *mut f32 = pbuf as *mut f32;
             i = 0 as i32;
             while i < count {
@@ -267,8 +260,7 @@ unsafe extern "C" fn S_PaintChannelFrom16_scalar(
     let mut rightvol: i32 = 0;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut samp: *mut portable_samplepair_t =
-        0 as *mut portable_samplepair_t;
+    let mut samp: *mut portable_samplepair_t = 0 as *mut portable_samplepair_t;
     let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
     let mut samples: *mut i16 = 0 as *mut i16;
     let mut ooff: f32 = 0.;
@@ -279,8 +271,8 @@ unsafe extern "C" fn S_PaintChannelFrom16_scalar(
     if (*sc).soundChannels <= 0 as i32 {
         return;
     }
-    samp = &mut *paintbuffer.as_mut_ptr().offset(bufferOffset as isize)
-        as *mut portable_samplepair_t;
+    samp =
+        &mut *paintbuffer.as_mut_ptr().offset(bufferOffset as isize) as *mut portable_samplepair_t;
     if (*ch).doppler as u64 != 0 {
         sampleOffset = (sampleOffset as f32 * (*ch).oldDopplerScale) as i32
     }
@@ -389,28 +381,22 @@ pub unsafe extern "C" fn S_PaintChannelFromWavelet(
     let mut leftvol: i32 = 0;
     let mut rightvol: i32 = 0;
     let mut i: i32 = 0;
-    let mut samp: *mut portable_samplepair_t =
-        0 as *mut portable_samplepair_t;
+    let mut samp: *mut portable_samplepair_t = 0 as *mut portable_samplepair_t;
     let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
     let mut samples: *mut i16 = 0 as *mut i16;
     leftvol = (*ch).leftvol * snd_vol;
     rightvol = (*ch).rightvol * snd_vol;
     i = 0 as i32;
-    samp = &mut *paintbuffer.as_mut_ptr().offset(bufferOffset as isize)
-        as *mut portable_samplepair_t;
+    samp =
+        &mut *paintbuffer.as_mut_ptr().offset(bufferOffset as isize) as *mut portable_samplepair_t;
     chunk = (*sc).soundData;
     while sampleOffset >= 1024 as i32 / 2 as i32 * 4 as i32 {
         chunk = (*chunk).next;
         sampleOffset -= 1024 as i32 / 2 as i32 * 4 as i32;
         i += 1
     }
-    if i != sfxScratchIndex
-        || sfxScratchPointer != sc
-    {
-        S_AdpcmGetSamples(
-            chunk as *mut sndBuffer_s,
-            sfxScratchBuffer,
-        );
+    if i != sfxScratchIndex || sfxScratchPointer != sc {
+        S_AdpcmGetSamples(chunk as *mut sndBuffer_s, sfxScratchBuffer);
         sfxScratchIndex = i;
         sfxScratchPointer = sc
     }
@@ -424,10 +410,7 @@ pub unsafe extern "C" fn S_PaintChannelFromWavelet(
         (*samp.offset(i as isize)).right += data * rightvol >> 8 as i32;
         if sampleOffset == 1024 as i32 * 2 as i32 {
             chunk = (*chunk).next;
-            decodeWavelet(
-                chunk as *mut sndBuffer_s,
-                sfxScratchBuffer,
-            );
+            decodeWavelet(chunk as *mut sndBuffer_s, sfxScratchBuffer);
             sfxScratchIndex += 1;
             sampleOffset = 0 as i32
         }
@@ -447,15 +430,14 @@ pub unsafe extern "C" fn S_PaintChannelFromADPCM(
     let mut leftvol: i32 = 0;
     let mut rightvol: i32 = 0;
     let mut i: i32 = 0;
-    let mut samp: *mut portable_samplepair_t =
-        0 as *mut portable_samplepair_t;
+    let mut samp: *mut portable_samplepair_t = 0 as *mut portable_samplepair_t;
     let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
     let mut samples: *mut i16 = 0 as *mut i16;
     leftvol = (*ch).leftvol * snd_vol;
     rightvol = (*ch).rightvol * snd_vol;
     i = 0 as i32;
-    samp = &mut *paintbuffer.as_mut_ptr().offset(bufferOffset as isize)
-        as *mut portable_samplepair_t;
+    samp =
+        &mut *paintbuffer.as_mut_ptr().offset(bufferOffset as isize) as *mut portable_samplepair_t;
     chunk = (*sc).soundData;
     if (*ch).doppler as u64 != 0 {
         sampleOffset = (sampleOffset as f32 * (*ch).oldDopplerScale) as i32
@@ -465,13 +447,8 @@ pub unsafe extern "C" fn S_PaintChannelFromADPCM(
         sampleOffset -= 1024 as i32 * 4 as i32;
         i += 1
     }
-    if i != sfxScratchIndex
-        || sfxScratchPointer != sc
-    {
-        S_AdpcmGetSamples(
-            chunk as *mut sndBuffer_s,
-            sfxScratchBuffer,
-        );
+    if i != sfxScratchIndex || sfxScratchPointer != sc {
+        S_AdpcmGetSamples(chunk as *mut sndBuffer_s, sfxScratchBuffer);
         sfxScratchIndex = i;
         sfxScratchPointer = sc
     }
@@ -485,10 +462,7 @@ pub unsafe extern "C" fn S_PaintChannelFromADPCM(
         (*samp.offset(i as isize)).right += data * rightvol >> 8 as i32;
         if sampleOffset == 1024 as i32 * 4 as i32 {
             chunk = (*chunk).next;
-            S_AdpcmGetSamples(
-                chunk as *mut sndBuffer_s,
-                sfxScratchBuffer,
-            );
+            S_AdpcmGetSamples(chunk as *mut sndBuffer_s, sfxScratchBuffer);
             sampleOffset = 0 as i32;
             sfxScratchIndex += 1
         }
@@ -508,16 +482,14 @@ pub unsafe extern "C" fn S_PaintChannelFromMuLaw(
     let mut leftvol: i32 = 0;
     let mut rightvol: i32 = 0;
     let mut i: i32 = 0;
-    let mut samp: *mut portable_samplepair_t =
-        0 as *mut portable_samplepair_t;
+    let mut samp: *mut portable_samplepair_t = 0 as *mut portable_samplepair_t;
     let mut chunk: *mut sndBuffer = 0 as *mut sndBuffer;
-    let mut samples: *mut byte =
-        0 as *mut byte;
+    let mut samples: *mut byte = 0 as *mut byte;
     let mut ooff: f32 = 0.;
     leftvol = (*ch).leftvol * snd_vol;
     rightvol = (*ch).rightvol * snd_vol;
-    samp = &mut *paintbuffer.as_mut_ptr().offset(bufferOffset as isize)
-        as *mut portable_samplepair_t;
+    samp =
+        &mut *paintbuffer.as_mut_ptr().offset(bufferOffset as isize) as *mut portable_samplepair_t;
     chunk = (*sc).soundData;
     while sampleOffset >= 1024 as i32 * 2 as i32 {
         chunk = (*chunk).next;
@@ -527,8 +499,7 @@ pub unsafe extern "C" fn S_PaintChannelFromMuLaw(
         }
     }
     if (*ch).doppler as u64 == 0 {
-        samples = ((*chunk).sndChunk.as_mut_ptr() as *mut byte)
-            .offset(sampleOffset as isize);
+        samples = ((*chunk).sndChunk.as_mut_ptr() as *mut byte).offset(sampleOffset as isize);
         i = 0 as i32;
         while i < count {
             data = mulawToShort[*samples as usize] as i32;
@@ -550,8 +521,7 @@ pub unsafe extern "C" fn S_PaintChannelFromMuLaw(
         samples = (*chunk).sndChunk.as_mut_ptr() as *mut byte;
         i = 0 as i32;
         while i < count {
-            data = mulawToShort
-                [*samples.offset(ooff as i32 as isize) as usize] as i32;
+            data = mulawToShort[*samples.offset(ooff as i32 as isize) as usize] as i32;
             ooff = ooff + (*ch).dopplerScale;
             (*samp.offset(i as isize)).left += data * leftvol >> 8 as i32;
             (*samp.offset(i as isize)).right += data * rightvol >> 8 as i32;
@@ -560,8 +530,7 @@ pub unsafe extern "C" fn S_PaintChannelFromMuLaw(
                 if chunk.is_null() {
                     chunk = (*sc).soundData
                 }
-                samples =
-                    (*chunk).sndChunk.as_mut_ptr() as *mut byte;
+                samples = (*chunk).sndChunk.as_mut_ptr() as *mut byte;
                 ooff = 0.0f64 as f32
             }
             i += 1
@@ -601,14 +570,11 @@ pub unsafe extern "C" fn S_PaintChannels(mut endtime: i32) {
         crate::stdlib::memset(
             paintbuffer.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ::std::mem::size_of::<[portable_samplepair_t; 4096]>()
-                as libc::c_ulong,
+            ::std::mem::size_of::<[portable_samplepair_t; 4096]>() as libc::c_ulong,
         );
         stream = 0 as i32;
         while stream < 64 as i32 * 2 as i32 + 1 as i32 {
-            if s_rawend[stream as usize]
-                >= s_paintedtime
-            {
+            if s_rawend[stream as usize] >= s_paintedtime {
                 // copy from the streaming sound source
                 let mut rawsamples: *const portable_samplepair_t =
                     s_rawsamples[stream as usize].as_mut_ptr();

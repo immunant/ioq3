@@ -58,10 +58,7 @@ pub static mut ogg_codec: snd_codec_t = {
             ),
             open: Some(
                 S_OGG_CodecOpenStream
-                    as unsafe extern "C" fn(
-                        _: *const libc::c_char,
-                    )
-                        -> *mut snd_stream_t,
+                    as unsafe extern "C" fn(_: *const libc::c_char) -> *mut snd_stream_t,
             ),
             read: Some(
                 S_OGG_CodecReadStream
@@ -71,14 +68,8 @@ pub static mut ogg_codec: snd_codec_t = {
                         _: *mut libc::c_void,
                     ) -> i32,
             ),
-            close: Some(
-                S_OGG_CodecCloseStream
-                    as unsafe extern "C" fn(
-                        _: *mut snd_stream_t,
-                    ) -> (),
-            ),
-            next: 0 as *const snd_codec_t
-                as *mut snd_codec_t,
+            close: Some(S_OGG_CodecCloseStream as unsafe extern "C" fn(_: *mut snd_stream_t) -> ()),
+            next: 0 as *const snd_codec_t as *mut snd_codec_t,
         };
         init
     }
@@ -93,8 +84,7 @@ pub unsafe extern "C" fn S_OGG_Callback_read(
     mut nmemb: size_t,
     mut datasource: *mut libc::c_void,
 ) -> size_t {
-    let mut stream: *mut snd_stream_t =
-        0 as *mut snd_stream_t;
+    let mut stream: *mut snd_stream_t = 0 as *mut snd_stream_t;
     let mut byteSize: i32 = 0 as i32;
     let mut bytesRead: i32 = 0 as i32;
     let mut nMembRead: size_t = 0 as i32 as size_t;
@@ -137,8 +127,7 @@ pub unsafe extern "C" fn S_OGG_Callback_seek(
     mut offset: ogg_int64_t,
     mut whence: i32,
 ) -> i32 {
-    let mut stream: *mut snd_stream_t =
-        0 as *mut snd_stream_t;
+    let mut stream: *mut snd_stream_t = 0 as *mut snd_stream_t;
     let mut retVal: i32 = 0 as i32;
     // check if input is valid
     if datasource.is_null() {
@@ -151,11 +140,8 @@ pub unsafe extern "C" fn S_OGG_Callback_seek(
     match whence {
         0 => {
             // set the file position in the actual file with the Q3 function
-            retVal = crate::src::qcommon::files::FS_Seek(
-                (*stream).file,
-                offset,
-                FS_SEEK_SET as i32,
-            );
+            retVal =
+                crate::src::qcommon::files::FS_Seek((*stream).file, offset, FS_SEEK_SET as i32);
             // something has gone wrong, so we return here
             if retVal < 0 as i32 {
                 return retVal;
@@ -165,11 +151,8 @@ pub unsafe extern "C" fn S_OGG_Callback_seek(
         }
         1 => {
             // set the file position in the actual file with the Q3 function
-            retVal = crate::src::qcommon::files::FS_Seek(
-                (*stream).file,
-                offset,
-                FS_SEEK_CUR as i32,
-            );
+            retVal =
+                crate::src::qcommon::files::FS_Seek((*stream).file, offset, FS_SEEK_CUR as i32);
             // something has gone wrong, so we return here
             if retVal < 0 as i32 {
                 return retVal;
@@ -179,11 +162,8 @@ pub unsafe extern "C" fn S_OGG_Callback_seek(
         }
         2 => {
             // set the file position in the actual file with the Q3 function
-            retVal = crate::src::qcommon::files::FS_Seek(
-                (*stream).file,
-                offset,
-                FS_SEEK_END as i32,
-            );
+            retVal =
+                crate::src::qcommon::files::FS_Seek((*stream).file, offset, FS_SEEK_END as i32);
             // something has gone wrong, so we return here
             if retVal < 0 as i32 {
                 return retVal;
@@ -221,8 +201,7 @@ pub unsafe extern "C" fn S_OGG_Callback_close(mut _datasource: *mut libc::c_void
 #[no_mangle]
 
 pub unsafe extern "C" fn S_OGG_Callback_tell(mut datasource: *mut libc::c_void) -> isize {
-    let mut stream: *mut snd_stream_t =
-        0 as *mut snd_stream_t;
+    let mut stream: *mut snd_stream_t = 0 as *mut snd_stream_t;
     // check if input is valid
     if datasource.is_null() {
         *libc::__errno_location() = 9 as i32;
@@ -248,11 +227,7 @@ pub static mut S_OGG_Callbacks: ov_callbacks = {
         ),
         seek_func: Some(
             S_OGG_Callback_seek
-                as unsafe extern "C" fn(
-                    _: *mut libc::c_void,
-                    _: ogg_int64_t,
-                    _: i32,
-                ) -> i32,
+                as unsafe extern "C" fn(_: *mut libc::c_void, _: ogg_int64_t, _: i32) -> i32,
         ),
         close_func: Some(S_OGG_Callback_close as unsafe extern "C" fn(_: *mut libc::c_void) -> i32),
         tell_func: Some(S_OGG_Callback_tell as unsafe extern "C" fn(_: *mut libc::c_void) -> isize),
@@ -269,11 +244,9 @@ S_OGG_CodecOpenStream
 pub unsafe extern "C" fn S_OGG_CodecOpenStream(
     mut filename: *const libc::c_char,
 ) -> *mut snd_stream_t {
-    let mut stream: *mut snd_stream_t =
-        0 as *mut snd_stream_t;
+    let mut stream: *mut snd_stream_t = 0 as *mut snd_stream_t;
     // OGG codec control structure
-    let mut vf: *mut OggVorbis_File =
-        0 as *mut OggVorbis_File;
+    let mut vf: *mut OggVorbis_File = 0 as *mut OggVorbis_File;
     // some variables used to get informations about the OGG
     let mut OGGInfo: *mut vorbis_info = 0 as *mut vorbis_info;
     let mut numSamples: ogg_int64_t = 0;
@@ -282,22 +255,17 @@ pub unsafe extern "C" fn S_OGG_CodecOpenStream(
         return 0 as *mut snd_stream_t;
     }
     // Open the stream
-    stream = S_CodecUtilOpen(
-        filename,
-        &mut ogg_codec as *mut _ as *mut snd_codec_s,
-    ) as *mut snd_stream_s;
+    stream = S_CodecUtilOpen(filename, &mut ogg_codec as *mut _ as *mut snd_codec_s)
+        as *mut snd_stream_s;
     if stream.is_null() {
         return 0 as *mut snd_stream_t;
     }
     // alloctate the OggVorbis_File
-    vf = crate::src::qcommon::common::Z_Malloc(::std::mem::size_of::<
-        OggVorbis_File,
-    >() as libc::c_ulong as i32)
-        as *mut OggVorbis_File;
+    vf = crate::src::qcommon::common::Z_Malloc(
+        ::std::mem::size_of::<OggVorbis_File>() as libc::c_ulong as i32
+    ) as *mut OggVorbis_File;
     if vf.is_null() {
-        S_CodecUtilClose(
-            &mut stream as *mut _ as *mut *mut snd_stream_s,
-        );
+        S_CodecUtilClose(&mut stream as *mut _ as *mut *mut snd_stream_s);
         return 0 as *mut snd_stream_t;
     }
     // open the codec with our callbacks and stream as the generic pointer
@@ -310,59 +278,33 @@ pub unsafe extern "C" fn S_OGG_CodecOpenStream(
     ) != 0 as i32
     {
         crate::src::qcommon::common::Z_Free(vf as *mut libc::c_void);
-        S_CodecUtilClose(
-            &mut stream as *mut _ as *mut *mut snd_stream_s,
-        );
+        S_CodecUtilClose(&mut stream as *mut _ as *mut *mut snd_stream_s);
         return 0 as *mut snd_stream_t;
     }
     // the stream must be seekable
-    if ov_seekable(
-        vf as *mut OggVorbis_File,
-    ) == 0
-    {
-        ov_clear(
-            vf as *mut OggVorbis_File,
-        );
+    if ov_seekable(vf as *mut OggVorbis_File) == 0 {
+        ov_clear(vf as *mut OggVorbis_File);
         crate::src::qcommon::common::Z_Free(vf as *mut libc::c_void);
-        S_CodecUtilClose(
-            &mut stream as *mut _ as *mut *mut snd_stream_s,
-        );
+        S_CodecUtilClose(&mut stream as *mut _ as *mut *mut snd_stream_s);
         return 0 as *mut snd_stream_t;
     }
     // we only support OGGs with one substream
-    if ov_streams(
-        vf as *mut OggVorbis_File,
-    ) != 1 as i32 as isize
-    {
-        ov_clear(
-            vf as *mut OggVorbis_File,
-        );
+    if ov_streams(vf as *mut OggVorbis_File) != 1 as i32 as isize {
+        ov_clear(vf as *mut OggVorbis_File);
         crate::src::qcommon::common::Z_Free(vf as *mut libc::c_void);
-        S_CodecUtilClose(
-            &mut stream as *mut _ as *mut *mut snd_stream_s,
-        );
+        S_CodecUtilClose(&mut stream as *mut _ as *mut *mut snd_stream_s);
         return 0 as *mut snd_stream_t;
     }
     // get the info about channels and rate
-    OGGInfo = ov_info(
-        vf as *mut OggVorbis_File,
-        0 as i32,
-    ) as *mut vorbis_info;
+    OGGInfo = ov_info(vf as *mut OggVorbis_File, 0 as i32) as *mut vorbis_info;
     if OGGInfo.is_null() {
-        ov_clear(
-            vf as *mut OggVorbis_File,
-        );
+        ov_clear(vf as *mut OggVorbis_File);
         crate::src::qcommon::common::Z_Free(vf as *mut libc::c_void);
-        S_CodecUtilClose(
-            &mut stream as *mut _ as *mut *mut snd_stream_s,
-        );
+        S_CodecUtilClose(&mut stream as *mut _ as *mut *mut snd_stream_s);
         return 0 as *mut snd_stream_t;
     }
     // get the number of sample-frames in the OGG
-    numSamples = ov_pcm_total(
-        vf as *mut OggVorbis_File,
-        0 as i32,
-    );
+    numSamples = ov_pcm_total(vf as *mut OggVorbis_File, 0 as i32);
     // fill in the info-structure in the stream
     (*stream).info.rate = (*OGGInfo).rate as i32;
     (*stream).info.width = 2 as i32;
@@ -383,24 +325,17 @@ S_OGG_CodecCloseStream
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn S_OGG_CodecCloseStream(
-    mut stream: *mut snd_stream_t,
-) {
+pub unsafe extern "C" fn S_OGG_CodecCloseStream(mut stream: *mut snd_stream_t) {
     // check if input is valid
     if stream.is_null() {
         return;
     }
     // let the OGG codec cleanup its stuff
-    ov_clear(
-        (*stream).ptr as *mut OggVorbis_File
-            as *mut OggVorbis_File,
-    );
+    ov_clear((*stream).ptr as *mut OggVorbis_File as *mut OggVorbis_File);
     // free the OGG codec control struct
     crate::src::qcommon::common::Z_Free((*stream).ptr);
     // close the stream
-    S_CodecUtilClose(
-        &mut stream as *mut _ as *mut *mut snd_stream_s,
-    );
+    S_CodecUtilClose(&mut stream as *mut _ as *mut *mut snd_stream_s);
 }
 /*
 =================
@@ -438,8 +373,7 @@ pub unsafe extern "C" fn S_OGG_CodecReadStream(
     while -(1 as i32) != 0 {
         // read some bytes from the OGG codec
         c = ov_read(
-            (*stream).ptr as *mut OggVorbis_File
-                as *mut OggVorbis_File,
+            (*stream).ptr as *mut OggVorbis_File as *mut OggVorbis_File,
             bufPtr,
             bytesLeft,
             IsBigEndian,
@@ -476,10 +410,8 @@ pub unsafe extern "C" fn S_OGG_CodecLoad(
     mut filename: *const libc::c_char,
     mut info: *mut snd_info_t,
 ) -> *mut libc::c_void {
-    let mut stream: *mut snd_stream_t =
-        0 as *mut snd_stream_t;
-    let mut buffer: *mut byte =
-        0 as *mut byte;
+    let mut stream: *mut snd_stream_t = 0 as *mut snd_stream_t;
+    let mut buffer: *mut byte = 0 as *mut byte;
     let mut bytesRead: i32 = 0;
     // check if input is valid
     if !(!filename.is_null() && !info.is_null()) {
@@ -499,8 +431,7 @@ pub unsafe extern "C" fn S_OGG_CodecLoad(
     (*info).dataofs = (*stream).info.dataofs;
     // allocate a buffer
     // this buffer must be free-ed by the caller of this function
-    buffer = crate::src::qcommon::common::Hunk_AllocateTempMemory((*info).size)
-        as *mut byte;
+    buffer = crate::src::qcommon::common::Hunk_AllocateTempMemory((*info).size) as *mut byte;
     if buffer.is_null() {
         S_OGG_CodecCloseStream(stream);
         return 0 as *mut libc::c_void;

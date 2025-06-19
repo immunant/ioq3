@@ -362,18 +362,12 @@ pub unsafe extern "C" fn CG_CustomSound(
     let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
     let mut i: i32 = 0;
     if *soundName.offset(0 as i32 as isize) as i32 != '*' as i32 {
-        return trap_S_RegisterSound(
-            soundName,
-            qfalse,
-        );
+        return trap_S_RegisterSound(soundName, qfalse);
     }
     if clientNum < 0 as i32 || clientNum >= 64 as i32 {
         clientNum = 0 as i32
     }
-    ci = &mut *cgs
-        .clientinfo
-        .as_mut_ptr()
-        .offset(clientNum as isize) as *mut clientInfo_t;
+    ci = &mut *cgs.clientinfo.as_mut_ptr().offset(clientNum as isize) as *mut clientInfo_t;
     i = 0 as i32;
     while i < 32 as i32 && !cg_customSoundNames[i as usize].is_null() {
         if libc::strcmp(soundName, cg_customSoundNames[i as usize]) == 0 {
@@ -415,15 +409,10 @@ unsafe extern "C" fn CG_ParseAnimationFile(
     let mut skip: i32 = 0;
     let mut text: [libc::c_char; 20000] = [0; 20000];
     let mut f: fileHandle_t = 0;
-    let mut animations: *mut animation_t =
-        0 as *mut animation_t;
+    let mut animations: *mut animation_t = 0 as *mut animation_t;
     animations = (*ci).animations.as_mut_ptr();
     // load the file
-    len = trap_FS_FOpenFile(
-        filename,
-        &mut f,
-        FS_READ,
-    );
+    len = trap_FS_FOpenFile(filename, &mut f, FS_READ);
     if len <= 0 as i32 {
         return qfalse;
     }
@@ -459,48 +448,22 @@ unsafe extern "C" fn CG_ParseAnimationFile(
         if *token.offset(0 as i32 as isize) == 0 {
             break;
         }
-        if Q_stricmp(
-            token,
-            b"footsteps\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        if Q_stricmp(token, b"footsteps\x00" as *const u8 as *const libc::c_char) == 0 {
             token = COM_Parse(&mut text_p);
             if *token.offset(0 as i32 as isize) == 0 {
                 break;
             }
-            if Q_stricmp(
-                token,
-                b"default\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-                || Q_stricmp(
-                    token,
-                    b"normal\x00" as *const u8 as *const libc::c_char,
-                ) == 0
+            if Q_stricmp(token, b"default\x00" as *const u8 as *const libc::c_char) == 0
+                || Q_stricmp(token, b"normal\x00" as *const u8 as *const libc::c_char) == 0
             {
                 (*ci).footsteps = FOOTSTEP_NORMAL
-            } else if Q_stricmp(
-                token,
-                b"boot\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"boot\x00" as *const u8 as *const libc::c_char) == 0 {
                 (*ci).footsteps = FOOTSTEP_BOOT
-            } else if Q_stricmp(
-                token,
-                b"flesh\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"flesh\x00" as *const u8 as *const libc::c_char) == 0 {
                 (*ci).footsteps = FOOTSTEP_FLESH
-            } else if Q_stricmp(
-                token,
-                b"mech\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"mech\x00" as *const u8 as *const libc::c_char) == 0 {
                 (*ci).footsteps = FOOTSTEP_MECH
-            } else if Q_stricmp(
-                token,
-                b"energy\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"energy\x00" as *const u8 as *const libc::c_char) == 0 {
                 (*ci).footsteps = FOOTSTEP_ENERGY
             } else {
                 CG_Printf(
@@ -509,11 +472,7 @@ unsafe extern "C" fn CG_ParseAnimationFile(
                     token,
                 );
             }
-        } else if Q_stricmp(
-            token,
-            b"headoffset\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"headoffset\x00" as *const u8 as *const libc::c_char) == 0 {
             i = 0 as i32;
             while i < 3 as i32 {
                 token = COM_Parse(&mut text_p);
@@ -523,11 +482,7 @@ unsafe extern "C" fn CG_ParseAnimationFile(
                 (*ci).headOffset[i as usize] = atof(token) as vec_t;
                 i += 1
             }
-        } else if Q_stricmp(
-            token,
-            b"sex\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"sex\x00" as *const u8 as *const libc::c_char) == 0 {
             token = COM_Parse(&mut text_p);
             if *token.offset(0 as i32 as isize) == 0 {
                 break;
@@ -543,17 +498,9 @@ unsafe extern "C" fn CG_ParseAnimationFile(
             } else {
                 (*ci).gender = GENDER_MALE
             }
-        } else if Q_stricmp(
-            token,
-            b"fixedlegs\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"fixedlegs\x00" as *const u8 as *const libc::c_char) == 0 {
             (*ci).fixedlegs = qtrue
-        } else if Q_stricmp(
-            token,
-            b"fixedtorso\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"fixedtorso\x00" as *const u8 as *const libc::c_char) == 0 {
             (*ci).fixedtorso = qtrue
         } else if *token.offset(0 as i32 as isize) as i32 >= '0' as i32
             && *token.offset(0 as i32 as isize) as i32 <= '9' as i32
@@ -574,9 +521,7 @@ unsafe extern "C" fn CG_ParseAnimationFile(
     while i < MAX_ANIMATIONS as i32 {
         token = COM_Parse(&mut text_p);
         if *token.offset(0 as i32 as isize) == 0 {
-            if !(i >= TORSO_GETFLAG as i32
-                && i <= TORSO_NEGATIVE as i32)
-            {
+            if !(i >= TORSO_GETFLAG as i32 && i <= TORSO_NEGATIVE as i32) {
                 break;
             }
             (*animations.offset(i as isize)).firstFrame =
@@ -589,21 +534,16 @@ unsafe extern "C" fn CG_ParseAnimationFile(
                 (*animations.offset(TORSO_GESTURE as i32 as isize)).loopFrames;
             (*animations.offset(i as isize)).numFrames =
                 (*animations.offset(TORSO_GESTURE as i32 as isize)).numFrames;
-            (*animations.offset(i as isize)).reversed =
-                qfalse as i32;
+            (*animations.offset(i as isize)).reversed = qfalse as i32;
             (*animations.offset(i as isize)).flipflop = qfalse as i32
         } else {
             (*animations.offset(i as isize)).firstFrame = atoi(token);
             // leg only frames are adjusted to not count the upper body only frames
             if i == LEGS_WALKCR as i32 {
-                skip = (*animations.offset(LEGS_WALKCR as i32 as isize))
-                    .firstFrame
-                    - (*animations.offset(TORSO_GESTURE as i32 as isize))
-                        .firstFrame
+                skip = (*animations.offset(LEGS_WALKCR as i32 as isize)).firstFrame
+                    - (*animations.offset(TORSO_GESTURE as i32 as isize)).firstFrame
             }
-            if i >= LEGS_WALKCR as i32
-                && i < TORSO_GETFLAG as i32
-            {
+            if i >= LEGS_WALKCR as i32 && i < TORSO_GETFLAG as i32 {
                 (*animations.offset(i as isize)).firstFrame -= skip
             }
             token = COM_Parse(&mut text_p);
@@ -611,16 +551,13 @@ unsafe extern "C" fn CG_ParseAnimationFile(
                 break;
             }
             (*animations.offset(i as isize)).numFrames = atoi(token);
-            (*animations.offset(i as isize)).reversed =
-                qfalse as i32;
-            (*animations.offset(i as isize)).flipflop =
-                qfalse as i32;
+            (*animations.offset(i as isize)).reversed = qfalse as i32;
+            (*animations.offset(i as isize)).flipflop = qfalse as i32;
             // if numFrames is negative the animation is reversed
             if (*animations.offset(i as isize)).numFrames < 0 as i32 {
                 (*animations.offset(i as isize)).numFrames =
                     -(*animations.offset(i as isize)).numFrames;
-                (*animations.offset(i as isize)).reversed =
-                    qtrue as i32
+                (*animations.offset(i as isize)).reversed = qtrue as i32
             }
             token = COM_Parse(&mut text_p);
             if *token.offset(0 as i32 as isize) == 0 {
@@ -649,54 +586,43 @@ unsafe extern "C" fn CG_ParseAnimationFile(
     }
     // crouch backward animation
     crate::stdlib::memcpy(
-        &mut *animations.offset(LEGS_BACKCR as i32 as isize)
-            as *mut animation_t as *mut libc::c_void,
-        &mut *animations.offset(LEGS_WALKCR as i32 as isize)
-            as *mut animation_t as *const libc::c_void,
+        &mut *animations.offset(LEGS_BACKCR as i32 as isize) as *mut animation_t
+            as *mut libc::c_void,
+        &mut *animations.offset(LEGS_WALKCR as i32 as isize) as *mut animation_t
+            as *const libc::c_void,
         ::std::mem::size_of::<animation_t>() as libc::c_ulong,
     );
-    (*animations.offset(LEGS_BACKCR as i32 as isize)).reversed =
-        qtrue as i32;
+    (*animations.offset(LEGS_BACKCR as i32 as isize)).reversed = qtrue as i32;
     // walk backward animation
     crate::stdlib::memcpy(
-        &mut *animations.offset(LEGS_BACKWALK as i32 as isize)
-            as *mut animation_t as *mut libc::c_void,
-        &mut *animations.offset(LEGS_WALK as i32 as isize)
-            as *mut animation_t as *const libc::c_void,
+        &mut *animations.offset(LEGS_BACKWALK as i32 as isize) as *mut animation_t
+            as *mut libc::c_void,
+        &mut *animations.offset(LEGS_WALK as i32 as isize) as *mut animation_t
+            as *const libc::c_void,
         ::std::mem::size_of::<animation_t>() as libc::c_ulong,
     );
-    (*animations.offset(LEGS_BACKWALK as i32 as isize)).reversed =
-        qtrue as i32;
+    (*animations.offset(LEGS_BACKWALK as i32 as isize)).reversed = qtrue as i32;
     // flag moving fast
     (*animations.offset(FLAG_RUN as i32 as isize)).firstFrame = 0 as i32;
     (*animations.offset(FLAG_RUN as i32 as isize)).numFrames = 16 as i32;
     (*animations.offset(FLAG_RUN as i32 as isize)).loopFrames = 16 as i32;
-    (*animations.offset(FLAG_RUN as i32 as isize)).frameLerp =
-        1000 as i32 / 15 as i32;
-    (*animations.offset(FLAG_RUN as i32 as isize)).initialLerp =
-        1000 as i32 / 15 as i32;
-    (*animations.offset(FLAG_RUN as i32 as isize)).reversed =
-        qfalse as i32;
+    (*animations.offset(FLAG_RUN as i32 as isize)).frameLerp = 1000 as i32 / 15 as i32;
+    (*animations.offset(FLAG_RUN as i32 as isize)).initialLerp = 1000 as i32 / 15 as i32;
+    (*animations.offset(FLAG_RUN as i32 as isize)).reversed = qfalse as i32;
     // flag not moving or moving slowly
     (*animations.offset(FLAG_STAND as i32 as isize)).firstFrame = 16 as i32;
     (*animations.offset(FLAG_STAND as i32 as isize)).numFrames = 5 as i32;
     (*animations.offset(FLAG_STAND as i32 as isize)).loopFrames = 0 as i32;
-    (*animations.offset(FLAG_STAND as i32 as isize)).frameLerp =
-        1000 as i32 / 20 as i32;
-    (*animations.offset(FLAG_STAND as i32 as isize)).initialLerp =
-        1000 as i32 / 20 as i32;
-    (*animations.offset(FLAG_STAND as i32 as isize)).reversed =
-        qfalse as i32;
+    (*animations.offset(FLAG_STAND as i32 as isize)).frameLerp = 1000 as i32 / 20 as i32;
+    (*animations.offset(FLAG_STAND as i32 as isize)).initialLerp = 1000 as i32 / 20 as i32;
+    (*animations.offset(FLAG_STAND as i32 as isize)).reversed = qfalse as i32;
     // flag speeding up
     (*animations.offset(FLAG_STAND2RUN as i32 as isize)).firstFrame = 16 as i32;
     (*animations.offset(FLAG_STAND2RUN as i32 as isize)).numFrames = 5 as i32;
     (*animations.offset(FLAG_STAND2RUN as i32 as isize)).loopFrames = 1 as i32;
-    (*animations.offset(FLAG_STAND2RUN as i32 as isize)).frameLerp =
-        1000 as i32 / 15 as i32;
-    (*animations.offset(FLAG_STAND2RUN as i32 as isize)).initialLerp =
-        1000 as i32 / 15 as i32;
-    (*animations.offset(FLAG_STAND2RUN as i32 as isize)).reversed =
-        qtrue as i32;
+    (*animations.offset(FLAG_STAND2RUN as i32 as isize)).frameLerp = 1000 as i32 / 15 as i32;
+    (*animations.offset(FLAG_STAND2RUN as i32 as isize)).initialLerp = 1000 as i32 / 15 as i32;
+    (*animations.offset(FLAG_STAND2RUN as i32 as isize)).reversed = qtrue as i32;
     //
     // new anims changes
     //
@@ -714,15 +640,9 @@ CG_FileExists
 ==========================
 */
 
-unsafe extern "C" fn CG_FileExists(
-    mut filename: *const libc::c_char,
-) -> qboolean {
+unsafe extern "C" fn CG_FileExists(mut filename: *const libc::c_char) -> qboolean {
     let mut len: i32 = 0;
-    len = trap_FS_FOpenFile(
-        filename,
-        0 as *mut fileHandle_t,
-        FS_READ,
-    );
+    len = trap_FS_FOpenFile(filename, 0 as *mut fileHandle_t, FS_READ);
     if len > 0 as i32 {
         return qtrue;
     }
@@ -747,8 +667,7 @@ unsafe extern "C" fn CG_FindClientModelFile(
     let mut team: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut charactersFolder: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut i: i32 = 0;
-    if cgs.gametype as u32 >= GT_TEAM as i32 as u32
-    {
+    if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
         match (*ci).team as u32 {
             2 => team = b"blue\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             _ => team = b"red\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -791,9 +710,7 @@ unsafe extern "C" fn CG_FindClientModelFile(
             if CG_FileExists(filename) as u64 != 0 {
                 return qtrue;
             }
-            if cgs.gametype as u32
-                >= GT_TEAM as i32 as u32
-            {
+            if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
                 if i == 0 as i32 && !teamName.is_null() && *teamName as i32 != 0 {
                     //								"models/players/characters/james/stroggs/lower_red.skin"
                     Com_sprintf(
@@ -882,8 +799,7 @@ unsafe extern "C" fn CG_FindClientHeadFile(
     let mut team: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut headsFolder: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut i: i32 = 0;
-    if cgs.gametype as u32 >= GT_TEAM as i32 as u32
-    {
+    if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
         match (*ci).team as u32 {
             2 => team = b"blue\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             _ => team = b"red\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -929,9 +845,7 @@ unsafe extern "C" fn CG_FindClientHeadFile(
             if CG_FileExists(filename) as u64 != 0 {
                 return qtrue;
             }
-            if cgs.gametype as u32
-                >= GT_TEAM as i32 as u32
-            {
+            if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
                 if i == 0 as i32 && !teamName.is_null() && *teamName as i32 != 0 {
                     Com_sprintf(
                         filename,
@@ -1135,8 +1049,7 @@ unsafe extern "C" fn CG_RegisterClientModelname(
             b"models/players/characters/%s/lower.md3\x00" as *const u8 as *const libc::c_char,
             modelName,
         );
-        (*ci).legsModel =
-            trap_R_RegisterModel(filename.as_mut_ptr());
+        (*ci).legsModel = trap_R_RegisterModel(filename.as_mut_ptr());
         if (*ci).legsModel == 0 {
             Com_Printf(
                 b"Failed to load model file %s\n\x00" as *const u8 as *const libc::c_char,
@@ -1159,8 +1072,7 @@ unsafe extern "C" fn CG_RegisterClientModelname(
             b"models/players/characters/%s/upper.md3\x00" as *const u8 as *const libc::c_char,
             modelName,
         );
-        (*ci).torsoModel =
-            trap_R_RegisterModel(filename.as_mut_ptr());
+        (*ci).torsoModel = trap_R_RegisterModel(filename.as_mut_ptr());
         if (*ci).torsoModel == 0 {
             Com_Printf(
                 b"Failed to load model file %s\n\x00" as *const u8 as *const libc::c_char,
@@ -1195,8 +1107,7 @@ unsafe extern "C" fn CG_RegisterClientModelname(
             headModelName,
             headModelName,
         );
-        (*ci).headModel =
-            trap_R_RegisterModel(filename.as_mut_ptr())
+        (*ci).headModel = trap_R_RegisterModel(filename.as_mut_ptr())
     }
     if (*ci).headModel == 0 {
         Com_Printf(
@@ -1300,8 +1211,7 @@ unsafe extern "C" fn CG_RegisterClientModelname(
     ) as u64
         != 0
     {
-        (*ci).modelIcon =
-            trap_R_RegisterShaderNoMip(filename.as_mut_ptr())
+        (*ci).modelIcon = trap_R_RegisterShaderNoMip(filename.as_mut_ptr())
     } else if CG_FindClientHeadFile(
         filename.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -1314,8 +1224,7 @@ unsafe extern "C" fn CG_RegisterClientModelname(
     ) as u64
         != 0
     {
-        (*ci).modelIcon =
-            trap_R_RegisterShaderNoMip(filename.as_mut_ptr())
+        (*ci).modelIcon = trap_R_RegisterShaderNoMip(filename.as_mut_ptr())
     }
     if (*ci).modelIcon == 0 {
         return qfalse;
@@ -1328,10 +1237,7 @@ CG_ColorFromString
 ====================
 */
 
-unsafe extern "C" fn CG_ColorFromString(
-    mut v: *const libc::c_char,
-    mut color: *mut vec_t,
-) {
+unsafe extern "C" fn CG_ColorFromString(mut v: *const libc::c_char, mut color: *mut vec_t) {
     let mut val: i32 = 0;
     let ref mut fresh0 = *color.offset(2 as i32 as isize);
     *fresh0 = 0 as i32 as vec_t;
@@ -1364,10 +1270,7 @@ This will usually be deferred to a safe time
 ===================
 */
 
-unsafe extern "C" fn CG_LoadClientInfo(
-    mut clientNum: i32,
-    mut ci: *mut clientInfo_t,
-) {
+unsafe extern "C" fn CG_LoadClientInfo(mut clientNum: i32, mut ci: *mut clientInfo_t) {
     let mut dir: *const libc::c_char = 0 as *const libc::c_char;
     let mut fallback: *const libc::c_char = 0 as *const libc::c_char;
     let mut i: i32 = 0;
@@ -1398,9 +1301,7 @@ unsafe extern "C" fn CG_LoadClientInfo(
             );
         }
         // fall back to default team name
-        if cgs.gametype as u32
-            >= GT_TEAM as i32 as u32
-        {
+        if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
             // keep skin name
             if (*ci).team as u32 == TEAM_BLUE as i32 as u32 {
                 Q_strncpyz(
@@ -1451,11 +1352,10 @@ unsafe extern "C" fn CG_LoadClientInfo(
     }
     (*ci).newAnims = qfalse;
     if (*ci).torsoModel != 0 {
-        let mut tag: orientation_t =
-            orientation_t {
-                origin: [0.; 3],
-                axis: [[0.; 3]; 3],
-            };
+        let mut tag: orientation_t = orientation_t {
+            origin: [0.; 3],
+            axis: [[0.; 3]; 3],
+        };
         // if the torso model has the "tag_flag"
         if trap_R_LerpTag(
             &mut tag as *mut _ as *mut orientation_t,
@@ -1471,9 +1371,7 @@ unsafe extern "C" fn CG_LoadClientInfo(
     }
     // sounds
     dir = (*ci).modelName.as_mut_ptr();
-    fallback = if cgs.gametype as u32
-        >= GT_TEAM as i32 as u32
-    {
+    fallback = if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
         b"sarge\x00" as *const u8 as *const libc::c_char
     } else {
         b"sarge\x00" as *const u8 as *const libc::c_char
@@ -1515,20 +1413,10 @@ unsafe extern "C" fn CG_LoadClientInfo(
     // frames for this new model
     i = 0 as i32;
     while i < (1 as i32) << 10 as i32 {
-        if cg_entities[i as usize]
-            .currentState
-            .clientNum
-            == clientNum
-            && cg_entities[i as usize]
-                .currentState
-                .eType
-                == ET_PLAYER as i32
+        if cg_entities[i as usize].currentState.clientNum == clientNum
+            && cg_entities[i as usize].currentState.eType == ET_PLAYER as i32
         {
-            CG_ResetPlayerEntity(
-                &mut *cg_entities
-                    .as_mut_ptr()
-                    .offset(i as isize),
-            );
+            CG_ResetPlayerEntity(&mut *cg_entities.as_mut_ptr().offset(i as isize));
         }
         i += 1
     }
@@ -1573,18 +1461,12 @@ CG_ScanForExistingClientInfo
 ======================
 */
 
-unsafe extern "C" fn CG_ScanForExistingClientInfo(
-    mut ci: *mut clientInfo_t,
-) -> qboolean {
+unsafe extern "C" fn CG_ScanForExistingClientInfo(mut ci: *mut clientInfo_t) -> qboolean {
     let mut i: i32 = 0;
-    let mut match_0: *mut clientInfo_t =
-        0 as *mut clientInfo_t;
+    let mut match_0: *mut clientInfo_t = 0 as *mut clientInfo_t;
     i = 0 as i32;
     while i < cgs.maxclients {
-        match_0 = &mut *cgs
-            .clientinfo
-            .as_mut_ptr()
-            .offset(i as isize) as *mut clientInfo_t;
+        match_0 = &mut *cgs.clientinfo.as_mut_ptr().offset(i as isize) as *mut clientInfo_t;
         if !((*match_0).infoValid as u64 == 0) {
             if !((*match_0).deferred as u64 != 0) {
                 if Q_stricmp(
@@ -1607,12 +1489,8 @@ unsafe extern "C" fn CG_ScanForExistingClientInfo(
                         (*ci).blueTeam.as_mut_ptr(),
                         (*match_0).blueTeam.as_mut_ptr(),
                     ) == 0
-                    && Q_stricmp(
-                        (*ci).redTeam.as_mut_ptr(),
-                        (*match_0).redTeam.as_mut_ptr(),
-                    ) == 0
-                    && ((cgs.gametype as u32)
-                        < GT_TEAM as i32 as u32
+                    && Q_stricmp((*ci).redTeam.as_mut_ptr(), (*match_0).redTeam.as_mut_ptr()) == 0
+                    && ((cgs.gametype as u32) < GT_TEAM as i32 as u32
                         || (*ci).team as u32 == (*match_0).team as u32)
                 {
                     // this clientinfo is identical, so use its handles
@@ -1636,21 +1514,14 @@ client's info to use until we have some spare time.
 ======================
 */
 
-unsafe extern "C" fn CG_SetDeferredClientInfo(
-    mut clientNum: i32,
-    mut ci: *mut clientInfo_t,
-) {
+unsafe extern "C" fn CG_SetDeferredClientInfo(mut clientNum: i32, mut ci: *mut clientInfo_t) {
     let mut i: i32 = 0;
-    let mut match_0: *mut clientInfo_t =
-        0 as *mut clientInfo_t;
+    let mut match_0: *mut clientInfo_t = 0 as *mut clientInfo_t;
     // if someone else is already the same models and skins we
     // can just load the client info
     i = 0 as i32;
     while i < cgs.maxclients {
-        match_0 = &mut *cgs
-            .clientinfo
-            .as_mut_ptr()
-            .offset(i as isize) as *mut clientInfo_t;
+        match_0 = &mut *cgs.clientinfo.as_mut_ptr().offset(i as isize) as *mut clientInfo_t;
         if !((*match_0).infoValid as u64 == 0 || (*match_0).deferred as u32 != 0) {
             if !(Q_stricmp(
                 (*ci).skinName.as_mut_ptr(),
@@ -1660,8 +1531,7 @@ unsafe extern "C" fn CG_SetDeferredClientInfo(
                     (*ci).modelName.as_mut_ptr(),
                     (*match_0).modelName.as_mut_ptr(),
                 ) != 0
-                || cgs.gametype as u32
-                    >= GT_TEAM as i32 as u32
+                || cgs.gametype as u32 >= GT_TEAM as i32 as u32
                     && (*ci).team as u32 != (*match_0).team as u32)
             {
                 // just load the real info cause it uses the same models and skins
@@ -1672,21 +1542,16 @@ unsafe extern "C" fn CG_SetDeferredClientInfo(
         i += 1
     }
     // if we are in teamplay, only grab a model if the skin is correct
-    if cgs.gametype as u32 >= GT_TEAM as i32 as u32
-    {
+    if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
         i = 0 as i32;
         while i < cgs.maxclients {
-            match_0 = &mut *cgs
-                .clientinfo
-                .as_mut_ptr()
-                .offset(i as isize) as *mut clientInfo_t;
+            match_0 = &mut *cgs.clientinfo.as_mut_ptr().offset(i as isize) as *mut clientInfo_t;
             if !((*match_0).infoValid as u64 == 0 || (*match_0).deferred as u32 != 0) {
                 if !(Q_stricmp(
                     (*ci).skinName.as_mut_ptr(),
                     (*match_0).skinName.as_mut_ptr(),
                 ) != 0
-                    || cgs.gametype as u32
-                        >= GT_TEAM as i32 as u32
+                    || cgs.gametype as u32 >= GT_TEAM as i32 as u32
                         && (*ci).team as u32 != (*match_0).team as u32)
                 {
                     (*ci).deferred = qtrue;
@@ -1706,10 +1571,7 @@ unsafe extern "C" fn CG_SetDeferredClientInfo(
     // find the first valid clientinfo and grab its stuff
     i = 0 as i32;
     while i < cgs.maxclients {
-        match_0 = &mut *cgs
-            .clientinfo
-            .as_mut_ptr()
-            .offset(i as isize) as *mut clientInfo_t;
+        match_0 = &mut *cgs.clientinfo.as_mut_ptr().offset(i as isize) as *mut clientInfo_t;
         if (*match_0).infoValid as u64 == 0 {
             i += 1
         } else {
@@ -1791,13 +1653,8 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
     let mut configstring: *const libc::c_char = 0 as *const libc::c_char;
     let mut v: *const libc::c_char = 0 as *const libc::c_char;
     let mut slash: *mut libc::c_char = 0 as *mut libc::c_char;
-    ci = &mut *cgs
-        .clientinfo
-        .as_mut_ptr()
-        .offset(clientNum as isize) as *mut clientInfo_t;
-    configstring = CG_ConfigString(
-        clientNum + (32 as i32 + 256 as i32 + 256 as i32),
-    );
+    ci = &mut *cgs.clientinfo.as_mut_ptr().offset(clientNum as isize) as *mut clientInfo_t;
+    configstring = CG_ConfigString(clientNum + (32 as i32 + 256 as i32 + 256 as i32));
     if *configstring.offset(0 as i32 as isize) == 0 {
         crate::stdlib::memset(
             ci as *mut libc::c_void,
@@ -1815,39 +1672,30 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
         ::std::mem::size_of::<clientInfo_t>() as libc::c_ulong,
     );
     // isolate the player's name
-    v = Info_ValueForKey(
-        configstring,
-        b"n\x00" as *const u8 as *const libc::c_char,
-    );
+    v = Info_ValueForKey(configstring, b"n\x00" as *const u8 as *const libc::c_char);
     Q_strncpyz(
         newInfo.name.as_mut_ptr(),
         v,
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     // colors
-    v = Info_ValueForKey(
-        configstring,
-        b"c1\x00" as *const u8 as *const libc::c_char,
-    );
+    v = Info_ValueForKey(configstring, b"c1\x00" as *const u8 as *const libc::c_char);
     CG_ColorFromString(v, newInfo.color1.as_mut_ptr());
-    newInfo.c1RGBA[0 as i32 as usize] = (255 as i32 as f32 * newInfo.color1[0 as i32 as usize])
-        as byte;
-    newInfo.c1RGBA[1 as i32 as usize] = (255 as i32 as f32 * newInfo.color1[1 as i32 as usize])
-        as byte;
-    newInfo.c1RGBA[2 as i32 as usize] = (255 as i32 as f32 * newInfo.color1[2 as i32 as usize])
-        as byte;
+    newInfo.c1RGBA[0 as i32 as usize] =
+        (255 as i32 as f32 * newInfo.color1[0 as i32 as usize]) as byte;
+    newInfo.c1RGBA[1 as i32 as usize] =
+        (255 as i32 as f32 * newInfo.color1[1 as i32 as usize]) as byte;
+    newInfo.c1RGBA[2 as i32 as usize] =
+        (255 as i32 as f32 * newInfo.color1[2 as i32 as usize]) as byte;
     newInfo.c1RGBA[3 as i32 as usize] = 255 as i32 as byte;
-    v = Info_ValueForKey(
-        configstring,
-        b"c2\x00" as *const u8 as *const libc::c_char,
-    );
+    v = Info_ValueForKey(configstring, b"c2\x00" as *const u8 as *const libc::c_char);
     CG_ColorFromString(v, newInfo.color2.as_mut_ptr());
-    newInfo.c2RGBA[0 as i32 as usize] = (255 as i32 as f32 * newInfo.color2[0 as i32 as usize])
-        as byte;
-    newInfo.c2RGBA[1 as i32 as usize] = (255 as i32 as f32 * newInfo.color2[1 as i32 as usize])
-        as byte;
-    newInfo.c2RGBA[2 as i32 as usize] = (255 as i32 as f32 * newInfo.color2[2 as i32 as usize])
-        as byte;
+    newInfo.c2RGBA[0 as i32 as usize] =
+        (255 as i32 as f32 * newInfo.color2[0 as i32 as usize]) as byte;
+    newInfo.c2RGBA[1 as i32 as usize] =
+        (255 as i32 as f32 * newInfo.color2[1 as i32 as usize]) as byte;
+    newInfo.c2RGBA[2 as i32 as usize] =
+        (255 as i32 as f32 * newInfo.color2[2 as i32 as usize]) as byte;
     newInfo.c2RGBA[3 as i32 as usize] = 255 as i32 as byte;
     // bot skill
     v = Info_ValueForKey(
@@ -1856,40 +1704,22 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
     );
     newInfo.botSkill = atoi(v);
     // handicap
-    v = Info_ValueForKey(
-        configstring,
-        b"hc\x00" as *const u8 as *const libc::c_char,
-    );
+    v = Info_ValueForKey(configstring, b"hc\x00" as *const u8 as *const libc::c_char);
     newInfo.handicap = atoi(v);
     // wins
-    v = Info_ValueForKey(
-        configstring,
-        b"w\x00" as *const u8 as *const libc::c_char,
-    );
+    v = Info_ValueForKey(configstring, b"w\x00" as *const u8 as *const libc::c_char);
     newInfo.wins = atoi(v);
     // losses
-    v = Info_ValueForKey(
-        configstring,
-        b"l\x00" as *const u8 as *const libc::c_char,
-    );
+    v = Info_ValueForKey(configstring, b"l\x00" as *const u8 as *const libc::c_char);
     newInfo.losses = atoi(v);
     // team
-    v = Info_ValueForKey(
-        configstring,
-        b"t\x00" as *const u8 as *const libc::c_char,
-    );
+    v = Info_ValueForKey(configstring, b"t\x00" as *const u8 as *const libc::c_char);
     newInfo.team = atoi(v) as team_t;
     // team task
-    v = Info_ValueForKey(
-        configstring,
-        b"tt\x00" as *const u8 as *const libc::c_char,
-    );
+    v = Info_ValueForKey(configstring, b"tt\x00" as *const u8 as *const libc::c_char);
     newInfo.teamTask = atoi(v);
     // team leader
-    v = Info_ValueForKey(
-        configstring,
-        b"tl\x00" as *const u8 as *const libc::c_char,
-    );
+    v = Info_ValueForKey(configstring, b"tl\x00" as *const u8 as *const libc::c_char);
     newInfo.teamLeader = atoi(v) as qboolean;
     v = Info_ValueForKey(
         configstring,
@@ -1911,9 +1741,7 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
         // to prevent load hitches
         let mut modelStr: [libc::c_char; 64] = [0; 64];
         let mut skin: *mut libc::c_char = 0 as *mut libc::c_char;
-        if cgs.gametype as u32
-            >= GT_TEAM as i32 as u32
-        {
+        if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
             Q_strncpyz(
                 newInfo.modelName.as_mut_ptr(),
                 b"sarge\x00" as *const u8 as *const libc::c_char,
@@ -1949,9 +1777,7 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
                 ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             );
         }
-        if cgs.gametype as u32
-            >= GT_TEAM as i32 as u32
-        {
+        if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
             // keep skin name
             slash = libc::strchr(v, '/' as i32);
             if !slash.is_null() {
@@ -1996,9 +1822,7 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
         // to prevent load hitches
         let mut modelStr_0: [libc::c_char; 64] = [0; 64];
         let mut skin_0: *mut libc::c_char = 0 as *mut libc::c_char;
-        if cgs.gametype as u32
-            >= GT_TEAM as i32 as u32
-        {
+        if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
             Q_strncpyz(
                 newInfo.headModelName.as_mut_ptr(),
                 b"sarge\x00" as *const u8 as *const libc::c_char,
@@ -2034,9 +1858,7 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
                 ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             );
         }
-        if cgs.gametype as u32
-            >= GT_TEAM as i32 as u32
-        {
+        if cgs.gametype as u32 >= GT_TEAM as i32 as u32 {
             // keep skin name
             slash = libc::strchr(v, '/' as i32);
             if !slash.is_null() {
@@ -2074,15 +1896,11 @@ pub unsafe extern "C" fn CG_NewClientInfo(mut clientNum: i32) {
     // scan for an existing clientinfo that matches this modelname
     // so we can avoid loading checks if possible
     if CG_ScanForExistingClientInfo(&mut newInfo) as u64 == 0 {
-        let mut forceDefer: qboolean =
-            qfalse;
-        forceDefer = (trap_MemoryRemaining() < 4000000 as i32)
-            as i32 as qboolean;
+        let mut forceDefer: qboolean = qfalse;
+        forceDefer = (trap_MemoryRemaining() < 4000000 as i32) as i32 as qboolean;
         // if we are defering loads, just have it pick the first valid
         if forceDefer as u32 != 0
-            || cg_deferPlayers.integer != 0
-                && cg_buildScript.integer == 0
-                && cg.loading as u64 == 0
+            || cg_deferPlayers.integer != 0 && cg_buildScript.integer == 0 && cg.loading as u64 == 0
         {
             // keep whatever they had if it won't violate team skins
             CG_SetDeferredClientInfo(clientNum, &mut newInfo);
@@ -2169,8 +1987,7 @@ unsafe extern "C" fn CG_SetLerpFrameAnimation(
             newAnimation,
         );
     }
-    anim = &mut *(*ci).animations.as_mut_ptr().offset(newAnimation as isize)
-        as *mut animation_t;
+    anim = &mut *(*ci).animations.as_mut_ptr().offset(newAnimation as isize) as *mut animation_t;
     (*lf).animation = anim;
     (*lf).animationTime = (*lf).frameTime + (*anim).initialLerp;
     if cg_debugAnim.integer != 0 {
@@ -2254,9 +2071,7 @@ unsafe extern "C" fn CG_RunLerpFrame(
         if cg.time > (*lf).frameTime {
             (*lf).frameTime = cg.time;
             if cg_debugAnim.integer != 0 {
-                CG_Printf(
-                    b"Clamp lf->frameTime\n\x00" as *const u8 as *const libc::c_char,
-                );
+                CG_Printf(b"Clamp lf->frameTime\n\x00" as *const u8 as *const libc::c_char);
             }
         }
     }
@@ -2324,20 +2139,12 @@ unsafe extern "C" fn CG_PlayerAnimation(
     } else {
         speedScale = 1 as i32 as f32
     }
-    ci = &mut *cgs
-        .clientinfo
-        .as_mut_ptr()
-        .offset(clientNum as isize) as *mut clientInfo_t;
+    ci = &mut *cgs.clientinfo.as_mut_ptr().offset(clientNum as isize) as *mut clientInfo_t;
     // do the shuffle turn frames locally
     if (*cent).pe.legs.yawing as u32 != 0
         && (*cent).currentState.legsAnim & !(128 as i32) == LEGS_IDLE as i32
     {
-        CG_RunLerpFrame(
-            ci,
-            &mut (*cent).pe.legs,
-            LEGS_TURN as i32,
-            speedScale,
-        );
+        CG_RunLerpFrame(ci, &mut (*cent).pe.legs, LEGS_TURN as i32, speedScale);
     } else {
         CG_RunLerpFrame(
             ci,
@@ -2423,11 +2230,9 @@ unsafe extern "C" fn CG_SwingAngles(
     // clamp to no more than tolerance
     swing = AngleSubtract(destination, *angle);
     if swing > clampTolerance {
-        *angle =
-            AngleMod(destination - (clampTolerance - 1 as i32 as f32))
+        *angle = AngleMod(destination - (clampTolerance - 1 as i32 as f32))
     } else if swing < -clampTolerance {
-        *angle =
-            AngleMod(destination + (clampTolerance - 1 as i32 as f32))
+        *angle = AngleMod(destination + (clampTolerance - 1 as i32 as f32))
     };
 }
 /*
@@ -2436,10 +2241,7 @@ CG_AddPainTwitch
 =================
 */
 
-unsafe extern "C" fn CG_AddPainTwitch(
-    mut cent: *mut centity_t,
-    mut torsoAngles: *mut vec_t,
-) {
+unsafe extern "C" fn CG_AddPainTwitch(mut cent: *mut centity_t, mut torsoAngles: *mut vec_t) {
     let mut t: i32 = 0;
     let mut f: f32 = 0.;
     t = cg.time - (*cent).pe.painTime;
@@ -2498,8 +2300,7 @@ unsafe extern "C" fn CG_PlayerAngles(
     headAngles[0 as i32 as usize] = (*cent).lerpAngles[0 as i32 as usize];
     headAngles[1 as i32 as usize] = (*cent).lerpAngles[1 as i32 as usize];
     headAngles[2 as i32 as usize] = (*cent).lerpAngles[2 as i32 as usize];
-    headAngles[1 as i32 as usize] =
-        AngleMod(headAngles[1 as i32 as usize]);
+    headAngles[1 as i32 as usize] = AngleMod(headAngles[1 as i32 as usize]);
     legsAngles[2 as i32 as usize] = 0 as i32 as vec_t;
     legsAngles[1 as i32 as usize] = legsAngles[2 as i32 as usize];
     legsAngles[0 as i32 as usize] = legsAngles[1 as i32 as usize];
@@ -2510,12 +2311,11 @@ unsafe extern "C" fn CG_PlayerAngles(
     // allow yaw to drift a bit
     if (*cent).currentState.legsAnim & !(128 as i32) != LEGS_IDLE as i32
         || (*cent).currentState.torsoAnim & !(128 as i32) != TORSO_STAND as i32
-            && (*cent).currentState.torsoAnim & !(128 as i32)
-                != TORSO_STAND2 as i32
+            && (*cent).currentState.torsoAnim & !(128 as i32) != TORSO_STAND2 as i32
     {
         // if not standing still, always point all in the same direction
         (*cent).pe.torso.yawing = qtrue; // always center
-                                                                        // always center
+                                         // always center
         (*cent).pe.torso.pitching = qtrue; // always center
         (*cent).pe.legs.yawing = qtrue
     }
@@ -2526,9 +2326,7 @@ unsafe extern "C" fn CG_PlayerAngles(
     } else {
         dir = (*cent).currentState.angles2[1 as i32 as usize] as i32;
         if dir < 0 as i32 || dir > 7 as i32 {
-            CG_Error(
-                b"Bad player movement angle\x00" as *const u8 as *const libc::c_char,
-            );
+            CG_Error(b"Bad player movement angle\x00" as *const u8 as *const libc::c_char);
         }
     }
     legsAngles[1 as i32 as usize] =
@@ -2574,10 +2372,7 @@ unsafe extern "C" fn CG_PlayerAngles(
     //
     clientNum = (*cent).currentState.clientNum;
     if clientNum >= 0 as i32 && clientNum < 64 as i32 {
-        ci = &mut *cgs
-            .clientinfo
-            .as_mut_ptr()
-            .offset(clientNum as isize) as *mut clientInfo_t;
+        ci = &mut *cgs.clientinfo.as_mut_ptr().offset(clientNum as isize) as *mut clientInfo_t;
         if (*ci).fixedtorso as u64 != 0 {
             torsoAngles[0 as i32 as usize] = 0.0f32
         }
@@ -2592,10 +2387,7 @@ unsafe extern "C" fn CG_PlayerAngles(
         let mut axis: [vec3_t; 3] = [[0.; 3]; 3];
         let mut side: f32 = 0.;
         speed *= 0.05f32;
-        AnglesToAxis(
-            legsAngles.as_mut_ptr() as *const vec_t,
-            axis.as_mut_ptr(),
-        );
+        AnglesToAxis(legsAngles.as_mut_ptr() as *const vec_t, axis.as_mut_ptr());
         side = speed
             * (velocity[0 as i32 as usize] * axis[1 as i32 as usize][0 as i32 as usize]
                 + velocity[1 as i32 as usize] * axis[1 as i32 as usize][1 as i32 as usize]
@@ -2610,10 +2402,7 @@ unsafe extern "C" fn CG_PlayerAngles(
     //
     clientNum = (*cent).currentState.clientNum;
     if clientNum >= 0 as i32 && clientNum < 64 as i32 {
-        ci = &mut *cgs
-            .clientinfo
-            .as_mut_ptr()
-            .offset(clientNum as isize) as *mut clientInfo_t;
+        ci = &mut *cgs.clientinfo.as_mut_ptr().offset(clientNum as isize) as *mut clientInfo_t;
         if (*ci).fixedlegs as u64 != 0 {
             legsAngles[1 as i32 as usize] = torsoAngles[1 as i32 as usize];
             legsAngles[0 as i32 as usize] = 0.0f32;
@@ -2633,18 +2422,9 @@ unsafe extern "C" fn CG_PlayerAngles(
         legsAngles.as_mut_ptr(),
         torsoAngles.as_mut_ptr(),
     );
-    AnglesToAxis(
-        legsAngles.as_mut_ptr() as *const vec_t,
-        legs,
-    );
-    AnglesToAxis(
-        torsoAngles.as_mut_ptr() as *const vec_t,
-        torso,
-    );
-    AnglesToAxis(
-        headAngles.as_mut_ptr() as *const vec_t,
-        head,
-    );
+    AnglesToAxis(legsAngles.as_mut_ptr() as *const vec_t, legs);
+    AnglesToAxis(torsoAngles.as_mut_ptr() as *const vec_t, torso);
+    AnglesToAxis(headAngles.as_mut_ptr() as *const vec_t, head);
 }
 //==========================================================================
 /*
@@ -2654,8 +2434,7 @@ CG_HasteTrail
 */
 
 unsafe extern "C" fn CG_HasteTrail(mut cent: *mut centity_t) {
-    let mut smoke: *mut localEntity_t =
-        0 as *mut localEntity_t;
+    let mut smoke: *mut localEntity_t = 0 as *mut localEntity_t;
     let mut origin: vec3_t = [0.; 3];
     let mut anim: i32 = 0;
     if (*cent).trailTime > cg.time {
@@ -2675,8 +2454,7 @@ unsafe extern "C" fn CG_HasteTrail(mut cent: *mut centity_t) {
     origin[2 as i32 as usize] -= 16 as i32 as f32;
     smoke = CG_SmokePuff(
         origin.as_mut_ptr() as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
         8 as i32 as f32,
         1 as i32 as f32,
         1 as i32 as f32,
@@ -2697,10 +2475,7 @@ CG_TrailItem
 ===============
 */
 
-unsafe extern "C" fn CG_TrailItem(
-    mut cent: *mut centity_t,
-    mut hModel: qhandle_t,
-) {
+unsafe extern "C" fn CG_TrailItem(mut cent: *mut centity_t, mut hModel: qhandle_t) {
     let mut ent: refEntity_t = refEntity_t {
         reType: RT_MODEL,
         renderfx: 0,
@@ -2730,10 +2505,7 @@ unsafe extern "C" fn CG_TrailItem(
     angles[2 as i32 as usize] = (*cent).lerpAngles[2 as i32 as usize];
     angles[0 as i32 as usize] = 0 as i32 as vec_t;
     angles[2 as i32 as usize] = 0 as i32 as vec_t;
-    AnglesToAxis(
-        angles.as_mut_ptr() as *const vec_t,
-        axis.as_mut_ptr(),
-    );
+    AnglesToAxis(angles.as_mut_ptr() as *const vec_t, axis.as_mut_ptr());
     crate::stdlib::memset(
         &mut ent as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
@@ -2747,14 +2519,9 @@ unsafe extern "C" fn CG_TrailItem(
         + axis[0 as i32 as usize][2 as i32 as usize] * -(16 as i32) as f32;
     ent.origin[2 as i32 as usize] += 16 as i32 as f32;
     angles[1 as i32 as usize] += 90 as i32 as f32;
-    AnglesToAxis(
-        angles.as_mut_ptr() as *const vec_t,
-        ent.axis.as_mut_ptr(),
-    );
+    AnglesToAxis(angles.as_mut_ptr() as *const vec_t, ent.axis.as_mut_ptr());
     ent.hModel = hModel;
-    trap_R_AddRefEntityToScene(
-        &mut ent as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
 }
 /*
 ===============
@@ -2837,9 +2604,7 @@ unsafe extern "C" fn CG_PlayerFlag(
         (*torso).hModel,
         b"tag_flag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
-    trap_R_AddRefEntityToScene(
-        &mut pole as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut pole as *mut _ as *const refEntity_t);
     // show the flag model
     crate::stdlib::memset(
         &mut flag as *mut refEntity_t as *mut libc::c_void,
@@ -2858,13 +2623,9 @@ unsafe extern "C" fn CG_PlayerFlag(
     angles[0 as i32 as usize] = angles[1 as i32 as usize];
     updateangles = qfalse as i32;
     legsAnim = (*cent).currentState.legsAnim & !(128 as i32);
-    if legsAnim == LEGS_IDLE as i32
-        || legsAnim == LEGS_IDLECR as i32
-    {
+    if legsAnim == LEGS_IDLE as i32 || legsAnim == LEGS_IDLECR as i32 {
         flagAnim = FLAG_STAND as i32
-    } else if legsAnim == LEGS_WALK as i32
-        || legsAnim == LEGS_WALKCR as i32
-    {
+    } else if legsAnim == LEGS_WALK as i32 || legsAnim == LEGS_WALKCR as i32 {
         flagAnim = FLAG_STAND as i32;
         updateangles = qtrue as i32
     } else {
@@ -2919,9 +2680,8 @@ unsafe extern "C" fn CG_PlayerFlag(
                     - (angle * 180 as i32 as f32) as f64 / 3.14159265358979323846f64)
                     as vec_t
             } else {
-                angles[1 as i32 as usize] = ((angle * 180 as i32 as f32) as f64
-                    / 3.14159265358979323846f64)
-                    as vec_t
+                angles[1 as i32 as usize] =
+                    ((angle * 180 as i32 as f32) as f64 / 3.14159265358979323846f64) as vec_t
             }
             if angles[1 as i32 as usize] < 0 as i32 as f32 {
                 angles[1 as i32 as usize] += 360 as i32 as f32
@@ -2948,25 +2708,19 @@ unsafe extern "C" fn CG_PlayerFlag(
     ci = &mut *cgs
         .clientinfo
         .as_mut_ptr()
-        .offset((*cent).currentState.clientNum as isize)
-        as *mut clientInfo_t;
+        .offset((*cent).currentState.clientNum as isize) as *mut clientInfo_t;
     CG_RunLerpFrame(ci, &mut (*cent).pe.flag, flagAnim, 1 as i32 as f32);
     flag.oldframe = (*cent).pe.flag.oldFrame;
     flag.frame = (*cent).pe.flag.frame;
     flag.backlerp = (*cent).pe.flag.backlerp;
-    AnglesToAxis(
-        angles.as_mut_ptr() as *const vec_t,
-        flag.axis.as_mut_ptr(),
-    );
+    AnglesToAxis(angles.as_mut_ptr() as *const vec_t, flag.axis.as_mut_ptr());
     CG_PositionRotatedEntityOnTag(
         &mut flag as *mut _ as *mut refEntity_t,
         &mut pole as *mut _ as *const refEntity_t,
         pole.hModel,
         b"tag_flag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
-    trap_R_AddRefEntityToScene(
-        &mut flag as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut flag as *mut _ as *const refEntity_t);
 }
 /*
 ===============
@@ -2974,10 +2728,7 @@ CG_PlayerPowerups
 ===============
 */
 
-unsafe extern "C" fn CG_PlayerPowerups(
-    mut cent: *mut centity_t,
-    mut torso: *mut refEntity_t,
-) {
+unsafe extern "C" fn CG_PlayerPowerups(mut cent: *mut centity_t, mut torso: *mut refEntity_t) {
     let mut powerups: i32 = 0;
     let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
     powerups = (*cent).currentState.powerups;
@@ -2999,24 +2750,18 @@ unsafe extern "C" fn CG_PlayerPowerups(
         trap_S_AddLoopingSound(
             (*cent).currentState.number,
             (*cent).lerpOrigin.as_mut_ptr() as *const vec_t,
-            vec3_origin.as_mut_ptr()
-                as *const vec_t,
+            vec3_origin.as_mut_ptr() as *const vec_t,
             cgs.media.flightSound,
         );
     }
     ci = &mut *cgs
         .clientinfo
         .as_mut_ptr()
-        .offset((*cent).currentState.clientNum as isize)
-        as *mut clientInfo_t;
+        .offset((*cent).currentState.clientNum as isize) as *mut clientInfo_t;
     // redflag
     if powerups & (1 as i32) << PW_REDFLAG as i32 != 0 {
         if (*ci).newAnims as u64 != 0 {
-            CG_PlayerFlag(
-                cent,
-                cgs.media.redFlagFlapSkin,
-                torso,
-            );
+            CG_PlayerFlag(cent, cgs.media.redFlagFlapSkin, torso);
         } else {
             CG_TrailItem(cent, cgs.media.redFlagModel);
         }
@@ -3031,11 +2776,7 @@ unsafe extern "C" fn CG_PlayerPowerups(
     // blueflag
     if powerups & (1 as i32) << PW_BLUEFLAG as i32 != 0 {
         if (*ci).newAnims as u64 != 0 {
-            CG_PlayerFlag(
-                cent,
-                cgs.media.blueFlagFlapSkin,
-                torso,
-            );
+            CG_PlayerFlag(cent, cgs.media.blueFlagFlapSkin, torso);
         } else {
             CG_TrailItem(cent, cgs.media.blueFlagModel);
         }
@@ -3050,11 +2791,7 @@ unsafe extern "C" fn CG_PlayerPowerups(
     // neutralflag
     if powerups & (1 as i32) << PW_NEUTRALFLAG as i32 != 0 {
         if (*ci).newAnims as u64 != 0 {
-            CG_PlayerFlag(
-                cent,
-                cgs.media.neutralFlagFlapSkin,
-                torso,
-            );
+            CG_PlayerFlag(cent, cgs.media.neutralFlagFlapSkin, torso);
         } else {
             CG_TrailItem(cent, cgs.media.neutralFlagModel);
         }
@@ -3079,10 +2816,7 @@ Float a sprite over the player's head
 ===============
 */
 
-unsafe extern "C" fn CG_PlayerFloatSprite(
-    mut cent: *mut centity_t,
-    mut shader: qhandle_t,
-) {
+unsafe extern "C" fn CG_PlayerFloatSprite(mut cent: *mut centity_t, mut shader: qhandle_t) {
     let mut rf: i32 = 0;
     let mut ent: refEntity_t = refEntity_t {
         reType: RT_MODEL,
@@ -3106,8 +2840,7 @@ unsafe extern "C" fn CG_PlayerFloatSprite(
         radius: 0.,
         rotation: 0.,
     };
-    if (*cent).currentState.number == (*cg.snap).ps.clientNum
-        && cg.renderingThirdPerson as u64 == 0
+    if (*cent).currentState.number == (*cg.snap).ps.clientNum && cg.renderingThirdPerson as u64 == 0
     {
         rf = 0x2 as i32
     // only show in mirrors
@@ -3131,9 +2864,7 @@ unsafe extern "C" fn CG_PlayerFloatSprite(
     ent.shaderRGBA[1 as i32 as usize] = 255 as i32 as byte;
     ent.shaderRGBA[2 as i32 as usize] = 255 as i32 as byte;
     ent.shaderRGBA[3 as i32 as usize] = 255 as i32 as byte;
-    trap_R_AddRefEntityToScene(
-        &mut ent as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
 }
 /*
 ===============
@@ -3177,14 +2908,10 @@ unsafe extern "C" fn CG_PlayerSprites(mut cent: *mut centity_t) {
         CG_PlayerFloatSprite(cent, cgs.media.medalCapture);
         return;
     }
-    team = cgs.clientinfo[(*cent).currentState.clientNum as usize].team
-        as i32;
+    team = cgs.clientinfo[(*cent).currentState.clientNum as usize].team as i32;
     if (*cent).currentState.eFlags & 0x1 as i32 == 0
-        && (*cg.snap).ps.persistant
-            [PERS_TEAM as i32 as usize]
-            == team
-        && cgs.gametype as u32
-            >= GT_TEAM as i32 as u32
+        && (*cg.snap).ps.persistant[PERS_TEAM as i32 as usize] == team
+        && cgs.gametype as u32 >= GT_TEAM as i32 as u32
     {
         if cg_drawFriend.integer != 0 {
             CG_PlayerFloatSprite(cent, cgs.media.friendShader);
@@ -3203,28 +2930,23 @@ unsafe extern "C" fn CG_PlayerShadow(
         -(15 as i32) as vec_t,
         0 as i32 as vec_t,
     ];
-    let mut maxs: vec3_t = [
-        15 as i32 as vec_t,
-        15 as i32 as vec_t,
-        2 as i32 as vec_t,
-    ];
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut maxs: vec3_t = [15 as i32 as vec_t, 15 as i32 as vec_t, 2 as i32 as vec_t];
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     let mut alpha: f32 = 0.;
     *shadowPlane = 0 as i32 as f32;
     if cg_shadows.integer == 0 as i32 {
@@ -3290,23 +3012,22 @@ Draw a mark at the water surface
 unsafe extern "C" fn CG_PlayerSplash(mut cent: *mut centity_t) {
     let mut start: vec3_t = [0.; 3];
     let mut end: vec3_t = [0.; 3];
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     let mut contents: i32 = 0;
     let mut verts: [polyVert_t; 4] = [polyVert_t {
         xyz: [0.; 3],
@@ -3322,10 +3043,7 @@ unsafe extern "C" fn CG_PlayerSplash(mut cent: *mut centity_t) {
     end[2 as i32 as usize] -= 24 as i32 as f32;
     // if the feet aren't in liquid, don't make a mark
     // this won't handle moving water brushes, but they wouldn't draw right anyway...
-    contents = CG_PointContents(
-        end.as_mut_ptr() as *const vec_t,
-        0 as i32,
-    );
+    contents = CG_PointContents(end.as_mut_ptr() as *const vec_t, 0 as i32);
     if contents & (32 as i32 | 16 as i32 | 8 as i32) == 0 {
         return;
     }
@@ -3334,10 +3052,7 @@ unsafe extern "C" fn CG_PlayerSplash(mut cent: *mut centity_t) {
     start[2 as i32 as usize] = (*cent).lerpOrigin[2 as i32 as usize];
     start[2 as i32 as usize] += 32 as i32 as f32;
     // if the head isn't out of liquid, don't make a mark
-    contents = CG_PointContents(
-        start.as_mut_ptr() as *const vec_t,
-        0 as i32,
-    );
+    contents = CG_PointContents(start.as_mut_ptr() as *const vec_t, 0 as i32);
     if contents & (1 as i32 | 32 as i32 | 16 as i32 | 8 as i32) != 0 {
         return;
     }
@@ -3362,14 +3077,10 @@ unsafe extern "C" fn CG_PlayerSplash(mut cent: *mut centity_t) {
     verts[0 as i32 as usize].xyz[1 as i32 as usize] -= 32 as i32 as f32;
     verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
     verts[0 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-    verts[0 as i32 as usize].modulate[0 as i32 as usize] =
-        255 as i32 as byte;
-    verts[0 as i32 as usize].modulate[1 as i32 as usize] =
-        255 as i32 as byte;
-    verts[0 as i32 as usize].modulate[2 as i32 as usize] =
-        255 as i32 as byte;
-    verts[0 as i32 as usize].modulate[3 as i32 as usize] =
-        255 as i32 as byte;
+    verts[0 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+    verts[0 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+    verts[0 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+    verts[0 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
     verts[1 as i32 as usize].xyz[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
     verts[1 as i32 as usize].xyz[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
     verts[1 as i32 as usize].xyz[2 as i32 as usize] = trace.endpos[2 as i32 as usize];
@@ -3377,14 +3088,10 @@ unsafe extern "C" fn CG_PlayerSplash(mut cent: *mut centity_t) {
     verts[1 as i32 as usize].xyz[1 as i32 as usize] += 32 as i32 as f32;
     verts[1 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
     verts[1 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
-    verts[1 as i32 as usize].modulate[0 as i32 as usize] =
-        255 as i32 as byte;
-    verts[1 as i32 as usize].modulate[1 as i32 as usize] =
-        255 as i32 as byte;
-    verts[1 as i32 as usize].modulate[2 as i32 as usize] =
-        255 as i32 as byte;
-    verts[1 as i32 as usize].modulate[3 as i32 as usize] =
-        255 as i32 as byte;
+    verts[1 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+    verts[1 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+    verts[1 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+    verts[1 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
     verts[2 as i32 as usize].xyz[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
     verts[2 as i32 as usize].xyz[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
     verts[2 as i32 as usize].xyz[2 as i32 as usize] = trace.endpos[2 as i32 as usize];
@@ -3392,14 +3099,10 @@ unsafe extern "C" fn CG_PlayerSplash(mut cent: *mut centity_t) {
     verts[2 as i32 as usize].xyz[1 as i32 as usize] += 32 as i32 as f32;
     verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
     verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
-    verts[2 as i32 as usize].modulate[0 as i32 as usize] =
-        255 as i32 as byte;
-    verts[2 as i32 as usize].modulate[1 as i32 as usize] =
-        255 as i32 as byte;
-    verts[2 as i32 as usize].modulate[2 as i32 as usize] =
-        255 as i32 as byte;
-    verts[2 as i32 as usize].modulate[3 as i32 as usize] =
-        255 as i32 as byte;
+    verts[2 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+    verts[2 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+    verts[2 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+    verts[2 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
     verts[3 as i32 as usize].xyz[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
     verts[3 as i32 as usize].xyz[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
     verts[3 as i32 as usize].xyz[2 as i32 as usize] = trace.endpos[2 as i32 as usize];
@@ -3407,14 +3110,10 @@ unsafe extern "C" fn CG_PlayerSplash(mut cent: *mut centity_t) {
     verts[3 as i32 as usize].xyz[1 as i32 as usize] -= 32 as i32 as f32;
     verts[3 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
     verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-    verts[3 as i32 as usize].modulate[0 as i32 as usize] =
-        255 as i32 as byte;
-    verts[3 as i32 as usize].modulate[1 as i32 as usize] =
-        255 as i32 as byte;
-    verts[3 as i32 as usize].modulate[2 as i32 as usize] =
-        255 as i32 as byte;
-    verts[3 as i32 as usize].modulate[3 as i32 as usize] =
-        255 as i32 as byte;
+    verts[3 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+    verts[3 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+    verts[3 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+    verts[3 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
     trap_R_AddPolyToScene(
         cgs.media.wakeMarkShader,
         4 as i32,
@@ -3438,9 +3137,7 @@ pub unsafe extern "C" fn CG_AddRefEntityWithPowerups(
 ) {
     if (*state).powerups & (1 as i32) << PW_INVIS as i32 != 0 {
         (*ent).customShader = cgs.media.invisShader;
-        trap_R_AddRefEntityToScene(
-            ent as *const refEntity_t,
-        );
+        trap_R_AddRefEntityToScene(ent as *const refEntity_t);
     } else {
         /*
         if ( state->eFlags & EF_KAMIKAZE ) {
@@ -3451,9 +3148,7 @@ pub unsafe extern "C" fn CG_AddRefEntityWithPowerups(
             trap_R_AddRefEntityToScene( ent );
         }
         else {*/
-        trap_R_AddRefEntityToScene(
-            ent as *const refEntity_t,
-        );
+        trap_R_AddRefEntityToScene(ent as *const refEntity_t);
         //}
         if (*state).powerups & (1 as i32) << PW_QUAD as i32 != 0 {
             if team == TEAM_RED as i32 {
@@ -3461,23 +3156,17 @@ pub unsafe extern "C" fn CG_AddRefEntityWithPowerups(
             } else {
                 (*ent).customShader = cgs.media.quadShader
             }
-            trap_R_AddRefEntityToScene(
-                ent as *const refEntity_t,
-            );
+            trap_R_AddRefEntityToScene(ent as *const refEntity_t);
         }
         if (*state).powerups & (1 as i32) << PW_REGEN as i32 != 0 {
             if cg.time / 100 as i32 % 10 as i32 == 1 as i32 {
                 (*ent).customShader = cgs.media.regenShader;
-                trap_R_AddRefEntityToScene(
-                    ent as *const refEntity_t,
-                );
+                trap_R_AddRefEntityToScene(ent as *const refEntity_t);
             }
         }
         if (*state).powerups & (1 as i32) << PW_BATTLESUIT as i32 != 0 {
             (*ent).customShader = cgs.media.battleSuitShader;
-            trap_R_AddRefEntityToScene(
-                ent as *const refEntity_t,
-            );
+            trap_R_AddRefEntityToScene(ent as *const refEntity_t);
         }
     };
 }
@@ -3517,32 +3206,27 @@ pub unsafe extern "C" fn CG_LightVerts(
                 ambientLight[1 as i32 as usize] as byte;
             (*verts.offset(i as isize)).modulate[2 as i32 as usize] =
                 ambientLight[2 as i32 as usize] as byte;
-            (*verts.offset(i as isize)).modulate[3 as i32 as usize] =
-                255 as i32 as byte
+            (*verts.offset(i as isize)).modulate[3 as i32 as usize] = 255 as i32 as byte
         } else {
             j = (ambientLight[0 as i32 as usize] + incoming * directedLight[0 as i32 as usize])
                 as i32;
             if j > 255 as i32 {
                 j = 255 as i32
             }
-            (*verts.offset(i as isize)).modulate[0 as i32 as usize] =
-                j as byte;
+            (*verts.offset(i as isize)).modulate[0 as i32 as usize] = j as byte;
             j = (ambientLight[1 as i32 as usize] + incoming * directedLight[1 as i32 as usize])
                 as i32;
             if j > 255 as i32 {
                 j = 255 as i32
             }
-            (*verts.offset(i as isize)).modulate[1 as i32 as usize] =
-                j as byte;
+            (*verts.offset(i as isize)).modulate[1 as i32 as usize] = j as byte;
             j = (ambientLight[2 as i32 as usize] + incoming * directedLight[2 as i32 as usize])
                 as i32;
             if j > 255 as i32 {
                 j = 255 as i32
             }
-            (*verts.offset(i as isize)).modulate[2 as i32 as usize] =
-                j as byte;
-            (*verts.offset(i as isize)).modulate[3 as i32 as usize] =
-                255 as i32 as byte
+            (*verts.offset(i as isize)).modulate[2 as i32 as usize] = j as byte;
+            (*verts.offset(i as isize)).modulate[3 as i32 as usize] = 255 as i32 as byte
         }
         i += 1
     }
@@ -3632,14 +3316,9 @@ pub unsafe extern "C" fn CG_Player(mut cent: *mut centity_t) {
     // multiple corpses on the level using the same clientinfo
     clientNum = (*cent).currentState.clientNum;
     if clientNum < 0 as i32 || clientNum >= 64 as i32 {
-        CG_Error(
-            b"Bad clientNum on player entity\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Error(b"Bad clientNum on player entity\x00" as *const u8 as *const libc::c_char);
     }
-    ci = &mut *cgs
-        .clientinfo
-        .as_mut_ptr()
-        .offset(clientNum as isize) as *mut clientInfo_t;
+    ci = &mut *cgs.clientinfo.as_mut_ptr().offset(clientNum as isize) as *mut clientInfo_t;
     // it is possible to see corpses from disconnected players that may
     // not have valid clientinfo
     if (*ci).infoValid as u64 == 0 {
@@ -3764,8 +3443,7 @@ pub unsafe extern "C" fn CG_Player(mut cent: *mut centity_t) {
     //
     CG_AddPlayerWeapon(
         &mut torso as *mut _ as *mut refEntity_t,
-        0 as *mut playerState_t
-            as *mut playerState_s,
+        0 as *mut playerState_t as *mut playerState_s,
         cent as *mut centity_s,
         (*ci).team as i32,
     );
@@ -3808,14 +3486,12 @@ pub unsafe extern "C" fn CG_ResetPlayerEntity(mut cent: *mut centity_t) {
         (*cent).currentState.torsoAnim,
     );
     BG_EvaluateTrajectory(
-        &mut (*cent).currentState.pos as *mut _
-            as *const trajectory_t,
+        &mut (*cent).currentState.pos as *mut _ as *const trajectory_t,
         cg.time,
         (*cent).lerpOrigin.as_mut_ptr(),
     );
     BG_EvaluateTrajectory(
-        &mut (*cent).currentState.apos as *mut _
-            as *const trajectory_t,
+        &mut (*cent).currentState.apos as *mut _ as *const trajectory_t,
         cg.time,
         (*cent).lerpAngles.as_mut_ptr(),
     );

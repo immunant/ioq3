@@ -94,8 +94,7 @@ pub static mut cmd_wait: i32 = 0;
 #[no_mangle]
 
 pub static mut cmd_text: cmd_t = cmd_t {
-    data: 0 as *const byte
-        as *mut byte,
+    data: 0 as *const byte as *mut byte,
     maxsize: 0,
     cursize: 0,
 };
@@ -174,14 +173,11 @@ pub unsafe extern "C" fn Cbuf_AddText(mut text: *const libc::c_char) {
     let mut l: i32 = 0;
     l = crate::stdlib::strlen(text) as i32;
     if cmd_text.cursize + l >= cmd_text.maxsize {
-        Com_Printf(
-            b"Cbuf_AddText: overflow\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Cbuf_AddText: overflow\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     crate::stdlib::memcpy(
-        &mut *cmd_text.data.offset(cmd_text.cursize as isize)
-            as *mut byte as *mut libc::c_void,
+        &mut *cmd_text.data.offset(cmd_text.cursize as isize) as *mut byte as *mut libc::c_void,
         text as *const libc::c_void,
         l as libc::c_ulong,
     );
@@ -202,9 +198,7 @@ pub unsafe extern "C" fn Cbuf_InsertText(mut text: *const libc::c_char) {
     let mut i: i32 = 0;
     len = crate::stdlib::strlen(text).wrapping_add(1 as i32 as libc::c_ulong) as i32;
     if len + cmd_text.cursize > cmd_text.maxsize {
-        Com_Printf(
-            b"Cbuf_InsertText overflowed\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Cbuf_InsertText overflowed\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     // move the existing command text
@@ -220,8 +214,7 @@ pub unsafe extern "C" fn Cbuf_InsertText(mut text: *const libc::c_char) {
         (len - 1 as i32) as libc::c_ulong,
     );
     // add a \n
-    *cmd_text.data.offset((len - 1 as i32) as isize) =
-        '\n' as i32 as byte;
+    *cmd_text.data.offset((len - 1 as i32) as isize) = '\n' as i32 as byte;
     cmd_text.cursize += len;
 }
 // Adds command text at the end of the buffer, does NOT add a final \n
@@ -279,10 +272,8 @@ pub unsafe extern "C" fn Cbuf_Execute() {
     // This will keep // style comments all on one line by not breaking on
     // a semicolon.  It will keep /* ... */ style comments all on one line by not
     // breaking it for semicolon or newline.
-    let mut in_star_comment: qboolean =
-        qfalse;
-    let mut in_slash_comment: qboolean =
-        qfalse;
+    let mut in_star_comment: qboolean = qfalse;
+    let mut in_slash_comment: qboolean = qfalse;
     while cmd_text.cursize != 0 {
         if cmd_wait > 0 as i32 {
             // skip out while text still remains in buffer, leaving it
@@ -469,10 +460,7 @@ Just prints the rest of the line to the console
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_Echo_f() {
-    Com_Printf(
-        b"%s\n\x00" as *const u8 as *const libc::c_char,
-        Cmd_Args(),
-    );
+    Com_Printf(b"%s\n\x00" as *const u8 as *const libc::c_char, Cmd_Args());
 }
 
 static mut cmd_argc: i32 = 0;
@@ -831,9 +819,8 @@ pub unsafe extern "C" fn Cmd_AddCommand(
         return;
     }
     // use a small malloc to avoid zone fragmentation
-    cmd = S_Malloc(
-        ::std::mem::size_of::<cmd_function_t>() as libc::c_ulong as i32
-    ) as *mut cmd_function_t;
+    cmd = S_Malloc(::std::mem::size_of::<cmd_function_t>() as libc::c_ulong as i32)
+        as *mut cmd_function_t;
     (*cmd).name = CopyString(cmd_name);
     (*cmd).function = function;
     (*cmd).complete = None;
@@ -1004,24 +991,15 @@ pub unsafe extern "C" fn Cmd_ExecuteString(mut text: *const libc::c_char) {
         return;
     }
     // check client game commands
-    if !com_cl_running.is_null()
-        && (*com_cl_running).integer != 0
-        && CL_GameCommand() as u32 != 0
-    {
+    if !com_cl_running.is_null() && (*com_cl_running).integer != 0 && CL_GameCommand() as u32 != 0 {
         return;
     }
     // check server game commands
-    if !com_sv_running.is_null()
-        && (*com_sv_running).integer != 0
-        && SV_GameCommand() as u32 != 0
-    {
+    if !com_sv_running.is_null() && (*com_sv_running).integer != 0 && SV_GameCommand() as u32 != 0 {
         return;
     }
     // check ui commands
-    if !com_cl_running.is_null()
-        && (*com_cl_running).integer != 0
-        && UI_GameCommand() as u32 != 0
-    {
+    if !com_cl_running.is_null() && (*com_cl_running).integer != 0 && UI_GameCommand() as u32 != 0 {
         return;
     }
     // send it as a server command if we are connected
@@ -1047,25 +1025,13 @@ pub unsafe extern "C" fn Cmd_List_f() {
     i = 0 as i32;
     cmd = cmd_functions;
     while !cmd.is_null() {
-        if !(!match_0.is_null()
-            && Com_Filter(
-                match_0,
-                (*cmd).name,
-                qfalse as i32,
-            ) == 0)
-        {
-            Com_Printf(
-                b"%s\n\x00" as *const u8 as *const libc::c_char,
-                (*cmd).name,
-            );
+        if !(!match_0.is_null() && Com_Filter(match_0, (*cmd).name, qfalse as i32) == 0) {
+            Com_Printf(b"%s\n\x00" as *const u8 as *const libc::c_char, (*cmd).name);
             i += 1
         }
         cmd = (*cmd).next
     }
-    Com_Printf(
-        b"%i commands\n\x00" as *const u8 as *const libc::c_char,
-        i,
-    );
+    Com_Printf(b"%i commands\n\x00" as *const u8 as *const libc::c_char, i);
 }
 /*
 ==================
@@ -1118,10 +1084,7 @@ pub unsafe extern "C" fn Cmd_Init() {
     );
     Cmd_SetCommandCompletionFunc(
         b"vstr\x00" as *const u8 as *const libc::c_char,
-        Some(
-            Cvar_CompleteCvarName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
-        ),
+        Some(Cvar_CompleteCvarName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()),
     );
     Cmd_AddCommand(
         b"echo\x00" as *const u8 as *const libc::c_char,

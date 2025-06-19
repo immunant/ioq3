@@ -339,8 +339,7 @@ pub static mut particles: [cparticle_t; 1024] = [cparticle_t {
 pub static mut cl_numparticles: i32 = 1024 as i32;
 #[no_mangle]
 
-pub static mut initparticles: qboolean =
-    qfalse;
+pub static mut initparticles: qboolean = qfalse;
 #[no_mangle]
 
 pub static mut vforward: vec3_t = [0.; 3];
@@ -394,14 +393,11 @@ pub unsafe extern "C" fn CG_ClearParticles() {
         let mut j: i32 = 0;
         j = 0 as i32;
         while j < shaderAnimCounts[i as usize] {
-            shaderAnims[i as usize][j as usize] =
-                trap_R_RegisterShader(
-                    va(
-                        b"%s%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                        shaderAnimNames[i as usize],
-                        j + 1 as i32,
-                    ),
-                );
+            shaderAnims[i as usize][j as usize] = trap_R_RegisterShader(va(
+                b"%s%i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
+                shaderAnimNames[i as usize],
+                j + 1 as i32,
+            ));
             j += 1
         }
         i += 1
@@ -458,21 +454,18 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
                     (*p).org[2 as i32 as usize] = *org.offset(2 as i32 as isize);
                     (*p).org[2 as i32 as usize] = ((*p).start as f64
                         + 2.0f64
-                            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
-                                as f64
+                            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                                 - 0.5f64)
                             * 4 as i32 as f64)
                         as vec_t;
                     if (*p).type_0 == P_BUBBLE_TURBULENT as i32 {
                         (*p).vel[0 as i32 as usize] = (2.0f64
-                            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
-                                as f64
+                            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                                 - 0.5f64)
                             * 4 as i32 as f64)
                             as vec_t;
                         (*p).vel[1 as i32 as usize] = (2.0f64
-                            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
-                                as f64
+                            * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                                 - 0.5f64)
                             * 4 as i32 as f64)
                             as vec_t
@@ -507,10 +500,7 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         }
         // Ridah, had to do this or MAX_POLYS is being exceeded in village1.bsp
         if Distance(
-            (*cg.snap)
-                .ps
-                .origin
-                .as_mut_ptr() as *const vec_t,
+            (*cg.snap).ps.origin.as_mut_ptr() as *const vec_t,
             org as *const vec_t,
         ) > 1024 as i32 as f32
         {
@@ -535,12 +525,9 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             verts[0 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
             verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
             verts[0 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-            verts[0 as i32 as usize].modulate[0 as i32 as usize] =
-                255 as i32 as byte;
-            verts[0 as i32 as usize].modulate[1 as i32 as usize] =
-                255 as i32 as byte;
-            verts[0 as i32 as usize].modulate[2 as i32 as usize] =
-                255 as i32 as byte;
+            verts[0 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+            verts[0 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+            verts[0 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
             verts[0 as i32 as usize].modulate[3 as i32 as usize] =
                 (255 as i32 as f32 * (*p).alpha) as byte;
             point[0 as i32 as usize] =
@@ -560,12 +547,9 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             verts[1 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
             verts[1 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
             verts[1 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
-            verts[1 as i32 as usize].modulate[0 as i32 as usize] =
-                255 as i32 as byte;
-            verts[1 as i32 as usize].modulate[1 as i32 as usize] =
-                255 as i32 as byte;
-            verts[1 as i32 as usize].modulate[2 as i32 as usize] =
-                255 as i32 as byte;
+            verts[1 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+            verts[1 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+            verts[1 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
             verts[1 as i32 as usize].modulate[3 as i32 as usize] =
                 (255 as i32 as f32 * (*p).alpha) as byte;
             point[0 as i32 as usize] =
@@ -585,12 +569,9 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             verts[2 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
             verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
             verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
-            verts[2 as i32 as usize].modulate[0 as i32 as usize] =
-                255 as i32 as byte;
-            verts[2 as i32 as usize].modulate[1 as i32 as usize] =
-                255 as i32 as byte;
-            verts[2 as i32 as usize].modulate[2 as i32 as usize] =
-                255 as i32 as byte;
+            verts[2 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+            verts[2 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+            verts[2 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
             verts[2 as i32 as usize].modulate[3 as i32 as usize] =
                 (255 as i32 as f32 * (*p).alpha) as byte;
             point[0 as i32 as usize] =
@@ -610,12 +591,9 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             verts[3 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
             verts[3 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
             verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-            verts[3 as i32 as usize].modulate[0 as i32 as usize] =
-                255 as i32 as byte;
-            verts[3 as i32 as usize].modulate[1 as i32 as usize] =
-                255 as i32 as byte;
-            verts[3 as i32 as usize].modulate[2 as i32 as usize] =
-                255 as i32 as byte;
+            verts[3 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+            verts[3 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+            verts[3 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
             verts[3 as i32 as usize].modulate[3 as i32 as usize] =
                 (255 as i32 as f32 * (*p).alpha) as byte
         } else {
@@ -636,12 +614,9 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             TRIverts[0 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
             TRIverts[0 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
             TRIverts[0 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-            TRIverts[0 as i32 as usize].modulate[0 as i32 as usize] =
-                255 as i32 as byte;
-            TRIverts[0 as i32 as usize].modulate[1 as i32 as usize] =
-                255 as i32 as byte;
-            TRIverts[0 as i32 as usize].modulate[2 as i32 as usize] =
-                255 as i32 as byte;
+            TRIverts[0 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+            TRIverts[0 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+            TRIverts[0 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
             TRIverts[0 as i32 as usize].modulate[3 as i32 as usize] =
                 (255 as i32 as f32 * (*p).alpha) as byte;
             point[0 as i32 as usize] =
@@ -661,12 +636,9 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             TRIverts[1 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
             TRIverts[1 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
             TRIverts[1 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-            TRIverts[1 as i32 as usize].modulate[0 as i32 as usize] =
-                255 as i32 as byte;
-            TRIverts[1 as i32 as usize].modulate[1 as i32 as usize] =
-                255 as i32 as byte;
-            TRIverts[1 as i32 as usize].modulate[2 as i32 as usize] =
-                255 as i32 as byte;
+            TRIverts[1 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+            TRIverts[1 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+            TRIverts[1 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
             TRIverts[1 as i32 as usize].modulate[3 as i32 as usize] =
                 (255 as i32 as f32 * (*p).alpha) as byte;
             point[0 as i32 as usize] =
@@ -686,12 +658,9 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             TRIverts[2 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
             TRIverts[2 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
             TRIverts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
-            TRIverts[2 as i32 as usize].modulate[0 as i32 as usize] =
-                255 as i32 as byte;
-            TRIverts[2 as i32 as usize].modulate[1 as i32 as usize] =
-                255 as i32 as byte;
-            TRIverts[2 as i32 as usize].modulate[2 as i32 as usize] =
-                255 as i32 as byte;
+            TRIverts[2 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+            TRIverts[2 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+            TRIverts[2 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
             TRIverts[2 as i32 as usize].modulate[3 as i32 as usize] =
                 (255 as i32 as f32 * (*p).alpha) as byte
         }
@@ -709,8 +678,7 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         height = (*p).height + ratio * ((*p).endheight - (*p).height);
         if (*p).roll != 0 {
             vectoangles(
-                cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr()
-                    as *const vec_t,
+                cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
                 rotate_ang.as_mut_ptr(),
             );
             rotate_ang[2 as i32 as usize] += (*p).roll as f32;
@@ -749,14 +717,10 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[0 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
         verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-        verts[0 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as byte;
-        verts[0 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as byte;
-        verts[0 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as byte;
-        verts[0 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte;
+        verts[0 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+        verts[0 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+        verts[0 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+        verts[0 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
         if (*p).roll != 0 {
             point[0 as i32 as usize] =
                 point[0 as i32 as usize] + ru[0 as i32 as usize] * (2 as i32 as f32 * height);
@@ -777,14 +741,10 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[1 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
         verts[1 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[1 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
-        verts[1 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as byte;
-        verts[1 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as byte;
-        verts[1 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as byte;
-        verts[1 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte;
+        verts[1 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+        verts[1 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+        verts[1 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+        verts[1 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
         if (*p).roll != 0 {
             point[0 as i32 as usize] =
                 point[0 as i32 as usize] + rr[0 as i32 as usize] * (2 as i32 as f32 * width);
@@ -805,14 +765,10 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[2 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
         verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
-        verts[2 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as byte;
-        verts[2 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as byte;
-        verts[2 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as byte;
-        verts[2 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte;
+        verts[2 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+        verts[2 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+        verts[2 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+        verts[2 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
         if (*p).roll != 0 {
             point[0 as i32 as usize] =
                 point[0 as i32 as usize] + ru[0 as i32 as usize] * (-(2 as i32) as f32 * height);
@@ -833,22 +789,15 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[3 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
         verts[3 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-        verts[3 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as byte;
-        verts[3 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as byte;
-        verts[3 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as byte;
-        verts[3 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte
+        verts[3 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+        verts[3 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+        verts[3 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+        verts[3 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte
     } else if (*p).type_0 == P_SMOKE as i32 || (*p).type_0 == P_SMOKE_IMPACT as i32 {
         // create a front rotating facing polygon
         if (*p).type_0 == P_SMOKE_IMPACT as i32
             && Distance(
-                (*cg.snap)
-                    .ps
-                    .origin
-                    .as_mut_ptr() as *const vec_t,
+                (*cg.snap).ps.origin.as_mut_ptr() as *const vec_t,
                 org as *const vec_t,
             ) > 1024 as i32 as f32
         {
@@ -863,10 +812,7 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             let mut greyit: f32 = 0.;
             let mut val: f32 = 0.;
             len = Distance(
-                (*cg.snap)
-                    .ps
-                    .origin
-                    .as_mut_ptr() as *const vec_t,
+                (*cg.snap).ps.origin.as_mut_ptr() as *const vec_t,
                 org as *const vec_t,
             );
             if len == 0. {
@@ -890,8 +836,7 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         ratio = time / time2;
         if cg.time as f32 > (*p).startfade {
             invratio = 1 as i32 as f32
-                - (cg.time as f32 - (*p).startfade)
-                    / ((*p).endtime - (*p).startfade);
+                - (cg.time as f32 - (*p).startfade) / ((*p).endtime - (*p).startfade);
             if (*p).color == 3 as i32 {
                 let mut fval: f32 = 0.;
                 fval = invratio * invratio;
@@ -906,9 +851,7 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         } else {
             invratio = 1 as i32 as f32 * (*p).alpha
         }
-        if cgs.glconfig.hardwareType as u32
-            == GLHW_RAGEPRO as i32 as u32
-        {
+        if cgs.glconfig.hardwareType as u32 == GLHW_RAGEPRO as i32 as u32 {
             invratio = 1 as i32 as f32
         }
         if invratio > 1 as i32 as f32 {
@@ -918,14 +861,10 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         height = (*p).height + ratio * ((*p).endheight - (*p).height);
         if (*p).type_0 != P_SMOKE_IMPACT as i32 {
             let mut temp: vec3_t = [0.; 3];
-            vectoangles(
-                rforward.as_mut_ptr() as *const vec_t,
-                temp.as_mut_ptr(),
-            );
+            vectoangles(rforward.as_mut_ptr() as *const vec_t, temp.as_mut_ptr());
             (*p).accumroll += (*p).roll;
-            temp[2 as i32 as usize] = (temp[2 as i32 as usize] as f64
-                + (*p).accumroll as f64 * 0.1f64)
-                as vec_t;
+            temp[2 as i32 as usize] =
+                (temp[2 as i32 as usize] as f64 + (*p).accumroll as f64 * 0.1f64) as vec_t;
             AngleVectors(
                 temp.as_mut_ptr() as *const vec_t,
                 0 as *mut vec_t,
@@ -1104,15 +1043,12 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         let mut rotate_ang_0: vec3_t = [0.; 3];
         let mut alpha_0: f32 = 0.;
         alpha_0 = (*p).alpha;
-        if cgs.glconfig.hardwareType as u32
-            == GLHW_RAGEPRO as i32 as u32
-        {
+        if cgs.glconfig.hardwareType as u32 == GLHW_RAGEPRO as i32 as u32 {
             alpha_0 = 1 as i32 as f32
         }
         if (*p).roll != 0 {
             vectoangles(
-                cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr()
-                    as *const vec_t,
+                cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
                 rotate_ang_0.as_mut_ptr(),
             );
             rotate_ang_0[2 as i32 as usize] += (*p).roll as f32;
@@ -1144,12 +1080,9 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[0 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
         verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-        verts[0 as i32 as usize].modulate[0 as i32 as usize] =
-            111 as i32 as byte;
-        verts[0 as i32 as usize].modulate[1 as i32 as usize] =
-            19 as i32 as byte;
-        verts[0 as i32 as usize].modulate[2 as i32 as usize] =
-            9 as i32 as byte;
+        verts[0 as i32 as usize].modulate[0 as i32 as usize] = 111 as i32 as byte;
+        verts[0 as i32 as usize].modulate[1 as i32 as usize] = 19 as i32 as byte;
+        verts[0 as i32 as usize].modulate[2 as i32 as usize] = 9 as i32 as byte;
         verts[0 as i32 as usize].modulate[3 as i32 as usize] =
             (255 as i32 as f32 * alpha_0) as byte;
         point[0 as i32 as usize] =
@@ -1166,12 +1099,9 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[1 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
         verts[1 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[1 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
-        verts[1 as i32 as usize].modulate[0 as i32 as usize] =
-            111 as i32 as byte;
-        verts[1 as i32 as usize].modulate[1 as i32 as usize] =
-            19 as i32 as byte;
-        verts[1 as i32 as usize].modulate[2 as i32 as usize] =
-            9 as i32 as byte;
+        verts[1 as i32 as usize].modulate[0 as i32 as usize] = 111 as i32 as byte;
+        verts[1 as i32 as usize].modulate[1 as i32 as usize] = 19 as i32 as byte;
+        verts[1 as i32 as usize].modulate[2 as i32 as usize] = 9 as i32 as byte;
         verts[1 as i32 as usize].modulate[3 as i32 as usize] =
             (255 as i32 as f32 * alpha_0) as byte;
         point[0 as i32 as usize] =
@@ -1188,12 +1118,9 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[2 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
         verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
-        verts[2 as i32 as usize].modulate[0 as i32 as usize] =
-            111 as i32 as byte;
-        verts[2 as i32 as usize].modulate[1 as i32 as usize] =
-            19 as i32 as byte;
-        verts[2 as i32 as usize].modulate[2 as i32 as usize] =
-            9 as i32 as byte;
+        verts[2 as i32 as usize].modulate[0 as i32 as usize] = 111 as i32 as byte;
+        verts[2 as i32 as usize].modulate[1 as i32 as usize] = 19 as i32 as byte;
+        verts[2 as i32 as usize].modulate[2 as i32 as usize] = 9 as i32 as byte;
         verts[2 as i32 as usize].modulate[3 as i32 as usize] =
             (255 as i32 as f32 * alpha_0) as byte;
         point[0 as i32 as usize] =
@@ -1210,14 +1137,10 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[3 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
         verts[3 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-        verts[3 as i32 as usize].modulate[0 as i32 as usize] =
-            111 as i32 as byte;
-        verts[3 as i32 as usize].modulate[1 as i32 as usize] =
-            19 as i32 as byte;
-        verts[3 as i32 as usize].modulate[2 as i32 as usize] =
-            9 as i32 as byte;
-        verts[3 as i32 as usize].modulate[3 as i32 as usize] =
-            (255 as i32 as f32 * alpha_0) as byte
+        verts[3 as i32 as usize].modulate[0 as i32 as usize] = 111 as i32 as byte;
+        verts[3 as i32 as usize].modulate[1 as i32 as usize] = 19 as i32 as byte;
+        verts[3 as i32 as usize].modulate[2 as i32 as usize] = 9 as i32 as byte;
+        verts[3 as i32 as usize].modulate[3 as i32 as usize] = (255 as i32 as f32 * alpha_0) as byte
     } else if (*p).type_0 == P_FLAT_SCALEUP as i32 {
         let mut sinR: f32 = 0.;
         let mut cosR: f32 = 0.;
@@ -1260,8 +1183,7 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             (255 as i32 as f32 * color[1 as i32 as usize]) as byte;
         verts[0 as i32 as usize].modulate[2 as i32 as usize] =
             (255 as i32 as f32 * color[2 as i32 as usize]) as byte;
-        verts[0 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte;
+        verts[0 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
         verts[1 as i32 as usize].xyz[0 as i32 as usize] = *org.offset(0 as i32 as isize);
         verts[1 as i32 as usize].xyz[1 as i32 as usize] = *org.offset(1 as i32 as isize);
         verts[1 as i32 as usize].xyz[2 as i32 as usize] = *org.offset(2 as i32 as isize);
@@ -1275,8 +1197,7 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             (255 as i32 as f32 * color[1 as i32 as usize]) as byte;
         verts[1 as i32 as usize].modulate[2 as i32 as usize] =
             (255 as i32 as f32 * color[2 as i32 as usize]) as byte;
-        verts[1 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte;
+        verts[1 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
         verts[2 as i32 as usize].xyz[0 as i32 as usize] = *org.offset(0 as i32 as isize);
         verts[2 as i32 as usize].xyz[1 as i32 as usize] = *org.offset(1 as i32 as isize);
         verts[2 as i32 as usize].xyz[2 as i32 as usize] = *org.offset(2 as i32 as isize);
@@ -1290,8 +1211,7 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             (255 as i32 as f32 * color[1 as i32 as usize]) as byte;
         verts[2 as i32 as usize].modulate[2 as i32 as usize] =
             (255 as i32 as f32 * color[2 as i32 as usize]) as byte;
-        verts[2 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte;
+        verts[2 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
         verts[3 as i32 as usize].xyz[0 as i32 as usize] = *org.offset(0 as i32 as isize);
         verts[3 as i32 as usize].xyz[1 as i32 as usize] = *org.offset(1 as i32 as isize);
         verts[3 as i32 as usize].xyz[2 as i32 as usize] = *org.offset(2 as i32 as isize);
@@ -1305,8 +1225,7 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
             (255 as i32 as f32 * color[1 as i32 as usize]) as byte;
         verts[3 as i32 as usize].modulate[2 as i32 as usize] =
             (255 as i32 as f32 * color[2 as i32 as usize]) as byte;
-        verts[3 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte
+        verts[3 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte
     } else if (*p).type_0 == P_FLAT as i32 {
         verts[0 as i32 as usize].xyz[0 as i32 as usize] = *org.offset(0 as i32 as isize);
         verts[0 as i32 as usize].xyz[1 as i32 as usize] = *org.offset(1 as i32 as isize);
@@ -1315,14 +1234,10 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[0 as i32 as usize].xyz[1 as i32 as usize] -= (*p).width;
         verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-        verts[0 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as byte;
-        verts[0 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as byte;
-        verts[0 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as byte;
-        verts[0 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte;
+        verts[0 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+        verts[0 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+        verts[0 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+        verts[0 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
         verts[1 as i32 as usize].xyz[0 as i32 as usize] = *org.offset(0 as i32 as isize);
         verts[1 as i32 as usize].xyz[1 as i32 as usize] = *org.offset(1 as i32 as isize);
         verts[1 as i32 as usize].xyz[2 as i32 as usize] = *org.offset(2 as i32 as isize);
@@ -1330,14 +1245,10 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[1 as i32 as usize].xyz[1 as i32 as usize] += (*p).width;
         verts[1 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[1 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
-        verts[1 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as byte;
-        verts[1 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as byte;
-        verts[1 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as byte;
-        verts[1 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte;
+        verts[1 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+        verts[1 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+        verts[1 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+        verts[1 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
         verts[2 as i32 as usize].xyz[0 as i32 as usize] = *org.offset(0 as i32 as isize);
         verts[2 as i32 as usize].xyz[1 as i32 as usize] = *org.offset(1 as i32 as isize);
         verts[2 as i32 as usize].xyz[2 as i32 as usize] = *org.offset(2 as i32 as isize);
@@ -1345,14 +1256,10 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[2 as i32 as usize].xyz[1 as i32 as usize] += (*p).width;
         verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
-        verts[2 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as byte;
-        verts[2 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as byte;
-        verts[2 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as byte;
-        verts[2 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte;
+        verts[2 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+        verts[2 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+        verts[2 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+        verts[2 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
         verts[3 as i32 as usize].xyz[0 as i32 as usize] = *org.offset(0 as i32 as isize);
         verts[3 as i32 as usize].xyz[1 as i32 as usize] = *org.offset(1 as i32 as isize);
         verts[3 as i32 as usize].xyz[2 as i32 as usize] = *org.offset(2 as i32 as isize);
@@ -1360,14 +1267,10 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[3 as i32 as usize].xyz[1 as i32 as usize] -= (*p).width;
         verts[3 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-        verts[3 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as byte;
-        verts[3 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as byte;
-        verts[3 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as byte;
-        verts[3 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte
+        verts[3 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+        verts[3 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+        verts[3 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+        verts[3 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte
     } else if (*p).type_0 == P_ANIM as i32 {
         let mut rr_1: vec3_t = [0.; 3];
         let mut ru_1: vec3_t = [0.; 3];
@@ -1385,10 +1288,7 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         // Ridah
         // if we are "inside" this sprite, don't draw
         if (Distance(
-            (*cg.snap)
-                .ps
-                .origin
-                .as_mut_ptr() as *const vec_t,
+            (*cg.snap).ps.origin.as_mut_ptr() as *const vec_t,
             org as *const vec_t,
         ) as f64)
             < width as f64 / 1.5f64
@@ -1401,8 +1301,7 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         (*p).pshader = shaderAnims[i as usize][j as usize];
         if (*p).roll != 0 {
             vectoangles(
-                cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr()
-                    as *const vec_t,
+                cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
                 rotate_ang_1.as_mut_ptr(),
             );
             rotate_ang_1[2 as i32 as usize] += (*p).roll as f32;
@@ -1441,14 +1340,10 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[0 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
         verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[0 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-        verts[0 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as byte;
-        verts[0 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as byte;
-        verts[0 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as byte;
-        verts[0 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte;
+        verts[0 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+        verts[0 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+        verts[0 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+        verts[0 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
         if (*p).roll != 0 {
             point[0 as i32 as usize] =
                 point[0 as i32 as usize] + ru_1[0 as i32 as usize] * (2 as i32 as f32 * height);
@@ -1469,14 +1364,10 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[1 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
         verts[1 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
         verts[1 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
-        verts[1 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as byte;
-        verts[1 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as byte;
-        verts[1 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as byte;
-        verts[1 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte;
+        verts[1 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+        verts[1 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+        verts[1 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+        verts[1 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
         if (*p).roll != 0 {
             point[0 as i32 as usize] =
                 point[0 as i32 as usize] + rr_1[0 as i32 as usize] * (2 as i32 as f32 * width);
@@ -1497,14 +1388,10 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[2 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
         verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
-        verts[2 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as byte;
-        verts[2 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as byte;
-        verts[2 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as byte;
-        verts[2 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte;
+        verts[2 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+        verts[2 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+        verts[2 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+        verts[2 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
         if (*p).roll != 0 {
             point[0 as i32 as usize] =
                 point[0 as i32 as usize] + ru_1[0 as i32 as usize] * (-(2 as i32) as f32 * height);
@@ -1525,14 +1412,10 @@ pub unsafe extern "C" fn CG_AddParticleToScene(
         verts[3 as i32 as usize].xyz[2 as i32 as usize] = point[2 as i32 as usize];
         verts[3 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
         verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-        verts[3 as i32 as usize].modulate[0 as i32 as usize] =
-            255 as i32 as byte;
-        verts[3 as i32 as usize].modulate[1 as i32 as usize] =
-            255 as i32 as byte;
-        verts[3 as i32 as usize].modulate[2 as i32 as usize] =
-            255 as i32 as byte;
-        verts[3 as i32 as usize].modulate[3 as i32 as usize] =
-            255 as i32 as byte
+        verts[3 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+        verts[3 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+        verts[3 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+        verts[3 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte
     }
     // done.
     if (*p).pshader == 0 {
@@ -1580,33 +1463,22 @@ pub unsafe extern "C" fn CG_AddParticles() {
     if initparticles as u64 == 0 {
         CG_ClearParticles();
     }
-    vforward[0 as i32 as usize] =
-        cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize];
-    vforward[1 as i32 as usize] =
-        cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize];
-    vforward[2 as i32 as usize] =
-        cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize];
-    vright[0 as i32 as usize] =
-        cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize];
-    vright[1 as i32 as usize] =
-        cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize];
-    vright[2 as i32 as usize] =
-        cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize];
-    vup[0 as i32 as usize] =
-        cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize];
-    vup[1 as i32 as usize] =
-        cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize];
-    vup[2 as i32 as usize] =
-        cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize];
+    vforward[0 as i32 as usize] = cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize];
+    vforward[1 as i32 as usize] = cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize];
+    vforward[2 as i32 as usize] = cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize];
+    vright[0 as i32 as usize] = cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize];
+    vright[1 as i32 as usize] = cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize];
+    vright[2 as i32 as usize] = cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize];
+    vup[0 as i32 as usize] = cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize];
+    vup[1 as i32 as usize] = cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize];
+    vup[2 as i32 as usize] = cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize];
     vectoangles(
-        cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr()
-            as *const vec_t,
+        cg.refdef.viewaxis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
         rotate_ang.as_mut_ptr(),
     );
-    roll = (roll as f64 + (cg.time as f32 - oldtime) as f64 * 0.1f64)
-        as f32;
-    rotate_ang[2 as i32 as usize] = (rotate_ang[2 as i32 as usize] as f64 + roll as f64 * 0.9f64)
-        as vec_t;
+    roll = (roll as f64 + (cg.time as f32 - oldtime) as f64 * 0.1f64) as f32;
+    rotate_ang[2 as i32 as usize] =
+        (rotate_ang[2 as i32 as usize] as f64 + roll as f64 * 0.9f64) as vec_t;
     AngleVectors(
         rotate_ang.as_mut_ptr() as *const vec_t,
         rforward.as_mut_ptr(),
@@ -1738,10 +1610,7 @@ CG_AddParticles
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_ParticleSnowFlurry(
-    mut pshader: qhandle_t,
-    mut cent: *mut centity_t,
-) {
+pub unsafe extern "C" fn CG_ParticleSnowFlurry(mut pshader: qhandle_t, mut cent: *mut centity_t) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     let mut turb: qboolean = qtrue;
     if pshader == 0 {
@@ -1789,27 +1658,21 @@ pub unsafe extern "C" fn CG_ParticleSnowFlurry(
     (*p).vel[0 as i32 as usize] = ((*p).vel[0 as i32 as usize] as f64
         + (((*cent).currentState.angles[0 as i32 as usize] * 32 as i32 as f32) as f64
             + 2.0f64
-                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                    - 0.5f64)
-                * 16 as i32 as f64))
-        as vec_t;
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+                * 16 as i32 as f64)) as vec_t;
     (*p).vel[1 as i32 as usize] = ((*p).vel[1 as i32 as usize] as f64
         + (((*cent).currentState.angles[1 as i32 as usize] * 32 as i32 as f32) as f64
             + 2.0f64
-                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                    - 0.5f64)
-                * 16 as i32 as f64))
-        as vec_t;
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+                * 16 as i32 as f64)) as vec_t;
     (*p).vel[2 as i32 as usize] += (*cent).currentState.angles[2 as i32 as usize];
     if turb as u64 != 0 {
         (*p).accel[0 as i32 as usize] = (2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 16 as i32 as f64)
-            as vec_t;
+            * 16 as i32 as f64) as vec_t;
         (*p).accel[1 as i32 as usize] = (2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 16 as i32 as f64)
-            as vec_t
+            * 16 as i32 as f64) as vec_t
     };
 }
 #[no_mangle]
@@ -1824,9 +1687,7 @@ pub unsafe extern "C" fn CG_ParticleSnow(
 ) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     if pshader == 0 {
-        CG_Printf(
-            b"CG_ParticleSnow pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Printf(b"CG_ParticleSnow pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char);
     }
     if free_particles.is_null() {
         return;
@@ -1847,8 +1708,7 @@ pub unsafe extern "C" fn CG_ParticleSnow(
     (*p).vel[2 as i32 as usize] = -(50 as i32) as vec_t;
     if turb != 0 {
         (*p).type_0 = P_WEATHER_TURBULENT as i32;
-        (*p).vel[2 as i32 as usize] =
-            (-(50 as i32) as f64 * 1.3f64) as vec_t
+        (*p).vel[2 as i32 as usize] = (-(50 as i32) as f64 * 1.3f64) as vec_t
     } else {
         (*p).type_0 = P_WEATHER as i32
     }
@@ -1858,18 +1718,15 @@ pub unsafe extern "C" fn CG_ParticleSnow(
     (*p).org[0 as i32 as usize] = ((*p).org[0 as i32 as usize] as f64
         + 2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * range as f64)
-        as vec_t;
+            * range as f64) as vec_t;
     (*p).org[1 as i32 as usize] = ((*p).org[1 as i32 as usize] as f64
         + 2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * range as f64)
-        as vec_t;
+            * range as f64) as vec_t;
     (*p).org[2 as i32 as usize] = ((*p).org[2 as i32 as usize] as f64
         + 2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * ((*p).start - (*p).end) as f64)
-        as vec_t;
+            * ((*p).start - (*p).end) as f64) as vec_t;
     (*p).vel[1 as i32 as usize] = 0 as i32 as vec_t;
     (*p).vel[0 as i32 as usize] = (*p).vel[1 as i32 as usize];
     (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
@@ -1878,12 +1735,10 @@ pub unsafe extern "C" fn CG_ParticleSnow(
     if turb != 0 {
         (*p).vel[0 as i32 as usize] = (2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 16 as i32 as f64)
-            as vec_t;
+            * 16 as i32 as f64) as vec_t;
         (*p).vel[1 as i32 as usize] = (2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 16 as i32 as f64)
-            as vec_t
+            * 16 as i32 as f64) as vec_t
     }
     // Rafael snow pvs check
     (*p).snum = snum;
@@ -1902,9 +1757,7 @@ pub unsafe extern "C" fn CG_ParticleBubble(
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     let mut randsize: f32 = 0.;
     if pshader == 0 {
-        CG_Printf(
-            b"CG_ParticleSnow pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Printf(b"CG_ParticleSnow pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char);
     }
     if free_particles.is_null() {
         return;
@@ -1929,12 +1782,10 @@ pub unsafe extern "C" fn CG_ParticleBubble(
     (*p).vel[2 as i32 as usize] = (50 as i32 as f64
         + 2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 10 as i32 as f64)
-        as vec_t;
+            * 10 as i32 as f64) as vec_t;
     if turb != 0 {
         (*p).type_0 = P_BUBBLE_TURBULENT as i32;
-        (*p).vel[2 as i32 as usize] =
-            (50 as i32 as f64 * 1.3f64) as vec_t
+        (*p).vel[2 as i32 as usize] = (50 as i32 as f64 * 1.3f64) as vec_t
     } else {
         (*p).type_0 = P_BUBBLE as i32
     }
@@ -1944,18 +1795,15 @@ pub unsafe extern "C" fn CG_ParticleBubble(
     (*p).org[0 as i32 as usize] = ((*p).org[0 as i32 as usize] as f64
         + 2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * range as f64)
-        as vec_t;
+            * range as f64) as vec_t;
     (*p).org[1 as i32 as usize] = ((*p).org[1 as i32 as usize] as f64
         + 2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * range as f64)
-        as vec_t;
+            * range as f64) as vec_t;
     (*p).org[2 as i32 as usize] = ((*p).org[2 as i32 as usize] as f64
         + 2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * ((*p).start - (*p).end) as f64)
-        as vec_t;
+            * ((*p).start - (*p).end) as f64) as vec_t;
     (*p).vel[1 as i32 as usize] = 0 as i32 as vec_t;
     (*p).vel[0 as i32 as usize] = (*p).vel[1 as i32 as usize];
     (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
@@ -1964,12 +1812,10 @@ pub unsafe extern "C" fn CG_ParticleBubble(
     if turb != 0 {
         (*p).vel[0 as i32 as usize] = (2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 4 as i32 as f64)
-            as vec_t;
+            * 4 as i32 as f64) as vec_t;
         (*p).vel[1 as i32 as usize] = (2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 4 as i32 as f64)
-            as vec_t
+            * 4 as i32 as f64) as vec_t
     }
     // Rafael snow pvs check
     (*p).snum = snum;
@@ -1977,17 +1823,12 @@ pub unsafe extern "C" fn CG_ParticleBubble(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_ParticleSmoke(
-    mut pshader: qhandle_t,
-    mut cent: *mut centity_t,
-) {
+pub unsafe extern "C" fn CG_ParticleSmoke(mut pshader: qhandle_t, mut cent: *mut centity_t) {
     // using cent->density = enttime
     //		 cent->frame = startfade
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     if pshader == 0 {
-        CG_Printf(
-            b"CG_ParticleSmoke == ZERO!\n\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Printf(b"CG_ParticleSmoke == ZERO!\n\x00" as *const u8 as *const libc::c_char);
     }
     if free_particles.is_null() {
         return;
@@ -2229,10 +2070,7 @@ pub unsafe extern "C" fn CG_NewParticleArea(mut num: i32) -> i32 {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_SnowLink(
-    mut cent: *mut centity_t,
-    mut particleOn: qboolean,
-) {
+pub unsafe extern "C" fn CG_SnowLink(mut cent: *mut centity_t, mut particleOn: qboolean) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     let mut next: *mut cparticle_t = 0 as *mut cparticle_t;
     let mut id: i32 = 0;
@@ -2309,9 +2147,7 @@ pub unsafe extern "C" fn CG_Particle_Bleed(
 ) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     if pshader == 0 {
-        CG_Printf(
-            b"CG_Particle_Bleed pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Printf(b"CG_Particle_Bleed pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char);
     }
     if free_particles.is_null() {
         return;
@@ -2352,10 +2188,7 @@ pub unsafe extern "C" fn CG_Particle_Bleed(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_Particle_OilParticle(
-    mut pshader: qhandle_t,
-    mut cent: *mut centity_t,
-) {
+pub unsafe extern "C" fn CG_Particle_OilParticle(mut pshader: qhandle_t, mut cent: *mut centity_t) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     let mut time: i32 = 0;
     let mut time2: i32 = 0;
@@ -2365,9 +2198,7 @@ pub unsafe extern "C" fn CG_Particle_OilParticle(
     time2 = cg.time + (*cent).currentState.time;
     ratio = 1 as i32 as f32 - time as f32 / time2 as f32;
     if pshader == 0 {
-        CG_Printf(
-            b"CG_Particle_OilParticle == ZERO!\n\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Printf(b"CG_Particle_OilParticle == ZERO!\n\x00" as *const u8 as *const libc::c_char);
     }
     if free_particles.is_null() {
         return;
@@ -2407,15 +2238,10 @@ pub unsafe extern "C" fn CG_Particle_OilParticle(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_Particle_OilSlick(
-    mut pshader: qhandle_t,
-    mut cent: *mut centity_t,
-) {
+pub unsafe extern "C" fn CG_Particle_OilSlick(mut pshader: qhandle_t, mut cent: *mut centity_t) {
     let mut p: *mut cparticle_t = 0 as *mut cparticle_t;
     if pshader == 0 {
-        CG_Printf(
-            b"CG_Particle_OilSlick == ZERO!\n\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Printf(b"CG_Particle_OilSlick == ZERO!\n\x00" as *const u8 as *const libc::c_char);
     }
     if free_particles.is_null() {
         return;
@@ -2426,8 +2252,7 @@ pub unsafe extern "C" fn CG_Particle_OilSlick(
     active_particles = p;
     (*p).time = cg.time as f32;
     if (*cent).currentState.angles2[2 as i32 as usize] != 0. {
-        (*p).endtime = cg.time as f32
-            + (*cent).currentState.angles2[2 as i32 as usize]
+        (*p).endtime = cg.time as f32 + (*cent).currentState.angles2[2 as i32 as usize]
     } else {
         (*p).endtime = (cg.time + 60000 as i32) as f32
     }
@@ -2457,10 +2282,8 @@ pub unsafe extern "C" fn CG_Particle_OilSlick(
     (*p).org[2 as i32 as usize] = ((*p).org[2 as i32 as usize] as f64
         + (0.55f64
             + 2.0f64
-                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                    - 0.5f64)
-                * 0.5f64))
-        as vec_t;
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+                * 0.5f64)) as vec_t;
     (*p).vel[0 as i32 as usize] = 0 as i32 as vec_t;
     (*p).vel[1 as i32 as usize] = 0 as i32 as vec_t;
     (*p).vel[2 as i32 as usize] = 0 as i32 as vec_t;
@@ -2479,9 +2302,7 @@ pub unsafe extern "C" fn CG_OilSlickRemove(mut _cent: *mut centity_t) {
     let mut id: i32 = 0;
     id = 1.0f32 as i32;
     if id == 0 {
-        CG_Printf(
-            b"CG_OilSlickRevove NULL id\n\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Printf(b"CG_OilSlickRevove NULL id\n\x00" as *const u8 as *const libc::c_char);
     }
     p = active_particles;
     while !p.is_null() {
@@ -2498,9 +2319,7 @@ pub unsafe extern "C" fn CG_OilSlickRemove(mut _cent: *mut centity_t) {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ValidBloodPool(
-    mut start: *mut vec_t,
-) -> qboolean {
+pub unsafe extern "C" fn ValidBloodPool(mut start: *mut vec_t) -> qboolean {
     let mut angles: vec3_t = [0.; 3];
     let mut right: vec3_t = [0.; 3];
     let mut up: vec3_t = [0.; 3];
@@ -2512,33 +2331,29 @@ pub unsafe extern "C" fn ValidBloodPool(
     let mut y: i32 = 0;
     let mut fwidth: i32 = 0;
     let mut fheight: i32 = 0;
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     let mut normal: vec3_t = [0.; 3];
     fwidth = 16 as i32;
     fheight = 16 as i32;
     normal[0 as i32 as usize] = 0 as i32 as vec_t;
     normal[1 as i32 as usize] = 0 as i32 as vec_t;
     normal[2 as i32 as usize] = 1 as i32 as vec_t;
-    vectoangles(
-        normal.as_mut_ptr() as *const vec_t,
-        angles.as_mut_ptr(),
-    );
+    vectoangles(normal.as_mut_ptr() as *const vec_t, angles.as_mut_ptr());
     AngleVectors(
         angles.as_mut_ptr() as *const vec_t,
         0 as *mut vec_t,
@@ -2546,14 +2361,11 @@ pub unsafe extern "C" fn ValidBloodPool(
         up.as_mut_ptr(),
     );
     center_pos[0 as i32 as usize] = (*start.offset(0 as i32 as isize) as f64
-        + normal[0 as i32 as usize] as f64 * 0.5f64)
-        as vec_t;
+        + normal[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
     center_pos[1 as i32 as usize] = (*start.offset(1 as i32 as isize) as f64
-        + normal[1 as i32 as usize] as f64 * 0.5f64)
-        as vec_t;
+        + normal[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
     center_pos[2 as i32 as usize] = (*start.offset(2 as i32 as isize) as f64
-        + normal[2 as i32 as usize] as f64 * 0.5f64)
-        as vec_t;
+        + normal[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
     x = -fwidth / 2 as i32;
     while x < fwidth {
         x_pos[0 as i32 as usize] =
@@ -2613,9 +2425,7 @@ pub unsafe extern "C" fn CG_BloodPool(
     let mut start: vec3_t = [0.; 3];
     let mut rndSize: f32 = 0.;
     if pshader == 0 {
-        CG_Printf(
-            b"CG_BloodPool pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Printf(b"CG_BloodPool pshader == ZERO!\n\x00" as *const u8 as *const libc::c_char);
     }
     if free_particles.is_null() {
         return;
@@ -2638,9 +2448,8 @@ pub unsafe extern "C" fn CG_BloodPool(
     (*p).alphavel = 0 as i32 as f32;
     (*p).roll = 0 as i32;
     (*p).pshader = pshader;
-    rndSize = (0.4f64
-        + ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 * 0.6f64)
-        as f32;
+    rndSize =
+        (0.4f64 + ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 * 0.6f64) as f32;
     (*p).width = 8 as i32 as f32 * rndSize;
     (*p).height = 8 as i32 as f32 * rndSize;
     (*p).endheight = 16 as i32 as f32 * rndSize;
@@ -2677,10 +2486,7 @@ pub unsafe extern "C" fn CG_ParticleBloodCloud(
     let mut i: i32 = 0;
     dist = 0 as i32 as f32;
     length = VectorLength(dir as *const vec_t);
-    vectoangles(
-        dir as *const vec_t,
-        angles.as_mut_ptr(),
-    );
+    vectoangles(dir as *const vec_t, angles.as_mut_ptr());
     AngleVectors(
         angles.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
@@ -2719,8 +2525,7 @@ pub unsafe extern "C" fn CG_ParticleBloodCloud(
         (*p).pshader = cgs.media.smokePuffShader;
         (*p).endtime = ((cg.time + 350 as i32) as f64
             + 2.0f64
-                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                    - 0.5f64)
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
                 * 100 as i32 as f64) as f32;
         (*p).startfade = cg.time as f32;
         (*p).width = 32 as i32 as f32;
@@ -2794,29 +2599,23 @@ pub unsafe extern "C" fn CG_ParticleSparks(
     (*p).vel[0 as i32 as usize] = ((*p).vel[0 as i32 as usize] as f64
         + 2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 4 as i32 as f64)
-        as vec_t;
+            * 4 as i32 as f64) as vec_t;
     (*p).vel[1 as i32 as usize] = ((*p).vel[1 as i32 as usize] as f64
         + 2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 4 as i32 as f64)
-        as vec_t;
+            * 4 as i32 as f64) as vec_t;
     (*p).vel[2 as i32 as usize] = ((*p).vel[2 as i32 as usize] as f64
         + (20 as i32 as f64
             + 2.0f64
-                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                    - 0.5f64)
+                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
                 * 10 as i32 as f64)
-            * speed as f64)
-        as vec_t;
+            * speed as f64) as vec_t;
     (*p).accel[0 as i32 as usize] = (2.0f64
         * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 4 as i32 as f64)
-        as vec_t;
+        * 4 as i32 as f64) as vec_t;
     (*p).accel[1 as i32 as usize] = (2.0f64
         * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 4 as i32 as f64)
-        as vec_t;
+        * 4 as i32 as f64) as vec_t;
 }
 #[no_mangle]
 
@@ -2838,10 +2637,7 @@ pub unsafe extern "C" fn CG_ParticleDust(
     *dir.offset(1 as i32 as isize) = -*dir.offset(1 as i32 as isize);
     *dir.offset(2 as i32 as isize) = -*dir.offset(2 as i32 as isize);
     length = VectorLength(dir as *const vec_t);
-    vectoangles(
-        dir as *const vec_t,
-        angles.as_mut_ptr(),
-    );
+    vectoangles(dir as *const vec_t, angles.as_mut_ptr());
     AngleVectors(
         angles.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
@@ -2882,14 +2678,12 @@ pub unsafe extern "C" fn CG_ParticleDust(
         if length != 0. {
             (*p).endtime = ((cg.time + 4500 as i32) as f64
                 + 2.0f64
-                    * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                        - 0.5f64)
+                    * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
                     * 3500 as i32 as f64) as f32
         } else {
             (*p).endtime = ((cg.time + 750 as i32) as f64
                 + 2.0f64
-                    * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                        - 0.5f64)
+                    * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
                     * 500 as i32 as f64) as f32
         }
         (*p).startfade = cg.time as f32;
@@ -2910,25 +2704,20 @@ pub unsafe extern "C" fn CG_ParticleDust(
         (*p).org[2 as i32 as usize] = point[2 as i32 as usize];
         (*p).vel[0 as i32 as usize] = (2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 6 as i32 as f64)
-            as vec_t;
+            * 6 as i32 as f64) as vec_t;
         (*p).vel[1 as i32 as usize] = (2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 6 as i32 as f64)
-            as vec_t;
+            * 6 as i32 as f64) as vec_t;
         (*p).vel[2 as i32 as usize] =
             (rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 20 as i32 as f32;
         // RF, add some gravity/randomness
         (*p).accel[0 as i32 as usize] = (2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 3 as i32 as f64)
-            as vec_t;
+            * 3 as i32 as f64) as vec_t;
         (*p).accel[1 as i32 as usize] = (2.0f64
             * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 3 as i32 as f64)
-            as vec_t;
-        (*p).accel[2 as i32 as usize] =
-            (-(40 as i32) as f64 * 0.4f64) as vec_t;
+            * 3 as i32 as f64) as vec_t;
+        (*p).accel[2 as i32 as usize] = (-(40 as i32) as f64 * 0.4f64) as vec_t;
         (*p).accel[2 as i32 as usize] = 0 as i32 as vec_t;
         (*p).accel[1 as i32 as usize] = (*p).accel[2 as i32 as usize];
         (*p).accel[0 as i32 as usize] = (*p).accel[1 as i32 as usize];

@@ -126,18 +126,11 @@ unsafe extern "C" fn start_output_pass(mut cinfo: j_decompress_ptr) {
         if (*cinfo).do_block_smoothing != 0 && smoothing_ok(cinfo) != 0 {
             (*coef).pub_0.decompress_data = Some(
                 decompress_smooth_data
-                    as unsafe extern "C" fn(
-                        _: j_decompress_ptr,
-                        _: JSAMPIMAGE,
-                    ) -> i32,
+                    as unsafe extern "C" fn(_: j_decompress_ptr, _: JSAMPIMAGE) -> i32,
             )
         } else {
             (*coef).pub_0.decompress_data = Some(
-                decompress_data
-                    as unsafe extern "C" fn(
-                        _: j_decompress_ptr,
-                        _: JSAMPIMAGE,
-                    ) -> i32,
+                decompress_data as unsafe extern "C" fn(_: j_decompress_ptr, _: JSAMPIMAGE) -> i32,
             )
         }
     }
@@ -160,10 +153,8 @@ unsafe extern "C" fn decompress_onepass(
 ) -> i32 {
     let mut coef: my_coef_ptr = (*cinfo).coef as my_coef_ptr; /* index of current MCU within row */
     let mut MCU_col_num: JDIMENSION = 0;
-    let mut last_MCU_col: JDIMENSION =
-        (*cinfo).MCUs_per_row.wrapping_sub(1 as i32 as u32);
-    let mut last_iMCU_row: JDIMENSION =
-        (*cinfo).total_iMCU_rows.wrapping_sub(1 as i32 as u32);
+    let mut last_MCU_col: JDIMENSION = (*cinfo).MCUs_per_row.wrapping_sub(1 as i32 as u32);
+    let mut last_iMCU_row: JDIMENSION = (*cinfo).total_iMCU_rows.wrapping_sub(1 as i32 as u32);
     let mut blkn: i32 = 0;
     let mut ci: i32 = 0;
     let mut xindex: i32 = 0;
@@ -173,8 +164,7 @@ unsafe extern "C" fn decompress_onepass(
     let mut output_ptr: JSAMPARRAY = 0 as *mut JSAMPROW;
     let mut start_col: JDIMENSION = 0;
     let mut output_col: JDIMENSION = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut inverse_DCT: inverse_DCT_method_ptr = None;
     /* Loop to process as much as one whole iMCU row */
     yoffset = (*coef).MCU_vert_offset;
@@ -185,9 +175,7 @@ unsafe extern "C" fn decompress_onepass(
             jzero_far(
                 (*coef).MCU_buffer[0 as i32 as usize] as *mut libc::c_void,
                 ((*cinfo).blocks_in_MCU as libc::c_ulong)
-                    .wrapping_mul(
-                        ::std::mem::size_of::<JBLOCK>() as libc::c_ulong
-                    ),
+                    .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
             );
             if Some(
                 (*(*cinfo).entropy)
@@ -237,8 +225,7 @@ unsafe extern "C" fn decompress_onepass(
                                     .expect("non-null function pointer")(
                                     cinfo,
                                     compptr,
-                                    (*coef).MCU_buffer[(blkn + xindex) as usize]
-                                        as JCOEFPTR,
+                                    (*coef).MCU_buffer[(blkn + xindex) as usize] as JCOEFPTR,
                                     output_ptr,
                                     output_col,
                                 );
@@ -304,8 +291,7 @@ unsafe extern "C" fn consume_data(mut cinfo: j_decompress_ptr) -> i32 {
     let mut start_col: JDIMENSION = 0;
     let mut buffer: [JBLOCKARRAY; 4] = [0 as *mut JBLOCKROW; 4];
     let mut buffer_ptr: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     /* Align the virtual buffers for the components used in this scan. */
     ci = 0 as i32;
     while ci < (*cinfo).comps_in_scan {
@@ -407,8 +393,7 @@ unsafe extern "C" fn decompress_data(
     mut output_buf: JSAMPIMAGE,
 ) -> i32 {
     let mut coef: my_coef_ptr = (*cinfo).coef as my_coef_ptr;
-    let mut last_iMCU_row: JDIMENSION =
-        (*cinfo).total_iMCU_rows.wrapping_sub(1 as i32 as u32);
+    let mut last_iMCU_row: JDIMENSION = (*cinfo).total_iMCU_rows.wrapping_sub(1 as i32 as u32);
     let mut block_num: JDIMENSION = 0;
     let mut ci: i32 = 0;
     let mut block_row: i32 = 0;
@@ -417,8 +402,7 @@ unsafe extern "C" fn decompress_data(
     let mut buffer_ptr: JBLOCKROW = 0 as *mut JBLOCK;
     let mut output_ptr: JSAMPARRAY = 0 as *mut JSAMPROW;
     let mut output_col: JDIMENSION = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut inverse_DCT: inverse_DCT_method_ptr = None;
     /* Force some input to be done if we are getting ahead of the input. */
     while (*cinfo).input_scan_number < (*cinfo).output_scan_number
@@ -490,8 +474,7 @@ unsafe extern "C" fn decompress_data(
                     buffer_ptr = buffer_ptr.offset(1);
                     output_col = (output_col as u32)
                         .wrapping_add((*compptr).DCT_h_scaled_size as u32)
-                        as JDIMENSION
-                        as JDIMENSION;
+                        as JDIMENSION as JDIMENSION;
                     block_num = block_num.wrapping_add(1)
                 }
                 output_ptr = output_ptr.offset((*compptr).DCT_v_scaled_size as isize);
@@ -515,15 +498,12 @@ unsafe extern "C" fn decompress_data(
  * more accurately than they really are.
  */
 
-unsafe extern "C" fn smoothing_ok(
-    mut cinfo: j_decompress_ptr,
-) -> boolean {
+unsafe extern "C" fn smoothing_ok(mut cinfo: j_decompress_ptr) -> boolean {
     let mut coef: my_coef_ptr = (*cinfo).coef as my_coef_ptr;
     let mut smoothing_useful: boolean = 0 as i32;
     let mut ci: i32 = 0;
     let mut coefi: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut qtable: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
     let mut coef_bits: *mut i32 = 0 as *mut i32;
     let mut coef_bits_latch: *mut i32 = 0 as *mut i32;
@@ -594,8 +574,7 @@ unsafe extern "C" fn decompress_smooth_data(
     mut output_buf: JSAMPIMAGE,
 ) -> i32 {
     let mut coef: my_coef_ptr = (*cinfo).coef as my_coef_ptr;
-    let mut last_iMCU_row: JDIMENSION =
-        (*cinfo).total_iMCU_rows.wrapping_sub(1 as i32 as u32);
+    let mut last_iMCU_row: JDIMENSION = (*cinfo).total_iMCU_rows.wrapping_sub(1 as i32 as u32);
     let mut block_num: JDIMENSION = 0;
     let mut last_block_column: JDIMENSION = 0;
     let mut ci: i32 = 0;
@@ -608,8 +587,7 @@ unsafe extern "C" fn decompress_smooth_data(
     let mut next_block_row: JBLOCKROW = 0 as *mut JBLOCK;
     let mut output_ptr: JSAMPARRAY = 0 as *mut JSAMPROW;
     let mut output_col: JDIMENSION = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut inverse_DCT: inverse_DCT_method_ptr = None;
     let mut first_row: boolean = 0;
     let mut last_row: boolean = 0;
@@ -648,8 +626,7 @@ unsafe extern "C" fn decompress_smooth_data(
                 1 as i32
             } else {
                 0 as i32
-            }
-                as JDIMENSION;
+            } as JDIMENSION;
             if (*cinfo).input_iMCU_row > (*cinfo).output_iMCU_row.wrapping_add(delta) {
                 break;
             }
@@ -891,8 +868,7 @@ unsafe extern "C" fn decompress_smooth_data(
                     next_block_row = next_block_row.offset(1);
                     output_col = (output_col as u32)
                         .wrapping_add((*compptr).DCT_h_scaled_size as u32)
-                        as JDIMENSION
-                        as JDIMENSION;
+                        as JDIMENSION as JDIMENSION;
                     block_num = block_num.wrapping_add(1)
                 }
                 output_ptr = output_ptr.offset((*compptr).DCT_v_scaled_size as isize);
@@ -932,9 +908,8 @@ pub unsafe extern "C" fn jinit_d_coef_controller(
     (*cinfo).coef = coef as *mut jpeg_d_coef_controller;
     (*coef).pub_0.start_input_pass =
         Some(start_input_pass as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
-    (*coef).pub_0.start_output_pass = Some(
-        start_output_pass as unsafe extern "C" fn(_: j_decompress_ptr) -> (),
-    );
+    (*coef).pub_0.start_output_pass =
+        Some(start_output_pass as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
     (*coef).coef_bits_latch = 0 as *mut i32;
     /* Create the coefficient buffer. */
     if need_full_buffer != 0 {
@@ -943,8 +918,7 @@ pub unsafe extern "C" fn jinit_d_coef_controller(
         /* Note we ask for a pre-zeroed array. */
         let mut ci: i32 = 0;
         let mut access_rows: i32 = 0;
-        let mut compptr: *mut jpeg_component_info =
-            0 as *mut jpeg_component_info;
+        let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
         ci = 0 as i32;
         compptr = (*cinfo).comp_info;
         while ci < (*cinfo).num_components {
@@ -975,15 +949,10 @@ pub unsafe extern "C" fn jinit_d_coef_controller(
             ci += 1;
             compptr = compptr.offset(1)
         }
-        (*coef).pub_0.consume_data = Some(
-            consume_data as unsafe extern "C" fn(_: j_decompress_ptr) -> i32,
-        );
+        (*coef).pub_0.consume_data =
+            Some(consume_data as unsafe extern "C" fn(_: j_decompress_ptr) -> i32);
         (*coef).pub_0.decompress_data = Some(
-            decompress_data
-                as unsafe extern "C" fn(
-                    _: j_decompress_ptr,
-                    _: JSAMPIMAGE,
-                ) -> i32,
+            decompress_data as unsafe extern "C" fn(_: j_decompress_ptr, _: JSAMPIMAGE) -> i32,
         );
         (*coef).pub_0.coef_arrays = (*coef).whole_image.as_mut_ptr()
     } else {
@@ -1006,16 +975,10 @@ pub unsafe extern "C" fn jinit_d_coef_controller(
             (*coef).MCU_buffer[i as usize] = buffer.offset(i as isize);
             i += 1
         }
-        (*coef).pub_0.consume_data = Some(
-            dummy_consume_data
-                as unsafe extern "C" fn(_: j_decompress_ptr) -> i32,
-        );
+        (*coef).pub_0.consume_data =
+            Some(dummy_consume_data as unsafe extern "C" fn(_: j_decompress_ptr) -> i32);
         (*coef).pub_0.decompress_data = Some(
-            decompress_onepass
-                as unsafe extern "C" fn(
-                    _: j_decompress_ptr,
-                    _: JSAMPIMAGE,
-                ) -> i32,
+            decompress_onepass as unsafe extern "C" fn(_: j_decompress_ptr, _: JSAMPIMAGE) -> i32,
         );
         (*coef).pub_0.coef_arrays = 0 as *mut jvirt_barray_ptr
     };

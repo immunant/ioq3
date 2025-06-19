@@ -124,10 +124,8 @@ pub unsafe extern "C" fn _ve_envelope_init(
     mut e: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup,
     mut vi: *mut vorbis_info,
 ) {
-    let mut ci: *mut codec_setup_info =
-        (*vi).codec_setup as *mut codec_setup_info; /* not random */
-    let mut gi: *mut vorbis_info_psy_global =
-        &mut (*ci).psy_g_param;
+    let mut ci: *mut codec_setup_info = (*vi).codec_setup as *mut codec_setup_info; /* not random */
+    let mut gi: *mut vorbis_info_psy_global = &mut (*ci).psy_g_param;
     let mut ch: i32 = (*vi).channels;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -142,10 +140,7 @@ pub unsafe extern "C" fn _ve_envelope_init(
         n as libc::c_ulong,
         ::std::mem::size_of::<f32>() as libc::c_ulong,
     ) as *mut f32;
-    mdct_init(
-        &mut (*e).mdct as *mut _ as *mut mdct_lookup,
-        n,
-    );
+    mdct_init(&mut (*e).mdct as *mut _ as *mut mdct_lookup, n);
     i = 0 as i32;
     while i < n {
         *(*e).mdct_win.offset(i as isize) =
@@ -201,9 +196,7 @@ pub unsafe extern "C" fn _ve_envelope_clear(
     mut e: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup,
 ) {
     let mut i: i32 = 0;
-    mdct_clear(
-        &mut (*e).mdct as *mut _ as *mut mdct_lookup,
-    );
+    mdct_clear(&mut (*e).mdct as *mut _ as *mut mdct_lookup);
     i = 0 as i32;
     while i < 7 as i32 {
         libc::free((*e).band[i as usize].window as *mut libc::c_void);
@@ -265,11 +258,7 @@ unsafe extern "C" fn _ve_amp(
         *vec.offset(i as isize) = *data.offset(i as isize) * *(*ve).mdct_win.offset(i as isize);
         i += 1
     }
-    mdct_forward(
-        &mut (*ve).mdct as *mut _ as *mut mdct_lookup,
-        vec,
-        vec,
-    );
+    mdct_forward(&mut (*ve).mdct as *mut _ as *mut mdct_lookup, vec, vec);
     /*_analysis_output_always("mdct",seq2,vec,n/2,0,1,0); */
     /* near-DC spreading function; this has nothing to do with
     psychoacoustics, just sidelobe leakage and window size */
@@ -394,14 +383,10 @@ unsafe extern "C" fn _ve_amp(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn _ve_envelope_search(
-    mut v: *mut vorbis_dsp_state,
-) -> isize {
+pub unsafe extern "C" fn _ve_envelope_search(mut v: *mut vorbis_dsp_state) -> isize {
     let mut vi: *mut vorbis_info = (*v).vi;
-    let mut ci: *mut codec_setup_info =
-        (*vi).codec_setup as *mut codec_setup_info;
-    let mut gi: *mut vorbis_info_psy_global =
-        &mut (*ci).psy_g_param;
+    let mut ci: *mut codec_setup_info = (*vi).codec_setup as *mut codec_setup_info;
+    let mut gi: *mut vorbis_info_psy_global = &mut (*ci).psy_g_param;
     let mut ve: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup =
         (*((*v).backend_state as *mut private_state)).ve;
     let mut i: isize = 0;
@@ -489,8 +474,7 @@ pub unsafe extern "C" fn _ve_envelope_mark(mut v: *mut vorbis_dsp_state) -> i32 
     let mut ve: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup =
         (*((*v).backend_state as *mut private_state)).ve;
     let mut vi: *mut vorbis_info = (*v).vi;
-    let mut ci: *mut codec_setup_info =
-        (*vi).codec_setup as *mut codec_setup_info;
+    let mut ci: *mut codec_setup_info = (*vi).codec_setup as *mut codec_setup_info;
     let mut centerW: isize = (*v).centerW;
     let mut beginW: isize = centerW - (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize;
     let mut endW: isize = centerW + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize;

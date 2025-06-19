@@ -157,29 +157,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // cl_scrn.c -- master for refresh, status bar, console, chat, notify, etc
 #[no_mangle]
 
-pub static mut scr_initialized: qboolean =
-    qfalse;
+pub static mut scr_initialized: qboolean = qfalse;
 // ready to draw
 #[no_mangle]
 
-pub static mut cl_timegraph: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_timegraph: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_debuggraph: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_debuggraph: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_graphheight: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_graphheight: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_graphscale: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_graphscale: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut cl_graphshift: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut cl_graphshift: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 /*
 ================
 SCR_DrawNamedPic
@@ -197,13 +191,9 @@ pub unsafe extern "C" fn SCR_DrawNamedPic(
     mut picname: *const libc::c_char,
 ) {
     let mut hShader: qhandle_t = 0;
-    hShader = re
-        .RegisterShader
-        .expect("non-null function pointer")(picname);
+    hShader = re.RegisterShader.expect("non-null function pointer")(picname);
     SCR_AdjustFrom640(&mut x, &mut y, &mut width, &mut height);
-    re
-        .DrawStretchPic
-        .expect("non-null function pointer")(
+    re.DrawStretchPic.expect("non-null function pointer")(
         x,
         y,
         width,
@@ -264,13 +254,9 @@ pub unsafe extern "C" fn SCR_FillRect(
     mut height: f32,
     mut color: *const f32,
 ) {
-    re
-        .SetColor
-        .expect("non-null function pointer")(color);
+    re.SetColor.expect("non-null function pointer")(color);
     SCR_AdjustFrom640(&mut x, &mut y, &mut width, &mut height);
-    re
-        .DrawStretchPic
-        .expect("non-null function pointer")(
+    re.DrawStretchPic.expect("non-null function pointer")(
         x,
         y,
         width,
@@ -281,9 +267,7 @@ pub unsafe extern "C" fn SCR_FillRect(
         0 as i32 as f32,
         cls.whiteShader,
     );
-    re
-        .SetColor
-        .expect("non-null function pointer")(0 as *const f32);
+    re.SetColor.expect("non-null function pointer")(0 as *const f32);
 }
 /*
 ================
@@ -302,9 +286,7 @@ pub unsafe extern "C" fn SCR_DrawPic(
     mut hShader: qhandle_t,
 ) {
     SCR_AdjustFrom640(&mut x, &mut y, &mut width, &mut height);
-    re
-        .DrawStretchPic
-        .expect("non-null function pointer")(
+    re.DrawStretchPic.expect("non-null function pointer")(
         x,
         y,
         width,
@@ -347,9 +329,7 @@ unsafe extern "C" fn SCR_DrawChar(mut x: i32, mut y: i32, mut size: f32, mut ch:
     frow = (row as f64 * 0.0625f64) as f32;
     fcol = (col as f64 * 0.0625f64) as f32;
     size = 0.0625f64 as f32;
-    re
-        .DrawStretchPic
-        .expect("non-null function pointer")(
+    re.DrawStretchPic.expect("non-null function pointer")(
         ax,
         ay,
         aw,
@@ -385,9 +365,7 @@ pub unsafe extern "C" fn SCR_DrawSmallChar(mut x: i32, mut y: i32, mut ch: i32) 
     frow = (row as f64 * 0.0625f64) as f32;
     fcol = (col as f64 * 0.0625f64) as f32;
     size = 0.0625f64 as f32;
-    re
-        .DrawStretchPic
-        .expect("non-null function pointer")(
+    re.DrawStretchPic.expect("non-null function pointer")(
         x as f32,
         y as f32,
         8 as i32 as f32,
@@ -428,15 +406,11 @@ pub unsafe extern "C" fn SCR_DrawStringExt(
     color[1 as i32 as usize] = color[2 as i32 as usize];
     color[0 as i32 as usize] = color[1 as i32 as usize];
     color[3 as i32 as usize] = *setColor.offset(3 as i32 as isize);
-    re
-        .SetColor
-        .expect("non-null function pointer")(color.as_mut_ptr());
+    re.SetColor.expect("non-null function pointer")(color.as_mut_ptr());
     s = string;
     xx = x;
     while *s != 0 {
-        if noColorEscape as u64 == 0
-            && Q_IsColorString(s) as u32 != 0
-        {
+        if noColorEscape as u64 == 0 && Q_IsColorString(s) as u32 != 0 {
             s = s.offset(2 as i32 as isize)
         } else {
             SCR_DrawChar(xx + 2 as i32, y + 2 as i32, size, *s as i32);
@@ -447,9 +421,7 @@ pub unsafe extern "C" fn SCR_DrawStringExt(
     // draw the colored text
     s = string;
     xx = x;
-    re
-        .SetColor
-        .expect("non-null function pointer")(setColor);
+    re.SetColor.expect("non-null function pointer")(setColor);
     while *s != 0 {
         if Q_IsColorString(s) as u64 != 0 {
             if forceColor as u64 == 0 {
@@ -461,9 +433,7 @@ pub unsafe extern "C" fn SCR_DrawStringExt(
                     ::std::mem::size_of::<vec4_t>() as libc::c_ulong,
                 );
                 color[3 as i32 as usize] = *setColor.offset(3 as i32 as isize);
-                re
-                    .SetColor
-                    .expect("non-null function pointer")(color.as_mut_ptr());
+                re.SetColor.expect("non-null function pointer")(color.as_mut_ptr());
             }
             if noColorEscape as u64 == 0 {
                 s = s.offset(2 as i32 as isize);
@@ -474,9 +444,7 @@ pub unsafe extern "C" fn SCR_DrawStringExt(
         xx = (xx as f32 + size) as i32;
         s = s.offset(1)
     }
-    re
-        .SetColor
-        .expect("non-null function pointer")(0 as *const f32);
+    re.SetColor.expect("non-null function pointer")(0 as *const f32);
 }
 #[no_mangle]
 
@@ -511,15 +479,7 @@ pub unsafe extern "C" fn SCR_DrawBigStringColor(
     mut color: *mut vec_t,
     mut noColorEscape: qboolean,
 ) {
-    SCR_DrawStringExt(
-        x,
-        y,
-        16 as i32 as f32,
-        s,
-        color,
-        qtrue,
-        noColorEscape,
-    );
+    SCR_DrawStringExt(x, y, 16 as i32 as f32, s, color, qtrue, noColorEscape);
 }
 // returns in virtual 640x480 coordinates
 // draws a string with embedded color control characters with fade
@@ -548,9 +508,7 @@ pub unsafe extern "C" fn SCR_DrawSmallStringExt(
     // draw the colored text
     s = string;
     xx = x;
-    re
-        .SetColor
-        .expect("non-null function pointer")(setColor);
+    re.SetColor.expect("non-null function pointer")(setColor);
     while *s != 0 {
         if Q_IsColorString(s) as u64 != 0 {
             if forceColor as u64 == 0 {
@@ -562,9 +520,7 @@ pub unsafe extern "C" fn SCR_DrawSmallStringExt(
                     ::std::mem::size_of::<vec4_t>() as libc::c_ulong,
                 );
                 color[3 as i32 as usize] = *setColor.offset(3 as i32 as isize);
-                re
-                    .SetColor
-                    .expect("non-null function pointer")(color.as_mut_ptr());
+                re.SetColor.expect("non-null function pointer")(color.as_mut_ptr());
             }
             if noColorEscape as u64 == 0 {
                 s = s.offset(2 as i32 as isize);
@@ -575,9 +531,7 @@ pub unsafe extern "C" fn SCR_DrawSmallStringExt(
         xx += 8 as i32;
         s = s.offset(1)
     }
-    re
-        .SetColor
-        .expect("non-null function pointer")(0 as *const f32);
+    re.SetColor.expect("non-null function pointer")(0 as *const f32);
 }
 /*
 ** SCR_Strlen -- skips color escape codes
@@ -658,9 +612,7 @@ pub unsafe extern "C" fn SCR_DrawVoipMeter() {
         if (*cl_voipSend).integer == 0 {
             return;
         } else {
-            if clc.state as u32
-                != CA_ACTIVE as i32 as u32
-            {
+            if clc.state as u32 != CA_ACTIVE as i32 as u32 {
                 return;
             } else {
                 if clc.voipEnabled as u64 == 0 {
@@ -1097,14 +1049,8 @@ pub unsafe extern "C" fn SCR_DrawDebugGraph() {
     w = cls.glconfig.vidWidth;
     x = 0 as i32;
     y = cls.glconfig.vidHeight;
-    re
-        .SetColor
-        .expect("non-null function pointer")(
-        g_color_table[0 as i32 as usize].as_mut_ptr(),
-    );
-    re
-        .DrawStretchPic
-        .expect("non-null function pointer")(
+    re.SetColor.expect("non-null function pointer")(g_color_table[0 as i32 as usize].as_mut_ptr());
+    re.DrawStretchPic.expect("non-null function pointer")(
         x as f32,
         (y - (*cl_graphheight).integer) as f32,
         w as f32,
@@ -1115,9 +1061,7 @@ pub unsafe extern "C" fn SCR_DrawDebugGraph() {
         0 as i32 as f32,
         cls.whiteShader,
     );
-    re
-        .SetColor
-        .expect("non-null function pointer")(0 as *const f32);
+    re.SetColor.expect("non-null function pointer")(0 as *const f32);
     a = 0 as i32;
     while a < w {
         i = (::std::mem::size_of::<[f32; 1024]>() as libc::c_ulong)
@@ -1142,9 +1086,7 @@ pub unsafe extern "C" fn SCR_DrawDebugGraph() {
                 as f32
         }
         h = v as i32 % (*cl_graphheight).integer;
-        re
-            .DrawStretchPic
-            .expect("non-null function pointer")(
+        re.DrawStretchPic.expect("non-null function pointer")(
             (x + w - 1 as i32 - a) as f32,
             (y - h) as f32,
             1 as i32 as f32,
@@ -1205,33 +1147,18 @@ This will be called twice if rendering in stereo mode
 #[no_mangle]
 
 pub unsafe extern "C" fn SCR_DrawScreenField(mut stereoFrame: stereoFrame_t) {
-    let mut uiFullscreen: qboolean =
-        qfalse;
-    re
-        .BeginFrame
-        .expect("non-null function pointer")(stereoFrame);
-    uiFullscreen = (!uivm.is_null()
-        && VM_Call(
-            uivm,
-            UI_IS_FULLSCREEN as i32,
-        ) != 0) as i32 as qboolean;
+    let mut uiFullscreen: qboolean = qfalse;
+    re.BeginFrame.expect("non-null function pointer")(stereoFrame);
+    uiFullscreen =
+        (!uivm.is_null() && VM_Call(uivm, UI_IS_FULLSCREEN as i32) != 0) as i32 as qboolean;
     // wide aspect ratio screens need to have the sides cleared
     // unless they are displaying game renderings
-    if uiFullscreen as u32 != 0
-        || (clc.state as u32)
-            < CA_LOADING as i32 as u32
-    {
-        if cls.glconfig.vidWidth * 480 as i32
-            > cls.glconfig.vidHeight * 640 as i32
-        {
-            re
-                .SetColor
-                .expect("non-null function pointer")(
+    if uiFullscreen as u32 != 0 || (clc.state as u32) < CA_LOADING as i32 as u32 {
+        if cls.glconfig.vidWidth * 480 as i32 > cls.glconfig.vidHeight * 640 as i32 {
+            re.SetColor.expect("non-null function pointer")(
                 g_color_table[0 as i32 as usize].as_mut_ptr(),
             );
-            re
-                .DrawStretchPic
-                .expect("non-null function pointer")(
+            re.DrawStretchPic.expect("non-null function pointer")(
                 0 as i32 as f32,
                 0 as i32 as f32,
                 cls.glconfig.vidWidth as f32,
@@ -1242,9 +1169,7 @@ pub unsafe extern "C" fn SCR_DrawScreenField(mut stereoFrame: stereoFrame_t) {
                 0 as i32 as f32,
                 cls.whiteShader,
             );
-            re
-                .SetColor
-                .expect("non-null function pointer")(0 as *const f32);
+            re.SetColor.expect("non-null function pointer")(0 as *const f32);
         }
     }
     // if the menu is going to cover the entire screen, we
@@ -1257,25 +1182,13 @@ pub unsafe extern "C" fn SCR_DrawScreenField(mut stereoFrame: stereoFrame_t) {
             1 => {
                 // force menu up
                 crate::src::client::snd_main::S_StopAllSounds();
-                VM_Call(
-                    uivm,
-                    UI_SET_ACTIVE_MENU as i32,
-                    UIMENU_MAIN as i32,
-                );
+                VM_Call(uivm, UI_SET_ACTIVE_MENU as i32, UIMENU_MAIN as i32);
             }
             3 | 4 | 5 => {
                 // connecting clients will only show the connection dialog
                 // refresh to update the time
-                VM_Call(
-                    uivm,
-                    UI_REFRESH as i32,
-                    cls.realtime,
-                );
-                VM_Call(
-                    uivm,
-                    UI_DRAW_CONNECT_SCREEN as i32,
-                    qfalse as i32,
-                );
+                VM_Call(uivm, UI_REFRESH as i32, cls.realtime);
+                VM_Call(uivm, UI_DRAW_CONNECT_SCREEN as i32, qfalse as i32);
             }
             6 | 7 => {
                 // draw the game information screen and loading progress
@@ -1283,16 +1196,8 @@ pub unsafe extern "C" fn SCR_DrawScreenField(mut stereoFrame: stereoFrame_t) {
                 // also draw the connection information, so it doesn't
                 // flash away too briefly on local or lan games
                 // refresh to update the time
-                VM_Call(
-                    uivm,
-                    UI_REFRESH as i32,
-                    cls.realtime,
-                );
-                VM_Call(
-                    uivm,
-                    UI_DRAW_CONNECT_SCREEN as i32,
-                    qtrue as i32,
-                );
+                VM_Call(uivm, UI_REFRESH as i32, cls.realtime);
+                VM_Call(uivm, UI_DRAW_CONNECT_SCREEN as i32, qtrue as i32);
             }
             8 => {
                 // always supply STEREO_CENTER as vieworg offset is now done by the engine.
@@ -1309,21 +1214,13 @@ pub unsafe extern "C" fn SCR_DrawScreenField(mut stereoFrame: stereoFrame_t) {
         }
     }
     // the menu draws next
-    if Key_GetCatcher() & 0x2 as i32 != 0
-        && !uivm.is_null()
-    {
-        VM_Call(
-            uivm,
-            UI_REFRESH as i32,
-            cls.realtime,
-        );
+    if Key_GetCatcher() & 0x2 as i32 != 0 && !uivm.is_null() {
+        VM_Call(uivm, UI_REFRESH as i32, cls.realtime);
     }
     // console draws next
     Con_DrawConsole();
     // debug graph can be drawn on top of anything
-    if (*cl_debuggraph).integer != 0
-        || (*cl_timegraph).integer != 0
-        || (*cl_debugMove).integer != 0
+    if (*cl_debuggraph).integer != 0 || (*cl_timegraph).integer != 0 || (*cl_debugMove).integer != 0
     {
         SCR_DrawDebugGraph();
     };
@@ -1544,33 +1441,21 @@ pub unsafe extern "C" fn SCR_UpdateScreen() {
     recursive = 1 as i32;
     // If there is no VM, there are also no rendering commands issued. Stop the renderer in
     // that case.
-    if !uivm.is_null()
-        || (*com_dedicated).integer != 0
-    {
+    if !uivm.is_null() || (*com_dedicated).integer != 0 {
         // XXX
-        let mut in_anaglyphMode: i32 = Cvar_VariableIntegerValue(
-            b"r_anaglyphMode\x00" as *const u8 as *const libc::c_char,
-        );
+        let mut in_anaglyphMode: i32 =
+            Cvar_VariableIntegerValue(b"r_anaglyphMode\x00" as *const u8 as *const libc::c_char);
         // if running in stereo, we need to draw the frame twice
-        if cls.glconfig.stereoEnabled as u32 != 0
-            || in_anaglyphMode != 0
-        {
+        if cls.glconfig.stereoEnabled as u32 != 0 || in_anaglyphMode != 0 {
             SCR_DrawScreenField(STEREO_LEFT);
             SCR_DrawScreenField(STEREO_RIGHT);
         } else {
             SCR_DrawScreenField(STEREO_CENTER);
         }
         if (*com_speeds).integer != 0 {
-            re
-                .EndFrame
-                .expect("non-null function pointer")(
-                &mut time_frontend,
-                &mut time_backend,
-            );
+            re.EndFrame.expect("non-null function pointer")(&mut time_frontend, &mut time_backend);
         } else {
-            re
-                .EndFrame
-                .expect("non-null function pointer")(0 as *mut i32, 0 as *mut i32);
+            re.EndFrame.expect("non-null function pointer")(0 as *mut i32, 0 as *mut i32);
         }
     }
     recursive = 0 as i32;

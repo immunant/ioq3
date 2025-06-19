@@ -74,8 +74,7 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -97,8 +96,7 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -124,8 +122,7 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -151,8 +148,7 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -178,8 +174,7 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -205,8 +200,7 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -232,8 +226,7 @@ static mut s_specifyserver: specifyserver_t = specifyserver_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -435,7 +428,5 @@ UI_SpecifyServerMenu
 
 pub unsafe extern "C" fn UI_SpecifyServerMenu() {
     SpecifyServer_MenuInit();
-    UI_PushMenu(
-        &mut s_specifyserver.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_specifyserver.menu as *mut _ as *mut _tag_menuframework);
 }

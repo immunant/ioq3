@@ -148,8 +148,7 @@ unsafe extern "C" fn exp_rotation1(
         *fresh0 = c * x1 + ms * x2;
         i += 1
     }
-    Xptr = &mut *X.offset((len - 2 as i32 * stride - 1 as i32) as isize)
-        as *mut celt_norm;
+    Xptr = &mut *X.offset((len - 2 as i32 * stride - 1 as i32) as isize) as *mut celt_norm;
     i = len - 2 as i32 * stride - 1 as i32;
     while i >= 0 as i32 {
         let mut x1_0: celt_norm = 0.;
@@ -186,8 +185,7 @@ pub unsafe extern "C" fn exp_rotation(
         return;
     }
     factor = SPREAD_FACTOR[(spread - 1 as i32) as usize];
-    gain =
-        1.0f32 * len as opus_val32 / (len + factor * K) as opus_val32;
+    gain = 1.0f32 * len as opus_val32 / (len + factor * K) as opus_val32;
     theta = 0.5f32 * (gain * gain);
     c = crate::stdlib::cos((0.5f32 * 3.141592653f32 * theta) as f64) as f32;
     s = crate::stdlib::cos((0.5f32 * 3.141592653f32 * (1.0f32 - theta)) as f64) as f32;
@@ -201,10 +199,7 @@ pub unsafe extern "C" fn exp_rotation(
     }
     /*NOTE: As a minor optimization, we could be passing around log2(B), not B, for both this and for
     extract_collapse_mask().*/
-    len = celt_udiv(
-        len as opus_uint32,
-        stride as opus_uint32,
-    ) as i32;
+    len = celt_udiv(len as opus_uint32, stride as opus_uint32) as i32;
     i = 0 as i32;
     while i < stride {
         if dir < 0 as i32 {
@@ -255,10 +250,7 @@ unsafe extern "C" fn extract_collapse_mask(mut iy: *mut i32, mut N: i32, mut B: 
     }
     /*NOTE: As a minor optimization, we could be passing around log2(B), not B, for both this and for
     exp_rotation().*/
-    N0 = celt_udiv(
-        N as opus_uint32,
-        B as opus_uint32,
-    ) as i32;
+    N0 = celt_udiv(N as opus_uint32, B as opus_uint32) as i32;
     collapse_mask = 0 as i32 as u32;
     i = 0 as i32;
     loop {
@@ -299,8 +291,8 @@ pub unsafe extern "C" fn op_pvq_search_c(
     let mut yy: opus_val16 = 0.;
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<celt_norm>() as libc::c_ulong)
-            .wrapping_mul(N as libc::c_ulong) as usize,
+        (::std::mem::size_of::<celt_norm>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong)
+            as usize,
     );
     y = fresh2.as_mut_ptr() as *mut celt_norm;
     let mut fresh3 = ::std::vec::from_elem(
@@ -478,12 +470,7 @@ pub unsafe extern "C" fn alg_quant(
     iy = fresh7.as_mut_ptr() as *mut i32;
     exp_rotation(X, N, 1 as i32, B, K, spread);
     yy = op_pvq_search_c(X, iy, K, N, arch);
-    crate::src::opus_1_2_1::celt::cwrs::encode_pulses(
-        iy,
-        N,
-        K,
-        enc as *mut ec_ctx,
-    );
+    crate::src::opus_1_2_1::celt::cwrs::encode_pulses(iy, N, K, enc as *mut ec_ctx);
     if resynth != 0 {
         normalise_residual(iy, X, N, yy, gain);
         exp_rotation(X, N, -(1 as i32), B, K, spread);
@@ -512,12 +499,7 @@ pub unsafe extern "C" fn alg_unquant(
         (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong) as usize,
     );
     iy = fresh8.as_mut_ptr() as *mut i32;
-    Ryy = crate::src::opus_1_2_1::celt::cwrs::decode_pulses(
-        iy,
-        N,
-        K,
-        dec as *mut ec_ctx,
-    );
+    Ryy = crate::src::opus_1_2_1::celt::cwrs::decode_pulses(iy, N, K, dec as *mut ec_ctx);
     normalise_residual(iy, X, N, Ryy, gain);
     exp_rotation(X, N, -(1 as i32), B, K, spread);
     collapse_mask = extract_collapse_mask(iy, N, B);

@@ -1143,20 +1143,16 @@ BG_FindItemForPowerup
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BG_FindItemForPowerup(
-    mut pw: powerup_t,
-) -> *mut gitem_t {
+pub unsafe extern "C" fn BG_FindItemForPowerup(mut pw: powerup_t) -> *mut gitem_t {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < bg_numItems {
         if (bg_itemlist[i as usize].giType as u32 == IT_POWERUP as i32 as u32
             || bg_itemlist[i as usize].giType as u32 == IT_TEAM as i32 as u32
-            || bg_itemlist[i as usize].giType as u32
-                == IT_PERSISTANT_POWERUP as i32 as u32)
+            || bg_itemlist[i as usize].giType as u32 == IT_PERSISTANT_POWERUP as i32 as u32)
             && bg_itemlist[i as usize].giTag as u32 == pw as u32
         {
-            return &mut *bg_itemlist.as_mut_ptr().offset(i as isize)
-                as *mut gitem_t;
+            return &mut *bg_itemlist.as_mut_ptr().offset(i as isize) as *mut gitem_t;
         }
         i += 1
     }
@@ -1169,17 +1165,14 @@ BG_FindItemForHoldable
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BG_FindItemForHoldable(
-    mut pw: holdable_t,
-) -> *mut gitem_t {
+pub unsafe extern "C" fn BG_FindItemForHoldable(mut pw: holdable_t) -> *mut gitem_t {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < bg_numItems {
         if bg_itemlist[i as usize].giType as u32 == IT_HOLDABLE as i32 as u32
             && bg_itemlist[i as usize].giTag as u32 == pw as u32
         {
-            return &mut *bg_itemlist.as_mut_ptr().offset(i as isize)
-                as *mut gitem_t;
+            return &mut *bg_itemlist.as_mut_ptr().offset(i as isize) as *mut gitem_t;
         }
         i += 1
     }
@@ -1196,15 +1189,11 @@ BG_FindItemForWeapon
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BG_FindItemForWeapon(
-    mut weapon: weapon_t,
-) -> *mut gitem_t {
+pub unsafe extern "C" fn BG_FindItemForWeapon(mut weapon: weapon_t) -> *mut gitem_t {
     let mut it: *mut gitem_t = 0 as *mut gitem_t;
     it = bg_itemlist.as_mut_ptr().offset(1 as i32 as isize);
     while !(*it).classname.is_null() {
-        if (*it).giType as u32 == IT_WEAPON as i32 as u32
-            && (*it).giTag as u32 == weapon as u32
-        {
+        if (*it).giType as u32 == IT_WEAPON as i32 as u32 && (*it).giTag as u32 == weapon as u32 {
             return it;
         }
         it = it.offset(1)
@@ -1224,9 +1213,7 @@ BG_FindItem
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BG_FindItem(
-    mut pickupName: *const libc::c_char,
-) -> *mut gitem_t {
+pub unsafe extern "C" fn BG_FindItem(mut pickupName: *const libc::c_char) -> *mut gitem_t {
     let mut it: *mut gitem_t = 0 as *mut gitem_t;
     it = bg_itemlist.as_mut_ptr().offset(1 as i32 as isize);
     while !(*it).classname.is_null() {
@@ -1288,8 +1275,7 @@ pub unsafe extern "C" fn BG_CanItemBeGrabbed(
             b"BG_CanItemBeGrabbed: index out of range\x00" as *const u8 as *const libc::c_char,
         );
     }
-    item = &mut *bg_itemlist.as_mut_ptr().offset((*ent).modelindex as isize)
-        as *mut gitem_t;
+    item = &mut *bg_itemlist.as_mut_ptr().offset((*ent).modelindex as isize) as *mut gitem_t;
     match (*item).giType as u32 {
         1 => return qtrue,
         2 => {
@@ -1332,23 +1318,17 @@ pub unsafe extern "C" fn BG_CanItemBeGrabbed(
                 // ent->modelindex2 is non-zero on items if they are dropped
                 // we need to know this because we can pick up our dropped flag (and return it)
                 // but we can't pick up our flag at base
-                if (*ps).persistant[PERS_TEAM as i32 as usize]
-                    == TEAM_RED as i32
-                {
+                if (*ps).persistant[PERS_TEAM as i32 as usize] == TEAM_RED as i32 {
                     if (*item).giTag == PW_BLUEFLAG as i32
-                        || (*item).giTag == PW_REDFLAG as i32
-                            && (*ent).modelindex2 != 0
+                        || (*item).giTag == PW_REDFLAG as i32 && (*ent).modelindex2 != 0
                         || (*item).giTag == PW_REDFLAG as i32
                             && (*ps).powerups[PW_BLUEFLAG as i32 as usize] != 0
                     {
                         return qtrue;
                     }
-                } else if (*ps).persistant[PERS_TEAM as i32 as usize]
-                    == TEAM_BLUE as i32
-                {
+                } else if (*ps).persistant[PERS_TEAM as i32 as usize] == TEAM_BLUE as i32 {
                     if (*item).giTag == PW_REDFLAG as i32
-                        || (*item).giTag == PW_BLUEFLAG as i32
-                            && (*ent).modelindex2 != 0
+                        || (*item).giTag == PW_BLUEFLAG as i32 && (*ent).modelindex2 != 0
                         || (*item).giTag == PW_BLUEFLAG as i32
                             && (*ps).powerups[PW_REDFLAG as i32 as usize] != 0
                     {
@@ -1653,9 +1633,7 @@ pub unsafe extern "C" fn BG_TouchJumpPad(
             (*jumppad).origin2.as_mut_ptr() as *const vec_t,
             angles.as_mut_ptr(),
         );
-        p = crate::stdlib::fabs(AngleNormalize180(
-            angles[0 as i32 as usize],
-        ) as f64) as f32;
+        p = crate::stdlib::fabs(AngleNormalize180(angles[0 as i32 as usize]) as f64) as f32;
         if p < 45 as i32 as f32 {
             effectNum = 0 as i32
         } else {
@@ -1687,9 +1665,7 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityState(
     mut snap: qboolean,
 ) {
     let mut i: i32 = 0;
-    if (*ps).pm_type == PM_INTERMISSION as i32
-        || (*ps).pm_type == PM_SPECTATOR as i32
-    {
+    if (*ps).pm_type == PM_INTERMISSION as i32 || (*ps).pm_type == PM_SPECTATOR as i32 {
         (*s).eType = ET_INVISIBLE as i32
     } else if (*ps).stats[STAT_HEALTH as i32 as usize] <= -(40 as i32) {
         (*s).eType = ET_INVISIBLE as i32
@@ -1702,12 +1678,9 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityState(
     (*s).pos.trBase[1 as i32 as usize] = (*ps).origin[1 as i32 as usize];
     (*s).pos.trBase[2 as i32 as usize] = (*ps).origin[2 as i32 as usize];
     if snap as u64 != 0 {
-        (*s).pos.trBase[0 as i32 as usize] =
-            (*s).pos.trBase[0 as i32 as usize] as i32 as vec_t;
-        (*s).pos.trBase[1 as i32 as usize] =
-            (*s).pos.trBase[1 as i32 as usize] as i32 as vec_t;
-        (*s).pos.trBase[2 as i32 as usize] =
-            (*s).pos.trBase[2 as i32 as usize] as i32 as vec_t
+        (*s).pos.trBase[0 as i32 as usize] = (*s).pos.trBase[0 as i32 as usize] as i32 as vec_t;
+        (*s).pos.trBase[1 as i32 as usize] = (*s).pos.trBase[1 as i32 as usize] as i32 as vec_t;
+        (*s).pos.trBase[2 as i32 as usize] = (*s).pos.trBase[2 as i32 as usize] as i32 as vec_t
     }
     // set the trDelta for flag direction
     (*s).pos.trDelta[0 as i32 as usize] = (*ps).velocity[0 as i32 as usize]; // ET_PLAYER looks here instead of at number
@@ -1718,12 +1691,9 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityState(
     (*s).apos.trBase[1 as i32 as usize] = (*ps).viewangles[1 as i32 as usize];
     (*s).apos.trBase[2 as i32 as usize] = (*ps).viewangles[2 as i32 as usize];
     if snap as u64 != 0 {
-        (*s).apos.trBase[0 as i32 as usize] =
-            (*s).apos.trBase[0 as i32 as usize] as i32 as vec_t;
-        (*s).apos.trBase[1 as i32 as usize] =
-            (*s).apos.trBase[1 as i32 as usize] as i32 as vec_t;
-        (*s).apos.trBase[2 as i32 as usize] =
-            (*s).apos.trBase[2 as i32 as usize] as i32 as vec_t
+        (*s).apos.trBase[0 as i32 as usize] = (*s).apos.trBase[0 as i32 as usize] as i32 as vec_t;
+        (*s).apos.trBase[1 as i32 as usize] = (*s).apos.trBase[1 as i32 as usize] as i32 as vec_t;
+        (*s).apos.trBase[2 as i32 as usize] = (*s).apos.trBase[2 as i32 as usize] as i32 as vec_t
     }
     (*s).angles2[1 as i32 as usize] = (*ps).movementDir as vec_t;
     (*s).legsAnim = (*ps).legsAnim;
@@ -1780,9 +1750,7 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityStateExtraPolate(
     mut snap: qboolean,
 ) {
     let mut i: i32 = 0;
-    if (*ps).pm_type == PM_INTERMISSION as i32
-        || (*ps).pm_type == PM_SPECTATOR as i32
-    {
+    if (*ps).pm_type == PM_INTERMISSION as i32 || (*ps).pm_type == PM_SPECTATOR as i32 {
         (*s).eType = ET_INVISIBLE as i32
     } else if (*ps).stats[STAT_HEALTH as i32 as usize] <= -(40 as i32) {
         (*s).eType = ET_INVISIBLE as i32
@@ -1795,12 +1763,9 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityStateExtraPolate(
     (*s).pos.trBase[1 as i32 as usize] = (*ps).origin[1 as i32 as usize];
     (*s).pos.trBase[2 as i32 as usize] = (*ps).origin[2 as i32 as usize];
     if snap as u64 != 0 {
-        (*s).pos.trBase[0 as i32 as usize] =
-            (*s).pos.trBase[0 as i32 as usize] as i32 as vec_t;
-        (*s).pos.trBase[1 as i32 as usize] =
-            (*s).pos.trBase[1 as i32 as usize] as i32 as vec_t;
-        (*s).pos.trBase[2 as i32 as usize] =
-            (*s).pos.trBase[2 as i32 as usize] as i32 as vec_t
+        (*s).pos.trBase[0 as i32 as usize] = (*s).pos.trBase[0 as i32 as usize] as i32 as vec_t;
+        (*s).pos.trBase[1 as i32 as usize] = (*s).pos.trBase[1 as i32 as usize] as i32 as vec_t;
+        (*s).pos.trBase[2 as i32 as usize] = (*s).pos.trBase[2 as i32 as usize] as i32 as vec_t
     }
     // set the trDelta for flag direction and linear prediction
     (*s).pos.trDelta[0 as i32 as usize] = (*ps).velocity[0 as i32 as usize];
@@ -1815,12 +1780,9 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityStateExtraPolate(
     (*s).apos.trBase[1 as i32 as usize] = (*ps).viewangles[1 as i32 as usize];
     (*s).apos.trBase[2 as i32 as usize] = (*ps).viewangles[2 as i32 as usize];
     if snap as u64 != 0 {
-        (*s).apos.trBase[0 as i32 as usize] =
-            (*s).apos.trBase[0 as i32 as usize] as i32 as vec_t;
-        (*s).apos.trBase[1 as i32 as usize] =
-            (*s).apos.trBase[1 as i32 as usize] as i32 as vec_t;
-        (*s).apos.trBase[2 as i32 as usize] =
-            (*s).apos.trBase[2 as i32 as usize] as i32 as vec_t
+        (*s).apos.trBase[0 as i32 as usize] = (*s).apos.trBase[0 as i32 as usize] as i32 as vec_t;
+        (*s).apos.trBase[1 as i32 as usize] = (*s).apos.trBase[1 as i32 as usize] as i32 as vec_t;
+        (*s).apos.trBase[2 as i32 as usize] = (*s).apos.trBase[2 as i32 as usize] as i32 as vec_t
     }
     (*s).angles2[1 as i32 as usize] = (*ps).movementDir as vec_t;
     (*s).legsAnim = (*ps).legsAnim;

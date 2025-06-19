@@ -192,149 +192,148 @@ pub static mut botlibglobals: crate::src::botlib::be_interface::botlib_globals_t
     };
 #[no_mangle]
 
-pub static mut be_botlib_export: botlib_export_t =
-    botlib_export_t {
-        aas: aas_export_t {
-            AAS_EntityInfo: None,
-            AAS_Initialized: None,
-            AAS_PresenceTypeBoundingBox: None,
-            AAS_Time: None,
-            AAS_PointAreaNum: None,
-            AAS_PointReachabilityAreaIndex: None,
-            AAS_TraceAreas: None,
-            AAS_BBoxAreas: None,
-            AAS_AreaInfo: None,
-            AAS_PointContents: None,
-            AAS_NextBSPEntity: None,
-            AAS_ValueForBSPEpairKey: None,
-            AAS_VectorForBSPEpairKey: None,
-            AAS_FloatForBSPEpairKey: None,
-            AAS_IntForBSPEpairKey: None,
-            AAS_AreaReachability: None,
-            AAS_AreaTravelTimeToGoalArea: None,
-            AAS_EnableRoutingArea: None,
-            AAS_PredictRoute: None,
-            AAS_AlternativeRouteGoals: None,
-            AAS_Swimming: None,
-            AAS_PredictClientMovement: None,
-        },
-        ea: ea_export_t {
-            EA_Command: None,
-            EA_Say: None,
-            EA_SayTeam: None,
-            EA_Action: None,
-            EA_Gesture: None,
-            EA_Talk: None,
-            EA_Attack: None,
-            EA_Use: None,
-            EA_Respawn: None,
-            EA_MoveUp: None,
-            EA_MoveDown: None,
-            EA_MoveForward: None,
-            EA_MoveBack: None,
-            EA_MoveLeft: None,
-            EA_MoveRight: None,
-            EA_Crouch: None,
-            EA_SelectWeapon: None,
-            EA_Jump: None,
-            EA_DelayedJump: None,
-            EA_Move: None,
-            EA_View: None,
-            EA_EndRegular: None,
-            EA_GetInput: None,
-            EA_ResetInput: None,
-        },
-        ai: ai_export_t {
-            BotLoadCharacter: None,
-            BotFreeCharacter: None,
-            Characteristic_Float: None,
-            Characteristic_BFloat: None,
-            Characteristic_Integer: None,
-            Characteristic_BInteger: None,
-            Characteristic_String: None,
-            BotAllocChatState: None,
-            BotFreeChatState: None,
-            BotQueueConsoleMessage: None,
-            BotRemoveConsoleMessage: None,
-            BotNextConsoleMessage: None,
-            BotNumConsoleMessages: None,
-            BotInitialChat: None,
-            BotNumInitialChats: None,
-            BotReplyChat: None,
-            BotChatLength: None,
-            BotEnterChat: None,
-            BotGetChatMessage: None,
-            StringContains: None,
-            BotFindMatch: None,
-            BotMatchVariable: None,
-            UnifyWhiteSpaces: None,
-            BotReplaceSynonyms: None,
-            BotLoadChatFile: None,
-            BotSetChatGender: None,
-            BotSetChatName: None,
-            BotResetGoalState: None,
-            BotResetAvoidGoals: None,
-            BotRemoveFromAvoidGoals: None,
-            BotPushGoal: None,
-            BotPopGoal: None,
-            BotEmptyGoalStack: None,
-            BotDumpAvoidGoals: None,
-            BotDumpGoalStack: None,
-            BotGoalName: None,
-            BotGetTopGoal: None,
-            BotGetSecondGoal: None,
-            BotChooseLTGItem: None,
-            BotChooseNBGItem: None,
-            BotTouchingGoal: None,
-            BotItemGoalInVisButNotVisible: None,
-            BotGetLevelItemGoal: None,
-            BotGetNextCampSpotGoal: None,
-            BotGetMapLocationGoal: None,
-            BotAvoidGoalTime: None,
-            BotSetAvoidGoalTime: None,
-            BotInitLevelItems: None,
-            BotUpdateEntityItems: None,
-            BotLoadItemWeights: None,
-            BotFreeItemWeights: None,
-            BotInterbreedGoalFuzzyLogic: None,
-            BotSaveGoalFuzzyLogic: None,
-            BotMutateGoalFuzzyLogic: None,
-            BotAllocGoalState: None,
-            BotFreeGoalState: None,
-            BotResetMoveState: None,
-            BotMoveToGoal: None,
-            BotMoveInDirection: None,
-            BotResetAvoidReach: None,
-            BotResetLastAvoidReach: None,
-            BotReachabilityArea: None,
-            BotMovementViewTarget: None,
-            BotPredictVisiblePosition: None,
-            BotAllocMoveState: None,
-            BotFreeMoveState: None,
-            BotInitMoveState: None,
-            BotAddAvoidSpot: None,
-            BotChooseBestFightWeapon: None,
-            BotGetWeaponInfo: None,
-            BotLoadWeaponWeights: None,
-            BotAllocWeaponState: None,
-            BotFreeWeaponState: None,
-            BotResetWeaponState: None,
-            GeneticParentsAndChildSelection: None,
-        },
-        BotLibSetup: None,
-        BotLibShutdown: None,
-        BotLibVarSet: None,
-        BotLibVarGet: None,
-        PC_AddGlobalDefine: None,
-        PC_LoadSourceHandle: None,
-        PC_FreeSourceHandle: None,
-        PC_ReadTokenHandle: None,
-        PC_SourceFileAndLine: None,
-        BotLibStartFrame: None,
-        BotLibLoadMap: None,
-        BotLibUpdateEntity: None,
-        Test: None,
-    };
+pub static mut be_botlib_export: botlib_export_t = botlib_export_t {
+    aas: aas_export_t {
+        AAS_EntityInfo: None,
+        AAS_Initialized: None,
+        AAS_PresenceTypeBoundingBox: None,
+        AAS_Time: None,
+        AAS_PointAreaNum: None,
+        AAS_PointReachabilityAreaIndex: None,
+        AAS_TraceAreas: None,
+        AAS_BBoxAreas: None,
+        AAS_AreaInfo: None,
+        AAS_PointContents: None,
+        AAS_NextBSPEntity: None,
+        AAS_ValueForBSPEpairKey: None,
+        AAS_VectorForBSPEpairKey: None,
+        AAS_FloatForBSPEpairKey: None,
+        AAS_IntForBSPEpairKey: None,
+        AAS_AreaReachability: None,
+        AAS_AreaTravelTimeToGoalArea: None,
+        AAS_EnableRoutingArea: None,
+        AAS_PredictRoute: None,
+        AAS_AlternativeRouteGoals: None,
+        AAS_Swimming: None,
+        AAS_PredictClientMovement: None,
+    },
+    ea: ea_export_t {
+        EA_Command: None,
+        EA_Say: None,
+        EA_SayTeam: None,
+        EA_Action: None,
+        EA_Gesture: None,
+        EA_Talk: None,
+        EA_Attack: None,
+        EA_Use: None,
+        EA_Respawn: None,
+        EA_MoveUp: None,
+        EA_MoveDown: None,
+        EA_MoveForward: None,
+        EA_MoveBack: None,
+        EA_MoveLeft: None,
+        EA_MoveRight: None,
+        EA_Crouch: None,
+        EA_SelectWeapon: None,
+        EA_Jump: None,
+        EA_DelayedJump: None,
+        EA_Move: None,
+        EA_View: None,
+        EA_EndRegular: None,
+        EA_GetInput: None,
+        EA_ResetInput: None,
+    },
+    ai: ai_export_t {
+        BotLoadCharacter: None,
+        BotFreeCharacter: None,
+        Characteristic_Float: None,
+        Characteristic_BFloat: None,
+        Characteristic_Integer: None,
+        Characteristic_BInteger: None,
+        Characteristic_String: None,
+        BotAllocChatState: None,
+        BotFreeChatState: None,
+        BotQueueConsoleMessage: None,
+        BotRemoveConsoleMessage: None,
+        BotNextConsoleMessage: None,
+        BotNumConsoleMessages: None,
+        BotInitialChat: None,
+        BotNumInitialChats: None,
+        BotReplyChat: None,
+        BotChatLength: None,
+        BotEnterChat: None,
+        BotGetChatMessage: None,
+        StringContains: None,
+        BotFindMatch: None,
+        BotMatchVariable: None,
+        UnifyWhiteSpaces: None,
+        BotReplaceSynonyms: None,
+        BotLoadChatFile: None,
+        BotSetChatGender: None,
+        BotSetChatName: None,
+        BotResetGoalState: None,
+        BotResetAvoidGoals: None,
+        BotRemoveFromAvoidGoals: None,
+        BotPushGoal: None,
+        BotPopGoal: None,
+        BotEmptyGoalStack: None,
+        BotDumpAvoidGoals: None,
+        BotDumpGoalStack: None,
+        BotGoalName: None,
+        BotGetTopGoal: None,
+        BotGetSecondGoal: None,
+        BotChooseLTGItem: None,
+        BotChooseNBGItem: None,
+        BotTouchingGoal: None,
+        BotItemGoalInVisButNotVisible: None,
+        BotGetLevelItemGoal: None,
+        BotGetNextCampSpotGoal: None,
+        BotGetMapLocationGoal: None,
+        BotAvoidGoalTime: None,
+        BotSetAvoidGoalTime: None,
+        BotInitLevelItems: None,
+        BotUpdateEntityItems: None,
+        BotLoadItemWeights: None,
+        BotFreeItemWeights: None,
+        BotInterbreedGoalFuzzyLogic: None,
+        BotSaveGoalFuzzyLogic: None,
+        BotMutateGoalFuzzyLogic: None,
+        BotAllocGoalState: None,
+        BotFreeGoalState: None,
+        BotResetMoveState: None,
+        BotMoveToGoal: None,
+        BotMoveInDirection: None,
+        BotResetAvoidReach: None,
+        BotResetLastAvoidReach: None,
+        BotReachabilityArea: None,
+        BotMovementViewTarget: None,
+        BotPredictVisiblePosition: None,
+        BotAllocMoveState: None,
+        BotFreeMoveState: None,
+        BotInitMoveState: None,
+        BotAddAvoidSpot: None,
+        BotChooseBestFightWeapon: None,
+        BotGetWeaponInfo: None,
+        BotLoadWeaponWeights: None,
+        BotAllocWeaponState: None,
+        BotFreeWeaponState: None,
+        BotResetWeaponState: None,
+        GeneticParentsAndChildSelection: None,
+    },
+    BotLibSetup: None,
+    BotLibShutdown: None,
+    BotLibVarSet: None,
+    BotLibVarGet: None,
+    PC_AddGlobalDefine: None,
+    PC_LoadSourceHandle: None,
+    PC_FreeSourceHandle: None,
+    PC_ReadTokenHandle: None,
+    PC_SourceFileAndLine: None,
+    BotLibStartFrame: None,
+    BotLibLoadMap: None,
+    BotLibUpdateEntity: None,
+    Test: None,
+};
 #[no_mangle]
 
 pub static mut botimport: botlib_import_t = botlib_import_t {
@@ -385,8 +384,7 @@ pub static mut botlibsetup: i32 = qfalse as i32;
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_MilliSeconds() -> i32 {
-    return (crate::stdlib::clock() * 1000 as i32 as isize
-        / 1000000 as i32 as __clock_t) as i32;
+    return (crate::stdlib::clock() * 1000 as i32 as isize / 1000000 as i32 as __clock_t) as i32;
 }
 //end of the function Sys_MilliSeconds
 //===========================================================================
@@ -397,10 +395,7 @@ pub unsafe extern "C" fn Sys_MilliSeconds() -> i32 {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn ValidClientNumber(
-    mut num: i32,
-    mut str: *mut libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn ValidClientNumber(mut num: i32, mut str: *mut libc::c_char) -> qboolean {
     if num < 0 as i32 || num > botlibglobals.maxclients {
         //end if
         //weird: the disabled stuff results in a crash
@@ -425,10 +420,7 @@ pub unsafe extern "C" fn ValidClientNumber(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn ValidEntityNumber(
-    mut num: i32,
-    mut str: *mut libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn ValidEntityNumber(mut num: i32, mut str: *mut libc::c_char) -> qboolean {
     if num < 0 as i32 || num > botlibglobals.maxentities {
         botimport.Print.expect("non-null function pointer")(
             3 as i32,
@@ -451,9 +443,7 @@ pub unsafe extern "C" fn ValidEntityNumber(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn BotLibSetup(
-    mut str: *mut libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn BotLibSetup(mut str: *mut libc::c_char) -> qboolean {
     if botlibglobals.botlibsetup == 0 {
         botimport.Print.expect("non-null function pointer")(
             3 as i32,
@@ -664,7 +654,7 @@ pub unsafe extern "C" fn Export_BotLibLoadMap(mut mapname: *const libc::c_char) 
     //initialize the items in the level
     BotInitLevelItems(); //be_ai_goal.h
     BotSetBrushModelTypes(); //be_ai_move.h
-                                                             //
+                             //
     botimport.Print.expect("non-null function pointer")(
         1 as i32,
         b"-------------------------------------\n\x00" as *const u8 as *const libc::c_char
@@ -738,11 +728,7 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut aas_export_t) {
         Some(crate::src::botlib::be_aas_main::AAS_Initialized as unsafe extern "C" fn() -> i32);
     (*aas).AAS_PresenceTypeBoundingBox = Some(
         crate::src::botlib::be_aas_sample::AAS_PresenceTypeBoundingBox
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut vec_t,
-                _: *mut vec_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: i32, _: *mut vec_t, _: *mut vec_t) -> (),
     );
     (*aas).AAS_Time =
         Some(crate::src::botlib::be_aas_main::AAS_Time as unsafe extern "C" fn() -> f32);
@@ -769,12 +755,7 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut aas_export_t) {
     );
     (*aas).AAS_BBoxAreas = Some(
         crate::src::botlib::be_aas_sample::AAS_BBoxAreas
-            as unsafe extern "C" fn(
-                _: *mut vec_t,
-                _: *mut vec_t,
-                _: *mut i32,
-                _: i32,
-            ) -> i32,
+            as unsafe extern "C" fn(_: *mut vec_t, _: *mut vec_t, _: *mut i32, _: i32) -> i32,
     );
     (*aas).AAS_AreaInfo = Some(
         crate::src::botlib::be_aas_sample::AAS_AreaInfo
@@ -801,11 +782,7 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut aas_export_t) {
     );
     (*aas).AAS_VectorForBSPEpairKey = Some(
         crate::src::botlib::be_aas_bspq3::AAS_VectorForBSPEpairKey
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut libc::c_char,
-                _: *mut vec_t,
-            ) -> i32,
+            as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut vec_t) -> i32,
     );
     (*aas).AAS_FloatForBSPEpairKey = Some(
         crate::src::botlib::be_aas_bspq3::AAS_FloatForBSPEpairKey
@@ -827,12 +804,7 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut aas_export_t) {
     //--------------------------------------------
     (*aas).AAS_AreaTravelTimeToGoalArea = Some(
         crate::src::botlib::be_aas_route::AAS_AreaTravelTimeToGoalArea
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut vec_t,
-                _: i32,
-                _: i32,
-            ) -> i32,
+            as unsafe extern "C" fn(_: i32, _: *mut vec_t, _: i32, _: i32) -> i32,
     );
     (*aas).AAS_EnableRoutingArea = Some(
         crate::src::botlib::be_aas_route::AAS_EnableRoutingArea
@@ -874,8 +846,7 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut aas_export_t) {
     // be_aas_move.c
     //--------------------------------------------
     (*aas).AAS_Swimming = Some(
-        crate::src::botlib::be_aas_move::AAS_Swimming
-            as unsafe extern "C" fn(_: *mut vec_t) -> i32,
+        crate::src::botlib::be_aas_move::AAS_Swimming as unsafe extern "C" fn(_: *mut vec_t) -> i32,
     );
     (*aas).AAS_PredictClientMovement = Some(
         crate::src::botlib::be_aas_move::AAS_PredictClientMovement
@@ -948,15 +919,10 @@ unsafe extern "C" fn Init_EA_Export(mut ea: *mut ea_export_t) {
         Some(crate::src::botlib::be_ea::EA_DelayedJump as unsafe extern "C" fn(_: i32) -> ());
     (*ea).EA_Move = Some(
         crate::src::botlib::be_ea::EA_Move
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut vec_t,
-                _: f32,
-            ) -> (),
+            as unsafe extern "C" fn(_: i32, _: *mut vec_t, _: f32) -> (),
     );
     (*ea).EA_View = Some(
-        crate::src::botlib::be_ea::EA_View
-            as unsafe extern "C" fn(_: i32, _: *mut vec_t) -> (),
+        crate::src::botlib::be_ea::EA_View as unsafe extern "C" fn(_: i32, _: *mut vec_t) -> (),
     );
     (*ea).EA_GetInput = Some(
         crate::src::botlib::be_ea::EA_GetInput
@@ -1008,30 +974,18 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut ai_export_t) {
     //-----------------------------------
     // be_ai_chat.h
     //-----------------------------------
-    (*ai).BotAllocChatState =
-        Some(BotAllocChatState as unsafe extern "C" fn() -> i32);
-    (*ai).BotFreeChatState = Some(
-        BotFreeChatState as unsafe extern "C" fn(_: i32) -> (),
-    );
+    (*ai).BotAllocChatState = Some(BotAllocChatState as unsafe extern "C" fn() -> i32);
+    (*ai).BotFreeChatState = Some(BotFreeChatState as unsafe extern "C" fn(_: i32) -> ());
     (*ai).BotQueueConsoleMessage = Some(
-        BotQueueConsoleMessage
-            as unsafe extern "C" fn(_: i32, _: i32, _: *mut libc::c_char) -> (),
+        BotQueueConsoleMessage as unsafe extern "C" fn(_: i32, _: i32, _: *mut libc::c_char) -> (),
     );
-    (*ai).BotRemoveConsoleMessage = Some(
-        BotRemoveConsoleMessage
-            as unsafe extern "C" fn(_: i32, _: i32) -> (),
-    );
+    (*ai).BotRemoveConsoleMessage =
+        Some(BotRemoveConsoleMessage as unsafe extern "C" fn(_: i32, _: i32) -> ());
     (*ai).BotNextConsoleMessage = Some(
-        BotNextConsoleMessage
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut bot_consolemessage_t,
-            ) -> i32,
+        BotNextConsoleMessage as unsafe extern "C" fn(_: i32, _: *mut bot_consolemessage_t) -> i32,
     );
-    (*ai).BotNumConsoleMessages = Some(
-        BotNumConsoleMessages
-            as unsafe extern "C" fn(_: i32) -> i32,
-    );
+    (*ai).BotNumConsoleMessages =
+        Some(BotNumConsoleMessages as unsafe extern "C" fn(_: i32) -> i32);
     (*ai).BotInitialChat = Some(
         BotInitialChat
             as unsafe extern "C" fn(
@@ -1048,10 +1002,8 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut ai_export_t) {
                 _: *mut libc::c_char,
             ) -> (),
     );
-    (*ai).BotNumInitialChats = Some(
-        BotNumInitialChats
-            as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32,
-    );
+    (*ai).BotNumInitialChats =
+        Some(BotNumInitialChats as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32);
     (*ai).BotReplyChat = Some(
         BotReplyChat
             as unsafe extern "C" fn(
@@ -1069,16 +1021,10 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut ai_export_t) {
                 _: *mut libc::c_char,
             ) -> i32,
     );
-    (*ai).BotChatLength =
-        Some(BotChatLength as unsafe extern "C" fn(_: i32) -> i32);
-    (*ai).BotEnterChat = Some(
-        BotEnterChat
-            as unsafe extern "C" fn(_: i32, _: i32, _: i32) -> (),
-    );
-    (*ai).BotGetChatMessage = Some(
-        BotGetChatMessage
-            as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> (),
-    );
+    (*ai).BotChatLength = Some(BotChatLength as unsafe extern "C" fn(_: i32) -> i32);
+    (*ai).BotEnterChat = Some(BotEnterChat as unsafe extern "C" fn(_: i32, _: i32, _: i32) -> ());
+    (*ai).BotGetChatMessage =
+        Some(BotGetChatMessage as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> ());
     (*ai).StringContains = Some(
         StringContains
             as unsafe extern "C" fn(_: *mut libc::c_char, _: *mut libc::c_char, _: i32) -> i32,
@@ -1100,83 +1046,38 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut ai_export_t) {
                 _: i32,
             ) -> (),
     );
-    (*ai).UnifyWhiteSpaces = Some(
-        UnifyWhiteSpaces
-            as unsafe extern "C" fn(_: *mut libc::c_char) -> (),
-    );
+    (*ai).UnifyWhiteSpaces =
+        Some(UnifyWhiteSpaces as unsafe extern "C" fn(_: *mut libc::c_char) -> ());
     (*ai).BotReplaceSynonyms = Some(
-        BotReplaceSynonyms
-            as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_ulong) -> (),
+        BotReplaceSynonyms as unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_ulong) -> (),
     );
     (*ai).BotLoadChatFile = Some(
         BotLoadChatFile
             as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut libc::c_char) -> i32,
     );
-    (*ai).BotSetChatGender = Some(
-        BotSetChatGender
-            as unsafe extern "C" fn(_: i32, _: i32) -> (),
-    );
-    (*ai).BotSetChatName = Some(
-        BotSetChatName
-            as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> (),
-    );
+    (*ai).BotSetChatGender = Some(BotSetChatGender as unsafe extern "C" fn(_: i32, _: i32) -> ());
+    (*ai).BotSetChatName =
+        Some(BotSetChatName as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> ());
     //-----------------------------------
     // be_ai_goal.h
     //-----------------------------------
-    (*ai).BotResetGoalState = Some(
-        BotResetGoalState as unsafe extern "C" fn(_: i32) -> (),
-    );
-    (*ai).BotResetAvoidGoals = Some(
-        BotResetAvoidGoals as unsafe extern "C" fn(_: i32) -> (),
-    );
-    (*ai).BotRemoveFromAvoidGoals = Some(
-        BotRemoveFromAvoidGoals
-            as unsafe extern "C" fn(_: i32, _: i32) -> (),
-    );
-    (*ai).BotPushGoal = Some(
-        BotPushGoal
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut bot_goal_t,
-            ) -> (),
-    );
-    (*ai).BotPopGoal =
-        Some(BotPopGoal as unsafe extern "C" fn(_: i32) -> ());
-    (*ai).BotEmptyGoalStack = Some(
-        BotEmptyGoalStack as unsafe extern "C" fn(_: i32) -> (),
-    );
-    (*ai).BotDumpAvoidGoals = Some(
-        BotDumpAvoidGoals as unsafe extern "C" fn(_: i32) -> (),
-    );
-    (*ai).BotDumpGoalStack = Some(
-        BotDumpGoalStack as unsafe extern "C" fn(_: i32) -> (),
-    );
-    (*ai).BotGoalName = Some(
-        BotGoalName
-            as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> (),
-    );
-    (*ai).BotGetTopGoal = Some(
-        BotGetTopGoal
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut bot_goal_t,
-            ) -> i32,
-    );
-    (*ai).BotGetSecondGoal = Some(
-        BotGetSecondGoal
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut bot_goal_t,
-            ) -> i32,
-    );
+    (*ai).BotResetGoalState = Some(BotResetGoalState as unsafe extern "C" fn(_: i32) -> ());
+    (*ai).BotResetAvoidGoals = Some(BotResetAvoidGoals as unsafe extern "C" fn(_: i32) -> ());
+    (*ai).BotRemoveFromAvoidGoals =
+        Some(BotRemoveFromAvoidGoals as unsafe extern "C" fn(_: i32, _: i32) -> ());
+    (*ai).BotPushGoal = Some(BotPushGoal as unsafe extern "C" fn(_: i32, _: *mut bot_goal_t) -> ());
+    (*ai).BotPopGoal = Some(BotPopGoal as unsafe extern "C" fn(_: i32) -> ());
+    (*ai).BotEmptyGoalStack = Some(BotEmptyGoalStack as unsafe extern "C" fn(_: i32) -> ());
+    (*ai).BotDumpAvoidGoals = Some(BotDumpAvoidGoals as unsafe extern "C" fn(_: i32) -> ());
+    (*ai).BotDumpGoalStack = Some(BotDumpGoalStack as unsafe extern "C" fn(_: i32) -> ());
+    (*ai).BotGoalName =
+        Some(BotGoalName as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> ());
+    (*ai).BotGetTopGoal =
+        Some(BotGetTopGoal as unsafe extern "C" fn(_: i32, _: *mut bot_goal_t) -> i32);
+    (*ai).BotGetSecondGoal =
+        Some(BotGetSecondGoal as unsafe extern "C" fn(_: i32, _: *mut bot_goal_t) -> i32);
     (*ai).BotChooseLTGItem = Some(
-        BotChooseLTGItem
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut vec_t,
-                _: *mut i32,
-                _: i32,
-            ) -> i32,
+        BotChooseLTGItem as unsafe extern "C" fn(_: i32, _: *mut vec_t, _: *mut i32, _: i32) -> i32,
     );
     (*ai).BotChooseNBGItem = Some(
         BotChooseNBGItem
@@ -1189,13 +1090,8 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut ai_export_t) {
                 _: f32,
             ) -> i32,
     );
-    (*ai).BotTouchingGoal = Some(
-        BotTouchingGoal
-            as unsafe extern "C" fn(
-                _: *mut vec_t,
-                _: *mut bot_goal_t,
-            ) -> i32,
-    );
+    (*ai).BotTouchingGoal =
+        Some(BotTouchingGoal as unsafe extern "C" fn(_: *mut vec_t, _: *mut bot_goal_t) -> i32);
     (*ai).BotItemGoalInVisButNotVisible = Some(
         BotItemGoalInVisButNotVisible
             as unsafe extern "C" fn(
@@ -1207,69 +1103,34 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut ai_export_t) {
     );
     (*ai).BotGetLevelItemGoal = Some(
         BotGetLevelItemGoal
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut libc::c_char,
-                _: *mut bot_goal_t,
-            ) -> i32,
+            as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut bot_goal_t) -> i32,
     );
-    (*ai).BotGetNextCampSpotGoal = Some(
-        BotGetNextCampSpotGoal
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut bot_goal_t,
-            ) -> i32,
-    );
+    (*ai).BotGetNextCampSpotGoal =
+        Some(BotGetNextCampSpotGoal as unsafe extern "C" fn(_: i32, _: *mut bot_goal_t) -> i32);
     (*ai).BotGetMapLocationGoal = Some(
         BotGetMapLocationGoal
-            as unsafe extern "C" fn(
-                _: *mut libc::c_char,
-                _: *mut bot_goal_t,
-            ) -> i32,
+            as unsafe extern "C" fn(_: *mut libc::c_char, _: *mut bot_goal_t) -> i32,
     );
-    (*ai).BotAvoidGoalTime = Some(
-        BotAvoidGoalTime
-            as unsafe extern "C" fn(_: i32, _: i32) -> f32,
-    );
-    (*ai).BotSetAvoidGoalTime = Some(
-        BotSetAvoidGoalTime
-            as unsafe extern "C" fn(_: i32, _: i32, _: f32) -> (),
-    );
-    (*ai).BotInitLevelItems =
-        Some(BotInitLevelItems as unsafe extern "C" fn() -> ());
-    (*ai).BotUpdateEntityItems =
-        Some(BotUpdateEntityItems as unsafe extern "C" fn() -> ());
-    (*ai).BotLoadItemWeights = Some(
-        BotLoadItemWeights
-            as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32,
-    );
-    (*ai).BotFreeItemWeights = Some(
-        BotFreeItemWeights as unsafe extern "C" fn(_: i32) -> (),
-    );
-    (*ai).BotInterbreedGoalFuzzyLogic = Some(
-        BotInterbreedGoalFuzzyLogic
-            as unsafe extern "C" fn(_: i32, _: i32, _: i32) -> (),
-    );
-    (*ai).BotSaveGoalFuzzyLogic = Some(
-        BotSaveGoalFuzzyLogic
-            as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> (),
-    );
-    (*ai).BotMutateGoalFuzzyLogic = Some(
-        BotMutateGoalFuzzyLogic
-            as unsafe extern "C" fn(_: i32, _: f32) -> (),
-    );
-    (*ai).BotAllocGoalState = Some(
-        BotAllocGoalState as unsafe extern "C" fn(_: i32) -> i32,
-    );
-    (*ai).BotFreeGoalState = Some(
-        BotFreeGoalState as unsafe extern "C" fn(_: i32) -> (),
-    );
+    (*ai).BotAvoidGoalTime = Some(BotAvoidGoalTime as unsafe extern "C" fn(_: i32, _: i32) -> f32);
+    (*ai).BotSetAvoidGoalTime =
+        Some(BotSetAvoidGoalTime as unsafe extern "C" fn(_: i32, _: i32, _: f32) -> ());
+    (*ai).BotInitLevelItems = Some(BotInitLevelItems as unsafe extern "C" fn() -> ());
+    (*ai).BotUpdateEntityItems = Some(BotUpdateEntityItems as unsafe extern "C" fn() -> ());
+    (*ai).BotLoadItemWeights =
+        Some(BotLoadItemWeights as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32);
+    (*ai).BotFreeItemWeights = Some(BotFreeItemWeights as unsafe extern "C" fn(_: i32) -> ());
+    (*ai).BotInterbreedGoalFuzzyLogic =
+        Some(BotInterbreedGoalFuzzyLogic as unsafe extern "C" fn(_: i32, _: i32, _: i32) -> ());
+    (*ai).BotSaveGoalFuzzyLogic =
+        Some(BotSaveGoalFuzzyLogic as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> ());
+    (*ai).BotMutateGoalFuzzyLogic =
+        Some(BotMutateGoalFuzzyLogic as unsafe extern "C" fn(_: i32, _: f32) -> ());
+    (*ai).BotAllocGoalState = Some(BotAllocGoalState as unsafe extern "C" fn(_: i32) -> i32);
+    (*ai).BotFreeGoalState = Some(BotFreeGoalState as unsafe extern "C" fn(_: i32) -> ());
     //-----------------------------------
     // be_ai_move.h
     //-----------------------------------
-    (*ai).BotResetMoveState = Some(
-        BotResetMoveState as unsafe extern "C" fn(_: i32) -> (),
-    );
+    (*ai).BotResetMoveState = Some(BotResetMoveState as unsafe extern "C" fn(_: i32) -> ());
     (*ai).BotMoveToGoal = Some(
         BotMoveToGoal
             as unsafe extern "C" fn(
@@ -1280,25 +1141,13 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut ai_export_t) {
             ) -> (),
     );
     (*ai).BotMoveInDirection = Some(
-        BotMoveInDirection
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut vec_t,
-                _: f32,
-                _: i32,
-            ) -> i32,
+        BotMoveInDirection as unsafe extern "C" fn(_: i32, _: *mut vec_t, _: f32, _: i32) -> i32,
     );
-    (*ai).BotResetAvoidReach = Some(
-        BotResetAvoidReach as unsafe extern "C" fn(_: i32) -> (),
-    );
-    (*ai).BotResetLastAvoidReach = Some(
-        BotResetLastAvoidReach
-            as unsafe extern "C" fn(_: i32) -> (),
-    );
-    (*ai).BotReachabilityArea = Some(
-        BotReachabilityArea
-            as unsafe extern "C" fn(_: *mut vec_t, _: i32) -> i32,
-    );
+    (*ai).BotResetAvoidReach = Some(BotResetAvoidReach as unsafe extern "C" fn(_: i32) -> ());
+    (*ai).BotResetLastAvoidReach =
+        Some(BotResetLastAvoidReach as unsafe extern "C" fn(_: i32) -> ());
+    (*ai).BotReachabilityArea =
+        Some(BotReachabilityArea as unsafe extern "C" fn(_: *mut vec_t, _: i32) -> i32);
     (*ai).BotMovementViewTarget = Some(
         BotMovementViewTarget
             as unsafe extern "C" fn(
@@ -1319,54 +1168,24 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut ai_export_t) {
                 _: *mut vec_t,
             ) -> i32,
     );
-    (*ai).BotAllocMoveState =
-        Some(BotAllocMoveState as unsafe extern "C" fn() -> i32);
-    (*ai).BotFreeMoveState = Some(
-        BotFreeMoveState as unsafe extern "C" fn(_: i32) -> (),
-    );
-    (*ai).BotInitMoveState = Some(
-        BotInitMoveState
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut bot_initmove_t,
-            ) -> (),
-    );
-    (*ai).BotAddAvoidSpot = Some(
-        BotAddAvoidSpot
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut vec_t,
-                _: f32,
-                _: i32,
-            ) -> (),
-    );
+    (*ai).BotAllocMoveState = Some(BotAllocMoveState as unsafe extern "C" fn() -> i32);
+    (*ai).BotFreeMoveState = Some(BotFreeMoveState as unsafe extern "C" fn(_: i32) -> ());
+    (*ai).BotInitMoveState =
+        Some(BotInitMoveState as unsafe extern "C" fn(_: i32, _: *mut bot_initmove_t) -> ());
+    (*ai).BotAddAvoidSpot =
+        Some(BotAddAvoidSpot as unsafe extern "C" fn(_: i32, _: *mut vec_t, _: f32, _: i32) -> ());
     //-----------------------------------
     // be_ai_weap.h
     //-----------------------------------
-    (*ai).BotChooseBestFightWeapon = Some(
-        BotChooseBestFightWeapon
-            as unsafe extern "C" fn(_: i32, _: *mut i32) -> i32,
-    );
-    (*ai).BotGetWeaponInfo = Some(
-        BotGetWeaponInfo
-            as unsafe extern "C" fn(
-                _: i32,
-                _: i32,
-                _: *mut weaponinfo_t,
-            ) -> (),
-    );
-    (*ai).BotLoadWeaponWeights = Some(
-        BotLoadWeaponWeights
-            as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32,
-    );
-    (*ai).BotAllocWeaponState =
-        Some(BotAllocWeaponState as unsafe extern "C" fn() -> i32);
-    (*ai).BotFreeWeaponState = Some(
-        BotFreeWeaponState as unsafe extern "C" fn(_: i32) -> (),
-    );
-    (*ai).BotResetWeaponState = Some(
-        BotResetWeaponState as unsafe extern "C" fn(_: i32) -> (),
-    );
+    (*ai).BotChooseBestFightWeapon =
+        Some(BotChooseBestFightWeapon as unsafe extern "C" fn(_: i32, _: *mut i32) -> i32);
+    (*ai).BotGetWeaponInfo =
+        Some(BotGetWeaponInfo as unsafe extern "C" fn(_: i32, _: i32, _: *mut weaponinfo_t) -> ());
+    (*ai).BotLoadWeaponWeights =
+        Some(BotLoadWeaponWeights as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32);
+    (*ai).BotAllocWeaponState = Some(BotAllocWeaponState as unsafe extern "C" fn() -> i32);
+    (*ai).BotFreeWeaponState = Some(BotFreeWeaponState as unsafe extern "C" fn(_: i32) -> ());
+    (*ai).BotResetWeaponState = Some(BotResetWeaponState as unsafe extern "C" fn(_: i32) -> ());
     //-----------------------------------
     // be_ai_gen.h
     //-----------------------------------
@@ -1435,10 +1254,7 @@ pub unsafe extern "C" fn GetBotLibAPI(
     );
     be_botlib_export.PC_ReadTokenHandle = Some(
         crate::src::botlib::l_precomp::PC_ReadTokenHandle
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut pc_token_t,
-            ) -> i32,
+            as unsafe extern "C" fn(_: i32, _: *mut pc_token_t) -> i32,
     );
     be_botlib_export.PC_SourceFileAndLine = Some(
         crate::src::botlib::l_precomp::PC_SourceFileAndLine
@@ -1449,8 +1265,7 @@ pub unsafe extern "C" fn GetBotLibAPI(
     be_botlib_export.BotLibLoadMap =
         Some(Export_BotLibLoadMap as unsafe extern "C" fn(_: *const libc::c_char) -> i32);
     be_botlib_export.BotLibUpdateEntity = Some(
-        Export_BotLibUpdateEntity
-            as unsafe extern "C" fn(_: i32, _: *mut bot_entitystate_t) -> i32,
+        Export_BotLibUpdateEntity as unsafe extern "C" fn(_: i32, _: *mut bot_entitystate_t) -> i32,
     );
     be_botlib_export.Test = Some(
         BotExportTest

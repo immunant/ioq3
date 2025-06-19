@@ -31,8 +31,7 @@ pub use crate::src::qcommon::q_shared::FS_WRITE;
 
 #[no_mangle]
 
-pub static mut botinputs: *mut bot_input_t =
-    0 as *const bot_input_t as *mut bot_input_t;
+pub static mut botinputs: *mut bot_input_t = 0 as *const bot_input_t as *mut bot_input_t;
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
@@ -476,11 +475,7 @@ pub unsafe extern "C" fn EA_MoveRight(mut client: i32) {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn EA_Move(
-    mut client: i32,
-    mut dir: *mut vec_t,
-    mut speed: f32,
-) {
+pub unsafe extern "C" fn EA_Move(mut client: i32, mut dir: *mut vec_t, mut speed: f32) {
     let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).dir[0 as i32 as usize] = *dir.offset(0 as i32 as isize);
@@ -503,10 +498,7 @@ pub unsafe extern "C" fn EA_Move(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn EA_View(
-    mut client: i32,
-    mut viewangles: *mut vec_t,
-) {
+pub unsafe extern "C" fn EA_View(mut client: i32, mut viewangles: *mut vec_t) {
     let mut bi: *mut bot_input_t = 0 as *mut bot_input_t;
     bi = &mut *botinputs.offset(client as isize) as *mut bot_input_t;
     (*bi).viewangles[0 as i32 as usize] = *viewangles.offset(0 as i32 as isize);

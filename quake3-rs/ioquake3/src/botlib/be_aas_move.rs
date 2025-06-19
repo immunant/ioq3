@@ -143,46 +143,45 @@ extern "C" {
 }
 #[no_mangle]
 
-pub static mut aassettings: aas_settings_t =
-    aas_settings_t {
-        phys_gravitydirection: [0.; 3],
-        phys_friction: 0.,
-        phys_stopspeed: 0.,
-        phys_gravity: 0.,
-        phys_waterfriction: 0.,
-        phys_watergravity: 0.,
-        phys_maxvelocity: 0.,
-        phys_maxwalkvelocity: 0.,
-        phys_maxcrouchvelocity: 0.,
-        phys_maxswimvelocity: 0.,
-        phys_walkaccelerate: 0.,
-        phys_airaccelerate: 0.,
-        phys_swimaccelerate: 0.,
-        phys_maxstep: 0.,
-        phys_maxsteepness: 0.,
-        phys_maxwaterjump: 0.,
-        phys_maxbarrier: 0.,
-        phys_jumpvel: 0.,
-        phys_falldelta5: 0.,
-        phys_falldelta10: 0.,
-        rs_waterjump: 0.,
-        rs_teleport: 0.,
-        rs_barrierjump: 0.,
-        rs_startcrouch: 0.,
-        rs_startgrapple: 0.,
-        rs_startwalkoffledge: 0.,
-        rs_startjump: 0.,
-        rs_rocketjump: 0.,
-        rs_bfgjump: 0.,
-        rs_jumppad: 0.,
-        rs_aircontrolledjumppad: 0.,
-        rs_funcbob: 0.,
-        rs_startelevator: 0.,
-        rs_falldamage5: 0.,
-        rs_falldamage10: 0.,
-        rs_maxfallheight: 0.,
-        rs_maxjumpfallheight: 0.,
-    };
+pub static mut aassettings: aas_settings_t = aas_settings_t {
+    phys_gravitydirection: [0.; 3],
+    phys_friction: 0.,
+    phys_stopspeed: 0.,
+    phys_gravity: 0.,
+    phys_waterfriction: 0.,
+    phys_watergravity: 0.,
+    phys_maxvelocity: 0.,
+    phys_maxwalkvelocity: 0.,
+    phys_maxcrouchvelocity: 0.,
+    phys_maxswimvelocity: 0.,
+    phys_walkaccelerate: 0.,
+    phys_airaccelerate: 0.,
+    phys_swimaccelerate: 0.,
+    phys_maxstep: 0.,
+    phys_maxsteepness: 0.,
+    phys_maxwaterjump: 0.,
+    phys_maxbarrier: 0.,
+    phys_jumpvel: 0.,
+    phys_falldelta5: 0.,
+    phys_falldelta10: 0.,
+    rs_waterjump: 0.,
+    rs_teleport: 0.,
+    rs_barrierjump: 0.,
+    rs_startcrouch: 0.,
+    rs_startgrapple: 0.,
+    rs_startwalkoffledge: 0.,
+    rs_startjump: 0.,
+    rs_rocketjump: 0.,
+    rs_bfgjump: 0.,
+    rs_jumppad: 0.,
+    rs_aircontrolledjumppad: 0.,
+    rs_funcbob: 0.,
+    rs_startelevator: 0.,
+    rs_falldamage5: 0.,
+    rs_falldamage10: 0.,
+    rs_maxfallheight: 0.,
+    rs_maxjumpfallheight: 0.,
+};
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.
@@ -334,12 +333,9 @@ pub unsafe extern "C" fn AAS_DropToFloor(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_InitSettings() {
-    aassettings.phys_gravitydirection[0 as i32 as usize] =
-        0 as i32 as vec_t;
-    aassettings.phys_gravitydirection[1 as i32 as usize] =
-        0 as i32 as vec_t;
-    aassettings.phys_gravitydirection[2 as i32 as usize] =
-        -(1 as i32) as vec_t;
+    aassettings.phys_gravitydirection[0 as i32 as usize] = 0 as i32 as vec_t;
+    aassettings.phys_gravitydirection[1 as i32 as usize] = 0 as i32 as vec_t;
+    aassettings.phys_gravitydirection[2 as i32 as usize] = -(1 as i32) as vec_t;
     aassettings.phys_friction = crate::src::botlib::l_libvar::LibVarValue(
         b"phys_friction\x00" as *const u8 as *const libc::c_char,
         b"6\x00" as *const u8 as *const libc::c_char,
@@ -495,9 +491,7 @@ pub unsafe extern "C" fn AAS_InitSettings() {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_AgainstLadder(
-    mut origin: *mut vec_t,
-) -> i32 {
+pub unsafe extern "C" fn AAS_AgainstLadder(mut origin: *mut vec_t) -> i32 {
     let mut areanum: i32 = 0; //end if
     let mut i: i32 = 0;
     let mut facenum: i32 = 0;
@@ -573,8 +567,7 @@ pub unsafe extern "C" fn AAS_AgainstLadder(
             //get the plane the face is in
             plane = &mut *crate::src::botlib::be_aas_main::aasworld
                 .planes
-                .offset(((*face).planenum ^ side) as isize)
-                as *mut aas_plane_t;
+                .offset(((*face).planenum ^ side) as isize) as *mut aas_plane_t;
             //if the origin is pretty close to the plane
             if crate::stdlib::fabsf(
                 (*plane).normal[0 as i32 as usize] * *origin.offset(0 as i32 as isize)
@@ -623,11 +616,7 @@ pub unsafe extern "C" fn AAS_OnGround(
         planenum: 0,
     };
     let mut end: vec3_t = [0.; 3];
-    let mut up: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ];
+    let mut up: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
     let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
     end[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     end[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
@@ -652,8 +641,7 @@ pub unsafe extern "C" fn AAS_OnGround(
         return qfalse as i32;
     }
     //check if the plane isn't too steep
-    plane = crate::src::botlib::be_aas_sample::AAS_PlaneFromNum(trace.planenum)
-        as *mut aas_plane_s;
+    plane = crate::src::botlib::be_aas_sample::AAS_PlaneFromNum(trace.planenum) as *mut aas_plane_s;
     if (*plane).normal[0 as i32 as usize] * up[0 as i32 as usize]
         + (*plane).normal[1 as i32 as usize] * up[1 as i32 as usize]
         + (*plane).normal[2 as i32 as usize] * up[2 as i32 as usize]
@@ -674,9 +662,7 @@ pub unsafe extern "C" fn AAS_OnGround(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_Swimming(
-    mut origin: *mut vec_t,
-) -> i32 {
+pub unsafe extern "C" fn AAS_Swimming(mut origin: *mut vec_t) -> i32 {
     let mut testorg: vec3_t = [0.; 3];
     testorg[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     testorg[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
@@ -698,40 +684,17 @@ pub unsafe extern "C" fn AAS_Swimming(
 // Changes Globals:		-
 //===========================================================================
 
-static mut VEC_UP: vec3_t = [
-    0 as i32 as vec_t,
-    -(1 as i32) as vec_t,
-    0 as i32 as vec_t,
-];
+static mut VEC_UP: vec3_t = [0 as i32 as vec_t, -(1 as i32) as vec_t, 0 as i32 as vec_t];
 
-static mut MOVEDIR_UP: vec3_t = [
-    0 as i32 as vec_t,
-    0 as i32 as vec_t,
-    1 as i32 as vec_t,
-];
+static mut MOVEDIR_UP: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
 
-static mut VEC_DOWN: vec3_t = [
-    0 as i32 as vec_t,
-    -(2 as i32) as vec_t,
-    0 as i32 as vec_t,
-];
+static mut VEC_DOWN: vec3_t = [0 as i32 as vec_t, -(2 as i32) as vec_t, 0 as i32 as vec_t];
 
-static mut MOVEDIR_DOWN: vec3_t = [
-    0 as i32 as vec_t,
-    0 as i32 as vec_t,
-    -(1 as i32) as vec_t,
-];
+static mut MOVEDIR_DOWN: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, -(1 as i32) as vec_t];
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_SetMovedir(
-    mut angles: *mut vec_t,
-    mut movedir: *mut vec_t,
-) {
-    if VectorCompare(
-        angles as *const vec_t,
-        VEC_UP.as_mut_ptr() as *const vec_t,
-    ) != 0
-    {
+pub unsafe extern "C" fn AAS_SetMovedir(mut angles: *mut vec_t, mut movedir: *mut vec_t) {
+    if VectorCompare(angles as *const vec_t, VEC_UP.as_mut_ptr() as *const vec_t) != 0 {
         *movedir.offset(0 as i32 as isize) = MOVEDIR_UP[0 as i32 as usize]; //end if
         *movedir.offset(1 as i32 as isize) = MOVEDIR_UP[1 as i32 as usize]; //end else if
         *movedir.offset(2 as i32 as isize) = MOVEDIR_UP[2 as i32 as usize]
@@ -854,21 +817,13 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
     let mut mass: f32 = 0.;
     let mut knockback: f32 = 0.;
     let mut points: f32 = 0.;
-    let mut rocketoffset: vec3_t = [
-        8 as i32 as vec_t,
-        8 as i32 as vec_t,
-        -(8 as i32) as vec_t,
-    ];
+    let mut rocketoffset: vec3_t = [8 as i32 as vec_t, 8 as i32 as vec_t, -(8 as i32) as vec_t];
     let mut botmins: vec3_t = [
         -(16 as i32) as vec_t,
         -(16 as i32) as vec_t,
         -(24 as i32) as vec_t,
     ];
-    let mut botmaxs: vec3_t = [
-        16 as i32 as vec_t,
-        16 as i32 as vec_t,
-        32 as i32 as vec_t,
-    ];
+    let mut botmaxs: vec3_t = [16 as i32 as vec_t, 16 as i32 as vec_t, 32 as i32 as vec_t];
     let mut bsptrace: bsp_trace_t = bsp_trace_t {
         allsolid: qfalse,
         startsolid: qfalse,
@@ -933,23 +888,18 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
     v[0 as i32 as usize] = botmins[0 as i32 as usize] + botmaxs[0 as i32 as usize];
     v[1 as i32 as usize] = botmins[1 as i32 as usize] + botmaxs[1 as i32 as usize];
     v[2 as i32 as usize] = botmins[2 as i32 as usize] + botmaxs[2 as i32 as usize];
-    v[0 as i32 as usize] = (*origin.offset(0 as i32 as isize) as f64
-        + v[0 as i32 as usize] as f64 * 0.5f64)
-        as vec_t;
-    v[1 as i32 as usize] = (*origin.offset(1 as i32 as isize) as f64
-        + v[1 as i32 as usize] as f64 * 0.5f64)
-        as vec_t;
-    v[2 as i32 as usize] = (*origin.offset(2 as i32 as isize) as f64
-        + v[2 as i32 as usize] as f64 * 0.5f64)
-        as vec_t;
+    v[0 as i32 as usize] =
+        (*origin.offset(0 as i32 as isize) as f64 + v[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    v[1 as i32 as usize] =
+        (*origin.offset(1 as i32 as isize) as f64 + v[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    v[2 as i32 as usize] =
+        (*origin.offset(2 as i32 as isize) as f64 + v[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
     v[0 as i32 as usize] = bsptrace.endpos[0 as i32 as usize] - v[0 as i32 as usize];
     v[1 as i32 as usize] = bsptrace.endpos[1 as i32 as usize] - v[1 as i32 as usize];
     v[2 as i32 as usize] = bsptrace.endpos[2 as i32 as usize] - v[2 as i32 as usize];
     //
-    points = (radiusdamage as f64
-        - 0.5f64
-            * VectorLength(v.as_mut_ptr() as *const vec_t) as f64)
-        as f32;
+    points =
+        (radiusdamage as f64 - 0.5f64 * VectorLength(v.as_mut_ptr() as *const vec_t) as f64) as f32;
     if points < 0 as i32 as f32 {
         points = 0 as i32 as f32
     }
@@ -965,15 +915,12 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
     dir[2 as i32 as usize] = *origin.offset(2 as i32 as isize) - bsptrace.endpos[2 as i32 as usize];
     VectorNormalize(dir.as_mut_ptr());
     //damage velocity
-    kvel[0 as i32 as usize] = (dir[0 as i32 as usize] as f64
-        * (1600.0f64 * knockback as f64 / mass as f64))
-        as vec_t; //the rocket jump hack...
-    kvel[1 as i32 as usize] = (dir[1 as i32 as usize] as f64
-        * (1600.0f64 * knockback as f64 / mass as f64))
-        as vec_t;
-    kvel[2 as i32 as usize] = (dir[2 as i32 as usize] as f64
-        * (1600.0f64 * knockback as f64 / mass as f64))
-        as vec_t;
+    kvel[0 as i32 as usize] =
+        (dir[0 as i32 as usize] as f64 * (1600.0f64 * knockback as f64 / mass as f64)) as vec_t; //the rocket jump hack...
+    kvel[1 as i32 as usize] =
+        (dir[1 as i32 as usize] as f64 * (1600.0f64 * knockback as f64 / mass as f64)) as vec_t;
+    kvel[2 as i32 as usize] =
+        (dir[2 as i32 as usize] as f64 * (1600.0f64 * knockback as f64 / mass as f64)) as vec_t;
     //rocket impact velocity + jump velocity
     return kvel[2 as i32 as usize] + aassettings.phys_jumpvel;
 }
@@ -986,9 +933,7 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_RocketJumpZVelocity(
-    mut origin: *mut vec_t,
-) -> f32 {
+pub unsafe extern "C" fn AAS_RocketJumpZVelocity(mut origin: *mut vec_t) -> f32 {
     //rocket radius damage is 120 (p_weapon.c: Weapon_RocketLauncher_Fire)
     return AAS_WeaponJumpZVelocity(origin, 120 as i32 as f32);
 }
@@ -1001,9 +946,7 @@ pub unsafe extern "C" fn AAS_RocketJumpZVelocity(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_BFGJumpZVelocity(
-    mut origin: *mut vec_t,
-) -> f32 {
+pub unsafe extern "C" fn AAS_BFGJumpZVelocity(mut origin: *mut vec_t) -> f32 {
     //bfg radius damage is 1000 (p_weapon.c: weapon_bfg_fire)
     return AAS_WeaponJumpZVelocity(origin, 120 as i32 as f32);
 }
@@ -1289,11 +1232,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
     let mut frame_test_vel: vec3_t = [0.; 3];
     let mut old_frame_test_vel: vec3_t = [0.; 3];
     let mut left_test_vel: vec3_t = [0.; 3];
-    let mut up: vec3_t = [
-        0 as i32 as vec_t,
-        0 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ];
+    let mut up: vec3_t = [0 as i32 as vec_t, 0 as i32 as vec_t, 1 as i32 as vec_t];
     let mut plane: *mut aas_plane_t = 0 as *mut aas_plane_t;
     let mut plane2: *mut aas_plane_t = 0 as *mut aas_plane_t;
     let mut trace: aas_trace_t = aas_trace_t {
@@ -1347,8 +1286,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
     org[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     org[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     org[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
-    org[2 as i32 as usize] =
-        (org[2 as i32 as usize] as f64 + 0.25f64) as vec_t;
+    org[2 as i32 as usize] = (org[2 as i32 as usize] as f64 + 0.25f64) as vec_t;
     //velocity to test for the first frame
     frame_test_vel[0 as i32 as usize] = *velocity.offset(0 as i32 as isize) * frametime;
     frame_test_vel[1 as i32 as usize] = *velocity.offset(1 as i32 as isize) * frametime;
@@ -1428,10 +1366,9 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                 //ax = 2;
                 if swimming == 0 && *cmdmove.offset(2 as i32 as isize) > 1 as i32 as f32 {
                     //if not swimming and upmove is positive then jump
-                    frame_test_vel[2 as i32 as usize] = (phys_jumpvel as f64
-                        - gravity as f64 * 0.1f64 * frametime as f64
-                        + 5 as i32 as f64)
-                        as vec_t; //end if
+                    frame_test_vel[2 as i32 as usize] =
+                        (phys_jumpvel as f64 - gravity as f64 * 0.1f64 * frametime as f64
+                            + 5 as i32 as f64) as vec_t; //end if
                     jump_frame = n;
                     //jump velocity minus the gravity for one frame + 5 for safety
                     //jumping so air accelerate
@@ -1710,8 +1647,8 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                         start[0 as i32 as usize] = org[0 as i32 as usize];
                         start[1 as i32 as usize] = org[1 as i32 as usize];
                         start[2 as i32 as usize] = org[2 as i32 as usize];
-                        start[2 as i32 as usize] = (start[2 as i32 as usize] as f64 + 0.5f64)
-                            as vec_t;
+                        start[2 as i32 as usize] =
+                            (start[2 as i32 as usize] as f64 + 0.5f64) as vec_t;
                         if crate::src::botlib::be_aas_sample::AAS_PointAreaNum(start.as_mut_ptr())
                             == stopareanum
                         {
@@ -1782,10 +1719,8 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                                 end[1 as i32 as usize] - steptrace.endpos[1 as i32 as usize];
                             left_test_vel[2 as i32 as usize] =
                                 end[2 as i32 as usize] - steptrace.endpos[2 as i32 as usize];
-                            left_test_vel[2 as i32 as usize] =
-                                0 as i32 as vec_t;
-                            frame_test_vel[2 as i32 as usize] =
-                                0 as i32 as vec_t;
+                            left_test_vel[2 as i32 as usize] = 0 as i32 as vec_t;
+                            frame_test_vel[2 as i32 as usize] = 0 as i32 as vec_t;
                             //
                             //end if
                             //#ifdef AAS_MOVE_DEBUG

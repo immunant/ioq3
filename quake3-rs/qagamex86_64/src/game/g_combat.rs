@@ -620,8 +620,7 @@ pub unsafe extern "C" fn ScorePlum(
     mut score: i32,
 ) {
     let mut plum: *mut gentity_t = 0 as *mut gentity_t;
-    plum = G_TempEntity(origin, EV_SCOREPLUM as i32)
-        as *mut gentity_s;
+    plum = G_TempEntity(origin, EV_SCOREPLUM as i32) as *mut gentity_s;
     // only send this temp entity to a single client
     (*plum).r.svFlags |= 0x100 as i32;
     (*plum).r.singleClient = (*ent).s.number;
@@ -638,11 +637,7 @@ Adds score to both the client and his team
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AddScore(
-    mut ent: *mut gentity_t,
-    mut origin: *mut vec_t,
-    mut score: i32,
-) {
+pub unsafe extern "C" fn AddScore(mut ent: *mut gentity_t, mut origin: *mut vec_t, mut score: i32) {
     if (*ent).client.is_null() {
         return;
     }
@@ -655,9 +650,8 @@ pub unsafe extern "C" fn AddScore(
     //
     (*(*ent).client).ps.persistant[PERS_SCORE as i32 as usize] += score;
     if g_gametype.integer == GT_TEAM as i32 {
-        level.teamScores[(*(*ent).client).ps.persistant
-            [PERS_TEAM as i32 as usize]
-            as usize] += score
+        level.teamScores[(*(*ent).client).ps.persistant[PERS_TEAM as i32 as usize] as usize] +=
+            score
     }
     CalculateRanks();
 }
@@ -682,16 +676,11 @@ pub unsafe extern "C" fn TossClientItems(mut self_0: *mut gentity_t) {
     // weapon that isn't the mg or gauntlet.  Without this, a client
     // can pick up a weapon, be killed, and not drop the weapon because
     // their weapon change hasn't completed yet and they are still holding the MG.
-    if weapon == WP_MACHINEGUN as i32
-        || weapon == WP_GRAPPLING_HOOK as i32
-    {
+    if weapon == WP_MACHINEGUN as i32 || weapon == WP_GRAPPLING_HOOK as i32 {
         if (*(*self_0).client).ps.weaponstate == WEAPON_DROPPING as i32 {
             weapon = (*(*self_0).client).pers.cmd.weapon as i32
         }
-        if (*(*self_0).client).ps.stats[STAT_WEAPONS as i32 as usize]
-            & (1 as i32) << weapon
-            == 0
-        {
+        if (*(*self_0).client).ps.stats[STAT_WEAPONS as i32 as usize] & (1 as i32) << weapon == 0 {
             weapon = WP_NONE as i32
         }
     }
@@ -700,9 +689,7 @@ pub unsafe extern "C" fn TossClientItems(mut self_0: *mut gentity_t) {
         && (*(*self_0).client).ps.ammo[weapon as usize] != 0
     {
         // find the item type for this weapon
-        item =
-            BG_FindItemForWeapon(weapon as weapon_t)
-                as *mut gitem_s;
+        item = BG_FindItemForWeapon(weapon as weapon_t) as *mut gitem_s;
         // spawn the item
 
         Drop_Item(
@@ -717,19 +704,13 @@ pub unsafe extern "C" fn TossClientItems(mut self_0: *mut gentity_t) {
         i = 1 as i32;
         while i < PW_NUM_POWERUPS as i32 {
             if (*(*self_0).client).ps.powerups[i as usize] > level.time {
-                item = BG_FindItemForPowerup(
-                    i as powerup_t,
-                ) as *mut gitem_s;
+                item = BG_FindItemForPowerup(i as powerup_t) as *mut gitem_s;
                 if !item.is_null() {
-                    drop_0 = Drop_Item(
-                        self_0 as *mut gentity_s,
-                        item as *mut gitem_s,
-                        angle,
-                    ) as *mut gentity_s;
+                    drop_0 = Drop_Item(self_0 as *mut gentity_s, item as *mut gitem_s, angle)
+                        as *mut gentity_s;
                     // decide how many seconds it has left
-                    (*drop_0).count = ((*(*self_0).client).ps.powerups[i as usize]
-                        - level.time)
-                        / 1000 as i32;
+                    (*drop_0).count =
+                        ((*(*self_0).client).ps.powerups[i as usize] - level.time) / 1000 as i32;
                     if (*drop_0).count < 1 as i32 {
                         (*drop_0).count = 1 as i32
                     }
@@ -773,9 +754,7 @@ pub unsafe extern "C" fn LookAtKiller(
         return;
     }
     (*(*self_0).client).ps.stats[STAT_DEAD_YAW as i32 as usize] =
-        vectoyaw(
-            dir.as_mut_ptr() as *const vec_t
-        ) as i32;
+        vectoyaw(dir.as_mut_ptr() as *const vec_t) as i32;
 }
 /*
 ==================
@@ -792,9 +771,7 @@ pub unsafe extern "C" fn GibEntity(mut self_0: *mut gentity_t, mut killer: i32) 
         // check if there is a kamikaze timer around for this owner
         i = 0 as i32;
         while i < level.num_entities {
-            ent = &mut *g_entities
-                .as_mut_ptr()
-                .offset(i as isize) as *mut gentity_t;
+            ent = &mut *g_entities.as_mut_ptr().offset(i as isize) as *mut gentity_t;
             if !((*ent).inuse as u64 == 0) {
                 if !((*ent).activator != self_0) {
                     if !(libc::strcmp(
@@ -802,9 +779,7 @@ pub unsafe extern "C" fn GibEntity(mut self_0: *mut gentity_t, mut killer: i32) 
                         b"kamikaze timer\x00" as *const u8 as *const libc::c_char,
                     ) != 0)
                     {
-                        G_FreeEntity(
-                            ent as *mut gentity_s,
-                        );
+                        G_FreeEntity(ent as *mut gentity_s);
                         break;
                     }
                 }
@@ -812,11 +787,7 @@ pub unsafe extern "C" fn GibEntity(mut self_0: *mut gentity_t, mut killer: i32) 
             i += 1
         }
     }
-    G_AddEvent(
-        self_0 as *mut gentity_s,
-        EV_GIB_PLAYER as i32,
-        killer,
-    );
+    G_AddEvent(self_0 as *mut gentity_s, EV_GIB_PLAYER as i32, killer);
     (*self_0).takedamage = qfalse;
     (*self_0).s.eType = ET_INVISIBLE as i32;
     (*self_0).r.contents = 0 as i32;
@@ -894,18 +865,14 @@ pub unsafe extern "C" fn CheckAlmostCapture(
     {
         // get the goal flag this player should have been going for
         if g_gametype.integer == GT_CTF as i32 {
-            if (*(*self_0).client).sess.sessionTeam as u32
-                == TEAM_BLUE as i32 as u32
-            {
+            if (*(*self_0).client).sess.sessionTeam as u32 == TEAM_BLUE as i32 as u32 {
                 classname = b"team_CTF_blueflag\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char
             } else {
                 classname =
                     b"team_CTF_redflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
             }
-        } else if (*(*self_0).client).sess.sessionTeam as u32
-            == TEAM_BLUE as i32 as u32
-        {
+        } else if (*(*self_0).client).sess.sessionTeam as u32 == TEAM_BLUE as i32 as u32 {
             classname =
                 b"team_CTF_redflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
         } else {
@@ -916,8 +883,7 @@ pub unsafe extern "C" fn CheckAlmostCapture(
         loop {
             ent = G_Find(
                 ent as *mut gentity_s,
-                &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char
-                    as size_t as i32,
+                &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
                 classname,
             ) as *mut gentity_s;
             if !(!ent.is_null() && (*ent).flags & 0x1000 as i32 != 0) {
@@ -933,14 +899,11 @@ pub unsafe extern "C" fn CheckAlmostCapture(
                 - (*ent).s.origin[1 as i32 as usize];
             dir[2 as i32 as usize] = (*(*self_0).client).ps.origin[2 as i32 as usize]
                 - (*ent).s.origin[2 as i32 as usize];
-            if VectorLength(dir.as_mut_ptr() as *const vec_t)
-                < 200 as i32 as f32
-            {
-                (*(*self_0).client).ps.persistant
-                    [PERS_PLAYEREVENTS as i32 as usize] ^= 0x4 as i32;
+            if VectorLength(dir.as_mut_ptr() as *const vec_t) < 200 as i32 as f32 {
+                (*(*self_0).client).ps.persistant[PERS_PLAYEREVENTS as i32 as usize] ^= 0x4 as i32;
                 if !(*attacker).client.is_null() {
-                    (*(*attacker).client).ps.persistant
-                        [PERS_PLAYEREVENTS as i32 as usize] ^= 0x4 as i32
+                    (*(*attacker).client).ps.persistant[PERS_PLAYEREVENTS as i32 as usize] ^=
+                        0x4 as i32
                 }
             }
         }
@@ -962,9 +925,7 @@ pub unsafe extern "C" fn CheckAlmostScored(
     let mut classname: *mut libc::c_char = 0 as *mut libc::c_char;
     // if the player was carrying cubes
     if (*(*self_0).client).ps.generic1 != 0 {
-        if (*(*self_0).client).sess.sessionTeam as u32
-            == TEAM_BLUE as i32 as u32
-        {
+        if (*(*self_0).client).sess.sessionTeam as u32 == TEAM_BLUE as i32 as u32 {
             classname =
                 b"team_redobelisk\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
         } else {
@@ -973,8 +934,7 @@ pub unsafe extern "C" fn CheckAlmostScored(
         }
         ent = G_Find(
             0 as *mut gentity_t as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char
-                as size_t as i32,
+            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
             classname,
         ) as *mut gentity_s;
         // if we found the destination obelisk
@@ -986,14 +946,11 @@ pub unsafe extern "C" fn CheckAlmostScored(
                 - (*ent).s.origin[1 as i32 as usize];
             dir[2 as i32 as usize] = (*(*self_0).client).ps.origin[2 as i32 as usize]
                 - (*ent).s.origin[2 as i32 as usize];
-            if VectorLength(dir.as_mut_ptr() as *const vec_t)
-                < 200 as i32 as f32
-            {
-                (*(*self_0).client).ps.persistant
-                    [PERS_PLAYEREVENTS as i32 as usize] ^= 0x4 as i32;
+            if VectorLength(dir.as_mut_ptr() as *const vec_t) < 200 as i32 as f32 {
+                (*(*self_0).client).ps.persistant[PERS_PLAYEREVENTS as i32 as usize] ^= 0x4 as i32;
                 if !(*attacker).client.is_null() {
-                    (*(*attacker).client).ps.persistant
-                        [PERS_PLAYEREVENTS as i32 as usize] ^= 0x4 as i32
+                    (*(*attacker).client).ps.persistant[PERS_PLAYEREVENTS as i32 as usize] ^=
+                        0x4 as i32
                 }
             }
         }
@@ -1054,9 +1011,7 @@ pub unsafe extern "C" fn player_die(
     // check for a player that almost brought in cubes
     CheckAlmostScored(self_0, attacker);
     if !(*self_0).client.is_null() && !(*(*self_0).client).hook.is_null() {
-        Weapon_HookFree(
-            (*(*self_0).client).hook as *mut gentity_s,
-        );
+        Weapon_HookFree((*(*self_0).client).hook as *mut gentity_s);
     }
     (*(*self_0).client).ps.pm_type = PM_DEAD as i32;
     if !attacker.is_null() {
@@ -1094,10 +1049,8 @@ pub unsafe extern "C" fn player_die(
         obit,
     );
     // broadcast the death event to everyone
-    ent = G_TempEntity(
-        (*self_0).r.currentOrigin.as_mut_ptr(),
-        EV_OBITUARY as i32,
-    ) as *mut gentity_s; // send to everyone
+    ent =
+        G_TempEntity((*self_0).r.currentOrigin.as_mut_ptr(), EV_OBITUARY as i32) as *mut gentity_s; // send to everyone
     (*ent).s.eventParm = meansOfDeath;
     (*ent).s.otherEntityNum = (*self_0).s.number;
     (*ent).s.otherEntityNum2 = killer;
@@ -1107,11 +1060,7 @@ pub unsafe extern "C" fn player_die(
     if !attacker.is_null() && !(*attacker).client.is_null() {
         (*(*attacker).client).lastkilled_client = (*self_0).s.number;
         if attacker == self_0
-            || OnSameTeam(
-                self_0 as *mut gentity_s,
-                attacker as *mut gentity_s,
-            ) as u32
-                != 0
+            || OnSameTeam(self_0 as *mut gentity_s, attacker as *mut gentity_s) as u32 != 0
         {
             AddScore(
                 attacker,
@@ -1122,8 +1071,7 @@ pub unsafe extern "C" fn player_die(
             AddScore(attacker, (*self_0).r.currentOrigin.as_mut_ptr(), 1 as i32);
             if meansOfDeath == MOD_GAUNTLET as i32 {
                 // play humiliation on player
-                (*(*attacker).client).ps.persistant
-                    [PERS_GAUNTLET_FRAG_COUNT as i32 as usize] += 1;
+                (*(*attacker).client).ps.persistant[PERS_GAUNTLET_FRAG_COUNT as i32 as usize] += 1;
                 // add the sprite over the player's head
                 (*(*attacker).client).ps.eFlags &= !(0x8000 as i32
                     | 0x8 as i32
@@ -1132,20 +1080,15 @@ pub unsafe extern "C" fn player_die(
                     | 0x10000 as i32
                     | 0x800 as i32);
                 (*(*attacker).client).ps.eFlags |= 0x40 as i32;
-                (*(*attacker).client).rewardTime =
-                    level.time + 2000 as i32;
+                (*(*attacker).client).rewardTime = level.time + 2000 as i32;
                 // also play humiliation on target
-                (*(*self_0).client).ps.persistant
-                    [PERS_PLAYEREVENTS as i32 as usize] ^= 0x2 as i32
+                (*(*self_0).client).ps.persistant[PERS_PLAYEREVENTS as i32 as usize] ^= 0x2 as i32
             }
             // check for two kills in a short amount of time
             // if this is close enough to the last kill, give a reward sound
-            if level.time - (*(*attacker).client).lastKillTime
-                < 3000 as i32
-            {
+            if level.time - (*(*attacker).client).lastKillTime < 3000 as i32 {
                 // play excellent on player
-                (*(*attacker).client).ps.persistant
-                    [PERS_EXCELLENT_COUNT as i32 as usize] += 1;
+                (*(*attacker).client).ps.persistant[PERS_EXCELLENT_COUNT as i32 as usize] += 1;
                 // add the sprite over the player's head
                 (*(*attacker).client).ps.eFlags &= !(0x8000 as i32
                     | 0x8 as i32
@@ -1154,8 +1097,7 @@ pub unsafe extern "C" fn player_die(
                     | 0x10000 as i32
                     | 0x800 as i32);
                 (*(*attacker).client).ps.eFlags |= 0x8 as i32;
-                (*(*attacker).client).rewardTime =
-                    level.time + 2000 as i32
+                (*(*attacker).client).rewardTime = level.time + 2000 as i32
             }
             (*(*attacker).client).lastKillTime = level.time
         }
@@ -1170,26 +1112,18 @@ pub unsafe extern "C" fn player_die(
     );
     // if I committed suicide, the flag does not fall, it returns.
     if meansOfDeath == MOD_SUICIDE as i32 {
-        if (*(*self_0).client).ps.powerups[PW_NEUTRALFLAG as i32 as usize] != 0
-        {
+        if (*(*self_0).client).ps.powerups[PW_NEUTRALFLAG as i32 as usize] != 0 {
             // only happens in One Flag CTF
             crate::src::game::g_team::Team_ReturnFlag(TEAM_FREE as i32);
-            (*(*self_0).client).ps.powerups[PW_NEUTRALFLAG as i32 as usize] =
-                0 as i32
-        } else if (*(*self_0).client).ps.powerups[PW_REDFLAG as i32 as usize]
-            != 0
-        {
+            (*(*self_0).client).ps.powerups[PW_NEUTRALFLAG as i32 as usize] = 0 as i32
+        } else if (*(*self_0).client).ps.powerups[PW_REDFLAG as i32 as usize] != 0 {
             // only happens in standard CTF
             crate::src::game::g_team::Team_ReturnFlag(TEAM_RED as i32);
-            (*(*self_0).client).ps.powerups[PW_REDFLAG as i32 as usize] =
-                0 as i32
-        } else if (*(*self_0).client).ps.powerups[PW_BLUEFLAG as i32 as usize]
-            != 0
-        {
+            (*(*self_0).client).ps.powerups[PW_REDFLAG as i32 as usize] = 0 as i32
+        } else if (*(*self_0).client).ps.powerups[PW_BLUEFLAG as i32 as usize] != 0 {
             // only happens in standard CTF
             crate::src::game::g_team::Team_ReturnFlag(TEAM_BLUE as i32); // show scores
-            (*(*self_0).client).ps.powerups[PW_BLUEFLAG as i32 as usize] =
-                0 as i32
+            (*(*self_0).client).ps.powerups[PW_BLUEFLAG as i32 as usize] = 0 as i32
         }
     }
     TossClientItems(self_0);
@@ -1199,19 +1133,11 @@ pub unsafe extern "C" fn player_die(
     i = 0 as i32; // can still be gibbed
     while i < level.maxclients {
         let mut client: *mut gclient_t = 0 as *mut gclient_t;
-        client = &mut *level.clients.offset(i as isize)
-            as *mut gclient_s;
+        client = &mut *level.clients.offset(i as isize) as *mut gclient_s;
         if !((*client).pers.connected as u32 != CON_CONNECTED as i32 as u32) {
-            if !((*client).sess.sessionTeam as u32
-                != TEAM_SPECTATOR as i32 as u32)
-            {
+            if !((*client).sess.sessionTeam as u32 != TEAM_SPECTATOR as i32 as u32) {
                 if (*client).sess.spectatorClient == (*self_0).s.number {
-                    Cmd_Score_f(
-                        g_entities
-                            .as_mut_ptr()
-                            .offset(i as isize)
-                            as *mut gentity_s,
-                    );
+                    Cmd_Score_f(g_entities.as_mut_ptr().offset(i as isize) as *mut gentity_s);
                 }
             }
         }
@@ -1267,11 +1193,7 @@ pub unsafe extern "C" fn player_die(
             (*(*self_0).client).ps.legsAnim & 128 as i32 ^ 128 as i32 | anim;
         (*(*self_0).client).ps.torsoAnim =
             (*(*self_0).client).ps.torsoAnim & 128 as i32 ^ 128 as i32 | anim;
-        G_AddEvent(
-            self_0 as *mut gentity_s,
-            EV_DEATH1 as i32 + i_0,
-            killer,
-        );
+        G_AddEvent(self_0 as *mut gentity_s, EV_DEATH1 as i32 + i_0, killer);
         // the body can still be gibbed
         (*self_0).die = Some(
             body_die
@@ -1456,9 +1378,7 @@ pub unsafe extern "C" fn G_Damage(
     }
     // shootable doors / buttons don't actually have any health
     if (*targ).s.eType == ET_MOVER as i32 {
-        if (*targ).use_0.is_some()
-            && (*targ).moverState as u32 == MOVER_POS1 as i32 as u32
-        {
+        if (*targ).use_0.is_some() && (*targ).moverState as u32 == MOVER_POS1 as i32 as u32 {
             (*targ).use_0.expect("non-null function pointer")(targ, inflictor, attacker);
         }
         return;
@@ -1495,12 +1415,12 @@ pub unsafe extern "C" fn G_Damage(
         let mut kvel: vec3_t = [0.; 3];
         let mut mass: f32 = 0.;
         mass = 200 as i32 as f32;
-        kvel[0 as i32 as usize] = *dir.offset(0 as i32 as isize)
-            * (g_knockback.value * knockback as f32 / mass);
-        kvel[1 as i32 as usize] = *dir.offset(1 as i32 as isize)
-            * (g_knockback.value * knockback as f32 / mass);
-        kvel[2 as i32 as usize] = *dir.offset(2 as i32 as isize)
-            * (g_knockback.value * knockback as f32 / mass);
+        kvel[0 as i32 as usize] =
+            *dir.offset(0 as i32 as isize) * (g_knockback.value * knockback as f32 / mass);
+        kvel[1 as i32 as usize] =
+            *dir.offset(1 as i32 as isize) * (g_knockback.value * knockback as f32 / mass);
+        kvel[2 as i32 as usize] =
+            *dir.offset(2 as i32 as isize) * (g_knockback.value * knockback as f32 / mass);
         (*(*targ).client).ps.velocity[0 as i32 as usize] =
             (*(*targ).client).ps.velocity[0 as i32 as usize] + kvel[0 as i32 as usize];
         (*(*targ).client).ps.velocity[1 as i32 as usize] =
@@ -1527,11 +1447,7 @@ pub unsafe extern "C" fn G_Damage(
         // if TF_NO_FRIENDLY_FIRE is set, don't do damage to the target
         // if the attacker was on the same team
         if targ != attacker
-            && OnSameTeam(
-                targ as *mut gentity_s,
-                attacker as *mut gentity_s,
-            ) as u32
-                != 0
+            && OnSameTeam(targ as *mut gentity_s, attacker as *mut gentity_s) as u32 != 0
         {
             if g_friendlyFire.integer == 0 {
                 return;
@@ -1544,9 +1460,7 @@ pub unsafe extern "C" fn G_Damage(
     }
     // battlesuit protects from all radius damage (but takes knockback)
     // and protects 50% against all damage
-    if !client.is_null()
-        && (*client).ps.powerups[PW_BATTLESUIT as i32 as usize] != 0
-    {
+    if !client.is_null() && (*client).ps.powerups[PW_BATTLESUIT as i32 as usize] != 0 {
         G_AddEvent(
             targ as *mut gentity_s,
             EV_POWERUP_BATTLESUIT as i32,
@@ -1565,19 +1479,13 @@ pub unsafe extern "C" fn G_Damage(
         && (*targ).s.eType != ET_MISSILE as i32
         && (*targ).s.eType != ET_GENERAL as i32
     {
-        if OnSameTeam(
-            targ as *mut gentity_s,
-            attacker as *mut gentity_s,
-        ) as u64
-            != 0
-        {
+        if OnSameTeam(targ as *mut gentity_s, attacker as *mut gentity_s) as u64 != 0 {
             (*(*attacker).client).ps.persistant[PERS_HITS as i32 as usize] -= 1
         } else {
             (*(*attacker).client).ps.persistant[PERS_HITS as i32 as usize] += 1
         }
-        (*(*attacker).client).ps.persistant
-            [PERS_ATTACKEE_ARMOR as i32 as usize] = (*targ).health << 8 as i32
-            | (*client).ps.stats[STAT_ARMOR as i32 as usize]
+        (*(*attacker).client).ps.persistant[PERS_ATTACKEE_ARMOR as i32 as usize] =
+            (*targ).health << 8 as i32 | (*client).ps.stats[STAT_ARMOR as i32 as usize]
     }
     // always give half damage if hurting self
     // calculated after knockback, so rocket jumping works
@@ -1606,8 +1514,7 @@ pub unsafe extern "C" fn G_Damage(
     // at the end of the frame
     if !client.is_null() {
         if !attacker.is_null() {
-            (*client).ps.persistant[PERS_ATTACKER as i32 as usize] =
-                (*attacker).s.number
+            (*client).ps.persistant[PERS_ATTACKER as i32 as usize] = (*attacker).s.number
         } else {
             (*client).ps.persistant[PERS_ATTACKER as i32 as usize] =
                 ((1 as i32) << 10 as i32) - 2 as i32
@@ -1643,8 +1550,7 @@ pub unsafe extern "C" fn G_Damage(
     if take != 0 {
         (*targ).health = (*targ).health - take;
         if !(*targ).client.is_null() {
-            (*(*targ).client).ps.stats[STAT_HEALTH as i32 as usize] =
-                (*targ).health
+            (*(*targ).client).ps.stats[STAT_HEALTH as i32 as usize] = (*targ).health
         }
         if (*targ).health <= 0 as i32 {
             if !client.is_null() {
@@ -1673,10 +1579,7 @@ explosions and melee attacks.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CanDamage(
-    mut targ: *mut gentity_t,
-    mut origin: *mut vec_t,
-) -> qboolean {
+pub unsafe extern "C" fn CanDamage(mut targ: *mut gentity_t, mut origin: *mut vec_t) -> qboolean {
     let mut dest: vec3_t = [0.; 3];
     let mut tr: trace_t = trace_t {
         allsolid: qfalse,
@@ -1700,11 +1603,7 @@ pub unsafe extern "C" fn CanDamage(
         -(15 as i32) as vec_t,
         -(15 as i32) as vec_t,
     ];
-    let mut offsetmaxs: vec3_t = [
-        15 as i32 as vec_t,
-        15 as i32 as vec_t,
-        15 as i32 as vec_t,
-    ];
+    let mut offsetmaxs: vec3_t = [15 as i32 as vec_t, 15 as i32 as vec_t, 15 as i32 as vec_t];
     // use the midpoint of the bounds instead of the origin, because
     // bmodels may have their origin is 0,0,0
     midpoint[0 as i32 as usize] =
@@ -1713,22 +1612,17 @@ pub unsafe extern "C" fn CanDamage(
         (*targ).r.absmin[1 as i32 as usize] + (*targ).r.absmax[1 as i32 as usize];
     midpoint[2 as i32 as usize] =
         (*targ).r.absmin[2 as i32 as usize] + (*targ).r.absmax[2 as i32 as usize];
-    midpoint[0 as i32 as usize] =
-        (midpoint[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
-    midpoint[1 as i32 as usize] =
-        (midpoint[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
-    midpoint[2 as i32 as usize] =
-        (midpoint[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    midpoint[0 as i32 as usize] = (midpoint[0 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    midpoint[1 as i32 as usize] = (midpoint[1 as i32 as usize] as f64 * 0.5f64) as vec_t;
+    midpoint[2 as i32 as usize] = (midpoint[2 as i32 as usize] as f64 * 0.5f64) as vec_t;
     dest[0 as i32 as usize] = midpoint[0 as i32 as usize];
     dest[1 as i32 as usize] = midpoint[1 as i32 as usize];
     dest[2 as i32 as usize] = midpoint[2 as i32 as usize];
     trap_Trace(
         &mut tr as *mut _ as *mut trace_t,
         origin as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
         dest.as_mut_ptr() as *const vec_t,
         ((1 as i32) << 10 as i32) - 1 as i32,
         1 as i32,
@@ -1747,10 +1641,8 @@ pub unsafe extern "C" fn CanDamage(
     trap_Trace(
         &mut tr as *mut _ as *mut trace_t,
         origin as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
         dest.as_mut_ptr() as *const vec_t,
         ((1 as i32) << 10 as i32) - 1 as i32,
         1 as i32,
@@ -1767,10 +1659,8 @@ pub unsafe extern "C" fn CanDamage(
     trap_Trace(
         &mut tr as *mut _ as *mut trace_t,
         origin as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
         dest.as_mut_ptr() as *const vec_t,
         ((1 as i32) << 10 as i32) - 1 as i32,
         1 as i32,
@@ -1787,10 +1677,8 @@ pub unsafe extern "C" fn CanDamage(
     trap_Trace(
         &mut tr as *mut _ as *mut trace_t,
         origin as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
         dest.as_mut_ptr() as *const vec_t,
         ((1 as i32) << 10 as i32) - 1 as i32,
         1 as i32,
@@ -1807,10 +1695,8 @@ pub unsafe extern "C" fn CanDamage(
     trap_Trace(
         &mut tr as *mut _ as *mut trace_t,
         origin as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
         dest.as_mut_ptr() as *const vec_t,
         ((1 as i32) << 10 as i32) - 1 as i32,
         1 as i32,
@@ -1827,10 +1713,8 @@ pub unsafe extern "C" fn CanDamage(
     trap_Trace(
         &mut tr as *mut _ as *mut trace_t,
         origin as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
         dest.as_mut_ptr() as *const vec_t,
         ((1 as i32) << 10 as i32) - 1 as i32,
         1 as i32,
@@ -1847,10 +1731,8 @@ pub unsafe extern "C" fn CanDamage(
     trap_Trace(
         &mut tr as *mut _ as *mut trace_t,
         origin as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
         dest.as_mut_ptr() as *const vec_t,
         ((1 as i32) << 10 as i32) - 1 as i32,
         1 as i32,
@@ -1867,10 +1749,8 @@ pub unsafe extern "C" fn CanDamage(
     trap_Trace(
         &mut tr as *mut _ as *mut trace_t,
         origin as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
         dest.as_mut_ptr() as *const vec_t,
         ((1 as i32) << 10 as i32) - 1 as i32,
         1 as i32,
@@ -1887,10 +1767,8 @@ pub unsafe extern "C" fn CanDamage(
     trap_Trace(
         &mut tr as *mut _ as *mut trace_t,
         origin as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
         dest.as_mut_ptr() as *const vec_t,
         ((1 as i32) << 10 as i32) - 1 as i32,
         1 as i32,
@@ -2103,8 +1981,7 @@ pub unsafe extern "C" fn G_RadiusDamage(
     let mut dir: vec3_t = [0.; 3];
     let mut i: i32 = 0;
     let mut e: i32 = 0;
-    let mut hitClient: qboolean =
-        qfalse;
+    let mut hitClient: qboolean = qfalse;
     if radius < 1 as i32 as f32 {
         radius = 1 as i32 as f32
     }
@@ -2144,10 +2021,7 @@ pub unsafe extern "C" fn G_RadiusDamage(
                 if !(dist >= radius) {
                     points = (damage as f64 * (1.0f64 - (dist / radius) as f64)) as f32;
                     if CanDamage(ent, origin) as u64 != 0 {
-                        if LogAccuracyHit(
-                            ent as *mut gentity_s,
-                            attacker as *mut gentity_s,
-                        ) as u64
+                        if LogAccuracyHit(ent as *mut gentity_s, attacker as *mut gentity_s) as u64
                             != 0
                         {
                             hitClient = qtrue

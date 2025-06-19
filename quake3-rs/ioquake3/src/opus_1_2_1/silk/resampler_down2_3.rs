@@ -80,8 +80,7 @@ pub unsafe extern "C" fn silk_resampler_down2_3(
     let mut counter: opus_int32 = 0;
     let mut res_Q6: opus_int32 = 0;
     let mut buf: *mut opus_int32 = 0 as *mut opus_int32;
-    let mut buf_ptr: *mut opus_int32 =
-        0 as *mut opus_int32;
+    let mut buf_ptr: *mut opus_int32 = 0 as *mut opus_int32;
     let mut fresh0 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<opus_int32>() as libc::c_ulong)
@@ -89,10 +88,12 @@ pub unsafe extern "C" fn silk_resampler_down2_3(
     );
     buf = fresh0.as_mut_ptr() as *mut opus_int32;
     /* Copy buffered samples to start of buffer */
-    crate::stdlib::memcpy(buf as *mut libc::c_void, S as *const libc::c_void,
-           (4 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
-                                                as libc::c_ulong));
+    crate::stdlib::memcpy(
+        buf as *mut libc::c_void,
+        S as *const libc::c_void,
+        (4 as i32 as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+    );
     loop
     /* Iterate over blocks of frameSizeIn input samples */
     {
@@ -207,18 +208,16 @@ pub unsafe extern "C" fn silk_resampler_down2_3(
         /* More iterations to do; copy last part of filtered signal to beginning of buffer */
         crate::stdlib::memcpy(
             buf as *mut libc::c_void,
-            &mut *buf.offset(nSamplesIn as isize) as *mut opus_int32
-                as *const libc::c_void,
-            (4 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                opus_int32,
-            >() as libc::c_ulong),
+            &mut *buf.offset(nSamplesIn as isize) as *mut opus_int32 as *const libc::c_void,
+            (4 as i32 as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
         );
     }
     /* Copy last part of filtered signal to the state for the next call */
-    crate::stdlib::memcpy(S as *mut libc::c_void,
-           &mut *buf.offset(nSamplesIn as isize) as *mut opus_int32 as
-               *const libc::c_void,
-           (4 as i32 as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
-                                                as libc::c_ulong));
+    crate::stdlib::memcpy(
+        S as *mut libc::c_void,
+        &mut *buf.offset(nSamplesIn as isize) as *mut opus_int32 as *const libc::c_void,
+        (4 as i32 as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+    );
 }

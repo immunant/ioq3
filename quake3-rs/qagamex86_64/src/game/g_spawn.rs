@@ -297,11 +297,7 @@ pub unsafe extern "C" fn G_SpawnString(
     }
     i = 0 as i32;
     while i < level.numSpawnVars {
-        if Q_stricmp(
-            key,
-            level.spawnVars[i as usize][0 as i32 as usize],
-        ) == 0
-        {
+        if Q_stricmp(key, level.spawnVars[i as usize][0 as i32 as usize]) == 0 {
             *out = level.spawnVars[i as usize][1 as i32 as usize];
             return qtrue;
         }
@@ -318,8 +314,7 @@ pub unsafe extern "C" fn G_SpawnFloat(
     mut out: *mut f32,
 ) -> qboolean {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut present: qboolean =
-        qfalse;
+    let mut present: qboolean = qfalse;
     present = G_SpawnString(key, defaultString, &mut s);
     *out = atof(s) as f32;
     return present;
@@ -332,8 +327,7 @@ pub unsafe extern "C" fn G_SpawnInt(
     mut out: *mut i32,
 ) -> qboolean {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut present: qboolean =
-        qfalse;
+    let mut present: qboolean = qfalse;
     present = G_SpawnString(key, defaultString, &mut s);
     *out = atoi(s);
     return present;
@@ -346,8 +340,7 @@ pub unsafe extern "C" fn G_SpawnVector(
     mut out: *mut f32,
 ) -> qboolean {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut present: qboolean =
-        qfalse;
+    let mut present: qboolean = qfalse;
     present = G_SpawnString(key, defaultString, &mut s);
     libc::sscanf(
         s,
@@ -377,10 +370,7 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"info_player_start\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                spawn: Some(
-                    SP_info_player_start
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_info_player_start as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -389,8 +379,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"info_player_deathmatch\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 spawn: Some(
-                    SP_info_player_deathmatch
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
+                    SP_info_player_deathmatch as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -400,8 +389,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"info_player_intermission\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 spawn: Some(
-                    SP_info_player_intermission
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
+                    SP_info_player_intermission as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -409,125 +397,91 @@ pub static mut spawns: [spawn_t; 49] = {
         {
             let mut init = spawn_t {
                 name: b"info_null\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_info_null as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_info_null as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"info_notnull\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_info_notnull
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_info_notnull as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"info_camp\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_info_camp as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_info_camp as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"func_plat\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_func_plat as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_func_plat as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"func_button\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_func_button
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_func_button as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"func_door\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_func_door as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_func_door as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"func_static\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_func_static
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_func_static as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"func_rotating\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_func_rotating
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_func_rotating as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"func_bobbing\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_func_bobbing
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_func_bobbing as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"func_pendulum\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_func_pendulum
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_func_pendulum as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"func_train\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_func_train
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_func_train as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"func_group\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_info_null as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_info_null as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"func_timer\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_func_timer
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_func_timer as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -535,10 +489,7 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"trigger_always\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                spawn: Some(
-                    SP_trigger_always
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_trigger_always as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -546,20 +497,14 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"trigger_multiple\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                spawn: Some(
-                    SP_trigger_multiple
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_trigger_multiple as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"trigger_push\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_trigger_push
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_trigger_push as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -567,30 +512,21 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"trigger_teleport\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                spawn: Some(
-                    SP_trigger_teleport
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_trigger_teleport as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"trigger_hurt\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_trigger_hurt
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_trigger_hurt as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"target_give\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_target_give
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_target_give as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -599,8 +535,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"target_remove_powerups\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 spawn: Some(
-                    SP_target_remove_powerups
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
+                    SP_target_remove_powerups as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -608,10 +543,7 @@ pub static mut spawns: [spawn_t; 49] = {
         {
             let mut init = spawn_t {
                 name: b"target_delay\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_target_delay
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_target_delay as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -619,40 +551,28 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"target_speaker\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                spawn: Some(
-                    SP_target_speaker
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_target_speaker as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"target_print\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_target_print
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_target_print as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"target_laser\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_target_laser
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_target_laser as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"target_score\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_target_score
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_target_score as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -660,30 +580,21 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"target_teleporter\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                spawn: Some(
-                    SP_target_teleporter
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_target_teleporter as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"target_relay\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_target_relay
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_target_relay as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"target_kill\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_target_kill
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_target_kill as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -691,10 +602,7 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"target_position\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                spawn: Some(
-                    SP_target_position
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_target_position as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -702,39 +610,28 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"target_location\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                spawn: Some(
-                    SP_target_location
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_target_location as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"target_push\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_target_push
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_target_push as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"light\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_light as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_light as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"path_corner\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_path_corner
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_path_corner as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -743,8 +640,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"misc_teleporter_dest\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 spawn: Some(
-                    SP_misc_teleporter_dest
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
+                    SP_misc_teleporter_dest as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -752,10 +648,7 @@ pub static mut spawns: [spawn_t; 49] = {
         {
             let mut init = spawn_t {
                 name: b"misc_model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_misc_model
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_misc_model as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -764,8 +657,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"misc_portal_surface\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 spawn: Some(
-                    SP_misc_portal_surface
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
+                    SP_misc_portal_surface as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -774,10 +666,7 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"misc_portal_camera\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                spawn: Some(
-                    SP_misc_portal_camera
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_misc_portal_camera as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -785,10 +674,7 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"shooter_rocket\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                spawn: Some(
-                    SP_shooter_rocket
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_shooter_rocket as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -796,10 +682,7 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"shooter_grenade\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                spawn: Some(
-                    SP_shooter_grenade
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_shooter_grenade as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -807,10 +690,7 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"shooter_plasma\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                spawn: Some(
-                    SP_shooter_plasma
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_shooter_plasma as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -818,10 +698,7 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"team_CTF_redplayer\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                spawn: Some(
-                    SP_team_CTF_redplayer
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_team_CTF_redplayer as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -830,8 +707,7 @@ pub static mut spawns: [spawn_t; 49] = {
                 name: b"team_CTF_blueplayer\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 spawn: Some(
-                    SP_team_CTF_blueplayer
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
+                    SP_team_CTF_blueplayer as unsafe extern "C" fn(_: *mut gentity_t) -> (),
                 ),
             };
             init
@@ -840,10 +716,7 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"team_CTF_redspawn\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                spawn: Some(
-                    SP_team_CTF_redspawn
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_team_CTF_redspawn as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -851,20 +724,14 @@ pub static mut spawns: [spawn_t; 49] = {
             let mut init = spawn_t {
                 name: b"team_CTF_bluespawn\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                spawn: Some(
-                    SP_team_CTF_bluespawn
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_team_CTF_bluespawn as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
         {
             let mut init = spawn_t {
                 name: b"item_botroam\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                spawn: Some(
-                    SP_item_botroam
-                        as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-                ),
+                spawn: Some(SP_item_botroam as unsafe extern "C" fn(_: *mut gentity_t) -> ()),
             };
             init
         },
@@ -887,27 +754,18 @@ returning qfalse if not found
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_CallSpawn(
-    mut ent: *mut gentity_t,
-) -> qboolean {
+pub unsafe extern "C" fn G_CallSpawn(mut ent: *mut gentity_t) -> qboolean {
     let mut s: *mut spawn_t = 0 as *mut spawn_t;
     let mut item: *mut gitem_t = 0 as *mut gitem_t;
     if (*ent).classname.is_null() {
-        G_Printf(
-            b"G_CallSpawn: NULL classname\n\x00" as *const u8 as *const libc::c_char,
-        );
+        G_Printf(b"G_CallSpawn: NULL classname\n\x00" as *const u8 as *const libc::c_char);
         return qfalse;
     }
     // check item spawn functions
-    item = bg_itemlist
-        .as_mut_ptr()
-        .offset(1 as i32 as isize);
+    item = bg_itemlist.as_mut_ptr().offset(1 as i32 as isize);
     while !(*item).classname.is_null() {
         if libc::strcmp((*item).classname, (*ent).classname) == 0 {
-            G_SpawnItem(
-                ent as *mut gentity_s,
-                item as *mut gitem_s,
-            );
+            G_SpawnItem(ent as *mut gentity_s, item as *mut gitem_s);
             return qtrue;
         }
         item = item.offset(1)
@@ -985,8 +843,7 @@ pub unsafe extern "C" fn G_ParseField(
     mut ent: *mut gentity_t,
 ) {
     let mut f: *mut field_t = 0 as *mut field_t;
-    let mut b: *mut byte =
-        0 as *mut byte;
+    let mut b: *mut byte = 0 as *mut byte;
     let mut v: f32 = 0.;
     let mut vec: vec3_t = [0.; 3];
     f = fields.as_mut_ptr();
@@ -1003,12 +860,9 @@ pub unsafe extern "C" fn G_ParseField(
                     libc::sscanf(
                         value,
                         b"%f %f %f\x00" as *const u8 as *const libc::c_char,
-                        &mut *vec.as_mut_ptr().offset(0 as i32 as isize)
-                            as *mut vec_t,
-                        &mut *vec.as_mut_ptr().offset(1 as i32 as isize)
-                            as *mut vec_t,
-                        &mut *vec.as_mut_ptr().offset(2 as i32 as isize)
-                            as *mut vec_t,
+                        &mut *vec.as_mut_ptr().offset(0 as i32 as isize) as *mut vec_t,
+                        &mut *vec.as_mut_ptr().offset(1 as i32 as isize) as *mut vec_t,
+                        &mut *vec.as_mut_ptr().offset(2 as i32 as isize) as *mut vec_t,
                     );
                     *(b.offset((*f).ofs as isize) as *mut f32).offset(0 as i32 as isize) =
                         vec[0 as i32 as usize];
@@ -1080,13 +934,8 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
         );
         if i != 0 {
             if (*ent).s.eType == ET_MOVER as i32 {
-                trap_LinkEntity(
-                    ent as *mut gentity_s,
-                );
-                trap_AdjustAreaPortalState(
-                    ent as *mut gentity_s,
-                    qtrue,
-                );
+                trap_LinkEntity(ent as *mut gentity_s);
+                trap_AdjustAreaPortalState(ent as *mut gentity_s, qtrue);
             }
             G_FreeEntity(ent as *mut gentity_s);
             return;
@@ -1101,13 +950,8 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
         );
         if i != 0 {
             if (*ent).s.eType == ET_MOVER as i32 {
-                trap_LinkEntity(
-                    ent as *mut gentity_s,
-                );
-                trap_AdjustAreaPortalState(
-                    ent as *mut gentity_s,
-                    qtrue,
-                );
+                trap_LinkEntity(ent as *mut gentity_s);
+                trap_AdjustAreaPortalState(ent as *mut gentity_s, qtrue);
             }
             G_FreeEntity(ent as *mut gentity_s);
             return;
@@ -1120,13 +964,8 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
         );
         if i != 0 {
             if (*ent).s.eType == ET_MOVER as i32 {
-                trap_LinkEntity(
-                    ent as *mut gentity_s,
-                );
-                trap_AdjustAreaPortalState(
-                    ent as *mut gentity_s,
-                    qtrue,
-                );
+                trap_LinkEntity(ent as *mut gentity_s);
+                trap_AdjustAreaPortalState(ent as *mut gentity_s, qtrue);
             }
             G_FreeEntity(ent as *mut gentity_s);
             return;
@@ -1140,10 +979,7 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
     if i != 0 {
         if (*ent).s.eType == ET_MOVER as i32 {
             trap_LinkEntity(ent as *mut gentity_s);
-            trap_AdjustAreaPortalState(
-                ent as *mut gentity_s,
-                qtrue,
-            );
+            trap_AdjustAreaPortalState(ent as *mut gentity_s, qtrue);
         }
         G_FreeEntity(ent as *mut gentity_s);
         return;
@@ -1155,21 +991,13 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
     ) as u64
         != 0
     {
-        if g_gametype.integer >= GT_FFA as i32
-            && g_gametype.integer
-                < GT_MAX_GAME_TYPE as i32
-        {
+        if g_gametype.integer >= GT_FFA as i32 && g_gametype.integer < GT_MAX_GAME_TYPE as i32 {
             gametypeName = gametypeNames[g_gametype.integer as usize];
             s = libc::strstr(value, gametypeName);
             if s.is_null() {
                 if (*ent).s.eType == ET_MOVER as i32 {
-                    trap_LinkEntity(
-                        ent as *mut gentity_s,
-                    );
-                    trap_AdjustAreaPortalState(
-                        ent as *mut gentity_s,
-                        qtrue,
-                    );
+                    trap_LinkEntity(ent as *mut gentity_s);
+                    trap_AdjustAreaPortalState(ent as *mut gentity_s, qtrue);
                 }
                 G_FreeEntity(ent as *mut gentity_s);
                 return;
@@ -1286,15 +1114,11 @@ pub unsafe extern "C" fn G_ParseSpawnVars() -> qboolean {
             );
         }
         if level.numSpawnVars == 64 as i32 {
-            G_Error(
-                b"G_ParseSpawnVars: MAX_SPAWN_VARS\x00" as *const u8 as *const libc::c_char,
-            );
+            G_Error(b"G_ParseSpawnVars: MAX_SPAWN_VARS\x00" as *const u8 as *const libc::c_char);
         }
-        level.spawnVars
-            [level.numSpawnVars as usize][0 as i32 as usize] =
+        level.spawnVars[level.numSpawnVars as usize][0 as i32 as usize] =
             G_AddSpawnVarToken(keyname.as_mut_ptr());
-        level.spawnVars
-            [level.numSpawnVars as usize][1 as i32 as usize] =
+        level.spawnVars[level.numSpawnVars as usize][1 as i32 as usize] =
             G_AddSpawnVarToken(com_token.as_mut_ptr());
         level.numSpawnVars += 1
     }
@@ -1316,11 +1140,7 @@ pub unsafe extern "C" fn SP_worldspawn() {
         b"\x00" as *const u8 as *const libc::c_char,
         &mut s,
     );
-    if Q_stricmp(
-        s,
-        b"worldspawn\x00" as *const u8 as *const libc::c_char,
-    ) != 0
-    {
+    if Q_stricmp(s, b"worldspawn\x00" as *const u8 as *const libc::c_char) != 0 {
         G_Error(
             b"SP_worldspawn: The first entity isn\'t \'worldspawn\'\x00" as *const u8
                 as *const libc::c_char,
@@ -1350,58 +1170,43 @@ pub unsafe extern "C" fn SP_worldspawn() {
         &mut s,
     );
     trap_SetConfigstring(3 as i32, s);
-    trap_SetConfigstring(
-        4 as i32,
-        g_motd.string.as_mut_ptr(),
-    );
+    trap_SetConfigstring(4 as i32, g_motd.string.as_mut_ptr());
     G_SpawnString(
         b"gravity\x00" as *const u8 as *const libc::c_char,
         b"800\x00" as *const u8 as *const libc::c_char,
         &mut s,
     );
-    trap_Cvar_Set(
-        b"g_gravity\x00" as *const u8 as *const libc::c_char,
-        s,
-    );
+    trap_Cvar_Set(b"g_gravity\x00" as *const u8 as *const libc::c_char, s);
     G_SpawnString(
         b"enableDust\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         &mut s,
     );
-    trap_Cvar_Set(
-        b"g_enableDust\x00" as *const u8 as *const libc::c_char,
-        s,
-    );
+    trap_Cvar_Set(b"g_enableDust\x00" as *const u8 as *const libc::c_char, s);
     G_SpawnString(
         b"enableBreath\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         &mut s,
     );
-    trap_Cvar_Set(
-        b"g_enableBreath\x00" as *const u8 as *const libc::c_char,
-        s,
-    );
+    trap_Cvar_Set(b"g_enableBreath\x00" as *const u8 as *const libc::c_char, s);
     g_entities[(((1 as i32) << 10 as i32) - 2 as i32) as usize]
         .s
         .number = ((1 as i32) << 10 as i32) - 2 as i32;
     g_entities[(((1 as i32) << 10 as i32) - 2 as i32) as usize]
         .r
         .ownerNum = ((1 as i32) << 10 as i32) - 1 as i32;
-    g_entities[(((1 as i32) << 10 as i32) - 2 as i32) as usize]
-        .classname = b"worldspawn\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
+    g_entities[(((1 as i32) << 10 as i32) - 2 as i32) as usize].classname =
+        b"worldspawn\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     g_entities[(((1 as i32) << 10 as i32) - 1 as i32) as usize]
         .s
         .number = ((1 as i32) << 10 as i32) - 1 as i32;
     g_entities[(((1 as i32) << 10 as i32) - 1 as i32) as usize]
         .r
         .ownerNum = ((1 as i32) << 10 as i32) - 1 as i32;
-    g_entities[(((1 as i32) << 10 as i32) - 1 as i32) as usize]
-        .classname = b"nothing\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
+    g_entities[(((1 as i32) << 10 as i32) - 1 as i32) as usize].classname =
+        b"nothing\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     // see if we want a warmup time
-    trap_SetConfigstring(
-        5 as i32,
-        b"\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_SetConfigstring(5 as i32, b"\x00" as *const u8 as *const libc::c_char);
     if g_restarted.integer != 0 {
         trap_Cvar_Set(
             b"g_restarted\x00" as *const u8 as *const libc::c_char,
@@ -1603,9 +1408,7 @@ pub unsafe extern "C" fn G_SpawnEntitiesFromString() {
     // has a "spawn" function to perform any global setup
     // needed by a level (setting configstrings or cvars, etc)
     if G_ParseSpawnVars() as u64 == 0 {
-        G_Error(
-            b"SpawnEntities: no entities\x00" as *const u8 as *const libc::c_char,
-        );
+        G_Error(b"SpawnEntities: no entities\x00" as *const u8 as *const libc::c_char);
     }
     SP_worldspawn();
     // parse ents
@@ -1620,8 +1423,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"classname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).classname
-                    as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1629,9 +1431,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"origin\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).s.origin
-                    as *mut vec3_t
-                    as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).s.origin as *mut vec3_t as size_t,
                 type_0: F_VECTOR,
             };
             init
@@ -1639,8 +1439,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"model\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).model as *mut *mut libc::c_char
-                    as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).model as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1648,8 +1447,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"model2\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).model2
-                    as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).model2 as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1657,8 +1455,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"spawnflags\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).spawnflags as *mut i32
-                    as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).spawnflags as *mut i32 as size_t,
                 type_0: F_INT,
             };
             init
@@ -1666,8 +1463,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"speed\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).speed as *mut f32
-                    as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).speed as *mut f32 as size_t,
                 type_0: F_FLOAT,
             };
             init
@@ -1675,8 +1471,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"target\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).target
-                    as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).target as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1684,8 +1479,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"targetname\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).targetname
-                    as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1693,8 +1487,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"message\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).message
-                    as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).message as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1702,8 +1495,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"team\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).team as *mut *mut libc::c_char
-                    as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).team as *mut *mut libc::c_char as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1711,8 +1503,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"wait\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).wait as *mut f32
-                    as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).wait as *mut f32 as size_t,
                 type_0: F_FLOAT,
             };
             init
@@ -1720,8 +1511,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"random\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).random as *mut f32
-                    as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).random as *mut f32 as size_t,
                 type_0: F_FLOAT,
             };
             init
@@ -1729,8 +1519,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"count\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).count as *mut i32
-                    as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).count as *mut i32 as size_t,
                 type_0: F_INT,
             };
             init
@@ -1738,8 +1527,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"health\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).health as *mut i32
-                    as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).health as *mut i32 as size_t,
                 type_0: F_INT,
             };
             init
@@ -1747,8 +1535,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"dmg\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).damage as *mut i32
-                    as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).damage as *mut i32 as size_t,
                 type_0: F_INT,
             };
             init
@@ -1756,9 +1543,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"angles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).s.angles
-                    as *mut vec3_t
-                    as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).s.angles as *mut vec3_t as size_t,
                 type_0: F_VECTOR,
             };
             init
@@ -1766,9 +1551,7 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = field_t {
                 name: b"angle\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).s.angles
-                    as *mut vec3_t
-                    as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).s.angles as *mut vec3_t as size_t,
                 type_0: F_ANGLEHACK,
             };
             init
@@ -1777,8 +1560,8 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = field_t {
                 name: b"targetShaderName\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).targetShaderName
-                    as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).targetShaderName as *mut *mut libc::c_char
+                    as size_t,
                 type_0: F_STRING,
             };
             init
@@ -1787,8 +1570,8 @@ unsafe extern "C" fn run_static_initializers() {
             let mut init = field_t {
                 name: b"targetShaderNewName\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
-                ofs: &mut (*(0 as *mut gentity_t)).targetShaderNewName
-                    as *mut *mut libc::c_char as size_t,
+                ofs: &mut (*(0 as *mut gentity_t)).targetShaderNewName as *mut *mut libc::c_char
+                    as size_t,
                 type_0: F_STRING,
             };
             init

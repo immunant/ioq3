@@ -212,8 +212,7 @@ unsafe extern "C" fn parse_size(
         return -(1 as i32);
     } else {
         *size = (4 as i32 * *data.offset(1 as i32 as isize) as i32
-            + *data.offset(0 as i32 as isize) as i32)
-            as opus_int16;
+            + *data.offset(0 as i32 as isize) as i32) as opus_int16;
         return 2 as i32;
     };
 }

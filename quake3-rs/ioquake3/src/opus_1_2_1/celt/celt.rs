@@ -133,9 +133,7 @@ pub unsafe extern "C" fn comb_filter(
                 y as *mut libc::c_void,
                 x as *const libc::c_void,
                 (N as libc::c_ulong)
-                    .wrapping_mul(
-                        ::std::mem::size_of::<opus_val32>() as libc::c_ulong
-                    )
+                    .wrapping_mul(::std::mem::size_of::<opus_val32>() as libc::c_ulong)
                     .wrapping_add((0 as i32 as isize * y.offset_from(x) as isize) as libc::c_ulong),
             );
         }
@@ -191,9 +189,7 @@ pub unsafe extern "C" fn comb_filter(
                 y.offset(overlap as isize) as *mut libc::c_void,
                 x.offset(overlap as isize) as *const libc::c_void,
                 ((N - overlap) as libc::c_ulong)
-                    .wrapping_mul(
-                        ::std::mem::size_of::<opus_val32>() as libc::c_ulong
-                    )
+                    .wrapping_mul(::std::mem::size_of::<opus_val32>() as libc::c_ulong)
                     .wrapping_add(
                         (0 as i32 as isize
                             * y.offset(overlap as isize)

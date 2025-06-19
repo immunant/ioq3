@@ -76,8 +76,7 @@ static mut s_serverinfo: serverinfo_t = serverinfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -99,8 +98,7 @@ static mut s_serverinfo: serverinfo_t = serverinfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -126,8 +124,7 @@ static mut s_serverinfo: serverinfo_t = serverinfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -153,8 +150,7 @@ static mut s_serverinfo: serverinfo_t = serverinfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -180,8 +176,7 @@ static mut s_serverinfo: serverinfo_t = serverinfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -228,9 +223,7 @@ pub unsafe extern "C" fn Favorites_Add() {
             adrstr.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
         );
-        if Q_stricmp(serverbuff.as_mut_ptr(), adrstr.as_mut_ptr())
-            == 0
-        {
+        if Q_stricmp(serverbuff.as_mut_ptr(), adrstr.as_mut_ptr()) == 0 {
             // already in list
             return;
         }
@@ -313,9 +306,7 @@ unsafe extern "C" fn ServerInfo_MenuDraw() {
         y += 16 as i32;
         i += 1
     }
-    Menu_Draw(
-        &mut s_serverinfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    Menu_Draw(&mut s_serverinfo.menu as *mut _ as *mut _tag_menuframework);
 }
 /*
 =================
@@ -323,9 +314,7 @@ ServerInfo_MenuKey
 =================
 */
 
-unsafe extern "C" fn ServerInfo_MenuKey(
-    mut key: i32,
-) -> sfxHandle_t {
+unsafe extern "C" fn ServerInfo_MenuKey(mut key: i32) -> sfxHandle_t {
     return Menu_DefaultKey(
         &mut s_serverinfo.menu as *mut _ as *mut _tag_menuframework,
         key,
@@ -467,10 +456,7 @@ pub unsafe extern "C" fn UI_ServerInfoMenu() {
     );
     ServerInfo_Cache();
     s_serverinfo.menu.draw = Some(ServerInfo_MenuDraw as unsafe extern "C" fn() -> ());
-    s_serverinfo.menu.key = Some(
-        ServerInfo_MenuKey
-            as unsafe extern "C" fn(_: i32) -> sfxHandle_t,
-    );
+    s_serverinfo.menu.key = Some(ServerInfo_MenuKey as unsafe extern "C" fn(_: i32) -> sfxHandle_t);
     s_serverinfo.menu.wrapAround = qtrue;
     s_serverinfo.menu.fullscreen = qtrue;
     s_serverinfo.banner.generic.type_0 = 10 as i32;
@@ -505,10 +491,7 @@ pub unsafe extern "C" fn UI_ServerInfoMenu() {
         b"ADD TO FAVORITES\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_serverinfo.add.style = 0x1 as i32 | 0x10 as i32;
     s_serverinfo.add.color = color_red.as_mut_ptr();
-    if trap_Cvar_VariableValue(
-        b"sv_running\x00" as *const u8 as *const libc::c_char,
-    ) != 0.
-    {
+    if trap_Cvar_VariableValue(b"sv_running\x00" as *const u8 as *const libc::c_char) != 0. {
         s_serverinfo.add.generic.flags |= 0x2000 as i32 as u32
     }
     s_serverinfo.back.generic.type_0 = 6 as i32;
@@ -523,11 +506,7 @@ pub unsafe extern "C" fn UI_ServerInfoMenu() {
     s_serverinfo.back.height = 64 as i32;
     s_serverinfo.back.focuspic =
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    trap_GetConfigString(
-        0 as i32,
-        s_serverinfo.info.as_mut_ptr(),
-        1024 as i32,
-    );
+    trap_GetConfigString(0 as i32, s_serverinfo.info.as_mut_ptr(), 1024 as i32);
     s_serverinfo.numlines = 0 as i32;
     s = s_serverinfo.info.as_mut_ptr();
     while !s.is_null() {
@@ -560,7 +539,5 @@ pub unsafe extern "C" fn UI_ServerInfoMenu() {
         &mut s_serverinfo.menu as *mut _ as *mut _tag_menuframework,
         &mut s_serverinfo.back as *mut menubitmap_s as *mut libc::c_void,
     );
-    UI_PushMenu(
-        &mut s_serverinfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_serverinfo.menu as *mut _ as *mut _tag_menuframework);
 }

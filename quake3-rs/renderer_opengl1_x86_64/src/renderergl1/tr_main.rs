@@ -365,15 +365,12 @@ pub static mut tr: trGlobals_t = trGlobals_t {
     identityLightImage: 0 as *const image_t as *mut image_t,
     defaultShader: 0 as *const shader_t as *mut shader_t,
     shadowShader: 0 as *const shader_t as *mut shader_t,
-    projectionShadowShader: 0 as *const shader_t
-        as *mut shader_t,
+    projectionShadowShader: 0 as *const shader_t as *mut shader_t,
     flareShader: 0 as *const shader_t as *mut shader_t,
     sunShader: 0 as *const shader_t as *mut shader_t,
     numLightmaps: 0,
-    lightmaps: 0 as *const *mut image_t
-        as *mut *mut image_t,
-    currentEntity: 0 as *const trRefEntity_t
-        as *mut trRefEntity_t,
+    lightmaps: 0 as *const *mut image_t as *mut *mut image_t,
+    currentEntity: 0 as *const trRefEntity_t as *mut trRefEntity_t,
     worldEntity: trRefEntity_t {
         e: refEntity_t {
             reType: RT_MODEL,
@@ -477,8 +474,7 @@ pub static mut tr: trGlobals_t = trGlobals_t {
         floatTime: 0.,
         text: [[0; 32]; 8],
         num_entities: 0,
-        entities: 0 as *const trRefEntity_t
-            as *mut trRefEntity_t,
+        entities: 0 as *const trRefEntity_t as *mut trRefEntity_t,
         num_dlights: 0,
         dlights: 0 as *const dlight_s as *mut dlight_s,
         numPolys: 0,
@@ -513,8 +509,7 @@ pub static mut tr: trGlobals_t = trGlobals_t {
     images: [0 as *const image_t as *mut image_t; 2048],
     numShaders: 0,
     shaders: [0 as *const shader_t as *mut shader_t; 16384],
-    sortedShaders: [0 as *const shader_t as *mut shader_t;
-        16384],
+    sortedShaders: [0 as *const shader_t as *mut shader_t; 16384],
     numSkins: 0,
     skins: [0 as *const skin_t as *mut skin_t; 1024],
     sinTable: [0.; 1024],
@@ -601,16 +596,13 @@ Returns CULL_IN, CULL_CLIP, or CULL_OUT
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_CullLocalBox(
-    mut bounds: *mut vec3_t,
-) -> i32 {
+pub unsafe extern "C" fn R_CullLocalBox(mut bounds: *mut vec3_t) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut transformed: [vec3_t; 8] = [[0.; 3]; 8];
     let mut dists: [f32; 8] = [0.; 8];
     let mut v: vec3_t = [0.; 3];
-    let mut frust: *mut cplane_t =
-        0 as *mut cplane_t;
+    let mut frust: *mut cplane_t = 0 as *mut cplane_t;
     let mut anyBack: i32 = 0;
     let mut front: i32 = 0;
     let mut back: i32 = 0;
@@ -652,8 +644,7 @@ pub unsafe extern "C" fn R_CullLocalBox(
     anyBack = 0 as i32;
     i = 0 as i32;
     while i < 4 as i32 {
-        frust = &mut *tr.viewParms.frustum.as_mut_ptr().offset(i as isize)
-            as *mut cplane_t;
+        frust = &mut *tr.viewParms.frustum.as_mut_ptr().offset(i as isize) as *mut cplane_t;
         back = 0 as i32;
         front = back;
         j = 0 as i32;
@@ -691,10 +682,7 @@ pub unsafe extern "C" fn R_CullLocalBox(
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_CullLocalPointAndRadius(
-    mut pt: *mut vec_t,
-    mut radius: f32,
-) -> i32 {
+pub unsafe extern "C" fn R_CullLocalPointAndRadius(mut pt: *mut vec_t, mut radius: f32) -> i32 {
     let mut transformed: vec3_t = [0.; 3];
     R_LocalPointToWorld(pt, transformed.as_mut_ptr());
     return R_CullPointAndRadius(transformed.as_mut_ptr(), radius);
@@ -704,24 +692,18 @@ pub unsafe extern "C" fn R_CullLocalPointAndRadius(
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_CullPointAndRadius(
-    mut pt: *mut vec_t,
-    mut radius: f32,
-) -> i32 {
+pub unsafe extern "C" fn R_CullPointAndRadius(mut pt: *mut vec_t, mut radius: f32) -> i32 {
     let mut i: i32 = 0;
     let mut dist: f32 = 0.;
-    let mut frust: *mut cplane_t =
-        0 as *mut cplane_t;
-    let mut mightBeClipped: qboolean =
-        qfalse;
+    let mut frust: *mut cplane_t = 0 as *mut cplane_t;
+    let mut mightBeClipped: qboolean = qfalse;
     if (*r_nocull).integer != 0 {
         return 1 as i32;
     }
     // check against frustum planes
     i = 0 as i32;
     while i < 4 as i32 {
-        frust = &mut *tr.viewParms.frustum.as_mut_ptr().offset(i as isize)
-            as *mut cplane_t;
+        frust = &mut *tr.viewParms.frustum.as_mut_ptr().offset(i as isize) as *mut cplane_t;
         dist = *pt.offset(0 as i32 as isize) * (*frust).normal[0 as i32 as usize]
             + *pt.offset(1 as i32 as isize) * (*frust).normal[1 as i32 as usize]
             + *pt.offset(2 as i32 as isize) * (*frust).normal[2 as i32 as usize]
@@ -749,10 +731,7 @@ R_LocalNormalToWorld
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_LocalNormalToWorld(
-    mut local: *mut vec_t,
-    mut world: *mut vec_t,
-) {
+pub unsafe extern "C" fn R_LocalNormalToWorld(mut local: *mut vec_t, mut world: *mut vec_t) {
     *world.offset(0 as i32 as isize) = *local.offset(0 as i32 as isize)
         * tr.or.axis[0 as i32 as usize][0 as i32 as usize]
         + *local.offset(1 as i32 as isize) * tr.or.axis[1 as i32 as usize][0 as i32 as usize]
@@ -774,10 +753,7 @@ R_LocalPointToWorld
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_LocalPointToWorld(
-    mut local: *mut vec_t,
-    mut world: *mut vec_t,
-) {
+pub unsafe extern "C" fn R_LocalPointToWorld(mut local: *mut vec_t, mut world: *mut vec_t) {
     *world.offset(0 as i32 as isize) = *local.offset(0 as i32 as isize)
         * tr.or.axis[0 as i32 as usize][0 as i32 as usize]
         + *local.offset(1 as i32 as isize) * tr.or.axis[1 as i32 as usize][0 as i32 as usize]
@@ -802,10 +778,7 @@ R_WorldToLocal
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_WorldToLocal(
-    mut world: *mut vec_t,
-    mut local: *mut vec_t,
-) {
+pub unsafe extern "C" fn R_WorldToLocal(mut world: *mut vec_t, mut local: *mut vec_t) {
     *local.offset(0 as i32 as isize) = *world.offset(0 as i32 as isize)
         * tr.or.axis[0 as i32 as usize][0 as i32 as usize]
         + *world.offset(1 as i32 as isize) * tr.or.axis[0 as i32 as usize][1 as i32 as usize]
@@ -975,10 +948,10 @@ pub unsafe extern "C" fn R_TransformClipToWindow(
     *window.offset(1 as i32 as isize) =
         0.5f32 * (1.0f32 + *normalized.offset(1 as i32 as isize)) * (*view).viewportHeight as f32;
     *window.offset(2 as i32 as isize) = *normalized.offset(2 as i32 as isize);
-    *window.offset(0 as i32 as isize) = (*window.offset(0 as i32 as isize) as f64 + 0.5f64) as i32
-        as vec_t;
-    *window.offset(1 as i32 as isize) = (*window.offset(1 as i32 as isize) as f64 + 0.5f64) as i32
-        as vec_t;
+    *window.offset(0 as i32 as isize) =
+        (*window.offset(0 as i32 as isize) as f64 + 0.5f64) as i32 as vec_t;
+    *window.offset(1 as i32 as isize) =
+        (*window.offset(1 as i32 as isize) as f64 + 0.5f64) as i32 as vec_t;
 }
 /*
 ==========================
@@ -1126,12 +1099,9 @@ pub unsafe extern "C" fn R_RotateForViewer() {
         0 as i32,
         ::std::mem::size_of::<orientationr_t>() as libc::c_ulong,
     );
-    tr.or.axis[0 as i32 as usize][0 as i32 as usize] =
-        1 as i32 as vec_t;
-    tr.or.axis[1 as i32 as usize][1 as i32 as usize] =
-        1 as i32 as vec_t;
-    tr.or.axis[2 as i32 as usize][2 as i32 as usize] =
-        1 as i32 as vec_t;
+    tr.or.axis[0 as i32 as usize][0 as i32 as usize] = 1 as i32 as vec_t;
+    tr.or.axis[1 as i32 as usize][1 as i32 as usize] = 1 as i32 as vec_t;
+    tr.or.axis[2 as i32 as usize][2 as i32 as usize] = 1 as i32 as vec_t;
     tr.or.viewOrigin[0 as i32 as usize] = tr.viewParms.or.origin[0 as i32 as usize];
     tr.or.viewOrigin[1 as i32 as usize] = tr.viewParms.or.origin[1 as i32 as usize];
     tr.or.viewOrigin[2 as i32 as usize] = tr.viewParms.or.origin[2 as i32 as usize];
@@ -1366,8 +1336,7 @@ pub unsafe extern "C" fn R_SetupFrustum(
             + ofsorigin[1 as i32 as usize] * (*dest).frustum[i as usize].normal[1 as i32 as usize]
             + ofsorigin[2 as i32 as usize] * (*dest).frustum[i as usize].normal[2 as i32 as usize];
         SetPlaneSignbits(
-            &mut *(*dest).frustum.as_mut_ptr().offset(i as isize) as *mut _
-                as *mut cplane_s,
+            &mut *(*dest).frustum.as_mut_ptr().offset(i as isize) as *mut _ as *mut cplane_s,
         );
         i += 1
     }
@@ -1542,8 +1511,7 @@ pub unsafe extern "C" fn R_PlaneForSurface(
     mut surfType: *mut surfaceType_t,
     mut plane: *mut cplane_t,
 ) {
-    let mut tri: *mut srfTriangles_t =
-        0 as *mut srfTriangles_t;
+    let mut tri: *mut srfTriangles_t = 0 as *mut srfTriangles_t;
     let mut poly: *mut srfPoly_t = 0 as *mut srfPoly_t;
     let mut v1: *mut drawVert_t = 0 as *mut drawVert_t;
     let mut v2: *mut drawVert_t = 0 as *mut drawVert_t;
@@ -1590,12 +1558,9 @@ pub unsafe extern "C" fn R_PlaneForSurface(
             poly = surfType as *mut srfPoly_t;
             PlaneFromPoints(
                 plane4.as_mut_ptr(),
-                (*(*poly).verts.offset(0 as i32 as isize)).xyz.as_mut_ptr()
-                    as *const vec_t,
-                (*(*poly).verts.offset(1 as i32 as isize)).xyz.as_mut_ptr()
-                    as *const vec_t,
-                (*(*poly).verts.offset(2 as i32 as isize)).xyz.as_mut_ptr()
-                    as *const vec_t,
+                (*(*poly).verts.offset(0 as i32 as isize)).xyz.as_mut_ptr() as *const vec_t,
+                (*(*poly).verts.offset(1 as i32 as isize)).xyz.as_mut_ptr() as *const vec_t,
+                (*(*poly).verts.offset(2 as i32 as isize)).xyz.as_mut_ptr() as *const vec_t,
             );
             (*plane).normal[0 as i32 as usize] = plane4[0 as i32 as usize];
             (*plane).normal[1 as i32 as usize] = plane4[1 as i32 as usize];
@@ -1635,22 +1600,20 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
     mut mirror: *mut qboolean,
 ) -> qboolean {
     let mut i: i32 = 0;
-    let mut originalPlane: cplane_t =
-        cplane_t {
-            normal: [0.; 3],
-            dist: 0.,
-            type_0: 0,
-            signbits: 0,
-            pad: [0; 2],
-        };
-    let mut plane: cplane_t =
-        cplane_t {
-            normal: [0.; 3],
-            dist: 0.,
-            type_0: 0,
-            signbits: 0,
-            pad: [0; 2],
-        };
+    let mut originalPlane: cplane_t = cplane_t {
+        normal: [0.; 3],
+        dist: 0.,
+        type_0: 0,
+        signbits: 0,
+        pad: [0; 2],
+    };
+    let mut plane: cplane_t = cplane_t {
+        normal: [0.; 3],
+        dist: 0.,
+        type_0: 0,
+        signbits: 0,
+        pad: [0; 2],
+    };
     let mut e: *mut trRefEntity_t = 0 as *mut trRefEntity_t;
     let mut d: f32 = 0.;
     let mut transformed: vec3_t = [0.; 3];
@@ -1659,8 +1622,8 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
     // rotate the plane if necessary
     if entityNum != ((1 as i32) << 10 as i32) - 1 as i32 {
         tr.currentEntityNum = entityNum;
-        tr.currentEntity = &mut *tr.refdef.entities.offset(entityNum as isize)
-            as *mut trRefEntity_t;
+        tr.currentEntity =
+            &mut *tr.refdef.entities.offset(entityNum as isize) as *mut trRefEntity_t;
         // get the orientation of the entity
         R_RotateForEntity(tr.currentEntity, &mut tr.viewParms, &mut tr.or);
         // rotate the plane, but keep the non-rotated version for matching
@@ -1683,14 +1646,11 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
     (*surface).axis[0 as i32 as usize][2 as i32 as usize] = plane.normal[2 as i32 as usize];
     PerpendicularVector(
         (*surface).axis[1 as i32 as usize].as_mut_ptr(),
-        (*surface).axis[0 as i32 as usize].as_mut_ptr()
-            as *const vec_t,
+        (*surface).axis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
     );
     CrossProduct(
-        (*surface).axis[0 as i32 as usize].as_mut_ptr()
-            as *const vec_t,
-        (*surface).axis[1 as i32 as usize].as_mut_ptr()
-            as *const vec_t,
+        (*surface).axis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
+        (*surface).axis[1 as i32 as usize].as_mut_ptr() as *const vec_t,
         (*surface).axis[2 as i32 as usize].as_mut_ptr(),
     );
     // locate the portal entity closest to this plane.
@@ -1723,15 +1683,15 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
                     (*camera).origin[0 as i32 as usize] = (*surface).origin[0 as i32 as usize];
                     (*camera).origin[1 as i32 as usize] = (*surface).origin[1 as i32 as usize];
                     (*camera).origin[2 as i32 as usize] = (*surface).origin[2 as i32 as usize];
-                    (*camera).axis[0 as i32 as usize][0 as i32 as usize] =
-                        vec3_origin[0 as i32 as usize]
-                            - (*surface).axis[0 as i32 as usize][0 as i32 as usize];
-                    (*camera).axis[0 as i32 as usize][1 as i32 as usize] =
-                        vec3_origin[1 as i32 as usize]
-                            - (*surface).axis[0 as i32 as usize][1 as i32 as usize];
-                    (*camera).axis[0 as i32 as usize][2 as i32 as usize] =
-                        vec3_origin[2 as i32 as usize]
-                            - (*surface).axis[0 as i32 as usize][2 as i32 as usize];
+                    (*camera).axis[0 as i32 as usize][0 as i32 as usize] = vec3_origin
+                        [0 as i32 as usize]
+                        - (*surface).axis[0 as i32 as usize][0 as i32 as usize];
+                    (*camera).axis[0 as i32 as usize][1 as i32 as usize] = vec3_origin
+                        [1 as i32 as usize]
+                        - (*surface).axis[0 as i32 as usize][1 as i32 as usize];
+                    (*camera).axis[0 as i32 as usize][2 as i32 as usize] = vec3_origin
+                        [2 as i32 as usize]
+                        - (*surface).axis[0 as i32 as usize][2 as i32 as usize];
                     (*camera).axis[1 as i32 as usize][0 as i32 as usize] =
                         (*surface).axis[1 as i32 as usize][0 as i32 as usize];
                     (*camera).axis[1 as i32 as usize][1 as i32 as usize] =
@@ -1763,28 +1723,25 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
                 (*camera).origin[0 as i32 as usize] = (*e).e.oldorigin[0 as i32 as usize];
                 (*camera).origin[1 as i32 as usize] = (*e).e.oldorigin[1 as i32 as usize];
                 (*camera).origin[2 as i32 as usize] = (*e).e.oldorigin[2 as i32 as usize];
-                AxisCopy(
-                    (*e).e.axis.as_mut_ptr(),
-                    (*camera).axis.as_mut_ptr(),
-                );
-                (*camera).axis[0 as i32 as usize][0 as i32 as usize] =
-                    vec3_origin[0 as i32 as usize]
-                        - (*camera).axis[0 as i32 as usize][0 as i32 as usize];
-                (*camera).axis[0 as i32 as usize][1 as i32 as usize] =
-                    vec3_origin[1 as i32 as usize]
-                        - (*camera).axis[0 as i32 as usize][1 as i32 as usize];
-                (*camera).axis[0 as i32 as usize][2 as i32 as usize] =
-                    vec3_origin[2 as i32 as usize]
-                        - (*camera).axis[0 as i32 as usize][2 as i32 as usize];
-                (*camera).axis[1 as i32 as usize][0 as i32 as usize] =
-                    vec3_origin[0 as i32 as usize]
-                        - (*camera).axis[1 as i32 as usize][0 as i32 as usize];
-                (*camera).axis[1 as i32 as usize][1 as i32 as usize] =
-                    vec3_origin[1 as i32 as usize]
-                        - (*camera).axis[1 as i32 as usize][1 as i32 as usize];
-                (*camera).axis[1 as i32 as usize][2 as i32 as usize] =
-                    vec3_origin[2 as i32 as usize]
-                        - (*camera).axis[1 as i32 as usize][2 as i32 as usize];
+                AxisCopy((*e).e.axis.as_mut_ptr(), (*camera).axis.as_mut_ptr());
+                (*camera).axis[0 as i32 as usize][0 as i32 as usize] = vec3_origin
+                    [0 as i32 as usize]
+                    - (*camera).axis[0 as i32 as usize][0 as i32 as usize];
+                (*camera).axis[0 as i32 as usize][1 as i32 as usize] = vec3_origin
+                    [1 as i32 as usize]
+                    - (*camera).axis[0 as i32 as usize][1 as i32 as usize];
+                (*camera).axis[0 as i32 as usize][2 as i32 as usize] = vec3_origin
+                    [2 as i32 as usize]
+                    - (*camera).axis[0 as i32 as usize][2 as i32 as usize];
+                (*camera).axis[1 as i32 as usize][0 as i32 as usize] = vec3_origin
+                    [0 as i32 as usize]
+                    - (*camera).axis[1 as i32 as usize][0 as i32 as usize];
+                (*camera).axis[1 as i32 as usize][1 as i32 as usize] = vec3_origin
+                    [1 as i32 as usize]
+                    - (*camera).axis[1 as i32 as usize][1 as i32 as usize];
+                (*camera).axis[1 as i32 as usize][2 as i32 as usize] = vec3_origin
+                    [2 as i32 as usize]
+                    - (*camera).axis[1 as i32 as usize][2 as i32 as usize];
                 // optionally rotate
                 if (*e).e.oldframe != 0 {
                     // if a speed is specified
@@ -1799,16 +1756,13 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
                             (*camera).axis[1 as i32 as usize][2 as i32 as usize];
                         RotatePointAroundVector(
                             (*camera).axis[1 as i32 as usize].as_mut_ptr(),
-                            (*camera).axis[0 as i32 as usize].as_mut_ptr()
-                                as *const vec_t,
+                            (*camera).axis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
                             transformed.as_mut_ptr() as *const vec_t,
                             d,
                         );
                         CrossProduct(
-                            (*camera).axis[0 as i32 as usize].as_mut_ptr()
-                                as *const vec_t,
-                            (*camera).axis[1 as i32 as usize].as_mut_ptr()
-                                as *const vec_t,
+                            (*camera).axis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
+                            (*camera).axis[1 as i32 as usize].as_mut_ptr() as *const vec_t,
                             (*camera).axis[2 as i32 as usize].as_mut_ptr(),
                         );
                     } else {
@@ -1823,16 +1777,13 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
                             (*camera).axis[1 as i32 as usize][2 as i32 as usize];
                         RotatePointAroundVector(
                             (*camera).axis[1 as i32 as usize].as_mut_ptr(),
-                            (*camera).axis[0 as i32 as usize].as_mut_ptr()
-                                as *const vec_t,
+                            (*camera).axis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
                             transformed.as_mut_ptr() as *const vec_t,
                             d,
                         );
                         CrossProduct(
-                            (*camera).axis[0 as i32 as usize].as_mut_ptr()
-                                as *const vec_t,
-                            (*camera).axis[1 as i32 as usize].as_mut_ptr()
-                                as *const vec_t,
+                            (*camera).axis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
+                            (*camera).axis[1 as i32 as usize].as_mut_ptr() as *const vec_t,
                             (*camera).axis[2 as i32 as usize].as_mut_ptr(),
                         );
                     }
@@ -1846,16 +1797,13 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
                         (*camera).axis[1 as i32 as usize][2 as i32 as usize];
                     RotatePointAroundVector(
                         (*camera).axis[1 as i32 as usize].as_mut_ptr(),
-                        (*camera).axis[0 as i32 as usize].as_mut_ptr()
-                            as *const vec_t,
+                        (*camera).axis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
                         transformed.as_mut_ptr() as *const vec_t,
                         d,
                     );
                     CrossProduct(
-                        (*camera).axis[0 as i32 as usize].as_mut_ptr()
-                            as *const vec_t,
-                        (*camera).axis[1 as i32 as usize].as_mut_ptr()
-                            as *const vec_t,
+                        (*camera).axis[0 as i32 as usize].as_mut_ptr() as *const vec_t,
+                        (*camera).axis[1 as i32 as usize].as_mut_ptr() as *const vec_t,
                         (*camera).axis[2 as i32 as usize].as_mut_ptr(),
                     );
                 }
@@ -1876,27 +1824,22 @@ pub unsafe extern "C" fn R_GetPortalOrientations(
     return qfalse;
 }
 
-unsafe extern "C" fn IsMirror(
-    mut drawSurf: *const drawSurf_t,
-    mut entityNum: i32,
-) -> qboolean {
+unsafe extern "C" fn IsMirror(mut drawSurf: *const drawSurf_t, mut entityNum: i32) -> qboolean {
     let mut i: i32 = 0;
-    let mut originalPlane: cplane_t =
-        cplane_t {
-            normal: [0.; 3],
-            dist: 0.,
-            type_0: 0,
-            signbits: 0,
-            pad: [0; 2],
-        };
-    let mut plane: cplane_t =
-        cplane_t {
-            normal: [0.; 3],
-            dist: 0.,
-            type_0: 0,
-            signbits: 0,
-            pad: [0; 2],
-        };
+    let mut originalPlane: cplane_t = cplane_t {
+        normal: [0.; 3],
+        dist: 0.,
+        type_0: 0,
+        signbits: 0,
+        pad: [0; 2],
+    };
+    let mut plane: cplane_t = cplane_t {
+        normal: [0.; 3],
+        dist: 0.,
+        type_0: 0,
+        signbits: 0,
+        pad: [0; 2],
+    };
     let mut e: *mut trRefEntity_t = 0 as *mut trRefEntity_t;
     let mut d: f32 = 0.;
     // create plane axis for the portal we are seeing
@@ -1904,8 +1847,8 @@ unsafe extern "C" fn IsMirror(
     // rotate the plane if necessary
     if entityNum != ((1 as i32) << 10 as i32) - 1 as i32 {
         tr.currentEntityNum = entityNum;
-        tr.currentEntity = &mut *tr.refdef.entities.offset(entityNum as isize)
-            as *mut trRefEntity_t;
+        tr.currentEntity =
+            &mut *tr.refdef.entities.offset(entityNum as isize) as *mut trRefEntity_t;
         // get the orientation of the entity
         R_RotateForEntity(tr.currentEntity, &mut tr.viewParms, &mut tr.or);
         // rotate the plane, but keep the non-rotated version for matching
@@ -1975,19 +1918,16 @@ unsafe extern "C" fn SurfIsOffscreen(
         &mut fogNum,
         &mut dlighted,
     );
-    RB_BeginSurface(
-        shader as *mut shader_s,
-        fogNum,
+    RB_BeginSurface(shader as *mut shader_s, fogNum);
+    rb_surfaceTable[*(*drawSurf).surface as usize].expect("non-null function pointer")(
+        (*drawSurf).surface as *mut libc::c_void,
     );
-    rb_surfaceTable[*(*drawSurf).surface as usize]
-        .expect("non-null function pointer")((*drawSurf).surface as *mut libc::c_void);
     i = 0 as i32;
     while i < tess.numVertexes {
         let mut j: i32 = 0;
         let mut pointFlags: u32 = 0 as i32 as u32;
         R_TransformModelToClip(
-            tess.xyz[i as usize].as_mut_ptr()
-                as *const vec_t,
+            tess.xyz[i as usize].as_mut_ptr() as *const vec_t,
             tr.or.modelMatrix.as_mut_ptr(),
             tr.viewParms.projectionMatrix.as_mut_ptr(),
             eye.as_mut_ptr(),
@@ -2019,35 +1959,22 @@ unsafe extern "C" fn SurfIsOffscreen(
     while i < tess.numIndexes {
         let mut normal: vec3_t = [0.; 3];
         let mut len: f32 = 0.;
-        normal[0 as i32 as usize] = tess.xyz
-            [tess.indexes[i as usize] as usize]
-            [0 as i32 as usize]
+        normal[0 as i32 as usize] = tess.xyz[tess.indexes[i as usize] as usize][0 as i32 as usize]
             - tr.viewParms.or.origin[0 as i32 as usize];
-        normal[1 as i32 as usize] = tess.xyz
-            [tess.indexes[i as usize] as usize]
-            [1 as i32 as usize]
+        normal[1 as i32 as usize] = tess.xyz[tess.indexes[i as usize] as usize][1 as i32 as usize]
             - tr.viewParms.or.origin[1 as i32 as usize];
-        normal[2 as i32 as usize] = tess.xyz
-            [tess.indexes[i as usize] as usize]
-            [2 as i32 as usize]
+        normal[2 as i32 as usize] = tess.xyz[tess.indexes[i as usize] as usize][2 as i32 as usize]
             - tr.viewParms.or.origin[2 as i32 as usize];
-        len =
-            VectorLengthSquared(normal.as_mut_ptr() as *const vec_t);
+        len = VectorLengthSquared(normal.as_mut_ptr() as *const vec_t);
         if len < shortest {
             shortest = len
         }
         if normal[0 as i32 as usize]
-            * tess.normal
-                [tess.indexes[i as usize] as usize]
-                [0 as i32 as usize]
+            * tess.normal[tess.indexes[i as usize] as usize][0 as i32 as usize]
             + normal[1 as i32 as usize]
-                * tess.normal
-                    [tess.indexes[i as usize] as usize]
-                    [1 as i32 as usize]
+                * tess.normal[tess.indexes[i as usize] as usize][1 as i32 as usize]
             + normal[2 as i32 as usize]
-                * tess.normal
-                    [tess.indexes[i as usize] as usize]
-                    [2 as i32 as usize]
+                * tess.normal[tess.indexes[i as usize] as usize][2 as i32 as usize]
             >= 0 as i32 as f32
         {
             numTriangles -= 1
@@ -2062,10 +1989,7 @@ unsafe extern "C" fn SurfIsOffscreen(
     if IsMirror(drawSurf, entityNum) as u64 != 0 {
         return qfalse;
     }
-    if shortest
-        > (*tess.shader).portalRange
-            * (*tess.shader).portalRange
-    {
+    if shortest > (*tess.shader).portalRange * (*tess.shader).portalRange {
         return qtrue;
     }
     return qfalse;
@@ -2170,16 +2094,14 @@ pub unsafe extern "C" fn R_MirrorViewBySurface(
         zFar: 0.,
         stereoFrame: STEREO_CENTER,
     };
-    let mut surface: orientation_t =
-        orientation_t {
-            origin: [0.; 3],
-            axis: [[0.; 3]; 3],
-        };
-    let mut camera: orientation_t =
-        orientation_t {
-            origin: [0.; 3],
-            axis: [[0.; 3]; 3],
-        };
+    let mut surface: orientation_t = orientation_t {
+        origin: [0.; 3],
+        axis: [[0.; 3]; 3],
+    };
+    let mut camera: orientation_t = orientation_t {
+        origin: [0.; 3],
+        axis: [[0.; 3]; 3],
+    };
     // don't recursively mirror
     if tr.viewParms.isPortal as u64 != 0 {
         ri.Printf.expect("non-null function pointer")(
@@ -2188,9 +2110,7 @@ pub unsafe extern "C" fn R_MirrorViewBySurface(
         );
         return qfalse;
     }
-    if (*r_noportals).integer != 0
-        || (*r_fastsky).integer == 1 as i32
-    {
+    if (*r_noportals).integer != 0 || (*r_fastsky).integer == 1 as i32 {
         return qfalse;
     }
     // trivially reject portal/mirror
@@ -2220,15 +2140,12 @@ pub unsafe extern "C" fn R_MirrorViewBySurface(
         &mut camera,
         newParms.or.origin.as_mut_ptr(),
     );
-    newParms.portalPlane.normal[0 as i32 as usize] = vec3_origin
-        [0 as i32 as usize]
-        - camera.axis[0 as i32 as usize][0 as i32 as usize];
-    newParms.portalPlane.normal[1 as i32 as usize] = vec3_origin
-        [1 as i32 as usize]
-        - camera.axis[0 as i32 as usize][1 as i32 as usize];
-    newParms.portalPlane.normal[2 as i32 as usize] = vec3_origin
-        [2 as i32 as usize]
-        - camera.axis[0 as i32 as usize][2 as i32 as usize];
+    newParms.portalPlane.normal[0 as i32 as usize] =
+        vec3_origin[0 as i32 as usize] - camera.axis[0 as i32 as usize][0 as i32 as usize];
+    newParms.portalPlane.normal[1 as i32 as usize] =
+        vec3_origin[1 as i32 as usize] - camera.axis[0 as i32 as usize][1 as i32 as usize];
+    newParms.portalPlane.normal[2 as i32 as usize] =
+        vec3_origin[2 as i32 as usize] - camera.axis[0 as i32 as usize][2 as i32 as usize];
     newParms.portalPlane.dist = camera.origin[0 as i32 as usize]
         * newParms.portalPlane.normal[0 as i32 as usize]
         + camera.origin[1 as i32 as usize] * newParms.portalPlane.normal[1 as i32 as usize]
@@ -2338,15 +2255,12 @@ unsafe extern "C" fn R_Radix(
     sortKey = (&mut (*source.offset(0 as i32 as isize)).sort as *mut u32 as *mut u8)
         .offset(byte as isize);
     end = sortKey.offset(
-        (size as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<drawSurf_t>() as libc::c_ulong)
+        (size as libc::c_ulong).wrapping_mul(::std::mem::size_of::<drawSurf_t>() as libc::c_ulong)
             as isize,
     );
     while sortKey < end {
         count[*sortKey as usize] += 1;
-        sortKey = sortKey.offset(
-            ::std::mem::size_of::<drawSurf_t>() as libc::c_ulong as isize
-        )
+        sortKey = sortKey.offset(::std::mem::size_of::<drawSurf_t>() as libc::c_ulong as isize)
     }
     index[0 as i32 as usize] = 0 as i32;
     i = 1 as i32;
@@ -2362,9 +2276,7 @@ unsafe extern "C" fn R_Radix(
         index[*sortKey as usize] = index[*sortKey as usize] + 1;
         *dest.offset(fresh2 as isize) = *source.offset(i as isize);
         i += 1;
-        sortKey = sortKey.offset(
-            ::std::mem::size_of::<drawSurf_t>() as libc::c_ulong as isize
-        )
+        sortKey = sortKey.offset(::std::mem::size_of::<drawSurf_t>() as libc::c_ulong as isize)
     }
 }
 /*
@@ -2378,8 +2290,7 @@ Radix sort with 4 byte size buckets
 unsafe extern "C" fn R_RadixSort(mut source: *mut drawSurf_t, mut size: i32) {
     static mut scratch: [drawSurf_t; 65536] = [drawSurf_t {
         sort: 0,
-        surface: 0 as *const surfaceType_t
-            as *mut surfaceType_t,
+        surface: 0 as *const surfaceType_t as *mut surfaceType_t,
     }; 65536];
     R_Radix(0 as i32, size, source, scratch.as_mut_ptr());
     R_Radix(1 as i32, size, scratch.as_mut_ptr(), source);
@@ -2443,10 +2354,7 @@ R_SortDrawSurfs
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_SortDrawSurfs(
-    mut drawSurfs: *mut drawSurf_t,
-    mut numDrawSurfs: i32,
-) {
+pub unsafe extern "C" fn R_SortDrawSurfs(mut drawSurfs: *mut drawSurf_t, mut numDrawSurfs: i32) {
     let mut shader: *mut shader_t = 0 as *mut shader_t;
     let mut fogNum: i32 = 0;
     let mut entityNum: i32 = 0;
@@ -2455,10 +2363,7 @@ pub unsafe extern "C" fn R_SortDrawSurfs(
     // it is possible for some views to not have any surfaces
     if numDrawSurfs < 1 as i32 {
         // we still need to add it for hyperspace cases
-        R_AddDrawSurfCmd(
-            drawSurfs as *mut drawSurf_s,
-            numDrawSurfs,
-        );
+        R_AddDrawSurfCmd(drawSurfs as *mut drawSurf_s, numDrawSurfs);
         return;
     }
     // sort the drawsurfs by sort type, then orientation, then shader
@@ -2497,10 +2402,7 @@ pub unsafe extern "C" fn R_SortDrawSurfs(
             i += 1
         }
     }
-    R_AddDrawSurfCmd(
-        drawSurfs as *mut drawSurf_s,
-        numDrawSurfs,
-    );
+    R_AddDrawSurfCmd(drawSurfs as *mut drawSurf_s, numDrawSurfs);
 }
 /*
 =============
@@ -2518,8 +2420,8 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
     let mut current_block_22: u64;
     tr.currentEntityNum = 0 as i32;
     while tr.currentEntityNum < tr.refdef.num_entities {
-        tr.currentEntity = &mut *tr.refdef.entities.offset(tr.currentEntityNum as isize)
-            as *mut trRefEntity_t;
+        tr.currentEntity =
+            &mut *tr.refdef.entities.offset(tr.currentEntityNum as isize) as *mut trRefEntity_t;
         ent = tr.currentEntity;
         (*ent).needDlights = qfalse;
         // preshift the value we are going to OR into the drawsurf sort
@@ -2546,10 +2448,7 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                         12015117824625712224 => {
                             // we must set up parts of tr.or for model culling
                             R_RotateForEntity(ent, &mut tr.viewParms, &mut tr.or);
-                            tr.currentModel = R_GetModelByHandle(
-                                (*ent).e.hModel,
-                            )
-                                as *mut model_s;
+                            tr.currentModel = R_GetModelByHandle((*ent).e.hModel) as *mut model_s;
                             if tr.currentModel.is_null() {
                                 R_AddDrawSurf(
                                     &mut entitySurface,
@@ -2560,24 +2459,16 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                             } else {
                                 match (*tr.currentModel).type_0 as u32 {
                                     2 => {
-                                        R_AddMD3Surfaces(
-                                            ent as *mut trRefEntity_t,
-                                        );
+                                        R_AddMD3Surfaces(ent as *mut trRefEntity_t);
                                     }
                                     3 => {
-                                        R_MDRAddAnimSurfaces(
-                                            ent as *mut trRefEntity_t,
-                                        );
+                                        R_MDRAddAnimSurfaces(ent as *mut trRefEntity_t);
                                     }
                                     4 => {
-                                        R_AddIQMSurfaces(
-                                            ent as *mut trRefEntity_t,
-                                        );
+                                        R_AddIQMSurfaces(ent as *mut trRefEntity_t);
                                     }
                                     1 => {
-                                        R_AddBrushModelSurfaces(
-                                            ent as *mut trRefEntity_t,
-                                        );
+                                        R_AddBrushModelSurfaces(ent as *mut trRefEntity_t);
                                     }
                                     0 => {
                                         // null model axis
@@ -2610,10 +2501,8 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                             if !((*ent).e.renderfx & 0x2 as i32 != 0
                                 && tr.viewParms.isPortal as u64 == 0)
                             {
-                                shader = R_GetShaderByHandle(
-                                    (*ent).e.customShader,
-                                )
-                                    as *mut shader_s; // don't draw anything
+                                shader =
+                                    R_GetShaderByHandle((*ent).e.customShader) as *mut shader_s; // don't draw anything
                                 R_AddDrawSurf(
                                     &mut entitySurface,
                                     shader,
@@ -2636,10 +2525,7 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                         }
                         12015117824625712224 => {
                             R_RotateForEntity(ent, &mut tr.viewParms, &mut tr.or);
-                            tr.currentModel = R_GetModelByHandle(
-                                (*ent).e.hModel,
-                            )
-                                as *mut model_s;
+                            tr.currentModel = R_GetModelByHandle((*ent).e.hModel) as *mut model_s;
                             if tr.currentModel.is_null() {
                                 R_AddDrawSurf(
                                     &mut entitySurface,
@@ -2650,24 +2536,16 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                             } else {
                                 match (*tr.currentModel).type_0 as u32 {
                                     2 => {
-                                        R_AddMD3Surfaces(
-                                            ent as *mut trRefEntity_t,
-                                        );
+                                        R_AddMD3Surfaces(ent as *mut trRefEntity_t);
                                     }
                                     3 => {
-                                        R_MDRAddAnimSurfaces(
-                                            ent as *mut trRefEntity_t,
-                                        );
+                                        R_MDRAddAnimSurfaces(ent as *mut trRefEntity_t);
                                     }
                                     4 => {
-                                        R_AddIQMSurfaces(
-                                            ent as *mut trRefEntity_t,
-                                        );
+                                        R_AddIQMSurfaces(ent as *mut trRefEntity_t);
                                     }
                                     1 => {
-                                        R_AddBrushModelSurfaces(
-                                            ent as *mut trRefEntity_t,
-                                        );
+                                        R_AddBrushModelSurfaces(ent as *mut trRefEntity_t);
                                     }
                                     0 => {
                                         if !((*ent).e.renderfx & 0x2 as i32 != 0
@@ -2695,10 +2573,8 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                             if !((*ent).e.renderfx & 0x2 as i32 != 0
                                 && tr.viewParms.isPortal as u64 == 0)
                             {
-                                shader = R_GetShaderByHandle(
-                                    (*ent).e.customShader,
-                                )
-                                    as *mut shader_s;
+                                shader =
+                                    R_GetShaderByHandle((*ent).e.customShader) as *mut shader_s;
                                 R_AddDrawSurf(
                                     &mut entitySurface,
                                     shader,
@@ -2721,10 +2597,7 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                         }
                         12015117824625712224 => {
                             R_RotateForEntity(ent, &mut tr.viewParms, &mut tr.or);
-                            tr.currentModel = R_GetModelByHandle(
-                                (*ent).e.hModel,
-                            )
-                                as *mut model_s;
+                            tr.currentModel = R_GetModelByHandle((*ent).e.hModel) as *mut model_s;
                             if tr.currentModel.is_null() {
                                 R_AddDrawSurf(
                                     &mut entitySurface,
@@ -2735,24 +2608,16 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                             } else {
                                 match (*tr.currentModel).type_0 as u32 {
                                     2 => {
-                                        R_AddMD3Surfaces(
-                                            ent as *mut trRefEntity_t,
-                                        );
+                                        R_AddMD3Surfaces(ent as *mut trRefEntity_t);
                                     }
                                     3 => {
-                                        R_MDRAddAnimSurfaces(
-                                            ent as *mut trRefEntity_t,
-                                        );
+                                        R_MDRAddAnimSurfaces(ent as *mut trRefEntity_t);
                                     }
                                     4 => {
-                                        R_AddIQMSurfaces(
-                                            ent as *mut trRefEntity_t,
-                                        );
+                                        R_AddIQMSurfaces(ent as *mut trRefEntity_t);
                                     }
                                     1 => {
-                                        R_AddBrushModelSurfaces(
-                                            ent as *mut trRefEntity_t,
-                                        );
+                                        R_AddBrushModelSurfaces(ent as *mut trRefEntity_t);
                                     }
                                     0 => {
                                         if !((*ent).e.renderfx & 0x2 as i32 != 0
@@ -2780,10 +2645,8 @@ pub unsafe extern "C" fn R_AddEntitySurfaces() {
                             if !((*ent).e.renderfx & 0x2 as i32 != 0
                                 && tr.viewParms.isPortal as u64 == 0)
                             {
-                                shader = R_GetShaderByHandle(
-                                    (*ent).e.customShader,
-                                )
-                                    as *mut shader_s;
+                                shader =
+                                    R_GetShaderByHandle((*ent).e.customShader) as *mut shader_s;
                                 R_AddDrawSurf(
                                     &mut entitySurface,
                                     shader,
@@ -2829,54 +2692,36 @@ R_DebugPolygon
 
 pub unsafe extern "C" fn R_DebugPolygon(mut color: i32, mut numPoints: i32, mut points: *mut f32) {
     let mut i: i32 = 0;
-    GL_State(
-        (0x100 as i32 | 0x2 as i32 | 0x20 as i32) as libc::c_ulong,
-    );
+    GL_State((0x100 as i32 | 0x2 as i32 | 0x20 as i32) as libc::c_ulong);
     // draw solid shade
     qglColor3f.expect("non-null function pointer")(
         (color & 1 as i32) as GLfloat,
         (color >> 1 as i32 & 1 as i32) as GLfloat,
         (color >> 2 as i32 & 1 as i32) as GLfloat,
     );
-    qglBegin.expect("non-null function pointer")(
-        0x9 as i32 as GLenum,
-    );
+    qglBegin.expect("non-null function pointer")(0x9 as i32 as GLenum);
     i = 0 as i32;
     while i < numPoints {
-        qglVertex3fv.expect("non-null function pointer")(
-            points.offset((i * 3 as i32) as isize),
-        );
+        qglVertex3fv.expect("non-null function pointer")(points.offset((i * 3 as i32) as isize));
         i += 1
     }
     qglEnd.expect("non-null function pointer")();
     // draw wireframe outline
-    GL_State(
-        (0x1000 as i32 | 0x100 as i32 | 0x2 as i32 | 0x20 as i32) as libc::c_ulong,
-    );
-    qglDepthRange.expect("non-null function pointer")(
-        0 as i32 as GLclampd,
-        0 as i32 as GLclampd,
-    );
+    GL_State((0x1000 as i32 | 0x100 as i32 | 0x2 as i32 | 0x20 as i32) as libc::c_ulong);
+    qglDepthRange.expect("non-null function pointer")(0 as i32 as GLclampd, 0 as i32 as GLclampd);
     qglColor3f.expect("non-null function pointer")(
         1 as i32 as GLfloat,
         1 as i32 as GLfloat,
         1 as i32 as GLfloat,
     );
-    qglBegin.expect("non-null function pointer")(
-        0x9 as i32 as GLenum,
-    );
+    qglBegin.expect("non-null function pointer")(0x9 as i32 as GLenum);
     i = 0 as i32;
     while i < numPoints {
-        qglVertex3fv.expect("non-null function pointer")(
-            points.offset((i * 3 as i32) as isize),
-        );
+        qglVertex3fv.expect("non-null function pointer")(points.offset((i * 3 as i32) as isize));
         i += 1
     }
     qglEnd.expect("non-null function pointer")();
-    qglDepthRange.expect("non-null function pointer")(
-        0 as i32 as GLclampd,
-        1 as i32 as GLclampd,
-    );
+    qglDepthRange.expect("non-null function pointer")(0 as i32 as GLclampd, 1 as i32 as GLclampd);
 }
 /*
 ====================
@@ -3237,11 +3082,7 @@ pub unsafe extern "C" fn R_RenderView(mut parms: *mut viewParms_t) {
     tr.viewCount += 1;
     // set viewParms.world
     R_RotateForViewer();
-    R_SetupProjection(
-        &mut tr.viewParms,
-        (*r_zproj).value,
-        qtrue,
-    );
+    R_SetupProjection(&mut tr.viewParms, (*r_zproj).value, qtrue);
     R_GenerateDrawSurfs();
     // if we overflowed MAX_DRAWSURFS, the drawsurfs
     // wrapped around in the buffer and we will be missing

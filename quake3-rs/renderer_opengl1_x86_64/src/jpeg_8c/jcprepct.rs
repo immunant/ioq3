@@ -205,10 +205,7 @@ pub struct my_prep_controller {
  * Initialize for a processing pass.
  */
 
-unsafe extern "C" fn start_pass_prep(
-    mut cinfo: j_compress_ptr,
-    mut pass_mode: J_BUF_MODE,
-) {
+unsafe extern "C" fn start_pass_prep(mut cinfo: j_compress_ptr, mut pass_mode: J_BUF_MODE) {
     let mut prep: my_prep_ptr = (*cinfo).prep as my_prep_ptr;
     if pass_mode as u32 != JBUF_PASS_THRU as i32 as u32 {
         (*(*cinfo).err).msg_code = JERR_BAD_BUFFER_MODE as i32;
@@ -277,8 +274,7 @@ unsafe extern "C" fn pre_process_data(
     let mut numrows: i32 = 0;
     let mut ci: i32 = 0;
     let mut inrows: JDIMENSION = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     while *in_row_ctr < in_rows_avail && *out_row_group_ctr < out_row_groups_avail {
         /* Do color conversion to fill the conversion buffer. */
         inrows = in_rows_avail.wrapping_sub(*in_row_ctr);
@@ -300,11 +296,9 @@ unsafe extern "C" fn pre_process_data(
             (*prep).next_buf_row as JDIMENSION,
             numrows,
         );
-        *in_row_ctr =
-            (*in_row_ctr as u32).wrapping_add(numrows as u32) as JDIMENSION;
+        *in_row_ctr = (*in_row_ctr as u32).wrapping_add(numrows as u32) as JDIMENSION;
         (*prep).next_buf_row += numrows;
-        (*prep).rows_to_go = ((*prep).rows_to_go as u32).wrapping_sub(numrows as u32)
-            as JDIMENSION;
+        (*prep).rows_to_go = ((*prep).rows_to_go as u32).wrapping_sub(numrows as u32) as JDIMENSION;
         /* If at bottom of image, pad to fill the conversion buffer. */
         if (*prep).rows_to_go == 0 as i32 as u32
             && (*prep).next_buf_row < (*cinfo).max_v_samp_factor
@@ -425,11 +419,10 @@ unsafe extern "C" fn pre_process_context(
                     ci += 1
                 }
             }
-            *in_row_ctr =
-                (*in_row_ctr as u32).wrapping_add(numrows as u32) as JDIMENSION;
+            *in_row_ctr = (*in_row_ctr as u32).wrapping_add(numrows as u32) as JDIMENSION;
             (*prep).next_buf_row += numrows;
-            (*prep).rows_to_go = ((*prep).rows_to_go as u32).wrapping_sub(numrows as u32)
-                as JDIMENSION
+            (*prep).rows_to_go =
+                ((*prep).rows_to_go as u32).wrapping_sub(numrows as u32) as JDIMENSION
         } else {
             /* Return for more data, unless we are at the bottom of the image. */
             if (*prep).rows_to_go != 0 as i32 as u32 {
@@ -486,8 +479,7 @@ unsafe extern "C" fn create_context_buffer(mut cinfo: j_compress_ptr) {
     let mut rgroup_height: i32 = (*cinfo).max_v_samp_factor;
     let mut ci: i32 = 0;
     let mut i: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut true_buffer: JSAMPARRAY = 0 as *mut JSAMPROW;
     let mut fake_buffer: JSAMPARRAY = 0 as *mut JSAMPROW;
     /* Grab enough space for fake row pointers for all the components;
@@ -574,8 +566,7 @@ pub unsafe extern "C" fn jinit_c_prep_controller(
 ) {
     let mut prep: my_prep_ptr = 0 as *mut my_prep_controller;
     let mut ci: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     if need_full_buffer != 0 {
         /* safety check */
         (*(*cinfo).err).msg_code = JERR_BAD_BUFFER_MODE as i32;
@@ -597,13 +588,8 @@ pub unsafe extern "C" fn jinit_c_prep_controller(
         ::std::mem::size_of::<my_prep_controller>() as libc::c_ulong,
     ) as my_prep_ptr;
     (*cinfo).prep = prep as *mut jpeg_c_prep_controller;
-    (*prep).pub_0.start_pass = Some(
-        start_pass_prep
-            as unsafe extern "C" fn(
-                _: j_compress_ptr,
-                _: J_BUF_MODE,
-            ) -> (),
-    );
+    (*prep).pub_0.start_pass =
+        Some(start_pass_prep as unsafe extern "C" fn(_: j_compress_ptr, _: J_BUF_MODE) -> ());
     /* Allocate the color conversion buffer.
      * We make the buffer wide enough to allow the downsampler to edge-expand
      * horizontally within the buffer, if it so chooses.
@@ -651,8 +637,7 @@ pub unsafe extern "C" fn jinit_c_prep_controller(
                 ((*compptr).width_in_blocks as isize
                     * (*cinfo).min_DCT_h_scaled_size as isize
                     * (*cinfo).max_h_samp_factor as isize
-                    / (*compptr).h_samp_factor as isize)
-                    as JDIMENSION,
+                    / (*compptr).h_samp_factor as isize) as JDIMENSION,
                 (*cinfo).max_v_samp_factor as JDIMENSION,
             );
             ci += 1;

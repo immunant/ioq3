@@ -99,9 +99,7 @@ pub type voiceCommand_t = voiceCommand_s;
 #[derive(Copy, Clone)]
 pub struct voiceCommand_s {
     pub cmd: *mut libc::c_char,
-    pub func: Option<
-        unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
-    >,
+    pub func: Option<unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> ()>,
 }
 /*
 ==================
@@ -130,8 +128,8 @@ pub unsafe extern "C" fn BotVoiceChat_GetFlag(
     (*bs).ordered = qtrue as i32;
     (*bs).order_time = floattime;
     //set the time to send a message to the team mates
-    (*bs).teammessage_time = floattime
-        + 2 as i32 as f32 * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
+    (*bs).teammessage_time =
+        floattime + 2 as i32 as f32 * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //set the ltg type
     (*bs).ltgtype = 4 as i32;
     //set the team goal time
@@ -141,17 +139,13 @@ pub unsafe extern "C" fn BotVoiceChat_GetFlag(
         //get an alternative route goal towards the enemy base
         crate::src::game::ai_dmq3::BotGetAlternateRouteGoal(
             bs as *mut bot_state_s,
-            crate::src::game::ai_dmq3::BotOppositeTeam(
-                bs as *mut bot_state_s,
-            ),
+            crate::src::game::ai_dmq3::BotOppositeTeam(bs as *mut bot_state_s),
         );
     }
     //
     crate::src::game::ai_dmq3::BotSetTeamStatus(bs as *mut bot_state_s);
     // remember last ordered task
-    crate::src::game::ai_dmq3::BotRememberLastOrderedTask(
-        bs as *mut bot_state_s,
-    );
+    crate::src::game::ai_dmq3::BotRememberLastOrderedTask(bs as *mut bot_state_s);
     //DEBUG
 }
 /*
@@ -175,8 +169,8 @@ pub unsafe extern "C" fn BotVoiceChat_Offense(
     (*bs).ordered = qtrue as i32;
     (*bs).order_time = floattime;
     //set the time to send a message to the team mates
-    (*bs).teammessage_time = floattime
-        + 2 as i32 as f32 * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
+    (*bs).teammessage_time =
+        floattime + 2 as i32 as f32 * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //set the ltg type
     (*bs).ltgtype = 13 as i32;
     //set the team goal time
@@ -185,9 +179,7 @@ pub unsafe extern "C" fn BotVoiceChat_Offense(
     //
     crate::src::game::ai_dmq3::BotSetTeamStatus(bs as *mut bot_state_s);
     // remember last ordered task
-    crate::src::game::ai_dmq3::BotRememberLastOrderedTask(
-        bs as *mut bot_state_s,
-    );
+    crate::src::game::ai_dmq3::BotRememberLastOrderedTask(bs as *mut bot_state_s);
     //DEBUG
 }
 /*
@@ -204,24 +196,19 @@ pub unsafe extern "C" fn BotVoiceChat_Defend(
 ) {
     if crate::src::game::ai_dmq3::gametype == GT_CTF as i32 {
         //
-        match crate::src::game::ai_dmq3::BotTeam(bs as *mut bot_state_s)
-        {
+        match crate::src::game::ai_dmq3::BotTeam(bs as *mut bot_state_s) {
             1 => {
                 crate::stdlib::memcpy(
-                    &mut (*bs).teamgoal as *mut bot_goal_t
-                        as *mut libc::c_void,
-                    &mut crate::src::game::ai_dmq3::ctf_redflag
-                        as *mut bot_goal_t
+                    &mut (*bs).teamgoal as *mut bot_goal_t as *mut libc::c_void,
+                    &mut crate::src::game::ai_dmq3::ctf_redflag as *mut bot_goal_t
                         as *const libc::c_void,
                     ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
                 );
             }
             2 => {
                 crate::stdlib::memcpy(
-                    &mut (*bs).teamgoal as *mut bot_goal_t
-                        as *mut libc::c_void,
-                    &mut crate::src::game::ai_dmq3::ctf_blueflag
-                        as *mut bot_goal_t
+                    &mut (*bs).teamgoal as *mut bot_goal_t as *mut libc::c_void,
+                    &mut crate::src::game::ai_dmq3::ctf_blueflag as *mut bot_goal_t
                         as *const libc::c_void,
                     ::std::mem::size_of::<bot_goal_t>() as libc::c_ulong,
                 );
@@ -236,8 +223,8 @@ pub unsafe extern "C" fn BotVoiceChat_Defend(
     (*bs).ordered = qtrue as i32;
     (*bs).order_time = floattime;
     //set the time to send a message to the team mates
-    (*bs).teammessage_time = floattime
-        + 2 as i32 as f32 * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
+    (*bs).teammessage_time =
+        floattime + 2 as i32 as f32 * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //set the ltg type
     (*bs).ltgtype = 3 as i32;
     //get the team goal time
@@ -247,9 +234,7 @@ pub unsafe extern "C" fn BotVoiceChat_Defend(
     //
     crate::src::game::ai_dmq3::BotSetTeamStatus(bs as *mut bot_state_s);
     // remember last ordered task
-    crate::src::game::ai_dmq3::BotRememberLastOrderedTask(
-        bs as *mut bot_state_s,
-    );
+    crate::src::game::ai_dmq3::BotRememberLastOrderedTask(bs as *mut bot_state_s);
     //DEBUG
 }
 /*
@@ -341,10 +326,7 @@ pub unsafe extern "C" fn BotVoiceChat_Camp(
     let mut netname: [libc::c_char; 36] = [0; 36];
     //
     (*bs).teamgoal.entitynum = -(1 as i32);
-    BotEntityInfo(
-        client,
-        &mut entinfo as *mut _ as *mut aas_entityinfo_s,
-    );
+    BotEntityInfo(client, &mut entinfo as *mut _ as *mut aas_entityinfo_s);
     //if info is valid (in PVS)
     if entinfo.valid != 0 {
         areanum = crate::src::game::ai_dmq3::BotPointAreaNum(entinfo.origin.as_mut_ptr());
@@ -357,18 +339,12 @@ pub unsafe extern "C" fn BotVoiceChat_Camp(
             (*bs).teamgoal.origin[0 as i32 as usize] = entinfo.origin[0 as i32 as usize];
             (*bs).teamgoal.origin[1 as i32 as usize] = entinfo.origin[1 as i32 as usize];
             (*bs).teamgoal.origin[2 as i32 as usize] = entinfo.origin[2 as i32 as usize];
-            (*bs).teamgoal.mins[0 as i32 as usize] =
-                -(8 as i32) as vec_t;
-            (*bs).teamgoal.mins[1 as i32 as usize] =
-                -(8 as i32) as vec_t;
-            (*bs).teamgoal.mins[2 as i32 as usize] =
-                -(8 as i32) as vec_t;
-            (*bs).teamgoal.maxs[0 as i32 as usize] =
-                8 as i32 as vec_t;
-            (*bs).teamgoal.maxs[1 as i32 as usize] =
-                8 as i32 as vec_t;
-            (*bs).teamgoal.maxs[2 as i32 as usize] =
-                8 as i32 as vec_t
+            (*bs).teamgoal.mins[0 as i32 as usize] = -(8 as i32) as vec_t;
+            (*bs).teamgoal.mins[1 as i32 as usize] = -(8 as i32) as vec_t;
+            (*bs).teamgoal.mins[2 as i32 as usize] = -(8 as i32) as vec_t;
+            (*bs).teamgoal.maxs[0 as i32 as usize] = 8 as i32 as vec_t;
+            (*bs).teamgoal.maxs[1 as i32 as usize] = 8 as i32 as vec_t;
+            (*bs).teamgoal.maxs[2 as i32 as usize] = 8 as i32 as vec_t
             //}
         }
     }
@@ -392,8 +368,8 @@ pub unsafe extern "C" fn BotVoiceChat_Camp(
     (*bs).ordered = qtrue as i32;
     (*bs).order_time = floattime;
     //set the time to send a message to the team mates
-    (*bs).teammessage_time = floattime
-        + 2 as i32 as f32 * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
+    (*bs).teammessage_time =
+        floattime + 2 as i32 as f32 * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //set the ltg type
     (*bs).ltgtype = 8 as i32;
     //get the team goal time
@@ -405,9 +381,7 @@ pub unsafe extern "C" fn BotVoiceChat_Camp(
     //
     crate::src::game::ai_dmq3::BotSetTeamStatus(bs as *mut bot_state_s);
     // remember last ordered task
-    crate::src::game::ai_dmq3::BotRememberLastOrderedTask(
-        bs as *mut bot_state_s,
-    );
+    crate::src::game::ai_dmq3::BotRememberLastOrderedTask(bs as *mut bot_state_s);
     //DEBUG
 }
 /*
@@ -450,10 +424,7 @@ pub unsafe extern "C" fn BotVoiceChat_FollowMe(
     };
     let mut netname: [libc::c_char; 36] = [0; 36];
     (*bs).teamgoal.entitynum = -(1 as i32);
-    BotEntityInfo(
-        client,
-        &mut entinfo as *mut _ as *mut aas_entityinfo_s,
-    );
+    BotEntityInfo(client, &mut entinfo as *mut _ as *mut aas_entityinfo_s);
     //if info is valid (in PVS)
     if entinfo.valid != 0 {
         areanum = crate::src::game::ai_dmq3::BotPointAreaNum(entinfo.origin.as_mut_ptr());
@@ -464,18 +435,12 @@ pub unsafe extern "C" fn BotVoiceChat_FollowMe(
             (*bs).teamgoal.origin[0 as i32 as usize] = entinfo.origin[0 as i32 as usize];
             (*bs).teamgoal.origin[1 as i32 as usize] = entinfo.origin[1 as i32 as usize];
             (*bs).teamgoal.origin[2 as i32 as usize] = entinfo.origin[2 as i32 as usize];
-            (*bs).teamgoal.mins[0 as i32 as usize] =
-                -(8 as i32) as vec_t;
-            (*bs).teamgoal.mins[1 as i32 as usize] =
-                -(8 as i32) as vec_t;
-            (*bs).teamgoal.mins[2 as i32 as usize] =
-                -(8 as i32) as vec_t;
-            (*bs).teamgoal.maxs[0 as i32 as usize] =
-                8 as i32 as vec_t;
-            (*bs).teamgoal.maxs[1 as i32 as usize] =
-                8 as i32 as vec_t;
-            (*bs).teamgoal.maxs[2 as i32 as usize] =
-                8 as i32 as vec_t
+            (*bs).teamgoal.mins[0 as i32 as usize] = -(8 as i32) as vec_t;
+            (*bs).teamgoal.mins[1 as i32 as usize] = -(8 as i32) as vec_t;
+            (*bs).teamgoal.mins[2 as i32 as usize] = -(8 as i32) as vec_t;
+            (*bs).teamgoal.maxs[0 as i32 as usize] = 8 as i32 as vec_t;
+            (*bs).teamgoal.maxs[1 as i32 as usize] = 8 as i32 as vec_t;
+            (*bs).teamgoal.maxs[2 as i32 as usize] = 8 as i32 as vec_t
         }
     }
     //if the other is not visible
@@ -502,8 +467,8 @@ pub unsafe extern "C" fn BotVoiceChat_FollowMe(
     //last time the team mate was assumed visible
     (*bs).teammatevisible_time = floattime;
     //set the time to send a message to the team mates
-    (*bs).teammessage_time = floattime
-        + 2 as i32 as f32 * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
+    (*bs).teammessage_time =
+        floattime + 2 as i32 as f32 * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //get the team goal time
     (*bs).teamgoal_time = floattime + 600 as i32 as f32;
     //set the ltg type
@@ -513,9 +478,7 @@ pub unsafe extern "C" fn BotVoiceChat_FollowMe(
     //
     crate::src::game::ai_dmq3::BotSetTeamStatus(bs as *mut bot_state_s);
     // remember last ordered task
-    crate::src::game::ai_dmq3::BotRememberLastOrderedTask(
-        bs as *mut bot_state_s,
-    );
+    crate::src::game::ai_dmq3::BotRememberLastOrderedTask(bs as *mut bot_state_s);
     //DEBUG
 }
 /*
@@ -531,9 +494,7 @@ pub unsafe extern "C" fn BotVoiceChat_FollowFlagCarrier(
     mut mode: i32,
 ) {
     let mut carrier: i32 = 0;
-    carrier = crate::src::game::ai_dmq3::BotTeamFlagCarrier(
-        bs as *mut bot_state_s,
-    );
+    carrier = crate::src::game::ai_dmq3::BotTeamFlagCarrier(bs as *mut bot_state_s);
     if carrier >= 0 as i32 {
         BotVoiceChat_FollowMe(bs, carrier, mode);
     };
@@ -560,8 +521,8 @@ pub unsafe extern "C" fn BotVoiceChat_ReturnFlag(
     (*bs).ordered = qtrue as i32;
     (*bs).order_time = floattime;
     //set the time to send a message to the team mates
-    (*bs).teammessage_time = floattime
-        + 2 as i32 as f32 * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
+    (*bs).teammessage_time =
+        floattime + 2 as i32 as f32 * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //set the ltg type
     (*bs).ltgtype = 6 as i32;
     //set the team goal time
@@ -611,8 +572,7 @@ pub unsafe extern "C" fn BotVoiceChat_StopLeader(
     ) == 0
     {
         (*bs).teamleader[0 as i32 as usize] = '\u{0}' as i32 as libc::c_char;
-        crate::src::game::ai_cmd::notleader[client as usize] =
-            qtrue as i32
+        crate::src::game::ai_cmd::notleader[client as usize] = qtrue as i32
     };
 }
 /*
@@ -637,9 +597,7 @@ pub unsafe extern "C" fn BotVoiceChat_WhoIsLeader(
         ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
     );
     //if this bot IS the team leader
-    if Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr())
-        == 0
-    {
+    if Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr()) == 0 {
         BotAI_BotInitialChat(
             bs as *mut bot_state_s,
             b"iamteamleader\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -667,10 +625,8 @@ pub unsafe extern "C" fn BotVoiceChat_WantOnDefense(
 ) {
     let mut netname: [libc::c_char; 36] = [0; 36];
     let mut preference: i32 = 0;
-    preference = crate::src::game::ai_team::BotGetTeamMateTaskPreference(
-        bs as *mut bot_state_s,
-        client,
-    );
+    preference =
+        crate::src::game::ai_team::BotGetTeamMateTaskPreference(bs as *mut bot_state_s, client);
     preference &= !(2 as i32);
     preference |= 1 as i32;
     crate::src::game::ai_team::BotSetTeamMateTaskPreference(
@@ -712,10 +668,8 @@ pub unsafe extern "C" fn BotVoiceChat_WantOnOffense(
 ) {
     let mut netname: [libc::c_char; 36] = [0; 36];
     let mut preference: i32 = 0;
-    preference = crate::src::game::ai_team::BotGetTeamMateTaskPreference(
-        bs as *mut bot_state_s,
-        client,
-    );
+    preference =
+        crate::src::game::ai_team::BotGetTeamMateTaskPreference(bs as *mut bot_state_s, client);
     preference &= !(1 as i32);
     preference |= 2 as i32;
     crate::src::game::ai_team::BotSetTeamMateTaskPreference(
@@ -760,11 +714,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
                 cmd: b"getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 func: Some(
                     BotVoiceChat_GetFlag
-                        as unsafe extern "C" fn(
-                            _: *mut bot_state_t,
-                            _: i32,
-                            _: i32,
-                        ) -> (),
+                        as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
                 ),
             };
             init
@@ -774,11 +724,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
                 cmd: b"offense\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 func: Some(
                     BotVoiceChat_Offense
-                        as unsafe extern "C" fn(
-                            _: *mut bot_state_t,
-                            _: i32,
-                            _: i32,
-                        ) -> (),
+                        as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
                 ),
             };
             init
@@ -788,11 +734,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
                 cmd: b"defend\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 func: Some(
                     BotVoiceChat_Defend
-                        as unsafe extern "C" fn(
-                            _: *mut bot_state_t,
-                            _: i32,
-                            _: i32,
-                        ) -> (),
+                        as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
                 ),
             };
             init
@@ -802,11 +744,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
                 cmd: b"defendflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 func: Some(
                     BotVoiceChat_DefendFlag
-                        as unsafe extern "C" fn(
-                            _: *mut bot_state_t,
-                            _: i32,
-                            _: i32,
-                        ) -> (),
+                        as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
                 ),
             };
             init
@@ -816,11 +754,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
                 cmd: b"patrol\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 func: Some(
                     BotVoiceChat_Patrol
-                        as unsafe extern "C" fn(
-                            _: *mut bot_state_t,
-                            _: i32,
-                            _: i32,
-                        ) -> (),
+                        as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
                 ),
             };
             init
@@ -830,11 +764,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
                 cmd: b"camp\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 func: Some(
                     BotVoiceChat_Camp
-                        as unsafe extern "C" fn(
-                            _: *mut bot_state_t,
-                            _: i32,
-                            _: i32,
-                        ) -> (),
+                        as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
                 ),
             };
             init
@@ -844,11 +774,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
                 cmd: b"followme\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 func: Some(
                     BotVoiceChat_FollowMe
-                        as unsafe extern "C" fn(
-                            _: *mut bot_state_t,
-                            _: i32,
-                            _: i32,
-                        ) -> (),
+                        as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
                 ),
             };
             init
@@ -859,11 +785,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
                     as *mut libc::c_char,
                 func: Some(
                     BotVoiceChat_FollowFlagCarrier
-                        as unsafe extern "C" fn(
-                            _: *mut bot_state_t,
-                            _: i32,
-                            _: i32,
-                        ) -> (),
+                        as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
                 ),
             };
             init
@@ -873,11 +795,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
                 cmd: b"returnflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 func: Some(
                     BotVoiceChat_ReturnFlag
-                        as unsafe extern "C" fn(
-                            _: *mut bot_state_t,
-                            _: i32,
-                            _: i32,
-                        ) -> (),
+                        as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
                 ),
             };
             init
@@ -887,11 +805,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
                 cmd: b"startleader\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 func: Some(
                     BotVoiceChat_StartLeader
-                        as unsafe extern "C" fn(
-                            _: *mut bot_state_t,
-                            _: i32,
-                            _: i32,
-                        ) -> (),
+                        as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
                 ),
             };
             init
@@ -901,11 +815,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
                 cmd: b"stopleader\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 func: Some(
                     BotVoiceChat_StopLeader
-                        as unsafe extern "C" fn(
-                            _: *mut bot_state_t,
-                            _: i32,
-                            _: i32,
-                        ) -> (),
+                        as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
                 ),
             };
             init
@@ -915,11 +825,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
                 cmd: b"whoisleader\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 func: Some(
                     BotVoiceChat_WhoIsLeader
-                        as unsafe extern "C" fn(
-                            _: *mut bot_state_t,
-                            _: i32,
-                            _: i32,
-                        ) -> (),
+                        as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
                 ),
             };
             init
@@ -929,11 +835,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
                 cmd: b"wantondefense\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 func: Some(
                     BotVoiceChat_WantOnDefense
-                        as unsafe extern "C" fn(
-                            _: *mut bot_state_t,
-                            _: i32,
-                            _: i32,
-                        ) -> (),
+                        as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
                 ),
             };
             init
@@ -943,11 +845,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
                 cmd: b"wantonoffense\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 func: Some(
                     BotVoiceChat_WantOnOffense
-                        as unsafe extern "C" fn(
-                            _: *mut bot_state_t,
-                            _: i32,
-                            _: i32,
-                        ) -> (),
+                        as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
                 ),
             };
             init
@@ -957,11 +855,7 @@ pub static mut voiceCommands: [voiceCommand_t; 15] = {
                 cmd: 0 as *const libc::c_char as *mut libc::c_char,
                 func: Some(
                     BotVoiceChat_Dummy
-                        as unsafe extern "C" fn(
-                            _: *mut bot_state_t,
-                            _: i32,
-                            _: i32,
-                        ) -> (),
+                        as unsafe extern "C" fn(_: *mut bot_state_t, _: i32, _: i32) -> (),
                 ),
             };
             init
@@ -1052,11 +946,7 @@ pub unsafe extern "C" fn BotVoiceChatCommand(
         *fresh2 = '\u{0}' as i32 as libc::c_char
     }
     //color = atoi(ptr);
-    if crate::src::game::ai_dmq3::BotSameTeam(
-        bs as *mut bot_state_s,
-        clientNum,
-    ) == 0
-    {
+    if crate::src::game::ai_dmq3::BotSameTeam(bs as *mut bot_state_s, clientNum) == 0 {
         return qfalse as i32;
     }
     i = 0 as i32;

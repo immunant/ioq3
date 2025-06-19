@@ -55,10 +55,7 @@ pub struct huffman {
  *   bit buffer, using shift left.
  */
 
-unsafe extern "C" fn bits(
-    mut s: *mut state,
-    mut need: int32_t,
-) -> int32_t {
+unsafe extern "C" fn bits(mut s: *mut state, mut need: int32_t) -> int32_t {
     let mut val: int32_t = 0; /* bit accumulator (can use up to 20 bits) */
     /* load at least need bits into val */
     val = (*s).bitbuf; /* out of input */
@@ -141,10 +138,8 @@ unsafe extern "C" fn stored(mut s: *mut state) -> int32_t {
         }
     } else {
         /* just scanning */
-        (*s).outcnt = ((*s).outcnt as u32).wrapping_add(len) as uint32_t
-            as uint32_t;
-        (*s).incnt = ((*s).incnt as u32).wrapping_add(len) as uint32_t
-            as uint32_t
+        (*s).outcnt = ((*s).outcnt as u32).wrapping_add(len) as uint32_t as uint32_t;
+        (*s).incnt = ((*s).incnt as u32).wrapping_add(len) as uint32_t as uint32_t
     }
     /* done with a valid stored block */
     return 0 as i32;
@@ -206,8 +201,7 @@ unsafe extern "C" fn decode(mut s: *mut state, mut h: *mut huffman) -> int32_t {
                 /* if length len, return symbol */
                 (*s).bitbuf = bitbuf; /* else update for next length */
                 (*s).bitcnt = (*s).bitcnt - len & 7 as i32; /* out of input */
-                return *(*h).symbol.offset((index + (code - first)) as isize)
-                    as int32_t;
+                return *(*h).symbol.offset((index + (code - first)) as isize) as int32_t;
             }
             index += count;
             first += count;
@@ -306,9 +300,8 @@ unsafe extern "C" fn construct(
     offs[1 as i32 as usize] = 0 as i32 as int16_t;
     len = 1 as i32;
     while len < 15 as i32 {
-        offs[(len + 1 as i32) as usize] = (offs[len as usize] as i32
-            + *(*h).count.offset(len as isize) as i32)
-            as int16_t;
+        offs[(len + 1 as i32) as usize] =
+            (offs[len as usize] as i32 + *(*h).count.offset(len as isize) as i32) as int16_t;
         len += 1
     }
     /*
@@ -542,15 +535,13 @@ unsafe extern "C" fn codes(
             if symbol >= 29 as i32 {
                 return -(9 as i32);
             }
-            len = lens[symbol as usize] as i32
-                + bits(s, lext[symbol as usize] as int32_t);
+            len = lens[symbol as usize] as i32 + bits(s, lext[symbol as usize] as int32_t);
             /* get and check distance */
             symbol = decode(s, distcode); /* invalid symbol */
             if symbol < 0 as i32 {
                 return symbol;
             } /* distance too far back */
-            dist = (dists[symbol as usize] as i32
-                + bits(s, dext[symbol as usize] as int32_t))
+            dist = (dists[symbol as usize] as i32 + bits(s, dext[symbol as usize] as int32_t))
                 as uint32_t;
             if dist > (*s).outcnt {
                 return -(10 as i32);
@@ -571,9 +562,7 @@ unsafe extern "C" fn codes(
                     (*s).outcnt = (*s).outcnt.wrapping_add(1)
                 }
             } else {
-                (*s).outcnt = ((*s).outcnt as u32).wrapping_add(len as u32)
-                    as uint32_t
-                    as uint32_t
+                (*s).outcnt = ((*s).outcnt as u32).wrapping_add(len as u32) as uint32_t as uint32_t
             }
         }
         if !(symbol != 256 as i32) {

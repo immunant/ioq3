@@ -324,8 +324,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -351,8 +350,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -374,8 +372,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -397,8 +394,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -420,8 +416,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -443,8 +438,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -466,8 +460,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -489,8 +482,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -516,8 +508,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -543,8 +534,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -565,10 +555,7 @@ static mut skillMenuInfo: skillMenuInfo_t = skillMenuInfo_t {
     silenceSound: 0,
 };
 
-unsafe extern "C" fn SetSkillColor(
-    mut skill: i32,
-    mut color: *mut vec_t,
-) {
+unsafe extern "C" fn SetSkillColor(mut skill: i32, mut color: *mut vec_t) {
     match skill {
         1 => skillMenuInfo.item_baby.color = color,
         2 => skillMenuInfo.item_easy.color = color,
@@ -591,9 +578,7 @@ unsafe extern "C" fn UI_SPSkillMenu_SkillEvent(mut ptr: *mut libc::c_void, mut n
         return;
     }
     SetSkillColor(
-        trap_Cvar_VariableValue(
-            b"g_spSkill\x00" as *const u8 as *const libc::c_char,
-        ) as i32,
+        trap_Cvar_VariableValue(b"g_spSkill\x00" as *const u8 as *const libc::c_char) as i32,
         color_red.as_mut_ptr(),
     );
     id = (*(ptr as *mut menucommon_s)).id;
@@ -605,15 +590,9 @@ unsafe extern "C" fn UI_SPSkillMenu_SkillEvent(mut ptr: *mut libc::c_void, mut n
     SetSkillColor(skill, color_white.as_mut_ptr());
     skillMenuInfo.art_skillPic.shader = skillMenuInfo.skillpics[(skill - 1 as i32) as usize];
     if id == 14 as i32 {
-        trap_S_StartLocalSound(
-            skillMenuInfo.nightmareSound,
-            CHAN_ANNOUNCER as i32,
-        );
+        trap_S_StartLocalSound(skillMenuInfo.nightmareSound, CHAN_ANNOUNCER as i32);
     } else {
-        trap_S_StartLocalSound(
-            skillMenuInfo.silenceSound,
-            CHAN_ANNOUNCER as i32,
-        );
+        trap_S_StartLocalSound(skillMenuInfo.silenceSound, CHAN_ANNOUNCER as i32);
     };
 }
 /*
@@ -638,10 +617,7 @@ unsafe extern "C" fn UI_SPSkillMenu_BackEvent(mut _ptr: *mut libc::c_void, mut n
     if notification != 3 as i32 {
         return;
     }
-    trap_S_StartLocalSound(
-        skillMenuInfo.silenceSound,
-        CHAN_ANNOUNCER as i32,
-    );
+    trap_S_StartLocalSound(skillMenuInfo.silenceSound, CHAN_ANNOUNCER as i32);
     UI_PopMenu();
 }
 /*
@@ -650,14 +626,9 @@ UI_SPSkillMenu_Key
 =================
 */
 
-unsafe extern "C" fn UI_SPSkillMenu_Key(
-    mut key: i32,
-) -> sfxHandle_t {
+unsafe extern "C" fn UI_SPSkillMenu_Key(mut key: i32) -> sfxHandle_t {
     if key == K_MOUSE2 as i32 || key == K_ESCAPE as i32 {
-        trap_S_StartLocalSound(
-            skillMenuInfo.silenceSound,
-            CHAN_ANNOUNCER as i32,
-        );
+        trap_S_StartLocalSound(skillMenuInfo.silenceSound, CHAN_ANNOUNCER as i32);
     }
     return Menu_DefaultKey(
         &mut skillMenuInfo.menu as *mut _ as *mut _tag_menuframework,
@@ -672,41 +643,26 @@ UI_SPSkillMenu_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn UI_SPSkillMenu_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/cut_frame\x00" as *const u8 as *const libc::c_char,
+    trap_R_RegisterShaderNoMip(b"menu/art/cut_frame\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0.tga\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1.tga\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/fight_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/fight_1\x00" as *const u8 as *const libc::c_char);
+    skillMenuInfo.skillpics[0 as i32 as usize] = trap_R_RegisterShaderNoMip(
+        b"menu/art/level_complete1\x00" as *const u8 as *const libc::c_char,
     );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0.tga\x00" as *const u8 as *const libc::c_char,
+    skillMenuInfo.skillpics[1 as i32 as usize] = trap_R_RegisterShaderNoMip(
+        b"menu/art/level_complete2\x00" as *const u8 as *const libc::c_char,
     );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1.tga\x00" as *const u8 as *const libc::c_char,
+    skillMenuInfo.skillpics[2 as i32 as usize] = trap_R_RegisterShaderNoMip(
+        b"menu/art/level_complete3\x00" as *const u8 as *const libc::c_char,
     );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/fight_0\x00" as *const u8 as *const libc::c_char,
+    skillMenuInfo.skillpics[3 as i32 as usize] = trap_R_RegisterShaderNoMip(
+        b"menu/art/level_complete4\x00" as *const u8 as *const libc::c_char,
     );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/fight_1\x00" as *const u8 as *const libc::c_char,
+    skillMenuInfo.skillpics[4 as i32 as usize] = trap_R_RegisterShaderNoMip(
+        b"menu/art/level_complete5\x00" as *const u8 as *const libc::c_char,
     );
-    skillMenuInfo.skillpics[0 as i32 as usize] =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/level_complete1\x00" as *const u8 as *const libc::c_char,
-        );
-    skillMenuInfo.skillpics[1 as i32 as usize] =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/level_complete2\x00" as *const u8 as *const libc::c_char,
-        );
-    skillMenuInfo.skillpics[2 as i32 as usize] =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/level_complete3\x00" as *const u8 as *const libc::c_char,
-        );
-    skillMenuInfo.skillpics[3 as i32 as usize] =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/level_complete4\x00" as *const u8 as *const libc::c_char,
-        );
-    skillMenuInfo.skillpics[4 as i32 as usize] =
-        trap_R_RegisterShaderNoMip(
-            b"menu/art/level_complete5\x00" as *const u8 as *const libc::c_char,
-        );
     skillMenuInfo.nightmareSound = trap_S_RegisterSound(
         b"sound/misc/nightmare.wav\x00" as *const u8 as *const libc::c_char,
         qfalse,
@@ -730,10 +686,8 @@ unsafe extern "C" fn UI_SPSkillMenu_Init() {
         ::std::mem::size_of::<skillMenuInfo_t>() as libc::c_ulong,
     );
     skillMenuInfo.menu.fullscreen = qtrue;
-    skillMenuInfo.menu.key = Some(
-        UI_SPSkillMenu_Key
-            as unsafe extern "C" fn(_: i32) -> sfxHandle_t,
-    );
+    skillMenuInfo.menu.key =
+        Some(UI_SPSkillMenu_Key as unsafe extern "C" fn(_: i32) -> sfxHandle_t);
     UI_SPSkillMenu_Cache();
     skillMenuInfo.art_frame.generic.type_0 = 6 as i32;
     skillMenuInfo.art_frame.generic.name =
@@ -864,13 +818,11 @@ unsafe extern "C" fn UI_SPSkillMenu_Init() {
     );
     Menu_AddItem(
         &mut skillMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut skillMenuInfo.item_nightmare as *mut menutext_s
-            as *mut libc::c_void,
+        &mut skillMenuInfo.item_nightmare as *mut menutext_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut skillMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-        &mut skillMenuInfo.art_skillPic as *mut menubitmap_s
-            as *mut libc::c_void,
+        &mut skillMenuInfo.art_skillPic as *mut menubitmap_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut skillMenuInfo.menu as *mut _ as *mut _tag_menuframework,
@@ -883,17 +835,12 @@ unsafe extern "C" fn UI_SPSkillMenu_Init() {
     skill = Com_Clamp(
         1 as i32 as f32,
         5 as i32 as f32,
-        trap_Cvar_VariableValue(
-            b"g_spSkill\x00" as *const u8 as *const libc::c_char,
-        ),
+        trap_Cvar_VariableValue(b"g_spSkill\x00" as *const u8 as *const libc::c_char),
     ) as i32;
     SetSkillColor(skill, color_white.as_mut_ptr());
     skillMenuInfo.art_skillPic.shader = skillMenuInfo.skillpics[(skill - 1 as i32) as usize];
     if skill == 5 as i32 {
-        trap_S_StartLocalSound(
-            skillMenuInfo.nightmareSound,
-            CHAN_ANNOUNCER as i32,
-        );
+        trap_S_StartLocalSound(skillMenuInfo.nightmareSound, CHAN_ANNOUNCER as i32);
     };
 }
 /*
@@ -1033,9 +980,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 pub unsafe extern "C" fn UI_SPSkillMenu(mut arenaInfo: *const libc::c_char) {
     UI_SPSkillMenu_Init();
     skillMenuInfo.arenaInfo = arenaInfo;
-    UI_PushMenu(
-        &mut skillMenuInfo.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut skillMenuInfo.menu as *mut _ as *mut _tag_menuframework);
     Menu_SetCursorToItem(
         &mut skillMenuInfo.menu as *mut _ as *mut _tag_menuframework,
         &mut skillMenuInfo.item_fight as *mut menubitmap_s as *mut libc::c_void,

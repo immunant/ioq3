@@ -261,10 +261,7 @@ pub unsafe extern "C" fn jpeg_write_coefficients(
         .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* Mark all tables to be written */
-    jpeg_suppress_tables(
-        cinfo as *mut jpeg_compress_struct,
-        0 as i32,
-    );
+    jpeg_suppress_tables(cinfo as *mut jpeg_compress_struct, 0 as i32);
     /* (Re)initialize error mgr and destination modules */
     Some(
         (*(*cinfo).err)
@@ -296,12 +293,9 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
     mut srcinfo: j_decompress_ptr,
     mut dstinfo: j_compress_ptr,
 ) {
-    let mut qtblptr: *mut *mut JQUANT_TBL =
-        0 as *mut *mut JQUANT_TBL;
-    let mut incomp: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
-    let mut outcomp: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut qtblptr: *mut *mut JQUANT_TBL = 0 as *mut *mut JQUANT_TBL;
+    let mut incomp: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
+    let mut outcomp: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut c_quant: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
     let mut slot_quant: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL;
     let mut tblno: i32 = 0;
@@ -328,9 +322,7 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
     (*dstinfo).min_DCT_h_scaled_size = (*srcinfo).min_DCT_h_scaled_size;
     (*dstinfo).min_DCT_v_scaled_size = (*srcinfo).min_DCT_v_scaled_size;
     /* Initialize all parameters to default values */
-    jpeg_set_defaults(
-        dstinfo as *mut jpeg_compress_struct,
-    );
+    jpeg_set_defaults(dstinfo as *mut jpeg_compress_struct);
     /* jpeg_set_defaults may choose wrong colorspace, eg YCbCr if input is RGB.
      * Fix it to get the right header markers for the image colorspace.
      */
@@ -347,13 +339,11 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
             qtblptr = &mut *(*dstinfo)
                 .quant_tbl_ptrs
                 .as_mut_ptr()
-                .offset(tblno as isize)
-                as *mut *mut JQUANT_TBL;
+                .offset(tblno as isize) as *mut *mut JQUANT_TBL;
             if (*qtblptr).is_null() {
-                *qtblptr = jpeg_alloc_quant_table(
-                    dstinfo as j_common_ptr
-                        as *mut jpeg_common_struct,
-                ) as *mut JQUANT_TBL
+                *qtblptr =
+                    jpeg_alloc_quant_table(dstinfo as j_common_ptr as *mut jpeg_common_struct)
+                        as *mut JQUANT_TBL
             }
             crate::stdlib::memcpy(
                 (**qtblptr).quantval.as_mut_ptr() as *mut libc::c_void,
@@ -404,9 +394,7 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                dstinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(dstinfo as j_common_ptr);
         }
         slot_quant = (*srcinfo).quant_tbl_ptrs[tblno as usize];
         c_quant = (*incomp).quant_table;
@@ -416,8 +404,7 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
                 if (*c_quant).quantval[coefi as usize] as i32
                     != (*slot_quant).quantval[coefi as usize] as i32
                 {
-                    (*(*dstinfo).err).msg_code =
-                        JERR_MISMATCHED_QUANT_TABLE as i32;
+                    (*(*dstinfo).err).msg_code = JERR_MISMATCHED_QUANT_TABLE as i32;
                     (*(*dstinfo).err).msg_parm.i[0 as i32 as usize] = tblno;
                     Some(
                         (*(*dstinfo).err)
@@ -480,25 +467,16 @@ unsafe extern "C" fn transencode_master_selection(
     mut coef_arrays: *mut jvirt_barray_ptr,
 ) {
     /* Initialize master control (includes parameter checking/processing) */
-    jinit_c_master_control(
-        cinfo as *mut jpeg_compress_struct,
-        1 as i32,
-    );
+    jinit_c_master_control(cinfo as *mut jpeg_compress_struct, 1 as i32);
     /* Entropy encoding: either Huffman or arithmetic coding. */
     if (*cinfo).arith_code != 0 {
-        jinit_arith_encoder(
-            cinfo as *mut jpeg_compress_struct,
-        );
+        jinit_arith_encoder(cinfo as *mut jpeg_compress_struct);
     } else {
-        jinit_huff_encoder(
-            cinfo as *mut jpeg_compress_struct,
-        );
+        jinit_huff_encoder(cinfo as *mut jpeg_compress_struct);
     }
     /* We need a special coefficient buffer controller. */
     transencode_coef_controller(cinfo, coef_arrays);
-    jinit_marker_writer(
-        cinfo as *mut jpeg_compress_struct,
-    );
+    jinit_marker_writer(cinfo as *mut jpeg_compress_struct);
     /* We can now tell the memory manager to allocate virtual arrays. */
     Some(
         (*(*cinfo).mem)
@@ -540,10 +518,7 @@ unsafe extern "C" fn start_iMCU_row(mut cinfo: j_compress_ptr)
  * Initialize for a processing pass.
  */
 
-unsafe extern "C" fn start_pass_coef(
-    mut cinfo: j_compress_ptr,
-    mut pass_mode: J_BUF_MODE,
-) {
+unsafe extern "C" fn start_pass_coef(mut cinfo: j_compress_ptr, mut pass_mode: J_BUF_MODE) {
     let mut coef: my_coef_ptr = (*cinfo).coef as my_coef_ptr;
     if pass_mode as u32 != JBUF_CRANK_DEST as i32 as u32 {
         (*(*cinfo).err).msg_code = JERR_BAD_BUFFER_MODE as i32;
@@ -573,10 +548,8 @@ unsafe extern "C" fn compress_output(
 ) -> boolean {
     let mut coef: my_coef_ptr = (*cinfo).coef as my_coef_ptr; /* index of current MCU within row */
     let mut MCU_col_num: JDIMENSION = 0;
-    let mut last_MCU_col: JDIMENSION =
-        (*cinfo).MCUs_per_row.wrapping_sub(1 as i32 as u32);
-    let mut last_iMCU_row: JDIMENSION =
-        (*cinfo).total_iMCU_rows.wrapping_sub(1 as i32 as u32);
+    let mut last_MCU_col: JDIMENSION = (*cinfo).MCUs_per_row.wrapping_sub(1 as i32 as u32);
+    let mut last_iMCU_row: JDIMENSION = (*cinfo).total_iMCU_rows.wrapping_sub(1 as i32 as u32);
     let mut blkn: i32 = 0;
     let mut ci: i32 = 0;
     let mut xindex: i32 = 0;
@@ -585,11 +558,9 @@ unsafe extern "C" fn compress_output(
     let mut blockcnt: i32 = 0;
     let mut start_col: JDIMENSION = 0;
     let mut buffer: [JBLOCKARRAY; 4] = [0 as *mut JBLOCKROW; 4];
-    let mut MCU_buffer: [JBLOCKROW; 10] =
-        [0 as *mut JBLOCK; 10];
+    let mut MCU_buffer: [JBLOCKROW; 10] = [0 as *mut JBLOCK; 10];
     let mut buffer_ptr: JBLOCKROW = 0 as *mut JBLOCK;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     /* Align the virtual buffers for the components used in this scan. */
     ci = 0 as i32;
     while ci < (*cinfo).comps_in_scan {
@@ -718,20 +689,10 @@ unsafe extern "C" fn transencode_coef_controller(
         ::std::mem::size_of::<my_coef_controller>() as libc::c_ulong,
     ) as my_coef_ptr;
     (*cinfo).coef = coef as *mut jpeg_c_coef_controller;
-    (*coef).pub_0.start_pass = Some(
-        start_pass_coef
-            as unsafe extern "C" fn(
-                _: j_compress_ptr,
-                _: J_BUF_MODE,
-            ) -> (),
-    );
-    (*coef).pub_0.compress_data = Some(
-        compress_output
-            as unsafe extern "C" fn(
-                _: j_compress_ptr,
-                _: JSAMPIMAGE,
-            ) -> boolean,
-    );
+    (*coef).pub_0.start_pass =
+        Some(start_pass_coef as unsafe extern "C" fn(_: j_compress_ptr, _: J_BUF_MODE) -> ());
+    (*coef).pub_0.compress_data =
+        Some(compress_output as unsafe extern "C" fn(_: j_compress_ptr, _: JSAMPIMAGE) -> boolean);
     /* Save pointer to virtual arrays */
     (*coef).whole_image = coef_arrays;
     /* Allocate and pre-zero space for dummy DCT blocks. */
@@ -743,13 +704,11 @@ unsafe extern "C" fn transencode_coef_controller(
     .expect("non-null function pointer")(
         cinfo as j_common_ptr,
         1 as i32,
-        (10 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
+        (10 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
     ) as JBLOCKROW;
     jzero_far(
         buffer as *mut libc::c_void,
-        (10 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
+        (10 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<JBLOCK>() as libc::c_ulong),
     );
     i = 0 as i32;
     while i < 10 as i32 {

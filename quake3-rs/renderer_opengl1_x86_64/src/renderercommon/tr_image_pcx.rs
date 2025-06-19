@@ -125,25 +125,18 @@ pub unsafe extern "C" fn R_LoadPCX(
     mut width: *mut i32,
     mut height: *mut i32,
 ) {
-    let mut raw: C2RustUnnamed_88 = C2RustUnnamed_88 {
-        b: 0 as *mut byte,
-    };
-    let mut end: *mut byte =
-        0 as *mut byte;
+    let mut raw: C2RustUnnamed_88 = C2RustUnnamed_88 { b: 0 as *mut byte };
+    let mut end: *mut byte = 0 as *mut byte;
     let mut pcx: *mut pcx_t = 0 as *mut pcx_t;
     let mut len: i32 = 0;
     let mut dataByte: u8 = 0 as i32 as u8;
     let mut runLength: u8 = 0 as i32 as u8;
-    let mut out: *mut byte =
-        0 as *mut byte;
-    let mut pix: *mut byte =
-        0 as *mut byte;
+    let mut out: *mut byte = 0 as *mut byte;
+    let mut pix: *mut byte = 0 as *mut byte;
     let mut w: u16 = 0;
     let mut h: u16 = 0;
-    let mut pic8: *mut byte =
-        0 as *mut byte;
-    let mut palette: *mut byte =
-        0 as *mut byte;
+    let mut pic8: *mut byte = 0 as *mut byte;
+    let mut palette: *mut byte = 0 as *mut byte;
     let mut i: i32 = 0;
     let mut size: u32 = 0 as i32 as u32;
     if !width.is_null() {
@@ -206,8 +199,7 @@ pub unsafe extern "C" fn R_LoadPCX(
     }
     pic8 = crate::src::renderergl1::tr_main::ri
         .Malloc
-        .expect("non-null function pointer")(size as i32)
-        as *mut byte;
+        .expect("non-null function pointer")(size as i32) as *mut byte;
     pix = pic8;
     raw.b = (*pcx).data.as_mut_ptr();
     // FIXME: should use bytes_per_line but original q3 didn't do that either
@@ -252,9 +244,7 @@ pub unsafe extern "C" fn R_LoadPCX(
             .Free
             .expect("non-null function pointer")(pic8 as *mut libc::c_void);
     }
-    if raw
-        .b
-        .offset_from(pcx as *mut byte) as isize
+    if raw.b.offset_from(pcx as *mut byte) as isize
         >= end.offset_from(769 as i32 as *mut byte) as isize
         || *end.offset(-(769 as i32) as isize) as i32 != 0xc as i32
     {

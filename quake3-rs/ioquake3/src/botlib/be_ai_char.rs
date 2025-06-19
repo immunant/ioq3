@@ -315,8 +315,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
     let mut index: i32 = 0;
     let mut foundcharacter: i32 = 0;
     let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
-    let mut source: *mut source_t =
-        0 as *mut source_t;
+    let mut source: *mut source_t = 0 as *mut source_t;
     let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
@@ -331,11 +330,8 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
     };
     foundcharacter = qfalse as i32;
     //a bot character is parsed in two phases
-    PC_SetBaseFolder(
-        b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-    ); //end if
-    source = LoadSourceFile(charfile)
-        as *mut source_s;
+    PC_SetBaseFolder(b"botfiles\x00" as *const u8 as *const libc::c_char as *mut libc::c_char); //end if
+    source = LoadSourceFile(charfile) as *mut source_s;
     if source.is_null() {
         crate::src::botlib::be_interface::botimport
             .Print
@@ -372,9 +368,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                 &mut token as *mut _ as *mut token_s,
             ) == 0
             {
-                FreeSource(
-                    source as *mut source_s,
-                ); //end if
+                FreeSource(source as *mut source_s); //end if
                 BotFreeCharacterStrings(ch);
                 crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
                 return 0 as *mut bot_character_t;
@@ -385,9 +379,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                 b"{\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             ) == 0
             {
-                FreeSource(
-                    source as *mut source_s,
-                ); //end if
+                FreeSource(source as *mut source_s); //end if
                 BotFreeCharacterStrings(ch);
                 crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
                 return 0 as *mut bot_character_t;
@@ -417,9 +409,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                                 as *mut libc::c_char,
                             token.string.as_mut_ptr(),
                         ); //end if
-                        FreeSource(
-                            source as *mut source_s,
-                        ); //end if
+                        FreeSource(source as *mut source_s); //end if
                         BotFreeCharacterStrings(ch); //end if
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void); //end if
                         return 0 as *mut bot_character_t;
@@ -433,9 +423,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                                 as *mut libc::c_char,
                             80 as i32,
                         );
-                        FreeSource(
-                            source as *mut source_s,
-                        );
+                        FreeSource(source as *mut source_s);
                         BotFreeCharacterStrings(ch);
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
                         return 0 as *mut bot_character_t;
@@ -448,9 +436,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                                 as *mut libc::c_char,
                             index,
                         );
-                        FreeSource(
-                            source as *mut source_s,
-                        );
+                        FreeSource(source as *mut source_s);
                         BotFreeCharacterStrings(ch);
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
                         return 0 as *mut bot_character_t;
@@ -460,9 +446,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                         &mut token as *mut _ as *mut token_s,
                     ) == 0
                     {
-                        FreeSource(
-                            source as *mut source_s,
-                        );
+                        FreeSource(source as *mut source_s);
                         BotFreeCharacterStrings(ch);
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
                         return 0 as *mut bot_character_t;
@@ -502,9 +486,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                                 as *mut libc::c_char,
                             token.string.as_mut_ptr(),
                         );
-                        FreeSource(
-                            source as *mut source_s,
-                        );
+                        FreeSource(source as *mut source_s);
                         BotFreeCharacterStrings(ch);
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
                         return 0 as *mut bot_character_t;
@@ -520,9 +502,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                         &mut token as *mut _ as *mut token_s,
                     ) == 0
                     {
-                        FreeSource(
-                            source as *mut source_s,
-                        ); //end if
+                        FreeSource(source as *mut source_s); //end if
                         BotFreeCharacterStrings(ch);
                         crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
                         return 0 as *mut bot_character_t;
@@ -549,17 +529,13 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                     as *mut libc::c_char,
                 token.string.as_mut_ptr(),
             );
-            FreeSource(
-                source as *mut source_s,
-            );
+            FreeSource(source as *mut source_s);
             BotFreeCharacterStrings(ch);
             crate::src::botlib::l_memory::FreeMemory(ch as *mut libc::c_void);
             return 0 as *mut bot_character_t;
         }
     }
-    FreeSource(
-        source as *mut source_s,
-    );
+    FreeSource(source as *mut source_s);
     //
     if foundcharacter == 0 {
         BotFreeCharacterStrings(ch); //end if

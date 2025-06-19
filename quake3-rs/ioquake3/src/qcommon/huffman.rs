@@ -38,11 +38,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 static mut bloc: i32 = 0 as i32;
 #[no_mangle]
 
-pub unsafe extern "C" fn Huff_putBit(
-    mut bit: i32,
-    mut fout: *mut byte,
-    mut offset: *mut i32,
-) {
+pub unsafe extern "C" fn Huff_putBit(mut bit: i32, mut fout: *mut byte, mut offset: *mut i32) {
     bloc = *offset;
     if bloc & 7 as i32 == 0 as i32 {
         *fout.offset((bloc >> 3 as i32) as isize) = 0 as i32 as byte
@@ -65,10 +61,7 @@ pub unsafe extern "C" fn Huff_setBloc(mut _bloc: i32) {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn Huff_getBit(
-    mut fin: *mut byte,
-    mut offset: *mut i32,
-) -> i32 {
+pub unsafe extern "C" fn Huff_getBit(mut fin: *mut byte, mut offset: *mut i32) -> i32 {
     let mut t: i32 = 0;
     bloc = *offset;
     t = *fin.offset((bloc >> 3 as i32) as isize) as i32 >> (bloc & 7 as i32) & 0x1 as i32;
@@ -78,16 +71,12 @@ pub unsafe extern "C" fn Huff_getBit(
 }
 /* Add a bit to the output file (buffered) */
 
-unsafe extern "C" fn add_bit(
-    mut bit: libc::c_char,
-    mut fout: *mut byte,
-) {
+unsafe extern "C" fn add_bit(mut bit: libc::c_char, mut fout: *mut byte) {
     if bloc & 7 as i32 == 0 as i32 {
         *fout.offset((bloc >> 3 as i32) as isize) = 0 as i32 as byte
     }
     let ref mut fresh1 = *fout.offset((bloc >> 3 as i32) as isize);
-    *fresh1 =
-        (*fresh1 as i32 | (bit as i32) << (bloc & 7 as i32)) as byte;
+    *fresh1 = (*fresh1 as i32 | (bit as i32) << (bloc & 7 as i32)) as byte;
     bloc += 1;
 }
 /* Receive one bit from the input file (buffered) */
@@ -99,15 +88,12 @@ unsafe extern "C" fn get_bit(mut fin: *mut byte) -> i32 {
     return t;
 }
 
-unsafe extern "C" fn get_ppnode(
-    mut huff: *mut huff_t,
-) -> *mut *mut node_t {
+unsafe extern "C" fn get_ppnode(mut huff: *mut huff_t) -> *mut *mut node_t {
     let mut tppnode: *mut *mut node_t = 0 as *mut *mut node_t;
     if (*huff).freelist.is_null() {
         let fresh2 = (*huff).blocPtrs;
         (*huff).blocPtrs = (*huff).blocPtrs + 1;
-        return &mut *(*huff).nodePtrs.as_mut_ptr().offset(fresh2 as isize)
-            as *mut *mut node_t;
+        return &mut *(*huff).nodePtrs.as_mut_ptr().offset(fresh2 as isize) as *mut *mut node_t;
     } else {
         tppnode = (*huff).freelist;
         (*huff).freelist = *tppnode as *mut *mut node_t;
@@ -115,20 +101,13 @@ unsafe extern "C" fn get_ppnode(
     };
 }
 
-unsafe extern "C" fn free_ppnode(
-    mut huff: *mut huff_t,
-    mut ppnode: *mut *mut node_t,
-) {
+unsafe extern "C" fn free_ppnode(mut huff: *mut huff_t, mut ppnode: *mut *mut node_t) {
     *ppnode = (*huff).freelist as *mut node_t;
     (*huff).freelist = ppnode;
 }
 /* Swap the location of these two nodes in the tree */
 
-unsafe extern "C" fn swap(
-    mut huff: *mut huff_t,
-    mut node1: *mut node_t,
-    mut node2: *mut node_t,
-) {
+unsafe extern "C" fn swap(mut huff: *mut huff_t, mut node1: *mut node_t, mut node2: *mut node_t) {
     let mut par1: *mut node_t = 0 as *mut node_t;
     let mut par2: *mut node_t = 0 as *mut node_t;
     par1 = (*node1).parent;
@@ -156,10 +135,7 @@ unsafe extern "C" fn swap(
 }
 /* Swap these two nodes in the linked list (update ranks) */
 
-unsafe extern "C" fn swaplist(
-    mut node1: *mut node_t,
-    mut node2: *mut node_t,
-) {
+unsafe extern "C" fn swaplist(mut node1: *mut node_t, mut node2: *mut node_t) {
     let mut par1: *mut node_t = 0 as *mut node_t;
     par1 = (*node1).next;
     (*node1).next = (*node2).next;
@@ -188,10 +164,7 @@ unsafe extern "C" fn swaplist(
 }
 /* Do the increments */
 
-unsafe extern "C" fn increment(
-    mut huff: *mut huff_t,
-    mut node: *mut node_t,
-) {
+unsafe extern "C" fn increment(mut huff: *mut huff_t, mut node: *mut node_t) {
     let mut lnode: *mut node_t = 0 as *mut node_t;
     if node.is_null() {
         return;
@@ -228,22 +201,17 @@ unsafe extern "C" fn increment(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn Huff_addRef(
-    mut huff: *mut huff_t,
-    mut ch: byte,
-) {
+pub unsafe extern "C" fn Huff_addRef(mut huff: *mut huff_t, mut ch: byte) {
     let mut tnode: *mut node_t = 0 as *mut node_t;
     let mut tnode2: *mut node_t = 0 as *mut node_t;
     if (*huff).loc[ch as usize].is_null() {
         /* if this is the first transmission of this node */
         let fresh3 = (*huff).blocNode;
         (*huff).blocNode = (*huff).blocNode + 1;
-        tnode = &mut *(*huff).nodeList.as_mut_ptr().offset(fresh3 as isize)
-            as *mut node_t;
+        tnode = &mut *(*huff).nodeList.as_mut_ptr().offset(fresh3 as isize) as *mut node_t;
         let fresh4 = (*huff).blocNode;
         (*huff).blocNode = (*huff).blocNode + 1;
-        tnode2 = &mut *(*huff).nodeList.as_mut_ptr().offset(fresh4 as isize)
-            as *mut node_t;
+        tnode2 = &mut *(*huff).nodeList.as_mut_ptr().offset(fresh4 as isize) as *mut node_t;
         (*tnode2).symbol = 256 as i32 + 1 as i32;
         (*tnode2).weight = 1 as i32;
         (*tnode2).next = (*(*huff).lhead).next;
@@ -398,12 +366,7 @@ pub unsafe extern "C" fn Huff_transmit(
             i -= 1
         }
     } else {
-        send(
-            (*huff).loc[ch as usize],
-            0 as *mut node_t,
-            fout,
-            maxoffset,
-        );
+        send((*huff).loc[ch as usize], 0 as *mut node_t, fout, maxoffset);
     };
 }
 #[no_mangle]
@@ -416,12 +379,7 @@ pub unsafe extern "C" fn Huff_offsetTransmit(
     mut maxoffset: i32,
 ) {
     bloc = *offset;
-    send(
-        (*huff).loc[ch as usize],
-        0 as *mut node_t,
-        fout,
-        maxoffset,
-    );
+    send((*huff).loc[ch as usize], 0 as *mut node_t, fout, maxoffset);
     *offset = bloc;
 }
 #[no_mangle]
@@ -433,8 +391,7 @@ pub unsafe extern "C" fn Huff_Decompress(mut mbuf: *mut msg_t, mut offset: i32) 
     let mut j: i32 = 0;
     let mut size: i32 = 0;
     let mut seq: [byte; 65536] = [0; 65536];
-    let mut buffer: *mut byte =
-        0 as *mut byte;
+    let mut buffer: *mut byte = 0 as *mut byte;
     let mut huff: huff_t = huff_t {
         blocNode: 0,
         blocPtrs: 0,
@@ -526,8 +483,7 @@ pub unsafe extern "C" fn Huff_Compress(mut mbuf: *mut msg_t, mut offset: i32) {
     let mut ch: i32 = 0;
     let mut size: i32 = 0;
     let mut seq: [byte; 65536] = [0; 65536];
-    let mut buffer: *mut byte =
-        0 as *mut byte;
+    let mut buffer: *mut byte = 0 as *mut byte;
     let mut huff: huff_t = huff_t {
         blocNode: 0,
         blocPtrs: 0,
@@ -619,8 +575,7 @@ pub unsafe extern "C" fn Huff_Init(mut huff: *mut huffman_t) {
         .decompressor
         .nodeList
         .as_mut_ptr()
-        .offset(fresh7 as isize)
-        as *mut node_t;
+        .offset(fresh7 as isize) as *mut node_t;
     (*huff).decompressor.ltail = (*huff).decompressor.loc[256 as i32 as usize];
     (*huff).decompressor.lhead = (*huff).decompressor.ltail;
     (*huff).decompressor.tree = (*huff).decompressor.lhead;
@@ -638,8 +593,7 @@ pub unsafe extern "C" fn Huff_Init(mut huff: *mut huffman_t) {
         .compressor
         .nodeList
         .as_mut_ptr()
-        .offset(fresh8 as isize)
-        as *mut node_t;
+        .offset(fresh8 as isize) as *mut node_t;
     (*huff).compressor.lhead = (*huff).compressor.loc[256 as i32 as usize];
     (*huff).compressor.tree = (*huff).compressor.lhead;
     (*(*huff).compressor.tree).symbol = 256 as i32;

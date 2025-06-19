@@ -318,8 +318,7 @@ pub unsafe extern "C" fn silk_encode_pulses(
                 [k as usize]
                 .as_ptr();
         sumBits_Q5 = crate::src::opus_1_2_1::silk::tables_pulses_per_block::silk_rate_levels_BITS_Q5
-            [(signalType >> 1 as i32) as usize][k as usize]
-            as opus_int32;
+            [(signalType >> 1 as i32) as usize][k as usize] as opus_int32;
         i = 0 as i32;
         while i < iter {
             if *nRshifts.offset(i as isize) > 0 as i32 {

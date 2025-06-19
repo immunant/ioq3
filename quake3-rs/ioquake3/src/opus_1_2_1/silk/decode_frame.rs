@@ -322,8 +322,7 @@ pub unsafe extern "C" fn silk_decode_frame(
     mut arch: i32,
 ) -> i32
 /* I    Run-time architecture                       */ {
-    let mut psDecCtrl: *mut silk_decoder_control =
-        0 as *mut silk_decoder_control;
+    let mut psDecCtrl: *mut silk_decoder_control = 0 as *mut silk_decoder_control;
     let mut L: i32 = 0;
     let mut mv_len: i32 = 0;
     let mut ret: i32 = 0 as i32;
@@ -339,8 +338,7 @@ pub unsafe extern "C" fn silk_decode_frame(
     if lostFlag == 0 as i32
         || lostFlag == 2 as i32 && (*psDec).LBRR_flags[(*psDec).nFramesDecoded as usize] == 1 as i32
     {
-        let mut pulses: *mut opus_int16 =
-            0 as *mut opus_int16;
+        let mut pulses: *mut opus_int16 = 0 as *mut opus_int16;
         let mut fresh1 = ::std::vec::from_elem(
             0,
             (::std::mem::size_of::<opus_int16>() as libc::c_ulong)
@@ -415,19 +413,23 @@ pub unsafe extern "C" fn silk_decode_frame(
     /* Update output buffer. */
     /* ************************/
     mv_len = (*psDec).ltp_mem_length - (*psDec).frame_length;
-    crate::stdlib::memmove((*psDec).outBuf.as_mut_ptr() as *mut libc::c_void,
-            &mut *(*psDec).outBuf.as_mut_ptr().offset((*psDec).frame_length as
-                                                          isize) as
-                *mut opus_int16 as *const libc::c_void,
-            (mv_len as
-                 libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
-                                                 as libc::c_ulong));
-    crate::stdlib::memcpy(&mut *(*psDec).outBuf.as_mut_ptr().offset(mv_len as isize) as
-               *mut opus_int16 as *mut libc::c_void,
-           pOut as *const libc::c_void,
-           ((*psDec).frame_length as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int16>()
-                                                as libc::c_ulong));
+    crate::stdlib::memmove(
+        (*psDec).outBuf.as_mut_ptr() as *mut libc::c_void,
+        &mut *(*psDec)
+            .outBuf
+            .as_mut_ptr()
+            .offset((*psDec).frame_length as isize) as *mut opus_int16
+            as *const libc::c_void,
+        (mv_len as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+    );
+    crate::stdlib::memcpy(
+        &mut *(*psDec).outBuf.as_mut_ptr().offset(mv_len as isize) as *mut opus_int16
+            as *mut libc::c_void,
+        pOut as *const libc::c_void,
+        ((*psDec).frame_length as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int16>() as libc::c_ulong),
+    );
     /* ***********************************************/
     /* Comfort noise generation / estimation        */
     /* ***********************************************/

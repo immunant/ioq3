@@ -557,10 +557,7 @@ static mut base_dither_matrix: [[UINT8; 16]; 16] = [
  * different components, though this is not currently done.
  */
 
-unsafe extern "C" fn select_ncolors(
-    mut cinfo: j_decompress_ptr,
-    mut Ncolors: *mut i32,
-) -> i32
+unsafe extern "C" fn select_ncolors(mut cinfo: j_decompress_ptr, mut Ncolors: *mut i32) -> i32
 /* Determine allocation of desired colors to components, */
 /* and fill in Ncolors[] array to indicate choice. */
 /* Return value is total number of colors (product of Ncolors[] values). */ {
@@ -656,8 +653,8 @@ unsafe extern "C" fn output_value(
      * (Forcing the upper and lower values to the limits ensures that
      * dithering can't produce a color outside the selected gamut.)
      */
-    return ((j as INT32 * 255 as i32 as isize + (maxj / 2 as i32) as isize)
-        / maxj as isize) as i32;
+    return ((j as INT32 * 255 as i32 as isize + (maxj / 2 as i32) as isize) / maxj as isize)
+        as i32;
 }
 
 unsafe extern "C" fn largest_input_value(
@@ -669,8 +666,7 @@ unsafe extern "C" fn largest_input_value(
 /* Return largest input value that should map to j'th output value */
 /* Must have largest(j=0) >= 0, and largest(j=maxj) >= MAXJSAMPLE */ {
     /* Breakpoints are halfway between values returned by output_value */
-    return (((2 as i32 * j + 1 as i32) as INT32 * 255 as i32 as isize
-        + maxj as isize)
+    return (((2 as i32 * j + 1 as i32) as INT32 * 255 as i32 as isize + maxj as isize)
         / (2 as i32 * maxj) as isize) as i32;
 }
 /*
@@ -704,9 +700,7 @@ unsafe extern "C" fn create_colormap(mut cinfo: j_decompress_ptr) {
                 .emit_message
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(
-            cinfo as j_common_ptr, 1 as i32
-        );
+        .expect("non-null function pointer")(cinfo as j_common_ptr, 1 as i32);
     } else {
         (*(*cinfo).err).msg_code = JTRC_QUANT_NCOLORS as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = total_colors;
@@ -715,9 +709,7 @@ unsafe extern "C" fn create_colormap(mut cinfo: j_decompress_ptr) {
                 .emit_message
                 .expect("non-null function pointer"),
         )
-        .expect("non-null function pointer")(
-            cinfo as j_common_ptr, 1 as i32
-        );
+        .expect("non-null function pointer")(cinfo as j_common_ptr, 1 as i32);
     }
     /* Allocate and fill in the colormap. */
     /* The colors are ordered in the map in standard row-major order, */
@@ -753,8 +745,7 @@ unsafe extern "C" fn create_colormap(mut cinfo: j_decompress_ptr) {
                 /* fill in blksize entries beginning at ptr */
                 k = 0 as i32;
                 while k < blksize {
-                    *(*colormap.offset(i as isize)).offset((ptr + k) as isize) =
-                        val as JSAMPLE;
+                    *(*colormap.offset(i as isize)).offset((ptr + k) as isize) = val as JSAMPLE;
                     k += 1
                 }
                 ptr += blkdist
@@ -876,8 +867,7 @@ unsafe extern "C" fn make_odither_array(
      * (f=0..N-1) should be (N-1-2*f)/(2*N) * MAXJSAMPLE/(ncolors-1).
      * On 16-bit-int machine, be careful to avoid overflow.
      */
-    den = (2 as i32 * (16 as i32 * 16 as i32)) as isize
-        * (ncolors - 1 as i32) as INT32;
+    den = (2 as i32 * (16 as i32 * 16 as i32)) as isize * (ncolors - 1 as i32) as INT32;
     j = 0 as i32;
     while j < 16 as i32 {
         k = 0 as i32;
@@ -992,12 +982,9 @@ unsafe extern "C" fn color_quantize3(
     let mut pixcode: i32 = 0;
     let mut ptrin: JSAMPROW = 0 as *mut JSAMPLE;
     let mut ptrout: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut colorindex0: JSAMPROW =
-        *(*cquantize).colorindex.offset(0 as i32 as isize);
-    let mut colorindex1: JSAMPROW =
-        *(*cquantize).colorindex.offset(1 as i32 as isize);
-    let mut colorindex2: JSAMPROW =
-        *(*cquantize).colorindex.offset(2 as i32 as isize);
+    let mut colorindex0: JSAMPROW = *(*cquantize).colorindex.offset(0 as i32 as isize);
+    let mut colorindex1: JSAMPROW = *(*cquantize).colorindex.offset(1 as i32 as isize);
+    let mut colorindex2: JSAMPROW = *(*cquantize).colorindex.offset(2 as i32 as isize);
     let mut row: i32 = 0;
     let mut col: JDIMENSION = 0;
     let mut width: JDIMENSION = (*cinfo).output_width;
@@ -1100,12 +1087,9 @@ unsafe extern "C" fn quantize3_ord_dither(
     let mut pixcode: i32 = 0; /* current indexes into dither matrix */
     let mut input_ptr: JSAMPROW = 0 as *mut JSAMPLE;
     let mut output_ptr: JSAMPROW = 0 as *mut JSAMPLE;
-    let mut colorindex0: JSAMPROW =
-        *(*cquantize).colorindex.offset(0 as i32 as isize);
-    let mut colorindex1: JSAMPROW =
-        *(*cquantize).colorindex.offset(1 as i32 as isize);
-    let mut colorindex2: JSAMPROW =
-        *(*cquantize).colorindex.offset(2 as i32 as isize);
+    let mut colorindex0: JSAMPROW = *(*cquantize).colorindex.offset(0 as i32 as isize);
+    let mut colorindex1: JSAMPROW = *(*cquantize).colorindex.offset(1 as i32 as isize);
+    let mut colorindex2: JSAMPROW = *(*cquantize).colorindex.offset(2 as i32 as isize);
     let mut dither0: *mut i32 = 0 as *mut i32;
     let mut dither1: *mut i32 = 0 as *mut i32;
     let mut dither2: *mut i32 = 0 as *mut i32;
@@ -1236,8 +1220,7 @@ unsafe extern "C" fn quantize_fs_dither(
                 cur += *input_ptr as i32;
                 cur = *range_limit.offset(cur as isize) as i32;
                 pixcode = *colorindex_ci.offset(cur as isize) as i32;
-                *output_ptr = (*output_ptr as i32 + pixcode as JSAMPLE as i32)
-                    as JSAMPLE;
+                *output_ptr = (*output_ptr as i32 + pixcode as JSAMPLE as i32) as JSAMPLE;
                 cur -= *colormap_ci.offset(pixcode as isize) as i32;
                 bnexterr = cur;
                 delta = cur * 2 as i32;
@@ -1306,9 +1289,7 @@ unsafe extern "C" fn alloc_fs_workspace(mut cinfo: j_decompress_ptr) {
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as j_common_ptr,
-            1 as i32,
-            arraysize,
+            cinfo as j_common_ptr, 1 as i32, arraysize
         ) as FSERRPTR;
         i += 1
     }
@@ -1317,10 +1298,7 @@ unsafe extern "C" fn alloc_fs_workspace(mut cinfo: j_decompress_ptr) {
  * Initialize for one-pass color quantization.
  */
 
-unsafe extern "C" fn start_pass_1_quant(
-    mut cinfo: j_decompress_ptr,
-    mut _is_pre_scan: boolean,
-) {
+unsafe extern "C" fn start_pass_1_quant(mut cinfo: j_decompress_ptr, mut _is_pre_scan: boolean) {
     let mut cquantize: my_cquantize_ptr = (*cinfo).cquantize as my_cquantize_ptr;
     let mut arraysize: size_t = 0;
     let mut i: i32 = 0;
@@ -1421,9 +1399,7 @@ unsafe extern "C" fn start_pass_1_quant(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
     };
 }
@@ -1466,19 +1442,12 @@ pub unsafe extern "C" fn jinit_1pass_quantizer(mut cinfo: j_decompress_ptr) {
         ::std::mem::size_of::<my_cquantizer>() as libc::c_ulong,
     ) as my_cquantize_ptr; /* Also flag odither arrays not allocated */
     (*cinfo).cquantize = cquantize as *mut jpeg_color_quantizer;
-    (*cquantize).pub_0.start_pass = Some(
-        start_pass_1_quant
-            as unsafe extern "C" fn(
-                _: j_decompress_ptr,
-                _: boolean,
-            ) -> (),
-    );
-    (*cquantize).pub_0.finish_pass = Some(
-        finish_pass_1_quant as unsafe extern "C" fn(_: j_decompress_ptr) -> (),
-    );
-    (*cquantize).pub_0.new_color_map = Some(
-        new_color_map_1_quant as unsafe extern "C" fn(_: j_decompress_ptr) -> (),
-    );
+    (*cquantize).pub_0.start_pass =
+        Some(start_pass_1_quant as unsafe extern "C" fn(_: j_decompress_ptr, _: boolean) -> ());
+    (*cquantize).pub_0.finish_pass =
+        Some(finish_pass_1_quant as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
+    (*cquantize).pub_0.new_color_map =
+        Some(new_color_map_1_quant as unsafe extern "C" fn(_: j_decompress_ptr) -> ());
     (*cquantize).fserrors[0 as i32 as usize] = 0 as FSERRPTR;
     (*cquantize).odither[0 as i32 as usize] = 0 as ODITHER_MATRIX_PTR;
     /* Make sure my internal arrays won't overflow */

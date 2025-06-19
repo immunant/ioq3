@@ -6205,16 +6205,15 @@ static mut stereo_threshholds_limited: [f64; 9] = [
 pub unsafe extern "C" fn _vp_global_look(
     mut vi: *mut vorbis_info,
 ) -> *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global {
-    let mut ci: *mut codec_setup_info =
-        (*vi).codec_setup as *mut codec_setup_info;
+    let mut ci: *mut codec_setup_info = (*vi).codec_setup as *mut codec_setup_info;
     let mut gi: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global =
         &mut (*ci).psy_g_param;
-    let mut look: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global =
-        calloc(
-            1 as i32 as libc::c_ulong,
-            ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global>()
-                as libc::c_ulong,
-        ) as *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global;
+    let mut look: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global = calloc(
+        1 as i32 as libc::c_ulong,
+        ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global>()
+            as libc::c_ulong,
+    )
+        as *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global;
     (*look).channels = (*vi).channels;
     (*look).ampmax = -9999.0f64 as f32;
     (*look).gi = gi;
@@ -6379,8 +6378,7 @@ unsafe extern "C" fn setup_tone_curves(
         while j < 8 as i32 {
             k = 0 as i32;
             while k < 56 as i32 {
-                let mut adj: f32 =
-                    center_boost + abs(16 as i32 - k) as f32 * center_decay_rate;
+                let mut adj: f32 = center_boost + abs(16 as i32 - k) as f32 * center_decay_rate;
                 if (adj as f64) < 0.0f64 && center_boost > 0 as i32 as f32 {
                     adj = 0.0f64 as f32
                 }
@@ -6682,15 +6680,15 @@ pub unsafe extern "C" fn _vp_psy_init(
         * ((1 as i32) << (*p).shiftoc + 1 as i32 as isize) as f64
         + 0.5f32 as f64) as isize;
     (*p).total_octave_lines = (maxoc - (*p).firstoc + 1 as i32 as isize) as i32;
-    (*p).ath = malloc(
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-    ) as *mut f32;
-    (*p).octave = malloc(
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
-    ) as *mut isize;
-    (*p).bark = malloc(
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
-    ) as *mut isize;
+    (*p).ath =
+        malloc((n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong))
+            as *mut f32;
+    (*p).octave =
+        malloc((n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong))
+            as *mut isize;
+    (*p).bark =
+        malloc((n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong))
+            as *mut isize;
     (*p).vi = vi;
     (*p).n = n;
     (*p).rate = rate;
@@ -7467,13 +7465,9 @@ pub unsafe extern "C" fn _vp_offset_and_mix(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn _vp_ampmax_decay(
-    mut amp: f32,
-    mut vd: *mut vorbis_dsp_state,
-) -> f32 {
+pub unsafe extern "C" fn _vp_ampmax_decay(mut amp: f32, mut vd: *mut vorbis_dsp_state) -> f32 {
     let mut vi: *mut vorbis_info = (*vd).vi;
-    let mut ci: *mut codec_setup_info =
-        (*vi).codec_setup as *mut codec_setup_info;
+    let mut ci: *mut codec_setup_info = (*vi).codec_setup as *mut codec_setup_info;
     let mut gi: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global =
         &mut (*ci).psy_g_param;
     let mut n: i32 = ((*ci).blocksizes[(*vd).W as usize] / 2 as i32 as isize) as i32;
@@ -8173,9 +8167,7 @@ pub unsafe extern "C" fn _vp_couple_quantize_normalize(
                                 *iM.offset(j as isize) = B
                             }
                             /* collapse two equivalent tuples to one */
-                            if *iA.offset(j as isize)
-                                >= abs(*iM.offset(j as isize)) * 2 as i32
-                            {
+                            if *iA.offset(j as isize) >= abs(*iM.offset(j as isize)) * 2 as i32 {
                                 *iA.offset(j as isize) = -*iA.offset(j as isize);
                                 *iM.offset(j as isize) = -*iM.offset(j as isize)
                             }

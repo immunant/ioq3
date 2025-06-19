@@ -181,12 +181,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #[no_mangle]
 
-pub static mut sv_voip: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_voip: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_voipProtocol: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_voipProtocol: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
 pub static mut svs: serverStatic_t = serverStatic_t {
@@ -196,8 +194,7 @@ pub static mut svs: serverStatic_t = serverStatic_t {
     clients: 0 as *const client_t as *mut client_t,
     numSnapshotEntities: 0,
     nextSnapshotEntities: 0,
-    snapshotEntities: 0 as *const entityState_t
-        as *mut entityState_t,
+    snapshotEntities: 0 as *const entityState_t as *mut entityState_t,
     nextHeartbeatTime: 0,
     challenges: [challenge_t {
         adr: netadr_t {
@@ -246,10 +243,8 @@ pub static mut sv: server_t = server_t {
     nextFrameTime: 0,
     configstrings: [0 as *const libc::c_char as *mut libc::c_char; 1024],
     svEntities: [svEntity_t {
-        worldSector: 0 as *const worldSector_s
-            as *mut worldSector_s,
-        nextEntityInWorldSector: 0 as *const svEntity_s
-            as *mut svEntity_s,
+        worldSector: 0 as *const worldSector_s as *mut worldSector_s,
+        nextEntityInWorldSector: 0 as *const svEntity_s as *mut svEntity_s,
         baseline: entityState_t {
             number: 0,
             eType: 0,
@@ -300,12 +295,10 @@ pub static mut sv: server_t = server_t {
         snapshotCounter: 0,
     }; 1024],
     entityParsePoint: 0 as *const libc::c_char as *mut libc::c_char,
-    gentities: 0 as *const sharedEntity_t
-        as *mut sharedEntity_t,
+    gentities: 0 as *const sharedEntity_t as *mut sharedEntity_t,
     gentitySize: 0,
     num_entities: 0,
-    gameClients: 0 as *const playerState_t
-        as *mut playerState_t,
+    gameClients: 0 as *const playerState_t as *mut playerState_t,
     gameClientSize: 0,
     restartTime: 0,
     time: 0,
@@ -313,134 +306,104 @@ pub static mut sv: server_t = server_t {
 // local server
 #[no_mangle]
 
-pub static mut gvm: *mut vm_t =
-    0 as *const vm_t as *mut vm_t;
+pub static mut gvm: *mut vm_t = 0 as *const vm_t as *mut vm_t;
 // game virtual machine
 #[no_mangle]
 
-pub static mut sv_fps: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_fps: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 // time rate for running non-clients
 #[no_mangle]
 
-pub static mut sv_timeout: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_timeout: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 // seconds without any message
 #[no_mangle]
 
-pub static mut sv_zombietime: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_zombietime: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 // seconds to sink messages after disconnect
 #[no_mangle]
 
-pub static mut sv_rconPassword: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_rconPassword: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 // password for remote server commands
 #[no_mangle]
 
-pub static mut sv_privatePassword: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_privatePassword: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 // password for the privateClient slots
 #[no_mangle]
 
-pub static mut sv_allowDownload: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_allowDownload: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_maxclients: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_maxclients: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_privateClients: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_privateClients: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 // number of clients reserved for password
 #[no_mangle]
 
-pub static mut sv_hostname: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_hostname: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_master: [*mut cvar_t; 5] =
-    [0 as *const cvar_t
-        as *mut cvar_t; 5];
+pub static mut sv_master: [*mut cvar_t; 5] = [0 as *const cvar_t as *mut cvar_t; 5];
 // master server ip address
 #[no_mangle]
 
-pub static mut sv_reconnectlimit: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_reconnectlimit: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 // minimum seconds between connect messages
 #[no_mangle]
 
-pub static mut sv_showloss: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_showloss: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 // report when usercmds are lost
 #[no_mangle]
 
-pub static mut sv_padPackets: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_padPackets: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 // add nop bytes to messages
 #[no_mangle]
 
-pub static mut sv_killserver: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_killserver: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 // menu system can set to 1 to shut server down
 #[no_mangle]
 
-pub static mut sv_mapname: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_mapname: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_mapChecksum: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_mapChecksum: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_serverid: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_serverid: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_minRate: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_minRate: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_maxRate: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_maxRate: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_dlRate: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_dlRate: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_minPing: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_minPing: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_maxPing: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_maxPing: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_gametype: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_gametype: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_pure: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_pure: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_floodProtect: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_floodProtect: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_lanForceRate: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_lanForceRate: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 // dedicated 1 (LAN) server forces local client rates to 99999 (bug #491)
 #[no_mangle]
 
-pub static mut sv_strictAuth: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_strictAuth: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
-pub static mut sv_banFile: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+pub static mut sv_banFile: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 #[no_mangle]
 
 pub static mut serverBans: [serverBan_t; 1024] = [serverBan_t {
@@ -642,9 +605,7 @@ pub unsafe extern "C" fn SV_MasterHeartbeat(mut message: *const libc::c_char) {
     let mut i: i32 = 0;
     let mut res: i32 = 0;
     let mut netenabled: i32 = 0;
-    netenabled = Cvar_VariableIntegerValue(
-        b"net_enabled\x00" as *const u8 as *const libc::c_char,
-    );
+    netenabled = Cvar_VariableIntegerValue(b"net_enabled\x00" as *const u8 as *const libc::c_char);
     // "dedicated 1" is for lan play, "dedicated 2" is for inet public play
     if com_dedicated.is_null()
         || (*com_dedicated).integer != 2 as i32
@@ -698,9 +659,7 @@ pub unsafe extern "C" fn SV_MasterHeartbeat(mut message: *const libc::c_char) {
                         Com_Printf(
                             b"%s resolved to %s\n\x00" as *const u8 as *const libc::c_char,
                             (*sv_master[i as usize]).string,
-                            NET_AdrToStringwPort(
-                                adr[i as usize][0 as i32 as usize] as netadr_t,
-                            ),
+                            NET_AdrToStringwPort(adr[i as usize][0 as i32 as usize] as netadr_t),
                         );
                     } else {
                         Com_Printf(
@@ -731,9 +690,7 @@ pub unsafe extern "C" fn SV_MasterHeartbeat(mut message: *const libc::c_char) {
                         Com_Printf(
                             b"%s resolved to %s\n\x00" as *const u8 as *const libc::c_char,
                             (*sv_master[i as usize]).string,
-                            NET_AdrToStringwPort(
-                                adr[i as usize][1 as i32 as usize] as netadr_t,
-                            ),
+                            NET_AdrToStringwPort(adr[i as usize][1 as i32 as usize] as netadr_t),
                         );
                     } else {
                         Com_Printf(
@@ -743,10 +700,8 @@ pub unsafe extern "C" fn SV_MasterHeartbeat(mut message: *const libc::c_char) {
                     }
                 }
             }
-            if !(adr[i as usize][0 as i32 as usize].type_0 as u32
-                == NA_BAD as i32 as u32
-                && adr[i as usize][1 as i32 as usize].type_0 as u32
-                    == NA_BAD as i32 as u32)
+            if !(adr[i as usize][0 as i32 as usize].type_0 as u32 == NA_BAD as i32 as u32
+                && adr[i as usize][1 as i32 as usize].type_0 as u32 == NA_BAD as i32 as u32)
             {
                 Com_Printf(
                     b"Sending heartbeat to %s\n\x00" as *const u8 as *const libc::c_char,
@@ -754,9 +709,7 @@ pub unsafe extern "C" fn SV_MasterHeartbeat(mut message: *const libc::c_char) {
                 );
                 // this command should be changed if the server info / status format
                 // ever incompatably changes
-                if adr[i as usize][0 as i32 as usize].type_0 as u32
-                    != NA_BAD as i32 as u32
-                {
+                if adr[i as usize][0 as i32 as usize].type_0 as u32 != NA_BAD as i32 as u32 {
                     NET_OutOfBandPrint(
                         NS_SERVER,
                         adr[i as usize][0 as i32 as usize] as netadr_t,
@@ -764,9 +717,7 @@ pub unsafe extern "C" fn SV_MasterHeartbeat(mut message: *const libc::c_char) {
                         message,
                     );
                 }
-                if adr[i as usize][1 as i32 as usize].type_0 as u32
-                    != NA_BAD as i32 as u32
-                {
+                if adr[i as usize][1 as i32 as usize].type_0 as u32 != NA_BAD as i32 as u32 {
                     NET_OutOfBandPrint(
                         NS_SERVER,
                         adr[i as usize][1 as i32 as usize] as netadr_t,
@@ -813,16 +764,15 @@ static mut bucketHashes: [*mut leakyBucket_t; 1024] =
     [0 as *const leakyBucket_t as *mut leakyBucket_t; 1024];
 #[no_mangle]
 
-pub static mut outboundLeakyBucket: leakyBucket_t =
-    leakyBucket_t {
-        type_0: NA_BAD,
-        ipv: C2RustUnnamed_164 { _4: [0; 4] },
-        lastTime: 0,
-        burst: 0,
-        hash: 0,
-        prev: 0 as *const leakyBucket_t as *mut leakyBucket_t,
-        next: 0 as *const leakyBucket_t as *mut leakyBucket_t,
-    };
+pub static mut outboundLeakyBucket: leakyBucket_t = leakyBucket_t {
+    type_0: NA_BAD,
+    ipv: C2RustUnnamed_164 { _4: [0; 4] },
+    lastTime: 0,
+    burst: 0,
+    hash: 0,
+    prev: 0 as *const leakyBucket_t as *mut leakyBucket_t,
+    next: 0 as *const leakyBucket_t as *mut leakyBucket_t,
+};
 /*
 ================
 SVC_HashForAddress
@@ -830,8 +780,7 @@ SVC_HashForAddress
 */
 
 unsafe extern "C" fn SVC_HashForAddress(mut address: netadr_t) -> isize {
-    let mut ip: *mut byte =
-        0 as *mut byte;
+    let mut ip: *mut byte = 0 as *mut byte;
     let mut size: size_t = 0 as i32 as size_t;
     let mut i: i32 = 0;
     let mut hash: isize = 0 as i32 as isize;
@@ -902,8 +851,7 @@ unsafe extern "C" fn SVC_BucketForAddress(
     i = 0 as i32;
     while i < 16384 as i32 {
         let mut interval: i32 = 0;
-        bucket =
-            &mut *buckets.as_mut_ptr().offset(i as isize) as *mut leakyBucket_t;
+        bucket = &mut *buckets.as_mut_ptr().offset(i as isize) as *mut leakyBucket_t;
         interval = now - (*bucket).lastTime;
         // Reclaim expired buckets
         if (*bucket).lastTime > 0 as i32 && (interval > burst * period || interval < 0 as i32) {
@@ -1020,18 +968,15 @@ unsafe extern "C" fn SVC_Status(mut from: netadr_t) {
     let mut status: [libc::c_char; 16384] = [0; 16384];
     let mut i: i32 = 0;
     let mut cl: *mut client_t = 0 as *mut client_t;
-    let mut ps: *mut playerState_t =
-        0 as *mut playerState_t;
+    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
     let mut statusLength: i32 = 0;
     let mut playerLength: i32 = 0;
     let mut infostring: [libc::c_char; 1024] = [0; 1024];
     // ignore if we are in single player
-    if Cvar_VariableValue(
-        b"g_gametype\x00" as *const u8 as *const libc::c_char,
-    ) == GT_SINGLE_PLAYER as i32 as f32
-        || Cvar_VariableValue(
-            b"ui_singlePlayerActive\x00" as *const u8 as *const libc::c_char,
-        ) != 0.
+    if Cvar_VariableValue(b"g_gametype\x00" as *const u8 as *const libc::c_char)
+        == GT_SINGLE_PLAYER as i32 as f32
+        || Cvar_VariableValue(b"ui_singlePlayerActive\x00" as *const u8 as *const libc::c_char)
+            != 0.
     {
         return;
     }
@@ -1054,15 +999,10 @@ unsafe extern "C" fn SVC_Status(mut from: netadr_t) {
         return;
     }
     // A maximum challenge length of 128 should be more than plenty.
-    if crate::stdlib::strlen(Cmd_Argv(1 as i32))
-        > 128 as i32 as libc::c_ulong
-    {
+    if crate::stdlib::strlen(Cmd_Argv(1 as i32)) > 128 as i32 as libc::c_ulong {
         return;
     }
-    libc::strcpy(
-        infostring.as_mut_ptr(),
-        Cvar_InfoString(0x4 as i32),
-    );
+    libc::strcpy(infostring.as_mut_ptr(), Cvar_InfoString(0x4 as i32));
     // echo back the parameter to status. so master servers can use it as a challenge
     // to prevent timed spoofed reply packets that add ghost servers
     Info_SetValueForKey(
@@ -1076,8 +1016,7 @@ unsafe extern "C" fn SVC_Status(mut from: netadr_t) {
     while i < (*sv_maxclients).integer {
         cl = &mut *svs.clients.offset(i as isize) as *mut client_t;
         if (*cl).state as u32 >= CS_CONNECTED as i32 as u32 {
-            ps = SV_GameClientNum(i)
-                as *mut playerState_s;
+            ps = SV_GameClientNum(i) as *mut playerState_s;
             Com_sprintf(
                 player.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
@@ -1125,12 +1064,10 @@ pub unsafe extern "C" fn SVC_Info(mut from: netadr_t) {
     let mut gamedir: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut infostring: [libc::c_char; 1024] = [0; 1024];
     // ignore if we are in single player
-    if Cvar_VariableValue(
-        b"g_gametype\x00" as *const u8 as *const libc::c_char,
-    ) == GT_SINGLE_PLAYER as i32 as f32
-        || Cvar_VariableValue(
-            b"ui_singlePlayerActive\x00" as *const u8 as *const libc::c_char,
-        ) != 0.
+    if Cvar_VariableValue(b"g_gametype\x00" as *const u8 as *const libc::c_char)
+        == GT_SINGLE_PLAYER as i32 as f32
+        || Cvar_VariableValue(b"ui_singlePlayerActive\x00" as *const u8 as *const libc::c_char)
+            != 0.
     {
         return;
     }
@@ -1157,9 +1094,7 @@ pub unsafe extern "C" fn SVC_Info(mut from: netadr_t) {
      * to the Infostring bug discovered by Luigi Auriemma. See http://aluigi.altervista.org/ for the advisory.
      */
     // A maximum challenge length of 128 should be more than plenty.
-    if crate::stdlib::strlen(Cmd_Argv(1 as i32))
-        > 128 as i32 as libc::c_ulong
-    {
+    if crate::stdlib::strlen(Cmd_Argv(1 as i32)) > 128 as i32 as libc::c_ulong {
         return;
     }
     // don't count privateclients
@@ -1167,9 +1102,7 @@ pub unsafe extern "C" fn SVC_Info(mut from: netadr_t) {
     count = humans;
     i = (*sv_privateClients).integer;
     while i < (*sv_maxclients).integer {
-        if (*svs.clients.offset(i as isize)).state as u32
-            >= CS_CONNECTED as i32 as u32
-        {
+        if (*svs.clients.offset(i as isize)).state as u32 >= CS_CONNECTED as i32 as u32 {
             count += 1;
             if (*svs.clients.offset(i as isize))
                 .netchan
@@ -1269,9 +1202,7 @@ pub unsafe extern "C" fn SVC_Info(mut from: netadr_t) {
         b"g_needpass\x00" as *const u8 as *const libc::c_char,
         va(
             b"%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            Cvar_VariableIntegerValue(
-                b"g_needpass\x00" as *const u8 as *const libc::c_char,
-            ),
+            Cvar_VariableIntegerValue(b"g_needpass\x00" as *const u8 as *const libc::c_char),
         ),
     );
     if !(*sv_voipProtocol).string.is_null() && *(*sv_voipProtocol).string as i32 != 0 {
@@ -1301,9 +1232,7 @@ pub unsafe extern "C" fn SVC_Info(mut from: netadr_t) {
             ),
         );
     }
-    gamedir = Cvar_VariableString(
-        b"fs_game\x00" as *const u8 as *const libc::c_char,
-    );
+    gamedir = Cvar_VariableString(b"fs_game\x00" as *const u8 as *const libc::c_char);
     if *gamedir != 0 {
         Info_SetValueForKey(
             infostring.as_mut_ptr(),
@@ -1343,10 +1272,7 @@ Redirect all printfs
 ===============
 */
 
-unsafe extern "C" fn SVC_RemoteCommand(
-    mut from: netadr_t,
-    mut _msg: *mut msg_t,
-) {
+unsafe extern "C" fn SVC_RemoteCommand(mut from: netadr_t, mut _msg: *mut msg_t) {
     let mut valid: qboolean = qfalse;
     let mut remaining: [libc::c_char; 1024] = [0; 1024];
     // TTimo - scaled down to accumulate, but not overflow anything network wise, print wise etc.
@@ -1363,10 +1289,7 @@ unsafe extern "C" fn SVC_RemoteCommand(
         return;
     }
     if crate::stdlib::strlen((*sv_rconPassword).string) == 0
-        || libc::strcmp(
-            Cmd_Argv(1 as i32),
-            (*sv_rconPassword).string,
-        ) != 0
+        || libc::strcmp(Cmd_Argv(1 as i32), (*sv_rconPassword).string) != 0
     {
         static mut bucket: leakyBucket_t = leakyBucket_t {
             type_0: NA_BAD,
@@ -1407,13 +1330,9 @@ unsafe extern "C" fn SVC_RemoteCommand(
         Some(SV_FlushRedirect as unsafe extern "C" fn(_: *mut libc::c_char) -> ()),
     );
     if crate::stdlib::strlen((*sv_rconPassword).string) == 0 {
-        Com_Printf(
-            b"No rconpassword set on the server.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"No rconpassword set on the server.\n\x00" as *const u8 as *const libc::c_char);
     } else if valid as u64 == 0 {
-        Com_Printf(
-            b"Bad rconpassword.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b"Bad rconpassword.\n\x00" as *const u8 as *const libc::c_char);
     } else {
         remaining[0 as i32 as usize] = 0 as i32 as libc::c_char;
         // https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=543
@@ -1454,25 +1373,18 @@ connectionless packets.
 =================
 */
 
-unsafe extern "C" fn SV_ConnectionlessPacket(
-    mut from: netadr_t,
-    mut msg: *mut msg_t,
-) {
+unsafe extern "C" fn SV_ConnectionlessPacket(mut from: netadr_t, mut msg: *mut msg_t) {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char; // skip the -1 marker
     let mut c: *mut libc::c_char = 0 as *mut libc::c_char;
     MSG_BeginReadingOOB(msg as *mut msg_t);
     MSG_ReadLong(msg as *mut msg_t);
     if Q_strncmp(
         b"connect\x00" as *const u8 as *const libc::c_char,
-        &mut *(*msg).data.offset(4 as i32 as isize) as *mut byte
-            as *mut libc::c_char,
+        &mut *(*msg).data.offset(4 as i32 as isize) as *mut byte as *mut libc::c_char,
         7 as i32,
     ) == 0
     {
-        Huff_Decompress(
-            msg as *mut msg_t,
-            12 as i32,
-        );
+        Huff_Decompress(msg as *mut msg_t, 12 as i32);
     }
     s = MSG_ReadStringLine(msg as *mut msg_t);
     Cmd_TokenizeString(s);
@@ -1482,47 +1394,19 @@ unsafe extern "C" fn SV_ConnectionlessPacket(
         NET_AdrToString(from as netadr_t),
         c,
     );
-    if Q_stricmp(
-        c,
-        b"getstatus\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    if Q_stricmp(c, b"getstatus\x00" as *const u8 as *const libc::c_char) == 0 {
         SVC_Status(from);
-    } else if Q_stricmp(
-        c,
-        b"getinfo\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    } else if Q_stricmp(c, b"getinfo\x00" as *const u8 as *const libc::c_char) == 0 {
         SVC_Info(from);
-    } else if Q_stricmp(
-        c,
-        b"getchallenge\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    } else if Q_stricmp(c, b"getchallenge\x00" as *const u8 as *const libc::c_char) == 0 {
         SV_GetChallenge(from as netadr_t);
-    } else if Q_stricmp(
-        c,
-        b"connect\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    } else if Q_stricmp(c, b"connect\x00" as *const u8 as *const libc::c_char) == 0 {
         SV_DirectConnect(from as netadr_t);
-    } else if Q_stricmp(
-        c,
-        b"ipAuthorize\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    } else if Q_stricmp(c, b"ipAuthorize\x00" as *const u8 as *const libc::c_char) == 0 {
         SV_AuthorizeIpPacket(from as netadr_t);
-    } else if Q_stricmp(
-        c,
-        b"rcon\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    } else if Q_stricmp(c, b"rcon\x00" as *const u8 as *const libc::c_char) == 0 {
         SVC_RemoteCommand(from, msg);
-    } else if !(Q_stricmp(
-        c,
-        b"disconnect\x00" as *const u8 as *const libc::c_char,
-    ) == 0)
-    {
+    } else if !(Q_stricmp(c, b"disconnect\x00" as *const u8 as *const libc::c_char) == 0) {
         Com_DPrintf(
             b"bad connectionless packet from %s:\n%s\n\x00" as *const u8 as *const libc::c_char,
             NET_AdrToString(from as netadr_t),
@@ -1538,10 +1422,7 @@ SV_PacketEvent
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_PacketEvent(
-    mut from: netadr_t,
-    mut msg: *mut msg_t,
-) {
+pub unsafe extern "C" fn SV_PacketEvent(mut from: netadr_t, mut msg: *mut msg_t) {
     let mut i: i32 = 0;
     let mut cl: *mut client_t = 0 as *mut client_t;
     let mut qport: i32 = 0;
@@ -1554,17 +1435,14 @@ pub unsafe extern "C" fn SV_PacketEvent(
     // stupid address translating routers
     MSG_BeginReadingOOB(msg as *mut msg_t); // sequence number
     MSG_ReadLong(msg as *mut msg_t);
-    qport = MSG_ReadShort(msg as *mut msg_t)
-        & 0xffff as i32;
+    qport = MSG_ReadShort(msg as *mut msg_t) & 0xffff as i32;
     // find which client the message is from
     i = 0 as i32;
     cl = svs.clients;
     while i < (*sv_maxclients).integer {
         if !((*cl).state as u32 == CS_FREE as i32 as u32) {
-            if !(NET_CompareBaseAdr(
-                from as netadr_t,
-                (*cl).netchan.remoteAddress as netadr_t,
-            ) as u64
+            if !(NET_CompareBaseAdr(from as netadr_t, (*cl).netchan.remoteAddress as netadr_t)
+                as u64
                 == 0)
             {
                 // it is possible to have multiple clients from a single IP
@@ -1581,21 +1459,13 @@ pub unsafe extern "C" fn SV_PacketEvent(
                         (*cl).netchan.remoteAddress.port = from.port
                     }
                     // make sure it is a valid, in sequence packet
-                    if SV_Netchan_Process(
-                        cl as *mut client_s,
-                        msg as *mut msg_t,
-                    ) as u64
-                        != 0
-                    {
+                    if SV_Netchan_Process(cl as *mut client_s, msg as *mut msg_t) as u64 != 0 {
                         // zombie clients still need to do the Netchan_Process
                         // to make sure they don't need to retransmit the final
                         // reliable message, but they don't do any other processing
                         if (*cl).state as u32 != CS_ZOMBIE as i32 as u32 {
                             (*cl).lastPacketTime = svs.time; // don't timeout
-                            SV_ExecuteClientMessage(
-                                cl as *mut client_s,
-                                msg as *mut msg_t,
-                            );
+                            SV_ExecuteClientMessage(cl as *mut client_s, msg as *mut msg_t);
                         }
                     }
                     return;
@@ -1621,8 +1491,7 @@ unsafe extern "C" fn SV_CalcPings() {
     let mut total: i32 = 0;
     let mut count: i32 = 0;
     let mut delta: i32 = 0;
-    let mut ps: *mut playerState_t =
-        0 as *mut playerState_t;
+    let mut ps: *mut playerState_t = 0 as *mut playerState_t;
     i = 0 as i32;
     while i < (*sv_maxclients).integer {
         cl = &mut *svs.clients.offset(i as isize) as *mut client_t;
@@ -1654,8 +1523,7 @@ unsafe extern "C" fn SV_CalcPings() {
                 }
             }
             // let the game dll know about the ping
-            ps = SV_GameClientNum(i)
-                as *mut playerState_s;
+            ps = SV_GameClientNum(i) as *mut playerState_s;
             (*ps).ping = (*cl).ping
         }
         i += 1
@@ -1689,9 +1557,7 @@ unsafe extern "C" fn SV_CheckTimeouts() {
         if (*cl).lastPacketTime > svs.time {
             (*cl).lastPacketTime = svs.time
         }
-        if (*cl).state as u32 == CS_ZOMBIE as i32 as u32
-            && (*cl).lastPacketTime < zombiepoint
-        {
+        if (*cl).state as u32 == CS_ZOMBIE as i32 as u32 && (*cl).lastPacketTime < zombiepoint {
             // using the client id cause the cl->name is empty at this point
             Com_DPrintf(
                 b"Going from CS_ZOMBIE to CS_FREE for client %d\n\x00" as *const u8
@@ -1824,8 +1690,7 @@ pub unsafe extern "C" fn SV_Frame(mut msec: i32) {
             b"10\x00" as *const u8 as *const libc::c_char,
         );
     }
-    frameMsec = ((1000 as i32 / (*sv_fps).integer) as f32
-        * (*com_timescale).value) as i32;
+    frameMsec = ((1000 as i32 / (*sv_fps).integer) as f32 * (*com_timescale).value) as i32;
     // don't let it scale below 1ms
     if frameMsec < 1 as i32 {
         Cvar_Set(
@@ -1852,9 +1717,7 @@ pub unsafe extern "C" fn SV_Frame(mut msec: i32) {
         );
         Cbuf_AddText(va(
             b"map %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            Cvar_VariableString(
-                b"mapname\x00" as *const u8 as *const libc::c_char,
-            ),
+            Cvar_VariableString(b"mapname\x00" as *const u8 as *const libc::c_char),
         ));
         return;
     }
@@ -1866,32 +1729,22 @@ pub unsafe extern "C" fn SV_Frame(mut msec: i32) {
         );
         Cbuf_AddText(va(
             b"map %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            Cvar_VariableString(
-                b"mapname\x00" as *const u8 as *const libc::c_char,
-            ),
+            Cvar_VariableString(b"mapname\x00" as *const u8 as *const libc::c_char),
         ));
         return;
     }
     if sv.restartTime != 0 && sv.time >= sv.restartTime {
         sv.restartTime = 0 as i32;
-        Cbuf_AddText(
-            b"map_restart 0\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Cbuf_AddText(b"map_restart 0\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     // update infostrings if anything has been changed
     if cvar_modifiedFlags & 0x4 as i32 != 0 {
-        SV_SetConfigstring(
-            0 as i32,
-            Cvar_InfoString(0x4 as i32),
-        );
+        SV_SetConfigstring(0 as i32, Cvar_InfoString(0x4 as i32));
         cvar_modifiedFlags &= !(0x4 as i32)
     }
     if cvar_modifiedFlags & 0x8 as i32 != 0 {
-        SV_SetConfigstring(
-            1 as i32,
-            Cvar_InfoString_Big(0x8 as i32),
-        );
+        SV_SetConfigstring(1 as i32, Cvar_InfoString_Big(0x8 as i32));
         cvar_modifiedFlags &= !(0x8 as i32)
     }
     if (*com_speeds).integer != 0 {
@@ -1914,8 +1767,7 @@ pub unsafe extern "C" fn SV_Frame(mut msec: i32) {
         VM_Call(gvm, GAME_RUN_FRAME as i32, sv.time);
     }
     if (*com_speeds).integer != 0 {
-        time_game =
-            Sys_Milliseconds() - startTime
+        time_game = Sys_Milliseconds() - startTime
     }
     // check timeouts
     SV_CheckTimeouts();
@@ -2086,8 +1938,7 @@ pub unsafe extern "C" fn SV_RateMsec(mut client: *mut client_t) -> i32 {
     } else {
         messageSize += 28 as i32
     }
-    rateMsec = messageSize * 1000 as i32
-        / (rate as f32 * (*com_timescale).value) as i32;
+    rateMsec = messageSize * 1000 as i32 / (rate as f32 * (*com_timescale).value) as i32;
     rate = Sys_Milliseconds() - (*client).netchan.lastSentTime;
     if rate > rateMsec {
         return 0 as i32;

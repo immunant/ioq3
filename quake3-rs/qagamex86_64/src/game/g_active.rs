@@ -349,15 +349,9 @@ pub unsafe extern "C" fn P_DamageFeedback(mut player: *mut gentity_t) {
             (angles[1 as i32 as usize] as f64 / 360.0f64 * 256 as i32 as f64) as i32
     }
     // play an appropriate pain sound
-    if level.time > (*player).pain_debounce_time
-        && (*player).flags & 0x10 as i32 == 0
-    {
+    if level.time > (*player).pain_debounce_time && (*player).flags & 0x10 as i32 == 0 {
         (*player).pain_debounce_time = level.time + 700 as i32;
-        G_AddEvent(
-            player as *mut gentity_s,
-            EV_PAIN as i32,
-            (*player).health,
-        );
+        G_AddEvent(player as *mut gentity_s, EV_PAIN as i32, (*player).health);
         (*client).ps.damageEvent += 1
     }
     (*client).ps.damageCount = count as i32;
@@ -378,16 +372,14 @@ Check for lava / slime contents and drowning
 #[no_mangle]
 
 pub unsafe extern "C" fn P_WorldEffects(mut ent: *mut gentity_t) {
-    let mut envirosuit: qboolean =
-        qfalse; // don't need air
+    let mut envirosuit: qboolean = qfalse; // don't need air
     let mut waterlevel: i32 = 0;
     if (*(*ent).client).noclip as u64 != 0 {
         (*(*ent).client).airOutTime = level.time + 12000 as i32;
         return;
     }
     waterlevel = (*ent).waterlevel;
-    envirosuit = ((*(*ent).client).ps.powerups[PW_BATTLESUIT as i32 as usize]
-        > level.time) as i32
+    envirosuit = ((*(*ent).client).ps.powerups[PW_BATTLESUIT as i32 as usize] > level.time) as i32
         as qboolean;
     //
     // check for drowning
@@ -429,9 +421,7 @@ pub unsafe extern "C" fn P_WorldEffects(mut ent: *mut gentity_t) {
     // check for sizzle damage (move to pmove?)
     //
     if waterlevel != 0 && (*ent).watertype & (8 as i32 | 16 as i32) != 0 {
-        if (*ent).health > 0 as i32
-            && (*ent).pain_debounce_time <= level.time
-        {
+        if (*ent).health > 0 as i32 && (*ent).pain_debounce_time <= level.time {
             if envirosuit as u64 != 0 {
                 G_AddEvent(
                     ent as *mut gentity_s,
@@ -489,29 +479,25 @@ ClientImpacts
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn ClientImpacts(
-    mut ent: *mut gentity_t,
-    mut pm: *mut pmove_t,
-) {
+pub unsafe extern "C" fn ClientImpacts(mut ent: *mut gentity_t, mut pm: *mut pmove_t) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     let mut other: *mut gentity_t = 0 as *mut gentity_t;
     crate::stdlib::memset(
         &mut trace as *mut trace_t as *mut libc::c_void,
@@ -558,30 +544,25 @@ pub unsafe extern "C" fn G_TouchTriggers(mut ent: *mut gentity_t) {
     let mut num: i32 = 0;
     let mut touch: [i32; 1024] = [0; 1024];
     let mut hit: *mut gentity_t = 0 as *mut gentity_t;
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
-    static mut range: vec3_t = [
-        40 as i32 as vec_t,
-        40 as i32 as vec_t,
-        52 as i32 as vec_t,
-    ];
+    static mut range: vec3_t = [40 as i32 as vec_t, 40 as i32 as vec_t, 52 as i32 as vec_t];
     if (*ent).client.is_null() {
         return;
     }
@@ -630,9 +611,7 @@ pub unsafe extern "C" fn G_TouchTriggers(mut ent: *mut gentity_t) {
         if !((*hit).touch.is_none() && (*ent).touch.is_none()) {
             if !((*hit).r.contents & 0x40000000 as i32 == 0) {
                 // ignore most entities if a spectator
-                if (*(*ent).client).sess.sessionTeam as u32
-                    == TEAM_SPECTATOR as i32 as u32
-                {
+                if (*(*ent).client).sess.sessionTeam as u32 == TEAM_SPECTATOR as i32 as u32 {
                     if (*hit).s.eType != ET_TELEPORT_TRIGGER as i32
                         && (*hit).touch
                             != Some(
@@ -660,10 +639,8 @@ pub unsafe extern "C" fn G_TouchTriggers(mut ent: *mut gentity_t) {
                     {
                         if (*hit).s.eType == ET_ITEM as i32 {
                             if BG_PlayerTouchesItem(
-                                &mut (*(*ent).client).ps as *mut _
-                                    as *mut playerState_s,
-                                &mut (*hit).s as *mut _
-                                    as *mut entityState_s,
+                                &mut (*(*ent).client).ps as *mut _ as *mut playerState_s,
+                                &mut (*hit).s as *mut _ as *mut entityState_s,
                                 level.time,
                             ) as u64
                                 == 0
@@ -687,11 +664,9 @@ pub unsafe extern "C" fn G_TouchTriggers(mut ent: *mut gentity_t) {
                             13586036798005543211 => {}
                             _ => {
                                 crate::stdlib::memset(
-                                    &mut trace as *mut trace_t
-                                        as *mut libc::c_void,
+                                    &mut trace as *mut trace_t as *mut libc::c_void,
                                     0 as i32,
-                                    ::std::mem::size_of::<trace_t>()
-                                        as libc::c_ulong,
+                                    ::std::mem::size_of::<trace_t>() as libc::c_ulong,
                                 );
                                 if (*hit).touch.is_some() {
                                     (*hit).touch.expect("non-null function pointer")(
@@ -724,10 +699,7 @@ SpectatorThink
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SpectatorThink(
-    mut ent: *mut gentity_t,
-    mut ucmd: *mut usercmd_t,
-) {
+pub unsafe extern "C" fn SpectatorThink(mut ent: *mut gentity_t, mut ucmd: *mut usercmd_t) {
     let mut pm: pmove_t = pmove_t {
         ps: 0 as *mut playerState_t,
         cmd: usercmd_t {
@@ -792,13 +764,8 @@ pub unsafe extern "C" fn SpectatorThink(
                     _: i32,
                 ) -> (),
         );
-        pm.pointcontents = Some(
-            trap_PointContents
-                as unsafe extern "C" fn(
-                    _: *const vec_t,
-                    _: i32,
-                ) -> i32,
-        );
+        pm.pointcontents =
+            Some(trap_PointContents as unsafe extern "C" fn(_: *const vec_t, _: i32) -> i32);
         // perform a pmove
         Pmove(&mut pm as *mut _ as *mut pmove_t);
         // save results of pmove
@@ -812,10 +779,7 @@ pub unsafe extern "C" fn SpectatorThink(
     (*client).buttons = (*ucmd).buttons;
     // attack button cycles through spectators
     if (*client).buttons & 1 as i32 != 0 && (*client).oldbuttons & 1 as i32 == 0 {
-        Cmd_FollowCycle_f(
-            ent as *mut gentity_s,
-            1 as i32,
-        );
+        Cmd_FollowCycle_f(ent as *mut gentity_s, 1 as i32);
     };
 }
 /*
@@ -827,9 +791,7 @@ Returns qfalse if the client is dropped
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn ClientInactivityTimer(
-    mut client: *mut gclient_t,
-) -> qboolean {
+pub unsafe extern "C" fn ClientInactivityTimer(mut client: *mut gclient_t) -> qboolean {
     if g_inactivity.integer == 0 {
         // give everyone some time, so if the operator sets g_inactivity during
         // gameplay, everyone isn't kicked
@@ -840,8 +802,7 @@ pub unsafe extern "C" fn ClientInactivityTimer(
         || (*client).pers.cmd.upmove as i32 != 0
         || (*client).pers.cmd.buttons & 1 as i32 != 0
     {
-        (*client).inactivityTime = level.time
-            + g_inactivity.integer * 1000 as i32;
+        (*client).inactivityTime = level.time + g_inactivity.integer * 1000 as i32;
         (*client).inactivityWarning = qfalse
     } else if (*client).pers.localClient as u64 == 0 {
         if level.time > (*client).inactivityTime {
@@ -873,10 +834,7 @@ Actions that happen once a second
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn ClientTimerActions(
-    mut ent: *mut gentity_t,
-    mut msec: i32,
-) {
+pub unsafe extern "C" fn ClientTimerActions(mut ent: *mut gentity_t, mut msec: i32) {
     let mut client: *mut gclient_t = 0 as *mut gclient_t;
     client = (*ent).client;
     (*client).timeResidual += msec;
@@ -884,45 +842,24 @@ pub unsafe extern "C" fn ClientTimerActions(
         (*client).timeResidual -= 1000 as i32;
         // regenerate
         if (*client).ps.powerups[PW_REGEN as i32 as usize] != 0 {
-            if (*ent).health
-                < (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize]
-            {
+            if (*ent).health < (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize] {
                 (*ent).health += 15 as i32;
                 if (*ent).health as f64
-                    > (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize] as f64
-                        * 1.1f64
+                    > (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize] as f64 * 1.1f64
                 {
-                    (*ent).health = ((*client).ps.stats
-                        [STAT_MAX_HEALTH as i32 as usize]
-                        as f64
-                        * 1.1f64) as i32
+                    (*ent).health =
+                        ((*client).ps.stats[STAT_MAX_HEALTH as i32 as usize] as f64 * 1.1f64) as i32
                 }
-                G_AddEvent(
-                    ent as *mut gentity_s,
-                    EV_POWERUP_REGEN as i32,
-                    0 as i32,
-                );
-            } else if (*ent).health
-                < (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize] * 2 as i32
+                G_AddEvent(ent as *mut gentity_s, EV_POWERUP_REGEN as i32, 0 as i32);
+            } else if (*ent).health < (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize] * 2 as i32
             {
                 (*ent).health += 5 as i32;
-                if (*ent).health
-                    > (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize]
-                        * 2 as i32
-                {
-                    (*ent).health = (*client).ps.stats
-                        [STAT_MAX_HEALTH as i32 as usize]
-                        * 2 as i32
+                if (*ent).health > (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize] * 2 as i32 {
+                    (*ent).health = (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize] * 2 as i32
                 }
-                G_AddEvent(
-                    ent as *mut gentity_s,
-                    EV_POWERUP_REGEN as i32,
-                    0 as i32,
-                );
+                G_AddEvent(ent as *mut gentity_s, EV_POWERUP_REGEN as i32, 0 as i32);
             }
-        } else if (*ent).health
-            > (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize]
-        {
+        } else if (*ent).health > (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize] {
             (*ent).health -= 1
         }
         // count down health when over max
@@ -963,10 +900,7 @@ but any server game effects are handled here
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn ClientEvents(
-    mut ent: *mut gentity_t,
-    mut oldEventSequence: i32,
-) {
+pub unsafe extern "C" fn ClientEvents(mut ent: *mut gentity_t, mut oldEventSequence: i32) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut event: i32 = 0;
@@ -993,14 +927,11 @@ pub unsafe extern "C" fn ClientEvents(
                         } else {
                             damage = 5 as i32
                         }
-                        (*ent).pain_debounce_time =
-                            level.time + 200 as i32;
+                        (*ent).pain_debounce_time = level.time + 200 as i32;
                         G_Damage(
                             ent as *mut gentity_s,
-                            0 as *mut gentity_t
-                                as *mut gentity_s,
-                            0 as *mut gentity_t
-                                as *mut gentity_s,
+                            0 as *mut gentity_t as *mut gentity_s,
+                            0 as *mut gentity_t as *mut gentity_s,
                             0 as *mut vec_t,
                             0 as *mut vec_t,
                             damage,
@@ -1018,39 +949,22 @@ pub unsafe extern "C" fn ClientEvents(
                 // drop flags in CTF
                 item = 0 as *mut gitem_t;
                 j = 0 as i32;
-                if (*(*ent).client).ps.powerups[PW_REDFLAG as i32 as usize] != 0
-                {
-                    item = BG_FindItemForPowerup(
-                        PW_REDFLAG,
-                    ) as *mut gitem_s;
+                if (*(*ent).client).ps.powerups[PW_REDFLAG as i32 as usize] != 0 {
+                    item = BG_FindItemForPowerup(PW_REDFLAG) as *mut gitem_s;
                     j = PW_REDFLAG as i32
-                } else if (*(*ent).client).ps.powerups
-                    [PW_BLUEFLAG as i32 as usize]
-                    != 0
-                {
-                    item = BG_FindItemForPowerup(
-                        PW_BLUEFLAG,
-                    ) as *mut gitem_s;
+                } else if (*(*ent).client).ps.powerups[PW_BLUEFLAG as i32 as usize] != 0 {
+                    item = BG_FindItemForPowerup(PW_BLUEFLAG) as *mut gitem_s;
                     j = PW_BLUEFLAG as i32
-                } else if (*(*ent).client).ps.powerups
-                    [PW_NEUTRALFLAG as i32 as usize]
-                    != 0
-                {
-                    item = BG_FindItemForPowerup(
-                        PW_NEUTRALFLAG,
-                    ) as *mut gitem_s;
+                } else if (*(*ent).client).ps.powerups[PW_NEUTRALFLAG as i32 as usize] != 0 {
+                    item = BG_FindItemForPowerup(PW_NEUTRALFLAG) as *mut gitem_s;
                     j = PW_NEUTRALFLAG as i32
                 }
                 if !item.is_null() {
-                    drop_0 = Drop_Item(
-                        ent as *mut gentity_s,
-                        item as *mut gitem_s,
-                        0 as i32 as f32,
-                    ) as *mut gentity_s;
+                    drop_0 = Drop_Item(ent as *mut gentity_s, item as *mut gitem_s, 0 as i32 as f32)
+                        as *mut gentity_s;
                     // decide how many seconds it has left
-                    (*drop_0).count = ((*(*ent).client).ps.powerups[j as usize]
-                        - level.time)
-                        / 1000 as i32;
+                    (*drop_0).count =
+                        ((*(*ent).client).ps.powerups[j as usize] - level.time) / 1000 as i32;
                     if (*drop_0).count < 1 as i32 {
                         (*drop_0).count = 1 as i32
                     }
@@ -1071,9 +985,8 @@ pub unsafe extern "C" fn ClientEvents(
             }
             26 => {
                 // medkit
-                (*ent).health = (*(*ent).client).ps.stats
-                    [STAT_MAX_HEALTH as i32 as usize]
-                    + 25 as i32
+                (*ent).health =
+                    (*(*ent).client).ps.stats[STAT_MAX_HEALTH as i32 as usize] + 25 as i32
             }
             _ => {}
         }
@@ -1087,9 +1000,7 @@ SendPendingPredictableEvents
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SendPendingPredictableEvents(
-    mut ps: *mut playerState_t,
-) {
+pub unsafe extern "C" fn SendPendingPredictableEvents(mut ps: *mut playerState_t) {
     let mut t: *mut gentity_t = 0 as *mut gentity_t;
     let mut event: i32 = 0;
     let mut seq: i32 = 0;
@@ -1105,8 +1016,7 @@ pub unsafe extern "C" fn SendPendingPredictableEvents(
         extEvent = (*ps).externalEvent;
         (*ps).externalEvent = 0 as i32;
         // create temporary entity for event
-        t = G_TempEntity((*ps).origin.as_mut_ptr(), event)
-            as *mut gentity_s;
+        t = G_TempEntity((*ps).origin.as_mut_ptr(), event) as *mut gentity_s;
         number = (*t).s.number;
         BG_PlayerStateToEntityState(
             ps as *mut playerState_s,
@@ -1169,8 +1079,7 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut gentity_t) {
     };
     let mut oldEventSequence: i32 = 0;
     let mut msec: i32 = 0;
-    let mut ucmd: *mut usercmd_t =
-        0 as *mut usercmd_t;
+    let mut ucmd: *mut usercmd_t = 0 as *mut usercmd_t;
     client = (*ent).client;
     // don't think if the client is not yet connected (and thus not yet spawned in)
     if (*client).pers.connected as u32 != CON_CONNECTED as i32 as u32 {
@@ -1190,9 +1099,7 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut gentity_t) {
     msec = (*ucmd).serverTime - (*client).ps.commandTime;
     // following others may result in bad times, but we still want
     // to check for follow toggles
-    if msec < 1 as i32
-        && (*client).sess.spectatorState as u32 != SPECTATOR_FOLLOW as i32 as u32
-    {
+    if msec < 1 as i32 && (*client).sess.spectatorState as u32 != SPECTATOR_FOLLOW as i32 as u32 {
         return;
     }
     if msec > 200 as i32 {
@@ -1203,23 +1110,16 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut gentity_t) {
             b"pmove_msec\x00" as *const u8 as *const libc::c_char,
             b"8\x00" as *const u8 as *const libc::c_char,
         );
-        trap_Cvar_Update(
-            &mut pmove_msec as *mut _
-                as *mut vmCvar_t,
-        );
+        trap_Cvar_Update(&mut pmove_msec as *mut _ as *mut vmCvar_t);
     } else if pmove_msec.integer > 33 as i32 {
         trap_Cvar_Set(
             b"pmove_msec\x00" as *const u8 as *const libc::c_char,
             b"33\x00" as *const u8 as *const libc::c_char,
         );
-        trap_Cvar_Update(
-            &mut pmove_msec as *mut _
-                as *mut vmCvar_t,
-        );
+        trap_Cvar_Update(&mut pmove_msec as *mut _ as *mut vmCvar_t);
     }
     if pmove_fixed.integer != 0 || (*client).pers.pmoveFixed as u32 != 0 {
-        (*ucmd).serverTime = ((*ucmd).serverTime + pmove_msec.integer
-            - 1 as i32)
+        (*ucmd).serverTime = ((*ucmd).serverTime + pmove_msec.integer - 1 as i32)
             / pmove_msec.integer
             * pmove_msec.integer
         //if (ucmd->serverTime - client->ps.commandTime <= 0)
@@ -1234,9 +1134,7 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut gentity_t) {
     }
     // spectators don't do much
     if (*client).sess.sessionTeam as u32 == TEAM_SPECTATOR as i32 as u32 {
-        if (*client).sess.spectatorState as u32
-            == SPECTATOR_SCOREBOARD as i32 as u32
-        {
+        if (*client).sess.spectatorState as u32 == SPECTATOR_SCOREBOARD as i32 as u32 {
             return;
         }
         SpectatorThink(ent, ucmd);
@@ -1273,9 +1171,7 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut gentity_t) {
         && !(*client).hook.is_null()
         && (*ucmd).buttons & 1 as i32 == 0
     {
-        Weapon_HookFree(
-            (*client).hook as *mut gentity_s,
-        );
+        Weapon_HookFree((*client).hook as *mut gentity_s);
     }
     // set up for pmove
     oldEventSequence = (*client).ps.eventSequence;
@@ -1291,8 +1187,7 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut gentity_t) {
         && (*ucmd).buttons & 1 as i32 != 0
         && (*client).ps.weaponTime <= 0 as i32
     {
-        pm.gauntletHit =
-            CheckGauntletAttack(ent as *mut gentity_s)
+        pm.gauntletHit = CheckGauntletAttack(ent as *mut gentity_s)
     }
     if (*ent).flags & 0x8000 as i32 != 0 {
         (*ent).flags &= !(0x8000 as i32);
@@ -1319,15 +1214,11 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut gentity_t) {
                 _: i32,
             ) -> (),
     );
-    pm.pointcontents = Some(
-        trap_PointContents
-            as unsafe extern "C" fn(_: *const vec_t, _: i32) -> i32,
-    );
+    pm.pointcontents =
+        Some(trap_PointContents as unsafe extern "C" fn(_: *const vec_t, _: i32) -> i32);
     pm.debugLevel = g_debugMove.integer;
-    pm.noFootsteps = (g_dmflags.integer & 32 as i32 > 0 as i32) as i32
-        as qboolean;
-    pm.pmove_fixed = (pmove_fixed.integer as u32
-        | (*client).pers.pmoveFixed as u32) as i32;
+    pm.noFootsteps = (g_dmflags.integer & 32 as i32 > 0 as i32) as i32 as qboolean;
+    pm.pmove_fixed = (pmove_fixed.integer as u32 | (*client).pers.pmoveFixed as u32) as i32;
     pm.pmove_msec = pmove_msec.integer;
     (*client).oldOrigin[0 as i32 as usize] = (*client).ps.origin[0 as i32 as usize];
     (*client).oldOrigin[1 as i32 as usize] = (*client).ps.origin[1 as i32 as usize];
@@ -1397,8 +1288,7 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut gentity_t) {
         if level.time > (*client).respawnTime {
             // forcerespawn is to prevent users from waiting out powerups
             if g_forcerespawn.integer > 0 as i32
-                && level.time - (*client).respawnTime
-                    > g_forcerespawn.integer * 1000 as i32
+                && level.time - (*client).respawnTime > g_forcerespawn.integer * 1000 as i32
             {
                 ClientRespawn(ent as *mut gentity_s);
                 return;
@@ -1424,9 +1314,7 @@ A new command has arrived from the client
 
 pub unsafe extern "C" fn ClientThink(mut clientNum: i32) {
     let mut ent: *mut gentity_t = 0 as *mut gentity_t;
-    ent = g_entities
-        .as_mut_ptr()
-        .offset(clientNum as isize);
+    ent = g_entities.as_mut_ptr().offset(clientNum as isize);
     trap_GetUsercmd(
         clientNum,
         &mut (*(*ent).client).pers.cmd as *mut _ as *mut usercmd_s,
@@ -1434,18 +1322,14 @@ pub unsafe extern "C" fn ClientThink(mut clientNum: i32) {
     // mark the time we got info, so we can display the
     // phone jack if they don't get any for a while
     (*(*ent).client).lastCmdTime = level.time;
-    if (*ent).r.svFlags & 0x8 as i32 == 0
-        && g_synchronousClients.integer == 0
-    {
+    if (*ent).r.svFlags & 0x8 as i32 == 0 && g_synchronousClients.integer == 0 {
         ClientThink_real(ent);
     };
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn G_RunClient(mut ent: *mut gentity_t) {
-    if (*ent).r.svFlags & 0x8 as i32 == 0
-        && g_synchronousClients.integer == 0
-    {
+    if (*ent).r.svFlags & 0x8 as i32 == 0 && g_synchronousClients.integer == 0 {
         return;
     }
     (*(*ent).client).pers.cmd.serverTime = level.time;
@@ -1462,9 +1346,7 @@ SpectatorClientEndFrame
 pub unsafe extern "C" fn SpectatorClientEndFrame(mut ent: *mut gentity_t) {
     let mut cl: *mut gclient_t = 0 as *mut gclient_t;
     // if we are doing a chase cam or a remote view, grab the latest info
-    if (*(*ent).client).sess.spectatorState as u32
-        == SPECTATOR_FOLLOW as i32 as u32
-    {
+    if (*(*ent).client).sess.spectatorState as u32 == SPECTATOR_FOLLOW as i32 as u32 {
         let mut clientNum: i32 = 0;
         let mut flags: i32 = 0;
         clientNum = (*(*ent).client).sess.spectatorClient;
@@ -1475,9 +1357,7 @@ pub unsafe extern "C" fn SpectatorClientEndFrame(mut ent: *mut gentity_t) {
             clientNum = level.follow2
         }
         if clientNum >= 0 as i32 {
-            cl = &mut *level
-                .clients
-                .offset(clientNum as isize) as *mut gclient_s;
+            cl = &mut *level.clients.offset(clientNum as isize) as *mut gclient_s;
             if (*cl).pers.connected as u32 == CON_CONNECTED as i32 as u32
                 && (*cl).sess.sessionTeam as u32 != TEAM_SPECTATOR as i32 as u32
             {
@@ -1494,17 +1374,10 @@ pub unsafe extern "C" fn SpectatorClientEndFrame(mut ent: *mut gentity_t) {
             if (*(*ent).client).sess.spectatorClient >= 0 as i32 {
                 (*(*ent).client).sess.spectatorState = SPECTATOR_FREE
             }
-            ClientBegin(
-                (*ent)
-                    .client
-                    .offset_from(level.clients) as isize
-                    as i32,
-            );
+            ClientBegin((*ent).client.offset_from(level.clients) as isize as i32);
         }
     }
-    if (*(*ent).client).sess.spectatorState as u32
-        == SPECTATOR_SCOREBOARD as i32 as u32
-    {
+    if (*(*ent).client).sess.spectatorState as u32 == SPECTATOR_SCOREBOARD as i32 as u32 {
         (*(*ent).client).ps.pm_flags |= 8192 as i32
     } else {
         (*(*ent).client).ps.pm_flags &= !(8192 as i32)
@@ -1523,8 +1396,7 @@ while a slow client may have multiple ClientEndFrame between ClientThink.
 
 pub unsafe extern "C" fn ClientEndFrame(mut ent: *mut gentity_t) {
     let mut i: i32 = 0;
-    if (*(*ent).client).sess.sessionTeam as u32 == TEAM_SPECTATOR as i32 as u32
-    {
+    if (*(*ent).client).sess.sessionTeam as u32 == TEAM_SPECTATOR as i32 as u32 {
         SpectatorClientEndFrame(ent);
         return;
     }

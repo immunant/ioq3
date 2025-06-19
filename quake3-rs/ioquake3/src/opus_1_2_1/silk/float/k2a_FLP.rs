@@ -73,11 +73,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /* step up function, converts reflection coefficients to prediction coefficients */
 #[no_mangle]
 
-pub unsafe extern "C" fn silk_k2a_FLP(
-    mut A: *mut f32,
-    mut rc: *const f32,
-    mut order: opus_int32,
-)
+pub unsafe extern "C" fn silk_k2a_FLP(mut A: *mut f32, mut rc: *const f32, mut order: opus_int32)
 /* I     prediction order                                           */
 {
     let mut k: i32 = 0;

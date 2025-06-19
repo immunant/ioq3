@@ -127,28 +127,23 @@ pub static mut aasworld: aas_t = aas_t {
     numedges: 0,
     edges: 0 as *const aas_edge_t as *mut aas_edge_t,
     edgeindexsize: 0,
-    edgeindex: 0 as *const aas_edgeindex_t
-        as *mut aas_edgeindex_t,
+    edgeindex: 0 as *const aas_edgeindex_t as *mut aas_edgeindex_t,
     numfaces: 0,
     faces: 0 as *const aas_face_t as *mut aas_face_t,
     faceindexsize: 0,
-    faceindex: 0 as *const aas_faceindex_t
-        as *mut aas_faceindex_t,
+    faceindex: 0 as *const aas_faceindex_t as *mut aas_faceindex_t,
     numareas: 0,
     areas: 0 as *const aas_area_t as *mut aas_area_t,
     numareasettings: 0,
-    areasettings: 0 as *const aas_areasettings_t
-        as *mut aas_areasettings_t,
+    areasettings: 0 as *const aas_areasettings_t as *mut aas_areasettings_t,
     reachabilitysize: 0,
-    reachability: 0 as *const aas_reachability_t
-        as *mut aas_reachability_t,
+    reachability: 0 as *const aas_reachability_t as *mut aas_reachability_t,
     numnodes: 0,
     nodes: 0 as *const aas_node_t as *mut aas_node_t,
     numportals: 0,
     portals: 0 as *const aas_portal_t as *mut aas_portal_t,
     portalindexsize: 0,
-    portalindex: 0 as *const aas_portalindex_t
-        as *mut aas_portalindex_t,
+    portalindex: 0 as *const aas_portalindex_t as *mut aas_portalindex_t,
     numclusters: 0,
     clusters: 0 as *const aas_cluster_t as *mut aas_cluster_t,
     numreachabilityareas: 0,
@@ -156,40 +151,28 @@ pub static mut aasworld: aas_t = aas_t {
     linkheap: 0 as *const aas_link_t as *mut aas_link_t,
     linkheapsize: 0,
     freelinks: 0 as *const aas_link_t as *mut aas_link_t,
-    arealinkedentities: 0 as *const *mut aas_link_t
-        as *mut *mut aas_link_t,
+    arealinkedentities: 0 as *const *mut aas_link_t as *mut *mut aas_link_t,
     maxentities: 0,
     maxclients: 0,
-    entities: 0 as *const aas_entity_t
-        as *mut aas_entity_t,
+    entities: 0 as *const aas_entity_t as *mut aas_entity_t,
     travelflagfortype: [0; 32],
     areacontentstravelflags: 0 as *const i32 as *mut i32,
-    areaupdate: 0 as *const aas_routingupdate_t
-        as *mut aas_routingupdate_t,
-    portalupdate: 0 as *const aas_routingupdate_t
-        as *mut aas_routingupdate_t,
+    areaupdate: 0 as *const aas_routingupdate_t as *mut aas_routingupdate_t,
+    portalupdate: 0 as *const aas_routingupdate_t as *mut aas_routingupdate_t,
     frameroutingupdates: 0,
-    reversedreachability: 0 as *const aas_reversedreachability_t
-        as *mut aas_reversedreachability_t,
+    reversedreachability: 0 as *const aas_reversedreachability_t as *mut aas_reversedreachability_t,
     areatraveltimes: 0 as *const *mut *mut u16 as *mut *mut *mut u16,
-    clusterareacache: 0 as *const *mut *mut aas_routingcache_t
-        as *mut *mut *mut aas_routingcache_t,
-    portalcache: 0 as *const *mut aas_routingcache_t
-        as *mut *mut aas_routingcache_t,
-    oldestcache: 0 as *const aas_routingcache_t
-        as *mut aas_routingcache_t,
-    newestcache: 0 as *const aas_routingcache_t
-        as *mut aas_routingcache_t,
+    clusterareacache: 0 as *const *mut *mut aas_routingcache_t as *mut *mut *mut aas_routingcache_t,
+    portalcache: 0 as *const *mut aas_routingcache_t as *mut *mut aas_routingcache_t,
+    oldestcache: 0 as *const aas_routingcache_t as *mut aas_routingcache_t,
+    newestcache: 0 as *const aas_routingcache_t as *mut aas_routingcache_t,
     portalmaxtraveltimes: 0 as *const i32 as *mut i32,
     reachabilityareaindex: 0 as *const i32 as *mut i32,
-    reachabilityareas: 0 as *const aas_reachabilityareas_t
-        as *mut aas_reachabilityareas_t,
+    reachabilityareas: 0 as *const aas_reachabilityareas_t as *mut aas_reachabilityareas_t,
 };
 #[no_mangle]
 
-pub static mut saveroutingcache: *mut libvar_t = 0
-    as *const libvar_t
-    as *mut libvar_t;
+pub static mut saveroutingcache: *mut libvar_t = 0 as *const libvar_t as *mut libvar_t;
 //===========================================================================
 //
 // Parameter:				-
@@ -285,10 +268,7 @@ pub unsafe extern "C" fn AAS_ContinueInit(mut time: f32) {
     //if reachability has been calculated and an AAS file should be written
     //or there is a forced data optimization
     if aasworld.savefile != 0
-        || LibVarGetValue(
-            b"forcewrite\x00" as *const u8 as *const libc::c_char,
-        ) as i32
-            != 0
+        || LibVarGetValue(b"forcewrite\x00" as *const u8 as *const libc::c_char) as i32 != 0
     {
         //end if
         //optimize the AAS data
@@ -352,10 +332,7 @@ pub unsafe extern "C" fn AAS_StartFrame(mut time: f32) -> i32 {
     //
     if crate::src::botlib::be_interface::botDeveloper != 0 {
         //end if
-        if LibVarGetValue(
-            b"showcacheupdates\x00" as *const u8 as *const libc::c_char,
-        ) != 0.
-        {
+        if LibVarGetValue(b"showcacheupdates\x00" as *const u8 as *const libc::c_char) != 0. {
             crate::src::botlib::be_aas_route::AAS_RoutingInfo(); //end if
             LibVarSet(
                 b"showcacheupdates\x00" as *const u8 as *const libc::c_char,
@@ -363,20 +340,14 @@ pub unsafe extern "C" fn AAS_StartFrame(mut time: f32) -> i32 {
             );
         }
         //end if
-        if LibVarGetValue(
-            b"showmemoryusage\x00" as *const u8 as *const libc::c_char,
-        ) != 0.
-        {
+        if LibVarGetValue(b"showmemoryusage\x00" as *const u8 as *const libc::c_char) != 0. {
             crate::src::botlib::l_memory::PrintUsedMemorySize(); //end if
             LibVarSet(
                 b"showmemoryusage\x00" as *const u8 as *const libc::c_char,
                 b"0\x00" as *const u8 as *const libc::c_char,
             );
         }
-        if LibVarGetValue(
-            b"memorydump\x00" as *const u8 as *const libc::c_char,
-        ) != 0.
-        {
+        if LibVarGetValue(b"memorydump\x00" as *const u8 as *const libc::c_char) != 0. {
             crate::src::botlib::l_memory::PrintMemoryLabels();
             LibVarSet(
                 b"memorydump\x00" as *const u8 as *const libc::c_char,
@@ -579,9 +550,8 @@ pub unsafe extern "C" fn AAS_Setup() -> i32 {
         crate::src::botlib::l_memory::FreeMemory(aasworld.entities as *mut libc::c_void);
     }
     aasworld.entities = crate::src::botlib::l_memory::GetClearedHunkMemory(
-        (aasworld.maxentities as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            aas_entity_t,
-        >() as libc::c_ulong),
+        (aasworld.maxentities as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<aas_entity_t>() as libc::c_ulong),
     ) as *mut aas_entity_t;
     //invalidate all the entities
     crate::src::botlib::be_aas_entity::AAS_InvalidateEntities();

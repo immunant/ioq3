@@ -561,10 +561,7 @@ unsafe extern "C" fn emit_message(mut cinfo: j_common_ptr, mut msg_level: i32) {
  * Few applications should need to override this method.
  */
 
-unsafe extern "C" fn format_message(
-    mut cinfo: j_common_ptr,
-    mut buffer: *mut libc::c_char,
-) {
+unsafe extern "C" fn format_message(mut cinfo: j_common_ptr, mut buffer: *mut libc::c_char) {
     let mut err: *mut jpeg_error_mgr = (*cinfo).err;
     let mut msg_code: i32 = (*err).msg_code;
     let mut msgtext: *const libc::c_char = 0 as *const libc::c_char;
@@ -660,21 +657,13 @@ unsafe extern "C" fn reset_error_mgr(mut cinfo: j_common_ptr) {
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_std_error(
-    mut err: *mut jpeg_error_mgr,
-) -> *mut jpeg_error_mgr {
-    (*err).error_exit =
-        Some(error_exit as unsafe extern "C" fn(_: j_common_ptr) -> ()); /* default = no tracing */
-    (*err).emit_message =
-        Some(emit_message as unsafe extern "C" fn(_: j_common_ptr, _: i32) -> ()); /* no warnings emitted yet */
-    (*err).output_message =
-        Some(output_message as unsafe extern "C" fn(_: j_common_ptr) -> ()); /* may be useful as a flag for "no error" */
-    (*err).format_message = Some(
-        format_message
-            as unsafe extern "C" fn(_: j_common_ptr, _: *mut libc::c_char) -> (),
-    );
-    (*err).reset_error_mgr =
-        Some(reset_error_mgr as unsafe extern "C" fn(_: j_common_ptr) -> ());
+pub unsafe extern "C" fn jpeg_std_error(mut err: *mut jpeg_error_mgr) -> *mut jpeg_error_mgr {
+    (*err).error_exit = Some(error_exit as unsafe extern "C" fn(_: j_common_ptr) -> ()); /* default = no tracing */
+    (*err).emit_message = Some(emit_message as unsafe extern "C" fn(_: j_common_ptr, _: i32) -> ()); /* no warnings emitted yet */
+    (*err).output_message = Some(output_message as unsafe extern "C" fn(_: j_common_ptr) -> ()); /* may be useful as a flag for "no error" */
+    (*err).format_message =
+        Some(format_message as unsafe extern "C" fn(_: j_common_ptr, _: *mut libc::c_char) -> ());
+    (*err).reset_error_mgr = Some(reset_error_mgr as unsafe extern "C" fn(_: j_common_ptr) -> ());
     (*err).trace_level = 0 as i32;
     (*err).num_warnings = 0 as i32 as isize;
     (*err).msg_code = 0 as i32;

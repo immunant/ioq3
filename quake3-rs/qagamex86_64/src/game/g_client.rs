@@ -461,11 +461,7 @@ static mut playerMins: vec3_t = [
     -(24 as i32) as vec_t,
 ];
 
-static mut playerMaxs: vec3_t = [
-    15 as i32 as vec_t,
-    15 as i32 as vec_t,
-    32 as i32 as vec_t,
-];
+static mut playerMaxs: vec3_t = [15 as i32 as vec_t, 15 as i32 as vec_t, 32 as i32 as vec_t];
 /*QUAKED info_player_deathmatch (1 0 1) (-16 -16 -24) (16 16 32) initial
 potential spawning position for deathmatch games.
 The first time a player enters the game, they will be at an 'initial' spot.
@@ -525,9 +521,7 @@ SpotWouldTelefrag
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SpotWouldTelefrag(
-    mut spot: *mut gentity_t,
-) -> qboolean {
+pub unsafe extern "C" fn SpotWouldTelefrag(mut spot: *mut gentity_t) -> qboolean {
     let mut i: i32 = 0;
     let mut num: i32 = 0;
     let mut touch: [i32; 1024] = [0; 1024];
@@ -569,9 +563,7 @@ Find the spot that we DON'T want to use
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SelectNearestDeathmatchSpawnPoint(
-    mut from: *mut vec_t,
-) -> *mut gentity_t {
+pub unsafe extern "C" fn SelectNearestDeathmatchSpawnPoint(mut from: *mut vec_t) -> *mut gentity_t {
     let mut spot: *mut gentity_t = 0 as *mut gentity_t;
     let mut delta: vec3_t = [0.; 3];
     let mut dist: f32 = 0.;
@@ -583,8 +575,7 @@ pub unsafe extern "C" fn SelectNearestDeathmatchSpawnPoint(
     loop {
         spot = G_Find(
             spot as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char
-                as size_t as i32,
+            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
             b"info_player_deathmatch\x00" as *const u8 as *const libc::c_char,
         ) as *mut gentity_s;
         if spot.is_null() {
@@ -606,14 +597,11 @@ pub unsafe extern "C" fn SelectNearestDeathmatchSpawnPoint(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn SelectRandomDeathmatchSpawnPoint(
-    mut isbot: qboolean,
-) -> *mut gentity_t {
+pub unsafe extern "C" fn SelectRandomDeathmatchSpawnPoint(mut isbot: qboolean) -> *mut gentity_t {
     let mut spot: *mut gentity_t = 0 as *mut gentity_t;
     let mut count: i32 = 0;
     let mut selection: i32 = 0;
-    let mut spots: [*mut gentity_t; 128] =
-        [0 as *mut gentity_t; 128];
+    let mut spots: [*mut gentity_t; 128] = [0 as *mut gentity_t; 128];
     count = 0 as i32;
     spot = 0 as *mut gentity_t;
     loop
@@ -621,8 +609,7 @@ pub unsafe extern "C" fn SelectRandomDeathmatchSpawnPoint(
     {
         spot = G_Find(
             spot as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char
-                as size_t as i32,
+            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
             b"info_player_deathmatch\x00" as *const u8 as *const libc::c_char,
         ) as *mut gentity_s;
         if !(!spot.is_null() && count < 128 as i32) {
@@ -643,8 +630,7 @@ pub unsafe extern "C" fn SelectRandomDeathmatchSpawnPoint(
         // no spots that won't telefrag
         return G_Find(
             0 as *mut gentity_t as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char
-                as size_t as i32,
+            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
             b"info_player_deathmatch\x00" as *const u8 as *const libc::c_char,
         ) as *mut gentity_s;
     }
@@ -670,8 +656,7 @@ pub unsafe extern "C" fn SelectRandomFurthestSpawnPoint(
     let mut delta: vec3_t = [0.; 3];
     let mut dist: f32 = 0.;
     let mut list_dist: [f32; 128] = [0.; 128];
-    let mut list_spot: [*mut gentity_t; 128] =
-        [0 as *mut gentity_t; 128];
+    let mut list_spot: [*mut gentity_t; 128] = [0 as *mut gentity_t; 128];
     let mut numSpots: i32 = 0;
     let mut rnd: i32 = 0;
     let mut i: i32 = 0;
@@ -683,8 +668,7 @@ pub unsafe extern "C" fn SelectRandomFurthestSpawnPoint(
     {
         spot = G_Find(
             spot as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char
-                as size_t as i32,
+            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
             b"info_player_deathmatch\x00" as *const u8 as *const libc::c_char,
         ) as *mut gentity_s;
         if spot.is_null() {
@@ -734,14 +718,11 @@ pub unsafe extern "C" fn SelectRandomFurthestSpawnPoint(
     if numSpots == 0 {
         spot = G_Find(
             0 as *mut gentity_t as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char
-                as size_t as i32,
+            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
             b"info_player_deathmatch\x00" as *const u8 as *const libc::c_char,
         ) as *mut gentity_s;
         if spot.is_null() {
-            G_Error(
-                b"Couldn\'t find a spawn point\x00" as *const u8 as *const libc::c_char,
-            );
+            G_Error(b"Couldn\'t find a spawn point\x00" as *const u8 as *const libc::c_char);
         }
         *origin.offset(0 as i32 as isize) = (*spot).s.origin[0 as i32 as usize];
         *origin.offset(1 as i32 as isize) = (*spot).s.origin[1 as i32 as usize];
@@ -754,8 +735,8 @@ pub unsafe extern "C" fn SelectRandomFurthestSpawnPoint(
         return spot;
     }
     // select a random spot from the spawn points furthest away
-    rnd = ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
-        * (numSpots / 2 as i32) as f32) as i32;
+    rnd = ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * (numSpots / 2 as i32) as f32)
+        as i32;
     *origin.offset(0 as i32 as isize) = (*list_spot[rnd as usize]).s.origin[0 as i32 as usize];
     *origin.offset(1 as i32 as isize) = (*list_spot[rnd as usize]).s.origin[1 as i32 as usize];
     *origin.offset(2 as i32 as isize) = (*list_spot[rnd as usize]).s.origin[2 as i32 as usize];
@@ -830,8 +811,7 @@ pub unsafe extern "C" fn SelectInitialSpawnPoint(
     loop {
         spot = G_Find(
             spot as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char
-                as size_t as i32,
+            &mut (*(0 as *mut gentity_t)).classname as *mut *mut libc::c_char as size_t as i32,
             b"info_player_deathmatch\x00" as *const u8 as *const libc::c_char,
         ) as *mut gentity_s;
         if spot.is_null() {
@@ -847,12 +827,7 @@ pub unsafe extern "C" fn SelectInitialSpawnPoint(
         }
     }
     if spot.is_null() || SpotWouldTelefrag(spot) as u32 != 0 {
-        return SelectSpawnPoint(
-            vec3_origin.as_mut_ptr(),
-            origin,
-            angles,
-            isbot,
-        );
+        return SelectSpawnPoint(vec3_origin.as_mut_ptr(), origin, angles, isbot);
     }
     *origin.offset(0 as i32 as isize) = (*spot).s.origin[0 as i32 as usize];
     *origin.offset(1 as i32 as isize) = (*spot).s.origin[1 as i32 as usize];
@@ -877,18 +852,12 @@ pub unsafe extern "C" fn SelectSpectatorSpawnPoint(
     mut angles: *mut vec_t,
 ) -> *mut gentity_t {
     FindIntermissionPoint();
-    *origin.offset(0 as i32 as isize) =
-        level.intermission_origin[0 as i32 as usize];
-    *origin.offset(1 as i32 as isize) =
-        level.intermission_origin[1 as i32 as usize];
-    *origin.offset(2 as i32 as isize) =
-        level.intermission_origin[2 as i32 as usize];
-    *angles.offset(0 as i32 as isize) =
-        level.intermission_angle[0 as i32 as usize];
-    *angles.offset(1 as i32 as isize) =
-        level.intermission_angle[1 as i32 as usize];
-    *angles.offset(2 as i32 as isize) =
-        level.intermission_angle[2 as i32 as usize];
+    *origin.offset(0 as i32 as isize) = level.intermission_origin[0 as i32 as usize];
+    *origin.offset(1 as i32 as isize) = level.intermission_origin[1 as i32 as usize];
+    *origin.offset(2 as i32 as isize) = level.intermission_origin[2 as i32 as usize];
+    *angles.offset(0 as i32 as isize) = level.intermission_angle[0 as i32 as usize];
+    *angles.offset(1 as i32 as isize) = level.intermission_angle[1 as i32 as usize];
+    *angles.offset(2 as i32 as isize) = level.intermission_angle[2 as i32 as usize];
     return 0 as *mut gentity_t;
 }
 /*
@@ -952,24 +921,18 @@ pub unsafe extern "C" fn CopyToBodyQue(mut ent: *mut gentity_t) {
     let mut contents: i32 = 0;
     trap_UnlinkEntity(ent as *mut gentity_s);
     // if client is in a nodrop area, don't leave the body
-    contents = trap_PointContents(
-        (*ent).s.origin.as_mut_ptr() as *const vec_t,
-        -(1 as i32),
-    );
+    contents = trap_PointContents((*ent).s.origin.as_mut_ptr() as *const vec_t, -(1 as i32));
     if contents as u32 & 0x80000000 as u32 != 0 {
         return;
     }
     // grab a body que and cycle to the next one
-    body = level.bodyQue
-        [level.bodyQueIndex as usize]; // clear EF_TALK, etc
-    level.bodyQueIndex =
-        (level.bodyQueIndex + 1 as i32) % 8 as i32; // clear powerups
+    body = level.bodyQue[level.bodyQueIndex as usize]; // clear EF_TALK, etc
+    level.bodyQueIndex = (level.bodyQueIndex + 1 as i32) % 8 as i32; // clear powerups
     (*body).s = (*ent).s; // clear lava burning
     (*body).s.eFlags = 0x1 as i32; // don't bounce
     (*body).s.powerups = 0 as i32;
     (*body).s.loopSound = 0 as i32;
-    (*body).s.number =
-        body.offset_from(g_entities.as_mut_ptr()) as isize as i32;
+    (*body).s.number = body.offset_from(g_entities.as_mut_ptr()) as isize as i32;
     (*body).timestamp = level.time;
     (*body).physicsObject = qtrue;
     (*body).physicsBounce = 0 as i32 as f32;
@@ -1016,8 +979,7 @@ pub unsafe extern "C" fn CopyToBodyQue(mut ent: *mut gentity_t) {
     (*body).r.contents = 0x4000000 as i32;
     (*body).r.ownerNum = (*ent).s.number;
     (*body).nextthink = level.time + 5000 as i32;
-    (*body).think =
-        Some(BodySink as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+    (*body).think = Some(BodySink as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     (*body).die = Some(
         body_die
             as unsafe extern "C" fn(
@@ -1048,10 +1010,7 @@ SetClientViewAngle
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SetClientViewAngle(
-    mut ent: *mut gentity_t,
-    mut angle: *mut vec_t,
-) {
+pub unsafe extern "C" fn SetClientViewAngle(mut ent: *mut gentity_t, mut angle: *mut vec_t) {
     let mut i: i32 = 0;
     // set the delta angle
     i = 0 as i32;
@@ -1090,25 +1049,16 @@ Returns number of players on a team
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn TeamCount(
-    mut ignoreClientNum: i32,
-    mut team: team_t,
-) -> i32 {
+pub unsafe extern "C" fn TeamCount(mut ignoreClientNum: i32, mut team: team_t) -> i32 {
     let mut i: i32 = 0;
     let mut count: i32 = 0 as i32;
     i = 0 as i32;
     while i < level.maxclients {
         if !(i == ignoreClientNum) {
-            if !((*level.clients.offset(i as isize))
-                .pers
-                .connected as u32
+            if !((*level.clients.offset(i as isize)).pers.connected as u32
                 == CON_DISCONNECTED as i32 as u32)
             {
-                if (*level.clients.offset(i as isize))
-                    .sess
-                    .sessionTeam as u32
-                    == team as u32
-                {
+                if (*level.clients.offset(i as isize)).sess.sessionTeam as u32 == team as u32 {
                     count += 1
                 }
             }
@@ -1130,21 +1080,11 @@ pub unsafe extern "C" fn TeamLeader(mut team: i32) -> i32 {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < level.maxclients {
-        if !((*level.clients.offset(i as isize))
-            .pers
-            .connected as u32
+        if !((*level.clients.offset(i as isize)).pers.connected as u32
             == CON_DISCONNECTED as i32 as u32)
         {
-            if (*level.clients.offset(i as isize))
-                .sess
-                .sessionTeam as u32
-                == team as u32
-            {
-                if (*level.clients.offset(i as isize))
-                    .sess
-                    .teamLeader as u64
-                    != 0
-                {
+            if (*level.clients.offset(i as isize)).sess.sessionTeam as u32 == team as u32 {
+                if (*level.clients.offset(i as isize)).sess.teamLeader as u64 != 0 {
                     return i;
                 }
             }
@@ -1163,24 +1103,16 @@ PickTeam
 
 pub unsafe extern "C" fn PickTeam(mut ignoreClientNum: i32) -> team_t {
     let mut counts: [i32; 4] = [0; 4];
-    counts[TEAM_BLUE as i32 as usize] =
-        TeamCount(ignoreClientNum, TEAM_BLUE);
-    counts[TEAM_RED as i32 as usize] =
-        TeamCount(ignoreClientNum, TEAM_RED);
-    if counts[TEAM_BLUE as i32 as usize]
-        > counts[TEAM_RED as i32 as usize]
-    {
+    counts[TEAM_BLUE as i32 as usize] = TeamCount(ignoreClientNum, TEAM_BLUE);
+    counts[TEAM_RED as i32 as usize] = TeamCount(ignoreClientNum, TEAM_RED);
+    if counts[TEAM_BLUE as i32 as usize] > counts[TEAM_RED as i32 as usize] {
         return TEAM_RED;
     }
-    if counts[TEAM_RED as i32 as usize]
-        > counts[TEAM_BLUE as i32 as usize]
-    {
+    if counts[TEAM_RED as i32 as usize] > counts[TEAM_BLUE as i32 as usize] {
         return TEAM_BLUE;
     }
     // equal team count, so join the team with the lowest score
-    if level.teamScores[TEAM_BLUE as i32 as usize]
-        > level.teamScores[TEAM_RED as i32 as usize]
-    {
+    if level.teamScores[TEAM_BLUE as i32 as usize] > level.teamScores[TEAM_RED as i32 as usize] {
         return TEAM_RED;
     }
     return TEAM_BLUE;
@@ -1236,11 +1168,7 @@ unsafe extern "C" fn ClientCleanName(
         } else if outpos > 0 as i32
             && *out.offset((outpos - 1 as i32) as isize) as i32 == '^' as i32
         {
-            if Q_IsColorString(
-                &mut *out.offset((outpos - 1 as i32) as isize),
-            ) as u64
-                != 0
-            {
+            if Q_IsColorString(&mut *out.offset((outpos - 1 as i32) as isize)) as u64 != 0 {
                 colorlessLen -= 1;
                 if *in_0 as i32 - '0' as i32 & 0x7 as i32 == 0 as i32 {
                     // Disallow color black in names to prevent players
@@ -1304,9 +1232,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
     let mut redTeam: [libc::c_char; 1024] = [0; 1024];
     let mut blueTeam: [libc::c_char; 1024] = [0; 1024];
     let mut userinfo: [libc::c_char; 1024] = [0; 1024];
-    ent = g_entities
-        .as_mut_ptr()
-        .offset(clientNum as isize);
+    ent = g_entities.as_mut_ptr().offset(clientNum as isize);
     client = (*ent).client;
     trap_GetUserinfo(
         clientNum,
@@ -1351,9 +1277,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
     );
     if (*client).sess.sessionTeam as u32 == TEAM_SPECTATOR as i32 as u32 {
-        if (*client).sess.spectatorState as u32
-            == SPECTATOR_SCOREBOARD as i32 as u32
-        {
+        if (*client).sess.spectatorState as u32 == SPECTATOR_SCOREBOARD as i32 as u32 {
             Q_strncpyz(
                 (*client).pers.netname.as_mut_ptr(),
                 b"scoreboard\x00" as *const u8 as *const libc::c_char,
@@ -1383,8 +1307,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
     if (*client).pers.maxHealth < 1 as i32 || (*client).pers.maxHealth > 100 as i32 {
         (*client).pers.maxHealth = 100 as i32
     }
-    (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize] =
-        (*client).pers.maxHealth;
+    (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize] = (*client).pers.maxHealth;
     // set model
     if g_gametype.integer >= GT_TEAM as i32 {
         Q_strncpyz(
@@ -1526,10 +1449,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
                (*client).pers.maxHealth, (*client).sess.wins,
                (*client).sess.losses, teamTask, teamLeader)
     }
-    trap_SetConfigstring(
-        32 as i32 + 256 as i32 + 256 as i32 + clientNum,
-        s,
-    );
+    trap_SetConfigstring(32 as i32 + 256 as i32 + 256 as i32 + clientNum, s);
     // this is not the userinfo, more like the configstring actually
     G_LogPrintf(
         b"ClientUserinfoChanged: %i %s\n\x00" as *const u8 as *const libc::c_char,
@@ -1569,9 +1489,7 @@ pub unsafe extern "C" fn ClientConnect(
     let mut client: *mut gclient_t = 0 as *mut gclient_t;
     let mut userinfo: [libc::c_char; 1024] = [0; 1024];
     let mut ent: *mut gentity_t = 0 as *mut gentity_t;
-    ent = &mut *g_entities
-        .as_mut_ptr()
-        .offset(clientNum as isize) as *mut gentity_t;
+    ent = &mut *g_entities.as_mut_ptr().offset(clientNum as isize) as *mut gentity_t;
     trap_GetUserinfo(
         clientNum,
         userinfo.as_mut_ptr(),
@@ -1605,10 +1523,7 @@ pub unsafe extern "C" fn ClientConnect(
                 g_password.string.as_mut_ptr(),
                 b"none\x00" as *const u8 as *const libc::c_char,
             ) != 0
-            && libc::strcmp(
-                g_password.string.as_mut_ptr(),
-                value,
-            ) != 0 as i32
+            && libc::strcmp(g_password.string.as_mut_ptr(), value) != 0 as i32
         {
             return b"Invalid password\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char;
@@ -1624,9 +1539,7 @@ pub unsafe extern "C" fn ClientConnect(
         ClientDisconnect(clientNum);
     }
     // they can connect
-    (*ent).client = level
-        .clients
-        .offset(clientNum as isize);
+    (*ent).client = level.clients.offset(clientNum as isize);
     client = (*ent).client;
     //	areabits = client->areabits;
     crate::stdlib::memset(
@@ -1646,22 +1559,14 @@ pub unsafe extern "C" fn ClientConnect(
     if isBot as u64 != 0 {
         (*ent).r.svFlags |= 0x8 as i32;
         (*ent).inuse = qtrue;
-        if G_BotConnect(
-            clientNum,
-            (firstTime as u64 == 0) as i32 as qboolean,
-        ) as u64
-            == 0
-        {
+        if G_BotConnect(clientNum, (firstTime as u64 == 0) as i32 as qboolean) as u64 == 0 {
             return b"BotConnectfailed\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char;
         }
     }
     // read or initialize the session data
     if firstTime as u32 != 0 || level.newSession as u32 != 0 {
-        G_InitSessionData(
-            client as *mut gclient_s,
-            userinfo.as_mut_ptr(),
-        );
+        G_InitSessionData(client as *mut gclient_s, userinfo.as_mut_ptr());
     }
     G_ReadSessionData(client as *mut gclient_s);
     // get and distribute relevant parameters
@@ -1684,10 +1589,7 @@ pub unsafe extern "C" fn ClientConnect(
     if g_gametype.integer >= GT_TEAM as i32
         && (*client).sess.sessionTeam as u32 != TEAM_SPECTATOR as i32 as u32
     {
-        BroadcastTeamChange(
-            client as *mut gclient_s,
-            -(1 as i32),
-        );
+        BroadcastTeamChange(client as *mut gclient_s, -(1 as i32));
     }
     // count current clients and rank for scoreboard
     CalculateRanks();
@@ -1712,12 +1614,8 @@ pub unsafe extern "C" fn ClientBegin(mut clientNum: i32) {
     let mut ent: *mut gentity_t = 0 as *mut gentity_t;
     let mut client: *mut gclient_t = 0 as *mut gclient_t;
     let mut flags: i32 = 0;
-    ent = g_entities
-        .as_mut_ptr()
-        .offset(clientNum as isize);
-    client = level
-        .clients
-        .offset(clientNum as isize);
+    ent = g_entities.as_mut_ptr().offset(clientNum as isize);
+    client = level.clients.offset(clientNum as isize);
     if (*ent).r.linked as u64 != 0 {
         trap_UnlinkEntity(ent as *mut gentity_s);
     }
@@ -1743,8 +1641,7 @@ pub unsafe extern "C" fn ClientBegin(mut clientNum: i32) {
     // locate ent at a spawn point
     ClientSpawn(ent);
     if (*client).sess.sessionTeam as u32 != TEAM_SPECTATOR as i32 as u32 {
-        if g_gametype.integer != GT_TOURNAMENT as i32
-        {
+        if g_gametype.integer != GT_TOURNAMENT as i32 {
             trap_SendServerCommand(
                 -(1 as i32),
                 va(
@@ -1910,8 +1807,7 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut gentity_t) {
     (*client).ps.eventSequence = eventSequence;
     // increment the spawncount so the client will detect the respawn
     (*client).ps.persistant[PERS_SPAWN_COUNT as i32 as usize] += 1;
-    (*client).ps.persistant[PERS_TEAM as i32 as usize] =
-        (*client).sess.sessionTeam as i32;
+    (*client).ps.persistant[PERS_TEAM as i32 as usize] = (*client).sess.sessionTeam as i32;
     (*client).airOutTime = level.time + 12000 as i32;
     trap_GetUserinfo(
         index,
@@ -1927,13 +1823,10 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut gentity_t) {
         (*client).pers.maxHealth = 100 as i32
     }
     // clear entity values
-    (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize] =
-        (*client).pers.maxHealth;
+    (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize] = (*client).pers.maxHealth;
     (*client).ps.eFlags = flags;
     (*ent).s.groundEntityNum = ((1 as i32) << 10 as i32) - 1 as i32;
-    (*ent).client = &mut *level
-        .clients
-        .offset(index as isize) as *mut gclient_s;
+    (*ent).client = &mut *level.clients.offset(index as isize) as *mut gclient_s;
     (*ent).takedamage = qtrue;
     (*ent).inuse = qtrue;
     (*ent).classname = b"player\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
@@ -1959,25 +1852,20 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut gentity_t) {
     (*ent).r.maxs[1 as i32 as usize] = playerMaxs[1 as i32 as usize];
     (*ent).r.maxs[2 as i32 as usize] = playerMaxs[2 as i32 as usize];
     (*client).ps.clientNum = index;
-    (*client).ps.stats[STAT_WEAPONS as i32 as usize] =
-        (1 as i32) << WP_MACHINEGUN as i32;
+    (*client).ps.stats[STAT_WEAPONS as i32 as usize] = (1 as i32) << WP_MACHINEGUN as i32;
     if g_gametype.integer == GT_TEAM as i32 {
         (*client).ps.ammo[WP_MACHINEGUN as i32 as usize] = 50 as i32
     } else {
         (*client).ps.ammo[WP_MACHINEGUN as i32 as usize] = 100 as i32
     }
-    (*client).ps.stats[STAT_WEAPONS as i32 as usize] |=
-        (1 as i32) << WP_GAUNTLET as i32;
+    (*client).ps.stats[STAT_WEAPONS as i32 as usize] |= (1 as i32) << WP_GAUNTLET as i32;
     (*client).ps.ammo[WP_GAUNTLET as i32 as usize] = -(1 as i32);
     (*client).ps.ammo[WP_GRAPPLING_HOOK as i32 as usize] = -(1 as i32);
     // health will count down towards max_health
     (*client).ps.stats[STAT_HEALTH as i32 as usize] =
         (*client).ps.stats[STAT_MAX_HEALTH as i32 as usize] + 25 as i32;
     (*ent).health = (*client).ps.stats[STAT_HEALTH as i32 as usize];
-    G_SetOrigin(
-        ent as *mut gentity_s,
-        spawn_origin.as_mut_ptr(),
-    );
+    G_SetOrigin(ent as *mut gentity_s, spawn_origin.as_mut_ptr());
     (*client).ps.origin[0 as i32 as usize] = spawn_origin[0 as i32 as usize];
     (*client).ps.origin[1 as i32 as usize] = spawn_origin[1 as i32 as usize];
     (*client).ps.origin[2 as i32 as usize] = spawn_origin[2 as i32 as usize];
@@ -1992,33 +1880,24 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut gentity_t) {
     (*client).ps.pm_flags |= 64 as i32;
     (*client).ps.pm_time = 100 as i32;
     (*client).respawnTime = level.time;
-    (*client).inactivityTime = level.time
-        + g_inactivity.integer * 1000 as i32;
+    (*client).inactivityTime = level.time + g_inactivity.integer * 1000 as i32;
     (*client).latched_buttons = 0 as i32;
     // set default animations
     (*client).ps.torsoAnim = TORSO_STAND as i32;
     (*client).ps.legsAnim = LEGS_IDLE as i32;
     if level.intermissiontime == 0 {
-        if (*(*ent).client).sess.sessionTeam as u32
-            != TEAM_SPECTATOR as i32 as u32
-        {
+        if (*(*ent).client).sess.sessionTeam as u32 != TEAM_SPECTATOR as i32 as u32 {
             G_KillBox(ent as *mut gentity_s);
             // force the base weapon up
             (*client).ps.weapon = WP_MACHINEGUN as i32;
             (*client).ps.weaponstate = WEAPON_READY as i32;
             // fire the targets of the spawn point
-            G_UseTargets(
-                spawnPoint as *mut gentity_s,
-                ent as *mut gentity_s,
-            );
+            G_UseTargets(spawnPoint as *mut gentity_s, ent as *mut gentity_s);
             // select the highest weapon number available, after any spawn given items have fired
             (*client).ps.weapon = 1 as i32;
             i = WP_NUM_WEAPONS as i32 - 1 as i32;
             while i > 0 as i32 {
-                if (*client).ps.stats[STAT_WEAPONS as i32 as usize]
-                    & (1 as i32) << i
-                    != 0
-                {
+                if (*client).ps.stats[STAT_WEAPONS as i32 as usize] & (1 as i32) << i != 0 {
                     (*client).ps.weapon = i;
                     break;
                 } else {
@@ -2047,14 +1926,10 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut gentity_t) {
     // initialize animations and other things
     (*client).ps.commandTime = level.time - 100 as i32;
     (*(*ent).client).pers.cmd.serverTime = level.time;
-    ClientThink(
-        ent.offset_from(g_entities.as_mut_ptr()) as isize as i32,
-    );
+    ClientThink(ent.offset_from(g_entities.as_mut_ptr()) as isize as i32);
     // run the presend to set anything else, follow spectators wait
     // until all clients have been reconnected after map_restart
-    if (*(*ent).client).sess.spectatorState as u32
-        != SPECTATOR_FOLLOW as i32 as u32
-    {
+    if (*(*ent).client).sess.spectatorState as u32 != SPECTATOR_FOLLOW as i32 as u32 {
         ClientEndFrame(ent as *mut gentity_s);
     }
     // clear entity state values
@@ -2300,44 +2175,30 @@ pub unsafe extern "C" fn ClientDisconnect(mut clientNum: i32) {
     // cleanup if we are kicking a bot that
     // hasn't spawned yet
     G_RemoveQueuedBotBegin(clientNum);
-    ent = g_entities
-        .as_mut_ptr()
-        .offset(clientNum as isize);
+    ent = g_entities.as_mut_ptr().offset(clientNum as isize);
     if (*ent).client.is_null()
-        || (*(*ent).client).pers.connected as u32
-            == CON_DISCONNECTED as i32 as u32
+        || (*(*ent).client).pers.connected as u32 == CON_DISCONNECTED as i32 as u32
     {
         return;
     }
     // stop any following clients
     i = 0 as i32;
     while i < level.maxclients {
-        if (*level.clients.offset(i as isize))
-            .sess
-            .sessionTeam as u32
+        if (*level.clients.offset(i as isize)).sess.sessionTeam as u32
             == TEAM_SPECTATOR as i32 as u32
-            && (*level.clients.offset(i as isize))
-                .sess
-                .spectatorState as u32
+            && (*level.clients.offset(i as isize)).sess.spectatorState as u32
                 == SPECTATOR_FOLLOW as i32 as u32
-            && (*level.clients.offset(i as isize))
-                .sess
-                .spectatorClient
-                == clientNum
+            && (*level.clients.offset(i as isize)).sess.spectatorClient == clientNum
         {
             StopFollowing(
-                &mut *g_entities
-                    .as_mut_ptr()
-                    .offset(i as isize) as *mut _
-                    as *mut gentity_s,
+                &mut *g_entities.as_mut_ptr().offset(i as isize) as *mut _ as *mut gentity_s
             );
         }
         i += 1
     }
     // send effect if they were completely connected
     if (*(*ent).client).pers.connected as u32 == CON_CONNECTED as i32 as u32
-        && (*(*ent).client).sess.sessionTeam as u32
-            != TEAM_SPECTATOR as i32 as u32
+        && (*(*ent).client).sess.sessionTeam as u32 != TEAM_SPECTATOR as i32 as u32
     {
         tent = G_TempEntity(
             (*(*ent).client).ps.origin.as_mut_ptr(),
@@ -2383,8 +2244,7 @@ pub unsafe extern "C" fn ClientDisconnect(mut clientNum: i32) {
     (*ent).inuse = qfalse;
     (*ent).classname = b"disconnected\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*(*ent).client).pers.connected = CON_DISCONNECTED;
-    (*(*ent).client).ps.persistant[PERS_TEAM as i32 as usize] =
-        TEAM_FREE as i32;
+    (*(*ent).client).ps.persistant[PERS_TEAM as i32 as usize] = TEAM_FREE as i32;
     (*(*ent).client).sess.sessionTeam = TEAM_FREE;
     trap_SetConfigstring(
         32 as i32 + 256 as i32 + 256 as i32 + clientNum,
@@ -2392,9 +2252,6 @@ pub unsafe extern "C" fn ClientDisconnect(mut clientNum: i32) {
     );
     CalculateRanks();
     if (*ent).r.svFlags & 0x8 as i32 != 0 {
-        BotAIShutdownClient(
-            clientNum,
-            qfalse,
-        );
+        BotAIShutdownClient(clientNum, qfalse);
     };
 }

@@ -222,8 +222,7 @@ unsafe extern "C" fn alloc_funny_pointers(mut cinfo: j_decompress_ptr)
     let mut ci: i32 = 0;
     let mut rgroup: i32 = 0;
     let mut M: i32 = (*cinfo).min_DCT_v_scaled_size;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut xbuf: JSAMPARRAY = 0 as *mut JSAMPROW;
     /* Get top-level space for component array pointers.
      * We alloc both arrays with one call to save a few cycles.
@@ -284,8 +283,7 @@ unsafe extern "C" fn make_funny_pointers(mut cinfo: j_decompress_ptr)
     let mut i: i32 = 0;
     let mut rgroup: i32 = 0;
     let mut M: i32 = (*cinfo).min_DCT_v_scaled_size;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut buf: JSAMPARRAY = 0 as *mut JSAMPROW;
     let mut xbuf0: JSAMPARRAY = 0 as *mut JSAMPROW;
     let mut xbuf1: JSAMPARRAY = 0 as *mut JSAMPROW;
@@ -341,8 +339,7 @@ unsafe extern "C" fn set_wraparound_pointers(mut cinfo: j_decompress_ptr)
     let mut i: i32 = 0;
     let mut rgroup: i32 = 0;
     let mut M: i32 = (*cinfo).min_DCT_v_scaled_size;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut xbuf0: JSAMPARRAY = 0 as *mut JSAMPROW;
     let mut xbuf1: JSAMPARRAY = 0 as *mut JSAMPROW;
     ci = 0 as i32;
@@ -381,8 +378,7 @@ unsafe extern "C" fn set_bottom_pointers(mut cinfo: j_decompress_ptr)
     let mut rgroup: i32 = 0;
     let mut iMCUheight: i32 = 0;
     let mut rows_left: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut xbuf: JSAMPARRAY = 0 as *mut JSAMPROW;
     ci = 0 as i32;
     compptr = (*cinfo).comp_info;
@@ -401,8 +397,7 @@ unsafe extern "C" fn set_bottom_pointers(mut cinfo: j_decompress_ptr)
          * so we need only do it once.
          */
         if ci == 0 as i32 {
-            (*main_ptr).rowgroups_avail =
-                ((rows_left - 1 as i32) / rgroup + 1 as i32) as JDIMENSION
+            (*main_ptr).rowgroups_avail = ((rows_left - 1 as i32) / rgroup + 1 as i32) as JDIMENSION
         }
         /* Duplicate the last real sample row rgroup*2 times; this pads out the
          * last partial rowgroup and ensures at least one full rowgroup of context.
@@ -422,10 +417,7 @@ unsafe extern "C" fn set_bottom_pointers(mut cinfo: j_decompress_ptr)
  * Initialize for a processing pass.
  */
 
-unsafe extern "C" fn start_pass_main(
-    mut cinfo: j_decompress_ptr,
-    mut pass_mode: J_BUF_MODE,
-) {
+unsafe extern "C" fn start_pass_main(mut cinfo: j_decompress_ptr, mut pass_mode: J_BUF_MODE) {
     let mut main_ptr: my_main_ptr = (*cinfo).main as my_main_ptr; /* Create the xbuffer[] lists */
     match pass_mode as u32 {
         0 => {
@@ -477,9 +469,7 @@ unsafe extern "C" fn start_pass_main(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
     };
 }
@@ -618,8 +608,7 @@ unsafe extern "C" fn process_data_context_main(
         /* Prepare to process first M-1 row groups of this iMCU row */
         {
             (*main_ptr).rowgroup_ctr = 0 as i32 as JDIMENSION;
-            (*main_ptr).rowgroups_avail =
-                ((*cinfo).min_DCT_v_scaled_size - 1 as i32) as JDIMENSION;
+            (*main_ptr).rowgroups_avail = ((*cinfo).min_DCT_v_scaled_size - 1 as i32) as JDIMENSION;
             /* Check for bottom of image: if so, tweak pointers to "duplicate"
              * the last sample row, and adjust rowgroups_avail to ignore padding rows.
              */
@@ -662,10 +651,8 @@ unsafe extern "C" fn process_data_context_main(
             (*main_ptr).buffer_full = 0 as i32;
             /* Still need to process last row group of this iMCU row, */
             /* which is saved at index M+1 of the other xbuffer */
-            (*main_ptr).rowgroup_ctr =
-                ((*cinfo).min_DCT_v_scaled_size + 1 as i32) as JDIMENSION;
-            (*main_ptr).rowgroups_avail =
-                ((*cinfo).min_DCT_v_scaled_size + 2 as i32) as JDIMENSION;
+            (*main_ptr).rowgroup_ctr = ((*cinfo).min_DCT_v_scaled_size + 1 as i32) as JDIMENSION;
+            (*main_ptr).rowgroups_avail = ((*cinfo).min_DCT_v_scaled_size + 2 as i32) as JDIMENSION;
             (*main_ptr).context_state = 2 as i32
         }
         _ => {}
@@ -731,8 +718,7 @@ pub unsafe extern "C" fn jinit_d_main_controller(
     let mut ci: i32 = 0;
     let mut rgroup: i32 = 0;
     let mut ngroups: i32 = 0;
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     main_ptr = Some(
         (*(*cinfo).mem)
             .alloc_small
@@ -744,13 +730,8 @@ pub unsafe extern "C" fn jinit_d_main_controller(
         ::std::mem::size_of::<my_main_controller>() as libc::c_ulong,
     ) as my_main_ptr;
     (*cinfo).main = main_ptr as *mut jpeg_d_main_controller;
-    (*main_ptr).pub_0.start_pass = Some(
-        start_pass_main
-            as unsafe extern "C" fn(
-                _: j_decompress_ptr,
-                _: J_BUF_MODE,
-            ) -> (),
-    );
+    (*main_ptr).pub_0.start_pass =
+        Some(start_pass_main as unsafe extern "C" fn(_: j_decompress_ptr, _: J_BUF_MODE) -> ());
     if need_full_buffer != 0 {
         /* shouldn't happen */
         (*(*cinfo).err).msg_code = JERR_BAD_BUFFER_MODE as i32;
@@ -773,9 +754,7 @@ pub unsafe extern "C" fn jinit_d_main_controller(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            ); /* height of a row group of component */
+            .expect("non-null function pointer")(cinfo as j_common_ptr); /* height of a row group of component */
         }
         alloc_funny_pointers(cinfo);
         ngroups = (*cinfo).min_DCT_v_scaled_size + 2 as i32

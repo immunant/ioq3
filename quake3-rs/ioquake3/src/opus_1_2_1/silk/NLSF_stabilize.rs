@@ -386,9 +386,8 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
             *NLSF_Q15.offset(0 as i32 as isize) = *NDeltaMin_Q15.offset(0 as i32 as isize)
         } else if I == L {
             /* Move away from higher limit */
-            *NLSF_Q15.offset((L - 1 as i32) as isize) = (((1 as i32) << 15 as i32)
-                - *NDeltaMin_Q15.offset(L as isize) as i32)
-                as opus_int16
+            *NLSF_Q15.offset((L - 1 as i32) as isize) =
+                (((1 as i32) << 15 as i32) - *NDeltaMin_Q15.offset(L as isize) as i32) as opus_int16
         } else {
             /* Find the lower extreme for the location of the current center frequency */
             min_center_Q15 = 0 as i32;
@@ -412,8 +411,7 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
                     (*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
                         + *NLSF_Q15.offset(I as isize) as opus_int32
                         >> 1 as i32)
-                        + (*NLSF_Q15.offset((I - 1 as i32) as isize)
-                            as opus_int32
+                        + (*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
                             + *NLSF_Q15.offset(I as isize) as opus_int32
                             & 1 as i32)
                 } else {
@@ -429,8 +427,7 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
                     (*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
                         + *NLSF_Q15.offset(I as isize) as opus_int32
                         >> 1 as i32)
-                        + (*NLSF_Q15.offset((I - 1 as i32) as isize)
-                            as opus_int32
+                        + (*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
                             + *NLSF_Q15.offset(I as isize) as opus_int32
                             & 1 as i32)
                 } else {
@@ -446,8 +443,7 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
                     (*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
                         + *NLSF_Q15.offset(I as isize) as opus_int32
                         >> 1 as i32)
-                        + (*NLSF_Q15.offset((I - 1 as i32) as isize)
-                            as opus_int32
+                        + (*NLSF_Q15.offset((I - 1 as i32) as isize) as opus_int32
                             + *NLSF_Q15.offset(I as isize) as opus_int32
                             & 1 as i32)
                 } else {
@@ -536,8 +532,7 @@ pub unsafe extern "C" fn silk_NLSF_stabilize(
                     > 0x7fff as i32
                 {
                     0x7fff as i32
-                } else if (*NLSF_Q15.offset((i - 1 as i32) as isize)
-                    as opus_int32
+                } else if (*NLSF_Q15.offset((i - 1 as i32) as isize) as opus_int32
                     + *NDeltaMin_Q15.offset(i as isize) as i32)
                     < 0x8000 as i32 as opus_int16 as i32
                 {

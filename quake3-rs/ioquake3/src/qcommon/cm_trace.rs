@@ -298,10 +298,7 @@ RotatePoint
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RotatePoint(
-    mut point: *mut vec_t,
-    mut matrix: *mut vec3_t,
-) {
+pub unsafe extern "C" fn RotatePoint(mut point: *mut vec_t, mut matrix: *mut vec3_t) {
     // FIXME
     let mut tvec: vec3_t = [0.; 3];
     tvec[0 as i32 as usize] = *point.offset(0 as i32 as isize);
@@ -327,10 +324,7 @@ TransposeMatrix
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn TransposeMatrix(
-    mut matrix: *mut vec3_t,
-    mut transpose: *mut vec3_t,
-) {
+pub unsafe extern "C" fn TransposeMatrix(mut matrix: *mut vec3_t, mut transpose: *mut vec3_t) {
     // FIXME
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -351,10 +345,7 @@ CreateRotationMatrix
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CreateRotationMatrix(
-    mut angles: *const vec_t,
-    mut matrix: *mut vec3_t,
-) {
+pub unsafe extern "C" fn CreateRotationMatrix(mut angles: *const vec_t, mut matrix: *mut vec3_t) {
     AngleVectors(
         angles,
         (*matrix.offset(0 as i32 as isize)).as_mut_ptr(),
@@ -450,10 +441,7 @@ CM_VectorDistanceSquared
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_VectorDistanceSquared(
-    mut p1: *mut vec_t,
-    mut p2: *mut vec_t,
-) -> f32 {
+pub unsafe extern "C" fn CM_VectorDistanceSquared(mut p1: *mut vec_t, mut p2: *mut vec_t) -> f32 {
     let mut dir: vec3_t = [0.; 3];
     dir[0 as i32 as usize] = *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
     dir[1 as i32 as usize] = *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
@@ -468,8 +456,7 @@ SquareRootFloat
 #[no_mangle]
 
 pub unsafe extern "C" fn SquareRootFloat(mut number: f32) -> f32 {
-    let mut t: floatint_t =
-        floatint_t { f: 0. };
+    let mut t: floatint_t = floatint_t { f: 0. };
     let mut x: f32 = 0.;
     let mut y: f32 = 0.;
     let f: f32 = 1.5f32;
@@ -495,13 +482,9 @@ CM_TestBoxInBrush
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_TestBoxInBrush(
-    mut tw: *mut traceWork_t,
-    mut brush: *mut cbrush_t,
-) {
+pub unsafe extern "C" fn CM_TestBoxInBrush(mut tw: *mut traceWork_t, mut brush: *mut cbrush_t) {
     let mut i: i32 = 0;
-    let mut plane: *mut cplane_t =
-        0 as *mut cplane_t;
+    let mut plane: *mut cplane_t = 0 as *mut cplane_t;
     let mut dist: f32 = 0.;
     let mut d1: f32 = 0.;
     let mut side: *mut cbrushside_t = 0 as *mut cbrushside_t;
@@ -603,10 +586,7 @@ CM_TestInLeaf
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_TestInLeaf(
-    mut tw: *mut traceWork_t,
-    mut leaf: *mut cLeaf_t,
-) {
+pub unsafe extern "C" fn CM_TestInLeaf(mut tw: *mut traceWork_t, mut leaf: *mut cLeaf_t) {
     let mut k: i32 = 0;
     let mut brushnum: i32 = 0;
     let mut b: *mut cbrush_t = 0 as *mut cbrush_t;
@@ -614,12 +594,8 @@ pub unsafe extern "C" fn CM_TestInLeaf(
     // test box position against all brushes in the leaf
     k = 0 as i32;
     while k < (*leaf).numLeafBrushes {
-        brushnum = *cm
-            .leafbrushes
-            .offset(((*leaf).firstLeafBrush + k) as isize);
-        b = &mut *cm
-            .brushes
-            .offset(brushnum as isize) as *mut cbrush_t;
+        brushnum = *cm.leafbrushes.offset(((*leaf).firstLeafBrush + k) as isize);
+        b = &mut *cm.brushes.offset(brushnum as isize) as *mut cbrush_t;
         if !((*b).checkcount == cm.checkcount) {
             (*b).checkcount = cm.checkcount;
             if !((*b).contents & (*tw).contents == 0) {
@@ -638,18 +614,14 @@ pub unsafe extern "C" fn CM_TestInLeaf(
         k = 0 as i32;
         while k < (*leaf).numLeafSurfaces {
             patch = *cm.surfaces.offset(
-                *cm
-                    .leafsurfaces
+                *cm.leafsurfaces
                     .offset(((*leaf).firstLeafSurface + k) as isize) as isize,
             );
             if !patch.is_null() {
                 if !((*patch).checkcount == cm.checkcount) {
                     (*patch).checkcount = cm.checkcount;
                     if !((*patch).contents & (*tw).contents == 0) {
-                        if CM_PositionTestInPatchCollide(
-                            tw as *mut traceWork_t,
-                            (*patch).pc,
-                        ) as u64
+                        if CM_PositionTestInPatchCollide(tw as *mut traceWork_t, (*patch).pc) as u64
                             != 0
                         {
                             (*tw).trace.allsolid = qtrue;
@@ -709,8 +681,7 @@ pub unsafe extern "C" fn CM_TestCapsuleInCapsule(
         (*tw).start[2 as i32 as usize] - (*tw).sphere.offset[2 as i32 as usize];
     i = 0 as i32;
     while i < 3 as i32 {
-        offset[i as usize] = ((mins[i as usize] + maxs[i as usize]) as f64 * 0.5f64)
-            as vec_t;
+        offset[i as usize] = ((mins[i as usize] + maxs[i as usize]) as f64 * 0.5f64) as vec_t;
         symetricSize[0 as i32 as usize][i as usize] = mins[i as usize] - offset[i as usize];
         symetricSize[1 as i32 as usize][i as usize] = maxs[i as usize] - offset[i as usize];
         i += 1
@@ -778,8 +749,7 @@ pub unsafe extern "C" fn CM_TestCapsuleInCapsule(
         tmp[0 as i32 as usize] = top[0 as i32 as usize] - p1[0 as i32 as usize];
         tmp[1 as i32 as usize] = top[1 as i32 as usize] - p1[1 as i32 as usize];
         tmp[2 as i32 as usize] = top[2 as i32 as usize] - p1[2 as i32 as usize];
-        if VectorLengthSquared(tmp.as_mut_ptr() as *const vec_t) < r
-        {
+        if VectorLengthSquared(tmp.as_mut_ptr() as *const vec_t) < r {
             (*tw).trace.allsolid = qtrue;
             (*tw).trace.startsolid = (*tw).trace.allsolid;
             (*tw).trace.fraction = 0 as i32 as f32
@@ -811,8 +781,7 @@ pub unsafe extern "C" fn CM_TestBoundingBoxInCapsule(
     // offset for capsule center
     i = 0 as i32;
     while i < 3 as i32 {
-        offset[i as usize] = ((mins[i as usize] + maxs[i as usize]) as f64 * 0.5f64)
-            as vec_t;
+        offset[i as usize] = ((mins[i as usize] + maxs[i as usize]) as f64 * 0.5f64) as vec_t;
         size[0 as i32 as usize][i as usize] = mins[i as usize] - offset[i as usize];
         size[1 as i32 as usize][i as usize] = maxs[i as usize] - offset[i as usize];
         (*tw).start[i as usize] -= offset[i as usize];
@@ -840,8 +809,7 @@ pub unsafe extern "C" fn CM_TestBoundingBoxInCapsule(
         qfalse as i32,
     );
     // calculate collision
-    cmod =
-        CM_ClipHandleToModel(h) as *mut cmodel_s;
+    cmod = CM_ClipHandleToModel(h) as *mut cmodel_s;
     CM_TestInLeaf(tw, &mut (*cmod).leaf);
 }
 #[no_mangle]
@@ -880,17 +848,11 @@ pub unsafe extern "C" fn CM_PositionTest(mut tw: *mut traceWork_t) {
     ll.count = 0 as i32;
     ll.maxcount = 1024 as i32;
     ll.list = leafs.as_mut_ptr();
-    ll.storeLeafs = Some(
-        CM_StoreLeafs
-            as unsafe extern "C" fn(_: *mut leafList_t, _: i32) -> (),
-    );
+    ll.storeLeafs = Some(CM_StoreLeafs as unsafe extern "C" fn(_: *mut leafList_t, _: i32) -> ());
     ll.lastLeaf = 0 as i32;
     ll.overflowed = qfalse;
     cm.checkcount += 1;
-    CM_BoxLeafnums_r(
-        &mut ll as *mut _ as *mut leafList_s,
-        0 as i32,
-    );
+    CM_BoxLeafnums_r(&mut ll as *mut _ as *mut leafList_s, 0 as i32);
     cm.checkcount += 1;
     // test the contents of the leafs
     i = 0 as i32;
@@ -921,17 +883,11 @@ CM_TraceThroughPatch
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_TraceThroughPatch(
-    mut tw: *mut traceWork_t,
-    mut patch: *mut cPatch_t,
-) {
+pub unsafe extern "C" fn CM_TraceThroughPatch(mut tw: *mut traceWork_t, mut patch: *mut cPatch_t) {
     let mut oldFrac: f32 = 0.;
     c_patch_traces += 1;
     oldFrac = (*tw).trace.fraction;
-    CM_TraceThroughPatchCollide(
-        tw as *mut traceWork_t,
-        (*patch).pc,
-    );
+    CM_TraceThroughPatchCollide(tw as *mut traceWork_t, (*patch).pc);
     if (*tw).trace.fraction < oldFrac {
         (*tw).trace.surfaceFlags = (*patch).surfaceFlags;
         (*tw).trace.contents = (*patch).contents
@@ -944,27 +900,20 @@ CM_TraceThroughBrush
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_TraceThroughBrush(
-    mut tw: *mut traceWork_t,
-    mut brush: *mut cbrush_t,
-) {
+pub unsafe extern "C" fn CM_TraceThroughBrush(mut tw: *mut traceWork_t, mut brush: *mut cbrush_t) {
     let mut i: i32 = 0;
-    let mut plane: *mut cplane_t =
-        0 as *mut cplane_t;
-    let mut clipplane: *mut cplane_t =
-        0 as *mut cplane_t;
+    let mut plane: *mut cplane_t = 0 as *mut cplane_t;
+    let mut clipplane: *mut cplane_t = 0 as *mut cplane_t;
     let mut dist: f32 = 0.;
     let mut enterFrac: f32 = 0.;
     let mut leaveFrac: f32 = 0.;
     let mut d1: f32 = 0.;
     let mut d2: f32 = 0.;
     let mut getout: qboolean = qfalse;
-    let mut startout: qboolean =
-        qfalse;
+    let mut startout: qboolean = qfalse;
     let mut f: f32 = 0.;
     let mut side: *mut cbrushside_t = 0 as *mut cbrushside_t;
-    let mut leadside: *mut cbrushside_t =
-        0 as *mut cbrushside_t;
+    let mut leadside: *mut cbrushside_t = 0 as *mut cbrushside_t;
     let mut t: f32 = 0.;
     let mut startp: vec3_t = [0.; 3];
     let mut endp: vec3_t = [0.; 3];
@@ -1167,10 +1116,7 @@ CM_TraceThroughLeaf
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_TraceThroughLeaf(
-    mut tw: *mut traceWork_t,
-    mut leaf: *mut cLeaf_t,
-) {
+pub unsafe extern "C" fn CM_TraceThroughLeaf(mut tw: *mut traceWork_t, mut leaf: *mut cLeaf_t) {
     let mut k: i32 = 0;
     let mut brushnum: i32 = 0;
     let mut b: *mut cbrush_t = 0 as *mut cbrush_t;
@@ -1178,24 +1124,16 @@ pub unsafe extern "C" fn CM_TraceThroughLeaf(
     // trace line against all brushes in the leaf
     k = 0 as i32;
     while k < (*leaf).numLeafBrushes {
-        brushnum = *cm
-            .leafbrushes
-            .offset(((*leaf).firstLeafBrush + k) as isize);
-        b = &mut *cm
-            .brushes
-            .offset(brushnum as isize) as *mut cbrush_t;
+        brushnum = *cm.leafbrushes.offset(((*leaf).firstLeafBrush + k) as isize);
+        b = &mut *cm.brushes.offset(brushnum as isize) as *mut cbrush_t;
         if !((*b).checkcount == cm.checkcount) {
             (*b).checkcount = cm.checkcount;
             if !((*b).contents & (*tw).contents == 0) {
                 if !(CM_BoundsIntersect(
-                    (*tw).bounds[0 as i32 as usize].as_mut_ptr()
-                        as *const vec_t,
-                    (*tw).bounds[1 as i32 as usize].as_mut_ptr()
-                        as *const vec_t,
-                    (*b).bounds[0 as i32 as usize].as_mut_ptr()
-                        as *const vec_t,
-                    (*b).bounds[1 as i32 as usize].as_mut_ptr()
-                        as *const vec_t,
+                    (*tw).bounds[0 as i32 as usize].as_mut_ptr() as *const vec_t,
+                    (*tw).bounds[1 as i32 as usize].as_mut_ptr() as *const vec_t,
+                    (*b).bounds[0 as i32 as usize].as_mut_ptr() as *const vec_t,
+                    (*b).bounds[1 as i32 as usize].as_mut_ptr() as *const vec_t,
                 ) as u64
                     == 0)
                 {
@@ -1214,8 +1152,7 @@ pub unsafe extern "C" fn CM_TraceThroughLeaf(
         k = 0 as i32;
         while k < (*leaf).numLeafSurfaces {
             patch = *cm.surfaces.offset(
-                *cm
-                    .leafsurfaces
+                *cm.leafsurfaces
                     .offset(((*leaf).firstLeafSurface + k) as isize) as isize,
             );
             if !patch.is_null() {
@@ -1430,9 +1367,7 @@ pub unsafe extern "C" fn CM_TraceThroughVerticalCylinder(
             dir[0 as i32 as usize] = end2d[0 as i32 as usize] - org2d[0 as i32 as usize];
             dir[1 as i32 as usize] = end2d[1 as i32 as usize] - org2d[1 as i32 as usize];
             dir[2 as i32 as usize] = end2d[2 as i32 as usize] - org2d[2 as i32 as usize];
-            l1 = VectorLengthSquared(
-                dir.as_mut_ptr() as *const vec_t
-            );
+            l1 = VectorLengthSquared(dir.as_mut_ptr() as *const vec_t);
             if l1 < radius * radius {
                 (*tw).trace.allsolid = qtrue
             }
@@ -1610,8 +1545,7 @@ pub unsafe extern "C" fn CM_TraceCapsuleThroughCapsule(
     // calculate top and bottom of the capsule spheres to collide with
     i = 0 as i32;
     while i < 3 as i32 {
-        offset[i as usize] = ((mins[i as usize] + maxs[i as usize]) as f64 * 0.5f64)
-            as vec_t;
+        offset[i as usize] = ((mins[i as usize] + maxs[i as usize]) as f64 * 0.5f64) as vec_t;
         symetricSize[0 as i32 as usize][i as usize] = mins[i as usize] - offset[i as usize];
         symetricSize[1 as i32 as usize][i as usize] = maxs[i as usize] - offset[i as usize];
         i += 1
@@ -1694,8 +1628,7 @@ pub unsafe extern "C" fn CM_TraceBoundingBoxThroughCapsule(
     // offset for capsule center
     i = 0 as i32;
     while i < 3 as i32 {
-        offset[i as usize] = ((mins[i as usize] + maxs[i as usize]) as f64 * 0.5f64)
-            as vec_t;
+        offset[i as usize] = ((mins[i as usize] + maxs[i as usize]) as f64 * 0.5f64) as vec_t;
         size[0 as i32 as usize][i as usize] = mins[i as usize] - offset[i as usize];
         size[1 as i32 as usize][i as usize] = maxs[i as usize] - offset[i as usize];
         (*tw).start[i as usize] -= offset[i as usize];
@@ -1723,8 +1656,7 @@ pub unsafe extern "C" fn CM_TraceBoundingBoxThroughCapsule(
         qfalse as i32,
     );
     // calculate collision
-    cmod =
-        CM_ClipHandleToModel(h) as *mut cmodel_s;
+    cmod = CM_ClipHandleToModel(h) as *mut cmodel_s;
     CM_TraceThroughLeaf(tw, &mut (*cmod).leaf);
 }
 //=========================================================================================
@@ -1749,8 +1681,7 @@ pub unsafe extern "C" fn CM_TraceThroughTree(
     mut p2: *mut vec_t,
 ) {
     let mut node: *mut cNode_t = 0 as *mut cNode_t;
-    let mut plane: *mut cplane_t =
-        0 as *mut cplane_t;
+    let mut plane: *mut cplane_t = 0 as *mut cplane_t;
     let mut t1: f32 = 0.;
     let mut t2: f32 = 0.;
     let mut offset: f32 = 0.;
@@ -1766,12 +1697,7 @@ pub unsafe extern "C" fn CM_TraceThroughTree(
     }
     // if < 0, we are in a leaf node
     if num < 0 as i32 {
-        CM_TraceThroughLeaf(
-            tw,
-            &mut *cm
-                .leafs
-                .offset((-(1 as i32) - num) as isize),
-        );
+        CM_TraceThroughLeaf(tw, &mut *cm.leafs.offset((-(1 as i32) - num) as isize));
         return;
     }
     //
@@ -1928,8 +1854,7 @@ pub unsafe extern "C" fn CM_Trace(
     }; // for statistics, may be zeroed
     let mut offset: vec3_t = [0.; 3];
     let mut cmod: *mut cmodel_t = 0 as *mut cmodel_t;
-    cmod = CM_ClipHandleToModel(model)
-        as *mut cmodel_s;
+    cmod = CM_ClipHandleToModel(model) as *mut cmodel_s;
     cm.checkcount += 1;
     c_traces += 1;
     // fill in a default trace
@@ -1961,8 +1886,8 @@ pub unsafe extern "C" fn CM_Trace(
     // bmodels
     i = 0 as i32;
     while i < 3 as i32 {
-        offset[i as usize] = ((*mins.offset(i as isize) + *maxs.offset(i as isize)) as f64 * 0.5f64)
-            as vec_t;
+        offset[i as usize] =
+            ((*mins.offset(i as isize) + *maxs.offset(i as isize)) as f64 * 0.5f64) as vec_t;
         tw.size[0 as i32 as usize][i as usize] = *mins.offset(i as isize) - offset[i as usize];
         tw.size[1 as i32 as usize][i as usize] = *maxs.offset(i as isize) - offset[i as usize];
         tw.start[i as usize] = *start.offset(i as isize) + offset[i as usize];
@@ -2188,8 +2113,7 @@ pub unsafe extern "C" fn CM_BoxTrace(
         mins,
         maxs,
         model,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
         brushmask,
         capsule,
         0 as *mut sphere_t,
@@ -2240,27 +2164,25 @@ pub unsafe extern "C" fn CM_TransformedBoxTrace(
     mut angles: *const vec_t,
     mut capsule: i32,
 ) {
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     let mut start_l: vec3_t = [0.; 3];
     let mut end_l: vec3_t = [0.; 3];
-    let mut rotated: qboolean =
-        qfalse;
+    let mut rotated: qboolean = qfalse;
     let mut offset: vec3_t = [0.; 3];
     let mut symetricSize: [vec3_t; 2] = [[0.; 3]; 2];
     let mut matrix: [vec3_t; 3] = [[0.; 3]; 3];
@@ -2286,8 +2208,8 @@ pub unsafe extern "C" fn CM_TransformedBoxTrace(
     // bmodels
     i = 0 as i32;
     while i < 3 as i32 {
-        offset[i as usize] = ((*mins.offset(i as isize) + *maxs.offset(i as isize)) as f64 * 0.5f64)
-            as vec_t;
+        offset[i as usize] =
+            ((*mins.offset(i as isize) + *maxs.offset(i as isize)) as f64 * 0.5f64) as vec_t;
         symetricSize[0 as i32 as usize][i as usize] = *mins.offset(i as isize) - offset[i as usize];
         symetricSize[1 as i32 as usize][i as usize] = *maxs.offset(i as isize) - offset[i as usize];
         start_l[i as usize] = *start.offset(i as isize) + offset[i as usize];

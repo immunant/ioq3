@@ -122,11 +122,7 @@ pub use ::libc::mkdir;
 pub use ::libc::mkfifo;
 
 pub type dialogCommandBuilder_t = Option<
-    unsafe extern "C" fn(
-        _: dialogType_t,
-        _: *const libc::c_char,
-        _: *const libc::c_char,
-    ) -> (),
+    unsafe extern "C" fn(_: dialogType_t, _: *const libc::c_char, _: *const libc::c_char) -> (),
 >;
 
 pub const NONE: dialogCommandType_t = 0;
@@ -163,8 +159,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #[no_mangle]
 
-pub static mut stdinIsATTY: qboolean =
-    qfalse;
+pub static mut stdinIsATTY: qboolean = qfalse;
 // Used to determine where to store user-specific files
 
 static mut homePath: [libc::c_char; 4096] = [
@@ -12484,11 +12479,7 @@ pub unsafe extern "C" fn Sys_DefaultHomePath() -> *mut libc::c_char {
                 p,
                 '/' as i32,
             );
-            if *(*com_homepath)
-                .string
-                .offset(0 as i32 as isize)
-                != 0
-            {
+            if *(*com_homepath).string.offset(0 as i32 as isize) != 0 {
                 Q_strcat(
                     homePath.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
@@ -12572,10 +12563,7 @@ Sys_RandomBytes
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Sys_RandomBytes(
-    mut string: *mut byte,
-    mut len: i32,
-) -> qboolean {
+pub unsafe extern "C" fn Sys_RandomBytes(mut string: *mut byte, mut len: i32) -> qboolean {
     let mut fp: *mut FILE = 0 as *mut FILE; // don't buffer reads from /dev/urandom
     fp = fopen(
         b"/dev/urandom\x00" as *const u8 as *const libc::c_char,
@@ -12584,12 +12572,7 @@ pub unsafe extern "C" fn Sys_RandomBytes(
     if fp.is_null() {
         return qfalse;
     }
-    setvbuf(
-        fp,
-        0 as *mut libc::c_char,
-        2 as i32,
-        0 as i32 as size_t,
-    );
+    setvbuf(fp, 0 as *mut libc::c_char, 2 as i32, 0 as i32 as size_t);
     if fread(
         string as *mut libc::c_void,
         ::std::mem::size_of::<byte>() as libc::c_ulong,
@@ -12701,13 +12684,10 @@ Sys_Mkdir
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Sys_Mkdir(
-    mut path: *const libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn Sys_Mkdir(mut path: *const libc::c_char) -> qboolean {
     let mut result: i32 = mkdir(path, 0o750 as i32 as __mode_t);
     if result != 0 as i32 {
-        return (*libc::__errno_location() == 17 as i32) as i32
-            as qboolean;
+        return (*libc::__errno_location() == 17 as i32) as i32 as qboolean;
     }
     return qtrue;
 }
@@ -12906,12 +12886,7 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
             subdirs,
             (*d).d_name.as_mut_ptr(),
         );
-        if Com_FilterPath(
-            filter,
-            filename.as_mut_ptr(),
-            qfalse as i32,
-        ) == 0
-        {
+        if Com_FilterPath(filter, filename.as_mut_ptr(), qfalse as i32) == 0 {
             continue;
         }
         let ref mut fresh0 = *list.offset(*numfiles as isize);
@@ -13121,8 +13096,8 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
         let fresh8;
         let fresh9 = (::std::mem::size_of::<fd_set>() as libc::c_ulong)
             .wrapping_div(::std::mem::size_of::<__fd_mask>() as libc::c_ulong);
-        let fresh10 = &mut *fdset.__fds_bits.as_mut_ptr().offset(0 as i32 as isize)
-            as *mut __fd_mask;
+        let fresh10 =
+            &mut *fdset.__fds_bits.as_mut_ptr().offset(0 as i32 as isize) as *mut __fd_mask;
         asm!("cld; rep; stosq" : "={cx}" (fresh6), "={di}" (fresh8) : "{ax}"
      (0 as i32), "0"
      (c2rust_asm_casts::AsmCast::cast_in(fresh5, fresh9)), "1"
@@ -13131,12 +13106,9 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
         c2rust_asm_casts::AsmCast::cast_out(fresh5, fresh9, fresh6);
         c2rust_asm_casts::AsmCast::cast_out(fresh7, fresh10, fresh8);
         fdset.__fds_bits[(0 as i32
-            / (8 as i32
-                * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+            / (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
             as usize] |= ((1 as libc::c_ulong)
-            << 0 as i32
-                % (8 as i32
-                    * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
+            << 0 as i32 % (8 as i32 * ::std::mem::size_of::<__fd_mask>() as libc::c_ulong as i32))
             as __fd_mask;
         if msec < 0 as i32 {
             select(
@@ -13152,8 +13124,8 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
                 tv_usec: 0,
             };
             timeout.tv_sec = ((msec / 1000 as i32) as __time_t) as libc::time_t;
-            timeout.tv_usec = ((msec % 1000 as i32 * 1000 as i32) as __suseconds_t)
-                as libc::suseconds_t;
+            timeout.tv_usec =
+                ((msec % 1000 as i32 * 1000 as i32) as __suseconds_t) as libc::suseconds_t;
             select(
                 0 as i32 + 1 as i32,
                 &mut fdset,
@@ -13183,20 +13155,17 @@ pub unsafe extern "C" fn Sys_ErrorDialog(mut error: *const libc::c_char) {
     let mut buffer: [libc::c_char; 1024] = [0; 1024];
     let mut size: u32 = 0;
     let mut f: i32 = -(1 as i32);
-    let mut homepath: *const libc::c_char = Cvar_VariableString(
-        b"fs_homepath\x00" as *const u8 as *const libc::c_char,
-    );
-    let mut gamedir: *const libc::c_char = Cvar_VariableString(
-        b"fs_game\x00" as *const u8 as *const libc::c_char,
-    );
+    let mut homepath: *const libc::c_char =
+        Cvar_VariableString(b"fs_homepath\x00" as *const u8 as *const libc::c_char);
+    let mut gamedir: *const libc::c_char =
+        Cvar_VariableString(b"fs_game\x00" as *const u8 as *const libc::c_char);
     let mut fileName: *const libc::c_char = b"crashlog.txt\x00" as *const u8 as *const libc::c_char;
     let mut dirpath: *mut libc::c_char = FS_BuildOSPath(
         homepath,
         gamedir,
         b"\x00" as *const u8 as *const libc::c_char,
     );
-    let mut ospath: *mut libc::c_char =
-        FS_BuildOSPath(homepath, gamedir, fileName);
+    let mut ospath: *mut libc::c_char = FS_BuildOSPath(homepath, gamedir, fileName);
     Sys_Print(va(
         b"%s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         error,
@@ -13299,8 +13268,8 @@ Sys_AppendToExecBuffer
 */
 
 unsafe extern "C" fn Sys_AppendToExecBuffer(mut text: *const libc::c_char) {
-    let mut size: size_t =
-        (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong).wrapping_sub(
+    let mut size: size_t = (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
+        .wrapping_sub(
             execBufferPointer.offset_from(execBuffer.as_mut_ptr()) as isize as libc::c_ulong,
         );
     let mut length: i32 =
@@ -13471,12 +13440,7 @@ pub unsafe extern "C" fn Sys_Dialog(
 ) -> dialogResult_t {
     let mut session: *const libc::c_char =
         libc::getenv(b"DESKTOP_SESSION\x00" as *const u8 as *const libc::c_char);
-    let mut tried: [qboolean; 4] = [
-        qfalse,
-        qfalse,
-        qfalse,
-        qfalse,
-    ];
+    let mut tried: [qboolean; 4] = [qfalse, qfalse, qfalse, qfalse];
     let mut commands: [dialogCommandBuilder_t; 4] = [None, None, None, None];
     let mut preferredCommandType: dialogCommandType_t = NONE;
     let mut i: i32 = 0;
@@ -13505,17 +13469,9 @@ pub unsafe extern "C" fn Sys_Dialog(
             ) -> (),
     );
     // This may not be the best way
-    if Q_stricmp(
-        session,
-        b"gnome\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    if Q_stricmp(session, b"gnome\x00" as *const u8 as *const libc::c_char) == 0 {
         preferredCommandType = ZENITY
-    } else if Q_stricmp(
-        session,
-        b"kde\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    } else if Q_stricmp(session, b"kde\x00" as *const u8 as *const libc::c_char) == 0 {
         preferredCommandType = KDIALOG
     }
     i = NONE as i32 + 1 as i32;
@@ -13534,16 +13490,14 @@ pub unsafe extern "C" fn Sys_Dialog(
                                 DR_NO as i32
                             } else {
                                 DR_YES as i32
-                            }
-                                as dialogResult_t
+                            } as dialogResult_t
                         }
                         4 => {
                             return if exitCode != 0 {
                                 DR_CANCEL as i32
                             } else {
                                 DR_OK as i32
-                            }
-                                as dialogResult_t
+                            } as dialogResult_t
                         }
                         _ => return DR_OK,
                     }
@@ -13558,9 +13512,7 @@ pub unsafe extern "C" fn Sys_Dialog(
         }
         i += 1
     }
-    Com_DPrintf(
-        b"^3WARNING: failed to show a dialog\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_DPrintf(b"^3WARNING: failed to show a dialog\n\x00" as *const u8 as *const libc::c_char);
     return DR_OK;
 }
 /*
@@ -13607,46 +13559,31 @@ pub unsafe extern "C" fn Sys_PlatformInit() {
         libc::getenv(b"TERM\x00" as *const u8 as *const libc::c_char);
     signal(
         1 as i32,
-        ::std::mem::transmute::<
-            Option<unsafe extern "C" fn(_: i32) -> !>,
-            __sighandler_t,
-        >(Some(
+        ::std::mem::transmute::<Option<unsafe extern "C" fn(_: i32) -> !>, __sighandler_t>(Some(
             crate::src::sys::sys_main::Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
         )),
     );
     signal(
         3 as i32,
-        ::std::mem::transmute::<
-            Option<unsafe extern "C" fn(_: i32) -> !>,
-            __sighandler_t,
-        >(Some(
+        ::std::mem::transmute::<Option<unsafe extern "C" fn(_: i32) -> !>, __sighandler_t>(Some(
             crate::src::sys::sys_main::Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
         )),
     );
     signal(
         5 as i32,
-        ::std::mem::transmute::<
-            Option<unsafe extern "C" fn(_: i32) -> !>,
-            __sighandler_t,
-        >(Some(
+        ::std::mem::transmute::<Option<unsafe extern "C" fn(_: i32) -> !>, __sighandler_t>(Some(
             crate::src::sys::sys_main::Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
         )),
     );
     signal(
         6 as i32,
-        ::std::mem::transmute::<
-            Option<unsafe extern "C" fn(_: i32) -> !>,
-            __sighandler_t,
-        >(Some(
+        ::std::mem::transmute::<Option<unsafe extern "C" fn(_: i32) -> !>, __sighandler_t>(Some(
             crate::src::sys::sys_main::Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
         )),
     );
     signal(
         7 as i32,
-        ::std::mem::transmute::<
-            Option<unsafe extern "C" fn(_: i32) -> !>,
-            __sighandler_t,
-        >(Some(
+        ::std::mem::transmute::<Option<unsafe extern "C" fn(_: i32) -> !>, __sighandler_t>(Some(
             crate::src::sys::sys_main::Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
         )),
     );
@@ -13701,8 +13638,7 @@ Sys_PIDIsRunning
 #[no_mangle]
 
 pub unsafe extern "C" fn Sys_PIDIsRunning(mut pid: i32) -> qboolean {
-    return (kill(pid, 0 as i32) == 0 as i32) as i32
-        as qboolean;
+    return (kill(pid, 0 as i32) == 0 as i32) as i32 as qboolean;
 }
 /*
 =================
@@ -13713,17 +13649,10 @@ Check if filename should be allowed to be loaded as a DLL.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Sys_DllExtension(
-    mut name: *const libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn Sys_DllExtension(mut name: *const libc::c_char) -> qboolean {
     let mut p: *const libc::c_char = 0 as *const libc::c_char;
     let mut c: libc::c_char = 0 as i32 as libc::c_char;
-    if COM_CompareExtension(
-        name,
-        b".so\x00" as *const u8 as *const libc::c_char,
-    ) as u64
-        != 0
-    {
+    if COM_CompareExtension(name, b".so\x00" as *const u8 as *const libc::c_char) as u64 != 0 {
         return qtrue;
     }
     // Check for format of filename.so.1.2.3
@@ -13734,8 +13663,7 @@ pub unsafe extern "C" fn Sys_DllExtension(
         // Check if .so is only followed for periods and numbers.
         while *p != 0 {
             c = *p;
-            if *(*__ctype_b_loc()).offset(c as i32 as isize) as i32
-                & _ISdigit as i32 as u16 as i32
+            if *(*__ctype_b_loc()).offset(c as i32 as isize) as i32 & _ISdigit as i32 as u16 as i32
                 == 0
                 && c as i32 != '.' as i32
             {

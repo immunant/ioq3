@@ -120,18 +120,15 @@ x86_64:
 
 */
 
-static mut buf: *mut byte =
-    0 as *const byte as *mut byte;
+static mut buf: *mut byte = 0 as *const byte as *mut byte;
 
-static mut jused: *mut byte =
-    0 as *const byte as *mut byte;
+static mut jused: *mut byte = 0 as *const byte as *mut byte;
 
 static mut jusedSize: i32 = 0 as i32;
 
 static mut compiledOfs: i32 = 0 as i32;
 
-static mut code: *mut byte =
-    0 as *const byte as *mut byte;
+static mut code: *mut byte = 0 as *const byte as *mut byte;
 
 static mut pc: i32 = 0 as i32;
 
@@ -240,10 +237,7 @@ unsafe extern "C" fn EmitString(mut string: *const libc::c_char) {
     }
 }
 
-unsafe extern "C" fn EmitRexString(
-    mut rex: byte,
-    mut string: *const libc::c_char,
-) {
+unsafe extern "C" fn EmitRexString(mut rex: byte, mut string: *const libc::c_char) {
     if rex != 0 {
         Emit1(rex as i32);
     }
@@ -639,10 +633,7 @@ VM OP_CALL procedure for call destinations obtained at runtime
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn EmitCallProcedure(
-    mut vm: *mut vm_t,
-    mut sysCallOfs: i32,
-) -> i32 {
+pub unsafe extern "C" fn EmitCallProcedure(mut vm: *mut vm_t, mut sysCallOfs: i32) -> i32 {
     let mut jmpSystemCall: i32 = 0; // mov eax, dword ptr [edi + ebx * 4]
     let mut jmpBadAddr: i32 = 0; // sub bl, 1
     let mut retval: i32 = 0; // test eax, eax
@@ -670,13 +661,11 @@ pub unsafe extern "C" fn EmitCallProcedure(
     EmitString(b"8B 04 9F\x00" as *const u8 as *const libc::c_char);
     EmitString(b"C3\x00" as *const u8 as *const libc::c_char);
     // badAddr:
-    *buf.offset(jmpBadAddr as isize) =
-        (compiledOfs - (jmpBadAddr + 1 as i32)) as byte;
+    *buf.offset(jmpBadAddr as isize) = (compiledOfs - (jmpBadAddr + 1 as i32)) as byte;
     EmitCallErrJump(vm, sysCallOfs);
     /* *********** System Call ************/
     // systemCall:
-    *buf.offset(jmpSystemCall as isize) =
-        (compiledOfs - (jmpSystemCall + 1 as i32)) as byte;
+    *buf.offset(jmpSystemCall as isize) = (compiledOfs - (jmpSystemCall + 1 as i32)) as byte;
     retval = compiledOfs;
     EmitCallRel(vm, sysCallOfs);
     // have opStack reg point at return value
@@ -866,10 +855,7 @@ instead of opStack operations, which will save expensive operations on memory
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn ConstOptimize(
-    mut vm: *mut vm_t,
-    mut callProcOfsSyscall: i32,
-) -> qboolean {
+pub unsafe extern "C" fn ConstOptimize(mut vm: *mut vm_t, mut callProcOfsSyscall: i32) -> qboolean {
     let mut v: i32 = 0;
     let mut op1: i32 = 0;
     // we can safely perform optimizations only in case if
@@ -1142,10 +1128,7 @@ VM_Compile
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn VM_Compile(
-    mut vm: *mut vm_t,
-    mut header: *mut vmHeader_t,
-) {
+pub unsafe extern "C" fn VM_Compile(mut vm: *mut vm_t, mut header: *mut vmHeader_t) {
     let mut op: i32 = 0;
     let mut maxLength: i32 = 0;
     let mut v: i32 = 0;
@@ -1156,12 +1139,9 @@ pub unsafe extern "C" fn VM_Compile(
     jusedSize = (*header).instructionCount + 2 as i32;
     // allocate a very large temp buffer, we will shrink it later
     maxLength = (*header).codeLength * 8 as i32 + 64 as i32;
-    buf = Z_Malloc(maxLength)
-        as *mut byte;
-    jused = Z_Malloc(jusedSize)
-        as *mut byte;
-    code = Z_Malloc((*header).codeLength + 32 as i32)
-        as *mut byte;
+    buf = Z_Malloc(maxLength) as *mut byte;
+    jused = Z_Malloc(jusedSize) as *mut byte;
+    code = Z_Malloc((*header).codeLength + 32 as i32) as *mut byte;
     crate::stdlib::memset(
         jused as *mut libc::c_void,
         0 as i32,
@@ -1182,8 +1162,7 @@ pub unsafe extern "C" fn VM_Compile(
     );
     crate::stdlib::memcpy(
         code as *mut libc::c_void,
-        (header as *mut byte).offset((*header).codeOffset as isize)
-            as *const libc::c_void,
+        (header as *mut byte).offset((*header).codeOffset as isize) as *const libc::c_void,
         (*header).codeLength as libc::c_ulong,
     );
     // ensure that the optimisation pass knows about all the jump
@@ -1246,8 +1225,7 @@ pub unsafe extern "C" fn VM_Compile(
                     b"VM_CompileX86: maxLength exceeded\x00" as *const u8 as *const libc::c_char,
                 ); // mov dword ptr [edi + ebx * 4], eax
             } // mov eax, dword ptr [edi + ebx * 4]
-            *(*vm).instructionPointers.offset(instruction as isize) =
-                compiledOfs as intptr_t; // mov edx, esi
+            *(*vm).instructionPointers.offset(instruction as isize) = compiledOfs as intptr_t; // mov edx, esi
             if (*vm).jumpTableTargets.is_null() {
                 jlabel = 1 as i32
             } else {
@@ -1292,8 +1270,7 @@ pub unsafe extern "C" fn VM_Compile(
                                     pc,
                                 );
                             }
-                            *jused.offset(lastConst as isize) =
-                                1 as i32 as byte
+                            *jused.offset(lastConst as isize) = 1 as i32 as byte
                         }
                     }
                 }
@@ -1336,20 +1313,14 @@ pub unsafe extern "C" fn VM_Compile(
                 }
                 29 => {
                     if *code.offset(pc as isize) as i32 == OP_CONST as i32
-                        && *code.offset((pc + 5 as i32) as isize) as i32
-                            == OP_ADD as i32
-                        && *code.offset((pc + 6 as i32) as isize) as i32
-                            == OP_STORE4 as i32
+                        && *code.offset((pc + 5 as i32) as isize) as i32 == OP_ADD as i32
+                        && *code.offset((pc + 6 as i32) as isize) as i32 == OP_STORE4 as i32
                     {
-                        if oc0 == oc1
-                            && pop0 == OP_LOCAL as i32
-                            && pop1 == OP_LOCAL as i32
-                        {
+                        if oc0 == oc1 && pop0 == OP_LOCAL as i32 && pop1 == OP_LOCAL as i32 {
                             compiledOfs -= 12 as i32;
                             *(*vm)
                                 .instructionPointers
-                                .offset((instruction - 1 as i32) as isize) =
-                                compiledOfs as intptr_t
+                                .offset((instruction - 1 as i32) as isize) = compiledOfs as intptr_t
                         }
                         pc += 1;
                         v = Constant4();
@@ -1371,10 +1342,7 @@ pub unsafe extern "C" fn VM_Compile(
                             ); // mov eax, dword ptr [r9 + edx]
                             EmitString(b"05\x00" as *const u8 as *const libc::c_char); // add eax, v
                             Emit4(v);
-                            if oc0 == oc1
-                                && pop0 == OP_LOCAL as i32
-                                && pop1 == OP_LOCAL as i32
-                            {
+                            if oc0 == oc1 && pop0 == OP_LOCAL as i32 && pop1 == OP_LOCAL as i32 {
                                 EmitRexString(
                                     0x41 as i32 as byte,
                                     b"89 04 11\x00" as *const u8 as *const libc::c_char,
@@ -1398,20 +1366,14 @@ pub unsafe extern "C" fn VM_Compile(
                         pc += 1;
                         instruction += 3 as i32
                     } else if *code.offset(pc as isize) as i32 == OP_CONST as i32
-                        && *code.offset((pc + 5 as i32) as isize) as i32
-                            == OP_SUB as i32
-                        && *code.offset((pc + 6 as i32) as isize) as i32
-                            == OP_STORE4 as i32
+                        && *code.offset((pc + 5 as i32) as isize) as i32 == OP_SUB as i32
+                        && *code.offset((pc + 6 as i32) as isize) as i32 == OP_STORE4 as i32
                     {
-                        if oc0 == oc1
-                            && pop0 == OP_LOCAL as i32
-                            && pop1 == OP_LOCAL as i32
-                        {
+                        if oc0 == oc1 && pop0 == OP_LOCAL as i32 && pop1 == OP_LOCAL as i32 {
                             compiledOfs -= 12 as i32;
                             *(*vm)
                                 .instructionPointers
-                                .offset((instruction - 1 as i32) as isize) =
-                                compiledOfs as intptr_t
+                                .offset((instruction - 1 as i32) as isize) = compiledOfs as intptr_t
                         }
                         pc += 1;
                         v = Constant4();
@@ -1433,10 +1395,7 @@ pub unsafe extern "C" fn VM_Compile(
                             ); // mov eax, dword ptr [r9 + edx]
                             EmitString(b"2D\x00" as *const u8 as *const libc::c_char); // sub eax, v
                             Emit4(v);
-                            if oc0 == oc1
-                                && pop0 == OP_LOCAL as i32
-                                && pop1 == OP_LOCAL as i32
-                            {
+                            if oc0 == oc1 && pop0 == OP_LOCAL as i32 && pop1 == OP_LOCAL as i32 {
                                 EmitRexString(
                                     0x41 as i32 as byte,
                                     b"89 04 11\x00" as *const u8 as *const libc::c_char,
@@ -1466,8 +1425,7 @@ pub unsafe extern "C" fn VM_Compile(
                         compiledOfs -= 3 as i32; // mov dword ptr [edi + ebx * 4], eax
                         *(*vm)
                             .instructionPointers
-                            .offset((instruction - 1 as i32) as isize) =
-                            compiledOfs as intptr_t; // movzx eax, word ptr [r9 + eax]
+                            .offset((instruction - 1 as i32) as isize) = compiledOfs as intptr_t; // movzx eax, word ptr [r9 + eax]
                         EmitString(b"81\x00" as *const u8 as *const libc::c_char); // mov dword ptr [edi + ebx * 4], eax
                         EmitString(b"E0\x00" as *const u8 as *const libc::c_char); // movzx eax, byte ptr [r9 + eax]
                         Emit4((*vm).dataMask); // mov dword ptr [edi + ebx * 4], eax
@@ -1796,9 +1754,7 @@ pub unsafe extern "C" fn VM_Compile(
         -(1 as i32),
         0 as i32 as __off_t,
     ) as *mut byte;
-    if (*vm).codeBase
-        == -(1 as i32) as *mut libc::c_void as *mut byte
-    {
+    if (*vm).codeBase == -(1 as i32) as *mut libc::c_void as *mut byte {
         Com_Error(
             ERR_FATAL as i32,
             b"VM_CompileX86: can\'t mmap memory\x00" as *const u8 as *const libc::c_char,
@@ -1828,8 +1784,7 @@ pub unsafe extern "C" fn VM_Compile(
         (*vm).name.as_mut_ptr(),
         compiledOfs,
     );
-    (*vm).destroy =
-        Some(VM_Destroy_Compiled as unsafe extern "C" fn(_: *mut vm_t) -> ());
+    (*vm).destroy = Some(VM_Destroy_Compiled as unsafe extern "C" fn(_: *mut vm_t) -> ());
     // offset all the instruction pointers for the new location
     i = 0 as i32;
     while i < (*header).instructionCount {
@@ -1925,16 +1880,12 @@ This function is called directly by the generated code
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn VM_CallCompiled(
-    mut vm: *mut vm_t,
-    mut args: *mut i32,
-) -> i32 {
+pub unsafe extern "C" fn VM_CallCompiled(mut vm: *mut vm_t, mut args: *mut i32) -> i32 {
     let mut stack: [byte; 1039] = [0; 1039];
     let mut entryPoint: *mut libc::c_void = 0 as *mut libc::c_void;
     let mut programStack: i32 = 0;
     let mut stackOnEntry: i32 = 0;
-    let mut image: *mut byte =
-        0 as *mut byte;
+    let mut image: *mut byte = 0 as *mut byte;
     let mut opStack: *mut i32 = 0 as *mut i32;
     let mut opStackOfs: i32 = 0;
     let mut arg: i32 = 0;
@@ -1949,18 +1900,15 @@ pub unsafe extern "C" fn VM_CallCompiled(
     programStack -= 8 as i32 + 4 as i32 * 13 as i32; // will terminate the loop on return
     arg = 0 as i32;
     while arg < 13 as i32 {
-        *(&mut *image.offset((programStack + 8 as i32 + arg * 4 as i32) as isize)
-            as *mut byte as *mut i32) = *args.offset(arg as isize);
+        *(&mut *image.offset((programStack + 8 as i32 + arg * 4 as i32) as isize) as *mut byte
+            as *mut i32) = *args.offset(arg as isize);
         arg += 1
     }
-    *(&mut *image.offset((programStack + 4 as i32) as isize)
-        as *mut byte as *mut i32) = 0 as i32;
-    *(&mut *image.offset(programStack as isize) as *mut byte
-        as *mut i32) = -(1 as i32);
+    *(&mut *image.offset((programStack + 4 as i32) as isize) as *mut byte as *mut i32) = 0 as i32;
+    *(&mut *image.offset(programStack as isize) as *mut byte as *mut i32) = -(1 as i32);
     // off we go into generated code...
     entryPoint = (*vm).codeBase.offset((*vm).entryOfs as isize) as *mut libc::c_void;
-    opStack = (stack.as_mut_ptr() as intptr_t + 16 as i32 as isize
-        - 1 as i32 as isize
+    opStack = (stack.as_mut_ptr() as intptr_t + 16 as i32 as isize - 1 as i32 as isize
         & !(16 as i32 - 1 as i32) as isize) as *mut libc::c_void as *mut i32;
     *opStack = 0xdeadbeef as u32 as i32;
     opStackOfs = 0 as i32;

@@ -83,9 +83,7 @@ pub unsafe extern "C" fn silk_resampler_private_up2_HQ(
     k = 0 as i32;
     while k < len {
         /* Convert to Q10 */
-        in32 = ((*in_0.offset(k as isize) as opus_int32
-            as opus_uint32)
-            << 10 as i32) as opus_int32;
+        in32 = ((*in_0.offset(k as isize) as opus_int32 as opus_uint32) << 10 as i32) as opus_int32;
         /* First all-pass section for even output sample */
         Y = in32 - *S.offset(0 as i32 as isize);
         X = (Y as i64 * silk_resampler_up2_hq_0[0 as i32 as usize] as i64 >> 16 as i32)
@@ -161,8 +159,7 @@ pub unsafe extern "C" fn silk_resampler_private_up2_HQ(
             (out32_1 >> 1 as i32) + (out32_1 & 1 as i32)
         } else {
             ((out32_1 >> 10 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
-        }
-            as opus_int16;
+        } as opus_int16;
         k += 1
     }
 }
@@ -177,7 +174,6 @@ pub unsafe extern "C" fn silk_resampler_private_up2_HQ_wrapper(
 )
 /* I    Number of input samples     */
 {
-    let mut S: *mut silk_resampler_state_struct =
-        SS as *mut silk_resampler_state_struct;
+    let mut S: *mut silk_resampler_state_struct = SS as *mut silk_resampler_state_struct;
     silk_resampler_private_up2_HQ((*S).sIIR.as_mut_ptr(), out, in_0, len);
 }

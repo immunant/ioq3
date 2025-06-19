@@ -433,28 +433,22 @@ unsafe extern "C" fn CG_MachineGunEjectBrass(mut cent: *mut centity_t) {
     if cg_brassTime.integer <= 0 as i32 {
         return;
     }
-    le = CG_AllocLocalEntity()
-        as *mut localEntity_s;
+    le = CG_AllocLocalEntity() as *mut localEntity_s;
     re = &mut (*le).refEntity;
     velocity[0 as i32 as usize] = 0 as i32 as vec_t;
     velocity[1 as i32 as usize] = (-(50 as i32) as f64
         + 40 as i32 as f64
-            * (2.0f64
-                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                    - 0.5f64)))
+            * (2.0f64 * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)))
         as vec_t;
     velocity[2 as i32 as usize] = (100 as i32 as f64
         + 50 as i32 as f64
-            * (2.0f64
-                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                    - 0.5f64)))
+            * (2.0f64 * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)))
         as vec_t;
     (*le).leType = LE_FRAGMENT;
     (*le).startTime = cg.time;
     (*le).endTime = (((*le).startTime + cg_brassTime.integer) as f32
         + (cg_brassTime.integer / 4 as i32) as f32
-            * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32))
-        as i32;
+            * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)) as i32;
     (*le).pos.trType = TR_GRAVITY;
     (*le).pos.trTime = cg.time - (rand() & 15 as i32);
     AnglesToAxis(
@@ -485,12 +479,7 @@ unsafe extern "C" fn CG_MachineGunEjectBrass(mut cent: *mut centity_t) {
     (*le).pos.trBase[0 as i32 as usize] = (*re).origin[0 as i32 as usize];
     (*le).pos.trBase[1 as i32 as usize] = (*re).origin[1 as i32 as usize];
     (*le).pos.trBase[2 as i32 as usize] = (*re).origin[2 as i32 as usize];
-    if CG_PointContents(
-        (*re).origin.as_mut_ptr() as *const vec_t,
-        -(1 as i32),
-    ) & 32 as i32
-        != 0
-    {
+    if CG_PointContents((*re).origin.as_mut_ptr() as *const vec_t, -(1 as i32)) & 32 as i32 != 0 {
         waterScale = 0.10f32
     }
     xvelocity[0 as i32 as usize] = velocity[0 as i32 as usize]
@@ -508,20 +497,14 @@ unsafe extern "C" fn CG_MachineGunEjectBrass(mut cent: *mut centity_t) {
     (*le).pos.trDelta[0 as i32 as usize] = xvelocity[0 as i32 as usize] * waterScale;
     (*le).pos.trDelta[1 as i32 as usize] = xvelocity[1 as i32 as usize] * waterScale;
     (*le).pos.trDelta[2 as i32 as usize] = xvelocity[2 as i32 as usize] * waterScale;
-    AxisCopy(
-        axisDefault.as_mut_ptr(),
-        (*re).axis.as_mut_ptr(),
-    );
+    AxisCopy(axisDefault.as_mut_ptr(), (*re).axis.as_mut_ptr());
     (*re).hModel = cgs.media.machinegunBrassModel;
     (*le).bounceFactor = (0.4f64 * waterScale as f64) as f32;
     (*le).angles.trType = TR_LINEAR;
     (*le).angles.trTime = cg.time;
-    (*le).angles.trBase[0 as i32 as usize] =
-        (rand() & 31 as i32) as vec_t;
-    (*le).angles.trBase[1 as i32 as usize] =
-        (rand() & 31 as i32) as vec_t;
-    (*le).angles.trBase[2 as i32 as usize] =
-        (rand() & 31 as i32) as vec_t;
+    (*le).angles.trBase[0 as i32 as usize] = (rand() & 31 as i32) as vec_t;
+    (*le).angles.trBase[1 as i32 as usize] = (rand() & 31 as i32) as vec_t;
+    (*le).angles.trBase[2 as i32 as usize] = (rand() & 31 as i32) as vec_t;
     (*le).angles.trDelta[0 as i32 as usize] = 2 as i32 as vec_t;
     (*le).angles.trDelta[1 as i32 as usize] = 1 as i32 as vec_t;
     (*le).angles.trDelta[2 as i32 as usize] = 0 as i32 as vec_t;
@@ -550,45 +533,37 @@ unsafe extern "C" fn CG_ShotgunEjectBrass(mut cent: *mut centity_t) {
     i = 0 as i32;
     while i < 2 as i32 {
         let mut waterScale: f32 = 1.0f32;
-        le = CG_AllocLocalEntity()
-            as *mut localEntity_s;
+        le = CG_AllocLocalEntity() as *mut localEntity_s;
         re = &mut (*le).refEntity;
         velocity[0 as i32 as usize] = (60 as i32 as f64
             + 60 as i32 as f64
                 * (2.0f64
-                    * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                        - 0.5f64)))
+                    * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)))
             as vec_t;
         if i == 0 as i32 {
             velocity[1 as i32 as usize] = (40 as i32 as f64
                 + 10 as i32 as f64
                     * (2.0f64
-                        * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
-                            as f64
-                            - 0.5f64)))
-                as vec_t
+                        * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                            - 0.5f64))) as vec_t
         } else {
             velocity[1 as i32 as usize] = (-(40 as i32) as f64
                 + 10 as i32 as f64
                     * (2.0f64
-                        * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
-                            as f64
-                            - 0.5f64)))
-                as vec_t
+                        * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                            - 0.5f64))) as vec_t
         }
         velocity[2 as i32 as usize] = (100 as i32 as f64
             + 50 as i32 as f64
                 * (2.0f64
-                    * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                        - 0.5f64)))
+                    * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)))
             as vec_t;
         (*le).leType = LE_FRAGMENT;
         (*le).startTime = cg.time;
-        (*le).endTime =
-            (((*le).startTime + cg_brassTime.integer * 3 as i32) as f32
-                + cg_brassTime.integer as f32
-                    * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32))
-                as i32;
+        (*le).endTime = (((*le).startTime + cg_brassTime.integer * 3 as i32) as f32
+            + cg_brassTime.integer as f32
+                * ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32))
+            as i32;
         (*le).pos.trType = TR_GRAVITY;
         (*le).pos.trTime = cg.time;
         AnglesToAxis(
@@ -619,11 +594,7 @@ unsafe extern "C" fn CG_ShotgunEjectBrass(mut cent: *mut centity_t) {
         (*le).pos.trBase[0 as i32 as usize] = (*re).origin[0 as i32 as usize];
         (*le).pos.trBase[1 as i32 as usize] = (*re).origin[1 as i32 as usize];
         (*le).pos.trBase[2 as i32 as usize] = (*re).origin[2 as i32 as usize];
-        if CG_PointContents(
-            (*re).origin.as_mut_ptr() as *const vec_t,
-            -(1 as i32),
-        ) & 32 as i32
-            != 0
+        if CG_PointContents((*re).origin.as_mut_ptr() as *const vec_t, -(1 as i32)) & 32 as i32 != 0
         {
             waterScale = 0.10f32
         }
@@ -642,20 +613,14 @@ unsafe extern "C" fn CG_ShotgunEjectBrass(mut cent: *mut centity_t) {
         (*le).pos.trDelta[0 as i32 as usize] = xvelocity[0 as i32 as usize] * waterScale;
         (*le).pos.trDelta[1 as i32 as usize] = xvelocity[1 as i32 as usize] * waterScale;
         (*le).pos.trDelta[2 as i32 as usize] = xvelocity[2 as i32 as usize] * waterScale;
-        AxisCopy(
-            axisDefault.as_mut_ptr(),
-            (*re).axis.as_mut_ptr(),
-        );
+        AxisCopy(axisDefault.as_mut_ptr(), (*re).axis.as_mut_ptr());
         (*re).hModel = cgs.media.shotgunBrassModel;
         (*le).bounceFactor = 0.3f32;
         (*le).angles.trType = TR_LINEAR;
         (*le).angles.trTime = cg.time;
-        (*le).angles.trBase[0 as i32 as usize] =
-            (rand() & 31 as i32) as vec_t;
-        (*le).angles.trBase[1 as i32 as usize] =
-            (rand() & 31 as i32) as vec_t;
-        (*le).angles.trBase[2 as i32 as usize] =
-            (rand() & 31 as i32) as vec_t;
+        (*le).angles.trBase[0 as i32 as usize] = (rand() & 31 as i32) as vec_t;
+        (*le).angles.trBase[1 as i32 as usize] = (rand() & 31 as i32) as vec_t;
+        (*le).angles.trBase[2 as i32 as usize] = (rand() & 31 as i32) as vec_t;
         (*le).angles.trDelta[0 as i32 as usize] = 1 as i32 as vec_t;
         (*le).angles.trDelta[1 as i32 as usize] = 0.5f64 as vec_t;
         (*le).angles.trDelta[2 as i32 as usize] = 0 as i32 as vec_t;
@@ -690,13 +655,11 @@ pub unsafe extern "C" fn CG_RailTrail(
     let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
     let ref mut fresh0 = *start.offset(2 as i32 as isize);
     *fresh0 -= 4 as i32 as f32;
-    le = CG_AllocLocalEntity()
-        as *mut localEntity_s;
+    le = CG_AllocLocalEntity() as *mut localEntity_s;
     re = &mut (*le).refEntity;
     (*le).leType = LE_FADE_RGB;
     (*le).startTime = cg.time;
-    (*le).endTime = (cg.time as f32
-        + cg_railTrailTime.value) as i32;
+    (*le).endTime = (cg.time as f32 + cg_railTrailTime.value) as i32;
     (*le).lifeRate = (1.0f64 / ((*le).endTime - (*le).startTime) as f64) as f32;
     (*re).shaderTime = cg.time as f32 / 1000.0f32;
     (*re).reType = RT_RAIL_CORE;
@@ -707,12 +670,12 @@ pub unsafe extern "C" fn CG_RailTrail(
     (*re).oldorigin[0 as i32 as usize] = *end.offset(0 as i32 as isize);
     (*re).oldorigin[1 as i32 as usize] = *end.offset(1 as i32 as isize);
     (*re).oldorigin[2 as i32 as usize] = *end.offset(2 as i32 as isize);
-    (*re).shaderRGBA[0 as i32 as usize] = ((*ci).color1[0 as i32 as usize] * 255 as i32 as f32)
-        as byte;
-    (*re).shaderRGBA[1 as i32 as usize] = ((*ci).color1[1 as i32 as usize] * 255 as i32 as f32)
-        as byte;
-    (*re).shaderRGBA[2 as i32 as usize] = ((*ci).color1[2 as i32 as usize] * 255 as i32 as f32)
-        as byte;
+    (*re).shaderRGBA[0 as i32 as usize] =
+        ((*ci).color1[0 as i32 as usize] * 255 as i32 as f32) as byte;
+    (*re).shaderRGBA[1 as i32 as usize] =
+        ((*ci).color1[1 as i32 as usize] * 255 as i32 as f32) as byte;
+    (*re).shaderRGBA[2 as i32 as usize] =
+        ((*ci).color1[2 as i32 as usize] * 255 as i32 as f32) as byte;
     (*re).shaderRGBA[3 as i32 as usize] = 255 as i32 as byte;
     (*le).color[0 as i32 as usize] = ((*ci).color1[0 as i32 as usize] as f64 * 0.75f64) as f32;
     (*le).color[1 as i32 as usize] = ((*ci).color1[1 as i32 as usize] as f64 * 0.75f64) as f32;
@@ -732,10 +695,7 @@ pub unsafe extern "C" fn CG_RailTrail(
     vec[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
     vec[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
     len = VectorNormalize(vec.as_mut_ptr());
-    PerpendicularVector(
-        temp.as_mut_ptr(),
-        vec.as_mut_ptr() as *const vec_t,
-    );
+    PerpendicularVector(temp.as_mut_ptr(), vec.as_mut_ptr() as *const vec_t);
     i = 0 as i32;
     while i < 36 as i32 {
         RotatePointAroundVector(
@@ -762,8 +722,7 @@ pub unsafe extern "C" fn CG_RailTrail(
     while (i as f32) < len {
         if i != skip {
             skip = i + 5 as i32;
-            le = CG_AllocLocalEntity()
-                as *mut localEntity_s;
+            le = CG_AllocLocalEntity() as *mut localEntity_s;
             re = &mut (*le).refEntity;
             (*le).leFlags = LEF_PUFF_DONT_SCALE as i32;
             (*le).leType = LE_MOVE_SCALE_FADE;
@@ -774,15 +733,12 @@ pub unsafe extern "C" fn CG_RailTrail(
             (*re).reType = RT_SPRITE;
             (*re).radius = 1.1f32;
             (*re).customShader = cgs.media.railRingsShader;
-            (*re).shaderRGBA[0 as i32 as usize] = ((*ci).color2[0 as i32 as usize]
-                * 255 as i32 as f32)
-                as byte;
-            (*re).shaderRGBA[1 as i32 as usize] = ((*ci).color2[1 as i32 as usize]
-                * 255 as i32 as f32)
-                as byte;
-            (*re).shaderRGBA[2 as i32 as usize] = ((*ci).color2[2 as i32 as usize]
-                * 255 as i32 as f32)
-                as byte;
+            (*re).shaderRGBA[0 as i32 as usize] =
+                ((*ci).color2[0 as i32 as usize] * 255 as i32 as f32) as byte;
+            (*re).shaderRGBA[1 as i32 as usize] =
+                ((*ci).color2[1 as i32 as usize] * 255 as i32 as f32) as byte;
+            (*re).shaderRGBA[2 as i32 as usize] =
+                ((*ci).color2[2 as i32 as usize] * 255 as i32 as f32) as byte;
             (*re).shaderRGBA[3 as i32 as usize] = 255 as i32 as byte;
             (*le).color[0 as i32 as usize] =
                 ((*ci).color2[0 as i32 as usize] as f64 * 0.75f64) as f32;
@@ -825,10 +781,7 @@ CG_RocketTrail
 ==========================
 */
 
-unsafe extern "C" fn CG_RocketTrail(
-    mut ent: *mut centity_t,
-    mut wi: *const weaponInfo_t,
-) {
+unsafe extern "C" fn CG_RocketTrail(mut ent: *mut centity_t, mut wi: *const weaponInfo_t) {
     let mut step: i32 = 0;
     let mut origin: vec3_t = [0.; 3];
     let mut lastPos: vec3_t = [0.; 3];
@@ -836,11 +789,9 @@ unsafe extern "C" fn CG_RocketTrail(
     let mut startTime: i32 = 0;
     let mut contents: i32 = 0;
     let mut lastContents: i32 = 0;
-    let mut es: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut es: *mut entityState_t = 0 as *mut entityState_t;
     let mut up: vec3_t = [0.; 3];
-    let mut smoke: *mut localEntity_t =
-        0 as *mut localEntity_t;
+    let mut smoke: *mut localEntity_t = 0 as *mut localEntity_t;
     if cg_noProjectileTrail.integer != 0 {
         return;
     }
@@ -856,10 +807,7 @@ unsafe extern "C" fn CG_RocketTrail(
         cg.time,
         origin.as_mut_ptr(),
     );
-    contents = CG_PointContents(
-        origin.as_mut_ptr() as *const vec_t,
-        -(1 as i32),
-    );
+    contents = CG_PointContents(origin.as_mut_ptr() as *const vec_t, -(1 as i32));
     // if object (e.g. grenade) is stationary, don't toss up smoke
     if (*es).pos.trType as u32 == TR_STATIONARY as i32 as u32 {
         (*ent).trailTime = cg.time;
@@ -870,18 +818,11 @@ unsafe extern "C" fn CG_RocketTrail(
         (*ent).trailTime,
         lastPos.as_mut_ptr(),
     );
-    lastContents = CG_PointContents(
-        lastPos.as_mut_ptr() as *const vec_t,
-        -(1 as i32),
-    );
+    lastContents = CG_PointContents(lastPos.as_mut_ptr() as *const vec_t, -(1 as i32));
     (*ent).trailTime = cg.time;
     if contents & (32 as i32 | 16 as i32 | 8 as i32) != 0 {
         if contents & lastContents & 32 as i32 != 0 {
-            CG_BubbleTrail(
-                lastPos.as_mut_ptr(),
-                origin.as_mut_ptr(),
-                8 as i32 as f32,
-            );
+            CG_BubbleTrail(lastPos.as_mut_ptr(), origin.as_mut_ptr(), 8 as i32 as f32);
         }
         return;
     }
@@ -916,14 +857,10 @@ CG_PlasmaTrail
 ==========================
 */
 
-unsafe extern "C" fn CG_PlasmaTrail(
-    mut cent: *mut centity_t,
-    mut wi: *const weaponInfo_t,
-) {
+unsafe extern "C" fn CG_PlasmaTrail(mut cent: *mut centity_t, mut wi: *const weaponInfo_t) {
     let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
     let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
-    let mut es: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut es: *mut entityState_t = 0 as *mut entityState_t;
     let mut velocity: vec3_t = [0.; 3];
     let mut xvelocity: vec3_t = [0.; 3];
     let mut origin: vec3_t = [0.; 3];
@@ -931,9 +868,7 @@ unsafe extern "C" fn CG_PlasmaTrail(
     let mut xoffset: vec3_t = [0.; 3];
     let mut v: [vec3_t; 3] = [[0.; 3]; 3];
     let mut waterScale: f32 = 1.0f32;
-    if cg_noProjectileTrail.integer != 0
-        || cg_oldPlasma.integer != 0
-    {
+    if cg_noProjectileTrail.integer != 0 || cg_oldPlasma.integer != 0 {
         return;
     }
     es = &mut (*cent).currentState;
@@ -942,26 +877,19 @@ unsafe extern "C" fn CG_PlasmaTrail(
         cg.time,
         origin.as_mut_ptr(),
     );
-    le = CG_AllocLocalEntity()
-        as *mut localEntity_s;
+    le = CG_AllocLocalEntity() as *mut localEntity_s;
     re = &mut (*le).refEntity;
     velocity[0 as i32 as usize] = (60 as i32 as f64
         - 120 as i32 as f64
-            * (2.0f64
-                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                    - 0.5f64)))
+            * (2.0f64 * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)))
         as vec_t;
     velocity[1 as i32 as usize] = (40 as i32 as f64
         - 80 as i32 as f64
-            * (2.0f64
-                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                    - 0.5f64)))
+            * (2.0f64 * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)))
         as vec_t;
     velocity[2 as i32 as usize] = (100 as i32 as f64
         - 200 as i32 as f64
-            * (2.0f64
-                * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
-                    - 0.5f64)))
+            * (2.0f64 * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)))
         as vec_t;
     (*le).leType = LE_MOVE_SCALE_FADE;
     (*le).leFlags = LEF_TUMBLE as i32;
@@ -996,12 +924,7 @@ unsafe extern "C" fn CG_PlasmaTrail(
     (*le).pos.trBase[0 as i32 as usize] = (*re).origin[0 as i32 as usize];
     (*le).pos.trBase[1 as i32 as usize] = (*re).origin[1 as i32 as usize];
     (*le).pos.trBase[2 as i32 as usize] = (*re).origin[2 as i32 as usize];
-    if CG_PointContents(
-        (*re).origin.as_mut_ptr() as *const vec_t,
-        -(1 as i32),
-    ) & 32 as i32
-        != 0
-    {
+    if CG_PointContents((*re).origin.as_mut_ptr() as *const vec_t, -(1 as i32)) & 32 as i32 != 0 {
         waterScale = 0.10f32
     }
     xvelocity[0 as i32 as usize] = velocity[0 as i32 as usize]
@@ -1019,24 +942,18 @@ unsafe extern "C" fn CG_PlasmaTrail(
     (*le).pos.trDelta[0 as i32 as usize] = xvelocity[0 as i32 as usize] * waterScale;
     (*le).pos.trDelta[1 as i32 as usize] = xvelocity[1 as i32 as usize] * waterScale;
     (*le).pos.trDelta[2 as i32 as usize] = xvelocity[2 as i32 as usize] * waterScale;
-    AxisCopy(
-        axisDefault.as_mut_ptr(),
-        (*re).axis.as_mut_ptr(),
-    );
+    AxisCopy(axisDefault.as_mut_ptr(), (*re).axis.as_mut_ptr());
     (*re).shaderTime = cg.time as f32 / 1000.0f32;
     (*re).reType = RT_SPRITE;
     (*re).radius = 0.25f32;
     (*re).customShader = cgs.media.railRingsShader;
     (*le).bounceFactor = 0.3f32;
-    (*re).shaderRGBA[0 as i32 as usize] = ((*wi).flashDlightColor[0 as i32 as usize]
-        * 63 as i32 as f32)
-        as byte;
-    (*re).shaderRGBA[1 as i32 as usize] = ((*wi).flashDlightColor[1 as i32 as usize]
-        * 63 as i32 as f32)
-        as byte;
-    (*re).shaderRGBA[2 as i32 as usize] = ((*wi).flashDlightColor[2 as i32 as usize]
-        * 63 as i32 as f32)
-        as byte;
+    (*re).shaderRGBA[0 as i32 as usize] =
+        ((*wi).flashDlightColor[0 as i32 as usize] * 63 as i32 as f32) as byte;
+    (*re).shaderRGBA[1 as i32 as usize] =
+        ((*wi).flashDlightColor[1 as i32 as usize] * 63 as i32 as f32) as byte;
+    (*re).shaderRGBA[2 as i32 as usize] =
+        ((*wi).flashDlightColor[2 as i32 as usize] * 63 as i32 as f32) as byte;
     (*re).shaderRGBA[3 as i32 as usize] = 63 as i32 as byte;
     (*le).color[0 as i32 as usize] =
         ((*wi).flashDlightColor[0 as i32 as usize] as f64 * 0.2f64) as f32;
@@ -1047,12 +964,9 @@ unsafe extern "C" fn CG_PlasmaTrail(
     (*le).color[3 as i32 as usize] = 0.25f32;
     (*le).angles.trType = TR_LINEAR;
     (*le).angles.trTime = cg.time;
-    (*le).angles.trBase[0 as i32 as usize] =
-        (rand() & 31 as i32) as vec_t;
-    (*le).angles.trBase[1 as i32 as usize] =
-        (rand() & 31 as i32) as vec_t;
-    (*le).angles.trBase[2 as i32 as usize] =
-        (rand() & 31 as i32) as vec_t;
+    (*le).angles.trBase[0 as i32 as usize] = (rand() & 31 as i32) as vec_t;
+    (*le).angles.trBase[1 as i32 as usize] = (rand() & 31 as i32) as vec_t;
+    (*le).angles.trBase[2 as i32 as usize] = (rand() & 31 as i32) as vec_t;
     (*le).angles.trDelta[0 as i32 as usize] = 1 as i32 as vec_t;
     (*le).angles.trDelta[1 as i32 as usize] = 0.5f64 as vec_t;
     (*le).angles.trDelta[2 as i32 as usize] = 0 as i32 as vec_t;
@@ -1064,13 +978,9 @@ CG_GrappleTrail
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_GrappleTrail(
-    mut ent: *mut centity_t,
-    mut _wi: *const weaponInfo_t,
-) {
+pub unsafe extern "C" fn CG_GrappleTrail(mut ent: *mut centity_t, mut _wi: *const weaponInfo_t) {
     let mut origin: vec3_t = [0.; 3];
-    let mut es: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut es: *mut entityState_t = 0 as *mut entityState_t;
     let mut forward: vec3_t = [0.; 3];
     let mut up: vec3_t = [0.; 3];
     let mut beam: refEntity_t = refEntity_t {
@@ -1108,15 +1018,12 @@ pub unsafe extern "C" fn CG_GrappleTrail(
         ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
     );
     //FIXME adjust for muzzle position
-    beam.origin[0 as i32 as usize] = cg_entities
-        [(*ent).currentState.otherEntityNum as usize]
-        .lerpOrigin[0 as i32 as usize]; // Don't draw if close
-    beam.origin[1 as i32 as usize] = cg_entities
-        [(*ent).currentState.otherEntityNum as usize]
-        .lerpOrigin[1 as i32 as usize];
-    beam.origin[2 as i32 as usize] = cg_entities
-        [(*ent).currentState.otherEntityNum as usize]
-        .lerpOrigin[2 as i32 as usize];
+    beam.origin[0 as i32 as usize] =
+        cg_entities[(*ent).currentState.otherEntityNum as usize].lerpOrigin[0 as i32 as usize]; // Don't draw if close
+    beam.origin[1 as i32 as usize] =
+        cg_entities[(*ent).currentState.otherEntityNum as usize].lerpOrigin[1 as i32 as usize];
+    beam.origin[2 as i32 as usize] =
+        cg_entities[(*ent).currentState.otherEntityNum as usize].lerpOrigin[2 as i32 as usize];
     beam.origin[2 as i32 as usize] += 26 as i32 as f32;
     AngleVectors(
         cg_entities[(*ent).currentState.otherEntityNum as usize]
@@ -1149,9 +1056,7 @@ pub unsafe extern "C" fn CG_GrappleTrail(
     beam.shaderRGBA[1 as i32 as usize] = 0xff as i32 as byte;
     beam.shaderRGBA[2 as i32 as usize] = 0xff as i32 as byte;
     beam.shaderRGBA[3 as i32 as usize] = 0xff as i32 as byte;
-    trap_R_AddRefEntityToScene(
-        &mut beam as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut beam as *mut _ as *const refEntity_t);
 }
 /*
 ==========================
@@ -1159,10 +1064,7 @@ CG_GrenadeTrail
 ==========================
 */
 
-unsafe extern "C" fn CG_GrenadeTrail(
-    mut ent: *mut centity_t,
-    mut wi: *const weaponInfo_t,
-) {
+unsafe extern "C" fn CG_GrenadeTrail(mut ent: *mut centity_t, mut wi: *const weaponInfo_t) {
     CG_RocketTrail(ent, wi);
 }
 /*
@@ -1175,17 +1077,14 @@ The server says this item is used on this level
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
-    let mut weaponInfo: *mut weaponInfo_t =
-        0 as *mut weaponInfo_t;
+    let mut weaponInfo: *mut weaponInfo_t = 0 as *mut weaponInfo_t;
     let mut item: *mut gitem_t = 0 as *mut gitem_t;
     let mut ammo: *mut gitem_t = 0 as *mut gitem_t;
     let mut path: [libc::c_char; 64] = [0; 64];
     let mut mins: vec3_t = [0.; 3];
     let mut maxs: vec3_t = [0.; 3];
     let mut i: i32 = 0;
-    weaponInfo = &mut *cg_weapons
-        .as_mut_ptr()
-        .offset(weaponNum as isize) as *mut weaponInfo_t;
+    weaponInfo = &mut *cg_weapons.as_mut_ptr().offset(weaponNum as isize) as *mut weaponInfo_t;
     if weaponNum == 0 as i32 {
         return;
     }
@@ -1198,13 +1097,9 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
         ::std::mem::size_of::<weaponInfo_t>() as libc::c_ulong,
     );
     (*weaponInfo).registered = qtrue;
-    item = bg_itemlist
-        .as_mut_ptr()
-        .offset(1 as i32 as isize);
+    item = bg_itemlist.as_mut_ptr().offset(1 as i32 as isize);
     while !(*item).classname.is_null() {
-        if (*item).giType as u32 == IT_WEAPON as i32 as u32
-            && (*item).giTag == weaponNum
-        {
+        if (*item).giType as u32 == IT_WEAPON as i32 as u32 && (*item).giTag == weaponNum {
             (*weaponInfo).item = item;
             break;
         } else {
@@ -1217,13 +1112,9 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
             weaponNum,
         );
     }
-    CG_RegisterItemVisuals(
-        item.offset_from(bg_itemlist.as_mut_ptr()) as isize as i32,
-    );
+    CG_RegisterItemVisuals(item.offset_from(bg_itemlist.as_mut_ptr()) as isize as i32);
     // load cmodel before model so filecache works
-    (*weaponInfo).weaponModel = trap_R_RegisterModel(
-        (*item).world_model[0 as i32 as usize],
-    );
+    (*weaponInfo).weaponModel = trap_R_RegisterModel((*item).world_model[0 as i32 as usize]);
     // calc midpoint for rotation
     trap_R_ModelBounds(
         (*weaponInfo).weaponModel,
@@ -1239,21 +1130,15 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
     }
     (*weaponInfo).weaponIcon = trap_R_RegisterShader((*item).icon);
     (*weaponInfo).ammoIcon = trap_R_RegisterShader((*item).icon);
-    ammo = bg_itemlist
-        .as_mut_ptr()
-        .offset(1 as i32 as isize);
+    ammo = bg_itemlist.as_mut_ptr().offset(1 as i32 as isize);
     while !(*ammo).classname.is_null() {
-        if (*ammo).giType as u32 == IT_AMMO as i32 as u32
-            && (*ammo).giTag == weaponNum
-        {
+        if (*ammo).giType as u32 == IT_AMMO as i32 as u32 && (*ammo).giTag == weaponNum {
             break;
         }
         ammo = ammo.offset(1)
     }
     if !(*ammo).classname.is_null() && !(*ammo).world_model[0 as i32 as usize].is_null() {
-        (*weaponInfo).ammoModel = trap_R_RegisterModel(
-            (*ammo).world_model[0 as i32 as usize],
-        )
+        (*weaponInfo).ammoModel = trap_R_RegisterModel((*ammo).world_model[0 as i32 as usize])
     }
     COM_StripExtension(
         (*item).world_model[0 as i32 as usize],
@@ -1265,8 +1150,7 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"_flash.md3\x00" as *const u8 as *const libc::c_char,
     );
-    (*weaponInfo).flashModel =
-        trap_R_RegisterModel(path.as_mut_ptr());
+    (*weaponInfo).flashModel = trap_R_RegisterModel(path.as_mut_ptr());
     COM_StripExtension(
         (*item).world_model[0 as i32 as usize],
         path.as_mut_ptr(),
@@ -1277,8 +1161,7 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"_barrel.md3\x00" as *const u8 as *const libc::c_char,
     );
-    (*weaponInfo).barrelModel =
-        trap_R_RegisterModel(path.as_mut_ptr());
+    (*weaponInfo).barrelModel = trap_R_RegisterModel(path.as_mut_ptr());
     COM_StripExtension(
         (*item).world_model[0 as i32 as usize],
         path.as_mut_ptr(),
@@ -1289,8 +1172,7 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         b"_hand.md3\x00" as *const u8 as *const libc::c_char,
     );
-    (*weaponInfo).handsModel =
-        trap_R_RegisterModel(path.as_mut_ptr());
+    (*weaponInfo).handsModel = trap_R_RegisterModel(path.as_mut_ptr());
     if (*weaponInfo).handsModel == 0 {
         (*weaponInfo).handsModel = trap_R_RegisterModel(
             b"models/weapons2/shotgun/shotgun_hand.md3\x00" as *const u8 as *const libc::c_char,
@@ -1305,11 +1187,10 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
                 b"sound/weapons/melee/fstrun.wav\x00" as *const u8 as *const libc::c_char,
                 qfalse,
             );
-            (*weaponInfo).flashSound[0 as i32 as usize] =
-                trap_S_RegisterSound(
-                    b"sound/weapons/melee/fstatck.wav\x00" as *const u8 as *const libc::c_char,
-                    qfalse,
-                )
+            (*weaponInfo).flashSound[0 as i32 as usize] = trap_S_RegisterSound(
+                b"sound/weapons/melee/fstatck.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
+            )
         }
         6 => {
             (*weaponInfo).flashDlightColor[0 as i32 as usize] = 0.6f32;
@@ -1323,35 +1204,27 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
                 b"sound/weapons/lightning/lg_hum.wav\x00" as *const u8 as *const libc::c_char,
                 qfalse,
             );
-            (*weaponInfo).flashSound[0 as i32 as usize] =
-                trap_S_RegisterSound(
-                    b"sound/weapons/lightning/lg_fire.wav\x00" as *const u8 as *const libc::c_char,
-                    qfalse,
-                );
+            (*weaponInfo).flashSound[0 as i32 as usize] = trap_S_RegisterSound(
+                b"sound/weapons/lightning/lg_fire.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
+            );
             cgs.media.lightningShader =
-                trap_R_RegisterShader(
-                    b"lightningBoltNew\x00" as *const u8 as *const libc::c_char,
-                );
-            cgs
-                .media
-                .lightningExplosionModel = trap_R_RegisterModel(
+                trap_R_RegisterShader(b"lightningBoltNew\x00" as *const u8 as *const libc::c_char);
+            cgs.media.lightningExplosionModel = trap_R_RegisterModel(
                 b"models/weaphits/crackle.md3\x00" as *const u8 as *const libc::c_char,
             );
-            cgs.media.sfx_lghit1 =
-                trap_S_RegisterSound(
-                    b"sound/weapons/lightning/lg_hit.wav\x00" as *const u8 as *const libc::c_char,
-                    qfalse,
-                );
-            cgs.media.sfx_lghit2 =
-                trap_S_RegisterSound(
-                    b"sound/weapons/lightning/lg_hit2.wav\x00" as *const u8 as *const libc::c_char,
-                    qfalse,
-                );
-            cgs.media.sfx_lghit3 =
-                trap_S_RegisterSound(
-                    b"sound/weapons/lightning/lg_hit3.wav\x00" as *const u8 as *const libc::c_char,
-                    qfalse,
-                )
+            cgs.media.sfx_lghit1 = trap_S_RegisterSound(
+                b"sound/weapons/lightning/lg_hit.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
+            );
+            cgs.media.sfx_lghit2 = trap_S_RegisterSound(
+                b"sound/weapons/lightning/lg_hit2.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
+            );
+            cgs.media.sfx_lghit3 = trap_S_RegisterSound(
+                b"sound/weapons/lightning/lg_hit3.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
+            )
         }
         10 => {
             (*weaponInfo).flashDlightColor[0 as i32 as usize] = 0.6f32;
@@ -1362,17 +1235,12 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
             );
             (*weaponInfo).missileTrailFunc = Some(
                 CG_GrappleTrail
-                    as unsafe extern "C" fn(
-                        _: *mut centity_t,
-                        _: *const weaponInfo_t,
-                    ) -> (),
+                    as unsafe extern "C" fn(_: *mut centity_t, _: *const weaponInfo_t) -> (),
             );
             (*weaponInfo).missileDlight = 200 as i32 as f32;
-            (*weaponInfo).missileDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
+            (*weaponInfo).missileDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
             (*weaponInfo).missileDlightColor[1 as i32 as usize] = 0.75f32;
-            (*weaponInfo).missileDlightColor[2 as i32 as usize] =
-                0 as i32 as vec_t;
+            (*weaponInfo).missileDlightColor[2 as i32 as usize] = 0 as i32 as vec_t;
             (*weaponInfo).readySound = trap_S_RegisterSound(
                 b"sound/weapons/melee/fsthum.wav\x00" as *const u8 as *const libc::c_char,
                 qfalse,
@@ -1382,66 +1250,43 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
                 qfalse,
             );
             cgs.media.lightningShader =
-                trap_R_RegisterShader(
-                    b"lightningBoltNew\x00" as *const u8 as *const libc::c_char,
-                )
+                trap_R_RegisterShader(b"lightningBoltNew\x00" as *const u8 as *const libc::c_char)
         }
         2 => {
-            (*weaponInfo).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
-            (*weaponInfo).flashDlightColor[1 as i32 as usize] =
-                1 as i32 as vec_t;
-            (*weaponInfo).flashDlightColor[2 as i32 as usize] =
-                0 as i32 as vec_t;
-            (*weaponInfo).flashSound[0 as i32 as usize] =
-                trap_S_RegisterSound(
-                    b"sound/weapons/machinegun/machgf1b.wav\x00" as *const u8
-                        as *const libc::c_char,
-                    qfalse,
-                );
-            (*weaponInfo).flashSound[1 as i32 as usize] =
-                trap_S_RegisterSound(
-                    b"sound/weapons/machinegun/machgf2b.wav\x00" as *const u8
-                        as *const libc::c_char,
-                    qfalse,
-                );
-            (*weaponInfo).flashSound[2 as i32 as usize] =
-                trap_S_RegisterSound(
-                    b"sound/weapons/machinegun/machgf3b.wav\x00" as *const u8
-                        as *const libc::c_char,
-                    qfalse,
-                );
-            (*weaponInfo).flashSound[3 as i32 as usize] =
-                trap_S_RegisterSound(
-                    b"sound/weapons/machinegun/machgf4b.wav\x00" as *const u8
-                        as *const libc::c_char,
-                    qfalse,
-                );
-            (*weaponInfo).ejectBrassFunc = Some(
-                CG_MachineGunEjectBrass
-                    as unsafe extern "C" fn(_: *mut centity_t) -> (),
+            (*weaponInfo).flashDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
+            (*weaponInfo).flashDlightColor[1 as i32 as usize] = 1 as i32 as vec_t;
+            (*weaponInfo).flashDlightColor[2 as i32 as usize] = 0 as i32 as vec_t;
+            (*weaponInfo).flashSound[0 as i32 as usize] = trap_S_RegisterSound(
+                b"sound/weapons/machinegun/machgf1b.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
             );
+            (*weaponInfo).flashSound[1 as i32 as usize] = trap_S_RegisterSound(
+                b"sound/weapons/machinegun/machgf2b.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
+            );
+            (*weaponInfo).flashSound[2 as i32 as usize] = trap_S_RegisterSound(
+                b"sound/weapons/machinegun/machgf3b.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
+            );
+            (*weaponInfo).flashSound[3 as i32 as usize] = trap_S_RegisterSound(
+                b"sound/weapons/machinegun/machgf4b.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
+            );
+            (*weaponInfo).ejectBrassFunc =
+                Some(CG_MachineGunEjectBrass as unsafe extern "C" fn(_: *mut centity_t) -> ());
             cgs.media.bulletExplosionShader =
-                trap_R_RegisterShader(
-                    b"bulletExplosion\x00" as *const u8 as *const libc::c_char,
-                )
+                trap_R_RegisterShader(b"bulletExplosion\x00" as *const u8 as *const libc::c_char)
         }
         3 => {
-            (*weaponInfo).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
-            (*weaponInfo).flashDlightColor[1 as i32 as usize] =
-                1 as i32 as vec_t;
-            (*weaponInfo).flashDlightColor[2 as i32 as usize] =
-                0 as i32 as vec_t;
-            (*weaponInfo).flashSound[0 as i32 as usize] =
-                trap_S_RegisterSound(
-                    b"sound/weapons/shotgun/sshotf1b.wav\x00" as *const u8 as *const libc::c_char,
-                    qfalse,
-                );
-            (*weaponInfo).ejectBrassFunc = Some(
-                CG_ShotgunEjectBrass
-                    as unsafe extern "C" fn(_: *mut centity_t) -> (),
-            )
+            (*weaponInfo).flashDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
+            (*weaponInfo).flashDlightColor[1 as i32 as usize] = 1 as i32 as vec_t;
+            (*weaponInfo).flashDlightColor[2 as i32 as usize] = 0 as i32 as vec_t;
+            (*weaponInfo).flashSound[0 as i32 as usize] = trap_S_RegisterSound(
+                b"sound/weapons/shotgun/sshotf1b.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
+            );
+            (*weaponInfo).ejectBrassFunc =
+                Some(CG_ShotgunEjectBrass as unsafe extern "C" fn(_: *mut centity_t) -> ())
         }
         5 => {
             (*weaponInfo).missileModel = trap_R_RegisterModel(
@@ -1453,33 +1298,23 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
             );
             (*weaponInfo).missileTrailFunc = Some(
                 CG_RocketTrail
-                    as unsafe extern "C" fn(
-                        _: *mut centity_t,
-                        _: *const weaponInfo_t,
-                    ) -> (),
+                    as unsafe extern "C" fn(_: *mut centity_t, _: *const weaponInfo_t) -> (),
             );
             (*weaponInfo).missileDlight = 200 as i32 as f32;
             (*weaponInfo).wiTrailTime = 2000 as i32 as f32;
             (*weaponInfo).trailRadius = 64 as i32 as f32;
-            (*weaponInfo).missileDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
+            (*weaponInfo).missileDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
             (*weaponInfo).missileDlightColor[1 as i32 as usize] = 0.75f32;
-            (*weaponInfo).missileDlightColor[2 as i32 as usize] =
-                0 as i32 as vec_t;
-            (*weaponInfo).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
+            (*weaponInfo).missileDlightColor[2 as i32 as usize] = 0 as i32 as vec_t;
+            (*weaponInfo).flashDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] = 0.75f32;
-            (*weaponInfo).flashDlightColor[2 as i32 as usize] =
-                0 as i32 as vec_t;
-            (*weaponInfo).flashSound[0 as i32 as usize] =
-                trap_S_RegisterSound(
-                    b"sound/weapons/rocket/rocklf1a.wav\x00" as *const u8 as *const libc::c_char,
-                    qfalse,
-                );
+            (*weaponInfo).flashDlightColor[2 as i32 as usize] = 0 as i32 as vec_t;
+            (*weaponInfo).flashSound[0 as i32 as usize] = trap_S_RegisterSound(
+                b"sound/weapons/rocket/rocklf1a.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
+            );
             cgs.media.rocketExplosionShader =
-                trap_R_RegisterShader(
-                    b"rocketExplosion\x00" as *const u8 as *const libc::c_char,
-                )
+                trap_R_RegisterShader(b"rocketExplosion\x00" as *const u8 as *const libc::c_char)
         }
         4 => {
             (*weaponInfo).missileModel = trap_R_RegisterModel(
@@ -1487,36 +1322,25 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
             );
             (*weaponInfo).missileTrailFunc = Some(
                 CG_GrenadeTrail
-                    as unsafe extern "C" fn(
-                        _: *mut centity_t,
-                        _: *const weaponInfo_t,
-                    ) -> (),
+                    as unsafe extern "C" fn(_: *mut centity_t, _: *const weaponInfo_t) -> (),
             );
             (*weaponInfo).wiTrailTime = 700 as i32 as f32;
             (*weaponInfo).trailRadius = 32 as i32 as f32;
-            (*weaponInfo).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
+            (*weaponInfo).flashDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] = 0.70f32;
-            (*weaponInfo).flashDlightColor[2 as i32 as usize] =
-                0 as i32 as vec_t;
-            (*weaponInfo).flashSound[0 as i32 as usize] =
-                trap_S_RegisterSound(
-                    b"sound/weapons/grenade/grenlf1a.wav\x00" as *const u8 as *const libc::c_char,
-                    qfalse,
-                );
+            (*weaponInfo).flashDlightColor[2 as i32 as usize] = 0 as i32 as vec_t;
+            (*weaponInfo).flashSound[0 as i32 as usize] = trap_S_RegisterSound(
+                b"sound/weapons/grenade/grenlf1a.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
+            );
             cgs.media.grenadeExplosionShader =
-                trap_R_RegisterShader(
-                    b"grenadeExplosion\x00" as *const u8 as *const libc::c_char,
-                )
+                trap_R_RegisterShader(b"grenadeExplosion\x00" as *const u8 as *const libc::c_char)
         }
         8 => {
             //		weaponInfo->missileModel = cgs.media.invulnerabilityPowerupModel;
             (*weaponInfo).missileTrailFunc = Some(
                 CG_PlasmaTrail
-                    as unsafe extern "C" fn(
-                        _: *mut centity_t,
-                        _: *const weaponInfo_t,
-                    ) -> (),
+                    as unsafe extern "C" fn(_: *mut centity_t, _: *const weaponInfo_t) -> (),
             );
             (*weaponInfo).missileSound = trap_S_RegisterSound(
                 b"sound/weapons/plasma/lasfly.wav\x00" as *const u8 as *const libc::c_char,
@@ -1525,67 +1349,48 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
             (*weaponInfo).flashDlightColor[0 as i32 as usize] = 0.6f32;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] = 0.6f32;
             (*weaponInfo).flashDlightColor[2 as i32 as usize] = 1.0f32;
-            (*weaponInfo).flashSound[0 as i32 as usize] =
-                trap_S_RegisterSound(
-                    b"sound/weapons/plasma/hyprbf1a.wav\x00" as *const u8 as *const libc::c_char,
-                    qfalse,
-                );
+            (*weaponInfo).flashSound[0 as i32 as usize] = trap_S_RegisterSound(
+                b"sound/weapons/plasma/hyprbf1a.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
+            );
             cgs.media.plasmaExplosionShader =
-                trap_R_RegisterShader(
-                    b"plasmaExplosion\x00" as *const u8 as *const libc::c_char,
-                );
+                trap_R_RegisterShader(b"plasmaExplosion\x00" as *const u8 as *const libc::c_char);
             cgs.media.railRingsShader =
-                trap_R_RegisterShader(
-                    b"railDisc\x00" as *const u8 as *const libc::c_char,
-                )
+                trap_R_RegisterShader(b"railDisc\x00" as *const u8 as *const libc::c_char)
         }
         7 => {
             (*weaponInfo).readySound = trap_S_RegisterSound(
                 b"sound/weapons/railgun/rg_hum.wav\x00" as *const u8 as *const libc::c_char,
                 qfalse,
             );
-            (*weaponInfo).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
+            (*weaponInfo).flashDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] = 0.5f32;
-            (*weaponInfo).flashDlightColor[2 as i32 as usize] =
-                0 as i32 as vec_t;
-            (*weaponInfo).flashSound[0 as i32 as usize] =
-                trap_S_RegisterSound(
-                    b"sound/weapons/railgun/railgf1a.wav\x00" as *const u8 as *const libc::c_char,
-                    qfalse,
-                );
+            (*weaponInfo).flashDlightColor[2 as i32 as usize] = 0 as i32 as vec_t;
+            (*weaponInfo).flashSound[0 as i32 as usize] = trap_S_RegisterSound(
+                b"sound/weapons/railgun/railgf1a.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
+            );
             cgs.media.railExplosionShader =
-                trap_R_RegisterShader(
-                    b"railExplosion\x00" as *const u8 as *const libc::c_char,
-                );
+                trap_R_RegisterShader(b"railExplosion\x00" as *const u8 as *const libc::c_char);
             cgs.media.railRingsShader =
-                trap_R_RegisterShader(
-                    b"railDisc\x00" as *const u8 as *const libc::c_char,
-                );
+                trap_R_RegisterShader(b"railDisc\x00" as *const u8 as *const libc::c_char);
             cgs.media.railCoreShader =
-                trap_R_RegisterShader(
-                    b"railCore\x00" as *const u8 as *const libc::c_char,
-                )
+                trap_R_RegisterShader(b"railCore\x00" as *const u8 as *const libc::c_char)
         }
         9 => {
             (*weaponInfo).readySound = trap_S_RegisterSound(
                 b"sound/weapons/bfg/bfg_hum.wav\x00" as *const u8 as *const libc::c_char,
                 qfalse,
             );
-            (*weaponInfo).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
+            (*weaponInfo).flashDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
             (*weaponInfo).flashDlightColor[1 as i32 as usize] = 0.7f32;
-            (*weaponInfo).flashDlightColor[2 as i32 as usize] =
-                1 as i32 as vec_t;
-            (*weaponInfo).flashSound[0 as i32 as usize] =
-                trap_S_RegisterSound(
-                    b"sound/weapons/bfg/bfg_fire.wav\x00" as *const u8 as *const libc::c_char,
-                    qfalse,
-                );
+            (*weaponInfo).flashDlightColor[2 as i32 as usize] = 1 as i32 as vec_t;
+            (*weaponInfo).flashSound[0 as i32 as usize] = trap_S_RegisterSound(
+                b"sound/weapons/bfg/bfg_fire.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
+            );
             cgs.media.bfgExplosionShader =
-                trap_R_RegisterShader(
-                    b"bfgExplosion\x00" as *const u8 as *const libc::c_char,
-                );
+                trap_R_RegisterShader(b"bfgExplosion\x00" as *const u8 as *const libc::c_char);
             (*weaponInfo).missileModel = trap_R_RegisterModel(
                 b"models/weaphits/bfg.md3\x00" as *const u8 as *const libc::c_char,
             );
@@ -1595,17 +1400,13 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
             )
         }
         _ => {
-            (*weaponInfo).flashDlightColor[0 as i32 as usize] =
-                1 as i32 as vec_t;
-            (*weaponInfo).flashDlightColor[1 as i32 as usize] =
-                1 as i32 as vec_t;
-            (*weaponInfo).flashDlightColor[2 as i32 as usize] =
-                1 as i32 as vec_t;
-            (*weaponInfo).flashSound[0 as i32 as usize] =
-                trap_S_RegisterSound(
-                    b"sound/weapons/rocket/rocklf1a.wav\x00" as *const u8 as *const libc::c_char,
-                    qfalse,
-                )
+            (*weaponInfo).flashDlightColor[0 as i32 as usize] = 1 as i32 as vec_t;
+            (*weaponInfo).flashDlightColor[1 as i32 as usize] = 1 as i32 as vec_t;
+            (*weaponInfo).flashDlightColor[2 as i32 as usize] = 1 as i32 as vec_t;
+            (*weaponInfo).flashSound[0 as i32 as usize] = trap_S_RegisterSound(
+                b"sound/weapons/rocket/rocklf1a.wav\x00" as *const u8 as *const libc::c_char,
+                qfalse,
+            )
         }
     };
 }
@@ -1629,24 +1430,19 @@ pub unsafe extern "C" fn CG_RegisterItemVisuals(mut itemNum: i32) {
             bg_numItems - 1 as i32,
         );
     }
-    itemInfo = &mut *cg_items
-        .as_mut_ptr()
-        .offset(itemNum as isize) as *mut itemInfo_t;
+    itemInfo = &mut *cg_items.as_mut_ptr().offset(itemNum as isize) as *mut itemInfo_t;
     if (*itemInfo).registered as u64 != 0 {
         return;
     }
-    item = &mut *bg_itemlist
-        .as_mut_ptr()
-        .offset(itemNum as isize) as *mut gitem_t;
+    item = &mut *bg_itemlist.as_mut_ptr().offset(itemNum as isize) as *mut gitem_t;
     crate::stdlib::memset(
         itemInfo as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<itemInfo_t>() as libc::c_ulong,
     );
     (*itemInfo).registered = qtrue;
-    (*itemInfo).models[0 as i32 as usize] = trap_R_RegisterModel(
-        (*item).world_model[0 as i32 as usize],
-    );
+    (*itemInfo).models[0 as i32 as usize] =
+        trap_R_RegisterModel((*item).world_model[0 as i32 as usize]);
     (*itemInfo).icon = trap_R_RegisterShader((*item).icon);
     if (*item).giType as u32 == IT_WEAPON as i32 as u32 {
         CG_RegisterWeapon((*item).giTag);
@@ -1661,9 +1457,7 @@ pub unsafe extern "C" fn CG_RegisterItemVisuals(mut itemNum: i32) {
     {
         if !(*item).world_model[1 as i32 as usize].is_null() {
             (*itemInfo).models[1 as i32 as usize] =
-                trap_R_RegisterModel(
-                    (*item).world_model[1 as i32 as usize],
-                )
+                trap_R_RegisterModel((*item).world_model[1 as i32 as usize])
         }
     };
 }
@@ -1681,35 +1475,24 @@ CG_MapTorsoToWeaponFrame
 =================
 */
 
-unsafe extern "C" fn CG_MapTorsoToWeaponFrame(
-    mut ci: *mut clientInfo_t,
-    mut frame: i32,
-) -> i32 {
+unsafe extern "C" fn CG_MapTorsoToWeaponFrame(mut ci: *mut clientInfo_t, mut frame: i32) -> i32 {
     // change weapon
     if frame >= (*ci).animations[TORSO_DROP as i32 as usize].firstFrame
-        && frame
-            < (*ci).animations[TORSO_DROP as i32 as usize].firstFrame + 9 as i32
+        && frame < (*ci).animations[TORSO_DROP as i32 as usize].firstFrame + 9 as i32
     {
-        return frame - (*ci).animations[TORSO_DROP as i32 as usize].firstFrame
-            + 6 as i32;
+        return frame - (*ci).animations[TORSO_DROP as i32 as usize].firstFrame + 6 as i32;
     }
     // stand attack
     if frame >= (*ci).animations[TORSO_ATTACK as i32 as usize].firstFrame
-        && frame
-            < (*ci).animations[TORSO_ATTACK as i32 as usize].firstFrame
-                + 6 as i32
+        && frame < (*ci).animations[TORSO_ATTACK as i32 as usize].firstFrame + 6 as i32
     {
-        return 1 as i32 + frame
-            - (*ci).animations[TORSO_ATTACK as i32 as usize].firstFrame;
+        return 1 as i32 + frame - (*ci).animations[TORSO_ATTACK as i32 as usize].firstFrame;
     }
     // stand attack 2
     if frame >= (*ci).animations[TORSO_ATTACK2 as i32 as usize].firstFrame
-        && frame
-            < (*ci).animations[TORSO_ATTACK2 as i32 as usize].firstFrame
-                + 6 as i32
+        && frame < (*ci).animations[TORSO_ATTACK2 as i32 as usize].firstFrame + 6 as i32
     {
-        return 1 as i32 + frame
-            - (*ci).animations[TORSO_ATTACK2 as i32 as usize].firstFrame;
+        return 1 as i32 + frame - (*ci).animations[TORSO_ATTACK2 as i32 as usize].firstFrame;
     }
     return 0 as i32;
 }
@@ -1719,25 +1502,16 @@ CG_CalculateWeaponPosition
 ==============
 */
 
-unsafe extern "C" fn CG_CalculateWeaponPosition(
-    mut origin: *mut vec_t,
-    mut angles: *mut vec_t,
-) {
+unsafe extern "C" fn CG_CalculateWeaponPosition(mut origin: *mut vec_t, mut angles: *mut vec_t) {
     let mut scale: f32 = 0.;
     let mut delta: i32 = 0;
     let mut fracsin: f32 = 0.;
-    *origin.offset(0 as i32 as isize) =
-        cg.refdef.vieworg[0 as i32 as usize];
-    *origin.offset(1 as i32 as isize) =
-        cg.refdef.vieworg[1 as i32 as usize];
-    *origin.offset(2 as i32 as isize) =
-        cg.refdef.vieworg[2 as i32 as usize];
-    *angles.offset(0 as i32 as isize) =
-        cg.refdefViewAngles[0 as i32 as usize];
-    *angles.offset(1 as i32 as isize) =
-        cg.refdefViewAngles[1 as i32 as usize];
-    *angles.offset(2 as i32 as isize) =
-        cg.refdefViewAngles[2 as i32 as usize];
+    *origin.offset(0 as i32 as isize) = cg.refdef.vieworg[0 as i32 as usize];
+    *origin.offset(1 as i32 as isize) = cg.refdef.vieworg[1 as i32 as usize];
+    *origin.offset(2 as i32 as isize) = cg.refdef.vieworg[2 as i32 as usize];
+    *angles.offset(0 as i32 as isize) = cg.refdefViewAngles[0 as i32 as usize];
+    *angles.offset(1 as i32 as isize) = cg.refdefViewAngles[1 as i32 as usize];
+    *angles.offset(2 as i32 as isize) = cg.refdefViewAngles[2 as i32 as usize];
     // on odd legs, invert some angles
     if cg.bobcycle & 1 as i32 != 0 {
         scale = -cg.xyspeed
@@ -1746,45 +1520,33 @@ unsafe extern "C" fn CG_CalculateWeaponPosition(
     }
     // gun angles from bobbing
     let ref mut fresh1 = *angles.offset(2 as i32 as isize);
-    *fresh1 = (*fresh1 as f64
-        + (scale * cg.bobfracsin) as f64 * 0.005f64)
-        as vec_t;
+    *fresh1 = (*fresh1 as f64 + (scale * cg.bobfracsin) as f64 * 0.005f64) as vec_t;
     let ref mut fresh2 = *angles.offset(1 as i32 as isize);
-    *fresh2 = (*fresh2 as f64
-        + (scale * cg.bobfracsin) as f64 * 0.01f64)
-        as vec_t;
+    *fresh2 = (*fresh2 as f64 + (scale * cg.bobfracsin) as f64 * 0.01f64) as vec_t;
     let ref mut fresh3 = *angles.offset(0 as i32 as isize);
-    *fresh3 = (*fresh3 as f64
-        + (cg.xyspeed * cg.bobfracsin)
-            as f64
-            * 0.005f64) as vec_t;
+    *fresh3 = (*fresh3 as f64 + (cg.xyspeed * cg.bobfracsin) as f64 * 0.005f64) as vec_t;
     // drop the weapon when landing
     delta = cg.time - cg.landTime;
     if delta < 150 as i32 {
         let ref mut fresh4 = *origin.offset(2 as i32 as isize);
         *fresh4 = (*fresh4 as f64
-            + cg.landChange as f64 * 0.25f64 * delta as f64
-                / 150 as i32 as f64) as vec_t
+            + cg.landChange as f64 * 0.25f64 * delta as f64 / 150 as i32 as f64)
+            as vec_t
     } else if delta < 150 as i32 + 300 as i32 {
         let ref mut fresh5 = *origin.offset(2 as i32 as isize);
         *fresh5 = (*fresh5 as f64
-            + cg.landChange as f64
-                * 0.25f64
-                * (150 as i32 + 300 as i32 - delta) as f64
+            + cg.landChange as f64 * 0.25f64 * (150 as i32 + 300 as i32 - delta) as f64
                 / 300 as i32 as f64) as vec_t
     }
     // idle drift
     scale = cg.xyspeed + 40 as i32 as f32;
     fracsin = crate::stdlib::sin(cg.time as f64 * 0.001f64) as f32;
     let ref mut fresh6 = *angles.offset(2 as i32 as isize);
-    *fresh6 = (*fresh6 as f64 + (scale * fracsin) as f64 * 0.01f64)
-        as vec_t;
+    *fresh6 = (*fresh6 as f64 + (scale * fracsin) as f64 * 0.01f64) as vec_t;
     let ref mut fresh7 = *angles.offset(1 as i32 as isize);
-    *fresh7 = (*fresh7 as f64 + (scale * fracsin) as f64 * 0.01f64)
-        as vec_t;
+    *fresh7 = (*fresh7 as f64 + (scale * fracsin) as f64 * 0.01f64) as vec_t;
     let ref mut fresh8 = *angles.offset(0 as i32 as isize);
-    *fresh8 = (*fresh8 as f64 + (scale * fracsin) as f64 * 0.01f64)
-        as vec_t;
+    *fresh8 = (*fresh8 as f64 + (scale * fracsin) as f64 * 0.01f64) as vec_t;
 }
 /*
 ===============
@@ -1798,27 +1560,23 @@ angle)
 ===============
 */
 
-unsafe extern "C" fn CG_LightningBolt(
-    mut cent: *mut centity_t,
-    mut origin: *mut vec_t,
-) {
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+unsafe extern "C" fn CG_LightningBolt(mut cent: *mut centity_t, mut origin: *mut vec_t) {
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     let mut beam: refEntity_t = refEntity_t {
         reType: RT_MODEL,
         renderfx: 0,
@@ -1854,18 +1612,14 @@ unsafe extern "C" fn CG_LightningBolt(
         ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
     );
     // CPMA  "true" lightning
-    if (*cent).currentState.number
-        == cg
-            .predictedPlayerState
-            .clientNum
+    if (*cent).currentState.number == cg.predictedPlayerState.clientNum
         && cg_trueLightning.value != 0 as i32 as f32
     {
         let mut angle: vec3_t = [0.; 3];
         let mut i: i32 = 0;
         i = 0 as i32;
         while i < 3 as i32 {
-            let mut a: f32 = (*cent).lerpAngles[i as usize]
-                - cg.refdefViewAngles[i as usize];
+            let mut a: f32 = (*cent).lerpAngles[i as usize] - cg.refdefViewAngles[i as usize];
             if a > 180 as i32 as f32 {
                 a -= 360 as i32 as f32
             }
@@ -1906,9 +1660,7 @@ unsafe extern "C" fn CG_LightningBolt(
         muzzlePoint[2 as i32 as usize] = (*cent).lerpOrigin[2 as i32 as usize]
     }
     anim = (*cent).currentState.legsAnim & !(128 as i32);
-    if anim == LEGS_WALKCR as i32
-        || anim == LEGS_IDLECR as i32
-    {
+    if anim == LEGS_WALKCR as i32 || anim == LEGS_IDLECR as i32 {
         muzzlePoint[2 as i32 as usize] += 12 as i32 as f32
     } else {
         muzzlePoint[2 as i32 as usize] += 26 as i32 as f32
@@ -1930,10 +1682,8 @@ unsafe extern "C" fn CG_LightningBolt(
     CG_Trace(
         &mut trace as *mut _ as *mut trace_t,
         muzzlePoint.as_mut_ptr() as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
-        vec3_origin.as_mut_ptr()
-            as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
+        vec3_origin.as_mut_ptr() as *const vec_t,
         endPoint.as_mut_ptr() as *const vec_t,
         (*cent).currentState.number,
         1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
@@ -1949,9 +1699,7 @@ unsafe extern "C" fn CG_LightningBolt(
     beam.origin[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
     beam.reType = RT_LIGHTNING;
     beam.customShader = cgs.media.lightningShader;
-    trap_R_AddRefEntityToScene(
-        &mut beam as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut beam as *mut _ as *const refEntity_t);
     // add the impact flare if it hit something
     if (trace.fraction as f64) < 1.0f64 {
         let mut angles: vec3_t = [0.; 3];
@@ -1965,9 +1713,7 @@ unsafe extern "C" fn CG_LightningBolt(
             0 as i32,
             ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
         );
-        beam.hModel = cgs
-            .media
-            .lightningExplosionModel;
+        beam.hModel = cgs.media.lightningExplosionModel;
         beam.origin[0 as i32 as usize] =
             trace.endpos[0 as i32 as usize] + dir[0 as i32 as usize] * -(16 as i32) as f32;
         beam.origin[1 as i32 as usize] =
@@ -1975,19 +1721,11 @@ unsafe extern "C" fn CG_LightningBolt(
         beam.origin[2 as i32 as usize] =
             trace.endpos[2 as i32 as usize] + dir[2 as i32 as usize] * -(16 as i32) as f32;
         // make a random orientation
-        angles[0 as i32 as usize] =
-            (rand() % 360 as i32) as vec_t;
-        angles[1 as i32 as usize] =
-            (rand() % 360 as i32) as vec_t;
-        angles[2 as i32 as usize] =
-            (rand() % 360 as i32) as vec_t;
-        AnglesToAxis(
-            angles.as_mut_ptr() as *const vec_t,
-            beam.axis.as_mut_ptr(),
-        );
-        trap_R_AddRefEntityToScene(
-            &mut beam as *mut _ as *const refEntity_t,
-        );
+        angles[0 as i32 as usize] = (rand() % 360 as i32) as vec_t;
+        angles[1 as i32 as usize] = (rand() % 360 as i32) as vec_t;
+        angles[2 as i32 as usize] = (rand() % 360 as i32) as vec_t;
+        AnglesToAxis(angles.as_mut_ptr() as *const vec_t, beam.axis.as_mut_ptr());
+        trap_R_AddRefEntityToScene(&mut beam as *mut _ as *const refEntity_t);
     };
 }
 
@@ -2011,8 +1749,8 @@ unsafe extern "C" fn CG_MachinegunSpinAngle(mut cent: *mut centity_t) -> f32 {
     {
         (*cent).pe.barrelTime = cg.time;
         (*cent).pe.barrelAngle = AngleMod(angle);
-        (*cent).pe.barrelSpinning = ((*cent).currentState.eFlags & 0x100 as i32 != 0) as i32
-            as qboolean
+        (*cent).pe.barrelSpinning =
+            ((*cent).currentState.eFlags & 0x100 as i32 != 0) as i32 as qboolean
     }
     return angle;
 }
@@ -2022,31 +1760,20 @@ CG_AddWeaponWithPowerups
 ========================
 */
 
-unsafe extern "C" fn CG_AddWeaponWithPowerups(
-    mut gun: *mut refEntity_t,
-    mut powerups: i32,
-) {
+unsafe extern "C" fn CG_AddWeaponWithPowerups(mut gun: *mut refEntity_t, mut powerups: i32) {
     // add powerup effects
     if powerups & (1 as i32) << PW_INVIS as i32 != 0 {
         (*gun).customShader = cgs.media.invisShader;
-        trap_R_AddRefEntityToScene(
-            gun as *const refEntity_t,
-        );
+        trap_R_AddRefEntityToScene(gun as *const refEntity_t);
     } else {
-        trap_R_AddRefEntityToScene(
-            gun as *const refEntity_t,
-        );
+        trap_R_AddRefEntityToScene(gun as *const refEntity_t);
         if powerups & (1 as i32) << PW_BATTLESUIT as i32 != 0 {
             (*gun).customShader = cgs.media.battleWeaponShader;
-            trap_R_AddRefEntityToScene(
-                gun as *const refEntity_t,
-            );
+            trap_R_AddRefEntityToScene(gun as *const refEntity_t);
         }
         if powerups & (1 as i32) << PW_QUAD as i32 != 0 {
             (*gun).customShader = cgs.media.quadWeaponShader;
-            trap_R_AddRefEntityToScene(
-                gun as *const refEntity_t,
-            );
+            trap_R_AddRefEntityToScene(gun as *const refEntity_t);
         }
     };
 }
@@ -2135,20 +1862,15 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     };
     let mut angles: vec3_t = [0.; 3];
     let mut weaponNum: weapon_t = WP_NONE;
-    let mut weapon: *mut weaponInfo_t =
-        0 as *mut weaponInfo_t;
-    let mut nonPredictedCent: *mut centity_t =
-        0 as *mut centity_t;
-    let mut lerped: orientation_t =
-        orientation_t {
-            origin: [0.; 3],
-            axis: [[0.; 3]; 3],
-        };
+    let mut weapon: *mut weaponInfo_t = 0 as *mut weaponInfo_t;
+    let mut nonPredictedCent: *mut centity_t = 0 as *mut centity_t;
+    let mut lerped: orientation_t = orientation_t {
+        origin: [0.; 3],
+        axis: [[0.; 3]; 3],
+    };
     weaponNum = (*cent).currentState.weapon as weapon_t;
     CG_RegisterWeapon(weaponNum as i32);
-    weapon = &mut *cg_weapons
-        .as_mut_ptr()
-        .offset(weaponNum as isize) as *mut weaponInfo_t;
+    weapon = &mut *cg_weapons.as_mut_ptr().offset(weaponNum as isize) as *mut weaponInfo_t;
     // add the weapon
     crate::stdlib::memset(
         &mut gun as *mut refEntity_t as *mut libc::c_void,
@@ -2168,18 +1890,13 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
             .offset((*cent).currentState.clientNum as isize)
             as *mut clientInfo_t;
         if (*cent).pe.railFireTime + 1500 as i32 > cg.time {
-            let mut scale: i32 = 255 as i32
-                * (cg.time - (*cent).pe.railFireTime)
-                / 1500 as i32;
-            gun.shaderRGBA[0 as i32 as usize] = ((*ci).c1RGBA[0 as i32 as usize] as i32 * scale
-                >> 8 as i32)
-                as byte;
-            gun.shaderRGBA[1 as i32 as usize] = ((*ci).c1RGBA[1 as i32 as usize] as i32 * scale
-                >> 8 as i32)
-                as byte;
-            gun.shaderRGBA[2 as i32 as usize] = ((*ci).c1RGBA[2 as i32 as usize] as i32 * scale
-                >> 8 as i32)
-                as byte;
+            let mut scale: i32 = 255 as i32 * (cg.time - (*cent).pe.railFireTime) / 1500 as i32;
+            gun.shaderRGBA[0 as i32 as usize] =
+                ((*ci).c1RGBA[0 as i32 as usize] as i32 * scale >> 8 as i32) as byte;
+            gun.shaderRGBA[1 as i32 as usize] =
+                ((*ci).c1RGBA[1 as i32 as usize] as i32 * scale >> 8 as i32) as byte;
+            gun.shaderRGBA[2 as i32 as usize] =
+                ((*ci).c1RGBA[2 as i32 as usize] as i32 * scale >> 8 as i32) as byte;
             gun.shaderRGBA[3 as i32 as usize] = 255 as i32 as byte
         } else {
             gun.shaderRGBA[0 as i32 as usize] = (*ci).c1RGBA[0 as i32 as usize];
@@ -2200,8 +1917,7 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
             trap_S_AddLoopingSound(
                 (*cent).currentState.number,
                 (*cent).lerpOrigin.as_mut_ptr() as *const vec_t,
-                vec3_origin.as_mut_ptr()
-                    as *const vec_t,
+                vec3_origin.as_mut_ptr() as *const vec_t,
                 (*weapon).firingSound,
             );
             (*cent).pe.lightningFiring = qtrue as i32
@@ -2209,8 +1925,7 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
             trap_S_AddLoopingSound(
                 (*cent).currentState.number,
                 (*cent).lerpOrigin.as_mut_ptr() as *const vec_t,
-                vec3_origin.as_mut_ptr()
-                    as *const vec_t,
+                vec3_origin.as_mut_ptr() as *const vec_t,
                 (*weapon).readySound,
             );
         }
@@ -2298,8 +2013,7 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     // make sure we aren't looking at cg.predictedPlayerEntity for LG
     nonPredictedCent = &mut *cg_entities
         .as_mut_ptr()
-        .offset((*cent).currentState.clientNum as isize)
-        as *mut centity_t;
+        .offset((*cent).currentState.clientNum as isize) as *mut centity_t;
     // if the index of the nonPredictedCent is not the same as the clientNum
     // then this is a fake player (like on the single player podiums), so
     // go ahead and use the cent
@@ -2338,28 +2052,20 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     angles[2 as i32 as usize] = (2.0f64
         * (((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
         * 10 as i32 as f64) as vec_t;
-    AnglesToAxis(
-        angles.as_mut_ptr() as *const vec_t,
-        flash.axis.as_mut_ptr(),
-    );
+    AnglesToAxis(angles.as_mut_ptr() as *const vec_t, flash.axis.as_mut_ptr());
     // colorize the railgun blast
     if weaponNum as u32 == WP_RAILGUN as i32 as u32 {
-        let mut ci_0: *mut clientInfo_t =
-            0 as *mut clientInfo_t;
+        let mut ci_0: *mut clientInfo_t = 0 as *mut clientInfo_t;
         ci_0 = &mut *cgs
             .clientinfo
             .as_mut_ptr()
-            .offset((*cent).currentState.clientNum as isize)
-            as *mut clientInfo_t;
-        flash.shaderRGBA[0 as i32 as usize] = (255 as i32 as f32
-            * (*ci_0).color1[0 as i32 as usize])
-            as byte;
-        flash.shaderRGBA[1 as i32 as usize] = (255 as i32 as f32
-            * (*ci_0).color1[1 as i32 as usize])
-            as byte;
-        flash.shaderRGBA[2 as i32 as usize] = (255 as i32 as f32
-            * (*ci_0).color1[2 as i32 as usize])
-            as byte
+            .offset((*cent).currentState.clientNum as isize) as *mut clientInfo_t;
+        flash.shaderRGBA[0 as i32 as usize] =
+            (255 as i32 as f32 * (*ci_0).color1[0 as i32 as usize]) as byte;
+        flash.shaderRGBA[1 as i32 as usize] =
+            (255 as i32 as f32 * (*ci_0).color1[1 as i32 as usize]) as byte;
+        flash.shaderRGBA[2 as i32 as usize] =
+            (255 as i32 as f32 * (*ci_0).color1[2 as i32 as usize]) as byte
     }
     CG_PositionRotatedEntityOnTag(
         &mut flash as *mut _ as *mut refEntity_t,
@@ -2367,15 +2073,10 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
         (*weapon).weaponModel,
         b"tag_flash\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     );
-    trap_R_AddRefEntityToScene(
-        &mut flash as *mut _ as *const refEntity_t,
-    );
+    trap_R_AddRefEntityToScene(&mut flash as *mut _ as *const refEntity_t);
     if !ps.is_null()
         || cg.renderingThirdPerson as u32 != 0
-        || (*cent).currentState.number
-            != cg
-                .predictedPlayerState
-                .clientNum
+        || (*cent).currentState.number != cg.predictedPlayerState.clientNum
     {
         // add lightning bolt
         CG_LightningBolt(nonPredictedCent, flash.origin.as_mut_ptr());
@@ -2402,9 +2103,7 @@ Add the weapon, and flash for the player's view
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_AddViewWeapon(
-    mut ps: *mut playerState_t,
-) {
+pub unsafe extern "C" fn CG_AddViewWeapon(mut ps: *mut playerState_t) {
     let mut hand: refEntity_t = refEntity_t {
         reType: RT_MODEL,
         renderfx: 0,
@@ -2431,11 +2130,8 @@ pub unsafe extern "C" fn CG_AddViewWeapon(
     let mut ci: *mut clientInfo_t = 0 as *mut clientInfo_t;
     let mut fovOffset: f32 = 0.;
     let mut angles: vec3_t = [0.; 3];
-    let mut weapon: *mut weaponInfo_t =
-        0 as *mut weaponInfo_t;
-    if (*ps).persistant[PERS_TEAM as i32 as usize]
-        == TEAM_SPECTATOR as i32
-    {
+    let mut weapon: *mut weaponInfo_t = 0 as *mut weaponInfo_t;
+    if (*ps).persistant[PERS_TEAM as i32 as usize] == TEAM_SPECTATOR as i32 {
         return;
     }
     if (*ps).pm_type == PM_INTERMISSION as i32 {
@@ -2451,28 +2147,17 @@ pub unsafe extern "C" fn CG_AddViewWeapon(
         let mut origin: vec3_t = [0.; 3];
         if cg.predictedPlayerState.eFlags & 0x100 as i32 != 0 {
             // special hack for lightning gun...
-            origin[0 as i32 as usize] =
-                cg.refdef.vieworg[0 as i32 as usize];
-            origin[1 as i32 as usize] =
-                cg.refdef.vieworg[1 as i32 as usize];
-            origin[2 as i32 as usize] =
-                cg.refdef.vieworg[2 as i32 as usize];
+            origin[0 as i32 as usize] = cg.refdef.vieworg[0 as i32 as usize];
+            origin[1 as i32 as usize] = cg.refdef.vieworg[1 as i32 as usize];
+            origin[2 as i32 as usize] = cg.refdef.vieworg[2 as i32 as usize];
             origin[0 as i32 as usize] = origin[0 as i32 as usize]
-                + cg.refdef.viewaxis[2 as i32 as usize]
-                    [0 as i32 as usize]
-                    * -(8 as i32) as f32;
+                + cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize] * -(8 as i32) as f32;
             origin[1 as i32 as usize] = origin[1 as i32 as usize]
-                + cg.refdef.viewaxis[2 as i32 as usize]
-                    [1 as i32 as usize]
-                    * -(8 as i32) as f32;
+                + cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize] * -(8 as i32) as f32;
             origin[2 as i32 as usize] = origin[2 as i32 as usize]
-                + cg.refdef.viewaxis[2 as i32 as usize]
-                    [2 as i32 as usize]
-                    * -(8 as i32) as f32;
+                + cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize] * -(8 as i32) as f32;
             CG_LightningBolt(
-                &mut *cg_entities
-                    .as_mut_ptr()
-                    .offset((*ps).clientNum as isize),
+                &mut *cg_entities.as_mut_ptr().offset((*ps).clientNum as isize),
                 origin.as_mut_ptr(),
             );
         }
@@ -2484,16 +2169,13 @@ pub unsafe extern "C" fn CG_AddViewWeapon(
     }
     // drop gun lower at higher fov
     if cg_fov.integer > 90 as i32 {
-        fovOffset =
-            (-0.2f64 * (cg_fov.integer - 90 as i32) as f64) as f32
+        fovOffset = (-0.2f64 * (cg_fov.integer - 90 as i32) as f64) as f32
     } else {
         fovOffset = 0 as i32 as f32
     } // &cg_entities[cg.snap->ps.clientNum];
     cent = &mut cg.predictedPlayerEntity;
     CG_RegisterWeapon((*ps).weapon);
-    weapon = &mut *cg_weapons
-        .as_mut_ptr()
-        .offset((*ps).weapon as isize) as *mut weaponInfo_t;
+    weapon = &mut *cg_weapons.as_mut_ptr().offset((*ps).weapon as isize) as *mut weaponInfo_t;
     crate::stdlib::memset(
         &mut hand as *mut refEntity_t as *mut libc::c_void,
         0 as i32,
@@ -2502,36 +2184,24 @@ pub unsafe extern "C" fn CG_AddViewWeapon(
     // set up gun position
     CG_CalculateWeaponPosition(hand.origin.as_mut_ptr(), angles.as_mut_ptr());
     hand.origin[0 as i32 as usize] = hand.origin[0 as i32 as usize]
-        + cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize]
-            * cg_gun_x.value;
+        + cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize] * cg_gun_x.value;
     hand.origin[1 as i32 as usize] = hand.origin[1 as i32 as usize]
-        + cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize]
-            * cg_gun_x.value;
+        + cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize] * cg_gun_x.value;
     hand.origin[2 as i32 as usize] = hand.origin[2 as i32 as usize]
-        + cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize]
-            * cg_gun_x.value;
+        + cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize] * cg_gun_x.value;
     hand.origin[0 as i32 as usize] = hand.origin[0 as i32 as usize]
-        + cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
-            * cg_gun_y.value;
+        + cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize] * cg_gun_y.value;
     hand.origin[1 as i32 as usize] = hand.origin[1 as i32 as usize]
-        + cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize]
-            * cg_gun_y.value;
+        + cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize] * cg_gun_y.value;
     hand.origin[2 as i32 as usize] = hand.origin[2 as i32 as usize]
-        + cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize]
-            * cg_gun_y.value;
+        + cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize] * cg_gun_y.value;
     hand.origin[0 as i32 as usize] = hand.origin[0 as i32 as usize]
-        + cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
-            * (cg_gun_z.value + fovOffset);
+        + cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize] * (cg_gun_z.value + fovOffset);
     hand.origin[1 as i32 as usize] = hand.origin[1 as i32 as usize]
-        + cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
-            * (cg_gun_z.value + fovOffset);
+        + cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize] * (cg_gun_z.value + fovOffset);
     hand.origin[2 as i32 as usize] = hand.origin[2 as i32 as usize]
-        + cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize]
-            * (cg_gun_z.value + fovOffset);
-    AnglesToAxis(
-        angles.as_mut_ptr() as *const vec_t,
-        hand.axis.as_mut_ptr(),
-    );
+        + cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize] * (cg_gun_z.value + fovOffset);
+    AnglesToAxis(angles.as_mut_ptr() as *const vec_t, hand.axis.as_mut_ptr());
     // map torso animations to weapon animations
     if cg_gun_frame.integer != 0 {
         // development tool
@@ -2543,8 +2213,7 @@ pub unsafe extern "C" fn CG_AddViewWeapon(
         ci = &mut *cgs
             .clientinfo
             .as_mut_ptr()
-            .offset((*cent).currentState.clientNum as isize)
-            as *mut clientInfo_t;
+            .offset((*cent).currentState.clientNum as isize) as *mut clientInfo_t;
         hand.frame = CG_MapTorsoToWeaponFrame(ci, (*cent).pe.torso.frame);
         hand.oldframe = CG_MapTorsoToWeaponFrame(ci, (*cent).pe.torso.oldFrame);
         hand.backlerp = (*cent).pe.torso.backlerp
@@ -2583,16 +2252,10 @@ pub unsafe extern "C" fn CG_DrawWeaponSelect() {
     let mut name: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut color: *mut f32 = 0 as *mut f32;
     // don't display if dead
-    if cg.predictedPlayerState.stats
-        [STAT_HEALTH as i32 as usize]
-        <= 0 as i32
-    {
+    if cg.predictedPlayerState.stats[STAT_HEALTH as i32 as usize] <= 0 as i32 {
         return;
     }
-    color = CG_FadeColor(
-        cg.weaponSelectTime,
-        1400 as i32,
-    );
+    color = CG_FadeColor(cg.weaponSelectTime, 1400 as i32);
     if color.is_null() {
         return;
     }
@@ -2600,8 +2263,7 @@ pub unsafe extern "C" fn CG_DrawWeaponSelect() {
     // showing weapon select clears pickup item display, but not the blend blob
     cg.itemPickupTime = 0 as i32;
     // count the number of weapons owned
-    bits = (*cg.snap).ps.stats
-        [STAT_WEAPONS as i32 as usize];
+    bits = (*cg.snap).ps.stats[STAT_WEAPONS as i32 as usize];
     count = 0 as i32;
     i = 1 as i32;
     while i < 16 as i32 {
@@ -2649,14 +2311,8 @@ pub unsafe extern "C" fn CG_DrawWeaponSelect() {
         i += 1
     }
     // draw the selected name
-    if !cg_weapons[cg.weaponSelect as usize]
-        .item
-        .is_null()
-    {
-        name = (*cg_weapons
-            [cg.weaponSelect as usize]
-            .item)
-            .pickup_name;
+    if !cg_weapons[cg.weaponSelect as usize].item.is_null() {
+        name = (*cg_weapons[cg.weaponSelect as usize].item).pickup_name;
         if !name.is_null() {
             w = CG_DrawStrlen(name) * 16 as i32;
             x = (640 as i32 - w) / 2 as i32;
@@ -2675,11 +2331,7 @@ unsafe extern "C" fn CG_WeaponSelectable(mut i: i32) -> qboolean {
     if (*cg.snap).ps.ammo[i as usize] == 0 {
         return qfalse;
     }
-    if (*cg.snap).ps.stats
-        [STAT_WEAPONS as i32 as usize]
-        & (1 as i32) << i
-        == 0
-    {
+    if (*cg.snap).ps.stats[STAT_WEAPONS as i32 as usize] & (1 as i32) << i == 0 {
         return qfalse;
     }
     return qtrue;
@@ -2708,8 +2360,7 @@ pub unsafe extern "C" fn CG_NextWeapon_f() {
         if cg.weaponSelect == 16 as i32 {
             cg.weaponSelect = 0 as i32
         }
-        if !(cg.weaponSelect == WP_GAUNTLET as i32)
-        {
+        if !(cg.weaponSelect == WP_GAUNTLET as i32) {
             if CG_WeaponSelectable(cg.weaponSelect) as u64 != 0 {
                 break;
             }
@@ -2745,8 +2396,7 @@ pub unsafe extern "C" fn CG_PrevWeapon_f() {
         if cg.weaponSelect == -(1 as i32) {
             cg.weaponSelect = 16 as i32 - 1 as i32
         }
-        if !(cg.weaponSelect == WP_GAUNTLET as i32)
-        {
+        if !(cg.weaponSelect == WP_GAUNTLET as i32) {
             if CG_WeaponSelectable(cg.weaponSelect) as u64 != 0 {
                 break;
             }
@@ -2778,11 +2428,7 @@ pub unsafe extern "C" fn CG_Weapon_f() {
         return;
     }
     cg.weaponSelectTime = cg.time;
-    if (*cg.snap).ps.stats
-        [STAT_WEAPONS as i32 as usize]
-        & (1 as i32) << num
-        == 0
-    {
+    if (*cg.snap).ps.stats[STAT_WEAPONS as i32 as usize] & (1 as i32) << num == 0 {
         return;
         // don't have the weapon
     }
@@ -2827,8 +2473,7 @@ Caused by an EV_FIRE_WEAPON event
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_FireWeapon(mut cent: *mut centity_t) {
-    let mut ent: *mut entityState_t =
-        0 as *mut entityState_t;
+    let mut ent: *mut entityState_t = 0 as *mut entityState_t;
     let mut c: i32 = 0;
     let mut weap: *mut weaponInfo_t = 0 as *mut weaponInfo_t;
     ent = &mut (*cent).currentState;
@@ -2840,9 +2485,7 @@ pub unsafe extern "C" fn CG_FireWeapon(mut cent: *mut centity_t) {
             b"CG_FireWeapon: ent->weapon >= WP_NUM_WEAPONS\x00" as *const u8 as *const libc::c_char,
         );
     }
-    weap = &mut *cg_weapons
-        .as_mut_ptr()
-        .offset((*ent).weapon as isize) as *mut weaponInfo_t;
+    weap = &mut *cg_weapons.as_mut_ptr().offset((*ent).weapon as isize) as *mut weaponInfo_t;
     // mark the entity as muzzle flashing, so when it is added it will
     // append the flash to the weapon model
     (*cent).muzzleFlashTime = cg.time;
@@ -2884,9 +2527,7 @@ pub unsafe extern "C" fn CG_FireWeapon(mut cent: *mut centity_t) {
         }
     }
     // do brass ejection
-    if (*weap).ejectBrassFunc.is_some()
-        && cg_brassTime.integer > 0 as i32
-    {
+    if (*weap).ejectBrassFunc.is_some() && cg_brassTime.integer > 0 as i32 {
         (*weap).ejectBrassFunc.expect("non-null function pointer")(cent);
     };
 }
@@ -2915,10 +2556,8 @@ pub unsafe extern "C" fn CG_MissileHitWall(
     let mut lightColor: vec3_t = [0.; 3];
     let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
     let mut r: i32 = 0;
-    let mut alphaFade: qboolean =
-        qfalse;
-    let mut isSprite: qboolean =
-        qfalse;
+    let mut alphaFade: qboolean = qfalse;
+    let mut isSprite: qboolean = qfalse;
     let mut duration: i32 = 0;
     let mut sprOrg: vec3_t = [0.; 3];
     let mut sprVel: vec3_t = [0.; 3];
@@ -3044,48 +2683,36 @@ pub unsafe extern "C" fn CG_MissileHitWall(
     // create the explosion
     //
     if mod_0 != 0 {
-        le = CG_MakeExplosion(
-            origin, dir, mod_0, shader, duration, isSprite,
-        ) as *mut localEntity_s;
+        le = CG_MakeExplosion(origin, dir, mod_0, shader, duration, isSprite) as *mut localEntity_s;
         (*le).light = light;
         (*le).lightColor[0 as i32 as usize] = lightColor[0 as i32 as usize];
         (*le).lightColor[1 as i32 as usize] = lightColor[1 as i32 as usize];
         (*le).lightColor[2 as i32 as usize] = lightColor[2 as i32 as usize];
         if weapon == WP_RAILGUN as i32 {
             // colorize with client color
-            (*le).color[0 as i32 as usize] = cgs.clientinfo
-                [clientNum as usize]
-                .color1[0 as i32 as usize];
-            (*le).color[1 as i32 as usize] = cgs.clientinfo
-                [clientNum as usize]
-                .color1[1 as i32 as usize];
-            (*le).color[2 as i32 as usize] = cgs.clientinfo
-                [clientNum as usize]
-                .color1[2 as i32 as usize];
-            (*le).refEntity.shaderRGBA[0 as i32 as usize] = ((*le).color[0 as i32 as usize]
-                * 0xff as i32 as f32)
-                as byte;
-            (*le).refEntity.shaderRGBA[1 as i32 as usize] = ((*le).color[1 as i32 as usize]
-                * 0xff as i32 as f32)
-                as byte;
-            (*le).refEntity.shaderRGBA[2 as i32 as usize] = ((*le).color[2 as i32 as usize]
-                * 0xff as i32 as f32)
-                as byte;
-            (*le).refEntity.shaderRGBA[3 as i32 as usize] =
-                0xff as i32 as byte
+            (*le).color[0 as i32 as usize] =
+                cgs.clientinfo[clientNum as usize].color1[0 as i32 as usize];
+            (*le).color[1 as i32 as usize] =
+                cgs.clientinfo[clientNum as usize].color1[1 as i32 as usize];
+            (*le).color[2 as i32 as usize] =
+                cgs.clientinfo[clientNum as usize].color1[2 as i32 as usize];
+            (*le).refEntity.shaderRGBA[0 as i32 as usize] =
+                ((*le).color[0 as i32 as usize] * 0xff as i32 as f32) as byte;
+            (*le).refEntity.shaderRGBA[1 as i32 as usize] =
+                ((*le).color[1 as i32 as usize] * 0xff as i32 as f32) as byte;
+            (*le).refEntity.shaderRGBA[2 as i32 as usize] =
+                ((*le).color[2 as i32 as usize] * 0xff as i32 as f32) as byte;
+            (*le).refEntity.shaderRGBA[3 as i32 as usize] = 0xff as i32 as byte
         }
     }
     //
     // impact mark
     //
-    alphaFade = (mark == cgs.media.energyMarkShader) as i32
-        as qboolean; // plasma fades alpha, all others fade color
+    alphaFade = (mark == cgs.media.energyMarkShader) as i32 as qboolean; // plasma fades alpha, all others fade color
     if weapon == WP_RAILGUN as i32 {
         let mut color: *mut f32 = 0 as *mut f32;
         // colorize with client color
-        color = cgs.clientinfo[clientNum as usize]
-            .color1
-            .as_mut_ptr();
+        color = cgs.clientinfo[clientNum as usize].color1.as_mut_ptr();
         CG_ImpactMark(
             mark,
             origin as *const vec_t,
@@ -3133,13 +2760,7 @@ pub unsafe extern "C" fn CG_MissileHitPlayer(
     // others will just make the blood
     match weapon {
         4 | 5 | 8 | 9 => {
-            CG_MissileHitWall(
-                weapon,
-                0 as i32,
-                origin,
-                dir,
-                IMPACTSOUND_FLESH,
-            );
+            CG_MissileHitWall(weapon, 0 as i32, origin, dir, IMPACTSOUND_FLESH);
         }
         _ => {}
     };
@@ -3189,41 +2810,30 @@ unsafe extern "C" fn CG_ShotgunPellet(
         skipNum,
         1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
     );
-    sourceContentType = CG_PointContents(
-        start as *const vec_t,
-        0 as i32,
-    );
-    destContentType = CG_PointContents(
-        tr.endpos.as_mut_ptr() as *const vec_t,
-        0 as i32,
-    );
+    sourceContentType = CG_PointContents(start as *const vec_t, 0 as i32);
+    destContentType = CG_PointContents(tr.endpos.as_mut_ptr() as *const vec_t, 0 as i32);
     // FIXME: should probably move this cruft into CG_BubbleTrail
     if sourceContentType == destContentType {
         if sourceContentType & 32 as i32 != 0 {
-            CG_BubbleTrail(
-                start,
-                tr.endpos.as_mut_ptr(),
-                32 as i32 as f32,
-            );
+            CG_BubbleTrail(start, tr.endpos.as_mut_ptr(), 32 as i32 as f32);
         }
     } else if sourceContentType & 32 as i32 != 0 {
-        let mut trace: trace_t =
-            trace_t {
-                allsolid: qfalse,
-                startsolid: qfalse,
-                fraction: 0.,
-                endpos: [0.; 3],
-                plane: cplane_t {
-                    normal: [0.; 3],
-                    dist: 0.,
-                    type_0: 0,
-                    signbits: 0,
-                    pad: [0; 2],
-                },
-                surfaceFlags: 0,
-                contents: 0,
-                entityNum: 0,
-            };
+        let mut trace: trace_t = trace_t {
+            allsolid: qfalse,
+            startsolid: qfalse,
+            fraction: 0.,
+            endpos: [0.; 3],
+            plane: cplane_t {
+                normal: [0.; 3],
+                dist: 0.,
+                type_0: 0,
+                signbits: 0,
+                pad: [0; 2],
+            },
+            surfaceFlags: 0,
+            contents: 0,
+            entityNum: 0,
+        };
         trap_CM_BoxTrace(
             &mut trace as *mut _ as *mut trace_t,
             end as *const vec_t,
@@ -3233,29 +2843,24 @@ unsafe extern "C" fn CG_ShotgunPellet(
             0 as i32,
             32 as i32,
         );
-        CG_BubbleTrail(
-            start,
-            trace.endpos.as_mut_ptr(),
-            32 as i32 as f32,
-        );
+        CG_BubbleTrail(start, trace.endpos.as_mut_ptr(), 32 as i32 as f32);
     } else if destContentType & 32 as i32 != 0 {
-        let mut trace_0: trace_t =
-            trace_t {
-                allsolid: qfalse,
-                startsolid: qfalse,
-                fraction: 0.,
-                endpos: [0.; 3],
-                plane: cplane_t {
-                    normal: [0.; 3],
-                    dist: 0.,
-                    type_0: 0,
-                    signbits: 0,
-                    pad: [0; 2],
-                },
-                surfaceFlags: 0,
-                contents: 0,
-                entityNum: 0,
-            };
+        let mut trace_0: trace_t = trace_t {
+            allsolid: qfalse,
+            startsolid: qfalse,
+            fraction: 0.,
+            endpos: [0.; 3],
+            plane: cplane_t {
+                normal: [0.; 3],
+                dist: 0.,
+                type_0: 0,
+                signbits: 0,
+                pad: [0; 2],
+            },
+            surfaceFlags: 0,
+            contents: 0,
+            entityNum: 0,
+        };
         trap_CM_BoxTrace(
             &mut trace_0 as *mut _ as *mut trace_t,
             start as *const vec_t,
@@ -3274,11 +2879,7 @@ unsafe extern "C" fn CG_ShotgunPellet(
     if tr.surfaceFlags & 0x10 as i32 != 0 {
         return;
     }
-    if cg_entities[tr.entityNum as usize]
-        .currentState
-        .eType
-        == ET_PLAYER as i32
-    {
+    if cg_entities[tr.entityNum as usize].currentState.eType == ET_PLAYER as i32 {
         CG_MissileHitPlayer(
             WP_SHOTGUN as i32,
             tr.endpos.as_mut_ptr(),
@@ -3333,14 +2934,8 @@ unsafe extern "C" fn CG_ShotgunPattern(
     let mut up: vec3_t = [0.; 3];
     // derive the right and up vectors from the forward vector, because
     // the client won't have any other information
-    VectorNormalize2(
-        origin2 as *const vec_t,
-        forward.as_mut_ptr(),
-    );
-    PerpendicularVector(
-        right.as_mut_ptr(),
-        forward.as_mut_ptr() as *const vec_t,
-    );
+    VectorNormalize2(origin2 as *const vec_t, forward.as_mut_ptr());
+    PerpendicularVector(right.as_mut_ptr(), forward.as_mut_ptr() as *const vec_t);
     CrossProduct(
         forward.as_mut_ptr() as *const vec_t,
         right.as_mut_ptr() as *const vec_t,
@@ -3349,12 +2944,8 @@ unsafe extern "C" fn CG_ShotgunPattern(
     // generate the "random" spread pattern
     i = 0 as i32;
     while i < 11 as i32 {
-        r = Q_crandom(&mut seed)
-            * 700 as i32 as f32
-            * 16 as i32 as f32;
-        u = Q_crandom(&mut seed)
-            * 700 as i32 as f32
-            * 16 as i32 as f32;
+        r = Q_crandom(&mut seed) * 700 as i32 as f32 * 16 as i32 as f32;
+        u = Q_crandom(&mut seed) * 700 as i32 as f32 * 16 as i32 as f32;
         end[0 as i32 as usize] = *origin.offset(0 as i32 as isize)
             + forward[0 as i32 as usize] * (8192 as i32 * 16 as i32) as f32;
         end[1 as i32 as usize] = *origin.offset(1 as i32 as isize)
@@ -3391,15 +2982,10 @@ pub unsafe extern "C" fn CG_ShotgunFire(mut es: *mut entityState_t) {
     v[0 as i32 as usize] = (*es).pos.trBase[0 as i32 as usize] + v[0 as i32 as usize];
     v[1 as i32 as usize] = (*es).pos.trBase[1 as i32 as usize] + v[1 as i32 as usize];
     v[2 as i32 as usize] = (*es).pos.trBase[2 as i32 as usize] + v[2 as i32 as usize];
-    if cgs.glconfig.hardwareType as u32
-        != GLHW_RAGEPRO as i32 as u32
-    {
+    if cgs.glconfig.hardwareType as u32 != GLHW_RAGEPRO as i32 as u32 {
         // ragepro can't alpha fade, so don't even bother with smoke
         let mut up: vec3_t = [0.; 3];
-        contents = CG_PointContents(
-            (*es).pos.trBase.as_mut_ptr() as *const vec_t,
-            0 as i32,
-        );
+        contents = CG_PointContents((*es).pos.trBase.as_mut_ptr() as *const vec_t, 0 as i32);
         if contents & 32 as i32 == 0 {
             up[0 as i32 as usize] = 0 as i32 as vec_t;
             up[1 as i32 as usize] = 0 as i32 as vec_t;
@@ -3442,10 +3028,7 @@ CG_Tracer
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_Tracer(
-    mut source: *mut vec_t,
-    mut dest: *mut vec_t,
-) {
+pub unsafe extern "C" fn CG_Tracer(mut source: *mut vec_t, mut dest: *mut vec_t) {
     let mut forward: vec3_t = [0.; 3];
     let mut right: vec3_t = [0.; 3];
     let mut verts: [polyVert_t; 4] = [polyVert_t {
@@ -3492,110 +3075,84 @@ pub unsafe extern "C" fn CG_Tracer(
         *source.offset(2 as i32 as isize) + forward[2 as i32 as usize] * end;
     line[0 as i32 as usize] = forward[0 as i32 as usize]
         * cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
-        + forward[1 as i32 as usize]
-            * cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize]
-        + forward[2 as i32 as usize]
-            * cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize];
+        + forward[1 as i32 as usize] * cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize]
+        + forward[2 as i32 as usize] * cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize];
     line[1 as i32 as usize] = forward[0 as i32 as usize]
         * cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
-        + forward[1 as i32 as usize]
-            * cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
-        + forward[2 as i32 as usize]
-            * cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize];
-    right[0 as i32 as usize] = cg.refdef.viewaxis[1 as i32 as usize]
-        [0 as i32 as usize]
-        * line[1 as i32 as usize];
-    right[1 as i32 as usize] = cg.refdef.viewaxis[1 as i32 as usize]
-        [1 as i32 as usize]
-        * line[1 as i32 as usize];
-    right[2 as i32 as usize] = cg.refdef.viewaxis[1 as i32 as usize]
-        [2 as i32 as usize]
-        * line[1 as i32 as usize];
+        + forward[1 as i32 as usize] * cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
+        + forward[2 as i32 as usize] * cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize];
+    right[0 as i32 as usize] =
+        cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize] * line[1 as i32 as usize];
+    right[1 as i32 as usize] =
+        cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize] * line[1 as i32 as usize];
+    right[2 as i32 as usize] =
+        cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize] * line[1 as i32 as usize];
     right[0 as i32 as usize] = right[0 as i32 as usize]
-        + cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
-            * -line[0 as i32 as usize];
+        + cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize] * -line[0 as i32 as usize];
     right[1 as i32 as usize] = right[1 as i32 as usize]
-        + cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
-            * -line[0 as i32 as usize];
+        + cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize] * -line[0 as i32 as usize];
     right[2 as i32 as usize] = right[2 as i32 as usize]
-        + cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize]
-            * -line[0 as i32 as usize];
+        + cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize] * -line[0 as i32 as usize];
     VectorNormalize(right.as_mut_ptr());
-    verts[0 as i32 as usize].xyz[0 as i32 as usize] = finish[0 as i32 as usize]
-        + right[0 as i32 as usize] * cg_tracerWidth.value;
-    verts[0 as i32 as usize].xyz[1 as i32 as usize] = finish[1 as i32 as usize]
-        + right[1 as i32 as usize] * cg_tracerWidth.value;
-    verts[0 as i32 as usize].xyz[2 as i32 as usize] = finish[2 as i32 as usize]
-        + right[2 as i32 as usize] * cg_tracerWidth.value;
+    verts[0 as i32 as usize].xyz[0 as i32 as usize] =
+        finish[0 as i32 as usize] + right[0 as i32 as usize] * cg_tracerWidth.value;
+    verts[0 as i32 as usize].xyz[1 as i32 as usize] =
+        finish[1 as i32 as usize] + right[1 as i32 as usize] * cg_tracerWidth.value;
+    verts[0 as i32 as usize].xyz[2 as i32 as usize] =
+        finish[2 as i32 as usize] + right[2 as i32 as usize] * cg_tracerWidth.value;
     verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
     verts[0 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
-    verts[0 as i32 as usize].modulate[0 as i32 as usize] =
-        255 as i32 as byte;
-    verts[0 as i32 as usize].modulate[1 as i32 as usize] =
-        255 as i32 as byte;
-    verts[0 as i32 as usize].modulate[2 as i32 as usize] =
-        255 as i32 as byte;
-    verts[0 as i32 as usize].modulate[3 as i32 as usize] =
-        255 as i32 as byte;
-    verts[1 as i32 as usize].xyz[0 as i32 as usize] = finish[0 as i32 as usize]
-        + right[0 as i32 as usize] * -cg_tracerWidth.value;
-    verts[1 as i32 as usize].xyz[1 as i32 as usize] = finish[1 as i32 as usize]
-        + right[1 as i32 as usize] * -cg_tracerWidth.value;
-    verts[1 as i32 as usize].xyz[2 as i32 as usize] = finish[2 as i32 as usize]
-        + right[2 as i32 as usize] * -cg_tracerWidth.value;
+    verts[0 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+    verts[0 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+    verts[0 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+    verts[0 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
+    verts[1 as i32 as usize].xyz[0 as i32 as usize] =
+        finish[0 as i32 as usize] + right[0 as i32 as usize] * -cg_tracerWidth.value;
+    verts[1 as i32 as usize].xyz[1 as i32 as usize] =
+        finish[1 as i32 as usize] + right[1 as i32 as usize] * -cg_tracerWidth.value;
+    verts[1 as i32 as usize].xyz[2 as i32 as usize] =
+        finish[2 as i32 as usize] + right[2 as i32 as usize] * -cg_tracerWidth.value;
     verts[1 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
     verts[1 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-    verts[1 as i32 as usize].modulate[0 as i32 as usize] =
-        255 as i32 as byte;
-    verts[1 as i32 as usize].modulate[1 as i32 as usize] =
-        255 as i32 as byte;
-    verts[1 as i32 as usize].modulate[2 as i32 as usize] =
-        255 as i32 as byte;
-    verts[1 as i32 as usize].modulate[3 as i32 as usize] =
-        255 as i32 as byte;
-    verts[2 as i32 as usize].xyz[0 as i32 as usize] = start[0 as i32 as usize]
-        + right[0 as i32 as usize] * -cg_tracerWidth.value;
-    verts[2 as i32 as usize].xyz[1 as i32 as usize] = start[1 as i32 as usize]
-        + right[1 as i32 as usize] * -cg_tracerWidth.value;
-    verts[2 as i32 as usize].xyz[2 as i32 as usize] = start[2 as i32 as usize]
-        + right[2 as i32 as usize] * -cg_tracerWidth.value;
+    verts[1 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+    verts[1 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+    verts[1 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+    verts[1 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
+    verts[2 as i32 as usize].xyz[0 as i32 as usize] =
+        start[0 as i32 as usize] + right[0 as i32 as usize] * -cg_tracerWidth.value;
+    verts[2 as i32 as usize].xyz[1 as i32 as usize] =
+        start[1 as i32 as usize] + right[1 as i32 as usize] * -cg_tracerWidth.value;
+    verts[2 as i32 as usize].xyz[2 as i32 as usize] =
+        start[2 as i32 as usize] + right[2 as i32 as usize] * -cg_tracerWidth.value;
     verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
     verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
-    verts[2 as i32 as usize].modulate[0 as i32 as usize] =
-        255 as i32 as byte;
-    verts[2 as i32 as usize].modulate[1 as i32 as usize] =
-        255 as i32 as byte;
-    verts[2 as i32 as usize].modulate[2 as i32 as usize] =
-        255 as i32 as byte;
-    verts[2 as i32 as usize].modulate[3 as i32 as usize] =
-        255 as i32 as byte;
-    verts[3 as i32 as usize].xyz[0 as i32 as usize] = start[0 as i32 as usize]
-        + right[0 as i32 as usize] * cg_tracerWidth.value;
-    verts[3 as i32 as usize].xyz[1 as i32 as usize] = start[1 as i32 as usize]
-        + right[1 as i32 as usize] * cg_tracerWidth.value;
-    verts[3 as i32 as usize].xyz[2 as i32 as usize] = start[2 as i32 as usize]
-        + right[2 as i32 as usize] * cg_tracerWidth.value;
+    verts[2 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+    verts[2 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+    verts[2 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+    verts[2 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
+    verts[3 as i32 as usize].xyz[0 as i32 as usize] =
+        start[0 as i32 as usize] + right[0 as i32 as usize] * cg_tracerWidth.value;
+    verts[3 as i32 as usize].xyz[1 as i32 as usize] =
+        start[1 as i32 as usize] + right[1 as i32 as usize] * cg_tracerWidth.value;
+    verts[3 as i32 as usize].xyz[2 as i32 as usize] =
+        start[2 as i32 as usize] + right[2 as i32 as usize] * cg_tracerWidth.value;
     verts[3 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
     verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
-    verts[3 as i32 as usize].modulate[0 as i32 as usize] =
-        255 as i32 as byte;
-    verts[3 as i32 as usize].modulate[1 as i32 as usize] =
-        255 as i32 as byte;
-    verts[3 as i32 as usize].modulate[2 as i32 as usize] =
-        255 as i32 as byte;
-    verts[3 as i32 as usize].modulate[3 as i32 as usize] =
-        255 as i32 as byte;
+    verts[3 as i32 as usize].modulate[0 as i32 as usize] = 255 as i32 as byte;
+    verts[3 as i32 as usize].modulate[1 as i32 as usize] = 255 as i32 as byte;
+    verts[3 as i32 as usize].modulate[2 as i32 as usize] = 255 as i32 as byte;
+    verts[3 as i32 as usize].modulate[3 as i32 as usize] = 255 as i32 as byte;
     trap_R_AddPolyToScene(
         cgs.media.tracerShader,
         4 as i32,
         verts.as_mut_ptr() as *const polyVert_t,
     );
-    midpoint[0 as i32 as usize] = ((start[0 as i32 as usize] + finish[0 as i32 as usize]) as f64
-        * 0.5f64) as vec_t;
-    midpoint[1 as i32 as usize] = ((start[1 as i32 as usize] + finish[1 as i32 as usize]) as f64
-        * 0.5f64) as vec_t;
-    midpoint[2 as i32 as usize] = ((start[2 as i32 as usize] + finish[2 as i32 as usize]) as f64
-        * 0.5f64) as vec_t;
+    midpoint[0 as i32 as usize] =
+        ((start[0 as i32 as usize] + finish[0 as i32 as usize]) as f64 * 0.5f64) as vec_t;
+    midpoint[1 as i32 as usize] =
+        ((start[1 as i32 as usize] + finish[1 as i32 as usize]) as f64 * 0.5f64) as vec_t;
+    midpoint[2 as i32 as usize] =
+        ((start[2 as i32 as usize] + finish[2 as i32 as usize]) as f64 * 0.5f64) as vec_t;
     // add the tracer sound
     trap_S_StartSound(
         midpoint.as_mut_ptr(),
@@ -3610,27 +3167,18 @@ CG_CalcMuzzlePoint
 ======================
 */
 
-unsafe extern "C" fn CG_CalcMuzzlePoint(
-    mut entityNum: i32,
-    mut muzzle: *mut vec_t,
-) -> qboolean {
+unsafe extern "C" fn CG_CalcMuzzlePoint(mut entityNum: i32, mut muzzle: *mut vec_t) -> qboolean {
     let mut forward: vec3_t = [0.; 3];
     let mut cent: *mut centity_t = 0 as *mut centity_t;
     let mut anim: i32 = 0;
     if entityNum == (*cg.snap).ps.clientNum {
-        *muzzle.offset(0 as i32 as isize) =
-            (*cg.snap).ps.origin[0 as i32 as usize];
-        *muzzle.offset(1 as i32 as isize) =
-            (*cg.snap).ps.origin[1 as i32 as usize];
-        *muzzle.offset(2 as i32 as isize) =
-            (*cg.snap).ps.origin[2 as i32 as usize];
+        *muzzle.offset(0 as i32 as isize) = (*cg.snap).ps.origin[0 as i32 as usize];
+        *muzzle.offset(1 as i32 as isize) = (*cg.snap).ps.origin[1 as i32 as usize];
+        *muzzle.offset(2 as i32 as isize) = (*cg.snap).ps.origin[2 as i32 as usize];
         let ref mut fresh9 = *muzzle.offset(2 as i32 as isize);
         *fresh9 += (*cg.snap).ps.viewheight as f32;
         AngleVectors(
-            (*cg.snap)
-                .ps
-                .viewangles
-                .as_mut_ptr() as *const vec_t,
+            (*cg.snap).ps.viewangles.as_mut_ptr() as *const vec_t,
             forward.as_mut_ptr(),
             0 as *mut vec_t,
             0 as *mut vec_t,
@@ -3643,9 +3191,7 @@ unsafe extern "C" fn CG_CalcMuzzlePoint(
             *muzzle.offset(2 as i32 as isize) + forward[2 as i32 as usize] * 14 as i32 as f32;
         return qtrue;
     }
-    cent = &mut *cg_entities
-        .as_mut_ptr()
-        .offset(entityNum as isize) as *mut centity_t;
+    cent = &mut *cg_entities.as_mut_ptr().offset(entityNum as isize) as *mut centity_t;
     if (*cent).currentValid as u64 == 0 {
         return qfalse;
     }
@@ -3653,16 +3199,13 @@ unsafe extern "C" fn CG_CalcMuzzlePoint(
     *muzzle.offset(1 as i32 as isize) = (*cent).currentState.pos.trBase[1 as i32 as usize];
     *muzzle.offset(2 as i32 as isize) = (*cent).currentState.pos.trBase[2 as i32 as usize];
     AngleVectors(
-        (*cent).currentState.apos.trBase.as_mut_ptr()
-            as *const vec_t,
+        (*cent).currentState.apos.trBase.as_mut_ptr() as *const vec_t,
         forward.as_mut_ptr(),
         0 as *mut vec_t,
         0 as *mut vec_t,
     );
     anim = (*cent).currentState.legsAnim & !(128 as i32);
-    if anim == LEGS_WALKCR as i32
-        || anim == LEGS_IDLECR as i32
-    {
+    if anim == LEGS_WALKCR as i32 || anim == LEGS_IDLECR as i32 {
         let ref mut fresh10 = *muzzle.offset(2 as i32 as isize);
         *fresh10 += 12 as i32 as f32
     } else {
@@ -3711,47 +3254,34 @@ pub unsafe extern "C" fn CG_Bullet(
     mut flesh: qboolean,
     mut fleshEntityNum: i32,
 ) {
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     let mut sourceContentType: i32 = 0;
     let mut destContentType: i32 = 0;
     let mut start: vec3_t = [0.; 3];
     // if the shooter is currently valid, calc a source point and possibly
     // do trail effects
-    if sourceEntityNum >= 0 as i32
-        && cg_tracerChance.value > 0 as i32 as f32
-    {
+    if sourceEntityNum >= 0 as i32 && cg_tracerChance.value > 0 as i32 as f32 {
         if CG_CalcMuzzlePoint(sourceEntityNum, start.as_mut_ptr()) as u64 != 0 {
-            sourceContentType = CG_PointContents(
-                start.as_mut_ptr() as *const vec_t,
-                0 as i32,
-            );
-            destContentType = CG_PointContents(
-                end as *const vec_t,
-                0 as i32,
-            );
+            sourceContentType = CG_PointContents(start.as_mut_ptr() as *const vec_t, 0 as i32);
+            destContentType = CG_PointContents(end as *const vec_t, 0 as i32);
             // do a complete bubble trail if necessary
             if sourceContentType == destContentType && sourceContentType & 32 as i32 != 0 {
-                CG_BubbleTrail(
-                    start.as_mut_ptr(),
-                    end,
-                    32 as i32 as f32,
-                );
+                CG_BubbleTrail(start.as_mut_ptr(), end, 32 as i32 as f32);
             } else if sourceContentType & 32 as i32 != 0 {
                 trap_CM_BoxTrace(
                     &mut trace as *mut _ as *mut trace_t,
@@ -3777,18 +3307,12 @@ pub unsafe extern "C" fn CG_Bullet(
                     0 as i32,
                     32 as i32,
                 );
-                CG_BubbleTrail(
-                    trace.endpos.as_mut_ptr(),
-                    end,
-                    32 as i32 as f32,
-                );
+                CG_BubbleTrail(trace.endpos.as_mut_ptr(), end, 32 as i32 as f32);
             }
             // bubble trail from water into air
             // bubble trail from air into water
             // draw a tracer
-            if ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
-                < cg_tracerChance.value
-            {
+            if ((rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) < cg_tracerChance.value {
                 CG_Tracer(start.as_mut_ptr(), end);
             }
         }

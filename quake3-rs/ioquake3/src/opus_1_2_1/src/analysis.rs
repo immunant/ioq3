@@ -922,12 +922,9 @@ unsafe extern "C" fn tonality_analysis(
 ) {
     let mut i: i32 = 0;
     let mut b: i32 = 0;
-    let mut kfft: *const kiss_fft_state =
-        0 as *const kiss_fft_state;
-    let mut in_0: *mut kiss_fft_cpx =
-        0 as *mut kiss_fft_cpx;
-    let mut out: *mut kiss_fft_cpx =
-        0 as *mut kiss_fft_cpx;
+    let mut kfft: *const kiss_fft_state = 0 as *const kiss_fft_state;
+    let mut in_0: *mut kiss_fft_cpx = 0 as *mut kiss_fft_cpx;
+    let mut out: *mut kiss_fft_cpx = 0 as *mut kiss_fft_cpx;
     let mut N: i32 = 480 as i32;
     let mut N2: i32 = 240 as i32;
     let mut A: *mut f32 = (*tonal).angle.as_mut_ptr();
@@ -1032,22 +1029,19 @@ unsafe extern "C" fn tonality_analysis(
     hp_ener = (*tonal).hp_ener_accum;
     let fresh3 = (*tonal).write_pos;
     (*tonal).write_pos = (*tonal).write_pos + 1;
-    info = &mut *(*tonal).info.as_mut_ptr().offset(fresh3 as isize)
-        as *mut AnalysisInfo;
+    info = &mut *(*tonal).info.as_mut_ptr().offset(fresh3 as isize) as *mut AnalysisInfo;
     if (*tonal).write_pos >= 100 as i32 {
         (*tonal).write_pos -= 100 as i32
     }
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<kiss_fft_cpx>()
-            as libc::c_ulong)
+        (::std::mem::size_of::<kiss_fft_cpx>() as libc::c_ulong)
             .wrapping_mul(480 as i32 as libc::c_ulong) as usize,
     );
     in_0 = fresh4.as_mut_ptr() as *mut kiss_fft_cpx;
     let mut fresh5 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<kiss_fft_cpx>()
-            as libc::c_ulong)
+        (::std::mem::size_of::<kiss_fft_cpx>() as libc::c_ulong)
             .wrapping_mul(480 as i32 as libc::c_ulong) as usize,
     );
     out = fresh5.as_mut_ptr() as *mut kiss_fft_cpx;
@@ -1649,8 +1643,7 @@ unsafe extern "C" fn tonality_analysis(
     features[23 as i32 as usize] = (*info).tonality_slope + 0.069216f32;
     features[24 as i32 as usize] = (*tonal).lowECount - 0.067930f32;
     mlp_process(
-        &net as *const _
-            as *const MLP,
+        &net as *const _ as *const MLP,
         features.as_mut_ptr(),
         frame_probs.as_mut_ptr(),
     );

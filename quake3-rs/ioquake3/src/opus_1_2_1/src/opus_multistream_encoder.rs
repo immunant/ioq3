@@ -429,9 +429,7 @@ static mut vorbis_mappings: [VorbisLayout; 8] = [
 /* then opus_val32 window_mem[channels*120]; */
 /* then opus_val32 preemph_mem[channels]; */
 
-unsafe extern "C" fn ms_get_preemph_mem(
-    mut st: *mut OpusMSEncoder,
-) -> *mut opus_val32 {
+unsafe extern "C" fn ms_get_preemph_mem(mut st: *mut OpusMSEncoder) -> *mut opus_val32 {
     let mut s: i32 = 0;
     let mut ptr: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut coupled_size: i32 = 0;
@@ -452,14 +450,11 @@ unsafe extern "C" fn ms_get_preemph_mem(
     /* void* cast avoids clang -Wcast-align warning */
     return ptr.offset(
         (((*st).layout.nb_channels * 120 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<opus_val32>() as libc::c_ulong)
-            as isize,
+            .wrapping_mul(::std::mem::size_of::<opus_val32>() as libc::c_ulong) as isize,
     ) as *mut libc::c_void as *mut opus_val32;
 }
 
-unsafe extern "C" fn ms_get_window_mem(
-    mut st: *mut OpusMSEncoder,
-) -> *mut opus_val32 {
+unsafe extern "C" fn ms_get_window_mem(mut st: *mut OpusMSEncoder) -> *mut opus_val32 {
     let mut s: i32 = 0;
     let mut ptr: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut coupled_size: i32 = 0;
@@ -481,35 +476,18 @@ unsafe extern "C" fn ms_get_window_mem(
     return ptr as *mut libc::c_void as *mut opus_val32;
 }
 
-unsafe extern "C" fn validate_encoder_layout(
-    mut layout: *const ChannelLayout,
-) -> i32 {
+unsafe extern "C" fn validate_encoder_layout(mut layout: *const ChannelLayout) -> i32 {
     let mut s: i32 = 0;
     s = 0 as i32;
     while s < (*layout).nb_streams {
         if s < (*layout).nb_coupled_streams {
-            if get_left_channel(
-                layout as *const ChannelLayout,
-                s,
-                -(1 as i32),
-            ) == -(1 as i32)
-            {
+            if get_left_channel(layout as *const ChannelLayout, s, -(1 as i32)) == -(1 as i32) {
                 return 0 as i32;
             }
-            if get_right_channel(
-                layout as *const ChannelLayout,
-                s,
-                -(1 as i32),
-            ) == -(1 as i32)
-            {
+            if get_right_channel(layout as *const ChannelLayout, s, -(1 as i32)) == -(1 as i32) {
                 return 0 as i32;
             }
-        } else if get_mono_channel(
-            layout as *const ChannelLayout,
-            s,
-            -(1 as i32),
-        ) == -(1 as i32)
-        {
+        } else if get_mono_channel(layout as *const ChannelLayout, s, -(1 as i32)) == -(1 as i32) {
             return 0 as i32;
         }
         s += 1
@@ -552,10 +530,7 @@ unsafe extern "C" fn channel_pos(mut channels: i32, mut pos: *mut i32) {
 }
 /* Computes a rough approximation of log2(2^a + 2^b) */
 
-unsafe extern "C" fn logSum(
-    mut a: opus_val16,
-    mut b: opus_val16,
-) -> opus_val16 {
+unsafe extern "C" fn logSum(mut a: opus_val16, mut b: opus_val16) -> opus_val16 {
     let mut max: opus_val16 = 0.;
     let mut diff: opus_val32 = 0.;
     let mut frac: opus_val16 = 0.;
@@ -647,8 +622,8 @@ pub unsafe extern "C" fn surround_analysis(
     in_0 = fresh0.as_mut_ptr() as *mut opus_val32;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<opus_val16>() as libc::c_ulong)
-            .wrapping_mul(len as libc::c_ulong) as usize,
+        (::std::mem::size_of::<opus_val16>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong)
+            as usize,
     );
     x = fresh1.as_mut_ptr() as *mut opus_val16;
     let mut fresh2 = ::std::vec::from_elem(
@@ -703,9 +678,7 @@ pub unsafe extern "C" fn surround_analysis(
                 in_0 as *mut libc::c_void,
                 0 as i32,
                 ((frame_size + overlap) as libc::c_ulong)
-                    .wrapping_mul(
-                        ::std::mem::size_of::<opus_val32>() as libc::c_ulong
-                    ),
+                    .wrapping_mul(::std::mem::size_of::<opus_val32>() as libc::c_ulong),
             );
             *preemph_mem.offset(c as isize) = 0 as i32 as opus_val32
         }
@@ -719,8 +692,7 @@ pub unsafe extern "C" fn surround_analysis(
         while frame < nb_frames {
             let mut tmpE: [opus_val32; 21] = [0.; 21];
             clt_mdct_forward_c(
-                &(*celt_mode).mdct as *const _
-                    as *const mdct_lookup,
+                &(*celt_mode).mdct as *const _ as *const mdct_lookup,
                 in_0.offset((960 as i32 * frame) as isize),
                 freq,
                 (*celt_mode).window,
@@ -881,8 +853,7 @@ pub unsafe extern "C" fn surround_analysis(
         } else {
             i = 0 as i32;
             while i < 21 as i32 {
-                *bandLogE.offset((21 as i32 * c + i) as isize) =
-                    0 as i32 as opus_val16;
+                *bandLogE.offset((21 as i32 * c + i) as isize) = 0 as i32 as opus_val16;
                 i += 1
             }
         }
@@ -939,12 +910,8 @@ pub unsafe extern "C" fn opus_multistream_surround_encoder_get_size(
         size = (size as libc::c_ulong).wrapping_add(
             (channels as libc::c_ulong).wrapping_mul(
                 (120 as i32 as libc::c_ulong)
-                    .wrapping_mul(
-                        ::std::mem::size_of::<opus_val32>() as libc::c_ulong
-                    )
-                    .wrapping_add(
-                        ::std::mem::size_of::<opus_val32>() as libc::c_ulong
-                    ),
+                    .wrapping_mul(::std::mem::size_of::<opus_val32>() as libc::c_ulong)
+                    .wrapping_add(::std::mem::size_of::<opus_val32>() as libc::c_ulong),
             ),
         ) as opus_int32
     }
@@ -990,10 +957,7 @@ unsafe extern "C" fn opus_multistream_encoder_init_impl(
         (*st).layout.mapping[i as usize] = *mapping.offset(i as isize);
         i += 1
     }
-    if validate_layout(
-        &mut (*st).layout as *mut _ as *const ChannelLayout,
-    ) == 0
-    {
+    if validate_layout(&mut (*st).layout as *mut _ as *const ChannelLayout) == 0 {
         return -(1 as i32);
     }
     if mapping_type as u32 == MAPPING_TYPE_SURROUND as i32 as u32
@@ -1181,9 +1145,8 @@ pub unsafe extern "C" fn opus_multistream_encoder_create(
         }
         return 0 as *mut OpusMSEncoder;
     }
-    st = opus_alloc(
-        opus_multistream_encoder_get_size(streams, coupled_streams) as size_t
-    ) as *mut OpusMSEncoder;
+    st = opus_alloc(opus_multistream_encoder_get_size(streams, coupled_streams) as size_t)
+        as *mut OpusMSEncoder;
     if st.is_null() {
         if !error.is_null() {
             *error = -(7 as i32)
@@ -1383,9 +1346,7 @@ unsafe extern "C" fn rate_allocation(
         ptr as *mut crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder,
         4029 as i32,
         (&mut Fs as *mut opus_int32).offset(
-            (&mut Fs as *mut opus_int32)
-                .offset_from(&mut Fs as *mut opus_int32) as isize
-                as isize,
+            (&mut Fs as *mut opus_int32).offset_from(&mut Fs as *mut opus_int32) as isize as isize,
         ),
     );
     surround_rate_allocation(st, rate, frame_size, Fs);
@@ -1431,8 +1392,7 @@ unsafe extern "C" fn opus_multistream_encode_native(
         framesize: 0,
     };
     let mut vbr: opus_int32 = 0;
-    let mut celt_mode: *const OpusCustomMode =
-        0 as *const OpusCustomMode;
+    let mut celt_mode: *const OpusCustomMode = 0 as *const OpusCustomMode;
     let mut bitrates: [opus_int32; 256] = [0; 256];
     let mut bandLogE: [opus_val16; 42] = [0.; 42];
     let mut mem: *mut opus_val32 = 0 as *mut opus_val32;
@@ -1450,17 +1410,14 @@ unsafe extern "C" fn opus_multistream_encode_native(
         ptr as *mut crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder,
         4029 as i32,
         (&mut Fs as *mut opus_int32).offset(
-            (&mut Fs as *mut opus_int32)
-                .offset_from(&mut Fs as *mut opus_int32) as isize
-                as isize,
+            (&mut Fs as *mut opus_int32).offset_from(&mut Fs as *mut opus_int32) as isize as isize,
         ),
     );
     crate::src::opus_1_2_1::src::opus_encoder::opus_encoder_ctl(
         ptr as *mut crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder,
         4007 as i32,
         (&mut vbr as *mut opus_int32).offset(
-            (&mut vbr as *mut opus_int32)
-                .offset_from(&mut vbr as *mut opus_int32) as isize
+            (&mut vbr as *mut opus_int32).offset_from(&mut vbr as *mut opus_int32) as isize
                 as isize,
         ),
     );
@@ -1469,17 +1426,11 @@ unsafe extern "C" fn opus_multistream_encode_native(
         10015 as i32,
         (&mut celt_mode as *mut *const OpusCustomMode).offset(
             (&mut celt_mode as *mut *const OpusCustomMode)
-                .offset_from(
-                    &mut celt_mode
-                        as *mut *const OpusCustomMode,
-                ) as isize as isize,
+                .offset_from(&mut celt_mode as *mut *const OpusCustomMode) as isize
+                as isize,
         ),
     );
-    frame_size = frame_size_select(
-        analysis_frame_size,
-        (*st).variable_duration,
-        Fs,
-    );
+    frame_size = frame_size_select(analysis_frame_size, (*st).variable_duration, Fs);
     if frame_size <= 0 as i32 {
         return -(1 as i32);
     }
@@ -1821,8 +1772,7 @@ unsafe extern "C" fn opus_copy_channel_in_short(
     mut src_channel: i32,
     mut frame_size: i32,
 ) {
-    let mut short_src: *const opus_int16 =
-        0 as *const opus_int16;
+    let mut short_src: *const opus_int16 = 0 as *const opus_int16;
     let mut i: opus_int32 = 0;
     short_src = src as *const opus_int16;
     i = 0 as i32;
@@ -1936,8 +1886,7 @@ pub unsafe extern "C" fn opus_multistream_encoder_ctl(
         .offset(align(::std::mem::size_of::<OpusMSEncoder>() as libc::c_ulong as i32) as isize);
     match request {
         4002 => {
-            let mut value: opus_int32 =
-                ap.as_va_list().arg::<opus_int32>();
+            let mut value: opus_int32 = ap.as_va_list().arg::<opus_int32>();
             if value != -(1000 as i32) && value != -(1 as i32) {
                 if value <= 0 as i32 {
                     current_block = 16375338222180917333;
@@ -1969,9 +1918,7 @@ pub unsafe extern "C" fn opus_multistream_encoder_ctl(
         }
         4003 => {
             let mut s: i32 = 0;
-            let mut value_0: *mut opus_int32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_int32>();
+            let mut value_0: *mut opus_int32 = ap.as_va_list().arg::<*mut opus_int32>();
             if value_0.is_null() {
                 current_block = 16375338222180917333;
             } else {
@@ -2003,9 +1950,7 @@ pub unsafe extern "C" fn opus_multistream_encoder_ctl(
             let mut enc_0: *mut crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder =
                 0 as *mut crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
             /* For int32* GET params, just query the first stream */
-            let mut value_1: *mut opus_int32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_int32>();
+            let mut value_1: *mut opus_int32 = ap.as_va_list().arg::<*mut opus_int32>();
             enc_0 = ptr as *mut crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder;
             ret = crate::src::opus_1_2_1::src::opus_encoder::opus_encoder_ctl(
                 enc_0, request, value_1,
@@ -2014,9 +1959,7 @@ pub unsafe extern "C" fn opus_multistream_encoder_ctl(
         }
         4031 => {
             let mut s_0: i32 = 0;
-            let mut value_2: *mut opus_uint32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_uint32>();
+            let mut value_2: *mut opus_uint32 = ap.as_va_list().arg::<*mut opus_uint32>();
             let mut tmp: opus_uint32 = 0;
             if value_2.is_null() {
                 current_block = 16375338222180917333;
@@ -2050,8 +1993,7 @@ pub unsafe extern "C" fn opus_multistream_encoder_ctl(
         | 4022 | 4042 | 4046 => {
             let mut s_1: i32 = 0;
             /* This works for int32 params */
-            let mut value_3: opus_int32 =
-                ap.as_va_list().arg::<opus_int32>();
+            let mut value_3: opus_int32 = ap.as_va_list().arg::<opus_int32>();
             s_1 = 0 as i32;
             while s_1 < (*st).layout.nb_streams {
                 let mut enc_2: *mut crate::src::opus_1_2_1::src::opus_encoder::OpusEncoder =
@@ -2101,15 +2043,12 @@ pub unsafe extern "C" fn opus_multistream_encoder_ctl(
             }
         }
         4040 => {
-            let mut value_5: opus_int32 =
-                ap.as_va_list().arg::<opus_int32>();
+            let mut value_5: opus_int32 = ap.as_va_list().arg::<opus_int32>();
             (*st).variable_duration = value_5;
             current_block = 1677945370889843322;
         }
         4041 => {
-            let mut value_6: *mut opus_int32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_int32>();
+            let mut value_6: *mut opus_int32 = ap.as_va_list().arg::<*mut opus_int32>();
             if value_6.is_null() {
                 current_block = 16375338222180917333;
             } else {
@@ -2123,16 +2062,14 @@ pub unsafe extern "C" fn opus_multistream_encoder_ctl(
                 crate::stdlib::memset(
                     ms_get_preemph_mem(st) as *mut libc::c_void,
                     0 as i32,
-                    ((*st).layout.nb_channels as libc::c_ulong).wrapping_mul(
-                        ::std::mem::size_of::<opus_val32>() as libc::c_ulong,
-                    ),
+                    ((*st).layout.nb_channels as libc::c_ulong)
+                        .wrapping_mul(::std::mem::size_of::<opus_val32>() as libc::c_ulong),
                 );
                 crate::stdlib::memset(
                     ms_get_window_mem(st) as *mut libc::c_void,
                     0 as i32,
-                    (((*st).layout.nb_channels * 120 as i32) as libc::c_ulong).wrapping_mul(
-                        ::std::mem::size_of::<opus_val32>() as libc::c_ulong,
-                    ),
+                    (((*st).layout.nb_channels * 120 as i32) as libc::c_ulong)
+                        .wrapping_mul(::std::mem::size_of::<opus_val32>() as libc::c_ulong),
                 );
             }
             s_3 = 0 as i32;

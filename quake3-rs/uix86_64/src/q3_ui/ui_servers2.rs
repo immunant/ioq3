@@ -528,8 +528,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -551,8 +550,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -580,8 +578,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -609,8 +606,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -638,8 +634,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -659,8 +654,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -680,8 +674,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -709,8 +702,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -736,8 +728,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -763,8 +754,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -790,8 +780,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -817,8 +806,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -840,8 +828,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -863,8 +850,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -890,8 +876,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -917,8 +902,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -944,8 +928,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -971,8 +954,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -998,8 +980,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1044,8 +1025,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1073,8 +1053,7 @@ static mut g_arenaservers: arenaservers_t = arenaservers_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -1159,9 +1138,7 @@ ArenaServers_MaxPing
 
 unsafe extern "C" fn ArenaServers_MaxPing() -> i32 {
     let mut maxPing: i32 = 0;
-    maxPing = trap_Cvar_VariableValue(
-        b"cl_maxPing\x00" as *const u8 as *const libc::c_char,
-    ) as i32;
+    maxPing = trap_Cvar_VariableValue(b"cl_maxPing\x00" as *const u8 as *const libc::c_char) as i32;
     if maxPing < 100 as i32 {
         maxPing = 100 as i32
     }
@@ -1184,18 +1161,8 @@ unsafe extern "C" fn ArenaServers_Compare(
     t1 = arg1 as *mut servernode_t;
     t2 = arg2 as *mut servernode_t;
     match g_sortkey {
-        0 => {
-            return Q_stricmp(
-                (*t1).hostname.as_mut_ptr(),
-                (*t2).hostname.as_mut_ptr(),
-            )
-        }
-        1 => {
-            return Q_stricmp(
-                (*t1).mapname.as_mut_ptr(),
-                (*t2).mapname.as_mut_ptr(),
-            )
-        }
+        0 => return Q_stricmp((*t1).hostname.as_mut_ptr(), (*t2).hostname.as_mut_ptr()),
+        1 => return Q_stricmp((*t1).mapname.as_mut_ptr(), (*t2).mapname.as_mut_ptr()),
         2 => {
             f1 = ((*t1).maxclients - (*t1).numclients) as f32;
             if f1 < 0 as i32 as f32 {
@@ -1229,10 +1196,7 @@ unsafe extern "C" fn ArenaServers_Compare(
             if (*t1).pingtime > (*t2).pingtime {
                 return 1 as i32;
             }
-            return Q_stricmp(
-                (*t1).hostname.as_mut_ptr(),
-                (*t2).hostname.as_mut_ptr(),
-            );
+            return Q_stricmp((*t1).hostname.as_mut_ptr(), (*t2).hostname.as_mut_ptr());
         }
         _ => {}
     }
@@ -1642,27 +1606,17 @@ unsafe extern "C" fn ArenaServers_Insert(
             .offset(*g_arenaservers.numservers as isize);
         *g_arenaservers.numservers += 1
     }
-    Q_strncpyz(
-        (*servernodeptr).adrstr.as_mut_ptr(),
-        adrstr,
-        64 as i32,
-    );
+    Q_strncpyz((*servernodeptr).adrstr.as_mut_ptr(), adrstr, 64 as i32);
     Q_strncpyz(
         (*servernodeptr).hostname.as_mut_ptr(),
-        Info_ValueForKey(
-            info,
-            b"hostname\x00" as *const u8 as *const libc::c_char,
-        ),
+        Info_ValueForKey(info, b"hostname\x00" as *const u8 as *const libc::c_char),
         22 as i32,
     );
     Q_CleanStr((*servernodeptr).hostname.as_mut_ptr());
     Q_strupr((*servernodeptr).hostname.as_mut_ptr());
     Q_strncpyz(
         (*servernodeptr).mapname.as_mut_ptr(),
-        Info_ValueForKey(
-            info,
-            b"mapname\x00" as *const u8 as *const libc::c_char,
-        ),
+        Info_ValueForKey(info, b"mapname\x00" as *const u8 as *const libc::c_char),
         16 as i32,
     );
     Q_CleanStr((*servernodeptr).mapname.as_mut_ptr());
@@ -1716,10 +1670,7 @@ unsafe extern "C" fn ArenaServers_Insert(
     {
         (*servernodeptr).nettype = 0 as i32
     }
-    s = Info_ValueForKey(
-        info,
-        b"game\x00" as *const u8 as *const libc::c_char,
-    );
+    s = Info_ValueForKey(info, b"game\x00" as *const u8 as *const libc::c_char);
     i = atoi(Info_ValueForKey(
         info,
         b"gametype\x00" as *const u8 as *const libc::c_char,
@@ -1906,9 +1857,7 @@ unsafe extern "C" fn ArenaServers_DoRefresh() {
                     return;
                 }
             }
-            if trap_LAN_GetServerCount(ArenaServers_SourceForLAN())
-                < 0 as i32
-            {
+            if trap_LAN_GetServerCount(ArenaServers_SourceForLAN()) < 0 as i32 {
                 // still waiting for response
                 return;
             }
@@ -1952,8 +1901,7 @@ unsafe extern "C" fn ArenaServers_DoRefresh() {
             if j < 32 as i32 {
                 // found it
                 if time == 0 {
-                    time = uis.realtime
-                        - g_arenaservers.pinglist[j as usize].start;
+                    time = uis.realtime - g_arenaservers.pinglist[j as usize].start;
                     if time < maxPing {
                         current_block_41 = 9828876828309294594;
                     } else {
@@ -1983,11 +1931,7 @@ unsafe extern "C" fn ArenaServers_DoRefresh() {
                                 );
                             }
                         } else {
-                            trap_LAN_GetPingInfo(
-                                i,
-                                info.as_mut_ptr(),
-                                1024 as i32,
-                            );
+                            trap_LAN_GetPingInfo(i, info.as_mut_ptr(), 1024 as i32);
                         }
                         // insert ping results
                         ArenaServers_Insert(adrstr.as_mut_ptr(), info.as_mut_ptr(), time);
@@ -2016,8 +1960,7 @@ unsafe extern "C" fn ArenaServers_DoRefresh() {
     if g_servertype == 7 as i32 {
         g_arenaservers.numqueriedservers = g_arenaservers.numfavoriteaddresses
     } else {
-        g_arenaservers.numqueriedservers =
-            trap_LAN_GetServerCount(ArenaServers_SourceForLAN())
+        g_arenaservers.numqueriedservers = trap_LAN_GetServerCount(ArenaServers_SourceForLAN())
     }
     //	if (g_arenaservers.numqueriedservers > g_arenaservers.maxservers)
     //		g_arenaservers.numqueriedservers = g_arenaservers.maxservers;
@@ -2183,9 +2126,8 @@ unsafe extern "C" fn ArenaServers_StartRefresh() {
                     b"globalservers %d %d%s\n\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char,
                     g_servertype - 1 as i32,
-                    trap_Cvar_VariableValue(
-                        b"protocol\x00" as *const u8 as *const libc::c_char,
-                    ) as i32,
+                    trap_Cvar_VariableValue(b"protocol\x00" as *const u8 as *const libc::c_char)
+                        as i32,
                     myargs.as_mut_ptr(),
                 ),
             );
@@ -2333,15 +2275,11 @@ unsafe extern "C" fn Punkbuster_ConfirmEnable(mut result: qboolean) {
     g_arenaservers.punkbuster.curvalue = Com_Clamp(
         0 as i32 as f32,
         1 as i32 as f32,
-        trap_Cvar_VariableValue(
-            b"cl_punkbuster\x00" as *const u8 as *const libc::c_char,
-        ),
+        trap_Cvar_VariableValue(b"cl_punkbuster\x00" as *const u8 as *const libc::c_char),
     ) as i32;
 }
 
-unsafe extern "C" fn Punkbuster_ConfirmDisable(
-    mut result: qboolean,
-) {
+unsafe extern "C" fn Punkbuster_ConfirmDisable(mut result: qboolean) {
     if result as u64 != 0 {
         trap_SetPbClStatus(0 as i32);
         UI_Message(punkbuster_msg.as_mut_ptr());
@@ -2349,9 +2287,7 @@ unsafe extern "C" fn Punkbuster_ConfirmDisable(
     g_arenaservers.punkbuster.curvalue = Com_Clamp(
         0 as i32 as f32,
         1 as i32 as f32,
-        trap_Cvar_VariableValue(
-            b"cl_punkbuster\x00" as *const u8 as *const libc::c_char,
-        ),
+        trap_Cvar_VariableValue(b"cl_punkbuster\x00" as *const u8 as *const libc::c_char),
     ) as i32;
 }
 /*
@@ -2435,9 +2371,7 @@ unsafe extern "C" fn ArenaServers_Event(mut ptr: *mut libc::c_void, mut event: i
             UI_SpecifyServerMenu();
         }
         21 => {
-            UI_StartServerMenu(
-                qtrue,
-            );
+            UI_StartServerMenu(qtrue);
         }
         22 => {
             ArenaServers_Go();
@@ -2452,24 +2386,14 @@ unsafe extern "C" fn ArenaServers_Event(mut ptr: *mut libc::c_void, mut event: i
                     b"Enable Punkbuster?\x00" as *const u8 as *const libc::c_char,
                     0x1 as i32 | 0x2000 as i32 | 0x10 as i32,
                     None,
-                    Some(
-                        Punkbuster_ConfirmEnable
-                            as unsafe extern "C" fn(
-                                _: qboolean,
-                            ) -> (),
-                    ),
+                    Some(Punkbuster_ConfirmEnable as unsafe extern "C" fn(_: qboolean) -> ()),
                 );
             } else {
                 UI_ConfirmMenu_Style(
                     b"Disable Punkbuster?\x00" as *const u8 as *const libc::c_char,
                     0x1 as i32 | 0x2000 as i32 | 0x10 as i32,
                     None,
-                    Some(
-                        Punkbuster_ConfirmDisable
-                            as unsafe extern "C" fn(
-                                _: qboolean,
-                            ) -> (),
-                    ),
+                    Some(Punkbuster_ConfirmDisable as unsafe extern "C" fn(_: qboolean) -> ()),
                 );
             }
         }
@@ -2486,9 +2410,7 @@ unsafe extern "C" fn ArenaServers_MenuDraw() {
     if g_arenaservers.refreshservers as u64 != 0 {
         ArenaServers_DoRefresh();
     }
-    Menu_Draw(
-        &mut g_arenaservers.menu as *mut _ as *mut _tag_menuframework,
-    );
+    Menu_Draw(&mut g_arenaservers.menu as *mut _ as *mut _tag_menuframework);
 }
 /*
 =================
@@ -2496,18 +2418,15 @@ ArenaServers_MenuKey
 =================
 */
 
-unsafe extern "C" fn ArenaServers_MenuKey(
-    mut key: i32,
-) -> sfxHandle_t {
+unsafe extern "C" fn ArenaServers_MenuKey(mut key: i32) -> sfxHandle_t {
     if key == K_SPACE as i32 && g_arenaservers.refreshservers as u32 != 0 {
         ArenaServers_StopRefresh();
         return menu_move_sound;
     }
     if (key == K_DEL as i32 || key == K_KP_DEL as i32)
         && g_servertype == 7 as i32
-        && Menu_ItemAtCursor(
-            &mut g_arenaservers.menu as *mut _ as *mut _tag_menuframework,
-        ) == &mut g_arenaservers.list as *mut menulist_s as *mut libc::c_void
+        && Menu_ItemAtCursor(&mut g_arenaservers.menu as *mut _ as *mut _tag_menuframework)
+            == &mut g_arenaservers.list as *mut menulist_s as *mut libc::c_void
     {
         ArenaServers_Remove();
         ArenaServers_UpdateMenu();
@@ -2542,10 +2461,8 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     g_arenaservers.menu.fullscreen = qtrue;
     g_arenaservers.menu.wrapAround = qtrue;
     g_arenaservers.menu.draw = Some(ArenaServers_MenuDraw as unsafe extern "C" fn() -> ());
-    g_arenaservers.menu.key = Some(
-        ArenaServers_MenuKey
-            as unsafe extern "C" fn(_: i32) -> sfxHandle_t,
-    );
+    g_arenaservers.menu.key =
+        Some(ArenaServers_MenuKey as unsafe extern "C" fn(_: i32) -> sfxHandle_t);
     g_arenaservers.banner.generic.type_0 = 10 as i32;
     g_arenaservers.banner.generic.flags = 0x8 as i32 as u32;
     g_arenaservers.banner.generic.x = 320 as i32;
@@ -2786,13 +2703,11 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     );
     Menu_AddItem(
         &mut g_arenaservers.menu as *mut _ as *mut _tag_menuframework,
-        &mut g_arenaservers.showfull as *mut menuradiobutton_s
-            as *mut libc::c_void,
+        &mut g_arenaservers.showfull as *mut menuradiobutton_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut g_arenaservers.menu as *mut _ as *mut _tag_menuframework,
-        &mut g_arenaservers.showempty as *mut menuradiobutton_s
-            as *mut libc::c_void,
+        &mut g_arenaservers.showempty as *mut menuradiobutton_s as *mut libc::c_void,
     );
     Menu_AddItem(
         &mut g_arenaservers.menu as *mut _ as *mut _tag_menuframework,
@@ -2888,16 +2803,13 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     g_arenaservers.punkbuster.curvalue = Com_Clamp(
         0 as i32 as f32,
         1 as i32 as f32,
-        trap_Cvar_VariableValue(
-            b"cl_punkbuster\x00" as *const u8 as *const libc::c_char,
-        ),
+        trap_Cvar_VariableValue(b"cl_punkbuster\x00" as *const u8 as *const libc::c_char),
     ) as i32;
     // force to initial state and refresh
     g_servertype = ArenaServers_SetType(g_servertype);
     g_arenaservers.master.curvalue = g_servertype;
     trap_Cvar_Register(
-        0 as *mut vmCvar_t
-            as *mut vmCvar_t,
+        0 as *mut vmCvar_t as *mut vmCvar_t,
         b"debug_protocol\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0 as i32,
@@ -2911,51 +2823,21 @@ ArenaServers_Cache
 #[no_mangle]
 
 pub unsafe extern "C" fn ArenaServers_Cache() {
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/back_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/create_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/create_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/specify_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/specify_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/refresh_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/refresh_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/fight_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/fight_1\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/arrows_vert_0\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/arrows_vert_top\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/arrows_vert_bot\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/unknownmap\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_R_RegisterShaderNoMip(
-        b"menu/art/pblogo\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_R_RegisterShaderNoMip(b"menu/art/back_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/back_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/create_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/create_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/specify_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/specify_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/refresh_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/refresh_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/fight_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/fight_1\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/arrows_vert_0\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/arrows_vert_top\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/arrows_vert_bot\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/unknownmap\x00" as *const u8 as *const libc::c_char);
+    trap_R_RegisterShaderNoMip(b"menu/art/pblogo\x00" as *const u8 as *const libc::c_char);
 }
 /*
 =================
@@ -2966,7 +2848,5 @@ UI_ArenaServersMenu
 
 pub unsafe extern "C" fn UI_ArenaServersMenu() {
     ArenaServers_MenuInit();
-    UI_PushMenu(
-        &mut g_arenaservers.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut g_arenaservers.menu as *mut _ as *mut _tag_menuframework);
 }

@@ -203,9 +203,7 @@ pub unsafe extern "C" fn AAS_Trace(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_PointContents(
-    mut point: *mut vec_t,
-) -> i32 {
+pub unsafe extern "C" fn AAS_PointContents(mut point: *mut vec_t) -> i32 {
     return botimport.PointContents.expect("non-null function pointer")(point);
 }
 //end of the function AAS_PointContents
@@ -277,12 +275,8 @@ pub unsafe extern "C" fn AAS_EntityCollision(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_inPVS(
-    mut p1: *mut vec_t,
-    mut p2: *mut vec_t,
-) -> qboolean {
-    return botimport.inPVS.expect("non-null function pointer")(p1, p2)
-        as qboolean;
+pub unsafe extern "C" fn AAS_inPVS(mut p1: *mut vec_t, mut p2: *mut vec_t) -> qboolean {
+    return botimport.inPVS.expect("non-null function pointer")(p1, p2) as qboolean;
 }
 //end of the function AAS_InPVS
 //===========================================================================
@@ -294,10 +288,7 @@ pub unsafe extern "C" fn AAS_inPVS(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_inPHS(
-    mut _p1: *mut vec_t,
-    mut _p2: *mut vec_t,
-) -> qboolean {
+pub unsafe extern "C" fn AAS_inPHS(mut _p1: *mut vec_t, mut _p2: *mut vec_t) -> qboolean {
     return qtrue;
 }
 //end of the function AAS_inPHS
@@ -330,10 +321,7 @@ pub unsafe extern "C" fn AAS_BSPModelMinsMaxsOrigin(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_UnlinkFromBSPLeaves(
-    mut _leaves: *mut bsp_link_t,
-) {
-}
+pub unsafe extern "C" fn AAS_UnlinkFromBSPLeaves(mut _leaves: *mut bsp_link_t) {}
 //end of the function AAS_UnlinkFromBSPLeaves
 //===========================================================================
 //
@@ -598,8 +586,7 @@ pub unsafe extern "C" fn AAS_FreeBSPEntities() {
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_ParseBSPEntities() {
-    let mut script: *mut script_t =
-        0 as *mut script_t; //SCFL_PRIMITIVE);
+    let mut script: *mut script_t = 0 as *mut script_t; //SCFL_PRIMITIVE);
     let mut token: token_t = token_t {
         string: [0; 1024],
         type_0: 0,
@@ -619,10 +606,7 @@ pub unsafe extern "C" fn AAS_ParseBSPEntities() {
         bspworld.entdatasize,
         b"entdata\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
     ) as *mut script_s;
-    SetScriptFlags(
-        script as *mut script_s,
-        0x4 as i32 | 0x8 as i32,
-    );
+    SetScriptFlags(script as *mut script_s, 0x4 as i32 | 0x8 as i32);
     bspworld.numentities = 1 as i32;
     //end if
     while PS_ReadToken(
@@ -641,9 +625,7 @@ pub unsafe extern "C" fn AAS_ParseBSPEntities() {
                 token.string.as_mut_ptr(),
             ); //end while
             AAS_FreeBSPEntities(); //end if
-            FreeScript(
-                script as *mut script_s,
-            ); //end if
+            FreeScript(script as *mut script_s); //end if
             return;
         } //end while
         if bspworld.numentities >= 2048 as i32 {
@@ -685,9 +667,7 @@ pub unsafe extern "C" fn AAS_ParseBSPEntities() {
                         token.string.as_mut_ptr(),
                     );
                     AAS_FreeBSPEntities();
-                    FreeScript(
-                        script as *mut script_s,
-                    );
+                    FreeScript(script as *mut script_s);
                     return;
                 }
                 StripDoubleQuotes(token.string.as_mut_ptr());
@@ -704,9 +684,7 @@ pub unsafe extern "C" fn AAS_ParseBSPEntities() {
                 ) == 0
                 {
                     AAS_FreeBSPEntities();
-                    FreeScript(
-                        script as *mut script_s,
-                    );
+                    FreeScript(script as *mut script_s);
                     return;
                 }
                 StripDoubleQuotes(token.string.as_mut_ptr());
@@ -726,9 +704,7 @@ pub unsafe extern "C" fn AAS_ParseBSPEntities() {
                     b"missing }\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 );
                 AAS_FreeBSPEntities();
-                FreeScript(
-                    script as *mut script_s,
-                );
+                FreeScript(script as *mut script_s);
                 return;
             }
         }

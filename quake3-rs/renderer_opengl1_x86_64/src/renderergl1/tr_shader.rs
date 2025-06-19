@@ -365,8 +365,7 @@ static mut stages: [shaderStage_t; 8] = [shaderStage_t {
         tcGen: TCGEN_BAD,
         tcGenVectors: [[0.; 3]; 2],
         numTexMods: 0,
-        texMods: 0 as *const texModInfo_t
-            as *mut texModInfo_t,
+        texMods: 0 as *const texModInfo_t as *mut texModInfo_t,
         videoMapHandle: 0,
         isLightmap: qfalse,
         isVideoMap: qfalse,
@@ -442,8 +441,7 @@ static mut shader: shader_t = shader_t {
         bulgeSpeed: 0.,
     }; 3],
     numUnfoggedPasses: 0,
-    stages: [0 as *const shaderStage_t as *mut shaderStage_t;
-        8],
+    stages: [0 as *const shaderStage_t as *mut shaderStage_t; 8],
     optimalStageIteratorFunc: None,
     clampTime: 0.,
     timeOffset: 0.,
@@ -467,8 +465,7 @@ static mut texMods: [[texModInfo_t; 4]; 8] = [[texModInfo_t {
     rotateSpeed: 0.,
 }; 4]; 8];
 
-static mut hashTable: [*mut shader_t; 1024] =
-    [0 as *const shader_t as *mut shader_t; 1024];
+static mut hashTable: [*mut shader_t; 1024] = [0 as *const shader_t as *mut shader_t; 1024];
 
 static mut shaderTextHashTable: [*mut *mut libc::c_char; 2048] =
     [0 as *const *mut libc::c_char as *mut *mut libc::c_char; 2048];
@@ -499,8 +496,7 @@ unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char, size: i32
                     __res = tolower(*fname.offset(i as isize) as i32)
                 }
             } else {
-                __res = *(*__ctype_tolower_loc())
-                    .offset(*fname.offset(i as isize) as i32 as isize)
+                __res = *(*__ctype_tolower_loc()).offset(*fname.offset(i as isize) as i32 as isize)
             }
             __res
         }) as libc::c_char;
@@ -538,9 +534,7 @@ pub unsafe extern "C" fn R_RemapShader(
         sh = R_GetShaderByHandle(h)
     }
     if sh.is_null() || sh == tr.defaultShader {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: R_RemapShader: shader %s not found\n\x00" as *const u8
                 as *const libc::c_char,
@@ -553,9 +547,7 @@ pub unsafe extern "C" fn R_RemapShader(
         sh2 = R_GetShaderByHandle(h)
     }
     if sh2.is_null() || sh2 == tr.defaultShader {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: R_RemapShader: new shader %s not found\n\x00" as *const u8
                 as *const libc::c_char,
@@ -572,11 +564,7 @@ pub unsafe extern "C" fn R_RemapShader(
     hash = generateHashValue(strippedName.as_mut_ptr(), 1024 as i32) as i32;
     sh = hashTable[hash as usize];
     while !sh.is_null() {
-        if Q_stricmp(
-            (*sh).name.as_mut_ptr(),
-            strippedName.as_mut_ptr(),
-        ) == 0 as i32
-        {
+        if Q_stricmp((*sh).name.as_mut_ptr(), strippedName.as_mut_ptr()) == 0 as i32 {
             if sh != sh2 {
                 (*sh).remappedShader = sh2
             } else {
@@ -603,12 +591,9 @@ unsafe extern "C" fn ParseVector(
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut i: i32 = 0;
     // FIXME: spaces are currently required after parens, should change parseext...
-    token =
-        COM_ParseExt(text, qfalse);
+    token = COM_ParseExt(text, qfalse);
     if libc::strcmp(token, b"(\x00" as *const u8 as *const libc::c_char) != 0 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: missing parenthesis in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -618,14 +603,9 @@ unsafe extern "C" fn ParseVector(
     }
     i = 0 as i32;
     while i < count {
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) == 0 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing vector element in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -636,12 +616,9 @@ unsafe extern "C" fn ParseVector(
         *v.offset(i as isize) = atof(token) as f32;
         i += 1
     }
-    token =
-        COM_ParseExt(text, qfalse);
+    token = COM_ParseExt(text, qfalse);
     if libc::strcmp(token, b")\x00" as *const u8 as *const libc::c_char) != 0 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: missing parenthesis in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -658,32 +635,18 @@ NameToAFunc
 */
 
 unsafe extern "C" fn NameToAFunc(mut funcname: *const libc::c_char) -> u32 {
-    if Q_stricmp(
-        funcname,
-        b"GT0\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    if Q_stricmp(funcname, b"GT0\x00" as *const u8 as *const libc::c_char) == 0 {
         return 0x10000000 as i32 as u32;
     } else {
-        if Q_stricmp(
-            funcname,
-            b"LT128\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        if Q_stricmp(funcname, b"LT128\x00" as *const u8 as *const libc::c_char) == 0 {
             return 0x20000000 as i32 as u32;
         } else {
-            if Q_stricmp(
-                funcname,
-                b"GE128\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            if Q_stricmp(funcname, b"GE128\x00" as *const u8 as *const libc::c_char) == 0 {
                 return 0x40000000 as i32 as u32;
             }
         }
     }
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_WARNING as i32,
         b"WARNING: invalid alphaFunc name \'%s\' in shader \'%s\'\n\x00" as *const u8
             as *const libc::c_char,
@@ -699,18 +662,10 @@ NameToSrcBlendMode
 */
 
 unsafe extern "C" fn NameToSrcBlendMode(mut name: *const libc::c_char) -> i32 {
-    if Q_stricmp(
-        name,
-        b"GL_ONE\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    if Q_stricmp(name, b"GL_ONE\x00" as *const u8 as *const libc::c_char) == 0 {
         return 0x2 as i32;
     } else {
-        if Q_stricmp(
-            name,
-            b"GL_ZERO\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        if Q_stricmp(name, b"GL_ZERO\x00" as *const u8 as *const libc::c_char) == 0 {
             return 0x1 as i32;
         } else {
             if Q_stricmp(
@@ -772,9 +727,7 @@ unsafe extern "C" fn NameToSrcBlendMode(mut name: *const libc::c_char) -> i32 {
             }
         }
     }
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_WARNING as i32,
         b"WARNING: unknown blend mode \'%s\' in shader \'%s\', substituting GL_ONE\n\x00"
             as *const u8 as *const libc::c_char,
@@ -790,18 +743,10 @@ NameToDstBlendMode
 */
 
 unsafe extern "C" fn NameToDstBlendMode(mut name: *const libc::c_char) -> i32 {
-    if Q_stricmp(
-        name,
-        b"GL_ONE\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    if Q_stricmp(name, b"GL_ONE\x00" as *const u8 as *const libc::c_char) == 0 {
         return 0x20 as i32;
     } else {
-        if Q_stricmp(
-            name,
-            b"GL_ZERO\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        if Q_stricmp(name, b"GL_ZERO\x00" as *const u8 as *const libc::c_char) == 0 {
             return 0x10 as i32;
         } else {
             if Q_stricmp(
@@ -854,9 +799,7 @@ unsafe extern "C" fn NameToDstBlendMode(mut name: *const libc::c_char) -> i32 {
             }
         }
     }
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_WARNING as i32,
         b"WARNING: unknown blend mode \'%s\' in shader \'%s\', substituting GL_ONE\n\x00"
             as *const u8 as *const libc::c_char,
@@ -871,21 +814,11 @@ NameToGenFunc
 ===============
 */
 
-unsafe extern "C" fn NameToGenFunc(
-    mut funcname: *const libc::c_char,
-) -> genFunc_t {
-    if Q_stricmp(
-        funcname,
-        b"sin\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+unsafe extern "C" fn NameToGenFunc(mut funcname: *const libc::c_char) -> genFunc_t {
+    if Q_stricmp(funcname, b"sin\x00" as *const u8 as *const libc::c_char) == 0 {
         return GF_SIN;
     } else {
-        if Q_stricmp(
-            funcname,
-            b"square\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        if Q_stricmp(funcname, b"square\x00" as *const u8 as *const libc::c_char) == 0 {
             return GF_SQUARE;
         } else {
             if Q_stricmp(
@@ -909,10 +842,8 @@ unsafe extern "C" fn NameToGenFunc(
                     {
                         return GF_INVERSE_SAWTOOTH;
                     } else {
-                        if Q_stricmp(
-                            funcname,
-                            b"noise\x00" as *const u8 as *const libc::c_char,
-                        ) == 0
+                        if Q_stricmp(funcname, b"noise\x00" as *const u8 as *const libc::c_char)
+                            == 0
                         {
                             return GF_NOISE;
                         }
@@ -921,9 +852,7 @@ unsafe extern "C" fn NameToGenFunc(
             }
         }
     }
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_WARNING as i32,
         b"WARNING: invalid genfunc name \'%s\' in shader \'%s\'\n\x00" as *const u8
             as *const libc::c_char,
@@ -938,17 +867,11 @@ ParseWaveForm
 ===================
 */
 
-unsafe extern "C" fn ParseWaveForm(
-    mut text: *mut *mut libc::c_char,
-    mut wave: *mut waveForm_t,
-) {
+unsafe extern "C" fn ParseWaveForm(mut text: *mut *mut libc::c_char, mut wave: *mut waveForm_t) {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
-    token =
-        COM_ParseExt(text, qfalse);
+    token = COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: missing waveform parm in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -957,12 +880,9 @@ unsafe extern "C" fn ParseWaveForm(
     }
     (*wave).func = NameToGenFunc(token);
     // BASE, AMP, PHASE, FREQ
-    token =
-        COM_ParseExt(text, qfalse);
+    token = COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: missing waveform parm in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -971,12 +891,9 @@ unsafe extern "C" fn ParseWaveForm(
         return;
     }
     (*wave).base = atof(token) as f32;
-    token =
-        COM_ParseExt(text, qfalse);
+    token = COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: missing waveform parm in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -985,12 +902,9 @@ unsafe extern "C" fn ParseWaveForm(
         return;
     }
     (*wave).amplitude = atof(token) as f32;
-    token =
-        COM_ParseExt(text, qfalse);
+    token = COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: missing waveform parm in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -999,12 +913,9 @@ unsafe extern "C" fn ParseWaveForm(
         return;
     }
     (*wave).phase = atof(token) as f32;
-    token =
-        COM_ParseExt(text, qfalse);
+    token = COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: missing waveform parm in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -1020,17 +931,12 @@ ParseTexMod
 ===================
 */
 
-unsafe extern "C" fn ParseTexMod(
-    mut _text: *mut libc::c_char,
-    mut stage: *mut shaderStage_t,
-) {
+unsafe extern "C" fn ParseTexMod(mut _text: *mut libc::c_char, mut stage: *mut shaderStage_t) {
     let mut token: *const libc::c_char = 0 as *const libc::c_char;
     let mut text: *mut *mut libc::c_char = &mut _text;
     let mut tmi: *mut texModInfo_t = 0 as *mut texModInfo_t;
     if (*stage).bundle[0 as i32 as usize].numTexMods == 4 as i32 {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"ERROR: too many tcMod stages in shader \'%s\'\x00" as *const u8
                 as *const libc::c_char,
@@ -1042,24 +948,14 @@ unsafe extern "C" fn ParseTexMod(
         .offset((*(*stage).bundle.as_mut_ptr().offset(0 as i32 as isize)).numTexMods as isize)
         as *mut texModInfo_t;
     (*stage).bundle[0 as i32 as usize].numTexMods += 1;
-    token =
-        COM_ParseExt(text, qfalse);
+    token = COM_ParseExt(text, qfalse);
     //
     // turb
     //
-    if Q_stricmp(
-        token,
-        b"turb\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+    if Q_stricmp(token, b"turb\x00" as *const u8 as *const libc::c_char) == 0 {
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing tcMod turb parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1068,14 +964,9 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.base = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing tcMod turb in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1084,14 +975,9 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.amplitude = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing tcMod turb in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1100,14 +986,9 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.phase = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing tcMod turb in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1117,19 +998,10 @@ unsafe extern "C" fn ParseTexMod(
         }
         (*tmi).wave.frequency = atof(token) as f32;
         (*tmi).type_0 = TMOD_TURBULENT
-    } else if Q_stricmp(
-        token,
-        b"scale\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+    } else if Q_stricmp(token, b"scale\x00" as *const u8 as *const libc::c_char) == 0 {
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing scale parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1138,14 +1010,9 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).scale[0 as i32 as usize] = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing scale parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1155,19 +1022,10 @@ unsafe extern "C" fn ParseTexMod(
         }
         (*tmi).scale[1 as i32 as usize] = atof(token) as f32;
         (*tmi).type_0 = TMOD_SCALE
-    } else if Q_stricmp(
-        token,
-        b"scroll\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+    } else if Q_stricmp(token, b"scroll\x00" as *const u8 as *const libc::c_char) == 0 {
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing scale scroll parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1176,14 +1034,9 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).scroll[0 as i32 as usize] = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing scale scroll parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1193,19 +1046,10 @@ unsafe extern "C" fn ParseTexMod(
         }
         (*tmi).scroll[1 as i32 as usize] = atof(token) as f32;
         (*tmi).type_0 = TMOD_SCROLL
-    } else if Q_stricmp(
-        token,
-        b"stretch\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+    } else if Q_stricmp(token, b"stretch\x00" as *const u8 as *const libc::c_char) == 0 {
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing stretch parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1214,14 +1058,9 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.func = NameToGenFunc(token);
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing stretch parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1230,14 +1069,9 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.base = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing stretch parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1246,14 +1080,9 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.amplitude = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing stretch parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1262,14 +1091,9 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).wave.phase = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing stretch parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1279,19 +1103,10 @@ unsafe extern "C" fn ParseTexMod(
         }
         (*tmi).wave.frequency = atof(token) as f32;
         (*tmi).type_0 = TMOD_STRETCH
-    } else if Q_stricmp(
-        token,
-        b"transform\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+    } else if Q_stricmp(token, b"transform\x00" as *const u8 as *const libc::c_char) == 0 {
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing transform parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1300,14 +1115,9 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).matrix[0 as i32 as usize][0 as i32 as usize] = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing transform parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1316,14 +1126,9 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).matrix[0 as i32 as usize][1 as i32 as usize] = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing transform parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1332,14 +1137,9 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).matrix[1 as i32 as usize][0 as i32 as usize] = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing transform parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1348,14 +1148,9 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).matrix[1 as i32 as usize][1 as i32 as usize] = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing transform parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1364,14 +1159,9 @@ unsafe extern "C" fn ParseTexMod(
             return;
         }
         (*tmi).translate[0 as i32 as usize] = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing transform parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1381,19 +1171,10 @@ unsafe extern "C" fn ParseTexMod(
         }
         (*tmi).translate[1 as i32 as usize] = atof(token) as f32;
         (*tmi).type_0 = TMOD_TRANSFORM
-    } else if Q_stricmp(
-        token,
-        b"rotate\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+    } else if Q_stricmp(token, b"rotate\x00" as *const u8 as *const libc::c_char) == 0 {
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing tcMod rotate parms in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -1410,9 +1191,7 @@ unsafe extern "C" fn ParseTexMod(
     {
         (*tmi).type_0 = TMOD_ENTITY_TRANSLATE
     } else {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: unknown tcMod \'%s\' in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -1455,16 +1234,12 @@ unsafe extern "C" fn ParseStage(
     let mut blendDstBits: i32 = 0 as i32;
     let mut atestBits: i32 = 0 as i32;
     let mut depthFuncBits: i32 = 0 as i32;
-    let mut depthMaskExplicit: qboolean =
-        qfalse;
+    let mut depthMaskExplicit: qboolean = qfalse;
     (*stage).active = qtrue;
     loop {
-        token =
-            COM_ParseExt(text, qtrue);
+        token = COM_ParseExt(text, qtrue);
         if *token.offset(0 as i32 as isize) == 0 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: no matching \'}\' found\n\x00" as *const u8 as *const libc::c_char,
             );
@@ -1476,19 +1251,10 @@ unsafe extern "C" fn ParseStage(
         //
         // map <name>
         //
-        if Q_stricmp(
-            token,
-            b"map\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+        if Q_stricmp(token, b"map\x00" as *const u8 as *const libc::c_char) == 0 {
+            token = COM_ParseExt(text, qfalse);
             if *token.offset(0 as i32 as isize) == 0 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: missing parameter for \'map\' keyword in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
@@ -1501,29 +1267,17 @@ unsafe extern "C" fn ParseStage(
                 b"$whiteimage\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] =
-                    tr.whiteImage
-            } else if Q_stricmp(
-                token,
-                b"$lightmap\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
-                (*stage).bundle[0 as i32 as usize].isLightmap =
-                    qtrue;
-                if shader.lightmapIndex < 0 as i32
-                    || tr.lightmaps.is_null()
-                {
-                    (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] =
-                        tr.whiteImage
+                (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] = tr.whiteImage
+            } else if Q_stricmp(token, b"$lightmap\x00" as *const u8 as *const libc::c_char) == 0 {
+                (*stage).bundle[0 as i32 as usize].isLightmap = qtrue;
+                if shader.lightmapIndex < 0 as i32 || tr.lightmaps.is_null() {
+                    (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] = tr.whiteImage
                 } else {
                     (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] =
-                        *tr
-                            .lightmaps
-                            .offset(shader.lightmapIndex as isize)
+                        *tr.lightmaps.offset(shader.lightmapIndex as isize)
                 }
             } else {
-                let mut type_0: imgType_t =
-                    IMGTYPE_COLORALPHA;
+                let mut type_0: imgType_t = IMGTYPE_COLORALPHA;
                 let mut flags: imgFlags_t = IMGFLAG_NONE;
                 if shader.noMipMaps as u64 == 0 {
                     flags = ::std::mem::transmute::<u32, imgFlags_t>(
@@ -1536,12 +1290,9 @@ unsafe extern "C" fn ParseStage(
                     )
                 }
                 (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] =
-                    R_FindImageFile(token, type_0, flags)
-                        as *mut image_s;
+                    R_FindImageFile(token, type_0, flags) as *mut image_s;
                 if (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize].is_null() {
-                    ri
-                        .Printf
-                        .expect("non-null function pointer")(
+                    ri.Printf.expect("non-null function pointer")(
                         PRINT_WARNING as i32,
                         b"WARNING: R_FindImageFile could not find \'%s\' in shader \'%s\'\n\x00"
                             as *const u8 as *const libc::c_char,
@@ -1551,22 +1302,12 @@ unsafe extern "C" fn ParseStage(
                     return qfalse;
                 }
             }
-        } else if Q_stricmp(
-            token,
-            b"clampmap\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"clampmap\x00" as *const u8 as *const libc::c_char) == 0 {
             let mut type_1: imgType_t = IMGTYPE_COLORALPHA;
-            let mut flags_0: imgFlags_t =
-                IMGFLAG_CLAMPTOEDGE;
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+            let mut flags_0: imgFlags_t = IMGFLAG_CLAMPTOEDGE;
+            token = COM_ParseExt(text, qfalse);
             if *token.offset(0 as i32 as isize) == 0 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: missing parameter for \'clampmap\' keyword in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
@@ -1585,12 +1326,9 @@ unsafe extern "C" fn ParseStage(
                 )
             }
             (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] =
-                R_FindImageFile(token, type_1, flags_0)
-                    as *mut image_s;
+                R_FindImageFile(token, type_1, flags_0) as *mut image_s;
             if (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize].is_null() {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: R_FindImageFile could not find \'%s\' in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
@@ -1599,20 +1337,11 @@ unsafe extern "C" fn ParseStage(
                 );
                 return qfalse;
             }
-        } else if Q_stricmp(
-            token,
-            b"animMap\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"animMap\x00" as *const u8 as *const libc::c_char) == 0 {
             let mut totalImages: i32 = 0 as i32;
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+            token = COM_ParseExt(text, qfalse);
             if *token.offset(0 as i32 as isize) == 0 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: missing parameter for \'animMap\' keyword in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
@@ -1631,17 +1360,13 @@ unsafe extern "C" fn ParseStage(
             // parse up to MAX_IMAGE_ANIMATIONS animations
             {
                 let mut num: i32 = 0;
-                token = COM_ParseExt(
-                    text,
-                    qfalse,
-                );
+                token = COM_ParseExt(text, qfalse);
                 if *token.offset(0 as i32 as isize) == 0 {
                     break;
                 }
                 num = (*stage).bundle[0 as i32 as usize].numImageAnimations;
                 if num < 8 as i32 {
-                    let mut flags_1: imgFlags_t =
-                        IMGFLAG_NONE;
+                    let mut flags_1: imgFlags_t = IMGFLAG_NONE;
                     if shader.noMipMaps as u64 == 0 {
                         flags_1 = ::std::mem::transmute::<u32, imgFlags_t>(
                             flags_1 as u32 | IMGFLAG_MIPMAP as i32 as u32,
@@ -1653,15 +1378,9 @@ unsafe extern "C" fn ParseStage(
                         )
                     }
                     (*stage).bundle[0 as i32 as usize].image[num as usize] =
-                        R_FindImageFile(
-                            token,
-                            IMGTYPE_COLORALPHA,
-                            flags_1,
-                        ) as *mut image_s;
+                        R_FindImageFile(token, IMGTYPE_COLORALPHA, flags_1) as *mut image_s;
                     if (*stage).bundle[0 as i32 as usize].image[num as usize].is_null() {
-                        ri
-                            .Printf
-                            .expect("non-null function pointer")(
+                        ri.Printf.expect("non-null function pointer")(
                             PRINT_WARNING as i32,
                             b"WARNING: R_FindImageFile could not find \'%s\' in shader \'%s\'\n\x00"
                                 as *const u8 as *const libc::c_char,
@@ -1686,19 +1405,10 @@ unsafe extern "C" fn ParseStage(
                                                                   i32,
                                                               shader.name.as_mut_ptr());
             }
-        } else if Q_stricmp(
-            token,
-            b"videoMap\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+        } else if Q_stricmp(token, b"videoMap\x00" as *const u8 as *const libc::c_char) == 0 {
+            token = COM_ParseExt(text, qfalse);
             if *token.offset(0 as i32 as isize) == 0 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: missing parameter for \'videoMap\' keyword in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
@@ -1707,9 +1417,7 @@ unsafe extern "C" fn ParseStage(
                 return qfalse;
             }
             (*stage).bundle[0 as i32 as usize].videoMapHandle =
-                ri
-                    .CIN_PlayCinematic
-                    .expect("non-null function pointer")(
+                ri.CIN_PlayCinematic.expect("non-null function pointer")(
                     token,
                     0 as i32,
                     0 as i32,
@@ -1718,11 +1426,9 @@ unsafe extern "C" fn ParseStage(
                     2 as i32 | 8 as i32 | 16 as i32,
                 );
             if (*stage).bundle[0 as i32 as usize].videoMapHandle != -(1 as i32) {
-                (*stage).bundle[0 as i32 as usize].isVideoMap =
-                    qtrue;
+                (*stage).bundle[0 as i32 as usize].isVideoMap = qtrue;
                 (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] =
-                    tr.scratchImage
-                        [(*stage).bundle[0 as i32 as usize].videoMapHandle as usize]
+                    tr.scratchImage[(*stage).bundle[0 as i32 as usize].videoMapHandle as usize]
             } else {
                 ri.Printf.expect("non-null function pointer")(PRINT_WARNING as
                                                                   i32,
@@ -1733,19 +1439,10 @@ unsafe extern "C" fn ParseStage(
                                                               token,
                                                               shader.name.as_mut_ptr());
             }
-        } else if Q_stricmp(
-            token,
-            b"alphaFunc\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+        } else if Q_stricmp(token, b"alphaFunc\x00" as *const u8 as *const libc::c_char) == 0 {
+            token = COM_ParseExt(text, qfalse);
             if *token.offset(0 as i32 as isize) == 0 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: missing parameter for \'alphaFunc\' keyword in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
@@ -1754,19 +1451,10 @@ unsafe extern "C" fn ParseStage(
                 return qfalse;
             }
             atestBits = NameToAFunc(token) as i32
-        } else if Q_stricmp(
-            token,
-            b"depthfunc\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+        } else if Q_stricmp(token, b"depthfunc\x00" as *const u8 as *const libc::c_char) == 0 {
+            token = COM_ParseExt(text, qfalse);
             if *token.offset(0 as i32 as isize) == 0 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: missing parameter for \'depthfunc\' keyword in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
@@ -1774,22 +1462,12 @@ unsafe extern "C" fn ParseStage(
                 );
                 return qfalse;
             }
-            if Q_stricmp(
-                token,
-                b"lequal\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            if Q_stricmp(token, b"lequal\x00" as *const u8 as *const libc::c_char) == 0 {
                 depthFuncBits = 0 as i32
-            } else if Q_stricmp(
-                token,
-                b"equal\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"equal\x00" as *const u8 as *const libc::c_char) == 0 {
                 depthFuncBits = 0x20000 as i32
             } else {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: unknown depthfunc \'%s\' in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
@@ -1797,25 +1475,12 @@ unsafe extern "C" fn ParseStage(
                     shader.name.as_mut_ptr(),
                 );
             }
-        } else if Q_stricmp(
-            token,
-            b"detail\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"detail\x00" as *const u8 as *const libc::c_char) == 0 {
             (*stage).isDetail = qtrue
-        } else if Q_stricmp(
-            token,
-            b"blendfunc\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+        } else if Q_stricmp(token, b"blendfunc\x00" as *const u8 as *const libc::c_char) == 0 {
+            token = COM_ParseExt(text, qfalse);
             if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: missing parm for blendFunc in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
@@ -1836,38 +1501,21 @@ unsafe extern "C" fn ParseStage(
                 // or blendfunc <add|filter|blend>
                 //
                 // check for "simple" blends first
-                if Q_stricmp(
-                    token,
-                    b"add\x00" as *const u8 as *const libc::c_char,
-                ) == 0
-                {
+                if Q_stricmp(token, b"add\x00" as *const u8 as *const libc::c_char) == 0 {
                     blendSrcBits = 0x2 as i32;
                     blendDstBits = 0x20 as i32
-                } else if Q_stricmp(
-                    token,
-                    b"filter\x00" as *const u8 as *const libc::c_char,
-                ) == 0
-                {
+                } else if Q_stricmp(token, b"filter\x00" as *const u8 as *const libc::c_char) == 0 {
                     blendSrcBits = 0x3 as i32;
                     blendDstBits = 0x10 as i32
-                } else if Q_stricmp(
-                    token,
-                    b"blend\x00" as *const u8 as *const libc::c_char,
-                ) == 0
-                {
+                } else if Q_stricmp(token, b"blend\x00" as *const u8 as *const libc::c_char) == 0 {
                     blendSrcBits = 0x5 as i32;
                     blendDstBits = 0x60 as i32
                 } else {
                     // complex double blends
                     blendSrcBits = NameToSrcBlendMode(token);
-                    token = COM_ParseExt(
-                        text,
-                        qfalse,
-                    );
+                    token = COM_ParseExt(text, qfalse);
                     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-                        ri
-                            .Printf
-                            .expect("non-null function pointer")(
+                        ri.Printf.expect("non-null function pointer")(
                             PRINT_WARNING as i32,
                             b"WARNING: missing parm for blendFunc in shader \'%s\'\n\x00"
                                 as *const u8 as *const libc::c_char,
@@ -1883,56 +1531,32 @@ unsafe extern "C" fn ParseStage(
                     depthMaskBits = 0 as i32
                 }
             }
-        } else if Q_stricmp(
-            token,
-            b"rgbGen\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+        } else if Q_stricmp(token, b"rgbGen\x00" as *const u8 as *const libc::c_char) == 0 {
+            token = COM_ParseExt(text, qfalse);
             if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: missing parameters for rgbGen in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
-            } else if Q_stricmp(
-                token,
-                b"wave\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"wave\x00" as *const u8 as *const libc::c_char) == 0 {
                 ParseWaveForm(text, &mut (*stage).rgbWave);
                 (*stage).rgbGen = CGEN_WAVEFORM
-            } else if Q_stricmp(
-                token,
-                b"const\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"const\x00" as *const u8 as *const libc::c_char) == 0 {
                 let mut color: vec3_t = [0.; 3];
                 color[2 as i32 as usize] = 0 as i32 as vec_t;
                 color[1 as i32 as usize] = color[2 as i32 as usize];
                 color[0 as i32 as usize] = color[1 as i32 as usize];
                 ParseVector(text, 3 as i32, color.as_mut_ptr());
-                (*stage).constantColor[0 as i32 as usize] = (255 as i32 as f32
-                    * color[0 as i32 as usize])
-                    as byte;
-                (*stage).constantColor[1 as i32 as usize] = (255 as i32 as f32
-                    * color[1 as i32 as usize])
-                    as byte;
-                (*stage).constantColor[2 as i32 as usize] = (255 as i32 as f32
-                    * color[2 as i32 as usize])
-                    as byte;
+                (*stage).constantColor[0 as i32 as usize] =
+                    (255 as i32 as f32 * color[0 as i32 as usize]) as byte;
+                (*stage).constantColor[1 as i32 as usize] =
+                    (255 as i32 as f32 * color[1 as i32 as usize]) as byte;
+                (*stage).constantColor[2 as i32 as usize] =
+                    (255 as i32 as f32 * color[2 as i32 as usize]) as byte;
                 (*stage).rgbGen = CGEN_CONST
-            } else if Q_stricmp(
-                token,
-                b"identity\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"identity\x00" as *const u8 as *const libc::c_char) == 0 {
                 (*stage).rgbGen = CGEN_IDENTITY
             } else if Q_stricmp(
                 token,
@@ -1940,11 +1564,7 @@ unsafe extern "C" fn ParseStage(
             ) == 0
             {
                 (*stage).rgbGen = CGEN_IDENTITY_LIGHTING
-            } else if Q_stricmp(
-                token,
-                b"entity\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"entity\x00" as *const u8 as *const libc::c_char) == 0 {
                 (*stage).rgbGen = CGEN_ENTITY
             } else if Q_stricmp(
                 token,
@@ -1952,11 +1572,7 @@ unsafe extern "C" fn ParseStage(
             ) == 0
             {
                 (*stage).rgbGen = CGEN_ONE_MINUS_ENTITY
-            } else if Q_stricmp(
-                token,
-                b"vertex\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"vertex\x00" as *const u8 as *const libc::c_char) == 0 {
                 (*stage).rgbGen = CGEN_VERTEX;
                 if (*stage).alphaGen as u32 == 0 as i32 as u32 {
                     (*stage).alphaGen = AGEN_VERTEX
@@ -1980,9 +1596,7 @@ unsafe extern "C" fn ParseStage(
             {
                 (*stage).rgbGen = CGEN_ONE_MINUS_VERTEX
             } else {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: unknown rgbGen parameter \'%s\' in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
@@ -1990,54 +1604,26 @@ unsafe extern "C" fn ParseStage(
                     shader.name.as_mut_ptr(),
                 );
             }
-        } else if Q_stricmp(
-            token,
-            b"alphaGen\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+        } else if Q_stricmp(token, b"alphaGen\x00" as *const u8 as *const libc::c_char) == 0 {
+            token = COM_ParseExt(text, qfalse);
             if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: missing parameters for alphaGen in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
-            } else if Q_stricmp(
-                token,
-                b"wave\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"wave\x00" as *const u8 as *const libc::c_char) == 0 {
                 ParseWaveForm(text, &mut (*stage).alphaWave);
                 (*stage).alphaGen = AGEN_WAVEFORM
-            } else if Q_stricmp(
-                token,
-                b"const\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
-                token = COM_ParseExt(
-                    text,
-                    qfalse,
-                );
+            } else if Q_stricmp(token, b"const\x00" as *const u8 as *const libc::c_char) == 0 {
+                token = COM_ParseExt(text, qfalse);
                 (*stage).constantColor[3 as i32 as usize] =
                     (255 as i32 as f64 * atof(token)) as byte;
                 (*stage).alphaGen = AGEN_CONST
-            } else if Q_stricmp(
-                token,
-                b"identity\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"identity\x00" as *const u8 as *const libc::c_char) == 0 {
                 (*stage).alphaGen = AGEN_IDENTITY
-            } else if Q_stricmp(
-                token,
-                b"entity\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"entity\x00" as *const u8 as *const libc::c_char) == 0 {
                 (*stage).alphaGen = AGEN_ENTITY
             } else if Q_stricmp(
                 token,
@@ -2045,11 +1631,7 @@ unsafe extern "C" fn ParseStage(
             ) == 0
             {
                 (*stage).alphaGen = AGEN_ONE_MINUS_ENTITY
-            } else if Q_stricmp(
-                token,
-                b"vertex\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"vertex\x00" as *const u8 as *const libc::c_char) == 0 {
                 (*stage).alphaGen = AGEN_VERTEX
             } else if Q_stricmp(
                 token,
@@ -2063,16 +1645,9 @@ unsafe extern "C" fn ParseStage(
             ) == 0
             {
                 (*stage).alphaGen = AGEN_ONE_MINUS_VERTEX
-            } else if Q_stricmp(
-                token,
-                b"portal\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"portal\x00" as *const u8 as *const libc::c_char) == 0 {
                 (*stage).alphaGen = AGEN_PORTAL;
-                token = COM_ParseExt(
-                    text,
-                    qfalse,
-                );
+                token = COM_ParseExt(text, qfalse);
                 if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
                     shader.portalRange = 256 as i32 as f32;
                     ri.Printf.expect("non-null function pointer")(PRINT_WARNING
@@ -2088,9 +1663,7 @@ unsafe extern "C" fn ParseStage(
                     shader.portalRange = atof(token) as f32
                 }
             } else {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: unknown alphaGen parameter \'%s\' in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
@@ -2098,23 +1671,12 @@ unsafe extern "C" fn ParseStage(
                     shader.name.as_mut_ptr(),
                 );
             }
-        } else if Q_stricmp(
-            token,
-            b"texgen\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-            || Q_stricmp(
-                token,
-                b"tcGen\x00" as *const u8 as *const libc::c_char,
-            ) == 0
+        } else if Q_stricmp(token, b"texgen\x00" as *const u8 as *const libc::c_char) == 0
+            || Q_stricmp(token, b"tcGen\x00" as *const u8 as *const libc::c_char) == 0
         {
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+            token = COM_ParseExt(text, qfalse);
             if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: missing texgen parm in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
@@ -2125,29 +1687,14 @@ unsafe extern "C" fn ParseStage(
                 b"environment\x00" as *const u8 as *const libc::c_char,
             ) == 0
             {
-                (*stage).bundle[0 as i32 as usize].tcGen =
-                    TCGEN_ENVIRONMENT_MAPPED
-            } else if Q_stricmp(
-                token,
-                b"lightmap\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+                (*stage).bundle[0 as i32 as usize].tcGen = TCGEN_ENVIRONMENT_MAPPED
+            } else if Q_stricmp(token, b"lightmap\x00" as *const u8 as *const libc::c_char) == 0 {
                 (*stage).bundle[0 as i32 as usize].tcGen = TCGEN_LIGHTMAP
-            } else if Q_stricmp(
-                token,
-                b"texture\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-                || Q_stricmp(
-                    token,
-                    b"base\x00" as *const u8 as *const libc::c_char,
-                ) == 0
+            } else if Q_stricmp(token, b"texture\x00" as *const u8 as *const libc::c_char) == 0
+                || Q_stricmp(token, b"base\x00" as *const u8 as *const libc::c_char) == 0
             {
                 (*stage).bundle[0 as i32 as usize].tcGen = TCGEN_TEXTURE
-            } else if Q_stricmp(
-                token,
-                b"vector\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-            {
+            } else if Q_stricmp(token, b"vector\x00" as *const u8 as *const libc::c_char) == 0 {
                 ParseVector(
                     text,
                     3 as i32,
@@ -2160,28 +1707,19 @@ unsafe extern "C" fn ParseStage(
                 );
                 (*stage).bundle[0 as i32 as usize].tcGen = TCGEN_VECTOR
             } else {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: unknown texgen parm in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
             }
-        } else if Q_stricmp(
-            token,
-            b"tcMod\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"tcMod\x00" as *const u8 as *const libc::c_char) == 0 {
             let mut buffer: [libc::c_char; 1024] =
                 *::std::mem::transmute::<&[u8; 1024],
                                          &mut [libc::c_char; 1024]>(b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00");
             loop {
-                token = COM_ParseExt(
-                    text,
-                    qfalse,
-                );
+                token = COM_ParseExt(text, qfalse);
                 if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
                     break;
                 }
@@ -2197,17 +1735,11 @@ unsafe extern "C" fn ParseStage(
                 );
             }
             ParseTexMod(buffer.as_mut_ptr(), stage);
-        } else if Q_stricmp(
-            token,
-            b"depthwrite\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"depthwrite\x00" as *const u8 as *const libc::c_char) == 0 {
             depthMaskBits = 0x100 as i32;
             depthMaskExplicit = qtrue
         } else {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: unknown parameter \'%s\' in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -2283,12 +1815,9 @@ deformVertexes text[0-7]
 unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut ds: *mut deformStage_t = 0 as *mut deformStage_t;
-    token =
-        COM_ParseExt(text, qfalse);
+    token = COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: missing deform parm in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -2297,9 +1826,7 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
         return;
     }
     if shader.numDeforms == 3 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: MAX_SHADER_DEFORMS in \'%s\'\n\x00" as *const u8 as *const libc::c_char,
             shader.name.as_mut_ptr(),
@@ -2319,11 +1846,7 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
         (*ds).deformation = DEFORM_PROJECTION_SHADOW;
         return;
     }
-    if Q_stricmp(
-        token,
-        b"autosprite\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    if Q_stricmp(token, b"autosprite\x00" as *const u8 as *const libc::c_char) == 0 {
         (*ds).deformation = DEFORM_AUTOSPRITE;
         return;
     }
@@ -2346,23 +1869,13 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
         if n < 0 as i32 || n > 7 as i32 {
             n = 0 as i32
         }
-        (*ds).deformation =
-            (DEFORM_TEXT0 as i32 + n) as deform_t;
+        (*ds).deformation = (DEFORM_TEXT0 as i32 + n) as deform_t;
         return;
     }
-    if Q_stricmp(
-        token,
-        b"bulge\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+    if Q_stricmp(token, b"bulge\x00" as *const u8 as *const libc::c_char) == 0 {
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing deformVertexes bulge parm in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -2371,14 +1884,9 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
             return;
         }
         (*ds).bulgeWidth = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing deformVertexes bulge parm in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -2387,14 +1895,9 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
             return;
         }
         (*ds).bulgeHeight = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing deformVertexes bulge parm in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -2406,19 +1909,10 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
         (*ds).deformation = DEFORM_BULGE;
         return;
     }
-    if Q_stricmp(
-        token,
-        b"wave\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+    if Q_stricmp(token, b"wave\x00" as *const u8 as *const libc::c_char) == 0 {
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing deformVertexes parm in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -2430,9 +1924,7 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
             (*ds).deformationSpread = (1.0f32 as f64 / atof(token)) as f32
         } else {
             (*ds).deformationSpread = 100.0f32;
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: illegal div value of 0 in deformVertexes command for shader \'%s\'\n\x00"
                     as *const u8 as *const libc::c_char,
@@ -2443,19 +1935,10 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
         (*ds).deformation = DEFORM_WAVE;
         return;
     }
-    if Q_stricmp(
-        token,
-        b"normal\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+    if Q_stricmp(token, b"normal\x00" as *const u8 as *const libc::c_char) == 0 {
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing deformVertexes parm in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -2464,14 +1947,9 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
             return;
         }
         (*ds).deformationWave.amplitude = atof(token) as f32;
-        token = COM_ParseExt(
-            text,
-            qfalse,
-        );
+        token = COM_ParseExt(text, qfalse);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: missing deformVertexes parm in shader \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -2483,22 +1961,13 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
         (*ds).deformation = DEFORM_NORMALS;
         return;
     }
-    if Q_stricmp(
-        token,
-        b"move\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    if Q_stricmp(token, b"move\x00" as *const u8 as *const libc::c_char) == 0 {
         let mut i: i32 = 0;
         i = 0 as i32;
         while i < 3 as i32 {
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+            token = COM_ParseExt(text, qfalse);
             if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: missing deformVertexes parm in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
@@ -2513,9 +1982,7 @@ unsafe extern "C" fn ParseDeform(mut text: *mut *mut libc::c_char) {
         (*ds).deformation = DEFORM_MOVE;
         return;
     }
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_WARNING as i32,
         b"WARNING: unknown deformVertexes subtype \'%s\' found in shader \'%s\'\n\x00" as *const u8
             as *const libc::c_char,
@@ -2543,16 +2010,11 @@ unsafe extern "C" fn ParseSkyParms(mut text: *mut *mut libc::c_char) {
     ];
     let mut pathname: [libc::c_char; 64] = [0; 64];
     let mut i: i32 = 0;
-    let mut imgFlags: imgFlags_t = (IMGFLAG_MIPMAP as i32
-        | IMGFLAG_PICMIP as i32)
-        as imgFlags_t;
+    let mut imgFlags: imgFlags_t = (IMGFLAG_MIPMAP as i32 | IMGFLAG_PICMIP as i32) as imgFlags_t;
     // outerbox
-    token =
-        COM_ParseExt(text, qfalse);
+    token = COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: \'skyParms\' missing parameter in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -2573,8 +2035,7 @@ unsafe extern "C" fn ParseSkyParms(mut text: *mut *mut libc::c_char) {
             shader.sky.outerbox[i as usize] = R_FindImageFile(
                 pathname.as_mut_ptr(),
                 IMGTYPE_COLORALPHA,
-                (imgFlags as u32 | IMGFLAG_CLAMPTOEDGE as i32 as u32)
-                    as imgFlags_t,
+                (imgFlags as u32 | IMGFLAG_CLAMPTOEDGE as i32 as u32) as imgFlags_t,
             ) as *mut image_s;
             if shader.sky.outerbox[i as usize].is_null() {
                 shader.sky.outerbox[i as usize] = tr.defaultImage
@@ -2583,12 +2044,9 @@ unsafe extern "C" fn ParseSkyParms(mut text: *mut *mut libc::c_char) {
         }
     }
     // cloudheight
-    token =
-        COM_ParseExt(text, qfalse);
+    token = COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: \'skyParms\' missing parameter in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -2602,12 +2060,9 @@ unsafe extern "C" fn ParseSkyParms(mut text: *mut *mut libc::c_char) {
     }
     R_InitSkyTexCoords(shader.sky.cloudHeight);
     // innerbox
-    token =
-        COM_ParseExt(text, qfalse);
+    token = COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: \'skyParms\' missing parameter in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -2625,11 +2080,9 @@ unsafe extern "C" fn ParseSkyParms(mut text: *mut *mut libc::c_char) {
                 token,
                 suf[i as usize],
             );
-            shader.sky.innerbox[i as usize] = R_FindImageFile(
-                pathname.as_mut_ptr(),
-                IMGTYPE_COLORALPHA,
-                imgFlags,
-            ) as *mut image_s;
+            shader.sky.innerbox[i as usize] =
+                R_FindImageFile(pathname.as_mut_ptr(), IMGTYPE_COLORALPHA, imgFlags)
+                    as *mut image_s;
             if shader.sky.innerbox[i as usize].is_null() {
                 shader.sky.innerbox[i as usize] = tr.defaultImage
             }
@@ -2647,12 +2100,9 @@ ParseSort
 
 pub unsafe extern "C" fn ParseSort(mut text: *mut *mut libc::c_char) {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
-    token =
-        COM_ParseExt(text, qfalse);
+    token = COM_ParseExt(text, qfalse);
     if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: missing sort parameter in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -2660,59 +2110,23 @@ pub unsafe extern "C" fn ParseSort(mut text: *mut *mut libc::c_char) {
         );
         return;
     }
-    if Q_stricmp(
-        token,
-        b"portal\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    if Q_stricmp(token, b"portal\x00" as *const u8 as *const libc::c_char) == 0 {
         shader.sort = SS_PORTAL as i32 as f32
-    } else if Q_stricmp(
-        token,
-        b"sky\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    } else if Q_stricmp(token, b"sky\x00" as *const u8 as *const libc::c_char) == 0 {
         shader.sort = SS_ENVIRONMENT as i32 as f32
-    } else if Q_stricmp(
-        token,
-        b"opaque\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    } else if Q_stricmp(token, b"opaque\x00" as *const u8 as *const libc::c_char) == 0 {
         shader.sort = SS_OPAQUE as i32 as f32
-    } else if Q_stricmp(
-        token,
-        b"decal\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    } else if Q_stricmp(token, b"decal\x00" as *const u8 as *const libc::c_char) == 0 {
         shader.sort = SS_DECAL as i32 as f32
-    } else if Q_stricmp(
-        token,
-        b"seeThrough\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    } else if Q_stricmp(token, b"seeThrough\x00" as *const u8 as *const libc::c_char) == 0 {
         shader.sort = SS_SEE_THROUGH as i32 as f32
-    } else if Q_stricmp(
-        token,
-        b"banner\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    } else if Q_stricmp(token, b"banner\x00" as *const u8 as *const libc::c_char) == 0 {
         shader.sort = SS_BANNER as i32 as f32
-    } else if Q_stricmp(
-        token,
-        b"additive\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    } else if Q_stricmp(token, b"additive\x00" as *const u8 as *const libc::c_char) == 0 {
         shader.sort = SS_BLEND1 as i32 as f32
-    } else if Q_stricmp(
-        token,
-        b"nearest\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    } else if Q_stricmp(token, b"nearest\x00" as *const u8 as *const libc::c_char) == 0 {
         shader.sort = SS_NEAREST as i32 as f32
-    } else if Q_stricmp(
-        token,
-        b"underwater\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    } else if Q_stricmp(token, b"underwater\x00" as *const u8 as *const libc::c_char) == 0 {
         shader.sort = SS_UNDERWATER as i32 as f32
     } else {
         shader.sort = atof(token) as f32
@@ -3024,8 +2438,7 @@ unsafe extern "C" fn ParseSurfaceParm(mut text: *mut *mut libc::c_char) {
         .wrapping_div(::std::mem::size_of::<infoParm_t>() as libc::c_ulong)
         as i32;
     let mut i: i32 = 0;
-    token =
-        COM_ParseExt(text, qfalse);
+    token = COM_ParseExt(text, qfalse);
     i = 0 as i32;
     while i < numInfoParms {
         if Q_stricmp(token, infoParms[i as usize].name) == 0 {
@@ -3047,17 +2460,13 @@ will optimize it.
 =================
 */
 
-unsafe extern "C" fn ParseShader(
-    mut text: *mut *mut libc::c_char,
-) -> qboolean {
+unsafe extern "C" fn ParseShader(mut text: *mut *mut libc::c_char) -> qboolean {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut s: i32 = 0;
     s = 0 as i32;
     token = COM_ParseExt(text, qtrue);
     if *token.offset(0 as i32 as isize) as i32 != '{' as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: expecting \'{\', found \'%s\' instead in shader \'%s\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -3067,12 +2476,9 @@ unsafe extern "C" fn ParseShader(
         return qfalse;
     }
     loop {
-        token =
-            COM_ParseExt(text, qtrue);
+        token = COM_ParseExt(text, qtrue);
         if *token.offset(0 as i32 as isize) == 0 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: no concluding \'}\' in shader %s\n\x00" as *const u8
                     as *const libc::c_char,
@@ -3087,9 +2493,7 @@ unsafe extern "C" fn ParseShader(
         // stage definition
         if *token.offset(0 as i32 as isize) as i32 == '{' as i32 {
             if s >= 8 as i32 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: too many stages in shader %s (max is %i)\n\x00" as *const u8
                         as *const libc::c_char,
@@ -3110,10 +2514,7 @@ unsafe extern "C" fn ParseShader(
         ) == 0
         {
             SkipRestOfLine(text);
-        } else if Q_stricmp(
-            token,
-            b"q3map_sun\x00" as *const u8 as *const libc::c_char,
-        ) == 0
+        } else if Q_stricmp(token, b"q3map_sun\x00" as *const u8 as *const libc::c_char) == 0
             || Q_stricmp(
                 token,
                 b"q3map_sunExt\x00" as *const u8 as *const libc::c_char,
@@ -3121,58 +2522,29 @@ unsafe extern "C" fn ParseShader(
         {
             let mut a: f32 = 0.;
             let mut b: f32 = 0.;
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
-            tr.sunLight[0 as i32 as usize] =
-                atof(token) as vec_t;
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
-            tr.sunLight[1 as i32 as usize] =
-                atof(token) as vec_t;
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
-            tr.sunLight[2 as i32 as usize] =
-                atof(token) as vec_t;
-            VectorNormalize(
-                tr.sunLight.as_mut_ptr(),
-            );
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+            token = COM_ParseExt(text, qfalse);
+            tr.sunLight[0 as i32 as usize] = atof(token) as vec_t;
+            token = COM_ParseExt(text, qfalse);
+            tr.sunLight[1 as i32 as usize] = atof(token) as vec_t;
+            token = COM_ParseExt(text, qfalse);
+            tr.sunLight[2 as i32 as usize] = atof(token) as vec_t;
+            VectorNormalize(tr.sunLight.as_mut_ptr());
+            token = COM_ParseExt(text, qfalse);
             a = atof(token) as f32;
-            tr.sunLight[0 as i32 as usize] =
-                tr.sunLight[0 as i32 as usize] * a;
-            tr.sunLight[1 as i32 as usize] =
-                tr.sunLight[1 as i32 as usize] * a;
-            tr.sunLight[2 as i32 as usize] =
-                tr.sunLight[2 as i32 as usize] * a;
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+            tr.sunLight[0 as i32 as usize] = tr.sunLight[0 as i32 as usize] * a;
+            tr.sunLight[1 as i32 as usize] = tr.sunLight[1 as i32 as usize] * a;
+            tr.sunLight[2 as i32 as usize] = tr.sunLight[2 as i32 as usize] * a;
+            token = COM_ParseExt(text, qfalse);
             a = atof(token) as f32;
             a = ((a / 180 as i32 as f32) as f64 * 3.14159265358979323846f64) as f32;
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+            token = COM_ParseExt(text, qfalse);
             b = atof(token) as f32;
             b = ((b / 180 as i32 as f32) as f64 * 3.14159265358979323846f64) as f32;
             tr.sunDirection[0 as i32 as usize] =
-                (crate::stdlib::cos(a as f64) * crate::stdlib::cos(b as f64))
-                    as vec_t;
+                (crate::stdlib::cos(a as f64) * crate::stdlib::cos(b as f64)) as vec_t;
             tr.sunDirection[1 as i32 as usize] =
-                (crate::stdlib::sin(a as f64) * crate::stdlib::cos(b as f64))
-                    as vec_t;
-            tr.sunDirection[2 as i32 as usize] =
-                crate::stdlib::sin(b as f64) as vec_t;
+                (crate::stdlib::sin(a as f64) * crate::stdlib::cos(b as f64)) as vec_t;
+            tr.sunDirection[2 as i32 as usize] = crate::stdlib::sin(b as f64) as vec_t;
             SkipRestOfLine(text);
         } else if Q_stricmp(
             token,
@@ -3180,21 +2552,10 @@ unsafe extern "C" fn ParseShader(
         ) == 0
         {
             ParseDeform(text);
-        } else if Q_stricmp(
-            token,
-            b"tesssize\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"tesssize\x00" as *const u8 as *const libc::c_char) == 0 {
             SkipRestOfLine(text);
-        } else if Q_stricmp(
-            token,
-            b"clampTime\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+        } else if Q_stricmp(token, b"clampTime\x00" as *const u8 as *const libc::c_char) == 0 {
+            token = COM_ParseExt(text, qfalse);
             if *token.offset(0 as i32 as isize) != 0 {
                 shader.clampTime = atof(token)
             }
@@ -3211,18 +2572,10 @@ unsafe extern "C" fn ParseShader(
         ) == 0
         {
             ParseSurfaceParm(text);
-        } else if Q_stricmp(
-            token,
-            b"nomipmaps\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"nomipmaps\x00" as *const u8 as *const libc::c_char) == 0 {
             shader.noMipMaps = qtrue;
             shader.noPicMip = qtrue
-        } else if Q_stricmp(
-            token,
-            b"nopicmip\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"nopicmip\x00" as *const u8 as *const libc::c_char) == 0 {
             shader.noPicMip = qtrue
         } else if Q_stricmp(
             token,
@@ -3236,11 +2589,7 @@ unsafe extern "C" fn ParseShader(
         ) == 0
         {
             shader.entityMergable = qtrue
-        } else if Q_stricmp(
-            token,
-            b"fogParms\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"fogParms\x00" as *const u8 as *const libc::c_char) == 0 {
             if ParseVector(text, 3 as i32, shader.fogParms.color.as_mut_ptr()) as u64 == 0 {
                 return qfalse;
             }
@@ -3267,14 +2616,9 @@ unsafe extern "C" fn ParseShader(
                     * (1.0f32 - (*r_greyscale).value)
                     + luminance_0 * (*r_greyscale).value
             }
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+            token = COM_ParseExt(text, qfalse);
             if *token.offset(0 as i32 as isize) == 0 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: missing parm for \'fogParms\' keyword in shader \'%s\'\n\x00"
                         as *const u8 as *const libc::c_char,
@@ -3297,77 +2641,33 @@ unsafe extern "C" fn ParseShader(
                 // skip any old gradient directions
                 SkipRestOfLine(text);
             }
-        } else if Q_stricmp(
-            token,
-            b"portal\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"portal\x00" as *const u8 as *const libc::c_char) == 0 {
             shader.sort = SS_PORTAL as i32 as f32
-        } else if Q_stricmp(
-            token,
-            b"skyparms\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"skyparms\x00" as *const u8 as *const libc::c_char) == 0 {
             ParseSkyParms(text);
-        } else if Q_stricmp(
-            token,
-            b"light\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
-            COM_ParseExt(
-                text,
-                qfalse,
-            );
-        } else if Q_stricmp(
-            token,
-            b"cull\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
-            token = COM_ParseExt(
-                text,
-                qfalse,
-            );
+        } else if Q_stricmp(token, b"light\x00" as *const u8 as *const libc::c_char) == 0 {
+            COM_ParseExt(text, qfalse);
+        } else if Q_stricmp(token, b"cull\x00" as *const u8 as *const libc::c_char) == 0 {
+            token = COM_ParseExt(text, qfalse);
             if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: missing cull parms in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
                     shader.name.as_mut_ptr(),
                 );
-            } else if Q_stricmp(
-                token,
-                b"none\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-                || Q_stricmp(
-                    token,
-                    b"twosided\x00" as *const u8 as *const libc::c_char,
-                ) == 0
-                || Q_stricmp(
-                    token,
-                    b"disable\x00" as *const u8 as *const libc::c_char,
-                ) == 0
+            } else if Q_stricmp(token, b"none\x00" as *const u8 as *const libc::c_char) == 0
+                || Q_stricmp(token, b"twosided\x00" as *const u8 as *const libc::c_char) == 0
+                || Q_stricmp(token, b"disable\x00" as *const u8 as *const libc::c_char) == 0
             {
                 shader.cullType = CT_TWO_SIDED
-            } else if Q_stricmp(
-                token,
-                b"back\x00" as *const u8 as *const libc::c_char,
-            ) == 0
-                || Q_stricmp(
-                    token,
-                    b"backside\x00" as *const u8 as *const libc::c_char,
-                ) == 0
-                || Q_stricmp(
-                    token,
-                    b"backsided\x00" as *const u8 as *const libc::c_char,
-                ) == 0
+            } else if Q_stricmp(token, b"back\x00" as *const u8 as *const libc::c_char) == 0
+                || Q_stricmp(token, b"backside\x00" as *const u8 as *const libc::c_char) == 0
+                || Q_stricmp(token, b"backsided\x00" as *const u8 as *const libc::c_char) == 0
             {
                 shader.cullType = CT_BACK_SIDED
             } else {
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b"WARNING: invalid cull parm \'%s\' in shader \'%s\'\n\x00" as *const u8
                         as *const libc::c_char,
@@ -3375,16 +2675,10 @@ unsafe extern "C" fn ParseShader(
                     shader.name.as_mut_ptr(),
                 );
             }
-        } else if Q_stricmp(
-            token,
-            b"sort\x00" as *const u8 as *const libc::c_char,
-        ) == 0
-        {
+        } else if Q_stricmp(token, b"sort\x00" as *const u8 as *const libc::c_char) == 0 {
             ParseSort(text);
         } else {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"WARNING: unknown general shader parameter \'%s\' in \'%s\'\n\x00" as *const u8
                     as *const libc::c_char,
@@ -3425,16 +2719,12 @@ otherwise set to the generic stage function
 */
 
 unsafe extern "C" fn ComputeStageIteratorFunc() {
-    shader.optimalStageIteratorFunc = Some(
-        RB_StageIteratorGeneric as unsafe extern "C" fn() -> (),
-    );
+    shader.optimalStageIteratorFunc = Some(RB_StageIteratorGeneric as unsafe extern "C" fn() -> ());
     //
     // see if this should go into the sky path
     //
     if shader.isSky as u64 != 0 {
-        shader.optimalStageIteratorFunc = Some(
-            RB_StageIteratorSky as unsafe extern "C" fn() -> (),
-        );
+        shader.optimalStageIteratorFunc = Some(RB_StageIteratorSky as unsafe extern "C" fn() -> ());
         return;
     }
     if (*r_ignoreFastPath).integer != 0 {
@@ -3444,21 +2734,18 @@ unsafe extern "C" fn ComputeStageIteratorFunc() {
     // see if this can go into the vertex lit fast path
     //
     if shader.numUnfoggedPasses == 1 as i32 {
-        if stages[0 as i32 as usize].rgbGen as u32
-            == CGEN_LIGHTING_DIFFUSE as i32 as u32
-        {
-            if stages[0 as i32 as usize].alphaGen as u32
-                == AGEN_IDENTITY as i32 as u32
-            {
+        if stages[0 as i32 as usize].rgbGen as u32 == CGEN_LIGHTING_DIFFUSE as i32 as u32 {
+            if stages[0 as i32 as usize].alphaGen as u32 == AGEN_IDENTITY as i32 as u32 {
                 if stages[0 as i32 as usize].bundle[0 as i32 as usize].tcGen as u32
                     == TCGEN_TEXTURE as i32 as u32
                 {
                     if shader.polygonOffset as u64 == 0 {
                         if shader.multitextureEnv == 0 {
                             if shader.numDeforms == 0 {
-                                shader.optimalStageIteratorFunc =
-                                    Some(RB_StageIteratorVertexLitTexture as
-                                             unsafe extern "C" fn() -> ());
+                                shader.optimalStageIteratorFunc = Some(
+                                    RB_StageIteratorVertexLitTexture
+                                        as unsafe extern "C" fn() -> (),
+                                );
                                 return;
                             }
                         }
@@ -3472,8 +2759,7 @@ unsafe extern "C" fn ComputeStageIteratorFunc() {
     //
     if shader.numUnfoggedPasses == 1 as i32 {
         if stages[0 as i32 as usize].rgbGen as u32 == CGEN_IDENTITY as i32 as u32
-            && stages[0 as i32 as usize].alphaGen as u32
-                == AGEN_IDENTITY as i32 as u32
+            && stages[0 as i32 as usize].alphaGen as u32 == AGEN_IDENTITY as i32 as u32
         {
             if stages[0 as i32 as usize].bundle[0 as i32 as usize].tcGen as u32
                 == TCGEN_TEXTURE as i32 as u32
@@ -3483,9 +2769,10 @@ unsafe extern "C" fn ComputeStageIteratorFunc() {
                 if shader.polygonOffset as u64 == 0 {
                     if shader.numDeforms == 0 {
                         if shader.multitextureEnv != 0 {
-                            shader.optimalStageIteratorFunc =
-                                Some(RB_StageIteratorLightmappedMultitexture
-                                         as unsafe extern "C" fn() -> ())
+                            shader.optimalStageIteratorFunc = Some(
+                                RB_StageIteratorLightmappedMultitexture
+                                    as unsafe extern "C" fn() -> (),
+                            )
                         }
                     }
                 }
@@ -3597,8 +2884,7 @@ unsafe extern "C" fn CollapseMultitexture() -> qboolean {
         tcGen: TCGEN_BAD,
         tcGenVectors: [[0.; 3]; 2],
         numTexMods: 0,
-        texMods: 0 as *const texModInfo_t
-            as *mut texModInfo_t,
+        texMods: 0 as *const texModInfo_t as *mut texModInfo_t,
         videoMapHandle: 0,
         isLightmap: qfalse,
         isVideoMap: qfalse,
@@ -3612,9 +2898,7 @@ unsafe extern "C" fn CollapseMultitexture() -> qboolean {
         return qfalse;
     }
     // on voodoo2, don't combine different tmus
-    if glConfig.driverType as u32
-        == GLDRV_VOODOO as i32 as u32
-    {
+    if glConfig.driverType as u32 == GLDRV_VOODOO as i32 as u32 {
         if (*stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize]).TMU
             == (*stages[1 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize]).TMU
         {
@@ -3663,10 +2947,10 @@ unsafe extern "C" fn CollapseMultitexture() -> qboolean {
     }
     if stages[0 as i32 as usize].rgbGen as u32 == CGEN_WAVEFORM as i32 as u32 {
         if crate::stdlib::memcmp(
-            &mut (*stages.as_mut_ptr().offset(0 as i32 as isize)).rgbWave
-                as *mut waveForm_t as *const libc::c_void,
-            &mut (*stages.as_mut_ptr().offset(1 as i32 as isize)).rgbWave
-                as *mut waveForm_t as *const libc::c_void,
+            &mut (*stages.as_mut_ptr().offset(0 as i32 as isize)).rgbWave as *mut waveForm_t
+                as *const libc::c_void,
+            &mut (*stages.as_mut_ptr().offset(1 as i32 as isize)).rgbWave as *mut waveForm_t
+                as *const libc::c_void,
             ::std::mem::size_of::<waveForm_t>() as libc::c_ulong,
         ) != 0
         {
@@ -3675,10 +2959,10 @@ unsafe extern "C" fn CollapseMultitexture() -> qboolean {
     }
     if stages[0 as i32 as usize].alphaGen as u32 == AGEN_WAVEFORM as i32 as u32 {
         if crate::stdlib::memcmp(
-            &mut (*stages.as_mut_ptr().offset(0 as i32 as isize)).alphaWave
-                as *mut waveForm_t as *const libc::c_void,
-            &mut (*stages.as_mut_ptr().offset(1 as i32 as isize)).alphaWave
-                as *mut waveForm_t as *const libc::c_void,
+            &mut (*stages.as_mut_ptr().offset(0 as i32 as isize)).alphaWave as *mut waveForm_t
+                as *const libc::c_void,
+            &mut (*stages.as_mut_ptr().offset(1 as i32 as isize)).alphaWave as *mut waveForm_t
+                as *const libc::c_void,
             ::std::mem::size_of::<waveForm_t>() as libc::c_ulong,
         ) != 0
         {
@@ -3711,8 +2995,8 @@ unsafe extern "C" fn CollapseMultitexture() -> qboolean {
             .wrapping_mul((8 as i32 - 2 as i32) as libc::c_ulong),
     );
     crate::stdlib::memset(
-        &mut *stages.as_mut_ptr().offset((8 as i32 - 1 as i32) as isize)
-            as *mut shaderStage_t as *mut libc::c_void,
+        &mut *stages.as_mut_ptr().offset((8 as i32 - 1 as i32) as isize) as *mut shaderStage_t
+            as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<shaderStage_t>() as libc::c_ulong,
     );
@@ -3731,8 +3015,7 @@ sortedIndex.
 */
 
 unsafe extern "C" fn FixRenderCommandList(mut newShader: i32) {
-    let mut cmdList: *mut renderCommandList_t =
-        &mut (*backEndData).commands;
+    let mut cmdList: *mut renderCommandList_t = &mut (*backEndData).commands;
     if !cmdList.is_null() {
         let mut curCmd: *const libc::c_void = (*cmdList).cmds.as_mut_ptr() as *const libc::c_void;
         loop {
@@ -3744,8 +3027,7 @@ unsafe extern "C" fn FixRenderCommandList(mut newShader: i32) {
                 as *mut libc::c_void;
             match *(curCmd as *const i32) {
                 1 => {
-                    let mut sc_cmd: *const setColorCommand_t =
-                        curCmd as *const setColorCommand_t;
+                    let mut sc_cmd: *const setColorCommand_t = curCmd as *const setColorCommand_t;
                     curCmd = sc_cmd.offset(1 as i32 as isize) as *const libc::c_void
                 }
                 2 => {
@@ -3755,16 +3037,13 @@ unsafe extern "C" fn FixRenderCommandList(mut newShader: i32) {
                 }
                 3 => {
                     let mut i: i32 = 0;
-                    let mut drawSurf: *mut drawSurf_t =
-                        0 as *mut drawSurf_t;
-                    let mut shader_0: *mut shader_t =
-                        0 as *mut shader_t;
+                    let mut drawSurf: *mut drawSurf_t = 0 as *mut drawSurf_t;
+                    let mut shader_0: *mut shader_t = 0 as *mut shader_t;
                     let mut fogNum: i32 = 0;
                     let mut entityNum: i32 = 0;
                     let mut dlightMap: i32 = 0;
                     let mut sortedIndex: i32 = 0;
-                    let mut ds_cmd: *const drawSurfsCommand_t =
-                        curCmd as *const drawSurfsCommand_t;
+                    let mut ds_cmd: *const drawSurfsCommand_t = curCmd as *const drawSurfsCommand_t;
                     i = 0 as i32;
                     drawSurf = (*ds_cmd).drawSurfs;
                     while i < (*ds_cmd).numDrawSurfs {
@@ -3821,18 +3100,15 @@ unsafe extern "C" fn SortNewShader() {
     let mut i: i32 = 0;
     let mut sort: f32 = 0.;
     let mut newShader: *mut shader_t = 0 as *mut shader_t;
-    newShader = tr.shaders
-        [(tr.numShaders - 1 as i32) as usize];
+    newShader = tr.shaders[(tr.numShaders - 1 as i32) as usize];
     sort = (*newShader).sort;
     i = tr.numShaders - 2 as i32;
     while i >= 0 as i32 {
         if (*tr.sortedShaders[i as usize]).sort <= sort {
             break;
         }
-        tr.sortedShaders[(i + 1 as i32) as usize] =
-            tr.sortedShaders[i as usize];
-        (*tr.sortedShaders[(i + 1 as i32) as usize])
-            .sortedIndex += 1;
+        tr.sortedShaders[(i + 1 as i32) as usize] = tr.sortedShaders[i as usize];
+        (*tr.sortedShaders[(i + 1 as i32) as usize]).sortedIndex += 1;
         i -= 1
     }
     // Arnout: fix rendercommandlist
@@ -3854,18 +3130,14 @@ unsafe extern "C" fn GeneratePermanentShader() -> *mut shader_t {
     let mut size: i32 = 0;
     let mut hash: i32 = 0;
     if tr.numShaders == (1 as i32) << 14 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: GeneratePermanentShader - MAX_SHADERS hit\n\x00" as *const u8
                 as *const libc::c_char,
         );
         return tr.defaultShader;
     }
-    newShader = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
+    newShader = ri.Hunk_Alloc.expect("non-null function pointer")(
         ::std::mem::size_of::<shader_t>() as libc::c_ulong as i32,
         h_low,
     ) as *mut shader_t;
@@ -3875,11 +3147,9 @@ unsafe extern "C" fn GeneratePermanentShader() -> *mut shader_t {
     } else if shader.contentFlags & 64 as i32 != 0 {
         (*newShader).fogPass = FP_LE
     }
-    tr.shaders
-        [tr.numShaders as usize] = newShader;
+    tr.shaders[tr.numShaders as usize] = newShader;
     (*newShader).index = tr.numShaders;
-    tr.sortedShaders
-        [tr.numShaders as usize] = newShader;
+    tr.sortedShaders[tr.numShaders as usize] = newShader;
     (*newShader).sortedIndex = tr.numShaders;
     tr.numShaders += 1;
     i = 0 as i32;
@@ -3887,9 +3157,7 @@ unsafe extern "C" fn GeneratePermanentShader() -> *mut shader_t {
         if stages[i as usize].active as u64 == 0 {
             break;
         }
-        (*newShader).stages[i as usize] = ri
-            .Hunk_Alloc
-            .expect("non-null function pointer")(
+        (*newShader).stages[i as usize] = ri.Hunk_Alloc.expect("non-null function pointer")(
             ::std::mem::size_of::<shaderStage_t>() as libc::c_ulong as i32,
             h_low,
         ) as *mut shaderStage_t;
@@ -3898,15 +3166,10 @@ unsafe extern "C" fn GeneratePermanentShader() -> *mut shader_t {
         while b < 2 as i32 {
             size = ((*(*newShader).stages[i as usize]).bundle[b as usize].numTexMods
                 as libc::c_ulong)
-                .wrapping_mul(
-                    ::std::mem::size_of::<texModInfo_t>() as libc::c_ulong
-                ) as i32;
+                .wrapping_mul(::std::mem::size_of::<texModInfo_t>() as libc::c_ulong)
+                as i32;
             (*(*newShader).stages[i as usize]).bundle[b as usize].texMods =
-                ri
-                    .Hunk_Alloc
-                    .expect("non-null function pointer")(
-                    size, h_low
-                ) as *mut texModInfo_t;
+                ri.Hunk_Alloc.expect("non-null function pointer")(size, h_low) as *mut texModInfo_t;
             crate::stdlib::memcpy(
                 (*(*newShader).stages[i as usize]).bundle[b as usize].texMods as *mut libc::c_void,
                 stages[i as usize].bundle[b as usize].texMods as *const libc::c_void,
@@ -3934,21 +3197,18 @@ what it is supposed to look like.
 
 unsafe extern "C" fn VertexLightingCollapse() {
     let mut stage: i32 = 0;
-    let mut bestStage: *mut shaderStage_t =
-        0 as *mut shaderStage_t;
+    let mut bestStage: *mut shaderStage_t = 0 as *mut shaderStage_t;
     let mut bestImageRank: i32 = 0;
     let mut rank: i32 = 0;
     // if we aren't opaque, just use the first pass
     if shader.sort == SS_OPAQUE as i32 as f32 {
         // pick the best texture for the single pass
-        bestStage = &mut *stages.as_mut_ptr().offset(0 as i32 as isize)
-            as *mut shaderStage_t;
+        bestStage = &mut *stages.as_mut_ptr().offset(0 as i32 as isize) as *mut shaderStage_t;
         bestImageRank = -(999999 as i32);
         stage = 0 as i32;
         while stage < 8 as i32 {
             let mut pStage: *mut shaderStage_t =
-                &mut *stages.as_mut_ptr().offset(stage as isize)
-                    as *mut shaderStage_t;
+                &mut *stages.as_mut_ptr().offset(stage as isize) as *mut shaderStage_t;
             if (*pStage).active as u64 == 0 {
                 break;
             }
@@ -3956,17 +3216,14 @@ unsafe extern "C" fn VertexLightingCollapse() {
             if (*pStage).bundle[0 as i32 as usize].isLightmap as u64 != 0 {
                 rank -= 100 as i32
             }
-            if (*pStage).bundle[0 as i32 as usize].tcGen as u32
-                != TCGEN_TEXTURE as i32 as u32
-            {
+            if (*pStage).bundle[0 as i32 as usize].tcGen as u32 != TCGEN_TEXTURE as i32 as u32 {
                 rank -= 5 as i32
             }
             if (*pStage).bundle[0 as i32 as usize].numTexMods != 0 {
                 rank -= 5 as i32
             }
             if (*pStage).rgbGen as u32 != CGEN_IDENTITY as i32 as u32
-                && (*pStage).rgbGen as u32
-                    != CGEN_IDENTITY_LIGHTING as i32 as u32
+                && (*pStage).rgbGen as u32 != CGEN_IDENTITY_LIGHTING as i32 as u32
             {
                 rank -= 3 as i32
             }
@@ -3992,30 +3249,23 @@ unsafe extern "C" fn VertexLightingCollapse() {
             stages[0 as i32 as usize] = stages[1 as i32 as usize]
         }
         // if we were in a cross-fade cgen, hack it to normal
-        if stages[0 as i32 as usize].rgbGen as u32
-            == CGEN_ONE_MINUS_ENTITY as i32 as u32
-            || stages[1 as i32 as usize].rgbGen as u32
-                == CGEN_ONE_MINUS_ENTITY as i32 as u32
+        if stages[0 as i32 as usize].rgbGen as u32 == CGEN_ONE_MINUS_ENTITY as i32 as u32
+            || stages[1 as i32 as usize].rgbGen as u32 == CGEN_ONE_MINUS_ENTITY as i32 as u32
         {
             stages[0 as i32 as usize].rgbGen = CGEN_IDENTITY_LIGHTING
         }
         if stages[0 as i32 as usize].rgbGen as u32 == CGEN_WAVEFORM as i32 as u32
-            && stages[0 as i32 as usize].rgbWave.func as u32
-                == GF_SAWTOOTH as i32 as u32
-            && (stages[1 as i32 as usize].rgbGen as u32
-                == CGEN_WAVEFORM as i32 as u32
+            && stages[0 as i32 as usize].rgbWave.func as u32 == GF_SAWTOOTH as i32 as u32
+            && (stages[1 as i32 as usize].rgbGen as u32 == CGEN_WAVEFORM as i32 as u32
                 && stages[1 as i32 as usize].rgbWave.func as u32
                     == GF_INVERSE_SAWTOOTH as i32 as u32)
         {
             stages[0 as i32 as usize].rgbGen = CGEN_IDENTITY_LIGHTING
         }
         if stages[0 as i32 as usize].rgbGen as u32 == CGEN_WAVEFORM as i32 as u32
-            && stages[0 as i32 as usize].rgbWave.func as u32
-                == GF_INVERSE_SAWTOOTH as i32 as u32
-            && (stages[1 as i32 as usize].rgbGen as u32
-                == CGEN_WAVEFORM as i32 as u32
-                && stages[1 as i32 as usize].rgbWave.func as u32
-                    == GF_SAWTOOTH as i32 as u32)
+            && stages[0 as i32 as usize].rgbWave.func as u32 == GF_INVERSE_SAWTOOTH as i32 as u32
+            && (stages[1 as i32 as usize].rgbGen as u32 == CGEN_WAVEFORM as i32 as u32
+                && stages[1 as i32 as usize].rgbWave.func as u32 == GF_SAWTOOTH as i32 as u32)
         {
             stages[0 as i32 as usize].rgbGen = CGEN_IDENTITY_LIGHTING
         }
@@ -4023,8 +3273,7 @@ unsafe extern "C" fn VertexLightingCollapse() {
     stage = 1 as i32;
     while stage < 8 as i32 {
         let mut pStage_0: *mut shaderStage_t =
-            &mut *stages.as_mut_ptr().offset(stage as isize)
-                as *mut shaderStage_t;
+            &mut *stages.as_mut_ptr().offset(stage as isize) as *mut shaderStage_t;
         if (*pStage_0).active as u64 == 0 {
             break;
         }
@@ -4078,10 +3327,8 @@ from the current global working shader
 
 unsafe extern "C" fn FinishShader() -> *mut shader_t {
     let mut stage: i32 = 0;
-    let mut hasLightmapStage: qboolean =
-        qfalse;
-    let mut vertexLightmap: qboolean =
-        qfalse;
+    let mut hasLightmapStage: qboolean = qfalse;
+    let mut vertexLightmap: qboolean = qfalse;
     hasLightmapStage = qfalse;
     vertexLightmap = qfalse;
     //
@@ -4102,25 +3349,20 @@ unsafe extern "C" fn FinishShader() -> *mut shader_t {
     stage = 0 as i32;
     while stage < 8 as i32 {
         let mut pStage: *mut shaderStage_t =
-            &mut *stages.as_mut_ptr().offset(stage as isize)
-                as *mut shaderStage_t;
+            &mut *stages.as_mut_ptr().offset(stage as isize) as *mut shaderStage_t;
         if (*pStage).active as u64 == 0 {
             break;
         }
         // check for a missing texture
         if (*pStage).bundle[0 as i32 as usize].image[0 as i32 as usize].is_null() {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_WARNING as i32,
                 b"Shader %s has a stage with no image\n\x00" as *const u8 as *const libc::c_char,
                 shader.name.as_mut_ptr(),
             );
             (*pStage).active = qfalse;
             stage += 1
-        } else if (*pStage).isDetail as u32 != 0
-            && (*r_detailTextures).integer == 0
-        {
+        } else if (*pStage).isDetail as u32 != 0 && (*r_detailTextures).integer == 0 {
             let mut index: i32 = 0;
             index = stage + 1 as i32;
             while index < 8 as i32 {
@@ -4141,15 +3383,13 @@ unsafe extern "C" fn FinishShader() -> *mut shader_t {
                     crate::stdlib::memmove(
                         pStage as *mut libc::c_void,
                         pStage.offset(1 as i32 as isize) as *const libc::c_void,
-                        (::std::mem::size_of::<shaderStage_t>()
-                            as libc::c_ulong)
+                        (::std::mem::size_of::<shaderStage_t>() as libc::c_ulong)
                             .wrapping_mul((index - stage - 1 as i32) as libc::c_ulong),
                     );
                 }
                 crate::stdlib::memset(
                     &mut *stages.as_mut_ptr().offset((index - 1 as i32) as isize)
-                        as *mut shaderStage_t
-                        as *mut libc::c_void,
+                        as *mut shaderStage_t as *mut libc::c_void,
                     0 as i32,
                     ::std::mem::size_of::<shaderStage_t>() as libc::c_ulong,
                 );
@@ -4162,15 +3402,11 @@ unsafe extern "C" fn FinishShader() -> *mut shader_t {
             // default texture coordinate generation
             //
             if (*pStage).bundle[0 as i32 as usize].isLightmap as u64 != 0 {
-                if (*pStage).bundle[0 as i32 as usize].tcGen as u32
-                    == TCGEN_BAD as i32 as u32
-                {
+                if (*pStage).bundle[0 as i32 as usize].tcGen as u32 == TCGEN_BAD as i32 as u32 {
                     (*pStage).bundle[0 as i32 as usize].tcGen = TCGEN_LIGHTMAP
                 }
                 hasLightmapStage = qtrue
-            } else if (*pStage).bundle[0 as i32 as usize].tcGen as u32
-                == TCGEN_BAD as i32 as u32
-            {
+            } else if (*pStage).bundle[0 as i32 as usize].tcGen as u32 == TCGEN_BAD as i32 as u32 {
                 (*pStage).bundle[0 as i32 as usize].tcGen = TCGEN_TEXTURE
             }
             // not a true lightmap but we want to leave existing
@@ -4225,10 +3461,8 @@ unsafe extern "C" fn FinishShader() -> *mut shader_t {
     // if we are in r_vertexLight mode, never use a lightmap texture
     //
     if stage > 1 as i32
-        && ((*r_vertexLight).integer != 0
-            && (*r_uiFullScreen).integer == 0
-            || glConfig.hardwareType as u32
-                == GLHW_PERMEDIA2 as i32 as u32)
+        && ((*r_vertexLight).integer != 0 && (*r_uiFullScreen).integer == 0
+            || glConfig.hardwareType as u32 == GLHW_PERMEDIA2 as i32 as u32)
     {
         VertexLightingCollapse();
         stage = 1 as i32;
@@ -4242,18 +3476,14 @@ unsafe extern "C" fn FinishShader() -> *mut shader_t {
     }
     if shader.lightmapIndex >= 0 as i32 && hasLightmapStage as u64 == 0 {
         if vertexLightmap as u64 != 0 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_DEVELOPER as i32,
                 b"WARNING: shader \'%s\' has VERTEX forced lightmap!\n\x00" as *const u8
                     as *const libc::c_char,
                 shader.name.as_mut_ptr(),
             );
         } else {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_DEVELOPER as i32,
                 b"WARNING: shader \'%s\' has lightmap but no lightmap stage!\n\x00" as *const u8
                     as *const libc::c_char,
@@ -4300,10 +3530,7 @@ unsafe extern "C" fn FindShaderInShaderText(
         i = 0 as i32;
         while !(*shaderTextHashTable[hash as usize].offset(i as isize)).is_null() {
             p = *shaderTextHashTable[hash as usize].offset(i as isize);
-            token = COM_ParseExt(
-                &mut p,
-                qtrue,
-            );
+            token = COM_ParseExt(&mut p, qtrue);
             if Q_stricmp(token, shadername) == 0 {
                 return p;
             }
@@ -4317,10 +3544,7 @@ unsafe extern "C" fn FindShaderInShaderText(
     loop
     // look for label
     {
-        token = COM_ParseExt(
-            &mut p,
-            qtrue,
-        );
+        token = COM_ParseExt(&mut p, qtrue);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
             break;
         }
@@ -4343,9 +3567,7 @@ default shader if the real one can't be found.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_FindShaderByName(
-    mut name: *const libc::c_char,
-) -> *mut shader_t {
+pub unsafe extern "C" fn R_FindShaderByName(mut name: *const libc::c_char) -> *mut shader_t {
     let mut strippedName: [libc::c_char; 64] = [0; 64];
     let mut hash: i32 = 0;
     let mut sh: *mut shader_t = 0 as *mut shader_t;
@@ -4367,11 +3589,7 @@ pub unsafe extern "C" fn R_FindShaderByName(
         // then a default shader is created with lightmapIndex == LIGHTMAP_NONE, so we
         // have to check all default shaders otherwise for every call to R_FindShader
         // with that same strippedName a new default shader is created.
-        if Q_stricmp(
-            (*sh).name.as_mut_ptr(),
-            strippedName.as_mut_ptr(),
-        ) == 0 as i32
-        {
+        if Q_stricmp((*sh).name.as_mut_ptr(), strippedName.as_mut_ptr()) == 0 as i32 {
             // match found
             return sh;
         }
@@ -4424,15 +3642,11 @@ pub unsafe extern "C" fn R_FindShader(
     }
     // use (fullbright) vertex lighting if the bsp file doesn't have
     // lightmaps
-    if lightmapIndex >= 0 as i32
-        && lightmapIndex >= tr.numLightmaps
-    {
+    if lightmapIndex >= 0 as i32 && lightmapIndex >= tr.numLightmaps {
         lightmapIndex = -(3 as i32)
     } else if lightmapIndex < -(4 as i32) {
         // negative lightmap indexes cause stray pointers (think tr.lightmaps[lightmapIndex])
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: shader \'%s\' has invalid lightmap index of %d\n\x00" as *const u8
                 as *const libc::c_char,
@@ -4457,10 +3671,7 @@ pub unsafe extern "C" fn R_FindShader(
         // have to check all default shaders otherwise for every call to R_FindShader
         // with that same strippedName a new default shader is created.
         if ((*sh).lightmapIndex == lightmapIndex || (*sh).defaultShader as u32 != 0)
-            && Q_stricmp(
-                (*sh).name.as_mut_ptr(),
-                strippedName.as_mut_ptr(),
-            ) == 0
+            && Q_stricmp((*sh).name.as_mut_ptr(), strippedName.as_mut_ptr()) == 0
         {
             // match found
             return sh;
@@ -4481,9 +3692,7 @@ pub unsafe extern "C" fn R_FindShader(
         // enable this when building a pak file to get a global list
         // of all explicit shaders
         if (*r_printShaders).integer != 0 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"*SHADER* %s\n\x00" as *const u8 as *const libc::c_char,
                 name,
@@ -4504,24 +3713,16 @@ pub unsafe extern "C" fn R_FindShader(
     flags = IMGFLAG_NONE;
     if mipRawImage as u64 != 0 {
         flags = ::std::mem::transmute::<u32, imgFlags_t>(
-            flags as u32
-                | (IMGFLAG_MIPMAP as i32
-                    | IMGFLAG_PICMIP as i32) as u32,
+            flags as u32 | (IMGFLAG_MIPMAP as i32 | IMGFLAG_PICMIP as i32) as u32,
         )
     } else {
         flags = ::std::mem::transmute::<u32, imgFlags_t>(
             flags as u32 | IMGFLAG_CLAMPTOEDGE as i32 as u32,
         )
     }
-    image = R_FindImageFile(
-        name,
-        IMGTYPE_COLORALPHA,
-        flags,
-    ) as *mut image_s;
+    image = R_FindImageFile(name, IMGTYPE_COLORALPHA, flags) as *mut image_s;
     if image.is_null() {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_DEVELOPER as i32,
             b"Couldn\'t find image file for shader %s\n\x00" as *const u8 as *const libc::c_char,
             name,
@@ -4566,11 +3767,8 @@ pub unsafe extern "C" fn R_FindShader(
     } else {
         // two pass lightmap
         stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] =
-            *tr
-                .lightmaps
-                .offset(shader.lightmapIndex as isize); // lightmaps are scaled on creation
-        stages[0 as i32 as usize].bundle[0 as i32 as usize].isLightmap =
-            qtrue;
+            *tr.lightmaps.offset(shader.lightmapIndex as isize); // lightmaps are scaled on creation
+        stages[0 as i32 as usize].bundle[0 as i32 as usize].isLightmap = qtrue;
         stages[0 as i32 as usize].active = qtrue;
         stages[0 as i32 as usize].rgbGen = CGEN_IDENTITY;
         // for identitylight
@@ -4659,11 +3857,8 @@ pub unsafe extern "C" fn RE_RegisterShaderFromImage(
     } else {
         // two pass lightmap
         stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] =
-            *tr
-                .lightmaps
-                .offset(shader.lightmapIndex as isize); // lightmaps are scaled on creation
-        stages[0 as i32 as usize].bundle[0 as i32 as usize].isLightmap =
-            qtrue;
+            *tr.lightmaps.offset(shader.lightmapIndex as isize); // lightmaps are scaled on creation
+        stages[0 as i32 as usize].bundle[0 as i32 as usize].isLightmap = qtrue;
         stages[0 as i32 as usize].active = qtrue;
         stages[0 as i32 as usize].rgbGen = CGEN_IDENTITY;
         // for identitylight
@@ -4695,9 +3890,7 @@ pub unsafe extern "C" fn RE_RegisterShaderLightMap(
 ) -> qhandle_t {
     let mut sh: *mut shader_t = 0 as *mut shader_t;
     if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"Shader name exceeds MAX_QPATH\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -4727,14 +3920,10 @@ way to ask for different implicit lighting modes (vertex, lightmap, etc)
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RE_RegisterShader(
-    mut name: *const libc::c_char,
-) -> qhandle_t {
+pub unsafe extern "C" fn RE_RegisterShader(mut name: *const libc::c_char) -> qhandle_t {
     let mut sh: *mut shader_t = 0 as *mut shader_t;
     if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"Shader name exceeds MAX_QPATH\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -4813,14 +4002,10 @@ For menu graphics that should never be picmiped
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn RE_RegisterShaderNoMip(
-    mut name: *const libc::c_char,
-) -> qhandle_t {
+pub unsafe extern "C" fn RE_RegisterShaderNoMip(mut name: *const libc::c_char) -> qhandle_t {
     let mut sh: *mut shader_t = 0 as *mut shader_t;
     if crate::stdlib::strlen(name) >= 64 as i32 as libc::c_ulong {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"Shader name exceeds MAX_QPATH\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -4847,13 +4032,9 @@ it and returns a valid (possibly default) shader_t to be used internally.
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_GetShaderByHandle(
-    mut hShader: qhandle_t,
-) -> *mut shader_t {
+pub unsafe extern "C" fn R_GetShaderByHandle(mut hShader: qhandle_t) -> *mut shader_t {
     if hShader < 0 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"R_GetShaderByHandle: out of range hShader \'%d\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -4862,9 +4043,7 @@ pub unsafe extern "C" fn R_GetShaderByHandle(
         return tr.defaultShader;
     }
     if hShader >= tr.numShaders {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"R_GetShaderByHandle: out of range hShader \'%d\'\n\x00" as *const u8
                 as *const libc::c_char,
@@ -4888,158 +4067,108 @@ pub unsafe extern "C" fn R_ShaderList_f() {
     let mut i: i32 = 0;
     let mut count: i32 = 0;
     let mut shader_0: *mut shader_t = 0 as *mut shader_t;
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"-----------------------\n\x00" as *const u8 as *const libc::c_char,
     );
     count = 0 as i32;
     i = 0 as i32;
     while i < tr.numShaders {
-        if ri
-            .Cmd_Argc
-            .expect("non-null function pointer")()
-            > 1 as i32
-        {
+        if ri.Cmd_Argc.expect("non-null function pointer")() > 1 as i32 {
             shader_0 = tr.sortedShaders[i as usize]
         } else {
             shader_0 = tr.shaders[i as usize]
         }
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_ALL as i32,
             b"%i \x00" as *const u8 as *const libc::c_char,
             (*shader_0).numUnfoggedPasses,
         );
         if (*shader_0).lightmapIndex >= 0 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"L \x00" as *const u8 as *const libc::c_char,
             );
         } else {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"  \x00" as *const u8 as *const libc::c_char,
             );
         }
         if (*shader_0).multitextureEnv == 0x104 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"MT(a) \x00" as *const u8 as *const libc::c_char,
             );
         } else if (*shader_0).multitextureEnv == 0x2100 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"MT(m) \x00" as *const u8 as *const libc::c_char,
             );
         } else if (*shader_0).multitextureEnv == 0x2101 as i32 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"MT(d) \x00" as *const u8 as *const libc::c_char,
             );
         } else {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"      \x00" as *const u8 as *const libc::c_char,
             );
         }
         if (*shader_0).explicitlyDefined as u64 != 0 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"E \x00" as *const u8 as *const libc::c_char,
             );
         } else {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"  \x00" as *const u8 as *const libc::c_char,
             );
         }
         if (*shader_0).optimalStageIteratorFunc
-            == Some(
-                RB_StageIteratorGeneric
-                    as unsafe extern "C" fn() -> (),
-            )
+            == Some(RB_StageIteratorGeneric as unsafe extern "C" fn() -> ())
         {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"gen \x00" as *const u8 as *const libc::c_char,
             );
         } else if (*shader_0).optimalStageIteratorFunc
-            == Some(
-                RB_StageIteratorSky
-                    as unsafe extern "C" fn() -> (),
-            )
+            == Some(RB_StageIteratorSky as unsafe extern "C" fn() -> ())
         {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"sky \x00" as *const u8 as *const libc::c_char,
             );
         } else if (*shader_0).optimalStageIteratorFunc
-            == Some(
-                RB_StageIteratorLightmappedMultitexture
-                    as unsafe extern "C" fn() -> (),
-            )
+            == Some(RB_StageIteratorLightmappedMultitexture as unsafe extern "C" fn() -> ())
         {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"lmmt\x00" as *const u8 as *const libc::c_char,
             );
         } else if (*shader_0).optimalStageIteratorFunc
-            == Some(
-                RB_StageIteratorVertexLitTexture
-                    as unsafe extern "C" fn() -> (),
-            )
+            == Some(RB_StageIteratorVertexLitTexture as unsafe extern "C" fn() -> ())
         {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"vlt \x00" as *const u8 as *const libc::c_char,
             );
         } else {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b"    \x00" as *const u8 as *const libc::c_char,
             );
         }
         if (*shader_0).defaultShader as u64 != 0 {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b": %s (DEFAULTED)\n\x00" as *const u8 as *const libc::c_char,
                 (*shader_0).name.as_mut_ptr(),
             );
         } else {
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_ALL as i32,
                 b": %s\n\x00" as *const u8 as *const libc::c_char,
                 (*shader_0).name.as_mut_ptr(),
@@ -5048,16 +4177,12 @@ pub unsafe extern "C" fn R_ShaderList_f() {
         count += 1;
         i += 1
     }
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"%i total shaders\n\x00" as *const u8 as *const libc::c_char,
         count,
     );
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"------------------\n\x00" as *const u8 as *const libc::c_char,
     );
@@ -9178,17 +8303,13 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
     let mut sum: isize = 0 as i32 as isize;
     let mut summand: isize = 0;
     // scan for shader files
-    shaderFiles = ri
-        .FS_ListFiles
-        .expect("non-null function pointer")(
+    shaderFiles = ri.FS_ListFiles.expect("non-null function pointer")(
         b"scripts\x00" as *const u8 as *const libc::c_char,
         b".shader\x00" as *const u8 as *const libc::c_char,
         &mut numShaderFiles,
     );
     if shaderFiles.is_null() || numShaderFiles == 0 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: no shader files found\n\x00" as *const u8 as *const libc::c_char,
         );
@@ -9207,24 +8328,18 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
             b"scripts/%s\x00" as *const u8 as *const libc::c_char,
             *shaderFiles.offset(i as isize),
         );
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_DEVELOPER as i32,
             b"...loading \'%s\'\n\x00" as *const u8 as *const libc::c_char,
             filename.as_mut_ptr(),
         );
-        summand = ri
-            .FS_ReadFile
-            .expect("non-null function pointer")(
+        summand = ri.FS_ReadFile.expect("non-null function pointer")(
             filename.as_mut_ptr(),
             &mut *buffers.as_mut_ptr().offset(i as isize) as *mut *mut libc::c_char
                 as *mut *mut libc::c_void,
         );
         if buffers[i as usize].is_null() {
-            ri
-                .Error
-                .expect("non-null function pointer")(
+            ri.Error.expect("non-null function pointer")(
                 ERR_DROP as i32,
                 b"Couldn\'t load %s\x00" as *const u8 as *const libc::c_char,
                 filename.as_mut_ptr(),
@@ -9234,10 +8349,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
         p = buffers[i as usize];
         COM_BeginParseSession(filename.as_mut_ptr());
         loop {
-            token = COM_ParseExt(
-                &mut p,
-                qtrue,
-            );
+            token = COM_ParseExt(&mut p, qtrue);
             if *token == 0 {
                 break;
             }
@@ -9247,10 +8359,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
                 ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             );
             shaderLine = COM_GetCurrentParseLine();
-            token = COM_ParseExt(
-                &mut p,
-                qtrue,
-            );
+            token = COM_ParseExt(&mut p, qtrue);
             if *token.offset(0 as i32 as isize) as i32 != '{' as i32
                 || *token.offset(1 as i32 as isize) as i32 != '\u{0}' as i32
             {
@@ -9264,31 +8373,24 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
                                                               shaderName.as_mut_ptr(),
                                                               shaderLine);
                 if *token.offset(0 as i32 as isize) != 0 {
-                    ri
-                        .Printf
-                        .expect("non-null function pointer")(
+                    ri.Printf.expect("non-null function pointer")(
                         PRINT_WARNING as i32,
                         b" (found \"%s\" on line %d)\x00" as *const u8 as *const libc::c_char,
                         token,
                         COM_GetCurrentParseLine(),
                     );
                 }
-                ri
-                    .Printf
-                    .expect("non-null function pointer")(
+                ri.Printf.expect("non-null function pointer")(
                     PRINT_WARNING as i32,
                     b".\n\x00" as *const u8 as *const libc::c_char,
                 );
-                ri
-                    .FS_FreeFile
-                    .expect("non-null function pointer")(
-                    buffers[i as usize] as *mut libc::c_void
+                ri.FS_FreeFile.expect("non-null function pointer")(
+                    buffers[i as usize] as *mut libc::c_void,
                 );
                 buffers[i as usize] = 0 as *mut libc::c_char;
                 break;
             } else {
-                if !(SkipBracedSection(&mut p, 1 as i32) as u64 == 0)
-                {
+                if !(SkipBracedSection(&mut p, 1 as i32) as u64 == 0) {
                     continue;
                 }
                 ri.Printf.expect("non-null function pointer")(PRINT_WARNING as
@@ -9300,10 +8402,8 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
                                                               filename.as_mut_ptr(),
                                                               shaderName.as_mut_ptr(),
                                                               shaderLine);
-                ri
-                    .FS_FreeFile
-                    .expect("non-null function pointer")(
-                    buffers[i as usize] as *mut libc::c_void
+                ri.FS_FreeFile.expect("non-null function pointer")(
+                    buffers[i as usize] as *mut libc::c_void,
                 );
                 buffers[i as usize] = 0 as *mut libc::c_char;
                 break;
@@ -9315,9 +8415,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
         i += 1
     }
     // build single large buffer
-    s_shaderText = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
+    s_shaderText = ri.Hunk_Alloc.expect("non-null function pointer")(
         (sum + (numShaderFiles * 2 as i32) as isize) as i32,
         h_low,
     ) as *mut libc::c_char;
@@ -9330,19 +8428,15 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
             libc::strcat(textEnd, buffers[i as usize]);
             libc::strcat(textEnd, b"\n\x00" as *const u8 as *const libc::c_char);
             textEnd = textEnd.offset(crate::stdlib::strlen(textEnd) as isize);
-            ri
-                .FS_FreeFile
-                .expect("non-null function pointer")(
-                buffers[i as usize] as *mut libc::c_void
+            ri.FS_FreeFile.expect("non-null function pointer")(
+                buffers[i as usize] as *mut libc::c_void,
             );
         }
         i -= 1
     }
     COM_Compress(s_shaderText);
     // free up memory
-    ri
-        .FS_FreeFileList
-        .expect("non-null function pointer")(shaderFiles);
+    ri.FS_FreeFileList.expect("non-null function pointer")(shaderFiles);
     crate::stdlib::memset(
         shaderTextHashTableSizes.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
@@ -9353,10 +8447,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
     loop
     // look for shader names
     {
-        token = COM_ParseExt(
-            &mut p,
-            qtrue,
-        );
+        token = COM_ParseExt(&mut p, qtrue);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
             break;
         }
@@ -9366,9 +8457,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
         SkipBracedSection(&mut p, 0 as i32);
     }
     size += 2048 as i32;
-    hashMem = ri
-        .Hunk_Alloc
-        .expect("non-null function pointer")(
+    hashMem = ri.Hunk_Alloc.expect("non-null function pointer")(
         (size as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong)
             as i32,
@@ -9394,10 +8483,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
     // look for shader names
     {
         oldp = p;
-        token = COM_ParseExt(
-            &mut p,
-            qtrue,
-        );
+        token = COM_ParseExt(&mut p, qtrue);
         if *token.offset(0 as i32 as isize) as i32 == 0 as i32 {
             break;
         }
@@ -9422,8 +8508,7 @@ unsafe extern "C" fn CreateInternalShaders() {
         b"<default>\x00" as *const u8 as *const libc::c_char,
         -(1 as i32),
     );
-    stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] =
-        tr.defaultImage;
+    stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = tr.defaultImage;
     stages[0 as i32 as usize].active = qtrue;
     stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32;
     tr.defaultShader = FinishShader();
@@ -9454,10 +8539,8 @@ unsafe extern "C" fn CreateExternalShaders() {
         let mut index: i32 = 0;
         index = 0 as i32;
         while index < (*tr.flareShader).numUnfoggedPasses {
-            (*(*tr.flareShader).stages[index as usize])
-                .adjustColorsForFog = ACFF_NONE;
-            (*(*tr.flareShader).stages[index as usize])
-                .stateBits |= 0x10000 as i32 as u32;
+            (*(*tr.flareShader).stages[index as usize]).adjustColorsForFog = ACFF_NONE;
+            (*(*tr.flareShader).stages[index as usize]).stateBits |= 0x10000 as i32 as u32;
             index += 1
         }
     }
@@ -9797,9 +8880,7 @@ R_InitShaders
 #[no_mangle]
 
 pub unsafe extern "C" fn R_InitShaders() {
-    ri
-        .Printf
-        .expect("non-null function pointer")(
+    ri.Printf.expect("non-null function pointer")(
         PRINT_ALL as i32,
         b"Initializing Shaders\n\x00" as *const u8 as *const libc::c_char,
     );

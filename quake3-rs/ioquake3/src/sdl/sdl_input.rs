@@ -1113,45 +1113,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
-static mut in_keyboardDebug: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut in_keyboardDebug: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
 static mut gamepad: *mut SDL_GameController =
     0 as *const SDL_GameController as *mut SDL_GameController;
 
-static mut stick: *mut SDL_Joystick =
-    0 as *const SDL_Joystick as *mut SDL_Joystick;
+static mut stick: *mut SDL_Joystick = 0 as *const SDL_Joystick as *mut SDL_Joystick;
 
-static mut mouseAvailable: qboolean =
-    qfalse;
+static mut mouseAvailable: qboolean = qfalse;
 
-static mut mouseActive: qboolean =
-    qfalse;
+static mut mouseActive: qboolean = qfalse;
 
-static mut in_mouse: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut in_mouse: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
-static mut in_nograb: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut in_nograb: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
-static mut in_joystick: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut in_joystick: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
-static mut in_joystickThreshold: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut in_joystickThreshold: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
-static mut in_joystickNo: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut in_joystickNo: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
-static mut in_joystickUseAnalog: *mut cvar_t =
-    0 as *const cvar_t as *mut cvar_t;
+static mut in_joystickUseAnalog: *mut cvar_t = 0 as *const cvar_t as *mut cvar_t;
 
 static mut vidRestartTime: i32 = 0 as i32;
 
 static mut in_eventTime: i32 = 0 as i32;
 
-static mut SDL_window: *mut SDL_Window =
-    0 as *const SDL_Window as *mut SDL_Window;
+static mut SDL_window: *mut SDL_Window = 0 as *const SDL_Window as *mut SDL_Window;
 /*
 ===============
 IN_PrintKey
@@ -1176,64 +1165,40 @@ unsafe extern "C" fn IN_PrintKey(
         SDL_GetKeyName((*keysym).sym),
     );
     if (*keysym).mod_0 as i32 & KMOD_LSHIFT as i32 != 0 {
-        Com_Printf(
-            b" KMOD_LSHIFT\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b" KMOD_LSHIFT\x00" as *const u8 as *const libc::c_char);
     }
     if (*keysym).mod_0 as i32 & KMOD_RSHIFT as i32 != 0 {
-        Com_Printf(
-            b" KMOD_RSHIFT\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b" KMOD_RSHIFT\x00" as *const u8 as *const libc::c_char);
     }
     if (*keysym).mod_0 as i32 & KMOD_LCTRL as i32 != 0 {
-        Com_Printf(
-            b" KMOD_LCTRL\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b" KMOD_LCTRL\x00" as *const u8 as *const libc::c_char);
     }
     if (*keysym).mod_0 as i32 & KMOD_RCTRL as i32 != 0 {
-        Com_Printf(
-            b" KMOD_RCTRL\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b" KMOD_RCTRL\x00" as *const u8 as *const libc::c_char);
     }
     if (*keysym).mod_0 as i32 & KMOD_LALT as i32 != 0 {
-        Com_Printf(
-            b" KMOD_LALT\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b" KMOD_LALT\x00" as *const u8 as *const libc::c_char);
     }
     if (*keysym).mod_0 as i32 & KMOD_RALT as i32 != 0 {
-        Com_Printf(
-            b" KMOD_RALT\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b" KMOD_RALT\x00" as *const u8 as *const libc::c_char);
     }
     if (*keysym).mod_0 as i32 & KMOD_LGUI as i32 != 0 {
-        Com_Printf(
-            b" KMOD_LGUI\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b" KMOD_LGUI\x00" as *const u8 as *const libc::c_char);
     }
     if (*keysym).mod_0 as i32 & KMOD_RGUI as i32 != 0 {
-        Com_Printf(
-            b" KMOD_RGUI\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b" KMOD_RGUI\x00" as *const u8 as *const libc::c_char);
     }
     if (*keysym).mod_0 as i32 & KMOD_NUM as i32 != 0 {
-        Com_Printf(
-            b" KMOD_NUM\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b" KMOD_NUM\x00" as *const u8 as *const libc::c_char);
     }
     if (*keysym).mod_0 as i32 & KMOD_CAPS as i32 != 0 {
-        Com_Printf(
-            b" KMOD_CAPS\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b" KMOD_CAPS\x00" as *const u8 as *const libc::c_char);
     }
     if (*keysym).mod_0 as i32 & KMOD_MODE as i32 != 0 {
-        Com_Printf(
-            b" KMOD_MODE\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b" KMOD_MODE\x00" as *const u8 as *const libc::c_char);
     }
     if (*keysym).mod_0 as i32 & KMOD_RESERVED as i32 != 0 {
-        Com_Printf(
-            b" KMOD_RESERVED\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_Printf(b" KMOD_RESERVED\x00" as *const u8 as *const libc::c_char);
     }
     Com_Printf(
         b" Q:0x%02x(%s)\n\x00" as *const u8 as *const libc::c_char,
@@ -1250,15 +1215,10 @@ TODO: If the SDL_Scancode situation improves, use it instead of
 ===============
 */
 
-unsafe extern "C" fn IN_IsConsoleKey(
-    mut key: keyNum_t,
-    mut character: i32,
-) -> qboolean {
+unsafe extern "C" fn IN_IsConsoleKey(mut key: keyNum_t, mut character: i32) -> qboolean {
     static mut consoleKeys: [consoleKey_t; 16] = [consoleKey_t {
         type_0: QUAKE_KEY,
-        u: C2RustUnnamed_152 {
-            key: 0 as keyNum_t,
-        },
+        u: C2RustUnnamed_152 { key: 0 as keyNum_t },
     }; 16];
     static mut numConsoleKeys: i32 = 0 as i32;
     let mut i: i32 = 0;
@@ -1266,8 +1226,7 @@ unsafe extern "C" fn IN_IsConsoleKey(
     if (*cl_consoleKeys).modified as u64 != 0 {
         let mut text_p: *mut libc::c_char = 0 as *mut libc::c_char;
         let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
-        (*cl_consoleKeys).modified =
-            qfalse;
+        (*cl_consoleKeys).modified = qfalse;
         text_p = (*cl_consoleKeys).string;
         numConsoleKeys = 0 as i32;
         while numConsoleKeys < 16 as i32 {
@@ -1284,8 +1243,7 @@ unsafe extern "C" fn IN_IsConsoleKey(
                 (*c).u.character = charCode
             } else {
                 (*c).type_0 = QUAKE_KEY;
-                (*c).u.key = Key_StringToKeynum(token)
-                    as keyNum_t;
+                (*c).u.key = Key_StringToKeynum(token) as keyNum_t;
                 // 0 isn't a key
                 if (*c).u.key as u32 <= 0 as i32 as u32 {
                     continue;
@@ -1342,12 +1300,9 @@ unsafe extern "C" fn IN_TranslateSDLToQ3Key(
         } else {
             key = ('1' as i32 as u32)
                 .wrapping_add((*keysym).scancode as u32)
-                .wrapping_sub(SDL_SCANCODE_1 as i32 as u32)
-                as keyNum_t
+                .wrapping_sub(SDL_SCANCODE_1 as i32 as u32) as keyNum_t
         }
-    } else if (*keysym).sym >= SDLK_SPACE as i32
-        && (*keysym).sym < SDLK_DELETE as i32
-    {
+    } else if (*keysym).sym >= SDLK_SPACE as i32 && (*keysym).sym < SDLK_DELETE as i32 {
         // These happen to match the ASCII chars
         key = (*keysym).sym as keyNum_t
     } else {
@@ -1422,8 +1377,7 @@ unsafe extern "C" fn IN_TranslateSDLToQ3Key(
                     // Maybe create a map of scancode to quake key at start up and on
                     // key map change; allocate world key numbers as needed similar
                     // to SDL 1.2.
-                    key = (K_WORLD_0 as i32 + (*keysym).scancode as i32)
-                        as keyNum_t
+                    key = (K_WORLD_0 as i32 + (*keysym).scancode as i32) as keyNum_t
                 }
             }
         }
@@ -1520,10 +1474,7 @@ unsafe extern "C" fn IN_DeactivateMouse(mut isFullscreen: qboolean) {
         SDL_SetWindowGrab(SDL_window, SDL_FALSE);
         crate::stdlib::SDL_SetRelativeMouseMode(SDL_FALSE);
         // Don't warp the mouse unless the cursor is within the window
-        if SDL_GetWindowFlags(SDL_window)
-            & SDL_WINDOW_MOUSE_FOCUS as i32 as u32
-            != 0
-        {
+        if SDL_GetWindowFlags(SDL_window) & SDL_WINDOW_MOUSE_FOCUS as i32 as u32 != 0 {
             crate::stdlib::SDL_WarpMouseInWindow(
                 SDL_window,
                 cls.glconfig.vidWidth / 2 as i32,
@@ -1670,9 +1621,7 @@ unsafe extern "C" fn IN_InitJoystick() {
         0x40 as i32,
     ) as *mut cvar_s;
     if (*in_joystick).integer == 0 {
-        Com_DPrintf(
-            b"Joystick is not active.\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Com_DPrintf(b"Joystick is not active.\n\x00" as *const u8 as *const libc::c_char);
         crate::stdlib::SDL_QuitSubSystem(0x2000 as u32);
         return;
     }
@@ -1785,110 +1734,70 @@ unsafe extern "C" fn KeyToAxisAndSign(
         return qfalse;
     }
     *outSign = 0 as i32;
-    if Q_stricmp(
-        bind,
-        b"+forward\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    if Q_stricmp(bind, b"+forward\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         *outAxis = (*j_forward_axis).integer;
         *outSign = if (*j_forward).value > 0.0f32 {
             1 as i32
         } else {
             -(1 as i32)
         }
-    } else if Q_stricmp(
-        bind,
-        b"+back\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    } else if Q_stricmp(bind, b"+back\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         *outAxis = (*j_forward_axis).integer;
         *outSign = if (*j_forward).value > 0.0f32 {
             -(1 as i32)
         } else {
             1 as i32
         }
-    } else if Q_stricmp(
-        bind,
-        b"+moveleft\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    } else if Q_stricmp(bind, b"+moveleft\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         *outAxis = (*j_side_axis).integer;
         *outSign = if (*j_side).value > 0.0f32 {
             -(1 as i32)
         } else {
             1 as i32
         }
-    } else if Q_stricmp(
-        bind,
-        b"+moveright\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    } else if Q_stricmp(bind, b"+moveright\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         *outAxis = (*j_side_axis).integer;
         *outSign = if (*j_side).value > 0.0f32 {
             1 as i32
         } else {
             -(1 as i32)
         }
-    } else if Q_stricmp(
-        bind,
-        b"+lookup\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    } else if Q_stricmp(bind, b"+lookup\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         *outAxis = (*j_pitch_axis).integer;
         *outSign = if (*j_pitch).value > 0.0f32 {
             -(1 as i32)
         } else {
             1 as i32
         }
-    } else if Q_stricmp(
-        bind,
-        b"+lookdown\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    } else if Q_stricmp(bind, b"+lookdown\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         *outAxis = (*j_pitch_axis).integer;
         *outSign = if (*j_pitch).value > 0.0f32 {
             1 as i32
         } else {
             -(1 as i32)
         }
-    } else if Q_stricmp(
-        bind,
-        b"+left\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    } else if Q_stricmp(bind, b"+left\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         *outAxis = (*j_yaw_axis).integer;
         *outSign = if (*j_yaw).value > 0.0f32 {
             1 as i32
         } else {
             -(1 as i32)
         }
-    } else if Q_stricmp(
-        bind,
-        b"+right\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    } else if Q_stricmp(bind, b"+right\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         *outAxis = (*j_yaw_axis).integer;
         *outSign = if (*j_yaw).value > 0.0f32 {
             -(1 as i32)
         } else {
             1 as i32
         }
-    } else if Q_stricmp(
-        bind,
-        b"+moveup\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    } else if Q_stricmp(bind, b"+moveup\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         *outAxis = (*j_up_axis).integer;
         *outSign = if (*j_up).value > 0.0f32 {
             1 as i32
         } else {
             -(1 as i32)
         }
-    } else if Q_stricmp(
-        bind,
-        b"+movedown\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    } else if Q_stricmp(bind, b"+movedown\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         *outAxis = (*j_up_axis).integer;
         *outSign = if (*j_up).value > 0.0f32 {
             -(1 as i32)
@@ -1907,18 +1816,15 @@ IN_GamepadMove
 unsafe extern "C" fn IN_GamepadMove() {
     let mut i: i32 = 0;
     let mut translatedAxes: [i32; 16] = [0; 16];
-    let mut translatedAxesSet: [qboolean; 16] =
-        [qfalse; 16];
+    let mut translatedAxesSet: [qboolean; 16] = [qfalse; 16];
     SDL_GameControllerUpdate();
     // check buttons
     i = 0 as i32;
     while i < SDL_CONTROLLER_BUTTON_MAX as i32 {
-        let mut pressed: qboolean =
-            SDL_GameControllerGetButton(
-                gamepad,
-                (SDL_CONTROLLER_BUTTON_A as i32 + i)
-                    as SDL_GameControllerButton,
-            ) as qboolean;
+        let mut pressed: qboolean = SDL_GameControllerGetButton(
+            gamepad,
+            (SDL_CONTROLLER_BUTTON_A as i32 + i) as SDL_GameControllerButton,
+        ) as qboolean;
         if pressed as u32 != stick_state.buttons[i as usize] as u32 {
             Com_QueueEvent(
                 in_eventTime,
@@ -1947,8 +1853,7 @@ unsafe extern "C" fn IN_GamepadMove() {
     while i < SDL_CONTROLLER_AXIS_MAX as i32 {
         let mut axis: i32 = SDL_GameControllerGetAxis(
             gamepad,
-            (SDL_CONTROLLER_AXIS_LEFTX as i32 + i)
-                as SDL_GameControllerAxis,
+            (SDL_CONTROLLER_AXIS_LEFTX as i32 + i) as SDL_GameControllerAxis,
         ) as i32;
         let mut oldAxis: i32 = stick_state.oldaaxes[i as usize];
         // Smoothly ramp from dead zone to maximum value
@@ -1975,10 +1880,8 @@ unsafe extern "C" fn IN_GamepadMove() {
                 K_PAD0_LEFTTRIGGER as i32,
                 K_PAD0_RIGHTTRIGGER as i32,
             ];
-            let mut posAnalog: qboolean =
-                qfalse;
-            let mut negAnalog: qboolean =
-                qfalse;
+            let mut posAnalog: qboolean = qfalse;
+            let mut negAnalog: qboolean = qfalse;
             let mut negKey: i32 = negMap[i as usize];
             let mut posKey: i32 = posMap[i as usize];
             if (*in_joystickUseAnalog).integer != 0 {
@@ -2141,25 +2044,17 @@ unsafe extern "C" fn IN_JoyMove() {
     total = SDL_JoystickNumButtons(stick);
     if total > 0 as i32 {
         if total as libc::c_ulong
-            > (::std::mem::size_of::<[qboolean; 16]>()
-                as libc::c_ulong)
-                .wrapping_div(
-                    ::std::mem::size_of::<qboolean>()
-                        as libc::c_ulong,
-                )
+            > (::std::mem::size_of::<[qboolean; 16]>() as libc::c_ulong)
+                .wrapping_div(::std::mem::size_of::<qboolean>() as libc::c_ulong)
         {
-            total = (::std::mem::size_of::<[qboolean; 16]>()
-                as libc::c_ulong)
-                .wrapping_div(
-                    ::std::mem::size_of::<qboolean>()
-                        as libc::c_ulong,
-                ) as i32
+            total = (::std::mem::size_of::<[qboolean; 16]>() as libc::c_ulong)
+                .wrapping_div(::std::mem::size_of::<qboolean>() as libc::c_ulong)
+                as i32
         }
         i = 0 as i32;
         while i < total {
             let mut pressed: qboolean =
-                (SDL_JoystickGetButton(stick, i) as i32 != 0 as i32) as i32
-                    as qboolean;
+                (SDL_JoystickGetButton(stick, i) as i32 != 0 as i32) as i32 as qboolean;
             if pressed as u32 != stick_state.buttons[i as usize] as u32 {
                 Com_QueueEvent(
                     in_eventTime,
@@ -2192,12 +2087,11 @@ unsafe extern "C" fn IN_JoyMove() {
         i = 0 as i32;
         while i < 4 as i32 {
             if *(&mut hats as *mut u32 as *mut Uint8).offset(i as isize) as i32
-                != *(&mut stick_state.oldhats as *mut u32 as *mut Uint8)
-                    .offset(i as isize) as i32
+                != *(&mut stick_state.oldhats as *mut u32 as *mut Uint8).offset(i as isize) as i32
             {
                 // release event
-                match *(&mut stick_state.oldhats as *mut u32 as *mut Uint8)
-                    .offset(i as isize) as i32
+                match *(&mut stick_state.oldhats as *mut u32 as *mut Uint8).offset(i as isize)
+                    as i32
                 {
                     1 => {
                         Com_QueueEvent(
@@ -2314,9 +2208,7 @@ unsafe extern "C" fn IN_JoyMove() {
                     _ => {}
                 }
                 // press event
-                match *(&mut hats as *mut u32 as *mut Uint8).offset(i as isize)
-                    as i32
-                {
+                match *(&mut hats as *mut u32 as *mut Uint8).offset(i as isize) as i32 {
                     1 => {
                         Com_QueueEvent(
                             in_eventTime,
@@ -2470,8 +2362,7 @@ unsafe extern "C" fn IN_JoyMove() {
             }
             i = 0 as i32;
             while i < total {
-                let mut axis_0: Sint16 =
-                    SDL_JoystickGetAxis(stick, i);
+                let mut axis_0: Sint16 = SDL_JoystickGetAxis(stick, i);
                 let mut f_0: f32 = axis_0 as f32 / 32767.0f32;
                 if f_0 < -(*in_joystickThreshold).value {
                     axes |= ((1 as i32) << i * 2 as i32) as u32
@@ -2532,13 +2423,8 @@ unsafe extern "C" fn IN_ProcessEvents() {
     while SDL_PollEvent(&mut e) != 0 {
         match e.type_0 {
             768 => {
-                if !(e.key.repeat as i32 != 0
-                    && Key_GetCatcher() == 0 as i32)
-                {
-                    key = IN_TranslateSDLToQ3Key(
-                        &mut e.key.keysym,
-                        qtrue,
-                    );
+                if !(e.key.repeat as i32 != 0 && Key_GetCatcher() == 0 as i32) {
+                    key = IN_TranslateSDLToQ3Key(&mut e.key.keysym, qtrue);
                     if key as u64 != 0 {
                         Com_QueueEvent(
                             in_eventTime,
@@ -2558,10 +2444,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                             0 as i32,
                             0 as *mut libc::c_void,
                         );
-                    } else if keys
-                        [K_CTRL as i32 as usize]
-                        .down as u32
-                        != 0
+                    } else if keys[K_CTRL as i32 as usize].down as u32 != 0
                         && key as u32 >= 'a' as i32 as u32
                         && key as u32 <= 'z' as i32 as u32
                     {
@@ -2580,10 +2463,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                 }
             }
             769 => {
-                key = IN_TranslateSDLToQ3Key(
-                    &mut e.key.keysym,
-                    qfalse,
-                );
+                key = IN_TranslateSDLToQ3Key(&mut e.key.keysym, qfalse);
                 if key as u64 != 0 {
                     Com_QueueEvent(
                         in_eventTime,
@@ -2648,8 +2528,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                             c = c.offset(1)
                         }
                         if utf32 != 0 as i32 {
-                            if IN_IsConsoleKey(0 as keyNum_t, utf32) as u64 != 0
-                            {
+                            if IN_IsConsoleKey(0 as keyNum_t, utf32) as u64 != 0 {
                                 Com_QueueEvent(
                                     in_eventTime,
                                     SE_KEY,
@@ -2778,8 +2657,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                         // ignore this event on fullscreen
                         if !(cls.glconfig.isFullscreen as u64 != 0) {
                             // check if size actually changed
-                            if !(cls.glconfig.vidWidth == width
-                                && cls.glconfig.vidHeight == height)
+                            if !(cls.glconfig.vidWidth == width && cls.glconfig.vidHeight == height)
                             {
                                 Cvar_SetValue(
                                     b"r_customwidth\x00" as *const u8 as *const libc::c_char,
@@ -2796,8 +2674,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                                 // Wait until user stops dragging for 1 second, so
                                 // we aren't constantly recreating the GL context while
                                 // he tries to drag...
-                                vidRestartTime =
-                                    Sys_Milliseconds() + 1000 as i32
+                                vidRestartTime = Sys_Milliseconds() + 1000 as i32
                             }
                         }
                     }
@@ -2840,34 +2717,22 @@ IN_Frame
 #[no_mangle]
 
 pub unsafe extern "C" fn IN_Frame() {
-    let mut loading: qboolean =
-        qfalse;
+    let mut loading: qboolean = qfalse;
     IN_JoyMove();
     // If not DISCONNECTED (main menu) or ACTIVE (in game), we're loading
-    loading = (clc.state as u32
-        != CA_DISCONNECTED as i32 as u32
-        && clc.state as u32
-            != CA_ACTIVE as i32 as u32) as i32
-        as qboolean;
+    loading = (clc.state as u32 != CA_DISCONNECTED as i32 as u32
+        && clc.state as u32 != CA_ACTIVE as i32 as u32) as i32 as qboolean;
     // update isFullscreen since it might of changed since the last vid_restart
     cls.glconfig.isFullscreen =
-        (Cvar_VariableIntegerValue(
-            b"r_fullscreen\x00" as *const u8 as *const libc::c_char,
-        ) != 0 as i32) as i32 as qboolean;
-    if cls.glconfig.isFullscreen as u64 == 0
-        && Key_GetCatcher() & 0x1 as i32 != 0
-    {
+        (Cvar_VariableIntegerValue(b"r_fullscreen\x00" as *const u8 as *const libc::c_char)
+            != 0 as i32) as i32 as qboolean;
+    if cls.glconfig.isFullscreen as u64 == 0 && Key_GetCatcher() & 0x1 as i32 != 0 {
         // Console is down in windowed mode
         IN_DeactivateMouse(cls.glconfig.isFullscreen);
-    } else if cls.glconfig.isFullscreen as u64 == 0
-        && loading as u32 != 0
-    {
+    } else if cls.glconfig.isFullscreen as u64 == 0 && loading as u32 != 0 {
         // Loading in windowed mode
         IN_DeactivateMouse(cls.glconfig.isFullscreen);
-    } else if SDL_GetWindowFlags(SDL_window)
-        & SDL_WINDOW_INPUT_FOCUS as i32 as u32
-        == 0
-    {
+    } else if SDL_GetWindowFlags(SDL_window) & SDL_WINDOW_INPUT_FOCUS as i32 as u32 == 0 {
         // Window not got focus
         IN_DeactivateMouse(cls.glconfig.isFullscreen);
     } else {
@@ -2877,12 +2742,9 @@ pub unsafe extern "C" fn IN_Frame() {
     // Set event time for next frame to earliest possible time an event could happen
     in_eventTime = Sys_Milliseconds();
     // In case we had to delay actual restart of video system
-    if vidRestartTime != 0 as i32 && vidRestartTime < Sys_Milliseconds()
-    {
+    if vidRestartTime != 0 as i32 && vidRestartTime < Sys_Milliseconds() {
         vidRestartTime = 0 as i32;
-        Cbuf_AddText(
-            b"vid_restart\n\x00" as *const u8 as *const libc::c_char,
-        );
+        Cbuf_AddText(b"vid_restart\n\x00" as *const u8 as *const libc::c_char);
     };
 }
 /*
@@ -2932,12 +2794,10 @@ pub unsafe extern "C" fn IN_Init(mut windowData: *mut libc::c_void) {
         0x1 as i32,
     ) as *mut cvar_s;
     SDL_StartTextInput();
-    mouseAvailable =
-        ((*in_mouse).value != 0 as i32 as f32) as i32 as qboolean;
+    mouseAvailable = ((*in_mouse).value != 0 as i32 as f32) as i32 as qboolean;
     IN_DeactivateMouse(
-        (Cvar_VariableIntegerValue(
-            b"r_fullscreen\x00" as *const u8 as *const libc::c_char,
-        ) != 0 as i32) as i32 as qboolean,
+        (Cvar_VariableIntegerValue(b"r_fullscreen\x00" as *const u8 as *const libc::c_char)
+            != 0 as i32) as i32 as qboolean,
     );
     appState = SDL_GetWindowFlags(SDL_window) as i32;
     Cvar_SetValue(
@@ -2949,9 +2809,7 @@ pub unsafe extern "C" fn IN_Init(mut windowData: *mut libc::c_void) {
         (appState & SDL_WINDOW_MINIMIZED as i32) as f32,
     );
     IN_InitJoystick();
-    Com_DPrintf(
-        b"------------------------------------\n\x00" as *const u8 as *const libc::c_char,
-    );
+    Com_DPrintf(b"------------------------------------\n\x00" as *const u8 as *const libc::c_char);
 }
 /*
 ===============
@@ -2963,9 +2821,8 @@ IN_Shutdown
 pub unsafe extern "C" fn IN_Shutdown() {
     SDL_StopTextInput();
     IN_DeactivateMouse(
-        (Cvar_VariableIntegerValue(
-            b"r_fullscreen\x00" as *const u8 as *const libc::c_char,
-        ) != 0 as i32) as i32 as qboolean,
+        (Cvar_VariableIntegerValue(b"r_fullscreen\x00" as *const u8 as *const libc::c_char)
+            != 0 as i32) as i32 as qboolean,
     );
     mouseAvailable = qfalse;
     IN_ShutdownJoystick();

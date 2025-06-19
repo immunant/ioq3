@@ -290,9 +290,7 @@ R_InitNextFrame
 #[no_mangle]
 
 pub unsafe extern "C" fn R_InitNextFrame() {
-    (*backEndData)
-        .commands
-        .used = 0 as i32;
+    (*backEndData).commands.used = 0 as i32;
     r_firstSceneDrawSurf = 0 as i32;
     r_numdlights = 0 as i32;
     r_firstSceneDlight = 0 as i32;
@@ -336,13 +334,11 @@ pub unsafe extern "C" fn R_AddPolygonSurfaces() {
     let mut sh: *mut shader_t = 0 as *mut shader_t;
     let mut poly: *mut srfPoly_t = 0 as *mut srfPoly_t;
     tr.currentEntityNum = ((1 as i32) << 10 as i32) - 1 as i32;
-    tr.shiftedEntityNum =
-        tr.currentEntityNum << 7 as i32;
+    tr.shiftedEntityNum = tr.currentEntityNum << 7 as i32;
     i = 0 as i32;
     poly = tr.refdef.polys;
     while i < tr.refdef.numPolys {
-        sh = R_GetShaderByHandle((*poly).hShader)
-            as *mut shader_s;
+        sh = R_GetShaderByHandle((*poly).hShader) as *mut shader_s;
         R_AddDrawSurf(
             poly as *mut libc::c_void as *mut surfaceType_t,
             sh as *mut shader_s,
@@ -377,9 +373,7 @@ pub unsafe extern "C" fn RE_AddPolyToScene(
         return;
     }
     if hShader == 0 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_WARNING as i32,
             b"WARNING: RE_AddPolyToScene: NULL poly shader\n\x00" as *const u8
                 as *const libc::c_char,
@@ -388,53 +382,37 @@ pub unsafe extern "C" fn RE_AddPolyToScene(
     }
     j = 0 as i32;
     while j < numPolys {
-        if r_numpolyverts + numVerts > max_polyverts
-            || r_numpolys >= max_polys
-        {
+        if r_numpolyverts + numVerts > max_polyverts || r_numpolys >= max_polys {
             /*
             NOTE TTimo this was initially a PRINT_WARNING
             but it happens a lot with high fighting scenes and particles
             since we don't plan on changing the const and making for room for those effects
             simply cut this message to developer only
             */
-            ri
-                .Printf
-                .expect("non-null function pointer")(
+            ri.Printf.expect("non-null function pointer")(
                 PRINT_DEVELOPER as i32,
                 b"WARNING: RE_AddPolyToScene: r_max_polys or r_max_polyverts reached\n\x00"
                     as *const u8 as *const libc::c_char,
             );
             return;
         }
-        poly = &mut *(*backEndData)
-            .polys
-            .offset(r_numpolys as isize) as *mut srfPoly_t;
+        poly = &mut *(*backEndData).polys.offset(r_numpolys as isize) as *mut srfPoly_t;
         (*poly).surfaceType = SF_POLY;
         (*poly).hShader = hShader;
         (*poly).numVerts = numVerts;
-        (*poly).verts = &mut *(*backEndData)
-            .polyVerts
-            .offset(r_numpolyverts as isize)
-            as *mut polyVert_t;
+        (*poly).verts =
+            &mut *(*backEndData).polyVerts.offset(r_numpolyverts as isize) as *mut polyVert_t;
         crate::stdlib::memcpy(
             (*poly).verts as *mut libc::c_void,
-            &*verts.offset((numVerts * j) as isize) as *const polyVert_t
-                as *const libc::c_void,
-            (numVerts as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                polyVert_t,
-            >() as libc::c_ulong),
+            &*verts.offset((numVerts * j) as isize) as *const polyVert_t as *const libc::c_void,
+            (numVerts as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<polyVert_t>() as libc::c_ulong),
         );
-        if glConfig.hardwareType as u32
-            == GLHW_RAGEPRO as i32 as u32
-        {
-            (*(*poly).verts).modulate[0 as i32 as usize] =
-                255 as i32 as byte;
-            (*(*poly).verts).modulate[1 as i32 as usize] =
-                255 as i32 as byte;
-            (*(*poly).verts).modulate[2 as i32 as usize] =
-                255 as i32 as byte;
-            (*(*poly).verts).modulate[3 as i32 as usize] =
-                255 as i32 as byte
+        if glConfig.hardwareType as u32 == GLHW_RAGEPRO as i32 as u32 {
+            (*(*poly).verts).modulate[0 as i32 as usize] = 255 as i32 as byte;
+            (*(*poly).verts).modulate[1 as i32 as usize] = 255 as i32 as byte;
+            (*(*poly).verts).modulate[2 as i32 as usize] = 255 as i32 as byte;
+            (*(*poly).verts).modulate[3 as i32 as usize] = 255 as i32 as byte
         }
         // done.
         r_numpolys += 1;
@@ -462,8 +440,7 @@ pub unsafe extern "C" fn RE_AddPolyToScene(
             i = 1 as i32;
             while i < (*poly).numVerts {
                 AddPointToBounds(
-                    (*(*poly).verts.offset(i as isize)).xyz.as_mut_ptr()
-                        as *const vec_t,
+                    (*(*poly).verts.offset(i as isize)).xyz.as_mut_ptr() as *const vec_t,
                     bounds[0 as i32 as usize].as_mut_ptr(),
                     bounds[1 as i32 as usize].as_mut_ptr(),
                 );
@@ -471,10 +448,7 @@ pub unsafe extern "C" fn RE_AddPolyToScene(
             }
             fogIndex = 1 as i32;
             while fogIndex < (*tr.world).numfogs {
-                fog = &mut *(*tr.world)
-                    .fogs
-                    .offset(fogIndex as isize)
-                    as *mut fog_t;
+                fog = &mut *(*tr.world).fogs.offset(fogIndex as isize) as *mut fog_t;
                 if bounds[1 as i32 as usize][0 as i32 as usize]
                     >= (*fog).bounds[0 as i32 as usize][0 as i32 as usize]
                     && bounds[1 as i32 as usize][1 as i32 as usize]
@@ -514,9 +488,7 @@ pub unsafe extern "C" fn RE_AddRefEntityToScene(mut ent: *const refEntity_t) {
         return;
     }
     if r_numentities >= ((1 as i32) << 10 as i32) - 1 as i32 {
-        ri
-            .Printf
-            .expect("non-null function pointer")(
+        ri.Printf.expect("non-null function pointer")(
             PRINT_DEVELOPER as i32,
             b"RE_AddRefEntityToScene: Dropping refEntity, reached MAX_REFENTITIES\n\x00"
                 as *const u8 as *const libc::c_char,
@@ -527,8 +499,7 @@ pub unsafe extern "C" fn RE_AddRefEntityToScene(mut ent: *const refEntity_t) {
         || Q_isnan((*ent).origin[1 as i32 as usize]) != 0
         || Q_isnan((*ent).origin[2 as i32 as usize]) != 0
     {
-        static mut firstTime: qboolean =
-            qtrue;
+        static mut firstTime: qboolean = qtrue;
         if firstTime as u64 != 0 {
             firstTime = qfalse;
             ri.Printf.expect("non-null function pointer")(PRINT_WARNING as
@@ -542,17 +513,14 @@ pub unsafe extern "C" fn RE_AddRefEntityToScene(mut ent: *const refEntity_t) {
     if ((*ent).reType as i32) < 0 as i32
         || (*ent).reType as u32 >= RT_MAX_REF_ENTITY_TYPE as i32 as u32
     {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"RE_AddRefEntityToScene: bad reType %i\x00" as *const u8 as *const libc::c_char,
             (*ent).reType as u32,
         );
     }
     (*backEndData).entities[r_numentities as usize].e = *ent;
-    (*backEndData).entities[r_numentities as usize]
-        .lightingCalculated = qfalse;
+    (*backEndData).entities[r_numentities as usize].lightingCalculated = qfalse;
     r_numentities += 1;
 }
 /*
@@ -582,19 +550,14 @@ pub unsafe extern "C" fn RE_AddDynamicLightToScene(
         return;
     }
     // these cards don't have the correct blend mode
-    if glConfig.hardwareType as u32
-        == GLHW_RIVA128 as i32 as u32
-        || glConfig.hardwareType as u32
-            == GLHW_PERMEDIA2 as i32 as u32
+    if glConfig.hardwareType as u32 == GLHW_RIVA128 as i32 as u32
+        || glConfig.hardwareType as u32 == GLHW_PERMEDIA2 as i32 as u32
     {
         return;
     }
     let fresh0 = r_numdlights;
     r_numdlights = r_numdlights + 1;
-    dl = &mut *(*backEndData)
-        .dlights
-        .as_mut_ptr()
-        .offset(fresh0 as isize) as *mut dlight_t;
+    dl = &mut *(*backEndData).dlights.as_mut_ptr().offset(fresh0 as isize) as *mut dlight_t;
     (*dl).origin[0 as i32 as usize] = *org.offset(0 as i32 as isize);
     (*dl).origin[1 as i32 as usize] = *org.offset(1 as i32 as isize);
     (*dl).origin[2 as i32 as usize] = *org.offset(2 as i32 as isize);
@@ -619,14 +582,7 @@ pub unsafe extern "C" fn RE_AddLightToScene(
     mut g: f32,
     mut b: f32,
 ) {
-    RE_AddDynamicLightToScene(
-        org,
-        intensity,
-        r,
-        g,
-        b,
-        qfalse as i32,
-    );
+    RE_AddDynamicLightToScene(org, intensity, r, g, b, qfalse as i32);
 }
 /*
 =====================
@@ -643,14 +599,7 @@ pub unsafe extern "C" fn RE_AddAdditiveLightToScene(
     mut g: f32,
     mut b: f32,
 ) {
-    RE_AddDynamicLightToScene(
-        org,
-        intensity,
-        r,
-        g,
-        b,
-        qtrue as i32,
-    );
+    RE_AddDynamicLightToScene(org, intensity, r, g, b, qtrue as i32);
 }
 /*
 ===========================================================================
@@ -1107,22 +1056,15 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const refdef_t) {
     if (*r_norefresh).integer != 0 {
         return;
     }
-    startTime = ri
-        .Milliseconds
-        .expect("non-null function pointer")();
+    startTime = ri.Milliseconds.expect("non-null function pointer")();
     if tr.world.is_null() && (*fd).rdflags & 0x1 as i32 == 0 {
-        ri
-            .Error
-            .expect("non-null function pointer")(
+        ri.Error.expect("non-null function pointer")(
             ERR_DROP as i32,
             b"R_RenderScene: NULL worldmodel\x00" as *const u8 as *const libc::c_char,
         );
     }
     crate::stdlib::memcpy(
-        tr
-            .refdef
-            .text
-            .as_mut_ptr() as *mut libc::c_void,
+        tr.refdef.text.as_mut_ptr() as *mut libc::c_void,
         (*fd).text.as_ptr() as *const libc::c_void,
         ::std::mem::size_of::<[[libc::c_char; 32]; 8]>() as libc::c_ulong,
     );
@@ -1132,12 +1074,9 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const refdef_t) {
     tr.refdef.height = (*fd).height;
     tr.refdef.fov_x = (*fd).fov_x;
     tr.refdef.fov_y = (*fd).fov_y;
-    tr.refdef.vieworg[0 as i32 as usize] =
-        (*fd).vieworg[0 as i32 as usize];
-    tr.refdef.vieworg[1 as i32 as usize] =
-        (*fd).vieworg[1 as i32 as usize];
-    tr.refdef.vieworg[2 as i32 as usize] =
-        (*fd).vieworg[2 as i32 as usize];
+    tr.refdef.vieworg[0 as i32 as usize] = (*fd).vieworg[0 as i32 as usize];
+    tr.refdef.vieworg[1 as i32 as usize] = (*fd).vieworg[1 as i32 as usize];
+    tr.refdef.vieworg[2 as i32 as usize] = (*fd).vieworg[2 as i32 as usize];
     tr.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize] =
         (*fd).viewaxis[0 as i32 as usize][0 as i32 as usize];
     tr.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize] =
@@ -1160,8 +1099,7 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const refdef_t) {
     tr.refdef.rdflags = (*fd).rdflags;
     // copy the areamask data over and note if it has changed, which
     // will force a reset of the visible leafs even if the view hasn't moved
-    tr.refdef.areamaskModified =
-        qfalse;
+    tr.refdef.areamaskModified = qfalse;
     if tr.refdef.rdflags & 0x1 as i32 == 0 {
         let mut areaDiff: i32 = 0;
         let mut i: i32 = 0;
@@ -1169,56 +1107,39 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const refdef_t) {
         areaDiff = 0 as i32;
         i = 0 as i32;
         while i < 32 as i32 / 4 as i32 {
-            areaDiff |= *(tr
-                .refdef
-                .areamask
-                .as_mut_ptr() as *mut i32)
-                .offset(i as isize)
+            areaDiff |= *(tr.refdef.areamask.as_mut_ptr() as *mut i32).offset(i as isize)
                 ^ *((*fd).areamask.as_ptr() as *mut i32).offset(i as isize);
-            *(tr
-                .refdef
-                .areamask
-                .as_mut_ptr() as *mut i32)
-                .offset(i as isize) = *((*fd).areamask.as_ptr() as *mut i32).offset(i as isize);
+            *(tr.refdef.areamask.as_mut_ptr() as *mut i32).offset(i as isize) =
+                *((*fd).areamask.as_ptr() as *mut i32).offset(i as isize);
             i += 1
         }
         if areaDiff != 0 {
             // a door just opened or something
-            tr.refdef.areamaskModified =
-                qtrue
+            tr.refdef.areamaskModified = qtrue
         }
     }
     // derived info
-    tr.refdef.floatTime =
-        tr.refdef.time as f64 * 0.001f64;
+    tr.refdef.floatTime = tr.refdef.time as f64 * 0.001f64;
     tr.refdef.numDrawSurfs = r_firstSceneDrawSurf;
-    tr.refdef.drawSurfs =
-        (*backEndData)
-            .drawSurfs
-            .as_mut_ptr();
+    tr.refdef.drawSurfs = (*backEndData).drawSurfs.as_mut_ptr();
     tr.refdef.num_entities = r_numentities - r_firstSceneEntity;
-    tr.refdef.entities =
-        &mut *(*backEndData)
-            .entities
-            .as_mut_ptr()
-            .offset(r_firstSceneEntity as isize) as *mut trRefEntity_t;
+    tr.refdef.entities = &mut *(*backEndData)
+        .entities
+        .as_mut_ptr()
+        .offset(r_firstSceneEntity as isize) as *mut trRefEntity_t;
     tr.refdef.num_dlights = r_numdlights - r_firstSceneDlight;
-    tr.refdef.dlights =
-        &mut *(*backEndData)
-            .dlights
-            .as_mut_ptr()
-            .offset(r_firstSceneDlight as isize) as *mut dlight_t;
+    tr.refdef.dlights = &mut *(*backEndData)
+        .dlights
+        .as_mut_ptr()
+        .offset(r_firstSceneDlight as isize) as *mut dlight_t;
     tr.refdef.numPolys = r_numpolys - r_firstScenePoly;
     tr.refdef.polys =
-        &mut *(*backEndData)
-            .polys
-            .offset(r_firstScenePoly as isize) as *mut srfPoly_t;
+        &mut *(*backEndData).polys.offset(r_firstScenePoly as isize) as *mut srfPoly_t;
     // turn off dynamic lighting globally by clearing all the
     // dlights if it needs to be disabled or if vertex lighting is enabled
     if (*r_dynamiclight).integer == 0 as i32
         || (*r_vertexLight).integer == 1 as i32
-        || glConfig.hardwareType as u32
-            == GLHW_PERMEDIA2 as i32 as u32
+        || glConfig.hardwareType as u32 == GLHW_PERMEDIA2 as i32 as u32
     {
         tr.refdef.num_dlights = 0 as i32
     }
@@ -1241,9 +1162,7 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const refdef_t) {
         ::std::mem::size_of::<viewParms_t>() as libc::c_ulong,
     );
     parms.viewportX = tr.refdef.x;
-    parms.viewportY = glConfig.vidHeight
-        - (tr.refdef.y
-            + tr.refdef.height);
+    parms.viewportY = glConfig.vidHeight - (tr.refdef.y + tr.refdef.height);
     parms.viewportWidth = tr.refdef.width;
     parms.viewportHeight = tr.refdef.height;
     parms.isPortal = qfalse;
@@ -1274,16 +1193,11 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const refdef_t) {
     parms.pvsOrigin[0 as i32 as usize] = (*fd).vieworg[0 as i32 as usize];
     parms.pvsOrigin[1 as i32 as usize] = (*fd).vieworg[1 as i32 as usize];
     parms.pvsOrigin[2 as i32 as usize] = (*fd).vieworg[2 as i32 as usize];
-    R_RenderView(
-        &mut parms as *mut _ as *mut viewParms_t,
-    );
+    R_RenderView(&mut parms as *mut _ as *mut viewParms_t);
     // the next scene rendered in this frame will tack on after this one
     r_firstSceneDrawSurf = tr.refdef.numDrawSurfs;
     r_firstSceneEntity = r_numentities;
     r_firstSceneDlight = r_numdlights;
     r_firstScenePoly = r_numpolys;
-    tr.frontEndMsec += ri
-        .Milliseconds
-        .expect("non-null function pointer")(
-    ) - startTime;
+    tr.frontEndMsec += ri.Milliseconds.expect("non-null function pointer")() - startTime;
 }

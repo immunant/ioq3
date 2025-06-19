@@ -613,21 +613,9 @@ pub unsafe extern "C" fn CG_TileClear() {
     left = cg.refdef.x;
     right = left + cg.refdef.width - 1 as i32;
     // clear above view screen
-    CG_TileClearBox(
-        0 as i32,
-        0 as i32,
-        w,
-        top,
-        cgs.media.backTileShader,
-    );
+    CG_TileClearBox(0 as i32, 0 as i32, w, top, cgs.media.backTileShader);
     // clear below view screen
-    CG_TileClearBox(
-        0 as i32,
-        bottom,
-        w,
-        h - bottom,
-        cgs.media.backTileShader,
-    );
+    CG_TileClearBox(0 as i32, bottom, w, h - bottom, cgs.media.backTileShader);
     // clear left of view screen
     CG_TileClearBox(
         0 as i32,
@@ -664,8 +652,7 @@ pub unsafe extern "C" fn CG_FadeColor(mut startMsec: i32, mut totalMsec: i32) ->
     }
     // fade out
     if totalMsec - t < 200 as i32 {
-        color[3 as i32 as usize] = ((totalMsec - t) as f64 * 1.0f64 / 200 as i32 as f64)
-            as vec_t
+        color[3 as i32 as usize] = ((totalMsec - t) as f64 * 1.0f64 / 200 as i32 as f64) as vec_t
     } else {
         color[3 as i32 as usize] = 1.0f64 as vec_t
     }
@@ -682,30 +669,15 @@ CG_TeamColor
 #[no_mangle]
 
 pub unsafe extern "C" fn CG_TeamColor(mut team: i32) -> *mut f32 {
-    static mut red: vec4_t = [
-        1 as i32 as vec_t,
-        0.2f32,
-        0.2f32,
-        1 as i32 as vec_t,
-    ];
-    static mut blue: vec4_t = [
-        0.2f32,
-        0.2f32,
-        1 as i32 as vec_t,
-        1 as i32 as vec_t,
-    ];
+    static mut red: vec4_t = [1 as i32 as vec_t, 0.2f32, 0.2f32, 1 as i32 as vec_t];
+    static mut blue: vec4_t = [0.2f32, 0.2f32, 1 as i32 as vec_t, 1 as i32 as vec_t];
     static mut other: vec4_t = [
         1 as i32 as vec_t,
         1 as i32 as vec_t,
         1 as i32 as vec_t,
         1 as i32 as vec_t,
     ];
-    static mut spectator: vec4_t = [
-        0.7f32,
-        0.7f32,
-        0.7f32,
-        1 as i32 as vec_t,
-    ];
+    static mut spectator: vec4_t = [0.7f32, 0.7f32, 0.7f32, 1 as i32 as vec_t];
     match team {
         1 => return red.as_mut_ptr(),
         2 => return blue.as_mut_ptr(),
@@ -752,16 +724,14 @@ pub unsafe extern "C" fn CG_GetColorForHealth(
     } else if health < 66 as i32 {
         *hcolor.offset(2 as i32 as isize) = 0 as i32 as vec_t
     } else {
-        *hcolor.offset(2 as i32 as isize) =
-            ((health - 66 as i32) as f64 / 33.0f64) as vec_t
+        *hcolor.offset(2 as i32 as isize) = ((health - 66 as i32) as f64 / 33.0f64) as vec_t
     }
     if health > 60 as i32 {
         *hcolor.offset(1 as i32 as isize) = 1.0f64 as vec_t
     } else if health < 30 as i32 {
         *hcolor.offset(1 as i32 as isize) = 0 as i32 as vec_t
     } else {
-        *hcolor.offset(1 as i32 as isize) =
-            ((health - 30 as i32) as f64 / 30.0f64) as vec_t
+        *hcolor.offset(1 as i32 as isize) = ((health - 30 as i32) as f64 / 30.0f64) as vec_t
     };
 }
 /*
@@ -773,10 +743,8 @@ CG_ColorForHealth
 
 pub unsafe extern "C" fn CG_ColorForHealth(mut hcolor: *mut vec_t) {
     CG_GetColorForHealth(
-        (*cg.snap).ps.stats
-            [STAT_HEALTH as i32 as usize],
-        (*cg.snap).ps.stats
-            [STAT_ARMOR as i32 as usize],
+        (*cg.snap).ps.stats[STAT_HEALTH as i32 as usize],
+        (*cg.snap).ps.stats[STAT_ARMOR as i32 as usize],
         hcolor,
     );
 }
@@ -969,23 +937,20 @@ unsafe extern "C" fn UI_DrawBannerString2(
     let mut fheight: f32 = 0.;
     // draw the colored text
     trap_R_SetColor(color as *const f32);
-    ax = x as f32 * cgs.screenXScale
-        + cgs.screenXBias;
+    ax = x as f32 * cgs.screenXScale + cgs.screenXBias;
     ay = y as f32 * cgs.screenYScale;
     s = str;
     while *s != 0 {
         ch = (*s as i32 & 127 as i32) as u8;
         if ch as i32 == ' ' as i32 {
-            ax +=
-                (12 as i32 as f32 + 4 as i32 as f32) * cgs.screenXScale
+            ax += (12 as i32 as f32 + 4 as i32 as f32) * cgs.screenXScale
         } else if ch as i32 >= 'A' as i32 && ch as i32 <= 'Z' as i32 {
             ch = (ch as i32 - 'A' as i32) as u8;
             fcol = propMapB[ch as usize][0 as i32 as usize] as f32 / 256.0f32;
             frow = propMapB[ch as usize][1 as i32 as usize] as f32 / 256.0f32;
             fwidth = propMapB[ch as usize][2 as i32 as usize] as f32 / 256.0f32;
             fheight = 36 as i32 as f32 / 256.0f32;
-            aw = propMapB[ch as usize][2 as i32 as usize] as f32
-                * cgs.screenXScale;
+            aw = propMapB[ch as usize][2 as i32 as usize] as f32 * cgs.screenXScale;
             ah = 36 as i32 as f32 * cgs.screenYScale;
             trap_R_DrawStretchPic(
                 ax,
@@ -1086,8 +1051,7 @@ unsafe extern "C" fn UI_DrawProportionalString2(
     let mut fheight: f32 = 0.;
     // draw the colored text
     trap_R_SetColor(color as *const f32);
-    ax = x as f32 * cgs.screenXScale
-        + cgs.screenXBias;
+    ax = x as f32 * cgs.screenXScale + cgs.screenXBias;
     ay = y as f32 * cgs.screenYScale;
     s = str;
     while *s != 0 {
@@ -1099,9 +1063,7 @@ unsafe extern "C" fn UI_DrawProportionalString2(
             frow = propMap[ch as usize][1 as i32 as usize] as f32 / 256.0f32;
             fwidth = propMap[ch as usize][2 as i32 as usize] as f32 / 256.0f32;
             fheight = 27 as i32 as f32 / 256.0f32;
-            aw = propMap[ch as usize][2 as i32 as usize] as f32
-                * cgs.screenXScale
-                * sizeScale;
+            aw = propMap[ch as usize][2 as i32 as usize] as f32 * cgs.screenXScale * sizeScale;
             ah = 27 as i32 as f32 * cgs.screenYScale * sizeScale;
             trap_R_DrawStretchPic(
                 ax,
@@ -1387,12 +1349,9 @@ pub unsafe extern "C" fn UI_DrawProportionalString(
         );
     }
     if style & 0x2000 as i32 != 0 {
-        drawcolor[0 as i32 as usize] = (*color.offset(0 as i32 as isize) as f64 * 0.8f64)
-            as vec_t;
-        drawcolor[1 as i32 as usize] = (*color.offset(1 as i32 as isize) as f64 * 0.8f64)
-            as vec_t;
-        drawcolor[2 as i32 as usize] = (*color.offset(2 as i32 as isize) as f64 * 0.8f64)
-            as vec_t;
+        drawcolor[0 as i32 as usize] = (*color.offset(0 as i32 as isize) as f64 * 0.8f64) as vec_t;
+        drawcolor[1 as i32 as usize] = (*color.offset(1 as i32 as isize) as f64 * 0.8f64) as vec_t;
+        drawcolor[2 as i32 as usize] = (*color.offset(2 as i32 as isize) as f64 * 0.8f64) as vec_t;
         drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
         UI_DrawProportionalString2(
             x,
@@ -1405,27 +1364,16 @@ pub unsafe extern "C" fn UI_DrawProportionalString(
         return;
     }
     if style & 0x4000 as i32 != 0 {
-        drawcolor[0 as i32 as usize] = (*color.offset(0 as i32 as isize) as f64 * 0.8f64)
-            as vec_t;
-        drawcolor[1 as i32 as usize] = (*color.offset(1 as i32 as isize) as f64 * 0.8f64)
-            as vec_t;
-        drawcolor[2 as i32 as usize] = (*color.offset(2 as i32 as isize) as f64 * 0.8f64)
-            as vec_t;
+        drawcolor[0 as i32 as usize] = (*color.offset(0 as i32 as isize) as f64 * 0.8f64) as vec_t;
+        drawcolor[1 as i32 as usize] = (*color.offset(1 as i32 as isize) as f64 * 0.8f64) as vec_t;
+        drawcolor[2 as i32 as usize] = (*color.offset(2 as i32 as isize) as f64 * 0.8f64) as vec_t;
         drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
-        UI_DrawProportionalString2(
-            x,
-            y,
-            str,
-            color,
-            sizeScale,
-            cgs.media.charsetProp,
-        );
+        UI_DrawProportionalString2(x, y, str, color, sizeScale, cgs.media.charsetProp);
         drawcolor[0 as i32 as usize] = *color.offset(0 as i32 as isize);
         drawcolor[1 as i32 as usize] = *color.offset(1 as i32 as isize);
         drawcolor[2 as i32 as usize] = *color.offset(2 as i32 as isize);
-        drawcolor[3 as i32 as usize] = (0.5f64
-            + 0.5f64 * crate::stdlib::sin((cg.time / 75 as i32) as f64))
-            as vec_t;
+        drawcolor[3 as i32 as usize] =
+            (0.5f64 + 0.5f64 * crate::stdlib::sin((cg.time / 75 as i32) as f64)) as vec_t;
         UI_DrawProportionalString2(
             x,
             y,
@@ -1436,12 +1384,5 @@ pub unsafe extern "C" fn UI_DrawProportionalString(
         );
         return;
     }
-    UI_DrawProportionalString2(
-        x,
-        y,
-        str,
-        color,
-        sizeScale,
-        cgs.media.charsetProp,
-    );
+    UI_DrawProportionalString2(x, y, str, color, sizeScale, cgs.media.charsetProp);
 }

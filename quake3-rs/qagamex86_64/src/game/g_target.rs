@@ -273,23 +273,22 @@ pub unsafe extern "C" fn Use_Target_Give(
     mut activator: *mut gentity_t,
 ) {
     let mut t: *mut gentity_t = 0 as *mut gentity_t;
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     if (*activator).client.is_null() {
         return;
     }
@@ -305,8 +304,7 @@ pub unsafe extern "C" fn Use_Target_Give(
     loop {
         t = G_Find(
             t as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char
-                as size_t as i32,
+            &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char as size_t as i32,
             (*ent).target,
         ) as *mut gentity_s;
         if t.is_null() {
@@ -330,11 +328,7 @@ pub unsafe extern "C" fn Use_Target_Give(
 pub unsafe extern "C" fn SP_target_give(mut ent: *mut gentity_t) {
     (*ent).use_0 = Some(
         Use_Target_Give
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
 }
 //==========================================================
@@ -354,13 +348,9 @@ pub unsafe extern "C" fn Use_target_remove_powerups(
     }
     if (*(*activator).client).ps.powerups[PW_REDFLAG as i32 as usize] != 0 {
         crate::src::game::g_team::Team_ReturnFlag(TEAM_RED as i32);
-    } else if (*(*activator).client).ps.powerups[PW_BLUEFLAG as i32 as usize]
-        != 0
-    {
+    } else if (*(*activator).client).ps.powerups[PW_BLUEFLAG as i32 as usize] != 0 {
         crate::src::game::g_team::Team_ReturnFlag(TEAM_BLUE as i32);
-    } else if (*(*activator).client).ps.powerups[PW_NEUTRALFLAG as i32 as usize]
-        != 0
-    {
+    } else if (*(*activator).client).ps.powerups[PW_NEUTRALFLAG as i32 as usize] != 0 {
         crate::src::game::g_team::Team_ReturnFlag(TEAM_FREE as i32);
     }
     crate::stdlib::memset(
@@ -374,11 +364,7 @@ pub unsafe extern "C" fn Use_target_remove_powerups(
 pub unsafe extern "C" fn SP_target_remove_powerups(mut ent: *mut gentity_t) {
     (*ent).use_0 = Some(
         Use_target_remove_powerups
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
 }
 //==========================================================
@@ -389,10 +375,7 @@ pub unsafe extern "C" fn SP_target_remove_powerups(mut ent: *mut gentity_t) {
 #[no_mangle]
 
 pub unsafe extern "C" fn Think_Target_Delay(mut ent: *mut gentity_t) {
-    G_UseTargets(
-        ent as *mut gentity_s,
-        (*ent).activator as *mut gentity_s,
-    );
+    G_UseTargets(ent as *mut gentity_s, (*ent).activator as *mut gentity_s);
 }
 #[no_mangle]
 
@@ -408,8 +391,7 @@ pub unsafe extern "C" fn Use_Target_Delay(
                     * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)))
             * 1000 as i32 as f64) as i32;
-    (*ent).think =
-        Some(Think_Target_Delay as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+    (*ent).think = Some(Think_Target_Delay as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     (*ent).activator = activator;
 }
 #[no_mangle]
@@ -434,11 +416,7 @@ pub unsafe extern "C" fn SP_target_delay(mut ent: *mut gentity_t) {
     }
     (*ent).use_0 = Some(
         Use_Target_Delay
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
 }
 //==========================================================
@@ -468,11 +446,7 @@ pub unsafe extern "C" fn SP_target_score(mut ent: *mut gentity_t) {
     }
     (*ent).use_0 = Some(
         Use_Target_Score
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
 }
 //==========================================================
@@ -489,8 +463,7 @@ pub unsafe extern "C" fn Use_Target_Print(
 ) {
     if !(*activator).client.is_null() && (*ent).spawnflags & 4 as i32 != 0 {
         trap_SendServerCommand(
-            activator.offset_from(g_entities.as_mut_ptr()) as isize
-                as i32,
+            activator.offset_from(g_entities.as_mut_ptr()) as isize as i32,
             va(
                 b"cp \"%s\"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 (*ent).message,
@@ -532,11 +505,7 @@ pub unsafe extern "C" fn Use_Target_Print(
 pub unsafe extern "C" fn SP_target_print(mut ent: *mut gentity_t) {
     (*ent).use_0 = Some(
         Use_Target_Print
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
 }
 //==========================================================
@@ -611,9 +580,7 @@ pub unsafe extern "C" fn SP_target_speaker(mut ent: *mut gentity_t) {
     {
         G_Error(
             b"target_speaker without a noise key at %s\x00" as *const u8 as *const libc::c_char,
-            vtos(
-                (*ent).s.origin.as_mut_ptr() as *const vec_t
-            ),
+            vtos((*ent).s.origin.as_mut_ptr() as *const vec_t),
         );
     }
     // force all client relative sounds to be "activator" speakers that
@@ -647,11 +614,7 @@ pub unsafe extern "C" fn SP_target_speaker(mut ent: *mut gentity_t) {
     }
     (*ent).use_0 = Some(
         Use_Target_Speaker
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
     if (*ent).spawnflags & 4 as i32 != 0 {
         (*ent).r.svFlags |= 0x20 as i32
@@ -735,10 +698,7 @@ pub unsafe extern "C" fn target_laser_think(mut self_0: *mut gentity_t) {
     if tr.entityNum != 0 {
         // hurt it if we can
         G_Damage(
-            &mut *g_entities
-                .as_mut_ptr()
-                .offset(tr.entityNum as isize) as *mut _
-                as *mut gentity_s,
+            &mut *g_entities.as_mut_ptr().offset(tr.entityNum as isize) as *mut _ as *mut gentity_s,
             self_0 as *mut gentity_s,
             (*self_0).activator as *mut gentity_s,
             (*self_0).movedir.as_mut_ptr(),
@@ -790,17 +750,14 @@ pub unsafe extern "C" fn target_laser_start(mut self_0: *mut gentity_t) {
     if !(*self_0).target.is_null() {
         ent = G_Find(
             0 as *mut gentity_t as *mut gentity_s,
-            &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char
-                as size_t as i32,
+            &mut (*(0 as *mut gentity_t)).targetname as *mut *mut libc::c_char as size_t as i32,
             (*self_0).target,
         ) as *mut gentity_s;
         if ent.is_null() {
             G_Printf(
                 b"%s at %s: %s is a bad target\n\x00" as *const u8 as *const libc::c_char,
                 (*self_0).classname,
-                vtos(
-                    (*self_0).s.origin.as_mut_ptr() as *const vec_t
-                ),
+                vtos((*self_0).s.origin.as_mut_ptr() as *const vec_t),
                 (*self_0).target,
             );
         }
@@ -813,14 +770,9 @@ pub unsafe extern "C" fn target_laser_start(mut self_0: *mut gentity_t) {
     }
     (*self_0).use_0 = Some(
         target_laser_use
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
-    (*self_0).think =
-        Some(target_laser_think as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+    (*self_0).think = Some(target_laser_think as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     if (*self_0).damage == 0 {
         (*self_0).damage = 1 as i32
     }
@@ -834,8 +786,7 @@ pub unsafe extern "C" fn target_laser_start(mut self_0: *mut gentity_t) {
 
 pub unsafe extern "C" fn SP_target_laser(mut self_0: *mut gentity_t) {
     // let everything else get spawned before we start firing
-    (*self_0).think =
-        Some(target_laser_start as unsafe extern "C" fn(_: *mut gentity_t) -> ());
+    (*self_0).think = Some(target_laser_start as unsafe extern "C" fn(_: *mut gentity_t) -> ());
     (*self_0).nextthink = level.time + 100 as i32;
 }
 //==========================================================
@@ -850,8 +801,7 @@ pub unsafe extern "C" fn target_teleporter_use(
     if (*activator).client.is_null() {
         return;
     }
-    dest = G_PickTarget((*self_0).target)
-        as *mut gentity_s;
+    dest = G_PickTarget((*self_0).target) as *mut gentity_s;
     if dest.is_null() {
         G_Printf(
             b"Couldn\'t find teleporter destination\n\x00" as *const u8 as *const libc::c_char,
@@ -874,18 +824,12 @@ pub unsafe extern "C" fn SP_target_teleporter(mut self_0: *mut gentity_t) {
         G_Printf(
             b"untargeted %s at %s\n\x00" as *const u8 as *const libc::c_char,
             (*self_0).classname,
-            vtos(
-                (*self_0).s.origin.as_mut_ptr() as *const vec_t
-            ),
+            vtos((*self_0).s.origin.as_mut_ptr() as *const vec_t),
         );
     }
     (*self_0).use_0 = Some(
         target_teleporter_use
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
 }
 //==========================================================
@@ -903,42 +847,32 @@ pub unsafe extern "C" fn target_relay_use(
 ) {
     if (*self_0).spawnflags & 1 as i32 != 0
         && !(*activator).client.is_null()
-        && (*(*activator).client).sess.sessionTeam as u32
-            != TEAM_RED as i32 as u32
+        && (*(*activator).client).sess.sessionTeam as u32 != TEAM_RED as i32 as u32
     {
         return;
     }
     if (*self_0).spawnflags & 2 as i32 != 0
         && !(*activator).client.is_null()
-        && (*(*activator).client).sess.sessionTeam as u32
-            != TEAM_BLUE as i32 as u32
+        && (*(*activator).client).sess.sessionTeam as u32 != TEAM_BLUE as i32 as u32
     {
         return;
     }
     if (*self_0).spawnflags & 4 as i32 != 0 {
         let mut ent: *mut gentity_t = 0 as *mut gentity_t;
-        ent = G_PickTarget((*self_0).target)
-            as *mut gentity_s;
+        ent = G_PickTarget((*self_0).target) as *mut gentity_s;
         if !ent.is_null() && (*ent).use_0.is_some() {
             (*ent).use_0.expect("non-null function pointer")(ent, self_0, activator);
         }
         return;
     }
-    G_UseTargets(
-        self_0 as *mut gentity_s,
-        activator as *mut gentity_s,
-    );
+    G_UseTargets(self_0 as *mut gentity_s, activator as *mut gentity_s);
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn SP_target_relay(mut self_0: *mut gentity_t) {
     (*self_0).use_0 = Some(
         target_relay_use
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
 }
 //==========================================================
@@ -968,11 +902,7 @@ pub unsafe extern "C" fn target_kill_use(
 pub unsafe extern "C" fn SP_target_kill(mut self_0: *mut gentity_t) {
     (*self_0).use_0 = Some(
         target_kill_use
-            as unsafe extern "C" fn(
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-                _: *mut gentity_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> (),
     );
 }
 /*QUAKED target_position (0 0.5 0) (-4 -4 -4) (4 4 4)
@@ -981,10 +911,7 @@ Used as a positional target for in-game calculation, like jumppad targets.
 #[no_mangle]
 
 pub unsafe extern "C" fn SP_target_position(mut self_0: *mut gentity_t) {
-    G_SetOrigin(
-        self_0 as *mut gentity_s,
-        (*self_0).s.origin.as_mut_ptr(),
-    );
+    G_SetOrigin(self_0 as *mut gentity_s, (*self_0).s.origin.as_mut_ptr());
 }
 
 unsafe extern "C" fn target_location_linkup(mut ent: *mut gentity_t) {
@@ -1035,12 +962,7 @@ in site, closest in distance
 #[no_mangle]
 
 pub unsafe extern "C" fn SP_target_location(mut self_0: *mut gentity_t) {
-    (*self_0).think = Some(
-        target_location_linkup as unsafe extern "C" fn(_: *mut gentity_t) -> (),
-    ); // Let them all spawn first
+    (*self_0).think = Some(target_location_linkup as unsafe extern "C" fn(_: *mut gentity_t) -> ()); // Let them all spawn first
     (*self_0).nextthink = level.time + 200 as i32;
-    G_SetOrigin(
-        self_0 as *mut gentity_s,
-        (*self_0).s.origin.as_mut_ptr(),
-    );
+    G_SetOrigin(self_0 as *mut gentity_s, (*self_0).s.origin.as_mut_ptr());
 }

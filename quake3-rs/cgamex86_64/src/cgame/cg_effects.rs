@@ -193,11 +193,9 @@ pub unsafe extern "C" fn CG_BubbleTrail(
     vec[1 as i32 as usize] = vec[1 as i32 as usize] * spacing;
     vec[2 as i32 as usize] = vec[2 as i32 as usize] * spacing;
     while (i as f32) < len {
-        let mut le: *mut localEntity_t =
-            0 as *mut localEntity_t;
+        let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
         let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
-        le = CG_AllocLocalEntity()
-            as *mut localEntity_s;
+        le = CG_AllocLocalEntity() as *mut localEntity_s;
         (*le).leFlags = LEF_PUFF_DONT_SCALE as i32;
         (*le).leType = LE_MOVE_SCALE_FADE;
         (*le).startTime = cg.time;
@@ -223,17 +221,14 @@ pub unsafe extern "C" fn CG_BubbleTrail(
         (*le).pos.trBase[2 as i32 as usize] = move_0[2 as i32 as usize];
         (*le).pos.trDelta[0 as i32 as usize] = (2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 5 as i32 as f64)
-            as vec_t;
+            * 5 as i32 as f64) as vec_t;
         (*le).pos.trDelta[1 as i32 as usize] = (2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 5 as i32 as f64)
-            as vec_t;
+            * 5 as i32 as f64) as vec_t;
         (*le).pos.trDelta[2 as i32 as usize] = (2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 5 as i32 as f64
-            + 6 as i32 as f64)
-            as vec_t;
+            + 6 as i32 as f64) as vec_t;
         move_0[0 as i32 as usize] = move_0[0 as i32 as usize] + vec[0 as i32 as usize];
         move_0[1 as i32 as usize] = move_0[1 as i32 as usize] + vec[1 as i32 as usize];
         move_0[2 as i32 as usize] = move_0[2 as i32 as usize] + vec[2 as i32 as usize];
@@ -267,8 +262,7 @@ pub unsafe extern "C" fn CG_SmokePuff(
     let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
     let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
     //	int fadeInTime = startTime + duration / 2;
-    le = CG_AllocLocalEntity()
-        as *mut localEntity_s;
+    le = CG_AllocLocalEntity() as *mut localEntity_s;
     (*le).leFlags = leFlags;
     (*le).radius = radius;
     re = &mut (*le).refEntity;
@@ -301,21 +295,19 @@ pub unsafe extern "C" fn CG_SmokePuff(
     (*re).origin[2 as i32 as usize] = *p.offset(2 as i32 as isize);
     (*re).customShader = hShader;
     // rage pro can't alpha fade, so use a different shader
-    if cgs.glconfig.hardwareType as u32
-        == GLHW_RAGEPRO as i32 as u32
-    {
+    if cgs.glconfig.hardwareType as u32 == GLHW_RAGEPRO as i32 as u32 {
         (*re).customShader = cgs.media.smokePuffRageProShader;
         (*re).shaderRGBA[0 as i32 as usize] = 0xff as i32 as byte;
         (*re).shaderRGBA[1 as i32 as usize] = 0xff as i32 as byte;
         (*re).shaderRGBA[2 as i32 as usize] = 0xff as i32 as byte;
         (*re).shaderRGBA[3 as i32 as usize] = 0xff as i32 as byte
     } else {
-        (*re).shaderRGBA[0 as i32 as usize] = ((*le).color[0 as i32 as usize] * 0xff as i32 as f32)
-            as byte;
-        (*re).shaderRGBA[1 as i32 as usize] = ((*le).color[1 as i32 as usize] * 0xff as i32 as f32)
-            as byte;
-        (*re).shaderRGBA[2 as i32 as usize] = ((*le).color[2 as i32 as usize] * 0xff as i32 as f32)
-            as byte;
+        (*re).shaderRGBA[0 as i32 as usize] =
+            ((*le).color[0 as i32 as usize] * 0xff as i32 as f32) as byte;
+        (*re).shaderRGBA[1 as i32 as usize] =
+            ((*le).color[1 as i32 as usize] * 0xff as i32 as f32) as byte;
+        (*re).shaderRGBA[2 as i32 as usize] =
+            ((*le).color[2 as i32 as usize] * 0xff as i32 as f32) as byte;
         (*re).shaderRGBA[3 as i32 as usize] = 0xff as i32 as byte
     }
     (*re).reType = RT_SPRITE;
@@ -334,8 +326,7 @@ Player teleporting in or out
 pub unsafe extern "C" fn CG_SpawnEffect(mut org: *mut vec_t) {
     let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
     let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
-    le = CG_AllocLocalEntity()
-        as *mut localEntity_s;
+    le = CG_AllocLocalEntity() as *mut localEntity_s;
     (*le).leFlags = 0 as i32;
     (*le).leType = LE_FADE_RGB;
     (*le).startTime = cg.time;
@@ -363,26 +354,16 @@ CG_ScorePlum
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_ScorePlum(
-    mut client: i32,
-    mut org: *mut vec_t,
-    mut score: i32,
-) {
+pub unsafe extern "C" fn CG_ScorePlum(mut client: i32, mut org: *mut vec_t, mut score: i32) {
     let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
     let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
     let mut angles: vec3_t = [0.; 3];
     static mut lastPos: vec3_t = [0.; 3];
     // only visualize for the client that scored
-    if client
-        != cg
-            .predictedPlayerState
-            .clientNum
-        || cg_scorePlum.integer == 0 as i32
-    {
+    if client != cg.predictedPlayerState.clientNum || cg_scorePlum.integer == 0 as i32 {
         return;
     }
-    le = CG_AllocLocalEntity()
-        as *mut localEntity_s;
+    le = CG_AllocLocalEntity() as *mut localEntity_s;
     (*le).leFlags = 0 as i32;
     (*le).leType = LE_SCOREPLUM;
     (*le).startTime = cg.time;
@@ -411,10 +392,7 @@ pub unsafe extern "C" fn CG_ScorePlum(
     angles[2 as i32 as usize] = 0 as i32 as vec_t;
     angles[1 as i32 as usize] = angles[2 as i32 as usize];
     angles[0 as i32 as usize] = angles[1 as i32 as usize];
-    AnglesToAxis(
-        angles.as_mut_ptr() as *const vec_t,
-        (*re).axis.as_mut_ptr(),
-    );
+    AnglesToAxis(angles.as_mut_ptr() as *const vec_t, (*re).axis.as_mut_ptr());
 }
 /*
 ====================
@@ -444,8 +422,7 @@ pub unsafe extern "C" fn CG_MakeExplosion(
     }
     // skew the time a bit so they aren't all in sync
     offset = libc::rand() & 63 as i32;
-    ex = CG_AllocLocalEntity()
-        as *mut localEntity_s;
+    ex = CG_AllocLocalEntity() as *mut localEntity_s;
     if isSprite as u64 != 0 {
         (*ex).leType = LE_SPRITE_EXPLOSION;
         // randomly rotate sprite orientation
@@ -474,10 +451,7 @@ pub unsafe extern "C" fn CG_MakeExplosion(
                 *dir.offset(1 as i32 as isize);
             (*ex).refEntity.axis[0 as i32 as usize][2 as i32 as usize] =
                 *dir.offset(2 as i32 as isize);
-            RotateAroundDirection(
-                (*ex).refEntity.axis.as_mut_ptr(),
-                ang,
-            );
+            RotateAroundDirection((*ex).refEntity.axis.as_mut_ptr(), ang);
         }
     }
     (*ex).startTime = cg.time - offset;
@@ -507,16 +481,12 @@ This is the spurt of blood when a character gets hit
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_Bleed(
-    mut origin: *mut vec_t,
-    mut entityNum: i32,
-) {
+pub unsafe extern "C" fn CG_Bleed(mut origin: *mut vec_t, mut entityNum: i32) {
     let mut ex: *mut localEntity_t = 0 as *mut localEntity_t;
     if cg_blood.integer == 0 {
         return;
     }
-    ex = CG_AllocLocalEntity()
-        as *mut localEntity_s;
+    ex = CG_AllocLocalEntity() as *mut localEntity_s;
     (*ex).leType = LE_EXPLOSION;
     (*ex).startTime = cg.time;
     (*ex).endTime = (*ex).startTime + 500 as i32;
@@ -546,8 +516,7 @@ pub unsafe extern "C" fn CG_LaunchGib(
 ) {
     let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
     let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
-    le = CG_AllocLocalEntity()
-        as *mut localEntity_s;
+    le = CG_AllocLocalEntity() as *mut localEntity_s;
     re = &mut (*le).refEntity;
     (*le).leType = LE_FRAGMENT;
     (*le).startTime = cg.time;
@@ -557,10 +526,7 @@ pub unsafe extern "C" fn CG_LaunchGib(
     (*re).origin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     (*re).origin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     (*re).origin[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
-    AxisCopy(
-        axisDefault.as_mut_ptr(),
-        (*re).axis.as_mut_ptr(),
-    );
+    AxisCopy(axisDefault.as_mut_ptr(), (*re).axis.as_mut_ptr());
     (*re).hModel = hModel;
     (*le).pos.trType = TR_GRAVITY;
     (*le).pos.trBase[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
@@ -587,17 +553,14 @@ pub unsafe extern "C" fn CG_GibPlayer(mut playerOrigin: *mut vec_t) {
     origin[2 as i32 as usize] = *playerOrigin.offset(2 as i32 as isize);
     velocity[0 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[1 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[2 as i32 as usize] = (250 as i32 as f64
         + 2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 250 as i32 as f64)
-        as vec_t;
+            * 250 as i32 as f64) as vec_t;
     if libc::rand() & 1 as i32 != 0 {
         CG_LaunchGib(
             origin.as_mut_ptr(),
@@ -620,17 +583,14 @@ pub unsafe extern "C" fn CG_GibPlayer(mut playerOrigin: *mut vec_t) {
     origin[2 as i32 as usize] = *playerOrigin.offset(2 as i32 as isize);
     velocity[0 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[1 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[2 as i32 as usize] = (250 as i32 as f64
         + 2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 250 as i32 as f64)
-        as vec_t;
+            * 250 as i32 as f64) as vec_t;
     CG_LaunchGib(
         origin.as_mut_ptr(),
         velocity.as_mut_ptr(),
@@ -641,38 +601,28 @@ pub unsafe extern "C" fn CG_GibPlayer(mut playerOrigin: *mut vec_t) {
     origin[2 as i32 as usize] = *playerOrigin.offset(2 as i32 as isize);
     velocity[0 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[1 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[2 as i32 as usize] = (250 as i32 as f64
         + 2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 250 as i32 as f64)
-        as vec_t;
-    CG_LaunchGib(
-        origin.as_mut_ptr(),
-        velocity.as_mut_ptr(),
-        cgs.media.gibArm,
-    );
+            * 250 as i32 as f64) as vec_t;
+    CG_LaunchGib(origin.as_mut_ptr(), velocity.as_mut_ptr(), cgs.media.gibArm);
     origin[0 as i32 as usize] = *playerOrigin.offset(0 as i32 as isize);
     origin[1 as i32 as usize] = *playerOrigin.offset(1 as i32 as isize);
     origin[2 as i32 as usize] = *playerOrigin.offset(2 as i32 as isize);
     velocity[0 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[1 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[2 as i32 as usize] = (250 as i32 as f64
         + 2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 250 as i32 as f64)
-        as vec_t;
+            * 250 as i32 as f64) as vec_t;
     CG_LaunchGib(
         origin.as_mut_ptr(),
         velocity.as_mut_ptr(),
@@ -683,17 +633,14 @@ pub unsafe extern "C" fn CG_GibPlayer(mut playerOrigin: *mut vec_t) {
     origin[2 as i32 as usize] = *playerOrigin.offset(2 as i32 as isize);
     velocity[0 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[1 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[2 as i32 as usize] = (250 as i32 as f64
         + 2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 250 as i32 as f64)
-        as vec_t;
+            * 250 as i32 as f64) as vec_t;
     CG_LaunchGib(
         origin.as_mut_ptr(),
         velocity.as_mut_ptr(),
@@ -704,17 +651,14 @@ pub unsafe extern "C" fn CG_GibPlayer(mut playerOrigin: *mut vec_t) {
     origin[2 as i32 as usize] = *playerOrigin.offset(2 as i32 as isize);
     velocity[0 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[1 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[2 as i32 as usize] = (250 as i32 as f64
         + 2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 250 as i32 as f64)
-        as vec_t;
+            * 250 as i32 as f64) as vec_t;
     CG_LaunchGib(
         origin.as_mut_ptr(),
         velocity.as_mut_ptr(),
@@ -725,17 +669,14 @@ pub unsafe extern "C" fn CG_GibPlayer(mut playerOrigin: *mut vec_t) {
     origin[2 as i32 as usize] = *playerOrigin.offset(2 as i32 as isize);
     velocity[0 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[1 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[2 as i32 as usize] = (250 as i32 as f64
         + 2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 250 as i32 as f64)
-        as vec_t;
+            * 250 as i32 as f64) as vec_t;
     CG_LaunchGib(
         origin.as_mut_ptr(),
         velocity.as_mut_ptr(),
@@ -746,17 +687,14 @@ pub unsafe extern "C" fn CG_GibPlayer(mut playerOrigin: *mut vec_t) {
     origin[2 as i32 as usize] = *playerOrigin.offset(2 as i32 as isize);
     velocity[0 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[1 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[2 as i32 as usize] = (250 as i32 as f64
         + 2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 250 as i32 as f64)
-        as vec_t;
+            * 250 as i32 as f64) as vec_t;
     CG_LaunchGib(
         origin.as_mut_ptr(),
         velocity.as_mut_ptr(),
@@ -767,43 +705,29 @@ pub unsafe extern "C" fn CG_GibPlayer(mut playerOrigin: *mut vec_t) {
     origin[2 as i32 as usize] = *playerOrigin.offset(2 as i32 as isize);
     velocity[0 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[1 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[2 as i32 as usize] = (250 as i32 as f64
         + 2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 250 as i32 as f64)
-        as vec_t;
-    CG_LaunchGib(
-        origin.as_mut_ptr(),
-        velocity.as_mut_ptr(),
-        cgs.media.gibLeg,
-    );
+            * 250 as i32 as f64) as vec_t;
+    CG_LaunchGib(origin.as_mut_ptr(), velocity.as_mut_ptr(), cgs.media.gibLeg);
     origin[0 as i32 as usize] = *playerOrigin.offset(0 as i32 as isize);
     origin[1 as i32 as usize] = *playerOrigin.offset(1 as i32 as isize);
     origin[2 as i32 as usize] = *playerOrigin.offset(2 as i32 as isize);
     velocity[0 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[1 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 250 as i32 as f64)
-        as vec_t;
+        * 250 as i32 as f64) as vec_t;
     velocity[2 as i32 as usize] = (250 as i32 as f64
         + 2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 250 as i32 as f64)
-        as vec_t;
-    CG_LaunchGib(
-        origin.as_mut_ptr(),
-        velocity.as_mut_ptr(),
-        cgs.media.gibLeg,
-    );
+            * 250 as i32 as f64) as vec_t;
+    CG_LaunchGib(origin.as_mut_ptr(), velocity.as_mut_ptr(), cgs.media.gibLeg);
 }
 /*
 ==================
@@ -819,8 +743,7 @@ pub unsafe extern "C" fn CG_LaunchExplode(
 ) {
     let mut le: *mut localEntity_t = 0 as *mut localEntity_t;
     let mut re: *mut refEntity_t = 0 as *mut refEntity_t;
-    le = CG_AllocLocalEntity()
-        as *mut localEntity_s;
+    le = CG_AllocLocalEntity() as *mut localEntity_s;
     re = &mut (*le).refEntity;
     (*le).leType = LE_FRAGMENT;
     (*le).startTime = cg.time;
@@ -830,10 +753,7 @@ pub unsafe extern "C" fn CG_LaunchExplode(
     (*re).origin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     (*re).origin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     (*re).origin[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
-    AxisCopy(
-        axisDefault.as_mut_ptr(),
-        (*re).axis.as_mut_ptr(),
-    );
+    AxisCopy(axisDefault.as_mut_ptr(), (*re).axis.as_mut_ptr());
     (*re).hModel = hModel;
     (*le).pos.trType = TR_GRAVITY;
     (*le).pos.trBase[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
@@ -1092,9 +1012,7 @@ Generated a bunch of gibs launching out from the bodies location
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_BigExplode(
-    mut playerOrigin: *mut vec_t,
-) {
+pub unsafe extern "C" fn CG_BigExplode(mut playerOrigin: *mut vec_t) {
     let mut origin: vec3_t = [0.; 3];
     let mut velocity: vec3_t = [0.; 3];
     if cg_blood.integer == 0 {
@@ -1105,43 +1023,29 @@ pub unsafe extern "C" fn CG_BigExplode(
     origin[2 as i32 as usize] = *playerOrigin.offset(2 as i32 as isize);
     velocity[0 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 100 as i32 as f64)
-        as vec_t;
+        * 100 as i32 as f64) as vec_t;
     velocity[1 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 100 as i32 as f64)
-        as vec_t;
+        * 100 as i32 as f64) as vec_t;
     velocity[2 as i32 as usize] = (150 as i32 as f64
         + 2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 100 as i32 as f64)
-        as vec_t;
-    CG_LaunchExplode(
-        origin.as_mut_ptr(),
-        velocity.as_mut_ptr(),
-        cgs.media.smoke2,
-    );
+            * 100 as i32 as f64) as vec_t;
+    CG_LaunchExplode(origin.as_mut_ptr(), velocity.as_mut_ptr(), cgs.media.smoke2);
     origin[0 as i32 as usize] = *playerOrigin.offset(0 as i32 as isize);
     origin[1 as i32 as usize] = *playerOrigin.offset(1 as i32 as isize);
     origin[2 as i32 as usize] = *playerOrigin.offset(2 as i32 as isize);
     velocity[0 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 100 as i32 as f64)
-        as vec_t;
+        * 100 as i32 as f64) as vec_t;
     velocity[1 as i32 as usize] = (2.0f64
         * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-        * 100 as i32 as f64)
-        as vec_t;
+        * 100 as i32 as f64) as vec_t;
     velocity[2 as i32 as usize] = (150 as i32 as f64
         + 2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 100 as i32 as f64)
-        as vec_t;
-    CG_LaunchExplode(
-        origin.as_mut_ptr(),
-        velocity.as_mut_ptr(),
-        cgs.media.smoke2,
-    );
+            * 100 as i32 as f64) as vec_t;
+    CG_LaunchExplode(origin.as_mut_ptr(), velocity.as_mut_ptr(), cgs.media.smoke2);
     origin[0 as i32 as usize] = *playerOrigin.offset(0 as i32 as isize);
     origin[1 as i32 as usize] = *playerOrigin.offset(1 as i32 as isize);
     origin[2 as i32 as usize] = *playerOrigin.offset(2 as i32 as isize);
@@ -1156,13 +1060,8 @@ pub unsafe extern "C" fn CG_BigExplode(
     velocity[2 as i32 as usize] = (150 as i32 as f64
         + 2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 100 as i32 as f64)
-        as vec_t;
-    CG_LaunchExplode(
-        origin.as_mut_ptr(),
-        velocity.as_mut_ptr(),
-        cgs.media.smoke2,
-    );
+            * 100 as i32 as f64) as vec_t;
+    CG_LaunchExplode(origin.as_mut_ptr(), velocity.as_mut_ptr(), cgs.media.smoke2);
     origin[0 as i32 as usize] = *playerOrigin.offset(0 as i32 as isize);
     origin[1 as i32 as usize] = *playerOrigin.offset(1 as i32 as isize);
     origin[2 as i32 as usize] = *playerOrigin.offset(2 as i32 as isize);
@@ -1177,13 +1076,8 @@ pub unsafe extern "C" fn CG_BigExplode(
     velocity[2 as i32 as usize] = (150 as i32 as f64
         + 2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 100 as i32 as f64)
-        as vec_t;
-    CG_LaunchExplode(
-        origin.as_mut_ptr(),
-        velocity.as_mut_ptr(),
-        cgs.media.smoke2,
-    );
+            * 100 as i32 as f64) as vec_t;
+    CG_LaunchExplode(origin.as_mut_ptr(), velocity.as_mut_ptr(), cgs.media.smoke2);
     origin[0 as i32 as usize] = *playerOrigin.offset(0 as i32 as isize);
     origin[1 as i32 as usize] = *playerOrigin.offset(1 as i32 as isize);
     origin[2 as i32 as usize] = *playerOrigin.offset(2 as i32 as isize);
@@ -1198,11 +1092,6 @@ pub unsafe extern "C" fn CG_BigExplode(
     velocity[2 as i32 as usize] = (150 as i32 as f64
         + 2.0f64
             * (((libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
-            * 100 as i32 as f64)
-        as vec_t;
-    CG_LaunchExplode(
-        origin.as_mut_ptr(),
-        velocity.as_mut_ptr(),
-        cgs.media.smoke2,
-    );
+            * 100 as i32 as f64) as vec_t;
+    CG_LaunchExplode(origin.as_mut_ptr(), velocity.as_mut_ptr(), cgs.media.smoke2);
 }

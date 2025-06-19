@@ -185,30 +185,28 @@ pub static mut cg_activeMarkPolys: markPoly_t = markPoly_t {
 // double linked list
 #[no_mangle]
 
-pub static mut cg_freeMarkPolys: *mut markPoly_t =
-    0 as *const markPoly_t as *mut markPoly_t;
+pub static mut cg_freeMarkPolys: *mut markPoly_t = 0 as *const markPoly_t as *mut markPoly_t;
 // single linked list
 #[no_mangle]
 
-pub static mut cg_markPolys: [markPoly_t; 256] =
-    [markPoly_t {
-        prevMark: 0 as *const markPoly_s as *mut markPoly_s,
-        nextMark: 0 as *const markPoly_s as *mut markPoly_s,
-        time: 0,
-        markShader: 0,
-        alphaFade: qfalse,
-        color: [0.; 4],
-        poly: poly_t {
-            hShader: 0,
-            numVerts: 0,
-            verts: 0 as *const polyVert_t as *mut polyVert_t,
-        },
-        verts: [polyVert_t {
-            xyz: [0.; 3],
-            st: [0.; 2],
-            modulate: [0; 4],
-        }; 10],
-    }; 256];
+pub static mut cg_markPolys: [markPoly_t; 256] = [markPoly_t {
+    prevMark: 0 as *const markPoly_s as *mut markPoly_s,
+    nextMark: 0 as *const markPoly_s as *mut markPoly_s,
+    time: 0,
+    markShader: 0,
+    alphaFade: qfalse,
+    color: [0.; 4],
+    poly: poly_t {
+        hShader: 0,
+        numVerts: 0,
+        verts: 0 as *const polyVert_t as *mut polyVert_t,
+    },
+    verts: [polyVert_t {
+        xyz: [0.; 3],
+        st: [0.; 2],
+        modulate: [0; 4],
+    }; 10],
+}; 256];
 
 static mut markTotal: i32 = 0;
 /*
@@ -233,8 +231,7 @@ pub unsafe extern "C" fn CG_InitMarkPolys() {
     i = 0 as i32;
     while i < 256 as i32 - 1 as i32 {
         cg_markPolys[i as usize].nextMark =
-            &mut *cg_markPolys.as_mut_ptr().offset((i + 1 as i32) as isize)
-                as *mut markPoly_t;
+            &mut *cg_markPolys.as_mut_ptr().offset((i + 1 as i32) as isize) as *mut markPoly_t;
         i += 1
     }
 }
@@ -247,9 +244,7 @@ CG_FreeMarkPoly
 
 pub unsafe extern "C" fn CG_FreeMarkPoly(mut le: *mut markPoly_t) {
     if (*le).prevMark.is_null() || (*le).nextMark.is_null() {
-        CG_Error(
-            b"CG_FreeLocalEntity: not active\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Error(b"CG_FreeLocalEntity: not active\x00" as *const u8 as *const libc::c_char);
     }
     // remove from the doubly linked active list
     (*(*le).prevMark).nextMark = (*le).nextMark;
@@ -315,22 +310,18 @@ pub unsafe extern "C" fn CG_ImpactMark(
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut numFragments: i32 = 0;
-    let mut markFragments: [markFragment_t; 128] =
-        [markFragment_t {
-            firstPoint: 0,
-            numPoints: 0,
-        }; 128];
-    let mut mf: *mut markFragment_t =
-        0 as *mut markFragment_t;
+    let mut markFragments: [markFragment_t; 128] = [markFragment_t {
+        firstPoint: 0,
+        numPoints: 0,
+    }; 128];
+    let mut mf: *mut markFragment_t = 0 as *mut markFragment_t;
     let mut markPoints: [vec3_t; 384] = [[0.; 3]; 384];
     let mut projection: vec3_t = [0.; 3];
     if cg_addMarks.integer == 0 {
         return;
     }
     if radius <= 0 as i32 as f32 {
-        CG_Error(
-            b"CG_ImpactMark called with <= 0 radius\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Error(b"CG_ImpactMark called with <= 0 radius\x00" as *const u8 as *const libc::c_char);
     }
     //if ( markTotal >= MAX_MARK_POLYS ) {
     //	return;
@@ -376,8 +367,7 @@ pub unsafe extern "C" fn CG_ImpactMark(
     projection[2 as i32 as usize] = *dir.offset(2 as i32 as isize) * -(20 as i32) as f32;
     numFragments = trap_CM_MarkFragments(
         4 as i32,
-        originalPoints.as_mut_ptr() as *mut libc::c_void
-            as *const vec3_t,
+        originalPoints.as_mut_ptr() as *mut libc::c_void as *const vec3_t,
         projection.as_mut_ptr() as *const vec_t,
         384 as i32,
         markPoints[0 as i32 as usize].as_mut_ptr(),
@@ -455,9 +445,7 @@ pub unsafe extern "C" fn CG_ImpactMark(
                 (*mark).verts.as_mut_ptr() as *mut libc::c_void,
                 verts.as_mut_ptr() as *const libc::c_void,
                 ((*mf).numPoints as libc::c_ulong)
-                    .wrapping_mul(
-                        ::std::mem::size_of::<polyVert_t>() as libc::c_ulong
-                    ),
+                    .wrapping_mul(::std::mem::size_of::<polyVert_t>() as libc::c_ulong),
             );
             markTotal += 1
         }
@@ -718,8 +706,7 @@ pub unsafe extern "C" fn CG_AddMarks() {
             // fade out the energy bursts
             if (*mp).markShader == cgs.media.energyMarkShader {
                 fade = (450 as i32 as f64
-                    - 450 as i32 as f64
-                        * ((cg.time - (*mp).time) as f64 / 3000.0f64))
+                    - 450 as i32 as f64 * ((cg.time - (*mp).time) as f64 / 3000.0f64))
                     as i32;
                 if fade < 255 as i32 {
                     if fade < 0 as i32 {
@@ -730,14 +717,11 @@ pub unsafe extern "C" fn CG_AddMarks() {
                         j = 0 as i32;
                         while j < (*mp).poly.numVerts {
                             (*mp).verts[j as usize].modulate[0 as i32 as usize] =
-                                ((*mp).color[0 as i32 as usize] * fade as f32)
-                                    as byte;
+                                ((*mp).color[0 as i32 as usize] * fade as f32) as byte;
                             (*mp).verts[j as usize].modulate[1 as i32 as usize] =
-                                ((*mp).color[1 as i32 as usize] * fade as f32)
-                                    as byte;
+                                ((*mp).color[1 as i32 as usize] * fade as f32) as byte;
                             (*mp).verts[j as usize].modulate[2 as i32 as usize] =
-                                ((*mp).color[2 as i32 as usize] * fade as f32)
-                                    as byte;
+                                ((*mp).color[2 as i32 as usize] * fade as f32) as byte;
                             j += 1
                         }
                     }
@@ -750,22 +734,18 @@ pub unsafe extern "C" fn CG_AddMarks() {
                 if (*mp).alphaFade as u64 != 0 {
                     j = 0 as i32;
                     while j < (*mp).poly.numVerts {
-                        (*mp).verts[j as usize].modulate[3 as i32 as usize] =
-                            fade as byte;
+                        (*mp).verts[j as usize].modulate[3 as i32 as usize] = fade as byte;
                         j += 1
                     }
                 } else {
                     j = 0 as i32;
                     while j < (*mp).poly.numVerts {
                         (*mp).verts[j as usize].modulate[0 as i32 as usize] =
-                            ((*mp).color[0 as i32 as usize] * fade as f32)
-                                as byte;
+                            ((*mp).color[0 as i32 as usize] * fade as f32) as byte;
                         (*mp).verts[j as usize].modulate[1 as i32 as usize] =
-                            ((*mp).color[1 as i32 as usize] * fade as f32)
-                                as byte;
+                            ((*mp).color[1 as i32 as usize] * fade as f32) as byte;
                         (*mp).verts[j as usize].modulate[2 as i32 as usize] =
-                            ((*mp).color[2 as i32 as usize] * fade as f32)
-                                as byte;
+                            ((*mp).color[2 as i32 as usize] * fade as f32) as byte;
                         j += 1
                     }
                 }

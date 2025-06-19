@@ -350,9 +350,7 @@ pub unsafe extern "C" fn ReadChar(
         StripSingleQuotes(token.string.as_mut_ptr()); //end if
         *(p as *mut libc::c_char) = token.string[0 as i32 as usize]
     } else {
-        PC_UnreadLastToken(
-            source as *mut source_s,
-        );
+        PC_UnreadLastToken(source as *mut source_s);
         if ReadNumber(source, fd, p) as u64 == 0 {
             return qfalse;
         }

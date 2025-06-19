@@ -197,10 +197,7 @@ unsafe extern "C" fn _get_data(
             (*vf).datasource,
         ) as isize;
         if bytes > 0 as i32 as isize {
-            ogg_sync_wrote(
-                &mut (*vf).oy as *mut _ as *mut ogg_sync_state,
-                bytes,
-            );
+            ogg_sync_wrote(&mut (*vf).oy as *mut _ as *mut ogg_sync_state, bytes);
         }
         if bytes == 0 as i32 as isize && *libc::__errno_location() != 0 {
             return -(1 as i32) as isize;
@@ -230,9 +227,7 @@ unsafe extern "C" fn _seek_helper(
                 return -(128 as i32);
             }
             (*vf).offset = offset;
-            ogg_sync_reset(
-                &mut (*vf).oy as *mut _ as *mut ogg_sync_state,
-            );
+            ogg_sync_reset(&mut (*vf).oy as *mut _ as *mut ogg_sync_state);
         }
     } else {
         /* shouldn't happen unless someone writes a broken callback */
@@ -305,8 +300,7 @@ unsafe extern "C" fn _get_prev_page(
 ) -> ogg_int64_t {
     let mut end: ogg_int64_t = begin;
     let mut ret: ogg_int64_t = 0;
-    let mut offset: ogg_int64_t =
-        -(1 as i32) as ogg_int64_t;
+    let mut offset: ogg_int64_t = -(1 as i32) as ogg_int64_t;
     while offset == -(1 as i32) as isize {
         begin -= 65536 as i32 as isize;
         if begin < 0 as i32 as isize {
@@ -354,9 +348,7 @@ unsafe extern "C" fn _add_serialno(
     mut serialno_list: *mut *mut isize,
     mut n: *mut i32,
 ) {
-    let mut s: isize = ogg_page_serialno(
-        og as *const ogg_page,
-    ) as isize;
+    let mut s: isize = ogg_page_serialno(og as *const ogg_page) as isize;
     *n += 1;
     if !(*serialno_list).is_null() {
         *serialno_list = crate::stdlib::realloc(
@@ -397,9 +389,7 @@ unsafe extern "C" fn _lookup_page_serialno(
     mut serialno_list: *mut isize,
     mut n: i32,
 ) -> i32 {
-    let mut s: isize = ogg_page_serialno(
-        og as *const ogg_page,
-    ) as isize;
+    let mut s: isize = ogg_page_serialno(og as *const ogg_page) as isize;
     return _lookup_serialno(s, serialno_list, n);
 }
 /* performs the same search as _get_prev_page, but prefers pages of
@@ -425,14 +415,10 @@ unsafe extern "C" fn _get_prev_page_serial(
     };
     let mut end: ogg_int64_t = begin;
     let mut ret: ogg_int64_t = 0;
-    let mut prefoffset: ogg_int64_t =
-        -(1 as i32) as ogg_int64_t;
-    let mut offset: ogg_int64_t =
-        -(1 as i32) as ogg_int64_t;
-    let mut ret_serialno: ogg_int64_t =
-        -(1 as i32) as ogg_int64_t;
-    let mut ret_gran: ogg_int64_t =
-        -(1 as i32) as ogg_int64_t;
+    let mut prefoffset: ogg_int64_t = -(1 as i32) as ogg_int64_t;
+    let mut offset: ogg_int64_t = -(1 as i32) as ogg_int64_t;
+    let mut ret_serialno: ogg_int64_t = -(1 as i32) as ogg_int64_t;
+    let mut ret_gran: ogg_int64_t = -(1 as i32) as ogg_int64_t;
     while offset == -(1 as i32) as isize {
         begin -= 65536 as i32 as isize;
         if begin < 0 as i32 as isize {
@@ -450,12 +436,8 @@ unsafe extern "C" fn _get_prev_page_serial(
             if ret < 0 as i32 as isize {
                 break;
             }
-            ret_serialno = ogg_page_serialno(
-                &mut og as *mut _ as *const ogg_page,
-            ) as ogg_int64_t;
-            ret_gran = ogg_page_granulepos(
-                &mut og as *mut _ as *const ogg_page,
-            );
+            ret_serialno = ogg_page_serialno(&mut og as *mut _ as *const ogg_page) as ogg_int64_t;
+            ret_gran = ogg_page_granulepos(&mut og as *mut _ as *const ogg_page);
             offset = ret;
             if ret_serialno == *serialno as isize {
                 prefoffset = ret;
@@ -508,11 +490,7 @@ unsafe extern "C" fn _fetch_headers(
     let mut ret: i32 = 0;
     let mut allbos: i32 = 0 as i32;
     if og_ptr.is_null() {
-        let mut llret: ogg_int64_t = _get_next_page(
-            vf,
-            &mut og,
-            65536 as i32 as ogg_int64_t,
-        );
+        let mut llret: ogg_int64_t = _get_next_page(vf, &mut og, 65536 as i32 as ogg_int64_t);
         if llret == -(128 as i32) as isize {
             return -(128 as i32);
         }
@@ -521,21 +499,14 @@ unsafe extern "C" fn _fetch_headers(
         }
         og_ptr = &mut og
     }
-    vorbis_info_init(
-        vi as *mut vorbis_info,
-    );
-    vorbis_comment_init(
-        vc as *mut vorbis_comment,
-    );
+    vorbis_info_init(vi as *mut vorbis_info);
+    vorbis_comment_init(vc as *mut vorbis_comment);
     (*vf).ready_state = 2 as i32;
     loop
     /* extract the serialnos of all BOS pages + the first set of vorbis
     headers we see in the link */
     {
-        if !(ogg_page_bos(
-            og_ptr as *const ogg_page,
-        ) != 0)
-        {
+        if !(ogg_page_bos(og_ptr as *const ogg_page) != 0) {
             current_block = 7746103178988627676;
             break;
         }
@@ -559,9 +530,7 @@ unsafe extern "C" fn _fetch_headers(
             prospective stream setup. We need a stream to get packets */
             ogg_stream_reset_serialno(
                 &mut (*vf).os as *mut _ as *mut ogg_stream_state,
-                ogg_page_serialno(
-                    og_ptr as *const ogg_page,
-                ),
+                ogg_page_serialno(og_ptr as *const ogg_page),
             );
             ogg_stream_pagein(
                 &mut (*vf).os as *mut _ as *mut ogg_stream_state,
@@ -571,9 +540,7 @@ unsafe extern "C" fn _fetch_headers(
                 &mut (*vf).os as *mut _ as *mut ogg_stream_state,
                 &mut op as *mut _ as *mut ogg_packet,
             ) > 0 as i32
-                && vorbis_synthesis_idheader(
-                    &mut op as *mut _ as *mut ogg_packet,
-                ) != 0
+                && vorbis_synthesis_idheader(&mut op as *mut _ as *mut ogg_packet) != 0
             {
                 /* vorbis header; continue setup */
                 (*vf).ready_state = 3 as i32;
@@ -590,11 +557,7 @@ unsafe extern "C" fn _fetch_headers(
             }
         }
         /* get next page */
-        let mut llret_0: ogg_int64_t = _get_next_page(
-            vf,
-            og_ptr,
-            65536 as i32 as ogg_int64_t,
-        );
+        let mut llret_0: ogg_int64_t = _get_next_page(vf, og_ptr, 65536 as i32 as ogg_int64_t);
         if llret_0 == -(128 as i32) as isize {
             ret = -(128 as i32);
             current_block = 5963935241184096755;
@@ -606,10 +569,7 @@ unsafe extern "C" fn _fetch_headers(
         } else {
             /* if this page also belongs to our vorbis stream, submit it and break */
             if !((*vf).ready_state == 3 as i32
-                && (*vf).os.serialno
-                    == ogg_page_serialno(
-                        og_ptr as *const ogg_page,
-                    ) as isize)
+                && (*vf).os.serialno == ogg_page_serialno(og_ptr as *const ogg_page) as isize)
             {
                 continue;
             }
@@ -635,11 +595,10 @@ unsafe extern "C" fn _fetch_headers(
                     /* get a page loop */
                     while i < 2 as i32 {
                         /* get a packet loop */
-                        let mut result: i32 =
-                            ogg_stream_packetout(
-                                &mut (*vf).os as *mut _ as *mut ogg_stream_state,
-                                &mut op as *mut _ as *mut ogg_packet,
-                            );
+                        let mut result: i32 = ogg_stream_packetout(
+                            &mut (*vf).os as *mut _ as *mut ogg_stream_state,
+                            &mut op as *mut _ as *mut ogg_packet,
+                        );
                         if result == 0 as i32 {
                             break;
                         }
@@ -661,19 +620,14 @@ unsafe extern "C" fn _fetch_headers(
                         }
                     }
                     while i < 2 as i32 {
-                        if _get_next_page(
-                            vf,
-                            og_ptr,
-                            65536 as i32 as ogg_int64_t,
-                        ) < 0 as i32 as isize
+                        if _get_next_page(vf, og_ptr, 65536 as i32 as ogg_int64_t)
+                            < 0 as i32 as isize
                         {
                             ret = -(133 as i32);
                             current_block = 5963935241184096755;
                             break 's_219;
                         } else if (*vf).os.serialno
-                            == ogg_page_serialno(
-                                og_ptr as *const ogg_page,
-                            ) as isize
+                            == ogg_page_serialno(og_ptr as *const ogg_page) as isize
                         {
                             ogg_stream_pagein(
                                 &mut (*vf).os as *mut _ as *mut ogg_stream_state,
@@ -684,10 +638,7 @@ unsafe extern "C" fn _fetch_headers(
                             /* if this page belongs to the correct stream, go parse it */
                             /* if we never see the final vorbis headers before the link
                             ends, abort */
-                            if !(ogg_page_bos(
-                                og_ptr as *const ogg_page,
-                            ) != 0)
-                            {
+                            if !(ogg_page_bos(og_ptr as *const ogg_page) != 0) {
                                 continue;
                             }
                             if allbos != 0 {
@@ -709,12 +660,8 @@ unsafe extern "C" fn _fetch_headers(
         }
         _ => {}
     }
-    vorbis_info_clear(
-        vi as *mut vorbis_info,
-    );
-    vorbis_comment_clear(
-        vc as *mut vorbis_comment,
-    );
+    vorbis_info_clear(vi as *mut vorbis_info);
+    vorbis_comment_clear(vc as *mut vorbis_comment);
     (*vf).ready_state = 2 as i32;
     return ret;
 }
@@ -733,8 +680,7 @@ unsafe extern "C" fn _initial_pcmoffset(
         body: 0 as *mut u8,
         body_len: 0,
     }; /* should not be possible unless the file is truncated/mangled */
-    let mut accumulated: ogg_int64_t =
-        0 as i32 as ogg_int64_t;
+    let mut accumulated: ogg_int64_t = 0 as i32 as ogg_int64_t;
     let mut lastblock: isize = -(1 as i32) as isize;
     let mut result: i32 = 0;
     let mut serialno: i32 = (*vf).os.serialno as i32;
@@ -747,24 +693,13 @@ unsafe extern "C" fn _initial_pcmoffset(
             granulepos: 0,
             packetno: 0,
         };
-        if _get_next_page(
-            vf,
-            &mut og,
-            -(1 as i32) as ogg_int64_t,
-        ) < 0 as i32 as isize
-        {
+        if _get_next_page(vf, &mut og, -(1 as i32) as ogg_int64_t) < 0 as i32 as isize {
             break;
         }
-        if ogg_page_bos(
-            &mut og as *mut _ as *const ogg_page,
-        ) != 0
-        {
+        if ogg_page_bos(&mut og as *mut _ as *const ogg_page) != 0 {
             break;
         }
-        if ogg_page_serialno(
-            &mut og as *mut _ as *const ogg_page,
-        ) != serialno
-        {
+        if ogg_page_serialno(&mut og as *mut _ as *const ogg_page) != serialno {
             continue;
         }
         /* count blocksizes of all frames in the page */
@@ -782,11 +717,10 @@ unsafe extern "C" fn _initial_pcmoffset(
             }
             if result > 0 as i32 {
                 /* ignore holes */
-                let mut thisblock: isize =
-                    vorbis_packet_blocksize(
-                        vi as *mut vorbis_info,
-                        &mut op as *mut _ as *mut ogg_packet,
-                    );
+                let mut thisblock: isize = vorbis_packet_blocksize(
+                    vi as *mut vorbis_info,
+                    &mut op as *mut _ as *mut ogg_packet,
+                );
                 if thisblock >= 0 as i32 as isize {
                     if lastblock != -(1 as i32) as isize {
                         accumulated += lastblock + thisblock >> 2 as i32
@@ -795,16 +729,11 @@ unsafe extern "C" fn _initial_pcmoffset(
                 }
             }
         }
-        if !(ogg_page_granulepos(
-            &mut og as *mut _ as *const ogg_page,
-        ) != -(1 as i32) as isize)
-        {
+        if !(ogg_page_granulepos(&mut og as *mut _ as *const ogg_page) != -(1 as i32) as isize) {
             continue;
         }
         /* pcm offset of last packet on the first audio page */
-        accumulated = ogg_page_granulepos(
-            &mut og as *mut _ as *const ogg_page,
-        ) - accumulated;
+        accumulated = ogg_page_granulepos(&mut og as *mut _ as *const ogg_page) - accumulated;
         break;
     }
     /* less than zero?  Either a corrupt file or a stream with samples
@@ -835,8 +764,7 @@ unsafe extern "C" fn _bisect_forward_serialno(
     let mut dataoffset: ogg_int64_t = searched;
     let mut endsearched: ogg_int64_t = end;
     let mut next: ogg_int64_t = end;
-    let mut searchgran: ogg_int64_t =
-        -(1 as i32) as ogg_int64_t;
+    let mut searchgran: ogg_int64_t = -(1 as i32) as ogg_int64_t;
     let mut og: ogg_page = ogg_page {
         header: 0 as *mut u8,
         header_len: 0,
@@ -879,34 +807,32 @@ unsafe extern "C" fn _bisect_forward_serialno(
         if !(*vf).dataoffsets.is_null() {
             libc::free((*vf).dataoffsets as *mut libc::c_void);
         }
-        (*vf).offsets =
-            crate::stdlib::malloc((((*vf).links + 1 as i32) as libc::c_ulong).wrapping_mul(
-                ::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong,
-            )) as *mut ogg_int64_t;
-        (*vf).vi =
-            crate::stdlib::realloc(
-                (*vf).vi as *mut libc::c_void,
-                ((*vf).links as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                    vorbis_info,
-                >() as libc::c_ulong),
-            ) as *mut vorbis_info;
+        (*vf).offsets = crate::stdlib::malloc(
+            (((*vf).links + 1 as i32) as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong),
+        ) as *mut ogg_int64_t;
+        (*vf).vi = crate::stdlib::realloc(
+            (*vf).vi as *mut libc::c_void,
+            ((*vf).links as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<vorbis_info>() as libc::c_ulong),
+        ) as *mut vorbis_info;
         (*vf).vc = crate::stdlib::realloc(
             (*vf).vc as *mut libc::c_void,
-            ((*vf).links as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                vorbis_comment,
-            >() as libc::c_ulong),
+            ((*vf).links as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<vorbis_comment>() as libc::c_ulong),
         ) as *mut vorbis_comment;
         (*vf).serialnos = crate::stdlib::malloc(
             ((*vf).links as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
         ) as *mut isize;
-        (*vf).dataoffsets = crate::stdlib::malloc(((*vf).links as libc::c_ulong).wrapping_mul(
-            ::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong,
-        )) as *mut ogg_int64_t;
-        (*vf).pcmlengths =
-            crate::stdlib::malloc((((*vf).links * 2 as i32) as libc::c_ulong).wrapping_mul(
-                ::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong,
-            )) as *mut ogg_int64_t;
+        (*vf).dataoffsets = crate::stdlib::malloc(
+            ((*vf).links as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong),
+        ) as *mut ogg_int64_t;
+        (*vf).pcmlengths = crate::stdlib::malloc(
+            (((*vf).links * 2 as i32) as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<ogg_int64_t>() as libc::c_ulong),
+        ) as *mut ogg_int64_t;
         *(*vf).offsets.offset((m + 1 as i32 as isize) as isize) = end;
         *(*vf).offsets.offset(m as isize) = begin;
         *(*vf)
@@ -953,11 +879,7 @@ unsafe extern "C" fn _bisect_forward_serialno(
             if ret != 0 {
                 return ret as i32;
             }
-            last = _get_next_page(
-                vf,
-                &mut og,
-                -(1 as i32) as ogg_int64_t,
-            );
+            last = _get_next_page(vf, &mut og, -(1 as i32) as ogg_int64_t);
             if last == -(128 as i32) as isize {
                 return -(128 as i32);
             }
@@ -1089,11 +1011,9 @@ unsafe extern "C" fn _make_decode_ready(
 unsafe extern "C" fn _open_seekable2(
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
 ) -> i32 {
-    let mut dataoffset: ogg_int64_t =
-        *(*vf).dataoffsets.offset(0 as i32 as isize);
+    let mut dataoffset: ogg_int64_t = *(*vf).dataoffsets.offset(0 as i32 as isize);
     let mut end: ogg_int64_t = 0;
-    let mut endgran: ogg_int64_t =
-        -(1 as i32) as ogg_int64_t;
+    let mut endgran: ogg_int64_t = -(1 as i32) as ogg_int64_t;
     let mut endserial: i32 = (*vf).os.serialno as i32;
     let mut serialno: i32 = (*vf).os.serialno as i32;
     /* we're partially open and have a first link header state in
@@ -1168,12 +1088,8 @@ unsafe extern "C" fn _open_seekable2(
 unsafe extern "C" fn _decode_clear(
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
 ) {
-    vorbis_dsp_clear(
-        &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
-    );
-    vorbis_block_clear(
-        &mut (*vf).vb as *mut _ as *mut vorbis_block,
-    );
+    vorbis_dsp_clear(&mut (*vf).vd as *mut _ as *mut vorbis_dsp_state);
+    vorbis_block_clear(&mut (*vf).vb as *mut _ as *mut vorbis_block);
     (*vf).ready_state = 2 as i32;
 }
 /* fetch and process a packet.  Handles the case where we're at a
@@ -1211,10 +1127,7 @@ unsafe extern "C" fn _fetch_and_process_packet(
         }
         /* process a packet if we can. */
         if (*vf).ready_state == 4 as i32 {
-            let mut hs: i32 =
-                vorbis_synthesis_halfrate_p(
-                    (*vf).vi as *mut vorbis_info,
-                ); /* hole in the data. */
+            let mut hs: i32 = vorbis_synthesis_halfrate_p((*vf).vi as *mut vorbis_info); /* hole in the data. */
             loop {
                 let mut op: ogg_packet = ogg_packet {
                     packet: 0 as *mut u8,
@@ -1224,8 +1137,7 @@ unsafe extern "C" fn _fetch_and_process_packet(
                     granulepos: 0,
                     packetno: 0,
                 };
-                let mut op_ptr: *mut ogg_packet =
-                    if !op_in.is_null() { op_in } else { &mut op };
+                let mut op_ptr: *mut ogg_packet = if !op_in.is_null() { op_in } else { &mut op };
                 let mut result: i32 = ogg_stream_packetout(
                     &mut (*vf).os as *mut _ as *mut ogg_stream_state,
                     op_ptr as *mut ogg_packet,
@@ -1253,11 +1165,10 @@ unsafe extern "C" fn _fetch_and_process_packet(
                     vorbis_synthesis will
                     reject them */
                     /* suck in the synthesis data and track bitrate */
-                    let mut oldsamples: i32 =
-                        vorbis_synthesis_pcmout(
-                            &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
-                            0 as *mut *mut *mut f32,
-                        );
+                    let mut oldsamples: i32 = vorbis_synthesis_pcmout(
+                        &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
+                        0 as *mut *mut *mut f32,
+                    );
                     /* for proper use of libvorbis within libvorbisfile,
                     oldsamples will always be zero. */
                     if oldsamples != 0 {
@@ -1267,11 +1178,10 @@ unsafe extern "C" fn _fetch_and_process_packet(
                         &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
                         &mut (*vf).vb as *mut _ as *mut vorbis_block,
                     );
-                    (*vf).samptrack +=
-                        (vorbis_synthesis_pcmout(
-                            &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
-                            0 as *mut *mut *mut f32,
-                        ) << hs) as f64;
+                    (*vf).samptrack += (vorbis_synthesis_pcmout(
+                        &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
+                        0 as *mut *mut *mut f32,
+                    ) << hs) as f64;
                     (*vf).bittrack += ((*op_ptr).bytes * 8 as i32 as isize) as f64;
                     /* update the pcm offset. */
                     if granulepos != -(1 as i32) as isize && (*op_ptr).e_o_s == 0 {
@@ -1331,11 +1241,7 @@ unsafe extern "C" fn _fetch_and_process_packet(
                 if readp == 0 {
                     return 0 as i32;
                 }
-                ret_0 = _get_next_page(
-                    vf,
-                    &mut og,
-                    -(1 as i32) as ogg_int64_t,
-                );
+                ret_0 = _get_next_page(vf, &mut og, -(1 as i32) as ogg_int64_t);
                 if ret_0 < 0 as i32 as isize {
                     return -(2 as i32);
                     /* eof. leave unitialized */
@@ -1347,19 +1253,14 @@ unsafe extern "C" fn _fetch_and_process_packet(
                     break;
                 }
                 if !((*vf).current_serialno
-                    != ogg_page_serialno(
-                        &mut og as *mut _ as *const ogg_page,
-                    ) as isize)
+                    != ogg_page_serialno(&mut og as *mut _ as *const ogg_page) as isize)
                 {
                     break;
                 }
                 /* two possibilities:
                 1) our decoding just traversed a bitstream boundary
                 2) another stream is multiplexed into this logical section */
-                if !(ogg_page_bos(
-                    &mut og as *mut _ as *const ogg_page,
-                ) != 0)
-                {
+                if !(ogg_page_bos(&mut og as *mut _ as *const ogg_page) != 0) {
                     continue;
                 }
                 /* boundary case */
@@ -1368,12 +1269,8 @@ unsafe extern "C" fn _fetch_and_process_packet(
                 }
                 _decode_clear(vf);
                 if (*vf).seekable == 0 {
-                    vorbis_info_clear(
-                        (*vf).vi as *mut vorbis_info,
-                    );
-                    vorbis_comment_clear(
-                        (*vf).vc as *mut vorbis_comment,
-                    );
+                    vorbis_info_clear((*vf).vi as *mut vorbis_info);
+                    vorbis_comment_clear((*vf).vc as *mut vorbis_comment);
                 }
                 break;
                 /* possibility #2 */
@@ -1395,9 +1292,7 @@ unsafe extern "C" fn _fetch_and_process_packet(
             if (*vf).ready_state < 3 as i32 {
                 if (*vf).seekable != 0 {
                     let mut serialno: isize =
-                        ogg_page_serialno(
-                            &mut og as *mut _ as *const ogg_page,
-                        ) as isize;
+                        ogg_page_serialno(&mut og as *mut _ as *const ogg_page) as isize;
                     /* match the serialno to bitstream section.  We use this rather than
                     offset positions to avoid problems near logical bitstream
                     boundaries */
@@ -1451,11 +1346,7 @@ unsafe extern "C" fn _fetch_and_process_packet(
 /* if, eg, 64 bit stdio is configured by default, this will build with
 fseek64 */
 
-unsafe extern "C" fn _fseek64_wrap(
-    mut f: *mut FILE,
-    mut off: ogg_int64_t,
-    mut whence: i32,
-) -> i32 {
+unsafe extern "C" fn _fseek64_wrap(mut f: *mut FILE, mut off: ogg_int64_t, mut whence: i32) -> i32 {
     if f.is_null() {
         return -(1 as i32);
     }
@@ -1490,27 +1381,20 @@ unsafe extern "C" fn _ov_open1(
     (*vf).datasource = f;
     (*vf).callbacks = callbacks;
     /* init the framing state */
-    ogg_sync_init(
-        &mut (*vf).oy as *mut _ as *mut ogg_sync_state,
-    );
+    ogg_sync_init(&mut (*vf).oy as *mut _ as *mut ogg_sync_state);
     /* perhaps some data was previously read into a buffer for testing
     against other stream types.  Allow initialization from this
     previously read data (especially as we may be reading from a
     non-seekable stream) */
     if !initial.is_null() {
-        let mut buffer: *mut libc::c_char = ogg_sync_buffer(
-            &mut (*vf).oy as *mut _ as *mut ogg_sync_state,
-            ibytes,
-        );
+        let mut buffer: *mut libc::c_char =
+            ogg_sync_buffer(&mut (*vf).oy as *mut _ as *mut ogg_sync_state, ibytes);
         crate::stdlib::memcpy(
             buffer as *mut libc::c_void,
             initial as *const libc::c_void,
             ibytes as libc::c_ulong,
         );
-        ogg_sync_wrote(
-            &mut (*vf).oy as *mut _ as *mut ogg_sync_state,
-            ibytes,
-        );
+        ogg_sync_wrote(&mut (*vf).oy as *mut _ as *mut ogg_sync_state, ibytes);
     }
     /* can we seek? Stevens suggests the seek test was portable */
     if offsettest != -(1 as i32) {
@@ -1605,25 +1489,15 @@ pub unsafe extern "C" fn ov_clear(
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
 ) -> i32 {
     if !vf.is_null() {
-        vorbis_block_clear(
-            &mut (*vf).vb as *mut _ as *mut vorbis_block,
-        );
-        vorbis_dsp_clear(
-            &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
-        );
-        ogg_stream_clear(
-            &mut (*vf).os as *mut _ as *mut ogg_stream_state,
-        );
+        vorbis_block_clear(&mut (*vf).vb as *mut _ as *mut vorbis_block);
+        vorbis_dsp_clear(&mut (*vf).vd as *mut _ as *mut vorbis_dsp_state);
+        ogg_stream_clear(&mut (*vf).os as *mut _ as *mut ogg_stream_state);
         if !(*vf).vi.is_null() && (*vf).links != 0 {
             let mut i: i32 = 0;
             i = 0 as i32;
             while i < (*vf).links {
-                vorbis_info_clear(
-                    (*vf).vi.offset(i as isize) as *mut vorbis_info,
-                );
-                vorbis_comment_clear(
-                    (*vf).vc.offset(i as isize) as *mut vorbis_comment,
-                );
+                vorbis_info_clear((*vf).vi.offset(i as isize) as *mut vorbis_info);
+                vorbis_comment_clear((*vf).vc.offset(i as isize) as *mut vorbis_comment);
                 i += 1
             }
             libc::free((*vf).vi as *mut libc::c_void);
@@ -1641,9 +1515,7 @@ pub unsafe extern "C" fn ov_clear(
         if !(*vf).offsets.is_null() {
             libc::free((*vf).offsets as *mut libc::c_void);
         }
-        ogg_sync_clear(
-            &mut (*vf).oy as *mut _ as *mut ogg_sync_state,
-        );
+        ogg_sync_clear(&mut (*vf).oy as *mut _ as *mut ogg_sync_state);
         if !(*vf).datasource.is_null() && (*vf).callbacks.close_func.is_some() {
             (*vf)
                 .callbacks
@@ -1718,27 +1590,10 @@ pub unsafe extern "C" fn ov_open(
                     ) -> libc::c_ulong,
             )),
             seek_func: ::std::mem::transmute::<
-                Option<
-                    unsafe extern "C" fn(
-                        _: *mut FILE,
-                        _: ogg_int64_t,
-                        _: i32,
-                    ) -> i32,
-                >,
-                Option<
-                    unsafe extern "C" fn(
-                        _: *mut libc::c_void,
-                        _: ogg_int64_t,
-                        _: i32,
-                    ) -> i32,
-                >,
+                Option<unsafe extern "C" fn(_: *mut FILE, _: ogg_int64_t, _: i32) -> i32>,
+                Option<unsafe extern "C" fn(_: *mut libc::c_void, _: ogg_int64_t, _: i32) -> i32>,
             >(Some(
-                _fseek64_wrap
-                    as unsafe extern "C" fn(
-                        _: *mut FILE,
-                        _: ogg_int64_t,
-                        _: i32,
-                    ) -> i32,
+                _fseek64_wrap as unsafe extern "C" fn(_: *mut FILE, _: ogg_int64_t, _: i32) -> i32,
             )),
             close_func: ::std::mem::transmute::<
                 Option<unsafe extern "C" fn(_: *mut FILE) -> i32>,
@@ -1790,12 +1645,8 @@ pub unsafe extern "C" fn ov_halfrate(
     if (*vf).ready_state > 3 as i32 {
         /* clear out stream state; dumping the decode machine is needed to
         reinit the MDCT lookups. */
-        vorbis_dsp_clear(
-            &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
-        ); /* make sure the pos is dumped if unseekable */
-        vorbis_block_clear(
-            &mut (*vf).vb as *mut _ as *mut vorbis_block,
-        );
+        vorbis_dsp_clear(&mut (*vf).vd as *mut _ as *mut vorbis_dsp_state); /* make sure the pos is dumped if unseekable */
+        vorbis_block_clear(&mut (*vf).vb as *mut _ as *mut vorbis_block);
         (*vf).ready_state = 3 as i32;
         if (*vf).pcm_offset >= 0 as i32 as isize {
             let mut pos: ogg_int64_t = (*vf).pcm_offset;
@@ -1805,11 +1656,7 @@ pub unsafe extern "C" fn ov_halfrate(
     }
     i = 0 as i32;
     while i < (*vf).links {
-        if vorbis_synthesis_halfrate(
-            (*vf).vi.offset(i as isize) as *mut vorbis_info,
-            flag,
-        ) != 0
-        {
+        if vorbis_synthesis_halfrate((*vf).vi.offset(i as isize) as *mut vorbis_info, flag) != 0 {
             if flag != 0 {
                 ov_halfrate(vf, 0 as i32);
             }
@@ -1827,9 +1674,7 @@ pub unsafe extern "C" fn ov_halfrate_p(
     if (*vf).vi.is_null() {
         return -(131 as i32);
     }
-    return vorbis_synthesis_halfrate_p(
-        (*vf).vi as *mut vorbis_info,
-    );
+    return vorbis_synthesis_halfrate_p((*vf).vi as *mut vorbis_info);
 }
 /* Only partially open the vorbis file; test for Vorbisness, and load
 the headers for the first chain.  Do not seek (although test for
@@ -1887,27 +1732,10 @@ pub unsafe extern "C" fn ov_test(
                     ) -> libc::c_ulong,
             )),
             seek_func: ::std::mem::transmute::<
-                Option<
-                    unsafe extern "C" fn(
-                        _: *mut FILE,
-                        _: ogg_int64_t,
-                        _: i32,
-                    ) -> i32,
-                >,
-                Option<
-                    unsafe extern "C" fn(
-                        _: *mut libc::c_void,
-                        _: ogg_int64_t,
-                        _: i32,
-                    ) -> i32,
-                >,
+                Option<unsafe extern "C" fn(_: *mut FILE, _: ogg_int64_t, _: i32) -> i32>,
+                Option<unsafe extern "C" fn(_: *mut libc::c_void, _: ogg_int64_t, _: i32) -> i32>,
             >(Some(
-                _fseek64_wrap
-                    as unsafe extern "C" fn(
-                        _: *mut FILE,
-                        _: ogg_int64_t,
-                        _: i32,
-                    ) -> i32,
+                _fseek64_wrap as unsafe extern "C" fn(_: *mut FILE, _: ogg_int64_t, _: i32) -> i32,
             )),
             close_func: ::std::mem::transmute::<
                 Option<unsafe extern "C" fn(_: *mut FILE) -> i32>,
@@ -1976,8 +1804,7 @@ pub unsafe extern "C" fn ov_bitrate(
         return ov_bitrate(vf, 0 as i32);
     }
     if i < 0 as i32 {
-        let mut bits: ogg_int64_t =
-            0 as i32 as ogg_int64_t;
+        let mut bits: ogg_int64_t = 0 as i32 as ogg_int64_t;
         let mut i_0: i32 = 0;
         let mut br: f32 = 0.;
         i_0 = 0 as i32;
@@ -2081,8 +1908,7 @@ pub unsafe extern "C" fn ov_raw_total(
         return -(131 as i32) as ogg_int64_t;
     }
     if i < 0 as i32 {
-        let mut acc: ogg_int64_t =
-            0 as i32 as ogg_int64_t;
+        let mut acc: ogg_int64_t = 0 as i32 as ogg_int64_t;
         let mut i_0: i32 = 0;
         i_0 = 0 as i32;
         while i_0 < (*vf).links {
@@ -2112,8 +1938,7 @@ pub unsafe extern "C" fn ov_pcm_total(
         return -(131 as i32) as ogg_int64_t;
     }
     if i < 0 as i32 {
-        let mut acc: ogg_int64_t =
-            0 as i32 as ogg_int64_t;
+        let mut acc: ogg_int64_t = 0 as i32 as ogg_int64_t;
         let mut i_0: i32 = 0;
         i_0 = 0 as i32;
         while i_0 < (*vf).links {
@@ -2219,16 +2044,12 @@ pub unsafe extern "C" fn ov_raw_seek(
         &mut (*vf).os as *mut _ as *mut ogg_stream_state,
         (*vf).current_serialno as i32,
     );
-    vorbis_synthesis_restart(
-        &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
-    );
+    vorbis_synthesis_restart(&mut (*vf).vd as *mut _ as *mut vorbis_dsp_state);
     ret = _seek_helper(vf, pos);
     if ret != 0 {
         /* dump the machine so we're in a known state */
         (*vf).pcm_offset = -(1 as i32) as ogg_int64_t;
-        ogg_stream_clear(
-            &mut work_os as *mut _ as *mut ogg_stream_state,
-        );
+        ogg_stream_clear(&mut work_os as *mut _ as *mut ogg_stream_state);
         _decode_clear(vf);
         return -(137 as i32);
     } else {
@@ -2267,15 +2088,12 @@ pub unsafe extern "C" fn ov_raw_seek(
         let mut thisblock: i32 = 0 as i32;
         let mut lastflag: i32 = 0 as i32;
         let mut firstflag: i32 = 0 as i32;
-        let mut pagepos: ogg_int64_t =
-            -(1 as i32) as ogg_int64_t;
+        let mut pagepos: ogg_int64_t = -(1 as i32) as ogg_int64_t;
         ogg_stream_init(
             &mut work_os as *mut _ as *mut ogg_stream_state,
             (*vf).current_serialno as i32,
         );
-        ogg_stream_reset(
-            &mut work_os as *mut _ as *mut ogg_stream_state,
-        );
+        ogg_stream_reset(&mut work_os as *mut _ as *mut ogg_stream_state);
         loop {
             if (*vf).ready_state >= 3 as i32 {
                 /* snarf/scan a packet if we can */
@@ -2288,12 +2106,10 @@ pub unsafe extern "C" fn ov_raw_seek(
                         .codec_setup
                         .is_null()
                     {
-                        thisblock =
-                            vorbis_packet_blocksize(
-                                (*vf).vi.offset((*vf).current_link as isize)
-                                    as *mut vorbis_info,
-                                &mut op as *mut _ as *mut ogg_packet,
-                            ) as i32;
+                        thisblock = vorbis_packet_blocksize(
+                            (*vf).vi.offset((*vf).current_link as isize) as *mut vorbis_info,
+                            &mut op as *mut _ as *mut ogg_packet,
+                        ) as i32;
                         if thisblock < 0 as i32 {
                             ogg_stream_packetout(
                                 &mut (*vf).os as *mut _ as *mut ogg_stream_state,
@@ -2340,11 +2156,7 @@ pub unsafe extern "C" fn ov_raw_seek(
                 }
             }
             if lastblock == 0 {
-                pagepos = _get_next_page(
-                    vf,
-                    &mut og,
-                    -(1 as i32) as ogg_int64_t,
-                );
+                pagepos = _get_next_page(vf, &mut og, -(1 as i32) as ogg_int64_t);
                 if pagepos < 0 as i32 as isize {
                     (*vf).pcm_offset = ov_pcm_total(vf, -(1 as i32));
                     break;
@@ -2359,22 +2171,15 @@ pub unsafe extern "C" fn ov_raw_seek(
                     /* has our decoding just traversed a bitstream boundary? */
                     if (*vf).ready_state >= 3 as i32 {
                         if (*vf).current_serialno
-                            != ogg_page_serialno(
-                                &mut og as *mut _ as *const ogg_page,
-                            ) as isize
+                            != ogg_page_serialno(&mut og as *mut _ as *const ogg_page) as isize
                         {
                             /* two possibilities:
                             1) our decoding just traversed a bitstream boundary
                             2) another stream is multiplexed into this logical section? */
-                            if ogg_page_bos(
-                                &mut og as *mut _ as *const ogg_page,
-                            ) != 0
-                            {
+                            if ogg_page_bos(&mut og as *mut _ as *const ogg_page) != 0 {
                                 /* we traversed */
                                 _decode_clear(vf); /* clear out stream state */
-                                ogg_stream_clear(
-                                    &mut work_os as *mut _ as *mut ogg_stream_state,
-                                );
+                                ogg_stream_clear(&mut work_os as *mut _ as *mut ogg_stream_state);
                             }
                             /* else, do nothing; next loop will scoop another page */
                         }
@@ -2384,9 +2189,7 @@ pub unsafe extern "C" fn ov_raw_seek(
                     if (*vf).ready_state < 3 as i32 {
                         let mut link_0: i32 = 0;
                         let mut serialno: isize =
-                            ogg_page_serialno(
-                                &mut og as *mut _ as *const ogg_page,
-                            ) as isize;
+                            ogg_page_serialno(&mut og as *mut _ as *const ogg_page) as isize;
                         link_0 = 0 as i32;
                         while link_0 < (*vf).links {
                             if *(*vf).serialnos.offset(link_0 as isize) == serialno {
@@ -2418,9 +2221,7 @@ pub unsafe extern "C" fn ov_raw_seek(
                         &mut work_os as *mut _ as *mut ogg_stream_state,
                         &mut og as *mut _ as *mut ogg_page,
                     );
-                    lastflag = ogg_page_eos(
-                        &mut og as *mut _ as *const ogg_page,
-                    )
+                    lastflag = ogg_page_eos(&mut og as *mut _ as *const ogg_page)
                 }
             } else {
                 /* huh?  Bogus stream with packets but no granulepos */
@@ -2428,9 +2229,7 @@ pub unsafe extern "C" fn ov_raw_seek(
                 break;
             }
         }
-        ogg_stream_clear(
-            &mut work_os as *mut _ as *mut ogg_stream_state,
-        );
+        ogg_stream_clear(&mut work_os as *mut _ as *mut ogg_stream_state);
         (*vf).bittrack = 0.0f32 as f64;
         (*vf).samptrack = 0.0f32 as f64;
         return 0 as i32;
@@ -2450,8 +2249,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
 ) -> i32 {
     let mut current_block: u64;
     let mut link: i32 = -(1 as i32);
-    let mut result: ogg_int64_t =
-        0 as i32 as ogg_int64_t;
+    let mut result: ogg_int64_t = 0 as i32 as ogg_int64_t;
     let mut total: ogg_int64_t = ov_pcm_total(vf, -(1 as i32));
     if (*vf).ready_state < 2 as i32 {
         return -(131 as i32);
@@ -2483,18 +2281,15 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
     information in the bitstream could make our task impossible.
     Account for that (it would be an error condition) */
     /* new search algorithm originally by HB (Nicholas Vinen) */
-    let mut end: ogg_int64_t =
-        *(*vf).offsets.offset((link + 1 as i32) as isize);
+    let mut end: ogg_int64_t = *(*vf).offsets.offset((link + 1 as i32) as isize);
     let mut begin: ogg_int64_t = *(*vf).dataoffsets.offset(link as isize);
-    let mut begintime: ogg_int64_t =
-        *(*vf).pcmlengths.offset((link * 2 as i32) as isize);
+    let mut begintime: ogg_int64_t = *(*vf).pcmlengths.offset((link * 2 as i32) as isize);
     let mut endtime: ogg_int64_t = *(*vf)
         .pcmlengths
         .offset((link * 2 as i32 + 1 as i32) as isize)
         + begintime;
     let mut target: ogg_int64_t = pos - total + begintime;
-    let mut best: ogg_int64_t =
-        -(1 as i32) as ogg_int64_t;
+    let mut best: ogg_int64_t = -(1 as i32) as ogg_int64_t;
     let mut got_page: i32 = 0 as i32;
     let mut og: ogg_page = ogg_page {
         header: 0 as *mut u8,
@@ -2581,8 +2376,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                                     bisect = begin + 1 as i32 as isize
                                 }
                                 /* seek and cntinue bisection */
-                                result =
-                                    _seek_helper(vf, bisect) as ogg_int64_t;
+                                result = _seek_helper(vf, bisect) as ogg_int64_t;
                                 if result != 0 {
                                     current_block = 11555952146732080064;
                                     break;
@@ -2593,18 +2387,13 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                             got_page = 1 as i32;
                             /* got a page. analyze it */
                             /* only consider pages from primary vorbis stream */
-                            if ogg_page_serialno(
-                                &mut og as *mut _ as *const ogg_page,
-                            ) as isize
+                            if ogg_page_serialno(&mut og as *mut _ as *const ogg_page) as isize
                                 != *(*vf).serialnos.offset(link as isize)
                             {
                                 continue;
                             }
                             /* only consider pages with the granulepos set */
-                            granulepos =
-                                ogg_page_granulepos(
-                                    &mut og as *mut _ as *const ogg_page,
-                                );
+                            granulepos = ogg_page_granulepos(&mut og as *mut _ as *const ogg_page);
                             if granulepos == -(1 as i32) as isize {
                                 continue;
                             }
@@ -2639,8 +2428,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                                 if bisect <= begin {
                                     bisect = begin + 1 as i32 as isize
                                 }
-                                result =
-                                    _seek_helper(vf, bisect) as ogg_int64_t;
+                                result = _seek_helper(vf, bisect) as ogg_int64_t;
                                 if result != 0 {
                                     current_block = 11555952146732080064;
                                     break;
@@ -2662,9 +2450,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                         first PCM granule position fencepost. */
                         if !(got_page != 0
                             && begin == *(*vf).dataoffsets.offset(link as isize)
-                            && ogg_page_serialno(
-                                &mut og as *mut _ as *const ogg_page,
-                            ) as isize
+                            && ogg_page_serialno(&mut og as *mut _ as *const ogg_page) as isize
                                 == *(*vf).serialnos.offset(link as isize))
                         {
                             current_block = 11555952146732080064;
@@ -2717,11 +2503,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                             current_block = 11555952146732080064;
                             continue;
                         }
-                        result = _get_next_page(
-                            vf,
-                            &mut og_0,
-                            -(1 as i32) as ogg_int64_t,
-                        );
+                        result = _get_next_page(vf, &mut og_0, -(1 as i32) as ogg_int64_t);
                         if result < 0 as i32 as isize {
                             current_block = 11555952146732080064;
                             continue;
@@ -2751,8 +2533,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                             result = ogg_stream_packetpeek(
                                 &mut (*vf).os as *mut _ as *mut ogg_stream_state,
                                 &mut op as *mut _ as *mut ogg_packet,
-                            )
-                                as ogg_int64_t;
+                            ) as ogg_int64_t;
                             if result == 0 as i32 as isize {
                                 /* No packet returned; we exited the bisection with 'best'
                                 pointing to a page with a granule position, so the packet
@@ -2769,17 +2550,18 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                                         current_block = 11555952146732080064;
                                         continue 's_118;
                                     }
-                                    if ogg_page_serialno(&mut og_0 as *mut _ as *const ogg_page) as
-                                               isize ==
-                                               (*vf).current_serialno &&
-                                               (ogg_page_granulepos(&mut og_0 as *mut _ as *const ogg_page)
-                                                    >
-                                                    -(1 as i32) as
-                                                        isize ||
-                                                    ogg_page_continued(&mut og_0 as *mut _ as *const ogg_page)
-                                                        == 0) {
-                                            return ov_raw_seek(vf, result)
-                                        }
+                                    if ogg_page_serialno(&mut og_0 as *mut _ as *const ogg_page)
+                                        as isize
+                                        == (*vf).current_serialno
+                                        && (ogg_page_granulepos(
+                                            &mut og_0 as *mut _ as *const ogg_page,
+                                        ) > -(1 as i32) as isize
+                                            || ogg_page_continued(
+                                                &mut og_0 as *mut _ as *const ogg_page,
+                                            ) == 0)
+                                    {
+                                        return ov_raw_seek(vf, result);
+                                    }
                                 }
                             }
                             if result < 0 as i32 as isize {
@@ -2792,20 +2574,15 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                                         .pcmlengths
                                         .offset(((*vf).current_link * 2 as i32) as isize);
                                 if (*vf).pcm_offset < 0 as i32 as isize {
-                                    (*vf).pcm_offset =
-                                        0 as i32 as ogg_int64_t
+                                    (*vf).pcm_offset = 0 as i32 as ogg_int64_t
                                 }
                                 (*vf).pcm_offset += total;
                                 break;
                             } else {
-                                result =
-                                    ogg_stream_packetout(
-                                        &mut (*vf).os as *mut _
-                                            as *mut ogg_stream_state,
-                                        0 as *mut ogg_packet
-                                            as *mut ogg_packet,
-                                    )
-                                        as ogg_int64_t
+                                result = ogg_stream_packetout(
+                                    &mut (*vf).os as *mut _ as *mut ogg_stream_state,
+                                    0 as *mut ogg_packet as *mut ogg_packet,
+                                ) as ogg_int64_t
                             }
                         }
                     }
@@ -2879,11 +2656,7 @@ pub unsafe extern "C" fn ov_pcm_seek(
                     (*vf).pcm_offset += (lastblock + thisblock >> 2 as i32) as isize
                 }
                 if (*vf).pcm_offset
-                    + (thisblock
-                        + vorbis_info_blocksize(
-                            (*vf).vi as *mut vorbis_info,
-                            1 as i32,
-                        )
+                    + (thisblock + vorbis_info_blocksize((*vf).vi as *mut vorbis_info, 1 as i32)
                         >> 2 as i32) as isize
                     >= pos
                 {
@@ -2930,24 +2703,15 @@ pub unsafe extern "C" fn ov_pcm_seek(
                 break;
             }
             /* suck in a new page */
-            if _get_next_page(
-                vf,
-                &mut og,
-                -(1 as i32) as ogg_int64_t,
-            ) < 0 as i32 as isize
-            {
+            if _get_next_page(vf, &mut og, -(1 as i32) as ogg_int64_t) < 0 as i32 as isize {
                 break;
             }
-            if ogg_page_bos(
-                &mut og as *mut _ as *const ogg_page,
-            ) != 0
-            {
+            if ogg_page_bos(&mut og as *mut _ as *const ogg_page) != 0 {
                 _decode_clear(vf);
             }
             if (*vf).ready_state < 3 as i32 {
-                let mut serialno: isize = ogg_page_serialno(
-                    &mut og as *mut _ as *const ogg_page,
-                ) as isize;
+                let mut serialno: isize =
+                    ogg_page_serialno(&mut og as *mut _ as *const ogg_page) as isize;
                 let mut link: i32 = 0;
                 link = 0 as i32;
                 while link < (*vf).links {
@@ -2961,9 +2725,8 @@ pub unsafe extern "C" fn ov_pcm_seek(
                 }
                 (*vf).current_link = link;
                 (*vf).ready_state = 3 as i32;
-                (*vf).current_serialno = ogg_page_serialno(
-                    &mut og as *mut _ as *const ogg_page,
-                ) as isize;
+                (*vf).current_serialno =
+                    ogg_page_serialno(&mut og as *mut _ as *const ogg_page) as isize;
                 ogg_stream_reset_serialno(
                     &mut (*vf).os as *mut _ as *mut ogg_stream_state,
                     serialno as i32,
@@ -2986,9 +2749,7 @@ pub unsafe extern "C" fn ov_pcm_seek(
     logical bitstream boundary with abandon is OK. */
     /* note that halfrate could be set differently in each link, but
     vorbisfile encoforces all links are set or unset */
-    let mut hs: i32 = vorbis_synthesis_halfrate_p(
-        (*vf).vi as *mut vorbis_info,
-    );
+    let mut hs: i32 = vorbis_synthesis_halfrate_p((*vf).vi as *mut vorbis_info);
     while (*vf).pcm_offset < pos >> hs << hs {
         let mut target: ogg_int64_t = pos - (*vf).pcm_offset >> hs;
         let mut samples: isize = vorbis_synthesis_pcmout(
@@ -3004,9 +2765,7 @@ pub unsafe extern "C" fn ov_pcm_seek(
         );
         (*vf).pcm_offset += samples << hs;
         if samples < target {
-            if _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 1 as i32)
-                <= 0 as i32
-            {
+            if _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 1 as i32) <= 0 as i32 {
                 (*vf).pcm_offset = ov_pcm_total(vf, -(1 as i32))
             }
         }
@@ -3024,8 +2783,7 @@ pub unsafe extern "C" fn ov_time_seek(
 ) -> i32 {
     /* translate time to PCM position and call ov_pcm_seek */
     let mut link: i32 = -(1 as i32);
-    let mut pcm_total: ogg_int64_t =
-        0 as i32 as ogg_int64_t;
+    let mut pcm_total: ogg_int64_t = 0 as i32 as ogg_int64_t;
     let mut time_total: f64 = 0.0f64;
     if (*vf).ready_state < 2 as i32 {
         return -(131 as i32);
@@ -3068,8 +2826,7 @@ pub unsafe extern "C" fn ov_time_seek_page(
 ) -> i32 {
     /* translate time to PCM position and call ov_pcm_seek */
     let mut link: i32 = -(1 as i32);
-    let mut pcm_total: ogg_int64_t =
-        0 as i32 as ogg_int64_t;
+    let mut pcm_total: ogg_int64_t = 0 as i32 as ogg_int64_t;
     let mut time_total: f64 = 0.0f64;
     if (*vf).ready_state < 2 as i32 {
         return -(131 as i32);
@@ -3132,8 +2889,7 @@ pub unsafe extern "C" fn ov_time_tell(
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
 ) -> f64 {
     let mut link: i32 = 0 as i32;
-    let mut pcm_total: ogg_int64_t =
-        0 as i32 as ogg_int64_t;
+    let mut pcm_total: ogg_int64_t = 0 as i32 as ogg_int64_t;
     let mut time_total: f64 = 0.0f32 as f64;
     if (*vf).ready_state < 2 as i32 {
         return -(131 as i32) as f64;
@@ -3211,8 +2967,7 @@ pub unsafe extern "C" fn ov_comment(
 }
 
 unsafe extern "C" fn host_is_big_endian() -> i32 {
-    let mut pattern: ogg_int32_t =
-        0xfeedface as u32 as ogg_int32_t;
+    let mut pattern: ogg_int32_t = 0xfeedface as u32 as ogg_int32_t;
     let mut bytewise: *mut u8 = &mut pattern as *mut ogg_int32_t as *mut u8;
     if *bytewise.offset(0 as i32 as isize) as i32 == 0xfe as i32 {
         return 1 as i32;
@@ -3280,17 +3035,15 @@ pub unsafe extern "C" fn ov_read_filter(
     }
     loop {
         if (*vf).ready_state == 4 as i32 {
-            samples = vorbis_synthesis_pcmout(
-                &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
-                &mut pcm,
-            ) as isize;
+            samples =
+                vorbis_synthesis_pcmout(&mut (*vf).vd as *mut _ as *mut vorbis_dsp_state, &mut pcm)
+                    as isize;
             if samples != 0 {
                 break;
             }
         }
         /* suck in another packet */
-        let mut ret: i32 =
-            _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 1 as i32);
+        let mut ret: i32 = _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 1 as i32);
         if ret == -(2 as i32) {
             return 0 as i32 as isize;
         }
@@ -3444,9 +3197,7 @@ pub unsafe extern "C" fn ov_read_filter(
             &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
             samples as i32,
         );
-        hs = vorbis_synthesis_halfrate_p(
-            (*vf).vi as *mut vorbis_info,
-        );
+        hs = vorbis_synthesis_halfrate_p((*vf).vi as *mut vorbis_info);
         (*vf).pcm_offset += samples << hs;
         if !bitstream.is_null() {
             *bitstream = (*vf).current_link
@@ -3505,15 +3256,10 @@ pub unsafe extern "C" fn ov_read_float(
         if (*vf).ready_state == 4 as i32 {
             let mut pcm: *mut *mut f32 = 0 as *mut *mut f32;
             let mut samples: isize =
-                vorbis_synthesis_pcmout(
-                    &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
-                    &mut pcm,
-                ) as isize;
+                vorbis_synthesis_pcmout(&mut (*vf).vd as *mut _ as *mut vorbis_dsp_state, &mut pcm)
+                    as isize;
             if samples != 0 {
-                let mut hs: i32 =
-                    vorbis_synthesis_halfrate_p(
-                        (*vf).vi as *mut vorbis_info,
-                    );
+                let mut hs: i32 = vorbis_synthesis_halfrate_p((*vf).vi as *mut vorbis_info);
                 if !pcm_channels.is_null() {
                     *pcm_channels = pcm
                 }
@@ -3532,8 +3278,7 @@ pub unsafe extern "C" fn ov_read_float(
             }
         }
         /* suck in another packet */
-        let mut ret: i32 =
-            _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 1 as i32);
+        let mut ret: i32 = _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 1 as i32);
         if ret == -(2 as i32) {
             return 0 as i32 as isize;
         }
@@ -3594,8 +3339,7 @@ unsafe extern "C" fn _ov_initset(
 ) -> i32 {
     while !((*vf).ready_state == 4 as i32) {
         /* suck in another packet */
-        let mut ret: i32 =
-            _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 0 as i32);
+        let mut ret: i32 = _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 0 as i32);
         if ret < 0 as i32 && ret != -(3 as i32) {
             return ret;
         }
@@ -3612,17 +3356,12 @@ unsafe extern "C" fn _ov_initprime(
     let mut vd: *mut vorbis_dsp_state = &mut (*vf).vd;
     loop {
         if (*vf).ready_state == 4 as i32 {
-            if vorbis_synthesis_pcmout(
-                vd as *mut vorbis_dsp_state,
-                0 as *mut *mut *mut f32,
-            ) != 0
-            {
+            if vorbis_synthesis_pcmout(vd as *mut vorbis_dsp_state, 0 as *mut *mut *mut f32) != 0 {
                 break;
             }
         }
         /* suck in another packet */
-        let mut ret: i32 =
-            _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 0 as i32);
+        let mut ret: i32 = _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 0 as i32);
         if ret < 0 as i32 && ret != -(3 as i32) {
             return ret;
         }
@@ -3645,10 +3384,7 @@ unsafe extern "C" fn _ov_getlap(
     let mut pcm: *mut *mut f32 = 0 as *mut *mut f32;
     /* try first to decode the lapping data */
     while lapcount < lapsize {
-        let mut samples: i32 = vorbis_synthesis_pcmout(
-            vd as *mut vorbis_dsp_state,
-            &mut pcm,
-        );
+        let mut samples: i32 = vorbis_synthesis_pcmout(vd as *mut vorbis_dsp_state, &mut pcm);
         if samples != 0 {
             if samples > lapsize - lapcount {
                 samples = lapsize - lapcount
@@ -3664,18 +3400,11 @@ unsafe extern "C" fn _ov_getlap(
                 i += 1
             }
             lapcount += samples;
-            vorbis_synthesis_read(
-                vd as *mut vorbis_dsp_state,
-                samples,
-            );
+            vorbis_synthesis_read(vd as *mut vorbis_dsp_state, samples);
         } else {
             /* suck in another packet */
-            let mut ret: i32 = _fetch_and_process_packet(
-                vf,
-                0 as *mut ogg_packet,
-                1 as i32,
-                0 as i32,
-            ); /* do *not* span */
+            let mut ret: i32 =
+                _fetch_and_process_packet(vf, 0 as *mut ogg_packet, 1 as i32, 0 as i32); /* do *not* span */
             if ret == -(2 as i32) {
                 break;
             }
@@ -3685,10 +3414,8 @@ unsafe extern "C" fn _ov_getlap(
         /* failed to get lapping data from normal decode; pry it from the
         postextrapolation buffering, or the second half of the MDCT
         from the last packet */
-        let mut samples_0: i32 = vorbis_synthesis_lapout(
-            &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
-            &mut pcm,
-        );
+        let mut samples_0: i32 =
+            vorbis_synthesis_lapout(&mut (*vf).vd as *mut _ as *mut vorbis_dsp_state, &mut pcm);
         if samples_0 == 0 as i32 {
             i = 0 as i32;
             while i < (*vi).channels {
@@ -3770,14 +3497,8 @@ pub unsafe extern "C" fn ov_crosslap(
             .wrapping_mul((*vi1).channels as libc::c_ulong) as usize,
     );
     lappcm = fresh8.as_mut_ptr() as *mut *mut f32;
-    n1 = vorbis_info_blocksize(
-        vi1 as *mut vorbis_info,
-        0 as i32,
-    ) >> 1 as i32 + hs1;
-    n2 = vorbis_info_blocksize(
-        vi2 as *mut vorbis_info,
-        0 as i32,
-    ) >> 1 as i32 + hs2;
+    n1 = vorbis_info_blocksize(vi1 as *mut vorbis_info, 0 as i32) >> 1 as i32 + hs1;
+    n2 = vorbis_info_blocksize(vi2 as *mut vorbis_info, 0 as i32) >> 1 as i32 + hs2;
     w1 = vorbis_window(&mut (*vf1).vd, 0 as i32);
     w2 = vorbis_window(&mut (*vf2).vd, 0 as i32);
     i = 0 as i32;
@@ -3795,10 +3516,7 @@ pub unsafe extern "C" fn ov_crosslap(
     /* have a lapping buffer from vf1; now to splice it into the lapping
     buffer of vf2 */
     /* consolidate and expose the buffer. */
-    vorbis_synthesis_lapout(
-        &mut (*vf2).vd as *mut _ as *mut vorbis_dsp_state,
-        &mut pcm,
-    );
+    vorbis_synthesis_lapout(&mut (*vf2).vd as *mut _ as *mut vorbis_dsp_state, &mut pcm);
     /* splice */
     _ov_splice(
         pcm,
@@ -3849,10 +3567,7 @@ unsafe extern "C" fn _ov_64_seek_lap(
     vi = ov_info(vf, -(1 as i32));
     hs = ov_halfrate_p(vf);
     ch1 = (*vi).channels;
-    n1 = vorbis_info_blocksize(
-        vi as *mut vorbis_info,
-        0 as i32,
-    ) >> 1 as i32 + hs;
+    n1 = vorbis_info_blocksize(vi as *mut vorbis_info, 0 as i32) >> 1 as i32 + hs;
     w1 = vorbis_window(&mut (*vf).vd, 0 as i32);
     let mut fresh11 = ::std::vec::from_elem(
         0,
@@ -3884,16 +3599,10 @@ unsafe extern "C" fn _ov_64_seek_lap(
     /* Guard against cross-link changes; they're perfectly legal */
     vi = ov_info(vf, -(1 as i32));
     ch2 = (*vi).channels;
-    n2 = vorbis_info_blocksize(
-        vi as *mut vorbis_info,
-        0 as i32,
-    ) >> 1 as i32 + hs;
+    n2 = vorbis_info_blocksize(vi as *mut vorbis_info, 0 as i32) >> 1 as i32 + hs;
     w2 = vorbis_window(&mut (*vf).vd, 0 as i32);
     /* consolidate and expose the buffer. */
-    vorbis_synthesis_lapout(
-        &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
-        &mut pcm,
-    );
+    vorbis_synthesis_lapout(&mut (*vf).vd as *mut _ as *mut vorbis_dsp_state, &mut pcm);
     /* splice */
     _ov_splice(pcm, lappcm, n1, n2, ch1, ch2, w1, w2);
     /* done */
@@ -3989,10 +3698,7 @@ unsafe extern "C" fn _ov_d_seek_lap(
     vi = ov_info(vf, -(1 as i32));
     hs = ov_halfrate_p(vf);
     ch1 = (*vi).channels;
-    n1 = vorbis_info_blocksize(
-        vi as *mut vorbis_info,
-        0 as i32,
-    ) >> 1 as i32 + hs;
+    n1 = vorbis_info_blocksize(vi as *mut vorbis_info, 0 as i32) >> 1 as i32 + hs;
     w1 = vorbis_window(&mut (*vf).vd, 0 as i32);
     let mut fresh14 = ::std::vec::from_elem(
         0,
@@ -4024,16 +3730,10 @@ unsafe extern "C" fn _ov_d_seek_lap(
     /* Guard against cross-link changes; they're perfectly legal */
     vi = ov_info(vf, -(1 as i32));
     ch2 = (*vi).channels;
-    n2 = vorbis_info_blocksize(
-        vi as *mut vorbis_info,
-        0 as i32,
-    ) >> 1 as i32 + hs;
+    n2 = vorbis_info_blocksize(vi as *mut vorbis_info, 0 as i32) >> 1 as i32 + hs;
     w2 = vorbis_window(&mut (*vf).vd, 0 as i32);
     /* consolidate and expose the buffer. */
-    vorbis_synthesis_lapout(
-        &mut (*vf).vd as *mut _ as *mut vorbis_dsp_state,
-        &mut pcm,
-    );
+    vorbis_synthesis_lapout(&mut (*vf).vd as *mut _ as *mut vorbis_dsp_state, &mut pcm);
     /* splice */
     _ov_splice(pcm, lappcm, n1, n2, ch1, ch2, w1, w2);
     /* done */

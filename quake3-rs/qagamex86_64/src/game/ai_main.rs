@@ -478,124 +478,112 @@ pub static mut bot_interbreedmatchcount: i32 = 0;
 //
 #[no_mangle]
 
-pub static mut bot_thinktime: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut bot_thinktime: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut bot_memorydump: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut bot_memorydump: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut bot_saveroutingcache: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut bot_saveroutingcache: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut bot_pause: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut bot_pause: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut bot_report: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut bot_report: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut bot_testsolid: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut bot_testsolid: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut bot_testclusters: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut bot_testclusters: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut bot_developer: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut bot_developer: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut bot_interbreedchar: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut bot_interbreedchar: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut bot_interbreedbots: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut bot_interbreedbots: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut bot_interbreedcycle: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut bot_interbreedcycle: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut bot_interbreedwrite: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut bot_interbreedwrite: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 // from the game source
 /*
 ==================
@@ -646,9 +634,7 @@ pub unsafe extern "C" fn BotAI_Print(mut type_0: i32, mut fmt: *mut libc::c_char
             );
         }
         _ => {
-            G_Printf(
-                b"unknown print type\n\x00" as *const u8 as *const libc::c_char,
-            );
+            G_Printf(b"unknown print type\n\x00" as *const u8 as *const libc::c_char);
         }
     };
 }
@@ -668,23 +654,22 @@ pub unsafe extern "C" fn BotAI_Trace(
     mut passent: i32,
     mut contentmask: i32,
 ) {
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     trap_Trace(
         &mut trace as *mut _ as *mut trace_t,
         start as *const vec_t,
@@ -726,9 +711,7 @@ pub unsafe extern "C" fn BotAI_GetClientState(
     mut state: *mut playerState_t,
 ) -> i32 {
     let mut ent: *mut gentity_t = 0 as *mut gentity_t;
-    ent = &mut *g_entities
-        .as_mut_ptr()
-        .offset(clientNum as isize) as *mut gentity_t;
+    ent = &mut *g_entities.as_mut_ptr().offset(clientNum as isize) as *mut gentity_t;
     if (*ent).inuse as u64 == 0 {
         return qfalse as i32;
     }
@@ -737,8 +720,7 @@ pub unsafe extern "C" fn BotAI_GetClientState(
     }
     crate::stdlib::memcpy(
         state as *mut libc::c_void,
-        &mut (*(*ent).client).ps as *mut playerState_t
-            as *const libc::c_void,
+        &mut (*(*ent).client).ps as *mut playerState_t as *const libc::c_void,
         ::std::mem::size_of::<playerState_t>() as libc::c_ulong,
     );
     return qtrue as i32;
@@ -755,9 +737,7 @@ pub unsafe extern "C" fn BotAI_GetEntityState(
     mut state: *mut entityState_t,
 ) -> i32 {
     let mut ent: *mut gentity_t = 0 as *mut gentity_t;
-    ent = &mut *g_entities
-        .as_mut_ptr()
-        .offset(entityNum as isize) as *mut gentity_t;
+    ent = &mut *g_entities.as_mut_ptr().offset(entityNum as isize) as *mut gentity_t;
     crate::stdlib::memset(
         state as *mut libc::c_void,
         0 as i32,
@@ -872,12 +852,8 @@ pub unsafe extern "C" fn BotTestAAS(mut origin: *mut vec_t) {
         maxs: [0.; 3],
         center: [0.; 3],
     };
-    trap_Cvar_Update(
-        &mut bot_testsolid as *mut _ as *mut vmCvar_t,
-    );
-    trap_Cvar_Update(
-        &mut bot_testclusters as *mut _ as *mut vmCvar_t,
-    );
+    trap_Cvar_Update(&mut bot_testsolid as *mut _ as *mut vmCvar_t);
+    trap_Cvar_Update(&mut bot_testclusters as *mut _ as *mut vmCvar_t);
     if bot_testsolid.integer != 0 {
         if trap_AAS_Initialized() == 0 {
             return;
@@ -938,9 +914,7 @@ pub unsafe extern "C" fn BotReportStatus(mut bs: *mut crate::src::game::ai_main:
         netname.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
     );
-    if Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr())
-        == 0 as i32
-    {
+    if Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr()) == 0 as i32 {
         leader = b"L\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     } else {
         leader = b" \x00" as *const u8 as *const libc::c_char as *mut libc::c_char
@@ -1241,9 +1215,7 @@ pub unsafe extern "C" fn BotSetInfoConfigString(
         netname.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
     );
-    if Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr())
-        == 0 as i32
-    {
+    if Q_stricmp(netname.as_mut_ptr(), (*bs).teamleader.as_mut_ptr()) == 0 as i32 {
         leader = b"L\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     } else {
         leader = b" \x00" as *const u8 as *const libc::c_char as *mut libc::c_char
@@ -1379,10 +1351,7 @@ pub unsafe extern "C" fn BotSetInfoConfigString(
             );
         }
         _ => {
-            trap_BotGetTopGoal(
-                (*bs).gs,
-                &mut goal as *mut bot_goal_t as *mut libc::c_void,
-            );
+            trap_BotGetTopGoal((*bs).gs, &mut goal as *mut bot_goal_t as *mut libc::c_void);
             trap_BotGoalName(
                 goal.number,
                 goalname.as_mut_ptr(),
@@ -1474,10 +1443,7 @@ pub unsafe extern "C" fn BotInterbreedBots() {
             (*botstates[parent2 as usize]).gs,
             (*botstates[child as usize]).gs,
         );
-        trap_BotMutateGoalFuzzyLogic(
-            (*botstates[child as usize]).gs,
-            1 as i32 as f32,
-        );
+        trap_BotMutateGoalFuzzyLogic((*botstates[child as usize]).gs, 1 as i32 as f32);
     }
     // reset the kills and deaths
     i = 0 as i32;
@@ -1520,10 +1486,7 @@ pub unsafe extern "C" fn BotWriteInterbreeded(mut filename: *mut libc::c_char) {
     }
     if bestbot >= 0 as i32 {
         //write out the new goal fuzzy logic
-        trap_BotSaveGoalFuzzyLogic(
-            (*botstates[bestbot as usize]).gs,
-            filename,
-        );
+        trap_BotSaveGoalFuzzyLogic((*botstates[bestbot as usize]).gs, filename);
     };
 }
 /*
@@ -1543,9 +1506,7 @@ pub unsafe extern "C" fn BotInterbreedEndMatch() {
     if bot_interbreedmatchcount >= bot_interbreedcycle.integer {
         bot_interbreedmatchcount = 0 as i32;
         //
-        trap_Cvar_Update(
-            &mut bot_interbreedwrite as *mut _ as *mut vmCvar_t,
-        );
+        trap_Cvar_Update(&mut bot_interbreedwrite as *mut _ as *mut vmCvar_t);
         if crate::stdlib::strlen(bot_interbreedwrite.string.as_mut_ptr()) != 0 {
             BotWriteInterbreeded(bot_interbreedwrite.string.as_mut_ptr());
             trap_Cvar_Set(
@@ -1565,9 +1526,7 @@ BotInterbreeding
 
 pub unsafe extern "C" fn BotInterbreeding() {
     let mut i: i32 = 0;
-    trap_Cvar_Update(
-        &mut bot_interbreedchar as *mut _ as *mut vmCvar_t,
-    );
+    trap_Cvar_Update(&mut bot_interbreedchar as *mut _ as *mut vmCvar_t);
     if crate::stdlib::strlen(bot_interbreedchar.string.as_mut_ptr()) == 0 {
         return;
     }
@@ -1587,10 +1546,7 @@ pub unsafe extern "C" fn BotInterbreeding() {
     i = 0 as i32;
     while i < 64 as i32 {
         if !botstates[i as usize].is_null() && (*botstates[i as usize]).inuse != 0 {
-            BotAIShutdownClient(
-                (*botstates[i as usize]).client,
-                qfalse,
-            );
+            BotAIShutdownClient((*botstates[i as usize]).client, qfalse);
         }
         i += 1
     }
@@ -1630,10 +1586,7 @@ BotEntityInfo
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotEntityInfo(
-    mut entnum: i32,
-    mut info: *mut aas_entityinfo_t,
-) {
+pub unsafe extern "C" fn BotEntityInfo(mut entnum: i32, mut info: *mut aas_entityinfo_t) {
     trap_AAS_EntityInfo(entnum, info as *mut libc::c_void);
 }
 //returns the number of bots in the game
@@ -1741,12 +1694,7 @@ pub unsafe extern "C" fn BotChangeViewAngles(
     }
     //
     if (*bs).enemy >= 0 as i32 {
-        factor = trap_Characteristic_BFloat(
-            (*bs).character,
-            4 as i32,
-            0.01f32,
-            1 as i32 as f32,
-        );
+        factor = trap_Characteristic_BFloat((*bs).character, 4 as i32, 0.01f32, 1 as i32 as f32);
         maxchange = trap_Characteristic_BFloat(
             (*bs).character,
             5 as i32,
@@ -1781,10 +1729,8 @@ pub unsafe extern "C" fn BotChangeViewAngles(
             )
         } else {
             //over reaction view model
-            (*bs).viewangles[i as usize] =
-                AngleMod((*bs).viewangles[i as usize]);
-            (*bs).ideal_viewangles[i as usize] =
-                AngleMod((*bs).ideal_viewangles[i as usize]);
+            (*bs).viewangles[i as usize] = AngleMod((*bs).viewangles[i as usize]);
+            (*bs).ideal_viewangles[i as usize] = AngleMod((*bs).ideal_viewangles[i as usize]);
             diff = AngleDifference(
                 (*bs).viewangles[i as usize],
                 (*bs).ideal_viewangles[i as usize],
@@ -1805,8 +1751,7 @@ pub unsafe extern "C" fn BotChangeViewAngles(
                 anglespeed = -maxchange
             }
             (*bs).viewangles[i as usize] += anglespeed;
-            (*bs).viewangles[i as usize] =
-                AngleMod((*bs).viewangles[i as usize]);
+            (*bs).viewangles[i as usize] = AngleMod((*bs).viewangles[i as usize]);
             //demping
             (*bs).viewanglespeed[i as usize] = ((*bs).viewanglespeed[i as usize] as f64
                 * (0.45f64 * (1 as i32 as f32 - factor) as f64))
@@ -2074,8 +2019,7 @@ pub unsafe extern "C" fn RemoveColorEscapeSequences(mut text: *mut libc::c_char)
     l = 0 as i32;
     i = 0 as i32;
     while *text.offset(i as isize) != 0 {
-        if Q_IsColorString(&mut *text.offset(i as isize)) as u64 != 0
-        {
+        if Q_IsColorString(&mut *text.offset(i as isize)) as u64 != 0 {
             i += 1
         } else if !(*text.offset(i as isize) as i32 > 0x7e as i32) {
             let fresh0 = l;
@@ -2163,11 +2107,7 @@ pub unsafe extern "C" fn BotAI(mut client: i32, mut thinktime: f32) -> i32 {
                         crate::stdlib::strlen(args).wrapping_sub(1 as i32 as libc::c_ulong)
                             as isize,
                     ) = '\u{0}' as i32 as libc::c_char;
-                    trap_BotQueueConsoleMessage(
-                        (*bs).cs,
-                        0 as i32,
-                        args,
-                    );
+                    trap_BotQueueConsoleMessage((*bs).cs, 0 as i32, args);
                 } else if Q_stricmp(
                     buf.as_mut_ptr(),
                     b"chat\x00" as *const u8 as *const libc::c_char,
@@ -2183,11 +2123,7 @@ pub unsafe extern "C" fn BotAI(mut client: i32, mut thinktime: f32) -> i32 {
                         crate::stdlib::strlen(args).wrapping_sub(1 as i32 as libc::c_ulong)
                             as isize,
                     ) = '\u{0}' as i32 as libc::c_char;
-                    trap_BotQueueConsoleMessage(
-                        (*bs).cs,
-                        1 as i32,
-                        args,
-                    );
+                    trap_BotQueueConsoleMessage((*bs).cs, 1 as i32, args);
                 } else if Q_stricmp(
                     buf.as_mut_ptr(),
                     b"tchat\x00" as *const u8 as *const libc::c_char,
@@ -2203,11 +2139,7 @@ pub unsafe extern "C" fn BotAI(mut client: i32, mut thinktime: f32) -> i32 {
                         crate::stdlib::strlen(args).wrapping_sub(1 as i32 as libc::c_ulong)
                             as isize,
                     ) = '\u{0}' as i32 as libc::c_char;
-                    trap_BotQueueConsoleMessage(
-                        (*bs).cs,
-                        1 as i32,
-                        args,
-                    );
+                    trap_BotQueueConsoleMessage((*bs).cs, 1 as i32, args);
                 } else if !(Q_stricmp(
                     buf.as_mut_ptr(),
                     b"scores\x00" as *const u8 as *const libc::c_char,
@@ -2423,10 +2355,10 @@ pub unsafe extern "C" fn BotAISetupClient(
         0 as *mut crate::src::game::ai_main::bot_state_t;
     let mut errnum: i32 = 0;
     if botstates[client as usize].is_null() {
-        botstates[client as usize] =
-            G_Alloc(::std::mem::size_of::<
-                crate::src::game::ai_main::bot_state_t,
-            >() as libc::c_ulong as i32) as *mut crate::src::game::ai_main::bot_state_t
+        botstates[client as usize] = G_Alloc(::std::mem::size_of::<
+            crate::src::game::ai_main::bot_state_t,
+        >() as libc::c_ulong as i32)
+            as *mut crate::src::game::ai_main::bot_state_t
     }
     bs = botstates[client as usize];
     if bs.is_null() {
@@ -2449,10 +2381,8 @@ pub unsafe extern "C" fn BotAISetupClient(
         return qfalse as i32;
     }
     //load the bot character
-    (*bs).character = trap_BotLoadCharacter(
-        (*settings).characterfile.as_mut_ptr(),
-        (*settings).skill,
-    );
+    (*bs).character =
+        trap_BotLoadCharacter((*settings).characterfile.as_mut_ptr(), (*settings).skill);
     if (*bs).character == 0 {
         BotAI_Print(
             4 as i32,
@@ -2492,8 +2422,7 @@ pub unsafe extern "C" fn BotAISetupClient(
         filename.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
     );
-    errnum =
-        trap_BotLoadWeaponWeights((*bs).ws, filename.as_mut_ptr());
+    errnum = trap_BotLoadWeaponWeights((*bs).ws, filename.as_mut_ptr());
     if errnum != 0 as i32 {
         trap_BotFreeGoalState((*bs).gs);
         trap_BotFreeWeaponState((*bs).ws);
@@ -2514,11 +2443,7 @@ pub unsafe extern "C" fn BotAISetupClient(
         name.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
     );
-    errnum = trap_BotLoadChatFile(
-        (*bs).cs,
-        filename.as_mut_ptr(),
-        name.as_mut_ptr(),
-    );
+    errnum = trap_BotLoadChatFile((*bs).cs, filename.as_mut_ptr(), name.as_mut_ptr());
     if errnum != 0 as i32 {
         trap_BotFreeChatState((*bs).cs);
         trap_BotFreeGoalState((*bs).gs);
@@ -2547,16 +2472,10 @@ pub unsafe extern "C" fn BotAISetupClient(
     (*bs).setupcount = 4 as i32;
     (*bs).entergame_time = floattime;
     (*bs).ms = trap_BotAllocMoveState();
-    (*bs).walker = trap_Characteristic_BFloat(
-        (*bs).character,
-        48 as i32,
-        0 as i32 as f32,
-        1 as i32 as f32,
-    );
+    (*bs).walker =
+        trap_Characteristic_BFloat((*bs).character, 48 as i32, 0 as i32 as f32, 1 as i32 as f32);
     numbots += 1;
-    if trap_Cvar_VariableIntegerValue(
-        b"bot_testichat\x00" as *const u8 as *const libc::c_char,
-    ) != 0
+    if trap_Cvar_VariableIntegerValue(b"bot_testichat\x00" as *const u8 as *const libc::c_char) != 0
     {
         trap_BotLibVarSet(
             b"bot_testichat\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2584,10 +2503,7 @@ BotAIShutdownClient
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotAIShutdownClient(
-    mut client: i32,
-    mut restart: qboolean,
-) -> i32 {
+pub unsafe extern "C" fn BotAIShutdownClient(mut client: i32, mut restart: qboolean) -> i32 {
     let mut bs: *mut crate::src::game::ai_main::bot_state_t =
         0 as *mut crate::src::game::ai_main::bot_state_t;
     bs = botstates[client as usize];
@@ -2661,54 +2577,53 @@ pub unsafe extern "C" fn BotResetState(mut bs: *mut crate::src::game::ai_main::b
         skill: 0.,
     };
     let mut character: i32 = 0;
-    let mut ps: playerState_t =
-        playerState_t {
-            commandTime: 0,
-            pm_type: 0,
-            bobCycle: 0,
-            pm_flags: 0,
-            pm_time: 0,
-            origin: [0.; 3],
-            velocity: [0.; 3],
-            weaponTime: 0,
-            gravity: 0,
-            speed: 0,
-            delta_angles: [0; 3],
-            groundEntityNum: 0,
-            legsTimer: 0,
-            legsAnim: 0,
-            torsoTimer: 0,
-            torsoAnim: 0,
-            movementDir: 0,
-            grapplePoint: [0.; 3],
-            eFlags: 0,
-            eventSequence: 0,
-            events: [0; 2],
-            eventParms: [0; 2],
-            externalEvent: 0,
-            externalEventParm: 0,
-            externalEventTime: 0,
-            clientNum: 0,
-            weapon: 0,
-            weaponstate: 0,
-            viewangles: [0.; 3],
-            viewheight: 0,
-            damageEvent: 0,
-            damageYaw: 0,
-            damagePitch: 0,
-            damageCount: 0,
-            stats: [0; 16],
-            persistant: [0; 16],
-            powerups: [0; 16],
-            ammo: [0; 16],
-            generic1: 0,
-            loopSound: 0,
-            jumppad_ent: 0,
-            ping: 0,
-            pmove_framecount: 0,
-            jumppad_frame: 0,
-            entityEventSequence: 0,
-        };
+    let mut ps: playerState_t = playerState_t {
+        commandTime: 0,
+        pm_type: 0,
+        bobCycle: 0,
+        pm_flags: 0,
+        pm_time: 0,
+        origin: [0.; 3],
+        velocity: [0.; 3],
+        weaponTime: 0,
+        gravity: 0,
+        speed: 0,
+        delta_angles: [0; 3],
+        groundEntityNum: 0,
+        legsTimer: 0,
+        legsAnim: 0,
+        torsoTimer: 0,
+        torsoAnim: 0,
+        movementDir: 0,
+        grapplePoint: [0.; 3],
+        eFlags: 0,
+        eventSequence: 0,
+        events: [0; 2],
+        eventParms: [0; 2],
+        externalEvent: 0,
+        externalEventParm: 0,
+        externalEventTime: 0,
+        clientNum: 0,
+        weapon: 0,
+        weaponstate: 0,
+        viewangles: [0.; 3],
+        viewheight: 0,
+        damageEvent: 0,
+        damageYaw: 0,
+        damagePitch: 0,
+        damageCount: 0,
+        stats: [0; 16],
+        persistant: [0; 16],
+        powerups: [0; 16],
+        ammo: [0; 16],
+        generic1: 0,
+        loopSound: 0,
+        jumppad_ent: 0,
+        ping: 0,
+        pmove_framecount: 0,
+        jumppad_frame: 0,
+        entityEventSequence: 0,
+    };
     let mut entergame_time: f32 = 0.;
     //save some things that should not be reset here
     crate::stdlib::memcpy(
@@ -2718,8 +2633,7 @@ pub unsafe extern "C" fn BotResetState(mut bs: *mut crate::src::game::ai_main::b
     );
     crate::stdlib::memcpy(
         &mut ps as *mut playerState_t as *mut libc::c_void,
-        &mut (*bs).cur_ps as *mut playerState_t
-            as *const libc::c_void,
+        &mut (*bs).cur_ps as *mut playerState_t as *const libc::c_void,
         ::std::mem::size_of::<playerState_t>() as libc::c_ulong,
     );
     inuse = (*bs).inuse;
@@ -2790,14 +2704,13 @@ BotAILoadMap
 
 pub unsafe extern "C" fn BotAILoadMap(mut restart: i32) -> i32 {
     let mut i: i32 = 0;
-    let mut mapname: vmCvar_t =
-        vmCvar_t {
-            handle: 0,
-            modificationCount: 0,
-            value: 0.,
-            integer: 0,
-            string: [0; 256],
-        };
+    let mut mapname: vmCvar_t = vmCvar_t {
+        handle: 0,
+        modificationCount: 0,
+        value: 0.,
+        integer: 0,
+        string: [0; 256],
+    };
     if restart == 0 {
         trap_Cvar_Register(
             &mut mapname as *mut _ as *mut vmCvar_t,
@@ -2854,41 +2767,16 @@ pub unsafe extern "C" fn BotAIStartFrame(mut time: i32) -> i32 {
     static mut botlib_residual: i32 = 0;
     static mut lastbotthink_time: i32 = 0;
     G_CheckBotSpawn();
-    trap_Cvar_Update(
-        &mut crate::src::game::ai_dmq3::bot_rocketjump as *mut _
-            as *mut vmCvar_t,
-    );
-    trap_Cvar_Update(
-        &mut crate::src::game::ai_dmq3::bot_grapple as *mut _
-            as *mut vmCvar_t,
-    );
-    trap_Cvar_Update(
-        &mut crate::src::game::ai_dmq3::bot_fastchat as *mut _
-            as *mut vmCvar_t,
-    );
-    trap_Cvar_Update(
-        &mut crate::src::game::ai_dmq3::bot_nochat as *mut _
-            as *mut vmCvar_t,
-    );
-    trap_Cvar_Update(
-        &mut crate::src::game::ai_dmq3::bot_testrchat as *mut _
-            as *mut vmCvar_t,
-    );
-    trap_Cvar_Update(
-        &mut bot_thinktime as *mut _ as *mut vmCvar_t,
-    );
-    trap_Cvar_Update(
-        &mut bot_memorydump as *mut _ as *mut vmCvar_t,
-    );
-    trap_Cvar_Update(
-        &mut bot_saveroutingcache as *mut _ as *mut vmCvar_t,
-    );
-    trap_Cvar_Update(
-        &mut bot_pause as *mut _ as *mut vmCvar_t,
-    );
-    trap_Cvar_Update(
-        &mut bot_report as *mut _ as *mut vmCvar_t,
-    );
+    trap_Cvar_Update(&mut crate::src::game::ai_dmq3::bot_rocketjump as *mut _ as *mut vmCvar_t);
+    trap_Cvar_Update(&mut crate::src::game::ai_dmq3::bot_grapple as *mut _ as *mut vmCvar_t);
+    trap_Cvar_Update(&mut crate::src::game::ai_dmq3::bot_fastchat as *mut _ as *mut vmCvar_t);
+    trap_Cvar_Update(&mut crate::src::game::ai_dmq3::bot_nochat as *mut _ as *mut vmCvar_t);
+    trap_Cvar_Update(&mut crate::src::game::ai_dmq3::bot_testrchat as *mut _ as *mut vmCvar_t);
+    trap_Cvar_Update(&mut bot_thinktime as *mut _ as *mut vmCvar_t);
+    trap_Cvar_Update(&mut bot_memorydump as *mut _ as *mut vmCvar_t);
+    trap_Cvar_Update(&mut bot_saveroutingcache as *mut _ as *mut vmCvar_t);
+    trap_Cvar_Update(&mut bot_pause as *mut _ as *mut vmCvar_t);
+    trap_Cvar_Update(&mut bot_report as *mut _ as *mut vmCvar_t);
     if bot_report.integer != 0 {
         //		BotTeamplayReport();
         //		trap_Cvar_Set("bot_report", "0");
@@ -2899,9 +2787,7 @@ pub unsafe extern "C" fn BotAIStartFrame(mut time: i32) -> i32 {
         i = 0 as i32;
         while i < 64 as i32 {
             if !(botstates[i as usize].is_null() || (*botstates[i as usize]).inuse == 0) {
-                if !((*g_entities[i as usize].client)
-                    .pers
-                    .connected as u32
+                if !((*g_entities[i as usize].client).pers.connected as u32
                     != CON_CONNECTED as i32 as u32)
                 {
                     (*botstates[i as usize]).lastucmd.forwardmove = 0 as i32 as i8;
@@ -2972,9 +2858,7 @@ pub unsafe extern "C" fn BotAIStartFrame(mut time: i32) -> i32 {
         //update entities in the botlib
         i = 0 as i32;
         while i < (1 as i32) << 10 as i32 {
-            ent = &mut *g_entities
-                .as_mut_ptr()
-                .offset(i as isize) as *mut gentity_t;
+            ent = &mut *g_entities.as_mut_ptr().offset(i as isize) as *mut gentity_t;
             if (*ent).inuse as u64 == 0 {
                 trap_BotLibUpdateEntity(i, 0 as *mut libc::c_void);
             } else if (*ent).r.linked as u64 == 0 {
@@ -3058,9 +2942,7 @@ pub unsafe extern "C" fn BotAIStartFrame(mut time: i32) -> i32 {
                 if trap_AAS_Initialized() == 0 {
                     return qfalse as i32;
                 }
-                if (*g_entities[i as usize].client)
-                    .pers
-                    .connected as u32
+                if (*g_entities[i as usize].client).pers.connected as u32
                     == CON_CONNECTED as i32 as u32
                 {
                     BotAI(i, thinktime as f32 / 1000 as i32 as f32);
@@ -3073,9 +2955,7 @@ pub unsafe extern "C" fn BotAIStartFrame(mut time: i32) -> i32 {
     i = 0 as i32;
     while i < 64 as i32 {
         if !(botstates[i as usize].is_null() || (*botstates[i as usize]).inuse == 0) {
-            if !((*g_entities[i as usize].client)
-                .pers
-                .connected as u32
+            if !((*g_entities[i as usize].client).pers.connected as u32
                 != CON_CONNECTED as i32 as u32)
             {
                 BotUpdateInput(botstates[i as usize], time, elapsed_time);
@@ -3438,10 +3318,7 @@ pub unsafe extern "C" fn BotAIShutdown(mut restart: i32) -> i32 {
         i = 0 as i32;
         while i < 64 as i32 {
             if !botstates[i as usize].is_null() && (*botstates[i as usize]).inuse != 0 {
-                BotAIShutdownClient(
-                    (*botstates[i as usize]).client,
-                    restart as qboolean,
-                );
+                BotAIShutdownClient((*botstates[i as usize]).client, restart as qboolean);
             }
             i += 1
         }

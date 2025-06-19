@@ -512,15 +512,13 @@ pub static mut chatField: field_t = field_t {
 };
 #[no_mangle]
 
-pub static mut chat_team: qboolean =
-    qfalse;
+pub static mut chat_team: qboolean = qfalse;
 #[no_mangle]
 
 pub static mut chat_playerNum: i32 = 0;
 #[no_mangle]
 
-pub static mut key_overstrikeMode: qboolean =
-    qfalse;
+pub static mut key_overstrikeMode: qboolean = qfalse;
 #[no_mangle]
 
 pub static mut anykeydown: i32 = 0;
@@ -2333,13 +2331,7 @@ pub unsafe extern "C" fn Field_VariableSizeDraw(
         );
     } else {
         // draw big string with drop shadow
-        SCR_DrawBigString(
-            x,
-            y,
-            str.as_mut_ptr(),
-            1.0f64 as f32,
-            noColorEscape,
-        );
+        SCR_DrawBigString(x, y, str.as_mut_ptr(), 1.0f64 as f32, noColorEscape);
     }
     // draw the cursor
     if showCursor as u64 != 0 {
@@ -2354,11 +2346,7 @@ pub unsafe extern "C" fn Field_VariableSizeDraw(
         }
         i = (drawLen as libc::c_ulong).wrapping_sub(crate::stdlib::strlen(str.as_mut_ptr())) as i32;
         if size == 8 as i32 {
-            SCR_DrawSmallChar(
-                x + ((*edit).cursor - prestep - i) * size,
-                y,
-                cursorChar,
-            );
+            SCR_DrawSmallChar(x + ((*edit).cursor - prestep - i) * size, y, cursorChar);
         } else {
             str[0 as i32 as usize] = cursorChar as libc::c_char;
             str[1 as i32 as usize] = 0 as i32 as libc::c_char;
@@ -2432,10 +2420,7 @@ Key events are used for non-printable characters, others are gotten from char ev
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Field_KeyDownEvent(
-    mut edit: *mut field_t,
-    mut key: i32,
-) {
+pub unsafe extern "C" fn Field_KeyDownEvent(mut edit: *mut field_t, mut key: i32) {
     let mut len: i32 = 0;
     // shift-insert is paste
     if (key == K_INS as i32 || key == K_KP_INS as i32)
@@ -2490,10 +2475,7 @@ pub unsafe extern "C" fn Field_KeyDownEvent(
         }
         143 => (*edit).cursor = 0 as i32,
         144 => (*edit).cursor = len,
-        139 => {
-            key_overstrikeMode =
-                (key_overstrikeMode as u64 == 0) as i32 as qboolean
-        }
+        139 => key_overstrikeMode = (key_overstrikeMode as u64 == 0) as i32 as qboolean,
         _ => {}
     }
     // Change scroll if cursor is no longer visible
@@ -2617,8 +2599,7 @@ pub unsafe extern "C" fn Console_Key(mut key: i32) {
     // enter finishes the line
     if key == K_ENTER as i32 || key == K_KP_ENTER as i32 {
         // if not in the game explicitly prepend a slash if needed
-        if clc.state as u32
-            != CA_ACTIVE as i32 as u32
+        if clc.state as u32 != CA_ACTIVE as i32 as u32
             && (*con_autochat).integer != 0
             && g_consoleField.buffer[0 as i32 as usize] as i32 != 0
             && g_consoleField.buffer[0 as i32 as usize] as i32 != '\\' as i32
@@ -2646,9 +2627,7 @@ pub unsafe extern "C" fn Console_Key(mut key: i32) {
         if g_consoleField.buffer[0 as i32 as usize] as i32 == '\\' as i32
             || g_consoleField.buffer[0 as i32 as usize] as i32 == '/' as i32
         {
-            Cbuf_AddText(
-                g_consoleField.buffer.as_mut_ptr().offset(1 as i32 as isize),
-            ); // valid command
+            Cbuf_AddText(g_consoleField.buffer.as_mut_ptr().offset(1 as i32 as isize)); // valid command
             Cbuf_AddText(b"\n\x00" as *const u8 as *const libc::c_char);
         } else if g_consoleField.buffer[0 as i32 as usize] == 0 {
             return;
@@ -2656,9 +2635,7 @@ pub unsafe extern "C" fn Console_Key(mut key: i32) {
         // empty lines just scroll the console without adding to history
         } else {
             if (*con_autochat).integer != 0 {
-                Cbuf_AddText(
-                    b"cmd say \x00" as *const u8 as *const libc::c_char,
-                );
+                Cbuf_AddText(b"cmd say \x00" as *const u8 as *const libc::c_char);
             }
             Cbuf_AddText(g_consoleField.buffer.as_mut_ptr());
             Cbuf_AddText(b"\n\x00" as *const u8 as *const libc::c_char);
@@ -2667,14 +2644,10 @@ pub unsafe extern "C" fn Console_Key(mut key: i32) {
         historyEditLines[(nextHistoryLine % 32 as i32) as usize] = g_consoleField; // may take some time
         nextHistoryLine += 1;
         historyLine = nextHistoryLine;
-        Field_Clear(
-            &mut g_consoleField as *mut _ as *mut field_t,
-        );
+        Field_Clear(&mut g_consoleField as *mut _ as *mut field_t);
         g_consoleField.widthInChars = g_console_field_width;
         CL_SaveConsoleHistory();
-        if clc.state as u32
-            == CA_DISCONNECTED as i32 as u32
-        {
+        if clc.state as u32 == CA_DISCONNECTED as i32 as u32 {
             SCR_UpdateScreen();
             // force an update, because the command
         }
@@ -2682,14 +2655,11 @@ pub unsafe extern "C" fn Console_Key(mut key: i32) {
     }
     // command completion
     if key == K_TAB as i32 {
-        Field_AutoComplete(
-            &mut g_consoleField as *mut _ as *mut field_t,
-        );
+        Field_AutoComplete(&mut g_consoleField as *mut _ as *mut field_t);
         return;
     }
     // command history (ctrl-p ctrl-n for unix style)
-    if key == K_MWHEELUP as i32
-        && keys[K_SHIFT as i32 as usize].down as u32 != 0
+    if key == K_MWHEELUP as i32 && keys[K_SHIFT as i32 as usize].down as u32 != 0
         || key == K_UPARROW as i32
         || key == K_KP_UPARROW as i32
         || ({
@@ -2718,8 +2688,7 @@ pub unsafe extern "C" fn Console_Key(mut key: i32) {
         g_consoleField = historyEditLines[(historyLine % 32 as i32) as usize];
         return;
     }
-    if key == K_MWHEELDOWN as i32
-        && keys[K_SHIFT as i32 as usize].down as u32 != 0
+    if key == K_MWHEELDOWN as i32 && keys[K_SHIFT as i32 as usize].down as u32 != 0
         || key == K_DOWNARROW as i32
         || key == K_KP_DOWNARROW as i32
         || ({
@@ -2745,9 +2714,7 @@ pub unsafe extern "C" fn Console_Key(mut key: i32) {
         historyLine += 1;
         if historyLine >= nextHistoryLine {
             historyLine = nextHistoryLine;
-            Field_Clear(
-                &mut g_consoleField as *mut _ as *mut field_t,
-            );
+            Field_Clear(&mut g_consoleField as *mut _ as *mut field_t);
             g_consoleField.widthInChars = g_console_field_width;
             return;
         }
@@ -2784,16 +2751,12 @@ pub unsafe extern "C" fn Console_Key(mut key: i32) {
         return;
     }
     // ctrl-home = top of console
-    if key == K_HOME as i32
-        && keys[K_CTRL as i32 as usize].down as u32 != 0
-    {
+    if key == K_HOME as i32 && keys[K_CTRL as i32 as usize].down as u32 != 0 {
         Con_Top();
         return;
     }
     // ctrl-end = bottom of console
-    if key == K_END as i32
-        && keys[K_CTRL as i32 as usize].down as u32 != 0
-    {
+    if key == K_END as i32 && keys[K_CTRL as i32 as usize].down as u32 != 0 {
         Con_Bottom();
         return;
     }
@@ -2814,15 +2777,12 @@ pub unsafe extern "C" fn Message_Key(mut key: i32) {
     let mut buffer: [libc::c_char; 1024] = [0; 1024];
     if key == K_ESCAPE as i32 {
         Key_SetCatcher(Key_GetCatcher() & !(0x4 as i32));
-        Field_Clear(
-            &mut chatField as *mut _ as *mut field_t,
-        );
+        Field_Clear(&mut chatField as *mut _ as *mut field_t);
         return;
     }
     if key == K_ENTER as i32 || key == K_KP_ENTER as i32 {
         if chatField.buffer[0 as i32 as usize] as i32 != 0
-            && clc.state as u32
-                == CA_ACTIVE as i32 as u32
+            && clc.state as u32 == CA_ACTIVE as i32 as u32
         {
             if chat_playerNum != -(1 as i32) {
                 Com_sprintf(
@@ -2847,15 +2807,10 @@ pub unsafe extern "C" fn Message_Key(mut key: i32) {
                     chatField.buffer.as_mut_ptr(),
                 );
             }
-            CL_AddReliableCommand(
-                buffer.as_mut_ptr(),
-                qfalse,
-            );
+            CL_AddReliableCommand(buffer.as_mut_ptr(), qfalse);
         }
         Key_SetCatcher(Key_GetCatcher() & !(0x4 as i32));
-        Field_Clear(
-            &mut chatField as *mut _ as *mut field_t,
-        );
+        Field_Clear(&mut chatField as *mut _ as *mut field_t);
         return;
     }
     Field_KeyDownEvent(&mut chatField, key);
@@ -2920,8 +2875,8 @@ pub unsafe extern "C" fn Key_StringToKeynum(mut str: *mut libc::c_char) -> i32 {
                     __res = tolower(*str.offset(0 as i32 as isize) as i32)
                 }
             } else {
-                __res = *(*__ctype_tolower_loc())
-                    .offset(*str.offset(0 as i32 as isize) as i32 as isize)
+                __res =
+                    *(*__ctype_tolower_loc()).offset(*str.offset(0 as i32 as isize) as i32 as isize)
             }
             __res
         };
@@ -3041,8 +2996,7 @@ pub unsafe extern "C" fn Key_GetKey(mut binding: *const libc::c_char) -> i32 {
         i = 0 as i32;
         while i < MAX_KEYS as i32 {
             if !keys[i as usize].binding.is_null()
-                && Q_stricmp(binding, keys[i as usize].binding)
-                    == 0 as i32
+                && Q_stricmp(binding, keys[i as usize].binding) == 0 as i32
             {
                 return i;
             }
@@ -3165,10 +3119,7 @@ Writes lines containing "bind key value"
 
 pub unsafe extern "C" fn Key_WriteBindings(mut f: fileHandle_t) {
     let mut i: i32 = 0;
-    FS_Printf(
-        f,
-        b"unbindall\n\x00" as *const u8 as *const libc::c_char,
-    );
+    FS_Printf(f, b"unbindall\n\x00" as *const u8 as *const libc::c_char);
     i = 0 as i32;
     while i < MAX_KEYS as i32 {
         if !keys[i as usize].binding.is_null()
@@ -3284,11 +3235,7 @@ unsafe extern "C" fn Key_CompleteBind(mut args: *mut libc::c_char, mut argNum: i
             b" \x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         );
         if p > args {
-            Field_CompleteCommand(
-                p,
-                qtrue,
-                qtrue,
-            );
+            Field_CompleteCommand(p, qtrue, qtrue);
         }
     };
 }
@@ -3334,9 +3281,7 @@ Returns qtrue if bind command should be executed while user interface is shown
 ===================
 */
 
-unsafe extern "C" fn CL_BindUICommand(
-    mut cmd: *const libc::c_char,
-) -> qboolean {
+unsafe extern "C" fn CL_BindUICommand(mut cmd: *const libc::c_char) -> qboolean {
     if Key_GetCatcher() & 0x1 as i32 != 0 {
         return qfalse;
     }
@@ -3347,11 +3292,7 @@ unsafe extern "C" fn CL_BindUICommand(
     {
         return qtrue;
     }
-    if Q_stricmp(
-        cmd,
-        b"togglemenu\x00" as *const u8 as *const libc::c_char,
-    ) == 0
-    {
+    if Q_stricmp(cmd, b"togglemenu\x00" as *const u8 as *const libc::c_char) == 0 {
         return qtrue;
     }
     return qfalse;
@@ -3365,22 +3306,13 @@ Execute the commands in the bind string
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_ParseBinding(
-    mut key: i32,
-    mut down: qboolean,
-    mut time: u32,
-) {
+pub unsafe extern "C" fn CL_ParseBinding(mut key: i32, mut down: qboolean, mut time: u32) {
     let mut buf: [libc::c_char; 1024] = [0; 1024];
     let mut p: *mut libc::c_char = buf.as_mut_ptr();
     let mut end: *mut libc::c_char = 0 as *mut libc::c_char;
-    let mut allCommands: qboolean =
-        qfalse;
-    let mut allowUpCmds: qboolean =
-        qfalse;
-    if clc.state as u32
-        == CA_DISCONNECTED as i32 as u32
-        && Key_GetCatcher() == 0 as i32
-    {
+    let mut allCommands: qboolean = qfalse;
+    let mut allowUpCmds: qboolean = qfalse;
+    if clc.state as u32 == CA_DISCONNECTED as i32 as u32 && Key_GetCatcher() == 0 as i32 {
         return;
     }
     if keys[key as usize].binding.is_null()
@@ -3396,12 +3328,9 @@ pub unsafe extern "C" fn CL_ParseBinding(
     // run all bind commands if console, ui, etc aren't reading keys
     allCommands = (Key_GetCatcher() == 0 as i32) as i32 as qboolean;
     // allow button up commands if in game even if key catcher is set
-    allowUpCmds = (clc.state as u32
-        != CA_DISCONNECTED as i32 as u32) as i32
-        as qboolean;
+    allowUpCmds = (clc.state as u32 != CA_DISCONNECTED as i32 as u32) as i32 as qboolean;
     loop {
-        while *(*__ctype_b_loc()).offset(*p as i32 as isize) as i32
-            & _ISspace as i32 as u16 as i32
+        while *(*__ctype_b_loc()).offset(*p as i32 as isize) as i32 & _ISspace as i32 as u16 as i32
             != 0
         {
             p = p.offset(1)
@@ -3435,9 +3364,7 @@ pub unsafe extern "C" fn CL_ParseBinding(
             // normal commands only execute on key press
             if allCommands as u32 != 0 || CL_BindUICommand(p) as u32 != 0 {
                 Cbuf_AddText(p);
-                Cbuf_AddText(
-                    b"\n\x00" as *const u8 as *const libc::c_char,
-                );
+                Cbuf_AddText(b"\n\x00" as *const u8 as *const libc::c_char);
             }
         }
         if end.is_null() {
@@ -3461,25 +3388,21 @@ pub unsafe extern "C" fn CL_KeyDownEvent(mut key: i32, mut time: u32) {
     if keys[key as usize].repeats == 1 as i32 {
         anykeydown += 1
     }
-    if keys[K_ALT as i32 as usize].down as u32 != 0
-        && key == K_ENTER as i32
-    {
+    if keys[K_ALT as i32 as usize].down as u32 != 0 && key == K_ENTER as i32 {
         // don't repeat fullscreen toggle when keys are held down
         if keys[K_ENTER as i32 as usize].repeats > 1 as i32 {
             return;
         }
         Cvar_SetValue(
             b"r_fullscreen\x00" as *const u8 as *const libc::c_char,
-            (Cvar_VariableIntegerValue(
-                b"r_fullscreen\x00" as *const u8 as *const libc::c_char,
-            ) == 0) as i32 as f32,
+            (Cvar_VariableIntegerValue(b"r_fullscreen\x00" as *const u8 as *const libc::c_char)
+                == 0) as i32 as f32,
         );
         return;
     }
     // console key is hardcoded, so the user can never unbind it
     if key == K_CONSOLE as i32
-        || keys[K_SHIFT as i32 as usize].down as u32 != 0
-            && key == K_ESCAPE as i32
+        || keys[K_SHIFT as i32 as usize].down as u32 != 0 && key == K_ESCAPE as i32
     {
         Con_ToggleConsole_f();
         Key_ClearStates();
@@ -3487,14 +3410,11 @@ pub unsafe extern "C" fn CL_KeyDownEvent(mut key: i32, mut time: u32) {
     }
     // keys can still be used for bound actions
     if (key < 128 as i32 || key == K_MOUSE1 as i32)
-        && (clc.demoplaying as u32 != 0
-            || clc.state as u32
-                == CA_CINEMATIC as i32 as u32)
+        && (clc.demoplaying as u32 != 0 || clc.state as u32 == CA_CINEMATIC as i32 as u32)
         && Key_GetCatcher() == 0 as i32
     {
-        if Cvar_VariableValue(
-            b"com_cameraMode\x00" as *const u8 as *const libc::c_char,
-        ) == 0 as i32 as f32
+        if Cvar_VariableValue(b"com_cameraMode\x00" as *const u8 as *const libc::c_char)
+            == 0 as i32 as f32
         {
             Cvar_Set(
                 b"nextdemo\x00" as *const u8 as *const libc::c_char,
@@ -3513,42 +3433,20 @@ pub unsafe extern "C" fn CL_KeyDownEvent(mut key: i32, mut time: u32) {
         // escape always gets out of CGAME stuff
         if Key_GetCatcher() & 0x8 as i32 != 0 {
             Key_SetCatcher(Key_GetCatcher() & !(0x8 as i32));
-            VM_Call(
-                cgvm,
-                CG_EVENT_HANDLING as i32,
-                CGAME_EVENT_NONE as i32,
-            );
+            VM_Call(cgvm, CG_EVENT_HANDLING as i32, CGAME_EVENT_NONE as i32);
             return;
         }
         if Key_GetCatcher() & 0x2 as i32 == 0 {
-            if clc.state as u32
-                == CA_ACTIVE as i32 as u32
-                && clc.demoplaying as u64 == 0
-            {
-                VM_Call(
-                    uivm,
-                    UI_SET_ACTIVE_MENU as i32,
-                    UIMENU_INGAME as i32,
-                );
-            } else if clc.state as u32
-                != CA_DISCONNECTED as i32 as u32
-            {
+            if clc.state as u32 == CA_ACTIVE as i32 as u32 && clc.demoplaying as u64 == 0 {
+                VM_Call(uivm, UI_SET_ACTIVE_MENU as i32, UIMENU_INGAME as i32);
+            } else if clc.state as u32 != CA_DISCONNECTED as i32 as u32 {
                 CL_Disconnect_f();
                 crate::src::client::snd_main::S_StopAllSounds();
-                VM_Call(
-                    uivm,
-                    UI_SET_ACTIVE_MENU as i32,
-                    UIMENU_MAIN as i32,
-                );
+                VM_Call(uivm, UI_SET_ACTIVE_MENU as i32, UIMENU_MAIN as i32);
             }
             return;
         }
-        VM_Call(
-            uivm,
-            UI_KEY_EVENT as i32,
-            key,
-            qtrue as i32,
-        );
+        VM_Call(uivm, UI_KEY_EVENT as i32, key, qtrue as i32);
         return;
     }
     // send the bound action
@@ -3558,27 +3456,15 @@ pub unsafe extern "C" fn CL_KeyDownEvent(mut key: i32, mut time: u32) {
         Console_Key(key);
     } else if Key_GetCatcher() & 0x2 as i32 != 0 {
         if !uivm.is_null() {
-            VM_Call(
-                uivm,
-                UI_KEY_EVENT as i32,
-                key,
-                qtrue as i32,
-            );
+            VM_Call(uivm, UI_KEY_EVENT as i32, key, qtrue as i32);
         }
     } else if Key_GetCatcher() & 0x8 as i32 != 0 {
         if !cgvm.is_null() {
-            VM_Call(
-                cgvm,
-                CG_KEY_EVENT as i32,
-                key,
-                qtrue as i32,
-            );
+            VM_Call(cgvm, CG_KEY_EVENT as i32, key, qtrue as i32);
         }
     } else if Key_GetCatcher() & 0x4 as i32 != 0 {
         Message_Key(key);
-    } else if clc.state as u32
-        == CA_DISCONNECTED as i32 as u32
-    {
+    } else if clc.state as u32 == CA_DISCONNECTED as i32 as u32 {
         Console_Key(key);
     };
 }
@@ -3600,8 +3486,7 @@ pub unsafe extern "C" fn CL_KeyUpEvent(mut key: i32, mut time: u32) {
     }
     // don't process key-up events for the console key
     if key == K_CONSOLE as i32
-        || key == K_ESCAPE as i32
-            && keys[K_SHIFT as i32 as usize].down as u32 != 0
+        || key == K_ESCAPE as i32 && keys[K_SHIFT as i32 as usize].down as u32 != 0
     {
         return;
     }
@@ -3613,19 +3498,9 @@ pub unsafe extern "C" fn CL_KeyUpEvent(mut key: i32, mut time: u32) {
     //
     CL_ParseBinding(key, qfalse, time);
     if Key_GetCatcher() & 0x2 as i32 != 0 && !uivm.is_null() {
-        VM_Call(
-            uivm,
-            UI_KEY_EVENT as i32,
-            key,
-            qfalse as i32,
-        );
+        VM_Call(uivm, UI_KEY_EVENT as i32, key, qfalse as i32);
     } else if Key_GetCatcher() & 0x8 as i32 != 0 && !cgvm.is_null() {
-        VM_Call(
-            cgvm,
-            CG_KEY_EVENT as i32,
-            key,
-            qfalse as i32,
-        );
+        VM_Call(cgvm, CG_KEY_EVENT as i32, key, qfalse as i32);
     };
 }
 /*
@@ -3637,11 +3512,7 @@ Called by the system for both key up and key down events
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CL_KeyEvent(
-    mut key: i32,
-    mut down: qboolean,
-    mut time: u32,
-) {
+pub unsafe extern "C" fn CL_KeyEvent(mut key: i32, mut down: qboolean, mut time: u32) {
     if down as u64 != 0 {
         CL_KeyDownEvent(key, time);
     } else {
@@ -3991,17 +3862,10 @@ pub unsafe extern "C" fn CL_CharEvent(mut key: i32) {
     if Key_GetCatcher() & 0x1 as i32 != 0 {
         Field_CharEvent(&mut g_consoleField, key);
     } else if Key_GetCatcher() & 0x2 as i32 != 0 {
-        VM_Call(
-            uivm,
-            UI_KEY_EVENT as i32,
-            key | 1024 as i32,
-            qtrue as i32,
-        );
+        VM_Call(uivm, UI_KEY_EVENT as i32, key | 1024 as i32, qtrue as i32);
     } else if Key_GetCatcher() & 0x4 as i32 != 0 {
         Field_CharEvent(&mut chatField, key);
-    } else if clc.state as u32
-        == CA_DISCONNECTED as i32 as u32
-    {
+    } else if clc.state as u32 == CA_DISCONNECTED as i32 as u32 {
         Field_CharEvent(&mut g_consoleField, key);
     };
 }
@@ -4172,20 +4036,18 @@ pub unsafe extern "C" fn CL_LoadConsoleHistory() {
             }
         }
         crate::stdlib::memmove(
-            &mut *historyEditLines.as_mut_ptr().offset(0 as i32 as isize)
-                as *mut field_t as *mut libc::c_void,
+            &mut *historyEditLines.as_mut_ptr().offset(0 as i32 as isize) as *mut field_t
+                as *mut libc::c_void,
             &mut *historyEditLines
                 .as_mut_ptr()
-                .offset((i + 1 as i32) as isize) as *mut field_t
-                as *const libc::c_void,
+                .offset((i + 1 as i32) as isize) as *mut field_t as *const libc::c_void,
             (numLines as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<field_t>() as libc::c_ulong),
         );
         i = numLines;
         while i < 32 as i32 {
             Field_Clear(
-                &mut *historyEditLines.as_mut_ptr().offset(i as isize) as *mut _
-                    as *mut field_t,
+                &mut *historyEditLines.as_mut_ptr().offset(i as isize) as *mut _ as *mut field_t,
             );
             i += 1
         }
@@ -4434,9 +4296,7 @@ pub unsafe extern "C" fn CL_SaveConsoleHistory() {
         }
     }
     consoleSaveBufferSize = crate::stdlib::strlen(consoleSaveBuffer.as_mut_ptr()) as i32;
-    f = FS_FOpenFileWrite(
-        b"q3history\x00" as *const u8 as *const libc::c_char,
-    );
+    f = FS_FOpenFileWrite(b"q3history\x00" as *const u8 as *const libc::c_char);
     if f == 0 {
         Com_Printf(
             b"Couldn\'t write %s.\n\x00" as *const u8 as *const libc::c_char,

@@ -134,9 +134,7 @@ pub use crate::src::qcommon::q_shared::vec_t;
 pub use crate::src::qcommon::q_shared::C2RustUnnamed_0;
 #[no_mangle]
 
-pub unsafe extern "C" fn PM_SlideMove(
-    mut gravity: qboolean,
-) -> qboolean {
+pub unsafe extern "C" fn PM_SlideMove(mut gravity: qboolean) -> qboolean {
     let mut bumpcount: i32 = 0;
     let mut numbumps: i32 = 0;
     let mut dir: vec3_t = [0.; 3];
@@ -148,63 +146,46 @@ pub unsafe extern "C" fn PM_SlideMove(
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     let mut end: vec3_t = [0.; 3];
     let mut time_left: f32 = 0.;
     let mut into: f32 = 0.;
     let mut endVelocity: vec3_t = [0.; 3];
     let mut endClipVelocity: vec3_t = [0.; 3];
     numbumps = 4 as i32;
-    primal_velocity[0 as i32 as usize] =
-        (*(*pm).ps).velocity[0 as i32 as usize];
-    primal_velocity[1 as i32 as usize] =
-        (*(*pm).ps).velocity[1 as i32 as usize];
-    primal_velocity[2 as i32 as usize] =
-        (*(*pm).ps).velocity[2 as i32 as usize];
+    primal_velocity[0 as i32 as usize] = (*(*pm).ps).velocity[0 as i32 as usize];
+    primal_velocity[1 as i32 as usize] = (*(*pm).ps).velocity[1 as i32 as usize];
+    primal_velocity[2 as i32 as usize] = (*(*pm).ps).velocity[2 as i32 as usize];
     if gravity as u64 != 0 {
-        endVelocity[0 as i32 as usize] =
-            (*(*pm).ps).velocity[0 as i32 as usize];
-        endVelocity[1 as i32 as usize] =
-            (*(*pm).ps).velocity[1 as i32 as usize];
-        endVelocity[2 as i32 as usize] =
-            (*(*pm).ps).velocity[2 as i32 as usize];
-        endVelocity[2 as i32 as usize] -= (*(*pm).ps).gravity as f32
-            * pml.frametime;
+        endVelocity[0 as i32 as usize] = (*(*pm).ps).velocity[0 as i32 as usize];
+        endVelocity[1 as i32 as usize] = (*(*pm).ps).velocity[1 as i32 as usize];
+        endVelocity[2 as i32 as usize] = (*(*pm).ps).velocity[2 as i32 as usize];
+        endVelocity[2 as i32 as usize] -= (*(*pm).ps).gravity as f32 * pml.frametime;
         (*(*pm).ps).velocity[2 as i32 as usize] =
-            (((*(*pm).ps).velocity[2 as i32 as usize]
-                + endVelocity[2 as i32 as usize]) as f64
+            (((*(*pm).ps).velocity[2 as i32 as usize] + endVelocity[2 as i32 as usize]) as f64
                 * 0.5f64) as vec_t;
         primal_velocity[2 as i32 as usize] = endVelocity[2 as i32 as usize];
         if pml.groundPlane as u64 != 0 {
             // slide along the ground plane
             PM_ClipVelocity(
-                (*(*pm).ps)
-                    .velocity
-                    .as_mut_ptr(),
-                pml
-                    .groundTrace
-                    .plane
-                    .normal
-                    .as_mut_ptr(),
-                (*(*pm).ps)
-                    .velocity
-                    .as_mut_ptr(),
+                (*(*pm).ps).velocity.as_mut_ptr(),
+                pml.groundTrace.plane.normal.as_mut_ptr(),
+                (*(*pm).ps).velocity.as_mut_ptr(),
                 1.001f32,
             );
         }
@@ -224,9 +205,7 @@ pub unsafe extern "C" fn PM_SlideMove(
     }
     // never turn against original velocity
     VectorNormalize2(
-        (*(*pm).ps)
-            .velocity
-            .as_mut_ptr() as *const vec_t,
+        (*(*pm).ps).velocity.as_mut_ptr() as *const vec_t,
         planes[numplanes as usize].as_mut_ptr(),
     );
     numplanes += 1;
@@ -240,34 +219,25 @@ pub unsafe extern "C" fn PM_SlideMove(
         end[2 as i32 as usize] = (*(*pm).ps).origin[2 as i32 as usize]
             + (*(*pm).ps).velocity[2 as i32 as usize] * time_left;
         // see if we can make it there
-        (*pm)
-            .trace
-            .expect("non-null function pointer")(
+        (*pm).trace.expect("non-null function pointer")(
             &mut trace,
-            (*(*pm).ps).origin.as_mut_ptr()
-                as *const vec_t,
-            (*pm).mins.as_mut_ptr()
-                as *const vec_t,
-            (*pm).maxs.as_mut_ptr()
-                as *const vec_t,
+            (*(*pm).ps).origin.as_mut_ptr() as *const vec_t,
+            (*pm).mins.as_mut_ptr() as *const vec_t,
+            (*pm).maxs.as_mut_ptr() as *const vec_t,
             end.as_mut_ptr() as *const vec_t,
             (*(*pm).ps).clientNum,
             (*pm).tracemask,
         );
         if trace.allsolid as u64 != 0 {
             // entity is completely trapped in another solid
-            (*(*pm).ps).velocity[2 as i32 as usize] =
-                0 as i32 as vec_t; // don't build up falling damage, but allow sideways acceleration
+            (*(*pm).ps).velocity[2 as i32 as usize] = 0 as i32 as vec_t; // don't build up falling damage, but allow sideways acceleration
             return qtrue;
         }
         if trace.fraction > 0 as i32 as f32 {
             // actually covered some distance
-            (*(*pm).ps).origin[0 as i32 as usize] =
-                trace.endpos[0 as i32 as usize];
-            (*(*pm).ps).origin[1 as i32 as usize] =
-                trace.endpos[1 as i32 as usize];
-            (*(*pm).ps).origin[2 as i32 as usize] =
-                trace.endpos[2 as i32 as usize]
+            (*(*pm).ps).origin[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
+            (*(*pm).ps).origin[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
+            (*(*pm).ps).origin[2 as i32 as usize] = trace.endpos[2 as i32 as usize]
         }
         if trace.fraction == 1 as i32 as f32 {
             break;
@@ -277,12 +247,9 @@ pub unsafe extern "C" fn PM_SlideMove(
         time_left -= time_left * trace.fraction;
         if numplanes >= 5 as i32 {
             // this shouldn't really happen
-            (*(*pm).ps).velocity[2 as i32 as usize] =
-                0 as i32 as vec_t;
-            (*(*pm).ps).velocity[1 as i32 as usize] =
-                (*(*pm).ps).velocity[2 as i32 as usize];
-            (*(*pm).ps).velocity[0 as i32 as usize] =
-                (*(*pm).ps).velocity[1 as i32 as usize];
+            (*(*pm).ps).velocity[2 as i32 as usize] = 0 as i32 as vec_t;
+            (*(*pm).ps).velocity[1 as i32 as usize] = (*(*pm).ps).velocity[2 as i32 as usize];
+            (*(*pm).ps).velocity[0 as i32 as usize] = (*(*pm).ps).velocity[1 as i32 as usize];
             return qtrue;
         }
         //
@@ -299,14 +266,11 @@ pub unsafe extern "C" fn PM_SlideMove(
                 > 0.99f64
             {
                 (*(*pm).ps).velocity[0 as i32 as usize] =
-                    trace.plane.normal[0 as i32 as usize]
-                        + (*(*pm).ps).velocity[0 as i32 as usize];
+                    trace.plane.normal[0 as i32 as usize] + (*(*pm).ps).velocity[0 as i32 as usize];
                 (*(*pm).ps).velocity[1 as i32 as usize] =
-                    trace.plane.normal[1 as i32 as usize]
-                        + (*(*pm).ps).velocity[1 as i32 as usize];
+                    trace.plane.normal[1 as i32 as usize] + (*(*pm).ps).velocity[1 as i32 as usize];
                 (*(*pm).ps).velocity[2 as i32 as usize] =
-                    trace.plane.normal[2 as i32 as usize]
-                        + (*(*pm).ps).velocity[2 as i32 as usize];
+                    trace.plane.normal[2 as i32 as usize] + (*(*pm).ps).velocity[2 as i32 as usize];
                 break;
             } else {
                 i += 1
@@ -339,9 +303,7 @@ pub unsafe extern "C" fn PM_SlideMove(
                     }
                     // slide along the plane
                     PM_ClipVelocity(
-                        (*(*pm).ps)
-                            .velocity
-                            .as_mut_ptr(),
+                        (*(*pm).ps).velocity.as_mut_ptr(),
                         planes[i as usize].as_mut_ptr(),
                         clipVelocity.as_mut_ptr(),
                         1.001f32,
@@ -394,36 +356,27 @@ pub unsafe extern "C" fn PM_SlideMove(
                                 {
                                     // slide the original velocity along the crease
                                     CrossProduct(
-                                        planes[i as usize].as_mut_ptr()
-                                            as *const vec_t,
-                                        planes[j as usize].as_mut_ptr()
-                                            as *const vec_t,
+                                        planes[i as usize].as_mut_ptr() as *const vec_t,
+                                        planes[j as usize].as_mut_ptr() as *const vec_t,
                                         dir.as_mut_ptr(),
                                     );
                                     VectorNormalize(dir.as_mut_ptr());
                                     d = dir[0 as i32 as usize]
-                                        * (*(*pm).ps).velocity
-                                            [0 as i32 as usize]
+                                        * (*(*pm).ps).velocity[0 as i32 as usize]
                                         + dir[1 as i32 as usize]
-                                            * (*(*pm).ps).velocity
-                                                [1 as i32 as usize]
+                                            * (*(*pm).ps).velocity[1 as i32 as usize]
                                         + dir[2 as i32 as usize]
-                                            * (*(*pm).ps).velocity
-                                                [2 as i32 as usize];
+                                            * (*(*pm).ps).velocity[2 as i32 as usize];
                                     clipVelocity[0 as i32 as usize] = dir[0 as i32 as usize] * d;
                                     clipVelocity[1 as i32 as usize] = dir[1 as i32 as usize] * d;
                                     clipVelocity[2 as i32 as usize] = dir[2 as i32 as usize] * d;
                                     if gravity as u64 != 0 {
                                         CrossProduct(
-                                            planes[i as usize].as_mut_ptr()
-                                                as *const vec_t,
-                                            planes[j as usize].as_mut_ptr()
-                                                as *const vec_t,
+                                            planes[i as usize].as_mut_ptr() as *const vec_t,
+                                            planes[j as usize].as_mut_ptr() as *const vec_t,
                                             dir.as_mut_ptr(),
                                         );
-                                        VectorNormalize(
-                                            dir.as_mut_ptr(),
-                                        );
+                                        VectorNormalize(dir.as_mut_ptr());
                                         d = dir[0 as i32 as usize] * endVelocity[0 as i32 as usize]
                                             + dir[1 as i32 as usize]
                                                 * endVelocity[1 as i32 as usize]
@@ -450,19 +403,12 @@ pub unsafe extern "C" fn PM_SlideMove(
                                                 >= 0.1f64)
                                             {
                                                 // stop dead at a tripple plane interaction
-                                                (*(*pm).ps).velocity
-                                                    [2 as i32 as usize] = 0 as i32
-                                                    as vec_t;
-                                                (*(*pm).ps).velocity
-                                                    [1 as i32 as usize] =
-                                                    (*(*pm).ps)
-                                                        .velocity
-                                                        [2 as i32 as usize];
-                                                (*(*pm).ps).velocity
-                                                    [0 as i32 as usize] =
-                                                    (*(*pm).ps)
-                                                        .velocity
-                                                        [1 as i32 as usize];
+                                                (*(*pm).ps).velocity[2 as i32 as usize] =
+                                                    0 as i32 as vec_t;
+                                                (*(*pm).ps).velocity[1 as i32 as usize] =
+                                                    (*(*pm).ps).velocity[2 as i32 as usize];
+                                                (*(*pm).ps).velocity[0 as i32 as usize] =
+                                                    (*(*pm).ps).velocity[1 as i32 as usize];
                                                 return qtrue;
                                             }
                                         }
@@ -476,12 +422,9 @@ pub unsafe extern "C" fn PM_SlideMove(
                         // move doesn't interact with the plane
                     }
                     // if we have fixed all interactions, try another move
-                    (*(*pm).ps).velocity[0 as i32 as usize] =
-                        clipVelocity[0 as i32 as usize];
-                    (*(*pm).ps).velocity[1 as i32 as usize] =
-                        clipVelocity[1 as i32 as usize];
-                    (*(*pm).ps).velocity[2 as i32 as usize] =
-                        clipVelocity[2 as i32 as usize];
+                    (*(*pm).ps).velocity[0 as i32 as usize] = clipVelocity[0 as i32 as usize];
+                    (*(*pm).ps).velocity[1 as i32 as usize] = clipVelocity[1 as i32 as usize];
+                    (*(*pm).ps).velocity[2 as i32 as usize] = clipVelocity[2 as i32 as usize];
                     if gravity as u64 != 0 {
                         endVelocity[0 as i32 as usize] = endClipVelocity[0 as i32 as usize];
                         endVelocity[1 as i32 as usize] = endClipVelocity[1 as i32 as usize];
@@ -494,21 +437,15 @@ pub unsafe extern "C" fn PM_SlideMove(
         bumpcount += 1
     }
     if gravity as u64 != 0 {
-        (*(*pm).ps).velocity[0 as i32 as usize] =
-            endVelocity[0 as i32 as usize];
-        (*(*pm).ps).velocity[1 as i32 as usize] =
-            endVelocity[1 as i32 as usize];
-        (*(*pm).ps).velocity[2 as i32 as usize] =
-            endVelocity[2 as i32 as usize]
+        (*(*pm).ps).velocity[0 as i32 as usize] = endVelocity[0 as i32 as usize];
+        (*(*pm).ps).velocity[1 as i32 as usize] = endVelocity[1 as i32 as usize];
+        (*(*pm).ps).velocity[2 as i32 as usize] = endVelocity[2 as i32 as usize]
     }
     // don't change velocity if in a timer (FIXME: is this correct?)
     if (*(*pm).ps).pm_time != 0 {
-        (*(*pm).ps).velocity[0 as i32 as usize] =
-            primal_velocity[0 as i32 as usize];
-        (*(*pm).ps).velocity[1 as i32 as usize] =
-            primal_velocity[1 as i32 as usize];
-        (*(*pm).ps).velocity[2 as i32 as usize] =
-            primal_velocity[2 as i32 as usize]
+        (*(*pm).ps).velocity[0 as i32 as usize] = primal_velocity[0 as i32 as usize];
+        (*(*pm).ps).velocity[1 as i32 as usize] = primal_velocity[1 as i32 as usize];
+        (*(*pm).ps).velocity[2 as i32 as usize] = primal_velocity[2 as i32 as usize]
     }
     return (bumpcount != 0 as i32) as i32 as qboolean;
 }
@@ -524,23 +461,22 @@ pub unsafe extern "C" fn PM_StepSlideMove(mut gravity: qboolean) {
     let mut start_o: vec3_t = [0.; 3];
     let mut start_v: vec3_t = [0.; 3];
     //	vec3_t		down_o, down_v;
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     //	float		down_dist, up_dist;
     //	vec3_t		delta, delta2;
     let mut up: vec3_t = [0.; 3];
@@ -549,12 +485,9 @@ pub unsafe extern "C" fn PM_StepSlideMove(mut gravity: qboolean) {
     start_o[0 as i32 as usize] = (*(*pm).ps).origin[0 as i32 as usize];
     start_o[1 as i32 as usize] = (*(*pm).ps).origin[1 as i32 as usize];
     start_o[2 as i32 as usize] = (*(*pm).ps).origin[2 as i32 as usize];
-    start_v[0 as i32 as usize] =
-        (*(*pm).ps).velocity[0 as i32 as usize];
-    start_v[1 as i32 as usize] =
-        (*(*pm).ps).velocity[1 as i32 as usize];
-    start_v[2 as i32 as usize] =
-        (*(*pm).ps).velocity[2 as i32 as usize];
+    start_v[0 as i32 as usize] = (*(*pm).ps).velocity[0 as i32 as usize];
+    start_v[1 as i32 as usize] = (*(*pm).ps).velocity[1 as i32 as usize];
+    start_v[2 as i32 as usize] = (*(*pm).ps).velocity[2 as i32 as usize];
     if PM_SlideMove(gravity) as u32 == 0 as i32 as u32 {
         return;
         // we got exactly where we wanted to go first try
@@ -563,15 +496,11 @@ pub unsafe extern "C" fn PM_StepSlideMove(mut gravity: qboolean) {
     down[1 as i32 as usize] = start_o[1 as i32 as usize];
     down[2 as i32 as usize] = start_o[2 as i32 as usize];
     down[2 as i32 as usize] -= 18 as i32 as f32;
-    (*pm)
-        .trace
-        .expect("non-null function pointer")(
+    (*pm).trace.expect("non-null function pointer")(
         &mut trace,
         start_o.as_mut_ptr() as *const vec_t,
-        (*pm).mins.as_mut_ptr()
-            as *const vec_t,
-        (*pm).maxs.as_mut_ptr()
-            as *const vec_t,
+        (*pm).mins.as_mut_ptr() as *const vec_t,
+        (*pm).maxs.as_mut_ptr() as *const vec_t,
         down.as_mut_ptr() as *const vec_t,
         (*(*pm).ps).clientNum,
         (*pm).tracemask,
@@ -597,15 +526,11 @@ pub unsafe extern "C" fn PM_StepSlideMove(mut gravity: qboolean) {
     up[2 as i32 as usize] = start_o[2 as i32 as usize];
     up[2 as i32 as usize] += 18 as i32 as f32;
     // test the player position if they were a stepheight higher
-    (*pm)
-        .trace
-        .expect("non-null function pointer")(
+    (*pm).trace.expect("non-null function pointer")(
         &mut trace,
         start_o.as_mut_ptr() as *const vec_t,
-        (*pm).mins.as_mut_ptr()
-            as *const vec_t,
-        (*pm).maxs.as_mut_ptr()
-            as *const vec_t,
+        (*pm).mins.as_mut_ptr() as *const vec_t,
+        (*pm).maxs.as_mut_ptr() as *const vec_t,
         up.as_mut_ptr() as *const vec_t,
         (*(*pm).ps).clientNum,
         (*pm).tracemask,
@@ -622,62 +547,43 @@ pub unsafe extern "C" fn PM_StepSlideMove(mut gravity: qboolean) {
     }
     stepSize = trace.endpos[2 as i32 as usize] - start_o[2 as i32 as usize];
     // try slidemove from this position
-    (*(*pm).ps).origin[0 as i32 as usize] =
-        trace.endpos[0 as i32 as usize];
-    (*(*pm).ps).origin[1 as i32 as usize] =
-        trace.endpos[1 as i32 as usize];
-    (*(*pm).ps).origin[2 as i32 as usize] =
-        trace.endpos[2 as i32 as usize];
-    (*(*pm).ps).velocity[0 as i32 as usize] =
-        start_v[0 as i32 as usize];
-    (*(*pm).ps).velocity[1 as i32 as usize] =
-        start_v[1 as i32 as usize];
-    (*(*pm).ps).velocity[2 as i32 as usize] =
-        start_v[2 as i32 as usize];
+    (*(*pm).ps).origin[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
+    (*(*pm).ps).origin[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
+    (*(*pm).ps).origin[2 as i32 as usize] = trace.endpos[2 as i32 as usize];
+    (*(*pm).ps).velocity[0 as i32 as usize] = start_v[0 as i32 as usize];
+    (*(*pm).ps).velocity[1 as i32 as usize] = start_v[1 as i32 as usize];
+    (*(*pm).ps).velocity[2 as i32 as usize] = start_v[2 as i32 as usize];
     PM_SlideMove(gravity);
     // push down the final amount
     down[0 as i32 as usize] = (*(*pm).ps).origin[0 as i32 as usize];
     down[1 as i32 as usize] = (*(*pm).ps).origin[1 as i32 as usize];
     down[2 as i32 as usize] = (*(*pm).ps).origin[2 as i32 as usize];
     down[2 as i32 as usize] -= stepSize;
-    (*pm)
-        .trace
-        .expect("non-null function pointer")(
+    (*pm).trace.expect("non-null function pointer")(
         &mut trace,
-        (*(*pm).ps).origin.as_mut_ptr()
-            as *const vec_t,
-        (*pm).mins.as_mut_ptr()
-            as *const vec_t,
-        (*pm).maxs.as_mut_ptr()
-            as *const vec_t,
+        (*(*pm).ps).origin.as_mut_ptr() as *const vec_t,
+        (*pm).mins.as_mut_ptr() as *const vec_t,
+        (*pm).maxs.as_mut_ptr() as *const vec_t,
         down.as_mut_ptr() as *const vec_t,
         (*(*pm).ps).clientNum,
         (*pm).tracemask,
     );
     if trace.allsolid as u64 == 0 {
-        (*(*pm).ps).origin[0 as i32 as usize] =
-            trace.endpos[0 as i32 as usize];
-        (*(*pm).ps).origin[1 as i32 as usize] =
-            trace.endpos[1 as i32 as usize];
-        (*(*pm).ps).origin[2 as i32 as usize] =
-            trace.endpos[2 as i32 as usize]
+        (*(*pm).ps).origin[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
+        (*(*pm).ps).origin[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
+        (*(*pm).ps).origin[2 as i32 as usize] = trace.endpos[2 as i32 as usize]
     }
     if (trace.fraction as f64) < 1.0f64 {
         PM_ClipVelocity(
-            (*(*pm).ps)
-                .velocity
-                .as_mut_ptr(),
+            (*(*pm).ps).velocity.as_mut_ptr(),
             trace.plane.normal.as_mut_ptr(),
-            (*(*pm).ps)
-                .velocity
-                .as_mut_ptr(),
+            (*(*pm).ps).velocity.as_mut_ptr(),
             1.001f32,
         );
     }
     // use the step move
     let mut delta: f32 = 0.;
-    delta = (*(*pm).ps).origin[2 as i32 as usize]
-        - start_o[2 as i32 as usize];
+    delta = (*(*pm).ps).origin[2 as i32 as usize] - start_o[2 as i32 as usize];
     if delta > 2 as i32 as f32 {
         if delta < 7 as i32 as f32 {
             PM_AddEvent(EV_STEP_4 as i32);

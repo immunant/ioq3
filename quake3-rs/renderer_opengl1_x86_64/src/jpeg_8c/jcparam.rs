@@ -220,8 +220,7 @@ pub unsafe extern "C" fn jpeg_add_quant_table(
  * are limited to 1..255 for JPEG baseline compatibility.
  */
 {
-    let mut qtblptr: *mut *mut JQUANT_TBL =
-        0 as *mut *mut JQUANT_TBL;
+    let mut qtblptr: *mut *mut JQUANT_TBL = 0 as *mut *mut JQUANT_TBL;
     let mut i: i32 = 0;
     let mut temp: isize = 0;
     /* Safety check to ensure start_compress not called yet. */
@@ -250,9 +249,8 @@ pub unsafe extern "C" fn jpeg_add_quant_table(
         .as_mut_ptr()
         .offset(which_tbl as isize) as *mut *mut JQUANT_TBL;
     if (*qtblptr).is_null() {
-        *qtblptr = jpeg_alloc_quant_table(
-            cinfo as j_common_ptr as *mut jpeg_common_struct,
-        ) as *mut JQUANT_TBL
+        *qtblptr = jpeg_alloc_quant_table(cinfo as j_common_ptr as *mut jpeg_common_struct)
+            as *mut JQUANT_TBL
     }
     i = 0 as i32;
     while i < 64 as i32 {
@@ -528,9 +526,8 @@ unsafe extern "C" fn add_huff_table(
     let mut nsymbols: i32 = 0;
     let mut len: i32 = 0;
     if (*htblptr).is_null() {
-        *htblptr = jpeg_alloc_huff_table(
-            cinfo as j_common_ptr as *mut jpeg_common_struct,
-        ) as *mut JHUFF_TBL
+        *htblptr = jpeg_alloc_huff_table(cinfo as j_common_ptr as *mut jpeg_common_struct)
+            as *mut JHUFF_TBL
     }
     /* Copy the number-of-symbols-of-each-code-length counts */
     crate::stdlib::memcpy(
@@ -560,8 +557,7 @@ unsafe extern "C" fn add_huff_table(
     crate::stdlib::memcpy(
         (**htblptr).huffval.as_mut_ptr() as *mut libc::c_void,
         val as *const libc::c_void,
-        (nsymbols as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<UINT8>() as libc::c_ulong),
+        (nsymbols as libc::c_ulong).wrapping_mul(::std::mem::size_of::<UINT8>() as libc::c_ulong),
     );
     /* Initialize sent_table FALSE so table will be written to JPEG file. */
     (**htblptr).sent_table = 0 as i32;
@@ -1077,9 +1073,8 @@ pub unsafe extern "C" fn jpeg_set_defaults(mut cinfo: j_compress_ptr) {
         .expect("non-null function pointer")(
             cinfo as j_common_ptr,
             0 as i32,
-            (10 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                jpeg_component_info,
-            >() as libc::c_ulong),
+            (10 as i32 as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<jpeg_component_info>() as libc::c_ulong),
         ) as *mut jpeg_component_info
     }
     /* Initialize everything not dependent on the color space */
@@ -1175,9 +1170,7 @@ pub unsafe extern "C" fn jpeg_default_colorspace(mut cinfo: j_compress_ptr) {
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
     };
 }
@@ -1190,8 +1183,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
     mut cinfo: j_compress_ptr,
     mut colorspace: J_COLOR_SPACE,
 ) {
-    let mut compptr: *mut jpeg_component_info =
-        0 as *mut jpeg_component_info;
+    let mut compptr: *mut jpeg_component_info = 0 as *mut jpeg_component_info;
     let mut ci: i32 = 0;
     /* Safety check to ensure start_compress not called yet. */
     if (*cinfo).global_state != 100 as i32 {
@@ -1215,8 +1207,8 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*cinfo).write_JFIF_header = 1 as i32;
             (*cinfo).num_components = 1 as i32;
             /* JFIF specifies component ID 1 */
-            compptr = &mut *(*cinfo).comp_info.offset(0 as i32 as isize)
-                as *mut jpeg_component_info; /* write Adobe marker to flag RGB */
+            compptr =
+                &mut *(*cinfo).comp_info.offset(0 as i32 as isize) as *mut jpeg_component_info; /* write Adobe marker to flag RGB */
             (*compptr).component_id = 1 as i32; /* Write a JFIF marker */
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1227,24 +1219,24 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
         2 => {
             (*cinfo).write_Adobe_marker = 1 as i32;
             (*cinfo).num_components = 3 as i32;
-            compptr = &mut *(*cinfo).comp_info.offset(0 as i32 as isize)
-                as *mut jpeg_component_info;
+            compptr =
+                &mut *(*cinfo).comp_info.offset(0 as i32 as isize) as *mut jpeg_component_info;
             (*compptr).component_id = 0x52 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
             (*compptr).quant_tbl_no = 0 as i32;
             (*compptr).dc_tbl_no = 0 as i32;
             (*compptr).ac_tbl_no = 0 as i32;
-            compptr = &mut *(*cinfo).comp_info.offset(1 as i32 as isize)
-                as *mut jpeg_component_info;
+            compptr =
+                &mut *(*cinfo).comp_info.offset(1 as i32 as isize) as *mut jpeg_component_info;
             (*compptr).component_id = 0x47 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
             (*compptr).quant_tbl_no = 0 as i32;
             (*compptr).dc_tbl_no = 0 as i32;
             (*compptr).ac_tbl_no = 0 as i32;
-            compptr = &mut *(*cinfo).comp_info.offset(2 as i32 as isize)
-                as *mut jpeg_component_info;
+            compptr =
+                &mut *(*cinfo).comp_info.offset(2 as i32 as isize) as *mut jpeg_component_info;
             (*compptr).component_id = 0x42 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1257,24 +1249,24 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             (*cinfo).num_components = 3 as i32;
             /* JFIF specifies component IDs 1,2,3 */
             /* We default to 2x2 subsamples of chrominance */
-            compptr = &mut *(*cinfo).comp_info.offset(0 as i32 as isize)
-                as *mut jpeg_component_info; /* write Adobe marker to flag CMYK */
+            compptr =
+                &mut *(*cinfo).comp_info.offset(0 as i32 as isize) as *mut jpeg_component_info; /* write Adobe marker to flag CMYK */
             (*compptr).component_id = 1 as i32; /* write Adobe marker to flag YCCK */
             (*compptr).h_samp_factor = 2 as i32;
             (*compptr).v_samp_factor = 2 as i32;
             (*compptr).quant_tbl_no = 0 as i32;
             (*compptr).dc_tbl_no = 0 as i32;
             (*compptr).ac_tbl_no = 0 as i32;
-            compptr = &mut *(*cinfo).comp_info.offset(1 as i32 as isize)
-                as *mut jpeg_component_info;
+            compptr =
+                &mut *(*cinfo).comp_info.offset(1 as i32 as isize) as *mut jpeg_component_info;
             (*compptr).component_id = 2 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
             (*compptr).quant_tbl_no = 1 as i32;
             (*compptr).dc_tbl_no = 1 as i32;
             (*compptr).ac_tbl_no = 1 as i32;
-            compptr = &mut *(*cinfo).comp_info.offset(2 as i32 as isize)
-                as *mut jpeg_component_info;
+            compptr =
+                &mut *(*cinfo).comp_info.offset(2 as i32 as isize) as *mut jpeg_component_info;
             (*compptr).component_id = 3 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1285,32 +1277,32 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
         4 => {
             (*cinfo).write_Adobe_marker = 1 as i32;
             (*cinfo).num_components = 4 as i32;
-            compptr = &mut *(*cinfo).comp_info.offset(0 as i32 as isize)
-                as *mut jpeg_component_info;
+            compptr =
+                &mut *(*cinfo).comp_info.offset(0 as i32 as isize) as *mut jpeg_component_info;
             (*compptr).component_id = 0x43 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
             (*compptr).quant_tbl_no = 0 as i32;
             (*compptr).dc_tbl_no = 0 as i32;
             (*compptr).ac_tbl_no = 0 as i32;
-            compptr = &mut *(*cinfo).comp_info.offset(1 as i32 as isize)
-                as *mut jpeg_component_info;
+            compptr =
+                &mut *(*cinfo).comp_info.offset(1 as i32 as isize) as *mut jpeg_component_info;
             (*compptr).component_id = 0x4d as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
             (*compptr).quant_tbl_no = 0 as i32;
             (*compptr).dc_tbl_no = 0 as i32;
             (*compptr).ac_tbl_no = 0 as i32;
-            compptr = &mut *(*cinfo).comp_info.offset(2 as i32 as isize)
-                as *mut jpeg_component_info;
+            compptr =
+                &mut *(*cinfo).comp_info.offset(2 as i32 as isize) as *mut jpeg_component_info;
             (*compptr).component_id = 0x59 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
             (*compptr).quant_tbl_no = 0 as i32;
             (*compptr).dc_tbl_no = 0 as i32;
             (*compptr).ac_tbl_no = 0 as i32;
-            compptr = &mut *(*cinfo).comp_info.offset(3 as i32 as isize)
-                as *mut jpeg_component_info;
+            compptr =
+                &mut *(*cinfo).comp_info.offset(3 as i32 as isize) as *mut jpeg_component_info;
             (*compptr).component_id = 0x4b as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
@@ -1321,32 +1313,32 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
         5 => {
             (*cinfo).write_Adobe_marker = 1 as i32;
             (*cinfo).num_components = 4 as i32;
-            compptr = &mut *(*cinfo).comp_info.offset(0 as i32 as isize)
-                as *mut jpeg_component_info;
+            compptr =
+                &mut *(*cinfo).comp_info.offset(0 as i32 as isize) as *mut jpeg_component_info;
             (*compptr).component_id = 1 as i32;
             (*compptr).h_samp_factor = 2 as i32;
             (*compptr).v_samp_factor = 2 as i32;
             (*compptr).quant_tbl_no = 0 as i32;
             (*compptr).dc_tbl_no = 0 as i32;
             (*compptr).ac_tbl_no = 0 as i32;
-            compptr = &mut *(*cinfo).comp_info.offset(1 as i32 as isize)
-                as *mut jpeg_component_info;
+            compptr =
+                &mut *(*cinfo).comp_info.offset(1 as i32 as isize) as *mut jpeg_component_info;
             (*compptr).component_id = 2 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
             (*compptr).quant_tbl_no = 1 as i32;
             (*compptr).dc_tbl_no = 1 as i32;
             (*compptr).ac_tbl_no = 1 as i32;
-            compptr = &mut *(*cinfo).comp_info.offset(2 as i32 as isize)
-                as *mut jpeg_component_info;
+            compptr =
+                &mut *(*cinfo).comp_info.offset(2 as i32 as isize) as *mut jpeg_component_info;
             (*compptr).component_id = 3 as i32;
             (*compptr).h_samp_factor = 1 as i32;
             (*compptr).v_samp_factor = 1 as i32;
             (*compptr).quant_tbl_no = 1 as i32;
             (*compptr).dc_tbl_no = 1 as i32;
             (*compptr).ac_tbl_no = 1 as i32;
-            compptr = &mut *(*cinfo).comp_info.offset(3 as i32 as isize)
-                as *mut jpeg_component_info;
+            compptr =
+                &mut *(*cinfo).comp_info.offset(3 as i32 as isize) as *mut jpeg_component_info;
             (*compptr).component_id = 4 as i32;
             (*compptr).h_samp_factor = 2 as i32;
             (*compptr).v_samp_factor = 2 as i32;
@@ -1365,14 +1357,11 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
                         .error_exit
                         .expect("non-null function pointer"),
                 )
-                .expect("non-null function pointer")(
-                    cinfo as j_common_ptr
-                );
+                .expect("non-null function pointer")(cinfo as j_common_ptr);
             }
             ci = 0 as i32;
             while ci < (*cinfo).num_components {
-                compptr = &mut *(*cinfo).comp_info.offset(ci as isize)
-                    as *mut jpeg_component_info;
+                compptr = &mut *(*cinfo).comp_info.offset(ci as isize) as *mut jpeg_component_info;
                 (*compptr).component_id = ci;
                 (*compptr).h_samp_factor = 1 as i32;
                 (*compptr).v_samp_factor = 1 as i32;
@@ -1389,9 +1378,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
     };
 }
@@ -1475,8 +1462,7 @@ unsafe extern "C" fn fill_dc_scans(
 pub unsafe extern "C" fn jpeg_simple_progression(mut cinfo: j_compress_ptr) {
     let mut ncomps: i32 = (*cinfo).num_components;
     let mut nscans: i32 = 0;
-    let mut scanptr: *mut jpeg_scan_info =
-        0 as *mut jpeg_scan_info;
+    let mut scanptr: *mut jpeg_scan_info = 0 as *mut jpeg_scan_info;
     /* Safety check to ensure start_compress not called yet. */
     if (*cinfo).global_state != 100 as i32 {
         (*(*cinfo).err).msg_code = JERR_BAD_STATE as i32;
@@ -1489,9 +1475,7 @@ pub unsafe extern "C" fn jpeg_simple_progression(mut cinfo: j_compress_ptr) {
         .expect("non-null function pointer")(cinfo as j_common_ptr);
     }
     /* Figure space needed for script.  Calculation must match code below! */
-    if ncomps == 3 as i32
-        && (*cinfo).jpeg_color_space as u32 == JCS_YCbCr as i32 as u32
-    {
+    if ncomps == 3 as i32 && (*cinfo).jpeg_color_space as u32 == JCS_YCbCr as i32 as u32 {
         /* Custom script for YCbCr color images. */
         nscans = 10 as i32
     } else if ncomps > 4 as i32 {
@@ -1523,17 +1507,13 @@ pub unsafe extern "C" fn jpeg_simple_progression(mut cinfo: j_compress_ptr) {
             cinfo as j_common_ptr,
             0 as i32,
             ((*cinfo).script_space_size as libc::c_ulong)
-                .wrapping_mul(
-                    ::std::mem::size_of::<jpeg_scan_info>() as libc::c_ulong
-                ),
+                .wrapping_mul(::std::mem::size_of::<jpeg_scan_info>() as libc::c_ulong),
         ) as *mut jpeg_scan_info
     }
     scanptr = (*cinfo).script_space;
     (*cinfo).scan_info = scanptr;
     (*cinfo).num_scans = nscans;
-    if ncomps == 3 as i32
-        && (*cinfo).jpeg_color_space as u32 == JCS_YCbCr as i32 as u32
-    {
+    if ncomps == 3 as i32 && (*cinfo).jpeg_color_space as u32 == JCS_YCbCr as i32 as u32 {
         /* Custom script for YCbCr color images. */
         /* Initial DC scan */
         scanptr = fill_dc_scans(scanptr, ncomps, 0 as i32, 1 as i32);

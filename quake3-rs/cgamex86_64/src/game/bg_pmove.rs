@@ -285,8 +285,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // takes a playerstate and a usercmd as input and returns a modifed playerstate
 #[no_mangle]
 
-pub static mut pm: *mut pmove_t =
-    0 as *const pmove_t as *mut pmove_t;
+pub static mut pm: *mut pmove_t = 0 as *const pmove_t as *mut pmove_t;
 #[no_mangle]
 
 pub static mut pml: pml_t = pml_t {
@@ -364,11 +363,7 @@ PM_AddEvent
 #[no_mangle]
 
 pub unsafe extern "C" fn PM_AddEvent(mut newEvent: i32) {
-    BG_AddPredictableEventToPlayerstate(
-        newEvent,
-        0 as i32,
-        (*pm).ps as *mut playerState_s,
-    );
+    BG_AddPredictableEventToPlayerstate(newEvent, 0 as i32, (*pm).ps as *mut playerState_s);
 }
 /*
 ===============
@@ -555,11 +550,7 @@ Handles user intended acceleration
 ==============
 */
 
-unsafe extern "C" fn PM_Accelerate(
-    mut wishdir: *mut vec_t,
-    mut wishspeed: f32,
-    mut accel: f32,
-) {
+unsafe extern "C" fn PM_Accelerate(mut wishdir: *mut vec_t, mut wishspeed: f32, mut accel: f32) {
     // q2 style
     let mut i: i32 = 0;
     let mut addspeed: f32 = 0.;
@@ -822,9 +813,7 @@ unsafe extern "C" fn PM_WaterMove() {
                 * pml.groundTrace.plane.normal[2 as i32 as usize]
             < 0 as i32 as f32
     {
-        vel = VectorLength(
-            (*(*pm).ps).velocity.as_mut_ptr() as *const vec_t
-        );
+        vel = VectorLength((*(*pm).ps).velocity.as_mut_ptr() as *const vec_t);
         // slide along the ground plane
         PM_ClipVelocity(
             (*(*pm).ps).velocity.as_mut_ptr(),
@@ -895,16 +884,15 @@ unsafe extern "C" fn PM_AirMove() {
     let mut wishdir: vec3_t = [0.; 3];
     let mut wishspeed: f32 = 0.;
     let mut scale: f32 = 0.;
-    let mut cmd: usercmd_t =
-        usercmd_t {
-            serverTime: 0,
-            angles: [0; 3],
-            buttons: 0,
-            weapon: 0,
-            forwardmove: 0,
-            rightmove: 0,
-            upmove: 0,
-        };
+    let mut cmd: usercmd_t = usercmd_t {
+        serverTime: 0,
+        angles: [0; 3],
+        buttons: 0,
+        weapon: 0,
+        forwardmove: 0,
+        rightmove: 0,
+        upmove: 0,
+    };
     PM_Friction();
     fmove = (*pm).cmd.forwardmove as f32;
     smove = (*pm).cmd.rightmove as f32;
@@ -994,16 +982,15 @@ unsafe extern "C" fn PM_WalkMove() {
     let mut wishdir: vec3_t = [0.; 3];
     let mut wishspeed: f32 = 0.;
     let mut scale: f32 = 0.;
-    let mut cmd: usercmd_t =
-        usercmd_t {
-            serverTime: 0,
-            angles: [0; 3],
-            buttons: 0,
-            weapon: 0,
-            forwardmove: 0,
-            rightmove: 0,
-            upmove: 0,
-        };
+    let mut cmd: usercmd_t = usercmd_t {
+        serverTime: 0,
+        angles: [0; 3],
+        buttons: 0,
+        weapon: 0,
+        forwardmove: 0,
+        rightmove: 0,
+        upmove: 0,
+    };
     let mut accelerate: f32 = 0.;
     let mut vel: f32 = 0.;
     if (*pm).waterlevel > 2 as i32
@@ -1091,9 +1078,7 @@ unsafe extern "C" fn PM_WalkMove() {
     if pml.groundTrace.surfaceFlags & 0x2 as i32 != 0 || (*(*pm).ps).pm_flags & 64 as i32 != 0 {
         (*(*pm).ps).velocity[2 as i32 as usize] -= (*(*pm).ps).gravity as f32 * pml.frametime
     }
-    vel = VectorLength(
-        (*(*pm).ps).velocity.as_mut_ptr() as *const vec_t
-    );
+    vel = VectorLength((*(*pm).ps).velocity.as_mut_ptr() as *const vec_t);
     // slide along the ground plane
     PM_ClipVelocity(
         (*(*pm).ps).velocity.as_mut_ptr(),
@@ -1127,9 +1112,7 @@ unsafe extern "C" fn PM_DeadMove() {
         return;
     }
     // extra friction
-    forward = VectorLength(
-        (*(*pm).ps).velocity.as_mut_ptr() as *const vec_t
-    );
+    forward = VectorLength((*(*pm).ps).velocity.as_mut_ptr() as *const vec_t);
     forward -= 20 as i32 as f32;
     if forward <= 0 as i32 as f32 {
         (*(*pm).ps).velocity[2 as i32 as usize] = 0 as i32 as vec_t;
@@ -1163,16 +1146,11 @@ unsafe extern "C" fn PM_NoclipMove() {
     let mut scale: f32 = 0.;
     (*(*pm).ps).viewheight = 26 as i32;
     // friction
-    speed = VectorLength(
-        (*(*pm).ps).velocity.as_mut_ptr() as *const vec_t
-    ); // extra friction
+    speed = VectorLength((*(*pm).ps).velocity.as_mut_ptr() as *const vec_t); // extra friction
     if speed < 1 as i32 as f32 {
-        (*(*pm).ps).velocity[0 as i32 as usize] =
-            vec3_origin[0 as i32 as usize];
-        (*(*pm).ps).velocity[1 as i32 as usize] =
-            vec3_origin[1 as i32 as usize];
-        (*(*pm).ps).velocity[2 as i32 as usize] =
-            vec3_origin[2 as i32 as usize]
+        (*(*pm).ps).velocity[0 as i32 as usize] = vec3_origin[0 as i32 as usize];
+        (*(*pm).ps).velocity[1 as i32 as usize] = vec3_origin[1 as i32 as usize];
+        (*(*pm).ps).velocity[2 as i32 as usize] = vec3_origin[2 as i32 as usize]
     } else {
         drop_0 = 0 as i32 as f32;
         friction = (pm_friction as f64 * 1.5f64) as f32;
@@ -1334,9 +1312,7 @@ PM_CorrectAllSolid
 =============
 */
 
-unsafe extern "C" fn PM_CorrectAllSolid(
-    mut trace: *mut trace_t,
-) -> i32 {
+unsafe extern "C" fn PM_CorrectAllSolid(mut trace: *mut trace_t) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
@@ -1372,13 +1348,11 @@ unsafe extern "C" fn PM_CorrectAllSolid(
                 if (*trace).allsolid as u64 == 0 {
                     point[0 as i32 as usize] = (*(*pm).ps).origin[0 as i32 as usize];
                     point[1 as i32 as usize] = (*(*pm).ps).origin[1 as i32 as usize];
-                    point[2 as i32 as usize] = ((*(*pm).ps).origin[2 as i32 as usize] as f64
-                        - 0.25f64)
-                        as vec_t;
+                    point[2 as i32 as usize] =
+                        ((*(*pm).ps).origin[2 as i32 as usize] as f64 - 0.25f64) as vec_t;
                     (*pm).trace.expect("non-null function pointer")(
                         trace,
-                        (*(*pm).ps).origin.as_mut_ptr()
-                            as *const vec_t,
+                        (*(*pm).ps).origin.as_mut_ptr() as *const vec_t,
                         (*pm).mins.as_mut_ptr() as *const vec_t,
                         (*pm).maxs.as_mut_ptr() as *const vec_t,
                         point.as_mut_ptr() as *const vec_t,
@@ -1408,23 +1382,22 @@ The ground trace didn't hit a surface, so we are in freefall
 */
 
 unsafe extern "C" fn PM_GroundTraceMissed() {
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     let mut point: vec3_t = [0.; 3];
     if (*(*pm).ps).groundEntityNum != ((1 as i32) << 10 as i32) - 1 as i32 {
         // we just transitioned into freefall
@@ -1471,27 +1444,25 @@ PM_GroundTrace
 
 unsafe extern "C" fn PM_GroundTrace() {
     let mut point: vec3_t = [0.; 3];
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     point[0 as i32 as usize] = (*(*pm).ps).origin[0 as i32 as usize];
     point[1 as i32 as usize] = (*(*pm).ps).origin[1 as i32 as usize];
-    point[2 as i32 as usize] = ((*(*pm).ps).origin[2 as i32 as usize] as f64 - 0.25f64)
-        as vec_t;
+    point[2 as i32 as usize] = ((*(*pm).ps).origin[2 as i32 as usize] as f64 - 0.25f64) as vec_t;
     (*pm).trace.expect("non-null function pointer")(
         &mut trace,
         (*(*pm).ps).origin.as_mut_ptr() as *const vec_t,
@@ -1642,23 +1613,22 @@ Sets mins, maxs, and pm->ps->viewheight
 */
 
 unsafe extern "C" fn PM_CheckDuck() {
-    let mut trace: trace_t =
-        trace_t {
-            allsolid: qfalse,
-            startsolid: qfalse,
-            fraction: 0.,
-            endpos: [0.; 3],
-            plane: cplane_t {
-                normal: [0.; 3],
-                dist: 0.,
-                type_0: 0,
-                signbits: 0,
-                pad: [0; 2],
-            },
-            surfaceFlags: 0,
-            contents: 0,
-            entityNum: 0,
-        };
+    let mut trace: trace_t = trace_t {
+        allsolid: qfalse,
+        startsolid: qfalse,
+        fraction: 0.,
+        endpos: [0.; 3],
+        plane: cplane_t {
+            normal: [0.; 3],
+            dist: 0.,
+            type_0: 0,
+            signbits: 0,
+            pad: [0; 2],
+        },
+        surfaceFlags: 0,
+        contents: 0,
+        entityNum: 0,
+    };
     if (*(*pm).ps).powerups[PW_INVULNERABILITY as i32 as usize] != 0 {
         if (*(*pm).ps).pm_flags & 16384 as i32 != 0 {
             // invulnerability sphere has a 42 units radius
@@ -1729,8 +1699,7 @@ PM_Footsteps
 unsafe extern "C" fn PM_Footsteps() {
     let mut bobmove: f32 = 0.;
     let mut old: i32 = 0;
-    let mut footstep: qboolean =
-        qfalse;
+    let mut footstep: qboolean = qfalse;
     //
     // calculate speed and cycle to be used for
     // all cyclic walking effects
@@ -1861,14 +1830,10 @@ PM_BeginWeaponChange
 */
 
 unsafe extern "C" fn PM_BeginWeaponChange(mut weapon: i32) {
-    if weapon <= WP_NONE as i32
-        || weapon >= WP_NUM_WEAPONS as i32
-    {
+    if weapon <= WP_NONE as i32 || weapon >= WP_NUM_WEAPONS as i32 {
         return;
     }
-    if (*(*pm).ps).stats[STAT_WEAPONS as i32 as usize] & (1 as i32) << weapon
-        == 0
-    {
+    if (*(*pm).ps).stats[STAT_WEAPONS as i32 as usize] & (1 as i32) << weapon == 0 {
         return;
     }
     if (*(*pm).ps).weaponstate == WEAPON_DROPPING as i32 {
@@ -1888,14 +1853,10 @@ PM_FinishWeaponChange
 unsafe extern "C" fn PM_FinishWeaponChange() {
     let mut weapon: i32 = 0;
     weapon = (*pm).cmd.weapon as i32;
-    if weapon < WP_NONE as i32
-        || weapon >= WP_NUM_WEAPONS as i32
-    {
+    if weapon < WP_NONE as i32 || weapon >= WP_NUM_WEAPONS as i32 {
         weapon = WP_NONE as i32
     }
-    if (*(*pm).ps).stats[STAT_WEAPONS as i32 as usize] & (1 as i32) << weapon
-        == 0
-    {
+    if (*(*pm).ps).stats[STAT_WEAPONS as i32 as usize] & (1 as i32) << weapon == 0 {
         weapon = WP_NONE as i32
     }
     (*(*pm).ps).weapon = weapon;
@@ -1935,9 +1896,7 @@ unsafe extern "C" fn PM_Weapon() {
         return;
     }
     // ignore if spectator
-    if (*(*pm).ps).persistant[PERS_TEAM as i32 as usize]
-        == TEAM_SPECTATOR as i32
-    {
+    if (*(*pm).ps).persistant[PERS_TEAM as i32 as usize] == TEAM_SPECTATOR as i32 {
         return;
     }
     // check for dead player
@@ -1948,22 +1907,19 @@ unsafe extern "C" fn PM_Weapon() {
     // check for item using
     if (*pm).cmd.buttons & 4 as i32 != 0 {
         if (*(*pm).ps).pm_flags & 1024 as i32 == 0 {
-            if !((*bg_itemlist.as_mut_ptr().offset(
-                (*(*pm).ps).stats[STAT_HOLDABLE_ITEM as i32 as usize] as isize,
-            ))
+            if !((*bg_itemlist
+                .as_mut_ptr()
+                .offset((*(*pm).ps).stats[STAT_HOLDABLE_ITEM as i32 as usize] as isize))
             .giTag
                 == HI_MEDKIT as i32
                 && (*(*pm).ps).stats[STAT_HEALTH as i32 as usize]
-                    >= (*(*pm).ps).stats[STAT_MAX_HEALTH as i32 as usize]
-                        + 25 as i32)
+                    >= (*(*pm).ps).stats[STAT_MAX_HEALTH as i32 as usize] + 25 as i32)
             {
                 (*(*pm).ps).pm_flags |= 1024 as i32;
                 PM_AddEvent(
                     EV_USE_ITEM0 as i32
                         + (*bg_itemlist.as_mut_ptr().offset(
-                            (*(*pm).ps).stats
-                                [STAT_HOLDABLE_ITEM as i32 as usize]
-                                as isize,
+                            (*(*pm).ps).stats[STAT_HOLDABLE_ITEM as i32 as usize] as isize,
                         ))
                         .giTag,
                 );
@@ -1981,9 +1937,7 @@ unsafe extern "C" fn PM_Weapon() {
     // check for weapon change
     // can't change if weapon is firing, but can change
     // again if lowering or raising
-    if (*(*pm).ps).weaponTime <= 0 as i32
-        || (*(*pm).ps).weaponstate != WEAPON_FIRING as i32
-    {
+    if (*(*pm).ps).weaponTime <= 0 as i32 || (*(*pm).ps).weaponstate != WEAPON_FIRING as i32 {
         if (*(*pm).ps).weapon != (*pm).cmd.weapon as i32 {
             PM_BeginWeaponChange((*pm).cmd.weapon as i32);
         }
@@ -2115,14 +2069,11 @@ pub unsafe extern "C" fn PM_UpdateViewAngles(
 ) {
     let mut temp: i16 = 0;
     let mut i: i32 = 0;
-    if (*ps).pm_type == PM_INTERMISSION as i32
-        || (*ps).pm_type == PM_SPINTERMISSION as i32
-    {
+    if (*ps).pm_type == PM_INTERMISSION as i32 || (*ps).pm_type == PM_SPINTERMISSION as i32 {
         return;
         // no view changes at all
     }
-    if (*ps).pm_type != PM_SPECTATOR as i32
-        && (*ps).stats[STAT_HEALTH as i32 as usize] <= 0 as i32
+    if (*ps).pm_type != PM_SPECTATOR as i32 && (*ps).stats[STAT_HEALTH as i32 as usize] <= 0 as i32
     {
         return;
         // no view changes at all
@@ -2141,8 +2092,8 @@ pub unsafe extern "C" fn PM_UpdateViewAngles(
                 temp = -(16000 as i32) as i16
             }
         }
-        (*ps).viewangles[i as usize] = (temp as i32 as f64 * (360.0f64 / 65536 as i32 as f64))
-            as vec_t;
+        (*ps).viewangles[i as usize] =
+            (temp as i32 as f64 * (360.0f64 / 65536 as i32 as f64)) as vec_t;
         i += 1
     }
 }

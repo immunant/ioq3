@@ -280,16 +280,9 @@ pub unsafe extern "C" fn vmMain(
             CG_Shutdown();
             return 0 as i32 as intptr_t;
         }
-        2 => {
-            return CG_ConsoleCommand()
-                as intptr_t
-        }
+        2 => return CG_ConsoleCommand() as intptr_t,
         3 => {
-            CG_DrawActiveFrame(
-                arg0,
-                arg1 as stereoFrame_t,
-                arg2 as qboolean,
-            );
+            CG_DrawActiveFrame(arg0, arg1 as stereoFrame_t, arg2 as qboolean);
             return 0 as i32 as intptr_t;
         }
         4 => return CG_CrosshairPlayer() as intptr_t,
@@ -591,8 +584,7 @@ pub static mut cg: cg_t = cg_t {
                 pitchAngle: 0.,
                 pitching: qfalse,
                 animationNumber: 0,
-                animation: 0 as *const animation_t
-                    as *mut animation_t,
+                animation: 0 as *const animation_t as *mut animation_t,
                 animationTime: 0,
             },
             torso: lerpFrame_t {
@@ -606,8 +598,7 @@ pub static mut cg: cg_t = cg_t {
                 pitchAngle: 0.,
                 pitching: qfalse,
                 animationNumber: 0,
-                animation: 0 as *const animation_t
-                    as *mut animation_t,
+                animation: 0 as *const animation_t as *mut animation_t,
                 animationTime: 0,
             },
             flag: lerpFrame_t {
@@ -621,8 +612,7 @@ pub static mut cg: cg_t = cg_t {
                 pitchAngle: 0.,
                 pitching: qfalse,
                 animationNumber: 0,
-                animation: 0 as *const animation_t
-                    as *mut animation_t,
+                animation: 0 as *const animation_t as *mut animation_t,
                 animationTime: 0,
             },
             painTime: 0,
@@ -1220,8 +1210,7 @@ pub static mut cg_entities: [centity_t; 1024] = [centity_t {
             pitchAngle: 0.,
             pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const animation_t
-                as *mut animation_t,
+            animation: 0 as *const animation_t as *mut animation_t,
             animationTime: 0,
         },
         torso: lerpFrame_t {
@@ -1235,8 +1224,7 @@ pub static mut cg_entities: [centity_t; 1024] = [centity_t {
             pitchAngle: 0.,
             pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const animation_t
-                as *mut animation_t,
+            animation: 0 as *const animation_t as *mut animation_t,
             animationTime: 0,
         },
         flag: lerpFrame_t {
@@ -1250,8 +1238,7 @@ pub static mut cg_entities: [centity_t; 1024] = [centity_t {
             pitchAngle: 0.,
             pitching: qfalse,
             animationNumber: 0,
-            animation: 0 as *const animation_t
-                as *mut animation_t,
+            animation: 0 as *const animation_t as *mut animation_t,
             animationTime: 0,
         },
         painTime: 0,
@@ -1274,33 +1261,32 @@ pub static mut cg_entities: [centity_t; 1024] = [centity_t {
 }; 1024];
 #[no_mangle]
 
-pub static mut cg_weapons: [weaponInfo_t; 16] =
-    [weaponInfo_t {
-        registered: qfalse,
-        item: 0 as *const gitem_t as *mut gitem_t,
-        handsModel: 0,
-        weaponModel: 0,
-        barrelModel: 0,
-        flashModel: 0,
-        weaponMidpoint: [0.; 3],
-        flashDlight: 0.,
-        flashDlightColor: [0.; 3],
-        flashSound: [0; 4],
-        weaponIcon: 0,
-        ammoIcon: 0,
-        ammoModel: 0,
-        missileModel: 0,
-        missileSound: 0,
-        missileTrailFunc: None,
-        missileDlight: 0.,
-        missileDlightColor: [0.; 3],
-        missileRenderfx: 0,
-        ejectBrassFunc: None,
-        trailRadius: 0.,
-        wiTrailTime: 0.,
-        readySound: 0,
-        firingSound: 0,
-    }; 16];
+pub static mut cg_weapons: [weaponInfo_t; 16] = [weaponInfo_t {
+    registered: qfalse,
+    item: 0 as *const gitem_t as *mut gitem_t,
+    handsModel: 0,
+    weaponModel: 0,
+    barrelModel: 0,
+    flashModel: 0,
+    weaponMidpoint: [0.; 3],
+    flashDlight: 0.,
+    flashDlightColor: [0.; 3],
+    flashSound: [0; 4],
+    weaponIcon: 0,
+    ammoIcon: 0,
+    ammoModel: 0,
+    missileModel: 0,
+    missileSound: 0,
+    missileTrailFunc: None,
+    missileDlight: 0.,
+    missileDlightColor: [0.; 3],
+    missileRenderfx: 0,
+    ejectBrassFunc: None,
+    trailRadius: 0.,
+    wiTrailTime: 0.,
+    readySound: 0,
+    firingSound: 0,
+}; 16];
 #[no_mangle]
 
 pub static mut cg_items: [itemInfo_t; 256] = [itemInfo_t {
@@ -1310,872 +1296,785 @@ pub static mut cg_items: [itemInfo_t; 256] = [itemInfo_t {
 }; 256];
 #[no_mangle]
 
-pub static mut cg_railTrailTime: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_centertime: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_runpitch: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_runroll: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_bobup: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_bobpitch: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_bobroll: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_swingSpeed: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_shadows: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_gibs: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_drawTimer: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_drawFPS: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_drawSnapshot: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_draw3dIcons: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_drawIcons: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_drawAmmoWarning: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_drawCrosshair: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_drawCrosshairNames: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_drawRewards: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_crosshairSize: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_crosshairX: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_crosshairY: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_crosshairHealth: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_draw2D: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_drawStatus: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_animSpeed: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_debugAnim: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_debugPosition: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_debugEvents: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_errorDecay: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_nopredict: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_noPlayerAnims: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_showmiss: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_footsteps: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_addMarks: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_brassTime: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_viewsize: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_drawGun: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_gun_frame: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_gun_x: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_gun_y: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_gun_z: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_tracerChance: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_tracerWidth: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_tracerLength: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_autoswitch: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_ignore: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_simpleItems: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_fov: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_zoomFov: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_thirdPerson: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_thirdPersonRange: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_thirdPersonAngle: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_lagometer: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_drawAttacker: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_synchronousClients: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_teamChatTime: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_teamChatHeight: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_stats: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_buildScript: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_forceModel: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_paused: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_blood: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_predictItems: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_deferPlayers: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_drawTeamOverlay: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_teamOverlayUserinfo: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_drawFriend: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_teamChatsOnly: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_hudFiles: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_scorePlum: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut cg_smoothClients: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
-#[no_mangle]
-
-pub static mut pmove_fixed: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut cg_railTrailTime: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_centertime: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_runpitch: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_runroll: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_bobup: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_bobpitch: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_bobroll: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_swingSpeed: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_shadows: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_gibs: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_drawTimer: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_drawFPS: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_drawSnapshot: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_draw3dIcons: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_drawIcons: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_drawAmmoWarning: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_drawCrosshair: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_drawCrosshairNames: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_drawRewards: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_crosshairSize: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_crosshairX: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_crosshairY: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_crosshairHealth: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_draw2D: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_drawStatus: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_animSpeed: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_debugAnim: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_debugPosition: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_debugEvents: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_errorDecay: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_nopredict: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_noPlayerAnims: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_showmiss: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_footsteps: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_addMarks: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_brassTime: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_viewsize: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_drawGun: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_gun_frame: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_gun_x: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_gun_y: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_gun_z: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_tracerChance: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_tracerWidth: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_tracerLength: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_autoswitch: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_ignore: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_simpleItems: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_fov: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_zoomFov: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_thirdPerson: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_thirdPersonRange: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_thirdPersonAngle: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_lagometer: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_drawAttacker: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_synchronousClients: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_teamChatTime: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_teamChatHeight: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_stats: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_buildScript: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_forceModel: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_paused: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_blood: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_predictItems: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_deferPlayers: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_drawTeamOverlay: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_teamOverlayUserinfo: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_drawFriend: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_teamChatsOnly: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_hudFiles: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_scorePlum: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut cg_smoothClients: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
+#[no_mangle]
+
+pub static mut pmove_fixed: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 //vmCvar_t	cg_pmove_fixed;
 #[no_mangle]
 
-pub static mut pmove_msec: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut pmove_msec: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut cg_pmove_msec: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut cg_pmove_msec: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut cg_cameraMode: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut cg_cameraMode: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut cg_cameraOrbit: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut cg_cameraOrbit: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut cg_cameraOrbitDelay: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut cg_cameraOrbitDelay: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut cg_timescaleFadeEnd: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut cg_timescaleFadeEnd: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut cg_timescaleFadeSpeed: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut cg_timescaleFadeSpeed: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut cg_timescale: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut cg_timescale: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut cg_noProjectileTrail: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut cg_noProjectileTrail: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut cg_oldRail: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut cg_oldRail: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut cg_oldRocket: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut cg_oldRocket: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut cg_oldPlasma: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut cg_oldPlasma: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 #[no_mangle]
 
-pub static mut cg_trueLightning: vmCvar_t =
-    vmCvar_t {
-        handle: 0,
-        modificationCount: 0,
-        value: 0.,
-        integer: 0,
-        string: [0; 256],
-    };
+pub static mut cg_trueLightning: vmCvar_t = vmCvar_t {
+    handle: 0,
+    modificationCount: 0,
+    value: 0.,
+    integer: 0,
+    string: [0; 256],
+};
 
 static mut cvarTable: [cvarTable_t; 83] = unsafe {
     [
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_ignore as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_ignore as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_ignore\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
@@ -2184,8 +2083,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_autoswitch as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_autoswitch as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_autoswitch\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2195,8 +2093,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawGun as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_drawGun as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_drawGun\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2206,8 +2103,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_zoomFov as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_zoomFov as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_zoomfov\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"22.5\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2217,8 +2113,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_fov as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_fov as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_fov\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"90\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
@@ -2227,8 +2122,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_viewsize as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_viewsize as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_viewsize\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"100\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2238,8 +2132,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_shadows as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_shadows as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_shadows\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2249,8 +2142,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_gibs as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_gibs as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_gibs\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
@@ -2259,8 +2151,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_draw2D as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_draw2D as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_draw2D\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
@@ -2269,8 +2160,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawStatus as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_drawStatus as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_drawStatus\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2280,8 +2170,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawTimer as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_drawTimer as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_drawTimer\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2291,8 +2180,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawFPS as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_drawFPS as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_drawFPS\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2302,8 +2190,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawSnapshot as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_drawSnapshot as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_drawSnapshot\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2313,8 +2200,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_draw3dIcons as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_draw3dIcons as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_draw3dIcons\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2324,8 +2210,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawIcons as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_drawIcons as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_drawIcons\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2335,8 +2220,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawAmmoWarning as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_drawAmmoWarning as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_drawAmmoWarning\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2346,8 +2230,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawAttacker as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_drawAttacker as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_drawAttacker\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2357,8 +2240,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawCrosshair as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_drawCrosshair as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_drawCrosshair\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"4\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2368,8 +2250,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawCrosshairNames as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_drawCrosshairNames as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_drawCrosshairNames\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2379,8 +2260,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawRewards as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_drawRewards as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_drawRewards\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2390,8 +2270,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_crosshairSize as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_crosshairSize as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_crosshairSize\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"24\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2401,8 +2280,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_crosshairHealth as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_crosshairHealth as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_crosshairHealth\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2412,8 +2290,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_crosshairX as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_crosshairX as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_crosshairX\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2423,8 +2300,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_crosshairY as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_crosshairY as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_crosshairY\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2434,8 +2310,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_brassTime as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_brassTime as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_brassTime\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"2500\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2445,8 +2320,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_simpleItems as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_simpleItems as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_simpleItems\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2456,8 +2330,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_addMarks as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_addMarks as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_marks\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
@@ -2466,8 +2339,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_lagometer as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_lagometer as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_lagometer\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2477,8 +2349,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_railTrailTime as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_railTrailTime as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_railTrailTime\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"400\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2488,8 +2359,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_gun_x as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_gun_x as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_gunX\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x200 as i32,
@@ -2498,8 +2368,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_gun_y as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_gun_y as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_gunY\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x200 as i32,
@@ -2508,8 +2377,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_gun_z as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_gun_z as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_gunZ\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x200 as i32,
@@ -2518,8 +2386,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_centertime as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_centertime as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_centertime\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"3\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2529,8 +2396,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_runpitch as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_runpitch as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_runpitch\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0.002\x00" as *const u8 as *const libc::c_char
@@ -2541,8 +2407,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_runroll as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_runroll as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_runroll\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0.005\x00" as *const u8 as *const libc::c_char
@@ -2553,8 +2418,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_bobup as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_bobup as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_bobup\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0.005\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
@@ -2564,8 +2428,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_bobpitch as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_bobpitch as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_bobpitch\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0.002\x00" as *const u8 as *const libc::c_char
@@ -2576,8 +2439,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_bobroll as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_bobroll as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_bobroll\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0.002\x00" as *const u8 as *const libc::c_char
@@ -2588,8 +2450,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_swingSpeed as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_swingSpeed as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_swingSpeed\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0.3\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2599,8 +2460,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_animSpeed as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_animSpeed as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_animspeed\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2610,8 +2470,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_debugAnim as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_debugAnim as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_debuganim\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2621,8 +2480,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_debugPosition as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_debugPosition as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_debugposition\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2632,8 +2490,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_debugEvents as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_debugEvents as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_debugevents\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2643,8 +2500,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_errorDecay as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_errorDecay as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_errordecay\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"100\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2654,8 +2510,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_nopredict as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_nopredict as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_nopredict\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2665,8 +2520,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_noPlayerAnims as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_noPlayerAnims as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_noplayeranims\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2676,8 +2530,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_showmiss as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_showmiss as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_showmiss\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2687,8 +2540,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_footsteps as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_footsteps as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_footsteps\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2698,8 +2550,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_tracerChance as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_tracerChance as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_tracerchance\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0.4\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2709,8 +2560,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_tracerWidth as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_tracerWidth as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_tracerwidth\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2720,8 +2570,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_tracerLength as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_tracerLength as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_tracerlength\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"100\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2731,8 +2580,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_thirdPersonRange as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_thirdPersonRange as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_thirdPersonRange\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"40\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2742,8 +2590,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_thirdPersonAngle as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_thirdPersonAngle as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_thirdPersonAngle\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2753,8 +2600,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_thirdPerson as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_thirdPerson as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_thirdPerson\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2764,8 +2610,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_teamChatTime as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_teamChatTime as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_teamChatTime\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"3000\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2775,8 +2620,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_teamChatHeight as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_teamChatHeight as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_teamChatHeight\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2786,8 +2630,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_forceModel as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_forceModel as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_forceModel\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2797,8 +2640,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_predictItems as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_predictItems as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_predictItems\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2808,8 +2650,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_deferPlayers as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_deferPlayers as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_deferPlayers\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2819,8 +2660,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawTeamOverlay as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_drawTeamOverlay as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_drawTeamOverlay\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2830,8 +2670,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_teamOverlayUserinfo as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_teamOverlayUserinfo as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"teamoverlay\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2841,8 +2680,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_stats as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_stats as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_stats\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
@@ -2851,8 +2689,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_drawFriend as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_drawFriend as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_drawFriend\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2862,8 +2699,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_teamChatsOnly as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_teamChatsOnly as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_teamChatsOnly\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2873,8 +2709,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_buildScript as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_buildScript as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"com_buildScript\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2884,8 +2719,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_paused as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_paused as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cl_paused\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x40 as i32,
@@ -2894,8 +2728,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_blood as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_blood as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"com_blood\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0x1 as i32,
@@ -2904,8 +2737,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_synchronousClients as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_synchronousClients as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"g_synchronousClients\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2915,8 +2747,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_cameraOrbit as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_cameraOrbit as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_cameraOrbit\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2926,8 +2757,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_cameraOrbitDelay as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_cameraOrbitDelay as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_cameraOrbitDelay\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"50\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2937,8 +2767,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_timescaleFadeEnd as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_timescaleFadeEnd as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_timescaleFadeEnd\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2948,8 +2777,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_timescaleFadeSpeed as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_timescaleFadeSpeed as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_timescaleFadeSpeed\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2959,8 +2787,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_timescale as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_timescale as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"timescale\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                 cvarFlags: 0 as i32,
@@ -2969,8 +2796,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_scorePlum as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_scorePlum as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_scorePlums\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2980,8 +2806,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_smoothClients as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_smoothClients as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_smoothClients\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -2991,8 +2816,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_cameraMode as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_cameraMode as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"com_cameraMode\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3002,8 +2826,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &pmove_fixed as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &pmove_fixed as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"pmove_fixed\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3013,8 +2836,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &pmove_msec as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &pmove_msec as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"pmove_msec\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"8\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3024,8 +2846,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_noProjectileTrail as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_noProjectileTrail as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_noProjectileTrail\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3035,8 +2856,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_oldRail as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_oldRail as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_oldRail\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3046,8 +2866,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_oldRocket as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_oldRocket as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_oldRocket\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3057,8 +2876,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_oldPlasma as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_oldPlasma as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_oldPlasma\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3068,8 +2886,7 @@ static mut cvarTable: [cvarTable_t; 83] = unsafe {
         },
         {
             let mut init = cvarTable_t {
-                vmCvar: &cg_trueLightning as *const vmCvar_t
-                    as *mut vmCvar_t,
+                vmCvar: &cg_trueLightning as *const vmCvar_t as *mut vmCvar_t,
                 cvarName: b"cg_trueLightning\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
                 defaultString: b"0.0\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -3114,29 +2931,25 @@ pub unsafe extern "C" fn CG_RegisterCvars() {
     cgs.localServer = atoi(var.as_mut_ptr()) as qboolean;
     forceModelModificationCount = cg_forceModel.modificationCount;
     trap_Cvar_Register(
-        0 as *mut vmCvar_t
-            as *mut vmCvar_t,
+        0 as *mut vmCvar_t as *mut vmCvar_t,
         b"model\x00" as *const u8 as *const libc::c_char,
         b"sarge\x00" as *const u8 as *const libc::c_char,
         0x2 as i32 | 0x1 as i32,
     );
     trap_Cvar_Register(
-        0 as *mut vmCvar_t
-            as *mut vmCvar_t,
+        0 as *mut vmCvar_t as *mut vmCvar_t,
         b"headmodel\x00" as *const u8 as *const libc::c_char,
         b"sarge\x00" as *const u8 as *const libc::c_char,
         0x2 as i32 | 0x1 as i32,
     );
     trap_Cvar_Register(
-        0 as *mut vmCvar_t
-            as *mut vmCvar_t,
+        0 as *mut vmCvar_t as *mut vmCvar_t,
         b"team_model\x00" as *const u8 as *const libc::c_char,
         b"sarge\x00" as *const u8 as *const libc::c_char,
         0x2 as i32 | 0x1 as i32,
     );
     trap_Cvar_Register(
-        0 as *mut vmCvar_t
-            as *mut vmCvar_t,
+        0 as *mut vmCvar_t as *mut vmCvar_t,
         b"team_headmodel\x00" as *const u8 as *const libc::c_char,
         b"sarge\x00" as *const u8 as *const libc::c_char,
         0x2 as i32 | 0x1 as i32,
@@ -3173,20 +2986,15 @@ pub unsafe extern "C" fn CG_UpdateCvars() {
     i = 0 as i32;
     cv = cvarTable.as_mut_ptr();
     while i < cvarTableSize {
-        trap_Cvar_Update(
-            (*cv).vmCvar as *mut vmCvar_t,
-        );
+        trap_Cvar_Update((*cv).vmCvar as *mut vmCvar_t);
         i += 1;
         cv = cv.offset(1)
     }
     // check for modications here
     // If team overlay is on, ask for updates from the server.  If it's off,
     // let the server know so we don't receive it
-    if drawTeamOverlayModificationCount
-        != cg_drawTeamOverlay.modificationCount
-    {
-        drawTeamOverlayModificationCount =
-            cg_drawTeamOverlay.modificationCount;
+    if drawTeamOverlayModificationCount != cg_drawTeamOverlay.modificationCount {
+        drawTeamOverlayModificationCount = cg_drawTeamOverlay.modificationCount;
         if cg_drawTeamOverlay.integer > 0 as i32 {
             trap_Cvar_Set(
                 b"teamoverlay\x00" as *const u8 as *const libc::c_char,
@@ -3463,14 +3271,9 @@ unsafe extern "C" fn CG_RegisterItemSounds(mut itemNum: i32) {
     let mut s: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut start: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut len: i32 = 0;
-    item = &mut *bg_itemlist
-        .as_mut_ptr()
-        .offset(itemNum as isize) as *mut gitem_t;
+    item = &mut *bg_itemlist.as_mut_ptr().offset(itemNum as isize) as *mut gitem_t;
     if !(*item).pickup_sound.is_null() {
-        trap_S_RegisterSound(
-            (*item).pickup_sound,
-            qfalse,
-        );
+        trap_S_RegisterSound((*item).pickup_sound, qfalse);
     }
     // parse the space separated precache string for other media
     s = (*item).sounds;
@@ -3505,10 +3308,7 @@ unsafe extern "C" fn CG_RegisterItemSounds(mut itemNum: i32) {
             b"wav\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {
-            trap_S_RegisterSound(
-                data.as_mut_ptr(),
-                qfalse,
-            );
+            trap_S_RegisterSound(data.as_mut_ptr(), qfalse);
         }
     }
 }
@@ -3570,9 +3370,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
         b"sound/feedback/prepare.wav\x00" as *const u8 as *const libc::c_char,
         qtrue,
     );
-    if cgs.gametype as u32 >= GT_TEAM as i32 as u32
-        || cg_buildScript.integer != 0
-    {
+    if cgs.gametype as u32 >= GT_TEAM as i32 as u32 || cg_buildScript.integer != 0 {
         cgs.media.captureAwardSound = trap_S_RegisterSound(
             b"sound/teamplay/flagcapture_yourteam.wav\x00" as *const u8 as *const libc::c_char,
             qtrue,
@@ -3625,9 +3423,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
             b"sound/teamplay/flagtaken_opponent.wav\x00" as *const u8 as *const libc::c_char,
             qtrue,
         );
-        if cgs.gametype as u32 == GT_CTF as i32 as u32
-            || cg_buildScript.integer != 0
-        {
+        if cgs.gametype as u32 == GT_CTF as i32 as u32 || cg_buildScript.integer != 0 {
             cgs.media.redFlagReturnedSound = trap_S_RegisterSound(
                 b"sound/teamplay/voc_red_returned.wav\x00" as *const u8 as *const libc::c_char,
                 qtrue,
@@ -3640,11 +3436,10 @@ unsafe extern "C" fn CG_RegisterSounds() {
                 b"sound/teamplay/voc_enemy_flag.wav\x00" as *const u8 as *const libc::c_char,
                 qtrue,
             );
-            cgs.media.yourTeamTookEnemyFlagSound =
-                trap_S_RegisterSound(
-                    b"sound/teamplay/voc_team_flag.wav\x00" as *const u8 as *const libc::c_char,
-                    qtrue,
-                )
+            cgs.media.yourTeamTookEnemyFlagSound = trap_S_RegisterSound(
+                b"sound/teamplay/voc_team_flag.wav\x00" as *const u8 as *const libc::c_char,
+                qtrue,
+            )
         }
         cgs.media.youHaveFlagSound = trap_S_RegisterSound(
             b"sound/teamplay/voc_you_flag.wav\x00" as *const u8 as *const libc::c_char,
@@ -3776,10 +3571,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
             i + 1 as i32,
         );
         cgs.media.footsteps[FOOTSTEP_NORMAL as i32 as usize][i as usize] =
-            trap_S_RegisterSound(
-                name.as_mut_ptr(),
-                qfalse,
-            );
+            trap_S_RegisterSound(name.as_mut_ptr(), qfalse);
         Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -3787,10 +3579,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
             i + 1 as i32,
         );
         cgs.media.footsteps[FOOTSTEP_BOOT as i32 as usize][i as usize] =
-            trap_S_RegisterSound(
-                name.as_mut_ptr(),
-                qfalse,
-            );
+            trap_S_RegisterSound(name.as_mut_ptr(), qfalse);
         Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -3798,10 +3587,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
             i + 1 as i32,
         );
         cgs.media.footsteps[FOOTSTEP_FLESH as i32 as usize][i as usize] =
-            trap_S_RegisterSound(
-                name.as_mut_ptr(),
-                qfalse,
-            );
+            trap_S_RegisterSound(name.as_mut_ptr(), qfalse);
         Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -3809,10 +3595,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
             i + 1 as i32,
         );
         cgs.media.footsteps[FOOTSTEP_MECH as i32 as usize][i as usize] =
-            trap_S_RegisterSound(
-                name.as_mut_ptr(),
-                qfalse,
-            );
+            trap_S_RegisterSound(name.as_mut_ptr(), qfalse);
         Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -3820,10 +3603,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
             i + 1 as i32,
         );
         cgs.media.footsteps[FOOTSTEP_ENERGY as i32 as usize][i as usize] =
-            trap_S_RegisterSound(
-                name.as_mut_ptr(),
-                qfalse,
-            );
+            trap_S_RegisterSound(name.as_mut_ptr(), qfalse);
         Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -3831,10 +3611,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
             i + 1 as i32,
         );
         cgs.media.footsteps[FOOTSTEP_SPLASH as i32 as usize][i as usize] =
-            trap_S_RegisterSound(
-                name.as_mut_ptr(),
-                qfalse,
-            );
+            trap_S_RegisterSound(name.as_mut_ptr(), qfalse);
         Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -3842,10 +3619,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
             i + 1 as i32,
         );
         cgs.media.footsteps[FOOTSTEP_METAL as i32 as usize][i as usize] =
-            trap_S_RegisterSound(
-                name.as_mut_ptr(),
-                qfalse,
-            );
+            trap_S_RegisterSound(name.as_mut_ptr(), qfalse);
         i += 1
     }
     // only register the items that the server says we need
@@ -3868,10 +3642,7 @@ unsafe extern "C" fn CG_RegisterSounds() {
             break;
         }
         if !(*soundName.offset(0 as i32 as isize) as i32 == '*' as i32) {
-            cgs.gameSounds[i as usize] = trap_S_RegisterSound(
-                soundName,
-                qfalse,
-            )
+            cgs.gameSounds[i as usize] = trap_S_RegisterSound(soundName, qfalse)
         }
         i += 1
         // custom sound
@@ -3966,126 +3737,82 @@ unsafe extern "C" fn CG_RegisterGraphics() {
     CG_LoadingString(cgs.mapname.as_mut_ptr());
     trap_R_LoadWorldMap(cgs.mapname.as_mut_ptr());
     // precache status bar pics
-    CG_LoadingString(
-        b"game media\x00" as *const u8 as *const libc::c_char,
-    );
+    CG_LoadingString(b"game media\x00" as *const u8 as *const libc::c_char);
     i = 0 as i32;
     while i < 11 as i32 {
-        cgs.media.numberShaders[i as usize] =
-            trap_R_RegisterShader(sb_nums[i as usize]);
+        cgs.media.numberShaders[i as usize] = trap_R_RegisterShader(sb_nums[i as usize]);
         i += 1
     }
     cgs.media.botSkillShaders[0 as i32 as usize] =
-        trap_R_RegisterShader(
-            b"menu/art/skill1.tga\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_R_RegisterShader(b"menu/art/skill1.tga\x00" as *const u8 as *const libc::c_char);
     cgs.media.botSkillShaders[1 as i32 as usize] =
-        trap_R_RegisterShader(
-            b"menu/art/skill2.tga\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_R_RegisterShader(b"menu/art/skill2.tga\x00" as *const u8 as *const libc::c_char);
     cgs.media.botSkillShaders[2 as i32 as usize] =
-        trap_R_RegisterShader(
-            b"menu/art/skill3.tga\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_R_RegisterShader(b"menu/art/skill3.tga\x00" as *const u8 as *const libc::c_char);
     cgs.media.botSkillShaders[3 as i32 as usize] =
-        trap_R_RegisterShader(
-            b"menu/art/skill4.tga\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_R_RegisterShader(b"menu/art/skill4.tga\x00" as *const u8 as *const libc::c_char);
     cgs.media.botSkillShaders[4 as i32 as usize] =
-        trap_R_RegisterShader(
-            b"menu/art/skill5.tga\x00" as *const u8 as *const libc::c_char,
-        );
-    cgs.media.viewBloodShader = trap_R_RegisterShader(
-        b"viewBloodBlend\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.deferShader = trap_R_RegisterShaderNoMip(
-        b"gfx/2d/defer.tga\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.scoreboardName = trap_R_RegisterShaderNoMip(
-        b"menu/tab/name.tga\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.scoreboardPing = trap_R_RegisterShaderNoMip(
-        b"menu/tab/ping.tga\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.scoreboardScore = trap_R_RegisterShaderNoMip(
-        b"menu/tab/score.tga\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.scoreboardTime = trap_R_RegisterShaderNoMip(
-        b"menu/tab/time.tga\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.smokePuffShader = trap_R_RegisterShader(
-        b"smokePuff\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.smokePuffRageProShader = trap_R_RegisterShader(
-        b"smokePuffRagePro\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.shotgunSmokePuffShader = trap_R_RegisterShader(
-        b"shotgunSmokePuff\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.plasmaBallShader = trap_R_RegisterShader(
-        b"sprites/plasma1\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.bloodTrailShader = trap_R_RegisterShader(
-        b"bloodTrail\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.lagometerShader = trap_R_RegisterShader(
-        b"lagometer\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.connectionShader = trap_R_RegisterShader(
-        b"disconnected\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.waterBubbleShader = trap_R_RegisterShader(
-        b"waterBubble\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.tracerShader = trap_R_RegisterShader(
-        b"gfx/misc/tracer\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.selectShader = trap_R_RegisterShader(
-        b"gfx/2d/select\x00" as *const u8 as *const libc::c_char,
-    );
+        trap_R_RegisterShader(b"menu/art/skill5.tga\x00" as *const u8 as *const libc::c_char);
+    cgs.media.viewBloodShader =
+        trap_R_RegisterShader(b"viewBloodBlend\x00" as *const u8 as *const libc::c_char);
+    cgs.media.deferShader =
+        trap_R_RegisterShaderNoMip(b"gfx/2d/defer.tga\x00" as *const u8 as *const libc::c_char);
+    cgs.media.scoreboardName =
+        trap_R_RegisterShaderNoMip(b"menu/tab/name.tga\x00" as *const u8 as *const libc::c_char);
+    cgs.media.scoreboardPing =
+        trap_R_RegisterShaderNoMip(b"menu/tab/ping.tga\x00" as *const u8 as *const libc::c_char);
+    cgs.media.scoreboardScore =
+        trap_R_RegisterShaderNoMip(b"menu/tab/score.tga\x00" as *const u8 as *const libc::c_char);
+    cgs.media.scoreboardTime =
+        trap_R_RegisterShaderNoMip(b"menu/tab/time.tga\x00" as *const u8 as *const libc::c_char);
+    cgs.media.smokePuffShader =
+        trap_R_RegisterShader(b"smokePuff\x00" as *const u8 as *const libc::c_char);
+    cgs.media.smokePuffRageProShader =
+        trap_R_RegisterShader(b"smokePuffRagePro\x00" as *const u8 as *const libc::c_char);
+    cgs.media.shotgunSmokePuffShader =
+        trap_R_RegisterShader(b"shotgunSmokePuff\x00" as *const u8 as *const libc::c_char);
+    cgs.media.plasmaBallShader =
+        trap_R_RegisterShader(b"sprites/plasma1\x00" as *const u8 as *const libc::c_char);
+    cgs.media.bloodTrailShader =
+        trap_R_RegisterShader(b"bloodTrail\x00" as *const u8 as *const libc::c_char);
+    cgs.media.lagometerShader =
+        trap_R_RegisterShader(b"lagometer\x00" as *const u8 as *const libc::c_char);
+    cgs.media.connectionShader =
+        trap_R_RegisterShader(b"disconnected\x00" as *const u8 as *const libc::c_char);
+    cgs.media.waterBubbleShader =
+        trap_R_RegisterShader(b"waterBubble\x00" as *const u8 as *const libc::c_char);
+    cgs.media.tracerShader =
+        trap_R_RegisterShader(b"gfx/misc/tracer\x00" as *const u8 as *const libc::c_char);
+    cgs.media.selectShader =
+        trap_R_RegisterShader(b"gfx/2d/select\x00" as *const u8 as *const libc::c_char);
     i = 0 as i32;
     while i < 10 as i32 {
-        cgs.media.crosshairShader[i as usize] =
-            trap_R_RegisterShader(
-                va(
-                    b"gfx/2d/crosshair%c\x00" as *const u8 as *const libc::c_char
-                        as *mut libc::c_char,
-                    'a' as i32 + i,
-                ),
-            );
+        cgs.media.crosshairShader[i as usize] = trap_R_RegisterShader(va(
+            b"gfx/2d/crosshair%c\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
+            'a' as i32 + i,
+        ));
         i += 1
     }
-    cgs.media.backTileShader = trap_R_RegisterShader(
-        b"gfx/2d/backtile\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.noammoShader = trap_R_RegisterShader(
-        b"icons/noammo\x00" as *const u8 as *const libc::c_char,
-    );
+    cgs.media.backTileShader =
+        trap_R_RegisterShader(b"gfx/2d/backtile\x00" as *const u8 as *const libc::c_char);
+    cgs.media.noammoShader =
+        trap_R_RegisterShader(b"icons/noammo\x00" as *const u8 as *const libc::c_char);
     // powerup shaders
-    cgs.media.quadShader = trap_R_RegisterShader(
-        b"powerups/quad\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.quadWeaponShader = trap_R_RegisterShader(
-        b"powerups/quadWeapon\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.battleSuitShader = trap_R_RegisterShader(
-        b"powerups/battleSuit\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.battleWeaponShader = trap_R_RegisterShader(
-        b"powerups/battleWeapon\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.invisShader = trap_R_RegisterShader(
-        b"powerups/invisibility\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.regenShader = trap_R_RegisterShader(
-        b"powerups/regen\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.hastePuffShader = trap_R_RegisterShader(
-        b"hasteSmokePuff\x00" as *const u8 as *const libc::c_char,
-    );
-    if cgs.gametype as u32 == GT_CTF as i32 as u32
-        || cg_buildScript.integer != 0
-    {
+    cgs.media.quadShader =
+        trap_R_RegisterShader(b"powerups/quad\x00" as *const u8 as *const libc::c_char);
+    cgs.media.quadWeaponShader =
+        trap_R_RegisterShader(b"powerups/quadWeapon\x00" as *const u8 as *const libc::c_char);
+    cgs.media.battleSuitShader =
+        trap_R_RegisterShader(b"powerups/battleSuit\x00" as *const u8 as *const libc::c_char);
+    cgs.media.battleWeaponShader =
+        trap_R_RegisterShader(b"powerups/battleWeapon\x00" as *const u8 as *const libc::c_char);
+    cgs.media.invisShader =
+        trap_R_RegisterShader(b"powerups/invisibility\x00" as *const u8 as *const libc::c_char);
+    cgs.media.regenShader =
+        trap_R_RegisterShader(b"powerups/regen\x00" as *const u8 as *const libc::c_char);
+    cgs.media.hastePuffShader =
+        trap_R_RegisterShader(b"hasteSmokePuff\x00" as *const u8 as *const libc::c_char);
+    if cgs.gametype as u32 == GT_CTF as i32 as u32 || cg_buildScript.integer != 0 {
         cgs.media.redFlagModel = trap_R_RegisterModel(
             b"models/flags/r_flag.md3\x00" as *const u8 as *const libc::c_char,
         );
@@ -4093,127 +3820,86 @@ unsafe extern "C" fn CG_RegisterGraphics() {
             b"models/flags/b_flag.md3\x00" as *const u8 as *const libc::c_char,
         );
         cgs.media.redFlagShader[0 as i32 as usize] =
-            trap_R_RegisterShaderNoMip(
-                b"icons/iconf_red1\x00" as *const u8 as *const libc::c_char,
-            );
+            trap_R_RegisterShaderNoMip(b"icons/iconf_red1\x00" as *const u8 as *const libc::c_char);
         cgs.media.redFlagShader[1 as i32 as usize] =
-            trap_R_RegisterShaderNoMip(
-                b"icons/iconf_red2\x00" as *const u8 as *const libc::c_char,
-            );
+            trap_R_RegisterShaderNoMip(b"icons/iconf_red2\x00" as *const u8 as *const libc::c_char);
         cgs.media.redFlagShader[2 as i32 as usize] =
-            trap_R_RegisterShaderNoMip(
-                b"icons/iconf_red3\x00" as *const u8 as *const libc::c_char,
-            );
+            trap_R_RegisterShaderNoMip(b"icons/iconf_red3\x00" as *const u8 as *const libc::c_char);
         cgs.media.blueFlagShader[0 as i32 as usize] =
-            trap_R_RegisterShaderNoMip(
-                b"icons/iconf_blu1\x00" as *const u8 as *const libc::c_char,
-            );
+            trap_R_RegisterShaderNoMip(b"icons/iconf_blu1\x00" as *const u8 as *const libc::c_char);
         cgs.media.blueFlagShader[1 as i32 as usize] =
-            trap_R_RegisterShaderNoMip(
-                b"icons/iconf_blu2\x00" as *const u8 as *const libc::c_char,
-            );
+            trap_R_RegisterShaderNoMip(b"icons/iconf_blu2\x00" as *const u8 as *const libc::c_char);
         cgs.media.blueFlagShader[2 as i32 as usize] =
-            trap_R_RegisterShaderNoMip(
-                b"icons/iconf_blu3\x00" as *const u8 as *const libc::c_char,
-            )
+            trap_R_RegisterShaderNoMip(b"icons/iconf_blu3\x00" as *const u8 as *const libc::c_char)
     }
-    if cgs.gametype as u32 >= GT_TEAM as i32 as u32
-        || cg_buildScript.integer != 0
-    {
-        cgs.media.friendShader = trap_R_RegisterShader(
-            b"sprites/foe\x00" as *const u8 as *const libc::c_char,
-        );
-        cgs.media.redQuadShader = trap_R_RegisterShader(
-            b"powerups/blueflag\x00" as *const u8 as *const libc::c_char,
-        );
-        cgs.media.teamStatusBar = trap_R_RegisterShader(
-            b"gfx/2d/colorbar.tga\x00" as *const u8 as *const libc::c_char,
-        )
+    if cgs.gametype as u32 >= GT_TEAM as i32 as u32 || cg_buildScript.integer != 0 {
+        cgs.media.friendShader =
+            trap_R_RegisterShader(b"sprites/foe\x00" as *const u8 as *const libc::c_char);
+        cgs.media.redQuadShader =
+            trap_R_RegisterShader(b"powerups/blueflag\x00" as *const u8 as *const libc::c_char);
+        cgs.media.teamStatusBar =
+            trap_R_RegisterShader(b"gfx/2d/colorbar.tga\x00" as *const u8 as *const libc::c_char)
     }
     cgs.media.armorModel = trap_R_RegisterModel(
         b"models/powerups/armor/armor_yel.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.armorIcon = trap_R_RegisterShaderNoMip(
-        b"icons/iconr_yellow\x00" as *const u8 as *const libc::c_char,
-    );
+    cgs.media.armorIcon =
+        trap_R_RegisterShaderNoMip(b"icons/iconr_yellow\x00" as *const u8 as *const libc::c_char);
     cgs.media.machinegunBrassModel = trap_R_RegisterModel(
         b"models/weapons2/shells/m_shell.md3\x00" as *const u8 as *const libc::c_char,
     );
     cgs.media.shotgunBrassModel = trap_R_RegisterModel(
         b"models/weapons2/shells/s_shell.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.gibAbdomen = trap_R_RegisterModel(
-        b"models/gibs/abdomen.md3\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.gibArm = trap_R_RegisterModel(
-        b"models/gibs/arm.md3\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.gibChest = trap_R_RegisterModel(
-        b"models/gibs/chest.md3\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.gibFist = trap_R_RegisterModel(
-        b"models/gibs/fist.md3\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.gibFoot = trap_R_RegisterModel(
-        b"models/gibs/foot.md3\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.gibForearm = trap_R_RegisterModel(
-        b"models/gibs/forearm.md3\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.gibIntestine = trap_R_RegisterModel(
-        b"models/gibs/intestine.md3\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.gibLeg = trap_R_RegisterModel(
-        b"models/gibs/leg.md3\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.gibSkull = trap_R_RegisterModel(
-        b"models/gibs/skull.md3\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.gibBrain = trap_R_RegisterModel(
-        b"models/gibs/brain.md3\x00" as *const u8 as *const libc::c_char,
-    );
+    cgs.media.gibAbdomen =
+        trap_R_RegisterModel(b"models/gibs/abdomen.md3\x00" as *const u8 as *const libc::c_char);
+    cgs.media.gibArm =
+        trap_R_RegisterModel(b"models/gibs/arm.md3\x00" as *const u8 as *const libc::c_char);
+    cgs.media.gibChest =
+        trap_R_RegisterModel(b"models/gibs/chest.md3\x00" as *const u8 as *const libc::c_char);
+    cgs.media.gibFist =
+        trap_R_RegisterModel(b"models/gibs/fist.md3\x00" as *const u8 as *const libc::c_char);
+    cgs.media.gibFoot =
+        trap_R_RegisterModel(b"models/gibs/foot.md3\x00" as *const u8 as *const libc::c_char);
+    cgs.media.gibForearm =
+        trap_R_RegisterModel(b"models/gibs/forearm.md3\x00" as *const u8 as *const libc::c_char);
+    cgs.media.gibIntestine =
+        trap_R_RegisterModel(b"models/gibs/intestine.md3\x00" as *const u8 as *const libc::c_char);
+    cgs.media.gibLeg =
+        trap_R_RegisterModel(b"models/gibs/leg.md3\x00" as *const u8 as *const libc::c_char);
+    cgs.media.gibSkull =
+        trap_R_RegisterModel(b"models/gibs/skull.md3\x00" as *const u8 as *const libc::c_char);
+    cgs.media.gibBrain =
+        trap_R_RegisterModel(b"models/gibs/brain.md3\x00" as *const u8 as *const libc::c_char);
     cgs.media.smoke2 = trap_R_RegisterModel(
         b"models/weapons2/shells/s_shell.md3\x00" as *const u8 as *const libc::c_char,
     );
-    cgs.media.balloonShader = trap_R_RegisterShader(
-        b"sprites/balloon3\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.bloodExplosionShader = trap_R_RegisterShader(
-        b"bloodExplosion\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.bulletFlashModel = trap_R_RegisterModel(
-        b"models/weaphits/bullet.md3\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.ringFlashModel = trap_R_RegisterModel(
-        b"models/weaphits/ring02.md3\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.dishFlashModel = trap_R_RegisterModel(
-        b"models/weaphits/boom01.md3\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.teleportEffectModel = trap_R_RegisterModel(
-        b"models/misc/telep.md3\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.teleportEffectShader = trap_R_RegisterShader(
-        b"teleportEffect\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.medalImpressive = trap_R_RegisterShaderNoMip(
-        b"medal_impressive\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.medalExcellent = trap_R_RegisterShaderNoMip(
-        b"medal_excellent\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.medalGauntlet = trap_R_RegisterShaderNoMip(
-        b"medal_gauntlet\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.medalDefend = trap_R_RegisterShaderNoMip(
-        b"medal_defend\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.medalAssist = trap_R_RegisterShaderNoMip(
-        b"medal_assist\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.medalCapture = trap_R_RegisterShaderNoMip(
-        b"medal_capture\x00" as *const u8 as *const libc::c_char,
-    );
+    cgs.media.balloonShader =
+        trap_R_RegisterShader(b"sprites/balloon3\x00" as *const u8 as *const libc::c_char);
+    cgs.media.bloodExplosionShader =
+        trap_R_RegisterShader(b"bloodExplosion\x00" as *const u8 as *const libc::c_char);
+    cgs.media.bulletFlashModel =
+        trap_R_RegisterModel(b"models/weaphits/bullet.md3\x00" as *const u8 as *const libc::c_char);
+    cgs.media.ringFlashModel =
+        trap_R_RegisterModel(b"models/weaphits/ring02.md3\x00" as *const u8 as *const libc::c_char);
+    cgs.media.dishFlashModel =
+        trap_R_RegisterModel(b"models/weaphits/boom01.md3\x00" as *const u8 as *const libc::c_char);
+    cgs.media.teleportEffectModel =
+        trap_R_RegisterModel(b"models/misc/telep.md3\x00" as *const u8 as *const libc::c_char);
+    cgs.media.teleportEffectShader =
+        trap_R_RegisterShader(b"teleportEffect\x00" as *const u8 as *const libc::c_char);
+    cgs.media.medalImpressive =
+        trap_R_RegisterShaderNoMip(b"medal_impressive\x00" as *const u8 as *const libc::c_char);
+    cgs.media.medalExcellent =
+        trap_R_RegisterShaderNoMip(b"medal_excellent\x00" as *const u8 as *const libc::c_char);
+    cgs.media.medalGauntlet =
+        trap_R_RegisterShaderNoMip(b"medal_gauntlet\x00" as *const u8 as *const libc::c_char);
+    cgs.media.medalDefend =
+        trap_R_RegisterShaderNoMip(b"medal_defend\x00" as *const u8 as *const libc::c_char);
+    cgs.media.medalAssist =
+        trap_R_RegisterShaderNoMip(b"medal_assist\x00" as *const u8 as *const libc::c_char);
+    cgs.media.medalCapture =
+        trap_R_RegisterShaderNoMip(b"medal_capture\x00" as *const u8 as *const libc::c_char);
     crate::stdlib::memset(
         cg_items.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
@@ -4239,27 +3925,20 @@ unsafe extern "C" fn CG_RegisterGraphics() {
         i += 1
     }
     // wall marks
-    cgs.media.bulletMarkShader = trap_R_RegisterShader(
-        b"gfx/damage/bullet_mrk\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.burnMarkShader = trap_R_RegisterShader(
-        b"gfx/damage/burn_med_mrk\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.holeMarkShader = trap_R_RegisterShader(
-        b"gfx/damage/hole_lg_mrk\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.energyMarkShader = trap_R_RegisterShader(
-        b"gfx/damage/plasma_mrk\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.shadowMarkShader = trap_R_RegisterShader(
-        b"markShadow\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.wakeMarkShader = trap_R_RegisterShader(
-        b"wake\x00" as *const u8 as *const libc::c_char,
-    );
-    cgs.media.bloodMarkShader = trap_R_RegisterShader(
-        b"bloodMark\x00" as *const u8 as *const libc::c_char,
-    );
+    cgs.media.bulletMarkShader =
+        trap_R_RegisterShader(b"gfx/damage/bullet_mrk\x00" as *const u8 as *const libc::c_char);
+    cgs.media.burnMarkShader =
+        trap_R_RegisterShader(b"gfx/damage/burn_med_mrk\x00" as *const u8 as *const libc::c_char);
+    cgs.media.holeMarkShader =
+        trap_R_RegisterShader(b"gfx/damage/hole_lg_mrk\x00" as *const u8 as *const libc::c_char);
+    cgs.media.energyMarkShader =
+        trap_R_RegisterShader(b"gfx/damage/plasma_mrk\x00" as *const u8 as *const libc::c_char);
+    cgs.media.shadowMarkShader =
+        trap_R_RegisterShader(b"markShadow\x00" as *const u8 as *const libc::c_char);
+    cgs.media.wakeMarkShader =
+        trap_R_RegisterShader(b"wake\x00" as *const u8 as *const libc::c_char);
+    cgs.media.bloodMarkShader =
+        trap_R_RegisterShader(b"bloodMark\x00" as *const u8 as *const libc::c_char);
     // register the inline models
     cgs.numInlineModels = trap_CM_NumInlineModels();
     i = 1 as i32;
@@ -4274,8 +3953,7 @@ unsafe extern "C" fn CG_RegisterGraphics() {
             b"*%i\x00" as *const u8 as *const libc::c_char,
             i,
         );
-        cgs.inlineDrawModel[i as usize] =
-            trap_R_RegisterModel(name.as_mut_ptr());
+        cgs.inlineDrawModel[i as usize] = trap_R_RegisterModel(name.as_mut_ptr());
         trap_R_ModelBounds(
             cgs.inlineDrawModel[i as usize],
             mins.as_mut_ptr(),
@@ -4298,8 +3976,7 @@ unsafe extern "C" fn CG_RegisterGraphics() {
         if *modelName.offset(0 as i32 as isize) == 0 {
             break;
         }
-        cgs.gameModels[i as usize] =
-            trap_R_RegisterModel(modelName);
+        cgs.gameModels[i as usize] = trap_R_RegisterModel(modelName);
         i += 1
     }
     CG_ClearParticles();
@@ -4330,8 +4007,7 @@ pub unsafe extern "C" fn CG_BuildSpectatorString() {
     i = 0 as i32;
     while i < 64 as i32 {
         if cgs.clientinfo[i as usize].infoValid as u32 != 0
-            && cgs.clientinfo[i as usize].team as u32
-                == TEAM_SPECTATOR as i32 as u32
+            && cgs.clientinfo[i as usize].team as u32 == TEAM_SPECTATOR as i32 as u32
         {
             Q_strcat(
                 cg.spectatorList.as_mut_ptr(),
@@ -4420,10 +4096,7 @@ pub unsafe extern "C" fn CG_StartMusic() {
         COM_Parse(&mut s),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
-    trap_S_StartBackgroundTrack(
-        parm1.as_mut_ptr(),
-        parm2.as_mut_ptr(),
-    );
+    trap_S_StartBackgroundTrack(parm1.as_mut_ptr(), parm2.as_mut_ptr());
 }
 /*
 =================
@@ -4471,12 +4144,9 @@ pub unsafe extern "C" fn CG_Init(
     cgs.processedSnapshotNum = serverMessageNum;
     cgs.serverCommandSequence = serverCommandSequence;
     // load a few needed things before we do any screen updates
-    cgs.media.charsetShader = trap_R_RegisterShader(
-        b"gfx/2d/bigchars\x00" as *const u8 as *const libc::c_char,
-    ); // For compatibily, default to unset for
-    cgs.media.whiteShader = trap_R_RegisterShader(
-        b"white\x00" as *const u8 as *const libc::c_char,
-    );
+    cgs.media.charsetShader =
+        trap_R_RegisterShader(b"gfx/2d/bigchars\x00" as *const u8 as *const libc::c_char); // For compatibily, default to unset for
+    cgs.media.whiteShader = trap_R_RegisterShader(b"white\x00" as *const u8 as *const libc::c_char);
     cgs.media.charsetProp = trap_R_RegisterShaderNoMip(
         b"menu/art/font1_prop.tga\x00" as *const u8 as *const libc::c_char,
     );
@@ -4494,15 +4164,11 @@ pub unsafe extern "C" fn CG_Init(
     cgs.flagStatus = -(1 as i32);
     // old servers
     // get the rendering configuration from the client system
-    trap_GetGlconfig(
-        &mut cgs.glconfig as *mut _ as *mut glconfig_t,
-    );
+    trap_GetGlconfig(&mut cgs.glconfig as *mut _ as *mut glconfig_t);
     cgs.screenXScale = (cgs.glconfig.vidWidth as f64 / 640.0f64) as f32;
     cgs.screenYScale = (cgs.glconfig.vidHeight as f64 / 480.0f64) as f32;
     // get the gamestate from the client system
-    trap_GetGameState(
-        &mut cgs.gameState as *mut _ as *mut gameState_t,
-    );
+    trap_GetGameState(&mut cgs.gameState as *mut _ as *mut gameState_t);
     // check version
     s = CG_ConfigString(20 as i32);
     if libc::strcmp(s, b"baseq3-1\x00" as *const u8 as *const libc::c_char) != 0 {
@@ -4516,20 +4182,14 @@ pub unsafe extern "C" fn CG_Init(
     cgs.levelStartTime = atoi(s);
     CG_ParseServerinfo();
     // load the new map
-    CG_LoadingString(
-        b"collision map\x00" as *const u8 as *const libc::c_char,
-    ); // force players to load instead of defer
+    CG_LoadingString(b"collision map\x00" as *const u8 as *const libc::c_char); // force players to load instead of defer
     trap_CM_LoadMap(cgs.mapname.as_mut_ptr()); // if low on memory, some clients will be deferred
     cg.loading = qtrue; // future players will be deferred
     CG_LoadingString(b"sounds\x00" as *const u8 as *const libc::c_char);
     CG_RegisterSounds();
-    CG_LoadingString(
-        b"graphics\x00" as *const u8 as *const libc::c_char,
-    );
+    CG_LoadingString(b"graphics\x00" as *const u8 as *const libc::c_char);
     CG_RegisterGraphics();
-    CG_LoadingString(
-        b"clients\x00" as *const u8 as *const libc::c_char,
-    );
+    CG_LoadingString(b"clients\x00" as *const u8 as *const libc::c_char);
     CG_RegisterClients();
     cg.loading = qfalse;
     CG_InitLocalEntities();
@@ -4570,11 +4230,7 @@ CG_EventHandling
 pub unsafe extern "C" fn CG_EventHandling(mut _type_0: i32) {}
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_KeyEvent(
-    mut _key: i32,
-    mut _down: qboolean,
-) {
-}
+pub unsafe extern "C" fn CG_KeyEvent(mut _key: i32, mut _down: qboolean) {}
 /*
 ===========================================================================
 Copyright (C) 1999-2005 Id Software, Inc.

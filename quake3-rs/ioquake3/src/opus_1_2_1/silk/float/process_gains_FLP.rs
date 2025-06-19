@@ -242,16 +242,16 @@ pub unsafe extern "C" fn silk_process_gains_FLP(
     /* Prepare gains for noise shaping quantization */
     k = 0 as i32;
     while k < (*psEnc).sCmn.nb_subfr {
-        pGains_Q16[k as usize] =
-            ((*psEncCtrl).Gains[k as usize] * 65536.0f32) as opus_int32;
+        pGains_Q16[k as usize] = ((*psEncCtrl).Gains[k as usize] * 65536.0f32) as opus_int32;
         k += 1
     }
     /* Save unquantized gains and gain Index */
-    crate::stdlib::memcpy((*psEncCtrl).GainsUnq_Q16.as_mut_ptr() as *mut libc::c_void,
-           pGains_Q16.as_mut_ptr() as *const libc::c_void,
-           ((*psEnc).sCmn.nb_subfr as
-                libc::c_ulong).wrapping_mul(::std::mem::size_of::<opus_int32>()
-                                                as libc::c_ulong));
+    crate::stdlib::memcpy(
+        (*psEncCtrl).GainsUnq_Q16.as_mut_ptr() as *mut libc::c_void,
+        pGains_Q16.as_mut_ptr() as *const libc::c_void,
+        ((*psEnc).sCmn.nb_subfr as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<opus_int32>() as libc::c_ulong),
+    );
     (*psEncCtrl).lastGainIndexPrev = (*psShapeSt).LastGainIndex;
     /* Quantize gains */
     crate::src::opus_1_2_1::silk::gain_quant::silk_gains_quant(

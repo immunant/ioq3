@@ -187,14 +187,8 @@ pub static mut silk_NLSF_interpolation_factor_iCDF: [u8; 5] = [
 #[no_mangle]
 
 pub static mut silk_Quantization_Offsets_Q10: [[opus_int16; 2]; 2] = [
-    [
-        100 as i32 as opus_int16,
-        240 as i32 as opus_int16,
-    ],
-    [
-        32 as i32 as opus_int16,
-        100 as i32 as opus_int16,
-    ],
+    [100 as i32 as opus_int16, 240 as i32 as opus_int16],
+    [32 as i32 as opus_int16, 100 as i32 as opus_int16],
 ];
 /* Table for LTPScale */
 #[no_mangle]

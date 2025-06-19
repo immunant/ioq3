@@ -194,9 +194,7 @@ pub unsafe extern "C" fn jpeg_destroy(mut cinfo: j_common_ptr) {
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_alloc_quant_table(
-    mut cinfo: j_common_ptr,
-) -> *mut JQUANT_TBL {
+pub unsafe extern "C" fn jpeg_alloc_quant_table(mut cinfo: j_common_ptr) -> *mut JQUANT_TBL {
     let mut tbl: *mut JQUANT_TBL = 0 as *mut JQUANT_TBL; /* make sure this is false in any new table */
     tbl = Some(
         (*(*cinfo).mem)
@@ -241,9 +239,7 @@ pub unsafe extern "C" fn jpeg_alloc_quant_table(
 /* Compression parameter setup aids */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_alloc_huff_table(
-    mut cinfo: j_common_ptr,
-) -> *mut JHUFF_TBL {
+pub unsafe extern "C" fn jpeg_alloc_huff_table(mut cinfo: j_common_ptr) -> *mut JHUFF_TBL {
     let mut tbl: *mut JHUFF_TBL = 0 as *mut JHUFF_TBL; /* make sure this is false in any new table */
     tbl = Some(
         (*(*cinfo).mem)

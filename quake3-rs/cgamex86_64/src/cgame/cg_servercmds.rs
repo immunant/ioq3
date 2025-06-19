@@ -190,10 +190,8 @@ unsafe extern "C" fn CG_ParseScores() {
     if cg.numScores > 64 as i32 {
         cg.numScores = 64 as i32
     }
-    cg.teamScores[0 as i32 as usize] =
-        atoi(CG_Argv(2 as i32));
-    cg.teamScores[1 as i32 as usize] =
-        atoi(CG_Argv(3 as i32));
+    cg.teamScores[0 as i32 as usize] = atoi(CG_Argv(2 as i32));
+    cg.teamScores[1 as i32 as usize] = atoi(CG_Argv(3 as i32));
     crate::stdlib::memset(
         cg.scores.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
@@ -202,63 +200,27 @@ unsafe extern "C" fn CG_ParseScores() {
     i = 0 as i32;
     while i < cg.numScores {
         //
-        cg.scores[i as usize].client = atoi(
-            CG_Argv(i * 14 as i32 + 4 as i32),
-        );
-        cg.scores[i as usize].score = atoi(
-            CG_Argv(i * 14 as i32 + 5 as i32),
-        );
-        cg.scores[i as usize].ping = atoi(
-            CG_Argv(i * 14 as i32 + 6 as i32),
-        );
-        cg.scores[i as usize].time = atoi(
-            CG_Argv(i * 14 as i32 + 7 as i32),
-        );
-        cg.scores[i as usize].scoreFlags = atoi(
-            CG_Argv(i * 14 as i32 + 8 as i32),
-        );
-        powerups = atoi(CG_Argv(
-            i * 14 as i32 + 9 as i32,
-        ));
-        cg.scores[i as usize].accuracy = atoi(
-            CG_Argv(i * 14 as i32 + 10 as i32),
-        );
-        cg.scores[i as usize].impressiveCount = atoi(
-            CG_Argv(i * 14 as i32 + 11 as i32),
-        );
-        cg.scores[i as usize].excellentCount = atoi(
-            CG_Argv(i * 14 as i32 + 12 as i32),
-        );
-        cg.scores[i as usize].guantletCount = atoi(
-            CG_Argv(i * 14 as i32 + 13 as i32),
-        );
-        cg.scores[i as usize].defendCount = atoi(
-            CG_Argv(i * 14 as i32 + 14 as i32),
-        );
-        cg.scores[i as usize].assistCount = atoi(
-            CG_Argv(i * 14 as i32 + 15 as i32),
-        );
-        cg.scores[i as usize].perfect = atoi(
-            CG_Argv(i * 14 as i32 + 16 as i32),
-        )
-            as qboolean;
-        cg.scores[i as usize].captures = atoi(
-            CG_Argv(i * 14 as i32 + 17 as i32),
-        );
-        if cg.scores[i as usize].client < 0 as i32
-            || cg.scores[i as usize].client >= 64 as i32
-        {
+        cg.scores[i as usize].client = atoi(CG_Argv(i * 14 as i32 + 4 as i32));
+        cg.scores[i as usize].score = atoi(CG_Argv(i * 14 as i32 + 5 as i32));
+        cg.scores[i as usize].ping = atoi(CG_Argv(i * 14 as i32 + 6 as i32));
+        cg.scores[i as usize].time = atoi(CG_Argv(i * 14 as i32 + 7 as i32));
+        cg.scores[i as usize].scoreFlags = atoi(CG_Argv(i * 14 as i32 + 8 as i32));
+        powerups = atoi(CG_Argv(i * 14 as i32 + 9 as i32));
+        cg.scores[i as usize].accuracy = atoi(CG_Argv(i * 14 as i32 + 10 as i32));
+        cg.scores[i as usize].impressiveCount = atoi(CG_Argv(i * 14 as i32 + 11 as i32));
+        cg.scores[i as usize].excellentCount = atoi(CG_Argv(i * 14 as i32 + 12 as i32));
+        cg.scores[i as usize].guantletCount = atoi(CG_Argv(i * 14 as i32 + 13 as i32));
+        cg.scores[i as usize].defendCount = atoi(CG_Argv(i * 14 as i32 + 14 as i32));
+        cg.scores[i as usize].assistCount = atoi(CG_Argv(i * 14 as i32 + 15 as i32));
+        cg.scores[i as usize].perfect = atoi(CG_Argv(i * 14 as i32 + 16 as i32)) as qboolean;
+        cg.scores[i as usize].captures = atoi(CG_Argv(i * 14 as i32 + 17 as i32));
+        if cg.scores[i as usize].client < 0 as i32 || cg.scores[i as usize].client >= 64 as i32 {
             cg.scores[i as usize].client = 0 as i32
         }
-        cgs.clientinfo
-            [cg.scores[i as usize].client as usize]
-            .score = cg.scores[i as usize].score;
-        cgs.clientinfo
-            [cg.scores[i as usize].client as usize]
-            .powerups = powerups;
-        cg.scores[i as usize].team = cgs
-            .clientinfo[cg.scores[i as usize].client as usize]
-            .team as i32;
+        cgs.clientinfo[cg.scores[i as usize].client as usize].score = cg.scores[i as usize].score;
+        cgs.clientinfo[cg.scores[i as usize].client as usize].powerups = powerups;
+        cg.scores[i as usize].team =
+            cgs.clientinfo[cg.scores[i as usize].client as usize].team as i32;
         i += 1
     }
 }
@@ -272,11 +234,8 @@ CG_ParseTeamInfo
 unsafe extern "C" fn CG_ParseTeamInfo() {
     let mut i: i32 = 0;
     let mut client: i32 = 0;
-    numSortedTeamPlayers =
-        atoi(CG_Argv(1 as i32));
-    if numSortedTeamPlayers < 0 as i32
-        || numSortedTeamPlayers > 32 as i32
-    {
+    numSortedTeamPlayers = atoi(CG_Argv(1 as i32));
+    if numSortedTeamPlayers < 0 as i32 || numSortedTeamPlayers > 32 as i32 {
         CG_Error(
             b"CG_ParseTeamInfo: numSortedTeamPlayers out of range (%d)\x00" as *const u8
                 as *const libc::c_char,
@@ -293,16 +252,11 @@ unsafe extern "C" fn CG_ParseTeamInfo() {
             );
         }
         sortedTeamPlayers[i as usize] = client;
-        cgs.clientinfo[client as usize].location =
-            atoi(CG_Argv(i * 6 as i32 + 3 as i32));
-        cgs.clientinfo[client as usize].health =
-            atoi(CG_Argv(i * 6 as i32 + 4 as i32));
-        cgs.clientinfo[client as usize].armor =
-            atoi(CG_Argv(i * 6 as i32 + 5 as i32));
-        cgs.clientinfo[client as usize].curWeapon =
-            atoi(CG_Argv(i * 6 as i32 + 6 as i32));
-        cgs.clientinfo[client as usize].powerups =
-            atoi(CG_Argv(i * 6 as i32 + 7 as i32));
+        cgs.clientinfo[client as usize].location = atoi(CG_Argv(i * 6 as i32 + 3 as i32));
+        cgs.clientinfo[client as usize].health = atoi(CG_Argv(i * 6 as i32 + 4 as i32));
+        cgs.clientinfo[client as usize].armor = atoi(CG_Argv(i * 6 as i32 + 5 as i32));
+        cgs.clientinfo[client as usize].curWeapon = atoi(CG_Argv(i * 6 as i32 + 6 as i32));
+        cgs.clientinfo[client as usize].powerups = atoi(CG_Argv(i * 6 as i32 + 7 as i32));
         i += 1
     }
 }
@@ -320,11 +274,10 @@ pub unsafe extern "C" fn CG_ParseServerinfo() {
     let mut info: *const libc::c_char = 0 as *const libc::c_char;
     let mut mapname: *mut libc::c_char = 0 as *mut libc::c_char;
     info = CG_ConfigString(0 as i32);
-    cgs.gametype =
-        atoi(Info_ValueForKey(
-            info,
-            b"g_gametype\x00" as *const u8 as *const libc::c_char,
-        )) as gametype_t;
+    cgs.gametype = atoi(Info_ValueForKey(
+        info,
+        b"g_gametype\x00" as *const u8 as *const libc::c_char,
+    )) as gametype_t;
     trap_Cvar_Set(
         b"g_gametype\x00" as *const u8 as *const libc::c_char,
         va(
@@ -332,40 +285,31 @@ pub unsafe extern "C" fn CG_ParseServerinfo() {
             cgs.gametype as u32,
         ),
     );
-    cgs.dmflags =
-        atoi(Info_ValueForKey(
-            info,
-            b"dmflags\x00" as *const u8 as *const libc::c_char,
-        ));
-    cgs.teamflags =
-        atoi(Info_ValueForKey(
-            info,
-            b"teamflags\x00" as *const u8 as *const libc::c_char,
-        ));
-    cgs.fraglimit =
-        atoi(Info_ValueForKey(
-            info,
-            b"fraglimit\x00" as *const u8 as *const libc::c_char,
-        ));
-    cgs.capturelimit =
-        atoi(Info_ValueForKey(
-            info,
-            b"capturelimit\x00" as *const u8 as *const libc::c_char,
-        ));
-    cgs.timelimit =
-        atoi(Info_ValueForKey(
-            info,
-            b"timelimit\x00" as *const u8 as *const libc::c_char,
-        ));
-    cgs.maxclients =
-        atoi(Info_ValueForKey(
-            info,
-            b"sv_maxclients\x00" as *const u8 as *const libc::c_char,
-        ));
-    mapname = Info_ValueForKey(
+    cgs.dmflags = atoi(Info_ValueForKey(
         info,
-        b"mapname\x00" as *const u8 as *const libc::c_char,
-    );
+        b"dmflags\x00" as *const u8 as *const libc::c_char,
+    ));
+    cgs.teamflags = atoi(Info_ValueForKey(
+        info,
+        b"teamflags\x00" as *const u8 as *const libc::c_char,
+    ));
+    cgs.fraglimit = atoi(Info_ValueForKey(
+        info,
+        b"fraglimit\x00" as *const u8 as *const libc::c_char,
+    ));
+    cgs.capturelimit = atoi(Info_ValueForKey(
+        info,
+        b"capturelimit\x00" as *const u8 as *const libc::c_char,
+    ));
+    cgs.timelimit = atoi(Info_ValueForKey(
+        info,
+        b"timelimit\x00" as *const u8 as *const libc::c_char,
+    ));
+    cgs.maxclients = atoi(Info_ValueForKey(
+        info,
+        b"sv_maxclients\x00" as *const u8 as *const libc::c_char,
+    ));
+    mapname = Info_ValueForKey(info, b"mapname\x00" as *const u8 as *const libc::c_char);
     Com_sprintf(
         cgs.mapname.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -374,10 +318,7 @@ pub unsafe extern "C" fn CG_ParseServerinfo() {
     );
     Q_strncpyz(
         cgs.redTeam.as_mut_ptr(),
-        Info_ValueForKey(
-            info,
-            b"g_redTeam\x00" as *const u8 as *const libc::c_char,
-        ),
+        Info_ValueForKey(info, b"g_redTeam\x00" as *const u8 as *const libc::c_char),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     trap_Cvar_Set(
@@ -386,10 +327,7 @@ pub unsafe extern "C" fn CG_ParseServerinfo() {
     );
     Q_strncpyz(
         cgs.blueTeam.as_mut_ptr(),
-        Info_ValueForKey(
-            info,
-            b"g_blueTeam\x00" as *const u8 as *const libc::c_char,
-        ),
+        Info_ValueForKey(info, b"g_blueTeam\x00" as *const u8 as *const libc::c_char),
         ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
     );
     trap_Cvar_Set(
@@ -411,10 +349,7 @@ unsafe extern "C" fn CG_ParseWarmup() {
     cg.warmupCount = -(1 as i32);
     if !(warmup == 0 as i32 && cg.warmup != 0) {
         if warmup > 0 as i32 && cg.warmup <= 0 as i32 {
-            trap_S_StartLocalSound(
-                cgs.media.countPrepareSound,
-                CHAN_ANNOUNCER as i32,
-            );
+            trap_S_StartLocalSound(cgs.media.countPrepareSound, CHAN_ANNOUNCER as i32);
         }
     }
     cg.warmup = warmup;
@@ -430,19 +365,15 @@ Called on load to set the initial values from configure strings
 
 pub unsafe extern "C" fn CG_SetConfigValues() {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    cgs.scores1 =
-        atoi(CG_ConfigString(6 as i32));
-    cgs.scores2 =
-        atoi(CG_ConfigString(7 as i32));
-    cgs.levelStartTime =
-        atoi(CG_ConfigString(21 as i32));
+    cgs.scores1 = atoi(CG_ConfigString(6 as i32));
+    cgs.scores2 = atoi(CG_ConfigString(7 as i32));
+    cgs.levelStartTime = atoi(CG_ConfigString(21 as i32));
     if cgs.gametype as u32 == GT_CTF as i32 as u32 {
         s = CG_ConfigString(23 as i32);
         cgs.redflag = *s.offset(0 as i32 as isize) as i32 - '0' as i32;
         cgs.blueflag = *s.offset(1 as i32 as isize) as i32 - '0' as i32
     }
-    cg.warmup =
-        atoi(CG_ConfigString(5 as i32));
+    cg.warmup = atoi(CG_ConfigString(5 as i32));
 }
 /*
 =====================
@@ -512,10 +443,7 @@ unsafe extern "C" fn CG_ConfigStringModified() {
     num = atoi(CG_Argv(1 as i32));
     // get the gamestate from the client system, which will have the
     // new configstring already integrated
-    trap_GetGameState(
-        &mut cgs.gameState as *mut _
-            as *mut gameState_t,
-    );
+    trap_GetGameState(&mut cgs.gameState as *mut _ as *mut gameState_t);
     // look up the individual string that was modified
     str = CG_ConfigString(num);
     // do something with it if necessary
@@ -549,16 +477,13 @@ unsafe extern "C" fn CG_ConfigStringModified() {
     //MISSIONPACK
     } else if num >= 12 as i32 && num <= 12 as i32 + 1 as i32 {
         cgs.teamVoteTime[(num - 12 as i32) as usize] = atoi(str);
-        cgs.teamVoteModified[(num - 12 as i32) as usize] =
-            qtrue
+        cgs.teamVoteModified[(num - 12 as i32) as usize] = qtrue
     } else if num >= 16 as i32 && num <= 16 as i32 + 1 as i32 {
         cgs.teamVoteYes[(num - 16 as i32) as usize] = atoi(str);
-        cgs.teamVoteModified[(num - 16 as i32) as usize] =
-            qtrue
+        cgs.teamVoteModified[(num - 16 as i32) as usize] = qtrue
     } else if num >= 18 as i32 && num <= 18 as i32 + 1 as i32 {
         cgs.teamVoteNo[(num - 18 as i32) as usize] = atoi(str);
-        cgs.teamVoteModified[(num - 18 as i32) as usize] =
-            qtrue
+        cgs.teamVoteModified[(num - 18 as i32) as usize] = qtrue
     } else if num >= 14 as i32 && num <= 14 as i32 + 1 as i32 {
         Q_strncpyz(
             cgs.teamVoteString[(num - 14 as i32) as usize].as_mut_ptr(),
@@ -566,36 +491,25 @@ unsafe extern "C" fn CG_ConfigStringModified() {
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
     } else if num == 22 as i32 {
-        cg.intermissionStarted =
-            atoi(str) as qboolean
+        cg.intermissionStarted = atoi(str) as qboolean
     } else if num >= 32 as i32 && num < 32 as i32 + 256 as i32 {
-        cgs.gameModels[(num - 32 as i32) as usize] =
-            trap_R_RegisterModel(str)
+        cgs.gameModels[(num - 32 as i32) as usize] = trap_R_RegisterModel(str)
     } else if num >= 32 as i32 + 256 as i32 && num < 32 as i32 + 256 as i32 + 256 as i32 {
         if *str.offset(0 as i32 as isize) as i32 != '*' as i32 {
             // player specific sounds don't register here
             cgs.gameSounds[(num - (32 as i32 + 256 as i32)) as usize] =
-                trap_S_RegisterSound(
-                    str,
-                    qfalse,
-                )
+                trap_S_RegisterSound(str, qfalse)
         }
     } else if num >= 32 as i32 + 256 as i32 + 256 as i32
         && num < 32 as i32 + 256 as i32 + 256 as i32 + 64 as i32
     {
-        CG_NewClientInfo(
-            num - (32 as i32 + 256 as i32 + 256 as i32),
-        );
+        CG_NewClientInfo(num - (32 as i32 + 256 as i32 + 256 as i32));
         CG_BuildSpectatorString();
     } else if num == 23 as i32 {
-        if cgs.gametype as u32
-            == GT_CTF as i32 as u32
-        {
+        if cgs.gametype as u32 == GT_CTF as i32 as u32 {
             // format is rb where its red/blue, 0 is at base, 1 is taken, 2 is dropped
-            cgs.redflag =
-                *str.offset(0 as i32 as isize) as i32 - '0' as i32;
-            cgs.blueflag =
-                *str.offset(1 as i32 as isize) as i32 - '0' as i32
+            cgs.redflag = *str.offset(0 as i32 as isize) as i32 - '0' as i32;
+            cgs.blueflag = *str.offset(1 as i32 as isize) as i32 - '0' as i32
         }
     } else if num == 24 as i32 {
         CG_ShaderStateChanged();
@@ -622,14 +536,11 @@ unsafe extern "C" fn CG_AddToTeamChat(mut str: *const libc::c_char) {
     if chatHeight <= 0 as i32 || cg_teamChatTime.integer <= 0 as i32 {
         // team chat disabled, dump into normal chat
         cgs.teamLastChatPos = 0 as i32;
-        cgs.teamChatPos =
-            cgs.teamLastChatPos;
+        cgs.teamChatPos = cgs.teamLastChatPos;
         return;
     }
     len = 0 as i32;
-    p = cgs.teamChatMsgs
-        [(cgs.teamChatPos % chatHeight) as usize]
-        .as_mut_ptr();
+    p = cgs.teamChatMsgs[(cgs.teamChatPos % chatHeight) as usize].as_mut_ptr();
     *p = 0 as i32 as libc::c_char;
     lastcolor = '7' as i32;
     ls = 0 as *mut libc::c_char;
@@ -641,13 +552,9 @@ unsafe extern "C" fn CG_AddToTeamChat(mut str: *const libc::c_char) {
                 p = p.offset(-(p.offset_from(ls) as isize as isize))
             }
             *p = 0 as i32 as libc::c_char;
-            cgs.teamChatMsgTimes
-                [(cgs.teamChatPos % chatHeight) as usize] =
-                cg.time;
+            cgs.teamChatMsgTimes[(cgs.teamChatPos % chatHeight) as usize] = cg.time;
             cgs.teamChatPos += 1;
-            p = cgs.teamChatMsgs
-                [(cgs.teamChatPos % chatHeight) as usize]
-                .as_mut_ptr();
+            p = cgs.teamChatMsgs[(cgs.teamChatPos % chatHeight) as usize].as_mut_ptr();
             *p = 0 as i32 as libc::c_char;
             let fresh0 = p;
             p = p.offset(1);
@@ -683,15 +590,10 @@ unsafe extern "C" fn CG_AddToTeamChat(mut str: *const libc::c_char) {
         }
     }
     *p = 0 as i32 as libc::c_char;
-    cgs.teamChatMsgTimes
-        [(cgs.teamChatPos % chatHeight) as usize] =
-        cg.time;
+    cgs.teamChatMsgTimes[(cgs.teamChatPos % chatHeight) as usize] = cg.time;
     cgs.teamChatPos += 1;
-    if cgs.teamChatPos - cgs.teamLastChatPos
-        > chatHeight
-    {
-        cgs.teamLastChatPos =
-            cgs.teamChatPos - chatHeight
+    if cgs.teamChatPos - cgs.teamLastChatPos > chatHeight {
+        cgs.teamLastChatPos = cgs.teamChatPos - chatHeight
     };
 }
 /*
@@ -708,9 +610,7 @@ require a reload of all the media
 
 unsafe extern "C" fn CG_MapRestart() {
     if cg_showmiss.integer != 0 {
-        CG_Printf(
-            b"CG_MapRestart\n\x00" as *const u8 as *const libc::c_char,
-        );
+        CG_Printf(b"CG_MapRestart\n\x00" as *const u8 as *const libc::c_char);
     }
     CG_InitLocalEntities();
     CG_InitMarkPolys();
@@ -730,10 +630,7 @@ unsafe extern "C" fn CG_MapRestart() {
     // play the "fight" sound if this is a restart without warmup
     if cg.warmup == 0 as i32 {
         /* && cgs.gametype == GT_TOURNAMENT */
-        trap_S_StartLocalSound(
-            cgs.media.countFightSound,
-            CHAN_ANNOUNCER as i32,
-        );
+        trap_S_StartLocalSound(cgs.media.countFightSound, CHAN_ANNOUNCER as i32);
         CG_CenterPrint(
             b"FIGHT!\x00" as *const u8 as *const libc::c_char,
             120 as i32,
@@ -804,21 +701,11 @@ unsafe extern "C" fn CG_ServerCommand() {
         return;
     }
     if libc::strcmp(cmd, b"chat\x00" as *const u8 as *const libc::c_char) == 0 {
-        if cgs.gametype as u32
-            >= GT_TEAM as i32 as u32
-            && cg_teamChatsOnly.integer != 0
-        {
+        if cgs.gametype as u32 >= GT_TEAM as i32 as u32 && cg_teamChatsOnly.integer != 0 {
             return;
         }
-        trap_S_StartLocalSound(
-            cgs.media.talkSound,
-            CHAN_LOCAL_SOUND as i32,
-        );
-        Q_strncpyz(
-            text.as_mut_ptr(),
-            CG_Argv(1 as i32),
-            150 as i32,
-        );
+        trap_S_StartLocalSound(cgs.media.talkSound, CHAN_LOCAL_SOUND as i32);
+        Q_strncpyz(text.as_mut_ptr(), CG_Argv(1 as i32), 150 as i32);
         CG_RemoveChatEscapeChar(text.as_mut_ptr());
         CG_Printf(
             b"%s\n\x00" as *const u8 as *const libc::c_char,
@@ -827,15 +714,8 @@ unsafe extern "C" fn CG_ServerCommand() {
         return;
     }
     if libc::strcmp(cmd, b"tchat\x00" as *const u8 as *const libc::c_char) == 0 {
-        trap_S_StartLocalSound(
-            cgs.media.talkSound,
-            CHAN_LOCAL_SOUND as i32,
-        );
-        Q_strncpyz(
-            text.as_mut_ptr(),
-            CG_Argv(1 as i32),
-            150 as i32,
-        );
+        trap_S_StartLocalSound(cgs.media.talkSound, CHAN_LOCAL_SOUND as i32);
+        Q_strncpyz(text.as_mut_ptr(), CG_Argv(1 as i32), 150 as i32);
         CG_RemoveChatEscapeChar(text.as_mut_ptr());
         CG_AddToTeamChat(text.as_mut_ptr());
         CG_Printf(
@@ -856,11 +736,7 @@ unsafe extern "C" fn CG_ServerCommand() {
         CG_MapRestart();
         return;
     }
-    if Q_stricmp(
-        cmd,
-        b"remapShader\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32
-    {
+    if Q_stricmp(cmd, b"remapShader\x00" as *const u8 as *const libc::c_char) == 0 as i32 {
         if trap_Argc() == 4 as i32 {
             let mut shader1: [libc::c_char; 64] = [0; 64];
             let mut shader2: [libc::c_char; 64] = [0; 64];
@@ -925,11 +801,7 @@ with this this snapshot.
 pub unsafe extern "C" fn CG_ExecuteNewServerCommands(mut latestSequence: i32) {
     while cgs.serverCommandSequence < latestSequence {
         cgs.serverCommandSequence += 1;
-        if trap_GetServerCommand(
-            cgs.serverCommandSequence,
-        ) as u64
-            != 0
-        {
+        if trap_GetServerCommand(cgs.serverCommandSequence) as u64 != 0 {
             CG_ServerCommand();
         }
     }

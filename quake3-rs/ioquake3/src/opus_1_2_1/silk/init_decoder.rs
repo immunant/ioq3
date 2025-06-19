@@ -332,9 +332,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /* ***********************/
 #[no_mangle]
 
-pub unsafe extern "C" fn silk_init_decoder(
-    mut psDec: *mut silk_decoder_state,
-) -> i32
+pub unsafe extern "C" fn silk_init_decoder(mut psDec: *mut silk_decoder_state) -> i32
 /* I/O  Decoder state pointer                       */ {
     /* Clear the entire encoder state, except anything copied */
     crate::stdlib::memset(
@@ -347,12 +345,8 @@ pub unsafe extern "C" fn silk_init_decoder(
     (*psDec).prev_gain_Q16 = 65536 as i32;
     (*psDec).arch = opus_select_arch();
     /* Reset CNG state */
-    crate::src::opus_1_2_1::silk::CNG::silk_CNG_Reset(
-        psDec as *mut silk_decoder_state,
-    );
+    crate::src::opus_1_2_1::silk::CNG::silk_CNG_Reset(psDec as *mut silk_decoder_state);
     /* Reset PLC state */
-    crate::src::opus_1_2_1::silk::PLC::silk_PLC_Reset(
-        psDec as *mut silk_decoder_state,
-    );
+    crate::src::opus_1_2_1::silk::PLC::silk_PLC_Reset(psDec as *mut silk_decoder_state);
     return 0 as i32;
 }

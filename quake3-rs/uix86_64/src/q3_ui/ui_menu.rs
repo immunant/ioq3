@@ -130,8 +130,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -153,8 +152,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -176,8 +174,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -199,8 +196,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -222,8 +218,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -245,8 +240,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -268,8 +262,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -291,8 +284,7 @@ static mut s_main: mainmenu_t = mainmenu_t {
             top: 0,
             right: 0,
             bottom: 0,
-            parent: 0 as *const menuframework_s
-                as *mut menuframework_s,
+            parent: 0 as *const menuframework_s as *mut menuframework_s,
             menuPosition: 0,
             flags: 0,
             callback: None,
@@ -377,10 +369,7 @@ pub unsafe extern "C" fn Main_MenuEvent(mut ptr: *mut libc::c_void, mut event: i
             UI_ConfirmMenu(
                 b"EXIT GAME?\x00" as *const u8 as *const libc::c_char,
                 None,
-                Some(
-                    MainMenu_ExitAction
-                        as unsafe extern "C" fn(_: qboolean) -> (),
-                ),
+                Some(MainMenu_ExitAction as unsafe extern "C" fn(_: qboolean) -> ()),
             );
         }
         _ => {}
@@ -400,9 +389,7 @@ pub unsafe extern "C" fn MainMenu_Cache() {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ErrorMessage_Key(
-    mut _key: i32,
-) -> sfxHandle_t {
+pub unsafe extern "C" fn ErrorMessage_Key(mut _key: i32) -> sfxHandle_t {
     trap_Cvar_Set(
         b"com_errorMessage\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
@@ -498,17 +485,12 @@ unsafe extern "C" fn Main_MenuDraw() {
         0 as i32,
         ::std::mem::size_of::<refEntity_t>() as libc::c_ulong,
     );
-    adjust = (5.0f64
-        * crate::stdlib::sin(
-            (uis.realtime as f32 / 5000 as i32 as f32) as f64,
-        )) as f32;
+    adjust =
+        (5.0f64 * crate::stdlib::sin((uis.realtime as f32 / 5000 as i32 as f32) as f64)) as f32;
     angles[0 as i32 as usize] = 0 as i32 as vec_t;
     angles[1 as i32 as usize] = 180 as i32 as f32 + adjust;
     angles[2 as i32 as usize] = 0 as i32 as vec_t;
-    AnglesToAxis(
-        angles.as_mut_ptr() as *const vec_t,
-        ent.axis.as_mut_ptr(),
-    );
+    AnglesToAxis(angles.as_mut_ptr() as *const vec_t, ent.axis.as_mut_ptr());
     ent.hModel = s_main.bannerModel;
     ent.origin[0 as i32 as usize] = origin[0 as i32 as usize];
     ent.origin[1 as i32 as usize] = origin[1 as i32 as usize];
@@ -520,12 +502,8 @@ unsafe extern "C" fn Main_MenuDraw() {
     ent.oldorigin[0 as i32 as usize] = ent.origin[0 as i32 as usize];
     ent.oldorigin[1 as i32 as usize] = ent.origin[1 as i32 as usize];
     ent.oldorigin[2 as i32 as usize] = ent.origin[2 as i32 as usize];
-    trap_R_AddRefEntityToScene(
-        &mut ent as *mut _ as *const refEntity_t,
-    );
-    trap_R_RenderScene(
-        &mut refdef as *mut _ as *const refdef_t,
-    );
+    trap_R_AddRefEntityToScene(&mut ent as *mut _ as *const refEntity_t);
+    trap_R_RenderScene(&mut refdef as *mut _ as *const refdef_t);
     if crate::stdlib::strlen(s_errorMessage.errorMessage.as_mut_ptr()) != 0 {
         UI_DrawProportionalString_AutoWrapped(
             320 as i32,
@@ -538,9 +516,7 @@ unsafe extern "C" fn Main_MenuDraw() {
         );
     } else {
         // standard menu drawing
-        Menu_Draw(
-            &mut s_main.menu as *mut _ as *mut _tag_menuframework,
-        );
+        Menu_Draw(&mut s_main.menu as *mut _ as *mut _tag_menuframework);
     }
     if uis.demoversion as u64 != 0 {
         UI_DrawProportionalString(
@@ -666,23 +642,19 @@ and that local cinematics are killed
 
 pub unsafe extern "C" fn UI_MainMenu() {
     let mut y: i32 = 0;
-    let mut teamArena: qboolean =
-        qfalse;
+    let mut teamArena: qboolean = qfalse;
     let mut style: i32 = 0x1 as i32 | 0x800 as i32;
     trap_Cvar_Set(
         b"sv_killserver\x00" as *const u8 as *const libc::c_char,
         b"1\x00" as *const u8 as *const libc::c_char,
     );
-    if uis.demoversion as u64 == 0
-        && ui_cdkeychecked.integer == 0
-    {
+    if uis.demoversion as u64 == 0 && ui_cdkeychecked.integer == 0 {
         let mut key: [libc::c_char; 17] = [0; 17];
         trap_GetCDKey(
             key.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 17]>() as libc::c_ulong as i32,
         );
-        if trap_VerifyCDKey(key.as_mut_ptr(), 0 as *const libc::c_char)
-            as u32
+        if trap_VerifyCDKey(key.as_mut_ptr(), 0 as *const libc::c_char) as u32
             == qfalse as i32 as u32
         {
             UI_CDKeyMenu();
@@ -708,18 +680,14 @@ pub unsafe extern "C" fn UI_MainMenu() {
     );
     if crate::stdlib::strlen(s_errorMessage.errorMessage.as_mut_ptr()) != 0 {
         s_errorMessage.menu.draw = Some(Main_MenuDraw as unsafe extern "C" fn() -> ());
-        s_errorMessage.menu.key = Some(
-            ErrorMessage_Key
-                as unsafe extern "C" fn(_: i32) -> sfxHandle_t,
-        );
+        s_errorMessage.menu.key =
+            Some(ErrorMessage_Key as unsafe extern "C" fn(_: i32) -> sfxHandle_t);
         s_errorMessage.menu.fullscreen = qtrue;
         s_errorMessage.menu.wrapAround = qtrue;
         s_errorMessage.menu.showlogo = qtrue;
         trap_Key_SetCatcher(0x2 as i32);
         uis.menusp = 0 as i32;
-        UI_PushMenu(
-            &mut s_errorMessage.menu as *mut _ as *mut _tag_menuframework,
-        );
+        UI_PushMenu(&mut s_errorMessage.menu as *mut _ as *mut _tag_menuframework);
         return;
     }
     s_main.menu.draw = Some(Main_MenuDraw as unsafe extern "C" fn() -> ());
@@ -784,8 +752,7 @@ pub unsafe extern "C" fn UI_MainMenu() {
         b"CINEMATICS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_main.cinematics.color = color_red.as_mut_ptr();
     s_main.cinematics.style = style;
-    if uis.demoversion as u64 == 0 && UI_TeamArenaExists() as u32 != 0
-    {
+    if uis.demoversion as u64 == 0 && UI_TeamArenaExists() as u32 != 0 {
         teamArena = qtrue;
         y += 34 as i32;
         s_main.teamArena.generic.type_0 = 9 as i32;
@@ -862,7 +829,5 @@ pub unsafe extern "C" fn UI_MainMenu() {
     );
     trap_Key_SetCatcher(0x2 as i32);
     uis.menusp = 0 as i32;
-    UI_PushMenu(
-        &mut s_main.menu as *mut _ as *mut _tag_menuframework,
-    );
+    UI_PushMenu(&mut s_main.menu as *mut _ as *mut _tag_menuframework);
 }

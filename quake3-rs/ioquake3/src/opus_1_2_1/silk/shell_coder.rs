@@ -98,10 +98,7 @@ unsafe extern "C" fn decode_split(
 /* Shell encoder, operates on one shell code frame of 16 pulses */
 #[no_mangle]
 
-pub unsafe extern "C" fn silk_shell_encoder(
-    mut psRangeEnc: *mut ec_enc,
-    mut pulses0: *const i32,
-)
+pub unsafe extern "C" fn silk_shell_encoder(mut psRangeEnc: *mut ec_enc, mut pulses0: *const i32)
 /* I    data: nonnegative pulse amplitudes          */
 {
     let mut pulses1: [i32; 8] = [0; 8];

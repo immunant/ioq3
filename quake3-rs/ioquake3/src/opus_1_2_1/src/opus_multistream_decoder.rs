@@ -297,10 +297,7 @@ pub unsafe extern "C" fn opus_multistream_decoder_init(
         (*st).layout.mapping[i as usize] = *mapping.offset(i as isize);
         i += 1
     }
-    if validate_layout(
-        &mut (*st).layout as *mut _ as *const ChannelLayout,
-    ) == 0
-    {
+    if validate_layout(&mut (*st).layout as *mut _ as *const ChannelLayout) == 0 {
         return -(1 as i32);
     }
     ptr = (st as *mut libc::c_char)
@@ -358,9 +355,8 @@ pub unsafe extern "C" fn opus_multistream_decoder_create(
         }
         return 0 as *mut OpusMSDecoder;
     }
-    st = opus_alloc(
-        opus_multistream_decoder_get_size(streams, coupled_streams) as size_t
-    ) as *mut OpusMSDecoder;
+    st = opus_alloc(opus_multistream_decoder_get_size(streams, coupled_streams) as size_t)
+        as *mut OpusMSDecoder;
     if st.is_null() {
         if !error.is_null() {
             *error = -(7 as i32)
@@ -448,9 +444,7 @@ unsafe extern "C" fn opus_multistream_decode_native(
         st,
         4029 as i32,
         (&mut Fs as *mut opus_int32).offset(
-            (&mut Fs as *mut opus_int32)
-                .offset_from(&mut Fs as *mut opus_int32) as isize
-                as isize,
+            (&mut Fs as *mut opus_int32).offset_from(&mut Fs as *mut opus_int32) as isize as isize,
         ),
     );
     frame_size = if frame_size < Fs / 25 as i32 * 3 as i32 {
@@ -527,11 +521,8 @@ unsafe extern "C" fn opus_multistream_decode_native(
             loop
             /* Copy "left" audio to the channel(s) where it belongs */
             {
-                chan = get_left_channel(
-                    &mut (*st).layout as *mut _ as *const ChannelLayout,
-                    s,
-                    prev,
-                );
+                chan =
+                    get_left_channel(&mut (*st).layout as *mut _ as *const ChannelLayout, s, prev);
                 if !(chan != -(1 as i32)) {
                     break;
                 }
@@ -550,11 +541,8 @@ unsafe extern "C" fn opus_multistream_decode_native(
             loop
             /* Copy "right" audio to the channel(s) where it belongs */
             {
-                chan = get_right_channel(
-                    &mut (*st).layout as *mut _ as *const ChannelLayout,
-                    s,
-                    prev,
-                );
+                chan =
+                    get_right_channel(&mut (*st).layout as *mut _ as *const ChannelLayout, s, prev);
                 if !(chan != -(1 as i32)) {
                     break;
                 }
@@ -652,8 +640,7 @@ unsafe extern "C" fn opus_copy_channel_out_short(
     mut src_stride: i32,
     mut frame_size: i32,
 ) {
-    let mut short_dst: *mut opus_int16 =
-        0 as *mut opus_int16;
+    let mut short_dst: *mut opus_int16 = 0 as *mut opus_int16;
     let mut i: opus_int32 = 0;
     short_dst = dst as *mut opus_int16;
     if !src.is_null() {
@@ -666,8 +653,7 @@ unsafe extern "C" fn opus_copy_channel_out_short(
     } else {
         i = 0 as i32;
         while i < frame_size {
-            *short_dst.offset((i * dst_stride + dst_channel) as isize) =
-                0 as i32 as opus_int16;
+            *short_dst.offset((i * dst_stride + dst_channel) as isize) = 0 as i32 as opus_int16;
             i += 1
         }
     };
@@ -757,18 +743,14 @@ pub unsafe extern "C" fn opus_multistream_decoder_ctl(
             let mut dec: *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder =
                 0 as *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
             /* For int32* GET params, just query the first stream */
-            let mut value: *mut opus_int32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_int32>();
+            let mut value: *mut opus_int32 = ap.as_va_list().arg::<*mut opus_int32>();
             dec = ptr as *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder;
             ret = crate::src::opus_1_2_1::src::opus_decoder::opus_decoder_ctl(dec, request, value);
             current_block = 7330218953828964527;
         }
         4031 => {
             let mut s: i32 = 0;
-            let mut value_0: *mut opus_uint32 =
-                ap.as_va_list()
-                    .arg::<*mut opus_uint32>();
+            let mut value_0: *mut opus_uint32 = ap.as_va_list().arg::<*mut opus_uint32>();
             let mut tmp: opus_uint32 = 0;
             if value_0.is_null() {
                 current_block = 14298507163138330979;
@@ -850,8 +832,7 @@ pub unsafe extern "C" fn opus_multistream_decoder_ctl(
         4034 | 4046 => {
             let mut s_2: i32 = 0;
             /* This works for int32 params */
-            let mut value_2: opus_int32 =
-                ap.as_va_list().arg::<opus_int32>();
+            let mut value_2: opus_int32 = ap.as_va_list().arg::<opus_int32>();
             s_2 = 0 as i32;
             while s_2 < (*st).layout.nb_streams {
                 let mut dec_2: *mut crate::src::opus_1_2_1::src::opus_decoder::OpusDecoder =

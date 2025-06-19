@@ -286,9 +286,7 @@ unsafe extern "C" fn init_mem_destination(mut _cinfo: j_compress_ptr) {
  * write it out when emptying the buffer externally.
  */
 
-unsafe extern "C" fn empty_output_buffer(
-    mut cinfo: j_compress_ptr,
-) -> boolean {
+unsafe extern "C" fn empty_output_buffer(mut cinfo: j_compress_ptr) -> boolean {
     let mut dest: my_dest_ptr = (*cinfo).dest as my_dest_ptr;
     if crate::stdlib::fwrite(
         (*dest).buffer as *const libc::c_void,
@@ -310,9 +308,7 @@ unsafe extern "C" fn empty_output_buffer(
     return 1 as i32;
 }
 
-unsafe extern "C" fn empty_mem_output_buffer(
-    mut cinfo: j_compress_ptr,
-) -> boolean {
+unsafe extern "C" fn empty_mem_output_buffer(mut cinfo: j_compress_ptr) -> boolean {
     let mut nextsize: size_t = 0;
     let mut nextbuffer: *mut JOCTET = 0 as *mut JOCTET;
     let mut dest: my_mem_dest_ptr = (*cinfo).dest as my_mem_dest_ptr;
@@ -372,9 +368,7 @@ unsafe extern "C" fn term_destination(mut cinfo: j_compress_ptr) {
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
     }
     crate::stdlib::fflush((*dest).outfile);
@@ -404,10 +398,7 @@ unsafe extern "C" fn term_mem_destination(mut cinfo: j_compress_ptr) {
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_stdio_dest(
-    mut cinfo: j_compress_ptr,
-    mut outfile: *mut FILE,
-) {
+pub unsafe extern "C" fn jpeg_stdio_dest(mut cinfo: j_compress_ptr, mut outfile: *mut FILE) {
     let mut dest: my_dest_ptr = 0 as *mut my_destination_mgr;
     /* The destination object is made permanent so that multiple JPEG images
      * can be written to the same file without re-executing jpeg_stdio_dest.
@@ -431,12 +422,8 @@ pub unsafe extern "C" fn jpeg_stdio_dest(
     dest = (*cinfo).dest as my_dest_ptr;
     (*dest).pub_0.init_destination =
         Some(init_destination as unsafe extern "C" fn(_: j_compress_ptr) -> ());
-    (*dest).pub_0.empty_output_buffer = Some(
-        empty_output_buffer
-            as unsafe extern "C" fn(
-                _: j_compress_ptr,
-            ) -> boolean,
-    );
+    (*dest).pub_0.empty_output_buffer =
+        Some(empty_output_buffer as unsafe extern "C" fn(_: j_compress_ptr) -> boolean);
     (*dest).pub_0.term_destination =
         Some(term_destination as unsafe extern "C" fn(_: j_compress_ptr) -> ());
     (*dest).outfile = outfile;
@@ -487,18 +474,12 @@ pub unsafe extern "C" fn jpeg_mem_dest(
         ) as *mut jpeg_destination_mgr
     }
     dest = (*cinfo).dest as my_mem_dest_ptr;
-    (*dest).pub_0.init_destination = Some(
-        init_mem_destination as unsafe extern "C" fn(_: j_compress_ptr) -> (),
-    );
-    (*dest).pub_0.empty_output_buffer = Some(
-        empty_mem_output_buffer
-            as unsafe extern "C" fn(
-                _: j_compress_ptr,
-            ) -> boolean,
-    );
-    (*dest).pub_0.term_destination = Some(
-        term_mem_destination as unsafe extern "C" fn(_: j_compress_ptr) -> (),
-    );
+    (*dest).pub_0.init_destination =
+        Some(init_mem_destination as unsafe extern "C" fn(_: j_compress_ptr) -> ());
+    (*dest).pub_0.empty_output_buffer =
+        Some(empty_mem_output_buffer as unsafe extern "C" fn(_: j_compress_ptr) -> boolean);
+    (*dest).pub_0.term_destination =
+        Some(term_mem_destination as unsafe extern "C" fn(_: j_compress_ptr) -> ());
     (*dest).outbuffer = outbuffer;
     (*dest).outsize = outsize;
     (*dest).newbuffer = 0 as *mut u8;
@@ -514,9 +495,7 @@ pub unsafe extern "C" fn jpeg_mem_dest(
                     .error_exit
                     .expect("non-null function pointer"),
             )
-            .expect("non-null function pointer")(
-                cinfo as j_common_ptr
-            );
+            .expect("non-null function pointer")(cinfo as j_common_ptr);
         }
         *outsize = 4096 as i32 as libc::c_ulong
     }
