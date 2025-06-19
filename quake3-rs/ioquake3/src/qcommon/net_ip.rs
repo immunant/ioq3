@@ -2435,7 +2435,7 @@ pub unsafe extern "C" fn NET_Sleep(mut msec: libc::c_int) {
         .__fds_bits
         .as_mut_ptr()
         .offset(0 as libc::c_int as isize) as *mut crate::stdlib::__fd_mask;
-    asm!("cld; rep; stosq" : "={cx}" (fresh1), "={di}" (fresh3) : "{ax}"
+    std::arch::asm!("cld; rep; stosq" : "={cx}" (fresh1), "={di}" (fresh3) : "{ax}"
      (0 as libc::c_int), "0"
      (c2rust_asm_casts::AsmCast::cast_in(fresh0, fresh4)), "1"
      (c2rust_asm_casts::AsmCast::cast_in(fresh2, fresh5)) : "memory" :
