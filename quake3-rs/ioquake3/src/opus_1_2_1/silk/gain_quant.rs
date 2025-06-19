@@ -1,5 +1,3 @@
-use ::libc;
-
 pub mod SigProc_FIX_h {
     /* Allocate opus_int16 aligned to 4-byte memory address */
     /* Useful Macros that can be adjusted to other platforms */

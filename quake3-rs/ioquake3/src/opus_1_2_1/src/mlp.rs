@@ -6,7 +6,6 @@ pub struct MLP {
     pub topo: *const i32,
     pub weights: *const f32,
 }
-use ::libc;
 
 pub mod arch_h {
 

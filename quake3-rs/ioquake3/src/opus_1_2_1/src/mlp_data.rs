@@ -1,5 +1,3 @@
-use ::libc;
-
 pub use crate::src::opus_1_2_1::src::mlp::MLP;
 /* RMS error was 0.280492, seed was 1480478173 */
 /* 0.005976 0.031821 (0.280494 0.280492) done */

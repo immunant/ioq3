@@ -1,5 +1,3 @@
-use ::libc;
-
 pub mod q_shared_h {
 
     /*

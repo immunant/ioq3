@@ -1,5 +1,3 @@
-use ::libc;
-
 pub use crate::control_h::silk_EncControlStruct;
 pub use crate::opus_types_h::opus_int32;
 pub use crate::stdlib::__int32_t;

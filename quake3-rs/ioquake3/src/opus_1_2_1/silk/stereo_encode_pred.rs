@@ -1,5 +1,3 @@
-use ::libc;
-
 pub use crate::opus_types_h::opus_uint32;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_ctx;
 pub use crate::src::opus_1_2_1::celt::entcode::ec_enc;

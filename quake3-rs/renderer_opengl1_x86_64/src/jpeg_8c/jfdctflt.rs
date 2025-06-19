@@ -1,5 +1,3 @@
-use ::libc;
-
 pub use crate::jmorecfg_h::JDIMENSION;
 pub use crate::jmorecfg_h::JSAMPLE;
 pub use crate::jpeglib_h::JSAMPARRAY;

@@ -1,5 +1,3 @@
-use ::libc;
-
 static mut s_noise_table: [f32; 256] = [0.; 256];
 
 static mut s_noise_perm: [i32; 256] = [0; 256];

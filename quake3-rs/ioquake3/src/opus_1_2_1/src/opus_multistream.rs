@@ -1,5 +1,3 @@
-use ::libc;
-
 pub use crate::opus_private_h::ChannelLayout;
 /* Copyright (c) 2011 Xiph.Org Foundation
 Written by Jean-Marc Valin */

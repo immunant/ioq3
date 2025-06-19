@@ -1,5 +1,3 @@
-use ::libc;
-
 pub mod SigProc_FIX_h {
     /* Compute reflection coefficients from input signal */
     /* O    Residual energy                                             */

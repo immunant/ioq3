@@ -1,5 +1,3 @@
-use ::libc;
-
 pub use crate::opus_types_h::opus_int16;
 pub use crate::opus_types_h::opus_int32;
 pub use crate::resampler_structs_h::_silk_resampler_state_struct;

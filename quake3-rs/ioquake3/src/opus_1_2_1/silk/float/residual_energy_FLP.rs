@@ -1,5 +1,3 @@
-use ::libc;
-
 /* 16th order LPC analysis filter */
 /* O    LPC residual signal                         */
 /* I    LPC coefficients                            */

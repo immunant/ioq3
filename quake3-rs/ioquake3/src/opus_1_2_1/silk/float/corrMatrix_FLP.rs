@@ -1,5 +1,3 @@
-use ::libc;
-
 /* Calculates correlation vector X'*t */
 /* **********************************************************************
 Copyright (c) 2006-2011, Skype Limited. All rights reserved.

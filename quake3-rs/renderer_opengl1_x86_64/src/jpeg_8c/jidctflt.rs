@@ -1,5 +1,3 @@
-use ::libc;
-
 pub use crate::stddef_h::size_t;
 
 pub use crate::jdct_h::FLOAT_MULT_TYPE;

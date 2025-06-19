@@ -1,5 +1,3 @@
-use ::libc;
-
 pub use crate::arch_h::opus_val32;
 pub use crate::opus_types_h::opus_int16;
 pub use crate::opus_types_h::opus_uint32;

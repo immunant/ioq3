@@ -1,5 +1,3 @@
-use ::libc;
-
 pub mod macros_h {
     #[inline]
 

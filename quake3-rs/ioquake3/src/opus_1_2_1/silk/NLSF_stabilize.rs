@@ -1,5 +1,3 @@
-use ::libc;
-
 pub mod SigProc_FIX_h {
     /* Laroia low complexity NLSF weights */
     /* O     Pointer to input vector weights [D]                        */

@@ -1,5 +1,3 @@
-use ::libc;
-
 pub mod resampler_rom_h {
     /* **********************************************************************
     Copyright (c) 2006-2011, Skype Limited. All rights reserved.

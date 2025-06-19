@@ -1,5 +1,3 @@
-use ::libc;
-
 pub mod float_cast_h {
     /* Copyright (C) 2001 Erik de Castro Lopo <erikd AT mega-nerd DOT com> */
     /*
