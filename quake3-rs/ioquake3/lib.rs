@@ -9890,5 +9890,20 @@ pub mod src {
     } // mod zlib
 } // mod src
 
-// Export main explicitly
-pub use src::sys::sys_main::main;
+pub fn main() {
+    let mut args: Vec<*mut libc::c_char> = Vec::new();
+    for arg in ::std::env::args() {
+        args.push(
+            ::std::ffi::CString::new(arg)
+                .expect("Failed to convert argument into CString.")
+                .into_raw(),
+        );
+    }
+    args.push(::std::ptr::null_mut());
+    unsafe {
+        ::std::process::exit(src::sys::sys_main::main_0(
+            (args.len() - 1) as libc::c_int,
+            args.as_mut_ptr() as *mut *mut libc::c_char,
+        ) as i32)
+    }
+}
