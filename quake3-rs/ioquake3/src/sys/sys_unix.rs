@@ -12562,8 +12562,7 @@ pub unsafe extern "C" fn Sys_Milliseconds() -> i32 {
     curtime = (tp.tv_sec as libc::c_ulong)
         .wrapping_sub(sys_timeBase)
         .wrapping_mul(1000 as i32 as libc::c_ulong)
-        .wrapping_add((tp.tv_usec as isize / 1000) as libc::c_ulong)
-        as i32;
+        .wrapping_add((tp.tv_usec as isize / 1000) as libc::c_ulong) as i32;
     return curtime;
 }
 /*
@@ -13153,7 +13152,8 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
                 tv_usec: 0,
             };
             timeout.tv_sec = ((msec / 1000 as i32) as crate::stdlib::__time_t) as libc::time_t;
-            timeout.tv_usec = ((msec % 1000 as i32 * 1000 as i32) as crate::stdlib::__suseconds_t) as libc::suseconds_t;
+            timeout.tv_usec = ((msec % 1000 as i32 * 1000 as i32) as crate::stdlib::__suseconds_t)
+                as libc::suseconds_t;
             crate::stdlib::select(
                 0 as i32 + 1 as i32,
                 &mut fdset,

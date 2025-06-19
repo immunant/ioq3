@@ -7240,8 +7240,7 @@ pub mod stdlib {
         ) -> libc::c_ulong;
 
         #[no_mangle]
-        pub fn fseek(__stream: *mut crate::stdlib::FILE, __off: isize, __whence: i32)
-            -> i32;
+        pub fn fseek(__stream: *mut crate::stdlib::FILE, __off: isize, __whence: i32) -> i32;
 
         #[no_mangle]
         pub fn ftell(__stream: *mut crate::stdlib::FILE) -> isize;

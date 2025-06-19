@@ -506,14 +506,11 @@ unsafe extern "C" fn decode_mcu_DC_first(
                 }
             }
             /* Section F.1.4.4.1.2: Establish dc_context conditioning category */
-            if m < ((1 as isize) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32)
-                as i32
-            {
+            if m < ((1 as isize) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32) as i32 {
                 /* small diff category */
                 (*entropy).dc_context[ci as usize] = 0 as i32
             } else if m
-                > ((1 as isize) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32)
-                    as i32
+                > ((1 as isize) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32) as i32
             {
                 /* zero diff category */
                 (*entropy).dc_context[ci as usize] = 12 as i32 + sign * 4 as i32
@@ -869,14 +866,11 @@ unsafe extern "C" fn decode_mcu(
                 }
             }
             /* Section F.1.4.4.1.2: Establish dc_context conditioning category */
-            if m < ((1 as isize) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32)
-                as i32
-            {
+            if m < ((1 as isize) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32) as i32 {
                 /* small diff category */
                 (*entropy).dc_context[ci as usize] = 0 as i32
             } else if m
-                > ((1 as isize) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32)
-                    as i32
+                > ((1 as isize) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32) as i32
             {
                 /* zero diff category */
                 (*entropy).dc_context[ci as usize] = 12 as i32 + sign * 4 as i32

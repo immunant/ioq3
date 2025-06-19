@@ -143,8 +143,7 @@ pub unsafe extern "C" fn _make_words(
                     if j == 1 as i32 as isize {
                         marker[1 as i32 as usize] = marker[1 as i32 as usize].wrapping_add(1)
                     } else {
-                        marker[j as usize] =
-                            marker[(j - 1 as i32 as isize) as usize] << 1 as i32
+                        marker[j as usize] = marker[(j - 1 as i32 as isize) as usize] << 1 as i32
                     }
                     break;
                 /* invariant says next upper marker would already
@@ -323,8 +322,8 @@ pub unsafe extern "C" fn _book_unquantize(
                             }
                             if !sparsemap.is_null() {
                                 *r.offset(
-                                    (*sparsemap.offset(count as isize) as isize * (*b).dim
-                                        + k) as isize,
+                                    (*sparsemap.offset(count as isize) as isize * (*b).dim + k)
+                                        as isize,
                                 ) = val
                             } else {
                                 *r.offset((count * (*b).dim + k) as isize) = val
@@ -356,8 +355,8 @@ pub unsafe extern "C" fn _book_unquantize(
                             }
                             if !sparsemap.is_null() {
                                 *r.offset(
-                                    (*sparsemap.offset(count as isize) as isize * (*b).dim
-                                        + k) as isize,
+                                    (*sparsemap.offset(count as isize) as isize * (*b).dim + k)
+                                        as isize,
                                 ) = val_0
                             } else {
                                 *r.offset((count * (*b).dim + k) as isize) = val_0
@@ -670,16 +669,11 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                         as crate::config_types_h::ogg_uint32_t;
                     if *(*c).dec_firsttable.offset(bitreverse(word) as isize) == 0 as i32 as u32 {
                         while (lo + 1 as i32 as isize) < n as isize
-                            && *(*c)
-                                .codelist
-                                .offset((lo + 1 as i32 as isize) as isize)
-                                <= word
+                            && *(*c).codelist.offset((lo + 1 as i32 as isize) as isize) <= word
                         {
                             lo += 1
                         }
-                        while hi < n as isize
-                            && word >= *(*c).codelist.offset(hi as isize) & mask
-                        {
+                        while hi < n as isize && word >= *(*c).codelist.offset(hi as isize) & mask {
                             hi += 1
                         }
                         /* we only actually have 15 bits per hint to play with here.

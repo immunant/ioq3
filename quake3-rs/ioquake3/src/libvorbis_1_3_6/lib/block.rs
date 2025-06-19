@@ -707,9 +707,8 @@ unsafe extern "C" fn _preextrapolate_helper(mut v: *mut crate::codec_h::vorbis_d
             /* need to run the extrapolation in reverse! */
             j = 0 as i32 as isize;
             while j < (*v).pcm_current as isize {
-                *work.offset(j as isize) = *(*(*v).pcm.offset(i as isize)).offset(
-                    ((*v).pcm_current as isize - j - 1 as i32 as isize) as isize,
-                );
+                *work.offset(j as isize) = *(*(*v).pcm.offset(i as isize))
+                    .offset(((*v).pcm_current as isize - j - 1 as i32 as isize) as isize);
                 j += 1
             }
             /* prime as above */
@@ -732,9 +731,9 @@ unsafe extern "C" fn _preextrapolate_helper(mut v: *mut crate::codec_h::vorbis_d
             );
             j = 0 as i32 as isize;
             while j < (*v).pcm_current as isize {
-                *(*(*v).pcm.offset(i as isize)).offset(
-                    ((*v).pcm_current as isize - j - 1 as i32 as isize) as isize,
-                ) = *work.offset(j as isize);
+                *(*(*v).pcm.offset(i as isize))
+                    .offset(((*v).pcm_current as isize - j - 1 as i32 as isize) as isize) =
+                    *work.offset(j as isize);
                 j += 1
             }
             i += 1
@@ -850,8 +849,7 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
     let mut b: *mut crate::codec_internal_h::private_state =
         (*v).backend_state as *mut crate::codec_internal_h::private_state;
     let mut g: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy_global = (*b).psy_g_look;
-    let mut beginW: isize =
-        (*v).centerW - (*ci).blocksizes[(*v).W as usize] / 2 as i32 as isize;
+    let mut beginW: isize = (*v).centerW - (*ci).blocksizes[(*v).W as usize] / 2 as i32 as isize;
     let mut centerNext: isize = 0;
     let mut vbi: *mut crate::codec_internal_h::vorbis_block_internal =
         (*vb).internal as *mut crate::codec_internal_h::vorbis_block_internal;
@@ -887,8 +885,7 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
         + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize
         + (*ci).blocksizes[(*v).nW as usize] / 4 as i32 as isize;
     /* center of next block + next block maximum right side. */
-    let mut blockbound: isize =
-        centerNext + (*ci).blocksizes[(*v).nW as usize] / 2 as i32 as isize;
+    let mut blockbound: isize = centerNext + (*ci).blocksizes[(*v).nW as usize] / 2 as i32 as isize;
     if ((*v).pcm_current as isize) < blockbound {
         return 0 as i32;
     }
@@ -949,8 +946,7 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
         *fresh11 = _vorbis_block_alloc(
             vb,
             (((*vb).pcmend as isize + beginW) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-                as isize,
+                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as isize,
         ) as *mut f32;
         crate::stdlib::memcpy(
             *(*vbi).pcmdelay.offset(i as isize) as *mut libc::c_void,
@@ -977,8 +973,7 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
         }
     }
     /* advance storage vectors and clean up */
-    let mut new_centerNext: i32 =
-        ((*ci).blocksizes[1 as i32 as usize] / 2 as i32 as isize) as i32;
+    let mut new_centerNext: i32 = ((*ci).blocksizes[1 as i32 as usize] / 2 as i32 as isize) as i32;
     let mut movementW: i32 = (centerNext - new_centerNext as isize) as i32;
     if movementW > 0 as i32 {
         crate::src::libvorbis_1_3_6::lib::envelope::_ve_envelope_shift(
@@ -1006,8 +1001,7 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
             }
             /* do not add padding to end of stream! */
             if (*v).centerW >= (*v).eofflag as isize {
-                (*v).granulepos +=
-                    movementW as isize - ((*v).centerW - (*v).eofflag as isize)
+                (*v).granulepos += movementW as isize - ((*v).centerW - (*v).eofflag as isize)
             } else {
                 (*v).granulepos += movementW as isize
             }
@@ -1087,8 +1081,7 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
     (*v).lW = (*v).W;
     (*v).W = (*vb).W;
     (*v).nW = -(1 as i32) as isize;
-    if (*v).sequence == -(1 as i32) as isize
-        || (*v).sequence + 1 as i32 as isize != (*vb).sequence
+    if (*v).sequence == -(1 as i32) as isize || (*v).sequence + 1 as i32 as isize != (*vb).sequence
     {
         (*v).granulepos = -(1 as i32) as crate::config_types_h::ogg_int64_t;
         (*b).sample_count = -(1 as i32) as crate::config_types_h::ogg_int64_t
@@ -1271,7 +1264,7 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
                 } else {
                     /* trim the beginning */
                     (*v).pcm_returned = ((*v).pcm_returned as isize + (extra >> hs)) as i32; /* else {Shouldn't happen *unless* the bitstream is out of
-                                                                                                    spec.  Either way, believe the bitstream } */
+                                                                                             spec.  Either way, believe the bitstream } */
                     if (*v).pcm_returned > (*v).pcm_current {
                         (*v).pcm_returned = (*v).pcm_current
                     }
@@ -1302,8 +1295,7 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
                         if extra_0 < 0 as i32 as isize {
                             extra_0 = 0 as i32 as isize
                         }
-                        (*v).pcm_current =
-                            ((*v).pcm_current as isize - (extra_0 >> hs)) as i32
+                        (*v).pcm_current = ((*v).pcm_current as isize - (extra_0 >> hs)) as i32
                     }
                 }
             }

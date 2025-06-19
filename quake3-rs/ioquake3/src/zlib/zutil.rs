@@ -103,8 +103,7 @@ pub unsafe extern "C" fn zlibCompileFlags() -> crate::zconf_h::uLong {
                 as crate::zconf_h::uLong
         }
     }
-    flags = (flags as libc::c_ulong)
-        .wrapping_add(((1 as isize) << 17 as i32) as libc::c_ulong)
+    flags = (flags as libc::c_ulong).wrapping_add(((1 as isize) << 17 as i32) as libc::c_ulong)
         as crate::zconf_h::uLong;
     return flags;
 }

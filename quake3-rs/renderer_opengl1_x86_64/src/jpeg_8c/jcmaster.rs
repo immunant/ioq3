@@ -642,8 +642,7 @@ unsafe extern "C" fn initial_setup(
         .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
     }
     /* Width of an input scanline must be representable as JDIMENSION. */
-    samplesperrow =
-        (*cinfo).image_width as isize * (*cinfo).input_components as isize;
+    samplesperrow = (*cinfo).image_width as isize * (*cinfo).input_components as isize;
     jd_samplesperrow = samplesperrow as crate::jmorecfg_h::JDIMENSION;
     if jd_samplesperrow as isize != samplesperrow {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_WIDTH_OVERFLOW as i32;
@@ -1290,8 +1289,7 @@ unsafe extern "C" fn per_scan_setup(mut cinfo: crate::jpeglib_h::j_compress_ptr)
     /* Convert restart specified in rows to actual MCU count. */
     /* Note that count must fit in 16 bits, so we provide limiting. */
     if (*cinfo).restart_in_rows > 0 as i32 {
-        let mut nominal: isize =
-            (*cinfo).restart_in_rows as isize * (*cinfo).MCUs_per_row as isize;
+        let mut nominal: isize = (*cinfo).restart_in_rows as isize * (*cinfo).MCUs_per_row as isize;
         (*cinfo).restart_interval = if nominal < 65535 as isize {
             nominal
         } else {

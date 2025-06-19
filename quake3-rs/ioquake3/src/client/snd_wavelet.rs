@@ -660,8 +660,7 @@ pub unsafe extern "C" fn MuLawDecode(mut uLaw: crate::src::qcommon::q_shared::by
     uLaw = !(uLaw as i32) as crate::src::qcommon::q_shared::byte;
     exponent = (uLaw as i32 >> 4 as i32 & 0x7 as i32) as crate::src::qcommon::q_shared::byte;
     mantissa = ((uLaw as i32 & 0xf as i32) + 16 as i32) as crate::src::qcommon::q_shared::byte;
-    adjusted =
-        (((mantissa as i32) << exponent as i32 + 3 as i32) - 128 as i32 - 4 as i32) as isize;
+    adjusted = (((mantissa as i32) << exponent as i32 + 3 as i32) - 128 as i32 - 4 as i32) as isize;
     return if uLaw as i32 & 0x80 as i32 != 0 {
         adjusted
     } else {

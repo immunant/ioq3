@@ -1974,8 +1974,7 @@ unsafe extern "C" fn examine_app14(
     } else {
         /* Start of APP14 does not match "Adobe", or too short */
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JTRC_APP14 as i32;
-        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] =
-            (datalen as isize + remaining) as i32;
+        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (datalen as isize + remaining) as i32;
         Some(
             (*(*cinfo).err)
                 .emit_message
@@ -2263,8 +2262,7 @@ unsafe extern "C" fn save_marker(
         _ => {
             (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JTRC_MISC_MARKER as i32;
             (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).unread_marker;
-            (*(*cinfo).err).msg_parm.i[1 as i32 as usize] =
-                (data_length as isize + length) as i32;
+            (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = (data_length as isize + length) as i32;
             Some(
                 (*(*cinfo).err)
                     .emit_message

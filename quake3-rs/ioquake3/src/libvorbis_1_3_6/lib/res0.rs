@@ -614,13 +614,11 @@ unsafe extern "C" fn _01class(
     let mut possible_partitions: i32 = (*info).partitions;
     let mut n: i32 = ((*info).end - (*info).begin) as i32;
     let mut partvals: i32 = n / samples_per_partition;
-    let mut partword: *mut *mut isize =
-        crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
-            vb as *mut crate::codec_h::vorbis_block,
-            (ch as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<*mut isize>() as libc::c_ulong)
-                as isize,
-        ) as *mut *mut isize;
+    let mut partword: *mut *mut isize = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
+        vb as *mut crate::codec_h::vorbis_block,
+        (ch as libc::c_ulong).wrapping_mul(::std::mem::size_of::<*mut isize>() as libc::c_ulong)
+            as isize,
+    ) as *mut *mut isize;
     let mut scale: f32 = (100.0f64 / samples_per_partition as f64) as f32;
     /* we find the partition type for each partition of each
     channel.  We'll go back and do the interleaved encoding in a
@@ -631,8 +629,7 @@ unsafe extern "C" fn _01class(
         *fresh6 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut crate::codec_h::vorbis_block,
             ((n / samples_per_partition) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong)
-                as isize,
+                .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong) as isize,
         ) as *mut isize;
         crate::stdlib::memset(
             *partword.offset(i as isize) as *mut libc::c_void,
@@ -651,17 +648,15 @@ unsafe extern "C" fn _01class(
             let mut ent: i32 = 0 as i32;
             k = 0 as i32 as isize;
             while k < samples_per_partition as isize {
-                if ::libc::abs(
-                    *(*in_0.offset(j as isize)).offset((offset as isize + k) as isize),
-                ) > max
+                if ::libc::abs(*(*in_0.offset(j as isize)).offset((offset as isize + k) as isize))
+                    > max
                 {
                     max = ::libc::abs(
                         *(*in_0.offset(j as isize)).offset((offset as isize + k) as isize),
                     )
                 }
-                ent += ::libc::abs(
-                    *(*in_0.offset(j as isize)).offset((offset as isize + k) as isize),
-                );
+                ent +=
+                    ::libc::abs(*(*in_0.offset(j as isize)).offset((offset as isize + k) as isize));
                 k += 1
             }
             ent = (ent as f32 * scale) as i32;
@@ -704,23 +699,20 @@ unsafe extern "C" fn _2class(
     let mut possible_partitions: i32 = (*info).partitions;
     let mut n: i32 = ((*info).end - (*info).begin) as i32;
     let mut partvals: i32 = n / samples_per_partition;
-    let mut partword: *mut *mut isize =
-        crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
-            vb as *mut crate::codec_h::vorbis_block,
-            ::std::mem::size_of::<*mut isize>() as libc::c_ulong as isize,
-        ) as *mut *mut isize;
+    let mut partword: *mut *mut isize = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
+        vb as *mut crate::codec_h::vorbis_block,
+        ::std::mem::size_of::<*mut isize>() as libc::c_ulong as isize,
+    ) as *mut *mut isize;
     let ref mut fresh7 = *partword.offset(0 as i32 as isize);
     *fresh7 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut crate::codec_h::vorbis_block,
-        (partvals as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong)
+        (partvals as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong)
             as isize,
     ) as *mut isize;
     crate::stdlib::memset(
         *partword.offset(0 as i32 as isize) as *mut libc::c_void,
         0 as i32,
-        (partvals as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
+        (partvals as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
     );
     i = 0 as i32 as isize;
     l = (*info).begin / ch as isize;
@@ -835,8 +827,7 @@ unsafe extern "C" fn _01forward(
             /* now we encode interleaved residual values for the partitions */
             k = 0 as i32 as isize;
             while k < partitions_per_word as isize && i < partvals as isize {
-                let mut offset: isize =
-                    i * samples_per_partition as isize + (*info).begin;
+                let mut offset: isize = i * samples_per_partition as isize + (*info).begin;
                 j = 0 as i32 as isize;
                 while j < ch as isize {
                     if s == 0 as i32 as isize {
@@ -968,8 +959,7 @@ unsafe extern "C" fn _01inverse(
                 while k < partitions_per_word as isize && i < partvals as isize {
                     j = 0 as i32 as isize;
                     while j < ch as isize {
-                        let mut offset: isize =
-                            (*info).begin + i * samples_per_partition as isize;
+                        let mut offset: isize = (*info).begin + i * samples_per_partition as isize;
                         if (*info).secondstages[*(*(*partword.offset(j as isize))
                             .offset(l as isize))
                         .offset(k as isize)

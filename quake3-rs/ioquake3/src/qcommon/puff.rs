@@ -1,5 +1,3 @@
-use ::libc;
-
 pub use crate::stdlib::__jmp_buf;
 pub use crate::stdlib::__sigset_t;
 
@@ -77,8 +75,7 @@ unsafe extern "C" fn bits(
     (*s).bitbuf = val >> need;
     (*s).bitcnt -= need;
     /* return need bits, zeroing the bits above that */
-    return (val as isize & ((1 as isize) << need) - 1 as i32 as isize)
-        as crate::stdlib::int32_t;
+    return (val as isize & ((1 as isize) << need) - 1 as i32 as isize) as crate::stdlib::int32_t;
 }
 /*
  * Process a stored block.

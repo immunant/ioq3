@@ -846,8 +846,7 @@ unsafe extern "C" fn realize_virt_arrays(mut cinfo: crate::jpeglib_h::j_common_p
         if (*sptr).mem_buffer.is_null() {
             /* if not realized yet */
             space_per_minheight = (space_per_minheight as libc::c_ulong).wrapping_add(
-                (((*sptr).maxaccess as isize * (*sptr).samplesperrow as isize)
-                    as libc::c_ulong)
+                (((*sptr).maxaccess as isize * (*sptr).samplesperrow as isize) as libc::c_ulong)
                     .wrapping_mul(
                         ::std::mem::size_of::<crate::jmorecfg_h::JSAMPLE>() as libc::c_ulong
                     ),
@@ -867,15 +866,13 @@ unsafe extern "C" fn realize_virt_arrays(mut cinfo: crate::jpeglib_h::j_common_p
         if (*bptr).mem_buffer.is_null() {
             /* if not realized yet */
             space_per_minheight = (space_per_minheight as libc::c_ulong).wrapping_add(
-                (((*bptr).maxaccess as isize * (*bptr).blocksperrow as isize)
-                    as libc::c_ulong)
+                (((*bptr).maxaccess as isize * (*bptr).blocksperrow as isize) as libc::c_ulong)
                     .wrapping_mul(
                         ::std::mem::size_of::<crate::jpeglib_h::JBLOCK>() as libc::c_ulong
                     ),
             ) as isize; /* no unrealized arrays, no work */
             maximum_space = (maximum_space as libc::c_ulong).wrapping_add(
-                (((*bptr).rows_in_array as isize * (*bptr).blocksperrow as isize)
-                    as libc::c_ulong)
+                (((*bptr).rows_in_array as isize * (*bptr).blocksperrow as isize) as libc::c_ulong)
                     .wrapping_mul(
                         ::std::mem::size_of::<crate::jpeglib_h::JBLOCK>() as libc::c_ulong
                     ),
@@ -913,16 +910,15 @@ unsafe extern "C" fn realize_virt_arrays(mut cinfo: crate::jpeglib_h::j_common_p
     while !sptr.is_null() {
         if (*sptr).mem_buffer.is_null() {
             /* if not realized yet */
-            minheights = ((*sptr).rows_in_array as isize - 1 as isize)
-                / (*sptr).maxaccess as isize
+            minheights = ((*sptr).rows_in_array as isize - 1 as isize) / (*sptr).maxaccess as isize
                 + 1 as isize;
             if minheights <= max_minheights {
                 /* This buffer fits in memory */
                 (*sptr).rows_in_mem = (*sptr).rows_in_array
             } else {
                 /* It doesn't fit in memory, create backing store. */
-                (*sptr).rows_in_mem = (max_minheights * (*sptr).maxaccess as isize)
-                    as crate::jmorecfg_h::JDIMENSION;
+                (*sptr).rows_in_mem =
+                    (max_minheights * (*sptr).maxaccess as isize) as crate::jmorecfg_h::JDIMENSION;
                 crate::src::jpeg_8c::jmemnobs::jpeg_open_backing_store(
                     cinfo as *mut crate::jpeglib_h::jpeg_common_struct,
                     &mut (*sptr).b_s_info as *mut _ as *mut crate::jmemsys_h::backing_store_struct,
@@ -946,16 +942,15 @@ unsafe extern "C" fn realize_virt_arrays(mut cinfo: crate::jpeglib_h::j_common_p
     while !bptr.is_null() {
         if (*bptr).mem_buffer.is_null() {
             /* if not realized yet */
-            minheights = ((*bptr).rows_in_array as isize - 1 as isize)
-                / (*bptr).maxaccess as isize
+            minheights = ((*bptr).rows_in_array as isize - 1 as isize) / (*bptr).maxaccess as isize
                 + 1 as isize;
             if minheights <= max_minheights {
                 /* This buffer fits in memory */
                 (*bptr).rows_in_mem = (*bptr).rows_in_array
             } else {
                 /* It doesn't fit in memory, create backing store. */
-                (*bptr).rows_in_mem = (max_minheights * (*bptr).maxaccess as isize)
-                    as crate::jmorecfg_h::JDIMENSION;
+                (*bptr).rows_in_mem =
+                    (max_minheights * (*bptr).maxaccess as isize) as crate::jmorecfg_h::JDIMENSION;
                 crate::src::jpeg_8c::jmemnobs::jpeg_open_backing_store(
                     cinfo as *mut crate::jpeglib_h::jpeg_common_struct,
                     &mut (*bptr).b_s_info as *mut _ as *mut crate::jmemsys_h::backing_store_struct,
@@ -1453,8 +1448,8 @@ unsafe extern "C" fn free_pool(mut cinfo: crate::jpeglib_h::j_common_ptr, mut po
             lhdr_ptr as *mut libc::c_void,
             space_freed,
         );
-        (*mem).total_space_allocated = ((*mem).total_space_allocated as libc::c_ulong)
-            .wrapping_sub(space_freed) as isize;
+        (*mem).total_space_allocated =
+            ((*mem).total_space_allocated as libc::c_ulong).wrapping_sub(space_freed) as isize;
         lhdr_ptr = next_lhdr_ptr
     }
     /* Release small objects */
@@ -1472,8 +1467,8 @@ unsafe extern "C" fn free_pool(mut cinfo: crate::jpeglib_h::j_common_ptr, mut po
             shdr_ptr as *mut libc::c_void,
             space_freed,
         );
-        (*mem).total_space_allocated = ((*mem).total_space_allocated as libc::c_ulong)
-            .wrapping_sub(space_freed) as isize;
+        (*mem).total_space_allocated =
+            ((*mem).total_space_allocated as libc::c_ulong).wrapping_sub(space_freed) as isize;
         shdr_ptr = next_shdr_ptr
     }
 }
@@ -1671,8 +1666,7 @@ pub unsafe extern "C" fn jinit_memory_mgr(mut cinfo: crate::jpeglib_h::j_common_
     }
     (*mem).virt_sarray_list = 0 as crate::jpeglib_h::jvirt_sarray_ptr;
     (*mem).virt_barray_list = 0 as crate::jpeglib_h::jvirt_barray_ptr;
-    (*mem).total_space_allocated =
-        ::std::mem::size_of::<my_memory_mgr>() as libc::c_ulong as isize;
+    (*mem).total_space_allocated = ::std::mem::size_of::<my_memory_mgr>() as libc::c_ulong as isize;
     /* Declare ourselves open for business */
     (*cinfo).mem = &mut (*mem).pub_0;
     /* Check for an environment variable JPEGMEM; if found, override the

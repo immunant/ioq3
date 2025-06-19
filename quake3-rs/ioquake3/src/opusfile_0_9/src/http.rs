@@ -197,8 +197,7 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
         return 0 as *const libc::c_char;
     }
     /*Make sure all escape sequences are valid to simplify unescaping later.*/
-    if (op_validate_url_escapes(scheme_end.offset(1 as i32 as isize)) < 0 as i32) as i32
-        as isize
+    if (op_validate_url_escapes(scheme_end.offset(1 as i32 as isize)) < 0 as i32) as i32 as isize
         != 0
     {
         return 0 as *const libc::c_char;
@@ -233,10 +232,7 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
                 return 0 as *const libc::c_char;
             }
             /*An escaped "localhost" can take at most 27 characters.*/
-            if (host_end.offset_from(host) as isize > 27 as i32 as isize) as i32
-                as isize
-                != 0
-            {
+            if (host_end.offset_from(host) as isize > 27 as i32 as isize) as i32 as isize != 0 {
                 return 0 as *const libc::c_char;
             }
             crate::stdlib::memcpy(
@@ -245,8 +241,7 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
                 (::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
                     .wrapping_mul(host_end.offset_from(host) as isize as libc::c_ulong),
             );
-            host_buf[host_end.offset_from(host) as isize as usize] =
-                '\u{0}' as i32 as libc::c_char;
+            host_buf[host_end.offset_from(host) as isize as usize] = '\u{0}' as i32 as libc::c_char;
             op_unescape_url_component(host_buf.as_mut_ptr());
             op_string_tolower(host_buf.as_mut_ptr());
             /*Some other host: give up.*/
@@ -381,8 +376,7 @@ unsafe extern "C" fn op_url_stream_vcreate_impl(
         request = _ap
             .as_va_list()
             .arg::<*mut libc::c_char>()
-            .offset_from(0 as *mut libc::c_void as *mut libc::c_char)
-            as isize;
+            .offset_from(0 as *mut libc::c_void as *mut libc::c_char) as isize;
         /*If we hit NULL, we're done processing options.*/
         if request == 0 {
             break;

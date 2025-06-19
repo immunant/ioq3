@@ -656,8 +656,7 @@ unsafe extern "C" fn output_value(
      * (Forcing the upper and lower values to the limits ensures that
      * dithering can't produce a color outside the selected gamut.)
      */
-    return ((j as crate::jmorecfg_h::INT32 * 255 as i32 as isize
-        + (maxj / 2 as i32) as isize)
+    return ((j as crate::jmorecfg_h::INT32 * 255 as i32 as isize + (maxj / 2 as i32) as isize)
         / maxj as isize) as i32;
 }
 

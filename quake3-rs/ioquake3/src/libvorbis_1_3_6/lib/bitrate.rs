@@ -118,8 +118,7 @@ pub unsafe extern "C" fn vorbis_bitrate_init(
         (*bm).avgfloat = (15 as i32 / 2 as i32) as f64;
         /* not a necessary fix, but one that leads to a more balanced
         typical initialization */
-        let mut desired_fill: isize =
-            ((*bi).reservoir_bits as f64 * (*bi).reservoir_bias) as isize;
+        let mut desired_fill: isize = ((*bi).reservoir_bits as f64 * (*bi).reservoir_bias) as isize;
         (*bm).minmax_reservoir = desired_fill;
         (*bm).avg_reservoir = desired_fill
     };
@@ -180,8 +179,7 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vo
         (*bm).max_bitsper
     };
     let mut samples: i32 = ((*ci).blocksizes[(*vb).W as usize] >> 1 as i32) as i32;
-    let mut desired_fill: isize =
-        ((*bi).reservoir_bits as f64 * (*bi).reservoir_bias) as isize;
+    let mut desired_fill: isize = ((*bi).reservoir_bits as f64 * (*bi).reservoir_bias) as isize;
     if (*bm).managed == 0 {
         /* not a bitrate managed stream, but for API simplicity, we'll
         buffer the packet to keep the code path clean */
@@ -251,8 +249,7 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vo
     if (*bm).min_bitsper > 0 as i32 as isize {
         /* do we need to force the bitrate up? */
         if this_bits < min_target_bits {
-            while (*bm).minmax_reservoir - (min_target_bits - this_bits) < 0 as i32 as isize
-            {
+            while (*bm).minmax_reservoir - (min_target_bits - this_bits) < 0 as i32 as isize {
                 choice += 1;
                 if choice >= 15 as i32 {
                     break;
@@ -283,9 +280,8 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vo
     if choice < 0 as i32 {
         /* choosing a smaller packetblob is insufficient to trim bitrate.
         frame will need to be truncated */
-        let mut maxsize: isize = (max_target_bits
-            + ((*bi).reservoir_bits - (*bm).minmax_reservoir))
-            / 8 as i32 as isize;
+        let mut maxsize: isize =
+            (max_target_bits + ((*bi).reservoir_bits - (*bm).minmax_reservoir)) / 8 as i32 as isize;
         choice = 0 as i32;
         (*bm).choice = choice;
         if crate::src::libogg_1_3_3::src::bitwise::oggpack_bytes(
@@ -301,9 +297,8 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vo
             ) * 8 as i32 as isize
         }
     } else {
-        let mut minsize: isize = (min_target_bits - (*bm).minmax_reservoir
-            + 7 as i32 as isize)
-            / 8 as i32 as isize;
+        let mut minsize: isize =
+            (min_target_bits - (*bm).minmax_reservoir + 7 as i32 as isize) / 8 as i32 as isize;
         if choice >= 15 as i32 {
             choice = 15 as i32 - 1 as i32
         }
@@ -330,8 +325,7 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vo
     }
     /* now we have the final packet and the final packet size.  Update statistics */
     /* min and max reservoir */
-    if (*bm).min_bitsper > 0 as i32 as isize || (*bm).max_bitsper > 0 as i32 as isize
-    {
+    if (*bm).min_bitsper > 0 as i32 as isize || (*bm).max_bitsper > 0 as i32 as isize {
         if max_target_bits > 0 as i32 as isize && this_bits > max_target_bits {
             (*bm).minmax_reservoir += this_bits - max_target_bits
         } else if min_target_bits > 0 as i32 as isize && this_bits < min_target_bits {

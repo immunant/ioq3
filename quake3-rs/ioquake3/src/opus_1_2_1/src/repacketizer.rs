@@ -367,8 +367,7 @@ pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
             (*len.offset(i as isize) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as isize
-                        * ptr.offset_from(*frames.offset(i as isize)) as isize)
+                    (0 as i32 as isize * ptr.offset_from(*frames.offset(i as isize)) as isize)
                         as libc::c_ulong,
                 ),
         );

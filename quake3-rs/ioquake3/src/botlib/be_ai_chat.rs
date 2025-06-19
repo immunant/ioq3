@@ -2420,10 +2420,9 @@ pub unsafe extern "C" fn StringsMatch(
                         newstrptr = strptr.offset(index as isize); //end if
                         if lastvariable >= 0 as i32 {
                             (*match_0).variables[lastvariable as usize].length =
-                                (newstrptr.offset_from((*match_0).string.as_mut_ptr())
-                                    as isize
-                                    - (*match_0).variables[lastvariable as usize].offset
-                                        as isize) as i32;
+                                (newstrptr.offset_from((*match_0).string.as_mut_ptr()) as isize
+                                    - (*match_0).variables[lastvariable as usize].offset as isize)
+                                    as i32;
                             //newstrptr - match->variables[lastvariable].ptr;
                             lastvariable = -(1 as i32);
                             break;
@@ -3652,13 +3651,11 @@ pub unsafe extern "C" fn BotLoadInitialChat(
                             }
                             len = crate::stdlib::strlen(chatmessagestring.as_mut_ptr())
                                 .wrapping_add(1 as i32 as libc::c_ulong);
-                            len =
-                                len.wrapping_add(
-                                    ::std::mem::size_of::<isize>() as libc::c_ulong
-                                )
+                            len = len
+                                .wrapping_add(::std::mem::size_of::<isize>() as libc::c_ulong)
                                 .wrapping_sub(1 as i32 as libc::c_ulong)
-                                    & !(::std::mem::size_of::<isize>() as libc::c_ulong)
-                                        .wrapping_sub(1 as i32 as libc::c_ulong);
+                                & !(::std::mem::size_of::<isize>() as libc::c_ulong)
+                                    .wrapping_sub(1 as i32 as libc::c_ulong);
                             if pass != 0 && !ptr.is_null() {
                                 chatmessage = ptr as *mut bot_chatmessage_t;
                                 (*chatmessage).time = (-(2 as i32) * 20 as i32) as f32;

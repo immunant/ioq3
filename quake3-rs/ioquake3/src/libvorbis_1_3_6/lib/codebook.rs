@@ -93,14 +93,9 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
     length random.  Decide between the two now. */
     i = 1 as i32 as isize;
     while i < (*c).entries {
-        if *(*c)
-            .lengthlist
-            .offset((i - 1 as i32 as isize) as isize) as i32
-            == 0 as i32
+        if *(*c).lengthlist.offset((i - 1 as i32 as isize) as isize) as i32 == 0 as i32
             || (*(*c).lengthlist.offset(i as isize) as i32)
-                < *(*c)
-                    .lengthlist
-                    .offset((i - 1 as i32 as isize) as isize) as i32
+                < *(*c).lengthlist.offset((i - 1 as i32 as isize) as isize) as i32
         {
             break;
         }
@@ -127,9 +122,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
         i = 1 as i32 as isize;
         while i < (*c).entries {
             let mut this: libc::c_char = *(*c).lengthlist.offset(i as isize);
-            let mut last: libc::c_char = *(*c)
-                .lengthlist
-                .offset((i - 1 as i32 as isize) as isize);
+            let mut last: libc::c_char = *(*c).lengthlist.offset((i - 1 as i32 as isize) as isize);
             if this as i32 > last as i32 {
                 j = last as isize;
                 while j < this as isize {
@@ -277,7 +270,8 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
             while i < quantvals as isize {
                 crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
                     opb as *mut crate::ogg_h::oggpack_buffer,
-                    ::libc::labs(*(*c).quantlist.offset(i as isize) as libc::c_long) as libc::c_ulong,
+                    ::libc::labs(*(*c).quantlist.offset(i as isize) as libc::c_long)
+                        as libc::c_ulong,
                     (*c).q_quant,
                 );
                 i += 1
@@ -346,8 +340,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                     1 as i32,
                                 );
                                 if (*s).entries
-                                    * (if unused != 0 { 1 as i32 } else { 5 as i32 })
-                                        as isize
+                                    * (if unused != 0 { 1 as i32 } else { 5 as i32 }) as isize
                                     + 7 as i32 as isize
                                     >> 3 as i32
                                     > (*opb).storage
@@ -730,8 +723,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                     1 as i32,
                                 );
                                 if (*s).entries
-                                    * (if unused != 0 { 1 as i32 } else { 5 as i32 })
-                                        as isize
+                                    * (if unused != 0 { 1 as i32 } else { 5 as i32 }) as isize
                                     + 7 as i32 as isize
                                     >> 3 as i32
                                     > (*opb).storage
@@ -1250,8 +1242,8 @@ pub unsafe extern "C" fn vorbis_book_decodevs_add(
         let mut step: i32 = (n as isize / (*book).dim) as i32;
         let mut fresh0 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<isize>() as libc::c_ulong)
-                .wrapping_mul(step as libc::c_ulong) as usize,
+            (::std::mem::size_of::<isize>() as libc::c_ulong).wrapping_mul(step as libc::c_ulong)
+                as usize,
         );
         let mut entry: *mut isize = fresh0.as_mut_ptr() as *mut isize;
         let mut fresh1 = ::std::vec::from_elem(

@@ -25,9 +25,8 @@ pub type write_file_func = Option<
     ) -> crate::zconf_h::uLong,
 >;
 
-pub type tell_file_func = Option<
-    unsafe extern "C" fn(_: crate::zconf_h::voidpf, _: crate::zconf_h::voidpf) -> isize,
->;
+pub type tell_file_func =
+    Option<unsafe extern "C" fn(_: crate::zconf_h::voidpf, _: crate::zconf_h::voidpf) -> isize>;
 
 pub type seek_file_func = Option<
     unsafe extern "C" fn(

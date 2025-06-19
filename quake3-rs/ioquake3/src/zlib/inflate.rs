@@ -166,8 +166,7 @@ pub unsafe extern "C" fn inflatePrime(
     if bits > 16 as i32 || (*state).bits.wrapping_add(bits as u32) > 32 as i32 as u32 {
         return -(2 as i32);
     }
-    value =
-        (value as isize & ((1 as isize) << bits) - 1 as i32 as isize) as i32;
+    value = (value as isize & ((1 as isize) << bits) - 1 as i32 as isize) as i32;
     (*state).hold = (*state)
         .hold
         .wrapping_add((value << (*state).bits) as libc::c_ulong);
@@ -6786,12 +6785,14 @@ pub unsafe extern "C" fn inflateCopy(
                 .offset(-(1 as i32 as isize))
                 as *const crate::src::zlib::inftrees::code
     {
-        (*copy).lencode = (*copy).codes.as_mut_ptr().offset(
-            (*state).lencode.offset_from((*state).codes.as_mut_ptr()) as isize as isize,
-        );
-        (*copy).distcode = (*copy).codes.as_mut_ptr().offset(
-            (*state).distcode.offset_from((*state).codes.as_mut_ptr()) as isize as isize,
-        )
+        (*copy).lencode = (*copy)
+            .codes
+            .as_mut_ptr()
+            .offset((*state).lencode.offset_from((*state).codes.as_mut_ptr()) as isize as isize);
+        (*copy).distcode = (*copy)
+            .codes
+            .as_mut_ptr()
+            .offset((*state).distcode.offset_from((*state).codes.as_mut_ptr()) as isize as isize)
     }
     (*copy).next = (*copy)
         .codes

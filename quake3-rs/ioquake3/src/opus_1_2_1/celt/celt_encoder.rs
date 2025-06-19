@@ -3119,8 +3119,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
             ((C * nbEBands) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as isize * bandLogE2.offset_from(bandLogE) as isize)
-                        as libc::c_ulong,
+                    (0 as i32 as isize * bandLogE2.offset_from(bandLogE) as isize) as libc::c_ulong,
                 ),
         );
     }
@@ -3945,8 +3944,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
                     (0 as i32 as isize
                         * (&mut *oldBandE.offset(nbEBands as isize)
                             as *mut crate::arch_h::opus_val16)
-                            .offset_from(oldBandE) as isize)
-                        as libc::c_ulong,
+                            .offset_from(oldBandE) as isize) as libc::c_ulong,
                 ),
         );
     }
@@ -3957,8 +3955,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
             ((CC * nbEBands) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as isize * oldLogE2.offset_from(oldLogE) as isize)
-                        as libc::c_ulong,
+                    (0 as i32 as isize * oldLogE2.offset_from(oldLogE) as isize) as libc::c_ulong,
                 ),
         );
         crate::stdlib::memcpy(
@@ -3967,8 +3964,7 @@ pub unsafe extern "C" fn celt_encode_with_ec(
             ((CC * nbEBands) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as isize * oldLogE.offset_from(oldBandE) as isize)
-                        as libc::c_ulong,
+                    (0 as i32 as isize * oldLogE.offset_from(oldBandE) as isize) as libc::c_ulong,
                 ),
         );
     } else {
@@ -4216,8 +4212,8 @@ pub unsafe extern "C" fn opus_custom_encoder_ctl(
                         .wrapping_add(
                             (0 as i32 as isize
                                 * (&mut (*st).analysis as *mut crate::celt_h::AnalysisInfo)
-                                    .offset_from(info)
-                                    as isize) as libc::c_ulong,
+                                    .offset_from(info) as isize)
+                                as libc::c_ulong,
                         ),
                 );
             }
@@ -4237,8 +4233,8 @@ pub unsafe extern "C" fn opus_custom_encoder_ctl(
                         .wrapping_add(
                             (0 as i32 as isize
                                 * (&mut (*st).silk_info as *mut crate::celt_h::SILKInfo)
-                                    .offset_from(info_0)
-                                    as isize) as libc::c_ulong,
+                                    .offset_from(info_0) as isize)
+                                as libc::c_ulong,
                         ),
                 );
             }

@@ -510,8 +510,7 @@ unsafe extern "C" fn master_selection(mut cinfo: crate::jpeglib_h::j_decompress_
     jpeg_calc_output_dimensions(cinfo);
     prepare_range_limit_table(cinfo);
     /* Width of an output scanline must be representable as JDIMENSION. */
-    samplesperrow =
-        (*cinfo).output_width as isize * (*cinfo).out_color_components as isize;
+    samplesperrow = (*cinfo).output_width as isize * (*cinfo).out_color_components as isize;
     jd_samplesperrow = samplesperrow as crate::jmorecfg_h::JDIMENSION;
     if jd_samplesperrow as isize != samplesperrow {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_WIDTH_OVERFLOW as i32;
@@ -655,8 +654,7 @@ unsafe extern "C" fn master_selection(mut cinfo: crate::jpeglib_h::j_decompress_
             nscans = (*cinfo).num_components
         }
         (*(*cinfo).progress).pass_counter = 0 as isize;
-        (*(*cinfo).progress).pass_limit =
-            (*cinfo).total_iMCU_rows as isize * nscans as isize;
+        (*(*cinfo).progress).pass_limit = (*cinfo).total_iMCU_rows as isize * nscans as isize;
         (*(*cinfo).progress).completed_passes = 0 as i32;
         (*(*cinfo).progress).total_passes = if (*cinfo).enable_2pass_quant != 0 {
             3 as i32

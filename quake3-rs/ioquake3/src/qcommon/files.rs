@@ -418,10 +418,7 @@ return a hash value for the filename
 ================
 */
 
-unsafe extern "C" fn FS_HashFileName(
-    mut fname: *const libc::c_char,
-    mut hashSize: i32,
-) -> isize {
+unsafe extern "C" fn FS_HashFileName(mut fname: *const libc::c_char, mut hashSize: i32) -> isize {
     let mut i: i32 = 0; // don't include extension
     let mut hash: isize = 0; // damn path names
     let mut letter: libc::c_char = 0; // damn path names
@@ -2128,8 +2125,7 @@ pub unsafe extern "C" fn FS_Seek(
             }
             origin = crate::src::qcommon::q_shared::FS_SEEK_SET as i32
         } else if origin == crate::src::qcommon::q_shared::FS_SEEK_END as i32 {
-            remainder =
-                ((fsh[f as usize].zipFileLen - currentPosition) as isize + offset) as i32
+            remainder = ((fsh[f as usize].zipFileLen - currentPosition) as isize + offset) as i32
         } else {
             remainder = offset as i32
         }
@@ -2411,9 +2407,8 @@ pub unsafe extern "C" fn FS_ReadFileDir(
     }
     fs_loadCount += 1;
     fs_loadStack += 1;
-    buf = crate::src::qcommon::common::Hunk_AllocateTempMemory(
-        (len + 1 as i32 as isize) as i32,
-    ) as *mut crate::src::qcommon::q_shared::byte;
+    buf = crate::src::qcommon::common::Hunk_AllocateTempMemory((len + 1 as i32 as isize) as i32)
+        as *mut crate::src::qcommon::q_shared::byte;
     *buffer = buf as *mut libc::c_void;
     FS_Read(buf as *mut libc::c_void, len as i32, h);
     // guarantee that it will have a trailing 0 for string operations
@@ -4206,9 +4201,9 @@ pub unsafe extern "C" fn FS_ComparePaks(
                         }
                         // Find out whether it might have overflowed the buffer and don't add this file to the
                         // list if that is the case.
-                        if crate::stdlib::strlen(origpos).wrapping_add(
-                            origpos.offset_from(neededpaks) as isize as libc::c_ulong,
-                        ) >= (len - 1 as i32) as libc::c_ulong
+                        if crate::stdlib::strlen(origpos)
+                            .wrapping_add(origpos.offset_from(neededpaks) as isize as libc::c_ulong)
+                            >= (len - 1 as i32) as libc::c_ulong
                         {
                             *origpos = '\u{0}' as i32 as libc::c_char;
                             break;

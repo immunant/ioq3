@@ -136,10 +136,7 @@ pub unsafe extern "C" fn comb_filter(
                     .wrapping_mul(
                         ::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong
                     )
-                    .wrapping_add(
-                        (0 as i32 as isize * y.offset_from(x) as isize)
-                            as libc::c_ulong,
-                    ),
+                    .wrapping_add((0 as i32 as isize * y.offset_from(x) as isize) as libc::c_ulong),
             );
         }
         return;

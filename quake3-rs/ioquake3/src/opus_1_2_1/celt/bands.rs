@@ -743,9 +743,7 @@ unsafe extern "C" fn stereo_merge(
             X as *const libc::c_void,
             (N as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong)
-                .wrapping_add(
-                    (0 as i32 as isize * Y.offset_from(X) as isize) as libc::c_ulong,
-                ),
+                .wrapping_add((0 as i32 as isize * Y.offset_from(X) as isize) as libc::c_ulong),
         );
         return;
     }
@@ -953,9 +951,7 @@ unsafe extern "C" fn deinterleave_hadamard(
         tmp as *const libc::c_void,
         (N as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong)
-            .wrapping_add(
-                (0 as i32 as isize * X.offset_from(tmp) as isize) as libc::c_ulong,
-            ),
+            .wrapping_add((0 as i32 as isize * X.offset_from(tmp) as isize) as libc::c_ulong),
     );
 }
 
@@ -1007,9 +1003,7 @@ unsafe extern "C" fn interleave_hadamard(
         tmp as *const libc::c_void,
         (N as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong)
-            .wrapping_add(
-                (0 as i32 as isize * X.offset_from(tmp) as isize) as libc::c_ulong,
-            ),
+            .wrapping_add((0 as i32 as isize * X.offset_from(tmp) as isize) as libc::c_ulong),
     );
 }
 #[no_mangle]
@@ -1744,8 +1738,7 @@ unsafe extern "C" fn quant_band(
             (N as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as isize
-                        * lowband_scratch.offset_from(lowband) as isize)
+                    (0 as i32 as isize * lowband_scratch.offset_from(lowband) as isize)
                         as libc::c_ulong,
                 ),
         );
@@ -2764,8 +2757,7 @@ pub unsafe extern "C" fn quant_all_bands(
                             .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
                             .wrapping_add(
                                 (0 as i32 as isize
-                                    * bytes_save.as_mut_ptr().offset_from(bytes_buf)
-                                        as isize)
+                                    * bytes_save.as_mut_ptr().offset_from(bytes_buf) as isize)
                                     as libc::c_ulong,
                             ),
                     );
@@ -2836,8 +2828,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_norm>()
                                     as libc::c_ulong)
                                 .wrapping_add(
-                                    (0 as i32 as isize
-                                        * X.offset_from(X_save2) as isize)
+                                    (0 as i32 as isize * X.offset_from(X_save2) as isize)
                                         as libc::c_ulong,
                                 ),
                         );
@@ -2848,8 +2839,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_norm>()
                                     as libc::c_ulong)
                                 .wrapping_add(
-                                    (0 as i32 as isize
-                                        * Y.offset_from(Y_save2) as isize)
+                                    (0 as i32 as isize * Y.offset_from(Y_save2) as isize)
                                         as libc::c_ulong,
                                 ),
                         );
@@ -2883,8 +2873,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                 .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
                                 .wrapping_add(
                                     (0 as i32 as isize
-                                        * bytes_buf.offset_from(bytes_save.as_mut_ptr())
-                                            as isize)
+                                        * bytes_buf.offset_from(bytes_save.as_mut_ptr()) as isize)
                                         as libc::c_ulong,
                                 ),
                         );

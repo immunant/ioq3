@@ -1,5 +1,3 @@
-use ::libc;
-
 pub mod SigProc_FIX_h {
     /* compute whitening filter coefficients from normalized line spectral frequencies */
     /* O    monic whitening filter coefficients in Q12,  [ d ]          */

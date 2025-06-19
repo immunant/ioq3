@@ -291,8 +291,7 @@ unsafe extern "C" fn floor0_inverse1(
             let mut lsp: *mut f32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
                 vb as *mut crate::codec_h::vorbis_block,
                 (::std::mem::size_of::<f32>() as libc::c_ulong).wrapping_mul(
-                    ((*look).m as isize + (*b).dim + 1 as i32 as isize)
-                        as libc::c_ulong,
+                    ((*look).m as isize + (*b).dim + 1 as i32 as isize) as libc::c_ulong,
                 ) as isize,
             ) as *mut f32;
             if !(crate::src::libvorbis_1_3_6::lib::codebook::vorbis_book_decodev_set(

@@ -1,5 +1,3 @@
-use ::libc;
-
 pub use crate::stddef_h::size_t;
 
 pub use crate::jmorecfg_h::boolean;
@@ -382,8 +380,7 @@ unsafe extern "C" fn transdecode_master_selection(mut cinfo: crate::jpeglib_h::j
             nscans = 1 as i32
         }
         (*(*cinfo).progress).pass_counter = 0 as isize;
-        (*(*cinfo).progress).pass_limit =
-            (*cinfo).total_iMCU_rows as isize * nscans as isize;
+        (*(*cinfo).progress).pass_limit = (*cinfo).total_iMCU_rows as isize * nscans as isize;
         (*(*cinfo).progress).completed_passes = 0 as i32;
         (*(*cinfo).progress).total_passes = 1 as i32
     };

@@ -429,8 +429,8 @@ pub unsafe extern "C" fn _ve_envelope_search(
         }
         i = 0 as i32 as isize;
         while i < (*ve).ch as isize {
-            let mut pcm: *mut f32 = (*(*v).pcm.offset(i as isize))
-                .offset(((*ve).searchstep as isize * j) as isize);
+            let mut pcm: *mut f32 =
+                (*(*v).pcm.offset(i as isize)).offset(((*ve).searchstep as isize * j) as isize);
             ret |= _ve_amp(
                 ve,
                 gi,
@@ -470,11 +470,7 @@ pub unsafe extern "C" fn _ve_envelope_search(
             return 1 as i32 as isize;
         }
         (*ve).cursor = j;
-        if *(*ve)
-            .mark
-            .offset((j / (*ve).searchstep as isize) as isize)
-            != 0
-        {
+        if *(*ve).mark.offset((j / (*ve).searchstep as isize) as isize) != 0 {
             if j > centerW {
                 (*ve).curmark = j;
                 if j >= testW {
@@ -496,10 +492,8 @@ pub unsafe extern "C" fn _ve_envelope_mark(mut v: *mut crate::codec_h::vorbis_ds
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
     let mut centerW: isize = (*v).centerW;
-    let mut beginW: isize =
-        centerW - (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize;
-    let mut endW: isize =
-        centerW + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize;
+    let mut beginW: isize = centerW - (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize;
+    let mut endW: isize = centerW + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize;
     if (*v).W != 0 {
         beginW -= (*ci).blocksizes[(*v).lW as usize] / 4 as i32 as isize;
         endW += (*ci).blocksizes[(*v).nW as usize] / 4 as i32 as isize
@@ -545,9 +539,8 @@ pub unsafe extern "C" fn _ve_envelope_shift(
     mut e: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup,
     mut shift: isize,
 ) {
-    let mut smallsize: i32 =
-        ((*e).current / (*e).searchstep as isize + 2 as i32 as isize) as i32; /* adjust for placing marks
-                                                                                            ahead of ve->current */
+    let mut smallsize: i32 = ((*e).current / (*e).searchstep as isize + 2 as i32 as isize) as i32; /* adjust for placing marks
+                                                                                                   ahead of ve->current */
     let mut smallshift: i32 = (shift / (*e).searchstep as isize) as i32;
     crate::stdlib::memmove(
         (*e).mark as *mut libc::c_void,

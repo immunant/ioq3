@@ -931,8 +931,7 @@ unsafe extern "C" fn unzlocal_GetCurrentFileInfoInternal(
             .wrapping_add(file_info.size_file_extra.wrapping_sub(uSizeRead_0))
             as isize
     } else {
-        lSeek = (lSeek as libc::c_ulong).wrapping_add(file_info.size_file_extra) as isize
-            as isize
+        lSeek = (lSeek as libc::c_ulong).wrapping_add(file_info.size_file_extra) as isize as isize
     }
     if err == 0 as i32 && !szComment.is_null() {
         let mut uSizeRead_1: crate::zconf_h::uLong = 0;

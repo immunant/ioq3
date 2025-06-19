@@ -256,8 +256,7 @@ pub unsafe extern "C" fn jpeg_add_quant_table(
     }
     i = 0 as i32;
     while i < 64 as i32 {
-        temp = (*basic_table.offset(i as isize) as isize * scale_factor as isize
-            + 50 as isize)
+        temp = (*basic_table.offset(i as isize) as isize * scale_factor as isize + 50 as isize)
             / 100 as isize;
         /* limit the values to the valid range */
         if temp <= 0 as isize {

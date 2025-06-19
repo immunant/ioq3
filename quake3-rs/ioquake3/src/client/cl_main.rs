@@ -5577,10 +5577,7 @@ pub unsafe extern "C" fn CL_InitRef() {
     );
     ri.FS_ReadFile = Some(
         crate::src::qcommon::files::FS_ReadFile
-            as unsafe extern "C" fn(
-                _: *const libc::c_char,
-                _: *mut *mut libc::c_void,
-            ) -> isize,
+            as unsafe extern "C" fn(_: *const libc::c_char, _: *mut *mut libc::c_void) -> isize,
     );
     ri.FS_FreeFile = Some(
         crate::src::qcommon::files::FS_FreeFile as unsafe extern "C" fn(_: *mut libc::c_void) -> (),
@@ -5674,8 +5671,7 @@ pub unsafe extern "C" fn CL_InitRef() {
     );
     ri.IN_Shutdown = Some(crate::src::sdl::sdl_input::IN_Shutdown as unsafe extern "C" fn() -> ());
     ri.IN_Restart = Some(crate::src::sdl::sdl_input::IN_Restart as unsafe extern "C" fn() -> ());
-    ri.ftol =
-        Some(crate::src::asm::ftola::qftolsse as unsafe extern "C" fn(_: f32) -> isize);
+    ri.ftol = Some(crate::src::asm::ftola::qftolsse as unsafe extern "C" fn(_: f32) -> isize);
     ri.Sys_SetEnv = Some(
         crate::src::sys::sys_unix::Sys_SetEnv
             as unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> (),

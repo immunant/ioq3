@@ -819,9 +819,7 @@ unsafe extern "C" fn decompress_smooth_data(
                     /* AC20 */
                     Al = *coef_bits.offset(3 as i32 as isize);
                     if Al != 0 as i32 && workspace[16 as i32 as usize] as i32 == 0 as i32 {
-                        num = 9 as i32 as isize
-                            * Q00
-                            * (DC2 + DC8 - 2 as i32 * DC5) as isize;
+                        num = 9 as i32 as isize * Q00 * (DC2 + DC8 - 2 as i32 * DC5) as isize;
                         if num >= 0 as i32 as isize {
                             pred = (((Q20 << 7 as i32) + num) / (Q20 << 8 as i32)) as i32;
                             if Al > 0 as i32 && pred >= (1 as i32) << Al {
@@ -839,9 +837,7 @@ unsafe extern "C" fn decompress_smooth_data(
                     /* AC11 */
                     Al = *coef_bits.offset(4 as i32 as isize);
                     if Al != 0 as i32 && workspace[9 as i32 as usize] as i32 == 0 as i32 {
-                        num = 5 as i32 as isize
-                            * Q00
-                            * (DC1 - DC3 - DC7 + DC9) as isize;
+                        num = 5 as i32 as isize * Q00 * (DC1 - DC3 - DC7 + DC9) as isize;
                         if num >= 0 as i32 as isize {
                             pred = (((Q11 << 7 as i32) + num) / (Q11 << 8 as i32)) as i32;
                             if Al > 0 as i32 && pred >= (1 as i32) << Al {
@@ -859,9 +855,7 @@ unsafe extern "C" fn decompress_smooth_data(
                     /* AC02 */
                     Al = *coef_bits.offset(5 as i32 as isize);
                     if Al != 0 as i32 && workspace[2 as i32 as usize] as i32 == 0 as i32 {
-                        num = 9 as i32 as isize
-                            * Q00
-                            * (DC4 + DC6 - 2 as i32 * DC5) as isize;
+                        num = 9 as i32 as isize * Q00 * (DC4 + DC6 - 2 as i32 * DC5) as isize;
                         if num >= 0 as i32 as isize {
                             pred = (((Q02 << 7 as i32) + num) / (Q02 << 8 as i32)) as i32;
                             if Al > 0 as i32 && pred >= (1 as i32) << Al {

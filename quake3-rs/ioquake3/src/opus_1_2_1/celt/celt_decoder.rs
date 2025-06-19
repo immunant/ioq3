@@ -505,8 +505,7 @@ unsafe extern "C" fn celt_synthesis(
             (N as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_sig>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as isize * freq2.offset_from(freq) as isize)
-                        as libc::c_ulong,
+                    (0 as i32 as isize * freq2.offset_from(freq) as isize) as libc::c_ulong,
                 ),
         );
         b = 0 as i32;
@@ -1022,8 +1021,7 @@ unsafe extern "C" fn celt_decode_lost(mut st: *mut OpusCustomDecoder, mut N: i32
                 ((2048 as i32 - N) as libc::c_ulong)
                     .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_sig>() as libc::c_ulong)
                     .wrapping_add(
-                        (0 as i32 as isize
-                            * buf.offset_from(buf.offset(N as isize)) as isize)
+                        (0 as i32 as isize * buf.offset_from(buf.offset(N as isize)) as isize)
                             as libc::c_ulong,
                     ),
             );
@@ -1788,8 +1786,7 @@ pub unsafe extern "C" fn celt_decode_with_ec(
                     (0 as i32 as isize
                         * (&mut *oldBandE.offset(nbEBands as isize)
                             as *mut crate::arch_h::opus_val16)
-                            .offset_from(oldBandE) as isize)
-                        as libc::c_ulong,
+                            .offset_from(oldBandE) as isize) as libc::c_ulong,
                 ),
         );
     }
@@ -1802,8 +1799,7 @@ pub unsafe extern "C" fn celt_decode_with_ec(
             ((2 as i32 * nbEBands) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as isize * oldLogE2.offset_from(oldLogE) as isize)
-                        as libc::c_ulong,
+                    (0 as i32 as isize * oldLogE2.offset_from(oldLogE) as isize) as libc::c_ulong,
                 ),
         );
         crate::stdlib::memcpy(
@@ -1812,8 +1808,7 @@ pub unsafe extern "C" fn celt_decode_with_ec(
             ((2 as i32 * nbEBands) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as isize * oldLogE.offset_from(oldBandE) as isize)
-                        as libc::c_ulong,
+                    (0 as i32 as isize * oldLogE.offset_from(oldBandE) as isize) as libc::c_ulong,
                 ),
         );
         /* In normal circumstances, we only allow the noise floor to increase by

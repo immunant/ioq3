@@ -162,8 +162,7 @@ pub unsafe extern "C" fn vorbis_synthesis(
         *fresh0 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut crate::codec_h::vorbis_block,
             ((*vb).pcmend as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-                as isize,
+                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as isize,
         ) as *mut f32;
         i += 1
     }

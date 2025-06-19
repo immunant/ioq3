@@ -3021,10 +3021,8 @@ pub unsafe extern "C" fn RB_CalcRotateTexCoords(mut degsPerSecond: f32, mut st: 
     index = (degs * (1024 as i32 as f32 / 360.0f32) as f64) as crate::stdlib::int64_t;
     sinValue = crate::src::renderergl1::tr_main::tr.sinTable
         [(index & (1024 as i32 - 1 as i32) as isize) as usize];
-    cosValue = crate::src::renderergl1::tr_main::tr.sinTable[(index
-        + (1024 as i32 / 4 as i32) as isize
-        & (1024 as i32 - 1 as i32) as isize)
-        as usize];
+    cosValue = crate::src::renderergl1::tr_main::tr.sinTable
+        [(index + (1024 as i32 / 4 as i32) as isize & (1024 as i32 - 1 as i32) as isize) as usize];
     tmi.matrix[0 as i32 as usize][0 as i32 as usize] = cosValue;
     tmi.matrix[1 as i32 as usize][0 as i32 as usize] = -sinValue;
     tmi.translate[0 as i32 as usize] =

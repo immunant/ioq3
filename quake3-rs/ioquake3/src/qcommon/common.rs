@@ -646,7 +646,9 @@ pub unsafe extern "C" fn Com_Printf(mut fmt: *const libc::c_char, mut args: ...)
             let mut aclock: crate::stdlib::time_t = 0;
             opening_qconsole = crate::src::qcommon::q_shared::qtrue;
             ::libc::time(&mut aclock as *mut crate::stdlib::time_t as *mut libc::c_long);
-            newtime = ::libc::localtime(&mut aclock as *mut crate::stdlib::time_t as *mut libc::c_long) as *mut ::libc::tm;
+            newtime =
+                ::libc::localtime(&mut aclock as *mut crate::stdlib::time_t as *mut libc::c_long)
+                    as *mut ::libc::tm;
             logfile = crate::src::qcommon::files::FS_FOpenFileWrite(
                 b"qconsole.log\x00" as *const u8 as *const libc::c_char,
             );
@@ -1530,7 +1532,8 @@ pub unsafe extern "C" fn Com_RealTime(
     if qtime.is_null() {
         return t as i32;
     }
-    tms = ::libc::localtime(&mut t as *mut crate::stdlib::time_t as *mut libc::c_long) as *mut ::libc::tm;
+    tms = ::libc::localtime(&mut t as *mut crate::stdlib::time_t as *mut libc::c_long)
+        as *mut ::libc::tm;
     if !tms.is_null() {
         (*qtime).tm_sec = (*tms).tm_sec;
         (*qtime).tm_min = (*tms).tm_min;
@@ -2513,8 +2516,7 @@ pub unsafe extern "C" fn Com_InitHunkMemory() {
     }
     // cacheline align
     s_hunkData = (s_hunkData as crate::stdlib::intptr_t + 31 as i32 as isize
-        & !(31 as i32) as isize)
-        as *mut crate::src::qcommon::q_shared::byte;
+        & !(31 as i32) as isize) as *mut crate::src::qcommon::q_shared::byte;
     Hunk_Clear();
     crate::src::qcommon::cmd::Cmd_AddCommand(
         b"meminfo\x00" as *const u8 as *const libc::c_char,
@@ -4129,8 +4131,7 @@ pub unsafe extern "C" fn Com_ReadFromPipe() {
                 buf.as_mut_ptr(),
             );
             *brk = tmp;
-            accu =
-                (accu as isize - brk.offset_from(buf.as_mut_ptr()) as isize) as i32;
+            accu = (accu as isize - brk.offset_from(buf.as_mut_ptr()) as isize) as i32;
             crate::stdlib::memmove(
                 buf.as_mut_ptr() as *mut libc::c_void,
                 brk as *const libc::c_void,

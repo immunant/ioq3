@@ -391,9 +391,7 @@ unsafe extern "C" fn opus_tags_parse_impl(
         if !_tags.is_null() {
             let ref mut fresh5 = *(*_tags).user_comments.offset(ncomments as isize);
             *fresh5 = crate::stdlib::malloc(len) as *mut libc::c_char;
-            if (*(*_tags).user_comments.offset(ncomments as isize)).is_null() as i32 as isize
-                != 0
-            {
+            if (*(*_tags).user_comments.offset(ncomments as isize)).is_null() as i32 as isize != 0 {
                 return -(129 as i32);
             }
             crate::stdlib::memcpy(
@@ -483,9 +481,7 @@ unsafe extern "C" fn opus_tags_copy_impl(
         if len_0 > 0 as i32 {
             let ref mut fresh7 = *(*_dst).user_comments.offset(ncomments as isize);
             *fresh7 = crate::stdlib::malloc(len_0 as libc::c_ulong) as *mut libc::c_char;
-            if (*(*_dst).user_comments.offset(ncomments as isize)).is_null() as i32 as isize
-                != 0
-            {
+            if (*(*_dst).user_comments.offset(ncomments as isize)).is_null() as i32 as isize != 0 {
                 return -(129 as i32);
             }
             crate::stdlib::memcpy(

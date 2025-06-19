@@ -1047,8 +1047,7 @@ unsafe extern "C" fn find_best_colors(
             dist0 += xx0;
             xx0 += (2 as i32
                 * (((1 as i32) << 8 as i32 - 5 as i32) * 2 as i32)
-                * (((1 as i32) << 8 as i32 - 5 as i32) * 2 as i32))
-                as isize;
+                * (((1 as i32) << 8 as i32 - 5 as i32) * 2 as i32)) as isize;
             ic0 -= 1
         }
         i += 1

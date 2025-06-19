@@ -1967,8 +1967,7 @@ unsafe extern "C" fn start_pass_huff(
                         1 as i32,
                         (257 as i32 as libc::c_ulong)
                             .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
-                    )
-                        as *mut isize
+                    ) as *mut isize
                 }
                 crate::stdlib::memset(
                     (*entropy).dc_count_ptrs[tbl as usize] as *mut libc::c_void,
@@ -2017,8 +2016,7 @@ unsafe extern "C" fn start_pass_huff(
                         1 as i32,
                         (257 as i32 as libc::c_ulong)
                             .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
-                    )
-                        as *mut isize
+                    ) as *mut isize
                 }
                 crate::stdlib::memset(
                     (*entropy).ac_count_ptrs[tbl as usize] as *mut libc::c_void,

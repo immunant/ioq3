@@ -276,8 +276,7 @@ unsafe extern "C" fn mapping0_unpack(
                                 (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                                     opb as *mut crate::ogg_h::oggpack_buffer,
                                     8 as i32,
-                                ) + 1 as i32 as isize)
-                                    as i32;
+                                ) + 1 as i32 as isize) as i32;
                             if (*info).coupling_steps <= 0 as i32 {
                                 current_block = 1977384903651761240;
                             } else {
@@ -447,14 +446,12 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
     let mut gmdct: *mut *mut f32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut crate::codec_h::vorbis_block,
         ((*vi).channels as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
-            as isize,
+            .wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong) as isize,
     ) as *mut *mut f32;
     let mut iwork: *mut *mut i32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut crate::codec_h::vorbis_block,
         ((*vi).channels as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut i32>() as libc::c_ulong)
-            as isize,
+            .wrapping_mul(::std::mem::size_of::<*mut i32>() as libc::c_ulong) as isize,
     ) as *mut *mut i32;
     let mut floor_posts: *mut *mut *mut i32 =
         crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
@@ -489,15 +486,13 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
         *fresh2 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut crate::codec_h::vorbis_block,
             ((n / 2 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
-                as isize,
+                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as isize,
         ) as *mut i32;
         let ref mut fresh3 = *gmdct.offset(i as isize);
         *fresh3 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut crate::codec_h::vorbis_block,
             ((n / 2 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-                as isize,
+                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as isize,
         ) as *mut f32;
         scale_dB = (todB(&mut scale) as f64 + 0.345f64) as f32;
         /* window the PCM data */

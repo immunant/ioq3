@@ -1447,8 +1447,8 @@ pub unsafe extern "C" fn opus_decoder_ctl(
                 (::std::mem::size_of::<OpusDecoder>() as libc::c_ulong)
                     .wrapping_sub(
                         (&mut (*st).stream_channels as *mut i32 as *mut libc::c_char)
-                            .offset_from(st as *mut libc::c_char)
-                            as isize as libc::c_ulong,
+                            .offset_from(st as *mut libc::c_char) as isize
+                            as libc::c_ulong,
                     )
                     .wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
             );

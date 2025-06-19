@@ -360,18 +360,12 @@ unsafe extern "C" fn finish_pass(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
                 }
             }
         }
-        emit_byte(
-            ((*e).c >> 19 as i32 & 0xff as i32 as isize) as i32,
-            cinfo,
-        );
+        emit_byte(((*e).c >> 19 as i32 & 0xff as i32 as isize) as i32, cinfo);
         if (*e).c >> 19 as i32 & 0xff as i32 as isize == 0xff as i32 as isize {
             emit_byte(0 as i32, cinfo);
         }
         if (*e).c & 0x7f800 as isize != 0 {
-            emit_byte(
-                ((*e).c >> 11 as i32 & 0xff as i32 as isize) as i32,
-                cinfo,
-            );
+            emit_byte(((*e).c >> 11 as i32 & 0xff as i32 as isize) as i32, cinfo);
             if (*e).c >> 11 as i32 & 0xff as i32 as isize == 0xff as i32 as isize {
                 emit_byte(0 as i32, cinfo);
             }
@@ -667,14 +661,11 @@ unsafe extern "C" fn encode_mcu_DC_first(
             }
             arith_encode(cinfo, st, 0 as i32);
             /* Section F.1.4.4.1.2: Establish dc_context conditioning category */
-            if m < ((1 as isize) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32)
-                as i32
-            {
+            if m < ((1 as isize) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32) as i32 {
                 /* large diff category */
                 (*entropy).dc_context[ci as usize] = 0 as i32
             } else if m
-                > ((1 as isize) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32)
-                    as i32
+                > ((1 as isize) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32) as i32
             {
                 (*entropy).dc_context[ci as usize] += 8 as i32
             } /* zero diff category */
@@ -1072,14 +1063,11 @@ unsafe extern "C" fn encode_mcu(
             }
             arith_encode(cinfo, st, 0 as i32);
             /* Section F.1.4.4.1.2: Establish dc_context conditioning category */
-            if m < ((1 as isize) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32)
-                as i32
-            {
+            if m < ((1 as isize) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32) as i32 {
                 /* large diff category */
                 (*entropy).dc_context[ci as usize] = 0 as i32
             } else if m
-                > ((1 as isize) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32)
-                    as i32
+                > ((1 as isize) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32) as i32
             {
                 (*entropy).dc_context[ci as usize] += 8 as i32
             } /* zero diff category */

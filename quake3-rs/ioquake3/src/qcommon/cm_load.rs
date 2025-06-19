@@ -293,8 +293,7 @@ pub unsafe extern "C" fn CMod_LoadSubmodels(mut l: *mut crate::qfiles_h::lump_t)
                 (*out).leaf.numLeafSurfaces * 4 as i32,
                 crate::src::qcommon::q_shared::h_high,
             ) as *mut i32;
-            (*out).leaf.firstLeafSurface =
-                indexes.offset_from(cm.leafsurfaces) as isize as i32;
+            (*out).leaf.firstLeafSurface = indexes.offset_from(cm.leafsurfaces) as isize as i32;
             j = 0 as i32;
             while j < (*out).leaf.numLeafSurfaces {
                 *indexes.offset(j as isize) = (*in_0).firstSurface + j;

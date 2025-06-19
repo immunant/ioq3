@@ -1,5 +1,3 @@
-use ::libc;
-
 /* JPEG_INTERNAL_OPTIONS */
 
 /* FAST_FLOAT should be either float or double, whichever is done faster

@@ -2977,13 +2977,11 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
                 (*v1).floatvalue -= (*v2).floatvalue
             }
             5 => {
-                (*v1).intvalue =
-                    ((*v1).intvalue != 0 && (*v2).intvalue != 0) as i32 as isize;
+                (*v1).intvalue = ((*v1).intvalue != 0 && (*v2).intvalue != 0) as i32 as isize;
                 (*v1).floatvalue = ((*v1).floatvalue != 0. && (*v2).floatvalue != 0.) as i32 as f32
             }
             6 => {
-                (*v1).intvalue =
-                    ((*v1).intvalue != 0 || (*v2).intvalue != 0) as i32 as isize;
+                (*v1).intvalue = ((*v1).intvalue != 0 || (*v2).intvalue != 0) as i32 as isize;
                 (*v1).floatvalue = ((*v1).floatvalue != 0. || (*v2).floatvalue != 0.) as i32 as f32
             }
             7 => {

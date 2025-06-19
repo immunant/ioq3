@@ -1232,8 +1232,8 @@ unsafe extern "C" fn R_LoadMDR(
     // frame should now point to the first free address after all frames.
     lod = frame as *mut crate::qfiles_h::mdrLOD_t;
     (*mdr).ofsLODs = (lod as *mut crate::src::qcommon::q_shared::byte)
-        .offset_from(mdr as *mut crate::src::qcommon::q_shared::byte)
-        as isize as i32;
+        .offset_from(mdr as *mut crate::src::qcommon::q_shared::byte) as isize
+        as i32;
     curlod = (pinmodel as *mut crate::src::qcommon::q_shared::byte)
         .offset((*pinmodel).ofsLODs as isize) as *mut crate::qfiles_h::mdrLOD_t;
     // swap all the LOD's
@@ -1459,8 +1459,8 @@ unsafe extern "C" fn R_LoadMDR(
     // lod points to the first tag now, so update the offset too.
     tag = lod as *mut crate::qfiles_h::mdrTag_t;
     (*mdr).ofsTags = (tag as *mut crate::src::qcommon::q_shared::byte)
-        .offset_from(mdr as *mut crate::src::qcommon::q_shared::byte)
-        as isize as i32;
+        .offset_from(mdr as *mut crate::src::qcommon::q_shared::byte) as isize
+        as i32;
     curtag = (pinmodel as *mut crate::src::qcommon::q_shared::byte)
         .offset((*pinmodel).ofsTags as isize) as *mut crate::qfiles_h::mdrTag_t;
     // simple bounds check
@@ -1491,8 +1491,8 @@ unsafe extern "C" fn R_LoadMDR(
     }
     // And finally we know the real offset to the end.
     (*mdr).ofsEnd = (tag as *mut crate::src::qcommon::q_shared::byte)
-        .offset_from(mdr as *mut crate::src::qcommon::q_shared::byte)
-        as isize as i32;
+        .offset_from(mdr as *mut crate::src::qcommon::q_shared::byte) as isize
+        as i32;
     // phew! we're done.
     return crate::src::qcommon::q_shared::qtrue;
 }

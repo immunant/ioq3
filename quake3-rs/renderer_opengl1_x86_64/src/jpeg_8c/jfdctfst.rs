@@ -1,5 +1,3 @@
-use ::libc;
-
 pub use crate::jdct_h::DCTELEM;
 pub use crate::jmorecfg_h::INT32;
 pub use crate::jmorecfg_h::JDIMENSION;

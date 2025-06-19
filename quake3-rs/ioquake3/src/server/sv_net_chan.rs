@@ -149,8 +149,7 @@ unsafe extern "C" fn SV_Netchan_Encode(
             key = (key as i32 ^ ('.' as i32) << (i & 1 as i32 as isize))
                 as crate::src::qcommon::q_shared::byte
         } else {
-            key = (key as i32
-                ^ (*string.offset(index as isize) as i32) << (i & 1 as i32 as isize))
+            key = (key as i32 ^ (*string.offset(index as isize) as i32) << (i & 1 as i32 as isize))
                 as crate::src::qcommon::q_shared::byte
         }
         index += 1;

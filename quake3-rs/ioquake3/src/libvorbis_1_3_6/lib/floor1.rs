@@ -427,9 +427,8 @@ unsafe extern "C" fn floor1_look(
     /* points from sort order back to range number */
     i = 0 as i32;
     while i < n {
-        (*look).forward_index[i as usize] = sortpointer[i as usize]
-            .offset_from((*info).postlist.as_mut_ptr())
-            as isize as i32;
+        (*look).forward_index[i as usize] =
+            sortpointer[i as usize].offset_from((*info).postlist.as_mut_ptr()) as isize as i32;
         i += 1
     }
     /* points from range order to sorted position */
@@ -1435,7 +1434,7 @@ pub unsafe extern "C" fn floor1_encode(
         out[1 as i32 as usize] = *post.offset(1 as i32 as isize);
         /* find prediction values for each post and subtract them */
         i = 2 as i32 as isize; /* in case there was roundoff jitter
-                                      in interpolation */
+                               in interpolation */
         while i < posts {
             let mut ln: i32 = (*look).loneighbor[(i - 2 as i32 as isize) as usize];
             let mut hn: i32 = (*look).hineighbor[(i - 2 as i32 as isize) as usize];
@@ -1652,8 +1651,7 @@ unsafe extern "C" fn floor1_inverse1(
         let mut fit_value: *mut i32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut crate::codec_h::vorbis_block,
             ((*look).posts as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
-                as isize,
+                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as isize,
         ) as *mut i32;
         *fit_value.offset(0 as i32 as isize) = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
             &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,

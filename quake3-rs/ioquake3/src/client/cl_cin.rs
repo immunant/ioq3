@@ -880,11 +880,7 @@ unsafe extern "C" fn ROQ_GenYUVTables() {
 *
 ******************************************************************************/
 
-unsafe extern "C" fn yuv_to_rgb(
-    mut y: isize,
-    mut u: isize,
-    mut v: isize,
-) -> u16 {
+unsafe extern "C" fn yuv_to_rgb(mut y: isize, mut u: isize, mut v: isize) -> u16 {
     let mut r: isize = 0;
     let mut g: isize = 0;
     let mut b: isize = 0;
@@ -920,11 +916,7 @@ unsafe extern "C" fn yuv_to_rgb(
 *
 ******************************************************************************/
 
-unsafe extern "C" fn yuv_to_rgb24(
-    mut y: isize,
-    mut u: isize,
-    mut v: isize,
-) -> u32 {
+unsafe extern "C" fn yuv_to_rgb24(mut y: isize, mut u: isize, mut v: isize) -> u32 {
     let mut r: isize = 0;
     let mut g: isize = 0;
     let mut b: isize = 0;
@@ -1384,32 +1376,16 @@ unsafe extern "C" fn decodeCodeBook(
                 *fresh104 = yuv_to_rgb(y1, cr, cb);
                 let fresh105 = bptr;
                 bptr = bptr.offset(1);
-                *fresh105 = yuv_to_rgb(
-                    (y0 * 3 as i32 as isize + y2) / 4 as i32 as isize,
-                    cr,
-                    cb,
-                );
+                *fresh105 = yuv_to_rgb((y0 * 3 as i32 as isize + y2) / 4 as i32 as isize, cr, cb);
                 let fresh106 = bptr;
                 bptr = bptr.offset(1);
-                *fresh106 = yuv_to_rgb(
-                    (y1 * 3 as i32 as isize + y3) / 4 as i32 as isize,
-                    cr,
-                    cb,
-                );
+                *fresh106 = yuv_to_rgb((y1 * 3 as i32 as isize + y3) / 4 as i32 as isize, cr, cb);
                 let fresh107 = bptr;
                 bptr = bptr.offset(1);
-                *fresh107 = yuv_to_rgb(
-                    (y0 + y2 * 3 as i32 as isize) / 4 as i32 as isize,
-                    cr,
-                    cb,
-                );
+                *fresh107 = yuv_to_rgb((y0 + y2 * 3 as i32 as isize) / 4 as i32 as isize, cr, cb);
                 let fresh108 = bptr;
                 bptr = bptr.offset(1);
-                *fresh108 = yuv_to_rgb(
-                    (y1 + y3 * 3 as i32 as isize) / 4 as i32 as isize,
-                    cr,
-                    cb,
-                );
+                *fresh108 = yuv_to_rgb((y1 + y3 * 3 as i32 as isize) / 4 as i32 as isize, cr, cb);
                 let fresh109 = bptr;
                 bptr = bptr.offset(1);
                 *fresh109 = yuv_to_rgb(y2, cr, cb);
@@ -1592,32 +1568,16 @@ unsafe extern "C" fn decodeCodeBook(
                 *fresh160 = yuv_to_rgb24(y1, cr, cb);
                 let fresh161 = ibptr.i;
                 ibptr.i = ibptr.i.offset(1);
-                *fresh161 = yuv_to_rgb24(
-                    (y0 * 3 as i32 as isize + y2) / 4 as i32 as isize,
-                    cr,
-                    cb,
-                );
+                *fresh161 = yuv_to_rgb24((y0 * 3 as i32 as isize + y2) / 4 as i32 as isize, cr, cb);
                 let fresh162 = ibptr.i;
                 ibptr.i = ibptr.i.offset(1);
-                *fresh162 = yuv_to_rgb24(
-                    (y1 * 3 as i32 as isize + y3) / 4 as i32 as isize,
-                    cr,
-                    cb,
-                );
+                *fresh162 = yuv_to_rgb24((y1 * 3 as i32 as isize + y3) / 4 as i32 as isize, cr, cb);
                 let fresh163 = ibptr.i;
                 ibptr.i = ibptr.i.offset(1);
-                *fresh163 = yuv_to_rgb24(
-                    (y0 + y2 * 3 as i32 as isize) / 4 as i32 as isize,
-                    cr,
-                    cb,
-                );
+                *fresh163 = yuv_to_rgb24((y0 + y2 * 3 as i32 as isize) / 4 as i32 as isize, cr, cb);
                 let fresh164 = ibptr.i;
                 ibptr.i = ibptr.i.offset(1);
-                *fresh164 = yuv_to_rgb24(
-                    (y1 + y3 * 3 as i32 as isize) / 4 as i32 as isize,
-                    cr,
-                    cb,
-                );
+                *fresh164 = yuv_to_rgb24((y1 + y3 * 3 as i32 as isize) / 4 as i32 as isize, cr, cb);
                 let fresh165 = ibptr.i;
                 ibptr.i = ibptr.i.offset(1);
                 *fresh165 = yuv_to_rgb24(y2, cr, cb);
@@ -1791,24 +1751,24 @@ unsafe extern "C" fn decodeCodeBook(
                 *fresh213 = *cinTable[currentHandle as usize].gray.offset(y1 as isize);
                 let fresh214 = bbptr;
                 bbptr = bbptr.offset(1);
-                *fresh214 = *cinTable[currentHandle as usize].gray.offset(
-                    ((y0 * 3 as i32 as isize + y2) / 4 as i32 as isize) as isize,
-                );
+                *fresh214 = *cinTable[currentHandle as usize]
+                    .gray
+                    .offset(((y0 * 3 as i32 as isize + y2) / 4 as i32 as isize) as isize);
                 let fresh215 = bbptr;
                 bbptr = bbptr.offset(1);
-                *fresh215 = *cinTable[currentHandle as usize].gray.offset(
-                    ((y1 * 3 as i32 as isize + y3) / 4 as i32 as isize) as isize,
-                );
+                *fresh215 = *cinTable[currentHandle as usize]
+                    .gray
+                    .offset(((y1 * 3 as i32 as isize + y3) / 4 as i32 as isize) as isize);
                 let fresh216 = bbptr;
                 bbptr = bbptr.offset(1);
-                *fresh216 = *cinTable[currentHandle as usize].gray.offset(
-                    ((y0 + y2 * 3 as i32 as isize) / 4 as i32 as isize) as isize,
-                );
+                *fresh216 = *cinTable[currentHandle as usize]
+                    .gray
+                    .offset(((y0 + y2 * 3 as i32 as isize) / 4 as i32 as isize) as isize);
                 let fresh217 = bbptr;
                 bbptr = bbptr.offset(1);
-                *fresh217 = *cinTable[currentHandle as usize].gray.offset(
-                    ((y1 + y3 * 3 as i32 as isize) / 4 as i32 as isize) as isize,
-                );
+                *fresh217 = *cinTable[currentHandle as usize]
+                    .gray
+                    .offset(((y1 + y3 * 3 as i32 as isize) / 4 as i32 as isize) as isize);
                 let fresh218 = bbptr;
                 bbptr = bbptr.offset(1);
                 *fresh218 = *cinTable[currentHandle as usize].gray.offset(y2 as isize);
@@ -2231,8 +2191,7 @@ unsafe extern "C" fn recurseQuad(
             .as_mut_ptr()
             .offset(
                 ((useY
-                    + (cinTable[currentHandle as usize].CIN_HEIGHT as isize - bigy
-                        >> 1 as i32)
+                    + (cinTable[currentHandle as usize].CIN_HEIGHT as isize - bigy >> 1 as i32)
                     + yOff)
                     * cinTable[currentHandle as usize].samplesPerLine) as isize,
             )
@@ -2341,10 +2300,8 @@ unsafe extern "C" fn readQuadInfo(mut qData: *mut crate::src::qcommon::q_shared:
         cinTable[currentHandle as usize].screenDelta;
     cinTable[currentHandle as usize].t[1 as i32 as usize] =
         -cinTable[currentHandle as usize].screenDelta;
-    cinTable[currentHandle as usize].drawX =
-        cinTable[currentHandle as usize].CIN_WIDTH as isize;
-    cinTable[currentHandle as usize].drawY =
-        cinTable[currentHandle as usize].CIN_HEIGHT as isize;
+    cinTable[currentHandle as usize].drawX = cinTable[currentHandle as usize].CIN_WIDTH as isize;
+    cinTable[currentHandle as usize].drawY = cinTable[currentHandle as usize].CIN_HEIGHT as isize;
     // rage pro is very slow at 512 wide textures, voodoo can't do it at all
     if crate::src::client::cl_main::cls.glconfig.hardwareType as u32
         == crate::tr_types_h::GLHW_RAGEPRO as i32 as u32
@@ -2730,8 +2687,7 @@ unsafe extern "C" fn RoQInterrupt() {
     //	r = FS_Read( cin.file, cinTable[currentHandle].RoQFrameSize+8, cinTable[currentHandle].iFile );
     cinTable[currentHandle as usize].RoQPlayed += cinTable[currentHandle as usize]
         .RoQFrameSize
-        .wrapping_add(8 as i32 as u32)
-        as isize;
+        .wrapping_add(8 as i32 as u32) as isize;
 }
 /* *****************************************************************************
 *
@@ -3243,8 +3199,7 @@ pub unsafe extern "C" fn CIN_DrawCinematic(mut handle: i32) {
     crate::src::client::cl_scrn::SCR_AdjustFrom640(&mut x, &mut y, &mut w, &mut h);
     if cinTable[handle as usize].dirty as u32 != 0
         && (cinTable[handle as usize].CIN_WIDTH as isize != cinTable[handle as usize].drawX
-            || cinTable[handle as usize].CIN_HEIGHT as isize
-                != cinTable[handle as usize].drawY)
+            || cinTable[handle as usize].CIN_HEIGHT as isize != cinTable[handle as usize].drawY)
     {
         let mut buf2: *mut i32 = 0 as *mut i32;
         buf2 = crate::src::qcommon::common::Hunk_AllocateTempMemory(
@@ -3568,10 +3523,8 @@ pub unsafe extern "C" fn CIN_UploadCinematic(mut handle: i32) {
         }
         // Resample the video if needed
         if cinTable[handle as usize].dirty as u32 != 0
-            && (cinTable[handle as usize].CIN_WIDTH as isize
-                != cinTable[handle as usize].drawX
-                || cinTable[handle as usize].CIN_HEIGHT as isize
-                    != cinTable[handle as usize].drawY)
+            && (cinTable[handle as usize].CIN_WIDTH as isize != cinTable[handle as usize].drawX
+                || cinTable[handle as usize].CIN_HEIGHT as isize != cinTable[handle as usize].drawY)
         {
             let mut buf2: *mut i32 = 0 as *mut i32;
             buf2 = crate::src::qcommon::common::Hunk_AllocateTempMemory(

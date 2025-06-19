@@ -6717,8 +6717,8 @@ pub unsafe extern "C" fn _vp_psy_init(
         ) as i32;
         let mut base: f32 = ATH[i as usize];
         if j < endpos as isize {
-            let mut delta: f32 = (ATH[(i + 1 as i32 as isize) as usize] - base)
-                / (endpos as isize - j) as f32;
+            let mut delta: f32 =
+                (ATH[(i + 1 as i32 as isize) as usize] - base) / (endpos as isize - j) as f32;
             while j < endpos as isize && j < n as isize {
                 *(*p).ath.offset(j as isize) = (base as f64 + 100.0f64) as f32;
                 base += delta;
@@ -6739,9 +6739,8 @@ pub unsafe extern "C" fn _vp_psy_init(
             )
             + 2.24f32 as f64
                 * crate::stdlib::atan(
-                    ((rate / (2 as i32 * n) as isize
-                        * i
-                        * (rate / (2 as i32 * n) as isize * i)) as f32
+                    ((rate / (2 as i32 * n) as isize * i * (rate / (2 as i32 * n) as isize * i))
+                        as f32
                         * 1.85e-8f32) as f64,
                 )
             + (1e-4f32 * (rate / (2 as i32 * n) as isize * i) as f32) as f64)
@@ -6986,8 +6985,7 @@ unsafe extern "C" fn seed_loop(
 unsafe extern "C" fn seed_chase(mut seeds: *mut f32, mut linesper: i32, mut n: isize) {
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong)
-            as usize,
+        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong) as usize,
     );
     let mut posstack: *mut isize = fresh4.as_mut_ptr() as *mut isize;
     let mut fresh5 = ::std::vec::from_elem(
@@ -7046,13 +7044,11 @@ unsafe extern "C" fn seed_chase(mut seeds: *mut f32, mut linesper: i32, mut n: i
     while i < stack {
         let mut endpos: isize = 0;
         if i < stack - 1 as i32 as isize
-            && *ampstack.offset((i + 1 as i32 as isize) as isize)
-                > *ampstack.offset(i as isize)
+            && *ampstack.offset((i + 1 as i32 as isize) as isize) > *ampstack.offset(i as isize)
         {
             endpos = *posstack.offset((i + 1 as i32 as isize) as isize)
         } else {
-            endpos =
-                *posstack.offset(i as isize) + linesper as isize + 1 as i32 as isize
+            endpos = *posstack.offset(i as isize) + linesper as isize + 1 as i32 as isize
             /* +1 is important, else bin 0 is
             discarded in short frames */
         }
@@ -7080,15 +7076,11 @@ unsafe extern "C" fn max_seeds(
     let mut linpos: isize = 0 as i32 as isize;
     let mut pos: isize = 0;
     seed_chase(seed, linesper, n);
-    pos = *(*p).octave.offset(0 as i32 as isize)
-        - (*p).firstoc
-        - (linesper >> 1 as i32) as isize;
+    pos = *(*p).octave.offset(0 as i32 as isize) - (*p).firstoc - (linesper >> 1 as i32) as isize;
     while (linpos + 1 as i32 as isize) < (*p).n as isize {
         let mut minV: f32 = *seed.offset(pos as isize);
         let mut end: isize = (*(*p).octave.offset(linpos as isize)
-            + *(*p)
-                .octave
-                .offset((linpos + 1 as i32 as isize) as isize)
+            + *(*p).octave.offset((linpos + 1 as i32 as isize) as isize)
             >> 1 as i32)
             - (*p).firstoc;
         if minV > (*(*p).vi).tone_abs_limit {

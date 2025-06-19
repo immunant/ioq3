@@ -522,8 +522,7 @@ unsafe extern "C" fn create_context_buffer(mut cinfo: crate::jpeglib_h::j_compre
             ((*compptr).width_in_blocks as isize
                 * (*cinfo).min_DCT_h_scaled_size as isize
                 * (*cinfo).max_h_samp_factor as isize
-                / (*compptr).h_samp_factor as isize)
-                as crate::jmorecfg_h::JDIMENSION,
+                / (*compptr).h_samp_factor as isize) as crate::jmorecfg_h::JDIMENSION,
             (3 as i32 * rgroup_height) as crate::jmorecfg_h::JDIMENSION,
         );
         /* point to space for next component */

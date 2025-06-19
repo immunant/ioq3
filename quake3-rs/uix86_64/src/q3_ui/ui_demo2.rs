@@ -751,16 +751,16 @@ unsafe extern "C" fn Demos_MenuInit() {
                 b"dm_\x00" as *const u8 as *const libc::c_char,
                 protocolLegacy,
             );
-            s_demos.numDemos +=
-                crate::src::ui::ui_syscalls::trap_FS_GetFileList(
-                    b"demos\x00" as *const u8 as *const libc::c_char,
-                    extension.as_mut_ptr(),
-                    demoname,
-                    (::std::mem::size_of::<[libc::c_char; 32768]>() as libc::c_ulong)
-                        .wrapping_div(::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
-                        .wrapping_sub(demoname.offset_from(s_demos.names.as_mut_ptr())
-                            as isize as libc::c_ulong) as i32,
-                )
+            s_demos.numDemos += crate::src::ui::ui_syscalls::trap_FS_GetFileList(
+                b"demos\x00" as *const u8 as *const libc::c_char,
+                extension.as_mut_ptr(),
+                demoname,
+                (::std::mem::size_of::<[libc::c_char; 32768]>() as libc::c_ulong)
+                    .wrapping_div(::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
+                    .wrapping_sub(
+                        demoname.offset_from(s_demos.names.as_mut_ptr()) as isize as libc::c_ulong
+                    ) as i32,
+            )
         }
         j += 1
     }

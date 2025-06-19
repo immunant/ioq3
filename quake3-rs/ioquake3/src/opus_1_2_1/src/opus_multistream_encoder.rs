@@ -1384,8 +1384,8 @@ unsafe extern "C" fn rate_allocation(
         4029 as i32,
         (&mut Fs as *mut crate::opus_types_h::opus_int32).offset(
             (&mut Fs as *mut crate::opus_types_h::opus_int32)
-                .offset_from(&mut Fs as *mut crate::opus_types_h::opus_int32)
-                as isize as isize,
+                .offset_from(&mut Fs as *mut crate::opus_types_h::opus_int32) as isize
+                as isize,
         ),
     );
     surround_rate_allocation(st, rate, frame_size, Fs);
@@ -1451,8 +1451,8 @@ unsafe extern "C" fn opus_multistream_encode_native(
         4029 as i32,
         (&mut Fs as *mut crate::opus_types_h::opus_int32).offset(
             (&mut Fs as *mut crate::opus_types_h::opus_int32)
-                .offset_from(&mut Fs as *mut crate::opus_types_h::opus_int32)
-                as isize as isize,
+                .offset_from(&mut Fs as *mut crate::opus_types_h::opus_int32) as isize
+                as isize,
         ),
     );
     crate::src::opus_1_2_1::src::opus_encoder::opus_encoder_ctl(
@@ -1460,8 +1460,8 @@ unsafe extern "C" fn opus_multistream_encode_native(
         4007 as i32,
         (&mut vbr as *mut crate::opus_types_h::opus_int32).offset(
             (&mut vbr as *mut crate::opus_types_h::opus_int32)
-                .offset_from(&mut vbr as *mut crate::opus_types_h::opus_int32)
-                as isize as isize,
+                .offset_from(&mut vbr as *mut crate::opus_types_h::opus_int32) as isize
+                as isize,
         ),
     );
     crate::src::opus_1_2_1::src::opus_encoder::opus_encoder_ctl(
@@ -1708,8 +1708,7 @@ unsafe extern "C" fn opus_multistream_encode_native(
                 enc_0,
                 10026 as i32,
                 bandLogE.as_mut_ptr().offset(
-                    bandLogE.as_mut_ptr().offset_from(bandLogE.as_mut_ptr()) as isize
-                        as isize,
+                    bandLogE.as_mut_ptr().offset_from(bandLogE.as_mut_ptr()) as isize as isize,
                 ),
             );
         }
