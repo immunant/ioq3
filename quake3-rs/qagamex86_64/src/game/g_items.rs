@@ -380,7 +380,7 @@ pub unsafe extern "C" fn Pickup_Holdable(
     (*(*other).client).ps.stats[crate::bg_public_h::STAT_HOLDABLE_ITEM as i32 as usize] = (*ent)
         .item
         .offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
-        as libc::c_long
+        as isize
         as i32;
     if (*(*ent).item).giTag == crate::bg_public_h::HI_KAMIKAZE as i32 {
         (*(*other).client).ps.eFlags |= 0x200 as i32
@@ -775,7 +775,7 @@ pub unsafe extern "C" fn LaunchItem(
     dropped = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s; // This is non-zero is it's a dropped item
     (*dropped).s.eType = crate::bg_public_h::ET_ITEM as i32; // auto-remove after 30 seconds
     (*dropped).s.modelindex = item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
-        as libc::c_long as i32;
+        as isize as i32;
     (*dropped).s.modelindex2 = 1 as i32;
     (*dropped).classname = (*item).classname;
     (*dropped).item = item;
@@ -922,7 +922,7 @@ pub unsafe extern "C" fn FinishSpawningItem(mut ent: *mut crate::g_local_h::gent
     (*ent).s.modelindex = (*ent)
         .item
         .offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
-        as libc::c_long as i32;
+        as isize as i32;
     (*ent).s.modelindex2 = 0 as i32;
     (*ent).r.contents = 0x40000000 as i32;
     (*ent).touch = Some(
@@ -1027,7 +1027,7 @@ pub unsafe extern "C" fn G_CheckTeamItems() {
         ) as *mut crate::bg_public_h::gitem_s;
         if item.is_null()
             || itemRegistered[item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
-                as libc::c_long as usize] as u64
+                as isize as usize] as u64
                 == 0
         {
             crate::src::game::g_main::G_Printf(
@@ -1039,7 +1039,7 @@ pub unsafe extern "C" fn G_CheckTeamItems() {
         ) as *mut crate::bg_public_h::gitem_s;
         if item.is_null()
             || itemRegistered[item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
-                as libc::c_long as usize] as u64
+                as isize as usize] as u64
                 == 0
         {
             crate::src::game::g_main::G_Printf(
@@ -1087,7 +1087,7 @@ pub unsafe extern "C" fn RegisterItem(mut item: *mut crate::bg_public_h::gitem_t
         );
     }
     itemRegistered[item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
-        as libc::c_long as usize] = crate::src::qcommon::q_shared::qtrue;
+        as isize as usize] = crate::src::qcommon::q_shared::qtrue;
 }
 /*
 ===============

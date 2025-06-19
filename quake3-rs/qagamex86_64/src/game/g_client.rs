@@ -969,7 +969,7 @@ pub unsafe extern "C" fn CopyToBodyQue(mut ent: *mut crate::g_local_h::gentity_t
     (*body).s.powerups = 0 as i32;
     (*body).s.loopSound = 0 as i32;
     (*body).s.number =
-        body.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32;
+        body.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as isize as i32;
     (*body).timestamp = crate::src::game::g_main::level.time;
     (*body).physicsObject = crate::src::qcommon::q_shared::qtrue;
     (*body).physicsBounce = 0 as i32 as f32;
@@ -1835,7 +1835,7 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut crate::g_local_h::gentity_t) 
     let mut eventSequence: i32 = 0;
     let mut userinfo: [libc::c_char; 1024] = [0; 1024];
     index =
-        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32;
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as isize as i32;
     client = (*ent).client;
     spawn_origin[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     spawn_origin[1 as i32 as usize] = spawn_origin[2 as i32 as usize];
@@ -1985,7 +1985,7 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut crate::g_local_h::gentity_t) 
     // the respawned flag will be cleared after the attack and jump keys come up
     (*client).ps.pm_flags |= 512 as i32;
     crate::src::game::g_syscalls::trap_GetUsercmd(
-        client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long as i32,
+        client.offset_from(crate::src::game::g_main::level.clients) as isize as i32,
         &mut (*(*ent).client).pers.cmd as *mut _ as *mut crate::src::qcommon::q_shared::usercmd_s,
     );
     SetClientViewAngle(ent, spawn_angles.as_mut_ptr());
@@ -2049,7 +2049,7 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut crate::g_local_h::gentity_t) 
     (*client).ps.commandTime = crate::src::game::g_main::level.time - 100 as i32;
     (*(*ent).client).pers.cmd.serverTime = crate::src::game::g_main::level.time;
     crate::src::game::g_active::ClientThink(
-        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32,
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as isize as i32,
     );
     // run the presend to set anything else, follow spectators wait
     // until all clients have been reconnected after map_restart
