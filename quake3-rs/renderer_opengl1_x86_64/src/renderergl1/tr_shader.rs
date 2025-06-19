@@ -551,7 +551,6 @@ pub unsafe extern "C" fn R_RemapShader(
                 as *const libc::c_char,
             shaderName,
         );
-
     }
     sh2 = R_FindShaderByName(newShaderName);
     if sh2.is_null() || sh2 == crate::src::renderergl1::tr_main::tr.defaultShader {

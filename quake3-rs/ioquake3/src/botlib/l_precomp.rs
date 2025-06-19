@@ -1722,9 +1722,7 @@ pub unsafe extern "C" fn PC_ReadLine(
 pub unsafe extern "C" fn PC_WhiteSpaceBeforeToken(
     mut token: *mut crate::src::botlib::l_script::token_t,
 ) -> libc::c_int {
-    return ((*token)
-        .endwhitespace_p
-        .offset_from((*token).whitespace_p) as libc::c_long
+    return ((*token).endwhitespace_p.offset_from((*token).whitespace_p) as libc::c_long
         > 0 as libc::c_int as libc::c_long) as libc::c_int;
 }
 //end of the function PC_WhiteSpaceBeforeToken

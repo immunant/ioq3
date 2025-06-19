@@ -49,12 +49,7 @@ pub struct gentity_s {
     pub nextthink: libc::c_int,
     pub think: Option<unsafe extern "C" fn(_: *mut gentity_t) -> ()>,
     pub reached: Option<unsafe extern "C" fn(_: *mut gentity_t) -> ()>,
-    pub blocked: Option<
-        unsafe extern "C" fn(
-            _: *mut gentity_t,
-            _: *mut gentity_t,
-        ) -> (),
-    >,
+    pub blocked: Option<unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t) -> ()>,
     pub touch: Option<
         unsafe extern "C" fn(
             _: *mut gentity_t,
@@ -62,20 +57,10 @@ pub struct gentity_s {
             _: *mut crate::src::qcommon::q_shared::trace_t,
         ) -> (),
     >,
-    pub use_0: Option<
-        unsafe extern "C" fn(
-            _: *mut gentity_t,
-            _: *mut gentity_t,
-            _: *mut gentity_t,
-        ) -> (),
-    >,
-    pub pain: Option<
-        unsafe extern "C" fn(
-            _: *mut gentity_t,
-            _: *mut gentity_t,
-            _: libc::c_int,
-        ) -> (),
-    >,
+    pub use_0:
+        Option<unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> ()>,
+    pub pain:
+        Option<unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: libc::c_int) -> ()>,
     pub die: Option<
         unsafe extern "C" fn(
             _: *mut gentity_t,

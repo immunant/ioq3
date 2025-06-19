@@ -4190,8 +4190,7 @@ pub unsafe extern "C" fn Com_ReadFromPipe() {
                 buf.as_mut_ptr(),
             );
             *brk = tmp;
-            accu = (accu as libc::c_long
-                - brk.offset_from(buf.as_mut_ptr()) as libc::c_long)
+            accu = (accu as libc::c_long - brk.offset_from(buf.as_mut_ptr()) as libc::c_long)
                 as libc::c_int;
             crate::stdlib::memmove(
                 buf.as_mut_ptr() as *mut libc::c_void,

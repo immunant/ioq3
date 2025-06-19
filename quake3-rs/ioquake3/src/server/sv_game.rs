@@ -504,8 +504,8 @@ pub unsafe extern "C" fn SV_GEntityForSvEntity(
     mut svEnt: *mut crate::server_h::svEntity_t,
 ) -> *mut crate::g_public_h::sharedEntity_t {
     let mut num: libc::c_int = 0;
-    num = svEnt.offset_from(crate::src::server::sv_main::sv.svEntities.as_mut_ptr())
-        as libc::c_long as libc::c_int;
+    num = svEnt.offset_from(crate::src::server::sv_main::sv.svEntities.as_mut_ptr()) as libc::c_long
+        as libc::c_int;
     return SV_GentityNum(num);
 }
 /*

@@ -4905,8 +4905,7 @@ pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
         .expect("non-null function pointer")(
         0 as libc::c_int, crate::src::qcommon::q_shared::h_low
     ) as *mut crate::src::qcommon::q_shared::byte)
-        .offset_from(startMarker) as libc::c_long
-        as libc::c_int;
+        .offset_from(startMarker) as libc::c_long as libc::c_int;
     // only set tr.world now that we know the entire level has loaded properly
     crate::src::renderergl1::tr_main::tr.world = &mut s_worldData;
     crate::src::renderergl1::tr_main::ri

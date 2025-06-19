@@ -791,8 +791,7 @@ pub unsafe extern "C" fn LaunchItem(
     let mut dropped: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t; // store item number in modelindex
     dropped = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s; // This is non-zero is it's a dropped item
     (*dropped).s.eType = crate::bg_public_h::ET_ITEM as libc::c_int; // auto-remove after 30 seconds
-    (*dropped).s.modelindex = item
-        .offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
+    (*dropped).s.modelindex = item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
         as libc::c_long as libc::c_int;
     (*dropped).s.modelindex2 = 1 as libc::c_int;
     (*dropped).classname = (*item).classname;
@@ -1070,8 +1069,7 @@ pub unsafe extern "C" fn G_CheckTeamItems() {
             b"Red Flag\x00" as *const u8 as *const libc::c_char,
         ) as *mut crate::bg_public_h::gitem_s;
         if item.is_null()
-            || itemRegistered[item
-                .offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
+            || itemRegistered[item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
                 as libc::c_long as usize] as u64
                 == 0
         {
@@ -1083,8 +1081,7 @@ pub unsafe extern "C" fn G_CheckTeamItems() {
             b"Blue Flag\x00" as *const u8 as *const libc::c_char,
         ) as *mut crate::bg_public_h::gitem_s;
         if item.is_null()
-            || itemRegistered[item
-                .offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
+            || itemRegistered[item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
                 as libc::c_long as usize] as u64
                 == 0
         {

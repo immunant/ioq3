@@ -394,11 +394,9 @@ pub struct jpeg_decompress_struct {
 #[derive(Copy, Clone)]
 pub struct jpeg_error_mgr {
     pub error_exit: Option<unsafe extern "C" fn(_: j_common_ptr) -> ()>,
-    pub emit_message:
-        Option<unsafe extern "C" fn(_: j_common_ptr, _: libc::c_int) -> ()>,
+    pub emit_message: Option<unsafe extern "C" fn(_: j_common_ptr, _: libc::c_int) -> ()>,
     pub output_message: Option<unsafe extern "C" fn(_: j_common_ptr) -> ()>,
-    pub format_message:
-        Option<unsafe extern "C" fn(_: j_common_ptr, _: *mut libc::c_char) -> ()>,
+    pub format_message: Option<unsafe extern "C" fn(_: j_common_ptr, _: *mut libc::c_char) -> ()>,
     pub reset_error_mgr: Option<unsafe extern "C" fn(_: j_common_ptr) -> ()>,
     pub msg_code: libc::c_int,
     pub msg_parm: C2RustUnnamed_0,
@@ -431,9 +429,8 @@ pub struct jpeg_destination_mgr {
     pub next_output_byte: *mut crate::jmorecfg_h::JOCTET,
     pub free_in_buffer: crate::stddef_h::size_t,
     pub init_destination: Option<unsafe extern "C" fn(_: j_compress_ptr) -> ()>,
-    pub empty_output_buffer: Option<
-        unsafe extern "C" fn(_: j_compress_ptr) -> crate::jmorecfg_h::boolean,
-    >,
+    pub empty_output_buffer:
+        Option<unsafe extern "C" fn(_: j_compress_ptr) -> crate::jmorecfg_h::boolean>,
     pub term_destination: Option<unsafe extern "C" fn(_: j_compress_ptr) -> ()>,
 }
 /* Data source object for decompression */
@@ -443,16 +440,11 @@ pub struct jpeg_source_mgr {
     pub next_input_byte: *const crate::jmorecfg_h::JOCTET,
     pub bytes_in_buffer: crate::stddef_h::size_t,
     pub init_source: Option<unsafe extern "C" fn(_: j_decompress_ptr) -> ()>,
-    pub fill_input_buffer: Option<
-        unsafe extern "C" fn(_: j_decompress_ptr) -> crate::jmorecfg_h::boolean,
-    >,
-    pub skip_input_data:
-        Option<unsafe extern "C" fn(_: j_decompress_ptr, _: libc::c_long) -> ()>,
+    pub fill_input_buffer:
+        Option<unsafe extern "C" fn(_: j_decompress_ptr) -> crate::jmorecfg_h::boolean>,
+    pub skip_input_data: Option<unsafe extern "C" fn(_: j_decompress_ptr, _: libc::c_long) -> ()>,
     pub resync_to_restart: Option<
-        unsafe extern "C" fn(
-            _: j_decompress_ptr,
-            _: libc::c_int,
-        ) -> crate::jmorecfg_h::boolean,
+        unsafe extern "C" fn(_: j_decompress_ptr, _: libc::c_int) -> crate::jmorecfg_h::boolean,
     >,
     pub term_source: Option<unsafe extern "C" fn(_: j_decompress_ptr) -> ()>,
 }
@@ -1075,12 +1067,10 @@ pub struct jpeg_memory_mgr {
             _: crate::jmorecfg_h::boolean,
         ) -> JBLOCKARRAY,
     >,
-    pub free_pool:
-        Option<unsafe extern "C" fn(_: j_common_ptr, _: libc::c_int) -> ()>,
+    pub free_pool: Option<unsafe extern "C" fn(_: j_common_ptr, _: libc::c_int) -> ()>,
     pub self_destruct: Option<unsafe extern "C" fn(_: j_common_ptr) -> ()>,
     pub max_memory_to_use: libc::c_long,
     pub max_alloc_chunk: libc::c_long,
 }
-pub type jpeg_marker_parser_method = Option<
-    unsafe extern "C" fn(_: j_decompress_ptr) -> crate::jmorecfg_h::boolean,
->;
+pub type jpeg_marker_parser_method =
+    Option<unsafe extern "C" fn(_: j_decompress_ptr) -> crate::jmorecfg_h::boolean>;

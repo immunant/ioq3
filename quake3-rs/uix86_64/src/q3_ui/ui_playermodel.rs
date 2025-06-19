@@ -1353,8 +1353,8 @@ unsafe extern "C" fn PlayerModel_SetMenuItems() {
             crate::src::qcommon::q_shared::Q_strncpyz(
                 modelskin.as_mut_ptr(),
                 buffptr,
-                (pdest.offset_from(buffptr) as libc::c_long
-                    + 1 as libc::c_int as libc::c_long) as libc::c_int,
+                (pdest.offset_from(buffptr) as libc::c_long + 1 as libc::c_int as libc::c_long)
+                    as libc::c_int,
             );
             ::libc::strcat(
                 modelskin.as_mut_ptr(),

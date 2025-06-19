@@ -497,8 +497,7 @@ pub unsafe extern "C" fn CG_ShaderStateChanged() {
             n,
             t.offset_from(n) as libc::c_long as libc::c_ulong,
         );
-        newShader[t.offset_from(n) as libc::c_long as usize] =
-            0 as libc::c_int as libc::c_char;
+        newShader[t.offset_from(n) as libc::c_long as usize] = 0 as libc::c_int as libc::c_char;
         t = t.offset(1);
         o = ::libc::strstr(t, b"@\x00" as *const u8 as *const libc::c_char);
         if !o.is_null() {

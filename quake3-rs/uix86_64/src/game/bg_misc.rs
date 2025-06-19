@@ -1143,9 +1143,7 @@ BG_FindItemForPowerup
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BG_FindItemForPowerup(
-    mut pw: powerup_t,
-) -> *mut gitem_t {
+pub unsafe extern "C" fn BG_FindItemForPowerup(mut pw: powerup_t) -> *mut gitem_t {
     let mut i: libc::c_int = 0;
     i = 0 as libc::c_int;
     while i < bg_numItems {
@@ -1157,8 +1155,7 @@ pub unsafe extern "C" fn BG_FindItemForPowerup(
                 == IT_PERSISTANT_POWERUP as libc::c_int as libc::c_uint)
             && bg_itemlist[i as usize].giTag as libc::c_uint == pw as libc::c_uint
         {
-            return &mut *bg_itemlist.as_mut_ptr().offset(i as isize)
-                as *mut gitem_t;
+            return &mut *bg_itemlist.as_mut_ptr().offset(i as isize) as *mut gitem_t;
         }
         i += 1
     }
@@ -1171,9 +1168,7 @@ BG_FindItemForHoldable
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BG_FindItemForHoldable(
-    mut pw: holdable_t,
-) -> *mut gitem_t {
+pub unsafe extern "C" fn BG_FindItemForHoldable(mut pw: holdable_t) -> *mut gitem_t {
     let mut i: libc::c_int = 0;
     i = 0 as libc::c_int;
     while i < bg_numItems {
@@ -1181,8 +1176,7 @@ pub unsafe extern "C" fn BG_FindItemForHoldable(
             == IT_HOLDABLE as libc::c_int as libc::c_uint
             && bg_itemlist[i as usize].giTag as libc::c_uint == pw as libc::c_uint
         {
-            return &mut *bg_itemlist.as_mut_ptr().offset(i as isize)
-                as *mut gitem_t;
+            return &mut *bg_itemlist.as_mut_ptr().offset(i as isize) as *mut gitem_t;
         }
         i += 1
     }
@@ -1199,14 +1193,11 @@ BG_FindItemForWeapon
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BG_FindItemForWeapon(
-    mut weapon: weapon_t,
-) -> *mut gitem_t {
+pub unsafe extern "C" fn BG_FindItemForWeapon(mut weapon: weapon_t) -> *mut gitem_t {
     let mut it: *mut gitem_t = 0 as *mut gitem_t;
     it = bg_itemlist.as_mut_ptr().offset(1 as libc::c_int as isize);
     while !(*it).classname.is_null() {
-        if (*it).giType as libc::c_uint
-            == IT_WEAPON as libc::c_int as libc::c_uint
+        if (*it).giType as libc::c_uint == IT_WEAPON as libc::c_int as libc::c_uint
             && (*it).giTag as libc::c_uint == weapon as libc::c_uint
         {
             return it;
@@ -1228,9 +1219,7 @@ BG_FindItem
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BG_FindItem(
-    mut pickupName: *const libc::c_char,
-) -> *mut gitem_t {
+pub unsafe extern "C" fn BG_FindItem(mut pickupName: *const libc::c_char) -> *mut gitem_t {
     let mut it: *mut gitem_t = 0 as *mut gitem_t;
     it = bg_itemlist.as_mut_ptr().offset(1 as libc::c_int as isize);
     while !(*it).classname.is_null() {
@@ -1298,8 +1287,7 @@ pub unsafe extern "C" fn BG_CanItemBeGrabbed(
             b"BG_CanItemBeGrabbed: index out of range\x00" as *const u8 as *const libc::c_char,
         );
     }
-    item = &mut *bg_itemlist.as_mut_ptr().offset((*ent).modelindex as isize)
-        as *mut gitem_t;
+    item = &mut *bg_itemlist.as_mut_ptr().offset((*ent).modelindex as isize) as *mut gitem_t;
     match (*item).giType as libc::c_uint {
         1 => return qtrue,
         2 => {
@@ -1311,8 +1299,7 @@ pub unsafe extern "C" fn BG_CanItemBeGrabbed(
         }
         3 => {
             if (*ps).stats[STAT_ARMOR as libc::c_int as usize]
-                >= (*ps).stats[STAT_MAX_HEALTH as libc::c_int as usize]
-                    * 2 as libc::c_int
+                >= (*ps).stats[STAT_MAX_HEALTH as libc::c_int as usize] * 2 as libc::c_int
             {
                 return qfalse;
             }
@@ -1323,8 +1310,7 @@ pub unsafe extern "C" fn BG_CanItemBeGrabbed(
             // don't pick up if already at max
             if (*item).quantity == 5 as libc::c_int || (*item).quantity == 100 as libc::c_int {
                 if (*ps).stats[STAT_HEALTH as libc::c_int as usize]
-                    >= (*ps).stats[STAT_MAX_HEALTH as libc::c_int as usize]
-                        * 2 as libc::c_int
+                    >= (*ps).stats[STAT_MAX_HEALTH as libc::c_int as usize] * 2 as libc::c_int
                 {
                     return qfalse;
                 } // powerups are always picked up
@@ -1344,16 +1330,11 @@ pub unsafe extern "C" fn BG_CanItemBeGrabbed(
                 // ent->modelindex2 is non-zero on items if they are dropped
                 // we need to know this because we can pick up our dropped flag (and return it)
                 // but we can't pick up our flag at base
-                if (*ps).persistant[PERS_TEAM as libc::c_int as usize]
-                    == TEAM_RED as libc::c_int
-                {
+                if (*ps).persistant[PERS_TEAM as libc::c_int as usize] == TEAM_RED as libc::c_int {
                     if (*item).giTag == PW_BLUEFLAG as libc::c_int
+                        || (*item).giTag == PW_REDFLAG as libc::c_int && (*ent).modelindex2 != 0
                         || (*item).giTag == PW_REDFLAG as libc::c_int
-                            && (*ent).modelindex2 != 0
-                        || (*item).giTag == PW_REDFLAG as libc::c_int
-                            && (*ps).powerups
-                                [PW_BLUEFLAG as libc::c_int as usize]
-                                != 0
+                            && (*ps).powerups[PW_BLUEFLAG as libc::c_int as usize] != 0
                     {
                         return qtrue;
                     }
@@ -1361,12 +1342,9 @@ pub unsafe extern "C" fn BG_CanItemBeGrabbed(
                     == TEAM_BLUE as libc::c_int
                 {
                     if (*item).giTag == PW_REDFLAG as libc::c_int
+                        || (*item).giTag == PW_BLUEFLAG as libc::c_int && (*ent).modelindex2 != 0
                         || (*item).giTag == PW_BLUEFLAG as libc::c_int
-                            && (*ent).modelindex2 != 0
-                        || (*item).giTag == PW_BLUEFLAG as libc::c_int
-                            && (*ps).powerups
-                                [PW_REDFLAG as libc::c_int as usize]
-                                != 0
+                            && (*ps).powerups[PW_REDFLAG as libc::c_int as usize] != 0
                     {
                         return qtrue;
                     }
@@ -1465,8 +1443,7 @@ pub unsafe extern "C" fn BG_EvaluateTrajectory(
                 - 0.5f64
                     * 800 as libc::c_int as libc::c_double
                     * deltaTime as libc::c_double
-                    * deltaTime as libc::c_double)
-                as vec_t
+                    * deltaTime as libc::c_double) as vec_t
         }
         _ => {
             Com_Error(
@@ -1682,19 +1659,15 @@ pub unsafe extern "C" fn BG_TouchJumpPad(
             (*jumppad).origin2.as_mut_ptr() as *const vec_t,
             angles.as_mut_ptr(),
         );
-        p = crate::stdlib::fabs(AngleNormalize180(
-            angles[0 as libc::c_int as usize],
-        ) as libc::c_double) as libc::c_float;
+        p = crate::stdlib::fabs(
+            AngleNormalize180(angles[0 as libc::c_int as usize]) as libc::c_double
+        ) as libc::c_float;
         if p < 45 as libc::c_int as libc::c_float {
             effectNum = 0 as libc::c_int
         } else {
             effectNum = 1 as libc::c_int
         }
-        BG_AddPredictableEventToPlayerstate(
-            EV_JUMP_PAD as libc::c_int,
-            effectNum,
-            ps,
-        );
+        BG_AddPredictableEventToPlayerstate(EV_JUMP_PAD as libc::c_int, effectNum, ps);
     }
     // remember hitting this jumppad this frame
     (*ps).jumppad_ent = (*jumppad).number;
@@ -1724,9 +1697,7 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityState(
         || (*ps).pm_type == PM_SPECTATOR as libc::c_int
     {
         (*s).eType = ET_INVISIBLE as libc::c_int
-    } else if (*ps).stats[STAT_HEALTH as libc::c_int as usize]
-        <= -(40 as libc::c_int)
-    {
+    } else if (*ps).stats[STAT_HEALTH as libc::c_int as usize] <= -(40 as libc::c_int) {
         (*s).eType = ET_INVISIBLE as libc::c_int
     } else {
         (*s).eType = ET_PLAYER as libc::c_int
@@ -1737,15 +1708,12 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityState(
     (*s).pos.trBase[1 as libc::c_int as usize] = (*ps).origin[1 as libc::c_int as usize];
     (*s).pos.trBase[2 as libc::c_int as usize] = (*ps).origin[2 as libc::c_int as usize];
     if snap as u64 != 0 {
-        (*s).pos.trBase[0 as libc::c_int as usize] = (*s).pos.trBase[0 as libc::c_int as usize]
-            as libc::c_int
-            as vec_t;
-        (*s).pos.trBase[1 as libc::c_int as usize] = (*s).pos.trBase[1 as libc::c_int as usize]
-            as libc::c_int
-            as vec_t;
-        (*s).pos.trBase[2 as libc::c_int as usize] = (*s).pos.trBase[2 as libc::c_int as usize]
-            as libc::c_int
-            as vec_t
+        (*s).pos.trBase[0 as libc::c_int as usize] =
+            (*s).pos.trBase[0 as libc::c_int as usize] as libc::c_int as vec_t;
+        (*s).pos.trBase[1 as libc::c_int as usize] =
+            (*s).pos.trBase[1 as libc::c_int as usize] as libc::c_int as vec_t;
+        (*s).pos.trBase[2 as libc::c_int as usize] =
+            (*s).pos.trBase[2 as libc::c_int as usize] as libc::c_int as vec_t
     }
     // set the trDelta for flag direction
     (*s).pos.trDelta[0 as libc::c_int as usize] = (*ps).velocity[0 as libc::c_int as usize]; // ET_PLAYER looks here instead of at number
@@ -1756,18 +1724,14 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityState(
     (*s).apos.trBase[1 as libc::c_int as usize] = (*ps).viewangles[1 as libc::c_int as usize];
     (*s).apos.trBase[2 as libc::c_int as usize] = (*ps).viewangles[2 as libc::c_int as usize];
     if snap as u64 != 0 {
-        (*s).apos.trBase[0 as libc::c_int as usize] = (*s).apos.trBase[0 as libc::c_int as usize]
-            as libc::c_int
-            as vec_t;
-        (*s).apos.trBase[1 as libc::c_int as usize] = (*s).apos.trBase[1 as libc::c_int as usize]
-            as libc::c_int
-            as vec_t;
-        (*s).apos.trBase[2 as libc::c_int as usize] = (*s).apos.trBase[2 as libc::c_int as usize]
-            as libc::c_int
-            as vec_t
+        (*s).apos.trBase[0 as libc::c_int as usize] =
+            (*s).apos.trBase[0 as libc::c_int as usize] as libc::c_int as vec_t;
+        (*s).apos.trBase[1 as libc::c_int as usize] =
+            (*s).apos.trBase[1 as libc::c_int as usize] as libc::c_int as vec_t;
+        (*s).apos.trBase[2 as libc::c_int as usize] =
+            (*s).apos.trBase[2 as libc::c_int as usize] as libc::c_int as vec_t
     }
-    (*s).angles2[1 as libc::c_int as usize] =
-        (*ps).movementDir as vec_t;
+    (*s).angles2[1 as libc::c_int as usize] = (*ps).movementDir as vec_t;
     (*s).legsAnim = (*ps).legsAnim;
     (*s).torsoAnim = (*ps).torsoAnim;
     (*s).clientNum = (*ps).clientNum;
@@ -1826,9 +1790,7 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityStateExtraPolate(
         || (*ps).pm_type == PM_SPECTATOR as libc::c_int
     {
         (*s).eType = ET_INVISIBLE as libc::c_int
-    } else if (*ps).stats[STAT_HEALTH as libc::c_int as usize]
-        <= -(40 as libc::c_int)
-    {
+    } else if (*ps).stats[STAT_HEALTH as libc::c_int as usize] <= -(40 as libc::c_int) {
         (*s).eType = ET_INVISIBLE as libc::c_int
     } else {
         (*s).eType = ET_PLAYER as libc::c_int
@@ -1839,15 +1801,12 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityStateExtraPolate(
     (*s).pos.trBase[1 as libc::c_int as usize] = (*ps).origin[1 as libc::c_int as usize];
     (*s).pos.trBase[2 as libc::c_int as usize] = (*ps).origin[2 as libc::c_int as usize];
     if snap as u64 != 0 {
-        (*s).pos.trBase[0 as libc::c_int as usize] = (*s).pos.trBase[0 as libc::c_int as usize]
-            as libc::c_int
-            as vec_t;
-        (*s).pos.trBase[1 as libc::c_int as usize] = (*s).pos.trBase[1 as libc::c_int as usize]
-            as libc::c_int
-            as vec_t;
-        (*s).pos.trBase[2 as libc::c_int as usize] = (*s).pos.trBase[2 as libc::c_int as usize]
-            as libc::c_int
-            as vec_t
+        (*s).pos.trBase[0 as libc::c_int as usize] =
+            (*s).pos.trBase[0 as libc::c_int as usize] as libc::c_int as vec_t;
+        (*s).pos.trBase[1 as libc::c_int as usize] =
+            (*s).pos.trBase[1 as libc::c_int as usize] as libc::c_int as vec_t;
+        (*s).pos.trBase[2 as libc::c_int as usize] =
+            (*s).pos.trBase[2 as libc::c_int as usize] as libc::c_int as vec_t
     }
     // set the trDelta for flag direction and linear prediction
     (*s).pos.trDelta[0 as libc::c_int as usize] = (*ps).velocity[0 as libc::c_int as usize];
@@ -1862,18 +1821,14 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityStateExtraPolate(
     (*s).apos.trBase[1 as libc::c_int as usize] = (*ps).viewangles[1 as libc::c_int as usize];
     (*s).apos.trBase[2 as libc::c_int as usize] = (*ps).viewangles[2 as libc::c_int as usize];
     if snap as u64 != 0 {
-        (*s).apos.trBase[0 as libc::c_int as usize] = (*s).apos.trBase[0 as libc::c_int as usize]
-            as libc::c_int
-            as vec_t;
-        (*s).apos.trBase[1 as libc::c_int as usize] = (*s).apos.trBase[1 as libc::c_int as usize]
-            as libc::c_int
-            as vec_t;
-        (*s).apos.trBase[2 as libc::c_int as usize] = (*s).apos.trBase[2 as libc::c_int as usize]
-            as libc::c_int
-            as vec_t
+        (*s).apos.trBase[0 as libc::c_int as usize] =
+            (*s).apos.trBase[0 as libc::c_int as usize] as libc::c_int as vec_t;
+        (*s).apos.trBase[1 as libc::c_int as usize] =
+            (*s).apos.trBase[1 as libc::c_int as usize] as libc::c_int as vec_t;
+        (*s).apos.trBase[2 as libc::c_int as usize] =
+            (*s).apos.trBase[2 as libc::c_int as usize] as libc::c_int as vec_t
     }
-    (*s).angles2[1 as libc::c_int as usize] =
-        (*ps).movementDir as vec_t;
+    (*s).angles2[1 as libc::c_int as usize] = (*ps).movementDir as vec_t;
     (*s).legsAnim = (*ps).legsAnim;
     (*s).torsoAnim = (*ps).torsoAnim;
     (*s).clientNum = (*ps).clientNum;

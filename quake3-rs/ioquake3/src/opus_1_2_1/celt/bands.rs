@@ -2242,9 +2242,8 @@ unsafe extern "C" fn special_hybrid_folding(
             .wrapping_add(
                 (0 as libc::c_int as libc::c_long
                     * (&mut *norm.offset(n1 as isize) as *mut crate::arch_h::celt_norm)
-                        .offset_from(
-                            &mut *norm.offset((2 as libc::c_int * n1 - n2) as isize),
-                        ) as libc::c_long) as libc::c_ulong,
+                        .offset_from(&mut *norm.offset((2 as libc::c_int * n1 - n2) as isize))
+                        as libc::c_long) as libc::c_ulong,
             ),
     );
     if dual_stereo != 0 {
@@ -2257,9 +2256,8 @@ unsafe extern "C" fn special_hybrid_folding(
                 .wrapping_add(
                     (0 as libc::c_int as libc::c_long
                         * (&mut *norm2.offset(n1 as isize) as *mut crate::arch_h::celt_norm)
-                            .offset_from(
-                                &mut *norm2.offset((2 as libc::c_int * n1 - n2) as isize),
-                            ) as libc::c_long) as libc::c_ulong,
+                            .offset_from(&mut *norm2.offset((2 as libc::c_int * n1 - n2) as isize))
+                            as libc::c_long) as libc::c_ulong,
                 ),
         );
     };

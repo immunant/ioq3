@@ -1873,8 +1873,8 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut crate::g_local_h::gentity_t) 
     let mut accuracy_shots: libc::c_int = 0;
     let mut eventSequence: libc::c_int = 0;
     let mut userinfo: [libc::c_char; 1024] = [0; 1024];
-    index = ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-        as libc::c_long as libc::c_int;
+    index = ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+        as libc::c_int;
     client = (*ent).client;
     spawn_origin[2 as libc::c_int as usize] =
         0 as libc::c_int as crate::src::qcommon::q_shared::vec_t;
@@ -2041,8 +2041,7 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut crate::g_local_h::gentity_t) 
     // the respawned flag will be cleared after the attack and jump keys come up
     (*client).ps.pm_flags |= 512 as libc::c_int;
     crate::src::game::g_syscalls::trap_GetUsercmd(
-        client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long
-            as libc::c_int,
+        client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long as libc::c_int,
         &mut (*(*ent).client).pers.cmd as *mut _ as *mut crate::src::qcommon::q_shared::usercmd_s,
     );
     SetClientViewAngle(ent, spawn_angles.as_mut_ptr());

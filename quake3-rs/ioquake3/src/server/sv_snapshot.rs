@@ -895,8 +895,7 @@ unsafe extern "C" fn SV_BuildClientSnapshot(mut client: *mut crate::server_h::cl
     }
     // grab the current playerState_t
     ps = crate::src::server::sv_game::SV_GameClientNum(
-        client.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long
-            as libc::c_int,
+        client.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as libc::c_int,
     ) as *mut crate::src::qcommon::q_shared::playerState_s;
     (*frame).ps = *ps;
     // never send client's own entity, because it can

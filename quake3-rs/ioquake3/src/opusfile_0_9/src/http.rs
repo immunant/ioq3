@@ -235,8 +235,8 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
                 return 0 as *const libc::c_char;
             }
             /*An escaped "localhost" can take at most 27 characters.*/
-            if (host_end.offset_from(host) as libc::c_long
-                > 27 as libc::c_int as libc::c_long) as libc::c_int as libc::c_long
+            if (host_end.offset_from(host) as libc::c_long > 27 as libc::c_int as libc::c_long)
+                as libc::c_int as libc::c_long
                 != 0
             {
                 return 0 as *const libc::c_char;
@@ -244,9 +244,8 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
             crate::stdlib::memcpy(
                 host_buf.as_mut_ptr() as *mut libc::c_void,
                 host as *const libc::c_void,
-                (::std::mem::size_of::<libc::c_char>() as libc::c_ulong).wrapping_mul(
-                    host_end.offset_from(host) as libc::c_long as libc::c_ulong,
-                ),
+                (::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
+                    .wrapping_mul(host_end.offset_from(host) as libc::c_long as libc::c_ulong),
             );
             host_buf[host_end.offset_from(host) as libc::c_long as usize] =
                 '\u{0}' as i32 as libc::c_char;

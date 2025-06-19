@@ -794,9 +794,6 @@ pub use crate::internal::__builtin_va_list;
 pub use crate::internal::__va_list_tag;
 pub use crate::src::game::g_main::Com_Error;
 pub use crate::src::game::g_main::Com_Printf;
-pub use ctype_h::tolower;
-pub use ctype_h::toupper;
-pub use stdlib_float_h::atof;
 pub use crate::stdarg_h::va_list;
 pub use crate::stddef_h::size_t;
 pub use crate::stdlib::_ISalnum;
@@ -815,11 +812,12 @@ pub use crate::stdlib::__ctype_b_loc;
 pub use crate::stdlib::__ctype_tolower_loc;
 pub use crate::stdlib::__ctype_toupper_loc;
 pub use crate::stdlib::__int32_t;
+pub use ctype_h::tolower;
+pub use ctype_h::toupper;
+pub use stdlib_float_h::atof;
 
 #[no_mangle]
-pub unsafe extern "C" fn Q_IsColorString(
-    mut p: *const libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn Q_IsColorString(mut p: *const libc::c_char) -> qboolean {
     if p.is_null() {
         return qfalse;
     }
@@ -944,19 +942,15 @@ pub unsafe extern "C" fn COM_DefaultExtension(
 }
 #[no_mangle]
 pub unsafe extern "C" fn CopyShortSwap(mut dest: *mut libc::c_void, mut src: *mut libc::c_void) {
-    let mut to: *mut byte =
-        dest as *mut byte;
-    let mut from: *mut byte =
-        src as *mut byte;
+    let mut to: *mut byte = dest as *mut byte;
+    let mut from: *mut byte = src as *mut byte;
     *to.offset(0 as libc::c_int as isize) = *from.offset(1 as libc::c_int as isize);
     *to.offset(1 as libc::c_int as isize) = *from.offset(0 as libc::c_int as isize);
 }
 #[no_mangle]
 pub unsafe extern "C" fn CopyLongSwap(mut dest: *mut libc::c_void, mut src: *mut libc::c_void) {
-    let mut to: *mut byte =
-        dest as *mut byte;
-    let mut from: *mut byte =
-        src as *mut byte;
+    let mut to: *mut byte = dest as *mut byte;
+    let mut from: *mut byte = src as *mut byte;
     *to.offset(0 as libc::c_int as isize) = *from.offset(3 as libc::c_int as isize);
     *to.offset(1 as libc::c_int as isize) = *from.offset(2 as libc::c_int as isize);
     *to.offset(2 as libc::c_int as isize) = *from.offset(1 as libc::c_int as isize);
@@ -967,8 +961,7 @@ pub unsafe extern "C" fn ShortSwap(mut l: libc::c_short) -> libc::c_short {
     let mut b1: byte = 0;
     let mut b2: byte = 0;
     b1 = (l as libc::c_int & 255 as libc::c_int) as byte;
-    b2 = (l as libc::c_int >> 8 as libc::c_int & 255 as libc::c_int)
-        as byte;
+    b2 = (l as libc::c_int >> 8 as libc::c_int & 255 as libc::c_int) as byte;
     return (((b1 as libc::c_int) << 8 as libc::c_int) + b2 as libc::c_int) as libc::c_short;
 }
 #[no_mangle]
@@ -995,9 +988,7 @@ pub unsafe extern "C" fn LongNoSwap(mut l: libc::c_int) -> libc::c_int {
     return l;
 }
 #[no_mangle]
-pub unsafe extern "C" fn Long64Swap(
-    mut ll: qint64,
-) -> qint64 {
+pub unsafe extern "C" fn Long64Swap(mut ll: qint64) -> qint64 {
     let mut result: qint64 = qint64 {
         b0: 0,
         b1: 0,
@@ -1019,15 +1010,12 @@ pub unsafe extern "C" fn Long64Swap(
     return result;
 }
 #[no_mangle]
-pub unsafe extern "C" fn Long64NoSwap(
-    mut ll: qint64,
-) -> qint64 {
+pub unsafe extern "C" fn Long64NoSwap(mut ll: qint64) -> qint64 {
     return ll;
 }
 #[no_mangle]
 pub unsafe extern "C" fn FloatSwap(mut f: *const libc::c_float) -> libc::c_float {
-    let mut out: floatint_t =
-        floatint_t { f: 0. };
+    let mut out: floatint_t = floatint_t { f: 0. };
     out.f = *f;
     out.ui = LongSwap(out.ui as libc::c_int) as libc::c_uint;
     return out.f;
@@ -1124,10 +1112,8 @@ pub unsafe extern "C" fn COM_Compress(mut data_p: *mut libc::c_char) -> libc::c_
     let mut in_0: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut out: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut c: libc::c_int = 0;
-    let mut newline: qboolean =
-        qfalse;
-    let mut whitespace: qboolean =
-        qfalse;
+    let mut newline: qboolean = qfalse;
+    let mut whitespace: qboolean = qfalse;
     out = data_p;
     in_0 = out;
     if !in_0.is_null() {
@@ -1220,8 +1206,7 @@ pub unsafe extern "C" fn COM_ParseExt(
 ) -> *mut libc::c_char {
     let mut c: libc::c_int = 0 as libc::c_int;
     let mut len: libc::c_int = 0;
-    let mut hasNewLines: qboolean =
-        qfalse;
+    let mut hasNewLines: qboolean = qfalse;
     let mut data: *mut libc::c_char = 0 as *mut libc::c_char;
     data = *data_p;
     len = 0 as libc::c_int;
@@ -1521,23 +1506,17 @@ pub unsafe extern "C" fn Q_isalpha(mut c: libc::c_int) -> libc::c_int {
     return 0 as libc::c_int;
 }
 #[no_mangle]
-pub unsafe extern "C" fn Q_isanumber(
-    mut s: *const libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn Q_isanumber(mut s: *const libc::c_char) -> qboolean {
     let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
     if *s as libc::c_int == '\u{0}' as i32 {
         return qfalse;
     }
     ::libc::strtod(s, &mut p);
-    return (*p as libc::c_int == '\u{0}' as i32) as libc::c_int
-        as qboolean;
+    return (*p as libc::c_int == '\u{0}' as i32) as libc::c_int as qboolean;
 }
 #[no_mangle]
-pub unsafe extern "C" fn Q_isintegral(
-    mut f: libc::c_float,
-) -> qboolean {
-    return (f as libc::c_int as libc::c_float == f) as libc::c_int
-        as qboolean;
+pub unsafe extern "C" fn Q_isintegral(mut f: libc::c_float) -> qboolean {
+    return (f as libc::c_int as libc::c_float == f) as libc::c_int as qboolean;
 }
 #[no_mangle]
 pub unsafe extern "C" fn Q_strncpyz(
@@ -2119,9 +2098,7 @@ pub unsafe extern "C" fn Info_RemoveKey_Big(
     }
 }
 #[no_mangle]
-pub unsafe extern "C" fn Info_Validate(
-    mut s: *const libc::c_char,
-) -> qboolean {
+pub unsafe extern "C" fn Info_Validate(mut s: *const libc::c_char) -> qboolean {
     if !::libc::strchr(s, '\"' as i32).is_null() {
         return qfalse;
     }

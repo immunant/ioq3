@@ -1394,7 +1394,8 @@ pub unsafe extern "C" fn opus_granule_sample(
 ) -> crate::config_types_h::ogg_int64_t {
     let mut _pre_skip: crate::opus_types_h::opus_int32 = 0;
     _pre_skip = (*_head).pre_skip as crate::opus_types_h::opus_int32;
-    if _gp != -(1 as libc::c_int) as libc::c_long && op_granpos_add(&mut _gp, _gp, -_pre_skip) != 0 {
+    if _gp != -(1 as libc::c_int) as libc::c_long && op_granpos_add(&mut _gp, _gp, -_pre_skip) != 0
+    {
         _gp = -(1 as libc::c_int) as crate::config_types_h::ogg_int64_t
     }
     return _gp;

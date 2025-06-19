@@ -15,12 +15,8 @@ pub struct jpeg_comp_master {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct jpeg_c_main_controller {
-    pub start_pass: Option<
-        unsafe extern "C" fn(
-            _: crate::jpeglib_h::j_compress_ptr,
-            _: J_BUF_MODE,
-        ) -> (),
-    >,
+    pub start_pass:
+        Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr, _: J_BUF_MODE) -> ()>,
     pub process_data: Option<
         unsafe extern "C" fn(
             _: crate::jpeglib_h::j_compress_ptr,
@@ -33,12 +29,8 @@ pub struct jpeg_c_main_controller {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct jpeg_c_prep_controller {
-    pub start_pass: Option<
-        unsafe extern "C" fn(
-            _: crate::jpeglib_h::j_compress_ptr,
-            _: J_BUF_MODE,
-        ) -> (),
-    >,
+    pub start_pass:
+        Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr, _: J_BUF_MODE) -> ()>,
     pub pre_process_data: Option<
         unsafe extern "C" fn(
             _: crate::jpeglib_h::j_compress_ptr,
@@ -54,12 +46,8 @@ pub struct jpeg_c_prep_controller {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct jpeg_c_coef_controller {
-    pub start_pass: Option<
-        unsafe extern "C" fn(
-            _: crate::jpeglib_h::j_compress_ptr,
-            _: J_BUF_MODE,
-        ) -> (),
-    >,
+    pub start_pass:
+        Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr, _: J_BUF_MODE) -> ()>,
     pub compress_data: Option<
         unsafe extern "C" fn(
             _: crate::jpeglib_h::j_compress_ptr,
@@ -173,12 +161,8 @@ pub struct jpeg_input_controller {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct jpeg_d_main_controller {
-    pub start_pass: Option<
-        unsafe extern "C" fn(
-            _: crate::jpeglib_h::j_decompress_ptr,
-            _: J_BUF_MODE,
-        ) -> (),
-    >,
+    pub start_pass:
+        Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr, _: J_BUF_MODE) -> ()>,
     pub process_data: Option<
         unsafe extern "C" fn(
             _: crate::jpeglib_h::j_decompress_ptr,
@@ -207,12 +191,8 @@ pub struct jpeg_d_coef_controller {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct jpeg_d_post_controller {
-    pub start_pass: Option<
-        unsafe extern "C" fn(
-            _: crate::jpeglib_h::j_decompress_ptr,
-            _: J_BUF_MODE,
-        ) -> (),
-    >,
+    pub start_pass:
+        Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr, _: J_BUF_MODE) -> ()>,
     pub post_process_data: Option<
         unsafe extern "C" fn(
             _: crate::jpeglib_h::j_decompress_ptr,

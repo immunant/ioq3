@@ -6879,23 +6879,16 @@ pub unsafe extern "C" fn inflateCopy(
                 as *const crate::src::zlib::inftrees::code
     {
         (*copy).lencode = (*copy).codes.as_mut_ptr().offset(
-            (*state)
-                .lencode
-                .offset_from((*state).codes.as_mut_ptr()) as libc::c_long
-                as isize,
+            (*state).lencode.offset_from((*state).codes.as_mut_ptr()) as libc::c_long as isize,
         );
         (*copy).distcode = (*copy).codes.as_mut_ptr().offset(
-            (*state)
-                .distcode
-                .offset_from((*state).codes.as_mut_ptr()) as libc::c_long
-                as isize,
+            (*state).distcode.offset_from((*state).codes.as_mut_ptr()) as libc::c_long as isize,
         )
     }
-    (*copy).next = (*copy).codes.as_mut_ptr().offset(
-        (*state)
-            .next
-            .offset_from((*state).codes.as_mut_ptr()) as libc::c_long as isize,
-    );
+    (*copy).next = (*copy)
+        .codes
+        .as_mut_ptr()
+        .offset((*state).next.offset_from((*state).codes.as_mut_ptr()) as libc::c_long as isize);
     if !window.is_null() {
         wsize = (1 as libc::c_uint) << (*state).wbits;
         crate::stdlib::memcpy(

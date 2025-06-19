@@ -904,9 +904,9 @@ unsafe extern "C" fn opus_decode_frame(
             celt_dec,
             4031 as libc::c_int,
             (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32).offset(
-                (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32).offset_from(
-                    &mut redundant_rng as *mut crate::opus_types_h::opus_uint32,
-                ) as libc::c_long as isize,
+                (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32)
+                    .offset_from(&mut redundant_rng as *mut crate::opus_types_h::opus_uint32)
+                    as libc::c_long as isize,
             ),
         );
     }
@@ -1024,9 +1024,9 @@ unsafe extern "C" fn opus_decode_frame(
             celt_dec,
             4031 as libc::c_int,
             (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32).offset(
-                (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32).offset_from(
-                    &mut redundant_rng as *mut crate::opus_types_h::opus_uint32,
-                ) as libc::c_long as isize,
+                (&mut redundant_rng as *mut crate::opus_types_h::opus_uint32)
+                    .offset_from(&mut redundant_rng as *mut crate::opus_types_h::opus_uint32)
+                    as libc::c_long as isize,
             ),
         );
         smooth_fade(
@@ -1512,8 +1512,7 @@ pub unsafe extern "C" fn opus_decoder_ctl(
                     crate::src::opus_1_2_1::celt::celt_decoder::opus_custom_decoder_ctl(
                         celt_dec,
                         4033 as libc::c_int,
-                        value_2
-                            .offset(value_2.offset_from(value_2) as libc::c_long as isize),
+                        value_2.offset(value_2.offset_from(value_2) as libc::c_long as isize),
                     );
                 } else {
                     *value_2 = (*st).DecControl.prevPitchLag

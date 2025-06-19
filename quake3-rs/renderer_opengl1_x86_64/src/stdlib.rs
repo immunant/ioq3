@@ -84,26 +84,16 @@ extern "C" {
     pub fn SDL_GetWindowFlags(window: *mut SDL_Window) -> Uint32;
 
     #[no_mangle]
-    pub fn SDL_SetWindowIcon(
-        window: *mut SDL_Window,
-        icon: *mut SDL_Surface,
-    );
+    pub fn SDL_SetWindowIcon(window: *mut SDL_Window, icon: *mut SDL_Surface);
 
     #[no_mangle]
-    pub fn SDL_GetWindowPosition(
-        window: *mut SDL_Window,
-        x: *mut libc::c_int,
-        y: *mut libc::c_int,
-    );
+    pub fn SDL_GetWindowPosition(window: *mut SDL_Window, x: *mut libc::c_int, y: *mut libc::c_int);
 
     #[no_mangle]
     pub fn SDL_MinimizeWindow(window: *mut SDL_Window);
 
     #[no_mangle]
-    pub fn SDL_SetWindowFullscreen(
-        window: *mut SDL_Window,
-        flags: Uint32,
-    ) -> libc::c_int;
+    pub fn SDL_SetWindowFullscreen(window: *mut SDL_Window, flags: Uint32) -> libc::c_int;
 
     #[no_mangle]
     pub fn SDL_SetWindowBrightness(
@@ -132,15 +122,10 @@ extern "C" {
     pub fn SDL_GL_SetAttribute(attr: SDL_GLattr, value: libc::c_int) -> libc::c_int;
 
     #[no_mangle]
-    pub fn SDL_GL_GetAttribute(
-        attr: SDL_GLattr,
-        value: *mut libc::c_int,
-    ) -> libc::c_int;
+    pub fn SDL_GL_GetAttribute(attr: SDL_GLattr, value: *mut libc::c_int) -> libc::c_int;
 
     #[no_mangle]
-    pub fn SDL_GL_CreateContext(
-        window: *mut SDL_Window,
-    ) -> SDL_GLContext;
+    pub fn SDL_GL_CreateContext(window: *mut SDL_Window) -> SDL_GLContext;
 
     #[no_mangle]
     pub fn SDL_GL_SetSwapInterval(interval: libc::c_int) -> libc::c_int;

@@ -212,12 +212,8 @@ pub struct weaponInfo_s {
     pub ammoModel: crate::src::qcommon::q_shared::qhandle_t,
     pub missileModel: crate::src::qcommon::q_shared::qhandle_t,
     pub missileSound: crate::src::qcommon::q_shared::sfxHandle_t,
-    pub missileTrailFunc: Option<
-        unsafe extern "C" fn(
-            _: *mut centity_t,
-            _: *const weaponInfo_s,
-        ) -> (),
-    >,
+    pub missileTrailFunc:
+        Option<unsafe extern "C" fn(_: *mut centity_t, _: *const weaponInfo_s) -> ()>,
     pub missileDlight: libc::c_float,
     pub missileDlightColor: crate::src::qcommon::q_shared::vec3_t,
     pub missileRenderfx: libc::c_int,

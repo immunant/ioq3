@@ -6123,8 +6123,8 @@ pub unsafe extern "C" fn BotMoveToGoal(
             //end else
             //if the area has no reachability links
             // skip areas without reachability links
-                                                                                          //end if
-                                                                                          //DEBUG
+            //end if
+            //DEBUG
             reachnum = BotGetReachabilityToGoal(
                 (*ms).origin.as_mut_ptr(),
                 (*ms).areanum,

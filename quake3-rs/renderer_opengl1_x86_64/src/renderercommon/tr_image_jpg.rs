@@ -690,7 +690,6 @@ unsafe extern "C" fn empty_output_buffer(
             as *const libc::c_char,
         (*dest).size,
     );
-
 }
 /*
  * Terminate destination --- called by jpeg_finish_compress

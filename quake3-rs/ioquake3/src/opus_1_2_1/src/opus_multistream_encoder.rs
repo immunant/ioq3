@@ -699,8 +699,8 @@ pub unsafe extern "C" fn surround_analysis(
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong)
                 .wrapping_add(
                     (0 as libc::c_int as libc::c_long
-                        * in_0.offset_from(mem.offset((c * overlap) as isize))
-                            as libc::c_long) as libc::c_ulong,
+                        * in_0.offset_from(mem.offset((c * overlap) as isize)) as libc::c_long)
+                        as libc::c_ulong,
                 ),
         );
         Some(copy_channel_in.expect("non-null function pointer"))
@@ -1774,10 +1774,8 @@ unsafe extern "C" fn opus_multistream_encode_native(
                 enc_0,
                 10026 as libc::c_int,
                 bandLogE.as_mut_ptr().offset(
-                    bandLogE
-                        .as_mut_ptr()
-                        .offset_from(bandLogE.as_mut_ptr())
-                        as libc::c_long as isize,
+                    bandLogE.as_mut_ptr().offset_from(bandLogE.as_mut_ptr()) as libc::c_long
+                        as isize,
                 ),
             );
         }

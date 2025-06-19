@@ -515,8 +515,7 @@ unsafe extern "C" fn celt_synthesis(
             (N as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_sig>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as libc::c_int as libc::c_long
-                        * freq2.offset_from(freq) as libc::c_long)
+                    (0 as libc::c_int as libc::c_long * freq2.offset_from(freq) as libc::c_long)
                         as libc::c_ulong,
                 ),
         );
@@ -1844,8 +1843,8 @@ pub unsafe extern "C" fn celt_decode_with_ec(
                     (0 as libc::c_int as libc::c_long
                         * (&mut *oldBandE.offset(nbEBands as isize)
                             as *mut crate::arch_h::opus_val16)
-                            .offset_from(oldBandE)
-                            as libc::c_long) as libc::c_ulong,
+                            .offset_from(oldBandE) as libc::c_long)
+                        as libc::c_ulong,
                 ),
         );
     }
@@ -2042,8 +2041,8 @@ pub unsafe extern "C" fn opus_custom_decoder_ctl(
                 0 as libc::c_int,
                 ((opus_custom_decoder_get_size((*st).mode, (*st).channels) as libc::c_long
                     - (&mut (*st).rng as *mut crate::opus_types_h::opus_uint32 as *mut libc::c_char)
-                        .offset_from(st as *mut libc::c_char)
-                        as libc::c_long) as libc::c_ulong)
+                        .offset_from(st as *mut libc::c_char) as libc::c_long)
+                    as libc::c_ulong)
                     .wrapping_mul(::std::mem::size_of::<libc::c_char>() as libc::c_ulong),
             );
             i = 0 as libc::c_int;

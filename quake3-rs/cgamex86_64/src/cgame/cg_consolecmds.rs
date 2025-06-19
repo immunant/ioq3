@@ -125,11 +125,7 @@ pub unsafe extern "C" fn CG_TargetCommand_f() {
     if targetNum == -(1 as libc::c_int) {
         return;
     }
-    trap_Argv(
-        1 as libc::c_int,
-        test.as_mut_ptr(),
-        4 as libc::c_int,
-    );
+    trap_Argv(1 as libc::c_int, test.as_mut_ptr(), 4 as libc::c_int);
     trap_SendClientCommand(va(
         b"gc %i %i\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
         targetNum,
@@ -189,15 +185,11 @@ unsafe extern "C" fn CG_Viewpos_f() {
 }
 
 unsafe extern "C" fn CG_ScoresDown_f() {
-    if (cg.scoresRequestTime + 2000 as libc::c_int)
-        < cg.time
-    {
+    if (cg.scoresRequestTime + 2000 as libc::c_int) < cg.time {
         // the scores are more than two seconds out of data,
         // so request new ones
         cg.scoresRequestTime = cg.time;
-        trap_SendClientCommand(
-            b"score\x00" as *const u8 as *const libc::c_char,
-        );
+        trap_SendClientCommand(b"score\x00" as *const u8 as *const libc::c_char);
         // leave the current scores up if they were already
         // displayed, but if this is the first hit, clear them out
         if cg.showScores as u64 == 0 {
@@ -305,58 +297,42 @@ static mut commands: [consoleCommand_t; 21] = {
         {
             let mut init = consoleCommand_t {
                 cmd: b"testgun\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                function: Some(
-                    CG_TestGun_f as unsafe extern "C" fn() -> (),
-                ),
+                function: Some(CG_TestGun_f as unsafe extern "C" fn() -> ()),
             };
             init
         },
         {
             let mut init = consoleCommand_t {
                 cmd: b"testmodel\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                function: Some(
-                    CG_TestModel_f as unsafe extern "C" fn() -> (),
-                ),
+                function: Some(CG_TestModel_f as unsafe extern "C" fn() -> ()),
             };
             init
         },
         {
             let mut init = consoleCommand_t {
                 cmd: b"nextframe\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                function: Some(
-                    CG_TestModelNextFrame_f
-                        as unsafe extern "C" fn() -> (),
-                ),
+                function: Some(CG_TestModelNextFrame_f as unsafe extern "C" fn() -> ()),
             };
             init
         },
         {
             let mut init = consoleCommand_t {
                 cmd: b"prevframe\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                function: Some(
-                    CG_TestModelPrevFrame_f
-                        as unsafe extern "C" fn() -> (),
-                ),
+                function: Some(CG_TestModelPrevFrame_f as unsafe extern "C" fn() -> ()),
             };
             init
         },
         {
             let mut init = consoleCommand_t {
                 cmd: b"nextskin\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                function: Some(
-                    CG_TestModelNextSkin_f
-                        as unsafe extern "C" fn() -> (),
-                ),
+                function: Some(CG_TestModelNextSkin_f as unsafe extern "C" fn() -> ()),
             };
             init
         },
         {
             let mut init = consoleCommand_t {
                 cmd: b"prevskin\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                function: Some(
-                    CG_TestModelPrevSkin_f
-                        as unsafe extern "C" fn() -> (),
-                ),
+                function: Some(CG_TestModelPrevSkin_f as unsafe extern "C" fn() -> ()),
             };
             init
         },
@@ -384,18 +360,14 @@ static mut commands: [consoleCommand_t; 21] = {
         {
             let mut init = consoleCommand_t {
                 cmd: b"+zoom\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                function: Some(
-                    CG_ZoomDown_f as unsafe extern "C" fn() -> (),
-                ),
+                function: Some(CG_ZoomDown_f as unsafe extern "C" fn() -> ()),
             };
             init
         },
         {
             let mut init = consoleCommand_t {
                 cmd: b"-zoom\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                function: Some(
-                    CG_ZoomUp_f as unsafe extern "C" fn() -> (),
-                ),
+                function: Some(CG_ZoomUp_f as unsafe extern "C" fn() -> ()),
             };
             init
         },
@@ -416,27 +388,21 @@ static mut commands: [consoleCommand_t; 21] = {
         {
             let mut init = consoleCommand_t {
                 cmd: b"weapnext\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                function: Some(
-                    CG_NextWeapon_f as unsafe extern "C" fn() -> (),
-                ),
+                function: Some(CG_NextWeapon_f as unsafe extern "C" fn() -> ()),
             };
             init
         },
         {
             let mut init = consoleCommand_t {
                 cmd: b"weapprev\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                function: Some(
-                    CG_PrevWeapon_f as unsafe extern "C" fn() -> (),
-                ),
+                function: Some(CG_PrevWeapon_f as unsafe extern "C" fn() -> ()),
             };
             init
         },
         {
             let mut init = consoleCommand_t {
                 cmd: b"weapon\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                function: Some(
-                    CG_Weapon_f as unsafe extern "C" fn() -> (),
-                ),
+                function: Some(CG_Weapon_f as unsafe extern "C" fn() -> ()),
             };
             init
         },
@@ -471,10 +437,7 @@ static mut commands: [consoleCommand_t; 21] = {
         {
             let mut init = consoleCommand_t {
                 cmd: b"loaddeferred\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                function: Some(
-                    CG_LoadDeferredPlayers
-                        as unsafe extern "C" fn() -> (),
-                ),
+                function: Some(CG_LoadDeferredPlayers as unsafe extern "C" fn() -> ()),
             };
             init
         },
@@ -781,70 +744,28 @@ pub unsafe extern "C" fn CG_InitConsoleCommands() {
     // the game server will interpret these commands, which will be automatically
     // forwarded to the server after they are not recognized locally
     //
-    trap_AddCommand(
-        b"kill\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_AddCommand(b"kill\x00" as *const u8 as *const libc::c_char);
     trap_AddCommand(b"say\x00" as *const u8 as *const libc::c_char);
-    trap_AddCommand(
-        b"say_team\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"tell\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"give\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_AddCommand(b"say_team\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"tell\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"give\x00" as *const u8 as *const libc::c_char);
     trap_AddCommand(b"god\x00" as *const u8 as *const libc::c_char);
-    trap_AddCommand(
-        b"notarget\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"noclip\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"where\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"team\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"follow\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"follownext\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"followprev\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"levelshot\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"addbot\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"setviewpos\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"callvote\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"vote\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"callteamvote\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"teamvote\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"stats\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"teamtask\x00" as *const u8 as *const libc::c_char,
-    );
-    trap_AddCommand(
-        b"loaddefered\x00" as *const u8 as *const libc::c_char,
-    );
+    trap_AddCommand(b"notarget\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"noclip\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"where\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"team\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"follow\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"follownext\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"followprev\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"levelshot\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"addbot\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"setviewpos\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"callvote\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"vote\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"callteamvote\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"teamvote\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"stats\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"teamtask\x00" as *const u8 as *const libc::c_char);
+    trap_AddCommand(b"loaddefered\x00" as *const u8 as *const libc::c_char);
     // spelled wrong, but not changing for demo
 }

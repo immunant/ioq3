@@ -1030,8 +1030,7 @@ pub unsafe extern "C" fn Svcmd_ForceTeam_f() {
     );
     crate::src::game::g_cmds::SetTeam(
         &mut *crate::src::game::g_main::g_entities.as_mut_ptr().offset(
-            cl.offset_from(crate::src::game::g_main::level.clients) as libc::c_long
-                as isize,
+            cl.offset_from(crate::src::game::g_main::level.clients) as libc::c_long as isize,
         ) as *mut _ as *mut crate::g_local_h::gentity_s,
         str.as_mut_ptr(),
     );

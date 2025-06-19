@@ -2462,8 +2462,7 @@ pub unsafe extern "C" fn StringsMatch(
             //if it is a variable piece of string
             //Log_Write("MT_VARIABLE");
             (*match_0).variables[(*mp).variable as usize].offset =
-                strptr.offset_from((*match_0).string.as_mut_ptr()) as libc::c_long
-                    as libc::c_char;
+                strptr.offset_from((*match_0).string.as_mut_ptr()) as libc::c_long as libc::c_char;
             lastvariable = (*mp).variable
         }
         mp = (*mp).next

@@ -403,8 +403,8 @@ pub unsafe extern "C" fn CheatsOk(
 ) -> crate::src::qcommon::q_shared::qboolean {
     if crate::src::game::g_main::g_cheats.integer == 0 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"Cheats are not enabled on this server.\n\"\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -412,8 +412,8 @@ pub unsafe extern "C" fn CheatsOk(
     }
     if (*ent).health <= 0 as libc::c_int {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"You must be alive to use this command.\n\"\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -848,8 +848,8 @@ hide the scoreboard, and take a special screenshot
 pub unsafe extern "C" fn Cmd_LevelShot_f(mut ent: *mut crate::g_local_h::gentity_t) {
     if (*(*ent).client).pers.localClient as u64 == 0 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"The levelshot command must be executed by a local client\n\"\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -863,8 +863,8 @@ pub unsafe extern "C" fn Cmd_LevelShot_f(mut ent: *mut crate::g_local_h::gentity
         == crate::bg_public_h::GT_SINGLE_PLAYER as libc::c_int
     {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"Must not be in singleplayer mode for levelshot\n\"\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -1027,8 +1027,8 @@ pub unsafe extern "C" fn SetTeam(
     // see what change is requested
     //
     client = (*ent).client;
-    clientNum = client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long
-        as libc::c_int;
+    clientNum =
+        client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long as libc::c_int;
     specClient = 0 as libc::c_int;
     specState = crate::g_local_h::SPECTATOR_NOT;
     if crate::src::qcommon::q_shared::Q_stricmp(
@@ -1308,8 +1308,8 @@ pub unsafe extern "C" fn Cmd_Team_f(mut ent: *mut crate::g_local_h::gentity_t) {
     }
     if (*(*ent).client).switchTeamTime > crate::src::game::g_main::level.time {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"May not switch teams more than once per 5 seconds.\n\"\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -1523,8 +1523,8 @@ unsafe extern "C" fn G_SayTo(
         return;
     }
     crate::src::game::g_syscalls::trap_SendServerCommand(
-        other.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-            as libc::c_long as libc::c_int,
+        other.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+            as libc::c_int,
         crate::src::qcommon::q_shared::va(
             b"%s \"%s%c%c%s\"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             if mode == 1 as libc::c_int {
@@ -1737,8 +1737,8 @@ unsafe extern "C" fn Cmd_Tell_f(mut ent: *mut crate::g_local_h::gentity_t) {
     let mut arg: [libc::c_char; 1024] = [0; 1024];
     if crate::src::game::g_syscalls::trap_Argc() < 3 as libc::c_int {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"Usage: tell <player id> <message>\n\"\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -1801,8 +1801,8 @@ pub unsafe extern "C" fn Cmd_GameCommand_f(mut ent: *mut crate::g_local_h::genti
     let mut arg: [libc::c_char; 1024] = [0; 1024];
     if crate::src::game::g_syscalls::trap_Argc() != 3 as libc::c_int {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             crate::src::qcommon::q_shared::va(
                 b"print \"Usage: gc <player id> <order 0-%d>\n\"\x00" as *const u8
                     as *const libc::c_char as *mut libc::c_char,
@@ -1819,8 +1819,8 @@ pub unsafe extern "C" fn Cmd_GameCommand_f(mut ent: *mut crate::g_local_h::genti
     order = atoi(arg.as_mut_ptr());
     if order < 0 as libc::c_int || order >= numgc_orders {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             crate::src::qcommon::q_shared::va(
                 b"print \"Bad order: %i\n\"\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
@@ -1906,24 +1906,24 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut crate::g_local_h::gentity_
     let mut arg2: [libc::c_char; 1024] = [0; 1024];
     if crate::src::game::g_main::g_allowVote.integer == 0 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"Voting not allowed here.\n\"\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
     if crate::src::game::g_main::level.voteTime != 0 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"A vote is already in progress.\n\"\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
     if (*(*ent).client).pers.voteCount >= 3 as libc::c_int {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"You have called the maximum number of votes.\n\"\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -1933,8 +1933,8 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut crate::g_local_h::gentity_
         == crate::bg_public_h::TEAM_SPECTATOR as libc::c_int as libc::c_uint
     {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"Not allowed to call a vote as spectator.\n\"\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -2057,8 +2057,8 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut crate::g_local_h::gentity_
             ) == 0
         {
             crate::src::game::g_syscalls::trap_SendServerCommand(
-                ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                    as libc::c_long as libc::c_int,
+                ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                    as libc::c_int,
                 b"print \"Vote after map change.\n\"\x00" as *const u8 as *const libc::c_char,
             );
             return;
@@ -2084,8 +2084,8 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut crate::g_local_h::gentity_
             || i >= crate::bg_public_h::GT_MAX_GAME_TYPE as libc::c_int
         {
             crate::src::game::g_syscalls::trap_SendServerCommand(
-                ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                    as libc::c_long as libc::c_int,
+                ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                    as libc::c_int,
                 b"print \"Invalid gametype.\n\"\x00" as *const u8 as *const libc::c_char,
             );
             return;
@@ -2158,8 +2158,8 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut crate::g_local_h::gentity_
         );
         if *s_0.as_mut_ptr() == 0 {
             crate::src::game::g_syscalls::trap_SendServerCommand(
-                ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                    as libc::c_long as libc::c_int,
+                ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                    as libc::c_int,
                 b"print \"nextmap not set.\n\"\x00" as *const u8 as *const libc::c_char,
             );
             return;
@@ -2207,8 +2207,8 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut crate::g_local_h::gentity_
             != 0
         {
             crate::src::game::g_syscalls::trap_SendServerCommand(
-                ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                    as libc::c_long as libc::c_int,
+                ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                    as libc::c_int,
                 b"print \"Cannot kick host player.\n\"\x00" as *const u8 as *const libc::c_char,
             );
             return;
@@ -2306,16 +2306,16 @@ pub unsafe extern "C" fn Cmd_Vote_f(mut ent: *mut crate::g_local_h::gentity_t) {
     let mut msg: [libc::c_char; 64] = [0; 64];
     if crate::src::game::g_main::level.voteTime == 0 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"No vote in progress.\n\"\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
     if (*(*ent).client).ps.eFlags & 0x4000 as libc::c_int != 0 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"Vote already cast.\n\"\x00" as *const u8 as *const libc::c_char,
         );
         return;
@@ -2324,8 +2324,8 @@ pub unsafe extern "C" fn Cmd_Vote_f(mut ent: *mut crate::g_local_h::gentity_t) {
         == crate::bg_public_h::TEAM_SPECTATOR as libc::c_int as libc::c_uint
     {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"Not allowed to vote as spectator.\n\"\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -2410,16 +2410,16 @@ pub unsafe extern "C" fn Cmd_CallTeamVote_f(mut ent: *mut crate::g_local_h::gent
     }
     if crate::src::game::g_main::g_allowVote.integer == 0 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"Voting not allowed here.\n\"\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
     if crate::src::game::g_main::level.teamVoteTime[cs_offset as usize] != 0 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"A team vote is already in progress.\n\"\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -2427,8 +2427,8 @@ pub unsafe extern "C" fn Cmd_CallTeamVote_f(mut ent: *mut crate::g_local_h::gent
     }
     if (*(*ent).client).pers.teamVoteCount >= 3 as libc::c_int {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"You have called the maximum number of team votes.\n\"\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -2438,8 +2438,8 @@ pub unsafe extern "C" fn Cmd_CallTeamVote_f(mut ent: *mut crate::g_local_h::gent
         == crate::bg_public_h::TEAM_SPECTATOR as libc::c_int as libc::c_uint
     {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"Not allowed to call a vote as spectator.\n\"\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -2599,13 +2599,13 @@ pub unsafe extern "C" fn Cmd_CallTeamVote_f(mut ent: *mut crate::g_local_h::gent
         );
     } else {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"Invalid vote string.\n\"\x00" as *const u8 as *const libc::c_char,
         );
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"Team vote commands are: leader <player>.\n\"\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -2708,16 +2708,16 @@ pub unsafe extern "C" fn Cmd_TeamVote_f(mut ent: *mut crate::g_local_h::gentity_
     }
     if crate::src::game::g_main::level.teamVoteTime[cs_offset as usize] == 0 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"No team vote in progress.\n\"\x00" as *const u8 as *const libc::c_char,
         );
         return;
     }
     if (*(*ent).client).ps.eFlags & 0x80000 as libc::c_int != 0 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"Team vote already cast.\n\"\x00" as *const u8 as *const libc::c_char,
         );
         return;
@@ -2726,8 +2726,8 @@ pub unsafe extern "C" fn Cmd_TeamVote_f(mut ent: *mut crate::g_local_h::gentity_
         == crate::bg_public_h::TEAM_SPECTATOR as libc::c_int as libc::c_uint
     {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"Not allowed to vote as spectator.\n\"\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -2802,8 +2802,8 @@ pub unsafe extern "C" fn Cmd_SetViewpos_f(mut ent: *mut crate::g_local_h::gentit
     let mut i: libc::c_int = 0;
     if crate::src::game::g_main::g_cheats.integer == 0 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"Cheats are not enabled on this server.\n\"\x00" as *const u8
                 as *const libc::c_char,
         );
@@ -2811,8 +2811,8 @@ pub unsafe extern "C" fn Cmd_SetViewpos_f(mut ent: *mut crate::g_local_h::gentit
     }
     if crate::src::game::g_syscalls::trap_Argc() != 5 as libc::c_int {
         crate::src::game::g_syscalls::trap_SendServerCommand(
-            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-                as libc::c_long as libc::c_int,
+            ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
+                as libc::c_int,
             b"print \"usage: setviewpos x y z yaw\n\"\x00" as *const u8 as *const libc::c_char,
         );
         return;

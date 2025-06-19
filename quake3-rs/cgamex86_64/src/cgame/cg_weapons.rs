@@ -1335,8 +1335,8 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: libc::c_int) {
         );
     }
     CG_RegisterItemVisuals(
-        item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
-            as libc::c_long as libc::c_int,
+        item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr()) as libc::c_long
+            as libc::c_int,
     );
     // load cmodel before model so filecache works
     (*weaponInfo).weaponModel = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(

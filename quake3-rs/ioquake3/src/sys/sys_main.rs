@@ -9218,7 +9218,10 @@ main
 =================
 */
 
-pub(crate) unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_char) -> libc::c_int {
+pub(crate) unsafe fn main_0(
+    mut argc: libc::c_int,
+    mut argv: *mut *mut libc::c_char,
+) -> libc::c_int {
     let mut i: libc::c_int = 0;
     let mut commandLine: [libc::c_char; 1024] = [
         0 as libc::c_int as libc::c_char,
@@ -10369,4 +10372,3 @@ pub(crate) unsafe fn main_0(mut argc: libc::c_int, mut argv: *mut *mut libc::c_c
         crate::src::qcommon::common::Com_Frame();
     }
 }
-

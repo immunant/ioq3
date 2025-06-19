@@ -476,8 +476,7 @@ pub unsafe extern "C" fn opus_packet_pad(
                     * data
                         .offset(new_len as isize)
                         .offset(-(len as isize))
-                        .offset_from(data) as libc::c_long)
-                    as libc::c_ulong,
+                        .offset_from(data) as libc::c_long) as libc::c_ulong,
             ),
     );
     ret = opus_repacketizer_cat(
