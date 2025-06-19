@@ -1039,7 +1039,7 @@ unsafe extern "C" fn SV_WriteVoipToClient(
                     ::std::mem::size_of::<*mut crate::server_h::voipServerPacket_t>()
                         as libc::c_ulong,
                 ),
-        ) as i32 as i32
+        ) as i32
     };
 }
 /*

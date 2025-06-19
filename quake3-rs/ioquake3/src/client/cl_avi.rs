@@ -204,7 +204,7 @@ unsafe extern "C" fn WRITE_STRING(mut s: *const libc::c_char) {
         s as *const libc::c_void,
         crate::stdlib::strlen(s),
     );
-    bufIndex = (bufIndex as libc::c_ulong).wrapping_add(crate::stdlib::strlen(s)) as i32 as i32;
+    bufIndex = (bufIndex as libc::c_ulong).wrapping_add(crate::stdlib::strlen(s)) as i32;
 }
 /*
 ===============

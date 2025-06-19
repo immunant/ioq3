@@ -181,7 +181,7 @@ pub unsafe extern "C" fn RE_RegisterFont(
             );
             fdOffset = (fdOffset as libc::c_ulong)
                 .wrapping_add(::std::mem::size_of::<[libc::c_char; 32]>() as libc::c_ulong)
-                as i32 as i32;
+                as i32;
             i += 1
         }
         (*font).glyphScale = readFloat();

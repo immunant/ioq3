@@ -494,7 +494,7 @@ pub unsafe extern "C" fn CL_KeyState(mut key: *mut crate::client_h::kbutton_t) -
         } else {
             msec = (msec as u32).wrapping_add(
                 (crate::src::qcommon::common::com_frameTime as u32).wrapping_sub((*key).downtime),
-            ) as i32 as i32
+            ) as i32
         }
         (*key).downtime = crate::src::qcommon::common::com_frameTime as u32
     }

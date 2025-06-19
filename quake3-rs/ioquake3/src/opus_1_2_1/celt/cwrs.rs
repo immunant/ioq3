@@ -1462,7 +1462,7 @@ unsafe extern "C" fn icwrs(mut _n: i32, mut _y: *const i32) -> crate::opus_types
             (i as u32).wrapping_add(
                 *CELT_PVQ_U_ROW[if _n - j < k { (_n) - j } else { k } as usize]
                     .offset(if _n - j > k { (_n) - j } else { k } as isize),
-            ) as crate::opus_types_h::opus_uint32 as crate::opus_types_h::opus_uint32;
+            ) as crate::opus_types_h::opus_uint32;
         k += ::libc::abs(*_y.offset(j as isize));
         if *_y.offset(j as isize) < 0 as i32 {
             i = (i as u32).wrapping_add(
@@ -1477,7 +1477,6 @@ unsafe extern "C" fn icwrs(mut _n: i32, mut _y: *const i32) -> crate::opus_types
                         (k) + 1 as i32
                     } as isize),
             ) as crate::opus_types_h::opus_uint32
-                as crate::opus_types_h::opus_uint32
         }
         if !(j > 0 as i32) {
             break;
@@ -1536,8 +1535,7 @@ unsafe extern "C" fn cwrsi(
             /*Are the pulses in this dimension negative?*/
             p = *row.offset((_k + 1 as i32) as isize);
             s = -((_i >= p) as i32);
-            _i = (_i as u32).wrapping_sub(p & s as u32) as crate::opus_types_h::opus_uint32
-                as crate::opus_types_h::opus_uint32;
+            _i = (_i as u32).wrapping_sub(p & s as u32) as crate::opus_types_h::opus_uint32;
             /*Count how many pulses were placed in this dimension.*/
             k0 = _k;
             q = *row.offset(_n as isize);
@@ -1557,8 +1555,7 @@ unsafe extern "C" fn cwrsi(
                     p = *row.offset(_k as isize)
                 }
             }
-            _i = (_i as u32).wrapping_sub(p) as crate::opus_types_h::opus_uint32
-                as crate::opus_types_h::opus_uint32;
+            _i = (_i as u32).wrapping_sub(p) as crate::opus_types_h::opus_uint32;
             val = (k0 - _k + s ^ s) as crate::opus_types_h::opus_int16;
             let fresh0 = _y;
             _y = _y.offset(1);
@@ -1570,16 +1567,14 @@ unsafe extern "C" fn cwrsi(
             p = *CELT_PVQ_U_ROW[_k as usize].offset(_n as isize);
             q = *CELT_PVQ_U_ROW[(_k + 1 as i32) as usize].offset(_n as isize);
             if p <= _i && _i < q {
-                _i = (_i as u32).wrapping_sub(p) as crate::opus_types_h::opus_uint32
-                    as crate::opus_types_h::opus_uint32;
+                _i = (_i as u32).wrapping_sub(p) as crate::opus_types_h::opus_uint32;
                 let fresh1 = _y;
                 _y = _y.offset(1);
                 *fresh1 = 0 as i32
             } else {
                 /*Are the pulses in this dimension negative?*/
                 s = -((_i >= q) as i32);
-                _i = (_i as u32).wrapping_sub(q & s as u32) as crate::opus_types_h::opus_uint32
-                    as crate::opus_types_h::opus_uint32;
+                _i = (_i as u32).wrapping_sub(q & s as u32) as crate::opus_types_h::opus_uint32;
                 /*Count how many pulses were placed in this dimension.*/
                 k0 = _k;
                 loop {
@@ -1589,8 +1584,7 @@ unsafe extern "C" fn cwrsi(
                         break;
                     }
                 }
-                _i = (_i as u32).wrapping_sub(p) as crate::opus_types_h::opus_uint32
-                    as crate::opus_types_h::opus_uint32;
+                _i = (_i as u32).wrapping_sub(p) as crate::opus_types_h::opus_uint32;
                 val = (k0 - _k + s ^ s) as crate::opus_types_h::opus_int16;
                 let fresh2 = _y;
                 _y = _y.offset(1);
@@ -1603,13 +1597,12 @@ unsafe extern "C" fn cwrsi(
     /*_n==2*/
     p = (2 as i32 * _k + 1 as i32) as crate::opus_types_h::opus_uint32;
     s = -((_i >= p) as i32);
-    _i = (_i as u32).wrapping_sub(p & s as u32) as crate::opus_types_h::opus_uint32
-        as crate::opus_types_h::opus_uint32;
+    _i = (_i as u32).wrapping_sub(p & s as u32) as crate::opus_types_h::opus_uint32;
     k0 = _k;
     _k = (_i.wrapping_add(1 as i32 as u32) >> 1 as i32) as i32;
     if _k != 0 {
         _i = (_i as u32).wrapping_sub((2 as i32 * _k - 1 as i32) as u32)
-            as crate::opus_types_h::opus_uint32 as crate::opus_types_h::opus_uint32
+            as crate::opus_types_h::opus_uint32
     }
     val = (k0 - _k + s ^ s) as crate::opus_types_h::opus_int16;
     let fresh3 = _y;

@@ -379,8 +379,7 @@ unsafe extern "C" fn post_process_1pass(
         output_buf.offset(*out_row_ctr as isize),
         num_rows as i32,
     );
-    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION
-        as crate::jmorecfg_h::JDIMENSION;
+    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION;
 }
 /*
  * Process some data in the first pass of 2-pass quantization.
@@ -445,12 +444,10 @@ unsafe extern "C" fn post_process_prepass(
             num_rows as i32,
         );
         *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION
-            as crate::jmorecfg_h::JDIMENSION
     }
     /* Advance if we filled the strip. */
     if (*post).next_row >= (*post).strip_height {
         (*post).starting_row = ((*post).starting_row as u32).wrapping_add((*post).strip_height)
-            as crate::jmorecfg_h::JDIMENSION
             as crate::jmorecfg_h::JDIMENSION;
         (*post).next_row = 0 as i32 as crate::jmorecfg_h::JDIMENSION
     };
@@ -509,14 +506,12 @@ unsafe extern "C" fn post_process_2pass(
         output_buf.offset(*out_row_ctr as isize),
         num_rows as i32,
     );
-    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION
-        as crate::jmorecfg_h::JDIMENSION;
+    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION;
     /* Advance if we filled the strip. */
-    (*post).next_row = ((*post).next_row as u32).wrapping_add(num_rows)
-        as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
+    (*post).next_row =
+        ((*post).next_row as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION;
     if (*post).next_row >= (*post).strip_height {
         (*post).starting_row = ((*post).starting_row as u32).wrapping_add((*post).strip_height)
-            as crate::jmorecfg_h::JDIMENSION
             as crate::jmorecfg_h::JDIMENSION;
         (*post).next_row = 0 as i32 as crate::jmorecfg_h::JDIMENSION
     };

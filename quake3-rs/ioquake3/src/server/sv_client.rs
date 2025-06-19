@@ -1258,7 +1258,7 @@ pub unsafe extern "C" fn SV_FreeClient(mut client: *mut crate::server_h::client_
                     ::std::mem::size_of::<*mut crate::server_h::voipServerPacket_t>()
                         as libc::c_ulong,
                 ),
-        ) as i32 as i32;
+        ) as i32;
         crate::src::qcommon::common::Z_Free(
             (*client).voipPacket[index as usize] as *mut libc::c_void,
         );

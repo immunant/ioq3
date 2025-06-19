@@ -93,7 +93,6 @@ pub mod mathops_h {
         in_0.f = x;
         integer = (in_0.i >> 23 as i32).wrapping_sub(127 as i32 as u32) as i32;
         in_0.i = (in_0.i as u32).wrapping_sub((integer << 23 as i32) as u32)
-            as crate::opus_types_h::opus_uint32
             as crate::opus_types_h::opus_uint32;
         frac = in_0.f - 1.5f32;
         frac = -0.41445418f32
@@ -947,7 +946,7 @@ pub unsafe extern "C" fn opus_multistream_surround_encoder_get_size(
                         ::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong
                     ),
             ),
-        ) as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_int32
+        ) as crate::opus_types_h::opus_int32
     }
     return size;
 }

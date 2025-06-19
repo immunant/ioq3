@@ -28,16 +28,16 @@ pub struct creditsmenu_t {
 }
 
 static mut s_credits: creditsmenu_t = creditsmenu_t {
-    menu: crate::ui_local_h::menuframework_s {
+    menu: menuframework_s {
         cursor: 0,
         cursor_prev: 0,
         nitems: 0,
         items: [0 as *const libc::c_void as *mut libc::c_void; 64],
         draw: None,
         key: None,
-        wrapAround: crate::src::qcommon::q_shared::qfalse,
-        fullscreen: crate::src::qcommon::q_shared::qfalse,
-        showlogo: crate::src::qcommon::q_shared::qfalse,
+        wrapAround: qfalse,
+        fullscreen: qfalse,
+        showlogo: qfalse,
     },
     frame: 0,
 };
@@ -76,32 +76,32 @@ unsafe extern "C" fn UI_CreditMenu_Draw_ioq3() {
             as f64
             * (1.42f64 * 27 as i32 as f64 * 0.75f64))
         / 2 as i32 as f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"ioquake3 contributors:\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
     i = 0 as i32;
     while !names[i as usize].is_null() {
-        crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+        UI_DrawProportionalString(
             320 as i32,
             y,
             names[i as usize],
             0x1 as i32 | 0x10 as i32,
-            crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+            color_white.as_mut_ptr(),
         );
         y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
         i += 1
     }
-    crate::src::q3_ui::ui_atoms::UI_DrawString(
+    UI_DrawString(
         320 as i32,
         459 as i32,
         b"http://www.ioquake3.org/\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr(),
+        color_red.as_mut_ptr(),
     );
 }
 /*
@@ -110,7 +110,7 @@ UI_CreditMenu_Key
 =================
 */
 
-unsafe extern "C" fn UI_CreditMenu_Key(mut key: i32) -> crate::src::qcommon::q_shared::sfxHandle_t {
+unsafe extern "C" fn UI_CreditMenu_Key(mut key: i32) -> sfxHandle_t {
     if key & 1024 as i32 != 0 {
         return 0 as i32;
     }
@@ -118,8 +118,8 @@ unsafe extern "C" fn UI_CreditMenu_Key(mut key: i32) -> crate::src::qcommon::q_s
     if s_credits.frame == 1 as i32 {
         s_credits.menu.draw = Some(UI_CreditMenu_Draw_ioq3 as unsafe extern "C" fn() -> ())
     } else {
-        crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
-            crate::src::qcommon::q_shared::EXEC_APPEND as i32,
+        trap_Cmd_ExecuteText(
+            EXEC_APPEND as i32,
             b"quit\n\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -134,166 +134,166 @@ UI_CreditMenu_Draw
 unsafe extern "C" fn UI_CreditMenu_Draw() {
     let mut y: i32 = 0;
     y = 12 as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"id Software is:\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"Programming\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"John Carmack, Robert A. Duffy, Jim Dose\'\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"Art\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"Adrian Carmack, Kevin Cloud,\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"Kenneth Scott, Seneca Menard, Fred Nilsson\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"Game Designer\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"Graeme Devine\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"Level Design\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"Tim Willits, Christian Antkow, Paul Jaquays\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"CEO\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"Todd Hollenshead\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"Director of Business Development\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"Marty Stratton\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"Biz Assist and id Mom\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"Donna Jackson\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"Development Assistance\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
+    UI_DrawProportionalString(
         320 as i32,
         y,
         b"Eric Webb\x00" as *const u8 as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
+        color_white.as_mut_ptr(),
     );
     y = (y as f64 + 1.35f64 * 27 as i32 as f64 * 0.75f64) as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawString(
+    UI_DrawString(
         320 as i32,
         y,
         b"To order: 1-800-idgames     www.quake3arena.com     www.idsoftware.com\x00" as *const u8
             as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr(),
+        color_red.as_mut_ptr(),
     );
     y += 16 as i32;
-    crate::src::q3_ui::ui_atoms::UI_DrawString(
+    UI_DrawString(
         320 as i32,
         y,
         b"Quake III Arena(c) 1999-2000, Id Software, Inc.  All Rights Reserved\x00" as *const u8
             as *const libc::c_char,
         0x1 as i32 | 0x10 as i32,
-        crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr(),
+        color_red.as_mut_ptr(),
     );
 }
 /*
@@ -357,12 +357,9 @@ pub unsafe extern "C" fn UI_CreditMenu() {
         ::std::mem::size_of::<creditsmenu_t>() as libc::c_ulong,
     );
     s_credits.menu.draw = Some(UI_CreditMenu_Draw as unsafe extern "C" fn() -> ());
-    s_credits.menu.key = Some(
-        UI_CreditMenu_Key
-            as unsafe extern "C" fn(_: i32) -> crate::src::qcommon::q_shared::sfxHandle_t,
-    );
-    s_credits.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
+    s_credits.menu.key = Some(UI_CreditMenu_Key as unsafe extern "C" fn(_: i32) -> sfxHandle_t);
+    s_credits.menu.fullscreen = qtrue;
     crate::src::q3_ui::ui_atoms::UI_PushMenu(
-        &mut s_credits.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
+        &mut s_credits.menu as *mut _ as *mut _tag_menuframework,
     );
 }

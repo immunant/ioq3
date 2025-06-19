@@ -300,11 +300,10 @@ unsafe extern "C" fn pre_process_data(
             (*prep).next_buf_row as crate::jmorecfg_h::JDIMENSION,
             numrows,
         );
-        *in_row_ctr = (*in_row_ctr as u32).wrapping_add(numrows as u32)
-            as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
+        *in_row_ctr =
+            (*in_row_ctr as u32).wrapping_add(numrows as u32) as crate::jmorecfg_h::JDIMENSION;
         (*prep).next_buf_row += numrows;
         (*prep).rows_to_go = ((*prep).rows_to_go as u32).wrapping_sub(numrows as u32)
-            as crate::jmorecfg_h::JDIMENSION
             as crate::jmorecfg_h::JDIMENSION;
         /* If at bottom of image, pad to fill the conversion buffer. */
         if (*prep).rows_to_go == 0 as i32 as u32
@@ -426,12 +425,10 @@ unsafe extern "C" fn pre_process_context(
                     ci += 1
                 }
             }
-            *in_row_ctr = (*in_row_ctr as u32).wrapping_add(numrows as u32)
-                as crate::jmorecfg_h::JDIMENSION
-                as crate::jmorecfg_h::JDIMENSION;
+            *in_row_ctr =
+                (*in_row_ctr as u32).wrapping_add(numrows as u32) as crate::jmorecfg_h::JDIMENSION;
             (*prep).next_buf_row += numrows;
             (*prep).rows_to_go = ((*prep).rows_to_go as u32).wrapping_sub(numrows as u32)
-                as crate::jmorecfg_h::JDIMENSION
                 as crate::jmorecfg_h::JDIMENSION
         } else {
             /* Return for more data, unless we are at the bottom of the image. */

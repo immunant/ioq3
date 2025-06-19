@@ -194,12 +194,10 @@ pub unsafe extern "C" fn ec_encode(
             (*_this)
                 .rng
                 .wrapping_sub(r.wrapping_mul(_ft.wrapping_sub(_fl))),
-        ) as crate::opus_types_h::opus_uint32
-            as crate::opus_types_h::opus_uint32;
+        ) as crate::opus_types_h::opus_uint32;
         (*_this).rng = r.wrapping_mul(_fh.wrapping_sub(_fl))
     } else {
         (*_this).rng = ((*_this).rng as u32).wrapping_sub(r.wrapping_mul(_ft.wrapping_sub(_fh)))
-            as crate::opus_types_h::opus_uint32
             as crate::opus_types_h::opus_uint32
     }
     ec_enc_normalize(_this);
@@ -219,13 +217,11 @@ pub unsafe extern "C" fn ec_encode_bin(
             (*_this)
                 .rng
                 .wrapping_sub(r.wrapping_mul(((1 as u32) << _bits).wrapping_sub(_fl))),
-        ) as crate::opus_types_h::opus_uint32
-            as crate::opus_types_h::opus_uint32;
+        ) as crate::opus_types_h::opus_uint32;
         (*_this).rng = r.wrapping_mul(_fh.wrapping_sub(_fl))
     } else {
         (*_this).rng = ((*_this).rng as u32)
             .wrapping_sub(r.wrapping_mul(((1 as u32) << _bits).wrapping_sub(_fh)))
-            as crate::opus_types_h::opus_uint32
             as crate::opus_types_h::opus_uint32
     }
     ec_enc_normalize(_this);
@@ -244,8 +240,7 @@ pub unsafe extern "C" fn ec_enc_bit_logp(
     r = (*_this).rng;
     l = (*_this).val;
     s = r >> _logp;
-    r = (r as u32).wrapping_sub(s) as crate::opus_types_h::opus_uint32
-        as crate::opus_types_h::opus_uint32;
+    r = (r as u32).wrapping_sub(s) as crate::opus_types_h::opus_uint32;
     if _val != 0 {
         (*_this).val = l.wrapping_add(r)
     }
@@ -267,16 +262,15 @@ pub unsafe extern "C" fn ec_enc_icdf(
             (*_this)
                 .rng
                 .wrapping_sub(r.wrapping_mul(*_icdf.offset((_s - 1 as i32) as isize) as u32)),
-        ) as crate::opus_types_h::opus_uint32
-            as crate::opus_types_h::opus_uint32;
+        ) as crate::opus_types_h::opus_uint32;
         (*_this).rng = r.wrapping_mul(
             (*_icdf.offset((_s - 1 as i32) as isize) as i32 - *_icdf.offset(_s as isize) as i32)
                 as u32,
         )
     } else {
-        (*_this).rng =
-            ((*_this).rng as u32).wrapping_sub(r.wrapping_mul(*_icdf.offset(_s as isize) as u32))
-                as crate::opus_types_h::opus_uint32 as crate::opus_types_h::opus_uint32
+        (*_this).rng = ((*_this).rng as u32)
+            .wrapping_sub(r.wrapping_mul(*_icdf.offset(_s as isize) as u32))
+            as crate::opus_types_h::opus_uint32
     }
     ec_enc_normalize(_this);
 }
@@ -342,10 +336,10 @@ pub unsafe extern "C" fn ec_enc_bits(
         }
     }
     window |= _fl << used;
-    used = (used as u32).wrapping_add(_bits) as i32 as i32;
+    used = (used as u32).wrapping_add(_bits) as i32;
     (*_this).end_window = window;
     (*_this).nend_bits = used;
-    (*_this).nbits_total = ((*_this).nbits_total as u32).wrapping_add(_bits) as i32 as i32;
+    (*_this).nbits_total = ((*_this).nbits_total as u32).wrapping_add(_bits) as i32;
 }
 #[no_mangle]
 

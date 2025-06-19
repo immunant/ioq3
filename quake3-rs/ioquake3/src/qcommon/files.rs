@@ -2618,7 +2618,7 @@ unsafe extern "C" fn FS_LoadZipFile(
         len = (len as libc::c_ulong).wrapping_add(
             crate::stdlib::strlen(filename_inzip.as_mut_ptr())
                 .wrapping_add(1 as i32 as libc::c_ulong),
-        ) as i32 as i32;
+        ) as i32;
         crate::src::qcommon::unzip::unzGoToNextFile(uf);
         i += 1
     }
@@ -3139,8 +3139,8 @@ unsafe extern "C" fn Sys_ConcatenateFileLists(
     let mut cat: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
     let mut dst: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
     let mut src: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
-    totalLength = (totalLength as u32).wrapping_add(Sys_CountFileList(list0)) as i32 as i32;
-    totalLength = (totalLength as u32).wrapping_add(Sys_CountFileList(list1)) as i32 as i32;
+    totalLength = (totalLength as u32).wrapping_add(Sys_CountFileList(list0)) as i32;
+    totalLength = (totalLength as u32).wrapping_add(Sys_CountFileList(list1)) as i32;
     /* Create new list. */
     cat = crate::src::qcommon::common::Z_Malloc(
         ((totalLength + 1 as i32) as libc::c_ulong)

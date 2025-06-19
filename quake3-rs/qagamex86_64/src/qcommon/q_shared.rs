@@ -888,9 +888,7 @@ pub unsafe extern "C" fn COM_StripExtension(
         slash = ::libc::strrchr(in_0, '/' as i32);
         (slash.is_null()) || slash < dot
     } {
-        destsize = if (destsize as isize)
-            < dot.offset_from(in_0) as isize + 1 as i32 as isize
-        {
+        destsize = if (destsize as isize) < dot.offset_from(in_0) as isize + 1 as i32 as isize {
             destsize as isize
         } else {
             (dot.offset_from(in_0) as isize) + 1 as i32 as isize

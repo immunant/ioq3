@@ -360,7 +360,7 @@ unsafe extern "C" fn skip_input_data(
             .offset(num_bytes as crate::stddef_h::size_t as isize);
         (*src).bytes_in_buffer = ((*src).bytes_in_buffer as libc::c_ulong)
             .wrapping_sub(num_bytes as crate::stddef_h::size_t)
-            as crate::stddef_h::size_t as crate::stddef_h::size_t
+            as crate::stddef_h::size_t
     };
 }
 /*

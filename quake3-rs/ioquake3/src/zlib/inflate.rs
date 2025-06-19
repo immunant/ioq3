@@ -5175,7 +5175,6 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
                     out = out.wrapping_sub(left);
                     (*strm).total_out = ((*strm).total_out as libc::c_ulong)
                         .wrapping_add(out as libc::c_ulong)
-                        as crate::zconf_h::uLong
                         as crate::zconf_h::uLong;
                     (*state).total = (*state).total.wrapping_add(out as libc::c_ulong);
                     if out != 0 {
@@ -5829,9 +5828,9 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
     in_0 = in_0.wrapping_sub((*strm).avail_in);
     out = out.wrapping_sub((*strm).avail_out);
     (*strm).total_in = ((*strm).total_in as libc::c_ulong).wrapping_add(in_0 as libc::c_ulong)
-        as crate::zconf_h::uLong as crate::zconf_h::uLong;
+        as crate::zconf_h::uLong;
     (*strm).total_out = ((*strm).total_out as libc::c_ulong).wrapping_add(out as libc::c_ulong)
-        as crate::zconf_h::uLong as crate::zconf_h::uLong;
+        as crate::zconf_h::uLong;
     (*state).total = (*state).total.wrapping_add(out as libc::c_ulong);
     if (*state).wrap != 0 && out != 0 {
         (*state).check = crate::src::zlib::adler32::adler32(
@@ -6036,11 +6035,10 @@ pub unsafe extern "C" fn inflateSync(mut strm: crate::zlib_h::z_streamp) -> i32 
     }
     /* search available input */
     len = syncsearch(&mut (*state).have, (*strm).next_in, (*strm).avail_in);
-    (*strm).avail_in =
-        ((*strm).avail_in as u32).wrapping_sub(len) as crate::zconf_h::uInt as crate::zconf_h::uInt;
+    (*strm).avail_in = ((*strm).avail_in as u32).wrapping_sub(len) as crate::zconf_h::uInt;
     (*strm).next_in = (*strm).next_in.offset(len as isize);
     (*strm).total_in = ((*strm).total_in as libc::c_ulong).wrapping_add(len as libc::c_ulong)
-        as crate::zconf_h::uLong as crate::zconf_h::uLong;
+        as crate::zconf_h::uLong;
     /* return no joy or set up to restart inflate() on a new block */
     if (*state).have != 4 as i32 as u32 {
         return -(3 as i32);

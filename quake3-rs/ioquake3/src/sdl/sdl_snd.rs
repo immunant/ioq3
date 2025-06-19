@@ -168,7 +168,7 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
         {
             let mut ptr: *mut f32 = stream as *mut f32;
             len = (len as libc::c_ulong).wrapping_div(::std::mem::size_of::<f32>() as libc::c_ulong)
-                as i32 as i32;
+                as i32;
             i = 0 as i32;
             while i < len {
                 *ptr *= sdlMasterGain;
@@ -179,7 +179,7 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
             let mut ptr_0: *mut crate::stdlib::Sint16 = stream as *mut crate::stdlib::Sint16;
             len = (len as libc::c_ulong)
                 .wrapping_div(::std::mem::size_of::<crate::stdlib::Sint16>() as libc::c_ulong)
-                as i32 as i32;
+                as i32;
             i = 0 as i32;
             while i < len {
                 *ptr_0 = (*ptr_0 as f32 * sdlMasterGain) as crate::stdlib::Sint16;
@@ -190,7 +190,7 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
             let mut ptr_1: *mut crate::stdlib::Uint8 = stream;
             len = (len as libc::c_ulong)
                 .wrapping_div(::std::mem::size_of::<crate::stdlib::Uint8>() as libc::c_ulong)
-                as i32 as i32;
+                as i32;
             i = 0 as i32;
             while i < len {
                 *ptr_1 = (*ptr_1 as f32 * sdlMasterGain) as crate::stdlib::Uint8;

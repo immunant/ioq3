@@ -406,7 +406,7 @@ unsafe extern "C" fn alloc_small(
     if odd_bytes > 0 as i32 as libc::c_ulong {
         sizeofobject = (sizeofobject as libc::c_ulong)
             .wrapping_add((::std::mem::size_of::<f64>() as libc::c_ulong).wrapping_sub(odd_bytes))
-            as crate::stddef_h::size_t as crate::stddef_h::size_t
+            as crate::stddef_h::size_t
     }
     /* See if space is available in any existing pool */
     if pool_id < 0 as i32 || pool_id >= 2 as i32 {
@@ -454,7 +454,7 @@ unsafe extern "C" fn alloc_small(
                 break;
             }
             slop = (slop as libc::c_ulong).wrapping_div(2 as i32 as libc::c_ulong)
-                as crate::stddef_h::size_t as crate::stddef_h::size_t;
+                as crate::stddef_h::size_t;
             if slop < 50 as i32 as libc::c_ulong {
                 /* give up when it gets real small */
                 out_of_memory(cinfo, 2 as i32);
@@ -462,7 +462,7 @@ unsafe extern "C" fn alloc_small(
         }
         (*mem).total_space_allocated = ((*mem).total_space_allocated as libc::c_ulong)
             .wrapping_add(min_request.wrapping_add(slop))
-            as isize as isize;
+            as isize;
         /* Success, initialize the new pool header and add to end of list */
         (*hdr_ptr).hdr.next = 0 as small_pool_ptr;
         (*hdr_ptr).hdr.bytes_used = 0 as i32 as crate::stddef_h::size_t;
@@ -478,11 +478,9 @@ unsafe extern "C" fn alloc_small(
     data_ptr = hdr_ptr.offset(1 as i32 as isize) as *mut libc::c_char; /* point to first data byte in pool */
     data_ptr = data_ptr.offset((*hdr_ptr).hdr.bytes_used as isize); /* point to place for object */
     (*hdr_ptr).hdr.bytes_used = ((*hdr_ptr).hdr.bytes_used as libc::c_ulong)
-        .wrapping_add(sizeofobject) as crate::stddef_h::size_t
-        as crate::stddef_h::size_t;
+        .wrapping_add(sizeofobject) as crate::stddef_h::size_t;
     (*hdr_ptr).hdr.bytes_left = ((*hdr_ptr).hdr.bytes_left as libc::c_ulong)
-        .wrapping_sub(sizeofobject) as crate::stddef_h::size_t
-        as crate::stddef_h::size_t;
+        .wrapping_sub(sizeofobject) as crate::stddef_h::size_t;
     return data_ptr as *mut libc::c_void;
 }
 /*
@@ -520,7 +518,7 @@ unsafe extern "C" fn alloc_large(
     if odd_bytes > 0 as i32 as libc::c_ulong {
         sizeofobject = (sizeofobject as libc::c_ulong)
             .wrapping_add((::std::mem::size_of::<f64>() as libc::c_ulong).wrapping_sub(odd_bytes))
-            as crate::stddef_h::size_t as crate::stddef_h::size_t
+            as crate::stddef_h::size_t
     }
     /* Always make a new pool */
     if pool_id < 0 as i32 || pool_id >= 2 as i32 {
@@ -542,7 +540,7 @@ unsafe extern "C" fn alloc_large(
     }
     (*mem).total_space_allocated = ((*mem).total_space_allocated as libc::c_ulong).wrapping_add(
         sizeofobject.wrapping_add(::std::mem::size_of::<large_pool_hdr>() as libc::c_ulong),
-    ) as isize as isize;
+    ) as isize;
     /* Success, initialize the new pool header and add to list */
     (*hdr_ptr).hdr.next = (*mem).large_list[pool_id as usize];
     /* We maintain space counts in each pool header for statistical purposes,
@@ -853,14 +851,14 @@ unsafe extern "C" fn realize_virt_arrays(mut cinfo: crate::jpeglib_h::j_common_p
                     .wrapping_mul(
                         ::std::mem::size_of::<crate::jmorecfg_h::JSAMPLE>() as libc::c_ulong
                     ),
-            ) as isize as isize;
+            ) as isize;
             maximum_space = (maximum_space as libc::c_ulong).wrapping_add(
                 (((*sptr).rows_in_array as isize * (*sptr).samplesperrow as isize)
                     as libc::c_ulong)
                     .wrapping_mul(
                         ::std::mem::size_of::<crate::jmorecfg_h::JSAMPLE>() as libc::c_ulong
                     ),
-            ) as isize as isize
+            ) as isize
         }
         sptr = (*sptr).next
     }
@@ -874,14 +872,14 @@ unsafe extern "C" fn realize_virt_arrays(mut cinfo: crate::jpeglib_h::j_common_p
                     .wrapping_mul(
                         ::std::mem::size_of::<crate::jpeglib_h::JBLOCK>() as libc::c_ulong
                     ),
-            ) as isize as isize; /* no unrealized arrays, no work */
+            ) as isize; /* no unrealized arrays, no work */
             maximum_space = (maximum_space as libc::c_ulong).wrapping_add(
                 (((*bptr).rows_in_array as isize * (*bptr).blocksperrow as isize)
                     as libc::c_ulong)
                     .wrapping_mul(
                         ::std::mem::size_of::<crate::jpeglib_h::JBLOCK>() as libc::c_ulong
                     ),
-            ) as isize as isize
+            ) as isize
         }
         bptr = (*bptr).next
     }
@@ -1228,10 +1226,8 @@ unsafe extern "C" fn access_virt_sarray(
                 as crate::stddef_h::size_t)
                 .wrapping_mul(::std::mem::size_of::<crate::jmorecfg_h::JSAMPLE>() as libc::c_ulong);
             undef_row = (undef_row as u32).wrapping_sub((*ptr).cur_start_row)
-                as crate::jmorecfg_h::JDIMENSION
                 as crate::jmorecfg_h::JDIMENSION;
             end_row = (end_row as u32).wrapping_sub((*ptr).cur_start_row)
-                as crate::jmorecfg_h::JDIMENSION
                 as crate::jmorecfg_h::JDIMENSION;
             while undef_row < end_row {
                 crate::src::jpeg_8c::jutils::jzero_far(
@@ -1356,10 +1352,8 @@ unsafe extern "C" fn access_virt_barray(
                 as crate::stddef_h::size_t)
                 .wrapping_mul(::std::mem::size_of::<crate::jpeglib_h::JBLOCK>() as libc::c_ulong);
             undef_row = (undef_row as u32).wrapping_sub((*ptr).cur_start_row)
-                as crate::jmorecfg_h::JDIMENSION
                 as crate::jmorecfg_h::JDIMENSION;
             end_row = (end_row as u32).wrapping_sub((*ptr).cur_start_row)
-                as crate::jmorecfg_h::JDIMENSION
                 as crate::jmorecfg_h::JDIMENSION;
             while undef_row < end_row {
                 crate::src::jpeg_8c::jutils::jzero_far(
@@ -1460,8 +1454,7 @@ unsafe extern "C" fn free_pool(mut cinfo: crate::jpeglib_h::j_common_ptr, mut po
             space_freed,
         );
         (*mem).total_space_allocated = ((*mem).total_space_allocated as libc::c_ulong)
-            .wrapping_sub(space_freed) as isize
-            as isize;
+            .wrapping_sub(space_freed) as isize;
         lhdr_ptr = next_lhdr_ptr
     }
     /* Release small objects */
@@ -1480,8 +1473,7 @@ unsafe extern "C" fn free_pool(mut cinfo: crate::jpeglib_h::j_common_ptr, mut po
             space_freed,
         );
         (*mem).total_space_allocated = ((*mem).total_space_allocated as libc::c_ulong)
-            .wrapping_sub(space_freed) as isize
-            as isize;
+            .wrapping_sub(space_freed) as isize;
         shdr_ptr = next_shdr_ptr
     }
 }
