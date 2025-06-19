@@ -1,7 +1,7 @@
 pub type byte = libc::c_uchar;
 pub type qboolean = libc::c_uint;
-pub const qfalse: crate::src::qcommon::q_shared::qboolean = 0;
-pub const qtrue: crate::src::qcommon::q_shared::qboolean = 1;
+pub const qfalse: qboolean = 0;
+pub const qtrue: qboolean = 1;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union floatint_t {
@@ -25,9 +25,9 @@ pub const ERR_SERVERDISCONNECT: crate::bg_public_h::C2RustUnnamed_0 = 2;
 pub const ERR_DISCONNECT: crate::bg_public_h::C2RustUnnamed_0 = 3;
 pub const ERR_NEED_CD: crate::bg_public_h::C2RustUnnamed_0 = 4;
 pub type vec_t = libc::c_float;
-pub type vec3_t = [crate::src::qcommon::q_shared::vec_t; 3];
-pub type vec4_t = [crate::src::qcommon::q_shared::vec_t; 4];
-pub type pc_token_t = crate::src::qcommon::q_shared::pc_token_s;
+pub type vec3_t = [vec_t; 3];
+pub type vec4_t = [vec_t; 4];
+pub type pc_token_t = pc_token_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct pc_token_s {
@@ -38,50 +38,50 @@ pub struct pc_token_s {
     pub string: [libc::c_char; 1024],
 }
 pub type fsMode_t = libc::c_uint;
-pub const FS_READ: crate::src::qcommon::q_shared::fsMode_t = 0;
-pub const FS_WRITE: crate::src::qcommon::q_shared::fsMode_t = 1;
-pub const FS_APPEND: crate::src::qcommon::q_shared::fsMode_t = 2;
-pub const FS_APPEND_SYNC: crate::src::qcommon::q_shared::fsMode_t = 3;
+pub const FS_READ: fsMode_t = 0;
+pub const FS_WRITE: fsMode_t = 1;
+pub const FS_APPEND: fsMode_t = 2;
+pub const FS_APPEND_SYNC: fsMode_t = 3;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct qint64 {
-    pub b0: crate::src::qcommon::q_shared::byte,
-    pub b1: crate::src::qcommon::q_shared::byte,
-    pub b2: crate::src::qcommon::q_shared::byte,
-    pub b3: crate::src::qcommon::q_shared::byte,
-    pub b4: crate::src::qcommon::q_shared::byte,
-    pub b5: crate::src::qcommon::q_shared::byte,
-    pub b6: crate::src::qcommon::q_shared::byte,
-    pub b7: crate::src::qcommon::q_shared::byte,
+    pub b0: byte,
+    pub b1: byte,
+    pub b2: byte,
+    pub b3: byte,
+    pub b4: byte,
+    pub b5: byte,
+    pub b6: byte,
+    pub b7: byte,
 }
 pub type cvarHandle_t = libc::c_int;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct vmCvar_t {
-    pub handle: crate::src::qcommon::q_shared::cvarHandle_t,
+    pub handle: cvarHandle_t,
     pub modificationCount: libc::c_int,
     pub value: libc::c_float,
     pub integer: libc::c_int,
     pub string: [libc::c_char; 256],
 }
-pub type cplane_t = crate::src::qcommon::q_shared::cplane_s;
+pub type cplane_t = cplane_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct cplane_s {
-    pub normal: crate::src::qcommon::q_shared::vec3_t,
+    pub normal: vec3_t,
     pub dist: libc::c_float,
-    pub type_0: crate::src::qcommon::q_shared::byte,
-    pub signbits: crate::src::qcommon::q_shared::byte,
-    pub pad: [crate::src::qcommon::q_shared::byte; 2],
+    pub type_0: byte,
+    pub signbits: byte,
+    pub pad: [byte; 2],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct trace_t {
-    pub allsolid: crate::src::qcommon::q_shared::qboolean,
-    pub startsolid: crate::src::qcommon::q_shared::qboolean,
+    pub allsolid: qboolean,
+    pub startsolid: qboolean,
     pub fraction: libc::c_float,
-    pub endpos: crate::src::qcommon::q_shared::vec3_t,
-    pub plane: crate::src::qcommon::q_shared::cplane_t,
+    pub endpos: vec3_t,
+    pub plane: cplane_t,
     pub surfaceFlags: libc::c_int,
     pub contents: libc::c_int,
     pub entityNum: libc::c_int,
@@ -94,7 +94,7 @@ pub const CHAN_ITEM: crate::bg_public_h::C2RustUnnamed_0 = 4;
 pub const CHAN_BODY: crate::bg_public_h::C2RustUnnamed_0 = 5;
 pub const CHAN_LOCAL_SOUND: crate::bg_public_h::C2RustUnnamed_0 = 6;
 pub const CHAN_ANNOUNCER: crate::bg_public_h::C2RustUnnamed_0 = 7;
-pub type playerState_t = crate::src::qcommon::q_shared::playerState_s;
+pub type playerState_t = playerState_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct playerState_s {
@@ -103,8 +103,8 @@ pub struct playerState_s {
     pub bobCycle: libc::c_int,
     pub pm_flags: libc::c_int,
     pub pm_time: libc::c_int,
-    pub origin: crate::src::qcommon::q_shared::vec3_t,
-    pub velocity: crate::src::qcommon::q_shared::vec3_t,
+    pub origin: vec3_t,
+    pub velocity: vec3_t,
     pub weaponTime: libc::c_int,
     pub gravity: libc::c_int,
     pub speed: libc::c_int,
@@ -115,7 +115,7 @@ pub struct playerState_s {
     pub torsoTimer: libc::c_int,
     pub torsoAnim: libc::c_int,
     pub movementDir: libc::c_int,
-    pub grapplePoint: crate::src::qcommon::q_shared::vec3_t,
+    pub grapplePoint: vec3_t,
     pub eFlags: libc::c_int,
     pub eventSequence: libc::c_int,
     pub events: [libc::c_int; 2],
@@ -126,7 +126,7 @@ pub struct playerState_s {
     pub clientNum: libc::c_int,
     pub weapon: libc::c_int,
     pub weaponstate: libc::c_int,
-    pub viewangles: crate::src::qcommon::q_shared::vec3_t,
+    pub viewangles: vec3_t,
     pub viewheight: libc::c_int,
     pub damageEvent: libc::c_int,
     pub damageYaw: libc::c_int,
@@ -144,35 +144,35 @@ pub struct playerState_s {
     pub jumppad_frame: libc::c_int,
     pub entityEventSequence: libc::c_int,
 }
-pub type usercmd_t = crate::src::qcommon::q_shared::usercmd_s;
+pub type usercmd_t = usercmd_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct usercmd_s {
     pub serverTime: libc::c_int,
     pub angles: [libc::c_int; 3],
     pub buttons: libc::c_int,
-    pub weapon: crate::src::qcommon::q_shared::byte,
+    pub weapon: byte,
     pub forwardmove: libc::c_schar,
     pub rightmove: libc::c_schar,
     pub upmove: libc::c_schar,
 }
 pub type trType_t = libc::c_uint;
-pub const TR_STATIONARY: crate::src::qcommon::q_shared::trType_t = 0;
-pub const TR_INTERPOLATE: crate::src::qcommon::q_shared::trType_t = 1;
-pub const TR_LINEAR: crate::src::qcommon::q_shared::trType_t = 2;
-pub const TR_LINEAR_STOP: crate::src::qcommon::q_shared::trType_t = 3;
-pub const TR_SINE: crate::src::qcommon::q_shared::trType_t = 4;
-pub const TR_GRAVITY: crate::src::qcommon::q_shared::trType_t = 5;
+pub const TR_STATIONARY: trType_t = 0;
+pub const TR_INTERPOLATE: trType_t = 1;
+pub const TR_LINEAR: trType_t = 2;
+pub const TR_LINEAR_STOP: trType_t = 3;
+pub const TR_SINE: trType_t = 4;
+pub const TR_GRAVITY: trType_t = 5;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct trajectory_t {
-    pub trType: crate::src::qcommon::q_shared::trType_t,
+    pub trType: trType_t,
     pub trTime: libc::c_int,
     pub trDuration: libc::c_int,
-    pub trBase: crate::src::qcommon::q_shared::vec3_t,
-    pub trDelta: crate::src::qcommon::q_shared::vec3_t,
+    pub trBase: vec3_t,
+    pub trDelta: vec3_t,
 }
-pub type entityState_t = crate::src::qcommon::q_shared::entityState_s;
+pub type entityState_t = entityState_s;
 // these are sent over the net as 8 bits
 
 // so they cannot be blindly increased
@@ -324,14 +324,14 @@ pub struct entityState_s {
     pub number: libc::c_int,
     pub eType: libc::c_int,
     pub eFlags: libc::c_int,
-    pub pos: crate::src::qcommon::q_shared::trajectory_t,
-    pub apos: crate::src::qcommon::q_shared::trajectory_t,
+    pub pos: trajectory_t,
+    pub apos: trajectory_t,
     pub time: libc::c_int,
     pub time2: libc::c_int,
-    pub origin: crate::src::qcommon::q_shared::vec3_t,
-    pub origin2: crate::src::qcommon::q_shared::vec3_t,
-    pub angles: crate::src::qcommon::q_shared::vec3_t,
-    pub angles2: crate::src::qcommon::q_shared::vec3_t,
+    pub origin: vec3_t,
+    pub origin2: vec3_t,
+    pub angles: vec3_t,
+    pub angles2: vec3_t,
     pub otherEntityNum: libc::c_int,
     pub otherEntityNum2: libc::c_int,
     pub groundEntityNum: libc::c_int,
@@ -350,7 +350,7 @@ pub struct entityState_s {
     pub torsoAnim: libc::c_int,
     pub generic1: libc::c_int,
 }
-pub type qtime_t = crate::src::qcommon::q_shared::qtime_s;
+pub type qtime_t = qtime_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct qtime_s {
@@ -364,13 +364,13 @@ pub struct qtime_s {
     pub tm_yday: libc::c_int,
     pub tm_isdst: libc::c_int,
 }
-pub type flagStatus_t = crate::src::qcommon::q_shared::_flag_status;
+pub type flagStatus_t = _flag_status;
 pub type _flag_status = libc::c_uint;
-pub const FLAG_ATBASE: crate::src::qcommon::q_shared::_flag_status = 0;
-pub const FLAG_TAKEN: crate::src::qcommon::q_shared::_flag_status = 1;
-pub const FLAG_TAKEN_RED: crate::src::qcommon::q_shared::_flag_status = 2;
-pub const FLAG_TAKEN_BLUE: crate::src::qcommon::q_shared::_flag_status = 3;
-pub const FLAG_DROPPED: crate::src::qcommon::q_shared::_flag_status = 4;
+pub const FLAG_ATBASE: _flag_status = 0;
+pub const FLAG_TAKEN: _flag_status = 1;
+pub const FLAG_TAKEN_RED: _flag_status = 2;
+pub const FLAG_TAKEN_BLUE: _flag_status = 3;
+pub const FLAG_DROPPED: _flag_status = 4;
 // check think function
 
 // if it is in a nodrop volume, remove it
@@ -794,9 +794,9 @@ pub use crate::internal::__builtin_va_list;
 pub use crate::internal::__va_list_tag;
 pub use crate::src::game::g_main::Com_Error;
 pub use crate::src::game::g_main::Com_Printf;
-pub use crate::src::qcommon::q_shared::ctype_h::tolower;
-pub use crate::src::qcommon::q_shared::ctype_h::toupper;
-pub use crate::src::qcommon::q_shared::stdlib_float_h::atof;
+pub use ctype_h::tolower;
+pub use ctype_h::toupper;
+pub use stdlib_float_h::atof;
 pub use crate::stdarg_h::va_list;
 pub use crate::stddef_h::size_t;
 pub use crate::stdlib::_ISalnum;
@@ -819,29 +819,29 @@ pub use crate::stdlib::__int32_t;
 #[no_mangle]
 pub unsafe extern "C" fn Q_IsColorString(
     mut p: *const libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     if p.is_null() {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     if *p.offset(0 as libc::c_int as isize) as libc::c_int != '^' as i32 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     if *p.offset(1 as libc::c_int as isize) as libc::c_int == 0 as libc::c_int {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     // isalnum expects a signed integer in the range -1 (EOF) to 255, or it might assert on undefined behaviour
     // a dereferenced char pointer has the range -128 to 127, so we just need to rangecheck the negative part
     if (*p.offset(1 as libc::c_int as isize) as libc::c_int) < 0 as libc::c_int {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     if *(*crate::stdlib::__ctype_b_loc())
         .offset(*p.offset(1 as libc::c_int as isize) as libc::c_int as isize) as libc::c_int
         & crate::stdlib::_ISalnum as libc::c_int as libc::c_ushort as libc::c_int
         == 0 as libc::c_int
     {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 #[no_mangle]
 pub unsafe extern "C" fn Com_Clamp(
@@ -912,7 +912,7 @@ pub unsafe extern "C" fn COM_StripExtension(
 pub unsafe extern "C" fn COM_CompareExtension(
     mut in_0: *const libc::c_char,
     mut ext: *const libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut inlen: libc::c_int = 0;
     let mut extlen: libc::c_int = 0;
     inlen = crate::stdlib::strlen(in_0) as libc::c_int;
@@ -920,10 +920,10 @@ pub unsafe extern "C" fn COM_CompareExtension(
     if extlen <= inlen {
         in_0 = in_0.offset((inlen - extlen) as isize);
         if Q_stricmp(in_0, ext) == 0 {
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 #[no_mangle]
 pub unsafe extern "C" fn COM_DefaultExtension(
@@ -944,19 +944,19 @@ pub unsafe extern "C" fn COM_DefaultExtension(
 }
 #[no_mangle]
 pub unsafe extern "C" fn CopyShortSwap(mut dest: *mut libc::c_void, mut src: *mut libc::c_void) {
-    let mut to: *mut crate::src::qcommon::q_shared::byte =
-        dest as *mut crate::src::qcommon::q_shared::byte;
-    let mut from: *mut crate::src::qcommon::q_shared::byte =
-        src as *mut crate::src::qcommon::q_shared::byte;
+    let mut to: *mut byte =
+        dest as *mut byte;
+    let mut from: *mut byte =
+        src as *mut byte;
     *to.offset(0 as libc::c_int as isize) = *from.offset(1 as libc::c_int as isize);
     *to.offset(1 as libc::c_int as isize) = *from.offset(0 as libc::c_int as isize);
 }
 #[no_mangle]
 pub unsafe extern "C" fn CopyLongSwap(mut dest: *mut libc::c_void, mut src: *mut libc::c_void) {
-    let mut to: *mut crate::src::qcommon::q_shared::byte =
-        dest as *mut crate::src::qcommon::q_shared::byte;
-    let mut from: *mut crate::src::qcommon::q_shared::byte =
-        src as *mut crate::src::qcommon::q_shared::byte;
+    let mut to: *mut byte =
+        dest as *mut byte;
+    let mut from: *mut byte =
+        src as *mut byte;
     *to.offset(0 as libc::c_int as isize) = *from.offset(3 as libc::c_int as isize);
     *to.offset(1 as libc::c_int as isize) = *from.offset(2 as libc::c_int as isize);
     *to.offset(2 as libc::c_int as isize) = *from.offset(1 as libc::c_int as isize);
@@ -964,11 +964,11 @@ pub unsafe extern "C" fn CopyLongSwap(mut dest: *mut libc::c_void, mut src: *mut
 }
 #[no_mangle]
 pub unsafe extern "C" fn ShortSwap(mut l: libc::c_short) -> libc::c_short {
-    let mut b1: crate::src::qcommon::q_shared::byte = 0;
-    let mut b2: crate::src::qcommon::q_shared::byte = 0;
-    b1 = (l as libc::c_int & 255 as libc::c_int) as crate::src::qcommon::q_shared::byte;
+    let mut b1: byte = 0;
+    let mut b2: byte = 0;
+    b1 = (l as libc::c_int & 255 as libc::c_int) as byte;
     b2 = (l as libc::c_int >> 8 as libc::c_int & 255 as libc::c_int)
-        as crate::src::qcommon::q_shared::byte;
+        as byte;
     return (((b1 as libc::c_int) << 8 as libc::c_int) + b2 as libc::c_int) as libc::c_short;
 }
 #[no_mangle]
@@ -977,14 +977,14 @@ pub unsafe extern "C" fn ShortNoSwap(mut l: libc::c_short) -> libc::c_short {
 }
 #[no_mangle]
 pub unsafe extern "C" fn LongSwap(mut l: libc::c_int) -> libc::c_int {
-    let mut b1: crate::src::qcommon::q_shared::byte = 0;
-    let mut b2: crate::src::qcommon::q_shared::byte = 0;
-    let mut b3: crate::src::qcommon::q_shared::byte = 0;
-    let mut b4: crate::src::qcommon::q_shared::byte = 0;
-    b1 = (l & 255 as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    b2 = (l >> 8 as libc::c_int & 255 as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    b3 = (l >> 16 as libc::c_int & 255 as libc::c_int) as crate::src::qcommon::q_shared::byte;
-    b4 = (l >> 24 as libc::c_int & 255 as libc::c_int) as crate::src::qcommon::q_shared::byte;
+    let mut b1: byte = 0;
+    let mut b2: byte = 0;
+    let mut b3: byte = 0;
+    let mut b4: byte = 0;
+    b1 = (l & 255 as libc::c_int) as byte;
+    b2 = (l >> 8 as libc::c_int & 255 as libc::c_int) as byte;
+    b3 = (l >> 16 as libc::c_int & 255 as libc::c_int) as byte;
+    b4 = (l >> 24 as libc::c_int & 255 as libc::c_int) as byte;
     return ((b1 as libc::c_int) << 24 as libc::c_int)
         + ((b2 as libc::c_int) << 16 as libc::c_int)
         + ((b3 as libc::c_int) << 8 as libc::c_int)
@@ -996,9 +996,9 @@ pub unsafe extern "C" fn LongNoSwap(mut l: libc::c_int) -> libc::c_int {
 }
 #[no_mangle]
 pub unsafe extern "C" fn Long64Swap(
-    mut ll: crate::src::qcommon::q_shared::qint64,
-) -> crate::src::qcommon::q_shared::qint64 {
-    let mut result: crate::src::qcommon::q_shared::qint64 = crate::src::qcommon::q_shared::qint64 {
+    mut ll: qint64,
+) -> qint64 {
+    let mut result: qint64 = qint64 {
         b0: 0,
         b1: 0,
         b2: 0,
@@ -1020,14 +1020,14 @@ pub unsafe extern "C" fn Long64Swap(
 }
 #[no_mangle]
 pub unsafe extern "C" fn Long64NoSwap(
-    mut ll: crate::src::qcommon::q_shared::qint64,
-) -> crate::src::qcommon::q_shared::qint64 {
+    mut ll: qint64,
+) -> qint64 {
     return ll;
 }
 #[no_mangle]
 pub unsafe extern "C" fn FloatSwap(mut f: *const libc::c_float) -> libc::c_float {
-    let mut out: crate::src::qcommon::q_shared::floatint_t =
-        crate::src::qcommon::q_shared::floatint_t { f: 0. };
+    let mut out: floatint_t =
+        floatint_t { f: 0. };
     out.f = *f;
     out.ui = LongSwap(out.ui as libc::c_int) as libc::c_uint;
     return out.f;
@@ -1060,7 +1060,7 @@ pub unsafe extern "C" fn COM_GetCurrentParseLine() -> libc::c_int {
 }
 #[no_mangle]
 pub unsafe extern "C" fn COM_Parse(mut data_p: *mut *mut libc::c_char) -> *mut libc::c_char {
-    return COM_ParseExt(data_p, crate::src::qcommon::q_shared::qtrue);
+    return COM_ParseExt(data_p, qtrue);
 }
 #[no_mangle]
 pub unsafe extern "C" fn COM_ParseError(mut format: *mut libc::c_char, mut args: ...) {
@@ -1100,7 +1100,7 @@ pub unsafe extern "C" fn COM_ParseWarning(mut format: *mut libc::c_char, mut arg
 }
 unsafe extern "C" fn SkipWhitespace(
     mut data: *mut libc::c_char,
-    mut hasNewLines: *mut crate::src::qcommon::q_shared::qboolean,
+    mut hasNewLines: *mut qboolean,
 ) -> *mut libc::c_char {
     let mut c: libc::c_int = 0;
     loop {
@@ -1113,7 +1113,7 @@ unsafe extern "C" fn SkipWhitespace(
         }
         if c == '\n' as i32 {
             com_lines += 1;
-            *hasNewLines = crate::src::qcommon::q_shared::qtrue
+            *hasNewLines = qtrue
         }
         data = data.offset(1)
     }
@@ -1124,10 +1124,10 @@ pub unsafe extern "C" fn COM_Compress(mut data_p: *mut libc::c_char) -> libc::c_
     let mut in_0: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut out: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut c: libc::c_int = 0;
-    let mut newline: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
-    let mut whitespace: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut newline: qboolean =
+        qfalse;
+    let mut whitespace: qboolean =
+        qfalse;
     out = data_p;
     in_0 = out;
     if !in_0.is_null() {
@@ -1158,11 +1158,11 @@ pub unsafe extern "C" fn COM_Compress(mut data_p: *mut libc::c_char) -> libc::c_
                 }
             // record when we hit a newline
             } else if c == '\n' as i32 || c == '\r' as i32 {
-                newline = crate::src::qcommon::q_shared::qtrue;
+                newline = qtrue;
                 in_0 = in_0.offset(1)
             // record when we hit whitespace
             } else if c == ' ' as i32 || c == '\t' as i32 {
-                whitespace = crate::src::qcommon::q_shared::qtrue;
+                whitespace = qtrue;
                 in_0 = in_0.offset(1)
             // an actual token
             } else {
@@ -1171,14 +1171,14 @@ pub unsafe extern "C" fn COM_Compress(mut data_p: *mut libc::c_char) -> libc::c_
                     let fresh0 = out;
                     out = out.offset(1);
                     *fresh0 = '\n' as i32 as libc::c_char;
-                    newline = crate::src::qcommon::q_shared::qfalse;
-                    whitespace = crate::src::qcommon::q_shared::qfalse
+                    newline = qfalse;
+                    whitespace = qfalse
                 }
                 if whitespace as u64 != 0 {
                     let fresh1 = out;
                     out = out.offset(1);
                     *fresh1 = ' ' as i32 as libc::c_char;
-                    whitespace = crate::src::qcommon::q_shared::qfalse
+                    whitespace = qfalse
                 }
                 // copy quoted strings unmolested
                 if c == '\"' as i32 {
@@ -1216,12 +1216,12 @@ pub unsafe extern "C" fn COM_Compress(mut data_p: *mut libc::c_char) -> libc::c_
 #[no_mangle]
 pub unsafe extern "C" fn COM_ParseExt(
     mut data_p: *mut *mut libc::c_char,
-    mut allowLineBreaks: crate::src::qcommon::q_shared::qboolean,
+    mut allowLineBreaks: qboolean,
 ) -> *mut libc::c_char {
     let mut c: libc::c_int = 0 as libc::c_int;
     let mut len: libc::c_int = 0;
-    let mut hasNewLines: crate::src::qcommon::q_shared::qboolean =
-        crate::src::qcommon::q_shared::qfalse;
+    let mut hasNewLines: qboolean =
+        qfalse;
     let mut data: *mut libc::c_char = 0 as *mut libc::c_char;
     data = *data_p;
     len = 0 as libc::c_int;
@@ -1321,7 +1321,7 @@ pub unsafe extern "C" fn COM_MatchToken(
     token = COM_Parse(buf_p);
     if ::libc::strcmp(token, match_0) != 0 {
         crate::src::game::g_main::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            ERR_DROP as libc::c_int,
             b"MatchToken: %s != %s\x00" as *const u8 as *const libc::c_char,
             token,
             match_0,
@@ -1332,10 +1332,10 @@ pub unsafe extern "C" fn COM_MatchToken(
 pub unsafe extern "C" fn SkipBracedSection(
     mut program: *mut *mut libc::c_char,
     mut depth: libc::c_int,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut token: *mut libc::c_char = 0 as *mut libc::c_char;
     loop {
-        token = COM_ParseExt(program, crate::src::qcommon::q_shared::qtrue);
+        token = COM_ParseExt(program, qtrue);
         if *token.offset(1 as libc::c_int as isize) as libc::c_int == 0 as libc::c_int {
             if *token.offset(0 as libc::c_int as isize) as libc::c_int == '{' as i32 {
                 depth += 1
@@ -1347,7 +1347,7 @@ pub unsafe extern "C" fn SkipBracedSection(
             break;
         }
     }
-    return (depth == 0 as libc::c_int) as libc::c_int as crate::src::qcommon::q_shared::qboolean;
+    return (depth == 0 as libc::c_int) as libc::c_int as qboolean;
 }
 #[no_mangle]
 pub unsafe extern "C" fn SkipRestOfLine(mut data: *mut *mut libc::c_char) {
@@ -1523,21 +1523,21 @@ pub unsafe extern "C" fn Q_isalpha(mut c: libc::c_int) -> libc::c_int {
 #[no_mangle]
 pub unsafe extern "C" fn Q_isanumber(
     mut s: *const libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
     if *s as libc::c_int == '\u{0}' as i32 {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     ::libc::strtod(s, &mut p);
     return (*p as libc::c_int == '\u{0}' as i32) as libc::c_int
-        as crate::src::qcommon::q_shared::qboolean;
+        as qboolean;
 }
 #[no_mangle]
 pub unsafe extern "C" fn Q_isintegral(
     mut f: libc::c_float,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     return (f as libc::c_int as libc::c_float == f) as libc::c_int
-        as crate::src::qcommon::q_shared::qboolean;
+        as qboolean;
 }
 #[no_mangle]
 pub unsafe extern "C" fn Q_strncpyz(
@@ -1547,19 +1547,19 @@ pub unsafe extern "C" fn Q_strncpyz(
 ) {
     if dest.is_null() {
         crate::src::game::g_main::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            ERR_FATAL as libc::c_int,
             b"Q_strncpyz: NULL dest\x00" as *const u8 as *const libc::c_char,
         );
     }
     if src.is_null() {
         crate::src::game::g_main::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            ERR_FATAL as libc::c_int,
             b"Q_strncpyz: NULL src\x00" as *const u8 as *const libc::c_char,
         );
     }
     if destsize < 1 as libc::c_int {
         crate::src::game::g_main::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            ERR_FATAL as libc::c_int,
             b"Q_strncpyz: destsize < 1\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -1734,7 +1734,7 @@ pub unsafe extern "C" fn Q_strcat(
     l1 = crate::stdlib::strlen(dest) as libc::c_int;
     if l1 >= size {
         crate::src::game::g_main::Com_Error(
-            crate::src::qcommon::q_shared::ERR_FATAL as libc::c_int,
+            ERR_FATAL as libc::c_int,
             b"Q_strcat: already overflowed\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -1918,7 +1918,7 @@ pub unsafe extern "C" fn Info_ValueForKey(
     }
     if crate::stdlib::strlen(s) >= 8192 as libc::c_int as libc::c_ulong {
         crate::src::game::g_main::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            ERR_DROP as libc::c_int,
             b"Info_ValueForKey: oversize infostring\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -2007,7 +2007,7 @@ pub unsafe extern "C" fn Info_RemoveKey(mut s: *mut libc::c_char, mut key: *cons
     let mut o: *mut libc::c_char = 0 as *mut libc::c_char;
     if crate::stdlib::strlen(s) >= 1024 as libc::c_int as libc::c_ulong {
         crate::src::game::g_main::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            ERR_DROP as libc::c_int,
             b"Info_RemoveKey: oversize infostring\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -2068,7 +2068,7 @@ pub unsafe extern "C" fn Info_RemoveKey_Big(
     let mut o: *mut libc::c_char = 0 as *mut libc::c_char;
     if crate::stdlib::strlen(s) >= 8192 as libc::c_int as libc::c_ulong {
         crate::src::game::g_main::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            ERR_DROP as libc::c_int,
             b"Info_RemoveKey_Big: oversize infostring\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -2121,14 +2121,14 @@ pub unsafe extern "C" fn Info_RemoveKey_Big(
 #[no_mangle]
 pub unsafe extern "C" fn Info_Validate(
     mut s: *const libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     if !::libc::strchr(s, '\"' as i32).is_null() {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
     if !::libc::strchr(s, ';' as i32).is_null() {
-        return crate::src::qcommon::q_shared::qfalse;
+        return qfalse;
     }
-    return crate::src::qcommon::q_shared::qtrue;
+    return qtrue;
 }
 #[no_mangle]
 pub unsafe extern "C" fn Info_SetValueForKey(
@@ -2140,7 +2140,7 @@ pub unsafe extern "C" fn Info_SetValueForKey(
     let mut blacklist: *const libc::c_char = b"\\;\"\x00" as *const u8 as *const libc::c_char;
     if crate::stdlib::strlen(s) >= 1024 as libc::c_int as libc::c_ulong {
         crate::src::game::g_main::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            ERR_DROP as libc::c_int,
             b"Info_SetValueForKey: oversize infostring\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -2191,7 +2191,7 @@ pub unsafe extern "C" fn Info_SetValueForKey_Big(
     let mut blacklist: *const libc::c_char = b"\\;\"\x00" as *const u8 as *const libc::c_char;
     if crate::stdlib::strlen(s) >= 8192 as libc::c_int as libc::c_ulong {
         crate::src::game::g_main::Com_Error(
-            crate::src::qcommon::q_shared::ERR_DROP as libc::c_int,
+            ERR_DROP as libc::c_int,
             b"Info_SetValueForKey: oversize infostring\x00" as *const u8 as *const libc::c_char,
         );
     }
@@ -2234,16 +2234,16 @@ pub unsafe extern "C" fn Info_SetValueForKey_Big(
 unsafe extern "C" fn Com_CharIsOneOfCharset(
     mut c: libc::c_char,
     mut set: *mut libc::c_char,
-) -> crate::src::qcommon::q_shared::qboolean {
+) -> qboolean {
     let mut i: libc::c_int = 0;
     i = 0 as libc::c_int;
     while (i as libc::c_ulong) < crate::stdlib::strlen(set) {
         if *set.offset(i as isize) as libc::c_int == c as libc::c_int {
-            return crate::src::qcommon::q_shared::qtrue;
+            return qtrue;
         }
         i += 1
     }
-    return crate::src::qcommon::q_shared::qfalse;
+    return qfalse;
 }
 #[no_mangle]
 pub unsafe extern "C" fn Com_SkipCharset(

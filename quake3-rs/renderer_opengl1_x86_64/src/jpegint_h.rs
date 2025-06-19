@@ -1,8 +1,8 @@
 pub type J_BUF_MODE = libc::c_uint;
-pub const JBUF_PASS_THRU: crate::jpegint_h::J_BUF_MODE = 0;
-pub const JBUF_SAVE_SOURCE: crate::jpegint_h::J_BUF_MODE = 1;
-pub const JBUF_CRANK_DEST: crate::jpegint_h::J_BUF_MODE = 2;
-pub const JBUF_SAVE_AND_PASS: crate::jpegint_h::J_BUF_MODE = 3;
+pub const JBUF_PASS_THRU: J_BUF_MODE = 0;
+pub const JBUF_SAVE_SOURCE: J_BUF_MODE = 1;
+pub const JBUF_CRANK_DEST: J_BUF_MODE = 2;
+pub const JBUF_SAVE_AND_PASS: J_BUF_MODE = 3;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct jpeg_comp_master {
@@ -18,7 +18,7 @@ pub struct jpeg_c_main_controller {
     pub start_pass: Option<
         unsafe extern "C" fn(
             _: crate::jpeglib_h::j_compress_ptr,
-            _: crate::jpegint_h::J_BUF_MODE,
+            _: J_BUF_MODE,
         ) -> (),
     >,
     pub process_data: Option<
@@ -36,7 +36,7 @@ pub struct jpeg_c_prep_controller {
     pub start_pass: Option<
         unsafe extern "C" fn(
             _: crate::jpeglib_h::j_compress_ptr,
-            _: crate::jpegint_h::J_BUF_MODE,
+            _: J_BUF_MODE,
         ) -> (),
     >,
     pub pre_process_data: Option<
@@ -57,7 +57,7 @@ pub struct jpeg_c_coef_controller {
     pub start_pass: Option<
         unsafe extern "C" fn(
             _: crate::jpeglib_h::j_compress_ptr,
-            _: crate::jpegint_h::J_BUF_MODE,
+            _: J_BUF_MODE,
         ) -> (),
     >,
     pub compress_data: Option<
@@ -111,7 +111,7 @@ pub type forward_DCT_ptr = Option<
 #[derive(Copy, Clone)]
 pub struct jpeg_forward_dct {
     pub start_pass: Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr) -> ()>,
-    pub forward_DCT: [crate::jpegint_h::forward_DCT_ptr; 10],
+    pub forward_DCT: [forward_DCT_ptr; 10],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -176,7 +176,7 @@ pub struct jpeg_d_main_controller {
     pub start_pass: Option<
         unsafe extern "C" fn(
             _: crate::jpeglib_h::j_decompress_ptr,
-            _: crate::jpegint_h::J_BUF_MODE,
+            _: J_BUF_MODE,
         ) -> (),
     >,
     pub process_data: Option<
@@ -210,7 +210,7 @@ pub struct jpeg_d_post_controller {
     pub start_pass: Option<
         unsafe extern "C" fn(
             _: crate::jpeglib_h::j_decompress_ptr,
-            _: crate::jpegint_h::J_BUF_MODE,
+            _: J_BUF_MODE,
         ) -> (),
     >,
     pub post_process_data: Option<
@@ -262,7 +262,7 @@ pub type inverse_DCT_method_ptr = Option<
 #[derive(Copy, Clone)]
 pub struct jpeg_inverse_dct {
     pub start_pass: Option<unsafe extern "C" fn(_: crate::jpeglib_h::j_decompress_ptr) -> ()>,
-    pub inverse_DCT: [crate::jpegint_h::inverse_DCT_method_ptr; 10],
+    pub inverse_DCT: [inverse_DCT_method_ptr; 10],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]

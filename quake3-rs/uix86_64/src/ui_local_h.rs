@@ -1,4 +1,4 @@
-pub type menuframework_s = crate::ui_local_h::_tag_menuframework;
+pub type menuframework_s = _tag_menuframework;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct _tag_menuframework {
@@ -25,7 +25,7 @@ pub struct menucommon_s {
     pub top: libc::c_int,
     pub right: libc::c_int,
     pub bottom: libc::c_int,
-    pub parent: *mut crate::ui_local_h::menuframework_s,
+    pub parent: *mut menuframework_s,
     pub menuPosition: libc::c_int,
     pub flags: libc::c_uint,
     pub callback: Option<unsafe extern "C" fn(_: *mut libc::c_void, _: libc::c_int) -> ()>,
@@ -44,13 +44,13 @@ pub struct mfield_t {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct menufield_s {
-    pub generic: crate::ui_local_h::menucommon_s,
-    pub field: crate::ui_local_h::mfield_t,
+    pub generic: menucommon_s,
+    pub field: mfield_t,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct menuslider_s {
-    pub generic: crate::ui_local_h::menucommon_s,
+    pub generic: menucommon_s,
     pub minvalue: libc::c_float,
     pub maxvalue: libc::c_float,
     pub curvalue: libc::c_float,
@@ -59,7 +59,7 @@ pub struct menuslider_s {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct menulist_s {
-    pub generic: crate::ui_local_h::menucommon_s,
+    pub generic: menucommon_s,
     pub oldvalue: libc::c_int,
     pub curvalue: libc::c_int,
     pub numitems: libc::c_int,
@@ -73,18 +73,18 @@ pub struct menulist_s {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct menuaction_s {
-    pub generic: crate::ui_local_h::menucommon_s,
+    pub generic: menucommon_s,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct menuradiobutton_s {
-    pub generic: crate::ui_local_h::menucommon_s,
+    pub generic: menucommon_s,
     pub curvalue: libc::c_int,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct menubitmap_s {
-    pub generic: crate::ui_local_h::menucommon_s,
+    pub generic: menucommon_s,
     pub focuspic: *mut libc::c_char,
     pub errorpic: *mut libc::c_char,
     pub shader: crate::src::qcommon::q_shared::qhandle_t,
@@ -96,7 +96,7 @@ pub struct menubitmap_s {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct menutext_s {
-    pub generic: crate::ui_local_h::menucommon_s,
+    pub generic: menucommon_s,
     pub string: *mut libc::c_char,
     pub style: libc::c_int,
     pub color: *mut libc::c_float,
@@ -122,10 +122,10 @@ pub struct lerpFrame_t {
 pub struct playerInfo_t {
     pub legsModel: crate::src::qcommon::q_shared::qhandle_t,
     pub legsSkin: crate::src::qcommon::q_shared::qhandle_t,
-    pub legs: crate::ui_local_h::lerpFrame_t,
+    pub legs: lerpFrame_t,
     pub torsoModel: crate::src::qcommon::q_shared::qhandle_t,
     pub torsoSkin: crate::src::qcommon::q_shared::qhandle_t,
-    pub torso: crate::ui_local_h::lerpFrame_t,
+    pub torso: lerpFrame_t,
     pub headModel: crate::src::qcommon::q_shared::qhandle_t,
     pub headSkin: crate::src::qcommon::q_shared::qhandle_t,
     pub animations: [crate::bg_public_h::animation_t; 31],
@@ -166,8 +166,8 @@ pub struct uiStatic_t {
     pub cursorx: libc::c_int,
     pub cursory: libc::c_int,
     pub menusp: libc::c_int,
-    pub activemenu: *mut crate::ui_local_h::menuframework_s,
-    pub stack: [*mut crate::ui_local_h::menuframework_s; 8],
+    pub activemenu: *mut menuframework_s,
+    pub stack: [*mut menuframework_s; 8],
     pub glconfig: crate::tr_types_h::glconfig_t,
     pub debug: crate::src::qcommon::q_shared::qboolean,
     pub whiteShader: crate::src::qcommon::q_shared::qhandle_t,

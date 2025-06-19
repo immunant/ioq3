@@ -1,4 +1,4 @@
-pub type projectileinfo_t = crate::be_ai_weap_h::projectileinfo_s;
+pub type projectileinfo_t = projectileinfo_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct projectileinfo_s {
@@ -17,7 +17,7 @@ pub struct projectileinfo_s {
     pub bouncefric: libc::c_float,
     pub bouncestop: libc::c_float,
 }
-pub type weaponinfo_t = crate::be_ai_weap_h::weaponinfo_s;
+pub type weaponinfo_t = weaponinfo_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct weaponinfo_s {
@@ -44,5 +44,5 @@ pub struct weaponinfo_s {
     pub reload: libc::c_float,
     pub spinup: libc::c_float,
     pub spindown: libc::c_float,
-    pub proj: crate::be_ai_weap_h::projectileinfo_t,
+    pub proj: projectileinfo_t,
 }

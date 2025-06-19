@@ -1,4 +1,4 @@
-pub type bot_initmove_t = crate::be_ai_move_h::bot_initmove_s;
+pub type bot_initmove_t = bot_initmove_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct bot_initmove_s {
@@ -27,7 +27,7 @@ pub struct bot_initmove_s {
 //item information
 
 //NOTE: the ideal_viewangles are only valid if MFL_MOVEMENTVIEW is set
-pub type bot_moveresult_t = crate::be_ai_move_h::bot_moveresult_s;
+pub type bot_moveresult_t = bot_moveresult_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct bot_moveresult_s {

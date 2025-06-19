@@ -1,24 +1,24 @@
 pub type gametype_t = libc::c_uint;
-pub const GT_FFA: crate::bg_public_h::gametype_t = 0;
+pub const GT_FFA: gametype_t = 0;
 // free for all
-pub const GT_TOURNAMENT: crate::bg_public_h::gametype_t = 1;
+pub const GT_TOURNAMENT: gametype_t = 1;
 // one on one tournament
-pub const GT_SINGLE_PLAYER: crate::bg_public_h::gametype_t = 2;
+pub const GT_SINGLE_PLAYER: gametype_t = 2;
 // single player ffa
 
 //-- team games go after this --
-pub const GT_TEAM: crate::bg_public_h::gametype_t = 3;
+pub const GT_TEAM: gametype_t = 3;
 // team deathmatch
-pub const GT_CTF: crate::bg_public_h::gametype_t = 4;
+pub const GT_CTF: gametype_t = 4;
 // capture the flag
-pub const GT_1FCTF: crate::bg_public_h::gametype_t = 5;
-pub const GT_OBELISK: crate::bg_public_h::gametype_t = 6;
-pub const GT_HARVESTER: crate::bg_public_h::gametype_t = 7;
-pub const GT_MAX_GAME_TYPE: crate::bg_public_h::gametype_t = 8;
+pub const GT_1FCTF: gametype_t = 5;
+pub const GT_OBELISK: gametype_t = 6;
+pub const GT_HARVESTER: gametype_t = 7;
+pub const GT_MAX_GAME_TYPE: gametype_t = 8;
 pub type gender_t = libc::c_uint;
-pub const GENDER_MALE: crate::bg_public_h::gender_t = 0;
-pub const GENDER_FEMALE: crate::bg_public_h::gender_t = 1;
-pub const GENDER_NEUTER: crate::bg_public_h::gender_t = 2;
+pub const GENDER_MALE: gender_t = 0;
+pub const GENDER_FEMALE: gender_t = 1;
+pub const GENDER_NEUTER: gender_t = 2;
 pub const PM_NORMAL: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 0;
 // can accelerate and turn
 pub const PM_NOCLIP: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 1;
@@ -160,30 +160,30 @@ pub const PERS_CAPTURES: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 14;
 
 // NOTE: may not have more than 16
 pub type powerup_t = libc::c_uint;
-pub const PW_NONE: crate::bg_public_h::powerup_t = 0;
-pub const PW_QUAD: crate::bg_public_h::powerup_t = 1;
-pub const PW_BATTLESUIT: crate::bg_public_h::powerup_t = 2;
-pub const PW_HASTE: crate::bg_public_h::powerup_t = 3;
-pub const PW_INVIS: crate::bg_public_h::powerup_t = 4;
-pub const PW_REGEN: crate::bg_public_h::powerup_t = 5;
-pub const PW_FLIGHT: crate::bg_public_h::powerup_t = 6;
-pub const PW_REDFLAG: crate::bg_public_h::powerup_t = 7;
-pub const PW_BLUEFLAG: crate::bg_public_h::powerup_t = 8;
-pub const PW_NEUTRALFLAG: crate::bg_public_h::powerup_t = 9;
-pub const PW_SCOUT: crate::bg_public_h::powerup_t = 10;
-pub const PW_GUARD: crate::bg_public_h::powerup_t = 11;
-pub const PW_DOUBLER: crate::bg_public_h::powerup_t = 12;
-pub const PW_AMMOREGEN: crate::bg_public_h::powerup_t = 13;
-pub const PW_INVULNERABILITY: crate::bg_public_h::powerup_t = 14;
-pub const PW_NUM_POWERUPS: crate::bg_public_h::powerup_t = 15;
+pub const PW_NONE: powerup_t = 0;
+pub const PW_QUAD: powerup_t = 1;
+pub const PW_BATTLESUIT: powerup_t = 2;
+pub const PW_HASTE: powerup_t = 3;
+pub const PW_INVIS: powerup_t = 4;
+pub const PW_REGEN: powerup_t = 5;
+pub const PW_FLIGHT: powerup_t = 6;
+pub const PW_REDFLAG: powerup_t = 7;
+pub const PW_BLUEFLAG: powerup_t = 8;
+pub const PW_NEUTRALFLAG: powerup_t = 9;
+pub const PW_SCOUT: powerup_t = 10;
+pub const PW_GUARD: powerup_t = 11;
+pub const PW_DOUBLER: powerup_t = 12;
+pub const PW_AMMOREGEN: powerup_t = 13;
+pub const PW_INVULNERABILITY: powerup_t = 14;
+pub const PW_NUM_POWERUPS: powerup_t = 15;
 pub type holdable_t = libc::c_uint;
-pub const HI_NONE: crate::bg_public_h::holdable_t = 0;
-pub const HI_TELEPORTER: crate::bg_public_h::holdable_t = 1;
-pub const HI_MEDKIT: crate::bg_public_h::holdable_t = 2;
-pub const HI_KAMIKAZE: crate::bg_public_h::holdable_t = 3;
-pub const HI_PORTAL: crate::bg_public_h::holdable_t = 4;
-pub const HI_INVULNERABILITY: crate::bg_public_h::holdable_t = 5;
-pub const HI_NUM_HOLDABLE: crate::bg_public_h::holdable_t = 6;
+pub const HI_NONE: holdable_t = 0;
+pub const HI_TELEPORTER: holdable_t = 1;
+pub const HI_MEDKIT: holdable_t = 2;
+pub const HI_KAMIKAZE: holdable_t = 3;
+pub const HI_PORTAL: holdable_t = 4;
+pub const HI_INVULNERABILITY: holdable_t = 5;
+pub const HI_NUM_HOLDABLE: holdable_t = 6;
 pub type weapon_t = libc::c_uint;
 pub const WP_NONE: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 0;
 pub const WP_GAUNTLET: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 1;
@@ -332,7 +332,7 @@ pub const FLAG_RUN: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 34;
 pub const FLAG_STAND: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 35;
 pub const FLAG_STAND2RUN: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 36;
 pub const MAX_TOTALANIMATIONS: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 37;
-pub type animation_t = crate::bg_public_h::animation_s;
+pub type animation_t = animation_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct animation_s {
@@ -350,11 +350,11 @@ pub struct animation_s {
 
 // changes so a restart of the same anim can be detected
 pub type team_t = libc::c_uint;
-pub const TEAM_FREE: crate::bg_public_h::team_t = 0;
-pub const TEAM_RED: crate::bg_public_h::team_t = 1;
-pub const TEAM_BLUE: crate::bg_public_h::team_t = 2;
-pub const TEAM_SPECTATOR: crate::bg_public_h::team_t = 3;
-pub const TEAM_NUM_TEAMS: crate::bg_public_h::team_t = 4;
+pub const TEAM_FREE: team_t = 0;
+pub const TEAM_RED: team_t = 1;
+pub const TEAM_BLUE: team_t = 2;
+pub const TEAM_SPECTATOR: team_t = 3;
+pub const TEAM_NUM_TEAMS: team_t = 4;
 pub const MOD_UNKNOWN: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 0;
 pub const MOD_SHOTGUN: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 1;
 pub const MOD_GAUNTLET: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 2;
@@ -383,26 +383,26 @@ pub const MOD_GRAPPLE: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 23;
 
 // gitem_t->type
 pub type itemType_t = libc::c_uint;
-pub const IT_BAD: crate::bg_public_h::itemType_t = 0;
-pub const IT_WEAPON: crate::bg_public_h::itemType_t = 1;
+pub const IT_BAD: itemType_t = 0;
+pub const IT_WEAPON: itemType_t = 1;
 // EFX: rotate + upscale + minlight
-pub const IT_AMMO: crate::bg_public_h::itemType_t = 2;
+pub const IT_AMMO: itemType_t = 2;
 // EFX: rotate
-pub const IT_ARMOR: crate::bg_public_h::itemType_t = 3;
+pub const IT_ARMOR: itemType_t = 3;
 // EFX: rotate + minlight
-pub const IT_HEALTH: crate::bg_public_h::itemType_t = 4;
+pub const IT_HEALTH: itemType_t = 4;
 // EFX: static external sphere + rotating internal
-pub const IT_POWERUP: crate::bg_public_h::itemType_t = 5;
+pub const IT_POWERUP: itemType_t = 5;
 // instant on, timer based
 
 // EFX: rotate + external ring that rotates
-pub const IT_HOLDABLE: crate::bg_public_h::itemType_t = 6;
+pub const IT_HOLDABLE: itemType_t = 6;
 // single use, holdable item
 
 // EFX: rotate + bob
-pub const IT_PERSISTANT_POWERUP: crate::bg_public_h::itemType_t = 7;
-pub const IT_TEAM: crate::bg_public_h::itemType_t = 8;
-pub type gitem_t = crate::bg_public_h::gitem_s;
+pub const IT_PERSISTANT_POWERUP: itemType_t = 7;
+pub const IT_TEAM: itemType_t = 8;
+pub type gitem_t = gitem_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct gitem_s {
@@ -412,7 +412,7 @@ pub struct gitem_s {
     pub icon: *mut libc::c_char,
     pub pickup_name: *mut libc::c_char,
     pub quantity: libc::c_int,
-    pub giType: crate::bg_public_h::itemType_t,
+    pub giType: itemType_t,
     pub giTag: libc::c_int,
     pub precaches: *mut libc::c_char,
     pub sounds: *mut libc::c_char,

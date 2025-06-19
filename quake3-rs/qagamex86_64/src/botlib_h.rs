@@ -1,4 +1,4 @@
-pub type bot_input_t = crate::botlib_h::bot_input_s;
+pub type bot_input_t = bot_input_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct bot_input_s {
@@ -24,7 +24,7 @@ pub struct bot_input_s {
 //item information
 
 //bsp_trace_t hit surface
-pub type bsp_surface_t = crate::botlib_h::bsp_surface_s;
+pub type bsp_surface_t = bsp_surface_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct bsp_surface_s {
@@ -35,7 +35,7 @@ pub struct bsp_surface_s {
 //remove the bsp_trace_s structure definition l8r on
 
 //a trace is returned when a box is swept through the world
-pub type bsp_trace_t = crate::botlib_h::bsp_trace_s;
+pub type bsp_trace_t = bsp_trace_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct bsp_trace_s {
@@ -46,7 +46,7 @@ pub struct bsp_trace_s {
     pub plane: crate::src::qcommon::q_shared::cplane_t,
     pub exp_dist: libc::c_float,
     pub sidenum: libc::c_int,
-    pub surface: crate::botlib_h::bsp_surface_t,
+    pub surface: bsp_surface_t,
     pub contents: libc::c_int,
     pub ent: libc::c_int,
 }
@@ -65,7 +65,7 @@ pub struct bsp_trace_s {
 // BSPTRACE
 
 //entity state
-pub type bot_entitystate_t = crate::botlib_h::bot_entitystate_s;
+pub type bot_entitystate_t = bot_entitystate_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct bot_entitystate_s {
