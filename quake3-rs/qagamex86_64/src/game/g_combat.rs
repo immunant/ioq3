@@ -241,8 +241,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -621,10 +620,8 @@ pub unsafe extern "C" fn ScorePlum(
     mut score: i32,
 ) {
     let mut plum: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    plum = crate::src::game::g_utils::G_TempEntity(
-        origin,
-        crate::bg_public_h::EV_SCOREPLUM as i32,
-    ) as *mut crate::g_local_h::gentity_s;
+    plum = crate::src::game::g_utils::G_TempEntity(origin, crate::bg_public_h::EV_SCOREPLUM as i32)
+        as *mut crate::g_local_h::gentity_s;
     // only send this temp entity to a single client
     (*plum).r.svFlags |= 0x100 as i32;
     (*plum).r.singleClient = (*ent).s.number;
@@ -688,8 +685,7 @@ pub unsafe extern "C" fn TossClientItems(mut self_0: *mut crate::g_local_h::gent
     if weapon == crate::bg_public_h::WP_MACHINEGUN as i32
         || weapon == crate::bg_public_h::WP_GRAPPLING_HOOK as i32
     {
-        if (*(*self_0).client).ps.weaponstate == crate::bg_public_h::WEAPON_DROPPING as i32
-        {
+        if (*(*self_0).client).ps.weaponstate == crate::bg_public_h::WEAPON_DROPPING as i32 {
             weapon = (*(*self_0).client).pers.cmd.weapon as i32
         }
         if (*(*self_0).client).ps.stats[crate::bg_public_h::STAT_WEAPONS as i32 as usize]
@@ -758,19 +754,19 @@ pub unsafe extern "C" fn LookAtKiller(
 ) {
     let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     if !attacker.is_null() && attacker != self_0 {
-        dir[0 as i32 as usize] = (*attacker).s.pos.trBase[0 as i32 as usize]
-            - (*self_0).s.pos.trBase[0 as i32 as usize];
-        dir[1 as i32 as usize] = (*attacker).s.pos.trBase[1 as i32 as usize]
-            - (*self_0).s.pos.trBase[1 as i32 as usize];
-        dir[2 as i32 as usize] = (*attacker).s.pos.trBase[2 as i32 as usize]
-            - (*self_0).s.pos.trBase[2 as i32 as usize]
+        dir[0 as i32 as usize] =
+            (*attacker).s.pos.trBase[0 as i32 as usize] - (*self_0).s.pos.trBase[0 as i32 as usize];
+        dir[1 as i32 as usize] =
+            (*attacker).s.pos.trBase[1 as i32 as usize] - (*self_0).s.pos.trBase[1 as i32 as usize];
+        dir[2 as i32 as usize] =
+            (*attacker).s.pos.trBase[2 as i32 as usize] - (*self_0).s.pos.trBase[2 as i32 as usize]
     } else if !inflictor.is_null() && inflictor != self_0 {
         dir[0 as i32 as usize] = (*inflictor).s.pos.trBase[0 as i32 as usize]
             - (*self_0).s.pos.trBase[0 as i32 as usize];
         dir[1 as i32 as usize] = (*inflictor).s.pos.trBase[1 as i32 as usize]
             - (*self_0).s.pos.trBase[1 as i32 as usize];
-        dir[2 as i32 as usize] = (*inflictor).s.pos.trBase[2 as i32 as usize]
-            - (*self_0).s.pos.trBase[2 as i32 as usize]
+        dir[2 as i32 as usize] =
+            (*inflictor).s.pos.trBase[2 as i32 as usize] - (*self_0).s.pos.trBase[2 as i32 as usize]
     } else {
         (*(*self_0).client).ps.stats[crate::bg_public_h::STAT_DEAD_YAW as i32 as usize] =
             (*self_0).s.angles[1 as i32 as usize] as i32;
@@ -788,10 +784,7 @@ GibEntity
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn GibEntity(
-    mut self_0: *mut crate::g_local_h::gentity_t,
-    mut killer: i32,
-) {
+pub unsafe extern "C" fn GibEntity(mut self_0: *mut crate::g_local_h::gentity_t, mut killer: i32) {
     let mut ent: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
     let mut i: i32 = 0;
     //if this entity still has kamikaze
@@ -896,15 +889,11 @@ pub unsafe extern "C" fn CheckAlmostCapture(
     let mut classname: *mut libc::c_char = 0 as *mut libc::c_char;
     // if this player was carrying a flag
     if (*(*self_0).client).ps.powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize] != 0
-        || (*(*self_0).client).ps.powerups[crate::bg_public_h::PW_BLUEFLAG as i32 as usize]
-            != 0
-        || (*(*self_0).client).ps.powerups
-            [crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize]
-            != 0
+        || (*(*self_0).client).ps.powerups[crate::bg_public_h::PW_BLUEFLAG as i32 as usize] != 0
+        || (*(*self_0).client).ps.powerups[crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize] != 0
     {
         // get the goal flag this player should have been going for
-        if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_CTF as i32
-        {
+        if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_CTF as i32 {
             if (*(*self_0).client).sess.sessionTeam as u32
                 == crate::bg_public_h::TEAM_BLUE as i32 as u32
             {
@@ -938,25 +927,20 @@ pub unsafe extern "C" fn CheckAlmostCapture(
         // if we found the destination flag and it's not picked up
         if !ent.is_null() && (*ent).r.svFlags & 0x1 as i32 == 0 {
             // if the player was *very* close
-            dir[0 as i32 as usize] = (*(*self_0).client).ps.origin
-                [0 as i32 as usize]
+            dir[0 as i32 as usize] = (*(*self_0).client).ps.origin[0 as i32 as usize]
                 - (*ent).s.origin[0 as i32 as usize];
-            dir[1 as i32 as usize] = (*(*self_0).client).ps.origin
-                [1 as i32 as usize]
+            dir[1 as i32 as usize] = (*(*self_0).client).ps.origin[1 as i32 as usize]
                 - (*ent).s.origin[1 as i32 as usize];
-            dir[2 as i32 as usize] = (*(*self_0).client).ps.origin
-                [2 as i32 as usize]
+            dir[2 as i32 as usize] = (*(*self_0).client).ps.origin[2 as i32 as usize]
                 - (*ent).s.origin[2 as i32 as usize];
             if VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
                 < 200 as i32 as f32
             {
                 (*(*self_0).client).ps.persistant
-                    [crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize] ^=
-                    0x4 as i32;
+                    [crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize] ^= 0x4 as i32;
                 if !(*attacker).client.is_null() {
                     (*(*attacker).client).ps.persistant
-                        [crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize] ^=
-                        0x4 as i32
+                        [crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize] ^= 0x4 as i32
                 }
             }
         }
@@ -996,25 +980,20 @@ pub unsafe extern "C" fn CheckAlmostScored(
         // if we found the destination obelisk
         if !ent.is_null() {
             // if the player was *very* close
-            dir[0 as i32 as usize] = (*(*self_0).client).ps.origin
-                [0 as i32 as usize]
+            dir[0 as i32 as usize] = (*(*self_0).client).ps.origin[0 as i32 as usize]
                 - (*ent).s.origin[0 as i32 as usize];
-            dir[1 as i32 as usize] = (*(*self_0).client).ps.origin
-                [1 as i32 as usize]
+            dir[1 as i32 as usize] = (*(*self_0).client).ps.origin[1 as i32 as usize]
                 - (*ent).s.origin[1 as i32 as usize];
-            dir[2 as i32 as usize] = (*(*self_0).client).ps.origin
-                [2 as i32 as usize]
+            dir[2 as i32 as usize] = (*(*self_0).client).ps.origin[2 as i32 as usize]
                 - (*ent).s.origin[2 as i32 as usize];
             if VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
                 < 200 as i32 as f32
             {
                 (*(*self_0).client).ps.persistant
-                    [crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize] ^=
-                    0x4 as i32;
+                    [crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize] ^= 0x4 as i32;
                 if !(*attacker).client.is_null() {
                     (*(*attacker).client).ps.persistant
-                        [crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize] ^=
-                        0x4 as i32
+                        [crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize] ^= 0x4 as i32
                 }
             }
         }
@@ -1140,11 +1119,7 @@ pub unsafe extern "C" fn player_die(
                 -(1 as i32),
             );
         } else {
-            AddScore(
-                attacker,
-                (*self_0).r.currentOrigin.as_mut_ptr(),
-                1 as i32,
-            );
+            AddScore(attacker, (*self_0).r.currentOrigin.as_mut_ptr(), 1 as i32);
             if meansOfDeath == crate::bg_public_h::MOD_GAUNTLET as i32 {
                 // play humiliation on player
                 (*(*attacker).client).ps.persistant
@@ -1161,8 +1136,7 @@ pub unsafe extern "C" fn player_die(
                     crate::src::game::g_main::level.time + 2000 as i32;
                 // also play humiliation on target
                 (*(*self_0).client).ps.persistant
-                    [crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize] ^=
-                    0x2 as i32
+                    [crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize] ^= 0x2 as i32
             }
             // check for two kills in a short amount of time
             // if this is close enough to the last kill, give a reward sound
@@ -1186,11 +1160,7 @@ pub unsafe extern "C" fn player_die(
             (*(*attacker).client).lastKillTime = crate::src::game::g_main::level.time
         }
     } else {
-        AddScore(
-            self_0,
-            (*self_0).r.currentOrigin.as_mut_ptr(),
-            -(1 as i32),
-        );
+        AddScore(self_0, (*self_0).r.currentOrigin.as_mut_ptr(), -(1 as i32));
     }
     // Add team bonuses
     crate::src::game::g_team::Team_FragBonuses(
@@ -1200,30 +1170,26 @@ pub unsafe extern "C" fn player_die(
     );
     // if I committed suicide, the flag does not fall, it returns.
     if meansOfDeath == crate::bg_public_h::MOD_SUICIDE as i32 {
-        if (*(*self_0).client).ps.powerups
-            [crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize]
-            != 0
+        if (*(*self_0).client).ps.powerups[crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize] != 0
         {
             // only happens in One Flag CTF
             crate::src::game::g_team::Team_ReturnFlag(crate::bg_public_h::TEAM_FREE as i32);
-            (*(*self_0).client).ps.powerups
-                [crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize] = 0 as i32
-        } else if (*(*self_0).client).ps.powerups
-            [crate::bg_public_h::PW_REDFLAG as i32 as usize]
+            (*(*self_0).client).ps.powerups[crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize] =
+                0 as i32
+        } else if (*(*self_0).client).ps.powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize]
             != 0
         {
             // only happens in standard CTF
             crate::src::game::g_team::Team_ReturnFlag(crate::bg_public_h::TEAM_RED as i32);
-            (*(*self_0).client).ps.powerups
-                [crate::bg_public_h::PW_REDFLAG as i32 as usize] = 0 as i32
-        } else if (*(*self_0).client).ps.powerups
-            [crate::bg_public_h::PW_BLUEFLAG as i32 as usize]
+            (*(*self_0).client).ps.powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize] =
+                0 as i32
+        } else if (*(*self_0).client).ps.powerups[crate::bg_public_h::PW_BLUEFLAG as i32 as usize]
             != 0
         {
             // only happens in standard CTF
             crate::src::game::g_team::Team_ReturnFlag(crate::bg_public_h::TEAM_BLUE as i32); // show scores
-            (*(*self_0).client).ps.powerups
-                [crate::bg_public_h::PW_BLUEFLAG as i32 as usize] = 0 as i32
+            (*(*self_0).client).ps.powerups[crate::bg_public_h::PW_BLUEFLAG as i32 as usize] =
+                0 as i32
         }
     }
     TossClientItems(self_0);
@@ -1235,9 +1201,7 @@ pub unsafe extern "C" fn player_die(
         let mut client: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
         client = &mut *crate::src::game::g_main::level.clients.offset(i as isize)
             as *mut crate::g_local_h::gclient_s;
-        if !((*client).pers.connected as u32
-            != crate::g_local_h::CON_CONNECTED as i32 as u32)
-        {
+        if !((*client).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32) {
             if !((*client).sess.sessionTeam as u32
                 != crate::bg_public_h::TEAM_SPECTATOR as i32 as u32)
             {
@@ -1257,20 +1221,14 @@ pub unsafe extern "C" fn player_die(
     (*self_0).s.weapon = crate::bg_public_h::WP_NONE as i32;
     (*self_0).s.powerups = 0 as i32;
     (*self_0).r.contents = 0x4000000 as i32;
-    (*self_0).s.angles[0 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*self_0).s.angles[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*self_0).s.angles[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*self_0).s.angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     LookAtKiller(self_0, inflictor, attacker);
-    (*(*self_0).client).ps.viewangles[0 as i32 as usize] =
-        (*self_0).s.angles[0 as i32 as usize];
-    (*(*self_0).client).ps.viewangles[1 as i32 as usize] =
-        (*self_0).s.angles[1 as i32 as usize];
-    (*(*self_0).client).ps.viewangles[2 as i32 as usize] =
-        (*self_0).s.angles[2 as i32 as usize];
+    (*(*self_0).client).ps.viewangles[0 as i32 as usize] = (*self_0).s.angles[0 as i32 as usize];
+    (*(*self_0).client).ps.viewangles[1 as i32 as usize] = (*self_0).s.angles[1 as i32 as usize];
+    (*(*self_0).client).ps.viewangles[2 as i32 as usize] = (*self_0).s.angles[2 as i32 as usize];
     (*self_0).s.loopSound = 0 as i32;
-    (*self_0).r.maxs[2 as i32 as usize] =
-        -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*self_0).r.maxs[2 as i32 as usize] = -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
     // don't allow respawn until the death anim is done
     // g_forcerespawn may force spawning at some later time
     (*(*self_0).client).respawnTime = crate::src::game::g_main::level.time + 1700 as i32;
@@ -1393,35 +1351,28 @@ pub unsafe extern "C" fn RaySphereIntersections(
     crate::src::qcommon::q_math::VectorNormalize(dir);
     b = 2 as i32 as f32
         * (*dir.offset(0 as i32 as isize)
-            * (*point.offset(0 as i32 as isize)
-                - *origin.offset(0 as i32 as isize))
+            * (*point.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize))
             + *dir.offset(1 as i32 as isize)
-                * (*point.offset(1 as i32 as isize)
-                    - *origin.offset(1 as i32 as isize))
+                * (*point.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize))
             + *dir.offset(2 as i32 as isize)
-                * (*point.offset(2 as i32 as isize)
-                    - *origin.offset(2 as i32 as isize)));
+                * (*point.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize)));
     c = (*point.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize))
         * (*point.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize))
         + (*point.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize))
-            * (*point.offset(1 as i32 as isize)
-                - *origin.offset(1 as i32 as isize))
+            * (*point.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize))
         + (*point.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize))
-            * (*point.offset(2 as i32 as isize)
-                - *origin.offset(2 as i32 as isize))
+            * (*point.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize))
         - radius * radius;
     d = b * b - 4 as i32 as f32 * c;
     if d > 0 as i32 as f32 {
-        t = ((-b as f64 + crate::stdlib::sqrt(d as f64))
-            / 2 as i32 as f64) as f32;
+        t = ((-b as f64 + crate::stdlib::sqrt(d as f64)) / 2 as i32 as f64) as f32;
         (*intersections.offset(0 as i32 as isize))[0 as i32 as usize] =
             *point.offset(0 as i32 as isize) + *dir.offset(0 as i32 as isize) * t;
         (*intersections.offset(0 as i32 as isize))[1 as i32 as usize] =
             *point.offset(1 as i32 as isize) + *dir.offset(1 as i32 as isize) * t;
         (*intersections.offset(0 as i32 as isize))[2 as i32 as usize] =
             *point.offset(2 as i32 as isize) + *dir.offset(2 as i32 as isize) * t;
-        t = ((-b as f64 - crate::stdlib::sqrt(d as f64))
-            / 2 as i32 as f64) as f32;
+        t = ((-b as f64 - crate::stdlib::sqrt(d as f64)) / 2 as i32 as f64) as f32;
         (*intersections.offset(1 as i32 as isize))[0 as i32 as usize] =
             *point.offset(0 as i32 as isize) + *dir.offset(0 as i32 as isize) * t;
         (*intersections.offset(1 as i32 as isize))[1 as i32 as usize] =
@@ -1432,15 +1383,12 @@ pub unsafe extern "C" fn RaySphereIntersections(
     } else {
         if d == 0 as i32 as f32 {
             t = -b / 2 as i32 as f32;
-            (*intersections.offset(0 as i32 as isize))[0 as i32 as usize] = *point
-                .offset(0 as i32 as isize)
-                + *dir.offset(0 as i32 as isize) * t;
-            (*intersections.offset(0 as i32 as isize))[1 as i32 as usize] = *point
-                .offset(1 as i32 as isize)
-                + *dir.offset(1 as i32 as isize) * t;
-            (*intersections.offset(0 as i32 as isize))[2 as i32 as usize] = *point
-                .offset(2 as i32 as isize)
-                + *dir.offset(2 as i32 as isize) * t;
+            (*intersections.offset(0 as i32 as isize))[0 as i32 as usize] =
+                *point.offset(0 as i32 as isize) + *dir.offset(0 as i32 as isize) * t;
+            (*intersections.offset(0 as i32 as isize))[1 as i32 as usize] =
+                *point.offset(1 as i32 as isize) + *dir.offset(1 as i32 as isize) * t;
+            (*intersections.offset(0 as i32 as isize))[2 as i32 as usize] =
+                *point.offset(2 as i32 as isize) + *dir.offset(2 as i32 as isize) * t;
             return 1 as i32;
         }
     }
@@ -1509,8 +1457,7 @@ pub unsafe extern "C" fn G_Damage(
     // shootable doors / buttons don't actually have any health
     if (*targ).s.eType == crate::bg_public_h::ET_MOVER as i32 {
         if (*targ).use_0.is_some()
-            && (*targ).moverState as u32
-                == crate::g_local_h::MOVER_POS1 as i32 as u32
+            && (*targ).moverState as u32 == crate::g_local_h::MOVER_POS1 as i32 as u32
         {
             (*targ).use_0.expect("non-null function pointer")(targ, inflictor, attacker);
         }
@@ -1519,8 +1466,7 @@ pub unsafe extern "C" fn G_Damage(
     // reduce damage by the attacker's handicap value
     // unless they are rocket jumping
     if !(*attacker).client.is_null() && attacker != targ {
-        max = (*(*attacker).client).ps.stats
-            [crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize];
+        max = (*(*attacker).client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize];
         damage = damage * max / 100 as i32
     }
     client = (*targ).client;
@@ -1555,15 +1501,12 @@ pub unsafe extern "C" fn G_Damage(
             * (crate::src::game::g_main::g_knockback.value * knockback as f32 / mass);
         kvel[2 as i32 as usize] = *dir.offset(2 as i32 as isize)
             * (crate::src::game::g_main::g_knockback.value * knockback as f32 / mass);
-        (*(*targ).client).ps.velocity[0 as i32 as usize] = (*(*targ).client).ps.velocity
-            [0 as i32 as usize]
-            + kvel[0 as i32 as usize];
-        (*(*targ).client).ps.velocity[1 as i32 as usize] = (*(*targ).client).ps.velocity
-            [1 as i32 as usize]
-            + kvel[1 as i32 as usize];
-        (*(*targ).client).ps.velocity[2 as i32 as usize] = (*(*targ).client).ps.velocity
-            [2 as i32 as usize]
-            + kvel[2 as i32 as usize];
+        (*(*targ).client).ps.velocity[0 as i32 as usize] =
+            (*(*targ).client).ps.velocity[0 as i32 as usize] + kvel[0 as i32 as usize];
+        (*(*targ).client).ps.velocity[1 as i32 as usize] =
+            (*(*targ).client).ps.velocity[1 as i32 as usize] + kvel[1 as i32 as usize];
+        (*(*targ).client).ps.velocity[2 as i32 as usize] =
+            (*(*targ).client).ps.velocity[2 as i32 as usize] + kvel[2 as i32 as usize];
         // set the timer so that the other client can't cancel
         // out the movement immediately
         if (*(*targ).client).ps.pm_time == 0 {
@@ -1609,9 +1552,7 @@ pub unsafe extern "C" fn G_Damage(
             crate::bg_public_h::EV_POWERUP_BATTLESUIT as i32,
             0 as i32,
         );
-        if dflags & 0x1 as i32 != 0
-            || mod_0 == crate::bg_public_h::MOD_FALLING as i32
-        {
+        if dflags & 0x1 as i32 != 0 || mod_0 == crate::bg_public_h::MOD_FALLING as i32 {
             return;
         }
         damage = (damage as f64 * 0.5f64) as i32
@@ -1630,15 +1571,12 @@ pub unsafe extern "C" fn G_Damage(
         ) as u64
             != 0
         {
-            (*(*attacker).client).ps.persistant
-                [crate::bg_public_h::PERS_HITS as i32 as usize] -= 1
+            (*(*attacker).client).ps.persistant[crate::bg_public_h::PERS_HITS as i32 as usize] -= 1
         } else {
-            (*(*attacker).client).ps.persistant
-                [crate::bg_public_h::PERS_HITS as i32 as usize] += 1
+            (*(*attacker).client).ps.persistant[crate::bg_public_h::PERS_HITS as i32 as usize] += 1
         }
         (*(*attacker).client).ps.persistant
-            [crate::bg_public_h::PERS_ATTACKEE_ARMOR as i32 as usize] = (*targ).health
-            << 8 as i32
+            [crate::bg_public_h::PERS_ATTACKEE_ARMOR as i32 as usize] = (*targ).health << 8 as i32
             | (*client).ps.stats[crate::bg_public_h::STAT_ARMOR as i32 as usize]
     }
     // always give half damage if hurting self
@@ -1678,20 +1616,14 @@ pub unsafe extern "C" fn G_Damage(
         (*client).damage_blood += take;
         (*client).damage_knockback += knockback;
         if !dir.is_null() {
-            (*client).damage_from[0 as i32 as usize] =
-                *dir.offset(0 as i32 as isize);
-            (*client).damage_from[1 as i32 as usize] =
-                *dir.offset(1 as i32 as isize);
-            (*client).damage_from[2 as i32 as usize] =
-                *dir.offset(2 as i32 as isize);
+            (*client).damage_from[0 as i32 as usize] = *dir.offset(0 as i32 as isize);
+            (*client).damage_from[1 as i32 as usize] = *dir.offset(1 as i32 as isize);
+            (*client).damage_from[2 as i32 as usize] = *dir.offset(2 as i32 as isize);
             (*client).damage_fromWorld = crate::src::qcommon::q_shared::qfalse
         } else {
-            (*client).damage_from[0 as i32 as usize] =
-                (*targ).r.currentOrigin[0 as i32 as usize];
-            (*client).damage_from[1 as i32 as usize] =
-                (*targ).r.currentOrigin[1 as i32 as usize];
-            (*client).damage_from[2 as i32 as usize] =
-                (*targ).r.currentOrigin[2 as i32 as usize];
+            (*client).damage_from[0 as i32 as usize] = (*targ).r.currentOrigin[0 as i32 as usize];
+            (*client).damage_from[1 as i32 as usize] = (*targ).r.currentOrigin[1 as i32 as usize];
+            (*client).damage_from[2 as i32 as usize] = (*targ).r.currentOrigin[2 as i32 as usize];
             (*client).damage_fromWorld = crate::src::qcommon::q_shared::qtrue
         }
     }
@@ -1781,12 +1713,12 @@ pub unsafe extern "C" fn CanDamage(
         (*targ).r.absmin[1 as i32 as usize] + (*targ).r.absmax[1 as i32 as usize];
     midpoint[2 as i32 as usize] =
         (*targ).r.absmin[2 as i32 as usize] + (*targ).r.absmax[2 as i32 as usize];
-    midpoint[0 as i32 as usize] = (midpoint[0 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    midpoint[1 as i32 as usize] = (midpoint[1 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    midpoint[2 as i32 as usize] = (midpoint[2 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+    midpoint[0 as i32 as usize] =
+        (midpoint[0 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+    midpoint[1 as i32 as usize] =
+        (midpoint[1 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+    midpoint[2 as i32 as usize] =
+        (midpoint[2 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     dest[0 as i32 as usize] = midpoint[0 as i32 as usize];
     dest[1 as i32 as usize] = midpoint[1 as i32 as usize];
     dest[2 as i32 as usize] = midpoint[2 as i32 as usize];
@@ -2210,9 +2142,7 @@ pub unsafe extern "C" fn G_RadiusDamage(
                 }
                 dist = VectorLength(v.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
                 if !(dist >= radius) {
-                    points = (damage as f64
-                        * (1.0f64 - (dist / radius) as f64))
-                        as f32;
+                    points = (damage as f64 * (1.0f64 - (dist / radius) as f64)) as f32;
                     if CanDamage(ent, origin) as u64 != 0 {
                         if crate::src::game::g_weapon::LogAccuracyHit(
                             ent as *mut crate::g_local_h::gentity_s,
@@ -2222,14 +2152,11 @@ pub unsafe extern "C" fn G_RadiusDamage(
                         {
                             hitClient = crate::src::qcommon::q_shared::qtrue
                         }
-                        dir[0 as i32 as usize] = (*ent).r.currentOrigin
-                            [0 as i32 as usize]
+                        dir[0 as i32 as usize] = (*ent).r.currentOrigin[0 as i32 as usize]
                             - *origin.offset(0 as i32 as isize);
-                        dir[1 as i32 as usize] = (*ent).r.currentOrigin
-                            [1 as i32 as usize]
+                        dir[1 as i32 as usize] = (*ent).r.currentOrigin[1 as i32 as usize]
                             - *origin.offset(1 as i32 as isize);
-                        dir[2 as i32 as usize] = (*ent).r.currentOrigin
-                            [2 as i32 as usize]
+                        dir[2 as i32 as usize] = (*ent).r.currentOrigin[2 as i32 as usize]
                             - *origin.offset(2 as i32 as isize);
                         // push the center of mass higher than the origin so players
                         // get knocked into the air more

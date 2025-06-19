@@ -117,10 +117,8 @@ pub unsafe extern "C" fn silk_stereo_quant_pred(
             step_Q13 = ((crate::src::opus_1_2_1::silk::tables_other::silk_stereo_pred_quant_Q13
                 [(i + 1 as i32) as usize] as i32
                 - low_Q13) as i64
-                * (0.5f64 / 5 as i32 as f64
-                    * ((1 as i32 as i64) << 16 as i32)
-                        as f64
-                    + 0.5f64) as crate::opus_types_h::opus_int32
+                * (0.5f64 / 5 as i32 as f64 * ((1 as i32 as i64) << 16 as i32) as f64 + 0.5f64)
+                    as crate::opus_types_h::opus_int32
                     as crate::opus_types_h::opus_int16 as i64
                 >> 16 as i32) as crate::opus_types_h::opus_int32;
             j = 0 as i32;
@@ -128,8 +126,7 @@ pub unsafe extern "C" fn silk_stereo_quant_pred(
                 lvl_Q13 = low_Q13
                     + step_Q13 as crate::opus_types_h::opus_int16
                         as crate::opus_types_h::opus_int32
-                        * (2 as i32 * j + 1 as i32)
-                            as crate::opus_types_h::opus_int16
+                        * (2 as i32 * j + 1 as i32) as crate::opus_types_h::opus_int16
                             as crate::opus_types_h::opus_int32;
                 err_Q13 = if *pred_Q13.offset(n as isize) - lvl_Q13 > 0 as i32 {
                     (*pred_Q13.offset(n as isize)) - lvl_Q13
@@ -149,12 +146,10 @@ pub unsafe extern "C" fn silk_stereo_quant_pred(
         }
         /* Error increasing, so we're past the optimum */
         (*ix.offset(n as isize))[2 as i32 as usize] =
-            ((*ix.offset(n as isize))[0 as i32 as usize] as i32 / 3 as i32)
-                as i8;
+            ((*ix.offset(n as isize))[0 as i32 as usize] as i32 / 3 as i32) as i8;
         let ref mut fresh0 = (*ix.offset(n as isize))[0 as i32 as usize];
-        *fresh0 = (*fresh0 as i32
-            - (*ix.offset(n as isize))[2 as i32 as usize] as i32 * 3 as i32)
-            as i8;
+        *fresh0 =
+            (*fresh0 as i32 - (*ix.offset(n as isize))[2 as i32 as usize] as i32 * 3 as i32) as i8;
         *pred_Q13.offset(n as isize) = quant_pred_Q13;
         n += 1
     }

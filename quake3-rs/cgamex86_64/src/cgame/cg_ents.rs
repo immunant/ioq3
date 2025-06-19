@@ -429,14 +429,10 @@ unsafe extern "C" fn CG_EntityEffects(mut cent: *mut crate::cg_local_h::centity_
         let mut g: f32 = 0.;
         let mut b: f32 = 0.;
         cl = (*cent).currentState.constantLight;
-        r = ((cl & 0xff as i32) as f32 as f64 / 255.0f64)
-            as f32;
-        g = ((cl >> 8 as i32 & 0xff as i32) as f32 as f64
-            / 255.0f64) as f32;
-        b = ((cl >> 16 as i32 & 0xff as i32) as f32 as f64
-            / 255.0f64) as f32;
-        i = ((cl >> 24 as i32 & 0xff as i32) as f32 as f64
-            * 4.0f64) as f32;
+        r = ((cl & 0xff as i32) as f32 as f64 / 255.0f64) as f32;
+        g = ((cl >> 8 as i32 & 0xff as i32) as f32 as f64 / 255.0f64) as f32;
+        b = ((cl >> 16 as i32 & 0xff as i32) as f32 as f64 / 255.0f64) as f32;
+        i = ((cl >> 24 as i32 & 0xff as i32) as f32 as f64 * 4.0f64) as f32;
         crate::src::cgame::cg_syscalls::trap_R_AddLightToScene(
             (*cent).lerpOrigin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             i,
@@ -539,13 +535,10 @@ unsafe extern "C" fn CG_Speaker(mut cent: *mut crate::cg_local_h::centity_t) {
     //	ent->s.frame = ent->wait * 10;
     //	ent->s.clientNum = ent->random * 10;
     (*cent).miscTime = ((crate::src::cgame::cg_main::cg.time
-        + (*cent).currentState.frame * 100 as i32)
-        as f64
+        + (*cent).currentState.frame * 100 as i32) as f64
         + ((*cent).currentState.clientNum * 100 as i32) as f64
             * (2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32)
-                    as f64
+                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64))) as i32;
 }
 /*
@@ -599,8 +592,7 @@ unsafe extern "C" fn CG_Item(mut cent: *mut crate::cg_local_h::centity_t) {
         .as_mut_ptr()
         .offset((*es).modelindex as isize) as *mut crate::bg_public_h::gitem_t;
     if crate::src::cgame::cg_main::cg_simpleItems.integer != 0
-        && (*item).giType as u32
-            != crate::bg_public_h::IT_TEAM as i32 as u32
+        && (*item).giType as u32 != crate::bg_public_h::IT_TEAM as i32 as u32
     {
         crate::stdlib::memset(
             &mut ent as *mut crate::tr_types_h::refEntity_t as *mut libc::c_void,
@@ -613,28 +605,21 @@ unsafe extern "C" fn CG_Item(mut cent: *mut crate::cg_local_h::centity_t) {
         ent.origin[2 as i32 as usize] = (*cent).lerpOrigin[2 as i32 as usize];
         ent.radius = 14 as i32 as f32;
         ent.customShader = crate::src::cgame::cg_main::cg_items[(*es).modelindex as usize].icon;
-        ent.shaderRGBA[0 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
-        ent.shaderRGBA[1 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
-        ent.shaderRGBA[2 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
-        ent.shaderRGBA[3 as i32 as usize] =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+        ent.shaderRGBA[0 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
+        ent.shaderRGBA[1 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
+        ent.shaderRGBA[2 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
+        ent.shaderRGBA[3 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
         crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
             &mut ent as *mut _ as *const crate::tr_types_h::refEntity_t,
         );
         return;
     }
     // items bob up and down continuously
-    scale =
-        (0.005f64 + (*cent).currentState.number as f64 * 0.00001f64) as f32;
-    (*cent).lerpOrigin[2 as i32 as usize] = ((*cent).lerpOrigin[2 as i32 as usize]
-        as f64
+    scale = (0.005f64 + (*cent).currentState.number as f64 * 0.00001f64) as f32;
+    (*cent).lerpOrigin[2 as i32 as usize] = ((*cent).lerpOrigin[2 as i32 as usize] as f64
         + (4 as i32 as f64
             + crate::stdlib::cos(
-                ((crate::src::cgame::cg_main::cg.time + 1000 as i32) as f32
-                    * scale) as f64,
+                ((crate::src::cgame::cg_main::cg.time + 1000 as i32) as f32 * scale) as f64,
             ) * 4 as i32 as f64))
         as crate::src::qcommon::q_shared::vec_t;
     crate::stdlib::memset(
@@ -643,9 +628,7 @@ unsafe extern "C" fn CG_Item(mut cent: *mut crate::cg_local_h::centity_t) {
         ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
     );
     // autorotate at one of two speeds
-    if (*item).giType as u32
-        == crate::bg_public_h::IT_HEALTH as i32 as u32
-    {
+    if (*item).giType as u32 == crate::bg_public_h::IT_HEALTH as i32 as u32 {
         (*cent).lerpAngles[0 as i32 as usize] =
             crate::src::cgame::cg_main::cg.autoAnglesFast[0 as i32 as usize];
         (*cent).lerpAngles[1 as i32 as usize] =
@@ -672,28 +655,23 @@ unsafe extern "C" fn CG_Item(mut cent: *mut crate::cg_local_h::centity_t) {
     // the weapons have their origin where they attatch to player
     // models, so we need to offset them or they will rotate
     // eccentricly
-    if (*item).giType as u32
-        == crate::bg_public_h::IT_WEAPON as i32 as u32
-    {
+    if (*item).giType as u32 == crate::bg_public_h::IT_WEAPON as i32 as u32 {
         wi = &mut *crate::src::cgame::cg_main::cg_weapons
             .as_mut_ptr()
             .offset((*item).giTag as isize) as *mut crate::cg_local_h::weaponInfo_t;
-        (*cent).lerpOrigin[0 as i32 as usize] -= (*wi).weaponMidpoint
-            [0 as i32 as usize]
+        (*cent).lerpOrigin[0 as i32 as usize] -= (*wi).weaponMidpoint[0 as i32 as usize]
             * ent.axis[0 as i32 as usize][0 as i32 as usize]
             + (*wi).weaponMidpoint[1 as i32 as usize]
                 * ent.axis[1 as i32 as usize][0 as i32 as usize]
             + (*wi).weaponMidpoint[2 as i32 as usize]
                 * ent.axis[2 as i32 as usize][0 as i32 as usize];
-        (*cent).lerpOrigin[1 as i32 as usize] -= (*wi).weaponMidpoint
-            [0 as i32 as usize]
+        (*cent).lerpOrigin[1 as i32 as usize] -= (*wi).weaponMidpoint[0 as i32 as usize]
             * ent.axis[0 as i32 as usize][1 as i32 as usize]
             + (*wi).weaponMidpoint[1 as i32 as usize]
                 * ent.axis[1 as i32 as usize][1 as i32 as usize]
             + (*wi).weaponMidpoint[2 as i32 as usize]
                 * ent.axis[2 as i32 as usize][1 as i32 as usize];
-        (*cent).lerpOrigin[2 as i32 as usize] -= (*wi).weaponMidpoint
-            [0 as i32 as usize]
+        (*cent).lerpOrigin[2 as i32 as usize] -= (*wi).weaponMidpoint[0 as i32 as usize]
             * ent.axis[0 as i32 as usize][2 as i32 as usize]
             + (*wi).weaponMidpoint[1 as i32 as usize]
                 * ent.axis[1 as i32 as usize][2 as i32 as usize]
@@ -702,8 +680,7 @@ unsafe extern "C" fn CG_Item(mut cent: *mut crate::cg_local_h::centity_t) {
         (*cent).lerpOrigin[2 as i32 as usize] += 8 as i32 as f32
         // an extra height boost
     }
-    if (*item).giType as u32
-        == crate::bg_public_h::IT_WEAPON as i32 as u32
+    if (*item).giType as u32 == crate::bg_public_h::IT_WEAPON as i32 as u32
         && (*item).giTag == crate::bg_public_h::WP_RAILGUN as i32
     {
         let mut ci: *mut crate::cg_local_h::clientInfo_t = &mut *crate::src::cgame::cg_main::cgs
@@ -716,8 +693,8 @@ unsafe extern "C" fn CG_Item(mut cent: *mut crate::cg_local_h::centity_t) {
         ent.shaderRGBA[2 as i32 as usize] = (*ci).c1RGBA[2 as i32 as usize];
         ent.shaderRGBA[3 as i32 as usize] = (*ci).c1RGBA[3 as i32 as usize]
     }
-    ent.hModel = crate::src::cgame::cg_main::cg_items[(*es).modelindex as usize].models
-        [0 as i32 as usize];
+    ent.hModel =
+        crate::src::cgame::cg_main::cg_items[(*es).modelindex as usize].models[0 as i32 as usize];
     ent.origin[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
     ent.origin[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
     ent.origin[2 as i32 as usize] = (*cent).lerpOrigin[2 as i32 as usize];
@@ -753,52 +730,47 @@ unsafe extern "C" fn CG_Item(mut cent: *mut crate::cg_local_h::centity_t) {
     }
     // items without glow textures need to keep a minimum light value
     // so they are always visible
-    if (*item).giType as u32
-        == crate::bg_public_h::IT_WEAPON as i32 as u32
-        || (*item).giType as u32
-            == crate::bg_public_h::IT_ARMOR as i32 as u32
+    if (*item).giType as u32 == crate::bg_public_h::IT_WEAPON as i32 as u32
+        || (*item).giType as u32 == crate::bg_public_h::IT_ARMOR as i32 as u32
     {
         ent.renderfx |= 0x1 as i32
     }
     // increase the size of the weapons when they are presented as items
-    if (*item).giType as u32
-        == crate::bg_public_h::IT_WEAPON as i32 as u32
-    {
+    if (*item).giType as u32 == crate::bg_public_h::IT_WEAPON as i32 as u32 {
         ent.axis[0 as i32 as usize][0 as i32 as usize] =
-            (ent.axis[0 as i32 as usize][0 as i32 as usize] as f64
-                * 1.5f64) as crate::src::qcommon::q_shared::vec_t;
+            (ent.axis[0 as i32 as usize][0 as i32 as usize] as f64 * 1.5f64)
+                as crate::src::qcommon::q_shared::vec_t;
         ent.axis[0 as i32 as usize][1 as i32 as usize] =
-            (ent.axis[0 as i32 as usize][1 as i32 as usize] as f64
-                * 1.5f64) as crate::src::qcommon::q_shared::vec_t;
+            (ent.axis[0 as i32 as usize][1 as i32 as usize] as f64 * 1.5f64)
+                as crate::src::qcommon::q_shared::vec_t;
         ent.axis[0 as i32 as usize][2 as i32 as usize] =
-            (ent.axis[0 as i32 as usize][2 as i32 as usize] as f64
-                * 1.5f64) as crate::src::qcommon::q_shared::vec_t;
+            (ent.axis[0 as i32 as usize][2 as i32 as usize] as f64 * 1.5f64)
+                as crate::src::qcommon::q_shared::vec_t;
         ent.axis[1 as i32 as usize][0 as i32 as usize] =
-            (ent.axis[1 as i32 as usize][0 as i32 as usize] as f64
-                * 1.5f64) as crate::src::qcommon::q_shared::vec_t;
+            (ent.axis[1 as i32 as usize][0 as i32 as usize] as f64 * 1.5f64)
+                as crate::src::qcommon::q_shared::vec_t;
         ent.axis[1 as i32 as usize][1 as i32 as usize] =
-            (ent.axis[1 as i32 as usize][1 as i32 as usize] as f64
-                * 1.5f64) as crate::src::qcommon::q_shared::vec_t;
+            (ent.axis[1 as i32 as usize][1 as i32 as usize] as f64 * 1.5f64)
+                as crate::src::qcommon::q_shared::vec_t;
         ent.axis[1 as i32 as usize][2 as i32 as usize] =
-            (ent.axis[1 as i32 as usize][2 as i32 as usize] as f64
-                * 1.5f64) as crate::src::qcommon::q_shared::vec_t;
+            (ent.axis[1 as i32 as usize][2 as i32 as usize] as f64 * 1.5f64)
+                as crate::src::qcommon::q_shared::vec_t;
         ent.axis[2 as i32 as usize][0 as i32 as usize] =
-            (ent.axis[2 as i32 as usize][0 as i32 as usize] as f64
-                * 1.5f64) as crate::src::qcommon::q_shared::vec_t;
+            (ent.axis[2 as i32 as usize][0 as i32 as usize] as f64 * 1.5f64)
+                as crate::src::qcommon::q_shared::vec_t;
         ent.axis[2 as i32 as usize][1 as i32 as usize] =
-            (ent.axis[2 as i32 as usize][1 as i32 as usize] as f64
-                * 1.5f64) as crate::src::qcommon::q_shared::vec_t;
+            (ent.axis[2 as i32 as usize][1 as i32 as usize] as f64 * 1.5f64)
+                as crate::src::qcommon::q_shared::vec_t;
         ent.axis[2 as i32 as usize][2 as i32 as usize] =
-            (ent.axis[2 as i32 as usize][2 as i32 as usize] as f64
-                * 1.5f64) as crate::src::qcommon::q_shared::vec_t;
+            (ent.axis[2 as i32 as usize][2 as i32 as usize] as f64 * 1.5f64)
+                as crate::src::qcommon::q_shared::vec_t;
         ent.nonNormalizedAxes = crate::src::qcommon::q_shared::qtrue
     }
     // add to refresh list
     crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
         &mut ent as *mut _ as *const crate::tr_types_h::refEntity_t,
     );
-    if (*item).giType as u32
-        == crate::bg_public_h::IT_WEAPON as i32 as u32
+    if (*item).giType as u32 == crate::bg_public_h::IT_WEAPON as i32 as u32
         && !wi.is_null()
         && (*wi).barrelModel != 0
     {
@@ -831,20 +803,14 @@ unsafe extern "C" fn CG_Item(mut cent: *mut crate::cg_local_h::centity_t) {
             ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
         );
         barrel.hModel = (*wi).barrelModel;
-        barrel.lightingOrigin[0 as i32 as usize] =
-            ent.lightingOrigin[0 as i32 as usize];
-        barrel.lightingOrigin[1 as i32 as usize] =
-            ent.lightingOrigin[1 as i32 as usize];
-        barrel.lightingOrigin[2 as i32 as usize] =
-            ent.lightingOrigin[2 as i32 as usize];
+        barrel.lightingOrigin[0 as i32 as usize] = ent.lightingOrigin[0 as i32 as usize];
+        barrel.lightingOrigin[1 as i32 as usize] = ent.lightingOrigin[1 as i32 as usize];
+        barrel.lightingOrigin[2 as i32 as usize] = ent.lightingOrigin[2 as i32 as usize];
         barrel.shadowPlane = ent.shadowPlane;
         barrel.renderfx = ent.renderfx;
-        angles[1 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        angles[0 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        angles[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        angles[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        angles[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::AnglesToAxis(
             angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             barrel.axis.as_mut_ptr(),
@@ -863,25 +829,19 @@ unsafe extern "C" fn CG_Item(mut cent: *mut crate::cg_local_h::centity_t) {
     // accompanying rings / spheres for powerups
     if crate::src::cgame::cg_main::cg_simpleItems.integer == 0 {
         let mut spinAngles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        spinAngles[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        spinAngles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         spinAngles[1 as i32 as usize] = spinAngles[2 as i32 as usize];
         spinAngles[0 as i32 as usize] = spinAngles[1 as i32 as usize];
-        if (*item).giType as u32
-            == crate::bg_public_h::IT_HEALTH as i32 as u32
-            || (*item).giType as u32
-                == crate::bg_public_h::IT_POWERUP as i32 as u32
+        if (*item).giType as u32 == crate::bg_public_h::IT_HEALTH as i32 as u32
+            || (*item).giType as u32 == crate::bg_public_h::IT_POWERUP as i32 as u32
         {
             ent.hModel = crate::src::cgame::cg_main::cg_items[(*es).modelindex as usize].models
                 [1 as i32 as usize];
             if ent.hModel != 0 as i32 {
-                if (*item).giType as u32
-                    == crate::bg_public_h::IT_POWERUP as i32 as u32
-                {
+                if (*item).giType as u32 == crate::bg_public_h::IT_POWERUP as i32 as u32 {
                     ent.origin[2 as i32 as usize] += 12 as i32 as f32;
                     spinAngles[1 as i32 as usize] =
-                        ((crate::src::cgame::cg_main::cg.time & 1023 as i32)
-                            * 360 as i32) as f32
+                        ((crate::src::cgame::cg_main::cg.time & 1023 as i32) * 360 as i32) as f32
                             / -1024.0f32
                 }
                 crate::src::qcommon::q_math::AnglesToAxis(
@@ -1048,9 +1008,7 @@ unsafe extern "C" fn CG_Missile(mut cent: *mut crate::cg_local_h::centity_t) {
             1 as i32 as crate::src::qcommon::q_shared::vec_t
     }
     // spin as it moves
-    if (*s1).pos.trType as u32
-        != crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32
-    {
+    if (*s1).pos.trType as u32 != crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32 {
         crate::src::qcommon::q_math::RotateAroundDirection(
             ent.axis.as_mut_ptr(),
             (crate::src::cgame::cg_main::cg.time / 4 as i32) as f32,
@@ -1324,32 +1282,28 @@ unsafe extern "C" fn CG_Portal(mut cent: *mut crate::cg_local_h::centity_t) {
     );
     crate::src::qcommon::q_math::PerpendicularVector(
         ent.axis[1 as i32 as usize].as_mut_ptr(),
-        ent.axis[0 as i32 as usize].as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+        ent.axis[0 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
     );
     // negating this tends to get the directions like they want
     // we really should have a camera roll value
-    ent.axis[1 as i32 as usize][0 as i32 as usize] =
-        crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize]
-            - ent.axis[1 as i32 as usize][0 as i32 as usize]; // rotation speed
-    ent.axis[1 as i32 as usize][1 as i32 as usize] =
-        crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize]
-            - ent.axis[1 as i32 as usize][1 as i32 as usize]; // roll offset
-    ent.axis[1 as i32 as usize][2 as i32 as usize] =
-        crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize]
-            - ent.axis[1 as i32 as usize][2 as i32 as usize];
+    ent.axis[1 as i32 as usize][0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
+        [0 as i32 as usize]
+        - ent.axis[1 as i32 as usize][0 as i32 as usize]; // rotation speed
+    ent.axis[1 as i32 as usize][1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
+        [1 as i32 as usize]
+        - ent.axis[1 as i32 as usize][1 as i32 as usize]; // roll offset
+    ent.axis[1 as i32 as usize][2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
+        [2 as i32 as usize]
+        - ent.axis[1 as i32 as usize][2 as i32 as usize];
     CrossProduct(
-        ent.axis[0 as i32 as usize].as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
-        ent.axis[1 as i32 as usize].as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+        ent.axis[0 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        ent.axis[1 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         ent.axis[2 as i32 as usize].as_mut_ptr(),
     );
     ent.reType = crate::tr_types_h::RT_PORTALSURFACE;
     ent.oldframe = (*s1).powerups;
     ent.frame = (*s1).frame;
-    ent.skinNum = ((*s1).clientNum as f64 / 256.0f64
-        * 360 as i32 as f64) as i32;
+    ent.skinNum = ((*s1).clientNum as f64 / 256.0f64 * 360 as i32 as f64) as i32;
     // add to refresh list
     crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
         &mut ent as *mut _ as *const crate::tr_types_h::refEntity_t,
@@ -1412,27 +1366,18 @@ pub unsafe extern "C" fn CG_RotatePoint(
     tvec[0 as i32 as usize] = *point.offset(0 as i32 as isize);
     tvec[1 as i32 as usize] = *point.offset(1 as i32 as isize);
     tvec[2 as i32 as usize] = *point.offset(2 as i32 as isize);
-    *point.offset(0 as i32 as isize) = (*matrix.offset(0 as i32 as isize))
-        [0 as i32 as usize]
+    *point.offset(0 as i32 as isize) = (*matrix.offset(0 as i32 as isize))[0 as i32 as usize]
         * tvec[0 as i32 as usize]
-        + (*matrix.offset(0 as i32 as isize))[1 as i32 as usize]
-            * tvec[1 as i32 as usize]
-        + (*matrix.offset(0 as i32 as isize))[2 as i32 as usize]
-            * tvec[2 as i32 as usize];
-    *point.offset(1 as i32 as isize) = (*matrix.offset(1 as i32 as isize))
-        [0 as i32 as usize]
+        + (*matrix.offset(0 as i32 as isize))[1 as i32 as usize] * tvec[1 as i32 as usize]
+        + (*matrix.offset(0 as i32 as isize))[2 as i32 as usize] * tvec[2 as i32 as usize];
+    *point.offset(1 as i32 as isize) = (*matrix.offset(1 as i32 as isize))[0 as i32 as usize]
         * tvec[0 as i32 as usize]
-        + (*matrix.offset(1 as i32 as isize))[1 as i32 as usize]
-            * tvec[1 as i32 as usize]
-        + (*matrix.offset(1 as i32 as isize))[2 as i32 as usize]
-            * tvec[2 as i32 as usize];
-    *point.offset(2 as i32 as isize) = (*matrix.offset(2 as i32 as isize))
-        [0 as i32 as usize]
+        + (*matrix.offset(1 as i32 as isize))[1 as i32 as usize] * tvec[1 as i32 as usize]
+        + (*matrix.offset(1 as i32 as isize))[2 as i32 as usize] * tvec[2 as i32 as usize];
+    *point.offset(2 as i32 as isize) = (*matrix.offset(2 as i32 as isize))[0 as i32 as usize]
         * tvec[0 as i32 as usize]
-        + (*matrix.offset(2 as i32 as isize))[1 as i32 as usize]
-            * tvec[1 as i32 as usize]
-        + (*matrix.offset(2 as i32 as isize))[2 as i32 as usize]
-            * tvec[2 as i32 as usize];
+        + (*matrix.offset(2 as i32 as isize))[1 as i32 as usize] * tvec[1 as i32 as usize]
+        + (*matrix.offset(2 as i32 as isize))[2 as i32 as usize] * tvec[2 as i32 as usize];
 }
 /*
 =========================
@@ -1464,18 +1409,13 @@ pub unsafe extern "C" fn CG_AdjustPositionForMover(
     let mut org: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut org2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut move2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    if moverNum <= 0 as i32
-        || moverNum >= ((1 as i32) << 10 as i32) - 2 as i32
-    {
+    if moverNum <= 0 as i32 || moverNum >= ((1 as i32) << 10 as i32) - 2 as i32 {
         *out.offset(0 as i32 as isize) = *in_0.offset(0 as i32 as isize);
         *out.offset(1 as i32 as isize) = *in_0.offset(1 as i32 as isize);
         *out.offset(2 as i32 as isize) = *in_0.offset(2 as i32 as isize);
-        *angles_out.offset(0 as i32 as isize) =
-            *angles_in.offset(0 as i32 as isize);
-        *angles_out.offset(1 as i32 as isize) =
-            *angles_in.offset(1 as i32 as isize);
-        *angles_out.offset(2 as i32 as isize) =
-            *angles_in.offset(2 as i32 as isize);
+        *angles_out.offset(0 as i32 as isize) = *angles_in.offset(0 as i32 as isize);
+        *angles_out.offset(1 as i32 as isize) = *angles_in.offset(1 as i32 as isize);
+        *angles_out.offset(2 as i32 as isize) = *angles_in.offset(2 as i32 as isize);
         return;
     }
     cent = &mut *crate::src::cgame::cg_main::cg_entities
@@ -1485,12 +1425,9 @@ pub unsafe extern "C" fn CG_AdjustPositionForMover(
         *out.offset(0 as i32 as isize) = *in_0.offset(0 as i32 as isize);
         *out.offset(1 as i32 as isize) = *in_0.offset(1 as i32 as isize);
         *out.offset(2 as i32 as isize) = *in_0.offset(2 as i32 as isize);
-        *angles_out.offset(0 as i32 as isize) =
-            *angles_in.offset(0 as i32 as isize);
-        *angles_out.offset(1 as i32 as isize) =
-            *angles_in.offset(1 as i32 as isize);
-        *angles_out.offset(2 as i32 as isize) =
-            *angles_in.offset(2 as i32 as isize);
+        *angles_out.offset(0 as i32 as isize) = *angles_in.offset(0 as i32 as isize);
+        *angles_out.offset(1 as i32 as isize) = *angles_in.offset(1 as i32 as isize);
+        *angles_out.offset(2 as i32 as isize) = *angles_in.offset(2 as i32 as isize);
         return;
     }
     crate::src::game::bg_misc::BG_EvaluateTrajectory(
@@ -1517,43 +1454,28 @@ pub unsafe extern "C" fn CG_AdjustPositionForMover(
         toTime,
         angles.as_mut_ptr(),
     );
-    deltaOrigin[0 as i32 as usize] =
-        origin[0 as i32 as usize] - oldOrigin[0 as i32 as usize];
-    deltaOrigin[1 as i32 as usize] =
-        origin[1 as i32 as usize] - oldOrigin[1 as i32 as usize];
-    deltaOrigin[2 as i32 as usize] =
-        origin[2 as i32 as usize] - oldOrigin[2 as i32 as usize];
-    deltaAngles[0 as i32 as usize] =
-        angles[0 as i32 as usize] - oldAngles[0 as i32 as usize];
-    deltaAngles[1 as i32 as usize] =
-        angles[1 as i32 as usize] - oldAngles[1 as i32 as usize];
-    deltaAngles[2 as i32 as usize] =
-        angles[2 as i32 as usize] - oldAngles[2 as i32 as usize];
+    deltaOrigin[0 as i32 as usize] = origin[0 as i32 as usize] - oldOrigin[0 as i32 as usize];
+    deltaOrigin[1 as i32 as usize] = origin[1 as i32 as usize] - oldOrigin[1 as i32 as usize];
+    deltaOrigin[2 as i32 as usize] = origin[2 as i32 as usize] - oldOrigin[2 as i32 as usize];
+    deltaAngles[0 as i32 as usize] = angles[0 as i32 as usize] - oldAngles[0 as i32 as usize];
+    deltaAngles[1 as i32 as usize] = angles[1 as i32 as usize] - oldAngles[1 as i32 as usize];
+    deltaAngles[2 as i32 as usize] = angles[2 as i32 as usize] - oldAngles[2 as i32 as usize];
     // origin change when on a rotating object
     CG_CreateRotationMatrix(deltaAngles.as_mut_ptr(), transpose.as_mut_ptr());
     CG_TransposeMatrix(transpose.as_mut_ptr(), matrix.as_mut_ptr());
-    org[0 as i32 as usize] =
-        *in_0.offset(0 as i32 as isize) - oldOrigin[0 as i32 as usize];
-    org[1 as i32 as usize] =
-        *in_0.offset(1 as i32 as isize) - oldOrigin[1 as i32 as usize];
-    org[2 as i32 as usize] =
-        *in_0.offset(2 as i32 as isize) - oldOrigin[2 as i32 as usize];
+    org[0 as i32 as usize] = *in_0.offset(0 as i32 as isize) - oldOrigin[0 as i32 as usize];
+    org[1 as i32 as usize] = *in_0.offset(1 as i32 as isize) - oldOrigin[1 as i32 as usize];
+    org[2 as i32 as usize] = *in_0.offset(2 as i32 as isize) - oldOrigin[2 as i32 as usize];
     org2[0 as i32 as usize] = org[0 as i32 as usize];
     org2[1 as i32 as usize] = org[1 as i32 as usize];
     org2[2 as i32 as usize] = org[2 as i32 as usize];
     CG_RotatePoint(org2.as_mut_ptr(), matrix.as_mut_ptr());
-    move2[0 as i32 as usize] =
-        org2[0 as i32 as usize] - org[0 as i32 as usize];
-    move2[1 as i32 as usize] =
-        org2[1 as i32 as usize] - org[1 as i32 as usize];
-    move2[2 as i32 as usize] =
-        org2[2 as i32 as usize] - org[2 as i32 as usize];
-    deltaOrigin[0 as i32 as usize] =
-        deltaOrigin[0 as i32 as usize] + move2[0 as i32 as usize];
-    deltaOrigin[1 as i32 as usize] =
-        deltaOrigin[1 as i32 as usize] + move2[1 as i32 as usize];
-    deltaOrigin[2 as i32 as usize] =
-        deltaOrigin[2 as i32 as usize] + move2[2 as i32 as usize];
+    move2[0 as i32 as usize] = org2[0 as i32 as usize] - org[0 as i32 as usize];
+    move2[1 as i32 as usize] = org2[1 as i32 as usize] - org[1 as i32 as usize];
+    move2[2 as i32 as usize] = org2[2 as i32 as usize] - org[2 as i32 as usize];
+    deltaOrigin[0 as i32 as usize] = deltaOrigin[0 as i32 as usize] + move2[0 as i32 as usize];
+    deltaOrigin[1 as i32 as usize] = deltaOrigin[1 as i32 as usize] + move2[1 as i32 as usize];
+    deltaOrigin[2 as i32 as usize] = deltaOrigin[2 as i32 as usize] + move2[2 as i32 as usize];
     *out.offset(0 as i32 as isize) =
         *in_0.offset(0 as i32 as isize) + deltaOrigin[0 as i32 as usize];
     *out.offset(1 as i32 as isize) =
@@ -1599,12 +1521,12 @@ unsafe extern "C" fn CG_InterpolateEntityPosition(mut cent: *mut crate::cg_local
         (*crate::src::cgame::cg_main::cg.nextSnap).serverTime,
         next.as_mut_ptr(),
     );
-    (*cent).lerpOrigin[0 as i32 as usize] = current[0 as i32 as usize]
-        + f * (next[0 as i32 as usize] - current[0 as i32 as usize]);
-    (*cent).lerpOrigin[1 as i32 as usize] = current[1 as i32 as usize]
-        + f * (next[1 as i32 as usize] - current[1 as i32 as usize]);
-    (*cent).lerpOrigin[2 as i32 as usize] = current[2 as i32 as usize]
-        + f * (next[2 as i32 as usize] - current[2 as i32 as usize]);
+    (*cent).lerpOrigin[0 as i32 as usize] =
+        current[0 as i32 as usize] + f * (next[0 as i32 as usize] - current[0 as i32 as usize]);
+    (*cent).lerpOrigin[1 as i32 as usize] =
+        current[1 as i32 as usize] + f * (next[1 as i32 as usize] - current[1 as i32 as usize]);
+    (*cent).lerpOrigin[2 as i32 as usize] =
+        current[2 as i32 as usize] + f * (next[2 as i32 as usize] - current[2 as i32 as usize]);
     crate::src::game::bg_misc::BG_EvaluateTrajectory(
         &mut (*cent).currentState.apos as *mut _
             as *const crate::src::qcommon::q_shared::trajectory_t,
@@ -1724,9 +1646,7 @@ unsafe extern "C" fn CG_TeamBase(mut cent: *mut crate::cg_local_h::centity_t) {
         radius: 0.,
         rotation: 0.,
     };
-    if crate::src::cgame::cg_main::cgs.gametype as u32
-        == crate::bg_public_h::GT_CTF as i32 as u32
-    {
+    if crate::src::cgame::cg_main::cgs.gametype as u32 == crate::bg_public_h::GT_CTF as i32 as u32 {
         // show the flag base
         crate::stdlib::memset(
             &mut model as *mut crate::tr_types_h::refEntity_t as *mut libc::c_void,
@@ -1734,12 +1654,9 @@ unsafe extern "C" fn CG_TeamBase(mut cent: *mut crate::cg_local_h::centity_t) {
             ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
         );
         model.reType = crate::tr_types_h::RT_MODEL;
-        model.lightingOrigin[0 as i32 as usize] =
-            (*cent).lerpOrigin[0 as i32 as usize];
-        model.lightingOrigin[1 as i32 as usize] =
-            (*cent).lerpOrigin[1 as i32 as usize];
-        model.lightingOrigin[2 as i32 as usize] =
-            (*cent).lerpOrigin[2 as i32 as usize];
+        model.lightingOrigin[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
+        model.lightingOrigin[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
+        model.lightingOrigin[2 as i32 as usize] = (*cent).lerpOrigin[2 as i32 as usize];
         model.origin[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
         model.origin[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
         model.origin[2 as i32 as usize] = (*cent).lerpOrigin[2 as i32 as usize];
@@ -2059,11 +1976,10 @@ pub unsafe extern "C" fn CG_AddPacketEntities() {
         if delta == 0 as i32 {
             crate::src::cgame::cg_main::cg.frameInterpolation = 0 as i32 as f32
         } else {
-            crate::src::cgame::cg_main::cg.frameInterpolation = (crate::src::cgame::cg_main::cg
-                .time
-                - (*crate::src::cgame::cg_main::cg.snap).serverTime)
-                as f32
-                / delta as f32
+            crate::src::cgame::cg_main::cg.frameInterpolation =
+                (crate::src::cgame::cg_main::cg.time
+                    - (*crate::src::cgame::cg_main::cg.snap).serverTime) as f32
+                    / delta as f32
         }
     } else {
         crate::src::cgame::cg_main::cg.frameInterpolation = 0 as i32 as f32
@@ -2074,17 +1990,14 @@ pub unsafe extern "C" fn CG_AddPacketEntities() {
     crate::src::cgame::cg_main::cg.autoAngles[0 as i32 as usize] =
         0 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::cgame::cg_main::cg.autoAngles[1 as i32 as usize] =
-        (((crate::src::cgame::cg_main::cg.time & 2047 as i32) * 360 as i32)
-            as f64
-            / 2048.0f64) as crate::src::qcommon::q_shared::vec_t;
+        (((crate::src::cgame::cg_main::cg.time & 2047 as i32) * 360 as i32) as f64 / 2048.0f64)
+            as crate::src::qcommon::q_shared::vec_t;
     crate::src::cgame::cg_main::cg.autoAngles[2 as i32 as usize] =
         0 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::cgame::cg_main::cg.autoAnglesFast[0 as i32 as usize] =
         0 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::cgame::cg_main::cg.autoAnglesFast[1 as i32 as usize] =
-        ((crate::src::cgame::cg_main::cg.time & 1023 as i32) * 360 as i32)
-            as f32
-            / 1024.0f32;
+        ((crate::src::cgame::cg_main::cg.time & 1023 as i32) * 360 as i32) as f32 / 1024.0f32;
     crate::src::cgame::cg_main::cg.autoAnglesFast[2 as i32 as usize] =
         0 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::qcommon::q_math::AnglesToAxis(

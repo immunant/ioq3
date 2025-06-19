@@ -443,9 +443,8 @@ pub struct jpeg_source_mgr {
     pub fill_input_buffer:
         Option<unsafe extern "C" fn(_: j_decompress_ptr) -> crate::jmorecfg_h::boolean>,
     pub skip_input_data: Option<unsafe extern "C" fn(_: j_decompress_ptr, _: libc::c_long) -> ()>,
-    pub resync_to_restart: Option<
-        unsafe extern "C" fn(_: j_decompress_ptr, _: i32) -> crate::jmorecfg_h::boolean,
-    >,
+    pub resync_to_restart:
+        Option<unsafe extern "C" fn(_: j_decompress_ptr, _: i32) -> crate::jmorecfg_h::boolean>,
     pub term_source: Option<unsafe extern "C" fn(_: j_decompress_ptr) -> ()>,
 }
 pub type jvirt_sarray_ptr = *mut jvirt_sarray_control;

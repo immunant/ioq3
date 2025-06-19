@@ -1441,9 +1441,7 @@ unsafe extern "C" fn ArenaServers_UpdateMenu() {
                         }
                     }
                     3 => {
-                        if (*servernodeptr).gametype
-                            != crate::bg_public_h::GT_TOURNAMENT as i32
-                        {
+                        if (*servernodeptr).gametype != crate::bg_public_h::GT_TOURNAMENT as i32 {
                             current_block_80 = 13325891313334703151;
                         } else {
                             current_block_80 = 17441561948628420366;
@@ -1557,8 +1555,8 @@ unsafe extern "C" fn ArenaServers_Remove() {
                         .as_mut_ptr()
                         .offset((i + 1 as i32) as isize)
                         as *mut [libc::c_char; 64] as *const libc::c_void,
-                    ((g_arenaservers.numfavoriteaddresses - i - 1 as i32)
-                        * 64 as i32) as libc::c_ulong,
+                    ((g_arenaservers.numfavoriteaddresses - i - 1 as i32) * 64 as i32)
+                        as libc::c_ulong,
                 );
             }
             g_arenaservers.numfavoriteaddresses -= 1;
@@ -1590,8 +1588,8 @@ unsafe extern "C" fn ArenaServers_Remove() {
                         as *mut libc::c_void,
                     &mut *g_favoriteserverlist
                         .as_mut_ptr()
-                        .offset((i + 1 as i32) as isize)
-                        as *mut servernode_t as *const libc::c_void,
+                        .offset((i + 1 as i32) as isize) as *mut servernode_t
+                        as *const libc::c_void,
                     ((g_numfavoriteservers - i - 1 as i32) as libc::c_ulong)
                         .wrapping_mul(::std::mem::size_of::<servernode_t>() as libc::c_ulong),
                 );
@@ -1883,10 +1881,7 @@ unsafe extern "C" fn ArenaServers_StopRefresh() {
         ::std::mem::size_of::<servernode_t>() as libc::c_ulong,
         Some(
             ArenaServers_Compare
-                as unsafe extern "C" fn(
-                    _: *const libc::c_void,
-                    _: *const libc::c_void,
-                ) -> i32,
+                as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
         ),
     );
     ArenaServers_UpdateMenu();
@@ -1925,8 +1920,7 @@ unsafe extern "C" fn ArenaServers_DoRefresh() {
                 crate::src::qcommon::q_shared::EXEC_APPEND as i32,
                 b"localservers\n\x00" as *const u8 as *const libc::c_char,
             );
-            g_arenaservers.refreshtime =
-                crate::src::q3_ui::ui_atoms::uis.realtime + 5000 as i32;
+            g_arenaservers.refreshtime = crate::src::q3_ui::ui_atoms::uis.realtime + 5000 as i32;
             return;
         }
     }
@@ -1941,12 +1935,7 @@ unsafe extern "C" fn ArenaServers_DoRefresh() {
     let mut current_block_41: u64;
     i = 0 as i32;
     while i < 32 as i32 {
-        crate::src::ui::ui_syscalls::trap_LAN_GetPing(
-            i,
-            adrstr.as_mut_ptr(),
-            64 as i32,
-            &mut time,
-        );
+        crate::src::ui::ui_syscalls::trap_LAN_GetPing(i, adrstr.as_mut_ptr(), 64 as i32, &mut time);
         if !(adrstr[0 as i32 as usize] == 0) {
             // find ping result in our local list
             j = 0 as i32;
@@ -2252,10 +2241,7 @@ pub unsafe extern "C" fn ArenaServers_Sort(mut type_0: i32) {
         ::std::mem::size_of::<servernode_t>() as libc::c_ulong,
         Some(
             ArenaServers_Compare
-                as unsafe extern "C" fn(
-                    _: *const libc::c_void,
-                    _: *const libc::c_void,
-                ) -> i32,
+                as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
         ),
     );
 }
@@ -2272,8 +2258,7 @@ pub unsafe extern "C" fn ArenaServers_SetType(mut type_0: i32) -> i32 {
         let mut masterstr: [libc::c_char; 2] = [0; 2];
         let mut cvarname: [libc::c_char; 11] = [0; 11];
         let mut direction: i32 = 0;
-        if type_0 == g_servertype || type_0 == (g_servertype + 1 as i32) % 8 as i32
-        {
+        if type_0 == g_servertype || type_0 == (g_servertype + 1 as i32) % 8 as i32 {
             direction = 1 as i32
         } else {
             direction = -(1 as i32)
@@ -2299,8 +2284,7 @@ pub unsafe extern "C" fn ArenaServers_SetType(mut type_0: i32) -> i32 {
     g_servertype = type_0;
     match type_0 {
         1 | 2 | 3 | 4 | 5 | 6 => {
-            g_arenaservers.remove.generic.flags |=
-                0x4000 as i32 as u32 | 0x1000 as i32 as u32;
+            g_arenaservers.remove.generic.flags |= 0x4000 as i32 as u32 | 0x1000 as i32 as u32;
             g_arenaservers.serverlist =
                 g_globalserverlist[(type_0 - 1 as i32) as usize].as_mut_ptr();
             g_arenaservers.numservers = &mut *g_numglobalservers
@@ -2310,15 +2294,13 @@ pub unsafe extern "C" fn ArenaServers_SetType(mut type_0: i32) -> i32 {
             g_arenaservers.maxservers = 128 as i32
         }
         7 => {
-            g_arenaservers.remove.generic.flags &=
-                !(0x4000 as i32 as u32 | 0x1000 as i32 as u32);
+            g_arenaservers.remove.generic.flags &= !(0x4000 as i32 as u32 | 0x1000 as i32 as u32);
             g_arenaservers.serverlist = g_favoriteserverlist.as_mut_ptr();
             g_arenaservers.numservers = &mut g_numfavoriteservers;
             g_arenaservers.maxservers = 16 as i32
         }
         0 | _ => {
-            g_arenaservers.remove.generic.flags |=
-                0x4000 as i32 as u32 | 0x1000 as i32 as u32;
+            g_arenaservers.remove.generic.flags |= 0x4000 as i32 as u32 | 0x1000 as i32 as u32;
             g_arenaservers.serverlist = g_localserverlist.as_mut_ptr();
             g_arenaservers.numservers = &mut g_numlocalservers;
             g_arenaservers.maxservers = 128 as i32
@@ -2517,14 +2499,11 @@ ArenaServers_MenuKey
 unsafe extern "C" fn ArenaServers_MenuKey(
     mut key: i32,
 ) -> crate::src::qcommon::q_shared::sfxHandle_t {
-    if key == crate::keycodes_h::K_SPACE as i32
-        && g_arenaservers.refreshservers as u32 != 0
-    {
+    if key == crate::keycodes_h::K_SPACE as i32 && g_arenaservers.refreshservers as u32 != 0 {
         ArenaServers_StopRefresh();
         return crate::src::q3_ui::ui_qmenu::menu_move_sound;
     }
-    if (key == crate::keycodes_h::K_DEL as i32
-        || key == crate::keycodes_h::K_KP_DEL as i32)
+    if (key == crate::keycodes_h::K_DEL as i32 || key == crate::keycodes_h::K_KP_DEL as i32)
         && g_servertype == 7 as i32
         && crate::src::q3_ui::ui_qmenu::Menu_ItemAtCursor(
             &mut g_arenaservers.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
@@ -2534,9 +2513,7 @@ unsafe extern "C" fn ArenaServers_MenuKey(
         ArenaServers_UpdateMenu();
         return crate::src::q3_ui::ui_qmenu::menu_move_sound;
     }
-    if key == crate::keycodes_h::K_MOUSE2 as i32
-        || key == crate::keycodes_h::K_ESCAPE as i32
-    {
+    if key == crate::keycodes_h::K_MOUSE2 as i32 || key == crate::keycodes_h::K_ESCAPE as i32 {
         ArenaServers_StopRefresh();
         ArenaServers_SaveChanges();
     }
@@ -2580,11 +2557,9 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     y = 80 as i32;
     g_arenaservers.master.generic.type_0 = 3 as i32;
     g_arenaservers.master.generic.name = b"Servers:\x00" as *const u8 as *const libc::c_char;
-    g_arenaservers.master.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
-    g_arenaservers.master.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.master.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
+    g_arenaservers.master.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.master.generic.id = 10 as i32;
     g_arenaservers.master.generic.x = 320 as i32;
     g_arenaservers.master.generic.y = y;
@@ -2592,11 +2567,9 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     y += 16 as i32;
     g_arenaservers.gametype.generic.type_0 = 3 as i32;
     g_arenaservers.gametype.generic.name = b"Game Type:\x00" as *const u8 as *const libc::c_char;
-    g_arenaservers.gametype.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
-    g_arenaservers.gametype.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.gametype.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
+    g_arenaservers.gametype.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.gametype.generic.id = 11 as i32;
     g_arenaservers.gametype.generic.x = 320 as i32;
     g_arenaservers.gametype.generic.y = y;
@@ -2604,11 +2577,9 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     y += 16 as i32;
     g_arenaservers.sortkey.generic.type_0 = 3 as i32;
     g_arenaservers.sortkey.generic.name = b"Sort By:\x00" as *const u8 as *const libc::c_char;
-    g_arenaservers.sortkey.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
-    g_arenaservers.sortkey.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.sortkey.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
+    g_arenaservers.sortkey.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.sortkey.generic.id = 12 as i32;
     g_arenaservers.sortkey.generic.x = 320 as i32;
     g_arenaservers.sortkey.generic.y = y;
@@ -2616,22 +2587,18 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     y += 16 as i32;
     g_arenaservers.showfull.generic.type_0 = 5 as i32;
     g_arenaservers.showfull.generic.name = b"Show Full:\x00" as *const u8 as *const libc::c_char;
-    g_arenaservers.showfull.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
-    g_arenaservers.showfull.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.showfull.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
+    g_arenaservers.showfull.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.showfull.generic.id = 13 as i32;
     g_arenaservers.showfull.generic.x = 320 as i32;
     g_arenaservers.showfull.generic.y = y;
     y += 16 as i32;
     g_arenaservers.showempty.generic.type_0 = 5 as i32;
     g_arenaservers.showempty.generic.name = b"Show Empty:\x00" as *const u8 as *const libc::c_char;
-    g_arenaservers.showempty.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
-    g_arenaservers.showempty.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.showempty.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
+    g_arenaservers.showempty.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.showempty.generic.id = 14 as i32;
     g_arenaservers.showempty.generic.x = 320 as i32;
     g_arenaservers.showempty.generic.y = y;
@@ -2639,9 +2606,8 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     g_arenaservers.list.generic.type_0 = 8 as i32;
     g_arenaservers.list.generic.flags = 0x80 as i32 as u32;
     g_arenaservers.list.generic.id = 15 as i32;
-    g_arenaservers.list.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.list.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.list.generic.x = 72 as i32;
     g_arenaservers.list.generic.y = y;
     g_arenaservers.list.width = 68 as i32;
@@ -2653,8 +2619,7 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
         i += 1
     }
     g_arenaservers.mappic.generic.type_0 = 6 as i32;
-    g_arenaservers.mappic.generic.flags =
-        0x4 as i32 as u32 | 0x4000 as i32 as u32;
+    g_arenaservers.mappic.generic.flags = 0x4 as i32 as u32 | 0x4000 as i32 as u32;
     g_arenaservers.mappic.generic.x = 72 as i32;
     g_arenaservers.mappic.generic.y = 80 as i32;
     g_arenaservers.mappic.width = 128 as i32;
@@ -2664,22 +2629,17 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     g_arenaservers.arrows.generic.type_0 = 6 as i32;
     g_arenaservers.arrows.generic.name =
         b"menu/art/arrows_vert_0\x00" as *const u8 as *const libc::c_char;
-    g_arenaservers.arrows.generic.flags =
-        0x4 as i32 as u32 | 0x4000 as i32 as u32;
-    g_arenaservers.arrows.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.arrows.generic.flags = 0x4 as i32 as u32 | 0x4000 as i32 as u32;
+    g_arenaservers.arrows.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.arrows.generic.x = 512 as i32 + 48 as i32;
     g_arenaservers.arrows.generic.y = 240 as i32 - 64 as i32 + 16 as i32;
     g_arenaservers.arrows.width = 64 as i32;
     g_arenaservers.arrows.height = 128 as i32;
     g_arenaservers.up.generic.type_0 = 6 as i32;
-    g_arenaservers.up.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x800 as i32 as u32;
-    g_arenaservers.up.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.up.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x800 as i32 as u32;
+    g_arenaservers.up.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.up.generic.id = 16 as i32;
     g_arenaservers.up.generic.x = 512 as i32 + 48 as i32;
     g_arenaservers.up.generic.y = 240 as i32 - 64 as i32 + 16 as i32;
@@ -2688,12 +2648,10 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     g_arenaservers.up.focuspic =
         b"menu/art/arrows_vert_top\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     g_arenaservers.down.generic.type_0 = 6 as i32;
-    g_arenaservers.down.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x800 as i32 as u32;
-    g_arenaservers.down.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.down.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x800 as i32 as u32;
+    g_arenaservers.down.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.down.generic.id = 17 as i32;
     g_arenaservers.down.generic.x = 512 as i32 + 48 as i32;
     g_arenaservers.down.generic.y = 240 as i32 + 16 as i32;
@@ -2719,11 +2677,9 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     g_arenaservers.remove.generic.type_0 = 6 as i32;
     g_arenaservers.remove.generic.name =
         b"menu/art/delete_0\x00" as *const u8 as *const libc::c_char;
-    g_arenaservers.remove.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
-    g_arenaservers.remove.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.remove.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
+    g_arenaservers.remove.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.remove.generic.id = 23 as i32;
     g_arenaservers.remove.generic.x = 450 as i32;
     g_arenaservers.remove.generic.y = 86 as i32;
@@ -2733,11 +2689,9 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
         b"menu/art/delete_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     g_arenaservers.back.generic.type_0 = 6 as i32;
     g_arenaservers.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    g_arenaservers.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
-    g_arenaservers.back.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
+    g_arenaservers.back.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.back.generic.id = 18 as i32;
     g_arenaservers.back.generic.x = 0 as i32;
     g_arenaservers.back.generic.y = 480 as i32 - 64 as i32;
@@ -2748,11 +2702,9 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     g_arenaservers.specify.generic.type_0 = 6 as i32;
     g_arenaservers.specify.generic.name =
         b"menu/art/specify_0\x00" as *const u8 as *const libc::c_char;
-    g_arenaservers.specify.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
-    g_arenaservers.specify.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.specify.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
+    g_arenaservers.specify.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.specify.generic.id = 20 as i32;
     g_arenaservers.specify.generic.x = 128 as i32;
     g_arenaservers.specify.generic.y = 480 as i32 - 64 as i32;
@@ -2763,11 +2715,9 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     g_arenaservers.refresh.generic.type_0 = 6 as i32;
     g_arenaservers.refresh.generic.name =
         b"menu/art/refresh_0\x00" as *const u8 as *const libc::c_char;
-    g_arenaservers.refresh.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
-    g_arenaservers.refresh.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.refresh.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
+    g_arenaservers.refresh.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.refresh.generic.id = 19 as i32;
     g_arenaservers.refresh.generic.x = 256 as i32;
     g_arenaservers.refresh.generic.y = 480 as i32 - 64 as i32;
@@ -2778,11 +2728,9 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
     g_arenaservers.create.generic.type_0 = 6 as i32;
     g_arenaservers.create.generic.name =
         b"menu/art/create_0\x00" as *const u8 as *const libc::c_char;
-    g_arenaservers.create.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
-    g_arenaservers.create.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.create.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
+    g_arenaservers.create.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.create.generic.id = 21 as i32;
     g_arenaservers.create.generic.x = 384 as i32;
     g_arenaservers.create.generic.y = 480 as i32 - 64 as i32;
@@ -2792,11 +2740,9 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
         b"menu/art/create_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     g_arenaservers.go.generic.type_0 = 6 as i32;
     g_arenaservers.go.generic.name = b"menu/art/fight_0\x00" as *const u8 as *const libc::c_char;
-    g_arenaservers.go.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
-    g_arenaservers.go.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.go.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
+    g_arenaservers.go.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.go.generic.id = 22 as i32;
     g_arenaservers.go.generic.x = 640 as i32;
     g_arenaservers.go.generic.y = 480 as i32 - 64 as i32;
@@ -2806,19 +2752,16 @@ unsafe extern "C" fn ArenaServers_MenuInit() {
         b"menu/art/fight_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     g_arenaservers.punkbuster.generic.type_0 = 3 as i32;
     g_arenaservers.punkbuster.generic.name = b"Punkbuster:\x00" as *const u8 as *const libc::c_char;
-    g_arenaservers.punkbuster.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
-    g_arenaservers.punkbuster.generic.callback = Some(
-        ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    g_arenaservers.punkbuster.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
+    g_arenaservers.punkbuster.generic.callback =
+        Some(ArenaServers_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     g_arenaservers.punkbuster.generic.id = 24 as i32;
     g_arenaservers.punkbuster.generic.x = 480 as i32 + 32 as i32;
     g_arenaservers.punkbuster.generic.y = 144 as i32;
     g_arenaservers.punkbuster.itemnames = punkbuster_items.as_mut_ptr();
     g_arenaservers.pblogo.generic.type_0 = 6 as i32;
     g_arenaservers.pblogo.generic.name = b"menu/art/pblogo\x00" as *const u8 as *const libc::c_char;
-    g_arenaservers.pblogo.generic.flags =
-        0x4 as i32 as u32 | 0x4000 as i32 as u32;
+    g_arenaservers.pblogo.generic.flags = 0x4 as i32 as u32 | 0x4000 as i32 as u32;
     g_arenaservers.pblogo.generic.x = 526 as i32;
     g_arenaservers.pblogo.generic.y = 176 as i32;
     g_arenaservers.pblogo.width = 32 as i32;

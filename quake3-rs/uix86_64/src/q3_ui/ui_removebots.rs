@@ -328,10 +328,7 @@ UI_RemoveBotsMenu_DeleteEvent
 =================
 */
 
-unsafe extern "C" fn UI_RemoveBotsMenu_DeleteEvent(
-    mut _ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_RemoveBotsMenu_DeleteEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
     if event != 3 as i32 {
         return;
     }
@@ -350,10 +347,7 @@ UI_RemoveBotsMenu_BotEvent
 =================
 */
 
-unsafe extern "C" fn UI_RemoveBotsMenu_BotEvent(
-    mut ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_RemoveBotsMenu_BotEvent(mut ptr: *mut libc::c_void, mut event: i32) {
     if event != 3 as i32 {
         return;
     }
@@ -370,10 +364,7 @@ UI_RemoveAddBotsMenu_BackEvent
 =================
 */
 
-unsafe extern "C" fn UI_RemoveBotsMenu_BackEvent(
-    mut _ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_RemoveBotsMenu_BackEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
     if event != 3 as i32 {
         return;
     }
@@ -385,10 +376,7 @@ UI_RemoveBotsMenu_UpEvent
 =================
 */
 
-unsafe extern "C" fn UI_RemoveBotsMenu_UpEvent(
-    mut _ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_RemoveBotsMenu_UpEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
     if event != 3 as i32 {
         return;
     }
@@ -403,10 +391,7 @@ UI_RemoveBotsMenu_DownEvent
 =================
 */
 
-unsafe extern "C" fn UI_RemoveBotsMenu_DownEvent(
-    mut _ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_RemoveBotsMenu_DownEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
     if event != 3 as i32 {
         return;
     }
@@ -527,28 +512,23 @@ unsafe extern "C" fn UI_RemoveBotsMenu_Init() {
     removeBotsMenuInfo.arrows.width = 64 as i32;
     removeBotsMenuInfo.arrows.height = 128 as i32;
     removeBotsMenuInfo.up.generic.type_0 = 6 as i32;
-    removeBotsMenuInfo.up.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    removeBotsMenuInfo.up.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     removeBotsMenuInfo.up.generic.x = 200 as i32;
     removeBotsMenuInfo.up.generic.y = 128 as i32;
     removeBotsMenuInfo.up.generic.id = 10 as i32;
-    removeBotsMenuInfo.up.generic.callback = Some(
-        UI_RemoveBotsMenu_UpEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    removeBotsMenuInfo.up.generic.callback =
+        Some(UI_RemoveBotsMenu_UpEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     removeBotsMenuInfo.up.width = 64 as i32;
     removeBotsMenuInfo.up.height = 64 as i32;
     removeBotsMenuInfo.up.focuspic =
         b"menu/art/arrows_vert_top\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     removeBotsMenuInfo.down.generic.type_0 = 6 as i32;
-    removeBotsMenuInfo.down.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    removeBotsMenuInfo.down.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     removeBotsMenuInfo.down.generic.x = 200 as i32;
     removeBotsMenuInfo.down.generic.y = 128 as i32 + 64 as i32;
     removeBotsMenuInfo.down.generic.id = 11 as i32;
     removeBotsMenuInfo.down.generic.callback = Some(
-        UI_RemoveBotsMenu_DownEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_RemoveBotsMenu_DownEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     removeBotsMenuInfo.down.width = 64 as i32;
     removeBotsMenuInfo.down.height = 64 as i32;
@@ -558,14 +538,12 @@ unsafe extern "C" fn UI_RemoveBotsMenu_Init() {
     y = 120 as i32;
     while n < count {
         removeBotsMenuInfo.bots[n as usize].generic.type_0 = 9 as i32;
-        removeBotsMenuInfo.bots[n as usize].generic.flags =
-            0x4 as i32 as u32 | 0x100 as i32 as u32;
+        removeBotsMenuInfo.bots[n as usize].generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
         removeBotsMenuInfo.bots[n as usize].generic.id = 20 as i32 + n;
         removeBotsMenuInfo.bots[n as usize].generic.x = 320 as i32 - 56 as i32;
         removeBotsMenuInfo.bots[n as usize].generic.y = y;
         removeBotsMenuInfo.bots[n as usize].generic.callback = Some(
-            UI_RemoveBotsMenu_BotEvent
-                as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+            UI_RemoveBotsMenu_BotEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
         );
         removeBotsMenuInfo.bots[n as usize].string =
             removeBotsMenuInfo.botnames[n as usize].as_mut_ptr();
@@ -578,17 +556,13 @@ unsafe extern "C" fn UI_RemoveBotsMenu_Init() {
     removeBotsMenuInfo.delete.generic.type_0 = 6 as i32;
     removeBotsMenuInfo.delete.generic.name =
         b"menu/art/delete_0\x00" as *const u8 as *const libc::c_char;
-    removeBotsMenuInfo.delete.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    removeBotsMenuInfo.delete.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     removeBotsMenuInfo.delete.generic.id = 12 as i32;
     removeBotsMenuInfo.delete.generic.callback = Some(
-        UI_RemoveBotsMenu_DeleteEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_RemoveBotsMenu_DeleteEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
-    removeBotsMenuInfo.delete.generic.x =
-        320 as i32 + 128 as i32 - 128 as i32;
-    removeBotsMenuInfo.delete.generic.y =
-        256 as i32 + 128 as i32 - 64 as i32;
+    removeBotsMenuInfo.delete.generic.x = 320 as i32 + 128 as i32 - 128 as i32;
+    removeBotsMenuInfo.delete.generic.y = 256 as i32 + 128 as i32 - 64 as i32;
     removeBotsMenuInfo.delete.width = 128 as i32;
     removeBotsMenuInfo.delete.height = 64 as i32;
     removeBotsMenuInfo.delete.focuspic =
@@ -596,12 +570,10 @@ unsafe extern "C" fn UI_RemoveBotsMenu_Init() {
     removeBotsMenuInfo.back.generic.type_0 = 6 as i32;
     removeBotsMenuInfo.back.generic.name =
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    removeBotsMenuInfo.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    removeBotsMenuInfo.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     removeBotsMenuInfo.back.generic.id = 13 as i32;
     removeBotsMenuInfo.back.generic.callback = Some(
-        UI_RemoveBotsMenu_BackEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_RemoveBotsMenu_BackEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     removeBotsMenuInfo.back.generic.x = 320 as i32 - 128 as i32;
     removeBotsMenuInfo.back.generic.y = 256 as i32 + 128 as i32 - 64 as i32;

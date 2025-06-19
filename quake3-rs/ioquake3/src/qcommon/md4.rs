@@ -499,14 +499,11 @@ unsafe extern "C" fn copy64(
         *M.offset(i as isize) = (*in_0.offset((i * 4 as i32 + 3 as i32) as isize)
             as crate::stdlib::uint32_t)
             << 24 as i32
-            | (*in_0.offset((i * 4 as i32 + 2 as i32) as isize)
-                as crate::stdlib::uint32_t)
+            | (*in_0.offset((i * 4 as i32 + 2 as i32) as isize) as crate::stdlib::uint32_t)
                 << 16 as i32
-            | (*in_0.offset((i * 4 as i32 + 1 as i32) as isize)
-                as crate::stdlib::uint32_t)
+            | (*in_0.offset((i * 4 as i32 + 1 as i32) as isize) as crate::stdlib::uint32_t)
                 << 8 as i32
-            | (*in_0.offset((i * 4 as i32 + 0 as i32) as isize)
-                as crate::stdlib::uint32_t)
+            | (*in_0.offset((i * 4 as i32 + 0 as i32) as isize) as crate::stdlib::uint32_t)
                 << 0 as i32;
         i += 1
     }
@@ -518,15 +515,12 @@ unsafe extern "C" fn copy4(
 ) {
     *out.offset(0 as i32 as isize) =
         (x & 0xff as i32 as u32) as crate::src::qcommon::q_shared::byte;
-    *out.offset(1 as i32 as isize) = (x >> 8 as i32
-        & 0xff as i32 as u32)
-        as crate::src::qcommon::q_shared::byte;
-    *out.offset(2 as i32 as isize) = (x >> 16 as i32
-        & 0xff as i32 as u32)
-        as crate::src::qcommon::q_shared::byte;
-    *out.offset(3 as i32 as isize) = (x >> 24 as i32
-        & 0xff as i32 as u32)
-        as crate::src::qcommon::q_shared::byte;
+    *out.offset(1 as i32 as isize) =
+        (x >> 8 as i32 & 0xff as i32 as u32) as crate::src::qcommon::q_shared::byte;
+    *out.offset(2 as i32 as isize) =
+        (x >> 16 as i32 & 0xff as i32 as u32) as crate::src::qcommon::q_shared::byte;
+    *out.offset(3 as i32 as isize) =
+        (x >> 24 as i32 & 0xff as i32 as u32) as crate::src::qcommon::q_shared::byte;
 }
 #[no_mangle]
 
@@ -538,15 +532,12 @@ pub unsafe extern "C" fn mdfour_begin(mut md: *mut mdfour) {
     (*md).totalN = 0 as i32 as crate::stdlib::uint32_t;
 }
 
-unsafe extern "C" fn mdfour_tail(
-    mut in_0: *mut crate::src::qcommon::q_shared::byte,
-    mut n: i32,
-) {
+unsafe extern "C" fn mdfour_tail(mut in_0: *mut crate::src::qcommon::q_shared::byte, mut n: i32) {
     let mut buf: [crate::src::qcommon::q_shared::byte; 128] = [0; 128];
     let mut M: [crate::stdlib::uint32_t; 16] = [0; 16];
     let mut b: crate::stdlib::uint32_t = 0;
-    (*m).totalN = ((*m).totalN as u32).wrapping_add(n as u32)
-        as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    (*m).totalN = ((*m).totalN as u32).wrapping_add(n as u32) as crate::stdlib::uint32_t
+        as crate::stdlib::uint32_t;
     b = (*m).totalN.wrapping_mul(8 as i32 as u32);
     crate::stdlib::memset(
         buf.as_mut_ptr() as *mut libc::c_void,
@@ -569,10 +560,7 @@ unsafe extern "C" fn mdfour_tail(
         copy4(buf.as_mut_ptr().offset(120 as i32 as isize), b);
         copy64(M.as_mut_ptr(), buf.as_mut_ptr());
         mdfour64(M.as_mut_ptr());
-        copy64(
-            M.as_mut_ptr(),
-            buf.as_mut_ptr().offset(64 as i32 as isize),
-        );
+        copy64(M.as_mut_ptr(), buf.as_mut_ptr().offset(64 as i32 as isize));
         mdfour64(M.as_mut_ptr());
     };
 }
@@ -592,8 +580,8 @@ unsafe extern "C" fn mdfour_update(
         mdfour64(M.as_mut_ptr());
         in_0 = in_0.offset(64 as i32 as isize);
         n -= 64 as i32;
-        (*m).totalN = ((*m).totalN as u32).wrapping_add(64 as i32 as u32)
-            as crate::stdlib::uint32_t as crate::stdlib::uint32_t
+        (*m).totalN = ((*m).totalN as u32).wrapping_add(64 as i32 as u32) as crate::stdlib::uint32_t
+            as crate::stdlib::uint32_t
     }
     mdfour_tail(in_0, n);
 }

@@ -203,21 +203,21 @@ pub unsafe extern "C" fn silk_VQ_WMat_EC_c(
     let mut bits_res_Q8: crate::opus_types_h::opus_int32 = 0;
     let mut bits_tot_Q8: crate::opus_types_h::opus_int32 = 0;
     /* Negate and convert to new Q domain */
-    neg_xX_Q24[0 as i32 as usize] =
-        -(((*xX_Q17.offset(0 as i32 as isize) as crate::opus_types_h::opus_uint32)
-            << 7 as i32) as crate::opus_types_h::opus_int32);
-    neg_xX_Q24[1 as i32 as usize] =
-        -(((*xX_Q17.offset(1 as i32 as isize) as crate::opus_types_h::opus_uint32)
-            << 7 as i32) as crate::opus_types_h::opus_int32);
-    neg_xX_Q24[2 as i32 as usize] =
-        -(((*xX_Q17.offset(2 as i32 as isize) as crate::opus_types_h::opus_uint32)
-            << 7 as i32) as crate::opus_types_h::opus_int32);
-    neg_xX_Q24[3 as i32 as usize] =
-        -(((*xX_Q17.offset(3 as i32 as isize) as crate::opus_types_h::opus_uint32)
-            << 7 as i32) as crate::opus_types_h::opus_int32);
-    neg_xX_Q24[4 as i32 as usize] =
-        -(((*xX_Q17.offset(4 as i32 as isize) as crate::opus_types_h::opus_uint32)
-            << 7 as i32) as crate::opus_types_h::opus_int32);
+    neg_xX_Q24[0 as i32 as usize] = -(((*xX_Q17.offset(0 as i32 as isize)
+        as crate::opus_types_h::opus_uint32)
+        << 7 as i32) as crate::opus_types_h::opus_int32);
+    neg_xX_Q24[1 as i32 as usize] = -(((*xX_Q17.offset(1 as i32 as isize)
+        as crate::opus_types_h::opus_uint32)
+        << 7 as i32) as crate::opus_types_h::opus_int32);
+    neg_xX_Q24[2 as i32 as usize] = -(((*xX_Q17.offset(2 as i32 as isize)
+        as crate::opus_types_h::opus_uint32)
+        << 7 as i32) as crate::opus_types_h::opus_int32);
+    neg_xX_Q24[3 as i32 as usize] = -(((*xX_Q17.offset(3 as i32 as isize)
+        as crate::opus_types_h::opus_uint32)
+        << 7 as i32) as crate::opus_types_h::opus_int32);
+    neg_xX_Q24[4 as i32 as usize] = -(((*xX_Q17.offset(4 as i32 as isize)
+        as crate::opus_types_h::opus_uint32)
+        << 7 as i32) as crate::opus_types_h::opus_int32);
     /* Loop over codebook */
     *rate_dist_Q8 = 0x7fffffff as i32;
     *res_nrg_Q15 = 0x7fffffff as i32;
@@ -230,9 +230,8 @@ pub unsafe extern "C" fn silk_VQ_WMat_EC_c(
         gain_tmp_Q7 = *cb_gain_Q7.offset(k as isize) as i32;
         /* Weighted rate */
         /* Quantization error: 1 - 2 * xX * cb + cb' * XX * cb */
-        sum1_Q15 = (1.001f64
-            * ((1 as i32 as i64) << 15 as i32) as f64
-            + 0.5f64) as crate::opus_types_h::opus_int32;
+        sum1_Q15 = (1.001f64 * ((1 as i32 as i64) << 15 as i32) as f64 + 0.5f64)
+            as crate::opus_types_h::opus_int32;
         /* Penalty for too large gain */
         penalty = (((if gain_tmp_Q7 - max_gain_Q7 > 0 as i32 {
             (gain_tmp_Q7) - max_gain_Q7
@@ -242,88 +241,68 @@ pub unsafe extern "C" fn silk_VQ_WMat_EC_c(
             << 11 as i32) as crate::opus_types_h::opus_int32;
         /* first row of XX_Q17 */
         sum2_Q24 = neg_xX_Q24[0 as i32 as usize]
-            + *XX_Q17.offset(1 as i32 as isize)
-                * *cb_row_Q7.offset(1 as i32 as isize) as i32;
+            + *XX_Q17.offset(1 as i32 as isize) * *cb_row_Q7.offset(1 as i32 as isize) as i32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(2 as i32 as isize)
-                * *cb_row_Q7.offset(2 as i32 as isize) as i32;
+            + *XX_Q17.offset(2 as i32 as isize) * *cb_row_Q7.offset(2 as i32 as isize) as i32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(3 as i32 as isize)
-                * *cb_row_Q7.offset(3 as i32 as isize) as i32;
+            + *XX_Q17.offset(3 as i32 as isize) * *cb_row_Q7.offset(3 as i32 as isize) as i32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(4 as i32 as isize)
-                * *cb_row_Q7.offset(4 as i32 as isize) as i32;
+            + *XX_Q17.offset(4 as i32 as isize) * *cb_row_Q7.offset(4 as i32 as isize) as i32;
         sum2_Q24 = ((sum2_Q24 as crate::opus_types_h::opus_uint32) << 1 as i32)
             as crate::opus_types_h::opus_int32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(0 as i32 as isize)
-                * *cb_row_Q7.offset(0 as i32 as isize) as i32;
+            + *XX_Q17.offset(0 as i32 as isize) * *cb_row_Q7.offset(0 as i32 as isize) as i32;
         sum1_Q15 = (sum1_Q15 as i64
             + (sum2_Q24 as i64
-                * *cb_row_Q7.offset(0 as i32 as isize) as crate::opus_types_h::opus_int16
-                    as i64
+                * *cb_row_Q7.offset(0 as i32 as isize) as crate::opus_types_h::opus_int16 as i64
                 >> 16 as i32)) as crate::opus_types_h::opus_int32;
         /* second row of XX_Q17 */
         sum2_Q24 = neg_xX_Q24[1 as i32 as usize]
-            + *XX_Q17.offset(7 as i32 as isize)
-                * *cb_row_Q7.offset(2 as i32 as isize) as i32;
+            + *XX_Q17.offset(7 as i32 as isize) * *cb_row_Q7.offset(2 as i32 as isize) as i32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(8 as i32 as isize)
-                * *cb_row_Q7.offset(3 as i32 as isize) as i32;
+            + *XX_Q17.offset(8 as i32 as isize) * *cb_row_Q7.offset(3 as i32 as isize) as i32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(9 as i32 as isize)
-                * *cb_row_Q7.offset(4 as i32 as isize) as i32;
+            + *XX_Q17.offset(9 as i32 as isize) * *cb_row_Q7.offset(4 as i32 as isize) as i32;
         sum2_Q24 = ((sum2_Q24 as crate::opus_types_h::opus_uint32) << 1 as i32)
             as crate::opus_types_h::opus_int32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(6 as i32 as isize)
-                * *cb_row_Q7.offset(1 as i32 as isize) as i32;
+            + *XX_Q17.offset(6 as i32 as isize) * *cb_row_Q7.offset(1 as i32 as isize) as i32;
         sum1_Q15 = (sum1_Q15 as i64
             + (sum2_Q24 as i64
-                * *cb_row_Q7.offset(1 as i32 as isize) as crate::opus_types_h::opus_int16
-                    as i64
+                * *cb_row_Q7.offset(1 as i32 as isize) as crate::opus_types_h::opus_int16 as i64
                 >> 16 as i32)) as crate::opus_types_h::opus_int32;
         /* third row of XX_Q17 */
         sum2_Q24 = neg_xX_Q24[2 as i32 as usize]
-            + *XX_Q17.offset(13 as i32 as isize)
-                * *cb_row_Q7.offset(3 as i32 as isize) as i32;
+            + *XX_Q17.offset(13 as i32 as isize) * *cb_row_Q7.offset(3 as i32 as isize) as i32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(14 as i32 as isize)
-                * *cb_row_Q7.offset(4 as i32 as isize) as i32;
+            + *XX_Q17.offset(14 as i32 as isize) * *cb_row_Q7.offset(4 as i32 as isize) as i32;
         sum2_Q24 = ((sum2_Q24 as crate::opus_types_h::opus_uint32) << 1 as i32)
             as crate::opus_types_h::opus_int32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(12 as i32 as isize)
-                * *cb_row_Q7.offset(2 as i32 as isize) as i32;
+            + *XX_Q17.offset(12 as i32 as isize) * *cb_row_Q7.offset(2 as i32 as isize) as i32;
         sum1_Q15 = (sum1_Q15 as i64
             + (sum2_Q24 as i64
-                * *cb_row_Q7.offset(2 as i32 as isize) as crate::opus_types_h::opus_int16
-                    as i64
+                * *cb_row_Q7.offset(2 as i32 as isize) as crate::opus_types_h::opus_int16 as i64
                 >> 16 as i32)) as crate::opus_types_h::opus_int32;
         /* fourth row of XX_Q17 */
         sum2_Q24 = neg_xX_Q24[3 as i32 as usize]
-            + *XX_Q17.offset(19 as i32 as isize)
-                * *cb_row_Q7.offset(4 as i32 as isize) as i32;
+            + *XX_Q17.offset(19 as i32 as isize) * *cb_row_Q7.offset(4 as i32 as isize) as i32;
         sum2_Q24 = ((sum2_Q24 as crate::opus_types_h::opus_uint32) << 1 as i32)
             as crate::opus_types_h::opus_int32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(18 as i32 as isize)
-                * *cb_row_Q7.offset(3 as i32 as isize) as i32;
+            + *XX_Q17.offset(18 as i32 as isize) * *cb_row_Q7.offset(3 as i32 as isize) as i32;
         sum1_Q15 = (sum1_Q15 as i64
             + (sum2_Q24 as i64
-                * *cb_row_Q7.offset(3 as i32 as isize) as crate::opus_types_h::opus_int16
-                    as i64
+                * *cb_row_Q7.offset(3 as i32 as isize) as crate::opus_types_h::opus_int16 as i64
                 >> 16 as i32)) as crate::opus_types_h::opus_int32;
         /* last row of XX_Q17 */
-        sum2_Q24 = ((neg_xX_Q24[4 as i32 as usize] as crate::opus_types_h::opus_uint32)
-            << 1 as i32) as crate::opus_types_h::opus_int32;
+        sum2_Q24 = ((neg_xX_Q24[4 as i32 as usize] as crate::opus_types_h::opus_uint32) << 1 as i32)
+            as crate::opus_types_h::opus_int32;
         sum2_Q24 = sum2_Q24
-            + *XX_Q17.offset(24 as i32 as isize)
-                * *cb_row_Q7.offset(4 as i32 as isize) as i32;
+            + *XX_Q17.offset(24 as i32 as isize) * *cb_row_Q7.offset(4 as i32 as isize) as i32;
         sum1_Q15 = (sum1_Q15 as i64
             + (sum2_Q24 as i64
-                * *cb_row_Q7.offset(4 as i32 as isize) as crate::opus_types_h::opus_int16
-                    as i64
+                * *cb_row_Q7.offset(4 as i32 as isize) as crate::opus_types_h::opus_int16 as i64
                 >> 16 as i32)) as crate::opus_types_h::opus_int32;
         /* find best */
         if sum1_Q15 >= 0 as i32 {
@@ -337,8 +316,7 @@ pub unsafe extern "C" fn silk_VQ_WMat_EC_c(
             /* In the following line we reduce the codelength component by half ("-1"); seems to slghtly improve quality */
             bits_tot_Q8 = bits_res_Q8
                 + ((*cl_Q5.offset(k as isize) as crate::opus_types_h::opus_uint32)
-                    << 3 as i32 - 1 as i32)
-                    as crate::opus_types_h::opus_int32;
+                    << 3 as i32 - 1 as i32) as crate::opus_types_h::opus_int32;
             if bits_tot_Q8 <= *rate_dist_Q8 {
                 *rate_dist_Q8 = bits_tot_Q8;
                 *res_nrg_Q15 = sum1_Q15 + penalty;

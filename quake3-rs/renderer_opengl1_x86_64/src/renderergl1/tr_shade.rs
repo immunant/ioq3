@@ -10,8 +10,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -379,17 +378,13 @@ unsafe extern "C" fn R_ArrayElementDiscrete(mut index: crate::stdlib::GLint) {
     if crate::src::renderergl1::tr_init::glState.currenttmu != 0 {
         crate::src::sdl::sdl_glimp::qglMultiTexCoord2fARB.expect("non-null function pointer")(
             0 as i32 as crate::stdlib::GLenum,
-            tess.svars.texcoords[0 as i32 as usize][index as usize]
-                [0 as i32 as usize],
-            tess.svars.texcoords[0 as i32 as usize][index as usize]
-                [1 as i32 as usize],
+            tess.svars.texcoords[0 as i32 as usize][index as usize][0 as i32 as usize],
+            tess.svars.texcoords[0 as i32 as usize][index as usize][1 as i32 as usize],
         );
         crate::src::sdl::sdl_glimp::qglMultiTexCoord2fARB.expect("non-null function pointer")(
             1 as i32 as crate::stdlib::GLenum,
-            tess.svars.texcoords[1 as i32 as usize][index as usize]
-                [0 as i32 as usize],
-            tess.svars.texcoords[1 as i32 as usize][index as usize]
-                [1 as i32 as usize],
+            tess.svars.texcoords[1 as i32 as usize][index as usize][0 as i32 as usize],
+            tess.svars.texcoords[1 as i32 as usize][index as usize][1 as i32 as usize],
         );
     } else {
         crate::src::sdl::sdl_glimp::qglTexCoord2fv.expect("non-null function pointer")(
@@ -418,11 +413,7 @@ unsafe extern "C" fn R_DrawStripElements(
     mut element: Option<unsafe extern "C" fn(_: crate::stdlib::GLint) -> ()>,
 ) {
     let mut i: i32 = 0;
-    let mut last: [i32; 3] = [
-        -(1 as i32),
-        -(1 as i32),
-        -(1 as i32),
-    ];
+    let mut last: [i32; 3] = [-(1 as i32), -(1 as i32), -(1 as i32)];
     let mut even: crate::src::qcommon::q_shared::qboolean = crate::src::qcommon::q_shared::qfalse;
     c_begins += 1;
     if numIndexes <= 0 as i32 {
@@ -451,10 +442,8 @@ unsafe extern "C" fn R_DrawStripElements(
         // odd numbered triangle in potential strip
         if even as u64 == 0 {
             // check previous triangle to see if we're continuing a strip
-            if *indexes.offset((i + 0 as i32) as isize)
-                == last[2 as i32 as usize] as u32
-                && *indexes.offset((i + 1 as i32) as isize)
-                    == last[1 as i32 as usize] as u32
+            if *indexes.offset((i + 0 as i32) as isize) == last[2 as i32 as usize] as u32
+                && *indexes.offset((i + 1 as i32) as isize) == last[1 as i32 as usize] as u32
             {
                 element.expect("non-null function pointer")(
                     *indexes.offset((i + 2 as i32) as isize) as crate::stdlib::GLint,
@@ -481,13 +470,11 @@ unsafe extern "C" fn R_DrawStripElements(
                 c_vertexes += 3 as i32;
                 even = crate::src::qcommon::q_shared::qfalse
             }
-        } else if last[2 as i32 as usize] as u32
-            == *indexes.offset((i + 1 as i32) as isize)
-            && last[0 as i32 as usize] as u32
-                == *indexes.offset((i + 0 as i32) as isize)
+        } else if last[2 as i32 as usize] as u32 == *indexes.offset((i + 1 as i32) as isize)
+            && last[0 as i32 as usize] as u32 == *indexes.offset((i + 0 as i32) as isize)
         {
             element.expect("non-null function pointer")(
-                *indexes.offset((i + 2 as i32) as isize) as crate::stdlib::GLint,
+                *indexes.offset((i + 2 as i32) as isize) as crate::stdlib::GLint
             );
             c_vertexes += 1;
             even = crate::src::qcommon::q_shared::qfalse
@@ -501,24 +488,21 @@ unsafe extern "C" fn R_DrawStripElements(
             );
             c_begins += 1;
             element.expect("non-null function pointer")(
-                *indexes.offset((i + 0 as i32) as isize) as crate::stdlib::GLint,
+                *indexes.offset((i + 0 as i32) as isize) as crate::stdlib::GLint
             );
             element.expect("non-null function pointer")(
-                *indexes.offset((i + 1 as i32) as isize) as crate::stdlib::GLint,
+                *indexes.offset((i + 1 as i32) as isize) as crate::stdlib::GLint
             );
             element.expect("non-null function pointer")(
-                *indexes.offset((i + 2 as i32) as isize) as crate::stdlib::GLint,
+                *indexes.offset((i + 2 as i32) as isize) as crate::stdlib::GLint
             );
             c_vertexes += 3 as i32;
             even = crate::src::qcommon::q_shared::qfalse
         }
         // cache the last three vertices
-        last[0 as i32 as usize] =
-            *indexes.offset((i + 0 as i32) as isize) as i32;
-        last[1 as i32 as usize] =
-            *indexes.offset((i + 1 as i32) as isize) as i32;
-        last[2 as i32 as usize] =
-            *indexes.offset((i + 2 as i32) as isize) as i32;
+        last[0 as i32 as usize] = *indexes.offset((i + 0 as i32) as isize) as i32;
+        last[1 as i32 as usize] = *indexes.offset((i + 1 as i32) as isize) as i32;
+        last[2 as i32 as usize] = *indexes.offset((i + 2 as i32) as isize) as i32;
         i += 3 as i32
     }
     crate::src::sdl::sdl_glimp::qglEnd.expect("non-null function pointer")();
@@ -732,9 +716,8 @@ unsafe extern "C" fn R_BindAnimatedImage(mut bundle: *mut crate::tr_local_h::tex
     }
     // it is necessary to do this messy calc to make sure animations line up
     // exactly with waveforms of the same frequency
-    index = (tess.shaderTime
-        * (*bundle).imageAnimationSpeed as f64
-        * 1024 as i32 as f64) as crate::stdlib::int64_t;
+    index = (tess.shaderTime * (*bundle).imageAnimationSpeed as f64 * 1024 as i32 as f64)
+        as crate::stdlib::int64_t;
     index >>= 10 as i32;
     if index < 0 as i32 as libc::c_long {
         index = 0 as i32 as crate::stdlib::int64_t
@@ -766,9 +749,7 @@ unsafe extern "C" fn DrawTris(mut input: *mut crate::tr_local_h::shaderCommands_
         1 as i32 as crate::stdlib::GLfloat,
         1 as i32 as crate::stdlib::GLfloat,
     );
-    crate::src::renderergl1::tr_backend::GL_State(
-        (0x1000 as i32 | 0x100 as i32) as libc::c_ulong,
-    );
+    crate::src::renderergl1::tr_backend::GL_State((0x1000 as i32 | 0x100 as i32) as libc::c_ulong);
     crate::src::sdl::sdl_glimp::qglDepthRange.expect("non-null function pointer")(
         0 as i32 as crate::stdlib::GLclampd,
         0 as i32 as crate::stdlib::GLclampd,
@@ -829,9 +810,7 @@ unsafe extern "C" fn DrawNormals(mut input: *mut crate::tr_local_h::shaderComman
         0 as i32 as crate::stdlib::GLclampd,
         0 as i32 as crate::stdlib::GLclampd,
     );
-    crate::src::renderergl1::tr_backend::GL_State(
-        (0x1000 as i32 | 0x100 as i32) as libc::c_ulong,
-    );
+    crate::src::renderergl1::tr_backend::GL_State((0x1000 as i32 | 0x100 as i32) as libc::c_ulong);
     crate::src::sdl::sdl_glimp::qglBegin.expect("non-null function pointer")(
         0x1 as i32 as crate::stdlib::GLenum,
     );
@@ -841,14 +820,11 @@ unsafe extern "C" fn DrawNormals(mut input: *mut crate::tr_local_h::shaderComman
             (*input).xyz[i as usize].as_mut_ptr(),
         );
         temp[0 as i32 as usize] = (*input).xyz[i as usize][0 as i32 as usize]
-            + (*input).normal[i as usize][0 as i32 as usize]
-                * 2 as i32 as f32;
+            + (*input).normal[i as usize][0 as i32 as usize] * 2 as i32 as f32;
         temp[1 as i32 as usize] = (*input).xyz[i as usize][1 as i32 as usize]
-            + (*input).normal[i as usize][1 as i32 as usize]
-                * 2 as i32 as f32;
+            + (*input).normal[i as usize][1 as i32 as usize] * 2 as i32 as f32;
         temp[2 as i32 as usize] = (*input).xyz[i as usize][2 as i32 as usize]
-            + (*input).normal[i as usize][2 as i32 as usize]
-                * 2 as i32 as f32;
+            + (*input).normal[i as usize][2 as i32 as usize] * 2 as i32 as f32;
         crate::src::sdl::sdl_glimp::qglVertex3fv.expect("non-null function pointer")(
             temp.as_mut_ptr(),
         );
@@ -937,12 +913,7 @@ unsafe extern "C" fn DrawMultitextured(
         0 as i32,
         (*input).svars.texcoords[0 as i32 as usize].as_mut_ptr() as *const libc::c_void,
     );
-    R_BindAnimatedImage(
-        &mut *(*pStage)
-            .bundle
-            .as_mut_ptr()
-            .offset(0 as i32 as isize),
-    );
+    R_BindAnimatedImage(&mut *(*pStage).bundle.as_mut_ptr().offset(0 as i32 as isize));
     //
     // lightmap/secondary pass
     //
@@ -964,12 +935,7 @@ unsafe extern "C" fn DrawMultitextured(
         0 as i32,
         (*input).svars.texcoords[1 as i32 as usize].as_mut_ptr() as *const libc::c_void,
     );
-    R_BindAnimatedImage(
-        &mut *(*pStage)
-            .bundle
-            .as_mut_ptr()
-            .offset(1 as i32 as isize),
-    );
+    R_BindAnimatedImage(&mut *(*pStage).bundle.as_mut_ptr().offset(1 as i32 as isize));
     R_DrawElements((*input).numIndexes, (*input).indexes.as_mut_ptr());
     //
     // disable texturing on TEXTURE1, then select TEXTURE0
@@ -1057,37 +1023,29 @@ unsafe extern "C" fn ProjectDlightTexture_scalar() {
                     * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     + luminance_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value
             } else {
-                floatColor[0 as i32 as usize] =
-                    (*dl).color[0 as i32 as usize] * 255.0f32;
-                floatColor[1 as i32 as usize] =
-                    (*dl).color[1 as i32 as usize] * 255.0f32;
-                floatColor[2 as i32 as usize] =
-                    (*dl).color[2 as i32 as usize] * 255.0f32
+                floatColor[0 as i32 as usize] = (*dl).color[0 as i32 as usize] * 255.0f32;
+                floatColor[1 as i32 as usize] = (*dl).color[1 as i32 as usize] * 255.0f32;
+                floatColor[2 as i32 as usize] = (*dl).color[2 as i32 as usize] * 255.0f32
             }
             i = 0 as i32;
             while i < tess.numVertexes {
                 let mut clip: i32 = 0 as i32;
                 let mut dist: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-                dist[0 as i32 as usize] = origin[0 as i32 as usize]
-                    - tess.xyz[i as usize][0 as i32 as usize];
-                dist[1 as i32 as usize] = origin[1 as i32 as usize]
-                    - tess.xyz[i as usize][1 as i32 as usize];
-                dist[2 as i32 as usize] = origin[2 as i32 as usize]
-                    - tess.xyz[i as usize][2 as i32 as usize];
+                dist[0 as i32 as usize] =
+                    origin[0 as i32 as usize] - tess.xyz[i as usize][0 as i32 as usize];
+                dist[1 as i32 as usize] =
+                    origin[1 as i32 as usize] - tess.xyz[i as usize][1 as i32 as usize];
+                dist[2 as i32 as usize] =
+                    origin[2 as i32 as usize] - tess.xyz[i as usize][2 as i32 as usize];
                 crate::src::renderergl1::tr_backend::backEnd
                     .pc
                     .c_dlightVertexes += 1;
-                *texCoords.offset(0 as i32 as isize) =
-                    0.5f32 + dist[0 as i32 as usize] * scale;
-                *texCoords.offset(1 as i32 as isize) =
-                    0.5f32 + dist[1 as i32 as usize] * scale;
+                *texCoords.offset(0 as i32 as isize) = 0.5f32 + dist[0 as i32 as usize] * scale;
+                *texCoords.offset(1 as i32 as isize) = 0.5f32 + dist[1 as i32 as usize] * scale;
                 if (*crate::src::renderergl1::tr_init::r_dlightBacks).integer == 0
-                    && dist[0 as i32 as usize]
-                        * tess.normal[i as usize][0 as i32 as usize]
-                        + dist[1 as i32 as usize]
-                            * tess.normal[i as usize][1 as i32 as usize]
-                        + dist[2 as i32 as usize]
-                            * tess.normal[i as usize][2 as i32 as usize]
+                    && dist[0 as i32 as usize] * tess.normal[i as usize][0 as i32 as usize]
+                        + dist[1 as i32 as usize] * tess.normal[i as usize][1 as i32 as usize]
+                        + dist[2 as i32 as usize] * tess.normal[i as usize][2 as i32 as usize]
                         < 0.0f32
                 {
                     clip = 63 as i32
@@ -1102,10 +1060,8 @@ unsafe extern "C" fn ProjectDlightTexture_scalar() {
                     } else if *texCoords.offset(1 as i32 as isize) > 1.0f32 {
                         clip |= 8 as i32
                     }
-                    *texCoords.offset(0 as i32 as isize) =
-                        *texCoords.offset(0 as i32 as isize);
-                    *texCoords.offset(1 as i32 as isize) =
-                        *texCoords.offset(1 as i32 as isize);
+                    *texCoords.offset(0 as i32 as isize) = *texCoords.offset(0 as i32 as isize);
+                    *texCoords.offset(1 as i32 as isize) = *texCoords.offset(1 as i32 as isize);
                     // modulate the strength based on the height and color
                     if dist[2 as i32 as usize] > radius {
                         clip |= 16 as i32;
@@ -1127,19 +1083,19 @@ unsafe extern "C" fn ProjectDlightTexture_scalar() {
                 *colors.offset(0 as i32 as isize) = crate::src::renderergl1::tr_main::ri
                     .ftol
                     .expect("non-null function pointer")(
-                    floatColor[0 as i32 as usize] * modulate,
+                    floatColor[0 as i32 as usize] * modulate
                 )
                     as crate::src::qcommon::q_shared::byte;
                 *colors.offset(1 as i32 as isize) = crate::src::renderergl1::tr_main::ri
                     .ftol
                     .expect("non-null function pointer")(
-                    floatColor[1 as i32 as usize] * modulate,
+                    floatColor[1 as i32 as usize] * modulate
                 )
                     as crate::src::qcommon::q_shared::byte;
                 *colors.offset(2 as i32 as isize) = crate::src::renderergl1::tr_main::ri
                     .ftol
                     .expect("non-null function pointer")(
-                    floatColor[2 as i32 as usize] * modulate,
+                    floatColor[2 as i32 as usize] * modulate
                 )
                     as crate::src::qcommon::q_shared::byte;
                 *colors.offset(3 as i32 as isize) =
@@ -1176,7 +1132,7 @@ unsafe extern "C" fn ProjectDlightTexture_scalar() {
             if !(numIndexes == 0) {
                 crate::src::sdl::sdl_glimp::qglEnableClientState
                     .expect("non-null function pointer")(
-                    0x8078 as i32 as crate::stdlib::GLenum,
+                    0x8078 as i32 as crate::stdlib::GLenum
                 );
                 crate::src::sdl::sdl_glimp::qglTexCoordPointer.expect("non-null function pointer")(
                     2 as i32,
@@ -1186,7 +1142,7 @@ unsafe extern "C" fn ProjectDlightTexture_scalar() {
                 );
                 crate::src::sdl::sdl_glimp::qglEnableClientState
                     .expect("non-null function pointer")(
-                    0x8076 as i32 as crate::stdlib::GLenum,
+                    0x8076 as i32 as crate::stdlib::GLenum
                 );
                 crate::src::sdl::sdl_glimp::qglColorPointer.expect("non-null function pointer")(
                     4 as i32,
@@ -1202,13 +1158,11 @@ unsafe extern "C" fn ProjectDlightTexture_scalar() {
                 // where they aren't rendered
                 if (*dl).additive != 0 {
                     crate::src::renderergl1::tr_backend::GL_State(
-                        (0x2 as i32 | 0x20 as i32 | 0x20000 as i32)
-                            as libc::c_ulong,
+                        (0x2 as i32 | 0x20 as i32 | 0x20000 as i32) as libc::c_ulong,
                     );
                 } else {
                     crate::src::renderergl1::tr_backend::GL_State(
-                        (0x3 as i32 | 0x20 as i32 | 0x20000 as i32)
-                            as libc::c_ulong,
+                        (0x3 as i32 | 0x20 as i32 | 0x20000 as i32) as libc::c_ulong,
                     );
                 }
                 R_DrawElements(numIndexes, hitIndexes.as_mut_ptr());
@@ -1263,8 +1217,7 @@ unsafe extern "C" fn RB_FogPass() {
     i = 0 as i32;
     while i < tess.numVertexes {
         *(&mut *tess.svars.colors.as_mut_ptr().offset(i as isize)
-            as *mut crate::tr_local_h::color4ub_t as *mut i32) =
-            (*fog).colorInt as i32;
+            as *mut crate::tr_local_h::color4ub_t as *mut i32) = (*fog).colorInt as i32;
         i += 1
     }
     crate::src::renderergl1::tr_shade_calc::RB_CalcFogTexCoords(
@@ -1273,16 +1226,12 @@ unsafe extern "C" fn RB_FogPass() {
     crate::src::renderergl1::tr_backend::GL_Bind(
         crate::src::renderergl1::tr_main::tr.fogImage as *mut crate::tr_common_h::image_s,
     );
-    if (*tess.shader).fogPass as u32
-        == crate::tr_local_h::FP_EQUAL as i32 as u32
-    {
+    if (*tess.shader).fogPass as u32 == crate::tr_local_h::FP_EQUAL as i32 as u32 {
         crate::src::renderergl1::tr_backend::GL_State(
             (0x5 as i32 | 0x60 as i32 | 0x20000 as i32) as libc::c_ulong,
         );
     } else {
-        crate::src::renderergl1::tr_backend::GL_State(
-            (0x5 as i32 | 0x60 as i32) as libc::c_ulong,
-        );
+        crate::src::renderergl1::tr_backend::GL_State((0x5 as i32 | 0x60 as i32) as libc::c_ulong);
     }
     R_DrawElements(tess.numIndexes, tess.indexes.as_mut_ptr());
 }
@@ -1329,9 +1278,7 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderSta
             }
         }
         6 => {
-            if crate::src::renderergl1::tr_main::tr.identityLight
-                == 1 as i32 as f32
-            {
+            if crate::src::renderergl1::tr_main::tr.identityLight == 1 as i32 as f32 {
                 crate::stdlib::memcpy(
                     tess.svars.colors.as_mut_ptr() as *mut libc::c_void,
                     tess.vertexColors.as_mut_ptr() as *const libc::c_void,
@@ -1344,18 +1291,15 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderSta
                 i = 0 as i32;
                 while i < tess.numVertexes {
                     tess.svars.colors[i as usize][0 as i32 as usize] =
-                        (tess.vertexColors[i as usize][0 as i32 as usize] as i32
-                            as f32
+                        (tess.vertexColors[i as usize][0 as i32 as usize] as i32 as f32
                             * crate::src::renderergl1::tr_main::tr.identityLight)
                             as crate::src::qcommon::q_shared::byte;
                     tess.svars.colors[i as usize][1 as i32 as usize] =
-                        (tess.vertexColors[i as usize][1 as i32 as usize] as i32
-                            as f32
+                        (tess.vertexColors[i as usize][1 as i32 as usize] as i32 as f32
                             * crate::src::renderergl1::tr_main::tr.identityLight)
                             as crate::src::qcommon::q_shared::byte;
                     tess.svars.colors[i as usize][2 as i32 as usize] =
-                        (tess.vertexColors[i as usize][2 as i32 as usize] as i32
-                            as f32
+                        (tess.vertexColors[i as usize][2 as i32 as usize] as i32 as f32
                             * crate::src::renderergl1::tr_main::tr.identityLight)
                             as crate::src::qcommon::q_shared::byte;
                     tess.svars.colors[i as usize][3 as i32 as usize] =
@@ -1365,9 +1309,7 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderSta
             }
         }
         7 => {
-            if crate::src::renderergl1::tr_main::tr.identityLight
-                == 1 as i32 as f32
-            {
+            if crate::src::renderergl1::tr_main::tr.identityLight == 1 as i32 as f32 {
                 i = 0 as i32;
                 while i < tess.numVertexes {
                     tess.svars.colors[i as usize][0 as i32 as usize] = (255 as i32
@@ -1411,8 +1353,7 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderSta
             i = 0 as i32;
             while i < tess.numVertexes {
                 *(&mut *tess.svars.colors.as_mut_ptr().offset(i as isize)
-                    as *mut crate::tr_local_h::color4ub_t as *mut i32) =
-                    (*fog).colorInt as i32;
+                    as *mut crate::tr_local_h::color4ub_t as *mut i32) = (*fog).colorInt as i32;
                 i += 1
             }
         }
@@ -1445,15 +1386,10 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderSta
     //
     match (*pStage).alphaGen as u32 {
         0 => {
-            if (*pStage).rgbGen as u32
-                != crate::tr_local_h::CGEN_IDENTITY as i32 as u32
-            {
-                if (*pStage).rgbGen as u32
-                    == crate::tr_local_h::CGEN_VERTEX as i32 as u32
-                    && crate::src::renderergl1::tr_main::tr.identityLight
-                        != 1 as i32 as f32
-                    || (*pStage).rgbGen as u32
-                        != crate::tr_local_h::CGEN_VERTEX as i32 as u32
+            if (*pStage).rgbGen as u32 != crate::tr_local_h::CGEN_IDENTITY as i32 as u32 {
+                if (*pStage).rgbGen as u32 == crate::tr_local_h::CGEN_VERTEX as i32 as u32
+                    && crate::src::renderergl1::tr_main::tr.identityLight != 1 as i32 as f32
+                    || (*pStage).rgbGen as u32 != crate::tr_local_h::CGEN_VERTEX as i32 as u32
                 {
                     i = 0 as i32;
                     while i < tess.numVertexes {
@@ -1465,9 +1401,7 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderSta
             }
         }
         9 => {
-            if (*pStage).rgbGen as u32
-                != crate::tr_local_h::CGEN_CONST as i32 as u32
-            {
+            if (*pStage).rgbGen as u32 != crate::tr_local_h::CGEN_CONST as i32 as u32 {
                 i = 0 as i32;
                 while i < tess.numVertexes {
                     tess.svars.colors[i as usize][3 as i32 as usize] =
@@ -1498,9 +1432,7 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderSta
             );
         }
         4 => {
-            if (*pStage).rgbGen as u32
-                != crate::tr_local_h::CGEN_VERTEX as i32 as u32
-            {
+            if (*pStage).rgbGen as u32 != crate::tr_local_h::CGEN_VERTEX as i32 as u32 {
                 i = 0 as i32;
                 while i < tess.numVertexes {
                     tess.svars.colors[i as usize][3 as i32 as usize] =
@@ -1582,15 +1514,10 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderSta
         let mut scale: i32 = 0;
         i = 0 as i32;
         while i < tess.numVertexes {
-            scale = (0.2126f32
-                * tess.svars.colors[i as usize][0 as i32 as usize] as i32
-                    as f32
-                + 0.7152f32
-                    * tess.svars.colors[i as usize][1 as i32 as usize] as i32
-                        as f32
-                + 0.0722f32
-                    * tess.svars.colors[i as usize][2 as i32 as usize] as i32
-                        as f32) as i32;
+            scale = (0.2126f32 * tess.svars.colors[i as usize][0 as i32 as usize] as i32 as f32
+                + 0.7152f32 * tess.svars.colors[i as usize][1 as i32 as usize] as i32 as f32
+                + 0.0722f32 * tess.svars.colors[i as usize][2 as i32 as usize] as i32 as f32)
+                as i32;
             tess.svars.colors[i as usize][2 as i32 as usize] =
                 scale as crate::src::qcommon::q_shared::byte;
             tess.svars.colors[i as usize][1 as i32 as usize] =
@@ -1603,30 +1530,21 @@ unsafe extern "C" fn ComputeColors(mut pStage: *mut crate::tr_local_h::shaderSta
         let mut scale_0: f32 = 0.;
         i = 0 as i32;
         while i < tess.numVertexes {
-            scale_0 = 0.2126f32
-                * tess.svars.colors[i as usize][0 as i32 as usize] as i32
-                    as f32
-                + 0.7152f32
-                    * tess.svars.colors[i as usize][1 as i32 as usize] as i32
-                        as f32
-                + 0.0722f32
-                    * tess.svars.colors[i as usize][2 as i32 as usize] as i32
-                        as f32;
+            scale_0 = 0.2126f32 * tess.svars.colors[i as usize][0 as i32 as usize] as i32 as f32
+                + 0.7152f32 * tess.svars.colors[i as usize][1 as i32 as usize] as i32 as f32
+                + 0.0722f32 * tess.svars.colors[i as usize][2 as i32 as usize] as i32 as f32;
             tess.svars.colors[i as usize][0 as i32 as usize] =
-                (tess.svars.colors[i as usize][0 as i32 as usize] as i32
-                    as f32
+                (tess.svars.colors[i as usize][0 as i32 as usize] as i32 as f32
                     * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     + scale_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     as crate::src::qcommon::q_shared::byte;
             tess.svars.colors[i as usize][1 as i32 as usize] =
-                (tess.svars.colors[i as usize][1 as i32 as usize] as i32
-                    as f32
+                (tess.svars.colors[i as usize][1 as i32 as usize] as i32 as f32
                     * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     + scale_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     as crate::src::qcommon::q_shared::byte;
             tess.svars.colors[i as usize][2 as i32 as usize] =
-                (tess.svars.colors[i as usize][2 as i32 as usize] as i32
-                    as f32
+                (tess.svars.colors[i as usize][2 as i32 as usize] as i32 as f32
                     * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     + scale_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     as crate::src::qcommon::q_shared::byte;
@@ -1662,32 +1580,28 @@ unsafe extern "C" fn ComputeTexCoords(mut pStage: *mut crate::tr_local_h::shader
             3 => {
                 i = 0 as i32;
                 while i < tess.numVertexes {
-                    tess.svars.texcoords[b as usize][i as usize][0 as i32 as usize] = tess
-                        .texCoords[i as usize][0 as i32 as usize]
-                        [0 as i32 as usize];
-                    tess.svars.texcoords[b as usize][i as usize][1 as i32 as usize] = tess
-                        .texCoords[i as usize][0 as i32 as usize]
-                        [1 as i32 as usize];
+                    tess.svars.texcoords[b as usize][i as usize][0 as i32 as usize] =
+                        tess.texCoords[i as usize][0 as i32 as usize][0 as i32 as usize];
+                    tess.svars.texcoords[b as usize][i as usize][1 as i32 as usize] =
+                        tess.texCoords[i as usize][0 as i32 as usize][1 as i32 as usize];
                     i += 1
                 }
             }
             2 => {
                 i = 0 as i32;
                 while i < tess.numVertexes {
-                    tess.svars.texcoords[b as usize][i as usize][0 as i32 as usize] = tess
-                        .texCoords[i as usize][1 as i32 as usize]
-                        [0 as i32 as usize];
-                    tess.svars.texcoords[b as usize][i as usize][1 as i32 as usize] = tess
-                        .texCoords[i as usize][1 as i32 as usize]
-                        [1 as i32 as usize];
+                    tess.svars.texcoords[b as usize][i as usize][0 as i32 as usize] =
+                        tess.texCoords[i as usize][1 as i32 as usize][0 as i32 as usize];
+                    tess.svars.texcoords[b as usize][i as usize][1 as i32 as usize] =
+                        tess.texCoords[i as usize][1 as i32 as usize][1 as i32 as usize];
                     i += 1
                 }
             }
             6 => {
                 i = 0 as i32;
                 while i < tess.numVertexes {
-                    tess.svars.texcoords[b as usize][i as usize][0 as i32 as usize] = tess
-                        .xyz[i as usize][0 as i32 as usize]
+                    tess.svars.texcoords[b as usize][i as usize][0 as i32 as usize] = tess.xyz
+                        [i as usize][0 as i32 as usize]
                         * (*pStage).bundle[b as usize].tcGenVectors[0 as i32 as usize]
                             [0 as i32 as usize]
                         + tess.xyz[i as usize][1 as i32 as usize]
@@ -1696,8 +1610,8 @@ unsafe extern "C" fn ComputeTexCoords(mut pStage: *mut crate::tr_local_h::shader
                         + tess.xyz[i as usize][2 as i32 as usize]
                             * (*pStage).bundle[b as usize].tcGenVectors[0 as i32 as usize]
                                 [2 as i32 as usize];
-                    tess.svars.texcoords[b as usize][i as usize][1 as i32 as usize] = tess
-                        .xyz[i as usize][0 as i32 as usize]
+                    tess.svars.texcoords[b as usize][i as usize][1 as i32 as usize] = tess.xyz
+                        [i as usize][0 as i32 as usize]
                         * (*pStage).bundle[b as usize].tcGenVectors[1 as i32 as usize]
                             [0 as i32 as usize]
                         + tess.xyz[i as usize][1 as i32 as usize]
@@ -1727,8 +1641,7 @@ unsafe extern "C" fn ComputeTexCoords(mut pStage: *mut crate::tr_local_h::shader
         //
         tm = 0 as i32; // break out of for loop
         while tm < (*pStage).bundle[b as usize].numTexMods {
-            match (*(*pStage).bundle[b as usize].texMods.offset(tm as isize)).type_0 as u32
-            {
+            match (*(*pStage).bundle[b as usize].texMods.offset(tm as isize)).type_0 as u32 {
                 0 => tm = 4 as i32,
                 2 => {
                     crate::src::renderergl1::tr_shade_calc::RB_CalcTurbulentTexCoords(
@@ -1797,8 +1710,7 @@ unsafe extern "C" fn ComputeTexCoords(mut pStage: *mut crate::tr_local_h::shader
                         crate::src::qcommon::q_shared::ERR_DROP as i32,
                         b"ERROR: unknown texmod \'%d\' in shader \'%s\'\x00" as *const u8
                             as *const libc::c_char,
-                        (*(*pStage).bundle[b as usize].texMods.offset(tm as isize)).type_0
-                            as u32,
+                        (*(*pStage).bundle[b as usize].texMods.offset(tm as isize)).type_0 as u32,
                         (*tess.shader).name.as_mut_ptr(),
                     );
                 }
@@ -1845,19 +1757,13 @@ unsafe extern "C" fn RB_IterateStagesGeneric(mut input: *mut crate::tr_local_h::
                     2 as i32,
                     0x1406 as i32 as crate::stdlib::GLenum,
                     0 as i32,
-                    (*input).svars.texcoords[0 as i32 as usize].as_mut_ptr()
-                        as *const libc::c_void,
+                    (*input).svars.texcoords[0 as i32 as usize].as_mut_ptr() as *const libc::c_void,
                 );
             }
             //
             // set state
             //
-            R_BindAnimatedImage(
-                &mut *(*pStage)
-                    .bundle
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize),
-            );
+            R_BindAnimatedImage(&mut *(*pStage).bundle.as_mut_ptr().offset(0 as i32 as isize));
             crate::src::renderergl1::tr_backend::GL_State((*pStage).stateBits as libc::c_ulong);
             //
             // draw
@@ -2065,8 +1971,7 @@ pub unsafe extern "C" fn RB_StageIteratorVertexLitTexture() {
         2 as i32,
         0x1406 as i32 as crate::stdlib::GLenum,
         16 as i32,
-        tess.texCoords[0 as i32 as usize][0 as i32 as usize].as_mut_ptr()
-            as *const libc::c_void,
+        tess.texCoords[0 as i32 as usize][0 as i32 as usize].as_mut_ptr() as *const libc::c_void,
     );
     crate::src::sdl::sdl_glimp::qglVertexPointer.expect("non-null function pointer")(
         3 as i32,
@@ -2099,9 +2004,7 @@ pub unsafe extern "C" fn RB_StageIteratorVertexLitTexture() {
     //
     // now do any dynamic lighting needed
     //
-    if tess.dlightBits != 0
-        && (*tess.shader).sort <= crate::tr_local_h::SS_OPAQUE as i32 as f32
-    {
+    if tess.dlightBits != 0 && (*tess.shader).sort <= crate::tr_local_h::SS_OPAQUE as i32 as f32 {
         ProjectDlightTexture();
     }
     //
@@ -2181,8 +2084,7 @@ pub unsafe extern "C" fn RB_StageIteratorLightmappedMultitexture() {
         2 as i32,
         0x1406 as i32 as crate::stdlib::GLenum,
         16 as i32,
-        tess.texCoords[0 as i32 as usize][0 as i32 as usize].as_mut_ptr()
-            as *const libc::c_void,
+        tess.texCoords[0 as i32 as usize][0 as i32 as usize].as_mut_ptr() as *const libc::c_void,
     );
     //
     // configure second stage
@@ -2209,8 +2111,7 @@ pub unsafe extern "C" fn RB_StageIteratorLightmappedMultitexture() {
         2 as i32,
         0x1406 as i32 as crate::stdlib::GLenum,
         16 as i32,
-        tess.texCoords[0 as i32 as usize][1 as i32 as usize].as_mut_ptr()
-            as *const libc::c_void,
+        tess.texCoords[0 as i32 as usize][1 as i32 as usize].as_mut_ptr() as *const libc::c_void,
     );
     //
     // lock arrays
@@ -2238,9 +2139,7 @@ pub unsafe extern "C" fn RB_StageIteratorLightmappedMultitexture() {
     //
     // now do any dynamic lighting needed
     //
-    if tess.dlightBits != 0
-        && (*tess.shader).sort <= crate::tr_local_h::SS_OPAQUE as i32 as f32
-    {
+    if tess.dlightBits != 0 && (*tess.shader).sort <= crate::tr_local_h::SS_OPAQUE as i32 as f32 {
         ProjectDlightTexture();
     }
     //
@@ -2602,9 +2501,7 @@ pub unsafe extern "C" fn RB_EndSurface() {
     if (*input).numIndexes == 0 as i32 {
         return;
     }
-    if (*input).indexes[(6 as i32 * 1000 as i32 - 1 as i32) as usize]
-        != 0 as i32 as u32
-    {
+    if (*input).indexes[(6 as i32 * 1000 as i32 - 1 as i32) as usize] != 0 as i32 as u32 {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
@@ -2612,9 +2509,7 @@ pub unsafe extern "C" fn RB_EndSurface() {
             b"RB_EndSurface() - SHADER_MAX_INDEXES hit\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if (*input).xyz[(1000 as i32 - 1 as i32) as usize][0 as i32 as usize]
-        != 0 as i32 as f32
-    {
+    if (*input).xyz[(1000 as i32 - 1 as i32) as usize][0 as i32 as usize] != 0 as i32 as f32 {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
@@ -2628,8 +2523,7 @@ pub unsafe extern "C" fn RB_EndSurface() {
     }
     // for debugging of sort order issues, stop rendering after a given sort value
     if (*crate::src::renderergl1::tr_init::r_debugSort).integer != 0
-        && ((*crate::src::renderergl1::tr_init::r_debugSort).integer as f32)
-            < (*tess.shader).sort
+        && ((*crate::src::renderergl1::tr_init::r_debugSort).integer as f32) < (*tess.shader).sort
     {
         return;
     }

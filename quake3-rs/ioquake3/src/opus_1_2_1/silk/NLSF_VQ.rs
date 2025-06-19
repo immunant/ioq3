@@ -286,14 +286,12 @@ pub unsafe extern "C" fn silk_NLSF_VQ(
         while m >= 0 as i32 {
             /* Compute weighted absolute predictive quantization error for index m + 1 */
             diff_Q15 = *in_Q15.offset((m + 1 as i32) as isize) as i32
-                - ((*cb_Q8_ptr.offset((m + 1 as i32) as isize)
-                    as crate::opus_types_h::opus_int32
+                - ((*cb_Q8_ptr.offset((m + 1 as i32) as isize) as crate::opus_types_h::opus_int32
                     as crate::opus_types_h::opus_uint32)
                     << 7 as i32) as crate::opus_types_h::opus_int32; /* range: [ -32767 : 32767 ]*/
             diffw_Q24 = diff_Q15 as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
-                * *w_Q9_ptr.offset((m + 1 as i32) as isize)
-                    as crate::opus_types_h::opus_int32;
+                * *w_Q9_ptr.offset((m + 1 as i32) as isize) as crate::opus_types_h::opus_int32;
             sum_error_Q24 = sum_error_Q24
                 + (if diffw_Q24 - (pred_Q24 >> 1 as i32) > 0 as i32 {
                     (diffw_Q24) - (pred_Q24 >> 1 as i32)

@@ -895,8 +895,7 @@ GL_CheckErrors
 pub unsafe extern "C" fn GL_CheckErrors() {
     let mut err: i32 = 0;
     let mut s: [libc::c_char; 64] = [0; 64];
-    err = crate::src::sdl::sdl_glimp::qglGetError.expect("non-null function pointer")()
-        as i32;
+    err = crate::src::sdl::sdl_glimp::qglGetError.expect("non-null function pointer")() as i32;
     if err == 0 as i32 {
         return;
     }
@@ -1301,26 +1300,21 @@ pub unsafe extern "C" fn RB_TakeScreenshot(
     let mut offset: crate::stddef_h::size_t = 18 as i32 as crate::stddef_h::size_t;
     let mut memcount: crate::stddef_h::size_t = 0;
     allbuf = RB_ReadPixels(x, y, width, height, &mut offset, &mut padlen);
-    buffer = allbuf
-        .offset(offset as isize)
-        .offset(-(18 as i32 as isize));
+    buffer = allbuf.offset(offset as isize).offset(-(18 as i32 as isize));
     crate::stdlib::memset(
         buffer as *mut libc::c_void,
         0 as i32,
         18 as i32 as libc::c_ulong,
     );
-    *buffer.offset(2 as i32 as isize) =
-        2 as i32 as crate::src::qcommon::q_shared::byte;
+    *buffer.offset(2 as i32 as isize) = 2 as i32 as crate::src::qcommon::q_shared::byte;
     *buffer.offset(12 as i32 as isize) =
         (width & 255 as i32) as crate::src::qcommon::q_shared::byte;
-    *buffer.offset(13 as i32 as isize) =
-        (width >> 8 as i32) as crate::src::qcommon::q_shared::byte;
+    *buffer.offset(13 as i32 as isize) = (width >> 8 as i32) as crate::src::qcommon::q_shared::byte;
     *buffer.offset(14 as i32 as isize) =
         (height & 255 as i32) as crate::src::qcommon::q_shared::byte;
     *buffer.offset(15 as i32 as isize) =
         (height >> 8 as i32) as crate::src::qcommon::q_shared::byte;
-    *buffer.offset(16 as i32 as isize) =
-        24 as i32 as crate::src::qcommon::q_shared::byte;
+    *buffer.offset(16 as i32 as isize) = 24 as i32 as crate::src::qcommon::q_shared::byte;
     // swap rgb to bgr and remove padding from line endings
     linelen = width * 3 as i32;
     destptr = allbuf.offset(offset as isize);
@@ -1455,8 +1449,7 @@ pub unsafe extern "C" fn R_TakeScreenshot(
         0 as *mut crate::tr_local_h::screenshotCommand_t;
     cmd = crate::src::renderergl1::tr_cmds::R_GetCommandBuffer(::std::mem::size_of::<
         crate::tr_local_h::screenshotCommand_t,
-    >() as libc::c_ulong
-        as i32) as *mut crate::tr_local_h::screenshotCommand_t;
+    >() as libc::c_ulong as i32) as *mut crate::tr_local_h::screenshotCommand_t;
     if cmd.is_null() {
         return;
     }
@@ -1606,21 +1599,17 @@ pub unsafe extern "C" fn R_LevelShot() {
     buffer = crate::src::renderergl1::tr_main::ri
         .Hunk_AllocateTempMemory
         .expect("non-null function pointer")(
-        128 as i32 * 128 as i32 * 3 as i32 + 18 as i32,
+        128 as i32 * 128 as i32 * 3 as i32 + 18 as i32
     ) as *mut crate::src::qcommon::q_shared::byte;
     crate::stdlib::memset(
         buffer as *mut libc::c_void,
         0 as i32,
         18 as i32 as libc::c_ulong,
     );
-    *buffer.offset(2 as i32 as isize) =
-        2 as i32 as crate::src::qcommon::q_shared::byte;
-    *buffer.offset(12 as i32 as isize) =
-        128 as i32 as crate::src::qcommon::q_shared::byte;
-    *buffer.offset(14 as i32 as isize) =
-        128 as i32 as crate::src::qcommon::q_shared::byte;
-    *buffer.offset(16 as i32 as isize) =
-        24 as i32 as crate::src::qcommon::q_shared::byte;
+    *buffer.offset(2 as i32 as isize) = 2 as i32 as crate::src::qcommon::q_shared::byte;
+    *buffer.offset(12 as i32 as isize) = 128 as i32 as crate::src::qcommon::q_shared::byte;
+    *buffer.offset(14 as i32 as isize) = 128 as i32 as crate::src::qcommon::q_shared::byte;
+    *buffer.offset(16 as i32 as isize) = 24 as i32 as crate::src::qcommon::q_shared::byte;
     // resample from source
     xScale = glConfig.vidWidth as f32 / 512.0f32;
     yScale = glConfig.vidHeight as f32 / 384.0f32;
@@ -1638,14 +1627,10 @@ pub unsafe extern "C" fn R_LevelShot() {
                     src = source
                         .offset(
                             ((3 as i32 * glConfig.vidWidth + padlen)
-                                * ((y * 3 as i32 + yy) as f32 * yScale)
-                                    as i32) as isize,
+                                * ((y * 3 as i32 + yy) as f32 * yScale) as i32)
+                                as isize,
                         )
-                        .offset(
-                            (3 as i32
-                                * ((x * 4 as i32 + xx) as f32 * xScale)
-                                    as i32) as isize,
-                        );
+                        .offset((3 as i32 * ((x * 4 as i32 + xx) as f32 * xScale) as i32) as isize);
                     r += *src.offset(0 as i32 as isize) as i32;
                     g += *src.offset(1 as i32 as isize) as i32;
                     b += *src.offset(2 as i32 as isize) as i32;
@@ -1656,12 +1641,9 @@ pub unsafe extern "C" fn R_LevelShot() {
             dst = buffer
                 .offset(18 as i32 as isize)
                 .offset((3 as i32 * (y * 128 as i32 + x)) as isize);
-            *dst.offset(0 as i32 as isize) =
-                (b / 12 as i32) as crate::src::qcommon::q_shared::byte;
-            *dst.offset(1 as i32 as isize) =
-                (g / 12 as i32) as crate::src::qcommon::q_shared::byte;
-            *dst.offset(2 as i32 as isize) =
-                (r / 12 as i32) as crate::src::qcommon::q_shared::byte;
+            *dst.offset(0 as i32 as isize) = (b / 12 as i32) as crate::src::qcommon::q_shared::byte;
+            *dst.offset(1 as i32 as isize) = (g / 12 as i32) as crate::src::qcommon::q_shared::byte;
+            *dst.offset(2 as i32 as isize) = (r / 12 as i32) as crate::src::qcommon::q_shared::byte;
             x += 1
         }
         y += 1
@@ -1959,9 +1941,7 @@ pub unsafe extern "C" fn RB_TakeVideoFrameCmd(
         );
         crate::src::renderergl1::tr_main::ri
             .CL_WriteAVIVideoFrame
-            .expect("non-null function pointer")(
-            (*cmd).encodeBuffer, memcount as i32
-        );
+            .expect("non-null function pointer")((*cmd).encodeBuffer, memcount as i32);
     } else {
         let mut lineend: *mut crate::src::qcommon::q_shared::byte =
             0 as *mut crate::src::qcommon::q_shared::byte;
@@ -2318,24 +2298,21 @@ unsafe extern "C" fn GfxInfo_f() {
         .expect("non-null function pointer")(
         crate::src::qcommon::q_shared::PRINT_ALL as i32,
         b"multitexture: %s\n\x00" as *const u8 as *const libc::c_char,
-        enablestrings
-            [crate::src::sdl::sdl_glimp::qglActiveTextureARB.is_some() as i32 as usize],
+        enablestrings[crate::src::sdl::sdl_glimp::qglActiveTextureARB.is_some() as i32 as usize],
     );
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
         crate::src::qcommon::q_shared::PRINT_ALL as i32,
         b"compiled vertex arrays: %s\n\x00" as *const u8 as *const libc::c_char,
-        enablestrings
-            [crate::src::sdl::sdl_glimp::qglLockArraysEXT.is_some() as i32 as usize],
+        enablestrings[crate::src::sdl::sdl_glimp::qglLockArraysEXT.is_some() as i32 as usize],
     );
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
         crate::src::qcommon::q_shared::PRINT_ALL as i32,
         b"texenv add: %s\n\x00" as *const u8 as *const libc::c_char,
-        enablestrings[(glConfig.textureEnvAddAvailable as u32
-            != 0 as i32 as u32) as i32 as usize],
+        enablestrings[(glConfig.textureEnvAddAvailable as u32 != 0 as i32 as u32) as i32 as usize],
     );
     crate::src::renderergl1::tr_main::ri
         .Printf
@@ -2343,12 +2320,10 @@ unsafe extern "C" fn GfxInfo_f() {
         crate::src::qcommon::q_shared::PRINT_ALL as i32,
         b"compressed textures: %s\n\x00" as *const u8 as *const libc::c_char,
         enablestrings[(glConfig.textureCompression as u32
-            != crate::tr_types_h::TC_NONE as i32 as u32)
-            as i32 as usize],
+            != crate::tr_types_h::TC_NONE as i32 as u32) as i32 as usize],
     );
     if (*r_vertexLight).integer != 0
-        || glConfig.hardwareType as u32
-            == crate::tr_types_h::GLHW_PERMEDIA2 as i32 as u32
+        || glConfig.hardwareType as u32 == crate::tr_types_h::GLHW_PERMEDIA2 as i32 as u32
     {
         crate::src::renderergl1::tr_main::ri
             .Printf
@@ -2357,9 +2332,7 @@ unsafe extern "C" fn GfxInfo_f() {
             b"HACK: using vertex lightmap approximation\n\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if glConfig.hardwareType as u32
-        == crate::tr_types_h::GLHW_RAGEPRO as i32 as u32
-    {
+    if glConfig.hardwareType as u32 == crate::tr_types_h::GLHW_RAGEPRO as i32 as u32 {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
@@ -2367,9 +2340,7 @@ unsafe extern "C" fn GfxInfo_f() {
             b"HACK: ragePro approximations\n\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if glConfig.hardwareType as u32
-        == crate::tr_types_h::GLHW_RIVA128 as i32 as u32
-    {
+    if glConfig.hardwareType as u32 == crate::tr_types_h::GLHW_RIVA128 as i32 as u32 {
         crate::src::renderergl1::tr_main::ri
             .Printf
             .expect("non-null function pointer")(
@@ -3297,18 +3268,16 @@ pub unsafe extern "C" fn R_Init() {
     i = 0 as i32;
     while i < 1024 as i32 {
         crate::src::renderergl1::tr_main::tr.sinTable[i as usize] = crate::stdlib::sin(
-            (i as f32 * 360.0f32
-                / (1024 as i32 - 1 as i32) as f32)
-                as f64
+            (i as f32 * 360.0f32 / (1024 as i32 - 1 as i32) as f32) as f64
                 * 3.14159265358979323846f64
                 / 180.0f32 as f64,
         ) as f32;
-        crate::src::renderergl1::tr_main::tr.squareTable[i as usize] =
-            if i < 1024 as i32 / 2 as i32 {
-                1.0f32
-            } else {
-                -1.0f32
-            };
+        crate::src::renderergl1::tr_main::tr.squareTable[i as usize] = if i < 1024 as i32 / 2 as i32
+        {
+            1.0f32
+        } else {
+            -1.0f32
+        };
         crate::src::renderergl1::tr_main::tr.sawToothTable[i as usize] =
             i as f32 / 1024 as i32 as f32;
         crate::src::renderergl1::tr_main::tr.inverseSawToothTable[i as usize] =
@@ -3372,8 +3341,7 @@ pub unsafe extern "C" fn R_Init() {
     crate::src::renderergl1::tr_image::R_InitSkins();
     crate::src::renderergl1::tr_model::R_ModelInit();
     crate::src::renderercommon::tr_font::R_InitFreeType();
-    err = crate::src::sdl::sdl_glimp::qglGetError.expect("non-null function pointer")()
-        as i32;
+    err = crate::src::sdl::sdl_glimp::qglGetError.expect("non-null function pointer")() as i32;
     if err != 0 as i32 {
         crate::src::renderergl1::tr_main::ri
             .Printf
@@ -4001,8 +3969,7 @@ pub unsafe extern "C" fn GetRefAPI(
             as unsafe extern "C" fn(_: *const crate::tr_types_h::refdef_t) -> (),
     );
     re.SetColor = Some(
-        crate::src::renderergl1::tr_cmds::RE_SetColor
-            as unsafe extern "C" fn(_: *const f32) -> (),
+        crate::src::renderergl1::tr_cmds::RE_SetColor as unsafe extern "C" fn(_: *const f32) -> (),
     );
     re.DrawStretchPic = Some(
         crate::src::renderergl1::tr_cmds::RE_StretchPic

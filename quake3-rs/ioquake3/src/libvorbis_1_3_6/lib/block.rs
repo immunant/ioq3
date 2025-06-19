@@ -111,8 +111,7 @@ pub unsafe extern "C" fn _vorbis_block_alloc(
     mut vb: *mut crate::codec_h::vorbis_block,
     mut bytes: libc::c_long,
 ) -> *mut libc::c_void {
-    bytes = bytes + (8 as i32 - 1 as i32) as libc::c_long
-        & !(8 as i32 - 1 as i32) as libc::c_long;
+    bytes = bytes + (8 as i32 - 1 as i32) as libc::c_long & !(8 as i32 - 1 as i32) as libc::c_long;
     if bytes + (*vb).localtop > (*vb).localalloc {
         /* can't just _ogg_realloc... there are outstanding pointers */
         if !(*vb).localstore.is_null() {
@@ -182,9 +181,7 @@ pub unsafe extern "C" fn _vorbis_block_ripcord(mut vb: *mut crate::codec_h::vorb
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn vorbis_block_clear(
-    mut vb: *mut crate::codec_h::vorbis_block,
-) -> i32 {
+pub unsafe extern "C" fn vorbis_block_clear(mut vb: *mut crate::codec_h::vorbis_block) -> i32 {
     let mut i: i32 = 0;
     let mut vbi: *mut crate::codec_internal_h::vorbis_block_internal =
         (*vb).internal as *mut crate::codec_internal_h::vorbis_block_internal;
@@ -259,15 +256,13 @@ unsafe extern "C" fn _vds_shared_init(
         ::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong,
     ) as *mut *mut libc::c_void;
     /* MDCT is tranform 0 */
-    let ref mut fresh0 =
-        *(*b).transform[0 as i32 as usize].offset(0 as i32 as isize);
+    let ref mut fresh0 = *(*b).transform[0 as i32 as usize].offset(0 as i32 as isize);
     *fresh0 = crate::stdlib::calloc(
         1 as i32 as libc::c_ulong,
         ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup>()
             as libc::c_ulong,
     );
-    let ref mut fresh1 =
-        *(*b).transform[1 as i32 as usize].offset(0 as i32 as isize);
+    let ref mut fresh1 = *(*b).transform[1 as i32 as usize].offset(0 as i32 as isize);
     *fresh1 = crate::stdlib::calloc(
         1 as i32 as libc::c_ulong,
         ::std::mem::size_of::<crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup>()
@@ -530,9 +525,7 @@ pub unsafe extern "C" fn vorbis_dsp_clear(mut v: *mut crate::codec_h::vorbis_dsp
                         as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup
                         as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup,
                 );
-                ::libc::free(
-                    *(*b).transform[0 as i32 as usize].offset(0 as i32 as isize),
-                );
+                ::libc::free(*(*b).transform[0 as i32 as usize].offset(0 as i32 as isize));
                 ::libc::free((*b).transform[0 as i32 as usize] as *mut libc::c_void);
             }
             if !(*b).transform[1 as i32 as usize].is_null() {
@@ -541,9 +534,7 @@ pub unsafe extern "C" fn vorbis_dsp_clear(mut v: *mut crate::codec_h::vorbis_dsp
                         as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup
                         as *mut crate::src::libvorbis_1_3_6::lib::mdct::mdct_lookup,
                 );
-                ::libc::free(
-                    *(*b).transform[1 as i32 as usize].offset(0 as i32 as isize),
-                );
+                ::libc::free(*(*b).transform[1 as i32 as usize].offset(0 as i32 as isize));
                 ::libc::free((*b).transform[1 as i32 as usize] as *mut libc::c_void);
             }
             if !(*b).flr.is_null() {
@@ -697,8 +688,8 @@ unsafe extern "C" fn _preextrapolate_helper(mut v: *mut crate::codec_h::vorbis_d
     let mut order: i32 = 16 as i32;
     let mut fresh7 = ::std::vec::from_elem(
         0,
-        (order as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
+        (order as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
+            as usize,
     );
     let mut lpc: *mut f32 = fresh7.as_mut_ptr() as *mut f32;
     let mut fresh8 = ::std::vec::from_elem(
@@ -709,8 +700,7 @@ unsafe extern "C" fn _preextrapolate_helper(mut v: *mut crate::codec_h::vorbis_d
     let mut work: *mut f32 = fresh8.as_mut_ptr() as *mut f32;
     let mut j: libc::c_long = 0;
     (*v).preextrapolate = 1 as i32;
-    if (*v).pcm_current as libc::c_long - (*v).centerW > (order * 2 as i32) as libc::c_long
-    {
+    if (*v).pcm_current as libc::c_long - (*v).centerW > (order * 2 as i32) as libc::c_long {
         /* safety */
         i = 0 as i32;
         while i < (*(*v).vi).channels {
@@ -718,8 +708,7 @@ unsafe extern "C" fn _preextrapolate_helper(mut v: *mut crate::codec_h::vorbis_d
             j = 0 as i32 as libc::c_long;
             while j < (*v).pcm_current as libc::c_long {
                 *work.offset(j as isize) = *(*(*v).pcm.offset(i as isize)).offset(
-                    ((*v).pcm_current as libc::c_long - j - 1 as i32 as libc::c_long)
-                        as isize,
+                    ((*v).pcm_current as libc::c_long - j - 1 as i32 as libc::c_long) as isize,
                 );
                 j += 1
             }
@@ -744,8 +733,7 @@ unsafe extern "C" fn _preextrapolate_helper(mut v: *mut crate::codec_h::vorbis_d
             j = 0 as i32 as libc::c_long;
             while j < (*v).pcm_current as libc::c_long {
                 *(*(*v).pcm.offset(i as isize)).offset(
-                    ((*v).pcm_current as libc::c_long - j - 1 as i32 as libc::c_long)
-                        as isize,
+                    ((*v).pcm_current as libc::c_long - j - 1 as i32 as libc::c_long) as isize,
                 ) = *work.offset(j as isize);
                 j += 1
             }
@@ -768,8 +756,7 @@ pub unsafe extern "C" fn vorbis_analysis_wrote(
         let mut i: i32 = 0;
         let mut fresh9 = ::std::vec::from_elem(
             0,
-            (order as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
+            (order as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
                 as usize,
         );
         let mut lpc: *mut f32 = fresh9.as_mut_ptr() as *mut f32;
@@ -784,8 +771,7 @@ pub unsafe extern "C" fn vorbis_analysis_wrote(
         suck to encode.  Extrapolate for the sake of cleanliness. */
         vorbis_analysis_buffer(
             v,
-            ((*ci).blocksizes[1 as i32 as usize] * 3 as i32 as libc::c_long)
-                as i32,
+            ((*ci).blocksizes[1 as i32 as usize] * 3 as i32 as libc::c_long) as i32,
         );
         (*v).eofflag = (*v).pcm_current;
         (*v).pcm_current = ((*v).pcm_current as libc::c_long
@@ -842,8 +828,7 @@ pub unsafe extern "C" fn vorbis_analysis_wrote(
         too... in case we're beginning on a cliff! */
         /* clumsy, but simple.  It only runs once, so simple is good. */
         if (*v).preextrapolate == 0
-            && (*v).pcm_current as libc::c_long - (*v).centerW
-                > (*ci).blocksizes[1 as i32 as usize]
+            && (*v).pcm_current as libc::c_long - (*v).centerW > (*ci).blocksizes[1 as i32 as usize]
         {
             _preextrapolate_helper(v);
         }
@@ -893,9 +878,7 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
             return 0 as i32;
         }
         (*v).nW = 0 as i32 as libc::c_long
-    } else if (*ci).blocksizes[0 as i32 as usize]
-        == (*ci).blocksizes[1 as i32 as usize]
-    {
+    } else if (*ci).blocksizes[0 as i32 as usize] == (*ci).blocksizes[1 as i32 as usize] {
         (*v).nW = 0 as i32 as libc::c_long
     } else {
         (*v).nW = bp
@@ -994,9 +977,8 @@ pub unsafe extern "C" fn vorbis_analysis_blockout(
         }
     }
     /* advance storage vectors and clean up */
-    let mut new_centerNext: i32 = ((*ci).blocksizes[1 as i32 as usize]
-        / 2 as i32 as libc::c_long)
-        as i32;
+    let mut new_centerNext: i32 =
+        ((*ci).blocksizes[1 as i32 as usize] / 2 as i32 as libc::c_long) as i32;
     let mut movementW: i32 = (centerNext - new_centerNext as libc::c_long) as i32;
     if movementW > 0 as i32 {
         crate::src::libvorbis_1_3_6::lib::envelope::_ve_envelope_shift(
@@ -1115,12 +1097,9 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
     if !(*vb).pcm.is_null() {
         /* no pcm to process if vorbis_synthesis_trackonly
         was called on block */
-        let mut n: i32 =
-            ((*ci).blocksizes[(*v).W as usize] >> hs + 1 as i32) as i32;
-        let mut n0: i32 =
-            ((*ci).blocksizes[0 as i32 as usize] >> hs + 1 as i32) as i32;
-        let mut n1: i32 =
-            ((*ci).blocksizes[1 as i32 as usize] >> hs + 1 as i32) as i32;
+        let mut n: i32 = ((*ci).blocksizes[(*v).W as usize] >> hs + 1 as i32) as i32;
+        let mut n0: i32 = ((*ci).blocksizes[0 as i32 as usize] >> hs + 1 as i32) as i32;
+        let mut n1: i32 = ((*ci).blocksizes[1 as i32 as usize] >> hs + 1 as i32) as i32;
         let mut thisCenter: i32 = 0;
         let mut prevCenter: i32 = 0;
         (*v).glue_bits += (*vb).glue_bits;
@@ -1216,8 +1195,7 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
                 }
             }
             /* the copy section */
-            let mut pcm_3: *mut f32 =
-                (*(*v).pcm.offset(j as isize)).offset(thisCenter as isize);
+            let mut pcm_3: *mut f32 = (*(*v).pcm.offset(j as isize)).offset(thisCenter as isize);
             let mut p_3: *mut f32 = (*(*vb).pcm.offset(j as isize)).offset(n as isize);
             i = 0 as i32;
             while i < n {
@@ -1289,13 +1267,11 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
                     if extra > ((*v).pcm_current - (*v).pcm_returned << hs) as libc::c_long {
                         extra = ((*v).pcm_current - (*v).pcm_returned << hs) as libc::c_long
                     }
-                    (*v).pcm_current =
-                        ((*v).pcm_current as libc::c_long - (extra >> hs)) as i32
+                    (*v).pcm_current = ((*v).pcm_current as libc::c_long - (extra >> hs)) as i32
                 } else {
                     /* trim the beginning */
-                    (*v).pcm_returned =
-                        ((*v).pcm_returned as libc::c_long + (extra >> hs)) as i32; /* else {Shouldn't happen *unless* the bitstream is out of
-                                                                                            spec.  Either way, believe the bitstream } */
+                    (*v).pcm_returned = ((*v).pcm_returned as libc::c_long + (extra >> hs)) as i32; /* else {Shouldn't happen *unless* the bitstream is out of
+                                                                                                    spec.  Either way, believe the bitstream } */
                     if (*v).pcm_returned > (*v).pcm_current {
                         (*v).pcm_returned = (*v).pcm_current
                     }
@@ -1305,9 +1281,7 @@ pub unsafe extern "C" fn vorbis_synthesis_blockin(
     } else {
         (*v).granulepos += (*ci).blocksizes[(*v).lW as usize] / 4 as i32 as libc::c_long
             + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as libc::c_long;
-        if (*vb).granulepos != -(1 as i32) as libc::c_long
-            && (*v).granulepos != (*vb).granulepos
-        {
+        if (*vb).granulepos != -(1 as i32) as libc::c_long && (*v).granulepos != (*vb).granulepos {
             if (*v).granulepos > (*vb).granulepos {
                 let mut extra_0: libc::c_long = (*v).granulepos - (*vb).granulepos;
                 if extra_0 != 0 {
@@ -1392,12 +1366,9 @@ pub unsafe extern "C" fn vorbis_synthesis_lapout(
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
     let mut hs: i32 = (*ci).halfrate_flag;
-    let mut n: i32 =
-        ((*ci).blocksizes[(*v).W as usize] >> hs + 1 as i32) as i32;
-    let mut n0: i32 =
-        ((*ci).blocksizes[0 as i32 as usize] >> hs + 1 as i32) as i32;
-    let mut n1: i32 =
-        ((*ci).blocksizes[1 as i32 as usize] >> hs + 1 as i32) as i32;
+    let mut n: i32 = ((*ci).blocksizes[(*v).W as usize] >> hs + 1 as i32) as i32;
+    let mut n0: i32 = ((*ci).blocksizes[0 as i32 as usize] >> hs + 1 as i32) as i32;
+    let mut n1: i32 = ((*ci).blocksizes[1 as i32 as usize] >> hs + 1 as i32) as i32;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     if (*v).pcm_returned < 0 as i32 {

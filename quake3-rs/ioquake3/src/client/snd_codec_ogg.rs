@@ -254,9 +254,7 @@ pub static mut S_OGG_Callbacks: crate::src::libvorbis_1_3_6::lib::vorbisfile::ov
                     _: i32,
                 ) -> i32,
         ),
-        close_func: Some(
-            S_OGG_Callback_close as unsafe extern "C" fn(_: *mut libc::c_void) -> i32,
-        ),
+        close_func: Some(S_OGG_Callback_close as unsafe extern "C" fn(_: *mut libc::c_void) -> i32),
         tell_func: Some(
             S_OGG_Callback_tell as unsafe extern "C" fn(_: *mut libc::c_void) -> libc::c_long,
         ),

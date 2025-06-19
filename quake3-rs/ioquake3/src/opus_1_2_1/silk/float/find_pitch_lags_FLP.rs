@@ -170,12 +170,10 @@ pub unsafe extern "C" fn silk_find_pitch_lags_FLP(
     );
     /* Last LA_LTP samples */
     Wsig_ptr = Wsig_ptr.offset(
-        ((*psEnc).sCmn.pitch_LPC_win_length - ((*psEnc).sCmn.la_pitch << 1 as i32))
-            as isize,
+        ((*psEnc).sCmn.pitch_LPC_win_length - ((*psEnc).sCmn.la_pitch << 1 as i32)) as isize,
     );
     x_buf_ptr = x_buf_ptr.offset(
-        ((*psEnc).sCmn.pitch_LPC_win_length - ((*psEnc).sCmn.la_pitch << 1 as i32))
-            as isize,
+        ((*psEnc).sCmn.pitch_LPC_win_length - ((*psEnc).sCmn.la_pitch << 1 as i32)) as isize,
     );
     crate::src::opus_1_2_1::silk::float::apply_sine_window_FLP::silk_apply_sine_window_FLP(
         Wsig_ptr,
@@ -191,8 +189,7 @@ pub unsafe extern "C" fn silk_find_pitch_lags_FLP(
         (*psEnc).sCmn.pitchEstimationLPCOrder + 1 as i32,
     );
     /* Add white noise, as a fraction of the energy */
-    auto_corr[0 as i32 as usize] +=
-        auto_corr[0 as i32 as usize] * 1e-3f32 + 1 as i32 as f32;
+    auto_corr[0 as i32 as usize] += auto_corr[0 as i32 as usize] * 1e-3f32 + 1 as i32 as f32;
     /* Calculate the reflection coefficients using Schur */
     res_nrg = crate::src::opus_1_2_1::silk::float::schur_FLP::silk_schur_FLP(
         refl_coef.as_mut_ptr(),
@@ -231,8 +228,7 @@ pub unsafe extern "C" fn silk_find_pitch_lags_FLP(
         thrhld = 0.6f32;
         thrhld -= 0.004f32 * (*psEnc).sCmn.pitchEstimationLPCOrder as f32;
         thrhld -= 0.1f32 * (*psEnc).sCmn.speech_activity_Q8 as f32 * (1.0f32 / 256.0f32);
-        thrhld -= 0.15f32
-            * ((*psEnc).sCmn.prevSignalType as i32 >> 1 as i32) as f32;
+        thrhld -= 0.15f32 * ((*psEnc).sCmn.prevSignalType as i32 >> 1 as i32) as f32;
         thrhld -= 0.1f32 * (*psEnc).sCmn.input_tilt_Q15 as f32 * (1.0f32 / 32768.0f32);
         /* ****************************************/
         /* Call Pitch estimator                  */

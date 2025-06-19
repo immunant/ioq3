@@ -295,10 +295,7 @@ UI_NetworkOptionsMenu_Event
 =================
 */
 
-unsafe extern "C" fn UI_NetworkOptionsMenu_Event(
-    mut ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_NetworkOptionsMenu_Event(mut ptr: *mut libc::c_void, mut event: i32) {
     if event != 3 as i32 {
         return;
     }
@@ -391,27 +388,22 @@ unsafe extern "C" fn UI_NetworkOptionsMenu_Init() {
     networkOptionsInfo.framer.width = 256 as i32;
     networkOptionsInfo.framer.height = 334 as i32;
     networkOptionsInfo.graphics.generic.type_0 = 9 as i32;
-    networkOptionsInfo.graphics.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    networkOptionsInfo.graphics.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     networkOptionsInfo.graphics.generic.id = 10 as i32;
     networkOptionsInfo.graphics.generic.callback = Some(
-        UI_NetworkOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_NetworkOptionsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     networkOptionsInfo.graphics.generic.x = 216 as i32;
-    networkOptionsInfo.graphics.generic.y =
-        240 as i32 - 2 as i32 * 27 as i32;
+    networkOptionsInfo.graphics.generic.y = 240 as i32 - 2 as i32 * 27 as i32;
     networkOptionsInfo.graphics.string =
         b"GRAPHICS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     networkOptionsInfo.graphics.style = 0x2 as i32;
     networkOptionsInfo.graphics.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     networkOptionsInfo.display.generic.type_0 = 9 as i32;
-    networkOptionsInfo.display.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    networkOptionsInfo.display.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     networkOptionsInfo.display.generic.id = 11 as i32;
     networkOptionsInfo.display.generic.callback = Some(
-        UI_NetworkOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_NetworkOptionsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     networkOptionsInfo.display.generic.x = 216 as i32;
     networkOptionsInfo.display.generic.y = 240 as i32 - 27 as i32;
@@ -420,12 +412,10 @@ unsafe extern "C" fn UI_NetworkOptionsMenu_Init() {
     networkOptionsInfo.display.style = 0x2 as i32;
     networkOptionsInfo.display.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     networkOptionsInfo.sound.generic.type_0 = 9 as i32;
-    networkOptionsInfo.sound.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    networkOptionsInfo.sound.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     networkOptionsInfo.sound.generic.id = 12 as i32;
     networkOptionsInfo.sound.generic.callback = Some(
-        UI_NetworkOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_NetworkOptionsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     networkOptionsInfo.sound.generic.x = 216 as i32;
     networkOptionsInfo.sound.generic.y = 240 as i32;
@@ -437,8 +427,7 @@ unsafe extern "C" fn UI_NetworkOptionsMenu_Init() {
     networkOptionsInfo.network.generic.flags = 0x10 as i32 as u32;
     networkOptionsInfo.network.generic.id = 13 as i32;
     networkOptionsInfo.network.generic.callback = Some(
-        UI_NetworkOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_NetworkOptionsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     networkOptionsInfo.network.generic.x = 216 as i32;
     networkOptionsInfo.network.generic.y = 240 as i32 + 27 as i32;
@@ -449,11 +438,9 @@ unsafe extern "C" fn UI_NetworkOptionsMenu_Init() {
     y = 240 as i32 - 1 as i32 * (16 as i32 + 2 as i32);
     networkOptionsInfo.rate.generic.type_0 = 3 as i32;
     networkOptionsInfo.rate.generic.name = b"Data Rate:\x00" as *const u8 as *const libc::c_char;
-    networkOptionsInfo.rate.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    networkOptionsInfo.rate.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     networkOptionsInfo.rate.generic.callback = Some(
-        UI_NetworkOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_NetworkOptionsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     networkOptionsInfo.rate.generic.id = 14 as i32;
     networkOptionsInfo.rate.generic.x = 400 as i32;
@@ -462,11 +449,9 @@ unsafe extern "C" fn UI_NetworkOptionsMenu_Init() {
     networkOptionsInfo.back.generic.type_0 = 6 as i32;
     networkOptionsInfo.back.generic.name =
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    networkOptionsInfo.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    networkOptionsInfo.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     networkOptionsInfo.back.generic.callback = Some(
-        UI_NetworkOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_NetworkOptionsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     networkOptionsInfo.back.generic.id = 15 as i32;
     networkOptionsInfo.back.generic.x = 0 as i32;

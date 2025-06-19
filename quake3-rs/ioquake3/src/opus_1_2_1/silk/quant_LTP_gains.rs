@@ -212,17 +212,15 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
     while k < 3 as i32 {
         /* Safety margin for pitch gain control, to take into account factors
         such as state rescaling/rewhitening. */
-        let mut gain_safety: crate::opus_types_h::opus_int32 = (0.4f64
-            * ((1 as i32 as i64) << 7 as i32) as f64
-            + 0.5f64)
-            as crate::opus_types_h::opus_int32;
+        let mut gain_safety: crate::opus_types_h::opus_int32 =
+            (0.4f64 * ((1 as i32 as i64) << 7 as i32) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32;
         cl_ptr_Q5 =
             crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_gain_BITS_Q5_ptrs[k as usize];
         cbk_ptr_Q7 = crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_vq_ptrs_Q7[k as usize];
         cbk_gain_ptr_Q7 =
             crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_vq_gain_ptrs_Q7[k as usize];
-        cbk_size =
-            crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_vq_sizes[k as usize] as i32;
+        cbk_size = crate::src::opus_1_2_1::silk::tables_LTP::silk_LTP_vq_sizes[k as usize] as i32;
         /* Set up pointers to first subframe */
         XX_Q17_ptr = XX_Q17;
         xX_Q17_ptr = xX_Q17;
@@ -232,15 +230,11 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
         j = 0 as i32;
         while j < nb_subfr {
             max_gain_Q7 = crate::src::opus_1_2_1::silk::log2lin::silk_log2lin(
-                (250.0f32 as f64 / 6.0f64
-                    * ((1 as i32 as i64) << 7 as i32)
-                        as f64
-                    + 0.5f64) as crate::opus_types_h::opus_int32
+                (250.0f32 as f64 / 6.0f64 * ((1 as i32 as i64) << 7 as i32) as f64 + 0.5f64)
+                    as crate::opus_types_h::opus_int32
                     - sum_log_gain_tmp_Q7
-                    + ((7 as i32 as i64
-                        * ((1 as i32 as i64) << 7 as i32))
-                        as f64
-                        + 0.5f64) as crate::opus_types_h::opus_int32,
+                    + ((7 as i32 as i64 * ((1 as i32 as i64) << 7 as i32)) as f64 + 0.5f64)
+                        as crate::opus_types_h::opus_int32,
             ) - gain_safety;
             crate::src::opus_1_2_1::silk::VQ_WMat_EC::silk_VQ_WMat_EC_c(
                 &mut *temp_idx.as_mut_ptr().offset(j as isize),
@@ -278,19 +272,15 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
             sum_log_gain_tmp_Q7 = if 0 as i32
                 > sum_log_gain_tmp_Q7
                     + crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(gain_safety + gain_Q7)
-                    - ((7 as i32 as i64
-                        * ((1 as i32 as i64) << 7 as i32))
-                        as f64
-                        + 0.5f64) as crate::opus_types_h::opus_int32
+                    - ((7 as i32 as i64 * ((1 as i32 as i64) << 7 as i32)) as f64 + 0.5f64)
+                        as crate::opus_types_h::opus_int32
             {
                 0 as i32
             } else {
                 (sum_log_gain_tmp_Q7
                     + crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(gain_safety + gain_Q7))
-                    - ((7 as i32 as i64
-                        * ((1 as i32 as i64) << 7 as i32))
-                        as f64
-                        + 0.5f64) as crate::opus_types_h::opus_int32
+                    - ((7 as i32 as i64 * ((1 as i32 as i64) << 7 as i32)) as f64 + 0.5f64)
+                        as crate::opus_types_h::opus_int32
             };
             XX_Q17_ptr = XX_Q17_ptr.offset((5 as i32 * 5 as i32) as isize);
             xX_Q17_ptr = xX_Q17_ptr.offset(5 as i32 as isize);
@@ -315,12 +305,12 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
     while j < nb_subfr {
         k = 0 as i32;
         while k < 5 as i32 {
-            *B_Q14.offset((j * 5 as i32 + k) as isize) =
-                ((*cbk_ptr_Q7.offset(
-                    (*cbk_index.offset(j as isize) as i32 * 5 as i32 + k) as isize,
-                ) as crate::opus_types_h::opus_uint32)
-                    << 7 as i32) as crate::opus_types_h::opus_int32
-                    as crate::opus_types_h::opus_int16;
+            *B_Q14.offset((j * 5 as i32 + k) as isize) = ((*cbk_ptr_Q7
+                .offset((*cbk_index.offset(j as isize) as i32 * 5 as i32 + k) as isize)
+                as crate::opus_types_h::opus_uint32)
+                << 7 as i32)
+                as crate::opus_types_h::opus_int32
+                as crate::opus_types_h::opus_int16;
             k += 1
         }
         j += 1
@@ -334,6 +324,6 @@ pub unsafe extern "C" fn silk_quant_LTP_gains(
     *pred_gain_dB_Q7 = -(3 as i32) as crate::opus_types_h::opus_int16
         as crate::opus_types_h::opus_int32
         * (crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(res_nrg_Q15)
-            - ((15 as i32) << 7 as i32))
-            as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
+            - ((15 as i32) << 7 as i32)) as crate::opus_types_h::opus_int16
+            as crate::opus_types_h::opus_int32;
 }

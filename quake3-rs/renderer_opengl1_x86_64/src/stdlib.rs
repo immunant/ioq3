@@ -43,32 +43,20 @@ extern "C" {
     pub fn SDL_GetNumDisplayModes(displayIndex: i32) -> i32;
 
     #[no_mangle]
-    pub fn SDL_GetDisplayMode(
-        displayIndex: i32,
-        modeIndex: i32,
-        mode: *mut SDL_DisplayMode,
-    ) -> i32;
+    pub fn SDL_GetDisplayMode(displayIndex: i32, modeIndex: i32, mode: *mut SDL_DisplayMode)
+        -> i32;
 
     #[no_mangle]
-    pub fn SDL_GetDesktopDisplayMode(
-        displayIndex: i32,
-        mode: *mut SDL_DisplayMode,
-    ) -> i32;
+    pub fn SDL_GetDesktopDisplayMode(displayIndex: i32, mode: *mut SDL_DisplayMode) -> i32;
 
     #[no_mangle]
     pub fn SDL_GetWindowDisplayIndex(window: *mut SDL_Window) -> i32;
 
     #[no_mangle]
-    pub fn SDL_SetWindowDisplayMode(
-        window: *mut SDL_Window,
-        mode: *const SDL_DisplayMode,
-    ) -> i32;
+    pub fn SDL_SetWindowDisplayMode(window: *mut SDL_Window, mode: *const SDL_DisplayMode) -> i32;
 
     #[no_mangle]
-    pub fn SDL_GetWindowDisplayMode(
-        window: *mut SDL_Window,
-        mode: *mut SDL_DisplayMode,
-    ) -> i32;
+    pub fn SDL_GetWindowDisplayMode(window: *mut SDL_Window, mode: *mut SDL_DisplayMode) -> i32;
 
     #[no_mangle]
     pub fn SDL_CreateWindow(
@@ -96,10 +84,7 @@ extern "C" {
     pub fn SDL_SetWindowFullscreen(window: *mut SDL_Window, flags: Uint32) -> i32;
 
     #[no_mangle]
-    pub fn SDL_SetWindowBrightness(
-        window: *mut SDL_Window,
-        brightness: f32,
-    ) -> i32;
+    pub fn SDL_SetWindowBrightness(window: *mut SDL_Window, brightness: f32) -> i32;
 
     #[no_mangle]
     pub fn SDL_SetWindowGammaRamp(
@@ -250,8 +235,7 @@ extern "C" {
     ) -> *mut libc::c_char;
 
     #[no_mangle]
-    pub fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong)
-        -> i32;
+    pub fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> i32;
 
     #[no_mangle]
     pub fn strlen(_: *const libc::c_char) -> libc::c_ulong;

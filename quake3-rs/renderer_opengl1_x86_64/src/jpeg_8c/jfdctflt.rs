@@ -82,35 +82,26 @@ pub unsafe extern "C" fn jpeg_fdct_float(
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
         tmp0 = (*elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(7 as i32 as isize) as i32)
-            as f32;
+            + *elemptr.offset(7 as i32 as isize) as i32) as f32;
         tmp7 = (*elemptr.offset(0 as i32 as isize) as i32
-            - *elemptr.offset(7 as i32 as isize) as i32)
-            as f32;
+            - *elemptr.offset(7 as i32 as isize) as i32) as f32;
         tmp1 = (*elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(6 as i32 as isize) as i32)
-            as f32;
+            + *elemptr.offset(6 as i32 as isize) as i32) as f32;
         tmp6 = (*elemptr.offset(1 as i32 as isize) as i32
-            - *elemptr.offset(6 as i32 as isize) as i32)
-            as f32;
+            - *elemptr.offset(6 as i32 as isize) as i32) as f32;
         tmp2 = (*elemptr.offset(2 as i32 as isize) as i32
-            + *elemptr.offset(5 as i32 as isize) as i32)
-            as f32;
+            + *elemptr.offset(5 as i32 as isize) as i32) as f32;
         tmp5 = (*elemptr.offset(2 as i32 as isize) as i32
-            - *elemptr.offset(5 as i32 as isize) as i32)
-            as f32;
+            - *elemptr.offset(5 as i32 as isize) as i32) as f32;
         tmp3 = (*elemptr.offset(3 as i32 as isize) as i32
-            + *elemptr.offset(4 as i32 as isize) as i32)
-            as f32;
+            + *elemptr.offset(4 as i32 as isize) as i32) as f32;
         tmp4 = (*elemptr.offset(3 as i32 as isize) as i32
-            - *elemptr.offset(4 as i32 as isize) as i32)
-            as f32;
+            - *elemptr.offset(4 as i32 as isize) as i32) as f32;
         tmp10 = tmp0 + tmp3;
         tmp13 = tmp0 - tmp3;
         tmp11 = tmp1 + tmp2;
         tmp12 = tmp1 - tmp2;
-        *dataptr.offset(0 as i32 as isize) =
-            tmp10 + tmp11 - (8 as i32 * 128 as i32) as f32;
+        *dataptr.offset(0 as i32 as isize) = tmp10 + tmp11 - (8 as i32 * 128 as i32) as f32;
         *dataptr.offset(4 as i32 as isize) = tmp10 - tmp11;
         z1 = (tmp12 + tmp13) * 0.707106781f64 as f32;
         *dataptr.offset(2 as i32 as isize) = tmp13 + z1;

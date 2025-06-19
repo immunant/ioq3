@@ -1170,8 +1170,7 @@ pub unsafe extern "C" fn jpeg_default_colorspace(mut cinfo: crate::jpeglib_h::j_
             jpeg_set_colorspace(cinfo, crate::jpeglib_h::JCS_UNKNOWN);
         }
         _ => {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_BAD_IN_COLORSPACE as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_IN_COLORSPACE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -1358,11 +1357,8 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
         }
         0 => {
             (*cinfo).num_components = (*cinfo).input_components;
-            if (*cinfo).num_components < 1 as i32
-                || (*cinfo).num_components > 10 as i32
-            {
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_COMPONENT_COUNT as i32;
+            if (*cinfo).num_components < 1 as i32 || (*cinfo).num_components > 10 as i32 {
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_COMPONENT_COUNT as i32;
                 (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).num_components;
                 (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = 10 as i32;
                 Some(
@@ -1388,8 +1384,7 @@ pub unsafe extern "C" fn jpeg_set_colorspace(
             }
         }
         _ => {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_BAD_J_COLORSPACE as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_J_COLORSPACE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -1496,8 +1491,7 @@ pub unsafe extern "C" fn jpeg_simple_progression(mut cinfo: crate::jpeglib_h::j_
     }
     /* Figure space needed for script.  Calculation must match code below! */
     if ncomps == 3 as i32
-        && (*cinfo).jpeg_color_space as u32
-            == crate::jpeglib_h::JCS_YCbCr as i32 as u32
+        && (*cinfo).jpeg_color_space as u32 == crate::jpeglib_h::JCS_YCbCr as i32 as u32
     {
         /* Custom script for YCbCr color images. */
         nscans = 10 as i32
@@ -1539,123 +1533,38 @@ pub unsafe extern "C" fn jpeg_simple_progression(mut cinfo: crate::jpeglib_h::j_
     (*cinfo).scan_info = scanptr;
     (*cinfo).num_scans = nscans;
     if ncomps == 3 as i32
-        && (*cinfo).jpeg_color_space as u32
-            == crate::jpeglib_h::JCS_YCbCr as i32 as u32
+        && (*cinfo).jpeg_color_space as u32 == crate::jpeglib_h::JCS_YCbCr as i32 as u32
     {
         /* Custom script for YCbCr color images. */
         /* Initial DC scan */
         scanptr = fill_dc_scans(scanptr, ncomps, 0 as i32, 1 as i32);
         /* Initial AC scan: get some luma data out in a hurry */
-        scanptr = fill_a_scan(
-            scanptr,
-            0 as i32,
-            1 as i32,
-            5 as i32,
-            0 as i32,
-            2 as i32,
-        );
+        scanptr = fill_a_scan(scanptr, 0 as i32, 1 as i32, 5 as i32, 0 as i32, 2 as i32);
         /* Chroma data is too small to be worth expending many scans on */
-        scanptr = fill_a_scan(
-            scanptr,
-            2 as i32,
-            1 as i32,
-            63 as i32,
-            0 as i32,
-            1 as i32,
-        );
-        scanptr = fill_a_scan(
-            scanptr,
-            1 as i32,
-            1 as i32,
-            63 as i32,
-            0 as i32,
-            1 as i32,
-        );
+        scanptr = fill_a_scan(scanptr, 2 as i32, 1 as i32, 63 as i32, 0 as i32, 1 as i32);
+        scanptr = fill_a_scan(scanptr, 1 as i32, 1 as i32, 63 as i32, 0 as i32, 1 as i32);
         /* Complete spectral selection for luma AC */
-        scanptr = fill_a_scan(
-            scanptr,
-            0 as i32,
-            6 as i32,
-            63 as i32,
-            0 as i32,
-            2 as i32,
-        );
+        scanptr = fill_a_scan(scanptr, 0 as i32, 6 as i32, 63 as i32, 0 as i32, 2 as i32);
         /* Refine next bit of luma AC */
-        scanptr = fill_a_scan(
-            scanptr,
-            0 as i32,
-            1 as i32,
-            63 as i32,
-            2 as i32,
-            1 as i32,
-        );
+        scanptr = fill_a_scan(scanptr, 0 as i32, 1 as i32, 63 as i32, 2 as i32, 1 as i32);
         /* Finish DC successive approximation */
         scanptr = fill_dc_scans(scanptr, ncomps, 1 as i32, 0 as i32);
         /* Finish AC successive approximation */
-        scanptr = fill_a_scan(
-            scanptr,
-            2 as i32,
-            1 as i32,
-            63 as i32,
-            1 as i32,
-            0 as i32,
-        );
-        scanptr = fill_a_scan(
-            scanptr,
-            1 as i32,
-            1 as i32,
-            63 as i32,
-            1 as i32,
-            0 as i32,
-        );
+        scanptr = fill_a_scan(scanptr, 2 as i32, 1 as i32, 63 as i32, 1 as i32, 0 as i32);
+        scanptr = fill_a_scan(scanptr, 1 as i32, 1 as i32, 63 as i32, 1 as i32, 0 as i32);
         /* Luma bottom bit comes last since it's usually largest scan */
-        scanptr = fill_a_scan(
-            scanptr,
-            0 as i32,
-            1 as i32,
-            63 as i32,
-            1 as i32,
-            0 as i32,
-        )
+        scanptr = fill_a_scan(scanptr, 0 as i32, 1 as i32, 63 as i32, 1 as i32, 0 as i32)
     } else {
         /* All-purpose script for other color spaces. */
         /* Successive approximation first pass */
         scanptr = fill_dc_scans(scanptr, ncomps, 0 as i32, 1 as i32);
-        scanptr = fill_scans(
-            scanptr,
-            ncomps,
-            1 as i32,
-            5 as i32,
-            0 as i32,
-            2 as i32,
-        );
-        scanptr = fill_scans(
-            scanptr,
-            ncomps,
-            6 as i32,
-            63 as i32,
-            0 as i32,
-            2 as i32,
-        );
+        scanptr = fill_scans(scanptr, ncomps, 1 as i32, 5 as i32, 0 as i32, 2 as i32);
+        scanptr = fill_scans(scanptr, ncomps, 6 as i32, 63 as i32, 0 as i32, 2 as i32);
         /* Successive approximation second pass */
-        scanptr = fill_scans(
-            scanptr,
-            ncomps,
-            1 as i32,
-            63 as i32,
-            2 as i32,
-            1 as i32,
-        );
+        scanptr = fill_scans(scanptr, ncomps, 1 as i32, 63 as i32, 2 as i32, 1 as i32);
         /* Successive approximation final pass */
         scanptr = fill_dc_scans(scanptr, ncomps, 1 as i32, 0 as i32);
-        scanptr = fill_scans(
-            scanptr,
-            ncomps,
-            1 as i32,
-            63 as i32,
-            1 as i32,
-            0 as i32,
-        )
+        scanptr = fill_scans(scanptr, ncomps, 1 as i32, 63 as i32, 1 as i32, 0 as i32)
     };
 }
 /* C_PROGRESSIVE_SUPPORTED */

@@ -289,8 +289,7 @@ unsafe extern "C" fn ProjectRadius(
         return 0 as i32 as f32;
     }
     p[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    p[1 as i32 as usize] =
-        crate::stdlib::fabs(r as f64) as crate::src::qcommon::q_shared::vec_t;
+    p[1 as i32 as usize] = crate::stdlib::fabs(r as f64) as crate::src::qcommon::q_shared::vec_t;
     p[2 as i32 as usize] = -dist;
     projected[0 as i32 as usize] = p[0 as i32 as usize]
         * crate::src::renderergl1::tr_main::tr
@@ -440,16 +439,14 @@ unsafe extern "C" fn R_CullModel(
     // calculate a bounding box in the current coordinate system
     i = 0 as i32;
     while i < 3 as i32 {
-        bounds[0 as i32 as usize][i as usize] = if (*oldFrame).bounds
-            [0 as i32 as usize][i as usize]
+        bounds[0 as i32 as usize][i as usize] = if (*oldFrame).bounds[0 as i32 as usize][i as usize]
             < (*newFrame).bounds[0 as i32 as usize][i as usize]
         {
             (*oldFrame).bounds[0 as i32 as usize][i as usize]
         } else {
             (*newFrame).bounds[0 as i32 as usize][i as usize]
         };
-        bounds[1 as i32 as usize][i as usize] = if (*oldFrame).bounds
-            [1 as i32 as usize][i as usize]
+        bounds[1 as i32 as usize][i as usize] = if (*oldFrame).bounds[1 as i32 as usize][i as usize]
             > (*newFrame).bounds[1 as i32 as usize][i as usize]
         {
             (*oldFrame).bounds[1 as i32 as usize][i as usize]
@@ -488,9 +485,7 @@ R_ComputeLOD
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn R_ComputeLOD(
-    mut ent: *mut crate::tr_local_h::trRefEntity_t,
-) -> i32 {
+pub unsafe extern "C" fn R_ComputeLOD(mut ent: *mut crate::tr_local_h::trRefEntity_t) -> i32 {
     let mut radius: f32 = 0.;
     let mut flod: f32 = 0.;
     let mut lodscale: f32 = 0.;
@@ -528,11 +523,10 @@ pub unsafe extern "C" fn R_ComputeLOD(
                     as *const crate::src::qcommon::q_shared::vec_t,
             )
         } else {
-            frame = ((*crate::src::renderergl1::tr_main::tr.currentModel).md3
-                [0 as i32 as usize] as *mut u8)
+            frame = ((*crate::src::renderergl1::tr_main::tr.currentModel).md3[0 as i32 as usize]
+                as *mut u8)
                 .offset(
-                    (*(*crate::src::renderergl1::tr_main::tr.currentModel).md3
-                        [0 as i32 as usize])
+                    (*(*crate::src::renderergl1::tr_main::tr.currentModel).md3[0 as i32 as usize])
                         .ofsFrames as isize,
                 ) as *mut crate::qfiles_h::md3Frame_t;
             frame = frame.offset((*ent).e.frame as isize);
@@ -597,12 +591,12 @@ pub unsafe extern "C" fn R_ComputeFogNum(
     md3Frame = ((header as *mut crate::src::qcommon::q_shared::byte)
         .offset((*header).ofsFrames as isize) as *mut crate::qfiles_h::md3Frame_t)
         .offset((*ent).e.frame as isize);
-    localOrigin[0 as i32 as usize] = (*ent).e.origin[0 as i32 as usize]
-        + (*md3Frame).localOrigin[0 as i32 as usize];
-    localOrigin[1 as i32 as usize] = (*ent).e.origin[1 as i32 as usize]
-        + (*md3Frame).localOrigin[1 as i32 as usize];
-    localOrigin[2 as i32 as usize] = (*ent).e.origin[2 as i32 as usize]
-        + (*md3Frame).localOrigin[2 as i32 as usize];
+    localOrigin[0 as i32 as usize] =
+        (*ent).e.origin[0 as i32 as usize] + (*md3Frame).localOrigin[0 as i32 as usize];
+    localOrigin[1 as i32 as usize] =
+        (*ent).e.origin[1 as i32 as usize] + (*md3Frame).localOrigin[1 as i32 as usize];
+    localOrigin[2 as i32 as usize] =
+        (*ent).e.origin[2 as i32 as usize] + (*md3Frame).localOrigin[2 as i32 as usize];
     i = 1 as i32;
     while i < (*crate::src::renderergl1::tr_main::tr.world).numfogs {
         fog = &mut *(*crate::src::renderergl1::tr_main::tr.world)
@@ -968,9 +962,8 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut crate::tr_local_h::trRef
         (*ent).e.frame %= (*(*crate::src::renderergl1::tr_main::tr.currentModel).md3
             [0 as i32 as usize])
             .numFrames;
-        (*ent).e.oldframe %= (*(*crate::src::renderergl1::tr_main::tr.currentModel).md3
-            [0 as i32 as usize])
-            .numFrames
+        (*ent).e.oldframe %=
+            (*(*crate::src::renderergl1::tr_main::tr.currentModel).md3[0 as i32 as usize]).numFrames
     }
     //
     // Validate the frames so there is no chance of a crash.
@@ -979,12 +972,10 @@ pub unsafe extern "C" fn R_AddMD3Surfaces(mut ent: *mut crate::tr_local_h::trRef
     // range checked again.
     //
     if (*ent).e.frame
-        >= (*(*crate::src::renderergl1::tr_main::tr.currentModel).md3[0 as i32 as usize])
-            .numFrames
+        >= (*(*crate::src::renderergl1::tr_main::tr.currentModel).md3[0 as i32 as usize]).numFrames
         || (*ent).e.frame < 0 as i32
         || (*ent).e.oldframe
-            >= (*(*crate::src::renderergl1::tr_main::tr.currentModel).md3
-                [0 as i32 as usize])
+            >= (*(*crate::src::renderergl1::tr_main::tr.currentModel).md3[0 as i32 as usize])
                 .numFrames
         || (*ent).e.oldframe < 0 as i32
     {

@@ -337,19 +337,15 @@ pub unsafe extern "C" fn silk_decode_frame(
     (*psDecCtrl).LTP_scale_Q14 = 0 as i32;
     /* Safety checks */
     if lostFlag == 0 as i32
-        || lostFlag == 2 as i32
-            && (*psDec).LBRR_flags[(*psDec).nFramesDecoded as usize] == 1 as i32
+        || lostFlag == 2 as i32 && (*psDec).LBRR_flags[(*psDec).nFramesDecoded as usize] == 1 as i32
     {
         let mut pulses: *mut crate::opus_types_h::opus_int16 =
             0 as *mut crate::opus_types_h::opus_int16;
         let mut fresh1 = ::std::vec::from_elem(
             0,
             (::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong)
-                .wrapping_mul(
-                    (L + 16 as i32 - 1 as i32
-                        & !(16 as i32 - 1 as i32))
-                        as libc::c_ulong,
-                ) as usize,
+                .wrapping_mul((L + 16 as i32 - 1 as i32 & !(16 as i32 - 1 as i32)) as libc::c_ulong)
+                as usize,
         );
         pulses = fresh1.as_mut_ptr() as *mut crate::opus_types_h::opus_int16;
         /* ********************************************/

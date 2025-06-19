@@ -217,8 +217,8 @@ unsafe extern "C" fn SV_SendConfigstring(
 ) {
     let mut maxChunkSize: i32 = 1024 as i32 - 24 as i32;
     let mut len: i32 = 0;
-    len = crate::stdlib::strlen(crate::src::server::sv_main::sv.configstrings[index as usize])
-        as i32;
+    len =
+        crate::stdlib::strlen(crate::src::server::sv_main::sv.configstrings[index as usize]) as i32;
     if len >= maxChunkSize {
         let mut sent: i32 = 0 as i32;
         let mut remaining: i32 = len;
@@ -326,20 +326,15 @@ pub unsafe extern "C" fn SV_SetConfigstring(mut index: i32, mut val: *const libc
         crate::src::qcommon::common::CopyString(val);
     // send it to all the clients if we aren't
     // spawning a new server
-    if crate::src::server::sv_main::sv.state as u32
-        == crate::server_h::SS_GAME as i32 as u32
+    if crate::src::server::sv_main::sv.state as u32 == crate::server_h::SS_GAME as i32 as u32
         || crate::src::server::sv_main::sv.restarting as u32 != 0
     {
         // send the data to all relevant clients
         i = 0 as i32;
         client = crate::src::server::sv_main::svs.clients;
         while i < (*crate::src::server::sv_main::sv_maxclients).integer {
-            if ((*client).state as u32)
-                < crate::server_h::CS_ACTIVE as i32 as u32
-            {
-                if (*client).state as u32
-                    == crate::server_h::CS_PRIMED as i32 as u32
-                {
+            if ((*client).state as u32) < crate::server_h::CS_ACTIVE as i32 as u32 {
+                if (*client).state as u32 == crate::server_h::CS_PRIMED as i32 as u32 {
                     (*client).csUpdated[index as usize] = crate::src::qcommon::q_shared::qtrue
                 }
             } else if !(index == 0 as i32
@@ -557,15 +552,11 @@ unsafe extern "C" fn SV_Startup() {
     ) as *mut crate::server_h::client_t;
     if (*crate::src::qcommon::common::com_dedicated).integer != 0 {
         crate::src::server::sv_main::svs.numSnapshotEntities =
-            (*crate::src::server::sv_main::sv_maxclients).integer
-                * 32 as i32
-                * 256 as i32
+            (*crate::src::server::sv_main::sv_maxclients).integer * 32 as i32 * 256 as i32
     } else {
         // we don't need nearly as many when playing locally
         crate::src::server::sv_main::svs.numSnapshotEntities =
-            (*crate::src::server::sv_main::sv_maxclients).integer
-                * 4 as i32
-                * 256 as i32
+            (*crate::src::server::sv_main::sv_maxclients).integer * 4 as i32 * 256 as i32
     }
     crate::src::server::sv_main::svs.initialized = crate::src::qcommon::q_shared::qtrue;
     // Don't respect sv_killserver unless a server is actually running
@@ -670,15 +661,11 @@ pub unsafe extern "C" fn SV_ChangeMaxClients() {
     // allocate new snapshot entities
     if (*crate::src::qcommon::common::com_dedicated).integer != 0 {
         crate::src::server::sv_main::svs.numSnapshotEntities =
-            (*crate::src::server::sv_main::sv_maxclients).integer
-                * 32 as i32
-                * 256 as i32
+            (*crate::src::server::sv_main::sv_maxclients).integer * 32 as i32 * 256 as i32
     } else {
         // we don't need nearly as many when playing locally
         crate::src::server::sv_main::svs.numSnapshotEntities =
-            (*crate::src::server::sv_main::sv_maxclients).integer
-                * 4 as i32
-                * 256 as i32
+            (*crate::src::server::sv_main::sv_maxclients).integer * 4 as i32 * 256 as i32
     };
 }
 /*
@@ -818,8 +805,7 @@ pub unsafe extern "C" fn SV_SpawnServer(
         b"0\x00" as *const u8 as *const libc::c_char,
     );
     // get a new checksum feed and restart the file system
-    crate::src::server::sv_main::sv.checksumFeed = ((::libc::rand() as u32)
-        << 16 as i32
+    crate::src::server::sv_main::sv.checksumFeed = ((::libc::rand() as u32) << 16 as i32
         ^ ::libc::rand() as u32
         ^ crate::src::qcommon::common::Com_Milliseconds() as u32)
         as i32;
@@ -1244,18 +1230,18 @@ pub unsafe extern "C" fn SV_Init() {
         b"\x00" as *const u8 as *const libc::c_char,
         0x4 as i32 | 0x1 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    crate::src::server::sv_main::sv_master[0 as i32 as usize] =
-        crate::src::qcommon::cvar::Cvar_Get(
-            b"sv_master1\x00" as *const u8 as *const libc::c_char,
-            b"master.quake3arena.com\x00" as *const u8 as *const libc::c_char,
-            0 as i32,
-        ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    crate::src::server::sv_main::sv_master[1 as i32 as usize] =
-        crate::src::qcommon::cvar::Cvar_Get(
-            b"sv_master2\x00" as *const u8 as *const libc::c_char,
-            b"master.ioquake3.org\x00" as *const u8 as *const libc::c_char,
-            0 as i32,
-        ) as *mut crate::src::qcommon::q_shared::cvar_s;
+    crate::src::server::sv_main::sv_master[0 as i32 as usize] = crate::src::qcommon::cvar::Cvar_Get(
+        b"sv_master1\x00" as *const u8 as *const libc::c_char,
+        b"master.quake3arena.com\x00" as *const u8 as *const libc::c_char,
+        0 as i32,
+    )
+        as *mut crate::src::qcommon::q_shared::cvar_s;
+    crate::src::server::sv_main::sv_master[1 as i32 as usize] = crate::src::qcommon::cvar::Cvar_Get(
+        b"sv_master2\x00" as *const u8 as *const libc::c_char,
+        b"master.ioquake3.org\x00" as *const u8 as *const libc::c_char,
+        0 as i32,
+    )
+        as *mut crate::src::qcommon::q_shared::cvar_s;
     index = 2 as i32;
     while index < 5 as i32 {
         crate::src::server::sv_main::sv_master[index as usize] = crate::src::qcommon::cvar::Cvar_Get(
@@ -1471,9 +1457,7 @@ pub unsafe extern "C" fn SV_FinalMessage(mut message: *mut libc::c_char) {
         i = 0 as i32;
         cl = crate::src::server::sv_main::svs.clients;
         while i < (*crate::src::server::sv_main::sv_maxclients).integer {
-            if (*cl).state as u32
-                >= crate::server_h::CS_CONNECTED as i32 as u32
-            {
+            if (*cl).state as u32 >= crate::server_h::CS_CONNECTED as i32 as u32 {
                 // don't send a disconnect to a local client
                 if (*cl).netchan.remoteAddress.type_0 as u32
                     != crate::qcommon_h::NA_LOOPBACK as i32 as u32

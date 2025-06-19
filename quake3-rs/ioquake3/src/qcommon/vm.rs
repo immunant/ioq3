@@ -417,8 +417,7 @@ pub unsafe extern "C" fn VM_LoadSymbols(mut vm: *mut crate::qcommon_h::vm_t) {
                     chars = crate::stdlib::strlen(token) as i32;
                     sym = crate::src::qcommon::common::Hunk_Alloc(
                         (::std::mem::size_of::<crate::vm_local_h::vmSymbol_t>() as libc::c_ulong)
-                            .wrapping_add(chars as libc::c_ulong)
-                            as i32,
+                            .wrapping_add(chars as libc::c_ulong) as i32,
                         crate::src::qcommon::q_shared::h_high,
                     ) as *mut crate::vm_local_h::vmSymbol_t;
                     *prev = sym;
@@ -568,8 +567,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
             < (::std::mem::size_of::<crate::qfiles_h::vmHeader_t>() as libc::c_ulong)
                 .wrapping_div(4 as i32 as libc::c_ulong)
         {
-            *(header.h as *mut i32).offset(i as isize) =
-                *(header.h as *mut i32).offset(i as isize);
+            *(header.h as *mut i32).offset(i as isize) = *(header.h as *mut i32).offset(i as isize);
             i += 1
         }
         // validate
@@ -596,8 +594,7 @@ pub unsafe extern "C" fn VM_LoadQVM(
                 .wrapping_sub(::std::mem::size_of::<i32>() as libc::c_ulong)
                 .wrapping_div(4 as i32 as libc::c_ulong)
         {
-            *(header.h as *mut i32).offset(i as isize) =
-                *(header.h as *mut i32).offset(i as isize);
+            *(header.h as *mut i32).offset(i as isize) = *(header.h as *mut i32).offset(i as isize);
             i += 1
         }
         // validate
@@ -838,9 +835,7 @@ pub unsafe extern "C" fn VM_Create(
             filename.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
             module,
-            (interpret as u32
-                == crate::qcommon_h::VMI_NATIVE as i32 as u32)
-                as i32,
+            (interpret as u32 == crate::qcommon_h::VMI_NATIVE as i32 as u32) as i32,
         );
         if retval == crate::qcommon_h::VMI_NATIVE as i32 {
             crate::src::qcommon::common::Com_Printf(
@@ -1260,10 +1255,7 @@ pub unsafe extern "C" fn VM_Call(
 }
 //=================================================================
 
-unsafe extern "C" fn VM_ProfileSort(
-    mut a: *const libc::c_void,
-    mut b: *const libc::c_void,
-) -> i32 {
+unsafe extern "C" fn VM_ProfileSort(mut a: *const libc::c_void, mut b: *const libc::c_void) -> i32 {
     let mut sa: *mut crate::vm_local_h::vmSymbol_t = 0 as *mut crate::vm_local_h::vmSymbol_t;
     let mut sb: *mut crate::vm_local_h::vmSymbol_t = 0 as *mut crate::vm_local_h::vmSymbol_t;
     sa = *(a as *mut *mut crate::vm_local_h::vmSymbol_t);
@@ -1318,19 +1310,14 @@ pub unsafe extern "C" fn VM_VmProfile_f() {
         ::std::mem::size_of::<*mut crate::vm_local_h::vmSymbol_t>() as libc::c_ulong,
         Some(
             VM_ProfileSort
-                as unsafe extern "C" fn(
-                    _: *const libc::c_void,
-                    _: *const libc::c_void,
-                ) -> i32,
+                as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
         ),
     );
     i = 0 as i32;
     while i < (*vm).numSymbols {
         let mut perc: i32 = 0;
         sym = *sorted.offset(i as isize);
-        perc = ((100 as i32 as f32 * (*sym).profileCount as f32)
-            as f64
-            / total) as i32;
+        perc = ((100 as i32 as f32 * (*sym).profileCount as f32) as f64 / total) as i32;
         crate::src::qcommon::common::Com_Printf(
             b"%2i%% %9i %s\n\x00" as *const u8 as *const libc::c_char,
             perc,
@@ -1424,8 +1411,7 @@ pub unsafe extern "C" fn VM_LogSyscalls(mut args: *mut i32) {
         f,
         b"%i: %p (%i) = %i %i %i %i\n\x00" as *const u8 as *const libc::c_char,
         callnum,
-        args.offset_from((*currentVM).dataBase as *mut i32) as libc::c_long
-            as *mut libc::c_void,
+        args.offset_from((*currentVM).dataBase as *mut i32) as libc::c_long as *mut libc::c_void,
         *args.offset(0 as i32 as isize),
         *args.offset(1 as i32 as isize),
         *args.offset(2 as i32 as isize),
@@ -1486,11 +1472,7 @@ Executes a block copy operation within currentVM data space
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn VM_BlockCopy(
-    mut dest: u32,
-    mut src: u32,
-    mut n: crate::stddef_h::size_t,
-) {
+pub unsafe extern "C" fn VM_BlockCopy(mut dest: u32, mut src: u32, mut n: crate::stddef_h::size_t) {
     let mut dataMask: u32 = (*currentVM).dataMask as u32;
     if dest & dataMask != dest
         || src & dataMask != src

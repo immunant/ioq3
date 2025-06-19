@@ -163,14 +163,11 @@ pub unsafe extern "C" fn inflatePrime(
         return -(2 as i32);
     }
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
-    if bits > 16 as i32
-        || (*state).bits.wrapping_add(bits as u32) > 32 as i32 as u32
-    {
+    if bits > 16 as i32 || (*state).bits.wrapping_add(bits as u32) > 32 as i32 as u32 {
         return -(2 as i32);
     }
-    value = (value as libc::c_long
-        & ((1 as libc::c_long) << bits) - 1 as i32 as libc::c_long)
-        as i32;
+    value =
+        (value as libc::c_long & ((1 as libc::c_long) << bits) - 1 as i32 as libc::c_long) as i32;
     (*state).hold = (*state)
         .hold
         .wrapping_add((value << (*state).bits) as libc::c_ulong);
@@ -191,8 +188,7 @@ pub unsafe extern "C" fn inflateInit2_(
         || *version.offset(0 as i32 as isize) as i32
             != (*::std::mem::transmute::<&[u8; 6], &[libc::c_char; 6]>(b"1.2.3\x00"))
                 [0 as i32 as usize] as i32
-        || stream_size
-            != ::std::mem::size_of::<crate::zlib_h::z_stream>() as libc::c_ulong as i32
+        || stream_size != ::std::mem::size_of::<crate::zlib_h::z_stream>() as libc::c_ulong as i32
     {
         return -(6 as i32);
     }
@@ -4734,10 +4730,7 @@ unsafe extern "C" fn fixedtables(mut state: *mut crate::src::zlib::inflate::infl
   The advantage may be dependent on the size of the processor's data caches.
 */
 
-unsafe extern "C" fn updatewindow(
-    mut strm: crate::zlib_h::z_streamp,
-    mut out: u32,
-) -> i32 {
+unsafe extern "C" fn updatewindow(mut strm: crate::zlib_h::z_streamp, mut out: u32) -> i32 {
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state;
     let mut copy: u32 = 0;
@@ -4899,10 +4892,7 @@ not enough available input to do that, then return from inflate(). */
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn inflate(
-    mut strm: crate::zlib_h::z_streamp,
-    mut flush: i32,
-) -> i32 {
+pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: i32) -> i32 {
     let mut current_block: u64; /* next input */
     let mut state: *mut crate::src::zlib::inflate::inflate_state =
         0 as *mut crate::src::zlib::inflate::inflate_state; /* next output */
@@ -4957,9 +4947,7 @@ pub unsafe extern "C" fn inflate(
         return -(2 as i32);
     }
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
-    if (*state).mode as u32
-        == crate::src::zlib::inflate::TYPE as i32 as u32
-    {
+    if (*state).mode as u32 == crate::src::zlib::inflate::TYPE as i32 as u32 {
         (*state).mode = crate::src::zlib::inflate::TYPEDO
     }
     put = (*strm).next_out;
@@ -4988,9 +4976,7 @@ pub unsafe extern "C" fn inflate(
                         hold = hold.wrapping_add((*fresh0 as libc::c_ulong) << bits);
                         bits = bits.wrapping_add(8 as i32 as u32)
                     }
-                    if (((hold as u32
-                        & ((1 as u32) << 8 as i32)
-                            .wrapping_sub(1 as i32 as u32))
+                    if (((hold as u32 & ((1 as u32) << 8 as i32).wrapping_sub(1 as i32 as u32))
                         << 8 as i32) as libc::c_ulong)
                         .wrapping_add(hold >> 8 as i32)
                         .wrapping_rem(31 as i32 as libc::c_ulong)
@@ -5001,9 +4987,7 @@ pub unsafe extern "C" fn inflate(
                             as *mut libc::c_char;
                         (*state).mode = crate::src::zlib::inflate::BAD;
                         continue;
-                    } else if hold as u32
-                        & ((1 as u32) << 4 as i32)
-                            .wrapping_sub(1 as i32 as u32)
+                    } else if hold as u32 & ((1 as u32) << 4 as i32).wrapping_sub(1 as i32 as u32)
                         != 8 as i32 as u32
                     {
                         (*strm).msg = b"unknown compression method\x00" as *const u8
@@ -5015,8 +4999,7 @@ pub unsafe extern "C" fn inflate(
                         hold >>= 4 as i32;
                         bits = bits.wrapping_sub(4 as i32 as u32);
                         len = (hold as u32
-                            & ((1 as u32) << 4 as i32)
-                                .wrapping_sub(1 as i32 as u32))
+                            & ((1 as u32) << 4 as i32).wrapping_sub(1 as i32 as u32))
                         .wrapping_add(8 as i32 as u32);
                         if len > (*state).wbits {
                             (*strm).msg = b"invalid window size\x00" as *const u8
@@ -5058,12 +5041,8 @@ pub unsafe extern "C" fn inflate(
                 }
                 (*state).check = (hold >> 24 as i32 & 0xff as i32 as libc::c_ulong)
                     .wrapping_add(hold >> 8 as i32 & 0xff00 as i32 as libc::c_ulong)
-                    .wrapping_add(
-                        (hold & 0xff00 as i32 as libc::c_ulong) << 8 as i32,
-                    )
-                    .wrapping_add(
-                        (hold & 0xff as i32 as libc::c_ulong) << 24 as i32,
-                    );
+                    .wrapping_add((hold & 0xff00 as i32 as libc::c_ulong) << 8 as i32)
+                    .wrapping_add((hold & 0xff as i32 as libc::c_ulong) << 24 as i32);
                 (*strm).adler = (*state).check;
                 hold = 0 as i32 as libc::c_ulong;
                 bits = 0 as i32 as u32;
@@ -5123,26 +5102,21 @@ pub unsafe extern "C" fn inflate(
                     bits = bits.wrapping_add(8 as i32 as u32)
                 }
                 (*state).nlen = (hold as u32
-                    & ((1 as u32) << 5 as i32)
-                        .wrapping_sub(1 as i32 as u32))
+                    & ((1 as u32) << 5 as i32).wrapping_sub(1 as i32 as u32))
                 .wrapping_add(257 as i32 as u32);
                 hold >>= 5 as i32;
                 bits = bits.wrapping_sub(5 as i32 as u32);
                 (*state).ndist = (hold as u32
-                    & ((1 as u32) << 5 as i32)
-                        .wrapping_sub(1 as i32 as u32))
+                    & ((1 as u32) << 5 as i32).wrapping_sub(1 as i32 as u32))
                 .wrapping_add(1 as i32 as u32);
                 hold >>= 5 as i32;
                 bits = bits.wrapping_sub(5 as i32 as u32);
                 (*state).ncode = (hold as u32
-                    & ((1 as u32) << 4 as i32)
-                        .wrapping_sub(1 as i32 as u32))
+                    & ((1 as u32) << 4 as i32).wrapping_sub(1 as i32 as u32))
                 .wrapping_add(4 as i32 as u32);
                 hold >>= 4 as i32;
                 bits = bits.wrapping_sub(4 as i32 as u32);
-                if (*state).nlen > 286 as i32 as u32
-                    || (*state).ndist > 30 as i32 as u32
-                {
+                if (*state).nlen > 286 as i32 as u32 || (*state).ndist > 30 as i32 as u32 {
                     (*strm).msg = b"too many length or distance symbols\x00" as *const u8
                         as *const libc::c_char
                         as *mut libc::c_char;
@@ -5214,15 +5188,9 @@ pub unsafe extern "C" fn inflate(
                     }
                     out = left;
                     if (hold >> 24 as i32 & 0xff as i32 as libc::c_ulong)
-                        .wrapping_add(
-                            hold >> 8 as i32 & 0xff00 as i32 as libc::c_ulong,
-                        )
-                        .wrapping_add(
-                            (hold & 0xff00 as i32 as libc::c_ulong) << 8 as i32,
-                        )
-                        .wrapping_add(
-                            (hold & 0xff as i32 as libc::c_ulong) << 24 as i32,
-                        )
+                        .wrapping_add(hold >> 8 as i32 & 0xff00 as i32 as libc::c_ulong)
+                        .wrapping_add((hold & 0xff00 as i32 as libc::c_ulong) << 8 as i32)
+                        .wrapping_add((hold & 0xff as i32 as libc::c_ulong) << 24 as i32)
                         != (*state).check
                     {
                         (*strm).msg = b"incorrect data check\x00" as *const u8
@@ -5264,8 +5232,7 @@ pub unsafe extern "C" fn inflate(
                     let fresh6 = (*state).have;
                     (*state).have = (*state).have.wrapping_add(1);
                     (*state).lens[order[fresh6 as usize] as usize] = (hold as u32
-                        & ((1 as u32) << 3 as i32)
-                            .wrapping_sub(1 as i32 as u32))
+                        & ((1 as u32) << 3 as i32).wrapping_sub(1 as i32 as u32))
                         as u16;
                     hold >>= 3 as i32;
                     bits = bits.wrapping_sub(3 as i32 as u32)
@@ -5273,8 +5240,7 @@ pub unsafe extern "C" fn inflate(
                 while (*state).have < 19 as i32 as u32 {
                     let fresh7 = (*state).have;
                     (*state).have = (*state).have.wrapping_add(1);
-                    (*state).lens[order[fresh7 as usize] as usize] =
-                        0 as i32 as u16
+                    (*state).lens[order[fresh7 as usize] as usize] = 0 as i32 as u16
                 }
                 (*state).next = (*state).codes.as_mut_ptr();
                 (*state).lencode = (*state).next as *const crate::src::zlib::inftrees::code;
@@ -5358,8 +5324,7 @@ pub unsafe extern "C" fn inflate(
                     loop {
                         this = *(*state).lencode.offset(
                             (hold as u32
-                                & ((1 as u32) << (*state).lenbits)
-                                    .wrapping_sub(1 as i32 as u32))
+                                & ((1 as u32) << (*state).lenbits).wrapping_sub(1 as i32 as u32))
                                 as isize,
                         );
                         if this.bits as u32 <= bits {
@@ -5392,9 +5357,7 @@ pub unsafe extern "C" fn inflate(
                         (*state).lens[fresh10 as usize] = this.val
                     } else {
                         if this.val as i32 == 16 as i32 {
-                            while bits
-                                < (this.bits as i32 + 2 as i32) as u32
-                            {
+                            while bits < (this.bits as i32 + 2 as i32) as u32 {
                                 if have == 0 as i32 as u32 {
                                     break 's_114;
                                 }
@@ -5413,22 +5376,18 @@ pub unsafe extern "C" fn inflate(
                                 (*state).mode = crate::src::zlib::inflate::BAD;
                                 break;
                             } else {
-                                len = (*state).lens[(*state)
-                                    .have
-                                    .wrapping_sub(1 as i32 as u32)
-                                    as usize] as u32;
+                                len = (*state).lens
+                                    [(*state).have.wrapping_sub(1 as i32 as u32) as usize]
+                                    as u32;
                                 copy = (3 as i32 as u32).wrapping_add(
                                     hold as u32
-                                        & ((1 as u32) << 2 as i32)
-                                            .wrapping_sub(1 as i32 as u32),
+                                        & ((1 as u32) << 2 as i32).wrapping_sub(1 as i32 as u32),
                                 );
                                 hold >>= 2 as i32;
                                 bits = bits.wrapping_sub(2 as i32 as u32)
                             }
                         } else if this.val as i32 == 17 as i32 {
-                            while bits
-                                < (this.bits as i32 + 3 as i32) as u32
-                            {
+                            while bits < (this.bits as i32 + 3 as i32) as u32 {
                                 if have == 0 as i32 as u32 {
                                     break 's_114;
                                 }
@@ -5443,15 +5402,12 @@ pub unsafe extern "C" fn inflate(
                             len = 0 as i32 as u32;
                             copy = (3 as i32 as u32).wrapping_add(
                                 hold as u32
-                                    & ((1 as u32) << 3 as i32)
-                                        .wrapping_sub(1 as i32 as u32),
+                                    & ((1 as u32) << 3 as i32).wrapping_sub(1 as i32 as u32),
                             );
                             hold >>= 3 as i32;
                             bits = bits.wrapping_sub(3 as i32 as u32)
                         } else {
-                            while bits
-                                < (this.bits as i32 + 7 as i32) as u32
-                            {
+                            while bits < (this.bits as i32 + 7 as i32) as u32 {
                                 if have == 0 as i32 as u32 {
                                     break 's_114;
                                 }
@@ -5466,8 +5422,7 @@ pub unsafe extern "C" fn inflate(
                             len = 0 as i32 as u32;
                             copy = (11 as i32 as u32).wrapping_add(
                                 hold as u32
-                                    & ((1 as u32) << 7 as i32)
-                                        .wrapping_sub(1 as i32 as u32),
+                                    & ((1 as u32) << 7 as i32).wrapping_sub(1 as i32 as u32),
                             );
                             hold >>= 7 as i32;
                             bits = bits.wrapping_sub(7 as i32 as u32)
@@ -5495,9 +5450,7 @@ pub unsafe extern "C" fn inflate(
                     }
                 }
                 /* handle error breaks in while */
-                if (*state).mode as u32
-                    == crate::src::zlib::inflate::BAD as i32 as u32
-                {
+                if (*state).mode as u32 == crate::src::zlib::inflate::BAD as i32 as u32 {
                     continue;
                 }
                 /* build code tables */
@@ -5551,9 +5504,7 @@ pub unsafe extern "C" fn inflate(
         }
         match current_block {
             11341304196878840394 => {
-                if have >= 6 as i32 as u32
-                    && left >= 258 as i32 as u32
-                {
+                if have >= 6 as i32 as u32 && left >= 258 as i32 as u32 {
                     (*strm).next_out = put;
                     (*strm).avail_out = left;
                     (*strm).next_in = next;
@@ -5575,8 +5526,7 @@ pub unsafe extern "C" fn inflate(
                     loop {
                         this = *(*state).lencode.offset(
                             (hold as u32
-                                & ((1 as u32) << (*state).lenbits)
-                                    .wrapping_sub(1 as i32 as u32))
+                                & ((1 as u32) << (*state).lenbits).wrapping_sub(1 as i32 as u32))
                                 as isize,
                         );
                         if this.bits as u32 <= bits {
@@ -5591,23 +5541,18 @@ pub unsafe extern "C" fn inflate(
                         hold = hold.wrapping_add((*fresh16 as libc::c_ulong) << bits);
                         bits = bits.wrapping_add(8 as i32 as u32)
                     }
-                    if this.op as i32 != 0
-                        && this.op as i32 & 0xf0 as i32 == 0 as i32
-                    {
+                    if this.op as i32 != 0 && this.op as i32 & 0xf0 as i32 == 0 as i32 {
                         last = this;
                         loop {
                             this = *(*state).lencode.offset(
                                 (last.val as u32).wrapping_add(
                                     (hold as u32
-                                        & ((1 as u32)
-                                            << last.bits as i32 + last.op as i32)
+                                        & ((1 as u32) << last.bits as i32 + last.op as i32)
                                             .wrapping_sub(1 as i32 as u32))
                                         >> last.bits as i32,
                                 ) as isize,
                             );
-                            if (last.bits as i32 + this.bits as i32) as u32
-                                <= bits
-                            {
+                            if (last.bits as i32 + this.bits as i32) as u32 <= bits {
                                 break;
                             }
                             if have == 0 as i32 as u32 {
@@ -5638,8 +5583,7 @@ pub unsafe extern "C" fn inflate(
                         (*state).mode = crate::src::zlib::inflate::BAD;
                         continue;
                     } else {
-                        (*state).extra =
-                            this.op as u32 & 15 as i32 as u32;
+                        (*state).extra = this.op as u32 & 15 as i32 as u32;
                         (*state).mode = crate::src::zlib::inflate::LENEXT
                     }
                 }
@@ -5663,15 +5607,11 @@ pub unsafe extern "C" fn inflate(
                         bits = bits.wrapping_add(8 as i32 as u32)
                     }
                     (*state).last = (hold as u32
-                        & ((1 as u32) << 1 as i32)
-                            .wrapping_sub(1 as i32 as u32))
+                        & ((1 as u32) << 1 as i32).wrapping_sub(1 as i32 as u32))
                         as i32;
                     hold >>= 1 as i32;
                     bits = bits.wrapping_sub(1 as i32 as u32);
-                    match hold as u32
-                        & ((1 as u32) << 2 as i32)
-                            .wrapping_sub(1 as i32 as u32)
-                    {
+                    match hold as u32 & ((1 as u32) << 2 as i32).wrapping_sub(1 as i32 as u32) {
                         0 => {
                             /* stored block */
                             (*state).mode = crate::src::zlib::inflate::STORED
@@ -5714,9 +5654,7 @@ pub unsafe extern "C" fn inflate(
                         bits = bits.wrapping_add(8 as i32 as u32)
                     }
                     (*state).length = (*state).length.wrapping_add(
-                        hold as u32
-                            & ((1 as u32) << (*state).extra)
-                                .wrapping_sub(1 as i32 as u32),
+                        hold as u32 & ((1 as u32) << (*state).extra).wrapping_sub(1 as i32 as u32),
                     );
                     hold >>= (*state).extra;
                     bits = bits.wrapping_sub((*state).extra)
@@ -5731,8 +5669,7 @@ pub unsafe extern "C" fn inflate(
                 583050819838508811 => {
                     this = *(*state).distcode.offset(
                         (hold as u32
-                            & ((1 as u32) << (*state).distbits)
-                                .wrapping_sub(1 as i32 as u32))
+                            & ((1 as u32) << (*state).distbits).wrapping_sub(1 as i32 as u32))
                             as isize,
                     );
                     if this.bits as u32 <= bits {
@@ -5742,17 +5679,12 @@ pub unsafe extern "C" fn inflate(
                                 this = *(*state).distcode.offset(
                                     (last.val as u32).wrapping_add(
                                         (hold as u32
-                                            & ((1 as u32)
-                                                << last.bits as i32
-                                                    + last.op as i32)
+                                            & ((1 as u32) << last.bits as i32 + last.op as i32)
                                                 .wrapping_sub(1 as i32 as u32))
                                             >> last.bits as i32,
                                     ) as isize,
                                 );
-                                if (last.bits as i32 + this.bits as i32)
-                                    as u32
-                                    <= bits
-                                {
+                                if (last.bits as i32 + this.bits as i32) as u32 <= bits {
                                     break;
                                 }
                                 if have == 0 as i32 as u32 {
@@ -5777,8 +5709,7 @@ pub unsafe extern "C" fn inflate(
                             break;
                         } else {
                             (*state).offset = this.val as u32;
-                            (*state).extra =
-                                this.op as u32 & 15 as i32 as u32;
+                            (*state).extra = this.op as u32 & 15 as i32 as u32;
                             (*state).mode = crate::src::zlib::inflate::DISTEXT;
                             current_block = 6144666487834620188;
                         }
@@ -5808,8 +5739,7 @@ pub unsafe extern "C" fn inflate(
                         }
                         (*state).offset = (*state).offset.wrapping_add(
                             hold as u32
-                                & ((1 as u32) << (*state).extra)
-                                    .wrapping_sub(1 as i32 as u32),
+                                & ((1 as u32) << (*state).extra).wrapping_sub(1 as i32 as u32),
                         );
                         hold >>= (*state).extra;
                         bits = bits.wrapping_sub((*state).extra)
@@ -5888,8 +5818,7 @@ pub unsafe extern "C" fn inflate(
     (*state).hold = hold;
     (*state).bits = bits;
     if (*state).wsize != 0
-        || ((*state).mode as u32)
-            < crate::src::zlib::inflate::CHECK as i32 as u32
+        || ((*state).mode as u32) < crate::src::zlib::inflate::CHECK as i32 as u32
             && out != (*strm).avail_out
     {
         if updatewindow(strm, out) != 0 {
@@ -5922,18 +5851,13 @@ pub unsafe extern "C" fn inflate(
             }) as u32,
         )
         .wrapping_add(
-            (if (*state).mode as u32
-                == crate::src::zlib::inflate::TYPE as i32 as u32
-            {
+            (if (*state).mode as u32 == crate::src::zlib::inflate::TYPE as i32 as u32 {
                 128 as i32
             } else {
                 0 as i32
             }) as u32,
         ) as i32;
-    if (in_0 == 0 as i32 as u32 && out == 0 as i32 as u32
-        || flush == 4 as i32)
-        && ret == 0 as i32
-    {
+    if (in_0 == 0 as i32 as u32 && out == 0 as i32 as u32 || flush == 4 as i32) && ret == 0 as i32 {
         ret = -(5 as i32)
     }
     return ret;
@@ -5976,15 +5900,12 @@ pub unsafe extern "C" fn inflateSetDictionary(
     }
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
     if (*state).wrap != 0 as i32
-        && (*state).mode as u32
-            != crate::src::zlib::inflate::DICT as i32 as u32
+        && (*state).mode as u32 != crate::src::zlib::inflate::DICT as i32 as u32
     {
         return -(2 as i32);
     }
     /* check for correct dictionary id */
-    if (*state).mode as u32
-        == crate::src::zlib::inflate::DICT as i32 as u32
-    {
+    if (*state).mode as u32 == crate::src::zlib::inflate::DICT as i32 as u32 {
         id = crate::src::zlib::adler32::adler32(
             0 as libc::c_long as crate::zconf_h::uLong,
             0 as *const crate::zconf_h::Bytef,
@@ -6056,11 +5977,7 @@ pub unsafe extern "C" fn inflateGetHeader(
   zero for the first call.
 */
 
-unsafe extern "C" fn syncsearch(
-    mut have: *mut u32,
-    mut buf: *mut u8,
-    mut len: u32,
-) -> u32 {
+unsafe extern "C" fn syncsearch(mut have: *mut u32, mut buf: *mut u8, mut len: u32) -> u32 {
     let mut got: u32 = 0; /* number of bytes to look at or looked at */
     let mut next: u32 = 0; /* temporary to save total_in and total_out */
     got = *have; /* to restore bit buffer to byte string */
@@ -6098,20 +6015,14 @@ pub unsafe extern "C" fn inflateSync(mut strm: crate::zlib_h::z_streamp) -> i32 
         return -(2 as i32);
     }
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
-    if (*strm).avail_in == 0 as i32 as u32
-        && (*state).bits < 8 as i32 as u32
-    {
+    if (*strm).avail_in == 0 as i32 as u32 && (*state).bits < 8 as i32 as u32 {
         return -(5 as i32);
     }
     /* if first time, start search in bit buffer */
-    if (*state).mode as u32
-        != crate::src::zlib::inflate::SYNC as i32 as u32
-    {
+    if (*state).mode as u32 != crate::src::zlib::inflate::SYNC as i32 as u32 {
         (*state).mode = crate::src::zlib::inflate::SYNC;
         (*state).hold <<= (*state).bits & 7 as i32 as u32;
-        (*state).bits = (*state)
-            .bits
-            .wrapping_sub((*state).bits & 7 as i32 as u32);
+        (*state).bits = (*state).bits.wrapping_sub((*state).bits & 7 as i32 as u32);
         len = 0 as i32 as u32;
         while (*state).bits >= 8 as i32 as u32 {
             let fresh26 = len;
@@ -6125,8 +6036,8 @@ pub unsafe extern "C" fn inflateSync(mut strm: crate::zlib_h::z_streamp) -> i32 
     }
     /* search available input */
     len = syncsearch(&mut (*state).have, (*strm).next_in, (*strm).avail_in);
-    (*strm).avail_in = ((*strm).avail_in as u32).wrapping_sub(len) as crate::zconf_h::uInt
-        as crate::zconf_h::uInt;
+    (*strm).avail_in =
+        ((*strm).avail_in as u32).wrapping_sub(len) as crate::zconf_h::uInt as crate::zconf_h::uInt;
     (*strm).next_in = (*strm).next_in.offset(len as isize);
     (*strm).total_in = ((*strm).total_in as libc::c_ulong).wrapping_add(len as libc::c_ulong)
         as crate::zconf_h::uLong as crate::zconf_h::uLong;
@@ -6605,8 +6516,7 @@ pub unsafe extern "C" fn inflateSyncPoint(mut strm: crate::zlib_h::z_streamp) ->
         return -(2 as i32);
     }
     state = (*strm).state as *mut crate::src::zlib::inflate::inflate_state;
-    return ((*state).mode as u32
-        == crate::src::zlib::inflate::STORED as i32 as u32
+    return ((*state).mode as u32 == crate::src::zlib::inflate::STORED as i32 as u32
         && (*state).bits == 0 as i32 as u32) as i32;
 }
 /*

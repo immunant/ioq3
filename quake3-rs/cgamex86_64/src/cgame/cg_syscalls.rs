@@ -513,8 +513,7 @@ pub unsafe extern "C" fn trap_CM_TransformedPointContents(
     mut angles: *const crate::src::qcommon::q_shared::vec_t,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
-        crate::cg_public_h::CG_CM_TRANSFORMEDPOINTCONTENTS as i32
-            as crate::stdlib::intptr_t,
+        crate::cg_public_h::CG_CM_TRANSFORMEDPOINTCONTENTS as i32 as crate::stdlib::intptr_t,
         p,
         model,
         origin,
@@ -1091,10 +1090,7 @@ pub unsafe extern "C" fn trap_GetUserCmd(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_SetUserCmdValue(
-    mut stateValue: i32,
-    mut sensitivityScale: f32,
-) {
+pub unsafe extern "C" fn trap_SetUserCmdValue(mut stateValue: i32, mut sensitivityScale: f32) {
     syscall.expect("non-null function pointer")(
         crate::cg_public_h::CG_SETUSERCMDVALUE as i32 as crate::stdlib::intptr_t,
         stateValue,

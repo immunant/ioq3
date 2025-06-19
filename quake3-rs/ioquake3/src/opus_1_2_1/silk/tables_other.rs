@@ -133,17 +133,10 @@ pub static mut silk_stereo_pred_joint_iCDF: [u8; 25] = [
 ];
 #[no_mangle]
 
-pub static mut silk_stereo_only_code_mid_iCDF: [u8; 2] = [
-    64 as i32 as u8,
-    0 as i32 as u8,
-];
+pub static mut silk_stereo_only_code_mid_iCDF: [u8; 2] = [64 as i32 as u8, 0 as i32 as u8];
 /* Tables for LBRR flags */
 
-static mut silk_LBRR_flags_2_iCDF: [u8; 3] = [
-    203 as i32 as u8,
-    150 as i32 as u8,
-    0 as i32 as u8,
-];
+static mut silk_LBRR_flags_2_iCDF: [u8; 3] = [203 as i32 as u8, 150 as i32 as u8, 0 as i32 as u8];
 
 static mut silk_LBRR_flags_3_iCDF: [u8; 7] = [
     215 as i32 as u8,
@@ -165,18 +158,11 @@ pub static mut silk_LBRR_flags_iCDF_ptr: [*const u8; 2] = unsafe {
 /* Table for LSB coding */
 #[no_mangle]
 
-pub static mut silk_lsb_iCDF: [u8; 2] = [
-    120 as i32 as u8,
-    0 as i32 as u8,
-];
+pub static mut silk_lsb_iCDF: [u8; 2] = [120 as i32 as u8, 0 as i32 as u8];
 /* Tables for LTPScale */
 #[no_mangle]
 
-pub static mut silk_LTPscale_iCDF: [u8; 3] = [
-    128 as i32 as u8,
-    64 as i32 as u8,
-    0 as i32 as u8,
-];
+pub static mut silk_LTPscale_iCDF: [u8; 3] = [128 as i32 as u8, 64 as i32 as u8, 0 as i32 as u8];
 /* Tables for signal type and offset coding */
 #[no_mangle]
 
@@ -188,10 +174,7 @@ pub static mut silk_type_offset_VAD_iCDF: [u8; 4] = [
 ];
 #[no_mangle]
 
-pub static mut silk_type_offset_no_VAD_iCDF: [u8; 2] = [
-    230 as i32 as u8,
-    0 as i32 as u8,
-];
+pub static mut silk_type_offset_no_VAD_iCDF: [u8; 2] = [230 as i32 as u8, 0 as i32 as u8];
 /* Tables for NLSF interpolation factor */
 #[no_mangle]
 
@@ -226,11 +209,7 @@ pub static mut silk_LTPScales_table_Q14: [crate::opus_types_h::opus_int16; 3] = 
 /* Uniform entropy tables */
 #[no_mangle]
 
-pub static mut silk_uniform3_iCDF: [u8; 3] = [
-    171 as i32 as u8,
-    85 as i32 as u8,
-    0 as i32 as u8,
-];
+pub static mut silk_uniform3_iCDF: [u8; 3] = [171 as i32 as u8, 85 as i32 as u8, 0 as i32 as u8];
 #[no_mangle]
 
 pub static mut silk_uniform4_iCDF: [u8; 4] = [
@@ -288,31 +267,11 @@ pub static mut silk_NLSF_EXT_iCDF: [u8; 7] = [
 #[no_mangle]
 
 pub static mut silk_Transition_LP_B_Q28: [[crate::opus_types_h::opus_int32; 3]; 5] = [
-    [
-        250767114 as i32,
-        501534038 as i32,
-        250767114 as i32,
-    ],
-    [
-        209867381 as i32,
-        419732057 as i32,
-        209867381 as i32,
-    ],
-    [
-        170987846 as i32,
-        341967853 as i32,
-        170987846 as i32,
-    ],
-    [
-        131531482 as i32,
-        263046905 as i32,
-        131531482 as i32,
-    ],
-    [
-        89306658 as i32,
-        178584282 as i32,
-        89306658 as i32,
-    ],
+    [250767114 as i32, 501534038 as i32, 250767114 as i32],
+    [209867381 as i32, 419732057 as i32, 209867381 as i32],
+    [170987846 as i32, 341967853 as i32, 170987846 as i32],
+    [131531482 as i32, 263046905 as i32, 131531482 as i32],
+    [89306658 as i32, 178584282 as i32, 89306658 as i32],
 ];
 /* Interpolation points for filter coefficients used in the bandwidth transition smoother */
 #[no_mangle]

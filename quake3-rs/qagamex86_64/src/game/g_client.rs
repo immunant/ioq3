@@ -96,8 +96,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -535,18 +534,12 @@ pub unsafe extern "C" fn SpotWouldTelefrag(
     let mut hit: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
     let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    mins[0 as i32 as usize] =
-        (*spot).s.origin[0 as i32 as usize] + playerMins[0 as i32 as usize];
-    mins[1 as i32 as usize] =
-        (*spot).s.origin[1 as i32 as usize] + playerMins[1 as i32 as usize];
-    mins[2 as i32 as usize] =
-        (*spot).s.origin[2 as i32 as usize] + playerMins[2 as i32 as usize];
-    maxs[0 as i32 as usize] =
-        (*spot).s.origin[0 as i32 as usize] + playerMaxs[0 as i32 as usize];
-    maxs[1 as i32 as usize] =
-        (*spot).s.origin[1 as i32 as usize] + playerMaxs[1 as i32 as usize];
-    maxs[2 as i32 as usize] =
-        (*spot).s.origin[2 as i32 as usize] + playerMaxs[2 as i32 as usize];
+    mins[0 as i32 as usize] = (*spot).s.origin[0 as i32 as usize] + playerMins[0 as i32 as usize];
+    mins[1 as i32 as usize] = (*spot).s.origin[1 as i32 as usize] + playerMins[1 as i32 as usize];
+    mins[2 as i32 as usize] = (*spot).s.origin[2 as i32 as usize] + playerMins[2 as i32 as usize];
+    maxs[0 as i32 as usize] = (*spot).s.origin[0 as i32 as usize] + playerMaxs[0 as i32 as usize];
+    maxs[1 as i32 as usize] = (*spot).s.origin[1 as i32 as usize] + playerMaxs[1 as i32 as usize];
+    maxs[2 as i32 as usize] = (*spot).s.origin[2 as i32 as usize] + playerMaxs[2 as i32 as usize];
     num = crate::src::game::g_syscalls::trap_EntitiesInBox(
         mins.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         maxs.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -705,12 +698,12 @@ pub unsafe extern "C" fn SelectRandomFurthestSpawnPoint(
         {
             continue;
         }
-        delta[0 as i32 as usize] = (*spot).s.origin[0 as i32 as usize]
-            - *avoidPoint.offset(0 as i32 as isize);
-        delta[1 as i32 as usize] = (*spot).s.origin[1 as i32 as usize]
-            - *avoidPoint.offset(1 as i32 as isize);
-        delta[2 as i32 as usize] = (*spot).s.origin[2 as i32 as usize]
-            - *avoidPoint.offset(2 as i32 as isize);
+        delta[0 as i32 as usize] =
+            (*spot).s.origin[0 as i32 as usize] - *avoidPoint.offset(0 as i32 as isize);
+        delta[1 as i32 as usize] =
+            (*spot).s.origin[1 as i32 as usize] - *avoidPoint.offset(1 as i32 as isize);
+        delta[2 as i32 as usize] =
+            (*spot).s.origin[2 as i32 as usize] - *avoidPoint.offset(2 as i32 as isize);
         dist = VectorLength(delta.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
         i = 0 as i32;
         while i < numSpots {
@@ -761,23 +754,16 @@ pub unsafe extern "C" fn SelectRandomFurthestSpawnPoint(
         return spot;
     }
     // select a random spot from the spawn points furthest away
-    rnd = ((::libc::rand() & 0x7fff as i32) as f32
-        / 0x7fff as i32 as f32
+    rnd = ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
         * (numSpots / 2 as i32) as f32) as i32;
-    *origin.offset(0 as i32 as isize) =
-        (*list_spot[rnd as usize]).s.origin[0 as i32 as usize];
-    *origin.offset(1 as i32 as isize) =
-        (*list_spot[rnd as usize]).s.origin[1 as i32 as usize];
-    *origin.offset(2 as i32 as isize) =
-        (*list_spot[rnd as usize]).s.origin[2 as i32 as usize];
+    *origin.offset(0 as i32 as isize) = (*list_spot[rnd as usize]).s.origin[0 as i32 as usize];
+    *origin.offset(1 as i32 as isize) = (*list_spot[rnd as usize]).s.origin[1 as i32 as usize];
+    *origin.offset(2 as i32 as isize) = (*list_spot[rnd as usize]).s.origin[2 as i32 as usize];
     let ref mut fresh1 = *origin.offset(2 as i32 as isize);
     *fresh1 += 9 as i32 as f32;
-    *angles.offset(0 as i32 as isize) =
-        (*list_spot[rnd as usize]).s.angles[0 as i32 as usize];
-    *angles.offset(1 as i32 as isize) =
-        (*list_spot[rnd as usize]).s.angles[1 as i32 as usize];
-    *angles.offset(2 as i32 as isize) =
-        (*list_spot[rnd as usize]).s.angles[2 as i32 as usize];
+    *angles.offset(0 as i32 as isize) = (*list_spot[rnd as usize]).s.angles[0 as i32 as usize];
+    *angles.offset(1 as i32 as isize) = (*list_spot[rnd as usize]).s.angles[1 as i32 as usize];
+    *angles.offset(2 as i32 as isize) = (*list_spot[rnd as usize]).s.angles[2 as i32 as usize];
     return list_spot[rnd as usize];
 }
 /*
@@ -982,20 +968,17 @@ pub unsafe extern "C" fn CopyToBodyQue(mut ent: *mut crate::g_local_h::gentity_t
     (*body).s.eFlags = 0x1 as i32; // don't bounce
     (*body).s.powerups = 0 as i32;
     (*body).s.loopSound = 0 as i32;
-    (*body).s.number = body.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-        as libc::c_long as i32;
+    (*body).s.number =
+        body.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32;
     (*body).timestamp = crate::src::game::g_main::level.time;
     (*body).physicsObject = crate::src::qcommon::q_shared::qtrue;
     (*body).physicsBounce = 0 as i32 as f32;
     if (*body).s.groundEntityNum == ((1 as i32) << 10 as i32) - 1 as i32 {
         (*body).s.pos.trType = crate::src::qcommon::q_shared::TR_GRAVITY;
         (*body).s.pos.trTime = crate::src::game::g_main::level.time;
-        (*body).s.pos.trDelta[0 as i32 as usize] =
-            (*(*ent).client).ps.velocity[0 as i32 as usize];
-        (*body).s.pos.trDelta[1 as i32 as usize] =
-            (*(*ent).client).ps.velocity[1 as i32 as usize];
-        (*body).s.pos.trDelta[2 as i32 as usize] =
-            (*(*ent).client).ps.velocity[2 as i32 as usize]
+        (*body).s.pos.trDelta[0 as i32 as usize] = (*(*ent).client).ps.velocity[0 as i32 as usize];
+        (*body).s.pos.trDelta[1 as i32 as usize] = (*(*ent).client).ps.velocity[1 as i32 as usize];
+        (*body).s.pos.trDelta[2 as i32 as usize] = (*(*ent).client).ps.velocity[2 as i32 as usize]
     } else {
         (*body).s.pos.trType = crate::src::qcommon::q_shared::TR_STATIONARY
     }
@@ -1051,12 +1034,9 @@ pub unsafe extern "C" fn CopyToBodyQue(mut ent: *mut crate::g_local_h::gentity_t
     } else {
         (*body).takedamage = crate::src::qcommon::q_shared::qtrue
     }
-    (*body).r.currentOrigin[0 as i32 as usize] =
-        (*body).s.pos.trBase[0 as i32 as usize];
-    (*body).r.currentOrigin[1 as i32 as usize] =
-        (*body).s.pos.trBase[1 as i32 as usize];
-    (*body).r.currentOrigin[2 as i32 as usize] =
-        (*body).s.pos.trBase[2 as i32 as usize];
+    (*body).r.currentOrigin[0 as i32 as usize] = (*body).s.pos.trBase[0 as i32 as usize];
+    (*body).r.currentOrigin[1 as i32 as usize] = (*body).s.pos.trBase[1 as i32 as usize];
+    (*body).r.currentOrigin[2 as i32 as usize] = (*body).s.pos.trBase[2 as i32 as usize];
     crate::src::game::g_syscalls::trap_LinkEntity(body as *mut crate::g_local_h::gentity_s);
 }
 //======================================================================
@@ -1077,8 +1057,7 @@ pub unsafe extern "C" fn SetClientViewAngle(
     i = 0 as i32;
     while i < 3 as i32 {
         let mut cmdAngle: i32 = 0;
-        cmdAngle = (*angle.offset(i as isize) * 65536 as i32 as f32
-            / 360 as i32 as f32) as i32
+        cmdAngle = (*angle.offset(i as isize) * 65536 as i32 as f32 / 360 as i32 as f32) as i32
             & 65535 as i32;
         (*(*ent).client).ps.delta_angles[i as usize] =
             cmdAngle - (*(*ent).client).pers.cmd.angles[i as usize];
@@ -1087,12 +1066,9 @@ pub unsafe extern "C" fn SetClientViewAngle(
     (*ent).s.angles[0 as i32 as usize] = *angle.offset(0 as i32 as isize);
     (*ent).s.angles[1 as i32 as usize] = *angle.offset(1 as i32 as isize);
     (*ent).s.angles[2 as i32 as usize] = *angle.offset(2 as i32 as isize);
-    (*(*ent).client).ps.viewangles[0 as i32 as usize] =
-        (*ent).s.angles[0 as i32 as usize];
-    (*(*ent).client).ps.viewangles[1 as i32 as usize] =
-        (*ent).s.angles[1 as i32 as usize];
-    (*(*ent).client).ps.viewangles[2 as i32 as usize] =
-        (*ent).s.angles[2 as i32 as usize];
+    (*(*ent).client).ps.viewangles[0 as i32 as usize] = (*ent).s.angles[0 as i32 as usize];
+    (*(*ent).client).ps.viewangles[1 as i32 as usize] = (*ent).s.angles[1 as i32 as usize];
+    (*(*ent).client).ps.viewangles[2 as i32 as usize] = (*ent).s.angles[2 as i32 as usize];
 }
 /*
 ================
@@ -1202,10 +1178,8 @@ pub unsafe extern "C" fn PickTeam(mut ignoreClientNum: i32) -> crate::bg_public_
         return crate::bg_public_h::TEAM_BLUE;
     }
     // equal team count, so join the team with the lowest score
-    if crate::src::game::g_main::level.teamScores
-        [crate::bg_public_h::TEAM_BLUE as i32 as usize]
-        > crate::src::game::g_main::level.teamScores
-            [crate::bg_public_h::TEAM_RED as i32 as usize]
+    if crate::src::game::g_main::level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize]
+        > crate::src::game::g_main::level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize]
     {
         return crate::bg_public_h::TEAM_RED;
     }
@@ -1376,9 +1350,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
         (*client).pers.netname.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
     );
-    if (*client).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
-    {
+    if (*client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32 {
         if (*client).sess.spectatorState as u32
             == crate::g_local_h::SPECTATOR_SCOREBOARD as i32 as u32
         {
@@ -1389,9 +1361,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
             );
         }
     }
-    if (*client).pers.connected as u32
-        == crate::g_local_h::CON_CONNECTED as i32 as u32
-    {
+    if (*client).pers.connected as u32 == crate::g_local_h::CON_CONNECTED as i32 as u32 {
         if ::libc::strcmp(oldname.as_mut_ptr(), (*client).pers.netname.as_mut_ptr()) != 0 {
             crate::src::game::g_syscalls::trap_SendServerCommand(
                 -(1 as i32),
@@ -1410,8 +1380,7 @@ pub unsafe extern "C" fn ClientUserinfoChanged(mut clientNum: i32) {
         b"handicap\x00" as *const u8 as *const libc::c_char,
     ));
     (*client).pers.maxHealth = health;
-    if (*client).pers.maxHealth < 1 as i32 || (*client).pers.maxHealth > 100 as i32
-    {
+    if (*client).pers.maxHealth < 1 as i32 || (*client).pers.maxHealth > 100 as i32 {
         (*client).pers.maxHealth = 100 as i32
     }
     (*client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize] =
@@ -1624,16 +1593,14 @@ pub unsafe extern "C" fn ClientConnect(
     // NOTE: local client <-> "ip" "localhost"
     //   this means this client is not running in our current process
     if isBot as u64 == 0
-        && ::libc::strcmp(value, b"localhost\x00" as *const u8 as *const libc::c_char)
-            != 0 as i32
+        && ::libc::strcmp(value, b"localhost\x00" as *const u8 as *const libc::c_char) != 0 as i32
     {
         // check for a password
         value = crate::src::qcommon::q_shared::Info_ValueForKey(
             userinfo.as_mut_ptr(),
             b"password\x00" as *const u8 as *const libc::c_char,
         );
-        if crate::src::game::g_main::g_password.string[0 as i32 as usize] as i32
-            != 0
+        if crate::src::game::g_main::g_password.string[0 as i32 as usize] as i32 != 0
             && crate::src::qcommon::q_shared::Q_stricmp(
                 crate::src::game::g_main::g_password.string.as_mut_ptr(),
                 b"none\x00" as *const u8 as *const libc::c_char,
@@ -1690,9 +1657,7 @@ pub unsafe extern "C" fn ClientConnect(
         }
     }
     // read or initialize the session data
-    if firstTime as u32 != 0
-        || crate::src::game::g_main::level.newSession as u32 != 0
-    {
+    if firstTime as u32 != 0 || crate::src::game::g_main::level.newSession as u32 != 0 {
         crate::src::game::g_session::G_InitSessionData(
             client as *mut crate::g_local_h::gclient_s,
             userinfo.as_mut_ptr(),
@@ -1717,8 +1682,7 @@ pub unsafe extern "C" fn ClientConnect(
         );
     }
     if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32
-        && (*client).sess.sessionTeam as u32
-            != crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+        && (*client).sess.sessionTeam as u32 != crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
     {
         crate::src::game::g_cmds::BroadcastTeamChange(
             client as *mut crate::g_local_h::gclient_s,
@@ -1778,11 +1742,8 @@ pub unsafe extern "C" fn ClientBegin(mut clientNum: i32) {
     (*client).ps.eFlags = flags;
     // locate ent at a spawn point
     ClientSpawn(ent);
-    if (*client).sess.sessionTeam as u32
-        != crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
-    {
-        if crate::src::game::g_main::g_gametype.integer
-            != crate::bg_public_h::GT_TOURNAMENT as i32
+    if (*client).sess.sessionTeam as u32 != crate::bg_public_h::TEAM_SPECTATOR as i32 as u32 {
+        if crate::src::game::g_main::g_gametype.integer != crate::bg_public_h::GT_TOURNAMENT as i32
         {
             crate::src::game::g_syscalls::trap_SendServerCommand(
                 -(1 as i32),
@@ -1873,41 +1834,32 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut crate::g_local_h::gentity_t) 
     let mut accuracy_shots: i32 = 0;
     let mut eventSequence: i32 = 0;
     let mut userinfo: [libc::c_char; 1024] = [0; 1024];
-    index = ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
-        as i32;
+    index =
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32;
     client = (*ent).client;
-    spawn_origin[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    spawn_origin[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     spawn_origin[1 as i32 as usize] = spawn_origin[2 as i32 as usize];
     spawn_origin[0 as i32 as usize] = spawn_origin[1 as i32 as usize];
     // find a spawn point
     // do it before setting health back up, so farthest
     // ranging doesn't count this client
-    if (*client).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
-    {
+    if (*client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32 {
         spawnPoint = SelectSpectatorSpawnPoint(spawn_origin.as_mut_ptr(), spawn_angles.as_mut_ptr())
-    } else if crate::src::game::g_main::g_gametype.integer
-        >= crate::bg_public_h::GT_CTF as i32
-    {
+    } else if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_CTF as i32 {
         // all base oriented team games use the CTF spawn points
         spawnPoint = crate::src::game::g_team::SelectCTFSpawnPoint(
             (*client).sess.sessionTeam,
             (*client).pers.teamState.state as i32,
             spawn_origin.as_mut_ptr(),
             spawn_angles.as_mut_ptr(),
-            ((*ent).r.svFlags & 0x8 as i32 != 0) as i32
-                as crate::src::qcommon::q_shared::qboolean,
+            ((*ent).r.svFlags & 0x8 as i32 != 0) as i32 as crate::src::qcommon::q_shared::qboolean,
         ) as *mut crate::g_local_h::gentity_s
-    } else if (*client).pers.initialSpawn as u64 == 0
-        && (*client).pers.localClient as u32 != 0
-    {
+    } else if (*client).pers.initialSpawn as u64 == 0 && (*client).pers.localClient as u32 != 0 {
         (*client).pers.initialSpawn = crate::src::qcommon::q_shared::qtrue;
         spawnPoint = SelectInitialSpawnPoint(
             spawn_origin.as_mut_ptr(),
             spawn_angles.as_mut_ptr(),
-            ((*ent).r.svFlags & 0x8 as i32 != 0) as i32
-                as crate::src::qcommon::q_shared::qboolean,
+            ((*ent).r.svFlags & 0x8 as i32 != 0) as i32 as crate::src::qcommon::q_shared::qboolean,
         )
     } else {
         // the first spawn should be at a good looking spot
@@ -1916,8 +1868,7 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut crate::g_local_h::gentity_t) 
             (*client).ps.origin.as_mut_ptr(),
             spawn_origin.as_mut_ptr(),
             spawn_angles.as_mut_ptr(),
-            ((*ent).r.svFlags & 0x8 as i32 != 0) as i32
-                as crate::src::qcommon::q_shared::qboolean,
+            ((*ent).r.svFlags & 0x8 as i32 != 0) as i32 as crate::src::qcommon::q_shared::qboolean,
         )
     }
     (*client).pers.teamState.state = crate::g_local_h::TEAM_ACTIVE;
@@ -1925,8 +1876,7 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut crate::g_local_h::gentity_t) 
     (*ent).s.eFlags &= !(0x200 as i32);
     // toggle the teleport bit so the client knows to not lerp
     // and never clear the voted flag
-    flags = (*(*ent).client).ps.eFlags
-        & (0x4 as i32 | 0x4000 as i32 | 0x80000 as i32);
+    flags = (*(*ent).client).ps.eFlags & (0x4 as i32 | 0x4000 as i32 | 0x80000 as i32);
     flags ^= 0x4 as i32;
     // clear everything but the persistant data
     saved = (*client).pers;
@@ -1974,8 +1924,7 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut crate::g_local_h::gentity_t) 
         userinfo.as_mut_ptr(),
         b"handicap\x00" as *const u8 as *const libc::c_char,
     ));
-    if (*client).pers.maxHealth < 1 as i32 || (*client).pers.maxHealth > 100 as i32
-    {
+    if (*client).pers.maxHealth < 1 as i32 || (*client).pers.maxHealth > 100 as i32 {
         (*client).pers.maxHealth = 100 as i32
     }
     // clear entity values
@@ -2014,22 +1963,17 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut crate::g_local_h::gentity_t) 
     (*client).ps.stats[crate::bg_public_h::STAT_WEAPONS as i32 as usize] =
         (1 as i32) << crate::bg_public_h::WP_MACHINEGUN as i32;
     if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_TEAM as i32 {
-        (*client).ps.ammo[crate::bg_public_h::WP_MACHINEGUN as i32 as usize] =
-            50 as i32
+        (*client).ps.ammo[crate::bg_public_h::WP_MACHINEGUN as i32 as usize] = 50 as i32
     } else {
-        (*client).ps.ammo[crate::bg_public_h::WP_MACHINEGUN as i32 as usize] =
-            100 as i32
+        (*client).ps.ammo[crate::bg_public_h::WP_MACHINEGUN as i32 as usize] = 100 as i32
     }
     (*client).ps.stats[crate::bg_public_h::STAT_WEAPONS as i32 as usize] |=
         (1 as i32) << crate::bg_public_h::WP_GAUNTLET as i32;
-    (*client).ps.ammo[crate::bg_public_h::WP_GAUNTLET as i32 as usize] =
-        -(1 as i32);
-    (*client).ps.ammo[crate::bg_public_h::WP_GRAPPLING_HOOK as i32 as usize] =
-        -(1 as i32);
+    (*client).ps.ammo[crate::bg_public_h::WP_GAUNTLET as i32 as usize] = -(1 as i32);
+    (*client).ps.ammo[crate::bg_public_h::WP_GRAPPLING_HOOK as i32 as usize] = -(1 as i32);
     // health will count down towards max_health
     (*client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] =
-        (*client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
-            + 25 as i32;
+        (*client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize] + 25 as i32;
     (*ent).health = (*client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize];
     crate::src::game::g_utils::G_SetOrigin(
         ent as *mut crate::g_local_h::gentity_s,
@@ -2105,8 +2049,7 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut crate::g_local_h::gentity_t) 
     (*client).ps.commandTime = crate::src::game::g_main::level.time - 100 as i32;
     (*(*ent).client).pers.cmd.serverTime = crate::src::game::g_main::level.time;
     crate::src::game::g_active::ClientThink(
-        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
-            as i32,
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32,
     );
     // run the presend to set anything else, follow spectators wait
     // until all clients have been reconnected after map_restart
@@ -2393,8 +2336,7 @@ pub unsafe extern "C" fn ClientDisconnect(mut clientNum: i32) {
         i += 1
     }
     // send effect if they were completely connected
-    if (*(*ent).client).pers.connected as u32
-        == crate::g_local_h::CON_CONNECTED as i32 as u32
+    if (*(*ent).client).pers.connected as u32 == crate::g_local_h::CON_CONNECTED as i32 as u32
         && (*(*ent).client).sess.sessionTeam as u32
             != crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
     {
@@ -2412,26 +2354,21 @@ pub unsafe extern "C" fn ClientDisconnect(mut clientNum: i32) {
         clientNum,
     );
     // if we are playing in tourney mode and losing, give a win to the other player
-    if crate::src::game::g_main::g_gametype.integer
-        == crate::bg_public_h::GT_TOURNAMENT as i32
+    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_TOURNAMENT as i32
         && crate::src::game::g_main::level.intermissiontime == 0
         && crate::src::game::g_main::level.warmupTime == 0
         && crate::src::game::g_main::level.sortedClients[1 as i32 as usize] == clientNum
     {
-        let ref mut fresh3 = (*crate::src::game::g_main::level.clients.offset(
-            crate::src::game::g_main::level.sortedClients[0 as i32 as usize] as isize,
-        ))
+        let ref mut fresh3 = (*crate::src::game::g_main::level
+            .clients
+            .offset(crate::src::game::g_main::level.sortedClients[0 as i32 as usize] as isize))
         .sess
         .wins;
         *fresh3 += 1;
-        ClientUserinfoChanged(
-            crate::src::game::g_main::level.sortedClients[0 as i32 as usize],
-        );
+        ClientUserinfoChanged(crate::src::game::g_main::level.sortedClients[0 as i32 as usize]);
     }
-    if crate::src::game::g_main::g_gametype.integer
-        == crate::bg_public_h::GT_TOURNAMENT as i32
-        && (*(*ent).client).sess.sessionTeam as u32
-            == crate::bg_public_h::TEAM_FREE as i32 as u32
+    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_TOURNAMENT as i32
+        && (*(*ent).client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_FREE as i32 as u32
         && crate::src::game::g_main::level.intermissiontime != 0
     {
         crate::src::game::g_syscalls::trap_SendConsoleCommand(

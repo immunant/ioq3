@@ -25,10 +25,7 @@ pub mod entcode_h {
 pub mod mathops_h {
     #[inline]
 
-    pub unsafe extern "C" fn fast_atan2f(
-        mut y: f32,
-        mut x: f32,
-    ) -> f32 {
+    pub unsafe extern "C" fn fast_atan2f(mut y: f32, mut x: f32) -> f32 {
         let mut x2: f32 = 0.;
         let mut y2: f32 = 0.;
         x2 = x * x;
@@ -177,8 +174,7 @@ pub unsafe extern "C" fn exp_rotation(
     mut K: i32,
     mut spread: i32,
 ) {
-    static mut SPREAD_FACTOR: [i32; 3] =
-        [15 as i32, 10 as i32, 5 as i32]; /*  sin(theta) */
+    static mut SPREAD_FACTOR: [i32; 3] = [15 as i32, 10 as i32, 5 as i32]; /*  sin(theta) */
     let mut i: i32 = 0;
     let mut c: crate::arch_h::opus_val16 = 0.;
     let mut s: crate::arch_h::opus_val16 = 0.;
@@ -194,8 +190,7 @@ pub unsafe extern "C" fn exp_rotation(
         1.0f32 * len as crate::arch_h::opus_val32 / (len + factor * K) as crate::arch_h::opus_val32;
     theta = 0.5f32 * (gain * gain);
     c = crate::stdlib::cos((0.5f32 * 3.141592653f32 * theta) as f64) as f32;
-    s = crate::stdlib::cos((0.5f32 * 3.141592653f32 * (1.0f32 - theta)) as f64)
-        as f32;
+    s = crate::stdlib::cos((0.5f32 * 3.141592653f32 * (1.0f32 - theta)) as f64) as f32;
     if len >= 8 as i32 * stride {
         stride2 = 1 as i32;
         /* This is just a simple (equivalent) way of computing sqrt(len/stride) with rounding.
@@ -251,11 +246,7 @@ unsafe extern "C" fn normalise_residual(
     }
 }
 
-unsafe extern "C" fn extract_collapse_mask(
-    mut iy: *mut i32,
-    mut N: i32,
-    mut B: i32,
-) -> u32 {
+unsafe extern "C" fn extract_collapse_mask(mut iy: *mut i32, mut N: i32, mut B: i32) -> u32 {
     let mut collapse_mask: u32 = 0;
     let mut N0: i32 = 0;
     let mut i: i32 = 0;
@@ -281,8 +272,7 @@ unsafe extern "C" fn extract_collapse_mask(
                 break;
             }
         }
-        collapse_mask |=
-            (((tmp != 0 as i32 as u32) as i32) << i) as u32;
+        collapse_mask |= (((tmp != 0 as i32 as u32) as i32) << i) as u32;
         i += 1;
         if !(i < B) {
             break;
@@ -315,19 +305,16 @@ pub unsafe extern "C" fn op_pvq_search_c(
     y = fresh2.as_mut_ptr() as *mut crate::arch_h::celt_norm;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong)
-            as usize,
+        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong) as usize,
     );
     signx = fresh3.as_mut_ptr() as *mut i32;
     /* Get rid of the sign */
     sum = 0 as i32 as crate::arch_h::opus_val32;
     j = 0 as i32;
     loop {
-        *signx.offset(j as isize) =
-            (*X.offset(j as isize) < 0 as i32 as f32) as i32;
+        *signx.offset(j as isize) = (*X.offset(j as isize) < 0 as i32 as f32) as i32;
         /* OPT: Make sure the compiler doesn't use a branch on ABS16(). */
-        *X.offset(j as isize) =
-            crate::stdlib::fabs(*X.offset(j as isize) as f64) as f32;
+        *X.offset(j as isize) = crate::stdlib::fabs(*X.offset(j as isize) as f64) as f32;
         *iy.offset(j as isize) = 0 as i32;
         *y.offset(j as isize) = 0 as i32 as crate::arch_h::celt_norm;
         j += 1;
@@ -369,8 +356,7 @@ pub unsafe extern "C" fn op_pvq_search_c(
         j = 0 as i32;
         loop {
             *iy.offset(j as isize) =
-                crate::stdlib::floor((rcp * *X.offset(j as isize)) as f64)
-                    as i32;
+                crate::stdlib::floor((rcp * *X.offset(j as isize)) as f64) as i32;
             *y.offset(j as isize) = *iy.offset(j as isize) as crate::arch_h::celt_norm;
             yy = yy + *y.offset(j as isize) * *y.offset(j as isize);
             xy = xy + *X.offset(j as isize) * *y.offset(j as isize);
@@ -523,8 +509,7 @@ pub unsafe extern "C" fn alg_unquant(
     let mut iy: *mut i32 = 0 as *mut i32;
     let mut fresh8 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong)
-            as usize,
+        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(N as libc::c_ulong) as usize,
     );
     iy = fresh8.as_mut_ptr() as *mut i32;
     Ryy = crate::src::opus_1_2_1::celt::cwrs::decode_pulses(
@@ -646,8 +631,7 @@ pub unsafe extern "C" fn stereo_itheta(
     mid = crate::stdlib::sqrt(Emid as f64) as f32;
     side = crate::stdlib::sqrt(Eside as f64) as f32;
     itheta = crate::stdlib::floor(
-        (0.5f32 + 16384 as i32 as f32 * 0.63662f32 * fast_atan2f(side, mid))
-            as f64,
+        (0.5f32 + 16384 as i32 as f32 * 0.63662f32 * fast_atan2f(side, mid)) as f64,
     ) as i32;
     return itheta;
 }

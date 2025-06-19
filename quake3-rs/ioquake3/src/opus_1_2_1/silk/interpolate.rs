@@ -174,8 +174,7 @@ pub unsafe extern "C" fn silk_interpolate(
                 as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
                 * ifact_Q2 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                >> 2 as i32))
-            as crate::opus_types_h::opus_int16;
+                >> 2 as i32)) as crate::opus_types_h::opus_int16;
         i += 1
     }
 }

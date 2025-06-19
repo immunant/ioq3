@@ -273,267 +273,87 @@ pub struct bitread_working_state {
 
 static mut jpeg_zigzag_order: [[i32; 8]; 8] = [
     [
-        0 as i32,
-        1 as i32,
-        5 as i32,
-        6 as i32,
-        14 as i32,
-        15 as i32,
-        27 as i32,
-        28 as i32,
+        0 as i32, 1 as i32, 5 as i32, 6 as i32, 14 as i32, 15 as i32, 27 as i32, 28 as i32,
     ],
     [
-        2 as i32,
-        4 as i32,
-        7 as i32,
-        13 as i32,
-        16 as i32,
-        26 as i32,
-        29 as i32,
-        42 as i32,
+        2 as i32, 4 as i32, 7 as i32, 13 as i32, 16 as i32, 26 as i32, 29 as i32, 42 as i32,
     ],
     [
-        3 as i32,
-        8 as i32,
-        12 as i32,
-        17 as i32,
-        25 as i32,
-        30 as i32,
-        41 as i32,
-        43 as i32,
+        3 as i32, 8 as i32, 12 as i32, 17 as i32, 25 as i32, 30 as i32, 41 as i32, 43 as i32,
     ],
     [
-        9 as i32,
-        11 as i32,
-        18 as i32,
-        24 as i32,
-        31 as i32,
-        40 as i32,
-        44 as i32,
-        53 as i32,
+        9 as i32, 11 as i32, 18 as i32, 24 as i32, 31 as i32, 40 as i32, 44 as i32, 53 as i32,
     ],
     [
-        10 as i32,
-        19 as i32,
-        23 as i32,
-        32 as i32,
-        39 as i32,
-        45 as i32,
-        52 as i32,
-        54 as i32,
+        10 as i32, 19 as i32, 23 as i32, 32 as i32, 39 as i32, 45 as i32, 52 as i32, 54 as i32,
     ],
     [
-        20 as i32,
-        22 as i32,
-        33 as i32,
-        38 as i32,
-        46 as i32,
-        51 as i32,
-        55 as i32,
-        60 as i32,
+        20 as i32, 22 as i32, 33 as i32, 38 as i32, 46 as i32, 51 as i32, 55 as i32, 60 as i32,
     ],
     [
-        21 as i32,
-        34 as i32,
-        37 as i32,
-        47 as i32,
-        50 as i32,
-        56 as i32,
-        59 as i32,
-        61 as i32,
+        21 as i32, 34 as i32, 37 as i32, 47 as i32, 50 as i32, 56 as i32, 59 as i32, 61 as i32,
     ],
     [
-        35 as i32,
-        36 as i32,
-        48 as i32,
-        49 as i32,
-        57 as i32,
-        58 as i32,
-        62 as i32,
-        63 as i32,
+        35 as i32, 36 as i32, 48 as i32, 49 as i32, 57 as i32, 58 as i32, 62 as i32, 63 as i32,
     ],
 ];
 
 static mut jpeg_zigzag_order7: [[i32; 7]; 7] = [
     [
-        0 as i32,
-        1 as i32,
-        5 as i32,
-        6 as i32,
-        14 as i32,
-        15 as i32,
-        27 as i32,
+        0 as i32, 1 as i32, 5 as i32, 6 as i32, 14 as i32, 15 as i32, 27 as i32,
     ],
     [
-        2 as i32,
-        4 as i32,
-        7 as i32,
-        13 as i32,
-        16 as i32,
-        26 as i32,
-        28 as i32,
+        2 as i32, 4 as i32, 7 as i32, 13 as i32, 16 as i32, 26 as i32, 28 as i32,
     ],
     [
-        3 as i32,
-        8 as i32,
-        12 as i32,
-        17 as i32,
-        25 as i32,
-        29 as i32,
-        38 as i32,
+        3 as i32, 8 as i32, 12 as i32, 17 as i32, 25 as i32, 29 as i32, 38 as i32,
     ],
     [
-        9 as i32,
-        11 as i32,
-        18 as i32,
-        24 as i32,
-        30 as i32,
-        37 as i32,
-        39 as i32,
+        9 as i32, 11 as i32, 18 as i32, 24 as i32, 30 as i32, 37 as i32, 39 as i32,
     ],
     [
-        10 as i32,
-        19 as i32,
-        23 as i32,
-        31 as i32,
-        36 as i32,
-        40 as i32,
-        45 as i32,
+        10 as i32, 19 as i32, 23 as i32, 31 as i32, 36 as i32, 40 as i32, 45 as i32,
     ],
     [
-        20 as i32,
-        22 as i32,
-        32 as i32,
-        35 as i32,
-        41 as i32,
-        44 as i32,
-        46 as i32,
+        20 as i32, 22 as i32, 32 as i32, 35 as i32, 41 as i32, 44 as i32, 46 as i32,
     ],
     [
-        21 as i32,
-        33 as i32,
-        34 as i32,
-        42 as i32,
-        43 as i32,
-        47 as i32,
-        48 as i32,
+        21 as i32, 33 as i32, 34 as i32, 42 as i32, 43 as i32, 47 as i32, 48 as i32,
     ],
 ];
 
 static mut jpeg_zigzag_order6: [[i32; 6]; 6] = [
+    [0 as i32, 1 as i32, 5 as i32, 6 as i32, 14 as i32, 15 as i32],
     [
-        0 as i32,
-        1 as i32,
-        5 as i32,
-        6 as i32,
-        14 as i32,
-        15 as i32,
+        2 as i32, 4 as i32, 7 as i32, 13 as i32, 16 as i32, 25 as i32,
     ],
     [
-        2 as i32,
-        4 as i32,
-        7 as i32,
-        13 as i32,
-        16 as i32,
-        25 as i32,
+        3 as i32, 8 as i32, 12 as i32, 17 as i32, 24 as i32, 26 as i32,
     ],
     [
-        3 as i32,
-        8 as i32,
-        12 as i32,
-        17 as i32,
-        24 as i32,
-        26 as i32,
+        9 as i32, 11 as i32, 18 as i32, 23 as i32, 27 as i32, 32 as i32,
     ],
     [
-        9 as i32,
-        11 as i32,
-        18 as i32,
-        23 as i32,
-        27 as i32,
-        32 as i32,
+        10 as i32, 19 as i32, 22 as i32, 28 as i32, 31 as i32, 33 as i32,
     ],
     [
-        10 as i32,
-        19 as i32,
-        22 as i32,
-        28 as i32,
-        31 as i32,
-        33 as i32,
-    ],
-    [
-        20 as i32,
-        21 as i32,
-        29 as i32,
-        30 as i32,
-        34 as i32,
-        35 as i32,
+        20 as i32, 21 as i32, 29 as i32, 30 as i32, 34 as i32, 35 as i32,
     ],
 ];
 
 static mut jpeg_zigzag_order5: [[i32; 5]; 5] = [
-    [
-        0 as i32,
-        1 as i32,
-        5 as i32,
-        6 as i32,
-        14 as i32,
-    ],
-    [
-        2 as i32,
-        4 as i32,
-        7 as i32,
-        13 as i32,
-        15 as i32,
-    ],
-    [
-        3 as i32,
-        8 as i32,
-        12 as i32,
-        16 as i32,
-        21 as i32,
-    ],
-    [
-        9 as i32,
-        11 as i32,
-        17 as i32,
-        20 as i32,
-        22 as i32,
-    ],
-    [
-        10 as i32,
-        18 as i32,
-        19 as i32,
-        23 as i32,
-        24 as i32,
-    ],
+    [0 as i32, 1 as i32, 5 as i32, 6 as i32, 14 as i32],
+    [2 as i32, 4 as i32, 7 as i32, 13 as i32, 15 as i32],
+    [3 as i32, 8 as i32, 12 as i32, 16 as i32, 21 as i32],
+    [9 as i32, 11 as i32, 17 as i32, 20 as i32, 22 as i32],
+    [10 as i32, 18 as i32, 19 as i32, 23 as i32, 24 as i32],
 ];
 
 static mut jpeg_zigzag_order4: [[i32; 4]; 4] = [
-    [
-        0 as i32,
-        1 as i32,
-        5 as i32,
-        6 as i32,
-    ],
-    [
-        2 as i32,
-        4 as i32,
-        7 as i32,
-        12 as i32,
-    ],
-    [
-        3 as i32,
-        8 as i32,
-        11 as i32,
-        13 as i32,
-    ],
-    [
-        9 as i32,
-        10 as i32,
-        14 as i32,
-        15 as i32,
-    ],
+    [0 as i32, 1 as i32, 5 as i32, 6 as i32],
+    [2 as i32, 4 as i32, 7 as i32, 12 as i32],
+    [3 as i32, 8 as i32, 11 as i32, 13 as i32],
+    [9 as i32, 10 as i32, 14 as i32, 15 as i32],
 ];
 
 static mut jpeg_zigzag_order3: [[i32; 3]; 3] = [
@@ -542,10 +362,7 @@ static mut jpeg_zigzag_order3: [[i32; 3]; 3] = [
     [3 as i32, 7 as i32, 8 as i32],
 ];
 
-static mut jpeg_zigzag_order2: [[i32; 2]; 2] = [
-    [0 as i32, 1 as i32],
-    [2 as i32, 3 as i32],
-];
+static mut jpeg_zigzag_order2: [[i32; 2]; 2] = [[0 as i32, 1 as i32], [2 as i32, 3 as i32]];
 /*
  * Compute the derived values for a Huffman table.
  * This routine also performs some validation checks on the table.
@@ -620,8 +437,7 @@ unsafe extern "C" fn jpeg_make_d_derived_tbl(
         i = (*htbl).bits[l as usize] as i32;
         if i < 0 as i32 || p + i > 256 as i32 {
             /* protect against table overrun */
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -660,10 +476,8 @@ unsafe extern "C" fn jpeg_make_d_derived_tbl(
         /* code is now 1 more than the last code used for codelength si; but
          * it must still fit in si bits, since no code is allowed to be all ones.
          */
-        if code as crate::jmorecfg_h::INT32 >= (1 as i32 as crate::jmorecfg_h::INT32) << si
-        {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
+        if code as crate::jmorecfg_h::INT32 >= (1 as i32 as crate::jmorecfg_h::INT32) << si {
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -739,8 +553,7 @@ unsafe extern "C" fn jpeg_make_d_derived_tbl(
         while i < numsymbols {
             let mut sym: i32 = (*htbl).huffval[i as usize] as i32;
             if sym < 0 as i32 || sym > 15 as i32 {
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
@@ -867,8 +680,7 @@ unsafe extern "C" fn jpeg_fill_bit_buffer(
                  * appears per data segment.
                  */
                 if (*((*cinfo).entropy as huff_entropy_ptr)).insufficient_data == 0 {
-                    (*(*cinfo).err).msg_code =
-                        crate::src::jpeg_8c::jerror::JWRN_HIT_MARKER as i32;
+                    (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JWRN_HIT_MARKER as i32;
                     Some(
                         (*(*cinfo).err)
                             .emit_message
@@ -941,8 +753,7 @@ unsafe extern "C" fn jpeg_huff_decode(
         bits_left = (*state).bits_left
     }
     bits_left -= l;
-    code =
-        ((get_buffer >> bits_left) as i32 & bmask[l as usize]) as crate::jmorecfg_h::INT32;
+    code = ((get_buffer >> bits_left) as i32 & bmask[l as usize]) as crate::jmorecfg_h::INT32;
     /* Collect the rest of the Huffman code one bit at a time. */
     /* This is per Figure F.16 in the JPEG spec. */
     while code > (*htbl).maxcode[l as usize] {
@@ -955,8 +766,7 @@ unsafe extern "C" fn jpeg_huff_decode(
             bits_left = (*state).bits_left
         }
         bits_left -= 1 as i32;
-        code |= ((get_buffer >> bits_left) as i32 & bmask[1 as i32 as usize])
-            as libc::c_long;
+        code |= ((get_buffer >> bits_left) as i32 & bmask[1 as i32 as usize]) as libc::c_long;
         l += 1
     }
     /* Unload the local registers */
@@ -964,8 +774,7 @@ unsafe extern "C" fn jpeg_huff_decode(
     (*state).bits_left = bits_left;
     /* With garbage input we may reach the sentinel value l = 17. */
     if l > 16 as i32 {
-        (*(*(*state).cinfo).err).msg_code =
-            crate::src::jpeg_8c::jerror::JWRN_HUFF_BAD_CODE as i32;
+        (*(*(*state).cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JWRN_HUFF_BAD_CODE as i32;
         Some(
             (*(*(*state).cinfo).err)
                 .emit_message
@@ -978,8 +787,7 @@ unsafe extern "C" fn jpeg_huff_decode(
         return 0 as i32;
         /* fake a zero as the safest result */
     }
-    return (*(*htbl).pub_0).huffval[(code + (*htbl).valoffset[l as usize]) as i32 as usize]
-        as i32;
+    return (*(*htbl).pub_0).huffval[(code + (*htbl).valoffset[l as usize]) as i32 as usize] as i32;
 }
 /*
  * Check for a restart marker & resynchronize decoder.
@@ -1109,8 +917,7 @@ unsafe extern "C" fn decode_mcu_DC_first(
             let mut nb: i32 = 0;
             let mut look: i32 = 0;
             if bits_left < 8 as i32 {
-                if jpeg_fill_bit_buffer(&mut br_state, get_buffer, bits_left, 0 as i32) == 0
-                {
+                if jpeg_fill_bit_buffer(&mut br_state, get_buffer, bits_left, 0 as i32) == 0 {
                     return 0 as i32;
                 }
                 get_buffer = br_state.get_buffer;
@@ -1126,8 +933,7 @@ unsafe extern "C" fn decode_mcu_DC_first(
             }
             match current_block_32 {
                 5494826135382683477 => {
-                    look = (get_buffer >> bits_left - 8 as i32) as i32
-                        & bmask[8 as i32 as usize];
+                    look = (get_buffer >> bits_left - 8 as i32) as i32 & bmask[8 as i32 as usize];
                     nb = (*tbl).look_nbits[look as usize];
                     if nb != 0 as i32 {
                         bits_left -= nb;
@@ -1252,9 +1058,7 @@ unsafe extern "C" fn decode_mcu_AC_first(
                 let mut nb: i32 = 0;
                 let mut look: i32 = 0;
                 if bits_left < 8 as i32 {
-                    if jpeg_fill_bit_buffer(&mut br_state, get_buffer, bits_left, 0 as i32)
-                        == 0
-                    {
+                    if jpeg_fill_bit_buffer(&mut br_state, get_buffer, bits_left, 0 as i32) == 0 {
                         return 0 as i32;
                     }
                     get_buffer = br_state.get_buffer;
@@ -1270,8 +1074,8 @@ unsafe extern "C" fn decode_mcu_AC_first(
                 }
                 match current_block_34 {
                     14136749492126903395 => {
-                        look = (get_buffer >> bits_left - 8 as i32) as i32
-                            & bmask[8 as i32 as usize];
+                        look =
+                            (get_buffer >> bits_left - 8 as i32) as i32 & bmask[8 as i32 as usize];
                         nb = (*tbl).look_nbits[look as usize];
                         if nb != 0 as i32 {
                             bits_left -= nb;
@@ -1407,9 +1211,8 @@ unsafe extern "C" fn decode_mcu_DC_refine(
         }
         bits_left -= 1 as i32;
         if (get_buffer >> bits_left) as i32 & bmask[1 as i32 as usize] != 0 {
-            (*block)[0 as i32 as usize] = ((*block)[0 as i32 as usize]
-                as i32
-                | p1) as crate::jmorecfg_h::JCOEF
+            (*block)[0 as i32 as usize] =
+                ((*block)[0 as i32 as usize] as i32 | p1) as crate::jmorecfg_h::JCOEF
         }
         blkn += 1
     }
@@ -1514,12 +1317,7 @@ unsafe extern "C" fn decode_mcu_AC_refine(
                     let mut nb: i32 = 0;
                     let mut look: i32 = 0;
                     if bits_left < 8 as i32 {
-                        if jpeg_fill_bit_buffer(
-                            &mut br_state,
-                            get_buffer,
-                            bits_left,
-                            0 as i32,
-                        ) == 0
+                        if jpeg_fill_bit_buffer(&mut br_state, get_buffer, bits_left, 0 as i32) == 0
                         {
                             current_block = 6568878844838934825;
                             break;
@@ -1581,12 +1379,8 @@ unsafe extern "C" fn decode_mcu_AC_refine(
                             );
                         }
                         if bits_left < 1 as i32 {
-                            if jpeg_fill_bit_buffer(
-                                &mut br_state,
-                                get_buffer,
-                                bits_left,
-                                1 as i32,
-                            ) == 0
+                            if jpeg_fill_bit_buffer(&mut br_state, get_buffer, bits_left, 1 as i32)
+                                == 0
                             {
                                 current_block = 6568878844838934825;
                                 break;
@@ -1595,10 +1389,7 @@ unsafe extern "C" fn decode_mcu_AC_refine(
                             bits_left = br_state.bits_left
                         }
                         bits_left -= 1 as i32;
-                        if (get_buffer >> bits_left) as i32
-                            & bmask[1 as i32 as usize]
-                            != 0
-                        {
+                        if (get_buffer >> bits_left) as i32 & bmask[1 as i32 as usize] != 0 {
                             /* newly nonzero coef is negative */
                             s = p1
                         } else {
@@ -1652,18 +1443,15 @@ unsafe extern "C" fn decode_mcu_AC_refine(
                                 bits_left = br_state.bits_left
                             }
                             bits_left -= 1 as i32;
-                            if (get_buffer >> bits_left) as i32
-                                & bmask[1 as i32 as usize]
-                                != 0
-                            {
+                            if (get_buffer >> bits_left) as i32 & bmask[1 as i32 as usize] != 0 {
                                 if *thiscoef as i32 & p1 == 0 as i32 {
                                     /* do nothing if already set it */
                                     if *thiscoef as i32 >= 0 as i32 {
-                                        *thiscoef = (*thiscoef as i32 + p1)
-                                            as crate::jmorecfg_h::JCOEF
+                                        *thiscoef =
+                                            (*thiscoef as i32 + p1) as crate::jmorecfg_h::JCOEF
                                     } else {
-                                        *thiscoef = (*thiscoef as i32 + m1)
-                                            as crate::jmorecfg_h::JCOEF
+                                        *thiscoef =
+                                            (*thiscoef as i32 + m1) as crate::jmorecfg_h::JCOEF
                                     }
                                 }
                             }
@@ -1731,18 +1519,15 @@ unsafe extern "C" fn decode_mcu_AC_refine(
                                 bits_left = br_state.bits_left
                             }
                             bits_left -= 1 as i32;
-                            if (get_buffer >> bits_left) as i32
-                                & bmask[1 as i32 as usize]
-                                != 0
-                            {
+                            if (get_buffer >> bits_left) as i32 & bmask[1 as i32 as usize] != 0 {
                                 if *thiscoef as i32 & p1 == 0 as i32 {
                                     /* do nothing if already changed it */
                                     if *thiscoef as i32 >= 0 as i32 {
-                                        *thiscoef = (*thiscoef as i32 + p1)
-                                            as crate::jmorecfg_h::JCOEF
+                                        *thiscoef =
+                                            (*thiscoef as i32 + p1) as crate::jmorecfg_h::JCOEF
                                     } else {
-                                        *thiscoef = (*thiscoef as i32 + m1)
-                                            as crate::jmorecfg_h::JCOEF
+                                        *thiscoef =
+                                            (*thiscoef as i32 + m1) as crate::jmorecfg_h::JCOEF
                                     }
                                 }
                             }
@@ -1836,8 +1621,7 @@ unsafe extern "C" fn decode_mcu_sub(
             let mut nb: i32 = 0;
             let mut look: i32 = 0;
             if bits_left < 8 as i32 {
-                if jpeg_fill_bit_buffer(&mut br_state, get_buffer, bits_left, 0 as i32) == 0
-                {
+                if jpeg_fill_bit_buffer(&mut br_state, get_buffer, bits_left, 0 as i32) == 0 {
                     return 0 as i32;
                 }
                 get_buffer = br_state.get_buffer;
@@ -1853,8 +1637,7 @@ unsafe extern "C" fn decode_mcu_sub(
             }
             match current_block_31 {
                 11636175345244025579 => {
-                    look = (get_buffer >> bits_left - 8 as i32) as i32
-                        & bmask[8 as i32 as usize];
+                    look = (get_buffer >> bits_left - 8 as i32) as i32 & bmask[8 as i32 as usize];
                     nb = (*htbl).look_nbits[look as usize];
                     if nb != 0 as i32 {
                         bits_left -= nb;
@@ -1916,12 +1699,7 @@ unsafe extern "C" fn decode_mcu_sub(
                     let mut nb_0: i32 = 0;
                     let mut look_0: i32 = 0;
                     if bits_left < 8 as i32 {
-                        if jpeg_fill_bit_buffer(
-                            &mut br_state,
-                            get_buffer,
-                            bits_left,
-                            0 as i32,
-                        ) == 0
+                        if jpeg_fill_bit_buffer(&mut br_state, get_buffer, bits_left, 0 as i32) == 0
                         {
                             return 0 as i32;
                         }
@@ -2018,12 +1796,8 @@ unsafe extern "C" fn decode_mcu_sub(
                         let mut nb_1: i32 = 0;
                         let mut look_1: i32 = 0;
                         if bits_left < 8 as i32 {
-                            if jpeg_fill_bit_buffer(
-                                &mut br_state,
-                                get_buffer,
-                                bits_left,
-                                0 as i32,
-                            ) == 0
+                            if jpeg_fill_bit_buffer(&mut br_state, get_buffer, bits_left, 0 as i32)
+                                == 0
                             {
                                 return 0 as i32;
                             }
@@ -2040,8 +1814,7 @@ unsafe extern "C" fn decode_mcu_sub(
                         }
                         match current_block_117 {
                             12696043255897098083 => {
-                                look_1 = (get_buffer >> bits_left - 8 as i32)
-                                    as i32
+                                look_1 = (get_buffer >> bits_left - 8 as i32) as i32
                                     & bmask[8 as i32 as usize];
                                 nb_1 = (*htbl).look_nbits[look_1 as usize];
                                 if nb_1 != 0 as i32 {
@@ -2171,8 +1944,7 @@ unsafe extern "C" fn decode_mcu(
             let mut nb: i32 = 0;
             let mut look: i32 = 0;
             if bits_left < 8 as i32 {
-                if jpeg_fill_bit_buffer(&mut br_state, get_buffer, bits_left, 0 as i32) == 0
-                {
+                if jpeg_fill_bit_buffer(&mut br_state, get_buffer, bits_left, 0 as i32) == 0 {
                     return 0 as i32;
                 }
                 get_buffer = br_state.get_buffer;
@@ -2188,8 +1960,7 @@ unsafe extern "C" fn decode_mcu(
             }
             match current_block_29 {
                 14359455889292382949 => {
-                    look = (get_buffer >> bits_left - 8 as i32) as i32
-                        & bmask[8 as i32 as usize];
+                    look = (get_buffer >> bits_left - 8 as i32) as i32 & bmask[8 as i32 as usize];
                     nb = (*htbl).look_nbits[look as usize];
                     if nb != 0 as i32 {
                         bits_left -= nb;
@@ -2251,12 +2022,7 @@ unsafe extern "C" fn decode_mcu(
                     let mut nb_0: i32 = 0;
                     let mut look_0: i32 = 0;
                     if bits_left < 8 as i32 {
-                        if jpeg_fill_bit_buffer(
-                            &mut br_state,
-                            get_buffer,
-                            bits_left,
-                            0 as i32,
-                        ) == 0
+                        if jpeg_fill_bit_buffer(&mut br_state, get_buffer, bits_left, 0 as i32) == 0
                         {
                             return 0 as i32;
                         }
@@ -2354,12 +2120,8 @@ unsafe extern "C" fn decode_mcu(
                         let mut nb_1: i32 = 0;
                         let mut look_1: i32 = 0;
                         if bits_left < 8 as i32 {
-                            if jpeg_fill_bit_buffer(
-                                &mut br_state,
-                                get_buffer,
-                                bits_left,
-                                0 as i32,
-                            ) == 0
+                            if jpeg_fill_bit_buffer(&mut br_state, get_buffer, bits_left, 0 as i32)
+                                == 0
                             {
                                 return 0 as i32;
                             }
@@ -2376,8 +2138,7 @@ unsafe extern "C" fn decode_mcu(
                         }
                         match current_block_115 {
                             9180031981464905198 => {
-                                look_1 = (get_buffer >> bits_left - 8 as i32)
-                                    as i32
+                                look_1 = (get_buffer >> bits_left - 8 as i32) as i32
                                     & bmask[8 as i32 as usize];
                                 nb_1 = (*htbl).look_nbits[look_1 as usize];
                                 if nb_1 != 0 as i32 {
@@ -2511,8 +2272,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: crate::jpeglib_h::j_deco
              * overflows in the IDCT math.  But we won't crash.
              */
             {
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_PROGRESSION as i32;
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_PROGRESSION as i32;
                 (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).Ss;
                 (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = (*cinfo).Se;
                 (*(*cinfo).err).msg_parm.i[2 as i32 as usize] = (*cinfo).Ah;
@@ -2536,13 +2296,10 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: crate::jpeglib_h::j_deco
         while ci < (*cinfo).comps_in_scan {
             let mut coefi: i32 = 0;
             let mut cindex: i32 = (*(*cinfo).cur_comp_info[ci as usize]).component_index;
-            let mut coef_bit_ptr: *mut i32 =
-                &mut *(*(*cinfo).coef_bits.offset(cindex as isize))
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize) as *mut i32;
-            if (*cinfo).Ss != 0
-                && *coef_bit_ptr.offset(0 as i32 as isize) < 0 as i32
-            {
+            let mut coef_bit_ptr: *mut i32 = &mut *(*(*cinfo).coef_bits.offset(cindex as isize))
+                .as_mut_ptr()
+                .offset(0 as i32 as isize) as *mut i32;
+            if (*cinfo).Ss != 0 && *coef_bit_ptr.offset(0 as i32 as isize) < 0 as i32 {
                 /* AC without prior DC scan */
                 (*(*cinfo).err).msg_code =
                     crate::src::jpeg_8c::jerror::JWRN_BOGUS_PROGRESSION as i32;
@@ -2560,12 +2317,11 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: crate::jpeglib_h::j_deco
             }
             coefi = (*cinfo).Ss;
             while coefi <= (*cinfo).Se {
-                let mut expected: i32 =
-                    if *coef_bit_ptr.offset(coefi as isize) < 0 as i32 {
-                        0 as i32
-                    } else {
-                        *coef_bit_ptr.offset(coefi as isize)
-                    };
+                let mut expected: i32 = if *coef_bit_ptr.offset(coefi as isize) < 0 as i32 {
+                    0 as i32
+                } else {
+                    *coef_bit_ptr.offset(coefi as isize)
+                };
                 if (*cinfo).Ah != expected {
                     (*(*cinfo).err).msg_code =
                         crate::src::jpeg_8c::jerror::JWRN_BOGUS_PROGRESSION as i32;
@@ -2669,8 +2425,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: crate::jpeglib_h::j_deco
             || ((*cinfo).is_baseline != 0 || (*cinfo).Se < 64 as i32)
                 && (*cinfo).Se != (*cinfo).lim_Se
         {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JWRN_NOT_SEQUENTIAL as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JWRN_NOT_SEQUENTIAL as i32;
             Some(
                 (*(*cinfo).err)
                     .emit_message
@@ -2755,8 +2510,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: crate::jpeglib_h::j_deco
                             i = 2 as i32
                         }
                         (*entropy).coef_limit[blkn as usize] = 1 as i32
-                            + jpeg_zigzag_order2[(ci - 1 as i32) as usize]
-                                [(i - 1 as i32) as usize]
+                            + jpeg_zigzag_order2[(ci - 1 as i32) as usize][(i - 1 as i32) as usize]
                     }
                     8 => {
                         if ci <= 0 as i32 || ci > 3 as i32 {
@@ -2766,8 +2520,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: crate::jpeglib_h::j_deco
                             i = 3 as i32
                         }
                         (*entropy).coef_limit[blkn as usize] = 1 as i32
-                            + jpeg_zigzag_order3[(ci - 1 as i32) as usize]
-                                [(i - 1 as i32) as usize]
+                            + jpeg_zigzag_order3[(ci - 1 as i32) as usize][(i - 1 as i32) as usize]
                     }
                     15 => {
                         if ci <= 0 as i32 || ci > 4 as i32 {
@@ -2777,8 +2530,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: crate::jpeglib_h::j_deco
                             i = 4 as i32
                         }
                         (*entropy).coef_limit[blkn as usize] = 1 as i32
-                            + jpeg_zigzag_order4[(ci - 1 as i32) as usize]
-                                [(i - 1 as i32) as usize]
+                            + jpeg_zigzag_order4[(ci - 1 as i32) as usize][(i - 1 as i32) as usize]
                     }
                     24 => {
                         if ci <= 0 as i32 || ci > 5 as i32 {
@@ -2788,8 +2540,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: crate::jpeglib_h::j_deco
                             i = 5 as i32
                         }
                         (*entropy).coef_limit[blkn as usize] = 1 as i32
-                            + jpeg_zigzag_order5[(ci - 1 as i32) as usize]
-                                [(i - 1 as i32) as usize]
+                            + jpeg_zigzag_order5[(ci - 1 as i32) as usize][(i - 1 as i32) as usize]
                     }
                     35 => {
                         if ci <= 0 as i32 || ci > 6 as i32 {
@@ -2799,8 +2550,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: crate::jpeglib_h::j_deco
                             i = 6 as i32
                         }
                         (*entropy).coef_limit[blkn as usize] = 1 as i32
-                            + jpeg_zigzag_order6[(ci - 1 as i32) as usize]
-                                [(i - 1 as i32) as usize]
+                            + jpeg_zigzag_order6[(ci - 1 as i32) as usize][(i - 1 as i32) as usize]
                     }
                     48 => {
                         if ci <= 0 as i32 || ci > 7 as i32 {
@@ -2810,8 +2560,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: crate::jpeglib_h::j_deco
                             i = 7 as i32
                         }
                         (*entropy).coef_limit[blkn as usize] = 1 as i32
-                            + jpeg_zigzag_order7[(ci - 1 as i32) as usize]
-                                [(i - 1 as i32) as usize]
+                            + jpeg_zigzag_order7[(ci - 1 as i32) as usize][(i - 1 as i32) as usize]
                     }
                     _ => {
                         if ci <= 0 as i32 || ci > 8 as i32 {
@@ -2821,8 +2570,7 @@ unsafe extern "C" fn start_pass_huff_decoder(mut cinfo: crate::jpeglib_h::j_deco
                             i = 8 as i32
                         }
                         (*entropy).coef_limit[blkn as usize] = 1 as i32
-                            + jpeg_zigzag_order[(ci - 1 as i32) as usize]
-                                [(i - 1 as i32) as usize]
+                            + jpeg_zigzag_order[(ci - 1 as i32) as usize][(i - 1 as i32) as usize]
                     }
                 }
             } else {

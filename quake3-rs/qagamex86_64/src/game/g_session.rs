@@ -230,9 +230,7 @@ pub unsafe extern "C" fn G_InitSessionData(
     );
     // check for human's team preference set by start server menu
     if *value.offset(0 as i32 as isize) == 0
-        && crate::src::game::g_main::g_localTeamPref.string[0 as i32 as usize]
-            as i32
-            != 0
+        && crate::src::game::g_main::g_localTeamPref.string[0 as i32 as usize] as i32 != 0
         && (*client).pers.localClient as u32 != 0
     {
         value = crate::src::game::g_main::g_localTeamPref

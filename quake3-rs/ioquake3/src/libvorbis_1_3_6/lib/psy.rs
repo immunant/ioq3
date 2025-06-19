@@ -6313,8 +6313,7 @@ unsafe extern "C" fn setup_tone_curves(
     let mut athc: [[f32; 56]; 8] = [[0.; 56]; 8];
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-            as usize,
+        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
     );
     let mut brute_buffer: *mut f32 = fresh0.as_mut_ptr() as *mut f32;
     let mut ret: *mut *mut *mut f32 = crate::stdlib::malloc(
@@ -6356,8 +6355,7 @@ unsafe extern "C" fn setup_tone_curves(
         j = 0 as i32;
         while j < 6 as i32 {
             crate::stdlib::memcpy(
-                workc[i as usize][(j + 2 as i32) as usize].as_mut_ptr()
-                    as *mut libc::c_void,
+                workc[i as usize][(j + 2 as i32) as usize].as_mut_ptr() as *mut libc::c_void,
                 tonemasks[i as usize][j as usize].as_ptr() as *const libc::c_void,
                 (56 as i32 as libc::c_ulong)
                     .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
@@ -6381,16 +6379,12 @@ unsafe extern "C" fn setup_tone_curves(
         while j < 8 as i32 {
             k = 0 as i32;
             while k < 56 as i32 {
-                let mut adj: f32 = center_boost
-                    + ::libc::abs(16 as i32 - k) as f32 * center_decay_rate;
-                if (adj as f64) < 0.0f64
-                    && center_boost > 0 as i32 as f32
-                {
+                let mut adj: f32 =
+                    center_boost + ::libc::abs(16 as i32 - k) as f32 * center_decay_rate;
+                if (adj as f64) < 0.0f64 && center_boost > 0 as i32 as f32 {
                     adj = 0.0f64 as f32
                 }
-                if adj as f64 > 0.0f64
-                    && center_boost < 0 as i32 as f32
-                {
+                if adj as f64 > 0.0f64 && center_boost < 0 as i32 as f32 {
                     adj = 0.0f64 as f32
                 }
                 workc[i as usize][j as usize][k as usize] += adj;
@@ -6405,12 +6399,7 @@ unsafe extern "C" fn setup_tone_curves(
             attenuate_curve(
                 workc[i as usize][j as usize].as_mut_ptr(),
                 (*curveatt_dB.offset(i as isize) as f64 + 100.0f64
-                    - (if j < 2 as i32 {
-                        2 as i32
-                    } else {
-                        j
-                    }) as f64
-                        * 10.0f64
+                    - (if j < 2 as i32 { 2 as i32 } else { j }) as f64 * 10.0f64
                     - 30.0f64) as f32,
             );
             crate::stdlib::memcpy(
@@ -6421,8 +6410,7 @@ unsafe extern "C" fn setup_tone_curves(
             );
             attenuate_curve(
                 athc[j as usize].as_mut_ptr(),
-                (100.0f64 - (j as f32 * 10.0f32) as f64 - 30.0f64)
-                    as f32,
+                (100.0f64 - (j as f32 * 10.0f32) as f64 - 30.0f64) as f32,
             );
             max_curve(
                 athc[j as usize].as_mut_ptr(),
@@ -6473,23 +6461,17 @@ unsafe extern "C" fn setup_tone_curves(
         octave values may also be composited. */
         /* which octave curves will we be compositing? */
         bin = crate::stdlib::floor(
-            crate::stdlib::exp(
-                (i as f64 * 0.5f64 + 5.965784f32 as f64)
-                    * 0.693147f32 as f64,
-            ) / binHz as f64,
+            crate::stdlib::exp((i as f64 * 0.5f64 + 5.965784f32 as f64) * 0.693147f32 as f64)
+                / binHz as f64,
         ) as i32;
         lo_curve = crate::stdlib::ceil(
-            (crate::stdlib::log(
-                (bin as f32 * binHz + 1 as i32 as f32)
-                    as f64,
-            ) * 1.442695f32 as f64
+            (crate::stdlib::log((bin as f32 * binHz + 1 as i32 as f32) as f64)
+                * 1.442695f32 as f64
                 - 5.965784f32 as f64)
                 * 2 as i32 as f64,
         ) as i32;
         hi_curve = crate::stdlib::floor(
-            (crate::stdlib::log(
-                ((bin + 1 as i32) as f32 * binHz) as f64,
-            ) * 1.442695f32 as f64
+            (crate::stdlib::log(((bin + 1 as i32) as f32 * binHz) as f64) * 1.442695f32 as f64
                 - 5.965784f32 as f64)
                 * 2 as i32 as f64,
         ) as i32;
@@ -6523,18 +6505,14 @@ unsafe extern "C" fn setup_tone_curves(
                 j = 0 as i32;
                 while j < 56 as i32 {
                     let mut lo_bin: i32 = (crate::stdlib::exp(
-                        (j as f64 * 0.125f64 + k as f64 * 0.5f64 - 2.0625f64
-                            + 5.965784f32 as f64)
+                        (j as f64 * 0.125f64 + k as f64 * 0.5f64 - 2.0625f64 + 5.965784f32 as f64)
                             * 0.693147f32 as f64,
-                    ) / binHz as f64)
-                        as i32;
+                    ) / binHz as f64) as i32;
                     let mut hi_bin: i32 = (crate::stdlib::exp(
-                        (j as f64 * 0.125f64 + k as f64 * 0.5f64 - 1.9375f64
-                            + 5.965784f32 as f64)
+                        (j as f64 * 0.125f64 + k as f64 * 0.5f64 - 1.9375f64 + 5.965784f32 as f64)
                             * 0.693147f32 as f64,
                     ) / binHz as f64
-                        + 1 as i32 as f64)
-                        as i32;
+                        + 1 as i32 as f64) as i32;
                     if lo_bin < 0 as i32 {
                         lo_bin = 0 as i32
                     }
@@ -6563,11 +6541,10 @@ unsafe extern "C" fn setup_tone_curves(
                 }
                 while l < n {
                     if *brute_buffer.offset(l as isize)
-                        > workc[k as usize][m as usize]
-                            [(56 as i32 - 1 as i32) as usize]
+                        > workc[k as usize][m as usize][(56 as i32 - 1 as i32) as usize]
                     {
-                        *brute_buffer.offset(l as isize) = workc[k as usize][m as usize]
-                            [(56 as i32 - 1 as i32) as usize]
+                        *brute_buffer.offset(l as isize) =
+                            workc[k as usize][m as usize][(56 as i32 - 1 as i32) as usize]
                     }
                     l += 1
                 }
@@ -6580,18 +6557,14 @@ unsafe extern "C" fn setup_tone_curves(
                 j = 0 as i32;
                 while j < 56 as i32 {
                     let mut lo_bin_0: i32 = (crate::stdlib::exp(
-                        (j as f64 * 0.125f64 + i as f64 * 0.5f64 - 2.0625f64
-                            + 5.965784f32 as f64)
+                        (j as f64 * 0.125f64 + i as f64 * 0.5f64 - 2.0625f64 + 5.965784f32 as f64)
                             * 0.693147f32 as f64,
-                    ) / binHz as f64)
-                        as i32;
+                    ) / binHz as f64) as i32;
                     let mut hi_bin_0: i32 = (crate::stdlib::exp(
-                        (j as f64 * 0.125f64 + i as f64 * 0.5f64 - 1.9375f64
-                            + 5.965784f32 as f64)
+                        (j as f64 * 0.125f64 + i as f64 * 0.5f64 - 1.9375f64 + 5.965784f32 as f64)
                             * 0.693147f32 as f64,
                     ) / binHz as f64
-                        + 1 as i32 as f64)
-                        as i32;
+                        + 1 as i32 as f64) as i32;
                     if lo_bin_0 < 0 as i32 {
                         lo_bin_0 = 0 as i32
                     }
@@ -6620,11 +6593,10 @@ unsafe extern "C" fn setup_tone_curves(
                 }
                 while l_0 < n {
                     if *brute_buffer.offset(l_0 as isize)
-                        > workc[k as usize][m as usize]
-                            [(56 as i32 - 1 as i32) as usize]
+                        > workc[k as usize][m as usize][(56 as i32 - 1 as i32) as usize]
                     {
-                        *brute_buffer.offset(l_0 as isize) = workc[k as usize][m as usize]
-                            [(56 as i32 - 1 as i32) as usize]
+                        *brute_buffer.offset(l_0 as isize) =
+                            workc[k as usize][m as usize][(56 as i32 - 1 as i32) as usize]
                     }
                     l_0 += 1
                 }
@@ -6632,11 +6604,9 @@ unsafe extern "C" fn setup_tone_curves(
             j = 0 as i32;
             while j < 56 as i32 {
                 let mut bin_0: i32 = (crate::stdlib::exp(
-                    (j as f64 * 0.125f64 + i as f64 * 0.5f64 - 2.0f64
-                        + 5.965784f32 as f64)
+                    (j as f64 * 0.125f64 + i as f64 * 0.5f64 - 2.0f64 + 5.965784f32 as f64)
                         * 0.693147f32 as f64,
-                ) / binHz as f64)
-                    as i32;
+                ) / binHz as f64) as i32;
                 if bin_0 < 0 as i32 {
                     *(*(*ret.offset(i as isize)).offset(m as isize))
                         .offset((j + 2 as i32) as isize) = -999.0f64 as f32
@@ -6645,36 +6615,31 @@ unsafe extern "C" fn setup_tone_curves(
                         .offset((j + 2 as i32) as isize) = -999.0f64 as f32
                 } else {
                     *(*(*ret.offset(i as isize)).offset(m as isize))
-                        .offset((j + 2 as i32) as isize) =
-                        *brute_buffer.offset(bin_0 as isize)
+                        .offset((j + 2 as i32) as isize) = *brute_buffer.offset(bin_0 as isize)
                 }
                 j += 1
             }
             /* add fenceposts */
             j = 0 as i32;
             while j < 16 as i32 {
-                if *(*(*ret.offset(i as isize)).offset(m as isize))
-                    .offset((j + 2 as i32) as isize)
+                if *(*(*ret.offset(i as isize)).offset(m as isize)).offset((j + 2 as i32) as isize)
                     > -200.0f32
                 {
                     break;
                 }
                 j += 1
             }
-            *(*(*ret.offset(i as isize)).offset(m as isize)).offset(0 as i32 as isize) =
-                j as f32;
+            *(*(*ret.offset(i as isize)).offset(m as isize)).offset(0 as i32 as isize) = j as f32;
             j = 56 as i32 - 1 as i32;
             while j > 16 as i32 + 1 as i32 {
-                if *(*(*ret.offset(i as isize)).offset(m as isize))
-                    .offset((j + 2 as i32) as isize)
+                if *(*(*ret.offset(i as isize)).offset(m as isize)).offset((j + 2 as i32) as isize)
                     > -200.0f32
                 {
                     break;
                 }
                 j -= 1
             }
-            *(*(*ret.offset(i as isize)).offset(m as isize)).offset(1 as i32 as isize) =
-                j as f32;
+            *(*(*ret.offset(i as isize)).offset(m as isize)).offset(1 as i32 as isize) = j as f32;
             m += 1
         }
         i += 1
@@ -6706,21 +6671,17 @@ pub unsafe extern "C" fn _vp_psy_init(
         crate::stdlib::log(((*gi).eighth_octave_lines as f32 * 8.0f32) as f64)
             / crate::stdlib::log(2.0f32 as f64),
     ) - 1 as i32 as f64) as libc::c_long;
-    (*p).firstoc = ((crate::stdlib::log(
-        (0.25f32 * rate as f32) as f64 * 0.5f64 / n as f64,
-    ) * 1.442695f32 as f64
+    (*p).firstoc = ((crate::stdlib::log((0.25f32 * rate as f32) as f64 * 0.5f64 / n as f64)
+        * 1.442695f32 as f64
         - 5.965784f32 as f64)
         * ((1 as i32) << (*p).shiftoc + 1 as i32 as libc::c_long) as f64
         - (*gi).eighth_octave_lines as f64) as libc::c_long;
-    maxoc = ((crate::stdlib::log(
-        ((n as f32 + 0.25f32) * rate as f32) as f64 * 0.5f64
-            / n as f64,
-    ) * 1.442695f32 as f64
+    maxoc = ((crate::stdlib::log(((n as f32 + 0.25f32) * rate as f32) as f64 * 0.5f64 / n as f64)
+        * 1.442695f32 as f64
         - 5.965784f32 as f64)
         * ((1 as i32) << (*p).shiftoc + 1 as i32 as libc::c_long) as f64
         + 0.5f32 as f64) as libc::c_long;
-    (*p).total_octave_lines =
-        (maxoc - (*p).firstoc + 1 as i32 as libc::c_long) as i32;
+    (*p).total_octave_lines = (maxoc - (*p).firstoc + 1 as i32 as libc::c_long) as i32;
     (*p).ath = crate::stdlib::malloc(
         (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
     ) as *mut f32;
@@ -6748,8 +6709,7 @@ pub unsafe extern "C" fn _vp_psy_init(
     while i < (88 as i32 - 1 as i32) as libc::c_long {
         let mut endpos: i32 = crate::stdlib::rint(
             crate::stdlib::exp(
-                ((i + 1 as i32 as libc::c_long) as f64 * 0.125f64 - 2.0f64
-                    + 5.965784f32 as f64)
+                ((i + 1 as i32 as libc::c_long) as f64 * 0.125f64 - 2.0f64 + 5.965784f32 as f64)
                     * 0.693147f32 as f64,
             ) * 2 as i32 as f64
                 * n as f64
@@ -6757,8 +6717,7 @@ pub unsafe extern "C" fn _vp_psy_init(
         ) as i32;
         let mut base: f32 = ATH[i as usize];
         if j < endpos as libc::c_long {
-            let mut delta: f32 = (ATH[(i + 1 as i32 as libc::c_long) as usize]
-                - base)
+            let mut delta: f32 = (ATH[(i + 1 as i32 as libc::c_long) as usize] - base)
                 / (endpos as libc::c_long - j) as f32;
             while j < endpos as libc::c_long && j < n as libc::c_long {
                 *(*p).ath.offset(j as isize) = (base as f64 + 100.0f64) as f32;
@@ -6769,34 +6728,28 @@ pub unsafe extern "C" fn _vp_psy_init(
         i += 1
     }
     while j < n as libc::c_long {
-        *(*p).ath.offset(j as isize) = *(*p)
-            .ath
-            .offset((j - 1 as i32 as libc::c_long) as isize);
+        *(*p).ath.offset(j as isize) = *(*p).ath.offset((j - 1 as i32 as libc::c_long) as isize);
         j += 1
     }
     i = 0 as i32 as libc::c_long;
     while i < n as libc::c_long {
         let mut bark: f32 = (13.1f32 as f64
             * crate::stdlib::atan(
-                (0.00074f32 * (rate / (2 as i32 * n) as libc::c_long * i) as f32)
-                    as f64,
+                (0.00074f32 * (rate / (2 as i32 * n) as libc::c_long * i) as f32) as f64,
             )
             + 2.24f32 as f64
                 * crate::stdlib::atan(
                     ((rate / (2 as i32 * n) as libc::c_long
                         * i
-                        * (rate / (2 as i32 * n) as libc::c_long * i))
-                        as f32
+                        * (rate / (2 as i32 * n) as libc::c_long * i)) as f32
                         * 1.85e-8f32) as f64,
                 )
-            + (1e-4f32 * (rate / (2 as i32 * n) as libc::c_long * i) as f32)
-                as f64) as f32;
+            + (1e-4f32 * (rate / (2 as i32 * n) as libc::c_long * i) as f32) as f64)
+            as f32;
         while (lo + (*vi).noisewindowlomin as libc::c_long) < i
             && (13.1f32 as f64
                 * crate::stdlib::atan(
-                    (0.00074f32
-                        * (rate / (2 as i32 * n) as libc::c_long * lo) as f32)
-                        as f64,
+                    (0.00074f32 * (rate / (2 as i32 * n) as libc::c_long * lo) as f32) as f64,
                 )
                 + 2.24f32 as f64
                     * crate::stdlib::atan(
@@ -6806,8 +6759,7 @@ pub unsafe extern "C" fn _vp_psy_init(
                             as f32
                             * 1.85e-8f32) as f64,
                     )
-                + (1e-4f32 * (rate / (2 as i32 * n) as libc::c_long * lo) as f32)
-                    as f64)
+                + (1e-4f32 * (rate / (2 as i32 * n) as libc::c_long * lo) as f32) as f64)
                 < (bark - (*vi).noisewindowlo) as f64
         {
             lo += 1
@@ -6816,9 +6768,7 @@ pub unsafe extern "C" fn _vp_psy_init(
             && (hi < i + (*vi).noisewindowhimin as libc::c_long
                 || (13.1f32 as f64
                     * crate::stdlib::atan(
-                        (0.00074f32
-                            * (rate / (2 as i32 * n) as libc::c_long * hi) as f32)
-                            as f64,
+                        (0.00074f32 * (rate / (2 as i32 * n) as libc::c_long * hi) as f32) as f64,
                     )
                     + 2.24f32 as f64
                         * crate::stdlib::atan(
@@ -6828,28 +6778,23 @@ pub unsafe extern "C" fn _vp_psy_init(
                                 as f32
                                 * 1.85e-8f32) as f64,
                         )
-                    + (1e-4f32
-                        * (rate / (2 as i32 * n) as libc::c_long * hi) as f32)
-                        as f64)
+                    + (1e-4f32 * (rate / (2 as i32 * n) as libc::c_long * hi) as f32) as f64)
                     < (bark + (*vi).noisewindowhi) as f64)
         {
             hi += 1
         }
-        *(*p).bark.offset(i as isize) = ((lo - 1 as i32 as libc::c_long)
-            << 16 as i32)
-            + (hi - 1 as i32 as libc::c_long);
+        *(*p).bark.offset(i as isize) =
+            ((lo - 1 as i32 as libc::c_long) << 16 as i32) + (hi - 1 as i32 as libc::c_long);
         i += 1
     }
     i = 0 as i32 as libc::c_long;
     while i < n as libc::c_long {
-        *(*p).octave.offset(i as isize) = ((crate::stdlib::log(
-            (i as f32 + 0.25f32) as f64 * 0.5f64 * rate as f64
-                / n as f64,
-        ) * 1.442695f32 as f64
-            - 5.965784f32 as f64)
-            * ((1 as i32) << (*p).shiftoc + 1 as i32 as libc::c_long)
-                as f64
-            + 0.5f32 as f64) as libc::c_long;
+        *(*p).octave.offset(i as isize) =
+            ((crate::stdlib::log((i as f32 + 0.25f32) as f64 * 0.5f64 * rate as f64 / n as f64)
+                * 1.442695f32 as f64
+                - 5.965784f32 as f64)
+                * ((1 as i32) << (*p).shiftoc + 1 as i32 as libc::c_long) as f64
+                + 0.5f32 as f64) as libc::c_long;
         i += 1
     }
     (*p).tonecurves = setup_tone_curves(
@@ -6868,19 +6813,17 @@ pub unsafe extern "C" fn _vp_psy_init(
     while i < 3 as i32 as libc::c_long {
         let ref mut fresh3 = *(*p).noiseoffset.offset(i as isize);
         *fresh3 = crate::stdlib::malloc(
-            (n as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+            (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
         ) as *mut f32;
         i += 1
     }
     i = 0 as i32 as libc::c_long;
     while i < n as libc::c_long {
-        let mut halfoc: f32 = ((crate::stdlib::log(
-            (i as f64 + 0.5f64) * rate as f64
-                / (2.0f64 * n as f64),
-        ) * 1.442695f32 as f64
-            - 5.965784f32 as f64)
-            * 2.0f64) as f32;
+        let mut halfoc: f32 =
+            ((crate::stdlib::log((i as f64 + 0.5f64) * rate as f64 / (2.0f64 * n as f64))
+                * 1.442695f32 as f64
+                - 5.965784f32 as f64)
+                * 2.0f64) as f32;
         let mut inthalfoc: i32 = 0;
         let mut del: f32 = 0.;
         if halfoc < 0 as i32 as f32 {
@@ -6894,10 +6837,9 @@ pub unsafe extern "C" fn _vp_psy_init(
         j = 0 as i32 as libc::c_long;
         while j < 3 as i32 as libc::c_long {
             *(*(*p).noiseoffset.offset(j as isize)).offset(i as isize) =
-                ((*(*p).vi).noiseoff[j as usize][inthalfoc as usize] as f64
-                    * (1.0f64 - del as f64)
-                    + ((*(*p).vi).noiseoff[j as usize][(inthalfoc + 1 as i32) as usize]
-                        * del) as f64) as f32;
+                ((*(*p).vi).noiseoff[j as usize][inthalfoc as usize] as f64 * (1.0f64 - del as f64)
+                    + ((*(*p).vi).noiseoff[j as usize][(inthalfoc + 1 as i32) as usize] * del)
+                        as f64) as f32;
             j += 1
         }
         i += 1
@@ -6966,13 +6908,8 @@ unsafe extern "C" fn seed_curve(
     let mut seedptr: i32 = 0;
     let mut posts: *const f32 = 0 as *const f32;
     let mut curve: *const f32 = 0 as *const f32;
-    let mut choice: i32 =
-        (((amp + dBoffset) as f64 - 30.0f64) * 0.1f32 as f64) as i32;
-    choice = if choice < 0 as i32 {
-        0 as i32
-    } else {
-        choice
-    };
+    let mut choice: i32 = (((amp + dBoffset) as f64 - 30.0f64) * 0.1f32 as f64) as i32;
+    choice = if choice < 0 as i32 { 0 as i32 } else { choice };
     choice = if choice > 8 as i32 - 1 as i32 {
         (8 as i32) - 1 as i32
     } else {
@@ -6981,9 +6918,7 @@ unsafe extern "C" fn seed_curve(
     posts = *curves.offset(choice as isize);
     curve = posts.offset(2 as i32 as isize);
     post1 = *posts.offset(1 as i32 as isize) as i32;
-    seedptr = (oc as f32
-        + (*posts.offset(0 as i32 as isize) - 16 as i32 as f32)
-            * linesper as f32
+    seedptr = (oc as f32 + (*posts.offset(0 as i32 as isize) - 16 as i32 as f32) * linesper as f32
         - (linesper >> 1 as i32) as f32) as i32;
     i = *posts.offset(0 as i32 as isize) as i32;
     while i < post1 {
@@ -7019,10 +6954,7 @@ unsafe extern "C" fn seed_loop(
         let mut max: f32 = *f.offset(i as isize);
         let mut oc: libc::c_long = *(*p).octave.offset(i as isize);
         while (i + 1 as i32 as libc::c_long) < n
-            && *(*p)
-                .octave
-                .offset((i + 1 as i32 as libc::c_long) as isize)
-                == oc
+            && *(*p).octave.offset((i + 1 as i32 as libc::c_long) as isize) == oc
         {
             i += 1;
             if *f.offset(i as isize) > max {
@@ -7051,11 +6983,7 @@ unsafe extern "C" fn seed_loop(
     }
 }
 
-unsafe extern "C" fn seed_chase(
-    mut seeds: *mut f32,
-    mut linesper: i32,
-    mut n: libc::c_long,
-) {
+unsafe extern "C" fn seed_chase(mut seeds: *mut f32, mut linesper: i32, mut n: libc::c_long) {
     let mut fresh4 = ::std::vec::from_elem(
         0,
         (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
@@ -7064,8 +6992,7 @@ unsafe extern "C" fn seed_chase(
     let mut posstack: *mut libc::c_long = fresh4.as_mut_ptr() as *mut libc::c_long;
     let mut fresh5 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-            as usize,
+        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
     );
     let mut ampstack: *mut f32 = fresh5.as_mut_ptr() as *mut f32;
     let mut stack: libc::c_long = 0 as i32 as libc::c_long;
@@ -7094,10 +7021,8 @@ unsafe extern "C" fn seed_chase(
                     {
                         if stack > 1 as i32 as libc::c_long
                             && *ampstack.offset((stack - 1 as i32 as libc::c_long) as isize)
-                                <= *ampstack
-                                    .offset((stack - 2 as i32 as libc::c_long) as isize)
-                            && i < *posstack
-                                .offset((stack - 2 as i32 as libc::c_long) as isize)
+                                <= *ampstack.offset((stack - 2 as i32 as libc::c_long) as isize)
+                            && i < *posstack.offset((stack - 2 as i32 as libc::c_long) as isize)
                                 + linesper as libc::c_long
                         {
                             /* we completely overlap, making stack-1 irrelevant.  pop it */
@@ -7126,9 +7051,8 @@ unsafe extern "C" fn seed_chase(
         {
             endpos = *posstack.offset((i + 1 as i32 as libc::c_long) as isize)
         } else {
-            endpos = *posstack.offset(i as isize)
-                + linesper as libc::c_long
-                + 1 as i32 as libc::c_long
+            endpos =
+                *posstack.offset(i as isize) + linesper as libc::c_long + 1 as i32 as libc::c_long
             /* +1 is important, else bin 0 is
             discarded in short frames */
         }
@@ -7186,8 +7110,7 @@ unsafe extern "C" fn max_seeds(
             linpos += 1
         }
     }
-    let mut minV_0: f32 =
-        *seed.offset(((*p).total_octave_lines - 1 as i32) as isize);
+    let mut minV_0: f32 = *seed.offset(((*p).total_octave_lines - 1 as i32) as isize);
     while linpos < (*p).n as libc::c_long {
         if *flr.offset(linpos as isize) < minV_0 {
             *flr.offset(linpos as isize) = minV_0
@@ -7206,32 +7129,27 @@ unsafe extern "C" fn bark_noise_hybridmp(
 ) {
     let mut fresh9 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-            as usize,
+        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
     );
     let mut N: *mut f32 = fresh9.as_mut_ptr() as *mut f32;
     let mut fresh10 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-            as usize,
+        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
     );
     let mut X: *mut f32 = fresh10.as_mut_ptr() as *mut f32;
     let mut fresh11 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-            as usize,
+        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
     );
     let mut XX: *mut f32 = fresh11.as_mut_ptr() as *mut f32;
     let mut fresh12 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-            as usize,
+        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
     );
     let mut Y: *mut f32 = fresh12.as_mut_ptr() as *mut f32;
     let mut fresh13 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-            as usize,
+        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
     );
     let mut XY: *mut f32 = fresh13.as_mut_ptr() as *mut f32;
     let mut tN: f32 = 0.;
@@ -7410,18 +7328,10 @@ pub unsafe extern "C" fn _vp_noisemask(
     let mut n: i32 = (*p).n;
     let mut fresh14 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-            as usize,
+        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
     );
     let mut work: *mut f32 = fresh14.as_mut_ptr() as *mut f32;
-    bark_noise_hybridmp(
-        n,
-        (*p).bark,
-        logmdct,
-        logmask,
-        140.0f64 as f32,
-        -(1 as i32),
-    );
+    bark_noise_hybridmp(n, (*p).bark, logmdct, logmask, 140.0f64 as f32, -(1 as i32));
     i = 0 as i32;
     while i < n {
         *work.offset(i as isize) = *logmdct.offset(i as isize) - *logmask.offset(i as isize);
@@ -7442,8 +7352,7 @@ pub unsafe extern "C" fn _vp_noisemask(
     }
     i = 0 as i32;
     while i < n {
-        let mut dB: i32 =
-            (*logmask.offset(i as isize) as f64 + 0.5f64) as i32;
+        let mut dB: i32 = (*logmask.offset(i as isize) as f64 + 0.5f64) as i32;
         if dB >= 40 as i32 {
             dB = 40 as i32 - 1 as i32
         }
@@ -7542,8 +7451,7 @@ pub unsafe extern "C" fn _vp_offset_and_mix(
             val = val - *logmdct.offset(i as isize); /* val == mdct line value relative to floor in dB */
             if val > coeffi {
                 /* mdct value is > -17.2 dB below floor */
-                de = (1.0f64 - (val - coeffi) as f64 * 0.005f64 * cx as f64)
-                    as f32;
+                de = (1.0f64 - (val - coeffi) as f64 * 0.005f64 * cx as f64) as f32;
                 /* pro-rated attenuation:
                 -0.00 dB boost if mdct value is -17.2dB (relative to floor)
                 -0.77 dB boost if mdct value is 0dB (relative to floor)
@@ -7554,8 +7462,7 @@ pub unsafe extern "C" fn _vp_offset_and_mix(
                 }
             } else {
                 /* mdct value is <= -17.2 dB below floor */
-                de = (1.0f64 - (val - coeffi) as f64 * 0.0003f64 * cx as f64)
-                    as f32
+                de = (1.0f64 - (val - coeffi) as f64 * 0.0003f64 * cx as f64) as f32
             }
             /* pro-rated attenuation:
             +0.00 dB atten if mdct value is -17.2dB (relative to floor)
@@ -7577,8 +7484,7 @@ pub unsafe extern "C" fn _vp_ampmax_decay(
         (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
     let mut gi: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy_global =
         &mut (*ci).psy_g_param;
-    let mut n: i32 =
-        ((*ci).blocksizes[(*vd).W as usize] / 2 as i32 as libc::c_long) as i32;
+    let mut n: i32 = ((*ci).blocksizes[(*vd).W as usize] / 2 as i32 as libc::c_long) as i32;
     let mut secs: f32 = n as f32 / (*vi).rate as f32;
     amp += secs * (*gi).ampmax_att_per_sec;
     if amp < -(9999 as i32) as f32 {
@@ -7868,8 +7774,7 @@ unsafe extern "C" fn flag_lossless(
     while j < jn {
         let mut point: f32 = if j >= limit - i { postpoint } else { prepoint };
         let mut r: f32 = (crate::stdlib::fabs(*mdct.offset(j as isize) as f64)
-            / *floor_0.offset(j as isize) as f64)
-            as f32;
+            / *floor_0.offset(j as isize) as f64) as f32;
         if r < point {
             *flag.offset(j as isize) = 0 as i32
         } else {
@@ -7898,8 +7803,7 @@ unsafe extern "C" fn noise_normalize(
     let mut vi: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_info_psy = (*p).vi;
     let mut fresh16 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
+        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
             as usize,
     );
     let mut sort: *mut *mut f32 = fresh16.as_mut_ptr() as *mut *mut f32;
@@ -7928,8 +7832,7 @@ unsafe extern "C" fn noise_normalize(
                 *out.offset(j as isize) =
                     -crate::stdlib::rint(crate::stdlib::sqrt(ve as f64)) as i32
             } else {
-                *out.offset(j as isize) =
-                    crate::stdlib::rint(crate::stdlib::sqrt(ve as f64)) as i32
+                *out.offset(j as isize) = crate::stdlib::rint(crate::stdlib::sqrt(ve as f64)) as i32
             }
         }
         j += 1
@@ -7957,15 +7860,12 @@ unsafe extern "C" fn noise_normalize(
                 /* For now: no acc adjustment for nonzero quantization.  populate *out and q as this value is final. */
                 if *r.offset(j as isize) < 0 as i32 as f32 {
                     *out.offset(j as isize) =
-                        -crate::stdlib::rint(crate::stdlib::sqrt(ve_0 as f64))
-                            as i32
+                        -crate::stdlib::rint(crate::stdlib::sqrt(ve_0 as f64)) as i32
                 } else {
                     *out.offset(j as isize) =
-                        crate::stdlib::rint(crate::stdlib::sqrt(ve_0 as f64))
-                            as i32
+                        crate::stdlib::rint(crate::stdlib::sqrt(ve_0 as f64)) as i32
                 }
-                *q.offset(j as isize) = (*out.offset(j as isize) * *out.offset(j as isize))
-                    as f32
+                *q.offset(j as isize) = (*out.offset(j as isize) * *out.offset(j as isize)) as f32
                     * *f.offset(j as isize)
             }
         }
@@ -7982,16 +7882,12 @@ unsafe extern "C" fn noise_normalize(
             ::std::mem::size_of::<*mut f32>() as libc::c_ulong,
             Some(
                 apsort
-                    as unsafe extern "C" fn(
-                        _: *const libc::c_void,
-                        _: *const libc::c_void,
-                    ) -> i32,
+                    as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
             ),
         );
         j = 0 as i32;
         while j < count {
-            let mut k: i32 =
-                (*sort.offset(j as isize)).offset_from(q) as libc::c_long as i32;
+            let mut k: i32 = (*sort.offset(j as isize)).offset_from(q) as libc::c_long as i32;
             if acc as f64 >= (*vi).normal_thresh {
                 *out.offset(k as isize) = unitnorm(*r.offset(k as isize)) as i32;
                 acc -= 1.0f32;
@@ -8052,8 +7948,7 @@ pub unsafe extern "C" fn _vp_couple_quantize_normalize(
     } else {
         16 as i32
     };
-    let mut limit: i32 =
-        (*g).coupling_pointlimit[(*(*p).vi).blockflag as usize][blobno as usize];
+    let mut limit: i32 = (*g).coupling_pointlimit[(*(*p).vi).blockflag as usize][blobno as usize];
     let mut prepoint: f32 =
         stereo_threshholds[(*g).coupling_prepointamp[blobno as usize] as usize] as f32;
     let mut postpoint: f32 =
@@ -8063,40 +7958,35 @@ pub unsafe extern "C" fn _vp_couple_quantize_normalize(
     /* unquantized energy (negative indicates amplitude has negative sign) */
     let mut fresh19 = ::std::vec::from_elem(
         0,
-        (ch as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
+        (ch as libc::c_ulong).wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
             as usize,
     );
     let mut raw: *mut *mut f32 = fresh19.as_mut_ptr() as *mut *mut f32;
     /* dual pupose; quantized energy (if flag set), othersize fabs(raw) */
     let mut fresh20 = ::std::vec::from_elem(
         0,
-        (ch as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
+        (ch as libc::c_ulong).wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
             as usize,
     );
     let mut quant: *mut *mut f32 = fresh20.as_mut_ptr() as *mut *mut f32;
     /* floor energy */
     let mut fresh21 = ::std::vec::from_elem(
         0,
-        (ch as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
+        (ch as libc::c_ulong).wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
             as usize,
     );
     let mut floor_0: *mut *mut f32 = fresh21.as_mut_ptr() as *mut *mut f32;
     /* flags indicating raw/quantized status of elements in raw vector */
     let mut fresh22 = ::std::vec::from_elem(
         0,
-        (ch as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut i32>() as libc::c_ulong)
+        (ch as libc::c_ulong).wrapping_mul(::std::mem::size_of::<*mut i32>() as libc::c_ulong)
             as usize,
     );
     let mut flag: *mut *mut i32 = fresh22.as_mut_ptr() as *mut *mut i32;
     /* non-zero flag working vector */
     let mut fresh23 = ::std::vec::from_elem(
         0,
-        (ch as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
-            as usize,
+        (ch as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as usize,
     );
     let mut nz: *mut i32 = fresh23.as_mut_ptr() as *mut i32;
     /* energy surplus/defecit tracking */
@@ -8108,8 +7998,8 @@ pub unsafe extern "C" fn _vp_couple_quantize_normalize(
     let mut acc: *mut f32 = fresh24.as_mut_ptr() as *mut f32;
     /* The threshold of a stereo is changed with the size of n */
     if n > 1000 as i32 {
-        postpoint = stereo_threshholds_limited[(*g).coupling_postpointamp[blobno as usize] as usize]
-            as f32
+        postpoint =
+            stereo_threshholds_limited[(*g).coupling_postpointamp[blobno as usize] as usize] as f32
     }
     let mut fresh25 = ::std::vec::from_elem(
         0,
@@ -8142,17 +8032,17 @@ pub unsafe extern "C" fn _vp_couple_quantize_normalize(
     i = 1 as i32;
     while i < ch {
         let ref mut fresh33 = *raw.offset(i as isize);
-        *fresh33 = &mut *(*raw.offset(0 as i32 as isize)).offset((partition * i) as isize)
-            as *mut f32;
+        *fresh33 =
+            &mut *(*raw.offset(0 as i32 as isize)).offset((partition * i) as isize) as *mut f32;
         let ref mut fresh34 = *quant.offset(i as isize);
-        *fresh34 = &mut *(*quant.offset(0 as i32 as isize)).offset((partition * i) as isize)
-            as *mut f32;
+        *fresh34 =
+            &mut *(*quant.offset(0 as i32 as isize)).offset((partition * i) as isize) as *mut f32;
         let ref mut fresh35 = *floor_0.offset(i as isize);
-        *fresh35 = &mut *(*floor_0.offset(0 as i32 as isize))
-            .offset((partition * i) as isize) as *mut f32;
+        *fresh35 =
+            &mut *(*floor_0.offset(0 as i32 as isize)).offset((partition * i) as isize) as *mut f32;
         let ref mut fresh36 = *flag.offset(i as isize);
-        *fresh36 = &mut *(*flag.offset(0 as i32 as isize)).offset((partition * i) as isize)
-            as *mut i32;
+        *fresh36 =
+            &mut *(*flag.offset(0 as i32 as isize)).offset((partition * i) as isize) as *mut i32;
         i += 1
     }
     i = 0 as i32;
@@ -8174,8 +8064,7 @@ pub unsafe extern "C" fn _vp_couple_quantize_normalize(
         crate::stdlib::memcpy(
             nz as *mut libc::c_void,
             nonzero as *const libc::c_void,
-            (::std::mem::size_of::<i32>() as libc::c_ulong)
-                .wrapping_mul(ch as libc::c_ulong),
+            (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(ch as libc::c_ulong),
         );
         /* prefill */
         crate::stdlib::memset(
@@ -8271,12 +8160,10 @@ pub unsafe extern "C" fn _vp_couple_quantize_normalize(
                     if j < sliding_lowpass - i {
                         if *fM.offset(j as isize) != 0 || *fA.offset(j as isize) != 0 {
                             /* lossless coupling */
-                            *reM.offset(j as isize) = (crate::stdlib::fabs(
-                                *reM.offset(j as isize) as f64
-                            ) + crate::stdlib::fabs(
-                                *reA.offset(j as isize) as f64,
-                            ))
-                                as f32;
+                            *reM.offset(j as isize) =
+                                (crate::stdlib::fabs(*reM.offset(j as isize) as f64)
+                                    + crate::stdlib::fabs(*reA.offset(j as isize) as f64))
+                                    as f32;
                             *qeM.offset(j as isize) =
                                 *qeM.offset(j as isize) + *qeA.offset(j as isize);
                             let ref mut fresh39 = *fA.offset(j as isize);
@@ -8286,17 +8173,11 @@ pub unsafe extern "C" fn _vp_couple_quantize_normalize(
                             let mut A: i32 = *iM.offset(j as isize);
                             let mut B: i32 = *iA.offset(j as isize);
                             if ::libc::abs(A) > ::libc::abs(B) {
-                                *iA.offset(j as isize) = if A > 0 as i32 {
-                                    (A) - B
-                                } else {
-                                    (B) - A
-                                }
+                                *iA.offset(j as isize) =
+                                    if A > 0 as i32 { (A) - B } else { (B) - A }
                             } else {
-                                *iA.offset(j as isize) = if B > 0 as i32 {
-                                    (A) - B
-                                } else {
-                                    (B) - A
-                                };
+                                *iA.offset(j as isize) =
+                                    if B > 0 as i32 { (A) - B } else { (B) - A };
                                 *iM.offset(j as isize) = B
                             }
                             /* collapse two equivalent tuples to one */
@@ -8312,25 +8193,20 @@ pub unsafe extern "C" fn _vp_couple_quantize_normalize(
                                 /* dipole */
                                 *reM.offset(j as isize) += *reA.offset(j as isize);
                                 *qeM.offset(j as isize) =
-                                    crate::stdlib::fabs(*reM.offset(j as isize) as f64)
-                                        as f32
+                                    crate::stdlib::fabs(*reM.offset(j as isize) as f64) as f32
                             } else if *reM.offset(j as isize) + *reA.offset(j as isize)
                                 < 0 as i32 as f32
                             {
                                 let ref mut fresh40 = *qeM.offset(j as isize);
-                                *fresh40 =
-                                    (crate::stdlib::fabs(*reM.offset(j as isize) as f64)
-                                        + crate::stdlib::fabs(
-                                            *reA.offset(j as isize) as f64
-                                        )) as f32;
+                                *fresh40 = (crate::stdlib::fabs(*reM.offset(j as isize) as f64)
+                                    + crate::stdlib::fabs(*reA.offset(j as isize) as f64))
+                                    as f32;
                                 *reM.offset(j as isize) = -*fresh40
                             } else {
                                 let ref mut fresh41 = *qeM.offset(j as isize);
-                                *fresh41 =
-                                    (crate::stdlib::fabs(*reM.offset(j as isize) as f64)
-                                        + crate::stdlib::fabs(
-                                            *reA.offset(j as isize) as f64
-                                        )) as f32;
+                                *fresh41 = (crate::stdlib::fabs(*reM.offset(j as isize) as f64)
+                                    + crate::stdlib::fabs(*reA.offset(j as isize) as f64))
+                                    as f32;
                                 *reM.offset(j as isize) = *fresh41
                             }
                             let ref mut fresh42 = *qeA.offset(j as isize);

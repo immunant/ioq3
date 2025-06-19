@@ -306,15 +306,10 @@ pub unsafe extern "C" fn vorbis_synthesis_halfrate(
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
     /* right now, our MDCT can't handle < 64 sample windows. */
-    if (*ci).blocksizes[0 as i32 as usize] <= 64 as i32 as libc::c_long && flag != 0
-    {
+    if (*ci).blocksizes[0 as i32 as usize] <= 64 as i32 as libc::c_long && flag != 0 {
         return -(1 as i32);
     }
-    (*ci).halfrate_flag = if flag != 0 {
-        1 as i32
-    } else {
-        0 as i32
-    };
+    (*ci).halfrate_flag = if flag != 0 { 1 as i32 } else { 0 as i32 };
     return 0 as i32;
 }
 #[no_mangle]

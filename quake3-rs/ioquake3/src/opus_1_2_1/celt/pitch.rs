@@ -67,56 +67,40 @@ pub mod pitch_h {
             let fresh4 = y;
             y = y.offset(1);
             y_3 = *fresh4;
-            *sum.offset(0 as i32 as isize) =
-                *sum.offset(0 as i32 as isize) + tmp * y_0;
-            *sum.offset(1 as i32 as isize) =
-                *sum.offset(1 as i32 as isize) + tmp * y_1;
-            *sum.offset(2 as i32 as isize) =
-                *sum.offset(2 as i32 as isize) + tmp * y_2;
-            *sum.offset(3 as i32 as isize) =
-                *sum.offset(3 as i32 as isize) + tmp * y_3;
+            *sum.offset(0 as i32 as isize) = *sum.offset(0 as i32 as isize) + tmp * y_0;
+            *sum.offset(1 as i32 as isize) = *sum.offset(1 as i32 as isize) + tmp * y_1;
+            *sum.offset(2 as i32 as isize) = *sum.offset(2 as i32 as isize) + tmp * y_2;
+            *sum.offset(3 as i32 as isize) = *sum.offset(3 as i32 as isize) + tmp * y_3;
             let fresh5 = x;
             x = x.offset(1);
             tmp = *fresh5;
             let fresh6 = y;
             y = y.offset(1);
             y_0 = *fresh6;
-            *sum.offset(0 as i32 as isize) =
-                *sum.offset(0 as i32 as isize) + tmp * y_1;
-            *sum.offset(1 as i32 as isize) =
-                *sum.offset(1 as i32 as isize) + tmp * y_2;
-            *sum.offset(2 as i32 as isize) =
-                *sum.offset(2 as i32 as isize) + tmp * y_3;
-            *sum.offset(3 as i32 as isize) =
-                *sum.offset(3 as i32 as isize) + tmp * y_0;
+            *sum.offset(0 as i32 as isize) = *sum.offset(0 as i32 as isize) + tmp * y_1;
+            *sum.offset(1 as i32 as isize) = *sum.offset(1 as i32 as isize) + tmp * y_2;
+            *sum.offset(2 as i32 as isize) = *sum.offset(2 as i32 as isize) + tmp * y_3;
+            *sum.offset(3 as i32 as isize) = *sum.offset(3 as i32 as isize) + tmp * y_0;
             let fresh7 = x;
             x = x.offset(1);
             tmp = *fresh7;
             let fresh8 = y;
             y = y.offset(1);
             y_1 = *fresh8;
-            *sum.offset(0 as i32 as isize) =
-                *sum.offset(0 as i32 as isize) + tmp * y_2;
-            *sum.offset(1 as i32 as isize) =
-                *sum.offset(1 as i32 as isize) + tmp * y_3;
-            *sum.offset(2 as i32 as isize) =
-                *sum.offset(2 as i32 as isize) + tmp * y_0;
-            *sum.offset(3 as i32 as isize) =
-                *sum.offset(3 as i32 as isize) + tmp * y_1;
+            *sum.offset(0 as i32 as isize) = *sum.offset(0 as i32 as isize) + tmp * y_2;
+            *sum.offset(1 as i32 as isize) = *sum.offset(1 as i32 as isize) + tmp * y_3;
+            *sum.offset(2 as i32 as isize) = *sum.offset(2 as i32 as isize) + tmp * y_0;
+            *sum.offset(3 as i32 as isize) = *sum.offset(3 as i32 as isize) + tmp * y_1;
             let fresh9 = x;
             x = x.offset(1);
             tmp = *fresh9;
             let fresh10 = y;
             y = y.offset(1);
             y_2 = *fresh10;
-            *sum.offset(0 as i32 as isize) =
-                *sum.offset(0 as i32 as isize) + tmp * y_3;
-            *sum.offset(1 as i32 as isize) =
-                *sum.offset(1 as i32 as isize) + tmp * y_0;
-            *sum.offset(2 as i32 as isize) =
-                *sum.offset(2 as i32 as isize) + tmp * y_1;
-            *sum.offset(3 as i32 as isize) =
-                *sum.offset(3 as i32 as isize) + tmp * y_2;
+            *sum.offset(0 as i32 as isize) = *sum.offset(0 as i32 as isize) + tmp * y_3;
+            *sum.offset(1 as i32 as isize) = *sum.offset(1 as i32 as isize) + tmp * y_0;
+            *sum.offset(2 as i32 as isize) = *sum.offset(2 as i32 as isize) + tmp * y_1;
+            *sum.offset(3 as i32 as isize) = *sum.offset(3 as i32 as isize) + tmp * y_2;
             j += 4 as i32
         }
         let fresh11 = j;
@@ -128,14 +112,10 @@ pub mod pitch_h {
             let fresh13 = y;
             y = y.offset(1);
             y_3 = *fresh13;
-            *sum.offset(0 as i32 as isize) =
-                *sum.offset(0 as i32 as isize) + tmp_0 * y_0;
-            *sum.offset(1 as i32 as isize) =
-                *sum.offset(1 as i32 as isize) + tmp_0 * y_1;
-            *sum.offset(2 as i32 as isize) =
-                *sum.offset(2 as i32 as isize) + tmp_0 * y_2;
-            *sum.offset(3 as i32 as isize) =
-                *sum.offset(3 as i32 as isize) + tmp_0 * y_3
+            *sum.offset(0 as i32 as isize) = *sum.offset(0 as i32 as isize) + tmp_0 * y_0;
+            *sum.offset(1 as i32 as isize) = *sum.offset(1 as i32 as isize) + tmp_0 * y_1;
+            *sum.offset(2 as i32 as isize) = *sum.offset(2 as i32 as isize) + tmp_0 * y_2;
+            *sum.offset(3 as i32 as isize) = *sum.offset(3 as i32 as isize) + tmp_0 * y_3
         }
         let fresh14 = j;
         j = j + 1;
@@ -146,14 +126,10 @@ pub mod pitch_h {
             let fresh16 = y;
             y = y.offset(1);
             y_0 = *fresh16;
-            *sum.offset(0 as i32 as isize) =
-                *sum.offset(0 as i32 as isize) + tmp_1 * y_1;
-            *sum.offset(1 as i32 as isize) =
-                *sum.offset(1 as i32 as isize) + tmp_1 * y_2;
-            *sum.offset(2 as i32 as isize) =
-                *sum.offset(2 as i32 as isize) + tmp_1 * y_3;
-            *sum.offset(3 as i32 as isize) =
-                *sum.offset(3 as i32 as isize) + tmp_1 * y_0
+            *sum.offset(0 as i32 as isize) = *sum.offset(0 as i32 as isize) + tmp_1 * y_1;
+            *sum.offset(1 as i32 as isize) = *sum.offset(1 as i32 as isize) + tmp_1 * y_2;
+            *sum.offset(2 as i32 as isize) = *sum.offset(2 as i32 as isize) + tmp_1 * y_3;
+            *sum.offset(3 as i32 as isize) = *sum.offset(3 as i32 as isize) + tmp_1 * y_0
         }
         if j < len {
             let fresh17 = x;
@@ -162,14 +138,10 @@ pub mod pitch_h {
             let fresh18 = y;
             y = y.offset(1);
             y_1 = *fresh18;
-            *sum.offset(0 as i32 as isize) =
-                *sum.offset(0 as i32 as isize) + tmp_2 * y_2;
-            *sum.offset(1 as i32 as isize) =
-                *sum.offset(1 as i32 as isize) + tmp_2 * y_3;
-            *sum.offset(2 as i32 as isize) =
-                *sum.offset(2 as i32 as isize) + tmp_2 * y_0;
-            *sum.offset(3 as i32 as isize) =
-                *sum.offset(3 as i32 as isize) + tmp_2 * y_1
+            *sum.offset(0 as i32 as isize) = *sum.offset(0 as i32 as isize) + tmp_2 * y_2;
+            *sum.offset(1 as i32 as isize) = *sum.offset(1 as i32 as isize) + tmp_2 * y_3;
+            *sum.offset(2 as i32 as isize) = *sum.offset(2 as i32 as isize) + tmp_2 * y_0;
+            *sum.offset(3 as i32 as isize) = *sum.offset(3 as i32 as isize) + tmp_2 * y_1
         };
     }
     #[inline]
@@ -267,15 +239,11 @@ unsafe extern "C" fn find_best_pitch(
             and overflows (inf) when squaring xcorr16 */
             xcorr16 *= 1e-12f32;
             num = xcorr16 * xcorr16;
-            if num * best_den[1 as i32 as usize] > best_num[1 as i32 as usize] * Syy
-            {
-                if num * best_den[0 as i32 as usize]
-                    > best_num[0 as i32 as usize] * Syy
-                {
+            if num * best_den[1 as i32 as usize] > best_num[1 as i32 as usize] * Syy {
+                if num * best_den[0 as i32 as usize] > best_num[0 as i32 as usize] * Syy {
                     best_num[1 as i32 as usize] = best_num[0 as i32 as usize];
                     best_den[1 as i32 as usize] = best_den[0 as i32 as usize];
-                    *best_pitch.offset(1 as i32 as isize) =
-                        *best_pitch.offset(0 as i32 as isize);
+                    *best_pitch.offset(1 as i32 as isize) = *best_pitch.offset(0 as i32 as isize);
                     best_num[0 as i32 as usize] = num;
                     best_den[0 as i32 as usize] = Syy;
                     *best_pitch.offset(0 as i32 as isize) = i
@@ -373,10 +341,8 @@ pub unsafe extern "C" fn pitch_downsample(
     while i < len >> 1 as i32 {
         *x_lp.offset(i as isize) = 0.5f32
             * (0.5f32
-                * (*(*x.offset(0 as i32 as isize))
-                    .offset((2 as i32 * i - 1 as i32) as isize)
-                    + *(*x.offset(0 as i32 as isize))
-                        .offset((2 as i32 * i + 1 as i32) as isize))
+                * (*(*x.offset(0 as i32 as isize)).offset((2 as i32 * i - 1 as i32) as isize)
+                    + *(*x.offset(0 as i32 as isize)).offset((2 as i32 * i + 1 as i32) as isize))
                 + *(*x.offset(0 as i32 as isize)).offset((2 as i32 * i) as isize));
         i += 1
     }
@@ -389,12 +355,10 @@ pub unsafe extern "C" fn pitch_downsample(
             let ref mut fresh19 = *x_lp.offset(i as isize);
             *fresh19 += 0.5f32
                 * (0.5f32
-                    * (*(*x.offset(1 as i32 as isize))
-                        .offset((2 as i32 * i - 1 as i32) as isize)
+                    * (*(*x.offset(1 as i32 as isize)).offset((2 as i32 * i - 1 as i32) as isize)
                         + *(*x.offset(1 as i32 as isize))
                             .offset((2 as i32 * i + 1 as i32) as isize))
-                    + *(*x.offset(1 as i32 as isize))
-                        .offset((2 as i32 * i) as isize));
+                    + *(*x.offset(1 as i32 as isize)).offset((2 as i32 * i) as isize));
             i += 1
         }
         let ref mut fresh20 = *x_lp.offset(0 as i32 as isize);
@@ -417,15 +381,10 @@ pub unsafe extern "C" fn pitch_downsample(
     i = 1 as i32;
     while i <= 4 as i32 {
         /*ac[i] *= exp(-.5*(2*M_PI*.002*i)*(2*M_PI*.002*i));*/
-        ac[i as usize] -=
-            ac[i as usize] * (0.008f32 * i as f32) * (0.008f32 * i as f32);
+        ac[i as usize] -= ac[i as usize] * (0.008f32 * i as f32) * (0.008f32 * i as f32);
         i += 1
     }
-    crate::src::opus_1_2_1::celt::celt_lpc::_celt_lpc(
-        lpc.as_mut_ptr(),
-        ac.as_mut_ptr(),
-        4 as i32,
-    );
+    crate::src::opus_1_2_1::celt::celt_lpc::_celt_lpc(lpc.as_mut_ptr(), ac.as_mut_ptr(), 4 as i32);
     i = 0 as i32;
     while i < 4 as i32 {
         tmp = 0.9f32 * tmp;
@@ -434,12 +393,9 @@ pub unsafe extern "C" fn pitch_downsample(
     }
     /* Add a zero */
     lpc2[0 as i32 as usize] = lpc[0 as i32 as usize] + 0.8f32;
-    lpc2[1 as i32 as usize] =
-        lpc[1 as i32 as usize] + c1 * lpc[0 as i32 as usize];
-    lpc2[2 as i32 as usize] =
-        lpc[2 as i32 as usize] + c1 * lpc[1 as i32 as usize];
-    lpc2[3 as i32 as usize] =
-        lpc[3 as i32 as usize] + c1 * lpc[2 as i32 as usize];
+    lpc2[1 as i32 as usize] = lpc[1 as i32 as usize] + c1 * lpc[0 as i32 as usize];
+    lpc2[2 as i32 as usize] = lpc[2 as i32 as usize] + c1 * lpc[1 as i32 as usize];
+    lpc2[3 as i32 as usize] = lpc[3 as i32 as usize] + c1 * lpc[2 as i32 as usize];
     lpc2[4 as i32 as usize] = c1 * lpc[3 as i32 as usize];
     celt_fir5(
         x_lp,
@@ -565,10 +521,8 @@ pub unsafe extern "C" fn pitch_search(
     while i < max_pitch >> 1 as i32 {
         let mut sum: crate::arch_h::opus_val32 = 0.;
         *xcorr.offset(i as isize) = 0 as i32 as crate::arch_h::opus_val32;
-        if !(::libc::abs(i - 2 as i32 * best_pitch[0 as i32 as usize])
-            > 2 as i32
-            && ::libc::abs(i - 2 as i32 * best_pitch[1 as i32 as usize])
-                > 2 as i32)
+        if !(::libc::abs(i - 2 as i32 * best_pitch[0 as i32 as usize]) > 2 as i32
+            && ::libc::abs(i - 2 as i32 * best_pitch[1 as i32 as usize]) > 2 as i32)
         {
             sum = celt_inner_prod_c(x_lp, y.offset(i as isize), len >> 1 as i32);
             *xcorr.offset(i as isize) = if -(1 as i32) as f32 > sum {
@@ -588,8 +542,7 @@ pub unsafe extern "C" fn pitch_search(
     );
     /* Refine by pseudo-interpolation */
     if best_pitch[0 as i32 as usize] > 0 as i32
-        && best_pitch[0 as i32 as usize]
-            < (max_pitch >> 1 as i32) - 1 as i32
+        && best_pitch[0 as i32 as usize] < (max_pitch >> 1 as i32) - 1 as i32
     {
         let mut a: crate::arch_h::opus_val32 = 0.;
         let mut b: crate::arch_h::opus_val32 = 0.;
@@ -615,28 +568,12 @@ unsafe extern "C" fn compute_pitch_gain(
     mut xx: crate::arch_h::opus_val32,
     mut yy: crate::arch_h::opus_val32,
 ) -> crate::arch_h::opus_val16 {
-    return xy
-        / crate::stdlib::sqrt((1 as i32 as f32 + xx * yy) as f64)
-            as f32;
+    return xy / crate::stdlib::sqrt((1 as i32 as f32 + xx * yy) as f64) as f32;
 }
 
 static mut second_check: [i32; 16] = [
-    0 as i32,
-    0 as i32,
-    3 as i32,
-    2 as i32,
-    3 as i32,
-    2 as i32,
-    5 as i32,
-    2 as i32,
-    3 as i32,
-    2 as i32,
-    3 as i32,
-    2 as i32,
-    5 as i32,
-    2 as i32,
-    3 as i32,
-    2 as i32,
+    0 as i32, 0 as i32, 3 as i32, 2 as i32, 3 as i32, 2 as i32, 5 as i32, 2 as i32, 3 as i32,
+    2 as i32, 3 as i32, 2 as i32, 5 as i32, 2 as i32, 3 as i32, 2 as i32,
 ];
 /* Copyright (c) 2007-2008 CSIRO
 Copyright (c) 2007-2009 Xiph.Org Foundation
@@ -759,8 +696,7 @@ pub unsafe extern "C" fn remove_doubling(
             }
         } else {
             T1b = celt_udiv(
-                (2 as i32 * second_check[k as usize] * T0 + k)
-                    as crate::opus_types_h::opus_uint32,
+                (2 as i32 * second_check[k as usize] * T0 + k) as crate::opus_types_h::opus_uint32,
                 (2 as i32 * k) as crate::opus_types_h::opus_uint32,
             ) as i32
         }
@@ -777,8 +713,7 @@ pub unsafe extern "C" fn remove_doubling(
         g1 = compute_pitch_gain(xy, xx, yy);
         if ::libc::abs(T1 - prev_period) <= 1 as i32 {
             cont = prev_gain
-        } else if ::libc::abs(T1 - prev_period) <= 2 as i32 && 5 as i32 * k * k < T0
-        {
+        } else if ::libc::abs(T1 - prev_period) <= 2 as i32 && 5 as i32 * k * k < T0 {
             cont = 0.5f32 * prev_gain
         } else {
             cont = 0 as i32 as crate::arch_h::opus_val16
@@ -823,8 +758,7 @@ pub unsafe extern "C" fn remove_doubling(
     }
     k = 0 as i32;
     while k < 3 as i32 {
-        xcorr[k as usize] =
-            celt_inner_prod_c(x, x.offset(-((T + k - 1 as i32) as isize)), N);
+        xcorr[k as usize] = celt_inner_prod_c(x, x.offset(-((T + k - 1 as i32) as isize)), N);
         k += 1
     }
     if xcorr[2 as i32 as usize] - xcorr[0 as i32 as usize]

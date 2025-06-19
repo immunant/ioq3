@@ -10,8 +10,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
     #[inline]
@@ -305,9 +304,7 @@ pub static mut numlreachabilities: i32 = 0;
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_FaceArea(
-    mut face: *mut crate::aasfile_h::aas_face_t,
-) -> f32 {
+pub unsafe extern "C" fn AAS_FaceArea(mut face: *mut crate::aasfile_h::aas_face_t) -> f32 {
     let mut i: i32 = 0; //end for
     let mut edgenum: i32 = 0;
     let mut side: i32 = 0;
@@ -324,9 +321,8 @@ pub unsafe extern "C" fn AAS_FaceArea(
     side = (edgenum < 0 as i32) as i32;
     edge = &mut *crate::src::botlib::be_aas_main::aasworld
         .edges
-        .offset(
-            (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize,
-        ) as *mut crate::aasfile_h::aas_edge_t;
+        .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
+        as *mut crate::aasfile_h::aas_edge_t;
     v = (*crate::src::botlib::be_aas_main::aasworld
         .vertexes
         .offset((*edge).v[side as usize] as isize))
@@ -340,10 +336,8 @@ pub unsafe extern "C" fn AAS_FaceArea(
         side = (edgenum < 0 as i32) as i32;
         edge = &mut *crate::src::botlib::be_aas_main::aasworld
             .edges
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum)
-                    as isize,
-            ) as *mut crate::aasfile_h::aas_edge_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
+            as *mut crate::aasfile_h::aas_edge_t;
         d1[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
             .vertexes
             .offset((*edge).v[side as usize] as isize))[0 as i32 as usize]
@@ -358,18 +352,15 @@ pub unsafe extern "C" fn AAS_FaceArea(
             - *v.offset(2 as i32 as isize);
         d2[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
             .vertexes
-            .offset((*edge).v[(side == 0) as i32 as usize] as isize))
-            [0 as i32 as usize]
+            .offset((*edge).v[(side == 0) as i32 as usize] as isize))[0 as i32 as usize]
             - *v.offset(0 as i32 as isize);
         d2[1 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
             .vertexes
-            .offset((*edge).v[(side == 0) as i32 as usize] as isize))
-            [1 as i32 as usize]
+            .offset((*edge).v[(side == 0) as i32 as usize] as isize))[1 as i32 as usize]
             - *v.offset(1 as i32 as isize);
         d2[2 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
             .vertexes
-            .offset((*edge).v[(side == 0) as i32 as usize] as isize))
-            [2 as i32 as usize]
+            .offset((*edge).v[(side == 0) as i32 as usize] as isize))[2 as i32 as usize]
             - *v.offset(2 as i32 as isize);
         CrossProduct(
             d1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -415,17 +406,15 @@ pub unsafe extern "C" fn AAS_AreaVolume(mut areanum: i32) -> f32 {
         .offset((*area).firstface as isize);
     face = &mut *crate::src::botlib::be_aas_main::aasworld
         .faces
-        .offset(
-            (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize,
-        ) as *mut crate::aasfile_h::aas_face_t;
+        .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
+        as *mut crate::aasfile_h::aas_face_t;
     edgenum = *crate::src::botlib::be_aas_main::aasworld
         .edgeindex
         .offset((*face).firstedge as isize);
     edge = &mut *crate::src::botlib::be_aas_main::aasworld
         .edges
-        .offset(
-            (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize,
-        ) as *mut crate::aasfile_h::aas_edge_t;
+        .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
+        as *mut crate::aasfile_h::aas_edge_t;
     //
     corner[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
         .vertexes
@@ -589,12 +578,12 @@ pub unsafe extern "C" fn AAS_GetJumpPadInfo(
         *absmins.offset(1 as i32 as isize) + *absmaxs.offset(1 as i32 as isize);
     origin[2 as i32 as usize] =
         *absmins.offset(2 as i32 as isize) + *absmaxs.offset(2 as i32 as isize);
-    origin[0 as i32 as usize] = (origin[0 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    origin[1 as i32 as usize] = (origin[1 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    origin[2 as i32 as usize] = (origin[2 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+    origin[0 as i32 as usize] =
+        (origin[0 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+    origin[1 as i32 as usize] =
+        (origin[1 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+    origin[2 as i32 as usize] =
+        (origin[2 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     //get the start areas
     teststart[0 as i32 as usize] = origin[0 as i32 as usize]; //end else
     teststart[1 as i32 as usize] = origin[1 as i32 as usize]; //end if
@@ -663,8 +652,7 @@ pub unsafe extern "C" fn AAS_GetJumpPadInfo(
     //
     height = ent2origin[2 as i32 as usize] - origin[2 as i32 as usize]; //end if
     gravity = crate::src::botlib::be_aas_move::aassettings.phys_gravity;
-    time = crate::stdlib::sqrt(height as f64 / (0.5f64 * gravity as f64))
-        as f32;
+    time = crate::stdlib::sqrt(height as f64 / (0.5f64 * gravity as f64)) as f32;
     if time == 0. {
         botimport.Print.expect("non-null function pointer")(
             1 as i32,
@@ -674,22 +662,16 @@ pub unsafe extern "C" fn AAS_GetJumpPadInfo(
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
     // set s.origin2 to the push velocity
-    *velocity.offset(0 as i32 as isize) =
-        ent2origin[0 as i32 as usize] - origin[0 as i32 as usize];
-    *velocity.offset(1 as i32 as isize) =
-        ent2origin[1 as i32 as usize] - origin[1 as i32 as usize];
-    *velocity.offset(2 as i32 as isize) =
-        ent2origin[2 as i32 as usize] - origin[2 as i32 as usize];
+    *velocity.offset(0 as i32 as isize) = ent2origin[0 as i32 as usize] - origin[0 as i32 as usize];
+    *velocity.offset(1 as i32 as isize) = ent2origin[1 as i32 as usize] - origin[1 as i32 as usize];
+    *velocity.offset(2 as i32 as isize) = ent2origin[2 as i32 as usize] - origin[2 as i32 as usize];
     dist = crate::src::qcommon::q_math::VectorNormalize(velocity);
     forward = dist / time;
     //FIXME: why multiply by 1.1
     forward *= 1.1f32;
-    *velocity.offset(0 as i32 as isize) =
-        *velocity.offset(0 as i32 as isize) * forward;
-    *velocity.offset(1 as i32 as isize) =
-        *velocity.offset(1 as i32 as isize) * forward;
-    *velocity.offset(2 as i32 as isize) =
-        *velocity.offset(2 as i32 as isize) * forward;
+    *velocity.offset(0 as i32 as isize) = *velocity.offset(0 as i32 as isize) * forward;
+    *velocity.offset(1 as i32 as isize) = *velocity.offset(1 as i32 as isize) * forward;
+    *velocity.offset(2 as i32 as isize) = *velocity.offset(2 as i32 as isize) * forward;
     *velocity.offset(2 as i32 as isize) = time * gravity;
     return crate::src::qcommon::q_shared::qtrue as i32;
 }
@@ -927,12 +909,9 @@ pub unsafe extern "C" fn AAS_BestReachableArea(
                     start[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
                     start[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
                     start[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
-                    start[0 as i32 as usize] +=
-                        j as f32 * 4 as i32 as f32 * k as f32;
-                    start[1 as i32 as usize] +=
-                        j as f32 * 4 as i32 as f32 * l as f32;
-                    start[2 as i32 as usize] +=
-                        i as f32 * 4 as i32 as f32;
+                    start[0 as i32 as usize] += j as f32 * 4 as i32 as f32 * k as f32;
+                    start[1 as i32 as usize] += j as f32 * 4 as i32 as f32 * l as f32;
+                    start[2 as i32 as usize] += i as f32 * 4 as i32 as f32;
                     areanum =
                         crate::src::botlib::be_aas_sample::AAS_PointAreaNum(start.as_mut_ptr());
                     l += 1
@@ -953,9 +932,8 @@ pub unsafe extern "C" fn AAS_BestReachableArea(
         end[0 as i32 as usize] = start[0 as i32 as usize];
         end[1 as i32 as usize] = start[1 as i32 as usize];
         end[2 as i32 as usize] = start[2 as i32 as usize];
-        start[2 as i32 as usize] = (start[2 as i32 as usize] as f64
-            + 0.25f64)
-            as crate::src::qcommon::q_shared::vec_t;
+        start[2 as i32 as usize] =
+            (start[2 as i32 as usize] as f64 + 0.25f64) as crate::src::qcommon::q_shared::vec_t;
         end[2 as i32 as usize] -= 50 as i32 as f32;
         trace = crate::src::botlib::be_aas_sample::AAS_TraceClientBBox(
             start.as_mut_ptr(),
@@ -1044,12 +1022,11 @@ pub unsafe extern "C" fn AAS_SetupReachabilityHeap() {
     i = 0 as i32;
     while i < 65536 as i32 - 1 as i32 {
         let ref mut fresh1 = (*reachabilityheap.offset(i as isize)).next;
-        *fresh1 = &mut *reachabilityheap.offset((i + 1 as i32) as isize)
-            as *mut aas_lreachability_t;
+        *fresh1 =
+            &mut *reachabilityheap.offset((i + 1 as i32) as isize) as *mut aas_lreachability_t;
         i += 1
     }
-    let ref mut fresh2 =
-        (*reachabilityheap.offset((65536 as i32 - 1 as i32) as isize)).next;
+    let ref mut fresh2 = (*reachabilityheap.offset((65536 as i32 - 1 as i32) as isize)).next;
     *fresh2 = 0 as *mut aas_lreachability_s;
     nextreachability = reachabilityheap;
     numlreachabilities = 0 as i32;
@@ -1162,13 +1139,11 @@ pub unsafe extern "C" fn AAS_AreaGroundFaceArea(mut areanum: i32) -> f32 {
     while i < (*area).numfaces {
         face = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
-                    *crate::src::botlib::be_aas_main::aasworld
-                        .faceindex
-                        .offset(((*area).firstface + i) as isize),
-                ) as isize,
-            ) as *mut crate::aasfile_h::aas_face_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
+                *crate::src::botlib::be_aas_main::aasworld
+                    .faceindex
+                    .offset(((*area).firstface + i) as isize),
+            ) as isize) as *mut crate::aasfile_h::aas_face_t;
         if !((*face).faceflags & 4 as i32 == 0) {
             //
             total += AAS_FaceArea(face)
@@ -1207,13 +1182,11 @@ pub unsafe extern "C" fn AAS_FaceCenter(
     while i < (*face).numedges {
         edge = &mut *crate::src::botlib::be_aas_main::aasworld
             .edges
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
-                    *crate::src::botlib::be_aas_main::aasworld
-                        .edgeindex
-                        .offset(((*face).firstedge + i) as isize),
-                ) as isize,
-            ) as *mut crate::aasfile_h::aas_edge_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
+                *crate::src::botlib::be_aas_main::aasworld
+                    .edgeindex
+                    .offset(((*face).firstedge + i) as isize),
+            ) as isize) as *mut crate::aasfile_h::aas_edge_t;
         *center.offset(0 as i32 as isize) = *center.offset(0 as i32 as isize)
             + (*crate::src::botlib::be_aas_main::aasworld
                 .vertexes
@@ -1260,12 +1233,10 @@ pub unsafe extern "C" fn AAS_FallDamageDistance() -> i32 {
     let mut maxzvelocity: f32 = 0.;
     let mut gravity: f32 = 0.;
     let mut t: f32 = 0.;
-    maxzvelocity = crate::stdlib::sqrt((30 as i32 * 10000 as i32) as f64)
-        as f32;
+    maxzvelocity = crate::stdlib::sqrt((30 as i32 * 10000 as i32) as f64) as f32;
     gravity = crate::src::botlib::be_aas_move::aassettings.phys_gravity;
     t = maxzvelocity / gravity;
-    return (0.5f64 * gravity as f64 * t as f64 * t as f64)
-        as i32;
+    return (0.5f64 * gravity as f64 * t as f64 * t as f64) as i32;
 }
 //end of the function AAS_FallDamageDistance
 //===========================================================================
@@ -1284,10 +1255,8 @@ pub unsafe extern "C" fn AAS_FallDelta(mut distance: f32) -> f32 {
     let mut delta: f32 = 0.;
     let mut gravity: f32 = 0.;
     gravity = crate::src::botlib::be_aas_move::aassettings.phys_gravity;
-    t = crate::stdlib::sqrt(
-        crate::stdlib::fabs(distance as f64) * 2 as i32 as f64
-            / gravity as f64,
-    ) as f32;
+    t = crate::stdlib::sqrt(crate::stdlib::fabs(distance as f64) * 2 as i32 as f64 / gravity as f64)
+        as f32;
     delta = t * gravity;
     return ((delta * delta) as f64 * 0.0001f64) as f32;
 }
@@ -1620,20 +1589,17 @@ pub unsafe extern "C" fn AAS_NearbySolidOrGap(
     let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3]; //end if
     let mut testpoint: crate::src::qcommon::q_shared::vec3_t = [0.; 3]; //end if
     let mut areanum: i32 = 0;
-    dir[0 as i32 as usize] =
-        *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
-    dir[1 as i32 as usize] =
-        *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
-    dir[2 as i32 as usize] =
-        *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
+    dir[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
+    dir[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
+    dir[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
     dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
-    testpoint[0 as i32 as usize] = *end.offset(0 as i32 as isize)
-        + dir[0 as i32 as usize] * 48 as i32 as f32;
-    testpoint[1 as i32 as usize] = *end.offset(1 as i32 as isize)
-        + dir[1 as i32 as usize] * 48 as i32 as f32;
-    testpoint[2 as i32 as usize] = *end.offset(2 as i32 as isize)
-        + dir[2 as i32 as usize] * 48 as i32 as f32;
+    testpoint[0 as i32 as usize] =
+        *end.offset(0 as i32 as isize) + dir[0 as i32 as usize] * 48 as i32 as f32;
+    testpoint[1 as i32 as usize] =
+        *end.offset(1 as i32 as isize) + dir[1 as i32 as usize] * 48 as i32 as f32;
+    testpoint[2 as i32 as usize] =
+        *end.offset(2 as i32 as isize) + dir[2 as i32 as usize] * 48 as i32 as f32;
     areanum = crate::src::botlib::be_aas_sample::AAS_PointAreaNum(testpoint.as_mut_ptr());
     if areanum == 0 {
         testpoint[2 as i32 as usize] += 16 as i32 as f32;
@@ -1642,12 +1608,12 @@ pub unsafe extern "C" fn AAS_NearbySolidOrGap(
             return crate::src::qcommon::q_shared::qtrue as i32;
         }
     }
-    testpoint[0 as i32 as usize] = *end.offset(0 as i32 as isize)
-        + dir[0 as i32 as usize] * 64 as i32 as f32;
-    testpoint[1 as i32 as usize] = *end.offset(1 as i32 as isize)
-        + dir[1 as i32 as usize] * 64 as i32 as f32;
-    testpoint[2 as i32 as usize] = *end.offset(2 as i32 as isize)
-        + dir[2 as i32 as usize] * 64 as i32 as f32;
+    testpoint[0 as i32 as usize] =
+        *end.offset(0 as i32 as isize) + dir[0 as i32 as usize] * 64 as i32 as f32;
+    testpoint[1 as i32 as usize] =
+        *end.offset(1 as i32 as isize) + dir[1 as i32 as usize] * 64 as i32 as f32;
+    testpoint[2 as i32 as usize] =
+        *end.offset(2 as i32 as isize) + dir[2 as i32 as usize] * 64 as i32 as f32;
     areanum = crate::src::botlib::be_aas_sample::AAS_PointAreaNum(testpoint.as_mut_ptr());
     if areanum != 0 {
         if AAS_AreaSwim(areanum) == 0 && AAS_AreaGrounded(areanum) == 0 {
@@ -1666,10 +1632,7 @@ pub unsafe extern "C" fn AAS_NearbySolidOrGap(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_Reachability_Swim(
-    mut area1num: i32,
-    mut area2num: i32,
-) -> i32 {
+pub unsafe extern "C" fn AAS_Reachability_Swim(mut area1num: i32, mut area2num: i32) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut face1num: i32 = 0;
@@ -1703,14 +1666,10 @@ pub unsafe extern "C" fn AAS_Reachability_Swim(
     //if the areas are not near enough
     i = 0 as i32; //end for
     while i < 3 as i32 {
-        if (*area1).mins[i as usize]
-            > (*area2).maxs[i as usize] + 10 as i32 as f32
-        {
+        if (*area1).mins[i as usize] > (*area2).maxs[i as usize] + 10 as i32 as f32 {
             return crate::src::qcommon::q_shared::qfalse as i32;
         }
-        if (*area1).maxs[i as usize]
-            < (*area2).mins[i as usize] - 10 as i32 as f32
-        {
+        if (*area1).maxs[i as usize] < (*area2).mins[i as usize] - 10 as i32 as f32 {
             return crate::src::qcommon::q_shared::qfalse as i32;
         }
         i += 1
@@ -1762,25 +1721,17 @@ pub unsafe extern "C" fn AAS_Reachability_Swim(
                         .planes
                         .offset(((*face1).planenum ^ side1) as isize)
                         as *mut crate::aasfile_h::aas_plane_t;
-                    (*lreach).end[0 as i32 as usize] = (*lreach).start
-                        [0 as i32 as usize]
-                        + (*plane).normal[0 as i32 as usize]
-                            * -(2 as i32) as f32;
-                    (*lreach).end[1 as i32 as usize] = (*lreach).start
-                        [1 as i32 as usize]
-                        + (*plane).normal[1 as i32 as usize]
-                            * -(2 as i32) as f32;
-                    (*lreach).end[2 as i32 as usize] = (*lreach).start
-                        [2 as i32 as usize]
-                        + (*plane).normal[2 as i32 as usize]
-                            * -(2 as i32) as f32;
+                    (*lreach).end[0 as i32 as usize] = (*lreach).start[0 as i32 as usize]
+                        + (*plane).normal[0 as i32 as usize] * -(2 as i32) as f32;
+                    (*lreach).end[1 as i32 as usize] = (*lreach).start[1 as i32 as usize]
+                        + (*plane).normal[1 as i32 as usize] * -(2 as i32) as f32;
+                    (*lreach).end[2 as i32 as usize] = (*lreach).start[2 as i32 as usize]
+                        + (*plane).normal[2 as i32 as usize] * -(2 as i32) as f32;
                     (*lreach).traveltype = 8 as i32;
                     (*lreach).traveltime = 1 as i32 as u16;
                     //if the volume of the area is rather small
                     if AAS_AreaVolume(area2num) < 800 as i32 as f32 {
-                        (*lreach).traveltime = ((*lreach).traveltime as i32
-                            + 200 as i32)
-                            as u16
+                        (*lreach).traveltime = ((*lreach).traveltime as i32 + 200 as i32) as u16
                     }
                     //if (!(AAS_PointContents(start) & MASK_WATER)) lreach->traveltime += 500;
                     //link the reachability
@@ -1863,14 +1814,10 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
     //if the areas are not near enough in the x-y direction
     i = 0 as i32; //end for
     while i < 2 as i32 {
-        if (*area1).mins[i as usize]
-            > (*area2).maxs[i as usize] + 10 as i32 as f32
-        {
+        if (*area1).mins[i as usize] > (*area2).maxs[i as usize] + 10 as i32 as f32 {
             return crate::src::qcommon::q_shared::qfalse as i32;
         }
-        if (*area1).maxs[i as usize]
-            < (*area2).mins[i as usize] - 10 as i32 as f32
-        {
+        if (*area1).maxs[i as usize] < (*area2).mins[i as usize] - 10 as i32 as f32 {
             return crate::src::qcommon::q_shared::qfalse as i32;
         }
         i += 1
@@ -1900,13 +1847,11 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
     while i < (*area1).numfaces {
         face1 = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
-                    *crate::src::botlib::be_aas_main::aasworld
-                        .faceindex
-                        .offset(((*area1).firstface + i) as isize),
-                ) as isize,
-            ) as *mut crate::aasfile_h::aas_face_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
+                *crate::src::botlib::be_aas_main::aasworld
+                    .faceindex
+                    .offset(((*area1).firstface + i) as isize),
+            ) as isize) as *mut crate::aasfile_h::aas_face_t;
         if !((*face1).faceflags & 4 as i32 == 0) {
             //end for
             //
@@ -1914,13 +1859,11 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
             while j < (*area2).numfaces {
                 face2 = &mut *crate::src::botlib::be_aas_main::aasworld
                     .faces
-                    .offset(
-                        (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
-                            *crate::src::botlib::be_aas_main::aasworld
-                                .faceindex
-                                .offset(((*area2).firstface + j) as isize),
-                        ) as isize,
-                    ) as *mut crate::aasfile_h::aas_face_t;
+                    .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
+                        *crate::src::botlib::be_aas_main::aasworld
+                            .faceindex
+                            .offset(((*area2).firstface + j) as isize),
+                    ) as isize) as *mut crate::aasfile_h::aas_face_t;
                 if !((*face2).faceflags & 4 as i32 == 0) {
                     //end for
                     //if there is a common edge
@@ -1941,12 +1884,11 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
                                     .edgeindex
                                     .offset(((*face1).firstedge + edgenum1) as isize);
                                 side = (edgenum < 0 as i32) as i32;
-                                edge = &mut *crate::src::botlib::be_aas_main::aasworld.edges.offset(
-                                    (::libc::abs
-                                        as unsafe extern "C" fn(_: i32) -> i32)(
+                                edge = &mut *crate::src::botlib::be_aas_main::aasworld
+                                    .edges
+                                    .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
                                         edgenum,
-                                    ) as isize,
-                                )
+                                    ) as isize)
                                     as *mut crate::aasfile_h::aas_edge_t;
                                 //get the length of the edge
                                 dir[0 as i32 as usize] =
@@ -2007,15 +1949,15 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
                                             .vertexes
                                             .offset((*edge).v[1 as i32 as usize] as isize))
                                             [2 as i32 as usize];
-                                start[0 as i32 as usize] =
-                                    (start[0 as i32 as usize] as f64 * 0.5f64)
-                                        as crate::src::qcommon::q_shared::vec_t;
-                                start[1 as i32 as usize] =
-                                    (start[1 as i32 as usize] as f64 * 0.5f64)
-                                        as crate::src::qcommon::q_shared::vec_t;
-                                start[2 as i32 as usize] =
-                                    (start[2 as i32 as usize] as f64 * 0.5f64)
-                                        as crate::src::qcommon::q_shared::vec_t;
+                                start[0 as i32 as usize] = (start[0 as i32 as usize] as f64
+                                    * 0.5f64)
+                                    as crate::src::qcommon::q_shared::vec_t;
+                                start[1 as i32 as usize] = (start[1 as i32 as usize] as f64
+                                    * 0.5f64)
+                                    as crate::src::qcommon::q_shared::vec_t;
+                                start[2 as i32 as usize] = (start[2 as i32 as usize] as f64
+                                    * 0.5f64)
+                                    as crate::src::qcommon::q_shared::vec_t;
                                 end[0 as i32 as usize] = start[0 as i32 as usize];
                                 end[1 as i32 as usize] = start[1 as i32 as usize];
                                 end[2 as i32 as usize] = start[2 as i32 as usize];
@@ -2031,10 +1973,8 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
                                         - (*crate::src::botlib::be_aas_main::aasworld
                                             .vertexes
                                             .offset(
-                                                (*edge).v[(side == 0) as i32 as usize]
-                                                    as isize,
-                                            ))
-                                            [0 as i32 as usize];
+                                                (*edge).v[(side == 0) as i32 as usize] as isize,
+                                            ))[0 as i32 as usize];
                                 edgevec[1 as i32 as usize] =
                                     (*crate::src::botlib::be_aas_main::aasworld
                                         .vertexes
@@ -2043,10 +1983,8 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
                                         - (*crate::src::botlib::be_aas_main::aasworld
                                             .vertexes
                                             .offset(
-                                                (*edge).v[(side == 0) as i32 as usize]
-                                                    as isize,
-                                            ))
-                                            [1 as i32 as usize];
+                                                (*edge).v[(side == 0) as i32 as usize] as isize,
+                                            ))[1 as i32 as usize];
                                 edgevec[2 as i32 as usize] =
                                     (*crate::src::botlib::be_aas_main::aasworld
                                         .vertexes
@@ -2055,10 +1993,8 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
                                         - (*crate::src::botlib::be_aas_main::aasworld
                                             .vertexes
                                             .offset(
-                                                (*edge).v[(side == 0) as i32 as usize]
-                                                    as isize,
-                                            ))
-                                            [2 as i32 as usize];
+                                                (*edge).v[(side == 0) as i32 as usize] as isize,
+                                            ))[2 as i32 as usize];
                                 plane2 = &mut *crate::src::botlib::be_aas_main::aasworld
                                     .planes
                                     .offset((*face2).planenum as isize)
@@ -2074,36 +2010,26 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
                                 //
                                 //VectorMA(start, -1, normal, start);
                                 end[0 as i32 as usize] = end[0 as i32 as usize]
-                                    + normal[0 as i32 as usize]
-                                        * 5 as i32 as f32;
+                                    + normal[0 as i32 as usize] * 5 as i32 as f32;
                                 end[1 as i32 as usize] = end[1 as i32 as usize]
-                                    + normal[1 as i32 as usize]
-                                        * 5 as i32 as f32;
+                                    + normal[1 as i32 as usize] * 5 as i32 as f32;
                                 end[2 as i32 as usize] = end[2 as i32 as usize]
-                                    + normal[2 as i32 as usize]
-                                        * 5 as i32 as f32;
-                                start[0 as i32 as usize] = (start[0 as i32 as usize]
-                                    as f64
+                                    + normal[2 as i32 as usize] * 5 as i32 as f32;
+                                start[0 as i32 as usize] = (start[0 as i32 as usize] as f64
                                     + normal[0 as i32 as usize] as f64 * 0.1f64)
                                     as crate::src::qcommon::q_shared::vec_t;
-                                start[1 as i32 as usize] = (start[1 as i32 as usize]
-                                    as f64
+                                start[1 as i32 as usize] = (start[1 as i32 as usize] as f64
                                     + normal[1 as i32 as usize] as f64 * 0.1f64)
                                     as crate::src::qcommon::q_shared::vec_t;
-                                start[2 as i32 as usize] = (start[2 as i32 as usize]
-                                    as f64
+                                start[2 as i32 as usize] = (start[2 as i32 as usize] as f64
                                     + normal[2 as i32 as usize] as f64 * 0.1f64)
                                     as crate::src::qcommon::q_shared::vec_t;
-                                end[2 as i32 as usize] =
-                                    (end[2 as i32 as usize] as f64 + 0.125f64)
-                                        as crate::src::qcommon::q_shared::vec_t;
+                                end[2 as i32 as usize] = (end[2 as i32 as usize] as f64 + 0.125f64)
+                                    as crate::src::qcommon::q_shared::vec_t;
                                 //
-                                height = invgravity[0 as i32 as usize]
-                                    * start[0 as i32 as usize]
-                                    + invgravity[1 as i32 as usize]
-                                        * start[1 as i32 as usize]
-                                    + invgravity[2 as i32 as usize]
-                                        * start[2 as i32 as usize];
+                                height = invgravity[0 as i32 as usize] * start[0 as i32 as usize]
+                                    + invgravity[1 as i32 as usize] * start[1 as i32 as usize]
+                                    + invgravity[2 as i32 as usize] * start[2 as i32 as usize];
                                 //NOTE: if there's nearby solid or a gap area after this area
                                 //disabled this crap
                                 //if (AAS_NearbySolidOrGap(start, end)) height += 200;
@@ -2111,8 +2037,7 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
                                 //if (AAS_PointAreaNum(end) != area2num) continue;
                                 //get the longest lowest edge
                                 if height < bestheight
-                                    || height < bestheight + 1 as i32 as f32
-                                        && length > bestlength
+                                    || height < bestheight + 1 as i32 as f32 && length > bestlength
                                 {
                                     bestheight = height;
                                     bestlength = length;
@@ -2120,18 +2045,12 @@ pub unsafe extern "C" fn AAS_Reachability_EqualFloorHeight(
                                     lr.areanum = area2num;
                                     lr.facenum = 0 as i32;
                                     lr.edgenum = edgenum;
-                                    lr.start[0 as i32 as usize] =
-                                        start[0 as i32 as usize];
-                                    lr.start[1 as i32 as usize] =
-                                        start[1 as i32 as usize];
-                                    lr.start[2 as i32 as usize] =
-                                        start[2 as i32 as usize];
-                                    lr.end[0 as i32 as usize] =
-                                        end[0 as i32 as usize];
-                                    lr.end[1 as i32 as usize] =
-                                        end[1 as i32 as usize];
-                                    lr.end[2 as i32 as usize] =
-                                        end[2 as i32 as usize];
+                                    lr.start[0 as i32 as usize] = start[0 as i32 as usize];
+                                    lr.start[1 as i32 as usize] = start[1 as i32 as usize];
+                                    lr.start[2 as i32 as usize] = start[2 as i32 as usize];
+                                    lr.end[0 as i32 as usize] = end[0 as i32 as usize];
+                                    lr.end[1 as i32 as usize] = end[1 as i32 as usize];
+                                    lr.end[2 as i32 as usize] = end[2 as i32 as usize];
                                     lr.traveltype = 2 as i32;
                                     lr.traveltime = 1 as i32 as u16;
                                     foundreach = crate::src::qcommon::q_shared::qtrue as i32
@@ -2329,14 +2248,10 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
     //if the areas are not near enough in the x-y direction
     i = 0 as i32; //end for
     while i < 2 as i32 {
-        if (*area1).mins[i as usize]
-            > (*area2).maxs[i as usize] + 10 as i32 as f32
-        {
+        if (*area1).mins[i as usize] > (*area2).maxs[i as usize] + 10 as i32 as f32 {
             return crate::src::qcommon::q_shared::qfalse as i32;
         }
-        if (*area1).maxs[i as usize]
-            < (*area2).mins[i as usize] - 10 as i32 as f32
-        {
+        if (*area1).maxs[i as usize] < (*area2).mins[i as usize] - 10 as i32 as f32 {
             return crate::src::qcommon::q_shared::qfalse as i32;
         }
         i += 1
@@ -2361,10 +2276,8 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
         faceside1 = (groundface1num < 0 as i32) as i32;
         groundface1 = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(groundface1num)
-                    as isize,
-            ) as *mut crate::aasfile_h::aas_face_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(groundface1num) as isize)
+            as *mut crate::aasfile_h::aas_face_t;
         //end for
         //if this isn't a ground face
         if (*groundface1).faceflags & 4 as i32 == 0 {
@@ -2375,12 +2288,9 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                     .planes
                     .offset(((*groundface1).planenum ^ (faceside1 == 0) as i32) as isize)
                     as *mut crate::aasfile_h::aas_plane_t; //end if
-                if (((*plane).normal[0 as i32 as usize]
-                    * invgravity[0 as i32 as usize]
-                    + (*plane).normal[1 as i32 as usize]
-                        * invgravity[1 as i32 as usize]
-                    + (*plane).normal[2 as i32 as usize]
-                        * invgravity[2 as i32 as usize])
+                if (((*plane).normal[0 as i32 as usize] * invgravity[0 as i32 as usize]
+                    + (*plane).normal[1 as i32 as usize] * invgravity[1 as i32 as usize]
+                    + (*plane).normal[2 as i32 as usize] * invgravity[2 as i32 as usize])
                     as f64)
                     < 0.7f64
                 {
@@ -2428,22 +2338,16 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                         [2 as i32 as usize];
                     v2[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
                         .vertexes
-                        .offset((*edge1).v[side1 as usize] as isize))
-                        [0 as i32 as usize];
+                        .offset((*edge1).v[side1 as usize] as isize))[0 as i32 as usize];
                     v2[1 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
                         .vertexes
-                        .offset((*edge1).v[side1 as usize] as isize))
-                        [1 as i32 as usize];
+                        .offset((*edge1).v[side1 as usize] as isize))[1 as i32 as usize];
                     v2[2 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
                         .vertexes
-                        .offset((*edge1).v[side1 as usize] as isize))
-                        [2 as i32 as usize];
-                    edgevec[0 as i32 as usize] =
-                        v2[0 as i32 as usize] - v1[0 as i32 as usize];
-                    edgevec[1 as i32 as usize] =
-                        v2[1 as i32 as usize] - v1[1 as i32 as usize];
-                    edgevec[2 as i32 as usize] =
-                        v2[2 as i32 as usize] - v1[2 as i32 as usize];
+                        .offset((*edge1).v[side1 as usize] as isize))[2 as i32 as usize];
+                    edgevec[0 as i32 as usize] = v2[0 as i32 as usize] - v1[0 as i32 as usize];
+                    edgevec[1 as i32 as usize] = v2[1 as i32 as usize] - v1[1 as i32 as usize];
+                    edgevec[2 as i32 as usize] = v2[2 as i32 as usize] - v1[2 as i32 as usize];
                     CrossProduct(
                         edgevec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                         invgravity.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -2520,26 +2424,16 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                         [2 as i32 as usize];
                                 //check the distance between the two points and the vertical plane
                                 //through the edge of area1
-                                diff = normal[0 as i32 as usize]
-                                    * v3[0 as i32 as usize]
-                                    + normal[1 as i32 as usize]
-                                        * v3[1 as i32 as usize]
-                                    + normal[2 as i32 as usize]
-                                        * v3[2 as i32 as usize]
+                                diff = normal[0 as i32 as usize] * v3[0 as i32 as usize]
+                                    + normal[1 as i32 as usize] * v3[1 as i32 as usize]
+                                    + normal[2 as i32 as usize] * v3[2 as i32 as usize]
                                     - dist;
-                                if !((diff as f64) < -0.1f64
-                                    || diff as f64 > 0.1f64)
-                                {
-                                    diff = normal[0 as i32 as usize]
-                                        * v4[0 as i32 as usize]
-                                        + normal[1 as i32 as usize]
-                                            * v4[1 as i32 as usize]
-                                        + normal[2 as i32 as usize]
-                                            * v4[2 as i32 as usize]
+                                if !((diff as f64) < -0.1f64 || diff as f64 > 0.1f64) {
+                                    diff = normal[0 as i32 as usize] * v4[0 as i32 as usize]
+                                        + normal[1 as i32 as usize] * v4[1 as i32 as usize]
+                                        + normal[2 as i32 as usize] * v4[2 as i32 as usize]
                                         - dist;
-                                    if !((diff as f64) < -0.1f64
-                                        || diff as f64 > 0.1f64)
-                                    {
+                                    if !((diff as f64) < -0.1f64 || diff as f64 > 0.1f64) {
                                         //
                                         //project the two ground edges into the step side plane
                                         //and calculate the shortest distance between the two
@@ -2553,46 +2447,31 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                             ort.as_mut_ptr(),
                                         );
                                         //invgravitydot = DotProduct(invgravity, invgravity);
-                                        ortdot = ort[0 as i32 as usize]
-                                            * ort[0 as i32 as usize]
-                                            + ort[1 as i32 as usize]
-                                                * ort[1 as i32 as usize]
-                                            + ort[2 as i32 as usize]
-                                                * ort[2 as i32 as usize];
+                                        ortdot = ort[0 as i32 as usize] * ort[0 as i32 as usize]
+                                            + ort[1 as i32 as usize] * ort[1 as i32 as usize]
+                                            + ort[2 as i32 as usize] * ort[2 as i32 as usize];
                                         //projection into the step plane
                                         //NOTE: since gravity is vertical this is just the z coordinate
                                         y1 = v1[2 as i32 as usize]; //DotProduct(v1, invgravity) / invgravitydot;
                                         y2 = v2[2 as i32 as usize]; //DotProduct(v2, invgravity) / invgravitydot;
                                         y3 = v3[2 as i32 as usize]; //DotProduct(v3, invgravity) / invgravitydot;
                                         y4 = v4[2 as i32 as usize]; //DotProduct(v4, invgravity) / invgravitydot;
-                                                                            //
-                                        x1 = (v1[0 as i32 as usize]
-                                            * ort[0 as i32 as usize]
-                                            + v1[1 as i32 as usize]
-                                                * ort[1 as i32 as usize]
-                                            + v1[2 as i32 as usize]
-                                                * ort[2 as i32 as usize])
+                                                                    //
+                                        x1 = (v1[0 as i32 as usize] * ort[0 as i32 as usize]
+                                            + v1[1 as i32 as usize] * ort[1 as i32 as usize]
+                                            + v1[2 as i32 as usize] * ort[2 as i32 as usize])
                                             / ortdot;
-                                        x2 = (v2[0 as i32 as usize]
-                                            * ort[0 as i32 as usize]
-                                            + v2[1 as i32 as usize]
-                                                * ort[1 as i32 as usize]
-                                            + v2[2 as i32 as usize]
-                                                * ort[2 as i32 as usize])
+                                        x2 = (v2[0 as i32 as usize] * ort[0 as i32 as usize]
+                                            + v2[1 as i32 as usize] * ort[1 as i32 as usize]
+                                            + v2[2 as i32 as usize] * ort[2 as i32 as usize])
                                             / ortdot;
-                                        x3 = (v3[0 as i32 as usize]
-                                            * ort[0 as i32 as usize]
-                                            + v3[1 as i32 as usize]
-                                                * ort[1 as i32 as usize]
-                                            + v3[2 as i32 as usize]
-                                                * ort[2 as i32 as usize])
+                                        x3 = (v3[0 as i32 as usize] * ort[0 as i32 as usize]
+                                            + v3[1 as i32 as usize] * ort[1 as i32 as usize]
+                                            + v3[2 as i32 as usize] * ort[2 as i32 as usize])
                                             / ortdot;
-                                        x4 = (v4[0 as i32 as usize]
-                                            * ort[0 as i32 as usize]
-                                            + v4[1 as i32 as usize]
-                                                * ort[1 as i32 as usize]
-                                            + v4[2 as i32 as usize]
-                                                * ort[2 as i32 as usize])
+                                        x4 = (v4[0 as i32 as usize] * ort[0 as i32 as usize]
+                                            + v4[1 as i32 as usize] * ort[1 as i32 as usize]
+                                            + v4[2 as i32 as usize] * ort[2 as i32 as usize])
                                             / ortdot;
                                         //
                                         if x1 > x2 {
@@ -2602,24 +2481,15 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                             tmp = y1;
                                             y1 = y2;
                                             y2 = tmp;
-                                            tmpv[0 as i32 as usize] =
-                                                v1[0 as i32 as usize];
-                                            tmpv[1 as i32 as usize] =
-                                                v1[1 as i32 as usize];
-                                            tmpv[2 as i32 as usize] =
-                                                v1[2 as i32 as usize];
-                                            v1[0 as i32 as usize] =
-                                                v2[0 as i32 as usize];
-                                            v1[1 as i32 as usize] =
-                                                v2[1 as i32 as usize];
-                                            v1[2 as i32 as usize] =
-                                                v2[2 as i32 as usize];
-                                            v2[0 as i32 as usize] =
-                                                tmpv[0 as i32 as usize];
-                                            v2[1 as i32 as usize] =
-                                                tmpv[1 as i32 as usize];
-                                            v2[2 as i32 as usize] =
-                                                tmpv[2 as i32 as usize]
+                                            tmpv[0 as i32 as usize] = v1[0 as i32 as usize];
+                                            tmpv[1 as i32 as usize] = v1[1 as i32 as usize];
+                                            tmpv[2 as i32 as usize] = v1[2 as i32 as usize];
+                                            v1[0 as i32 as usize] = v2[0 as i32 as usize];
+                                            v1[1 as i32 as usize] = v2[1 as i32 as usize];
+                                            v1[2 as i32 as usize] = v2[2 as i32 as usize];
+                                            v2[0 as i32 as usize] = tmpv[0 as i32 as usize];
+                                            v2[1 as i32 as usize] = tmpv[1 as i32 as usize];
+                                            v2[2 as i32 as usize] = tmpv[2 as i32 as usize]
                                         }
                                         if x3 > x4 {
                                             tmp = x3;
@@ -2628,70 +2498,44 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                             tmp = y3;
                                             y3 = y4;
                                             y4 = tmp;
-                                            tmpv[0 as i32 as usize] =
-                                                v3[0 as i32 as usize];
-                                            tmpv[1 as i32 as usize] =
-                                                v3[1 as i32 as usize];
-                                            tmpv[2 as i32 as usize] =
-                                                v3[2 as i32 as usize];
-                                            v3[0 as i32 as usize] =
-                                                v4[0 as i32 as usize];
-                                            v3[1 as i32 as usize] =
-                                                v4[1 as i32 as usize];
-                                            v3[2 as i32 as usize] =
-                                                v4[2 as i32 as usize];
-                                            v4[0 as i32 as usize] =
-                                                tmpv[0 as i32 as usize];
-                                            v4[1 as i32 as usize] =
-                                                tmpv[1 as i32 as usize];
-                                            v4[2 as i32 as usize] =
-                                                tmpv[2 as i32 as usize]
+                                            tmpv[0 as i32 as usize] = v3[0 as i32 as usize];
+                                            tmpv[1 as i32 as usize] = v3[1 as i32 as usize];
+                                            tmpv[2 as i32 as usize] = v3[2 as i32 as usize];
+                                            v3[0 as i32 as usize] = v4[0 as i32 as usize];
+                                            v3[1 as i32 as usize] = v4[1 as i32 as usize];
+                                            v3[2 as i32 as usize] = v4[2 as i32 as usize];
+                                            v4[0 as i32 as usize] = tmpv[0 as i32 as usize];
+                                            v4[1 as i32 as usize] = tmpv[1 as i32 as usize];
+                                            v4[2 as i32 as usize] = tmpv[2 as i32 as usize]
                                         }
                                         //if the two projected edge lines have no overlap
                                         if !(x2 <= x3 || x4 <= x1) {
                                             //end if
                                             //if the two lines fully overlap
                                             if x1 as f64 - 0.5f64 < x3 as f64
-                                                && (x4 as f64)
-                                                    < x2 as f64 + 0.5f64
-                                                && (x3 as f64 - 0.5f64
-                                                    < x1 as f64
-                                                    && (x2 as f64)
-                                                        < x4 as f64 + 0.5f64)
+                                                && (x4 as f64) < x2 as f64 + 0.5f64
+                                                && (x3 as f64 - 0.5f64 < x1 as f64
+                                                    && (x2 as f64) < x4 as f64 + 0.5f64)
                                             {
                                                 //end else
                                                 dist1 = y3 - y1; //end if
                                                 dist2 = y4 - y2;
-                                                p1area1[0 as i32 as usize] =
-                                                    v1[0 as i32 as usize];
-                                                p1area1[1 as i32 as usize] =
-                                                    v1[1 as i32 as usize];
-                                                p1area1[2 as i32 as usize] =
-                                                    v1[2 as i32 as usize];
-                                                p2area1[0 as i32 as usize] =
-                                                    v2[0 as i32 as usize];
-                                                p2area1[1 as i32 as usize] =
-                                                    v2[1 as i32 as usize];
-                                                p2area1[2 as i32 as usize] =
-                                                    v2[2 as i32 as usize];
-                                                p1area2[0 as i32 as usize] =
-                                                    v3[0 as i32 as usize];
-                                                p1area2[1 as i32 as usize] =
-                                                    v3[1 as i32 as usize];
-                                                p1area2[2 as i32 as usize] =
-                                                    v3[2 as i32 as usize];
-                                                p2area2[0 as i32 as usize] =
-                                                    v4[0 as i32 as usize];
-                                                p2area2[1 as i32 as usize] =
-                                                    v4[1 as i32 as usize];
-                                                p2area2[2 as i32 as usize] =
-                                                    v4[2 as i32 as usize]
+                                                p1area1[0 as i32 as usize] = v1[0 as i32 as usize];
+                                                p1area1[1 as i32 as usize] = v1[1 as i32 as usize];
+                                                p1area1[2 as i32 as usize] = v1[2 as i32 as usize];
+                                                p2area1[0 as i32 as usize] = v2[0 as i32 as usize];
+                                                p2area1[1 as i32 as usize] = v2[1 as i32 as usize];
+                                                p2area1[2 as i32 as usize] = v2[2 as i32 as usize];
+                                                p1area2[0 as i32 as usize] = v3[0 as i32 as usize];
+                                                p1area2[1 as i32 as usize] = v3[1 as i32 as usize];
+                                                p1area2[2 as i32 as usize] = v3[2 as i32 as usize];
+                                                p2area2[0 as i32 as usize] = v4[0 as i32 as usize];
+                                                p2area2[1 as i32 as usize] = v4[1 as i32 as usize];
+                                                p2area2[2 as i32 as usize] = v4[2 as i32 as usize]
                                             } else {
                                                 //if the points are equal
-                                                if x1 as f64
-                                                    > x3 as f64 - 0.1f64
-                                                    && (x1 as f64)
-                                                        < x3 as f64 + 0.1f64
+                                                if x1 as f64 > x3 as f64 - 0.1f64
+                                                    && (x1 as f64) < x3 as f64 + 0.1f64
                                                 {
                                                     //end if
                                                     dist1 = y3 - y1; //end if
@@ -2741,10 +2585,8 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                                     p1area2[2 as i32 as usize] = y
                                                 }
                                                 //end else
-                                                if x2 as f64
-                                                    > x4 as f64 - 0.1f64
-                                                    && (x2 as f64)
-                                                        < x4 as f64 + 0.1f64
+                                                if x2 as f64 > x4 as f64 - 0.1f64
+                                                    && (x2 as f64) < x4 as f64 + 0.1f64
                                                 {
                                                     //if the points are equal
                                                     dist2 = y4 - y2; //end if
@@ -2810,45 +2652,30 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                                 start[2 as i32 as usize] = p1area1
                                                     [2 as i32 as usize]
                                                     + p2area1[2 as i32 as usize];
-                                                start[0 as i32 as usize] = (start
-                                                    [0 as i32 as usize]
-                                                    as f64
-                                                    * 0.5f64)
-                                                    as crate::src::qcommon::q_shared::vec_t;
-                                                start[1 as i32 as usize] = (start
-                                                    [1 as i32 as usize]
-                                                    as f64
-                                                    * 0.5f64)
-                                                    as crate::src::qcommon::q_shared::vec_t;
-                                                start[2 as i32 as usize] = (start
-                                                    [2 as i32 as usize]
-                                                    as f64
-                                                    * 0.5f64)
-                                                    as crate::src::qcommon::q_shared::vec_t;
-                                                end[0 as i32 as usize] = p1area2
-                                                    [0 as i32 as usize]
+                                                start[0 as i32 as usize] =
+                                                    (start[0 as i32 as usize] as f64 * 0.5f64)
+                                                        as crate::src::qcommon::q_shared::vec_t;
+                                                start[1 as i32 as usize] =
+                                                    (start[1 as i32 as usize] as f64 * 0.5f64)
+                                                        as crate::src::qcommon::q_shared::vec_t;
+                                                start[2 as i32 as usize] =
+                                                    (start[2 as i32 as usize] as f64 * 0.5f64)
+                                                        as crate::src::qcommon::q_shared::vec_t;
+                                                end[0 as i32 as usize] = p1area2[0 as i32 as usize]
                                                     + p2area2[0 as i32 as usize];
-                                                end[1 as i32 as usize] = p1area2
-                                                    [1 as i32 as usize]
+                                                end[1 as i32 as usize] = p1area2[1 as i32 as usize]
                                                     + p2area2[1 as i32 as usize];
-                                                end[2 as i32 as usize] = p1area2
-                                                    [2 as i32 as usize]
+                                                end[2 as i32 as usize] = p1area2[2 as i32 as usize]
                                                     + p2area2[2 as i32 as usize];
-                                                end[0 as i32 as usize] = (end
-                                                    [0 as i32 as usize]
-                                                    as f64
-                                                    * 0.5f64)
-                                                    as crate::src::qcommon::q_shared::vec_t;
-                                                end[1 as i32 as usize] = (end
-                                                    [1 as i32 as usize]
-                                                    as f64
-                                                    * 0.5f64)
-                                                    as crate::src::qcommon::q_shared::vec_t;
-                                                end[2 as i32 as usize] = (end
-                                                    [2 as i32 as usize]
-                                                    as f64
-                                                    * 0.5f64)
-                                                    as crate::src::qcommon::q_shared::vec_t
+                                                end[0 as i32 as usize] =
+                                                    (end[0 as i32 as usize] as f64 * 0.5f64)
+                                                        as crate::src::qcommon::q_shared::vec_t;
+                                                end[1 as i32 as usize] =
+                                                    (end[1 as i32 as usize] as f64 * 0.5f64)
+                                                        as crate::src::qcommon::q_shared::vec_t;
+                                                end[2 as i32 as usize] =
+                                                    (end[2 as i32 as usize] as f64 * 0.5f64)
+                                                        as crate::src::qcommon::q_shared::vec_t
                                             } else if dist1 < dist2 {
                                                 dist = dist1;
                                                 start[0 as i32 as usize] =
@@ -2857,12 +2684,9 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                                     p1area1[1 as i32 as usize];
                                                 start[2 as i32 as usize] =
                                                     p1area1[2 as i32 as usize];
-                                                end[0 as i32 as usize] =
-                                                    p1area2[0 as i32 as usize];
-                                                end[1 as i32 as usize] =
-                                                    p1area2[1 as i32 as usize];
-                                                end[2 as i32 as usize] =
-                                                    p1area2[2 as i32 as usize]
+                                                end[0 as i32 as usize] = p1area2[0 as i32 as usize];
+                                                end[1 as i32 as usize] = p1area2[1 as i32 as usize];
+                                                end[2 as i32 as usize] = p1area2[2 as i32 as usize]
                                             } else {
                                                 dist = dist2;
                                                 start[0 as i32 as usize] =
@@ -2871,22 +2695,16 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                                     p2area1[1 as i32 as usize];
                                                 start[2 as i32 as usize] =
                                                     p2area1[2 as i32 as usize];
-                                                end[0 as i32 as usize] =
-                                                    p2area2[0 as i32 as usize];
-                                                end[1 as i32 as usize] =
-                                                    p2area2[1 as i32 as usize];
-                                                end[2 as i32 as usize] =
-                                                    p2area2[2 as i32 as usize]
+                                                end[0 as i32 as usize] = p2area2[0 as i32 as usize];
+                                                end[1 as i32 as usize] = p2area2[1 as i32 as usize];
+                                                end[2 as i32 as usize] = p2area2[2 as i32 as usize]
                                             }
                                             //get the length of the overlapping part of the edges of the two areas
-                                            dir[0 as i32 as usize] = p2area2
-                                                [0 as i32 as usize]
+                                            dir[0 as i32 as usize] = p2area2[0 as i32 as usize]
                                                 - p1area2[0 as i32 as usize];
-                                            dir[1 as i32 as usize] = p2area2
-                                                [1 as i32 as usize]
+                                            dir[1 as i32 as usize] = p2area2[1 as i32 as usize]
                                                 - p1area2[1 as i32 as usize];
-                                            dir[2 as i32 as usize] = p2area2
-                                                [2 as i32 as usize]
+                                            dir[2 as i32 as usize] = p2area2[2 as i32 as usize]
                                                 - p1area2[2 as i32 as usize];
                                             length = VectorLength(dir.as_mut_ptr()
                                                 as *const crate::src::qcommon::q_shared::vec_t);
@@ -2894,16 +2712,13 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                             if (*groundface1).faceflags & 4 as i32 != 0 {
                                                 //if the vertical distance is smaller
                                                 if dist < ground_bestdist
-                                                    || dist
-                                                        < ground_bestdist
-                                                            + 1 as i32 as f32
+                                                    || dist < ground_bestdist + 1 as i32 as f32
                                                         && length > ground_bestlength
                                                 {
                                                     ground_bestdist = dist;
                                                     ground_bestlength = length;
                                                     ground_foundreach =
-                                                        crate::src::qcommon::q_shared::qtrue
-                                                            as i32;
+                                                        crate::src::qcommon::q_shared::qtrue as i32;
                                                     ground_bestarea2groundedgenum = edge1num;
                                                     //best point towards area1
                                                     ground_beststart[0 as i32 as usize] =
@@ -2929,16 +2744,13 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                                 }
                                             //end if
                                             } else if dist < water_bestdist
-                                                || dist
-                                                    < water_bestdist
-                                                        + 1 as i32 as f32
+                                                || dist < water_bestdist + 1 as i32 as f32
                                                     && length > water_bestlength
                                             {
                                                 water_bestdist = dist;
                                                 water_bestlength = length;
                                                 water_foundreach =
-                                                    crate::src::qcommon::q_shared::qtrue
-                                                        as i32;
+                                                    crate::src::qcommon::q_shared::qtrue as i32;
                                                 water_bestarea2groundedgenum = edge1num;
                                                 //if the vertical distance is smaller
                                                 //best point towards area1
@@ -3015,18 +2827,15 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
             (*lreach).areanum = area2num;
             (*lreach).facenum = 0 as i32;
             (*lreach).edgenum = ground_bestarea2groundedgenum;
-            (*lreach).start[0 as i32 as usize] =
-                (ground_beststart[0 as i32 as usize] as f64
-                    + ground_bestnormal[0 as i32 as usize] as f64 * 0.1f64)
-                    as crate::src::qcommon::q_shared::vec_t;
-            (*lreach).start[1 as i32 as usize] =
-                (ground_beststart[1 as i32 as usize] as f64
-                    + ground_bestnormal[1 as i32 as usize] as f64 * 0.1f64)
-                    as crate::src::qcommon::q_shared::vec_t;
-            (*lreach).start[2 as i32 as usize] =
-                (ground_beststart[2 as i32 as usize] as f64
-                    + ground_bestnormal[2 as i32 as usize] as f64 * 0.1f64)
-                    as crate::src::qcommon::q_shared::vec_t;
+            (*lreach).start[0 as i32 as usize] = (ground_beststart[0 as i32 as usize] as f64
+                + ground_bestnormal[0 as i32 as usize] as f64 * 0.1f64)
+                as crate::src::qcommon::q_shared::vec_t;
+            (*lreach).start[1 as i32 as usize] = (ground_beststart[1 as i32 as usize] as f64
+                + ground_bestnormal[1 as i32 as usize] as f64 * 0.1f64)
+                as crate::src::qcommon::q_shared::vec_t;
+            (*lreach).start[2 as i32 as usize] = (ground_beststart[2 as i32 as usize] as f64
+                + ground_bestnormal[2 as i32 as usize] as f64 * 0.1f64)
+                as crate::src::qcommon::q_shared::vec_t;
             (*lreach).end[0 as i32 as usize] = ground_bestend[0 as i32 as usize]
                 + ground_bestnormal[0 as i32 as usize] * 5 as i32 as f32;
             (*lreach).end[1 as i32 as usize] = ground_bestend[1 as i32 as usize]
@@ -3105,8 +2914,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
             //don't create ridiculous water jump reachabilities from areas very far below
             //the water surface
             if water_bestdist
-                < crate::src::botlib::be_aas_move::aassettings.phys_maxwaterjump
-                    + 24 as i32 as f32
+                < crate::src::botlib::be_aas_move::aassettings.phys_maxwaterjump + 24 as i32 as f32
             {
                 //waterjumping from or towards a crouch only area is not possible in Quake2
                 if (*crate::src::botlib::be_aas_main::aasworld
@@ -3130,24 +2938,15 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                     (*lreach).areanum = area2num;
                     (*lreach).facenum = 0 as i32;
                     (*lreach).edgenum = water_bestarea2groundedgenum;
-                    (*lreach).start[0 as i32 as usize] =
-                        water_beststart[0 as i32 as usize];
-                    (*lreach).start[1 as i32 as usize] =
-                        water_beststart[1 as i32 as usize];
-                    (*lreach).start[2 as i32 as usize] =
-                        water_beststart[2 as i32 as usize];
-                    (*lreach).end[0 as i32 as usize] = water_bestend
-                        [0 as i32 as usize]
-                        + water_bestnormal[0 as i32 as usize]
-                            * 15 as i32 as f32;
-                    (*lreach).end[1 as i32 as usize] = water_bestend
-                        [1 as i32 as usize]
-                        + water_bestnormal[1 as i32 as usize]
-                            * 15 as i32 as f32;
-                    (*lreach).end[2 as i32 as usize] = water_bestend
-                        [2 as i32 as usize]
-                        + water_bestnormal[2 as i32 as usize]
-                            * 15 as i32 as f32;
+                    (*lreach).start[0 as i32 as usize] = water_beststart[0 as i32 as usize];
+                    (*lreach).start[1 as i32 as usize] = water_beststart[1 as i32 as usize];
+                    (*lreach).start[2 as i32 as usize] = water_beststart[2 as i32 as usize];
+                    (*lreach).end[0 as i32 as usize] = water_bestend[0 as i32 as usize]
+                        + water_bestnormal[0 as i32 as usize] * 15 as i32 as f32;
+                    (*lreach).end[1 as i32 as usize] = water_bestend[1 as i32 as usize]
+                        + water_bestnormal[1 as i32 as usize] * 15 as i32 as f32;
+                    (*lreach).end[2 as i32 as usize] = water_bestend[2 as i32 as usize]
+                        + water_bestnormal[2 as i32 as usize] * 15 as i32 as f32;
                     (*lreach).traveltype = 9 as i32;
                     (*lreach).traveltime =
                         crate::src::botlib::be_aas_move::aassettings.rs_waterjump as u16;
@@ -3188,9 +2987,7 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
             && ground_bestdist < crate::src::botlib::be_aas_move::aassettings.phys_maxbarrier
         {
             //if no water in area1 or a very thin layer of water on the ground
-            if water_foundreach == 0
-                || ground_bestdist - water_bestdist < 16 as i32 as f32
-            {
+            if water_foundreach == 0 || ground_bestdist - water_bestdist < 16 as i32 as f32 {
                 //cannot perform a barrier jump towards or from a crouch area in Quake2
                 if AAS_AreaCrouch(area1num) == 0 && AAS_AreaCrouch(area2num) == 0 {
                     //create barrier jump reachability from area1 to area2
@@ -3201,37 +2998,27 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                     (*lreach).areanum = area2num;
                     (*lreach).facenum = 0 as i32;
                     (*lreach).edgenum = ground_bestarea2groundedgenum;
-                    (*lreach).start[0 as i32 as usize] = (ground_beststart
-                        [0 as i32 as usize]
+                    (*lreach).start[0 as i32 as usize] = (ground_beststart[0 as i32 as usize]
                         as f64
                         + ground_bestnormal[0 as i32 as usize] as f64 * 0.1f64)
                         as crate::src::qcommon::q_shared::vec_t;
-                    (*lreach).start[1 as i32 as usize] = (ground_beststart
-                        [1 as i32 as usize]
+                    (*lreach).start[1 as i32 as usize] = (ground_beststart[1 as i32 as usize]
                         as f64
                         + ground_bestnormal[1 as i32 as usize] as f64 * 0.1f64)
                         as crate::src::qcommon::q_shared::vec_t;
-                    (*lreach).start[2 as i32 as usize] = (ground_beststart
-                        [2 as i32 as usize]
+                    (*lreach).start[2 as i32 as usize] = (ground_beststart[2 as i32 as usize]
                         as f64
                         + ground_bestnormal[2 as i32 as usize] as f64 * 0.1f64)
                         as crate::src::qcommon::q_shared::vec_t;
-                    (*lreach).end[0 as i32 as usize] = ground_bestend
-                        [0 as i32 as usize]
-                        + ground_bestnormal[0 as i32 as usize]
-                            * 5 as i32 as f32;
-                    (*lreach).end[1 as i32 as usize] = ground_bestend
-                        [1 as i32 as usize]
-                        + ground_bestnormal[1 as i32 as usize]
-                            * 5 as i32 as f32;
-                    (*lreach).end[2 as i32 as usize] = ground_bestend
-                        [2 as i32 as usize]
-                        + ground_bestnormal[2 as i32 as usize]
-                            * 5 as i32 as f32;
+                    (*lreach).end[0 as i32 as usize] = ground_bestend[0 as i32 as usize]
+                        + ground_bestnormal[0 as i32 as usize] * 5 as i32 as f32;
+                    (*lreach).end[1 as i32 as usize] = ground_bestend[1 as i32 as usize]
+                        + ground_bestnormal[1 as i32 as usize] * 5 as i32 as f32;
+                    (*lreach).end[2 as i32 as usize] = ground_bestend[2 as i32 as usize]
+                        + ground_bestnormal[2 as i32 as usize] * 5 as i32 as f32;
                     (*lreach).traveltype = 4 as i32;
-                    (*lreach).traveltime = crate::src::botlib::be_aas_move::aassettings
-                        .rs_barrierjump
-                        as u16;
+                    (*lreach).traveltime =
+                        crate::src::botlib::be_aas_move::aassettings.rs_barrierjump as u16;
                     (*lreach).next = *areareachability.offset(area1num as isize);
                     let ref mut fresh9 = *areareachability.offset(area1num as isize);
                     *fresh9 = lreach;
@@ -3280,30 +3067,21 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                 (*lreach).areanum = area2num;
                 (*lreach).facenum = 0 as i32;
                 (*lreach).edgenum = ground_bestarea2groundedgenum;
-                (*lreach).start[0 as i32 as usize] =
-                    (ground_beststart[0 as i32 as usize] as f64
-                        + ground_bestnormal[0 as i32 as usize] as f64 * 0.1f64)
-                        as crate::src::qcommon::q_shared::vec_t;
-                (*lreach).start[1 as i32 as usize] =
-                    (ground_beststart[1 as i32 as usize] as f64
-                        + ground_bestnormal[1 as i32 as usize] as f64 * 0.1f64)
-                        as crate::src::qcommon::q_shared::vec_t;
-                (*lreach).start[2 as i32 as usize] =
-                    (ground_beststart[2 as i32 as usize] as f64
-                        + ground_bestnormal[2 as i32 as usize] as f64 * 0.1f64)
-                        as crate::src::qcommon::q_shared::vec_t;
-                (*lreach).end[0 as i32 as usize] = ground_bestend
-                    [0 as i32 as usize]
-                    + ground_bestnormal[0 as i32 as usize]
-                        * 5 as i32 as f32;
-                (*lreach).end[1 as i32 as usize] = ground_bestend
-                    [1 as i32 as usize]
-                    + ground_bestnormal[1 as i32 as usize]
-                        * 5 as i32 as f32;
-                (*lreach).end[2 as i32 as usize] = ground_bestend
-                    [2 as i32 as usize]
-                    + ground_bestnormal[2 as i32 as usize]
-                        * 5 as i32 as f32;
+                (*lreach).start[0 as i32 as usize] = (ground_beststart[0 as i32 as usize] as f64
+                    + ground_bestnormal[0 as i32 as usize] as f64 * 0.1f64)
+                    as crate::src::qcommon::q_shared::vec_t;
+                (*lreach).start[1 as i32 as usize] = (ground_beststart[1 as i32 as usize] as f64
+                    + ground_bestnormal[1 as i32 as usize] as f64 * 0.1f64)
+                    as crate::src::qcommon::q_shared::vec_t;
+                (*lreach).start[2 as i32 as usize] = (ground_beststart[2 as i32 as usize] as f64
+                    + ground_bestnormal[2 as i32 as usize] as f64 * 0.1f64)
+                    as crate::src::qcommon::q_shared::vec_t;
+                (*lreach).end[0 as i32 as usize] = ground_bestend[0 as i32 as usize]
+                    + ground_bestnormal[0 as i32 as usize] * 5 as i32 as f32;
+                (*lreach).end[1 as i32 as usize] = ground_bestend[1 as i32 as usize]
+                    + ground_bestnormal[1 as i32 as usize] * 5 as i32 as f32;
+                (*lreach).end[2 as i32 as usize] = ground_bestend[2 as i32 as usize]
+                    + ground_bestnormal[2 as i32 as usize] * 5 as i32 as f32;
                 (*lreach).traveltype = 2 as i32;
                 (*lreach).traveltime = 1 as i32 as u16;
                 (*lreach).next = *areareachability.offset(area1num as isize);
@@ -3316,23 +3094,16 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
             //end if
             if crate::src::botlib::be_aas_move::aassettings.rs_maxfallheight == 0.
                 || crate::stdlib::fabs(ground_bestdist as f64)
-                    < crate::src::botlib::be_aas_move::aassettings.rs_maxfallheight
-                        as f64
+                    < crate::src::botlib::be_aas_move::aassettings.rs_maxfallheight as f64
             {
                 // if no maximum fall height set or less than the max
                 //trace a bounding box vertically to check for solids
-                ground_bestend[0 as i32 as usize] = ground_bestend
-                    [0 as i32 as usize]
-                    + ground_bestnormal[0 as i32 as usize]
-                        * 2 as i32 as f32;
-                ground_bestend[1 as i32 as usize] = ground_bestend
-                    [1 as i32 as usize]
-                    + ground_bestnormal[1 as i32 as usize]
-                        * 2 as i32 as f32;
-                ground_bestend[2 as i32 as usize] = ground_bestend
-                    [2 as i32 as usize]
-                    + ground_bestnormal[2 as i32 as usize]
-                        * 2 as i32 as f32;
+                ground_bestend[0 as i32 as usize] = ground_bestend[0 as i32 as usize]
+                    + ground_bestnormal[0 as i32 as usize] * 2 as i32 as f32;
+                ground_bestend[1 as i32 as usize] = ground_bestend[1 as i32 as usize]
+                    + ground_bestnormal[1 as i32 as usize] * 2 as i32 as f32;
+                ground_bestend[2 as i32 as usize] = ground_bestend[2 as i32 as usize]
+                    + ground_bestnormal[2 as i32 as usize] * 2 as i32 as f32;
                 start[0 as i32 as usize] = ground_bestend[0 as i32 as usize];
                 start[1 as i32 as usize] = ground_bestend[1 as i32 as usize];
                 start[2 as i32 as usize] = ground_bestend[2 as i32 as usize];
@@ -3390,18 +3161,14 @@ pub unsafe extern "C" fn AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge(
                                 ground_beststart[1 as i32 as usize];
                             (*lreach).start[2 as i32 as usize] =
                                 ground_beststart[2 as i32 as usize];
-                            (*lreach).end[0 as i32 as usize] =
-                                ground_bestend[0 as i32 as usize];
-                            (*lreach).end[1 as i32 as usize] =
-                                ground_bestend[1 as i32 as usize];
-                            (*lreach).end[2 as i32 as usize] =
-                                ground_bestend[2 as i32 as usize];
+                            (*lreach).end[0 as i32 as usize] = ground_bestend[0 as i32 as usize];
+                            (*lreach).end[1 as i32 as usize] = ground_bestend[1 as i32 as usize];
+                            (*lreach).end[2 as i32 as usize] = ground_bestend[2 as i32 as usize];
                             (*lreach).traveltype = 7 as i32;
                             (*lreach).traveltime = (crate::src::botlib::be_aas_move::aassettings
                                 .rs_startwalkoffledge
                                 as f64
-                                + crate::stdlib::fabs(ground_bestdist as f64)
-                                    * 50 as i32 as f64
+                                + crate::stdlib::fabs(ground_bestdist as f64) * 50 as i32 as f64
                                     / crate::src::botlib::be_aas_move::aassettings.phys_gravity
                                         as f64)
                                 as u16;
@@ -3459,12 +3226,9 @@ pub unsafe extern "C" fn VectorDistance(
     mut v2: *mut crate::src::qcommon::q_shared::vec_t,
 ) -> f32 {
     let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    dir[0 as i32 as usize] =
-        *v2.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
-    dir[1 as i32 as usize] =
-        *v2.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
-    dir[2 as i32 as usize] =
-        *v2.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
+    dir[0 as i32 as usize] = *v2.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
+    dir[1 as i32 as usize] = *v2.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
+    dir[2 as i32 as usize] = *v2.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
     return VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
 }
 //end of the function VectorDistance
@@ -3484,18 +3248,12 @@ pub unsafe extern "C" fn VectorBetweenVectors(
 ) -> i32 {
     let mut dir1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut dir2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    dir1[0 as i32 as usize] =
-        *v.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
-    dir1[1 as i32 as usize] =
-        *v.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
-    dir1[2 as i32 as usize] =
-        *v.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
-    dir2[0 as i32 as usize] =
-        *v.offset(0 as i32 as isize) - *v2.offset(0 as i32 as isize);
-    dir2[1 as i32 as usize] =
-        *v.offset(1 as i32 as isize) - *v2.offset(1 as i32 as isize);
-    dir2[2 as i32 as usize] =
-        *v.offset(2 as i32 as isize) - *v2.offset(2 as i32 as isize);
+    dir1[0 as i32 as usize] = *v.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
+    dir1[1 as i32 as usize] = *v.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
+    dir1[2 as i32 as usize] = *v.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
+    dir2[0 as i32 as usize] = *v.offset(0 as i32 as isize) - *v2.offset(0 as i32 as isize);
+    dir2[1 as i32 as usize] = *v.offset(1 as i32 as isize) - *v2.offset(1 as i32 as isize);
+    dir2[2 as i32 as usize] = *v.offset(2 as i32 as isize) - *v2.offset(2 as i32 as isize);
     return (dir1[0 as i32 as usize] * dir2[0 as i32 as usize]
         + dir1[1 as i32 as usize] * dir2[1 as i32 as usize]
         + dir1[2 as i32 as usize] * dir2[2 as i32 as usize]
@@ -3523,14 +3281,11 @@ pub unsafe extern "C" fn VectorMiddle(
     *middle.offset(2 as i32 as isize) =
         *v1.offset(2 as i32 as isize) + *v2.offset(2 as i32 as isize);
     *middle.offset(0 as i32 as isize) =
-        (*middle.offset(0 as i32 as isize) as f64 * 0.5f64)
-            as crate::src::qcommon::q_shared::vec_t;
+        (*middle.offset(0 as i32 as isize) as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     *middle.offset(1 as i32 as isize) =
-        (*middle.offset(1 as i32 as isize) as f64 * 0.5f64)
-            as crate::src::qcommon::q_shared::vec_t;
+        (*middle.offset(1 as i32 as isize) as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     *middle.offset(2 as i32 as isize) =
-        (*middle.offset(2 as i32 as isize) as f64 * 0.5f64)
-            as crate::src::qcommon::q_shared::vec_t;
+        (*middle.offset(2 as i32 as isize) as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
 }
 //end of the function VectorMiddle
 //===========================================================================
@@ -3749,18 +3504,12 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
     let mut dist2: f32 = 0.;
     let mut founddist: i32 = 0;
     //edge vectors
-    dir1[0 as i32 as usize] =
-        *v2.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
-    dir1[1 as i32 as usize] =
-        *v2.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
-    dir1[2 as i32 as usize] =
-        *v2.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
-    dir2[0 as i32 as usize] =
-        *v4.offset(0 as i32 as isize) - *v3.offset(0 as i32 as isize);
-    dir2[1 as i32 as usize] =
-        *v4.offset(1 as i32 as isize) - *v3.offset(1 as i32 as isize);
-    dir2[2 as i32 as usize] =
-        *v4.offset(2 as i32 as isize) - *v3.offset(2 as i32 as isize);
+    dir1[0 as i32 as usize] = *v2.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
+    dir1[1 as i32 as usize] = *v2.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
+    dir1[2 as i32 as usize] = *v2.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
+    dir2[0 as i32 as usize] = *v4.offset(0 as i32 as isize) - *v3.offset(0 as i32 as isize);
+    dir2[1 as i32 as usize] = *v4.offset(1 as i32 as isize) - *v3.offset(1 as i32 as isize);
+    dir2[2 as i32 as usize] = *v4.offset(2 as i32 as isize) - *v3.offset(2 as i32 as isize);
     //get the horizontal directions
     dir1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     dir2[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
@@ -3775,16 +3524,14 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
         a2 = dir2[1 as i32 as usize] / dir2[0 as i32 as usize]; //end if
         b2 = *v3.offset(1 as i32 as isize) - a2 * *v3.offset(0 as i32 as isize);
         //point on the edge vector of area2 closest to v1
-        p1[0 as i32 as usize] = (*v1.offset(0 as i32 as isize)
-            * dir2[0 as i32 as usize]
+        p1[0 as i32 as usize] = (*v1.offset(0 as i32 as isize) * dir2[0 as i32 as usize]
             + *v1.offset(1 as i32 as isize) * dir2[1 as i32 as usize]
             + *v1.offset(2 as i32 as isize) * dir2[2 as i32 as usize]
             - (a2 * dir2[0 as i32 as usize] + b2 * dir2[1 as i32 as usize]))
             / dir2[0 as i32 as usize];
         p1[1 as i32 as usize] = a2 * p1[0 as i32 as usize] + b2;
         //point on the edge vector of area2 closest to v2
-        p2[0 as i32 as usize] = (*v2.offset(0 as i32 as isize)
-            * dir2[0 as i32 as usize]
+        p2[0 as i32 as usize] = (*v2.offset(0 as i32 as isize) * dir2[0 as i32 as usize]
             + *v2.offset(1 as i32 as isize) * dir2[1 as i32 as usize]
             + *v2.offset(2 as i32 as isize) * dir2[2 as i32 as usize]
             - (a2 * dir2[0 as i32 as usize] + b2 * dir2[1 as i32 as usize]))
@@ -3805,16 +3552,14 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
         b1 = *v1.offset(1 as i32 as isize) - a1 * *v1.offset(0 as i32 as isize);
         //
         //point on the edge vector of area1 closest to v3
-        p3[0 as i32 as usize] = (*v3.offset(0 as i32 as isize)
-            * dir1[0 as i32 as usize]
+        p3[0 as i32 as usize] = (*v3.offset(0 as i32 as isize) * dir1[0 as i32 as usize]
             + *v3.offset(1 as i32 as isize) * dir1[1 as i32 as usize]
             + *v3.offset(2 as i32 as isize) * dir1[2 as i32 as usize]
             - (a1 * dir1[0 as i32 as usize] + b1 * dir1[1 as i32 as usize]))
             / dir1[0 as i32 as usize];
         p3[1 as i32 as usize] = a1 * p3[0 as i32 as usize] + b1;
         //point on the edge vector of area1 closest to v4
-        p4[0 as i32 as usize] = (*v4.offset(0 as i32 as isize)
-            * dir1[0 as i32 as usize]
+        p4[0 as i32 as usize] = (*v4.offset(0 as i32 as isize) * dir1[0 as i32 as usize]
             + *v4.offset(1 as i32 as isize) * dir1[1 as i32 as usize]
             + *v4.offset(2 as i32 as isize) * dir1[2 as i32 as usize]
             - (a1 * dir1[0 as i32 as usize] + b1 * dir1[1 as i32 as usize]))
@@ -3859,29 +3604,21 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
     //
     if VectorBetweenVectors(p1.as_mut_ptr(), v3, v4) != 0 {
         dist = VectorDistance(v1, p1.as_mut_ptr()); //end if
-        if dist as f64 > bestdist as f64 - 0.5f64
-            && (dist as f64) < bestdist as f64 + 0.5f64
-        {
+        if dist as f64 > bestdist as f64 - 0.5f64 && (dist as f64) < bestdist as f64 + 0.5f64 {
             dist1 = VectorDistance(beststart1, v1);
             dist2 = VectorDistance(beststart2, v1); //end if
                                                     //end else
             if dist1 > dist2 {
                 //end else
                 if dist1 > VectorDistance(beststart1, beststart2) {
-                    *beststart2.offset(0 as i32 as isize) =
-                        *v1.offset(0 as i32 as isize); //end if
-                    *beststart2.offset(1 as i32 as isize) =
-                        *v1.offset(1 as i32 as isize); //end if
-                    *beststart2.offset(2 as i32 as isize) =
-                        *v1.offset(2 as i32 as isize)
+                    *beststart2.offset(0 as i32 as isize) = *v1.offset(0 as i32 as isize); //end if
+                    *beststart2.offset(1 as i32 as isize) = *v1.offset(1 as i32 as isize); //end if
+                    *beststart2.offset(2 as i32 as isize) = *v1.offset(2 as i32 as isize)
                 }
             } else if dist2 > VectorDistance(beststart1, beststart2) {
-                *beststart1.offset(0 as i32 as isize) =
-                    *v1.offset(0 as i32 as isize); //end else if
-                *beststart1.offset(1 as i32 as isize) =
-                    *v1.offset(1 as i32 as isize); //end if
-                *beststart1.offset(2 as i32 as isize) =
-                    *v1.offset(2 as i32 as isize)
+                *beststart1.offset(0 as i32 as isize) = *v1.offset(0 as i32 as isize); //end else if
+                *beststart1.offset(1 as i32 as isize) = *v1.offset(1 as i32 as isize); //end if
+                *beststart1.offset(2 as i32 as isize) = *v1.offset(2 as i32 as isize)
             }
             dist1 = VectorDistance(bestend1, p1.as_mut_ptr());
             dist2 = VectorDistance(bestend2, p1.as_mut_ptr());
@@ -3915,29 +3652,21 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
     }
     if VectorBetweenVectors(p2.as_mut_ptr(), v3, v4) != 0 {
         dist = VectorDistance(v2, p2.as_mut_ptr());
-        if dist as f64 > bestdist as f64 - 0.5f64
-            && (dist as f64) < bestdist as f64 + 0.5f64
-        {
+        if dist as f64 > bestdist as f64 - 0.5f64 && (dist as f64) < bestdist as f64 + 0.5f64 {
             dist1 = VectorDistance(beststart1, v2);
             dist2 = VectorDistance(beststart2, v2);
             //end else
             if dist1 > dist2 {
                 //end else
                 if dist1 > VectorDistance(beststart1, beststart2) {
-                    *beststart2.offset(0 as i32 as isize) =
-                        *v2.offset(0 as i32 as isize); //end if
-                    *beststart2.offset(1 as i32 as isize) =
-                        *v2.offset(1 as i32 as isize); //end if
-                    *beststart2.offset(2 as i32 as isize) =
-                        *v2.offset(2 as i32 as isize)
+                    *beststart2.offset(0 as i32 as isize) = *v2.offset(0 as i32 as isize); //end if
+                    *beststart2.offset(1 as i32 as isize) = *v2.offset(1 as i32 as isize); //end if
+                    *beststart2.offset(2 as i32 as isize) = *v2.offset(2 as i32 as isize)
                 }
             } else if dist2 > VectorDistance(beststart1, beststart2) {
-                *beststart1.offset(0 as i32 as isize) =
-                    *v2.offset(0 as i32 as isize); //end else if
-                *beststart1.offset(1 as i32 as isize) =
-                    *v2.offset(1 as i32 as isize); //end if
-                *beststart1.offset(2 as i32 as isize) =
-                    *v2.offset(2 as i32 as isize)
+                *beststart1.offset(0 as i32 as isize) = *v2.offset(0 as i32 as isize); //end else if
+                *beststart1.offset(1 as i32 as isize) = *v2.offset(1 as i32 as isize); //end if
+                *beststart1.offset(2 as i32 as isize) = *v2.offset(2 as i32 as isize)
             }
             dist1 = VectorDistance(bestend1, p2.as_mut_ptr());
             dist2 = VectorDistance(bestend2, p2.as_mut_ptr());
@@ -3971,9 +3700,7 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
     }
     if VectorBetweenVectors(p3.as_mut_ptr(), v1, v2) != 0 {
         dist = VectorDistance(v3, p3.as_mut_ptr());
-        if dist as f64 > bestdist as f64 - 0.5f64
-            && (dist as f64) < bestdist as f64 + 0.5f64
-        {
+        if dist as f64 > bestdist as f64 - 0.5f64 && (dist as f64) < bestdist as f64 + 0.5f64 {
             dist1 = VectorDistance(beststart1, p3.as_mut_ptr());
             dist2 = VectorDistance(beststart2, p3.as_mut_ptr());
             //end else
@@ -3993,12 +3720,9 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
             dist2 = VectorDistance(bestend2, v3);
             if dist1 > dist2 {
                 if dist1 > VectorDistance(bestend1, bestend2) {
-                    *bestend2.offset(0 as i32 as isize) =
-                        *v3.offset(0 as i32 as isize);
-                    *bestend2.offset(1 as i32 as isize) =
-                        *v3.offset(1 as i32 as isize);
-                    *bestend2.offset(2 as i32 as isize) =
-                        *v3.offset(2 as i32 as isize)
+                    *bestend2.offset(0 as i32 as isize) = *v3.offset(0 as i32 as isize);
+                    *bestend2.offset(1 as i32 as isize) = *v3.offset(1 as i32 as isize);
+                    *bestend2.offset(2 as i32 as isize) = *v3.offset(2 as i32 as isize)
                 }
             } else if dist2 > VectorDistance(bestend1, bestend2) {
                 *bestend1.offset(0 as i32 as isize) = *v3.offset(0 as i32 as isize);
@@ -4024,9 +3748,7 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
     }
     if VectorBetweenVectors(p4.as_mut_ptr(), v1, v2) != 0 {
         dist = VectorDistance(v4, p4.as_mut_ptr());
-        if dist as f64 > bestdist as f64 - 0.5f64
-            && (dist as f64) < bestdist as f64 + 0.5f64
-        {
+        if dist as f64 > bestdist as f64 - 0.5f64 && (dist as f64) < bestdist as f64 + 0.5f64 {
             dist1 = VectorDistance(beststart1, p4.as_mut_ptr());
             dist2 = VectorDistance(beststart2, p4.as_mut_ptr());
             //end else
@@ -4046,12 +3768,9 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
             dist2 = VectorDistance(bestend2, v4);
             if dist1 > dist2 {
                 if dist1 > VectorDistance(bestend1, bestend2) {
-                    *bestend2.offset(0 as i32 as isize) =
-                        *v4.offset(0 as i32 as isize);
-                    *bestend2.offset(1 as i32 as isize) =
-                        *v4.offset(1 as i32 as isize);
-                    *bestend2.offset(2 as i32 as isize) =
-                        *v4.offset(2 as i32 as isize)
+                    *bestend2.offset(0 as i32 as isize) = *v4.offset(0 as i32 as isize);
+                    *bestend2.offset(1 as i32 as isize) = *v4.offset(1 as i32 as isize);
+                    *bestend2.offset(2 as i32 as isize) = *v4.offset(2 as i32 as isize)
                 }
             } else if dist2 > VectorDistance(bestend1, bestend2) {
                 *bestend1.offset(0 as i32 as isize) = *v4.offset(0 as i32 as isize);
@@ -4164,10 +3883,7 @@ pub unsafe extern "C" fn AAS_ClosestEdgePoints(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_Reachability_Jump(
-    mut area1num: i32,
-    mut area2num: i32,
-) -> i32 {
+pub unsafe extern "C" fn AAS_Reachability_Jump(mut area1num: i32, mut area2num: i32) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
@@ -4194,26 +3910,14 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
         0 as *mut crate::src::qcommon::q_shared::vec_t;
     let mut v4: *mut crate::src::qcommon::q_shared::vec_t =
         0 as *mut crate::src::qcommon::q_shared::vec_t;
-    let mut beststart: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0.,
-        0.,
-    ];
-    let mut beststart2: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0.,
-        0.,
-    ];
-    let mut bestend: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0.,
-        0.,
-    ];
-    let mut bestend2: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0.,
-        0.,
-    ];
+    let mut beststart: crate::src::qcommon::q_shared::vec3_t =
+        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
+    let mut beststart2: crate::src::qcommon::q_shared::vec3_t =
+        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
+    let mut bestend: crate::src::qcommon::q_shared::vec3_t =
+        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
+    let mut bestend2: crate::src::qcommon::q_shared::vec3_t =
+        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
     let mut teststart: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut testend: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
@@ -4295,9 +3999,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
         i += 1
     }
     //if area2 is way to high to jump up to
-    if (*area2).mins[2 as i32 as usize]
-        > (*area1).maxs[2 as i32 as usize] + maxjumpheight
-    {
+    if (*area2).mins[2 as i32 as usize] > (*area1).maxs[2 as i32 as usize] + maxjumpheight {
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
     //
@@ -4310,10 +4012,8 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
             .offset(((*area1).firstface + i) as isize);
         face1 = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face1num)
-                    as isize,
-            ) as *mut crate::aasfile_h::aas_face_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face1num) as isize)
+            as *mut crate::aasfile_h::aas_face_t;
         //end for
         //if not a ground face
         if !((*face1).faceflags & 4 as i32 == 0) {
@@ -4325,11 +4025,8 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
                     .offset(((*area2).firstface + j) as isize);
                 face2 = &mut *crate::src::botlib::be_aas_main::aasworld
                     .faces
-                    .offset(
-                        (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
-                            face2num,
-                        ) as isize,
-                    ) as *mut crate::aasfile_h::aas_face_t;
+                    .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face2num) as isize)
+                    as *mut crate::aasfile_h::aas_face_t;
                 //end for
                 //if not a ground face
                 if !((*face2).faceflags & 4 as i32 == 0) {
@@ -4422,8 +4119,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
         // if very close and almost no height difference then the bot can walk
         if bestdist <= 48 as i32 as f32
             && crate::stdlib::fabs(
-                (beststart[2 as i32 as usize] - bestend[2 as i32 as usize])
-                    as f64,
+                (beststart[2 as i32 as usize] - bestend[2 as i32 as usize]) as f64,
             ) < 8 as i32 as f64
         {
             //end if
@@ -4455,14 +4151,10 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
             traveltype = 5 as i32;
             //
             //NOTE: test if the horizontal distance isn't too small
-            dir[0 as i32 as usize] =
-                bestend[0 as i32 as usize] - beststart[0 as i32 as usize];
-            dir[1 as i32 as usize] =
-                bestend[1 as i32 as usize] - beststart[1 as i32 as usize];
-            dir[2 as i32 as usize] =
-                bestend[2 as i32 as usize] - beststart[2 as i32 as usize];
-            dir[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            dir[0 as i32 as usize] = bestend[0 as i32 as usize] - beststart[0 as i32 as usize];
+            dir[1 as i32 as usize] = bestend[1 as i32 as usize] - beststart[1 as i32 as usize];
+            dir[2 as i32 as usize] = bestend[2 as i32 as usize] - beststart[2 as i32 as usize];
+            dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
             if VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
                 < 10 as i32 as f32
             {
@@ -4470,19 +4162,16 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
             }
         }
         //
-        dir[0 as i32 as usize] =
-            bestend[0 as i32 as usize] - beststart[0 as i32 as usize];
-        dir[1 as i32 as usize] =
-            bestend[1 as i32 as usize] - beststart[1 as i32 as usize];
-        dir[2 as i32 as usize] =
-            bestend[2 as i32 as usize] - beststart[2 as i32 as usize];
+        dir[0 as i32 as usize] = bestend[0 as i32 as usize] - beststart[0 as i32 as usize];
+        dir[1 as i32 as usize] = bestend[1 as i32 as usize] - beststart[1 as i32 as usize];
+        dir[2 as i32 as usize] = bestend[2 as i32 as usize] - beststart[2 as i32 as usize];
         crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
-        teststart[0 as i32 as usize] = beststart[0 as i32 as usize]
-            + dir[0 as i32 as usize] * 1 as i32 as f32;
-        teststart[1 as i32 as usize] = beststart[1 as i32 as usize]
-            + dir[1 as i32 as usize] * 1 as i32 as f32;
-        teststart[2 as i32 as usize] = beststart[2 as i32 as usize]
-            + dir[2 as i32 as usize] * 1 as i32 as f32;
+        teststart[0 as i32 as usize] =
+            beststart[0 as i32 as usize] + dir[0 as i32 as usize] * 1 as i32 as f32;
+        teststart[1 as i32 as usize] =
+            beststart[1 as i32 as usize] + dir[1 as i32 as usize] * 1 as i32 as f32;
+        teststart[2 as i32 as usize] =
+            beststart[2 as i32 as usize] + dir[2 as i32 as usize] * 1 as i32 as f32;
         //
         testend[0 as i32 as usize] = teststart[0 as i32 as usize];
         testend[1 as i32 as usize] = teststart[1 as i32 as usize];
@@ -4506,8 +4195,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
             //end if
             if ((*plane).normal[0 as i32 as usize] * up[0 as i32 as usize]
                 + (*plane).normal[1 as i32 as usize] * up[1 as i32 as usize]
-                + (*plane).normal[2 as i32 as usize] * up[2 as i32 as usize])
-                as f64
+                + (*plane).normal[2 as i32 as usize] * up[2 as i32 as usize]) as f64
                 >= 0.7f64
             {
                 // if the bot can stand on the surface
@@ -4516,8 +4204,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
                     & (8 as i32 | 16 as i32)
                     == 0
                 {
-                    if teststart[2 as i32 as usize]
-                        - trace.endpos[2 as i32 as usize]
+                    if teststart[2 as i32 as usize] - trace.endpos[2 as i32 as usize]
                         <= crate::src::botlib::be_aas_move::aassettings.phys_maxbarrier
                     {
                         return crate::src::qcommon::q_shared::qfalse as i32;
@@ -4527,12 +4214,12 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
             }
         }
         //
-        teststart[0 as i32 as usize] = bestend[0 as i32 as usize]
-            + dir[0 as i32 as usize] * -(1 as i32) as f32;
-        teststart[1 as i32 as usize] = bestend[1 as i32 as usize]
-            + dir[1 as i32 as usize] * -(1 as i32) as f32;
-        teststart[2 as i32 as usize] = bestend[2 as i32 as usize]
-            + dir[2 as i32 as usize] * -(1 as i32) as f32;
+        teststart[0 as i32 as usize] =
+            bestend[0 as i32 as usize] + dir[0 as i32 as usize] * -(1 as i32) as f32;
+        teststart[1 as i32 as usize] =
+            bestend[1 as i32 as usize] + dir[1 as i32 as usize] * -(1 as i32) as f32;
+        teststart[2 as i32 as usize] =
+            bestend[2 as i32 as usize] + dir[2 as i32 as usize] * -(1 as i32) as f32;
         //
         testend[0 as i32 as usize] = teststart[0 as i32 as usize];
         testend[1 as i32 as usize] = teststart[1 as i32 as usize];
@@ -4556,8 +4243,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
             //end if
             if ((*plane).normal[0 as i32 as usize] * up[0 as i32 as usize]
                 + (*plane).normal[1 as i32 as usize] * up[1 as i32 as usize]
-                + (*plane).normal[2 as i32 as usize] * up[2 as i32 as usize])
-                as f64
+                + (*plane).normal[2 as i32 as usize] * up[2 as i32 as usize]) as f64
                 >= 0.7f64
             {
                 // if the bot can stand on the surface
@@ -4566,8 +4252,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
                     & (8 as i32 | 16 as i32)
                     == 0
                 {
-                    if teststart[2 as i32 as usize]
-                        - trace.endpos[2 as i32 as usize]
+                    if teststart[2 as i32 as usize] - trace.endpos[2 as i32 as usize]
                         <= crate::src::botlib::be_aas_move::aassettings.phys_maxbarrier
                     {
                         return crate::src::qcommon::q_shared::qfalse as i32;
@@ -4578,24 +4263,18 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
         }
         //
         // get command movement
-        cmdmove[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        cmdmove[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         cmdmove[1 as i32 as usize] = cmdmove[2 as i32 as usize];
         cmdmove[0 as i32 as usize] = cmdmove[1 as i32 as usize];
         if traveltype & 0xffffff as i32 == 5 as i32 {
-            cmdmove[2 as i32 as usize] =
-                crate::src::botlib::be_aas_move::aassettings.phys_jumpvel
+            cmdmove[2 as i32 as usize] = crate::src::botlib::be_aas_move::aassettings.phys_jumpvel
         } else {
-            cmdmove[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t
+            cmdmove[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
         }
         //
-        dir[0 as i32 as usize] =
-            bestend[0 as i32 as usize] - beststart[0 as i32 as usize];
-        dir[1 as i32 as usize] =
-            bestend[1 as i32 as usize] - beststart[1 as i32 as usize];
-        dir[2 as i32 as usize] =
-            bestend[2 as i32 as usize] - beststart[2 as i32 as usize];
+        dir[0 as i32 as usize] = bestend[0 as i32 as usize] - beststart[0 as i32 as usize];
+        dir[1 as i32 as usize] = bestend[1 as i32 as usize] - beststart[1 as i32 as usize];
+        dir[2 as i32 as usize] = bestend[2 as i32 as usize] - beststart[2 as i32 as usize];
         dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
         CrossProduct(
@@ -4604,11 +4283,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
             sidewards.as_mut_ptr(),
         );
         //
-        stopevent = 1 as i32
-            | 4 as i32
-            | 8 as i32
-            | 16 as i32
-            | 32 as i32;
+        stopevent = 1 as i32 | 4 as i32 | 8 as i32 | 16 as i32 | 32 as i32;
         if AAS_AreaClusterPortal(area1num) == 0 && AAS_AreaClusterPortal(area2num) == 0 {
             stopevent |= 4096 as i32
         }
@@ -4635,14 +4310,10 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
                 testend[1 as i32 as usize] = bestend[1 as i32 as usize];
                 testend[2 as i32 as usize] = bestend[2 as i32 as usize]
             }
-            dir[0 as i32 as usize] =
-                testend[0 as i32 as usize] - beststart[0 as i32 as usize];
-            dir[1 as i32 as usize] =
-                testend[1 as i32 as usize] - beststart[1 as i32 as usize];
-            dir[2 as i32 as usize] =
-                testend[2 as i32 as usize] - beststart[2 as i32 as usize];
-            dir[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            dir[0 as i32 as usize] = testend[0 as i32 as usize] - beststart[0 as i32 as usize];
+            dir[1 as i32 as usize] = testend[1 as i32 as usize] - beststart[1 as i32 as usize];
+            dir[2 as i32 as usize] = testend[2 as i32 as usize] - beststart[2 as i32 as usize];
+            dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
             crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
             velocity[0 as i32 as usize] = dir[0 as i32 as usize] * speed;
             velocity[1 as i32 as usize] = dir[1 as i32 as usize] * speed;
@@ -4677,12 +4348,12 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
             }
             //the end position should be in area2, also test a little bit back
             //because the predicted jump could have rushed through the area
-            teststart[0 as i32 as usize] = move_0.endpos[0 as i32 as usize]
-                + dir[0 as i32 as usize] * -(64 as i32) as f32; //end for
-            teststart[1 as i32 as usize] = move_0.endpos[1 as i32 as usize]
-                + dir[1 as i32 as usize] * -(64 as i32) as f32;
-            teststart[2 as i32 as usize] = move_0.endpos[2 as i32 as usize]
-                + dir[2 as i32 as usize] * -(64 as i32) as f32;
+            teststart[0 as i32 as usize] =
+                move_0.endpos[0 as i32 as usize] + dir[0 as i32 as usize] * -(64 as i32) as f32; //end for
+            teststart[1 as i32 as usize] =
+                move_0.endpos[1 as i32 as usize] + dir[1 as i32 as usize] * -(64 as i32) as f32;
+            teststart[2 as i32 as usize] =
+                move_0.endpos[2 as i32 as usize] + dir[2 as i32 as usize] * -(64 as i32) as f32;
             teststart[2 as i32 as usize] += 1 as i32 as f32;
             numareas = crate::src::botlib::be_aas_sample::AAS_TraceAreas(
                 move_0.endpos.as_mut_ptr(),
@@ -4725,12 +4396,9 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
         (*lreach).end[1 as i32 as usize] = bestend[1 as i32 as usize];
         (*lreach).end[2 as i32 as usize] = bestend[2 as i32 as usize];
         (*lreach).traveltype = traveltype;
-        dir[0 as i32 as usize] =
-            bestend[0 as i32 as usize] - beststart[0 as i32 as usize];
-        dir[1 as i32 as usize] =
-            bestend[1 as i32 as usize] - beststart[1 as i32 as usize];
-        dir[2 as i32 as usize] =
-            bestend[2 as i32 as usize] - beststart[2 as i32 as usize];
+        dir[0 as i32 as usize] = bestend[0 as i32 as usize] - beststart[0 as i32 as usize];
+        dir[1 as i32 as usize] = bestend[1 as i32 as usize] - beststart[1 as i32 as usize];
+        dir[2 as i32 as usize] = bestend[2 as i32 as usize] - beststart[2 as i32 as usize];
         height = dir[2 as i32 as usize];
         dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         if traveltype & 0xffffff as i32 == 7 as i32
@@ -4744,24 +4412,21 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
                 as u16
         } else {
             (*lreach).traveltime = (crate::src::botlib::be_aas_move::aassettings.rs_startjump
-                + VectorDistance(bestend.as_mut_ptr(), beststart.as_mut_ptr())
-                    * 240 as i32 as f32
+                + VectorDistance(bestend.as_mut_ptr(), beststart.as_mut_ptr()) * 240 as i32 as f32
                     / crate::src::botlib::be_aas_move::aassettings.phys_maxwalkvelocity)
                 as u16
         }
         //
         if AAS_AreaJumpPad(area2num) == 0 {
-            if AAS_FallDelta(
-                beststart[2 as i32 as usize] - bestend[2 as i32 as usize],
-            ) > crate::src::botlib::be_aas_move::aassettings.phys_falldelta5
+            if AAS_FallDelta(beststart[2 as i32 as usize] - bestend[2 as i32 as usize])
+                > crate::src::botlib::be_aas_move::aassettings.phys_falldelta5
             {
                 //end if
                 (*lreach).traveltime = ((*lreach).traveltime as f32
                     + crate::src::botlib::be_aas_move::aassettings.rs_falldamage5)
                     as u16
-            } else if AAS_FallDelta(
-                beststart[2 as i32 as usize] - bestend[2 as i32 as usize],
-            ) > crate::src::botlib::be_aas_move::aassettings.phys_falldelta10
+            } else if AAS_FallDelta(beststart[2 as i32 as usize] - bestend[2 as i32 as usize])
+                > crate::src::botlib::be_aas_move::aassettings.phys_falldelta10
             {
                 (*lreach).traveltime = ((*lreach).traveltime as f32
                     + crate::src::botlib::be_aas_move::aassettings.rs_falldamage10)
@@ -4791,10 +4456,7 @@ pub unsafe extern "C" fn AAS_Reachability_Jump(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_Reachability_Ladder(
-    mut area1num: i32,
-    mut area2num: i32,
-) -> i32 {
+pub unsafe extern "C" fn AAS_Reachability_Ladder(mut area1num: i32, mut area2num: i32) -> i32 {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
@@ -4875,10 +4537,8 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(
             .offset(((*area1).firstface + i) as isize);
         face1 = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face1num)
-                    as isize,
-            ) as *mut crate::aasfile_h::aas_face_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face1num) as isize)
+            as *mut crate::aasfile_h::aas_face_t;
         //end for
         //if not a ladder face
         if !((*face1).faceflags & 2 as i32 == 0) {
@@ -4890,11 +4550,8 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(
                     .offset(((*area2).firstface + j) as isize);
                 face2 = &mut *crate::src::botlib::be_aas_main::aasworld
                     .faces
-                    .offset(
-                        (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
-                            face2num,
-                        ) as isize,
-                    ) as *mut crate::aasfile_h::aas_face_t;
+                    .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face2num) as isize)
+                    as *mut crate::aasfile_h::aas_face_t;
                 //end for
                 //if not a ladder face
                 if !((*face2).faceflags & 2 as i32 == 0) {
@@ -4945,10 +4602,8 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(
         //get the middle of the shared edge
         sharededge = &mut *crate::src::botlib::be_aas_main::aasworld
             .edges
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(sharededgenum)
-                    as isize,
-            ) as *mut crate::aasfile_h::aas_edge_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(sharededgenum) as isize)
+            as *mut crate::aasfile_h::aas_edge_t;
         firstv = (sharededgenum < 0 as i32) as i32;
         //end if
         v1[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
@@ -4962,64 +4617,54 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(
             .offset((*sharededge).v[firstv as usize] as isize))[2 as i32 as usize];
         v2[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
             .vertexes
-            .offset((*sharededge).v[(firstv == 0) as i32 as usize] as isize))
-            [0 as i32 as usize];
+            .offset((*sharededge).v[(firstv == 0) as i32 as usize] as isize))[0 as i32 as usize];
         v2[1 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
             .vertexes
-            .offset((*sharededge).v[(firstv == 0) as i32 as usize] as isize))
-            [1 as i32 as usize];
+            .offset((*sharededge).v[(firstv == 0) as i32 as usize] as isize))[1 as i32 as usize];
         v2[2 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
             .vertexes
-            .offset((*sharededge).v[(firstv == 0) as i32 as usize] as isize))
-            [2 as i32 as usize];
+            .offset((*sharededge).v[(firstv == 0) as i32 as usize] as isize))[2 as i32 as usize];
+        area1point[0 as i32 as usize] = v1[0 as i32 as usize] + v2[0 as i32 as usize];
+        area1point[1 as i32 as usize] = v1[1 as i32 as usize] + v2[1 as i32 as usize];
+        area1point[2 as i32 as usize] = v1[2 as i32 as usize] + v2[2 as i32 as usize];
         area1point[0 as i32 as usize] =
-            v1[0 as i32 as usize] + v2[0 as i32 as usize];
+            (area1point[0 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
         area1point[1 as i32 as usize] =
-            v1[1 as i32 as usize] + v2[1 as i32 as usize];
+            (area1point[1 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
         area1point[2 as i32 as usize] =
-            v1[2 as i32 as usize] + v2[2 as i32 as usize];
-        area1point[0 as i32 as usize] =
-            (area1point[0 as i32 as usize] as f64 * 0.5f64)
-                as crate::src::qcommon::q_shared::vec_t;
-        area1point[1 as i32 as usize] =
-            (area1point[1 as i32 as usize] as f64 * 0.5f64)
-                as crate::src::qcommon::q_shared::vec_t;
-        area1point[2 as i32 as usize] =
-            (area1point[2 as i32 as usize] as f64 * 0.5f64)
-                as crate::src::qcommon::q_shared::vec_t;
+            (area1point[2 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
         area2point[0 as i32 as usize] = area1point[0 as i32 as usize];
         area2point[1 as i32 as usize] = area1point[1 as i32 as usize];
         area2point[2 as i32 as usize] = area1point[2 as i32 as usize];
-        plane1 = &mut *crate::src::botlib::be_aas_main::aasworld.planes.offset(
-            ((*ladderface1).planenum ^ (ladderface1num < 0 as i32) as i32) as isize,
-        ) as *mut crate::aasfile_h::aas_plane_t;
-        plane2 = &mut *crate::src::botlib::be_aas_main::aasworld.planes.offset(
-            ((*ladderface2).planenum ^ (ladderface2num < 0 as i32) as i32) as isize,
-        ) as *mut crate::aasfile_h::aas_plane_t;
-        sharededgevec[0 as i32 as usize] =
-            v2[0 as i32 as usize] - v1[0 as i32 as usize];
-        sharededgevec[1 as i32 as usize] =
-            v2[1 as i32 as usize] - v1[1 as i32 as usize];
-        sharededgevec[2 as i32 as usize] =
-            v2[2 as i32 as usize] - v1[2 as i32 as usize];
+        plane1 = &mut *crate::src::botlib::be_aas_main::aasworld
+            .planes
+            .offset(((*ladderface1).planenum ^ (ladderface1num < 0 as i32) as i32) as isize)
+            as *mut crate::aasfile_h::aas_plane_t;
+        plane2 = &mut *crate::src::botlib::be_aas_main::aasworld
+            .planes
+            .offset(((*ladderface2).planenum ^ (ladderface2num < 0 as i32) as i32) as isize)
+            as *mut crate::aasfile_h::aas_plane_t;
+        sharededgevec[0 as i32 as usize] = v2[0 as i32 as usize] - v1[0 as i32 as usize];
+        sharededgevec[1 as i32 as usize] = v2[1 as i32 as usize] - v1[1 as i32 as usize];
+        sharededgevec[2 as i32 as usize] = v2[2 as i32 as usize] - v1[2 as i32 as usize];
         CrossProduct(
             (*plane1).normal.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             sharededgevec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             dir.as_mut_ptr(),
         );
         crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
-        area1point[0 as i32 as usize] = area1point[0 as i32 as usize]
-            + dir[0 as i32 as usize] * -(32 as i32) as f32;
-        area1point[1 as i32 as usize] = area1point[1 as i32 as usize]
-            + dir[1 as i32 as usize] * -(32 as i32) as f32;
-        area1point[2 as i32 as usize] = area1point[2 as i32 as usize]
-            + dir[2 as i32 as usize] * -(32 as i32) as f32;
-        area2point[0 as i32 as usize] = area2point[0 as i32 as usize]
-            + dir[0 as i32 as usize] * 32 as i32 as f32;
-        area2point[1 as i32 as usize] = area2point[1 as i32 as usize]
-            + dir[1 as i32 as usize] * 32 as i32 as f32;
-        area2point[2 as i32 as usize] = area2point[2 as i32 as usize]
-            + dir[2 as i32 as usize] * 32 as i32 as f32;
+        area1point[0 as i32 as usize] =
+            area1point[0 as i32 as usize] + dir[0 as i32 as usize] * -(32 as i32) as f32;
+        area1point[1 as i32 as usize] =
+            area1point[1 as i32 as usize] + dir[1 as i32 as usize] * -(32 as i32) as f32;
+        area1point[2 as i32 as usize] =
+            area1point[2 as i32 as usize] + dir[2 as i32 as usize] * -(32 as i32) as f32;
+        area2point[0 as i32 as usize] =
+            area2point[0 as i32 as usize] + dir[0 as i32 as usize] * 32 as i32 as f32;
+        area2point[1 as i32 as usize] =
+            area2point[1 as i32 as usize] + dir[1 as i32 as usize] * 32 as i32 as f32;
+        area2point[2 as i32 as usize] =
+            area2point[2 as i32 as usize] + dir[2 as i32 as usize] * 32 as i32 as f32;
         ladderface1vertical = ((crate::stdlib::fabsf(
             (*plane1).normal[0 as i32 as usize] * up[0 as i32 as usize]
                 + (*plane1).normal[1 as i32 as usize] * up[1 as i32 as usize]
@@ -5037,12 +4682,10 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(
         }
         if ladderface1vertical != 0
             && ladderface2vertical != 0
-            && ((*plane1).normal[0 as i32 as usize]
-                * (*plane2).normal[0 as i32 as usize]
-                + (*plane1).normal[1 as i32 as usize]
-                    * (*plane2).normal[1 as i32 as usize]
-                + (*plane1).normal[2 as i32 as usize]
-                    * (*plane2).normal[2 as i32 as usize]) as f64
+            && ((*plane1).normal[0 as i32 as usize] * (*plane2).normal[0 as i32 as usize]
+                + (*plane1).normal[1 as i32 as usize] * (*plane2).normal[1 as i32 as usize]
+                + (*plane1).normal[2 as i32 as usize] * (*plane2).normal[2 as i32 as usize])
+                as f64
                 > 0.7f64
             && (crate::stdlib::fabsf(
                 sharededgevec[0 as i32 as usize] * up[0 as i32 as usize]
@@ -5074,14 +4717,11 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(
             (*lreach).start[2 as i32 as usize] = area1point[2 as i32 as usize];
             //VectorCopy(area2point, lreach->end);
             (*lreach).end[0 as i32 as usize] = area2point[0 as i32 as usize]
-                + (*plane1).normal[0 as i32 as usize]
-                    * -(3 as i32) as f32;
+                + (*plane1).normal[0 as i32 as usize] * -(3 as i32) as f32;
             (*lreach).end[1 as i32 as usize] = area2point[1 as i32 as usize]
-                + (*plane1).normal[1 as i32 as usize]
-                    * -(3 as i32) as f32;
+                + (*plane1).normal[1 as i32 as usize] * -(3 as i32) as f32;
             (*lreach).end[2 as i32 as usize] = area2point[2 as i32 as usize]
-                + (*plane1).normal[2 as i32 as usize]
-                    * -(3 as i32) as f32;
+                + (*plane1).normal[2 as i32 as usize] * -(3 as i32) as f32;
             (*lreach).traveltype = 6 as i32;
             (*lreach).traveltime = 10 as i32 as u16;
             (*lreach).next = *areareachability.offset(area1num as isize);
@@ -5102,14 +4742,11 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(
             (*lreach).start[2 as i32 as usize] = area2point[2 as i32 as usize];
             //VectorCopy(area1point, lreach->end);
             (*lreach).end[0 as i32 as usize] = area1point[0 as i32 as usize]
-                + (*plane1).normal[0 as i32 as usize]
-                    * -(3 as i32) as f32;
+                + (*plane1).normal[0 as i32 as usize] * -(3 as i32) as f32;
             (*lreach).end[1 as i32 as usize] = area1point[1 as i32 as usize]
-                + (*plane1).normal[1 as i32 as usize]
-                    * -(3 as i32) as f32;
+                + (*plane1).normal[1 as i32 as usize] * -(3 as i32) as f32;
             (*lreach).end[2 as i32 as usize] = area1point[2 as i32 as usize]
-                + (*plane1).normal[2 as i32 as usize]
-                    * -(3 as i32) as f32;
+                + (*plane1).normal[2 as i32 as usize] * -(3 as i32) as f32;
             (*lreach).traveltype = 6 as i32;
             (*lreach).traveltime = 10 as i32 as u16;
             (*lreach).next = *areareachability.offset(area2num as isize);
@@ -5141,14 +4778,11 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(
             (*lreach).end[2 as i32 as usize] = area2point[2 as i32 as usize];
             (*lreach).end[2 as i32 as usize] += 16 as i32 as f32;
             (*lreach).end[0 as i32 as usize] = (*lreach).end[0 as i32 as usize]
-                + (*plane1).normal[0 as i32 as usize]
-                    * -(15 as i32) as f32;
+                + (*plane1).normal[0 as i32 as usize] * -(15 as i32) as f32;
             (*lreach).end[1 as i32 as usize] = (*lreach).end[1 as i32 as usize]
-                + (*plane1).normal[1 as i32 as usize]
-                    * -(15 as i32) as f32;
+                + (*plane1).normal[1 as i32 as usize] * -(15 as i32) as f32;
             (*lreach).end[2 as i32 as usize] = (*lreach).end[2 as i32 as usize]
-                + (*plane1).normal[2 as i32 as usize]
-                    * -(15 as i32) as f32;
+                + (*plane1).normal[2 as i32 as usize] * -(15 as i32) as f32;
             (*lreach).traveltype = 6 as i32;
             (*lreach).traveltime = 10 as i32 as u16;
             (*lreach).next = *areareachability.offset(area1num as isize);
@@ -5183,8 +4817,7 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(
         if ladderface1vertical != 0 {
             //
             //find lowest edge of the ladder face
-            lowestpoint[2 as i32 as usize] =
-                99999 as i32 as crate::src::qcommon::q_shared::vec_t;
+            lowestpoint[2 as i32 as usize] = 99999 as i32 as crate::src::qcommon::q_shared::vec_t;
             //end if
             /*//if slime or lava below the ladder
             //try jump reachability from far towards the ladder
@@ -5245,42 +4878,30 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(
                 //end if
                 v1[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
                     .vertexes
-                    .offset((*edge1).v[0 as i32 as usize] as isize))
-                    [0 as i32 as usize];
+                    .offset((*edge1).v[0 as i32 as usize] as isize))[0 as i32 as usize];
                 v1[1 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
                     .vertexes
-                    .offset((*edge1).v[0 as i32 as usize] as isize))
-                    [1 as i32 as usize];
+                    .offset((*edge1).v[0 as i32 as usize] as isize))[1 as i32 as usize];
                 v1[2 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
                     .vertexes
-                    .offset((*edge1).v[0 as i32 as usize] as isize))
-                    [2 as i32 as usize];
+                    .offset((*edge1).v[0 as i32 as usize] as isize))[2 as i32 as usize];
                 v2[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
                     .vertexes
-                    .offset((*edge1).v[1 as i32 as usize] as isize))
-                    [0 as i32 as usize];
+                    .offset((*edge1).v[1 as i32 as usize] as isize))[0 as i32 as usize];
                 v2[1 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
                     .vertexes
-                    .offset((*edge1).v[1 as i32 as usize] as isize))
-                    [1 as i32 as usize];
+                    .offset((*edge1).v[1 as i32 as usize] as isize))[1 as i32 as usize];
                 v2[2 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
                     .vertexes
-                    .offset((*edge1).v[1 as i32 as usize] as isize))
-                    [2 as i32 as usize];
-                mid[0 as i32 as usize] =
-                    v1[0 as i32 as usize] + v2[0 as i32 as usize];
-                mid[1 as i32 as usize] =
-                    v1[1 as i32 as usize] + v2[1 as i32 as usize];
-                mid[2 as i32 as usize] =
-                    v1[2 as i32 as usize] + v2[2 as i32 as usize];
-                mid[0 as i32 as usize] = (mid[0 as i32 as usize] as f64
-                    * 0.5f64)
+                    .offset((*edge1).v[1 as i32 as usize] as isize))[2 as i32 as usize];
+                mid[0 as i32 as usize] = v1[0 as i32 as usize] + v2[0 as i32 as usize];
+                mid[1 as i32 as usize] = v1[1 as i32 as usize] + v2[1 as i32 as usize];
+                mid[2 as i32 as usize] = v1[2 as i32 as usize] + v2[2 as i32 as usize];
+                mid[0 as i32 as usize] = (mid[0 as i32 as usize] as f64 * 0.5f64)
                     as crate::src::qcommon::q_shared::vec_t;
-                mid[1 as i32 as usize] = (mid[1 as i32 as usize] as f64
-                    * 0.5f64)
+                mid[1 as i32 as usize] = (mid[1 as i32 as usize] as f64 * 0.5f64)
                     as crate::src::qcommon::q_shared::vec_t;
-                mid[2 as i32 as usize] = (mid[2 as i32 as usize] as f64
-                    * 0.5f64)
+                mid[2 as i32 as usize] = (mid[2 as i32 as usize] as f64 * 0.5f64)
                     as crate::src::qcommon::q_shared::vec_t;
                 if mid[2 as i32 as usize] < lowestpoint[2 as i32 as usize] {
                     lowestpoint[0 as i32 as usize] = mid[0 as i32 as usize];
@@ -5324,11 +4945,8 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(
                     .offset(((*area2).firstface + i) as isize);
                 face2 = &mut *crate::src::botlib::be_aas_main::aasworld
                     .faces
-                    .offset(
-                        (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
-                            face2num,
-                        ) as isize,
-                    ) as *mut crate::aasfile_h::aas_face_t;
+                    .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face2num) as isize)
+                    as *mut crate::aasfile_h::aas_face_t;
                 //
                 //
                 //
@@ -5350,10 +4968,8 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(
                         as *mut crate::aasfile_h::aas_plane_t;
                     if (crate::stdlib::fabsf(
                         (*plane2).normal[0 as i32 as usize] * up[0 as i32 as usize]
-                            + (*plane2).normal[1 as i32 as usize]
-                                * up[1 as i32 as usize]
-                            + (*plane2).normal[2 as i32 as usize]
-                                * up[2 as i32 as usize],
+                            + (*plane2).normal[1 as i32 as usize] * up[1 as i32 as usize]
+                            + (*plane2).normal[2 as i32 as usize] * up[2 as i32 as usize],
                     ) as f64)
                         < 0.1f64
                     {
@@ -5369,9 +4985,7 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(
             {
                 //if from another area without vertical ladder faces
                 //if the height is jumpable
-                if start[2 as i32 as usize] - trace.endpos[2 as i32 as usize]
-                    < maxjumpheight
-                {
+                if start[2 as i32 as usize] - trace.endpos[2 as i32 as usize] < maxjumpheight {
                     //create a new reachability link
                     lreach = AAS_AllocReachability();
                     if lreach.is_null() {
@@ -5380,18 +4994,12 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(
                     (*lreach).areanum = area2num;
                     (*lreach).facenum = ladderface1num;
                     (*lreach).edgenum = lowestedgenum;
-                    (*lreach).start[0 as i32 as usize] =
-                        lowestpoint[0 as i32 as usize];
-                    (*lreach).start[1 as i32 as usize] =
-                        lowestpoint[1 as i32 as usize];
-                    (*lreach).start[2 as i32 as usize] =
-                        lowestpoint[2 as i32 as usize];
-                    (*lreach).end[0 as i32 as usize] =
-                        trace.endpos[0 as i32 as usize];
-                    (*lreach).end[1 as i32 as usize] =
-                        trace.endpos[1 as i32 as usize];
-                    (*lreach).end[2 as i32 as usize] =
-                        trace.endpos[2 as i32 as usize];
+                    (*lreach).start[0 as i32 as usize] = lowestpoint[0 as i32 as usize];
+                    (*lreach).start[1 as i32 as usize] = lowestpoint[1 as i32 as usize];
+                    (*lreach).start[2 as i32 as usize] = lowestpoint[2 as i32 as usize];
+                    (*lreach).end[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
+                    (*lreach).end[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
+                    (*lreach).end[2 as i32 as usize] = trace.endpos[2 as i32 as usize];
                     (*lreach).traveltype = 6 as i32;
                     (*lreach).traveltime = 10 as i32 as u16;
                     (*lreach).next = *areareachability.offset(area1num as isize);
@@ -5406,24 +5014,15 @@ pub unsafe extern "C" fn AAS_Reachability_Ladder(
                     (*lreach).areanum = area1num;
                     (*lreach).facenum = ladderface1num;
                     (*lreach).edgenum = lowestedgenum;
-                    (*lreach).start[0 as i32 as usize] =
-                        trace.endpos[0 as i32 as usize];
-                    (*lreach).start[1 as i32 as usize] =
-                        trace.endpos[1 as i32 as usize];
-                    (*lreach).start[2 as i32 as usize] =
-                        trace.endpos[2 as i32 as usize];
-                    (*lreach).end[0 as i32 as usize] = lowestpoint
-                        [0 as i32 as usize]
-                        + (*plane1).normal[0 as i32 as usize]
-                            * -(5 as i32) as f32;
-                    (*lreach).end[1 as i32 as usize] = lowestpoint
-                        [1 as i32 as usize]
-                        + (*plane1).normal[1 as i32 as usize]
-                            * -(5 as i32) as f32;
-                    (*lreach).end[2 as i32 as usize] = lowestpoint
-                        [2 as i32 as usize]
-                        + (*plane1).normal[2 as i32 as usize]
-                            * -(5 as i32) as f32;
+                    (*lreach).start[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
+                    (*lreach).start[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
+                    (*lreach).start[2 as i32 as usize] = trace.endpos[2 as i32 as usize];
+                    (*lreach).end[0 as i32 as usize] = lowestpoint[0 as i32 as usize]
+                        + (*plane1).normal[0 as i32 as usize] * -(5 as i32) as f32;
+                    (*lreach).end[1 as i32 as usize] = lowestpoint[1 as i32 as usize]
+                        + (*plane1).normal[1 as i32 as usize] * -(5 as i32) as f32;
+                    (*lreach).end[2 as i32 as usize] = lowestpoint[2 as i32 as usize]
+                        + (*plane1).normal[2 as i32 as usize] * -(5 as i32) as f32;
                     (*lreach).end[2 as i32 as usize] += 10 as i32 as f32;
                     (*lreach).traveltype = 5 as i32;
                     (*lreach).traveltime = 10 as i32 as u16;
@@ -5574,8 +5173,7 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                     model.as_mut_ptr(),
                 );
                 //#endif REACH_DEBUG
-                angles[2 as i32 as usize] =
-                    0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
                 angles[1 as i32 as usize] = angles[2 as i32 as usize];
                 angles[0 as i32 as usize] = angles[1 as i32 as usize];
                 crate::src::botlib::be_aas_bspq3::AAS_BSPModelMinsMaxsOrigin(
@@ -5679,8 +5277,7 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                     model.as_mut_ptr(),
                 );
                 //#endif REACH_DEBUG
-                angles[2 as i32 as usize] =
-                    0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
                 angles[1 as i32 as usize] = angles[2 as i32 as usize];
                 angles[0 as i32 as usize] = angles[1 as i32 as usize];
                 crate::src::botlib::be_aas_bspq3::AAS_BSPModelMinsMaxsOrigin(
@@ -5817,29 +5414,22 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                                         0 as *mut crate::src::qcommon::q_shared::vec_t,
                                         0 as *mut crate::src::qcommon::q_shared::vec_t,
                                     );
-                                    velocity[0 as i32 as usize] = velocity
-                                        [0 as i32 as usize]
-                                        * 400 as i32 as f32;
-                                    velocity[1 as i32 as usize] = velocity
-                                        [1 as i32 as usize]
-                                        * 400 as i32 as f32;
-                                    velocity[2 as i32 as usize] = velocity
-                                        [2 as i32 as usize]
-                                        * 400 as i32 as f32
+                                    velocity[0 as i32 as usize] =
+                                        velocity[0 as i32 as usize] * 400 as i32 as f32;
+                                    velocity[1 as i32 as usize] =
+                                        velocity[1 as i32 as usize] * 400 as i32 as f32;
+                                    velocity[2 as i32 as usize] =
+                                        velocity[2 as i32 as usize] * 400 as i32 as f32
                                 } else {
                                     velocity[2 as i32 as usize] =
                                         0 as i32 as crate::src::qcommon::q_shared::vec_t;
-                                    velocity[1 as i32 as usize] =
-                                        velocity[2 as i32 as usize];
-                                    velocity[0 as i32 as usize] =
-                                        velocity[1 as i32 as usize]
+                                    velocity[1 as i32 as usize] = velocity[2 as i32 as usize];
+                                    velocity[0 as i32 as usize] = velocity[1 as i32 as usize]
                                 }
                                 cmdmove[2 as i32 as usize] =
                                     0 as i32 as crate::src::qcommon::q_shared::vec_t;
-                                cmdmove[1 as i32 as usize] =
-                                    cmdmove[2 as i32 as usize];
-                                cmdmove[0 as i32 as usize] =
-                                    cmdmove[1 as i32 as usize];
+                                cmdmove[1 as i32 as usize] = cmdmove[2 as i32 as usize];
+                                cmdmove[0 as i32 as usize] = cmdmove[1 as i32 as usize];
                                 crate::src::botlib::be_aas_move::AAS_PredictClientMovement(
                                     &mut move_0 as *mut _ as *mut crate::be_aas_h::aas_clientmove_s,
                                     -(1 as i32),
@@ -5874,12 +5464,9 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                                         target.as_mut_ptr(),
                                     );
                                 }
-                                destorigin[0 as i32 as usize] =
-                                    move_0.endpos[0 as i32 as usize];
-                                destorigin[1 as i32 as usize] =
-                                    move_0.endpos[1 as i32 as usize];
-                                destorigin[2 as i32 as usize] =
-                                    move_0.endpos[2 as i32 as usize];
+                                destorigin[0 as i32 as usize] = move_0.endpos[0 as i32 as usize];
+                                destorigin[1 as i32 as usize] = move_0.endpos[1 as i32 as usize];
+                                destorigin[2 as i32 as usize] = move_0.endpos[2 as i32 as usize];
                                 current_block_61 = 7178192492338286402;
                             }
                         } else {
@@ -5892,34 +5479,31 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                                 //botimport.Print(PRT_MESSAGE, "teleporter brush origin at %f %f %f\n", origin[0], origin[1], origin[2]);
                                 //botimport.Print(PRT_MESSAGE, "teleporter brush mins = %f %f %f\n", mins[0], mins[1], mins[2]);
                                 //botimport.Print(PRT_MESSAGE, "teleporter brush maxs = %f %f %f\n", maxs[0], maxs[1], maxs[2]);
-                                mins[0 as i32 as usize] = origin[0 as i32 as usize]
-                                    + mins[0 as i32 as usize];
-                                mins[1 as i32 as usize] = origin[1 as i32 as usize]
-                                    + mins[1 as i32 as usize];
-                                mins[2 as i32 as usize] = origin[2 as i32 as usize]
-                                    + mins[2 as i32 as usize];
-                                maxs[0 as i32 as usize] = origin[0 as i32 as usize]
-                                    + maxs[0 as i32 as usize];
-                                maxs[1 as i32 as usize] = origin[1 as i32 as usize]
-                                    + maxs[1 as i32 as usize];
-                                maxs[2 as i32 as usize] = origin[2 as i32 as usize]
-                                    + maxs[2 as i32 as usize];
+                                mins[0 as i32 as usize] =
+                                    origin[0 as i32 as usize] + mins[0 as i32 as usize];
+                                mins[1 as i32 as usize] =
+                                    origin[1 as i32 as usize] + mins[1 as i32 as usize];
+                                mins[2 as i32 as usize] =
+                                    origin[2 as i32 as usize] + mins[2 as i32 as usize];
+                                maxs[0 as i32 as usize] =
+                                    origin[0 as i32 as usize] + maxs[0 as i32 as usize];
+                                maxs[1 as i32 as usize] =
+                                    origin[1 as i32 as usize] + maxs[1 as i32 as usize];
+                                maxs[2 as i32 as usize] =
+                                    origin[2 as i32 as usize] + maxs[2 as i32 as usize];
                                 //
-                                mid[0 as i32 as usize] = mins[0 as i32 as usize]
-                                    + maxs[0 as i32 as usize];
-                                mid[1 as i32 as usize] = mins[1 as i32 as usize]
-                                    + maxs[1 as i32 as usize];
-                                mid[2 as i32 as usize] = mins[2 as i32 as usize]
-                                    + maxs[2 as i32 as usize];
                                 mid[0 as i32 as usize] =
-                                    (mid[0 as i32 as usize] as f64 * 0.5f64)
-                                        as crate::src::qcommon::q_shared::vec_t;
+                                    mins[0 as i32 as usize] + maxs[0 as i32 as usize];
                                 mid[1 as i32 as usize] =
-                                    (mid[1 as i32 as usize] as f64 * 0.5f64)
-                                        as crate::src::qcommon::q_shared::vec_t;
+                                    mins[1 as i32 as usize] + maxs[1 as i32 as usize];
                                 mid[2 as i32 as usize] =
-                                    (mid[2 as i32 as usize] as f64 * 0.5f64)
-                                        as crate::src::qcommon::q_shared::vec_t;
+                                    mins[2 as i32 as usize] + maxs[2 as i32 as usize];
+                                mid[0 as i32 as usize] = (mid[0 as i32 as usize] as f64 * 0.5f64)
+                                    as crate::src::qcommon::q_shared::vec_t;
+                                mid[1 as i32 as usize] = (mid[1 as i32 as usize] as f64 * 0.5f64)
+                                    as crate::src::qcommon::q_shared::vec_t;
+                                mid[2 as i32 as usize] = (mid[2 as i32 as usize] as f64 * 0.5f64)
+                                    as crate::src::qcommon::q_shared::vec_t;
                                 //link an invalid (-1) entity
                                 areas = crate::src::botlib::be_aas_sample::AAS_LinkEntityClientBBox(
                                     mins.as_mut_ptr(),
@@ -5951,12 +5535,9 @@ pub unsafe extern "C" fn AAS_Reachability_Teleport() {
                                         (*lreach).areanum = area2num;
                                         (*lreach).facenum = 0 as i32;
                                         (*lreach).edgenum = 0 as i32;
-                                        (*lreach).start[0 as i32 as usize] =
-                                            mid[0 as i32 as usize];
-                                        (*lreach).start[1 as i32 as usize] =
-                                            mid[1 as i32 as usize];
-                                        (*lreach).start[2 as i32 as usize] =
-                                            mid[2 as i32 as usize];
+                                        (*lreach).start[0 as i32 as usize] = mid[0 as i32 as usize];
+                                        (*lreach).start[1 as i32 as usize] = mid[1 as i32 as usize];
+                                        (*lreach).start[2 as i32 as usize] = mid[2 as i32 as usize];
                                         (*lreach).end[0 as i32 as usize] =
                                             destorigin[0 as i32 as usize];
                                         (*lreach).end[1 as i32 as usize] =
@@ -6129,9 +5710,7 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                             &mut height,
                         );
                         if height == 0. {
-                            height = maxs[2 as i32 as usize]
-                                - mins[2 as i32 as usize]
-                                - lip
+                            height = maxs[2 as i32 as usize] - mins[2 as i32 as usize] - lip
                         }
                         //get the speed of the plat
                         crate::src::botlib::be_aas_bspq3::AAS_FloatForBSPEpairKey(
@@ -6146,48 +5725,35 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                         pos2[2 as i32 as usize] -= height;
                         //
                         //get a point just above the plat in the bottom position
-                        mids[0 as i32 as usize] =
-                            mins[0 as i32 as usize] + maxs[0 as i32 as usize];
-                        mids[1 as i32 as usize] =
-                            mins[1 as i32 as usize] + maxs[1 as i32 as usize];
-                        mids[2 as i32 as usize] =
-                            mins[2 as i32 as usize] + maxs[2 as i32 as usize];
-                        platbottom[0 as i32 as usize] = (pos2[0 as i32 as usize]
-                            as f64
+                        mids[0 as i32 as usize] = mins[0 as i32 as usize] + maxs[0 as i32 as usize];
+                        mids[1 as i32 as usize] = mins[1 as i32 as usize] + maxs[1 as i32 as usize];
+                        mids[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
+                        platbottom[0 as i32 as usize] = (pos2[0 as i32 as usize] as f64
                             + mids[0 as i32 as usize] as f64 * 0.5f64)
                             as crate::src::qcommon::q_shared::vec_t;
-                        platbottom[1 as i32 as usize] = (pos2[1 as i32 as usize]
-                            as f64
+                        platbottom[1 as i32 as usize] = (pos2[1 as i32 as usize] as f64
                             + mids[1 as i32 as usize] as f64 * 0.5f64)
                             as crate::src::qcommon::q_shared::vec_t;
-                        platbottom[2 as i32 as usize] = (pos2[2 as i32 as usize]
-                            as f64
+                        platbottom[2 as i32 as usize] = (pos2[2 as i32 as usize] as f64
                             + mids[2 as i32 as usize] as f64 * 0.5f64)
                             as crate::src::qcommon::q_shared::vec_t;
                         platbottom[2 as i32 as usize] = maxs[2 as i32 as usize]
                             - (pos1[2 as i32 as usize] - pos2[2 as i32 as usize])
                             + 2 as i32 as f32;
                         //get a point just above the plat in the top position
-                        mids[0 as i32 as usize] =
-                            mins[0 as i32 as usize] + maxs[0 as i32 as usize];
-                        mids[1 as i32 as usize] =
-                            mins[1 as i32 as usize] + maxs[1 as i32 as usize];
-                        mids[2 as i32 as usize] =
-                            mins[2 as i32 as usize] + maxs[2 as i32 as usize];
-                        plattop[0 as i32 as usize] = (pos2[0 as i32 as usize]
-                            as f64
+                        mids[0 as i32 as usize] = mins[0 as i32 as usize] + maxs[0 as i32 as usize];
+                        mids[1 as i32 as usize] = mins[1 as i32 as usize] + maxs[1 as i32 as usize];
+                        mids[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
+                        plattop[0 as i32 as usize] = (pos2[0 as i32 as usize] as f64
                             + mids[0 as i32 as usize] as f64 * 0.5f64)
                             as crate::src::qcommon::q_shared::vec_t;
-                        plattop[1 as i32 as usize] = (pos2[1 as i32 as usize]
-                            as f64
+                        plattop[1 as i32 as usize] = (pos2[1 as i32 as usize] as f64
                             + mids[1 as i32 as usize] as f64 * 0.5f64)
                             as crate::src::qcommon::q_shared::vec_t;
-                        plattop[2 as i32 as usize] = (pos2[2 as i32 as usize]
-                            as f64
+                        plattop[2 as i32 as usize] = (pos2[2 as i32 as usize] as f64
                             + mids[2 as i32 as usize] as f64 * 0.5f64)
                             as crate::src::qcommon::q_shared::vec_t;
-                        plattop[2 as i32 as usize] =
-                            maxs[2 as i32 as usize] + 2 as i32 as f32;
+                        plattop[2 as i32 as usize] = maxs[2 as i32 as usize] + 2 as i32 as f32;
                         //
                         /*if (!area1num)
                         {
@@ -6204,21 +5770,15 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                         //
                         //botimport.Print(PRT_MESSAGE, "platbottom[2] = %1.1f plattop[2] = %1.1f\n", platbottom[2], plattop[2]);
                         //
-                        mids[0 as i32 as usize] =
-                            mins[0 as i32 as usize] + maxs[0 as i32 as usize];
-                        mids[1 as i32 as usize] =
-                            mins[1 as i32 as usize] + maxs[1 as i32 as usize];
-                        mids[2 as i32 as usize] =
-                            mins[2 as i32 as usize] + maxs[2 as i32 as usize];
-                        mids[0 as i32 as usize] =
-                            (mids[0 as i32 as usize] as f64 * 0.5f64)
-                                as crate::src::qcommon::q_shared::vec_t;
-                        mids[1 as i32 as usize] =
-                            (mids[1 as i32 as usize] as f64 * 0.5f64)
-                                as crate::src::qcommon::q_shared::vec_t;
-                        mids[2 as i32 as usize] =
-                            (mids[2 as i32 as usize] as f64 * 0.5f64)
-                                as crate::src::qcommon::q_shared::vec_t;
+                        mids[0 as i32 as usize] = mins[0 as i32 as usize] + maxs[0 as i32 as usize];
+                        mids[1 as i32 as usize] = mins[1 as i32 as usize] + maxs[1 as i32 as usize];
+                        mids[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
+                        mids[0 as i32 as usize] = (mids[0 as i32 as usize] as f64 * 0.5f64)
+                            as crate::src::qcommon::q_shared::vec_t;
+                        mids[1 as i32 as usize] = (mids[1 as i32 as usize] as f64 * 0.5f64)
+                            as crate::src::qcommon::q_shared::vec_t;
+                        mids[2 as i32 as usize] = (mids[2 as i32 as usize] as f64 * 0.5f64)
+                            as crate::src::qcommon::q_shared::vec_t;
                         //
                         xvals[0 as i32 as usize] = mins[0 as i32 as usize];
                         xvals[1 as i32 as usize] = mids[0 as i32 as usize];
@@ -6247,9 +5807,8 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                                     origin[0 as i32 as usize] + xvals[i as usize];
                                 bottomorg[1 as i32 as usize] =
                                     origin[1 as i32 as usize] + yvals[i as usize]; //end if
-                                bottomorg[2 as i32 as usize] = platbottom
-                                    [2 as i32 as usize]
-                                    + 16 as i32 as f32;
+                                bottomorg[2 as i32 as usize] =
+                                    platbottom[2 as i32 as usize] + 16 as i32 as f32;
                                 //end if
                                 //get a grounded or swim area near the plat in the bottom position
                                 area1num = crate::src::botlib::be_aas_sample::AAS_PointAreaNum(
@@ -6264,8 +5823,7 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                                             break;
                                         }
                                     }
-                                    bottomorg[2 as i32 as usize] +=
-                                        4 as i32 as f32;
+                                    bottomorg[2 as i32 as usize] += 4 as i32 as f32;
                                     area1num = crate::src::botlib::be_aas_sample::AAS_PointAreaNum(
                                         bottomorg.as_mut_ptr(),
                                     );
@@ -6279,28 +5837,20 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                             } else {
                                 //if in solid
                                 //at the middle of the plat
-                                bottomorg[0 as i32 as usize] =
-                                    plattop[0 as i32 as usize];
-                                bottomorg[1 as i32 as usize] =
-                                    plattop[1 as i32 as usize];
-                                bottomorg[2 as i32 as usize] =
-                                    plattop[2 as i32 as usize];
-                                bottomorg[2 as i32 as usize] +=
-                                    24 as i32 as f32;
+                                bottomorg[0 as i32 as usize] = plattop[0 as i32 as usize];
+                                bottomorg[1 as i32 as usize] = plattop[1 as i32 as usize];
+                                bottomorg[2 as i32 as usize] = plattop[2 as i32 as usize];
+                                bottomorg[2 as i32 as usize] += 24 as i32 as f32;
                                 area1num = crate::src::botlib::be_aas_sample::AAS_PointAreaNum(
                                     bottomorg.as_mut_ptr(),
                                 );
                                 if area1num == 0 {
                                     current_block_119 = 5892776923941496671;
                                 } else {
-                                    bottomorg[0 as i32 as usize] =
-                                        platbottom[0 as i32 as usize];
-                                    bottomorg[1 as i32 as usize] =
-                                        platbottom[1 as i32 as usize];
-                                    bottomorg[2 as i32 as usize] =
-                                        platbottom[2 as i32 as usize];
-                                    bottomorg[2 as i32 as usize] +=
-                                        24 as i32 as f32;
+                                    bottomorg[0 as i32 as usize] = platbottom[0 as i32 as usize];
+                                    bottomorg[1 as i32 as usize] = platbottom[1 as i32 as usize];
+                                    bottomorg[2 as i32 as usize] = platbottom[2 as i32 as usize];
+                                    bottomorg[2 as i32 as usize] += 24 as i32 as f32;
                                     current_block_119 = 7385833325316299293;
                                 }
                             }
@@ -6316,50 +5866,31 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                                             maxs[k as usize] += 4 as i32 as f32;
                                             k += 1
                                         }
-                                        xvals_top[0 as i32 as usize] =
-                                            mins[0 as i32 as usize];
-                                        xvals_top[1 as i32 as usize] =
-                                            mids[0 as i32 as usize];
-                                        xvals_top[2 as i32 as usize] =
-                                            maxs[0 as i32 as usize];
-                                        xvals_top[3 as i32 as usize] =
-                                            mids[0 as i32 as usize];
-                                        yvals_top[0 as i32 as usize] =
-                                            mids[1 as i32 as usize];
-                                        yvals_top[1 as i32 as usize] =
-                                            maxs[1 as i32 as usize];
-                                        yvals_top[2 as i32 as usize] =
-                                            mids[1 as i32 as usize];
-                                        yvals_top[3 as i32 as usize] =
-                                            mins[1 as i32 as usize];
+                                        xvals_top[0 as i32 as usize] = mins[0 as i32 as usize];
+                                        xvals_top[1 as i32 as usize] = mids[0 as i32 as usize];
+                                        xvals_top[2 as i32 as usize] = maxs[0 as i32 as usize];
+                                        xvals_top[3 as i32 as usize] = mids[0 as i32 as usize];
+                                        yvals_top[0 as i32 as usize] = mids[1 as i32 as usize];
+                                        yvals_top[1 as i32 as usize] = maxs[1 as i32 as usize];
+                                        yvals_top[2 as i32 as usize] = mids[1 as i32 as usize];
+                                        yvals_top[3 as i32 as usize] = mins[1 as i32 as usize];
                                         //end for
-                                        xvals_top[4 as i32 as usize] =
-                                            mins[0 as i32 as usize];
-                                        xvals_top[5 as i32 as usize] =
-                                            maxs[0 as i32 as usize];
-                                        xvals_top[6 as i32 as usize] =
-                                            maxs[0 as i32 as usize];
-                                        xvals_top[7 as i32 as usize] =
-                                            mins[0 as i32 as usize];
-                                        yvals_top[4 as i32 as usize] =
-                                            maxs[1 as i32 as usize];
-                                        yvals_top[5 as i32 as usize] =
-                                            maxs[1 as i32 as usize];
-                                        yvals_top[6 as i32 as usize] =
-                                            mins[1 as i32 as usize];
-                                        yvals_top[7 as i32 as usize] =
-                                            mins[1 as i32 as usize];
+                                        xvals_top[4 as i32 as usize] = mins[0 as i32 as usize];
+                                        xvals_top[5 as i32 as usize] = maxs[0 as i32 as usize];
+                                        xvals_top[6 as i32 as usize] = maxs[0 as i32 as usize];
+                                        xvals_top[7 as i32 as usize] = mins[0 as i32 as usize];
+                                        yvals_top[4 as i32 as usize] = maxs[1 as i32 as usize];
+                                        yvals_top[5 as i32 as usize] = maxs[1 as i32 as usize];
+                                        yvals_top[6 as i32 as usize] = mins[1 as i32 as usize];
+                                        yvals_top[7 as i32 as usize] = mins[1 as i32 as usize];
                                         j = 0 as i32;
                                         while j < 8 as i32 {
-                                            toporg[0 as i32 as usize] = origin
-                                                [0 as i32 as usize]
-                                                + xvals_top[j as usize];
-                                            toporg[1 as i32 as usize] = origin
-                                                [1 as i32 as usize]
-                                                + yvals_top[j as usize];
-                                            toporg[2 as i32 as usize] = plattop
-                                                [2 as i32 as usize]
-                                                + 16 as i32 as f32;
+                                            toporg[0 as i32 as usize] =
+                                                origin[0 as i32 as usize] + xvals_top[j as usize];
+                                            toporg[1 as i32 as usize] =
+                                                origin[1 as i32 as usize] + yvals_top[j as usize];
+                                            toporg[2 as i32 as usize] =
+                                                plattop[2 as i32 as usize] + 16 as i32 as f32;
                                             //
                                             //
                                             //get a grounded or swim area near the plat in the top position
@@ -6387,8 +5918,7 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                                                             toporg[1 as i32 as usize];
                                                         end[2 as i32 as usize] =
                                                             toporg[2 as i32 as usize];
-                                                        end[2 as i32 as usize] +=
-                                                            1 as i32 as f32;
+                                                        end[2 as i32 as usize] += 1 as i32 as f32;
                                                         trace =
                                                             
                                                             crate::src::botlib::be_aas_sample::AAS_TraceClientBBox(start.as_mut_ptr(),
@@ -6400,16 +5930,13 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                                                                                       as
                                                                                       i32)) as
     crate::be_aas_h::aas_trace_s;
-                                                        if trace.fraction
-                                                            >= 1 as i32 as f32
-                                                        {
+                                                        if trace.fraction >= 1 as i32 as f32 {
                                                             break;
                                                         }
                                                     }
                                                     //end if
                                                 }
-                                                toporg[2 as i32 as usize] +=
-                                                    4 as i32 as f32;
+                                                toporg[2 as i32 as usize] += 4 as i32 as f32;
                                                 area2num =
                                                     crate::src::botlib::be_aas_sample::AAS_PointAreaNum(toporg.as_mut_ptr());
                                                 l += 1
@@ -6428,39 +5955,26 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                                                             != 0)
                                                         {
                                                             //if the reachability start is within the elevator bounding box
-                                                            dir[0 as i32 as usize] =
-                                                                bottomorg
-                                                                    [0 as i32 as usize]
-                                                                    - platbottom
-                                                                        [0 as i32 as usize];
-                                                            dir[1 as i32 as usize] =
-                                                                bottomorg
-                                                                    [1 as i32 as usize]
-                                                                    - platbottom
-                                                                        [1 as i32 as usize];
-                                                            dir[2 as i32 as usize] =
-                                                                bottomorg
-                                                                    [2 as i32 as usize]
-                                                                    - platbottom
-                                                                        [2 as i32 as usize];
+                                                            dir[0 as i32 as usize] = bottomorg
+                                                                [0 as i32 as usize]
+                                                                - platbottom[0 as i32 as usize];
+                                                            dir[1 as i32 as usize] = bottomorg
+                                                                [1 as i32 as usize]
+                                                                - platbottom[1 as i32 as usize];
+                                                            dir[2 as i32 as usize] = bottomorg
+                                                                [2 as i32 as usize]
+                                                                - platbottom[2 as i32 as usize];
                                                             crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
-                                                            dir[0 as i32 as usize] =
-                                                                bottomorg
-                                                                    [0 as i32 as usize]
-                                                                    + 24 as i32
-                                                                        as f32
-                                                                        * dir[0 as i32
-                                                                            as usize];
-                                                            dir[1 as i32 as usize] =
-                                                                bottomorg
-                                                                    [1 as i32 as usize]
-                                                                    + 24 as i32
-                                                                        as f32
-                                                                        * dir[1 as i32
-                                                                            as usize];
+                                                            dir[0 as i32 as usize] = bottomorg
+                                                                [0 as i32 as usize]
+                                                                + 24 as i32 as f32
+                                                                    * dir[0 as i32 as usize];
+                                                            dir[1 as i32 as usize] = bottomorg
+                                                                [1 as i32 as usize]
+                                                                + 24 as i32 as f32
+                                                                    * dir[1 as i32 as usize];
                                                             dir[2 as i32 as usize] =
-                                                                bottomorg
-                                                                    [2 as i32 as usize];
+                                                                bottomorg[2 as i32 as usize];
                                                             //
                                                             p = 0 as i32;
                                                             while p < 3 as i32 {
@@ -6486,24 +6000,24 @@ pub unsafe extern "C" fn AAS_Reachability_Elevator() {
                                                                     (*lreach).edgenum =
                                                                         height as i32;
                                                                     //
-                                                                    (*lreach).start[0 as i32
-                                                                        as usize] = dir
-                                                                        [0 as i32 as usize];
-                                                                    (*lreach).start[1 as i32
-                                                                        as usize] = dir
-                                                                        [1 as i32 as usize];
-                                                                    (*lreach).start[2 as i32
-                                                                        as usize] = dir
-                                                                        [2 as i32 as usize];
-                                                                    (*lreach).end[0 as i32
-                                                                        as usize] = toporg
-                                                                        [0 as i32 as usize];
-                                                                    (*lreach).end[1 as i32
-                                                                        as usize] = toporg
-                                                                        [1 as i32 as usize];
-                                                                    (*lreach).end[2 as i32
-                                                                        as usize] = toporg
-                                                                        [2 as i32 as usize];
+                                                                    (*lreach).start
+                                                                        [0 as i32 as usize] =
+                                                                        dir[0 as i32 as usize];
+                                                                    (*lreach).start
+                                                                        [1 as i32 as usize] =
+                                                                        dir[1 as i32 as usize];
+                                                                    (*lreach).start
+                                                                        [2 as i32 as usize] =
+                                                                        dir[2 as i32 as usize];
+                                                                    (*lreach).end
+                                                                        [0 as i32 as usize] =
+                                                                        toporg[0 as i32 as usize];
+                                                                    (*lreach).end
+                                                                        [1 as i32 as usize] =
+                                                                        toporg[1 as i32 as usize];
+                                                                    (*lreach).end
+                                                                        [2 as i32 as usize] =
+                                                                        toporg[2 as i32 as usize];
                                                                     (*lreach).traveltype =
                                                                         11 as i32;
                                                                     (*lreach).traveltype |=
@@ -6594,26 +6108,14 @@ pub unsafe extern "C" fn AAS_FindFaceReachabilities(
     let mut speed: f32 = 0.;
     let mut hordist: f32 = 0.;
     let mut dist: f32 = 0.;
-    let mut beststart: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0.,
-        0.,
-    ];
-    let mut beststart2: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0.,
-        0.,
-    ];
-    let mut bestend: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0.,
-        0.,
-    ];
-    let mut bestend2: crate::src::qcommon::q_shared::vec3_t = [
-        0 as i32 as crate::src::qcommon::q_shared::vec_t,
-        0.,
-        0.,
-    ];
+    let mut beststart: crate::src::qcommon::q_shared::vec3_t =
+        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
+    let mut beststart2: crate::src::qcommon::q_shared::vec3_t =
+        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
+    let mut bestend: crate::src::qcommon::q_shared::vec3_t =
+        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
+    let mut bestend2: crate::src::qcommon::q_shared::vec3_t =
+        [0 as i32 as crate::src::qcommon::q_shared::vec_t, 0., 0.];
     let mut tmp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut hordir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut testpoint: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
@@ -6646,10 +6148,8 @@ pub unsafe extern "C" fn AAS_FindFaceReachabilities(
                 .offset(((*area).firstface + j) as isize);
             face = &mut *crate::src::botlib::be_aas_main::aasworld
                 .faces
-                .offset(
-                    (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum)
-                        as isize,
-                ) as *mut crate::aasfile_h::aas_face_t;
+                .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
+                as *mut crate::aasfile_h::aas_face_t;
             //end for
             //if not a ground face
             if !((*face).faceflags & 4 as i32 == 0) {
@@ -6738,14 +6238,10 @@ pub unsafe extern "C" fn AAS_FindFaceReachabilities(
                 bestend[2 as i32 as usize] = tmp[2 as i32 as usize]
             }
             //
-            hordir[0 as i32 as usize] =
-                bestend[0 as i32 as usize] - beststart[0 as i32 as usize];
-            hordir[1 as i32 as usize] =
-                bestend[1 as i32 as usize] - beststart[1 as i32 as usize];
-            hordir[2 as i32 as usize] =
-                bestend[2 as i32 as usize] - beststart[2 as i32 as usize];
-            hordir[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            hordir[0 as i32 as usize] = bestend[0 as i32 as usize] - beststart[0 as i32 as usize];
+            hordir[1 as i32 as usize] = bestend[1 as i32 as usize] - beststart[1 as i32 as usize];
+            hordir[2 as i32 as usize] = bestend[2 as i32 as usize] - beststart[2 as i32 as usize];
+            hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
             hordist =
                 VectorLength(hordir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
             //
@@ -6756,13 +6252,10 @@ pub unsafe extern "C" fn AAS_FindFaceReachabilities(
                     ))
             {
                 //the end point should not be significantly higher than the start point
-                if !(bestend[2 as i32 as usize] - 32 as i32 as f32
-                    > beststart[2 as i32 as usize])
-                {
+                if !(bestend[2 as i32 as usize] - 32 as i32 as f32 > beststart[2 as i32 as usize]) {
                     //don't fall down too far
                     if !(bestend[2 as i32 as usize]
-                        < beststart[2 as i32 as usize]
-                            - 128 as i32 as f32)
+                        < beststart[2 as i32 as usize] - 128 as i32 as f32)
                     {
                         //the distance should not be too far
                         if hordist > 32 as i32 as f32 {
@@ -6786,25 +6279,17 @@ pub unsafe extern "C" fn AAS_FindFaceReachabilities(
                             3276175668257526147 => {}
                             _ => {
                                 //
-                                beststart[2 as i32 as usize] +=
-                                    1 as i32 as f32;
-                                bestend[2 as i32 as usize] +=
-                                    1 as i32 as f32;
+                                beststart[2 as i32 as usize] += 1 as i32 as f32;
+                                bestend[2 as i32 as usize] += 1 as i32 as f32;
                                 //
                                 if towardsface != 0 {
-                                    testpoint[0 as i32 as usize] =
-                                        bestend[0 as i32 as usize];
-                                    testpoint[1 as i32 as usize] =
-                                        bestend[1 as i32 as usize];
-                                    testpoint[2 as i32 as usize] =
-                                        bestend[2 as i32 as usize]
+                                    testpoint[0 as i32 as usize] = bestend[0 as i32 as usize];
+                                    testpoint[1 as i32 as usize] = bestend[1 as i32 as usize];
+                                    testpoint[2 as i32 as usize] = bestend[2 as i32 as usize]
                                 } else {
-                                    testpoint[0 as i32 as usize] =
-                                        beststart[0 as i32 as usize];
-                                    testpoint[1 as i32 as usize] =
-                                        beststart[1 as i32 as usize];
-                                    testpoint[2 as i32 as usize] =
-                                        beststart[2 as i32 as usize]
+                                    testpoint[0 as i32 as usize] = beststart[0 as i32 as usize];
+                                    testpoint[1 as i32 as usize] = beststart[1 as i32 as usize];
+                                    testpoint[2 as i32 as usize] = beststart[2 as i32 as usize]
                                 }
                                 if !bestfaceplane.is_null() {
                                     testpoint[2 as i32 as usize] = ((*bestfaceplane).dist
@@ -6829,8 +6314,7 @@ pub unsafe extern "C" fn AAS_FindFaceReachabilities(
                                 {
                                     //end if
                                     //if the faces are not overlapping then only go down
-                                    if bestend[2 as i32 as usize]
-                                        - 16 as i32 as f32
+                                    if bestend[2 as i32 as usize] - 16 as i32 as f32
                                         > beststart[2 as i32 as usize]
                                     {
                                         current_block_61 = 3276175668257526147;
@@ -7030,21 +6514,15 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                         maxs[2 as i32 as usize] =
                             maxs[2 as i32 as usize] + origin[2 as i32 as usize];
                         //
-                        mid[0 as i32 as usize] =
-                            mins[0 as i32 as usize] + maxs[0 as i32 as usize];
-                        mid[1 as i32 as usize] =
-                            mins[1 as i32 as usize] + maxs[1 as i32 as usize];
-                        mid[2 as i32 as usize] =
-                            mins[2 as i32 as usize] + maxs[2 as i32 as usize];
-                        mid[0 as i32 as usize] =
-                            (mid[0 as i32 as usize] as f64 * 0.5f64)
-                                as crate::src::qcommon::q_shared::vec_t;
-                        mid[1 as i32 as usize] =
-                            (mid[1 as i32 as usize] as f64 * 0.5f64)
-                                as crate::src::qcommon::q_shared::vec_t;
-                        mid[2 as i32 as usize] =
-                            (mid[2 as i32 as usize] as f64 * 0.5f64)
-                                as crate::src::qcommon::q_shared::vec_t;
+                        mid[0 as i32 as usize] = mins[0 as i32 as usize] + maxs[0 as i32 as usize];
+                        mid[1 as i32 as usize] = mins[1 as i32 as usize] + maxs[1 as i32 as usize];
+                        mid[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
+                        mid[0 as i32 as usize] = (mid[0 as i32 as usize] as f64 * 0.5f64)
+                            as crate::src::qcommon::q_shared::vec_t;
+                        mid[1 as i32 as usize] = (mid[1 as i32 as usize] as f64 * 0.5f64)
+                            as crate::src::qcommon::q_shared::vec_t;
+                        mid[2 as i32 as usize] = (mid[2 as i32 as usize] as f64 * 0.5f64)
+                            as crate::src::qcommon::q_shared::vec_t;
                         origin[0 as i32 as usize] = mid[0 as i32 as usize];
                         origin[1 as i32 as usize] = mid[1 as i32 as usize];
                         origin[2 as i32 as usize] = mid[2 as i32 as usize];
@@ -7106,8 +6584,7 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                             //+ player origin to ground dist
                             start_edgeverts[i as usize][2 as i32 as usize] +=
                                 maxs[2 as i32 as usize] - mid[2 as i32 as usize]; //+ bbox maxs z
-                            start_edgeverts[i as usize][2 as i32 as usize] +=
-                                24 as i32 as f32;
+                            start_edgeverts[i as usize][2 as i32 as usize] += 24 as i32 as f32;
                             i += 1
                         }
                         start_edgeverts[0 as i32 as usize][0 as i32 as usize] +=
@@ -7127,8 +6604,7 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                         start_edgeverts[3 as i32 as usize][1 as i32 as usize] +=
                             maxs[1 as i32 as usize] - mid[1 as i32 as usize];
                         //
-                        start_plane.dist =
-                            start_edgeverts[0 as i32 as usize][2 as i32 as usize];
+                        start_plane.dist = start_edgeverts[0 as i32 as usize][2 as i32 as usize];
                         start_plane.normal[0 as i32 as usize] =
                             0 as i32 as crate::src::qcommon::q_shared::vec_t;
                         start_plane.normal[1 as i32 as usize] =
@@ -7147,8 +6623,7 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                             //+ player origin to ground dist
                             end_edgeverts[i as usize][2 as i32 as usize] +=
                                 maxs[2 as i32 as usize] - mid[2 as i32 as usize]; //+ bbox maxs z
-                            end_edgeverts[i as usize][2 as i32 as usize] +=
-                                24 as i32 as f32;
+                            end_edgeverts[i as usize][2 as i32 as usize] += 24 as i32 as f32;
                             i += 1
                         }
                         end_edgeverts[0 as i32 as usize][0 as i32 as usize] +=
@@ -7168,8 +6643,7 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                         end_edgeverts[3 as i32 as usize][1 as i32 as usize] +=
                             maxs[1 as i32 as usize] - mid[1 as i32 as usize];
                         //
-                        end_plane.dist =
-                            end_edgeverts[0 as i32 as usize][2 as i32 as usize];
+                        end_plane.dist = end_edgeverts[0 as i32 as usize][2 as i32 as usize];
                         end_plane.normal[0 as i32 as usize] =
                             0 as i32 as crate::src::qcommon::q_shared::vec_t;
                         end_plane.normal[1 as i32 as usize] =
@@ -7177,24 +6651,16 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                         end_plane.normal[2 as i32 as usize] =
                             1 as i32 as crate::src::qcommon::q_shared::vec_t;
                         //
-                        move_start_top[0 as i32 as usize] =
-                            move_start[0 as i32 as usize]; //+ bbox maxs z
-                        move_start_top[1 as i32 as usize] =
-                            move_start[1 as i32 as usize]; //+ bbox maxs z
-                        move_start_top[2 as i32 as usize] =
-                            move_start[2 as i32 as usize];
+                        move_start_top[0 as i32 as usize] = move_start[0 as i32 as usize]; //+ bbox maxs z
+                        move_start_top[1 as i32 as usize] = move_start[1 as i32 as usize]; //+ bbox maxs z
+                        move_start_top[2 as i32 as usize] = move_start[2 as i32 as usize];
                         move_start_top[2 as i32 as usize] +=
-                            maxs[2 as i32 as usize] - mid[2 as i32 as usize]
-                                + 24 as i32 as f32;
-                        move_end_top[0 as i32 as usize] =
-                            move_end[0 as i32 as usize];
-                        move_end_top[1 as i32 as usize] =
-                            move_end[1 as i32 as usize];
-                        move_end_top[2 as i32 as usize] =
-                            move_end[2 as i32 as usize];
-                        move_end_top[2 as i32 as usize] += maxs[2 as i32 as usize]
-                            - mid[2 as i32 as usize]
-                            + 24 as i32 as f32;
+                            maxs[2 as i32 as usize] - mid[2 as i32 as usize] + 24 as i32 as f32;
+                        move_end_top[0 as i32 as usize] = move_end[0 as i32 as usize];
+                        move_end_top[1 as i32 as usize] = move_end[1 as i32 as usize];
+                        move_end_top[2 as i32 as usize] = move_end[2 as i32 as usize];
+                        move_end_top[2 as i32 as usize] +=
+                            maxs[2 as i32 as usize] - mid[2 as i32 as usize] + 24 as i32 as f32;
                         //
                         if !(crate::src::botlib::be_aas_sample::AAS_PointAreaNum(
                             move_start_top.as_mut_ptr(),
@@ -7288,8 +6754,8 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                                             dir[2 as i32 as usize] = (*startreach).start
                                                 [2 as i32 as usize]
                                                 - org[2 as i32 as usize];
-                                            dir[2 as i32 as usize] = 0 as i32
-                                                as crate::src::qcommon::q_shared::vec_t;
+                                            dir[2 as i32 as usize] =
+                                                0 as i32 as crate::src::qcommon::q_shared::vec_t;
                                             crate::src::qcommon::q_math::VectorNormalize(
                                                 dir.as_mut_ptr(),
                                             );
@@ -7301,32 +6767,24 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                                                 (*startreach).start[2 as i32 as usize];
                                             start[0 as i32 as usize] = (*startreach).start
                                                 [0 as i32 as usize]
-                                                + dir[0 as i32 as usize]
-                                                    * 1 as i32 as f32;
+                                                + dir[0 as i32 as usize] * 1 as i32 as f32;
                                             start[1 as i32 as usize] = (*startreach).start
                                                 [1 as i32 as usize]
-                                                + dir[1 as i32 as usize]
-                                                    * 1 as i32 as f32;
+                                                + dir[1 as i32 as usize] * 1 as i32 as f32;
                                             start[2 as i32 as usize] = (*startreach).start
                                                 [2 as i32 as usize]
-                                                + dir[2 as i32 as usize]
-                                                    * 1 as i32 as f32;
-                                            start[2 as i32 as usize] +=
-                                                1 as i32 as f32;
+                                                + dir[2 as i32 as usize] * 1 as i32 as f32;
+                                            start[2 as i32 as usize] += 1 as i32 as f32;
                                             end[0 as i32 as usize] = (*startreach).start
                                                 [0 as i32 as usize]
-                                                + dir[0 as i32 as usize]
-                                                    * 16 as i32 as f32;
+                                                + dir[0 as i32 as usize] * 16 as i32 as f32;
                                             end[1 as i32 as usize] = (*startreach).start
                                                 [1 as i32 as usize]
-                                                + dir[1 as i32 as usize]
-                                                    * 16 as i32 as f32;
+                                                + dir[1 as i32 as usize] * 16 as i32 as f32;
                                             end[2 as i32 as usize] = (*startreach).start
                                                 [2 as i32 as usize]
-                                                + dir[2 as i32 as usize]
-                                                    * 16 as i32 as f32;
-                                            end[2 as i32 as usize] +=
-                                                1 as i32 as f32;
+                                                + dir[2 as i32 as usize] * 16 as i32 as f32;
+                                            end[2 as i32 as usize] += 1 as i32 as f32;
                                             //
                                             numareas =
                                                 crate::src::botlib::be_aas_sample::AAS_TraceAreas(
@@ -7338,23 +6796,18 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                                                 );
                                             if !(numareas <= 0 as i32) {
                                                 if numareas > 1 as i32 {
-                                                    (*startreach).start
-                                                        [0 as i32 as usize] = points
+                                                    (*startreach).start[0 as i32 as usize] = points
                                                         [1 as i32 as usize]
                                                         [0 as i32 as usize];
-                                                    (*startreach).start
-                                                        [1 as i32 as usize] = points
+                                                    (*startreach).start[1 as i32 as usize] = points
                                                         [1 as i32 as usize]
                                                         [1 as i32 as usize];
                                                     (*startreach).start[2 as i32 as usize] =
-                                                        points[1 as i32 as usize]
-                                                            [2 as i32 as usize]
+                                                        points[1 as i32 as usize][2 as i32 as usize]
                                                 } else {
-                                                    (*startreach).start
-                                                        [0 as i32 as usize] =
+                                                    (*startreach).start[0 as i32 as usize] =
                                                         end[0 as i32 as usize];
-                                                    (*startreach).start
-                                                        [1 as i32 as usize] =
+                                                    (*startreach).start[1 as i32 as usize] =
                                                         end[1 as i32 as usize];
                                                     (*startreach).start[2 as i32 as usize] =
                                                         end[2 as i32 as usize]
@@ -7522,9 +6975,7 @@ pub unsafe extern "C" fn AAS_Reachability_FuncBobbing() {
                                         endreach = nextendreach
                                     }
                                     //only go up with func_bobbing entities that go up and down
-                                    if spawnflags & 1 as i32 == 0
-                                        && spawnflags & 2 as i32 == 0
-                                    {
+                                    if spawnflags & 1 as i32 == 0 && spawnflags & 2 as i32 == 0 {
                                         break;
                                     }
                                     i += 1
@@ -7739,9 +7190,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                             velocity[2 as i32 as usize] as f64,
                         );
                         //if there is a horizontal velocity check for a reachability without air control
-                        if velocity[0 as i32 as usize] != 0.
-                            || velocity[1 as i32 as usize] != 0.
-                        {
+                        if velocity[0 as i32 as usize] != 0. || velocity[1 as i32 as usize] != 0. {
                             cmdmove[0 as i32 as usize] =
                                 0 as i32 as crate::src::qcommon::q_shared::vec_t; //end if
                             cmdmove[1 as i32 as usize] =
@@ -7796,18 +7245,12 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                 if link.is_null() {
                                     break;
                                 }
-                                areastart[0 as i32 as usize] =
-                                    move_0.endpos[0 as i32 as usize];
-                                areastart[1 as i32 as usize] =
-                                    move_0.endpos[1 as i32 as usize];
-                                areastart[2 as i32 as usize] =
-                                    move_0.endpos[2 as i32 as usize];
-                                velocity[0 as i32 as usize] =
-                                    move_0.velocity[0 as i32 as usize];
-                                velocity[1 as i32 as usize] =
-                                    move_0.velocity[1 as i32 as usize];
-                                velocity[2 as i32 as usize] =
-                                    move_0.velocity[2 as i32 as usize];
+                                areastart[0 as i32 as usize] = move_0.endpos[0 as i32 as usize];
+                                areastart[1 as i32 as usize] = move_0.endpos[1 as i32 as usize];
+                                areastart[2 as i32 as usize] = move_0.endpos[2 as i32 as usize];
+                                velocity[0 as i32 as usize] = move_0.velocity[0 as i32 as usize];
+                                velocity[1 as i32 as usize] = move_0.velocity[1 as i32 as usize];
+                                velocity[2 as i32 as usize] = move_0.velocity[2 as i32 as usize];
                                 i += 1
                             }
                             if area2num != 0 && i < 20 as i32 {
@@ -7826,8 +7269,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                             }
                                             (*lreach).areanum = area2num;
                                             //NOTE: the facenum is the Z velocity
-                                            (*lreach).facenum =
-                                                velocity[2 as i32 as usize] as i32;
+                                            (*lreach).facenum = velocity[2 as i32 as usize] as i32;
                                             //NOTE: the edgenum is the horizontal velocity
                                             (*lreach).edgenum = crate::stdlib::sqrt(
                                                 (velocity[0 as i32 as usize]
@@ -7870,12 +7312,10 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                             }
                         }
                         //
-                        if !(crate::stdlib::fabs(
-                            velocity[0 as i32 as usize] as f64,
-                        ) > 100 as i32 as f64
-                            || crate::stdlib::fabs(
-                                velocity[1 as i32 as usize] as f64,
-                            ) > 100 as i32 as f64)
+                        if !(crate::stdlib::fabs(velocity[0 as i32 as usize] as f64)
+                            > 100 as i32 as f64
+                            || crate::stdlib::fabs(velocity[1 as i32 as usize] as f64)
+                                > 100 as i32 as f64)
                         {
                             //check for areas we can reach with air control
                             area2num = 1 as i32; //end for
@@ -7924,10 +7364,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                         face2 = &mut *crate::src::botlib::be_aas_main::aasworld
                                             .faces
                                             .offset((::libc::abs
-                                                as unsafe extern "C" fn(
-                                                    _: i32,
-                                                )
-                                                    -> i32)(
+                                                as unsafe extern "C" fn(_: i32) -> i32)(
                                                 face2num
                                             )
                                                 as isize)
@@ -7950,9 +7387,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                                                                   areastart.as_mut_ptr(),
                                                                                   facecenter.as_mut_ptr(),
                                                                                   &mut speed);
-                                                if ret != 0
-                                                    && speed < 150 as i32 as f32
-                                                {
+                                                if ret != 0 && speed < 150 as i32 as f32 {
                                                     //direction towards the face center
                                                     dir[0 as i32 as usize] = facecenter
                                                         [0 as i32 as usize]
@@ -7963,8 +7398,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                                     dir[2 as i32 as usize] = facecenter
                                                         [2 as i32 as usize]
                                                         - areastart[2 as i32 as usize];
-                                                    dir[2 as i32 as usize] = 0
-                                                        as i32
+                                                    dir[2 as i32 as usize] = 0 as i32
                                                         as crate::src::qcommon::q_shared::vec_t;
                                                     //end if
                                                     //hordist = VectorNormalize(dir);
@@ -8027,9 +7461,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                                                               visualize);
                                                     if move_0.frames < 30 as i32
                                                         && move_0.stopevent
-                                                            & (8 as i32
-                                                                | 16 as i32
-                                                                | 32 as i32)
+                                                            & (8 as i32 | 16 as i32 | 32 as i32)
                                                             == 0
                                                         && move_0.stopevent
                                                             & (1024 as i32
@@ -8072,8 +7504,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                                                             move_0.endarea;
                                                                         //NOTE: the facenum is the Z velocity
                                                                         (*lreach).facenum = velocity
-                                                                            [2 as i32
-                                                                                as usize]
+                                                                            [2 as i32 as usize]
                                                                             as i32;
                                                                         //NOTE: the edgenum is the horizontal velocity
                                                                         (*lreach).edgenum
@@ -8105,36 +7536,30 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
                                                                                      f64)
                                                                                 as
                                                                                 i32;
-                                                                        (*lreach).start[0
-                                                                            as i32
-                                                                            as usize] = areastart[0
-                                                                            as i32
-                                                                            as usize];
-                                                                        (*lreach).start[1
-                                                                            as i32
-                                                                            as usize] = areastart[1
-                                                                            as i32
-                                                                            as usize];
-                                                                        (*lreach).start[2
-                                                                            as i32
-                                                                            as usize] = areastart[2
-                                                                            as i32
-                                                                            as usize];
-                                                                        (*lreach).end[0
-                                                                            as i32
-                                                                            as usize] = facecenter
-                                                                            [0 as i32
-                                                                                as usize];
-                                                                        (*lreach).end[1
-                                                                            as i32
-                                                                            as usize] = facecenter
-                                                                            [1 as i32
-                                                                                as usize];
-                                                                        (*lreach).end[2
-                                                                            as i32
-                                                                            as usize] = facecenter
-                                                                            [2 as i32
-                                                                                as usize];
+                                                                        (*lreach).start
+                                                                            [0 as i32 as usize] =
+                                                                            areastart
+                                                                                [0 as i32 as usize];
+                                                                        (*lreach).start
+                                                                            [1 as i32 as usize] =
+                                                                            areastart
+                                                                                [1 as i32 as usize];
+                                                                        (*lreach).start
+                                                                            [2 as i32 as usize] =
+                                                                            areastart
+                                                                                [2 as i32 as usize];
+                                                                        (*lreach).end
+                                                                            [0 as i32 as usize] =
+                                                                            facecenter
+                                                                                [0 as i32 as usize];
+                                                                        (*lreach).end
+                                                                            [1 as i32 as usize] =
+                                                                            facecenter
+                                                                                [1 as i32 as usize];
+                                                                        (*lreach).end
+                                                                            [2 as i32 as usize] =
+                                                                            facecenter
+                                                                                [2 as i32 as usize];
                                                                         (*lreach).traveltype =
                                                                             18 as i32;
                                                                         (*lreach).traveltype |=
@@ -8201,10 +7626,7 @@ pub unsafe extern "C" fn AAS_Reachability_JumpPad() {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_Reachability_Grapple(
-    mut area1num: i32,
-    mut area2num: i32,
-) -> i32 {
+pub unsafe extern "C" fn AAS_Reachability_Grapple(mut area1num: i32, mut area2num: i32) -> i32 {
     let mut face2num: i32 = 0;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -8346,10 +7768,8 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(
             .offset(((*area2).firstface + i) as isize);
         face2 = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face2num)
-                    as isize,
-            ) as *mut crate::aasfile_h::aas_face_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face2num) as isize)
+            as *mut crate::aasfile_h::aas_face_t;
         //if it is not a solid face
         if !((*face2).faceflags & 1 as i32 == 0) {
             //direction towards the first vertex of the face
@@ -8364,12 +7784,9 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(
                 .v[0 as i32 as usize] as isize,
             ))
             .as_mut_ptr();
-            dir[0 as i32 as usize] =
-                *v.offset(0 as i32 as isize) - areastart[0 as i32 as usize];
-            dir[1 as i32 as usize] =
-                *v.offset(1 as i32 as isize) - areastart[1 as i32 as usize];
-            dir[2 as i32 as usize] =
-                *v.offset(2 as i32 as isize) - areastart[2 as i32 as usize];
+            dir[0 as i32 as usize] = *v.offset(0 as i32 as isize) - areastart[0 as i32 as usize];
+            dir[1 as i32 as usize] = *v.offset(1 as i32 as isize) - areastart[1 as i32 as usize];
+            dir[2 as i32 as usize] = *v.offset(2 as i32 as isize) - areastart[2 as i32 as usize];
             //if the face plane is facing away
             if !((*crate::src::botlib::be_aas_main::aasworld
                 .planes
@@ -8413,16 +7830,15 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(
                         < 0 as i32 as f32)
                     {
                         //direction towards the face center
-                        dir[0 as i32 as usize] = facecenter[0 as i32 as usize]
-                            - areastart[0 as i32 as usize];
-                        dir[1 as i32 as usize] = facecenter[1 as i32 as usize]
-                            - areastart[1 as i32 as usize];
-                        dir[2 as i32 as usize] = facecenter[2 as i32 as usize]
-                            - areastart[2 as i32 as usize];
+                        dir[0 as i32 as usize] =
+                            facecenter[0 as i32 as usize] - areastart[0 as i32 as usize];
+                        dir[1 as i32 as usize] =
+                            facecenter[1 as i32 as usize] - areastart[1 as i32 as usize];
+                        dir[2 as i32 as usize] =
+                            facecenter[2 as i32 as usize] - areastart[2 as i32 as usize];
                         //
                         z = dir[2 as i32 as usize];
-                        dir[2 as i32 as usize] =
-                            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                        dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
                         hordist = VectorLength(
                             dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                         );
@@ -8440,35 +7856,26 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(
                                     ))
                                 {
                                     //
-                                    start[0 as i32 as usize] =
-                                        facecenter[0 as i32 as usize];
-                                    start[1 as i32 as usize] =
-                                        facecenter[1 as i32 as usize];
-                                    start[2 as i32 as usize] =
-                                        facecenter[2 as i32 as usize];
-                                    end[0 as i32 as usize] = facecenter
-                                        [0 as i32 as usize]
+                                    start[0 as i32 as usize] = facecenter[0 as i32 as usize];
+                                    start[1 as i32 as usize] = facecenter[1 as i32 as usize];
+                                    start[2 as i32 as usize] = facecenter[2 as i32 as usize];
+                                    end[0 as i32 as usize] = facecenter[0 as i32 as usize]
                                         + (*crate::src::botlib::be_aas_main::aasworld
                                             .planes
                                             .offset((*face2).planenum as isize))
-                                        .normal
-                                            [0 as i32 as usize]
+                                        .normal[0 as i32 as usize]
                                             * -(500 as i32) as f32;
-                                    end[1 as i32 as usize] = facecenter
-                                        [1 as i32 as usize]
+                                    end[1 as i32 as usize] = facecenter[1 as i32 as usize]
                                         + (*crate::src::botlib::be_aas_main::aasworld
                                             .planes
                                             .offset((*face2).planenum as isize))
-                                        .normal
-                                            [1 as i32 as usize]
+                                        .normal[1 as i32 as usize]
                                             * -(500 as i32) as f32;
-                                    end[2 as i32 as usize] = facecenter
-                                        [2 as i32 as usize]
+                                    end[2 as i32 as usize] = facecenter[2 as i32 as usize]
                                         + (*crate::src::botlib::be_aas_main::aasworld
                                             .planes
                                             .offset((*face2).planenum as isize))
-                                        .normal
-                                            [2 as i32 as usize]
+                                        .normal[2 as i32 as usize]
                                             * -(500 as i32) as f32;
                                     //
                                     bsptrace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
@@ -8482,41 +7889,28 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(
                                         as crate::botlib_h::bsp_trace_s;
                                     //the grapple won't stick to the sky and the grapple point should be near the AAS wall
                                     if !(bsptrace.surface.flags & 0x4 as i32 != 0
-                                        || bsptrace.fraction * 500 as i32 as f32
-                                            > 32 as i32 as f32)
+                                        || bsptrace.fraction * 500 as i32 as f32 > 32 as i32 as f32)
                                     {
                                         //trace a full bounding box from the area center on the ground to
                                         //the center of the face
-                                        dir[0 as i32 as usize] = facecenter
-                                            [0 as i32 as usize]
+                                        dir[0 as i32 as usize] = facecenter[0 as i32 as usize]
                                             - areastart[0 as i32 as usize];
-                                        dir[1 as i32 as usize] = facecenter
-                                            [1 as i32 as usize]
+                                        dir[1 as i32 as usize] = facecenter[1 as i32 as usize]
                                             - areastart[1 as i32 as usize];
-                                        dir[2 as i32 as usize] = facecenter
-                                            [2 as i32 as usize]
+                                        dir[2 as i32 as usize] = facecenter[2 as i32 as usize]
                                             - areastart[2 as i32 as usize];
                                         crate::src::qcommon::q_math::VectorNormalize(
                                             dir.as_mut_ptr(),
                                         );
-                                        start[0 as i32 as usize] = areastart
-                                            [0 as i32 as usize]
-                                            + dir[0 as i32 as usize]
-                                                * 4 as i32 as f32;
-                                        start[1 as i32 as usize] = areastart
-                                            [1 as i32 as usize]
-                                            + dir[1 as i32 as usize]
-                                                * 4 as i32 as f32;
-                                        start[2 as i32 as usize] = areastart
-                                            [2 as i32 as usize]
-                                            + dir[2 as i32 as usize]
-                                                * 4 as i32 as f32;
-                                        end[0 as i32 as usize] =
-                                            bsptrace.endpos[0 as i32 as usize];
-                                        end[1 as i32 as usize] =
-                                            bsptrace.endpos[1 as i32 as usize];
-                                        end[2 as i32 as usize] =
-                                            bsptrace.endpos[2 as i32 as usize];
+                                        start[0 as i32 as usize] = areastart[0 as i32 as usize]
+                                            + dir[0 as i32 as usize] * 4 as i32 as f32;
+                                        start[1 as i32 as usize] = areastart[1 as i32 as usize]
+                                            + dir[1 as i32 as usize] * 4 as i32 as f32;
+                                        start[2 as i32 as usize] = areastart[2 as i32 as usize]
+                                            + dir[2 as i32 as usize] * 4 as i32 as f32;
+                                        end[0 as i32 as usize] = bsptrace.endpos[0 as i32 as usize];
+                                        end[1 as i32 as usize] = bsptrace.endpos[1 as i32 as usize];
+                                        end[2 as i32 as usize] = bsptrace.endpos[2 as i32 as usize];
                                         trace =
                                             crate::src::botlib::be_aas_sample::AAS_TraceClientBBox(
                                                 start.as_mut_ptr(),
@@ -8525,14 +7919,11 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(
                                                 -(1 as i32),
                                             )
                                                 as crate::be_aas_h::aas_trace_s;
-                                        dir[0 as i32 as usize] = trace.endpos
-                                            [0 as i32 as usize]
+                                        dir[0 as i32 as usize] = trace.endpos[0 as i32 as usize]
                                             - facecenter[0 as i32 as usize];
-                                        dir[1 as i32 as usize] = trace.endpos
-                                            [1 as i32 as usize]
+                                        dir[1 as i32 as usize] = trace.endpos[1 as i32 as usize]
                                             - facecenter[1 as i32 as usize];
-                                        dir[2 as i32 as usize] = trace.endpos
-                                            [2 as i32 as usize]
+                                        dir[2 as i32 as usize] = trace.endpos[2 as i32 as usize]
                                             - facecenter[2 as i32 as usize];
                                         if !(VectorLength(dir.as_mut_ptr()
                                             as *const crate::src::qcommon::q_shared::vec_t)
@@ -8562,9 +7953,7 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(
                                                                     -(1 as
                                                                           i32)) as
     crate::be_aas_h::aas_trace_s;
-                                            if !(trace.fraction
-                                                >= 1 as i32 as f32)
-                                            {
+                                            if !(trace.fraction >= 1 as i32 as f32) {
                                                 //area to end in
                                                 areanum =
                                                     crate::src::botlib::be_aas_sample::AAS_PointAreaNum(trace.endpos.as_mut_ptr());
@@ -8599,8 +7988,7 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(
                                                                                    20
                                                                                        as
                                                                                        i32); //end for
-                                                                if !(numareas >= 20 as i32)
-                                                                {
+                                                                if !(numareas >= 20 as i32) {
                                                                     j = 0 as i32;
                                                                     while j < numareas {
                                                                         if (*crate::src::botlib::be_aas_main::aasworld.areasettings.offset(areas[j
@@ -8634,66 +8022,51 @@ pub unsafe extern "C" fn AAS_Reachability_Grapple(
                                                                             face2num;
                                                                         (*lreach).edgenum =
                                                                             0 as i32;
-                                                                        (*lreach).start[0
-                                                                            as i32
-                                                                            as usize] = areastart[0
-                                                                            as i32
-                                                                            as usize];
-                                                                        (*lreach).start[1
-                                                                            as i32
-                                                                            as usize] = areastart[1
-                                                                            as i32
-                                                                            as usize];
-                                                                        (*lreach).start[2
-                                                                            as i32
-                                                                            as usize] = areastart[2
-                                                                            as i32
-                                                                            as usize];
+                                                                        (*lreach).start
+                                                                            [0 as i32 as usize] =
+                                                                            areastart
+                                                                                [0 as i32 as usize];
+                                                                        (*lreach).start
+                                                                            [1 as i32 as usize] =
+                                                                            areastart
+                                                                                [1 as i32 as usize];
+                                                                        (*lreach).start
+                                                                            [2 as i32 as usize] =
+                                                                            areastart
+                                                                                [2 as i32 as usize];
                                                                         //VectorCopy(facecenter, lreach->end);
-                                                                        (*lreach).end[0
-                                                                            as i32
-                                                                            as usize] = bsptrace
-                                                                            .endpos
-                                                                            [0 as i32
-                                                                                as usize];
-                                                                        (*lreach).end[1
-                                                                            as i32
-                                                                            as usize] = bsptrace
-                                                                            .endpos
-                                                                            [1 as i32
-                                                                                as usize];
-                                                                        (*lreach).end[2
-                                                                            as i32
-                                                                            as usize] = bsptrace
-                                                                            .endpos
-                                                                            [2 as i32
-                                                                                as usize];
+                                                                        (*lreach).end
+                                                                            [0 as i32 as usize] =
+                                                                            bsptrace.endpos
+                                                                                [0 as i32 as usize];
+                                                                        (*lreach).end
+                                                                            [1 as i32 as usize] =
+                                                                            bsptrace.endpos
+                                                                                [1 as i32 as usize];
+                                                                        (*lreach).end
+                                                                            [2 as i32 as usize] =
+                                                                            bsptrace.endpos
+                                                                                [2 as i32 as usize];
                                                                         (*lreach).traveltype =
                                                                             14 as i32;
-                                                                        dir[0 as i32
-                                                                            as usize] = (*lreach)
-                                                                            .end
-                                                                            [0 as i32
-                                                                                as usize]
-                                                                            - (*lreach).start[0
-                                                                                as i32
-                                                                                as usize];
-                                                                        dir[1 as i32
-                                                                            as usize] = (*lreach)
-                                                                            .end
-                                                                            [1 as i32
-                                                                                as usize]
-                                                                            - (*lreach).start[1
-                                                                                as i32
-                                                                                as usize];
-                                                                        dir[2 as i32
-                                                                            as usize] = (*lreach)
-                                                                            .end
-                                                                            [2 as i32
-                                                                                as usize]
-                                                                            - (*lreach).start[2
-                                                                                as i32
-                                                                                as usize];
+                                                                        dir[0 as i32 as usize] =
+                                                                            (*lreach).end
+                                                                                [0 as i32 as usize]
+                                                                                - (*lreach).start[0
+                                                                                    as i32
+                                                                                    as usize];
+                                                                        dir[1 as i32 as usize] =
+                                                                            (*lreach).end
+                                                                                [1 as i32 as usize]
+                                                                                - (*lreach).start[1
+                                                                                    as i32
+                                                                                    as usize];
+                                                                        dir[2 as i32 as usize] =
+                                                                            (*lreach).end
+                                                                                [2 as i32 as usize]
+                                                                                - (*lreach).start[2
+                                                                                    as i32
+                                                                                    as usize];
                                                                         (*lreach).traveltime
                                                                             =
                                                                             (crate::src::botlib::be_aas_move::aassettings.rs_startgrapple
@@ -8926,10 +8299,7 @@ pub unsafe extern "C" fn AAS_SetWeaponJumpAreaFlags() {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_Reachability_WeaponJump(
-    mut area1num: i32,
-    mut area2num: i32,
-) -> i32 {
+pub unsafe extern "C" fn AAS_Reachability_WeaponJump(mut area1num: i32, mut area2num: i32) -> i32 {
     let mut face2num: i32 = 0;
     let mut i: i32 = 0;
     let mut n: i32 = 0;
@@ -9059,19 +8429,15 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(
             .offset(((*area2).firstface + i) as isize);
         face2 = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face2num)
-                    as isize,
-            ) as *mut crate::aasfile_h::aas_face_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face2num) as isize)
+            as *mut crate::aasfile_h::aas_face_t;
         //end for
         //if it is not a solid face
         if !((*face2).faceflags & 4 as i32 == 0) {
             //get the center of the face
             AAS_FaceCenter(face2num, facecenter.as_mut_ptr());
             //only go higher up with weapon jumps
-            if !(facecenter[2 as i32 as usize]
-                < areastart[2 as i32 as usize] + 64 as i32 as f32)
-            {
+            if !(facecenter[2 as i32 as usize] < areastart[2 as i32 as usize] + 64 as i32 as f32) {
                 //NOTE: set to 2 to allow bfg jump reachabilities
                 n = 0 as i32;
                 while n < 1 as i32 {
@@ -9096,14 +8462,13 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(
                         //get the horizontal speed for the jump, if it isn't possible to calculate this
                         //speed (the jump is not possible) then there's no jump reachability created
                         //direction towards the face center
-                        dir[0 as i32 as usize] = facecenter[0 as i32 as usize]
-                            - areastart[0 as i32 as usize];
-                        dir[1 as i32 as usize] = facecenter[1 as i32 as usize]
-                            - areastart[1 as i32 as usize];
-                        dir[2 as i32 as usize] = facecenter[2 as i32 as usize]
-                            - areastart[2 as i32 as usize];
+                        dir[0 as i32 as usize] =
+                            facecenter[0 as i32 as usize] - areastart[0 as i32 as usize];
+                        dir[1 as i32 as usize] =
+                            facecenter[1 as i32 as usize] - areastart[1 as i32 as usize];
                         dir[2 as i32 as usize] =
-                            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                            facecenter[2 as i32 as usize] - areastart[2 as i32 as usize];
+                        dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
                         //end if
                         //hordist = VectorNormalize(dir);
                         //if (hordist < 1.6 * (facecenter[2] - areastart[2]))
@@ -9138,9 +8503,7 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(
                             visualize,
                         );
                         if move_0.frames < 30 as i32
-                            && move_0.stopevent
-                                & (8 as i32 | 16 as i32 | 32 as i32)
-                                == 0
+                            && move_0.stopevent & (8 as i32 | 16 as i32 | 32 as i32) == 0
                             && move_0.stopevent & (1024 as i32 | 128 as i32) != 0
                         {
                             //end if
@@ -9159,23 +8522,16 @@ pub unsafe extern "C" fn AAS_Reachability_WeaponJump(
                             (*lreach).areanum = area2num;
                             (*lreach).facenum = 0 as i32;
                             (*lreach).edgenum = 0 as i32;
-                            (*lreach).start[0 as i32 as usize] =
-                                areastart[0 as i32 as usize];
-                            (*lreach).start[1 as i32 as usize] =
-                                areastart[1 as i32 as usize];
-                            (*lreach).start[2 as i32 as usize] =
-                                areastart[2 as i32 as usize];
-                            (*lreach).end[0 as i32 as usize] =
-                                facecenter[0 as i32 as usize];
-                            (*lreach).end[1 as i32 as usize] =
-                                facecenter[1 as i32 as usize];
-                            (*lreach).end[2 as i32 as usize] =
-                                facecenter[2 as i32 as usize];
+                            (*lreach).start[0 as i32 as usize] = areastart[0 as i32 as usize];
+                            (*lreach).start[1 as i32 as usize] = areastart[1 as i32 as usize];
+                            (*lreach).start[2 as i32 as usize] = areastart[2 as i32 as usize];
+                            (*lreach).end[0 as i32 as usize] = facecenter[0 as i32 as usize];
+                            (*lreach).end[1 as i32 as usize] = facecenter[1 as i32 as usize];
+                            (*lreach).end[2 as i32 as usize] = facecenter[2 as i32 as usize];
                             if n != 0 {
                                 (*lreach).traveltype = 13 as i32;
-                                (*lreach).traveltime = crate::src::botlib::be_aas_move::aassettings
-                                    .rs_bfgjump
-                                    as u16
+                                (*lreach).traveltime =
+                                    crate::src::botlib::be_aas_move::aassettings.rs_bfgjump as u16
                             } else {
                                 (*lreach).traveltype = 12 as i32;
                                 (*lreach).traveltime = crate::src::botlib::be_aas_move::aassettings
@@ -9271,10 +8627,8 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
             .offset(((*area).firstface + i) as isize);
         face1 = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face1num)
-                    as isize,
-            ) as *mut crate::aasfile_h::aas_face_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face1num) as isize)
+            as *mut crate::aasfile_h::aas_face_t;
         //end for
         //face 1 must be a ground face
         if !((*face1).faceflags & 4 as i32 == 0) {
@@ -9293,11 +8647,10 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                     face2 =
                         &mut *crate::src::botlib::be_aas_main::aasworld
                             .faces
-                            .offset((::libc::abs
-                                as unsafe extern "C" fn(_: i32) -> i32)(
-                                face2num
-                            ) as isize)
-                            as *mut crate::aasfile_h::aas_face_t;
+                            .offset(
+                                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(face2num)
+                                    as isize,
+                            ) as *mut crate::aasfile_h::aas_face_t;
                     //find another not ground face using this same edge
                     //end for
                     //face 2 may not be a ground face
@@ -9343,11 +8696,8 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                             face3 = &mut *crate::src::botlib::be_aas_main::aasworld
                                                 .faces
                                                 .offset((::libc::abs
-                                                    as unsafe extern "C" fn(
-                                                        _: i32,
-                                                    )
-                                                        -> i32)(
-                                                    face3num
+                                                    as unsafe extern "C" fn(_: i32) -> i32)(
+                                                    face3num,
                                                 )
                                                     as isize)
                                                 as *mut crate::aasfile_h::aas_face_t;
@@ -9365,9 +8715,7 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                                         gap = crate::src::qcommon::q_shared::qtrue
                                                             as i32; //end if
                                                         break;
-                                                    } else if (*face3).faceflags & 4 as i32
-                                                        != 0
-                                                    {
+                                                    } else if (*face3).faceflags & 4 as i32 != 0 {
                                                         gap = crate::src::qcommon::q_shared::qfalse
                                                             as i32;
                                                         break;
@@ -9394,12 +8742,11 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                     }
                                 }
                                 //check for a walk off ledge reachability
-                                edge = &mut *crate::src::botlib::be_aas_main::aasworld.edges.offset(
-                                    (::libc::abs
-                                        as unsafe extern "C" fn(_: i32) -> i32)(
+                                edge = &mut *crate::src::botlib::be_aas_main::aasworld
+                                    .edges
+                                    .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(
                                         edge1num,
-                                    ) as isize,
-                                )
+                                    ) as isize)
                                     as *mut crate::aasfile_h::aas_edge_t;
                                 side = (edge1num < 0 as i32) as i32;
                                 //
@@ -9407,9 +8754,9 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                     .vertexes
                                     .offset((*edge).v[side as usize] as isize))
                                 .as_mut_ptr();
-                                v2 = (*crate::src::botlib::be_aas_main::aasworld.vertexes.offset(
-                                    (*edge).v[(side == 0) as i32 as usize] as isize,
-                                ))
+                                v2 = (*crate::src::botlib::be_aas_main::aasworld
+                                    .vertexes
+                                    .offset((*edge).v[(side == 0) as i32 as usize] as isize))
                                 .as_mut_ptr();
                                 //
                                 plane = &mut *crate::src::botlib::be_aas_main::aasworld
@@ -9417,15 +8764,12 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                     .offset((*face1).planenum as isize)
                                     as *mut crate::aasfile_h::aas_plane_t;
                                 //get the points really into the areas
-                                sharededgevec[0 as i32 as usize] = *v2
-                                    .offset(0 as i32 as isize)
-                                    - *v1.offset(0 as i32 as isize);
-                                sharededgevec[1 as i32 as usize] = *v2
-                                    .offset(1 as i32 as isize)
-                                    - *v1.offset(1 as i32 as isize);
-                                sharededgevec[2 as i32 as usize] = *v2
-                                    .offset(2 as i32 as isize)
-                                    - *v1.offset(2 as i32 as isize);
+                                sharededgevec[0 as i32 as usize] =
+                                    *v2.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
+                                sharededgevec[1 as i32 as usize] =
+                                    *v2.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
+                                sharededgevec[2 as i32 as usize] =
+                                    *v2.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
                                 CrossProduct(
                                     (*plane).normal.as_mut_ptr()
                                         as *const crate::src::qcommon::q_shared::vec_t,
@@ -9435,39 +8779,29 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                 );
                                 crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
                                 //
-                                mid[0 as i32 as usize] = *v1
-                                    .offset(0 as i32 as isize)
-                                    + *v2.offset(0 as i32 as isize);
-                                mid[1 as i32 as usize] = *v1
-                                    .offset(1 as i32 as isize)
-                                    + *v2.offset(1 as i32 as isize);
-                                mid[2 as i32 as usize] = *v1
-                                    .offset(2 as i32 as isize)
-                                    + *v2.offset(2 as i32 as isize);
                                 mid[0 as i32 as usize] =
-                                    (mid[0 as i32 as usize] as f64 * 0.5f64)
-                                        as crate::src::qcommon::q_shared::vec_t;
+                                    *v1.offset(0 as i32 as isize) + *v2.offset(0 as i32 as isize);
                                 mid[1 as i32 as usize] =
-                                    (mid[1 as i32 as usize] as f64 * 0.5f64)
-                                        as crate::src::qcommon::q_shared::vec_t;
+                                    *v1.offset(1 as i32 as isize) + *v2.offset(1 as i32 as isize);
                                 mid[2 as i32 as usize] =
-                                    (mid[2 as i32 as usize] as f64 * 0.5f64)
-                                        as crate::src::qcommon::q_shared::vec_t;
+                                    *v1.offset(2 as i32 as isize) + *v2.offset(2 as i32 as isize);
+                                mid[0 as i32 as usize] = (mid[0 as i32 as usize] as f64 * 0.5f64)
+                                    as crate::src::qcommon::q_shared::vec_t;
+                                mid[1 as i32 as usize] = (mid[1 as i32 as usize] as f64 * 0.5f64)
+                                    as crate::src::qcommon::q_shared::vec_t;
+                                mid[2 as i32 as usize] = (mid[2 as i32 as usize] as f64 * 0.5f64)
+                                    as crate::src::qcommon::q_shared::vec_t;
                                 mid[0 as i32 as usize] = mid[0 as i32 as usize]
-                                    + dir[0 as i32 as usize]
-                                        * 8 as i32 as f32;
+                                    + dir[0 as i32 as usize] * 8 as i32 as f32;
                                 mid[1 as i32 as usize] = mid[1 as i32 as usize]
-                                    + dir[1 as i32 as usize]
-                                        * 8 as i32 as f32;
+                                    + dir[1 as i32 as usize] * 8 as i32 as f32;
                                 mid[2 as i32 as usize] = mid[2 as i32 as usize]
-                                    + dir[2 as i32 as usize]
-                                        * 8 as i32 as f32;
+                                    + dir[2 as i32 as usize] * 8 as i32 as f32;
                                 //
                                 testend[0 as i32 as usize] = mid[0 as i32 as usize];
                                 testend[1 as i32 as usize] = mid[1 as i32 as usize];
                                 testend[2 as i32 as usize] = mid[2 as i32 as usize];
-                                testend[2 as i32 as usize] -=
-                                    1000 as i32 as f32;
+                                testend[2 as i32 as usize] -= 1000 as i32 as f32;
                                 trace = crate::src::botlib::be_aas_sample::AAS_TraceClientBBox(
                                     mid.as_mut_ptr(),
                                     testend.as_mut_ptr(),
@@ -9518,10 +8852,8 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                                 0 as *mut crate::src::qcommon::q_shared::vec3_t,
                                                 (::std::mem::size_of::<[i32; 10]>()
                                                     as libc::c_ulong)
-                                                    .wrapping_div(
-                                                        ::std::mem::size_of::<i32>()
-                                                            as libc::c_ulong,
-                                                    )
+                                                    .wrapping_div(::std::mem::size_of::<i32>()
+                                                        as libc::c_ulong)
                                                     as i32,
                                             );
                                         p = 0 as i32;
@@ -9556,12 +8888,9 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                         (*lreach).areanum = reachareanum;
                                         (*lreach).facenum = 0 as i32;
                                         (*lreach).edgenum = edge1num;
-                                        (*lreach).start[0 as i32 as usize] =
-                                            mid[0 as i32 as usize];
-                                        (*lreach).start[1 as i32 as usize] =
-                                            mid[1 as i32 as usize];
-                                        (*lreach).start[2 as i32 as usize] =
-                                            mid[2 as i32 as usize];
+                                        (*lreach).start[0 as i32 as usize] = mid[0 as i32 as usize];
+                                        (*lreach).start[1 as i32 as usize] = mid[1 as i32 as usize];
+                                        (*lreach).start[2 as i32 as usize] = mid[2 as i32 as usize];
                                         (*lreach).end[0 as i32 as usize] =
                                             trace.endpos[0 as i32 as usize];
                                         (*lreach).end[1 as i32 as usize] =
@@ -9591,8 +8920,7 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                             ) > crate::src::botlib::be_aas_move::aassettings
                                                 .phys_falldelta5
                                             {
-                                                (*lreach).traveltime = ((*lreach).traveltime
-                                                    as f32
+                                                (*lreach).traveltime = ((*lreach).traveltime as f32
                                                     + crate::src::botlib::be_aas_move::aassettings
                                                         .rs_falldamage5)
                                                     as u16
@@ -9603,8 +8931,7 @@ pub unsafe extern "C" fn AAS_Reachability_WalkOffLedge(mut areanum: i32) {
                                                 > crate::src::botlib::be_aas_move::aassettings
                                                     .phys_falldelta10
                                             {
-                                                (*lreach).traveltime = ((*lreach).traveltime
-                                                    as f32
+                                                (*lreach).traveltime = ((*lreach).traveltime as f32
                                                     + crate::src::botlib::be_aas_move::aassettings
                                                         .rs_falldamage10)
                                                     as u16
@@ -9758,8 +9085,8 @@ pub unsafe extern "C" fn AAS_ContinueInitReachability(mut _time: f32) -> i32 {
         reachability_delay = 1000 as i32 as f32
     }
     //number of areas to calculate reachability for this cycle
-    todo = crate::src::botlib::be_aas_main::aasworld.numreachabilityareas
-        + framereachability as i32;
+    todo =
+        crate::src::botlib::be_aas_main::aasworld.numreachabilityareas + framereachability as i32;
     start_time = Sys_MilliSeconds();
     //loop over the areas
     i = crate::src::botlib::be_aas_main::aasworld.numreachabilityareas; //end for
@@ -9860,8 +9187,7 @@ pub unsafe extern "C" fn AAS_ContinueInitReachability(mut _time: f32) -> i32 {
                     break;
                 }
                 //
-                if crate::src::botlib::be_aas_main::aasworld.numreachabilityareas
-                    * 1000 as i32
+                if crate::src::botlib::be_aas_main::aasworld.numreachabilityareas * 1000 as i32
                     / crate::src::botlib::be_aas_main::aasworld.numareas
                     > lastpercentage
                 {
@@ -9938,8 +9264,7 @@ pub unsafe extern "C" fn AAS_ContinueInitReachability(mut _time: f32) -> i32 {
         botimport.Print.expect("non-null function pointer")(
             1 as i32,
             b"\r%6.1f%%\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-            (lastpercentage as f32 / 10 as i32 as f32)
-                as f64,
+            (lastpercentage as f32 / 10 as i32 as f32) as f64,
         );
     }
     //not yet finished

@@ -1149,10 +1149,8 @@ pub unsafe extern "C" fn BG_FindItemForPowerup(
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < bg_numItems {
-        if (bg_itemlist[i as usize].giType as u32
-            == crate::bg_public_h::IT_POWERUP as i32 as u32
-            || bg_itemlist[i as usize].giType as u32
-                == crate::bg_public_h::IT_TEAM as i32 as u32
+        if (bg_itemlist[i as usize].giType as u32 == crate::bg_public_h::IT_POWERUP as i32 as u32
+            || bg_itemlist[i as usize].giType as u32 == crate::bg_public_h::IT_TEAM as i32 as u32
             || bg_itemlist[i as usize].giType as u32
                 == crate::bg_public_h::IT_PERSISTANT_POWERUP as i32 as u32)
             && bg_itemlist[i as usize].giTag as u32 == pw as u32
@@ -1177,8 +1175,7 @@ pub unsafe extern "C" fn BG_FindItemForHoldable(
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < bg_numItems {
-        if bg_itemlist[i as usize].giType as u32
-            == crate::bg_public_h::IT_HOLDABLE as i32 as u32
+        if bg_itemlist[i as usize].giType as u32 == crate::bg_public_h::IT_HOLDABLE as i32 as u32
             && bg_itemlist[i as usize].giTag as u32 == pw as u32
         {
             return &mut *bg_itemlist.as_mut_ptr().offset(i as isize)
@@ -1205,8 +1202,7 @@ pub unsafe extern "C" fn BG_FindItemForWeapon(
     let mut it: *mut crate::bg_public_h::gitem_t = 0 as *mut crate::bg_public_h::gitem_t;
     it = bg_itemlist.as_mut_ptr().offset(1 as i32 as isize);
     while !(*it).classname.is_null() {
-        if (*it).giType as u32
-            == crate::bg_public_h::IT_WEAPON as i32 as u32
+        if (*it).giType as u32 == crate::bg_public_h::IT_WEAPON as i32 as u32
             && (*it).giTag as u32 == weapon as u32
         {
             return it;
@@ -1259,18 +1255,12 @@ pub unsafe extern "C" fn BG_PlayerTouchesItem(
     let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     BG_EvaluateTrajectory(&mut (*item).pos, atTime, origin.as_mut_ptr());
     // we are ignoring ducked differences here
-    if (*ps).origin[0 as i32 as usize] - origin[0 as i32 as usize]
-        > 44 as i32 as f32
-        || (*ps).origin[0 as i32 as usize] - origin[0 as i32 as usize]
-            < -(50 as i32) as f32
-        || (*ps).origin[1 as i32 as usize] - origin[1 as i32 as usize]
-            > 36 as i32 as f32
-        || (*ps).origin[1 as i32 as usize] - origin[1 as i32 as usize]
-            < -(36 as i32) as f32
-        || (*ps).origin[2 as i32 as usize] - origin[2 as i32 as usize]
-            > 36 as i32 as f32
-        || (*ps).origin[2 as i32 as usize] - origin[2 as i32 as usize]
-            < -(36 as i32) as f32
+    if (*ps).origin[0 as i32 as usize] - origin[0 as i32 as usize] > 44 as i32 as f32
+        || (*ps).origin[0 as i32 as usize] - origin[0 as i32 as usize] < -(50 as i32) as f32
+        || (*ps).origin[1 as i32 as usize] - origin[1 as i32 as usize] > 36 as i32 as f32
+        || (*ps).origin[1 as i32 as usize] - origin[1 as i32 as usize] < -(36 as i32) as f32
+        || (*ps).origin[2 as i32 as usize] - origin[2 as i32 as usize] > 36 as i32 as f32
+        || (*ps).origin[2 as i32 as usize] - origin[2 as i32 as usize] < -(36 as i32) as f32
     {
         return crate::src::qcommon::q_shared::qfalse;
     }
@@ -1311,8 +1301,7 @@ pub unsafe extern "C" fn BG_CanItemBeGrabbed(
         }
         3 => {
             if (*ps).stats[crate::bg_public_h::STAT_ARMOR as i32 as usize]
-                >= (*ps).stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
-                    * 2 as i32
+                >= (*ps).stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize] * 2 as i32
             {
                 return crate::src::qcommon::q_shared::qfalse;
             }
@@ -1323,8 +1312,7 @@ pub unsafe extern "C" fn BG_CanItemBeGrabbed(
             // don't pick up if already at max
             if (*item).quantity == 5 as i32 || (*item).quantity == 100 as i32 {
                 if (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-                    >= (*ps).stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
-                        * 2 as i32
+                    >= (*ps).stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize] * 2 as i32
                 {
                     return crate::src::qcommon::q_shared::qfalse;
                 } // powerups are always picked up
@@ -1351,9 +1339,7 @@ pub unsafe extern "C" fn BG_CanItemBeGrabbed(
                         || (*item).giTag == crate::bg_public_h::PW_REDFLAG as i32
                             && (*ent).modelindex2 != 0
                         || (*item).giTag == crate::bg_public_h::PW_REDFLAG as i32
-                            && (*ps).powerups
-                                [crate::bg_public_h::PW_BLUEFLAG as i32 as usize]
-                                != 0
+                            && (*ps).powerups[crate::bg_public_h::PW_BLUEFLAG as i32 as usize] != 0
                     {
                         return crate::src::qcommon::q_shared::qtrue;
                     }
@@ -1364,9 +1350,7 @@ pub unsafe extern "C" fn BG_CanItemBeGrabbed(
                         || (*item).giTag == crate::bg_public_h::PW_BLUEFLAG as i32
                             && (*ent).modelindex2 != 0
                         || (*item).giTag == crate::bg_public_h::PW_BLUEFLAG as i32
-                            && (*ps).powerups
-                                [crate::bg_public_h::PW_REDFLAG as i32 as usize]
-                                != 0
+                            && (*ps).powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize] != 0
                     {
                         return crate::src::qcommon::q_shared::qtrue;
                     }
@@ -1415,27 +1399,24 @@ pub unsafe extern "C" fn BG_EvaluateTrajectory(
         }
         2 => {
             deltaTime = ((atTime - (*tr).trTime) as f64 * 0.001f64) as f32;
-            *result.offset(0 as i32 as isize) = (*tr).trBase[0 as i32 as usize]
-                + (*tr).trDelta[0 as i32 as usize] * deltaTime;
-            *result.offset(1 as i32 as isize) = (*tr).trBase[1 as i32 as usize]
-                + (*tr).trDelta[1 as i32 as usize] * deltaTime;
-            *result.offset(2 as i32 as isize) = (*tr).trBase[2 as i32 as usize]
-                + (*tr).trDelta[2 as i32 as usize] * deltaTime
+            *result.offset(0 as i32 as isize) =
+                (*tr).trBase[0 as i32 as usize] + (*tr).trDelta[0 as i32 as usize] * deltaTime;
+            *result.offset(1 as i32 as isize) =
+                (*tr).trBase[1 as i32 as usize] + (*tr).trDelta[1 as i32 as usize] * deltaTime;
+            *result.offset(2 as i32 as isize) =
+                (*tr).trBase[2 as i32 as usize] + (*tr).trDelta[2 as i32 as usize] * deltaTime
         }
         4 => {
-            deltaTime =
-                (atTime - (*tr).trTime) as f32 / (*tr).trDuration as f32;
-            phase = crate::stdlib::sin(
-                deltaTime as f64
-                    * 3.14159265358979323846f64
-                    * 2 as i32 as f64,
-            ) as f32;
-            *result.offset(0 as i32 as isize) = (*tr).trBase[0 as i32 as usize]
-                + (*tr).trDelta[0 as i32 as usize] * phase;
-            *result.offset(1 as i32 as isize) = (*tr).trBase[1 as i32 as usize]
-                + (*tr).trDelta[1 as i32 as usize] * phase;
-            *result.offset(2 as i32 as isize) = (*tr).trBase[2 as i32 as usize]
-                + (*tr).trDelta[2 as i32 as usize] * phase
+            deltaTime = (atTime - (*tr).trTime) as f32 / (*tr).trDuration as f32;
+            phase =
+                crate::stdlib::sin(deltaTime as f64 * 3.14159265358979323846f64 * 2 as i32 as f64)
+                    as f32;
+            *result.offset(0 as i32 as isize) =
+                (*tr).trBase[0 as i32 as usize] + (*tr).trDelta[0 as i32 as usize] * phase;
+            *result.offset(1 as i32 as isize) =
+                (*tr).trBase[1 as i32 as usize] + (*tr).trDelta[1 as i32 as usize] * phase;
+            *result.offset(2 as i32 as isize) =
+                (*tr).trBase[2 as i32 as usize] + (*tr).trDelta[2 as i32 as usize] * phase
         }
         3 => {
             if atTime > (*tr).trTime + (*tr).trDuration {
@@ -1445,27 +1426,24 @@ pub unsafe extern "C" fn BG_EvaluateTrajectory(
             if deltaTime < 0 as i32 as f32 {
                 deltaTime = 0 as i32 as f32
             }
-            *result.offset(0 as i32 as isize) = (*tr).trBase[0 as i32 as usize]
-                + (*tr).trDelta[0 as i32 as usize] * deltaTime;
-            *result.offset(1 as i32 as isize) = (*tr).trBase[1 as i32 as usize]
-                + (*tr).trDelta[1 as i32 as usize] * deltaTime;
-            *result.offset(2 as i32 as isize) = (*tr).trBase[2 as i32 as usize]
-                + (*tr).trDelta[2 as i32 as usize] * deltaTime
+            *result.offset(0 as i32 as isize) =
+                (*tr).trBase[0 as i32 as usize] + (*tr).trDelta[0 as i32 as usize] * deltaTime;
+            *result.offset(1 as i32 as isize) =
+                (*tr).trBase[1 as i32 as usize] + (*tr).trDelta[1 as i32 as usize] * deltaTime;
+            *result.offset(2 as i32 as isize) =
+                (*tr).trBase[2 as i32 as usize] + (*tr).trDelta[2 as i32 as usize] * deltaTime
         }
         5 => {
             deltaTime = ((atTime - (*tr).trTime) as f64 * 0.001f64) as f32;
-            *result.offset(0 as i32 as isize) = (*tr).trBase[0 as i32 as usize]
-                + (*tr).trDelta[0 as i32 as usize] * deltaTime;
-            *result.offset(1 as i32 as isize) = (*tr).trBase[1 as i32 as usize]
-                + (*tr).trDelta[1 as i32 as usize] * deltaTime;
-            *result.offset(2 as i32 as isize) = (*tr).trBase[2 as i32 as usize]
-                + (*tr).trDelta[2 as i32 as usize] * deltaTime;
+            *result.offset(0 as i32 as isize) =
+                (*tr).trBase[0 as i32 as usize] + (*tr).trDelta[0 as i32 as usize] * deltaTime;
+            *result.offset(1 as i32 as isize) =
+                (*tr).trBase[1 as i32 as usize] + (*tr).trDelta[1 as i32 as usize] * deltaTime;
+            *result.offset(2 as i32 as isize) =
+                (*tr).trBase[2 as i32 as usize] + (*tr).trDelta[2 as i32 as usize] * deltaTime;
             let ref mut fresh0 = *result.offset(2 as i32 as isize);
             *fresh0 = (*fresh0 as f64
-                - 0.5f64
-                    * 800 as i32 as f64
-                    * deltaTime as f64
-                    * deltaTime as f64)
+                - 0.5f64 * 800 as i32 as f64 * deltaTime as f64 * deltaTime as f64)
                 as crate::src::qcommon::q_shared::vec_t
         }
         _ => {
@@ -1508,20 +1486,14 @@ pub unsafe extern "C" fn BG_EvaluateTrajectoryDelta(
             *result.offset(2 as i32 as isize) = (*tr).trDelta[2 as i32 as usize]
         }
         4 => {
-            deltaTime =
-                (atTime - (*tr).trTime) as f32 / (*tr).trDuration as f32;
-            phase = crate::stdlib::cos(
-                deltaTime as f64
-                    * 3.14159265358979323846f64
-                    * 2 as i32 as f64,
-            ) as f32;
+            deltaTime = (atTime - (*tr).trTime) as f32 / (*tr).trDuration as f32;
+            phase =
+                crate::stdlib::cos(deltaTime as f64 * 3.14159265358979323846f64 * 2 as i32 as f64)
+                    as f32;
             phase = (phase as f64 * 0.5f64) as f32;
-            *result.offset(0 as i32 as isize) =
-                (*tr).trDelta[0 as i32 as usize] * phase;
-            *result.offset(1 as i32 as isize) =
-                (*tr).trDelta[1 as i32 as usize] * phase;
-            *result.offset(2 as i32 as isize) =
-                (*tr).trDelta[2 as i32 as usize] * phase
+            *result.offset(0 as i32 as isize) = (*tr).trDelta[0 as i32 as usize] * phase;
+            *result.offset(1 as i32 as isize) = (*tr).trDelta[1 as i32 as usize] * phase;
+            *result.offset(2 as i32 as isize) = (*tr).trDelta[2 as i32 as usize] * phase
         }
         3 => {
             if atTime > (*tr).trTime + (*tr).trDuration {
@@ -1649,8 +1621,7 @@ pub unsafe extern "C" fn BG_AddPredictableEventToPlayerstate(
     mut ps: *mut crate::src::qcommon::q_shared::playerState_t,
 ) {
     (*ps).events[((*ps).eventSequence & 2 as i32 - 1 as i32) as usize] = newEvent;
-    (*ps).eventParms[((*ps).eventSequence & 2 as i32 - 1 as i32) as usize] =
-        eventParm;
+    (*ps).eventParms[((*ps).eventSequence & 2 as i32 - 1 as i32) as usize] = eventParm;
     (*ps).eventSequence += 1;
 }
 /*
@@ -1690,11 +1661,7 @@ pub unsafe extern "C" fn BG_TouchJumpPad(
         } else {
             effectNum = 1 as i32
         }
-        BG_AddPredictableEventToPlayerstate(
-            crate::bg_public_h::EV_JUMP_PAD as i32,
-            effectNum,
-            ps,
-        );
+        BG_AddPredictableEventToPlayerstate(crate::bg_public_h::EV_JUMP_PAD as i32, effectNum, ps);
     }
     // remember hitting this jumppad this frame
     (*ps).jumppad_ent = (*jumppad).number;
@@ -1724,9 +1691,7 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityState(
         || (*ps).pm_type == crate::bg_public_h::PM_SPECTATOR as i32
     {
         (*s).eType = crate::bg_public_h::ET_INVISIBLE as i32
-    } else if (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-        <= -(40 as i32)
-    {
+    } else if (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= -(40 as i32) {
         (*s).eType = crate::bg_public_h::ET_INVISIBLE as i32
     } else {
         (*s).eType = crate::bg_public_h::ET_PLAYER as i32
@@ -1737,15 +1702,12 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityState(
     (*s).pos.trBase[1 as i32 as usize] = (*ps).origin[1 as i32 as usize];
     (*s).pos.trBase[2 as i32 as usize] = (*ps).origin[2 as i32 as usize];
     if snap as u64 != 0 {
-        (*s).pos.trBase[0 as i32 as usize] = (*s).pos.trBase[0 as i32 as usize]
-            as i32
-            as crate::src::qcommon::q_shared::vec_t;
-        (*s).pos.trBase[1 as i32 as usize] = (*s).pos.trBase[1 as i32 as usize]
-            as i32
-            as crate::src::qcommon::q_shared::vec_t;
-        (*s).pos.trBase[2 as i32 as usize] = (*s).pos.trBase[2 as i32 as usize]
-            as i32
-            as crate::src::qcommon::q_shared::vec_t
+        (*s).pos.trBase[0 as i32 as usize] =
+            (*s).pos.trBase[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*s).pos.trBase[1 as i32 as usize] =
+            (*s).pos.trBase[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*s).pos.trBase[2 as i32 as usize] =
+            (*s).pos.trBase[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t
     }
     // set the trDelta for flag direction
     (*s).pos.trDelta[0 as i32 as usize] = (*ps).velocity[0 as i32 as usize]; // ET_PLAYER looks here instead of at number
@@ -1756,18 +1718,14 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityState(
     (*s).apos.trBase[1 as i32 as usize] = (*ps).viewangles[1 as i32 as usize];
     (*s).apos.trBase[2 as i32 as usize] = (*ps).viewangles[2 as i32 as usize];
     if snap as u64 != 0 {
-        (*s).apos.trBase[0 as i32 as usize] = (*s).apos.trBase[0 as i32 as usize]
-            as i32
-            as crate::src::qcommon::q_shared::vec_t;
-        (*s).apos.trBase[1 as i32 as usize] = (*s).apos.trBase[1 as i32 as usize]
-            as i32
-            as crate::src::qcommon::q_shared::vec_t;
-        (*s).apos.trBase[2 as i32 as usize] = (*s).apos.trBase[2 as i32 as usize]
-            as i32
-            as crate::src::qcommon::q_shared::vec_t
+        (*s).apos.trBase[0 as i32 as usize] =
+            (*s).apos.trBase[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*s).apos.trBase[1 as i32 as usize] =
+            (*s).apos.trBase[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*s).apos.trBase[2 as i32 as usize] =
+            (*s).apos.trBase[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t
     }
-    (*s).angles2[1 as i32 as usize] =
-        (*ps).movementDir as crate::src::qcommon::q_shared::vec_t;
+    (*s).angles2[1 as i32 as usize] = (*ps).movementDir as crate::src::qcommon::q_shared::vec_t;
     (*s).legsAnim = (*ps).legsAnim;
     (*s).torsoAnim = (*ps).torsoAnim;
     (*s).clientNum = (*ps).clientNum;
@@ -1787,8 +1745,8 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityState(
             (*ps).entityEventSequence = (*ps).eventSequence - 2 as i32
         }
         seq = (*ps).entityEventSequence & 2 as i32 - 1 as i32;
-        (*s).event = (*ps).events[seq as usize]
-            | ((*ps).entityEventSequence & 3 as i32) << 8 as i32;
+        (*s).event =
+            (*ps).events[seq as usize] | ((*ps).entityEventSequence & 3 as i32) << 8 as i32;
         (*s).eventParm = (*ps).eventParms[seq as usize];
         (*ps).entityEventSequence += 1
     }
@@ -1826,9 +1784,7 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityStateExtraPolate(
         || (*ps).pm_type == crate::bg_public_h::PM_SPECTATOR as i32
     {
         (*s).eType = crate::bg_public_h::ET_INVISIBLE as i32
-    } else if (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-        <= -(40 as i32)
-    {
+    } else if (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= -(40 as i32) {
         (*s).eType = crate::bg_public_h::ET_INVISIBLE as i32
     } else {
         (*s).eType = crate::bg_public_h::ET_PLAYER as i32
@@ -1839,15 +1795,12 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityStateExtraPolate(
     (*s).pos.trBase[1 as i32 as usize] = (*ps).origin[1 as i32 as usize];
     (*s).pos.trBase[2 as i32 as usize] = (*ps).origin[2 as i32 as usize];
     if snap as u64 != 0 {
-        (*s).pos.trBase[0 as i32 as usize] = (*s).pos.trBase[0 as i32 as usize]
-            as i32
-            as crate::src::qcommon::q_shared::vec_t;
-        (*s).pos.trBase[1 as i32 as usize] = (*s).pos.trBase[1 as i32 as usize]
-            as i32
-            as crate::src::qcommon::q_shared::vec_t;
-        (*s).pos.trBase[2 as i32 as usize] = (*s).pos.trBase[2 as i32 as usize]
-            as i32
-            as crate::src::qcommon::q_shared::vec_t
+        (*s).pos.trBase[0 as i32 as usize] =
+            (*s).pos.trBase[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*s).pos.trBase[1 as i32 as usize] =
+            (*s).pos.trBase[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*s).pos.trBase[2 as i32 as usize] =
+            (*s).pos.trBase[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t
     }
     // set the trDelta for flag direction and linear prediction
     (*s).pos.trDelta[0 as i32 as usize] = (*ps).velocity[0 as i32 as usize];
@@ -1862,18 +1815,14 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityStateExtraPolate(
     (*s).apos.trBase[1 as i32 as usize] = (*ps).viewangles[1 as i32 as usize];
     (*s).apos.trBase[2 as i32 as usize] = (*ps).viewangles[2 as i32 as usize];
     if snap as u64 != 0 {
-        (*s).apos.trBase[0 as i32 as usize] = (*s).apos.trBase[0 as i32 as usize]
-            as i32
-            as crate::src::qcommon::q_shared::vec_t;
-        (*s).apos.trBase[1 as i32 as usize] = (*s).apos.trBase[1 as i32 as usize]
-            as i32
-            as crate::src::qcommon::q_shared::vec_t;
-        (*s).apos.trBase[2 as i32 as usize] = (*s).apos.trBase[2 as i32 as usize]
-            as i32
-            as crate::src::qcommon::q_shared::vec_t
+        (*s).apos.trBase[0 as i32 as usize] =
+            (*s).apos.trBase[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*s).apos.trBase[1 as i32 as usize] =
+            (*s).apos.trBase[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*s).apos.trBase[2 as i32 as usize] =
+            (*s).apos.trBase[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t
     }
-    (*s).angles2[1 as i32 as usize] =
-        (*ps).movementDir as crate::src::qcommon::q_shared::vec_t;
+    (*s).angles2[1 as i32 as usize] = (*ps).movementDir as crate::src::qcommon::q_shared::vec_t;
     (*s).legsAnim = (*ps).legsAnim;
     (*s).torsoAnim = (*ps).torsoAnim;
     (*s).clientNum = (*ps).clientNum;
@@ -1893,8 +1842,8 @@ pub unsafe extern "C" fn BG_PlayerStateToEntityStateExtraPolate(
             (*ps).entityEventSequence = (*ps).eventSequence - 2 as i32
         }
         seq = (*ps).entityEventSequence & 2 as i32 - 1 as i32;
-        (*s).event = (*ps).events[seq as usize]
-            | ((*ps).entityEventSequence & 3 as i32) << 8 as i32;
+        (*s).event =
+            (*ps).events[seq as usize] | ((*ps).entityEventSequence & 3 as i32) << 8 as i32;
         (*s).eventParm = (*ps).eventParms[seq as usize];
         (*ps).entityEventSequence += 1
     }

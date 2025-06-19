@@ -626,8 +626,8 @@ pub unsafe extern "C" fn Con_Clear_f() {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 32768 as i32 {
-        con.text[i as usize] = (('7' as i32 - '0' as i32 & 0x7 as i32) << 8 as i32
-            | ' ' as i32) as i16;
+        con.text[i as usize] =
+            (('7' as i32 - '0' as i32 & 0x7 as i32) << 8 as i32 | ' ' as i32) as i16;
         i += 1
     }
     Con_Bottom();
@@ -795,9 +795,8 @@ pub unsafe extern "C" fn Con_CheckResize() {
         con.totallines = 32768 as i32 / con.linewidth;
         i = 0 as i32;
         while i < 32768 as i32 {
-            con.text[i as usize] = (('7' as i32 - '0' as i32 & 0x7 as i32)
-                << 8 as i32
-                | ' ' as i32) as i16;
+            con.text[i as usize] =
+                (('7' as i32 - '0' as i32 & 0x7 as i32) << 8 as i32 | ' ' as i32) as i16;
             i += 1
         }
     } else {
@@ -821,18 +820,16 @@ pub unsafe extern "C" fn Con_CheckResize() {
         );
         i = 0 as i32;
         while i < 32768 as i32 {
-            con.text[i as usize] = (('7' as i32 - '0' as i32 & 0x7 as i32)
-                << 8 as i32
-                | ' ' as i32) as i16;
+            con.text[i as usize] =
+                (('7' as i32 - '0' as i32 & 0x7 as i32) << 8 as i32 | ' ' as i32) as i16;
             i += 1
         }
         i = 0 as i32;
         while i < numlines {
             j = 0 as i32;
             while j < numchars {
-                con.text[((con.totallines - 1 as i32 - i) * con.linewidth + j) as usize] =
-                    tbuf[((con.current - i + oldtotallines) % oldtotallines * oldwidth + j)
-                        as usize];
+                con.text[((con.totallines - 1 as i32 - i) * con.linewidth + j) as usize] = tbuf
+                    [((con.current - i + oldtotallines) % oldtotallines * oldwidth + j) as usize];
                 j += 1
             }
             i += 1
@@ -849,10 +846,7 @@ Cmd_CompleteTxtName
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cmd_CompleteTxtName(
-    mut _args: *mut libc::c_char,
-    mut argNum: i32,
-) {
+pub unsafe extern "C" fn Cmd_CompleteTxtName(mut _args: *mut libc::c_char, mut argNum: i32) {
     if argNum == 2 as i32 {
         crate::src::qcommon::common::Field_CompleteFilename(
             b"\x00" as *const u8 as *const libc::c_char,
@@ -937,9 +931,7 @@ pub unsafe extern "C" fn Con_Init() {
     );
     crate::src::qcommon::cmd::Cmd_SetCommandCompletionFunc(
         b"condump\x00" as *const u8 as *const libc::c_char,
-        Some(
-            Cmd_CompleteTxtName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
-        ),
+        Some(Cmd_CompleteTxtName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()),
     );
 }
 /*
@@ -985,8 +977,7 @@ pub unsafe extern "C" fn Con_Linefeed(mut skipnotify: crate::src::qcommon::q_sha
         if skipnotify as u64 != 0 {
             con.times[(con.current % 4 as i32) as usize] = 0 as i32
         } else {
-            con.times[(con.current % 4 as i32) as usize] =
-                crate::src::client::cl_main::cls.realtime
+            con.times[(con.current % 4 as i32) as usize] = crate::src::client::cl_main::cls.realtime
         }
     }
     con.x = 0 as i32;
@@ -997,8 +988,7 @@ pub unsafe extern "C" fn Con_Linefeed(mut skipnotify: crate::src::qcommon::q_sha
     i = 0 as i32;
     while i < con.linewidth {
         con.text[(con.current % con.totallines * con.linewidth + i) as usize] =
-            (('7' as i32 - '0' as i32 & 0x7 as i32) << 8 as i32 | ' ' as i32)
-                as i16;
+            (('7' as i32 - '0' as i32 & 0x7 as i32) << 8 as i32 | ' ' as i32) as i16;
         i += 1
     }
 }
@@ -1054,8 +1044,7 @@ pub unsafe extern "C" fn CL_ConsolePrint(mut txt: *mut libc::c_char) {
             break;
         }
         if crate::src::qcommon::q_shared::Q_IsColorString(txt) as u64 != 0 {
-            color = (*txt.offset(1 as i32 as isize) as i32 - '0' as i32
-                & 0x7 as i32) as u16;
+            color = (*txt.offset(1 as i32 as isize) as i32 - '0' as i32 & 0x7 as i32) as u16;
             txt = txt.offset(2 as i32 as isize)
         } else {
             // count word length
@@ -1080,8 +1069,7 @@ pub unsafe extern "C" fn CL_ConsolePrint(mut txt: *mut libc::c_char) {
                     // display character and advance
                     y = con.current % con.totallines;
                     con.text[(y * con.linewidth + con.x) as usize] =
-                        ((color as i32) << 8 as i32 | c as i32)
-                            as i16;
+                        ((color as i32) << 8 as i32 | c as i32) as i16;
                     con.x += 1;
                     if con.x >= con.linewidth {
                         Con_Linefeed(skipnotify);
@@ -1101,8 +1089,7 @@ pub unsafe extern "C" fn CL_ConsolePrint(mut txt: *mut libc::c_char) {
             con.times[prev as usize] = 0 as i32
         } else {
             // -NERVE - SMF
-            con.times[(con.current % 4 as i32) as usize] =
-                crate::src::client::cl_main::cls.realtime
+            con.times[(con.current % 4 as i32) as usize] = crate::src::client::cl_main::cls.realtime
         }
     };
 }
@@ -1179,9 +1166,7 @@ pub unsafe extern "C" fn Con_DrawNotify() {
             time = con.times[(i % 4 as i32) as usize];
             if !(time == 0 as i32) {
                 time = crate::src::client::cl_main::cls.realtime - time;
-                if !(time as f32
-                    > (*con_notifytime).value * 1000 as i32 as f32)
-                {
+                if !(time as f32 > (*con_notifytime).value * 1000 as i32 as f32) {
                     text = con
                         .text
                         .as_mut_ptr()
@@ -1194,16 +1179,12 @@ pub unsafe extern "C" fn Con_DrawNotify() {
                     {
                         x = 0 as i32;
                         while x < con.linewidth {
-                            if !(*text.offset(x as isize) as i32 & 0xff as i32
-                                == ' ' as i32)
-                            {
-                                if *text.offset(x as isize) as i32 >> 8 as i32
-                                    & 0x7 as i32
+                            if !(*text.offset(x as isize) as i32 & 0xff as i32 == ' ' as i32) {
+                                if *text.offset(x as isize) as i32 >> 8 as i32 & 0x7 as i32
                                     != currentColor
                                 {
-                                    currentColor = *text.offset(x as isize) as i32
-                                        >> 8 as i32
-                                        & 0x7 as i32;
+                                    currentColor =
+                                        *text.offset(x as isize) as i32 >> 8 as i32 & 0x7 as i32;
                                     crate::src::client::cl_main::re
                                         .SetColor
                                         .expect("non-null function pointer")(
@@ -1213,11 +1194,9 @@ pub unsafe extern "C" fn Con_DrawNotify() {
                                     );
                                 }
                                 crate::src::client::cl_scrn::SCR_DrawSmallChar(
-                                    ((*crate::src::client::cl_main::cl_conXOffset).integer
-                                        as f32
+                                    ((*crate::src::client::cl_main::cl_conXOffset).integer as f32
                                         + con.xadjust
-                                        + ((x + 1 as i32) * 8 as i32)
-                                            as f32)
+                                        + ((x + 1 as i32) * 8 as i32) as f32)
                                         as i32,
                                     v,
                                     *text.offset(x as isize) as i32 & 0xff as i32,
@@ -1235,9 +1214,7 @@ pub unsafe extern "C" fn Con_DrawNotify() {
     crate::src::client::cl_main::re
         .SetColor
         .expect("non-null function pointer")(0 as *const f32);
-    if crate::src::client::cl_keys::Key_GetCatcher() & (0x2 as i32 | 0x8 as i32)
-        != 0
-    {
+    if crate::src::client::cl_keys::Key_GetCatcher() & (0x2 as i32 | 0x8 as i32) != 0 {
         return;
     }
     // draw the chat line
@@ -1291,8 +1268,7 @@ pub unsafe extern "C" fn Con_DrawSolidConsole(mut frac: f32) {
     //	qhandle_t		conShader;
     let mut currentColor: i32 = 0;
     let mut color: crate::src::qcommon::q_shared::vec4_t = [0.; 4];
-    lines = (crate::src::client::cl_main::cls.glconfig.vidHeight as f32 * frac)
-        as i32;
+    lines = (crate::src::client::cl_main::cls.glconfig.vidHeight as f32 * frac) as i32;
     if lines <= 0 as i32 {
         return;
     }
@@ -1335,8 +1311,7 @@ pub unsafe extern "C" fn Con_DrawSolidConsole(mut frac: f32) {
     crate::src::client::cl_main::re
         .SetColor
         .expect("non-null function pointer")(
-        crate::src::qcommon::q_math::g_color_table
-            [('1' as i32 - '0' as i32 & 0x7 as i32) as usize]
+        crate::src::qcommon::q_math::g_color_table[('1' as i32 - '0' as i32 & 0x7 as i32) as usize]
             .as_mut_ptr(),
     );
     i = crate::stdlib::strlen(
@@ -1345,8 +1320,7 @@ pub unsafe extern "C" fn Con_DrawSolidConsole(mut frac: f32) {
     x = 0 as i32;
     while x < i {
         crate::src::client::cl_scrn::SCR_DrawSmallChar(
-            crate::src::client::cl_main::cls.glconfig.vidWidth
-                - (i - x + 1 as i32) * 8 as i32,
+            crate::src::client::cl_main::cls.glconfig.vidWidth - (i - x + 1 as i32) * 8 as i32,
             lines - 16 as i32,
             (*::std::mem::transmute::<&[u8; 34], &[libc::c_char; 34]>(
                 b"ioq3 1.36_GIT_d0fe4462-2020-01-10\x00",
@@ -1371,8 +1345,7 @@ pub unsafe extern "C" fn Con_DrawSolidConsole(mut frac: f32) {
         x = 0 as i32;
         while x < con.linewidth {
             crate::src::client::cl_scrn::SCR_DrawSmallChar(
-                (con.xadjust + ((x + 1 as i32) * 8 as i32) as f32)
-                    as i32,
+                (con.xadjust + ((x + 1 as i32) * 8 as i32) as f32) as i32,
                 y,
                 '^' as i32,
             );
@@ -1404,12 +1377,8 @@ pub unsafe extern "C" fn Con_DrawSolidConsole(mut frac: f32) {
             x = 0 as i32;
             while x < con.linewidth {
                 if !(*text.offset(x as isize) as i32 & 0xff as i32 == ' ' as i32) {
-                    if *text.offset(x as isize) as i32 >> 8 as i32
-                        & 0x7 as i32
-                        != currentColor
-                    {
-                        currentColor = *text.offset(x as isize) as i32 >> 8 as i32
-                            & 0x7 as i32;
+                    if *text.offset(x as isize) as i32 >> 8 as i32 & 0x7 as i32 != currentColor {
+                        currentColor = *text.offset(x as isize) as i32 >> 8 as i32 & 0x7 as i32;
                         crate::src::client::cl_main::re
                             .SetColor
                             .expect("non-null function pointer")(
@@ -1418,8 +1387,7 @@ pub unsafe extern "C" fn Con_DrawSolidConsole(mut frac: f32) {
                         );
                     }
                     crate::src::client::cl_scrn::SCR_DrawSmallChar(
-                        (con.xadjust + ((x + 1 as i32) * 8 as i32) as f32)
-                            as i32,
+                        (con.xadjust + ((x + 1 as i32) * 8 as i32) as f32) as i32,
                         y,
                         *text.offset(x as isize) as i32 & 0xff as i32,
                     );
@@ -1452,9 +1420,7 @@ pub unsafe extern "C" fn Con_DrawConsole() {
     if crate::src::client::cl_main::clc.state as u32
         == crate::src::qcommon::q_shared::CA_DISCONNECTED as i32 as u32
     {
-        if crate::src::client::cl_keys::Key_GetCatcher() & (0x2 as i32 | 0x8 as i32)
-            == 0
-        {
+        if crate::src::client::cl_keys::Key_GetCatcher() & (0x2 as i32 | 0x8 as i32) == 0 {
             Con_DrawSolidConsole(1.0f64 as f32);
             return;
         }
@@ -1489,8 +1455,7 @@ pub unsafe extern "C" fn Con_RunConsole() {
       // scroll towards the destination height
     if con.finalFrac < con.displayFrac {
         con.displayFrac = (con.displayFrac as f64
-            - ((*con_conspeed).value
-                * crate::src::client::cl_main::cls.realFrametime as f32)
+            - ((*con_conspeed).value * crate::src::client::cl_main::cls.realFrametime as f32)
                 as f64
                 * 0.001f64) as f32; // none visible
         if con.finalFrac > con.displayFrac {
@@ -1498,8 +1463,7 @@ pub unsafe extern "C" fn Con_RunConsole() {
         }
     } else if con.finalFrac > con.displayFrac {
         con.displayFrac = (con.displayFrac as f64
-            + ((*con_conspeed).value
-                * crate::src::client::cl_main::cls.realFrametime as f32)
+            + ((*con_conspeed).value * crate::src::client::cl_main::cls.realFrametime as f32)
                 as f64
                 * 0.001f64) as f32;
         if con.finalFrac < con.displayFrac {

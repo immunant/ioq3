@@ -520,40 +520,34 @@ unsafe extern "C" fn MD5Transform(
     b = b << 21 as i32 | b >> 32 as i32 - 21 as i32;
     b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
     let ref mut fresh0 = *buf.offset(0 as i32 as isize);
-    *fresh0 = (*fresh0 as u32).wrapping_add(a) as crate::stdlib::uint32_t
-        as crate::stdlib::uint32_t;
+    *fresh0 =
+        (*fresh0 as u32).wrapping_add(a) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
     let ref mut fresh1 = *buf.offset(1 as i32 as isize);
-    *fresh1 = (*fresh1 as u32).wrapping_add(b) as crate::stdlib::uint32_t
-        as crate::stdlib::uint32_t;
+    *fresh1 =
+        (*fresh1 as u32).wrapping_add(b) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
     let ref mut fresh2 = *buf.offset(2 as i32 as isize);
-    *fresh2 = (*fresh2 as u32).wrapping_add(c) as crate::stdlib::uint32_t
-        as crate::stdlib::uint32_t;
+    *fresh2 =
+        (*fresh2 as u32).wrapping_add(c) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
     let ref mut fresh3 = *buf.offset(3 as i32 as isize);
-    *fresh3 = (*fresh3 as u32).wrapping_add(d) as crate::stdlib::uint32_t
-        as crate::stdlib::uint32_t;
+    *fresh3 =
+        (*fresh3 as u32).wrapping_add(d) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
 }
 /*
  * Update context to reflect the concatenation of another buffer full
  * of bytes.
  */
 
-unsafe extern "C" fn MD5Update(
-    mut ctx: *mut MD5Context,
-    mut buf: *const u8,
-    mut len: u32,
-) {
+unsafe extern "C" fn MD5Update(mut ctx: *mut MD5Context, mut buf: *const u8, mut len: u32) {
     let mut t: crate::stdlib::uint32_t = 0;
     /* Update bitcount */
     t = (*ctx).bits[0 as i32 as usize]; /* Carry from low to high */
     (*ctx).bits[0 as i32 as usize] = t.wrapping_add(len << 3 as i32); /* Bytes already in shsInfo->data */
     if (*ctx).bits[0 as i32 as usize] < t {
-        (*ctx).bits[1 as i32 as usize] =
-            (*ctx).bits[1 as i32 as usize].wrapping_add(1)
+        (*ctx).bits[1 as i32 as usize] = (*ctx).bits[1 as i32 as usize].wrapping_add(1)
     }
-    (*ctx).bits[1 as i32 as usize] =
-        ((*ctx).bits[1 as i32 as usize] as u32)
-            .wrapping_add(len >> 29 as i32) as crate::stdlib::uint32_t
-            as crate::stdlib::uint32_t;
+    (*ctx).bits[1 as i32 as usize] = ((*ctx).bits[1 as i32 as usize] as u32)
+        .wrapping_add(len >> 29 as i32)
+        as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
     t = t >> 3 as i32 & 0x3f as i32 as u32;
     /* Handle any leading odd-sized chunks */
     if t != 0 {
@@ -611,8 +605,7 @@ unsafe extern "C" fn MD5Final(mut ctx: *mut MD5Context, mut digest: *mut u8) {
     let mut count: u32 = 0;
     let mut p: *mut u8 = 0 as *mut u8;
     /* Compute number of bytes mod 64 */
-    count = (*ctx).bits[0 as i32 as usize] >> 3 as i32
-        & 0x3f as i32 as u32;
+    count = (*ctx).bits[0 as i32 as usize] >> 3 as i32 & 0x3f as i32 as u32;
     /* Set the first char of padding to 0x80.  This is safe since there is
     always at least one byte free */
     p = (*ctx).in_0.as_mut_ptr().offset(count as isize);
@@ -624,11 +617,7 @@ unsafe extern "C" fn MD5Final(mut ctx: *mut MD5Context, mut digest: *mut u8) {
     /* Pad out to 56 mod 64 */
     if count < 8 as i32 as u32 {
         /* Two lots of padding:  Pad the first block to 64 bytes */
-        crate::stdlib::memset(
-            p as *mut libc::c_void,
-            0 as i32,
-            count as libc::c_ulong,
-        );
+        crate::stdlib::memset(p as *mut libc::c_void, 0 as i32, count as libc::c_ulong);
         MD5Transform(
             (*ctx).buf.as_mut_ptr(),
             (*ctx).in_0.as_mut_ptr() as *mut crate::stdlib::uint32_t
@@ -649,10 +638,10 @@ unsafe extern "C" fn MD5Final(mut ctx: *mut MD5Context, mut digest: *mut u8) {
         );
     }
     /* Append length in bits and transform */
-    *((*ctx).in_0.as_mut_ptr() as *mut crate::stdlib::uint32_t)
-        .offset(14 as i32 as isize) = (*ctx).bits[0 as i32 as usize];
-    *((*ctx).in_0.as_mut_ptr() as *mut crate::stdlib::uint32_t)
-        .offset(15 as i32 as isize) = (*ctx).bits[1 as i32 as usize];
+    *((*ctx).in_0.as_mut_ptr() as *mut crate::stdlib::uint32_t).offset(14 as i32 as isize) =
+        (*ctx).bits[0 as i32 as usize];
+    *((*ctx).in_0.as_mut_ptr() as *mut crate::stdlib::uint32_t).offset(15 as i32 as isize) =
+        (*ctx).bits[1 as i32 as usize];
     MD5Transform(
         (*ctx).buf.as_mut_ptr(),
         (*ctx).in_0.as_mut_ptr() as *mut crate::stdlib::uint32_t as *const crate::stdlib::uint32_t,
@@ -683,10 +672,9 @@ pub unsafe extern "C" fn Com_MD5File(
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0,
     ];
-    let mut digest: [u8; 16] =
-        *::std::mem::transmute::<&[u8; 16], &mut [u8; 16]>(
-            b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
-        );
+    let mut digest: [u8; 16] = *::std::mem::transmute::<&[u8; 16], &mut [u8; 16]>(
+        b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
+    );
     let mut f: crate::src::qcommon::q_shared::fileHandle_t = 0;
     let mut md5: MD5_CTX = MD5_CTX {
         buf: [0; 4],
@@ -716,11 +704,7 @@ pub unsafe extern "C" fn Com_MD5File(
     }
     MD5Init(&mut md5);
     if prefix_len != 0 && *prefix as i32 != 0 {
-        MD5Update(
-            &mut md5,
-            prefix as *mut u8,
-            prefix_len as u32,
-        );
+        MD5Update(&mut md5, prefix as *mut u8, prefix_len as u32);
     }
     loop {
         r = crate::src::qcommon::files::FS_Read(

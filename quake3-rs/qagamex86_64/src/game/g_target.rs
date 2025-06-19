@@ -352,17 +352,13 @@ pub unsafe extern "C" fn Use_target_remove_powerups(
     if (*activator).client.is_null() {
         return;
     }
-    if (*(*activator).client).ps.powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize]
-        != 0
-    {
+    if (*(*activator).client).ps.powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize] != 0 {
         crate::src::game::g_team::Team_ReturnFlag(crate::bg_public_h::TEAM_RED as i32);
-    } else if (*(*activator).client).ps.powerups
-        [crate::bg_public_h::PW_BLUEFLAG as i32 as usize]
+    } else if (*(*activator).client).ps.powerups[crate::bg_public_h::PW_BLUEFLAG as i32 as usize]
         != 0
     {
         crate::src::game::g_team::Team_ReturnFlag(crate::bg_public_h::TEAM_BLUE as i32);
-    } else if (*(*activator).client).ps.powerups
-        [crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize]
+    } else if (*(*activator).client).ps.powerups[crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize]
         != 0
     {
         crate::src::game::g_team::Team_ReturnFlag(crate::bg_public_h::TEAM_FREE as i32);
@@ -409,9 +405,7 @@ pub unsafe extern "C" fn Use_Target_Delay(
         + ((*ent).wait as f64
             + (*ent).random as f64
                 * (2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
-                        as f64
+                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)))
             * 1000 as i32 as f64) as i32;
     (*ent).think =
@@ -696,16 +690,13 @@ pub unsafe extern "C" fn target_laser_think(mut self_0: *mut crate::g_local_h::g
     let mut point: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     // if pointed at another entity, set movedir to point at it
     if !(*self_0).enemy.is_null() {
-        point[0 as i32 as usize] = ((*(*self_0).enemy).s.origin[0 as i32 as usize]
-            as f64
+        point[0 as i32 as usize] = ((*(*self_0).enemy).s.origin[0 as i32 as usize] as f64
             + (*(*self_0).enemy).r.mins[0 as i32 as usize] as f64 * 0.5f64)
             as crate::src::qcommon::q_shared::vec_t;
-        point[1 as i32 as usize] = ((*(*self_0).enemy).s.origin[1 as i32 as usize]
-            as f64
+        point[1 as i32 as usize] = ((*(*self_0).enemy).s.origin[1 as i32 as usize] as f64
             + (*(*self_0).enemy).r.mins[1 as i32 as usize] as f64 * 0.5f64)
             as crate::src::qcommon::q_shared::vec_t;
-        point[2 as i32 as usize] = ((*(*self_0).enemy).s.origin[2 as i32 as usize]
-            as f64
+        point[2 as i32 as usize] = ((*(*self_0).enemy).s.origin[2 as i32 as usize] as f64
             + (*(*self_0).enemy).r.mins[2 as i32 as usize] as f64 * 0.5f64)
             as crate::src::qcommon::q_shared::vec_t;
         point[0 as i32 as usize] = (point[0 as i32 as usize] as f64

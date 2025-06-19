@@ -335,8 +335,7 @@ pub unsafe extern "C" fn R_AddPolygonSurfaces() {
     let mut i: i32 = 0;
     let mut sh: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
     let mut poly: *mut crate::tr_local_h::srfPoly_t = 0 as *mut crate::tr_local_h::srfPoly_t;
-    crate::src::renderergl1::tr_main::tr.currentEntityNum =
-        ((1 as i32) << 10 as i32) - 1 as i32;
+    crate::src::renderergl1::tr_main::tr.currentEntityNum = ((1 as i32) << 10 as i32) - 1 as i32;
     crate::src::renderergl1::tr_main::tr.shiftedEntityNum =
         crate::src::renderergl1::tr_main::tr.currentEntityNum << 7 as i32;
     i = 0 as i32;
@@ -541,8 +540,7 @@ pub unsafe extern "C" fn RE_AddRefEntityToScene(mut ent: *const crate::tr_types_
         return;
     }
     if ((*ent).reType as i32) < 0 as i32
-        || (*ent).reType as u32
-            >= crate::tr_types_h::RT_MAX_REF_ENTITY_TYPE as i32 as u32
+        || (*ent).reType as u32 >= crate::tr_types_h::RT_MAX_REF_ENTITY_TYPE as i32 as u32
     {
         crate::src::renderergl1::tr_main::ri
             .Error
@@ -1112,9 +1110,7 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const crate::tr_types_h::refdef
     startTime = crate::src::renderergl1::tr_main::ri
         .Milliseconds
         .expect("non-null function pointer")();
-    if crate::src::renderergl1::tr_main::tr.world.is_null()
-        && (*fd).rdflags & 0x1 as i32 == 0
-    {
+    if crate::src::renderergl1::tr_main::tr.world.is_null() && (*fd).rdflags & 0x1 as i32 == 0 {
         crate::src::renderergl1::tr_main::ri
             .Error
             .expect("non-null function pointer")(
@@ -1142,32 +1138,23 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const crate::tr_types_h::refdef
         (*fd).vieworg[1 as i32 as usize];
     crate::src::renderergl1::tr_main::tr.refdef.vieworg[2 as i32 as usize] =
         (*fd).vieworg[2 as i32 as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[0 as i32 as usize]
-        [0 as i32 as usize] =
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize] =
         (*fd).viewaxis[0 as i32 as usize][0 as i32 as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[0 as i32 as usize]
-        [1 as i32 as usize] =
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize] =
         (*fd).viewaxis[0 as i32 as usize][1 as i32 as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[0 as i32 as usize]
-        [2 as i32 as usize] =
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize] =
         (*fd).viewaxis[0 as i32 as usize][2 as i32 as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[1 as i32 as usize]
-        [0 as i32 as usize] =
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize] =
         (*fd).viewaxis[1 as i32 as usize][0 as i32 as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[1 as i32 as usize]
-        [1 as i32 as usize] =
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize] =
         (*fd).viewaxis[1 as i32 as usize][1 as i32 as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[1 as i32 as usize]
-        [2 as i32 as usize] =
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize] =
         (*fd).viewaxis[1 as i32 as usize][2 as i32 as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[2 as i32 as usize]
-        [0 as i32 as usize] =
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize] =
         (*fd).viewaxis[2 as i32 as usize][0 as i32 as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[2 as i32 as usize]
-        [1 as i32 as usize] =
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize] =
         (*fd).viewaxis[2 as i32 as usize][1 as i32 as usize];
-    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[2 as i32 as usize]
-        [2 as i32 as usize] =
+    crate::src::renderergl1::tr_main::tr.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize] =
         (*fd).viewaxis[2 as i32 as usize][2 as i32 as usize];
     crate::src::renderergl1::tr_main::tr.refdef.time = (*fd).time;
     crate::src::renderergl1::tr_main::tr.refdef.rdflags = (*fd).rdflags;
@@ -1192,8 +1179,7 @@ pub unsafe extern "C" fn RE_RenderScene(mut fd: *const crate::tr_types_h::refdef
                 .refdef
                 .areamask
                 .as_mut_ptr() as *mut i32)
-                .offset(i as isize) =
-                *((*fd).areamask.as_ptr() as *mut i32).offset(i as isize);
+                .offset(i as isize) = *((*fd).areamask.as_ptr() as *mut i32).offset(i as isize);
             i += 1
         }
         if areaDiff != 0 {

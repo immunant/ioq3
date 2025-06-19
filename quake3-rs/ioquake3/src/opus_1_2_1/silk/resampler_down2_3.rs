@@ -84,9 +84,8 @@ pub unsafe extern "C" fn silk_resampler_down2_3(
         0 as *mut crate::opus_types_h::opus_int32;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<crate::opus_types_h::opus_int32>() as libc::c_ulong).wrapping_mul(
-            (10 as i32 * 48 as i32 + 4 as i32) as libc::c_ulong,
-        ) as usize,
+        (::std::mem::size_of::<crate::opus_types_h::opus_int32>() as libc::c_ulong)
+            .wrapping_mul((10 as i32 * 48 as i32 + 4 as i32) as libc::c_ulong) as usize,
     );
     buf = fresh0.as_mut_ptr() as *mut crate::opus_types_h::opus_int32;
     /* Copy buffered samples to start of buffer */
@@ -140,24 +139,21 @@ pub unsafe extern "C" fn silk_resampler_down2_3(
             *fresh1 = if (if 6 as i32 == 1 as i32 {
                 (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
             } else {
-                ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32)
-                    >> 1 as i32
+                ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
             }) > 0x7fff as i32
             {
                 0x7fff as i32
             } else if (if 6 as i32 == 1 as i32 {
                 (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
             } else {
-                ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32)
-                    >> 1 as i32
+                ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
             }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
             {
                 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
             } else if 6 as i32 == 1 as i32 {
                 (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
             } else {
-                ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32)
-                    >> 1 as i32
+                ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
             } as crate::opus_types_h::opus_int16;
             res_Q6 = (*buf_ptr.offset(1 as i32 as isize) as i64
                 * crate::src::opus_1_2_1::silk::resampler_rom::silk_Resampler_2_3_COEFS_LQ
@@ -184,24 +180,21 @@ pub unsafe extern "C" fn silk_resampler_down2_3(
             *fresh2 = if (if 6 as i32 == 1 as i32 {
                 (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
             } else {
-                ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32)
-                    >> 1 as i32
+                ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
             }) > 0x7fff as i32
             {
                 0x7fff as i32
             } else if (if 6 as i32 == 1 as i32 {
                 (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
             } else {
-                ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32)
-                    >> 1 as i32
+                ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
             }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
             {
                 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
             } else if 6 as i32 == 1 as i32 {
                 (res_Q6 >> 1 as i32) + (res_Q6 & 1 as i32)
             } else {
-                ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32)
-                    >> 1 as i32
+                ((res_Q6 >> 6 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
             } as crate::opus_types_h::opus_int16;
             buf_ptr = buf_ptr.offset(3 as i32 as isize);
             counter -= 3 as i32

@@ -445,9 +445,7 @@ pub static mut botlib_export: *mut crate::botlib_h::botlib_export_t =
 // the game allocates gentities with private information after the server shared part
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_NumForGentity(
-    mut ent: *mut crate::g_public_h::sharedEntity_t,
-) -> i32 {
+pub unsafe extern "C" fn SV_NumForGentity(mut ent: *mut crate::g_public_h::sharedEntity_t) -> i32 {
     let mut num: i32 = 0;
     num = ((ent as *mut crate::src::qcommon::q_shared::byte).offset_from(
         crate::src::server::sv_main::sv.gentities as *mut crate::src::qcommon::q_shared::byte,
@@ -457,9 +455,7 @@ pub unsafe extern "C" fn SV_NumForGentity(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_GentityNum(
-    mut num: i32,
-) -> *mut crate::g_public_h::sharedEntity_t {
+pub unsafe extern "C" fn SV_GentityNum(mut num: i32) -> *mut crate::g_public_h::sharedEntity_t {
     let mut ent: *mut crate::g_public_h::sharedEntity_t =
         0 as *mut crate::g_public_h::sharedEntity_t;
     ent = (crate::src::server::sv_main::sv.gentities as *mut crate::src::qcommon::q_shared::byte)
@@ -484,9 +480,7 @@ pub unsafe extern "C" fn SV_GameClientNum(
 pub unsafe extern "C" fn SV_SvEntityForGentity(
     mut gEnt: *mut crate::g_public_h::sharedEntity_t,
 ) -> *mut crate::server_h::svEntity_t {
-    if gEnt.is_null()
-        || (*gEnt).s.number < 0 as i32
-        || (*gEnt).s.number >= (1 as i32) << 10 as i32
+    if gEnt.is_null() || (*gEnt).s.number < 0 as i32 || (*gEnt).s.number >= (1 as i32) << 10 as i32
     {
         crate::src::qcommon::common::Com_Error(
             crate::src::qcommon::q_shared::ERR_DROP as i32,
@@ -551,13 +545,8 @@ Disconnects the client with a message
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_GameDropClient(
-    mut clientNum: i32,
-    mut reason: *const libc::c_char,
-) {
-    if clientNum < 0 as i32
-        || clientNum >= (*crate::src::server::sv_main::sv_maxclients).integer
-    {
+pub unsafe extern "C" fn SV_GameDropClient(mut clientNum: i32, mut reason: *const libc::c_char) {
+    if clientNum < 0 as i32 || clientNum >= (*crate::src::server::sv_main::sv_maxclients).integer {
         return;
     }
     crate::src::server::sv_client::SV_DropClient(
@@ -637,8 +626,7 @@ pub unsafe extern "C" fn SV_inPVS(
     cluster = crate::src::qcommon::cm_load::CM_LeafCluster(leafnum);
     area2 = crate::src::qcommon::cm_load::CM_LeafArea(leafnum);
     if !mask.is_null()
-        && *mask.offset((cluster >> 3 as i32) as isize) as i32
-            & (1 as i32) << (cluster & 7 as i32)
+        && *mask.offset((cluster >> 3 as i32) as isize) as i32 & (1 as i32) << (cluster & 7 as i32)
             == 0
     {
         return crate::src::qcommon::q_shared::qfalse;
@@ -671,8 +659,7 @@ pub unsafe extern "C" fn SV_inPVSIgnorePortals(
     leafnum = crate::src::qcommon::cm_test::CM_PointLeafnum(p2);
     cluster = crate::src::qcommon::cm_load::CM_LeafCluster(leafnum);
     if !mask.is_null()
-        && *mask.offset((cluster >> 3 as i32) as isize) as i32
-            & (1 as i32) << (cluster & 7 as i32)
+        && *mask.offset((cluster >> 3 as i32) as isize) as i32 & (1 as i32) << (cluster & 7 as i32)
             == 0
     {
         return crate::src::qcommon::q_shared::qfalse;
@@ -764,10 +751,7 @@ SV_GetServerinfo
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SV_GetServerinfo(
-    mut buffer: *mut libc::c_char,
-    mut bufferSize: i32,
-) {
+pub unsafe extern "C" fn SV_GetServerinfo(mut buffer: *mut libc::c_char, mut bufferSize: i32) {
     if bufferSize < 1 as i32 {
         crate::src::qcommon::common::Com_Error(
             crate::src::qcommon::q_shared::ERR_DROP as i32,
@@ -814,9 +798,7 @@ pub unsafe extern "C" fn SV_GetUsercmd(
     mut clientNum: i32,
     mut cmd: *mut crate::src::qcommon::q_shared::usercmd_t,
 ) {
-    if clientNum < 0 as i32
-        || clientNum >= (*crate::src::server::sv_main::sv_maxclients).integer
-    {
+    if clientNum < 0 as i32 || clientNum >= (*crate::src::server::sv_main::sv_maxclients).integer {
         crate::src::qcommon::common::Com_Error(
             crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"SV_GetUsercmd: bad clientNum:%i\x00" as *const u8 as *const libc::c_char,
@@ -943,8 +925,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             crate::src::qcommon::files::FS_Read(
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 *args.offset(2 as i32 as isize) as i32,
-                *args.offset(3 as i32 as isize)
-                    as crate::src::qcommon::q_shared::fileHandle_t,
+                *args.offset(3 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t,
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -952,14 +933,14 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             crate::src::qcommon::files::FS_Write(
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 *args.offset(2 as i32 as isize) as i32,
-                *args.offset(3 as i32 as isize)
-                    as crate::src::qcommon::q_shared::fileHandle_t,
+                *args.offset(3 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t,
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
         13 => {
-            crate::src::qcommon::files::FS_FCloseFile(*args.offset(1 as i32 as isize)
-                as crate::src::qcommon::q_shared::fileHandle_t);
+            crate::src::qcommon::files::FS_FCloseFile(
+                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t
+            );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
         38 => {
@@ -975,8 +956,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
         }
         45 => {
             return crate::src::qcommon::files::FS_Seek(
-                *args.offset(1 as i32 as isize)
-                    as crate::src::qcommon::q_shared::fileHandle_t,
+                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t,
                 *args.offset(2 as i32 as isize),
                 *args.offset(3 as i32 as isize) as i32,
             ) as crate::stdlib::intptr_t
@@ -1031,8 +1011,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                     as *const crate::src::qcommon::q_shared::vec_t,
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *const crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut i32,
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
                 *args.offset(4 as i32 as isize) as i32,
             ) as crate::stdlib::intptr_t
         }
@@ -1186,9 +1165,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
         }
         34 => return crate::src::server::sv_bot::SV_BotAllocateClient() as crate::stdlib::intptr_t,
         35 => {
-            crate::src::server::sv_bot::SV_BotFreeClient(
-                *args.offset(1 as i32 as isize) as i32
-            );
+            crate::src::server::sv_bot::SV_BotFreeClient(*args.offset(1 as i32 as isize) as i32);
             return 0 as i32 as crate::stdlib::intptr_t;
         }
         36 => {
@@ -1213,11 +1190,9 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             if crate::src::server::sv_main::sv.entityParsePoint.is_null()
                 && *s.offset(0 as i32 as isize) == 0
             {
-                return crate::src::qcommon::q_shared::qfalse as i32
-                    as crate::stdlib::intptr_t;
+                return crate::src::qcommon::q_shared::qfalse as i32 as crate::stdlib::intptr_t;
             } else {
-                return crate::src::qcommon::q_shared::qtrue as i32
-                    as crate::stdlib::intptr_t;
+                return crate::src::qcommon::q_shared::qtrue as i32 as crate::stdlib::intptr_t;
             }
         }
         39 => {
@@ -1295,7 +1270,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             return (*botlib_export)
                 .PC_FreeSourceHandle
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             ) as crate::stdlib::intptr_t
         }
         580 => {
@@ -1314,8 +1289,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(1 as i32 as isize) as i32,
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut i32,
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
             ) as crate::stdlib::intptr_t
         }
         205 => {
@@ -1393,8 +1367,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                     as *mut crate::src::qcommon::q_shared::vec_t,
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut i32,
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
                 *args.offset(4 as i32 as isize) as i32,
             ) as crate::stdlib::intptr_t
         }
@@ -1491,8 +1464,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                     as *mut crate::src::qcommon::q_shared::vec_t,
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut i32,
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
                     as *mut crate::src::qcommon::q_shared::vec3_t,
                 *args.offset(5 as i32 as isize) as i32,
@@ -1512,7 +1484,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .aas
                 .AAS_NextBSPEntity
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             ) as crate::stdlib::intptr_t
         }
         311 => {
@@ -1548,8 +1520,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(1 as i32 as isize) as i32,
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut f32,
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut f32,
             ) as crate::stdlib::intptr_t
         }
         314 => {
@@ -1560,8 +1531,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(1 as i32 as isize) as i32,
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut i32,
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
             ) as crate::stdlib::intptr_t
         }
         315 => {
@@ -1569,7 +1539,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .aas
                 .AAS_AreaReachability
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             ) as crate::stdlib::intptr_t
         }
         316 => {
@@ -1694,7 +1664,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ea
                 .EA_Gesture
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1703,7 +1673,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ea
                 .EA_Talk
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1712,7 +1682,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ea
                 .EA_Attack
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1721,7 +1691,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ea
                 .EA_Use
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1730,7 +1700,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ea
                 .EA_Respawn
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1739,7 +1709,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ea
                 .EA_Crouch
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1748,7 +1718,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ea
                 .EA_MoveUp
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1757,7 +1727,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ea
                 .EA_MoveDown
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1766,7 +1736,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ea
                 .EA_MoveForward
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1775,7 +1745,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ea
                 .EA_MoveBack
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1784,7 +1754,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ea
                 .EA_MoveLeft
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1793,7 +1763,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ea
                 .EA_MoveRight
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1812,7 +1782,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ea
                 .EA_Jump
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1821,7 +1791,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ea
                 .EA_DelayedJump
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1875,7 +1845,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ea
                 .EA_ResetInput
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1894,7 +1864,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotFreeCharacter
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1963,7 +1933,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotFreeChatState
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2004,7 +1974,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotNumConsoleMessages
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             ) as crate::stdlib::intptr_t
         }
         513 => {
@@ -2078,7 +2048,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotChatLength
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             ) as crate::stdlib::intptr_t
         }
         516 => {
@@ -2204,7 +2174,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotResetGoalState
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2213,7 +2183,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotResetAvoidGoals
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2243,7 +2213,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotPopGoal
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2252,7 +2222,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotEmptyGoalStack
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2261,7 +2231,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotDumpAvoidGoals
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2270,7 +2240,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotDumpGoalStack
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2314,8 +2284,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(1 as i32 as isize) as i32,
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut i32,
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
                 *args.offset(4 as i32 as isize) as i32,
             ) as crate::stdlib::intptr_t
         }
@@ -2327,8 +2296,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 *args.offset(1 as i32 as isize) as i32,
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut crate::src::qcommon::q_shared::vec_t,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut i32,
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
                 *args.offset(4 as i32 as isize) as i32,
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize))
                     as *mut crate::src::botlib::be_ai_goal::bot_goal_s,
@@ -2442,7 +2410,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotFreeItemWeights
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2483,7 +2451,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotAllocGoalState
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             ) as crate::stdlib::intptr_t
         }
         547 => {
@@ -2491,7 +2459,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotFreeGoalState
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2500,7 +2468,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotResetMoveState
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2548,7 +2516,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotResetAvoidReach
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2557,7 +2525,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotResetLastAvoidReach
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2612,7 +2580,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotFreeMoveState
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2633,8 +2601,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .BotChooseBestFightWeapon
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut i32,
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut i32,
             ) as crate::stdlib::intptr_t
         }
         559 => {
@@ -2671,7 +2638,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotFreeWeaponState
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2680,7 +2647,7 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .ai
                 .BotResetWeaponState
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2690,14 +2657,10 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
                 .GeneticParentsAndChildSelection
                 .expect("non-null function pointer")(
                 *args.offset(1 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
-                    as *mut f32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize))
-                    as *mut i32,
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize)) as *mut f32,
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut i32,
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(5 as i32 as isize)) as *mut i32,
             ) as crate::stdlib::intptr_t
         }
         100 => {
@@ -2727,14 +2690,14 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             return *args.offset(1 as i32 as isize);
         }
         103 => {
-            return FloatAsInt(crate::stdlib::sin(
-                _vmf(*args.offset(1 as i32 as isize)) as f64
-            ) as f32) as crate::stdlib::intptr_t
+            return FloatAsInt(
+                crate::stdlib::sin(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
+            ) as crate::stdlib::intptr_t
         }
         104 => {
-            return FloatAsInt(crate::stdlib::cos(
-                _vmf(*args.offset(1 as i32 as isize)) as f64
-            ) as f32) as crate::stdlib::intptr_t
+            return FloatAsInt(
+                crate::stdlib::cos(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
+            ) as crate::stdlib::intptr_t
         }
         105 => {
             return FloatAsInt(crate::stdlib::atan2(
@@ -2743,9 +2706,9 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             ) as f32) as crate::stdlib::intptr_t
         }
         106 => {
-            return FloatAsInt(crate::stdlib::sqrt(
-                _vmf(*args.offset(1 as i32 as isize)) as f64
-            ) as f32) as crate::stdlib::intptr_t
+            return FloatAsInt(
+                crate::stdlib::sqrt(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
+            ) as crate::stdlib::intptr_t
         }
         107 => {
             crate::src::qcommon::q_math::MatrixMultiply(
@@ -2781,14 +2744,14 @@ pub unsafe extern "C" fn SV_GameSystemCalls(
             return 0 as i32 as crate::stdlib::intptr_t;
         }
         110 => {
-            return FloatAsInt(crate::stdlib::floor(
-                _vmf(*args.offset(1 as i32 as isize)) as f64
-            ) as f32) as crate::stdlib::intptr_t
+            return FloatAsInt(
+                crate::stdlib::floor(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
+            ) as crate::stdlib::intptr_t
         }
         111 => {
-            return FloatAsInt(crate::stdlib::ceil(
-                _vmf(*args.offset(1 as i32 as isize)) as f64
-            ) as f32) as crate::stdlib::intptr_t
+            return FloatAsInt(
+                crate::stdlib::ceil(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
+            ) as crate::stdlib::intptr_t
         }
         _ => {
             crate::src::qcommon::common::Com_Error(
@@ -3082,9 +3045,7 @@ See if the current console command is claimed by the game
 #[no_mangle]
 
 pub unsafe extern "C" fn SV_GameCommand() -> crate::src::qcommon::q_shared::qboolean {
-    if crate::src::server::sv_main::sv.state as u32
-        != crate::server_h::SS_GAME as i32 as u32
-    {
+    if crate::src::server::sv_main::sv.state as u32 != crate::server_h::SS_GAME as i32 as u32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
     return crate::src::qcommon::vm::VM_Call(

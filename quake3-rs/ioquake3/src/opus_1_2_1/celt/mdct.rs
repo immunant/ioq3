@@ -96,8 +96,7 @@ pub unsafe extern "C" fn clt_mdct_forward_c(
     N4 = N >> 2 as i32;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f32>() as libc::c_ulong).wrapping_mul(N2 as libc::c_ulong)
-            as usize,
+        (::std::mem::size_of::<f32>() as libc::c_ulong).wrapping_mul(N2 as libc::c_ulong) as usize,
     );
     f = fresh0.as_mut_ptr() as *mut f32;
     let mut fresh1 = ::std::vec::from_elem(
@@ -116,8 +115,7 @@ pub unsafe extern "C" fn clt_mdct_forward_c(
         .offset(-(1 as i32 as isize))
         .offset((overlap >> 1 as i32) as isize);
     let mut yp: *mut f32 = f;
-    let mut wp1: *const crate::arch_h::opus_val16 =
-        window.offset((overlap >> 1 as i32) as isize);
+    let mut wp1: *const crate::arch_h::opus_val16 = window.offset((overlap >> 1 as i32) as isize);
     let mut wp2: *const crate::arch_h::opus_val16 = window
         .offset((overlap >> 1 as i32) as isize)
         .offset(-(1 as i32 as isize));
@@ -137,9 +135,7 @@ pub unsafe extern "C" fn clt_mdct_forward_c(
         i += 1
     }
     wp1 = window;
-    wp2 = window
-        .offset(overlap as isize)
-        .offset(-(1 as i32 as isize));
+    wp2 = window.offset(overlap as isize).offset(-(1 as i32 as isize));
     while i < N4 - (overlap + 3 as i32 >> 2 as i32) {
         /* Real part arranged as a-bR, Imag part arranged as -c-dR */
         let fresh4 = yp;
@@ -168,8 +164,7 @@ pub unsafe extern "C" fn clt_mdct_forward_c(
     }
     /* Pre-rotation */
     let mut yp_0: *mut f32 = f;
-    let mut t: *const f32 =
-        &*trig.offset(0 as i32 as isize) as *const f32;
+    let mut t: *const f32 = &*trig.offset(0 as i32 as isize) as *const f32;
     i = 0 as i32;
     while i < N4 {
         let mut yc: crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx =
@@ -207,8 +202,7 @@ pub unsafe extern "C" fn clt_mdct_forward_c(
     let mut fp: *const crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx = f2;
     let mut yp1: *mut f32 = out;
     let mut yp2: *mut f32 = out.offset((stride * (N2 - 1 as i32)) as isize);
-    let mut t_0: *const f32 =
-        &*trig.offset(0 as i32 as isize) as *const f32;
+    let mut t_0: *const f32 = &*trig.offset(0 as i32 as isize) as *const f32;
     i = 0 as i32;
     while i < N4 {
         let mut yr_0: f32 = 0.;
@@ -299,8 +293,7 @@ pub unsafe extern "C" fn clt_mdct_backward_c(
     let mut xp1: *const f32 = in_0;
     let mut xp2: *const f32 = in_0.offset((stride * (N2 - 1 as i32)) as isize);
     let mut yp: *mut f32 = out.offset((overlap >> 1 as i32) as isize);
-    let mut t: *const f32 =
-        &*trig.offset(0 as i32 as isize) as *const f32;
+    let mut t: *const f32 = &*trig.offset(0 as i32 as isize) as *const f32;
     let mut bitrev: *const crate::opus_types_h::opus_int16 = (*(*l).kfft[shift as usize]).bitrev;
     i = 0 as i32;
     while i < N4 {
@@ -333,8 +326,7 @@ pub unsafe extern "C" fn clt_mdct_backward_c(
         .offset((overlap >> 1 as i32) as isize)
         .offset(N2 as isize)
         .offset(-(2 as i32 as isize));
-    let mut t_0: *const f32 =
-        &*trig.offset(0 as i32 as isize) as *const f32;
+    let mut t_0: *const f32 = &*trig.offset(0 as i32 as isize) as *const f32;
     /* Loop to (N4+1)>>1 to handle odd N4. When N4 is odd, the
     middle pair will be computed twice. */
     i = 0 as i32;
@@ -370,14 +362,11 @@ pub unsafe extern "C" fn clt_mdct_backward_c(
         i += 1
     }
     /* Mirror on both sides for TDAC */
-    let mut xp1_0: *mut f32 = out
-        .offset(overlap as isize)
-        .offset(-(1 as i32 as isize));
+    let mut xp1_0: *mut f32 = out.offset(overlap as isize).offset(-(1 as i32 as isize));
     let mut yp1_0: *mut f32 = out;
     let mut wp1: *const crate::arch_h::opus_val16 = window;
-    let mut wp2: *const crate::arch_h::opus_val16 = window
-        .offset(overlap as isize)
-        .offset(-(1 as i32 as isize));
+    let mut wp2: *const crate::arch_h::opus_val16 =
+        window.offset(overlap as isize).offset(-(1 as i32 as isize));
     i = 0 as i32;
     while i < overlap / 2 as i32 {
         let mut x1: f32 = 0.;

@@ -478,10 +478,7 @@ return a hash value for the filename
 ================
 */
 
-unsafe extern "C" fn generateHashValue(
-    mut fname: *const libc::c_char,
-    size: i32,
-) -> libc::c_long {
+unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char, size: i32) -> libc::c_long {
     let mut i: i32 = 0; // don't include extension
     let mut hash: libc::c_long = 0; // damn path names
     let mut letter: libc::c_char = 0; // damn path names
@@ -490,9 +487,7 @@ unsafe extern "C" fn generateHashValue(
     while *fname.offset(i as isize) as i32 != '\u{0}' as i32 {
         letter = ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                > 1 as i32 as libc::c_ulong
-            {
+            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
                 if 0 != 0 {
                     let mut __c: i32 = *fname.offset(i as isize) as i32;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1042,18 +1037,10 @@ unsafe extern "C" fn ParseTexMod(
             shader.name.as_mut_ptr(),
         );
     }
-    tmi = &mut *(*(*stage)
-        .bundle
-        .as_mut_ptr()
-        .offset(0 as i32 as isize))
-    .texMods
-    .offset(
-        (*(*stage)
-            .bundle
-            .as_mut_ptr()
-            .offset(0 as i32 as isize))
-        .numTexMods as isize,
-    ) as *mut crate::tr_local_h::texModInfo_t;
+    tmi = &mut *(*(*stage).bundle.as_mut_ptr().offset(0 as i32 as isize))
+        .texMods
+        .offset((*(*stage).bundle.as_mut_ptr().offset(0 as i32 as isize)).numTexMods as isize)
+        as *mut crate::tr_local_h::texModInfo_t;
     (*stage).bundle[0 as i32 as usize].numTexMods += 1;
     token =
         crate::src::qcommon::q_shared::COM_ParseExt(text, crate::src::qcommon::q_shared::qfalse);
@@ -1312,8 +1299,7 @@ unsafe extern "C" fn ParseTexMod(
             );
             return;
         }
-        (*tmi).matrix[0 as i32 as usize][0 as i32 as usize] =
-            atof(token) as f32;
+        (*tmi).matrix[0 as i32 as usize][0 as i32 as usize] = atof(token) as f32;
         token = crate::src::qcommon::q_shared::COM_ParseExt(
             text,
             crate::src::qcommon::q_shared::qfalse,
@@ -1329,8 +1315,7 @@ unsafe extern "C" fn ParseTexMod(
             );
             return;
         }
-        (*tmi).matrix[0 as i32 as usize][1 as i32 as usize] =
-            atof(token) as f32;
+        (*tmi).matrix[0 as i32 as usize][1 as i32 as usize] = atof(token) as f32;
         token = crate::src::qcommon::q_shared::COM_ParseExt(
             text,
             crate::src::qcommon::q_shared::qfalse,
@@ -1346,8 +1331,7 @@ unsafe extern "C" fn ParseTexMod(
             );
             return;
         }
-        (*tmi).matrix[1 as i32 as usize][0 as i32 as usize] =
-            atof(token) as f32;
+        (*tmi).matrix[1 as i32 as usize][0 as i32 as usize] = atof(token) as f32;
         token = crate::src::qcommon::q_shared::COM_ParseExt(
             text,
             crate::src::qcommon::q_shared::qfalse,
@@ -1363,8 +1347,7 @@ unsafe extern "C" fn ParseTexMod(
             );
             return;
         }
-        (*tmi).matrix[1 as i32 as usize][1 as i32 as usize] =
-            atof(token) as f32;
+        (*tmi).matrix[1 as i32 as usize][1 as i32 as usize] = atof(token) as f32;
         token = crate::src::qcommon::q_shared::COM_ParseExt(
             text,
             crate::src::qcommon::q_shared::qfalse,
@@ -1544,22 +1527,18 @@ unsafe extern "C" fn ParseStage(
                 let mut flags: crate::tr_common_h::imgFlags_t = crate::tr_common_h::IMGFLAG_NONE;
                 if shader.noMipMaps as u64 == 0 {
                     flags = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
-                        flags as u32
-                            | crate::tr_common_h::IMGFLAG_MIPMAP as i32 as u32,
+                        flags as u32 | crate::tr_common_h::IMGFLAG_MIPMAP as i32 as u32,
                     )
                 }
                 if shader.noPicMip as u64 == 0 {
                     flags = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
-                        flags as u32
-                            | crate::tr_common_h::IMGFLAG_PICMIP as i32 as u32,
+                        flags as u32 | crate::tr_common_h::IMGFLAG_PICMIP as i32 as u32,
                     )
                 }
                 (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] =
                     crate::src::renderergl1::tr_image::R_FindImageFile(token, type_0, flags)
                         as *mut crate::tr_common_h::image_s;
-                if (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize]
-                    .is_null()
-                {
+                if (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize].is_null() {
                     crate::src::renderergl1::tr_main::ri
                         .Printf
                         .expect("non-null function pointer")(
@@ -1597,21 +1576,18 @@ unsafe extern "C" fn ParseStage(
             }
             if shader.noMipMaps as u64 == 0 {
                 flags_0 = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
-                    flags_0 as u32
-                        | crate::tr_common_h::IMGFLAG_MIPMAP as i32 as u32,
+                    flags_0 as u32 | crate::tr_common_h::IMGFLAG_MIPMAP as i32 as u32,
                 )
             }
             if shader.noPicMip as u64 == 0 {
                 flags_0 = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
-                    flags_0 as u32
-                        | crate::tr_common_h::IMGFLAG_PICMIP as i32 as u32,
+                    flags_0 as u32 | crate::tr_common_h::IMGFLAG_PICMIP as i32 as u32,
                 )
             }
             (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize] =
                 crate::src::renderergl1::tr_image::R_FindImageFile(token, type_1, flags_0)
                     as *mut crate::tr_common_h::image_s;
-            if (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize].is_null()
-            {
+            if (*stage).bundle[0 as i32 as usize].image[0 as i32 as usize].is_null() {
                 crate::src::renderergl1::tr_main::ri
                     .Printf
                     .expect("non-null function pointer")(
@@ -1644,8 +1620,7 @@ unsafe extern "C" fn ParseStage(
                 );
                 return crate::src::qcommon::q_shared::qfalse;
             }
-            (*stage).bundle[0 as i32 as usize].imageAnimationSpeed =
-                atof(token) as f32;
+            (*stage).bundle[0 as i32 as usize].imageAnimationSpeed = atof(token) as f32;
             loop
             //
             // clampmap <name>
@@ -1668,20 +1643,14 @@ unsafe extern "C" fn ParseStage(
                     let mut flags_1: crate::tr_common_h::imgFlags_t =
                         crate::tr_common_h::IMGFLAG_NONE;
                     if shader.noMipMaps as u64 == 0 {
-                        flags_1 =
-                            ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
-                                flags_1 as u32
-                                    | crate::tr_common_h::IMGFLAG_MIPMAP as i32
-                                        as u32,
-                            )
+                        flags_1 = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
+                            flags_1 as u32 | crate::tr_common_h::IMGFLAG_MIPMAP as i32 as u32,
+                        )
                     }
                     if shader.noPicMip as u64 == 0 {
-                        flags_1 =
-                            ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
-                                flags_1 as u32
-                                    | crate::tr_common_h::IMGFLAG_PICMIP as i32
-                                        as u32,
-                            )
+                        flags_1 = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
+                            flags_1 as u32 | crate::tr_common_h::IMGFLAG_PICMIP as i32 as u32,
+                        )
                     }
                     (*stage).bundle[0 as i32 as usize].image[num as usize] =
                         crate::src::renderergl1::tr_image::R_FindImageFile(
@@ -1945,20 +1914,19 @@ unsafe extern "C" fn ParseStage(
             ) == 0
             {
                 let mut color: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-                color[2 as i32 as usize] =
-                    0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                color[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
                 color[1 as i32 as usize] = color[2 as i32 as usize];
                 color[0 as i32 as usize] = color[1 as i32 as usize];
                 ParseVector(text, 3 as i32, color.as_mut_ptr());
-                (*stage).constantColor[0 as i32 as usize] =
-                    (255 as i32 as f32 * color[0 as i32 as usize])
-                        as crate::src::qcommon::q_shared::byte;
-                (*stage).constantColor[1 as i32 as usize] =
-                    (255 as i32 as f32 * color[1 as i32 as usize])
-                        as crate::src::qcommon::q_shared::byte;
-                (*stage).constantColor[2 as i32 as usize] =
-                    (255 as i32 as f32 * color[2 as i32 as usize])
-                        as crate::src::qcommon::q_shared::byte;
+                (*stage).constantColor[0 as i32 as usize] = (255 as i32 as f32
+                    * color[0 as i32 as usize])
+                    as crate::src::qcommon::q_shared::byte;
+                (*stage).constantColor[1 as i32 as usize] = (255 as i32 as f32
+                    * color[1 as i32 as usize])
+                    as crate::src::qcommon::q_shared::byte;
+                (*stage).constantColor[2 as i32 as usize] = (255 as i32 as f32
+                    * color[2 as i32 as usize])
+                    as crate::src::qcommon::q_shared::byte;
                 (*stage).rgbGen = crate::tr_local_h::CGEN_CONST
             } else if crate::src::qcommon::q_shared::Q_stricmp(
                 token,
@@ -2057,8 +2025,7 @@ unsafe extern "C" fn ParseStage(
                     crate::src::qcommon::q_shared::qfalse,
                 );
                 (*stage).constantColor[3 as i32 as usize] =
-                    (255 as i32 as f64 * atof(token))
-                        as crate::src::qcommon::q_shared::byte;
+                    (255 as i32 as f64 * atof(token)) as crate::src::qcommon::q_shared::byte;
                 (*stage).alphaGen = crate::tr_local_h::AGEN_CONST
             } else if crate::src::qcommon::q_shared::Q_stricmp(
                 token,
@@ -2184,16 +2151,12 @@ unsafe extern "C" fn ParseStage(
                 ParseVector(
                     text,
                     3 as i32,
-                    (*stage).bundle[0 as i32 as usize].tcGenVectors
-                        [0 as i32 as usize]
-                        .as_mut_ptr(),
+                    (*stage).bundle[0 as i32 as usize].tcGenVectors[0 as i32 as usize].as_mut_ptr(),
                 );
                 ParseVector(
                     text,
                     3 as i32,
-                    (*stage).bundle[0 as i32 as usize].tcGenVectors
-                        [1 as i32 as usize]
-                        .as_mut_ptr(),
+                    (*stage).bundle[0 as i32 as usize].tcGenVectors[1 as i32 as usize].as_mut_ptr(),
                 );
                 (*stage).bundle[0 as i32 as usize].tcGen = crate::tr_local_h::TCGEN_VECTOR
             } else {
@@ -2272,12 +2235,8 @@ unsafe extern "C" fn ParseStage(
     //
     // if cgen isn't explicitly specified, use either identity or identitylighting
     //
-    if (*stage).rgbGen as u32 == crate::tr_local_h::CGEN_BAD as i32 as u32
-    {
-        if blendSrcBits == 0 as i32
-            || blendSrcBits == 0x2 as i32
-            || blendSrcBits == 0x5 as i32
-        {
+    if (*stage).rgbGen as u32 == crate::tr_local_h::CGEN_BAD as i32 as u32 {
+        if blendSrcBits == 0 as i32 || blendSrcBits == 0x2 as i32 || blendSrcBits == 0x5 as i32 {
             (*stage).rgbGen = crate::tr_local_h::CGEN_IDENTITY_LIGHTING
         } else {
             (*stage).rgbGen = crate::tr_local_h::CGEN_IDENTITY
@@ -2292,13 +2251,9 @@ unsafe extern "C" fn ParseStage(
         depthMaskBits = 0x100 as i32
     }
     // decide which agens we can skip
-    if (*stage).alphaGen as u32
-        == crate::tr_local_h::AGEN_IDENTITY as i32 as u32
-    {
-        if (*stage).rgbGen as u32
-            == crate::tr_local_h::CGEN_IDENTITY as i32 as u32
-            || (*stage).rgbGen as u32
-                == crate::tr_local_h::CGEN_LIGHTING_DIFFUSE as i32 as u32
+    if (*stage).alphaGen as u32 == crate::tr_local_h::AGEN_IDENTITY as i32 as u32 {
+        if (*stage).rgbGen as u32 == crate::tr_local_h::CGEN_IDENTITY as i32 as u32
+            || (*stage).rgbGen as u32 == crate::tr_local_h::CGEN_LIGHTING_DIFFUSE as i32 as u32
         {
             (*stage).alphaGen = crate::tr_local_h::AGEN_SKIP
         }
@@ -2588,8 +2543,7 @@ unsafe extern "C" fn ParseSkyParms(mut text: *mut *mut libc::c_char) {
     ];
     let mut pathname: [libc::c_char; 64] = [0; 64];
     let mut i: i32 = 0;
-    let mut imgFlags: crate::tr_common_h::imgFlags_t = (crate::tr_common_h::IMGFLAG_MIPMAP
-        as i32
+    let mut imgFlags: crate::tr_common_h::imgFlags_t = (crate::tr_common_h::IMGFLAG_MIPMAP as i32
         | crate::tr_common_h::IMGFLAG_PICMIP as i32)
         as crate::tr_common_h::imgFlags_t;
     // outerbox
@@ -2619,8 +2573,7 @@ unsafe extern "C" fn ParseSkyParms(mut text: *mut *mut libc::c_char) {
             shader.sky.outerbox[i as usize] = crate::src::renderergl1::tr_image::R_FindImageFile(
                 pathname.as_mut_ptr(),
                 crate::tr_common_h::IMGTYPE_COLORALPHA,
-                (imgFlags as u32
-                    | crate::tr_common_h::IMGFLAG_CLAMPTOEDGE as i32 as u32)
+                (imgFlags as u32 | crate::tr_common_h::IMGFLAG_CLAMPTOEDGE as i32 as u32)
                     as crate::tr_common_h::imgFlags_t,
             ) as *mut crate::tr_common_h::image_s;
             if shader.sky.outerbox[i as usize].is_null() {
@@ -3205,15 +3158,13 @@ unsafe extern "C" fn ParseShader(
                 crate::src::qcommon::q_shared::qfalse,
             );
             a = atof(token) as f32;
-            a = ((a / 180 as i32 as f32) as f64
-                * 3.14159265358979323846f64) as f32;
+            a = ((a / 180 as i32 as f32) as f64 * 3.14159265358979323846f64) as f32;
             token = crate::src::qcommon::q_shared::COM_ParseExt(
                 text,
                 crate::src::qcommon::q_shared::qfalse,
             );
             b = atof(token) as f32;
-            b = ((b / 180 as i32 as f32) as f64
-                * 3.14159265358979323846f64) as f32;
+            b = ((b / 180 as i32 as f32) as f64 * 3.14159265358979323846f64) as f32;
             crate::src::renderergl1::tr_main::tr.sunDirection[0 as i32 as usize] =
                 (crate::stdlib::cos(a as f64) * crate::stdlib::cos(b as f64))
                     as crate::src::qcommon::q_shared::vec_t;
@@ -3306,16 +3257,13 @@ unsafe extern "C" fn ParseShader(
                 luminance_0 = 0.2126f32 * shader.fogParms.color[0 as i32 as usize]
                     + 0.7152f32 * shader.fogParms.color[1 as i32 as usize]
                     + 0.0722f32 * shader.fogParms.color[2 as i32 as usize];
-                shader.fogParms.color[0 as i32 as usize] = shader.fogParms.color
-                    [0 as i32 as usize]
+                shader.fogParms.color[0 as i32 as usize] = shader.fogParms.color[0 as i32 as usize]
                     * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     + luminance_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value;
-                shader.fogParms.color[1 as i32 as usize] = shader.fogParms.color
-                    [1 as i32 as usize]
+                shader.fogParms.color[1 as i32 as usize] = shader.fogParms.color[1 as i32 as usize]
                     * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     + luminance_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value;
-                shader.fogParms.color[2 as i32 as usize] = shader.fogParms.color
-                    [2 as i32 as usize]
+                shader.fogParms.color[2 as i32 as usize] = shader.fogParms.color[2 as i32 as usize]
                     * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     + luminance_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value
             }
@@ -3454,10 +3402,7 @@ unsafe extern "C" fn ParseShader(
     //
     // ignore shaders that don't have any stages, unless it is a sky or fog
     //
-    if s == 0 as i32
-        && shader.isSky as u64 == 0
-        && shader.contentFlags & 64 as i32 == 0
-    {
+    if s == 0 as i32 && shader.isSky as u64 == 0 && shader.contentFlags & 64 as i32 == 0 {
         return crate::src::qcommon::q_shared::qfalse;
     }
     shader.explicitlyDefined = crate::src::qcommon::q_shared::qtrue;
@@ -3505,8 +3450,7 @@ unsafe extern "C" fn ComputeStageIteratorFunc() {
             if stages[0 as i32 as usize].alphaGen as u32
                 == crate::tr_local_h::AGEN_IDENTITY as i32 as u32
             {
-                if stages[0 as i32 as usize].bundle[0 as i32 as usize].tcGen
-                    as u32
+                if stages[0 as i32 as usize].bundle[0 as i32 as usize].tcGen as u32
                     == crate::tr_local_h::TCGEN_TEXTURE as i32 as u32
                 {
                     if shader.polygonOffset as u64 == 0 {
@@ -3527,16 +3471,13 @@ unsafe extern "C" fn ComputeStageIteratorFunc() {
     // see if this can go into an optimized LM, multitextured path
     //
     if shader.numUnfoggedPasses == 1 as i32 {
-        if stages[0 as i32 as usize].rgbGen as u32
-            == crate::tr_local_h::CGEN_IDENTITY as i32 as u32
+        if stages[0 as i32 as usize].rgbGen as u32 == crate::tr_local_h::CGEN_IDENTITY as i32 as u32
             && stages[0 as i32 as usize].alphaGen as u32
                 == crate::tr_local_h::AGEN_IDENTITY as i32 as u32
         {
-            if stages[0 as i32 as usize].bundle[0 as i32 as usize].tcGen
-                as u32
+            if stages[0 as i32 as usize].bundle[0 as i32 as usize].tcGen as u32
                 == crate::tr_local_h::TCGEN_TEXTURE as i32 as u32
-                && stages[0 as i32 as usize].bundle[1 as i32 as usize].tcGen
-                    as u32
+                && stages[0 as i32 as usize].bundle[1 as i32 as usize].tcGen as u32
                     == crate::tr_local_h::TCGEN_LIGHTMAP as i32 as u32
             {
                 if shader.polygonOffset as u64 == 0 {
@@ -3666,8 +3607,7 @@ unsafe extern "C" fn CollapseMultitexture() -> crate::src::qcommon::q_shared::qb
         return crate::src::qcommon::q_shared::qfalse;
     }
     // make sure both stages are active
-    if stages[0 as i32 as usize].active as u64 == 0
-        || stages[1 as i32 as usize].active as u64 == 0
+    if stages[0 as i32 as usize].active as u64 == 0 || stages[1 as i32 as usize].active as u64 == 0
     {
         return crate::src::qcommon::q_shared::qfalse;
     }
@@ -3675,12 +3615,8 @@ unsafe extern "C" fn CollapseMultitexture() -> crate::src::qcommon::q_shared::qb
     if crate::src::renderergl1::tr_init::glConfig.driverType as u32
         == crate::tr_types_h::GLDRV_VOODOO as i32 as u32
     {
-        if (*stages[0 as i32 as usize].bundle[0 as i32 as usize].image
-            [0 as i32 as usize])
-            .TMU
-            == (*stages[1 as i32 as usize].bundle[0 as i32 as usize].image
-                [0 as i32 as usize])
-                .TMU
+        if (*stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize]).TMU
+            == (*stages[1 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize]).TMU
         {
             return crate::src::qcommon::q_shared::qfalse;
         }
@@ -3714,23 +3650,18 @@ unsafe extern "C" fn CollapseMultitexture() -> crate::src::qcommon::q_shared::qb
         return crate::src::qcommon::q_shared::qfalse;
     }
     // make sure waveforms have identical parameters
-    if stages[0 as i32 as usize].rgbGen as u32
-        != stages[1 as i32 as usize].rgbGen as u32
-        || stages[0 as i32 as usize].alphaGen as u32
-            != stages[1 as i32 as usize].alphaGen as u32
+    if stages[0 as i32 as usize].rgbGen as u32 != stages[1 as i32 as usize].rgbGen as u32
+        || stages[0 as i32 as usize].alphaGen as u32 != stages[1 as i32 as usize].alphaGen as u32
     {
         return crate::src::qcommon::q_shared::qfalse;
     }
     // an add collapse can only have identity colors
     if collapse[i as usize].multitextureEnv == 0x104 as i32
-        && stages[0 as i32 as usize].rgbGen as u32
-            != crate::tr_local_h::CGEN_IDENTITY as i32 as u32
+        && stages[0 as i32 as usize].rgbGen as u32 != crate::tr_local_h::CGEN_IDENTITY as i32 as u32
     {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    if stages[0 as i32 as usize].rgbGen as u32
-        == crate::tr_local_h::CGEN_WAVEFORM as i32 as u32
-    {
+    if stages[0 as i32 as usize].rgbGen as u32 == crate::tr_local_h::CGEN_WAVEFORM as i32 as u32 {
         if crate::stdlib::memcmp(
             &mut (*stages.as_mut_ptr().offset(0 as i32 as isize)).rgbWave
                 as *mut crate::tr_local_h::waveForm_t as *const libc::c_void,
@@ -3742,9 +3673,7 @@ unsafe extern "C" fn CollapseMultitexture() -> crate::src::qcommon::q_shared::qb
             return crate::src::qcommon::q_shared::qfalse;
         }
     }
-    if stages[0 as i32 as usize].alphaGen as u32
-        == crate::tr_local_h::AGEN_WAVEFORM as i32 as u32
-    {
+    if stages[0 as i32 as usize].alphaGen as u32 == crate::tr_local_h::AGEN_WAVEFORM as i32 as u32 {
         if crate::stdlib::memcmp(
             &mut (*stages.as_mut_ptr().offset(0 as i32 as isize)).alphaWave
                 as *mut crate::tr_local_h::waveForm_t as *const libc::c_void,
@@ -3768,25 +3697,21 @@ unsafe extern "C" fn CollapseMultitexture() -> crate::src::qcommon::q_shared::qb
     }
     // set the new blend state bits
     shader.multitextureEnv = collapse[i as usize].multitextureEnv;
-    stages[0 as i32 as usize].stateBits &=
-        !(0xf0 as i32 | 0xf as i32) as u32;
-    stages[0 as i32 as usize].stateBits |=
-        collapse[i as usize].multitextureBlend as u32;
+    stages[0 as i32 as usize].stateBits &= !(0xf0 as i32 | 0xf as i32) as u32;
+    stages[0 as i32 as usize].stateBits |= collapse[i as usize].multitextureBlend as u32;
     //
     // move down subsequent shaders
     //
     crate::stdlib::memmove(
-        &mut *stages.as_mut_ptr().offset(1 as i32 as isize)
-            as *mut crate::tr_local_h::shaderStage_t as *mut libc::c_void,
-        &mut *stages.as_mut_ptr().offset(2 as i32 as isize)
-            as *mut crate::tr_local_h::shaderStage_t as *const libc::c_void,
+        &mut *stages.as_mut_ptr().offset(1 as i32 as isize) as *mut crate::tr_local_h::shaderStage_t
+            as *mut libc::c_void,
+        &mut *stages.as_mut_ptr().offset(2 as i32 as isize) as *mut crate::tr_local_h::shaderStage_t
+            as *const libc::c_void,
         (::std::mem::size_of::<crate::tr_local_h::shaderStage_t>() as libc::c_ulong)
             .wrapping_mul((8 as i32 - 2 as i32) as libc::c_ulong),
     );
     crate::stdlib::memset(
-        &mut *stages
-            .as_mut_ptr()
-            .offset((8 as i32 - 1 as i32) as isize)
+        &mut *stages.as_mut_ptr().offset((8 as i32 - 1 as i32) as isize)
             as *mut crate::tr_local_h::shaderStage_t as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<crate::tr_local_h::shaderStage_t>() as libc::c_ulong,
@@ -3851,16 +3776,14 @@ unsafe extern "C" fn FixRenderCommandList(mut newShader: i32) {
                             &mut dlightMap,
                         );
                         sortedIndex = ((*drawSurf).sort >> 7 as i32 + 10 as i32
-                            & (((1 as i32) << 14 as i32) - 1 as i32)
-                                as u32)
+                            & (((1 as i32) << 14 as i32) - 1 as i32) as u32)
                             as i32;
                         if sortedIndex >= newShader {
                             sortedIndex += 1;
                             (*drawSurf).sort = (sortedIndex << 7 as i32 + 10 as i32
                                 | entityNum
                                 | fogNum << 2 as i32
-                                | dlightMap)
-                                as u32
+                                | dlightMap) as u32
                         }
                         i += 1;
                         drawSurf = drawSurf.offset(1)
@@ -3967,8 +3890,7 @@ unsafe extern "C" fn GeneratePermanentShader() -> *mut crate::tr_local_h::shader
         (*newShader).stages[i as usize] = crate::src::renderergl1::tr_main::ri
             .Hunk_Alloc
             .expect("non-null function pointer")(
-            ::std::mem::size_of::<crate::tr_local_h::shaderStage_t>() as libc::c_ulong
-                as i32,
+            ::std::mem::size_of::<crate::tr_local_h::shaderStage_t>() as libc::c_ulong as i32,
             crate::src::qcommon::q_shared::h_low,
         ) as *mut crate::tr_local_h::shaderStage_t;
         *(*newShader).stages[i as usize] = stages[i as usize];
@@ -4042,8 +3964,7 @@ unsafe extern "C" fn VertexLightingCollapse() {
             if (*pStage).bundle[0 as i32 as usize].numTexMods != 0 {
                 rank -= 5 as i32
             }
-            if (*pStage).rgbGen as u32
-                != crate::tr_local_h::CGEN_IDENTITY as i32 as u32
+            if (*pStage).rgbGen as u32 != crate::tr_local_h::CGEN_IDENTITY as i32 as u32
                 && (*pStage).rgbGen as u32
                     != crate::tr_local_h::CGEN_IDENTITY_LIGHTING as i32 as u32
             {
@@ -4057,8 +3978,7 @@ unsafe extern "C" fn VertexLightingCollapse() {
         }
         stages[0 as i32 as usize].bundle[0 as i32 as usize] =
             (*bestStage).bundle[0 as i32 as usize];
-        stages[0 as i32 as usize].stateBits &=
-            !(0xf0 as i32 | 0xf as i32) as u32;
+        stages[0 as i32 as usize].stateBits &= !(0xf0 as i32 | 0xf as i32) as u32;
         stages[0 as i32 as usize].stateBits |= 0x100 as i32 as u32;
         if shader.lightmapIndex == -(1 as i32) {
             stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_LIGHTING_DIFFUSE
@@ -4068,9 +3988,7 @@ unsafe extern "C" fn VertexLightingCollapse() {
         stages[0 as i32 as usize].alphaGen = crate::tr_local_h::AGEN_SKIP
     } else {
         // don't use a lightmap (tesla coils)
-        if stages[0 as i32 as usize].bundle[0 as i32 as usize].isLightmap as u64
-            != 0
-        {
+        if stages[0 as i32 as usize].bundle[0 as i32 as usize].isLightmap as u64 != 0 {
             stages[0 as i32 as usize] = stages[1 as i32 as usize]
         }
         // if we were in a cross-fade cgen, hack it to normal
@@ -4081,8 +3999,7 @@ unsafe extern "C" fn VertexLightingCollapse() {
         {
             stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY_LIGHTING
         }
-        if stages[0 as i32 as usize].rgbGen as u32
-            == crate::tr_local_h::CGEN_WAVEFORM as i32 as u32
+        if stages[0 as i32 as usize].rgbGen as u32 == crate::tr_local_h::CGEN_WAVEFORM as i32 as u32
             && stages[0 as i32 as usize].rgbWave.func as u32
                 == crate::tr_local_h::GF_SAWTOOTH as i32 as u32
             && (stages[1 as i32 as usize].rgbGen as u32
@@ -4092,8 +4009,7 @@ unsafe extern "C" fn VertexLightingCollapse() {
         {
             stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY_LIGHTING
         }
-        if stages[0 as i32 as usize].rgbGen as u32
-            == crate::tr_local_h::CGEN_WAVEFORM as i32 as u32
+        if stages[0 as i32 as usize].rgbGen as u32 == crate::tr_local_h::CGEN_WAVEFORM as i32 as u32
             && stages[0 as i32 as usize].rgbWave.func as u32
                 == crate::tr_local_h::GF_INVERSE_SAWTOOTH as i32 as u32
             && (stages[1 as i32 as usize].rgbGen as u32
@@ -4147,8 +4063,7 @@ unsafe extern "C" fn InitShader(mut name: *const libc::c_char, mut lightmapIndex
     shader.lightmapIndex = lightmapIndex;
     i = 0 as i32;
     while i < 8 as i32 {
-        stages[i as usize].bundle[0 as i32 as usize].texMods =
-            texMods[i as usize].as_mut_ptr();
+        stages[i as usize].bundle[0 as i32 as usize].texMods = texMods[i as usize].as_mut_ptr();
         i += 1
     }
 }
@@ -4232,9 +4147,7 @@ unsafe extern "C" fn FinishShader() -> *mut crate::tr_local_h::shader_t {
                     );
                 }
                 crate::stdlib::memset(
-                    &mut *stages
-                        .as_mut_ptr()
-                        .offset((index - 1 as i32) as isize)
+                    &mut *stages.as_mut_ptr().offset((index - 1 as i32) as isize)
                         as *mut crate::tr_local_h::shaderStage_t
                         as *mut libc::c_void,
                     0 as i32,
@@ -4252,8 +4165,7 @@ unsafe extern "C" fn FinishShader() -> *mut crate::tr_local_h::shader_t {
                 if (*pStage).bundle[0 as i32 as usize].tcGen as u32
                     == crate::tr_local_h::TCGEN_BAD as i32 as u32
                 {
-                    (*pStage).bundle[0 as i32 as usize].tcGen =
-                        crate::tr_local_h::TCGEN_LIGHTMAP
+                    (*pStage).bundle[0 as i32 as usize].tcGen = crate::tr_local_h::TCGEN_LIGHTMAP
                 }
                 hasLightmapStage = crate::src::qcommon::q_shared::qtrue
             } else if (*pStage).bundle[0 as i32 as usize].tcGen as u32
@@ -4270,14 +4182,10 @@ unsafe extern "C" fn FinishShader() -> *mut crate::tr_local_h::shader_t {
             // determine sort order and fog color adjustment
             //
             if (*pStage).stateBits & (0xf as i32 | 0xf0 as i32) as u32 != 0
-                && stages[0 as i32 as usize].stateBits
-                    & (0xf as i32 | 0xf0 as i32) as u32
-                    != 0
+                && stages[0 as i32 as usize].stateBits & (0xf as i32 | 0xf0 as i32) as u32 != 0
             {
-                let mut blendSrcBits: i32 =
-                    ((*pStage).stateBits & 0xf as i32 as u32) as i32;
-                let mut blendDstBits: i32 =
-                    ((*pStage).stateBits & 0xf0 as i32 as u32) as i32;
+                let mut blendSrcBits: i32 = ((*pStage).stateBits & 0xf as i32 as u32) as i32;
+                let mut blendDstBits: i32 = ((*pStage).stateBits & 0xf0 as i32 as u32) as i32;
                 // fog color adjustment only works for blend modes that have a contribution
                 // that aproaches 0 as the modulate values aproach 0 --
                 // GL_ONE, GL_ONE
@@ -4288,11 +4196,9 @@ unsafe extern "C" fn FinishShader() -> *mut crate::tr_local_h::shader_t {
                     || blendSrcBits == 0x1 as i32 && blendDstBits == 0x40 as i32
                 {
                     (*pStage).adjustColorsForFog = crate::tr_local_h::ACFF_MODULATE_RGB
-                } else if blendSrcBits == 0x5 as i32 && blendDstBits == 0x60 as i32
-                {
+                } else if blendSrcBits == 0x5 as i32 && blendDstBits == 0x60 as i32 {
                     (*pStage).adjustColorsForFog = crate::tr_local_h::ACFF_MODULATE_ALPHA
-                } else if blendSrcBits == 0x2 as i32 && blendDstBits == 0x60 as i32
-                {
+                } else if blendSrcBits == 0x2 as i32 && blendDstBits == 0x60 as i32 {
                     (*pStage).adjustColorsForFog = crate::tr_local_h::ACFF_MODULATE_RGBA
                 }
                 // strict blend
@@ -4301,8 +4207,7 @@ unsafe extern "C" fn FinishShader() -> *mut crate::tr_local_h::shader_t {
                 if shader.sort == 0. {
                     // see through item, like a grill or grate
                     if (*pStage).stateBits & 0x100 as i32 as u32 != 0 {
-                        shader.sort =
-                            crate::tr_local_h::SS_SEE_THROUGH as i32 as f32
+                        shader.sort = crate::tr_local_h::SS_SEE_THROUGH as i32 as f32
                     } else {
                         shader.sort = crate::tr_local_h::SS_BLEND0 as i32 as f32
                     }
@@ -4444,8 +4349,7 @@ pub unsafe extern "C" fn R_FindShaderByName(
     let mut strippedName: [libc::c_char; 64] = [0; 64];
     let mut hash: i32 = 0;
     let mut sh: *mut crate::tr_local_h::shader_t = 0 as *mut crate::tr_local_h::shader_t;
-    if name.is_null() || *name.offset(0 as i32 as isize) as i32 == 0 as i32
-    {
+    if name.is_null() || *name.offset(0 as i32 as isize) as i32 == 0 as i32 {
         return crate::src::renderergl1::tr_main::tr.defaultShader;
     }
     crate::src::qcommon::q_shared::COM_StripExtension(
@@ -4602,13 +4506,11 @@ pub unsafe extern "C" fn R_FindShader(
         flags = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
             flags as u32
                 | (crate::tr_common_h::IMGFLAG_MIPMAP as i32
-                    | crate::tr_common_h::IMGFLAG_PICMIP as i32)
-                    as u32,
+                    | crate::tr_common_h::IMGFLAG_PICMIP as i32) as u32,
         )
     } else {
         flags = ::std::mem::transmute::<u32, crate::tr_common_h::imgFlags_t>(
-            flags as u32
-                | crate::tr_common_h::IMGFLAG_CLAMPTOEDGE as i32 as u32,
+            flags as u32 | crate::tr_common_h::IMGFLAG_CLAMPTOEDGE as i32 as u32,
         )
     }
     image = crate::src::renderergl1::tr_image::R_FindImageFile(
@@ -4632,59 +4534,51 @@ pub unsafe extern "C" fn R_FindShader(
     //
     if shader.lightmapIndex == -(1 as i32) {
         // dynamic colors at vertexes
-        stages[0 as i32 as usize].bundle[0 as i32 as usize].image
-            [0 as i32 as usize] = image;
+        stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
         stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
         stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_LIGHTING_DIFFUSE;
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32
     } else if shader.lightmapIndex == -(3 as i32) {
         // explicit colors at vertexes
-        stages[0 as i32 as usize].bundle[0 as i32 as usize].image
-            [0 as i32 as usize] = image;
+        stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
         stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
         stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_EXACT_VERTEX;
         stages[0 as i32 as usize].alphaGen = crate::tr_local_h::AGEN_SKIP;
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32
     } else if shader.lightmapIndex == -(4 as i32) {
         // GUI elements
-        stages[0 as i32 as usize].bundle[0 as i32 as usize].image
-            [0 as i32 as usize] = image;
+        stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
         stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
         stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_VERTEX;
         stages[0 as i32 as usize].alphaGen = crate::tr_local_h::AGEN_VERTEX;
-        stages[0 as i32 as usize].stateBits =
-            (0x10000 as i32 | 0x5 as i32 | 0x60 as i32) as u32
+        stages[0 as i32 as usize].stateBits = (0x10000 as i32 | 0x5 as i32 | 0x60 as i32) as u32
     } else if shader.lightmapIndex == -(2 as i32) {
         // fullbright level
-        stages[0 as i32 as usize].bundle[0 as i32 as usize].image
-            [0 as i32 as usize] = crate::src::renderergl1::tr_main::tr.whiteImage;
+        stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] =
+            crate::src::renderergl1::tr_main::tr.whiteImage;
         stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
         stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY_LIGHTING;
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32;
-        stages[1 as i32 as usize].bundle[0 as i32 as usize].image
-            [0 as i32 as usize] = image;
+        stages[1 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
         stages[1 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
         stages[1 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY;
-        stages[1 as i32 as usize].stateBits |=
-            (0x3 as i32 | 0x10 as i32) as u32
+        stages[1 as i32 as usize].stateBits |= (0x3 as i32 | 0x10 as i32) as u32
     } else {
         // two pass lightmap
-        stages[0 as i32 as usize].bundle[0 as i32 as usize].image
-            [0 as i32 as usize] = *crate::src::renderergl1::tr_main::tr
-            .lightmaps
-            .offset(shader.lightmapIndex as isize); // lightmaps are scaled on creation
+        stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] =
+            *crate::src::renderergl1::tr_main::tr
+                .lightmaps
+                .offset(shader.lightmapIndex as isize); // lightmaps are scaled on creation
         stages[0 as i32 as usize].bundle[0 as i32 as usize].isLightmap =
             crate::src::qcommon::q_shared::qtrue;
         stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
         stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY;
         // for identitylight
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32;
-        stages[1 as i32 as usize].bundle[0 as i32 as usize].image
-            [0 as i32 as usize] = image;
+        stages[1 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
         stages[1 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
         stages[1 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY;
-        stages[1 as i32 as usize].stateBits |=
-            (0x3 as i32 | 0x10 as i32) as u32
+        stages[1 as i32 as usize].stateBits |= (0x3 as i32 | 0x10 as i32) as u32
     }
     return FinishShader();
 }
@@ -4733,59 +4627,51 @@ pub unsafe extern "C" fn RE_RegisterShaderFromImage(
     //
     if shader.lightmapIndex == -(1 as i32) {
         // dynamic colors at vertexes
-        stages[0 as i32 as usize].bundle[0 as i32 as usize].image
-            [0 as i32 as usize] = image;
+        stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
         stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
         stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_LIGHTING_DIFFUSE;
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32
     } else if shader.lightmapIndex == -(3 as i32) {
         // explicit colors at vertexes
-        stages[0 as i32 as usize].bundle[0 as i32 as usize].image
-            [0 as i32 as usize] = image;
+        stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
         stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
         stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_EXACT_VERTEX;
         stages[0 as i32 as usize].alphaGen = crate::tr_local_h::AGEN_SKIP;
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32
     } else if shader.lightmapIndex == -(4 as i32) {
         // GUI elements
-        stages[0 as i32 as usize].bundle[0 as i32 as usize].image
-            [0 as i32 as usize] = image;
+        stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
         stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
         stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_VERTEX;
         stages[0 as i32 as usize].alphaGen = crate::tr_local_h::AGEN_VERTEX;
-        stages[0 as i32 as usize].stateBits =
-            (0x10000 as i32 | 0x5 as i32 | 0x60 as i32) as u32
+        stages[0 as i32 as usize].stateBits = (0x10000 as i32 | 0x5 as i32 | 0x60 as i32) as u32
     } else if shader.lightmapIndex == -(2 as i32) {
         // fullbright level
-        stages[0 as i32 as usize].bundle[0 as i32 as usize].image
-            [0 as i32 as usize] = crate::src::renderergl1::tr_main::tr.whiteImage;
+        stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] =
+            crate::src::renderergl1::tr_main::tr.whiteImage;
         stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
         stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY_LIGHTING;
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32;
-        stages[1 as i32 as usize].bundle[0 as i32 as usize].image
-            [0 as i32 as usize] = image;
+        stages[1 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
         stages[1 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
         stages[1 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY;
-        stages[1 as i32 as usize].stateBits |=
-            (0x3 as i32 | 0x10 as i32) as u32
+        stages[1 as i32 as usize].stateBits |= (0x3 as i32 | 0x10 as i32) as u32
     } else {
         // two pass lightmap
-        stages[0 as i32 as usize].bundle[0 as i32 as usize].image
-            [0 as i32 as usize] = *crate::src::renderergl1::tr_main::tr
-            .lightmaps
-            .offset(shader.lightmapIndex as isize); // lightmaps are scaled on creation
+        stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] =
+            *crate::src::renderergl1::tr_main::tr
+                .lightmaps
+                .offset(shader.lightmapIndex as isize); // lightmaps are scaled on creation
         stages[0 as i32 as usize].bundle[0 as i32 as usize].isLightmap =
             crate::src::qcommon::q_shared::qtrue;
         stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
         stages[0 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY;
         // for identitylight
         stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32;
-        stages[1 as i32 as usize].bundle[0 as i32 as usize].image
-            [0 as i32 as usize] = image;
+        stages[1 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] = image;
         stages[1 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
         stages[1 as i32 as usize].rgbGen = crate::tr_local_h::CGEN_IDENTITY;
-        stages[1 as i32 as usize].stateBits |=
-            (0x3 as i32 | 0x10 as i32) as u32
+        stages[1 as i32 as usize].stateBits |= (0x3 as i32 | 0x10 as i32) as u32
     }
     sh = FinishShader();
     return (*sh).index;
@@ -4854,11 +4740,7 @@ pub unsafe extern "C" fn RE_RegisterShader(
         );
         return 0 as i32;
     }
-    sh = R_FindShader(
-        name,
-        -(4 as i32),
-        crate::src::qcommon::q_shared::qtrue,
-    );
+    sh = R_FindShader(name, -(4 as i32), crate::src::qcommon::q_shared::qtrue);
     // we want to return 0 if the shader failed to
     // load for some reason, but R_FindShader should
     // still keep a name allocated for it, so if
@@ -4944,11 +4826,7 @@ pub unsafe extern "C" fn RE_RegisterShaderNoMip(
         );
         return 0 as i32;
     }
-    sh = R_FindShader(
-        name,
-        -(4 as i32),
-        crate::src::qcommon::q_shared::qfalse,
-    );
+    sh = R_FindShader(name, -(4 as i32), crate::src::qcommon::q_shared::qfalse);
     // we want to return 0 if the shader failed to
     // load for some reason, but R_FindShader should
     // still keep a name allocated for it, so if
@@ -9409,9 +9287,7 @@ unsafe extern "C" fn ScanAndLoadShaderFiles() {
                 buffers[i as usize] = 0 as *mut libc::c_char;
                 break;
             } else {
-                if !(crate::src::qcommon::q_shared::SkipBracedSection(&mut p, 1 as i32)
-                    as u64
-                    == 0)
+                if !(crate::src::qcommon::q_shared::SkipBracedSection(&mut p, 1 as i32) as u64 == 0)
                 {
                     continue;
                 }
@@ -9546,8 +9422,8 @@ unsafe extern "C" fn CreateInternalShaders() {
         b"<default>\x00" as *const u8 as *const libc::c_char,
         -(1 as i32),
     );
-    stages[0 as i32 as usize].bundle[0 as i32 as usize].image
-        [0 as i32 as usize] = crate::src::renderergl1::tr_main::tr.defaultImage;
+    stages[0 as i32 as usize].bundle[0 as i32 as usize].image[0 as i32 as usize] =
+        crate::src::renderergl1::tr_main::tr.defaultImage;
     stages[0 as i32 as usize].active = crate::src::qcommon::q_shared::qtrue;
     stages[0 as i32 as usize].stateBits = 0x100 as i32 as u32;
     crate::src::renderergl1::tr_main::tr.defaultShader = FinishShader();

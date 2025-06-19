@@ -58,11 +58,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /* Chirp (bw expand) LP AR filter */
 #[no_mangle]
 
-pub unsafe extern "C" fn silk_bwexpander_FLP(
-    mut ar: *mut f32,
-    d: i32,
-    chirp: f32,
-)
+pub unsafe extern "C" fn silk_bwexpander_FLP(mut ar: *mut f32, d: i32, chirp: f32)
 /* I    chirp factor (typically in range (0..1) )                   */
 {
     let mut i: i32 = 0;

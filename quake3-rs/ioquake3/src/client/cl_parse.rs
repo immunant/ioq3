@@ -494,8 +494,8 @@ pub unsafe extern "C" fn CL_DeltaEntity(
         .parseEntities
         .as_mut_ptr()
         .offset(
-            (crate::src::client::cl_main::cl.parseEntitiesNum
-                & 32 as i32 * 256 as i32 - 1 as i32) as isize,
+            (crate::src::client::cl_main::cl.parseEntitiesNum & 32 as i32 * 256 as i32 - 1 as i32)
+                as isize,
         ) as *mut crate::src::qcommon::q_shared::entityState_t;
     if unchanged as u64 != 0 {
         *state = *old
@@ -546,18 +546,15 @@ pub unsafe extern "C" fn CL_ParsePacketEntities(
             .parseEntities
             .as_mut_ptr()
             .offset(
-                ((*oldframe).parseEntitiesNum + oldindex
-                    & 32 as i32 * 256 as i32 - 1 as i32)
+                ((*oldframe).parseEntitiesNum + oldindex & 32 as i32 * 256 as i32 - 1 as i32)
                     as isize,
             ) as *mut crate::src::qcommon::q_shared::entityState_t;
         oldnum = (*oldstate).number
     }
     loop {
         // read the entity index number
-        newnum = crate::src::qcommon::msg::MSG_ReadBits(
-            msg as *mut crate::qcommon_h::msg_t,
-            10 as i32,
-        );
+        newnum =
+            crate::src::qcommon::msg::MSG_ReadBits(msg as *mut crate::qcommon_h::msg_t, 10 as i32);
         if newnum == ((1 as i32) << 10 as i32) - 1 as i32 {
             break;
         }
@@ -592,8 +589,7 @@ pub unsafe extern "C" fn CL_ParsePacketEntities(
                     .as_mut_ptr()
                     .offset(
                         ((*oldframe).parseEntitiesNum + oldindex
-                            & 32 as i32 * 256 as i32 - 1 as i32)
-                            as isize,
+                            & 32 as i32 * 256 as i32 - 1 as i32) as isize,
                     )
                     as *mut crate::src::qcommon::q_shared::entityState_t;
                 oldnum = (*oldstate).number
@@ -624,8 +620,7 @@ pub unsafe extern "C" fn CL_ParsePacketEntities(
                     .as_mut_ptr()
                     .offset(
                         ((*oldframe).parseEntitiesNum + oldindex
-                            & 32 as i32 * 256 as i32 - 1 as i32)
-                            as isize,
+                            & 32 as i32 * 256 as i32 - 1 as i32) as isize,
                     )
                     as *mut crate::src::qcommon::q_shared::entityState_t;
                 oldnum = (*oldstate).number
@@ -679,8 +674,7 @@ pub unsafe extern "C" fn CL_ParsePacketEntities(
                 .parseEntities
                 .as_mut_ptr()
                 .offset(
-                    ((*oldframe).parseEntitiesNum + oldindex
-                        & 32 as i32 * 256 as i32 - 1 as i32)
+                    ((*oldframe).parseEntitiesNum + oldindex & 32 as i32 * 256 as i32 - 1 as i32)
                         as isize,
                 ) as *mut crate::src::qcommon::q_shared::entityState_t;
             oldnum = (*oldstate).number
@@ -898,9 +892,8 @@ pub unsafe extern "C" fn CL_ParseSnapshot(mut msg: *mut crate::qcommon_h::msg_t)
     // calculate ping time
     i = 0 as i32;
     while i < 32 as i32 {
-        packetNum =
-            crate::src::client::cl_main::clc.netchan.outgoingSequence - 1 as i32 - i
-                & 32 as i32 - 1 as i32;
+        packetNum = crate::src::client::cl_main::clc.netchan.outgoingSequence - 1 as i32 - i
+            & 32 as i32 - 1 as i32;
         if crate::src::client::cl_main::cl.snap.ps.commandTime
             >= crate::src::client::cl_main::cl.outPackets[packetNum as usize].p_serverTime
         {
@@ -912,9 +905,9 @@ pub unsafe extern "C" fn CL_ParseSnapshot(mut msg: *mut crate::qcommon_h::msg_t)
         }
     }
     // save the frame off in the backup array for later delta comparisons
-    crate::src::client::cl_main::cl.snapshots[(crate::src::client::cl_main::cl.snap.messageNum
-        & 32 as i32 - 1 as i32)
-        as usize] = crate::src::client::cl_main::cl.snap;
+    crate::src::client::cl_main::cl.snapshots
+        [(crate::src::client::cl_main::cl.snap.messageNum & 32 as i32 - 1 as i32) as usize] =
+        crate::src::client::cl_main::cl.snap;
     if (*crate::src::client::cl_main::cl_shownet).integer == 3 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"   snapshot:%i  delta:%i  ping:%i\n\x00" as *const u8 as *const libc::c_char,
@@ -956,8 +949,7 @@ pub unsafe extern "C" fn CL_SystemInfoChanged() {
         .stringData
         .as_mut_ptr()
         .offset(
-            crate::src::client::cl_main::cl.gameState.stringOffsets[1 as i32 as usize]
-                as isize,
+            crate::src::client::cl_main::cl.gameState.stringOffsets[1 as i32 as usize] as isize,
         );
     // NOTE TTimo:
     // when the serverId changes, any further messages we send to the server will use this new serverId
@@ -1102,8 +1094,7 @@ unsafe extern "C" fn CL_ParseServerInfo() {
         .stringData
         .as_mut_ptr()
         .offset(
-            crate::src::client::cl_main::cl.gameState.stringOffsets[0 as i32 as usize]
-                as isize,
+            crate::src::client::cl_main::cl.gameState.stringOffsets[0 as i32 as usize] as isize,
         );
     crate::src::client::cl_main::clc.sv_allowDownload =
         atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
@@ -1202,9 +1193,7 @@ pub unsafe extern "C" fn CL_ParseGamestate(mut msg: *mut crate::qcommon_h::msg_t
             }
             s = crate::src::qcommon::msg::MSG_ReadBigString(msg as *mut crate::qcommon_h::msg_t);
             len = crate::stdlib::strlen(s) as i32;
-            if len + 1 as i32 + crate::src::client::cl_main::cl.gameState.dataCount
-                > 16000 as i32
-            {
+            if len + 1 as i32 + crate::src::client::cl_main::cl.gameState.dataCount > 16000 as i32 {
                 crate::src::qcommon::common::Com_Error(
                     crate::src::qcommon::q_shared::ERR_DROP as i32,
                     b"MAX_GAMESTATE_CHARS exceeded\x00" as *const u8 as *const libc::c_char,
@@ -1372,9 +1361,7 @@ pub unsafe extern "C" fn CL_ParseDownload(mut msg: *mut crate::qcommon_h::msg_t)
         data.as_mut_ptr() as *mut libc::c_void,
         size,
     );
-    if crate::src::client::cl_main::clc.downloadBlock & 0xffff as i32
-        != block as i32
-    {
+    if crate::src::client::cl_main::clc.downloadBlock & 0xffff as i32 != block as i32 {
         crate::src::qcommon::common::Com_DPrintf(
             b"CL_ParseDownload: Expected block %d, got %d\n\x00" as *const u8
                 as *const libc::c_char,
@@ -1533,20 +1520,15 @@ unsafe extern "C" fn CL_ParseVoip(
     mut ignoreData: crate::src::qcommon::q_shared::qboolean,
 ) {
     static mut decoded: [i16; 11520] = [0; 11520]; // !!! FIXME: don't hard code
-    let sender: i32 =
-        crate::src::qcommon::msg::MSG_ReadShort(msg as *mut crate::qcommon_h::msg_t); // short/invalid packet, bail.
+    let sender: i32 = crate::src::qcommon::msg::MSG_ReadShort(msg as *mut crate::qcommon_h::msg_t); // short/invalid packet, bail.
     let generation: i32 =
         crate::src::qcommon::msg::MSG_ReadByte(msg as *mut crate::qcommon_h::msg_t); // short/invalid packet, bail.
-    let sequence: i32 =
-        crate::src::qcommon::msg::MSG_ReadLong(msg as *mut crate::qcommon_h::msg_t); // short/invalid packet, bail.
-    let frames: i32 =
-        crate::src::qcommon::msg::MSG_ReadByte(msg as *mut crate::qcommon_h::msg_t); // short/invalid packet, bail.
+    let sequence: i32 = crate::src::qcommon::msg::MSG_ReadLong(msg as *mut crate::qcommon_h::msg_t); // short/invalid packet, bail.
+    let frames: i32 = crate::src::qcommon::msg::MSG_ReadByte(msg as *mut crate::qcommon_h::msg_t); // short/invalid packet, bail.
     let packetsize: i32 =
         crate::src::qcommon::msg::MSG_ReadShort(msg as *mut crate::qcommon_h::msg_t); // short/invalid packet, bail.
-    let flags: i32 = crate::src::qcommon::msg::MSG_ReadBits(
-        msg as *mut crate::qcommon_h::msg_t,
-        2 as i32,
-    );
+    let flags: i32 =
+        crate::src::qcommon::msg::MSG_ReadBits(msg as *mut crate::qcommon_h::msg_t, 2 as i32);
     let mut encoded: [u8; 4000] = [0; 4000];
     let mut numSamples: i32 = 0;
     let mut seqdiff: i32 = 0;
@@ -1576,14 +1558,12 @@ unsafe extern "C" fn CL_ParseVoip(
             }
         }
     }
-    if packetsize as libc::c_ulong > ::std::mem::size_of::<[u8; 4000]>() as libc::c_ulong
-    {
+    if packetsize as libc::c_ulong > ::std::mem::size_of::<[u8; 4000]>() as libc::c_ulong {
         // overlarge packet?
         let mut bytesleft: i32 = packetsize;
         while bytesleft != 0 {
             let mut br: i32 = bytesleft;
-            if br as libc::c_ulong > ::std::mem::size_of::<[u8; 4000]>() as libc::c_ulong
-            {
+            if br as libc::c_ulong > ::std::mem::size_of::<[u8; 4000]>() as libc::c_ulong {
                 br = ::std::mem::size_of::<[u8; 4000]>() as libc::c_ulong as i32
             }
             crate::src::qcommon::msg::MSG_ReadData(
@@ -1626,8 +1606,7 @@ unsafe extern "C" fn CL_ParseVoip(
     );
     seqdiff = sequence - crate::src::client::cl_main::clc.voipIncomingSequence[sender as usize];
     // This is a new "generation" ... a new recording started, reset the bits.
-    if generation
-        != crate::src::client::cl_main::clc.voipIncomingGeneration[sender as usize] as i32
+    if generation != crate::src::client::cl_main::clc.voipIncomingGeneration[sender as usize] as i32
     {
         crate::src::qcommon::common::Com_DPrintf(
             b"VoIP: new generation %d!\n\x00" as *const u8 as *const libc::c_char,
@@ -1654,9 +1633,7 @@ unsafe extern "C" fn CL_ParseVoip(
             4028 as i32,
         );
         seqdiff = 0 as i32
-    } else if (seqdiff
-        * (20 as i32 * 48 as i32 * 3 as i32)
-        * 2 as i32) as libc::c_ulong
+    } else if (seqdiff * (20 as i32 * 48 as i32 * 3 as i32) * 2 as i32) as libc::c_ulong
         >= ::std::mem::size_of::<[i16; 11520]>() as libc::c_ulong
     {
         // dropped more than we can handle?
@@ -2031,8 +2008,7 @@ pub unsafe extern "C" fn CL_ParseServerMessage(mut msg: *mut crate::qcommon_h::m
                     10 => {
                         CL_ParseVoip(
                             msg,
-                            (crate::src::client::cl_main::clc.voipEnabled as u64 == 0)
-                                as i32
+                            (crate::src::client::cl_main::clc.voipEnabled as u64 == 0) as i32
                                 as crate::src::qcommon::q_shared::qboolean,
                         );
                     }

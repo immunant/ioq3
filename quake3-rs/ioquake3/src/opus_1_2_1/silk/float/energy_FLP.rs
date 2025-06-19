@@ -108,10 +108,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /* sum of squares of a silk_float array, with result as double */
 #[no_mangle]
 
-pub unsafe extern "C" fn silk_energy_FLP(
-    mut data: *const f32,
-    mut dataSize: i32,
-) -> f64 {
+pub unsafe extern "C" fn silk_energy_FLP(mut data: *const f32, mut dataSize: i32) -> f64 {
     let mut i: i32 = 0;
     let mut result: f64 = 0.;
     /* 4x unrolled loop */
@@ -130,8 +127,7 @@ pub unsafe extern "C" fn silk_energy_FLP(
     }
     /* add any remaining products */
     while i < dataSize {
-        result +=
-            *data.offset(i as isize) as f64 * *data.offset(i as isize) as f64;
+        result += *data.offset(i as isize) as f64 * *data.offset(i as isize) as f64;
         i += 1
     }
     return result;

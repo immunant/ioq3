@@ -41,11 +41,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /* shell coder; pulse-subframe length is hardcoded */
 #[inline]
 
-unsafe extern "C" fn combine_pulses(
-    mut out: *mut i32,
-    mut in_0: *const i32,
-    len: i32,
-)
+unsafe extern "C" fn combine_pulses(mut out: *mut i32, mut in_0: *const i32, len: i32)
 /* I    number of OUTPUT samples     */
 {
     let mut k: i32 = 0;
@@ -95,13 +91,10 @@ unsafe extern "C" fn decode_split(
                                                  as isize),
                         8 as i32 as u32) as crate::opus_types_h::opus_int16;
         *p_child2.offset(0 as i32 as isize) =
-            (p - *p_child1.offset(0 as i32 as isize) as i32)
-                as crate::opus_types_h::opus_int16
+            (p - *p_child1.offset(0 as i32 as isize) as i32) as crate::opus_types_h::opus_int16
     } else {
-        *p_child1.offset(0 as i32 as isize) =
-            0 as i32 as crate::opus_types_h::opus_int16;
-        *p_child2.offset(0 as i32 as isize) =
-            0 as i32 as crate::opus_types_h::opus_int16
+        *p_child1.offset(0 as i32 as isize) = 0 as i32 as crate::opus_types_h::opus_int16;
+        *p_child2.offset(0 as i32 as isize) = 0 as i32 as crate::opus_types_h::opus_int16
     };
 }
 /* Shell encoder, operates on one shell code frame of 16 pulses */

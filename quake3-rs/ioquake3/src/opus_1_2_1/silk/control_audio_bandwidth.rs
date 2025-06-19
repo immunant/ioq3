@@ -167,9 +167,7 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
         fs_kHz = fs_Hz / 1000 as i32
     } else {
         /* State machine for the internal sampling rate switching */
-        if (*psEncC).sLP.transition_frame_no
-            >= 5120 as i32 / (5 as i32 * 4 as i32)
-        {
+        if (*psEncC).sLP.transition_frame_no >= 5120 as i32 / (5 as i32 * 4 as i32) {
             /* Stop transition phase */
             (*psEncC).sLP.mode = 0 as i32
         }
@@ -177,15 +175,13 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
             /* Check if we should switch down */
             if (*psEncC).fs_kHz as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
-                * 1000 as i32 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
+                * 1000 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
                 > (*psEncC).desiredInternal_fs_Hz
             {
                 /* Switch down */
                 if (*psEncC).sLP.mode == 0 as i32 {
                     /* New transition */
-                    (*psEncC).sLP.transition_frame_no =
-                        5120 as i32 / (5 as i32 * 4 as i32);
+                    (*psEncC).sLP.transition_frame_no = 5120 as i32 / (5 as i32 * 4 as i32);
                     /* Reset transition filter state */
                     crate::stdlib::memset(
                         (*psEncC).sLP.In_LP_State.as_mut_ptr() as *mut libc::c_void,
@@ -206,16 +202,15 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
                 } else if (*psEncC).sLP.transition_frame_no <= 0 as i32 {
                     (*encControl).switchReady = 1 as i32;
                     /* Make room for redundancy */
-                    (*encControl).maxBits -= (*encControl).maxBits * 5 as i32
-                        / ((*encControl).payloadSize_ms + 5 as i32)
+                    (*encControl).maxBits -=
+                        (*encControl).maxBits * 5 as i32 / ((*encControl).payloadSize_ms + 5 as i32)
                 } else {
                     /* Direction: down (at double speed) */
                     (*psEncC).sLP.mode = -(2 as i32)
                 }
             } else if ((*psEncC).fs_kHz as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
-                * 1000 as i32 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32)
+                * 1000 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32)
                 < (*psEncC).desiredInternal_fs_Hz
             {
                 /* Check if we should switch up */
@@ -241,8 +236,8 @@ pub unsafe extern "C" fn silk_control_audio_bandwidth(
                 } else if (*psEncC).sLP.mode == 0 as i32 {
                     (*encControl).switchReady = 1 as i32;
                     /* Make room for redundancy */
-                    (*encControl).maxBits -= (*encControl).maxBits * 5 as i32
-                        / ((*encControl).payloadSize_ms + 5 as i32)
+                    (*encControl).maxBits -=
+                        (*encControl).maxBits * 5 as i32 / ((*encControl).payloadSize_ms + 5 as i32)
                 } else {
                     /* Direction: up */
                     (*psEncC).sLP.mode = 1 as i32

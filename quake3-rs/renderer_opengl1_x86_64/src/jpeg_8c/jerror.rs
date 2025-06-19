@@ -535,19 +535,14 @@ unsafe extern "C" fn output_message(mut cinfo: crate::jpeglib_h::j_common_ptr) {
  * or change the policy about which messages to display.
  */
 
-unsafe extern "C" fn emit_message(
-    mut cinfo: crate::jpeglib_h::j_common_ptr,
-    mut msg_level: i32,
-) {
+unsafe extern "C" fn emit_message(mut cinfo: crate::jpeglib_h::j_common_ptr, mut msg_level: i32) {
     let mut err: *mut crate::jpeglib_h::jpeg_error_mgr = (*cinfo).err;
     if msg_level < 0 as i32 {
         /* It's a warning message.  Since corrupt files may generate many warnings,
          * the policy implemented here is to show only the first warning,
          * unless trace_level >= 3.
          */
-        if (*err).num_warnings == 0 as i32 as libc::c_long
-            || (*err).trace_level >= 3 as i32
-        {
+        if (*err).num_warnings == 0 as i32 as libc::c_long || (*err).trace_level >= 3 as i32 {
             Some((*err).output_message.expect("non-null function pointer"))
                 .expect("non-null function pointer")(cinfo);
         }
@@ -670,10 +665,8 @@ pub unsafe extern "C" fn jpeg_std_error(
 ) -> *mut crate::jpeglib_h::jpeg_error_mgr {
     (*err).error_exit =
         Some(error_exit as unsafe extern "C" fn(_: crate::jpeglib_h::j_common_ptr) -> ()); /* default = no tracing */
-    (*err).emit_message = Some(
-        emit_message
-            as unsafe extern "C" fn(_: crate::jpeglib_h::j_common_ptr, _: i32) -> (),
-    ); /* no warnings emitted yet */
+    (*err).emit_message =
+        Some(emit_message as unsafe extern "C" fn(_: crate::jpeglib_h::j_common_ptr, _: i32) -> ()); /* no warnings emitted yet */
     (*err).output_message =
         Some(output_message as unsafe extern "C" fn(_: crate::jpeglib_h::j_common_ptr) -> ()); /* may be useful as a flag for "no error" */
     (*err).format_message = Some(
@@ -687,8 +680,7 @@ pub unsafe extern "C" fn jpeg_std_error(
     (*err).msg_code = 0 as i32;
     /* Initialize message table pointers */
     (*err).jpeg_message_table = jpeg_std_message_table.as_ptr(); /* for safety */
-    (*err).last_jpeg_message =
-        crate::src::jpeg_8c::jerror::JMSG_LASTMSGCODE as i32 - 1 as i32;
+    (*err).last_jpeg_message = crate::src::jpeg_8c::jerror::JMSG_LASTMSGCODE as i32 - 1 as i32;
     (*err).addon_message_table = 0 as *const *const libc::c_char;
     (*err).first_addon_message = 0 as i32;
     (*err).last_addon_message = 0 as i32;

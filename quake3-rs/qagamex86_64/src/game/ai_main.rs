@@ -62,8 +62,7 @@ pub struct bot_state_s {
     pub lastucmd: crate::src::qcommon::q_shared::usercmd_t,
     pub entityeventTime: [i32; 1024],
     pub settings: crate::g_local_h::bot_settings_t,
-    pub ainode:
-        Option<unsafe extern "C" fn(_: *mut crate::src::game::ai_main::bot_state_s) -> i32>,
+    pub ainode: Option<unsafe extern "C" fn(_: *mut crate::src::game::ai_main::bot_state_s) -> i32>,
     pub thinktime: f32,
     pub origin: crate::src::qcommon::q_shared::vec3_t,
     pub velocity: crate::src::qcommon::q_shared::vec3_t,
@@ -605,11 +604,7 @@ BotAI_Print
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotAI_Print(
-    mut type_0: i32,
-    mut fmt: *mut libc::c_char,
-    mut args: ...
-) {
+pub unsafe extern "C" fn BotAI_Print(mut type_0: i32, mut fmt: *mut libc::c_char, mut args: ...) {
     let mut str: [libc::c_char; 2048] = [0; 2048];
     let mut ap: ::std::ffi::VaListImpl;
     ap = args.clone();
@@ -707,12 +702,9 @@ pub unsafe extern "C" fn BotAI_Trace(
     (*bsptrace).endpos[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
     (*bsptrace).endpos[2 as i32 as usize] = trace.endpos[2 as i32 as usize];
     (*bsptrace).plane.dist = trace.plane.dist;
-    (*bsptrace).plane.normal[0 as i32 as usize] =
-        trace.plane.normal[0 as i32 as usize];
-    (*bsptrace).plane.normal[1 as i32 as usize] =
-        trace.plane.normal[1 as i32 as usize];
-    (*bsptrace).plane.normal[2 as i32 as usize] =
-        trace.plane.normal[2 as i32 as usize];
+    (*bsptrace).plane.normal[0 as i32 as usize] = trace.plane.normal[0 as i32 as usize];
+    (*bsptrace).plane.normal[1 as i32 as usize] = trace.plane.normal[1 as i32 as usize];
+    (*bsptrace).plane.normal[2 as i32 as usize] = trace.plane.normal[2 as i32 as usize];
     (*bsptrace).plane.signbits = trace.plane.signbits;
     (*bsptrace).plane.type_0 = trace.plane.type_0;
     (*bsptrace).surface.value = 0 as i32;
@@ -1463,8 +1455,7 @@ pub unsafe extern "C" fn BotInterbreedBots() {
     while i < 64 as i32 {
         if !botstates[i as usize].is_null() && (*botstates[i as usize]).inuse != 0 {
             ranks[i as usize] = ((*botstates[i as usize]).num_kills * 2 as i32
-                - (*botstates[i as usize]).num_deaths)
-                as f32
+                - (*botstates[i as usize]).num_deaths) as f32
         } else {
             ranks[i as usize] = -(1 as i32) as f32
         }
@@ -1663,9 +1654,7 @@ BotTeamLeader
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotTeamLeader(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn BotTeamLeader(mut bs: *mut crate::src::game::ai_main::bot_state_t) -> i32 {
     let mut leader: i32 = 0;
     leader = crate::src::game::ai_dmq3::ClientFromName((*bs).teamleader.as_mut_ptr());
     if leader < 0 as i32 {
@@ -1683,10 +1672,7 @@ AngleDifference
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AngleDifference(
-    mut ang1: f32,
-    mut ang2: f32,
-) -> f32 {
+pub unsafe extern "C" fn AngleDifference(mut ang1: f32, mut ang2: f32) -> f32 {
     let mut diff: f32 = 0.;
     diff = ang1 - ang2;
     if ang1 > ang2 {
@@ -1913,18 +1899,15 @@ pub unsafe extern "C" fn BotInputToUserCommand(
     (*ucmd).weapon = (*bi).weapon as crate::src::qcommon::q_shared::byte;
     //set the view angles
     //NOTE: the ucmd->angles are the angles WITHOUT the delta angles
-    (*ucmd).angles[0 as i32 as usize] =
-        ((*bi).viewangles[0 as i32 as usize] * 65536 as i32 as f32
-            / 360 as i32 as f32) as i32
-            & 65535 as i32;
-    (*ucmd).angles[1 as i32 as usize] =
-        ((*bi).viewangles[1 as i32 as usize] * 65536 as i32 as f32
-            / 360 as i32 as f32) as i32
-            & 65535 as i32;
-    (*ucmd).angles[2 as i32 as usize] =
-        ((*bi).viewangles[2 as i32 as usize] * 65536 as i32 as f32
-            / 360 as i32 as f32) as i32
-            & 65535 as i32;
+    (*ucmd).angles[0 as i32 as usize] = ((*bi).viewangles[0 as i32 as usize] * 65536 as i32 as f32
+        / 360 as i32 as f32) as i32
+        & 65535 as i32;
+    (*ucmd).angles[1 as i32 as usize] = ((*bi).viewangles[1 as i32 as usize] * 65536 as i32 as f32
+        / 360 as i32 as f32) as i32
+        & 65535 as i32;
+    (*ucmd).angles[2 as i32 as usize] = ((*bi).viewangles[2 as i32 as usize] * 65536 as i32 as f32
+        / 360 as i32 as f32) as i32
+        & 65535 as i32;
     //subtract the delta angles
     j = 0 as i32;
     while j < 3 as i32 {
@@ -1956,8 +1939,7 @@ pub unsafe extern "C" fn BotInputToUserCommand(
         0 as *mut crate::src::qcommon::q_shared::vec_t,
     );
     //bot input speed is in the range [0, 400]
-    (*bi).speed =
-        (*bi).speed * 127 as i32 as f32 / 400 as i32 as f32;
+    (*bi).speed = (*bi).speed * 127 as i32 as f32 / 400 as i32 as f32;
     //set the view independent movement
     f = forward[0 as i32 as usize] * (*bi).dir[0 as i32 as usize]
         + forward[1 as i32 as usize] * (*bi).dir[1 as i32 as usize]
@@ -2029,17 +2011,13 @@ pub unsafe extern "C" fn BotUpdateInput(
     while j < 3 as i32 {
         (*bs).viewangles[j as usize] = crate::src::qcommon::q_math::AngleMod(
             ((*bs).viewangles[j as usize] as f64
-                + (*bs).cur_ps.delta_angles[j as usize] as f64
-                    * (360.0f64 / 65536 as i32 as f64))
+                + (*bs).cur_ps.delta_angles[j as usize] as f64 * (360.0f64 / 65536 as i32 as f64))
                 as f32,
         );
         j += 1
     }
     //change the bot view angles
-    BotChangeViewAngles(
-        bs,
-        elapsed_time as f32 / 1000 as i32 as f32,
-    );
+    BotChangeViewAngles(bs, elapsed_time as f32 / 1000 as i32 as f32);
     //retrieve the bot input
     crate::src::game::g_syscalls::trap_EA_GetInput(
         (*bs).client,
@@ -2064,8 +2042,7 @@ pub unsafe extern "C" fn BotUpdateInput(
     while j < 3 as i32 {
         (*bs).viewangles[j as usize] = crate::src::qcommon::q_math::AngleMod(
             ((*bs).viewangles[j as usize] as f64
-                - (*bs).cur_ps.delta_angles[j as usize] as f64
-                    * (360.0f64 / 65536 as i32 as f64))
+                - (*bs).cur_ps.delta_angles[j as usize] as f64 * (360.0f64 / 65536 as i32 as f64))
                 as f32,
         );
         j += 1
@@ -2116,10 +2093,7 @@ BotAI
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotAI(
-    mut client: i32,
-    mut thinktime: f32,
-) -> i32 {
+pub unsafe extern "C" fn BotAI(mut client: i32, mut thinktime: f32) -> i32 {
     let mut bs: *mut crate::src::game::ai_main::bot_state_t =
         0 as *mut crate::src::game::ai_main::bot_state_t;
     let mut buf: [libc::c_char; 1024] = [0; 1024];
@@ -2252,8 +2226,7 @@ pub unsafe extern "C" fn BotAI(
     while j < 3 as i32 {
         (*bs).viewangles[j as usize] = crate::src::qcommon::q_math::AngleMod(
             ((*bs).viewangles[j as usize] as f64
-                + (*bs).cur_ps.delta_angles[j as usize] as f64
-                    * (360.0f64 / 65536 as i32 as f64))
+                + (*bs).cur_ps.delta_angles[j as usize] as f64 * (360.0f64 / 65536 as i32 as f64))
                 as f32,
         );
         j += 1
@@ -2285,8 +2258,7 @@ pub unsafe extern "C" fn BotAI(
     while j < 3 as i32 {
         (*bs).viewangles[j as usize] = crate::src::qcommon::q_math::AngleMod(
             ((*bs).viewangles[j as usize] as f64
-                - (*bs).cur_ps.delta_angles[j as usize] as f64
-                    * (360.0f64 / 65536 as i32 as f64))
+                - (*bs).cur_ps.delta_angles[j as usize] as f64 * (360.0f64 / 65536 as i32 as f64))
                 as f32,
         );
         j += 1
@@ -2451,11 +2423,10 @@ pub unsafe extern "C" fn BotAISetupClient(
         0 as *mut crate::src::game::ai_main::bot_state_t;
     let mut errnum: i32 = 0;
     if botstates[client as usize].is_null() {
-        botstates[client as usize] = crate::src::game::g_mem::G_Alloc(::std::mem::size_of::<
-            crate::src::game::ai_main::bot_state_t,
-        >() as libc::c_ulong
-            as i32)
-            as *mut crate::src::game::ai_main::bot_state_t
+        botstates[client as usize] =
+            crate::src::game::g_mem::G_Alloc(::std::mem::size_of::<
+                crate::src::game::ai_main::bot_state_t,
+            >() as libc::c_ulong as i32) as *mut crate::src::game::ai_main::bot_state_t
     }
     bs = botstates[client as usize];
     if bs.is_null() {
@@ -2562,12 +2533,9 @@ pub unsafe extern "C" fn BotAISetupClient(
         ::std::mem::size_of::<[libc::c_char; 144]>() as libc::c_ulong as i32,
     );
     //set the chat gender
-    if *gender.as_mut_ptr() as i32 == 'f' as i32
-        || *gender.as_mut_ptr() as i32 == 'F' as i32
-    {
+    if *gender.as_mut_ptr() as i32 == 'f' as i32 || *gender.as_mut_ptr() as i32 == 'F' as i32 {
         crate::src::game::g_syscalls::trap_BotSetChatGender((*bs).cs, 1 as i32);
-    } else if *gender.as_mut_ptr() as i32 == 'm' as i32
-        || *gender.as_mut_ptr() as i32 == 'M' as i32
+    } else if *gender.as_mut_ptr() as i32 == 'm' as i32 || *gender.as_mut_ptr() as i32 == 'M' as i32
     {
         crate::src::game::g_syscalls::trap_BotSetChatGender((*bs).cs, 2 as i32);
     } else {
@@ -2600,10 +2568,7 @@ pub unsafe extern "C" fn BotAISetupClient(
     BotScheduleBotThink();
     //if interbreeding start with a mutation
     if bot_interbreed != 0 {
-        crate::src::game::g_syscalls::trap_BotMutateGoalFuzzyLogic(
-            (*bs).gs,
-            1 as i32 as f32,
-        );
+        crate::src::game::g_syscalls::trap_BotMutateGoalFuzzyLogic((*bs).gs, 1 as i32 as f32);
     }
     // if we kept the bot client
     if restart as u64 != 0 {
@@ -2939,8 +2904,7 @@ pub unsafe extern "C" fn BotAIStartFrame(mut time: i32) -> i32 {
                     .connected as u32
                     != crate::g_local_h::CON_CONNECTED as i32 as u32)
                 {
-                    (*botstates[i as usize]).lastucmd.forwardmove =
-                        0 as i32 as i8;
+                    (*botstates[i as usize]).lastucmd.forwardmove = 0 as i32 as i8;
                     (*botstates[i as usize]).lastucmd.rightmove = 0 as i32 as i8;
                     (*botstates[i as usize]).lastucmd.upmove = 0 as i32 as i8;
                     (*botstates[i as usize]).lastucmd.buttons = 0 as i32;
@@ -3001,9 +2965,7 @@ pub unsafe extern "C" fn BotAIStartFrame(mut time: i32) -> i32 {
     // update the bot library
     if botlib_residual >= thinktime {
         botlib_residual -= thinktime;
-        crate::src::game::g_syscalls::trap_BotLibStartFrame(
-            time as f32 / 1000 as i32 as f32,
-        );
+        crate::src::game::g_syscalls::trap_BotLibStartFrame(time as f32 / 1000 as i32 as f32);
         if crate::src::game::g_syscalls::trap_AAS_Initialized() == 0 {
             return crate::src::qcommon::q_shared::qfalse as i32;
         }
@@ -3035,33 +2997,21 @@ pub unsafe extern "C" fn BotAIStartFrame(mut time: i32) -> i32 {
                     ::std::mem::size_of::<crate::botlib_h::bot_entitystate_t>() as libc::c_ulong,
                 );
                 //
-                state.origin[0 as i32 as usize] =
-                    (*ent).r.currentOrigin[0 as i32 as usize];
-                state.origin[1 as i32 as usize] =
-                    (*ent).r.currentOrigin[1 as i32 as usize];
-                state.origin[2 as i32 as usize] =
-                    (*ent).r.currentOrigin[2 as i32 as usize];
+                state.origin[0 as i32 as usize] = (*ent).r.currentOrigin[0 as i32 as usize];
+                state.origin[1 as i32 as usize] = (*ent).r.currentOrigin[1 as i32 as usize];
+                state.origin[2 as i32 as usize] = (*ent).r.currentOrigin[2 as i32 as usize];
                 if i < 64 as i32 {
-                    state.angles[0 as i32 as usize] =
-                        (*ent).s.apos.trBase[0 as i32 as usize];
-                    state.angles[1 as i32 as usize] =
-                        (*ent).s.apos.trBase[1 as i32 as usize];
-                    state.angles[2 as i32 as usize] =
-                        (*ent).s.apos.trBase[2 as i32 as usize]
+                    state.angles[0 as i32 as usize] = (*ent).s.apos.trBase[0 as i32 as usize];
+                    state.angles[1 as i32 as usize] = (*ent).s.apos.trBase[1 as i32 as usize];
+                    state.angles[2 as i32 as usize] = (*ent).s.apos.trBase[2 as i32 as usize]
                 } else {
-                    state.angles[0 as i32 as usize] =
-                        (*ent).r.currentAngles[0 as i32 as usize];
-                    state.angles[1 as i32 as usize] =
-                        (*ent).r.currentAngles[1 as i32 as usize];
-                    state.angles[2 as i32 as usize] =
-                        (*ent).r.currentAngles[2 as i32 as usize]
+                    state.angles[0 as i32 as usize] = (*ent).r.currentAngles[0 as i32 as usize];
+                    state.angles[1 as i32 as usize] = (*ent).r.currentAngles[1 as i32 as usize];
+                    state.angles[2 as i32 as usize] = (*ent).r.currentAngles[2 as i32 as usize]
                 }
-                state.old_origin[0 as i32 as usize] =
-                    (*ent).s.origin2[0 as i32 as usize];
-                state.old_origin[1 as i32 as usize] =
-                    (*ent).s.origin2[1 as i32 as usize];
-                state.old_origin[2 as i32 as usize] =
-                    (*ent).s.origin2[2 as i32 as usize];
+                state.old_origin[0 as i32 as usize] = (*ent).s.origin2[0 as i32 as usize];
+                state.old_origin[1 as i32 as usize] = (*ent).s.origin2[1 as i32 as usize];
+                state.old_origin[2 as i32 as usize] = (*ent).s.origin2[2 as i32 as usize];
                 state.mins[0 as i32 as usize] = (*ent).r.mins[0 as i32 as usize];
                 state.mins[1 as i32 as usize] = (*ent).r.mins[1 as i32 as usize];
                 state.mins[2 as i32 as usize] = (*ent).r.mins[2 as i32 as usize];
@@ -3113,10 +3063,7 @@ pub unsafe extern "C" fn BotAIStartFrame(mut time: i32) -> i32 {
                     .connected as u32
                     == crate::g_local_h::CON_CONNECTED as i32 as u32
                 {
-                    BotAI(
-                        i,
-                        thinktime as f32 / 1000 as i32 as f32,
-                    );
+                    BotAI(i, thinktime as f32 / 1000 as i32 as f32);
                 }
             }
         }

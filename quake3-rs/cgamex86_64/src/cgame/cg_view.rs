@@ -304,22 +304,19 @@ pub unsafe extern "C" fn CG_TestModel_f() {
     }
     crate::src::cgame::cg_main::cg.testModelEntity.origin[0 as i32 as usize] =
         crate::src::cgame::cg_main::cg.refdef.vieworg[0 as i32 as usize]
-            + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
-                [0 as i32 as usize]
+            + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize]
                 * 100 as i32 as f32;
     crate::src::cgame::cg_main::cg.testModelEntity.origin[1 as i32 as usize] =
         crate::src::cgame::cg_main::cg.refdef.vieworg[1 as i32 as usize]
-            + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
-                [1 as i32 as usize]
+            + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize]
                 * 100 as i32 as f32;
     crate::src::cgame::cg_main::cg.testModelEntity.origin[2 as i32 as usize] =
         crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize]
-            + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
-                [2 as i32 as usize]
+            + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize]
                 * 100 as i32 as f32;
     angles[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    angles[1 as i32 as usize] = 180 as i32 as f32
-        + crate::src::cgame::cg_main::cg.refdefViewAngles[1 as i32 as usize];
+    angles[1 as i32 as usize] =
+        180 as i32 as f32 + crate::src::cgame::cg_main::cg.refdefViewAngles[1 as i32 as usize];
     angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::qcommon::q_math::AnglesToAxis(
         angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -344,8 +341,7 @@ pub unsafe extern "C" fn CG_TestGun_f() {
         return;
     }
     crate::src::cgame::cg_main::cg.testGun = crate::src::qcommon::q_shared::qtrue;
-    crate::src::cgame::cg_main::cg.testModelEntity.renderfx =
-        0x1 as i32 | 0x8 as i32 | 0x4 as i32;
+    crate::src::cgame::cg_main::cg.testModelEntity.renderfx = 0x1 as i32 | 0x8 as i32 | 0x4 as i32;
 }
 #[no_mangle]
 
@@ -411,47 +407,35 @@ unsafe extern "C" fn CG_AddTestModel() {
             crate::src::cgame::cg_main::cg.refdef.vieworg[1 as i32 as usize];
         crate::src::cgame::cg_main::cg.testModelEntity.origin[2 as i32 as usize] =
             crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize];
-        crate::src::cgame::cg_main::cg.testModelEntity.axis[0 as i32 as usize]
-            [0 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis
-            [0 as i32 as usize][0 as i32 as usize];
-        crate::src::cgame::cg_main::cg.testModelEntity.axis[0 as i32 as usize]
-            [1 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis
-            [0 as i32 as usize][1 as i32 as usize];
-        crate::src::cgame::cg_main::cg.testModelEntity.axis[0 as i32 as usize]
-            [2 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis
-            [0 as i32 as usize][2 as i32 as usize];
-        crate::src::cgame::cg_main::cg.testModelEntity.axis[1 as i32 as usize]
-            [0 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis
-            [1 as i32 as usize][0 as i32 as usize];
-        crate::src::cgame::cg_main::cg.testModelEntity.axis[1 as i32 as usize]
-            [1 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis
-            [1 as i32 as usize][1 as i32 as usize];
-        crate::src::cgame::cg_main::cg.testModelEntity.axis[1 as i32 as usize]
-            [2 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis
-            [1 as i32 as usize][2 as i32 as usize];
-        crate::src::cgame::cg_main::cg.testModelEntity.axis[2 as i32 as usize]
-            [0 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis
-            [2 as i32 as usize][0 as i32 as usize];
-        crate::src::cgame::cg_main::cg.testModelEntity.axis[2 as i32 as usize]
-            [1 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis
-            [2 as i32 as usize][1 as i32 as usize];
-        crate::src::cgame::cg_main::cg.testModelEntity.axis[2 as i32 as usize]
-            [2 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis
-            [2 as i32 as usize][2 as i32 as usize];
+        crate::src::cgame::cg_main::cg.testModelEntity.axis[0 as i32 as usize][0 as i32 as usize] =
+            crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize];
+        crate::src::cgame::cg_main::cg.testModelEntity.axis[0 as i32 as usize][1 as i32 as usize] =
+            crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize];
+        crate::src::cgame::cg_main::cg.testModelEntity.axis[0 as i32 as usize][2 as i32 as usize] =
+            crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize];
+        crate::src::cgame::cg_main::cg.testModelEntity.axis[1 as i32 as usize][0 as i32 as usize] =
+            crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize];
+        crate::src::cgame::cg_main::cg.testModelEntity.axis[1 as i32 as usize][1 as i32 as usize] =
+            crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize];
+        crate::src::cgame::cg_main::cg.testModelEntity.axis[1 as i32 as usize][2 as i32 as usize] =
+            crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize];
+        crate::src::cgame::cg_main::cg.testModelEntity.axis[2 as i32 as usize][0 as i32 as usize] =
+            crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize];
+        crate::src::cgame::cg_main::cg.testModelEntity.axis[2 as i32 as usize][1 as i32 as usize] =
+            crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize];
+        crate::src::cgame::cg_main::cg.testModelEntity.axis[2 as i32 as usize][2 as i32 as usize] =
+            crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize];
         // allow the position to be adjusted
         i = 0 as i32;
         while i < 3 as i32 {
             crate::src::cgame::cg_main::cg.testModelEntity.origin[i as usize] +=
-                crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
-                    [i as usize]
+                crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][i as usize]
                     * crate::src::cgame::cg_main::cg_gun_x.value;
             crate::src::cgame::cg_main::cg.testModelEntity.origin[i as usize] +=
-                crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
-                    [i as usize]
+                crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][i as usize]
                     * crate::src::cgame::cg_main::cg_gun_y.value;
             crate::src::cgame::cg_main::cg.testModelEntity.origin[i as usize] +=
-                crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
-                    [i as usize]
+                crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][i as usize]
                     * crate::src::cgame::cg_main::cg_gun_z.value;
             i += 1
         }
@@ -566,9 +550,8 @@ unsafe extern "C" fn CG_OffsetThirdPersonView() {
         [crate::bg_public_h::STAT_HEALTH as i32 as usize]
         <= 0 as i32
     {
-        focusAngles[1 as i32 as usize] = crate::src::cgame::cg_main::cg
-            .predictedPlayerState
-            .stats[crate::bg_public_h::STAT_DEAD_YAW as i32 as usize]
+        focusAngles[1 as i32 as usize] = crate::src::cgame::cg_main::cg.predictedPlayerState.stats
+            [crate::bg_public_h::STAT_DEAD_YAW as i32 as usize]
             as crate::src::qcommon::q_shared::vec_t;
         crate::src::cgame::cg_main::cg.refdefViewAngles[1 as i32 as usize] =
             crate::src::cgame::cg_main::cg.predictedPlayerState.stats
@@ -576,8 +559,7 @@ unsafe extern "C" fn CG_OffsetThirdPersonView() {
                 as crate::src::qcommon::q_shared::vec_t
     }
     if focusAngles[0 as i32 as usize] > 45 as i32 as f32 {
-        focusAngles[0 as i32 as usize] =
-            45 as i32 as crate::src::qcommon::q_shared::vec_t
+        focusAngles[0 as i32 as usize] = 45 as i32 as crate::src::qcommon::q_shared::vec_t
         // don't go too far overhead
     }
     crate::src::qcommon::q_math::AngleVectors(
@@ -595,17 +577,13 @@ unsafe extern "C" fn CG_OffsetThirdPersonView() {
     focusPoint[2 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg
         [2 as i32 as usize]
         + forward[2 as i32 as usize] * 512 as i32 as f32;
-    view[0 as i32 as usize] =
-        crate::src::cgame::cg_main::cg.refdef.vieworg[0 as i32 as usize];
-    view[1 as i32 as usize] =
-        crate::src::cgame::cg_main::cg.refdef.vieworg[1 as i32 as usize];
-    view[2 as i32 as usize] =
-        crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize];
+    view[0 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg[0 as i32 as usize];
+    view[1 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg[1 as i32 as usize];
+    view[2 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize];
     view[2 as i32 as usize] += 8 as i32 as f32;
     crate::src::cgame::cg_main::cg.refdefViewAngles[0 as i32 as usize] =
-        (crate::src::cgame::cg_main::cg.refdefViewAngles[0 as i32 as usize]
-            as f64
-            * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (crate::src::cgame::cg_main::cg.refdefViewAngles[0 as i32 as usize] as f64 * 0.5f64)
+            as crate::src::qcommon::q_shared::vec_t;
     crate::src::qcommon::q_math::AngleVectors(
         crate::src::cgame::cg_main::cg.refdefViewAngles.as_mut_ptr()
             as *const crate::src::qcommon::q_shared::vec_t,
@@ -614,13 +592,11 @@ unsafe extern "C" fn CG_OffsetThirdPersonView() {
         up.as_mut_ptr(),
     );
     forwardScale = crate::stdlib::cos(
-        (crate::src::cgame::cg_main::cg_thirdPersonAngle.value
-            / 180 as i32 as f32) as f64
+        (crate::src::cgame::cg_main::cg_thirdPersonAngle.value / 180 as i32 as f32) as f64
             * 3.14159265358979323846f64,
     ) as f32;
     sideScale = crate::stdlib::sin(
-        (crate::src::cgame::cg_main::cg_thirdPersonAngle.value
-            / 180 as i32 as f32) as f64
+        (crate::src::cgame::cg_main::cg_thirdPersonAngle.value / 180 as i32 as f32) as f64
             * 3.14159265358979323846f64,
     ) as f32;
     view[0 as i32 as usize] = view[0 as i32 as usize]
@@ -682,12 +658,9 @@ unsafe extern "C" fn CG_OffsetThirdPersonView() {
             view[2 as i32 as usize] = trace.endpos[2 as i32 as usize]
         }
     }
-    crate::src::cgame::cg_main::cg.refdef.vieworg[0 as i32 as usize] =
-        view[0 as i32 as usize];
-    crate::src::cgame::cg_main::cg.refdef.vieworg[1 as i32 as usize] =
-        view[1 as i32 as usize];
-    crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize] =
-        view[2 as i32 as usize];
+    crate::src::cgame::cg_main::cg.refdef.vieworg[0 as i32 as usize] = view[0 as i32 as usize];
+    crate::src::cgame::cg_main::cg.refdef.vieworg[1 as i32 as usize] = view[1 as i32 as usize];
+    crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize] = view[2 as i32 as usize];
     // select pitch to look at focus point from vieword
     focusPoint[0 as i32 as usize] = focusPoint[0 as i32 as usize]
         - crate::src::cgame::cg_main::cg.refdef.vieworg[0 as i32 as usize];
@@ -697,19 +670,16 @@ unsafe extern "C" fn CG_OffsetThirdPersonView() {
         - crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize];
     focusDist = crate::stdlib::sqrt(
         (focusPoint[0 as i32 as usize] * focusPoint[0 as i32 as usize]
-            + focusPoint[1 as i32 as usize] * focusPoint[1 as i32 as usize])
-            as f64,
+            + focusPoint[1 as i32 as usize] * focusPoint[1 as i32 as usize]) as f64,
     ) as f32;
     if focusDist < 1 as i32 as f32 {
         focusDist = 1 as i32 as f32
         // should never happen
     }
-    crate::src::cgame::cg_main::cg.refdefViewAngles[0 as i32 as usize] =
-        (-(180 as i32) as f64 / 3.14159265358979323846f64
-            * crate::stdlib::atan2(
-                focusPoint[2 as i32 as usize] as f64,
-                focusDist as f64,
-            )) as crate::src::qcommon::q_shared::vec_t;
+    crate::src::cgame::cg_main::cg.refdefViewAngles[0 as i32 as usize] = (-(180 as i32) as f64
+        / 3.14159265358979323846f64
+        * crate::stdlib::atan2(focusPoint[2 as i32 as usize] as f64, focusDist as f64))
+        as crate::src::qcommon::q_shared::vec_t;
     crate::src::cgame::cg_main::cg.refdefViewAngles[1 as i32 as usize] -=
         crate::src::cgame::cg_main::cg_thirdPersonAngle.value;
 }
@@ -721,8 +691,7 @@ unsafe extern "C" fn CG_StepOffset() {
     timeDelta = crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cg.stepTime;
     if timeDelta < 200 as i32 {
         crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize] -=
-            crate::src::cgame::cg_main::cg.stepChange
-                * (200 as i32 - timeDelta) as f32
+            crate::src::cgame::cg_main::cg.stepChange * (200 as i32 - timeDelta) as f32
                 / 200 as i32 as f32
     };
 }
@@ -767,19 +736,14 @@ unsafe extern "C" fn CG_OffsetFirstPersonView() {
     }
     // add angles based on damage kick
     if crate::src::cgame::cg_main::cg.damageTime != 0. {
-        ratio = crate::src::cgame::cg_main::cg.time as f32
-            - crate::src::cgame::cg_main::cg.damageTime;
+        ratio =
+            crate::src::cgame::cg_main::cg.time as f32 - crate::src::cgame::cg_main::cg.damageTime;
         if ratio < 100 as i32 as f32 {
             ratio /= 100 as i32 as f32;
-            *angles.offset(0 as i32 as isize) +=
-                ratio * crate::src::cgame::cg_main::cg.v_dmg_pitch;
-            *angles.offset(2 as i32 as isize) +=
-                ratio * crate::src::cgame::cg_main::cg.v_dmg_roll
+            *angles.offset(0 as i32 as isize) += ratio * crate::src::cgame::cg_main::cg.v_dmg_pitch;
+            *angles.offset(2 as i32 as isize) += ratio * crate::src::cgame::cg_main::cg.v_dmg_roll
         } else {
-            ratio = (1.0f64
-                - ((ratio - 100 as i32 as f32)
-                    / 400 as i32 as f32) as f64)
-                as f32;
+            ratio = (1.0f64 - ((ratio - 100 as i32 as f32) / 400 as i32 as f32) as f64) as f32;
             if ratio > 0 as i32 as f32 {
                 *angles.offset(0 as i32 as isize) +=
                     ratio * crate::src::cgame::cg_main::cg.v_dmg_pitch;
@@ -797,27 +761,19 @@ unsafe extern "C" fn CG_OffsetFirstPersonView() {
     predictedVelocity[2 as i32 as usize] =
         crate::src::cgame::cg_main::cg.predictedPlayerState.velocity[2 as i32 as usize];
     delta = predictedVelocity[0 as i32 as usize]
-        * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
-            [0 as i32 as usize]
+        * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize]
         + predictedVelocity[1 as i32 as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
-                [1 as i32 as usize]
+            * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize]
         + predictedVelocity[2 as i32 as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
-                [2 as i32 as usize];
-    *angles.offset(0 as i32 as isize) +=
-        delta * crate::src::cgame::cg_main::cg_runpitch.value;
+            * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize];
+    *angles.offset(0 as i32 as isize) += delta * crate::src::cgame::cg_main::cg_runpitch.value;
     delta = predictedVelocity[0 as i32 as usize]
-        * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
-            [0 as i32 as usize]
+        * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
         + predictedVelocity[1 as i32 as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
-                [1 as i32 as usize]
+            * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize]
         + predictedVelocity[2 as i32 as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
-                [2 as i32 as usize];
-    *angles.offset(2 as i32 as isize) -=
-        delta * crate::src::cgame::cg_main::cg_runroll.value;
+            * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize];
+    *angles.offset(2 as i32 as isize) -= delta * crate::src::cgame::cg_main::cg_runroll.value;
     // add angles based on bob
     // make sure the bob is visible even at low speeds
     speed = if crate::src::cgame::cg_main::cg.xyspeed > 200 as i32 as f32 {
@@ -851,8 +807,7 @@ unsafe extern "C" fn CG_OffsetFirstPersonView() {
     timeDelta = crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cg.duckTime;
     if timeDelta < 100 as i32 {
         crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize] -=
-            crate::src::cgame::cg_main::cg.duckChange
-                * (100 as i32 - timeDelta) as f32
+            crate::src::cgame::cg_main::cg.duckChange * (100 as i32 - timeDelta) as f32
                 / 100 as i32 as f32
     }
     // add bob height
@@ -864,16 +819,14 @@ unsafe extern "C" fn CG_OffsetFirstPersonView() {
     }
     *origin.offset(2 as i32 as isize) += bob;
     // add fall height
-    delta = (crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cg.landTime)
-        as f32;
+    delta = (crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cg.landTime) as f32;
     if delta < 150 as i32 as f32 {
         f = delta / 150 as i32 as f32;
         crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize] +=
             crate::src::cgame::cg_main::cg.landChange * f
     } else if delta < (150 as i32 + 300 as i32) as f32 {
         delta -= 150 as i32 as f32;
-        f = (1.0f64 - (delta / 300 as i32 as f32) as f64)
-            as f32;
+        f = (1.0f64 - (delta / 300 as i32 as f32) as f64) as f32;
         crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize] +=
             crate::src::cgame::cg_main::cg.landChange * f
     }
@@ -955,16 +908,13 @@ unsafe extern "C" fn CG_CalcFov() -> i32 {
         }
     }
     x = (crate::src::cgame::cg_main::cg.refdef.width as f64
-        / crate::stdlib::tan(
-            (fov_x / 360 as i32 as f32) as f64
-                * 3.14159265358979323846f64,
-        )) as f32;
+        / crate::stdlib::tan((fov_x / 360 as i32 as f32) as f64 * 3.14159265358979323846f64))
+        as f32;
     fov_y = crate::stdlib::atan2(
         crate::src::cgame::cg_main::cg.refdef.height as f64,
         x as f64,
     ) as f32;
-    fov_y = ((fov_y * 360 as i32 as f32) as f64
-        / 3.14159265358979323846f64) as f32;
+    fov_y = ((fov_y * 360 as i32 as f32) as f64 / 3.14159265358979323846f64) as f32;
     // warp if underwater
     contents = crate::src::cgame::cg_predict::CG_PointContents(
         crate::src::cgame::cg_main::cg.refdef.vieworg.as_mut_ptr()
@@ -976,8 +926,7 @@ unsafe extern "C" fn CG_CalcFov() -> i32 {
             * 0.4f64
             * 3.14159265358979323846f64
             * 2 as i32 as f64) as f32;
-        v = (1 as i32 as f64 * crate::stdlib::sin(phase as f64))
-            as f32;
+        v = (1 as i32 as f64 * crate::stdlib::sin(phase as f64)) as f32;
         fov_x += v;
         fov_y -= v;
         inwater = crate::src::qcommon::q_shared::qtrue as i32
@@ -991,8 +940,7 @@ unsafe extern "C" fn CG_CalcFov() -> i32 {
         crate::src::cgame::cg_main::cg.zoomSensitivity = 1 as i32 as f32
     } else {
         crate::src::cgame::cg_main::cg.zoomSensitivity =
-            (crate::src::cgame::cg_main::cg.refdef.fov_y as f64 / 75.0f64)
-                as f32
+            (crate::src::cgame::cg_main::cg.refdef.fov_y as f64 / 75.0f64) as f32
     }
     return inwater;
 }
@@ -1044,8 +992,8 @@ unsafe extern "C" fn CG_DamageBlendBlob() {
         return;
     }
     maxTime = 500 as i32;
-    t = (crate::src::cgame::cg_main::cg.time as f32
-        - crate::src::cgame::cg_main::cg.damageTime) as i32;
+    t = (crate::src::cgame::cg_main::cg.time as f32 - crate::src::cgame::cg_main::cg.damageTime)
+        as i32;
     if t <= 0 as i32 || t >= maxTime {
         return;
     }
@@ -1058,51 +1006,39 @@ unsafe extern "C" fn CG_DamageBlendBlob() {
     ent.renderfx = 0x4 as i32;
     ent.origin[0 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg
         [0 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
-            [0 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize]
             * 8 as i32 as f32;
     ent.origin[1 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg
         [1 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
-            [1 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize]
             * 8 as i32 as f32;
     ent.origin[2 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg
         [2 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
-            [2 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize]
             * 8 as i32 as f32;
     ent.origin[0 as i32 as usize] = ent.origin[0 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
-            [0 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
             * (crate::src::cgame::cg_main::cg.damageX * -(8 as i32) as f32);
     ent.origin[1 as i32 as usize] = ent.origin[1 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
-            [1 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize]
             * (crate::src::cgame::cg_main::cg.damageX * -(8 as i32) as f32);
     ent.origin[2 as i32 as usize] = ent.origin[2 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
-            [2 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize]
             * (crate::src::cgame::cg_main::cg.damageX * -(8 as i32) as f32);
     ent.origin[0 as i32 as usize] = ent.origin[0 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
-            [0 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
             * (crate::src::cgame::cg_main::cg.damageY * 8 as i32 as f32);
     ent.origin[1 as i32 as usize] = ent.origin[1 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
-            [1 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
             * (crate::src::cgame::cg_main::cg.damageY * 8 as i32 as f32);
     ent.origin[2 as i32 as usize] = ent.origin[2 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
-            [2 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize]
             * (crate::src::cgame::cg_main::cg.damageY * 8 as i32 as f32);
     ent.radius = crate::src::cgame::cg_main::cg.damageValue * 3 as i32 as f32;
     ent.customShader = crate::src::cgame::cg_main::cgs.media.viewBloodShader;
-    ent.shaderRGBA[0 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
-    ent.shaderRGBA[1 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
-    ent.shaderRGBA[2 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+    ent.shaderRGBA[0 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
+    ent.shaderRGBA[1 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
+    ent.shaderRGBA[2 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
     ent.shaderRGBA[3 as i32 as usize] = (200 as i32 as f64
         * (1.0f64 - (t as f32 / maxTime as f32) as f64))
         as crate::src::qcommon::q_shared::byte;
@@ -1168,16 +1104,13 @@ unsafe extern "C" fn CG_CalcViewValues() -> i32 {
         );
         return CG_CalcFov();
     }
-    crate::src::cgame::cg_main::cg.bobcycle =
-        ((*ps).bobCycle & 128 as i32) >> 7 as i32;
+    crate::src::cgame::cg_main::cg.bobcycle = ((*ps).bobCycle & 128 as i32) >> 7 as i32;
     crate::src::cgame::cg_main::cg.bobfracsin = crate::stdlib::fabs(crate::stdlib::sin(
-        ((*ps).bobCycle & 127 as i32) as f64 / 127.0f64
-            * 3.14159265358979323846f64,
+        ((*ps).bobCycle & 127 as i32) as f64 / 127.0f64 * 3.14159265358979323846f64,
     )) as f32;
     crate::src::cgame::cg_main::cg.xyspeed = crate::stdlib::sqrt(
         ((*ps).velocity[0 as i32 as usize] * (*ps).velocity[0 as i32 as usize]
-            + (*ps).velocity[1 as i32 as usize] * (*ps).velocity[1 as i32 as usize])
-            as f64,
+            + (*ps).velocity[1 as i32 as usize] * (*ps).velocity[1 as i32 as usize]) as f64,
     ) as f32;
     crate::src::cgame::cg_main::cg.refdef.vieworg[0 as i32 as usize] =
         (*ps).origin[0 as i32 as usize];
@@ -1253,8 +1186,7 @@ unsafe extern "C" fn CG_PowerupTimerSounds() {
     while i < 16 as i32 {
         t = (*crate::src::cgame::cg_main::cg.snap).ps.powerups[i as usize];
         if !(t <= crate::src::cgame::cg_main::cg.time) {
-            if !(t - crate::src::cgame::cg_main::cg.time >= 5 as i32 * 1000 as i32)
-            {
+            if !(t - crate::src::cgame::cg_main::cg.time >= 5 as i32 * 1000 as i32) {
                 if (t - crate::src::cgame::cg_main::cg.time) / 1000 as i32
                     != (t - crate::src::cgame::cg_main::cg.oldTime) / 1000 as i32
                 {
@@ -1312,8 +1244,7 @@ unsafe extern "C" fn CG_PlayBufferedSounds() {
             crate::src::cgame::cg_main::cg.soundBuffer
                 [crate::src::cgame::cg_main::cg.soundBufferOut as usize] = 0 as i32;
             crate::src::cgame::cg_main::cg.soundBufferOut =
-                (crate::src::cgame::cg_main::cg.soundBufferOut + 1 as i32)
-                    % 20 as i32;
+                (crate::src::cgame::cg_main::cg.soundBufferOut + 1 as i32) % 20 as i32;
             crate::src::cgame::cg_main::cg.soundTime =
                 crate::src::cgame::cg_main::cg.time + 750 as i32
         }
@@ -1546,9 +1477,7 @@ pub unsafe extern "C" fn CG_DrawActiveFrame(
     crate::src::cgame::cg_main::CG_UpdateCvars();
     // if we are only updating the screen as a loading
     // pacifier, don't even try to read snapshots
-    if crate::src::cgame::cg_main::cg.infoScreenText[0 as i32 as usize] as i32
-        != 0 as i32
-    {
+    if crate::src::cgame::cg_main::cg.infoScreenText[0 as i32 as usize] as i32 != 0 as i32 {
         crate::src::cgame::cg_info::CG_DrawInformation();
         return;
     }
@@ -1586,8 +1515,7 @@ pub unsafe extern "C" fn CG_DrawActiveFrame(
             && (crate::src::cgame::cg_main::cg_thirdPerson.integer != 0
                 || (*crate::src::cgame::cg_main::cg.snap).ps.stats
                     [crate::bg_public_h::STAT_HEALTH as i32 as usize]
-                    <= 0 as i32)) as i32
-            as crate::src::qcommon::q_shared::qboolean;
+                    <= 0 as i32)) as i32 as crate::src::qcommon::q_shared::qboolean;
     // build cg.refdef
     inwater = CG_CalcViewValues();
     // first person blend blobs, done after AnglesToAxis
@@ -1628,8 +1556,7 @@ pub unsafe extern "C" fn CG_DrawActiveFrame(
         inwater,
     );
     // make sure the lagometerSample and frame timing isn't done twice when in stereo
-    if stereoView as u32 != crate::tr_types_h::STEREO_RIGHT as i32 as u32
-    {
+    if stereoView as u32 != crate::tr_types_h::STEREO_RIGHT as i32 as u32 {
         crate::src::cgame::cg_main::cg.frametime =
             crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cg.oldTime;
         if crate::src::cgame::cg_main::cg.frametime < 0 as i32 {

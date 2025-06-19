@@ -118,14 +118,10 @@ pub unsafe extern "C" fn silk_scale_copy_vector_FLP(
     dataSize4 = dataSize & 0xfffc as i32;
     i = 0 as i32;
     while i < dataSize4 {
-        *data_out.offset((i + 0 as i32) as isize) =
-            gain * *data_in.offset((i + 0 as i32) as isize);
-        *data_out.offset((i + 1 as i32) as isize) =
-            gain * *data_in.offset((i + 1 as i32) as isize);
-        *data_out.offset((i + 2 as i32) as isize) =
-            gain * *data_in.offset((i + 2 as i32) as isize);
-        *data_out.offset((i + 3 as i32) as isize) =
-            gain * *data_in.offset((i + 3 as i32) as isize);
+        *data_out.offset((i + 0 as i32) as isize) = gain * *data_in.offset((i + 0 as i32) as isize);
+        *data_out.offset((i + 1 as i32) as isize) = gain * *data_in.offset((i + 1 as i32) as isize);
+        *data_out.offset((i + 2 as i32) as isize) = gain * *data_in.offset((i + 2 as i32) as isize);
+        *data_out.offset((i + 3 as i32) as isize) = gain * *data_in.offset((i + 3 as i32) as isize);
         i += 4 as i32
     }
     /* any remaining elements */

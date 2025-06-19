@@ -143,11 +143,7 @@ pub unsafe extern "C" fn Log_Open(mut filename: *mut libc::c_char) {
         );
         return;
     }
-    crate::src::qcommon::q_shared::Q_strncpyz(
-        logfile.filename.as_mut_ptr(),
-        filename,
-        1024 as i32,
-    );
+    crate::src::qcommon::q_shared::Q_strncpyz(logfile.filename.as_mut_ptr(), filename, 1024 as i32);
     crate::src::botlib::be_interface::botimport
         .Print
         .expect("non-null function pointer")(
@@ -244,16 +240,12 @@ pub unsafe extern "C" fn Log_WriteTimeStamped(mut fmt: *mut libc::c_char, mut ar
         logfile.fp,
         b"%d   %02d:%02d:%02d:%02d   \x00" as *const u8 as *const libc::c_char,
         logfile.numwrites,
-        (crate::src::botlib::be_interface::botlibglobals.time
-            / 60 as i32 as f32
-            / 60 as i32 as f32) as i32,
-        (crate::src::botlib::be_interface::botlibglobals.time / 60 as i32 as f32)
+        (crate::src::botlib::be_interface::botlibglobals.time / 60 as i32 as f32 / 60 as i32 as f32)
             as i32,
+        (crate::src::botlib::be_interface::botlibglobals.time / 60 as i32 as f32) as i32,
         crate::src::botlib::be_interface::botlibglobals.time as i32,
-        (crate::src::botlib::be_interface::botlibglobals.time * 100 as i32 as f32)
-            as i32
-            - crate::src::botlib::be_interface::botlibglobals.time as i32
-                * 100 as i32,
+        (crate::src::botlib::be_interface::botlibglobals.time * 100 as i32 as f32) as i32
+            - crate::src::botlib::be_interface::botlibglobals.time as i32 * 100 as i32,
     );
     ap = args.clone();
     crate::stdlib::vfprintf(logfile.fp, fmt, ap.as_va_list());

@@ -70,9 +70,7 @@ pub mod SigProc_FLP_h {
     /* floating-point to integer conversion (rounding) */
     #[inline]
 
-    pub unsafe extern "C" fn silk_float2int(
-        mut x: f32,
-    ) -> crate::opus_types_h::opus_int32 {
+    pub unsafe extern "C" fn silk_float2int(mut x: f32) -> crate::opus_types_h::opus_int32 {
         return float2int(x);
     }
 
@@ -305,8 +303,7 @@ pub unsafe extern "C" fn silk_NSQ_wrapper_FLP(
     while i < (*psEnc).sCmn.nb_subfr {
         LF_shp_Q14[i as usize] = ((silk_float2int((*psEncCtrl).LF_AR_shp[i as usize] * 16384.0f32)
             as crate::opus_types_h::opus_uint32)
-            << 16 as i32)
-            as crate::opus_types_h::opus_int32
+            << 16 as i32) as crate::opus_types_h::opus_int32
             | silk_float2int((*psEncCtrl).LF_MA_shp[i as usize] * 16384.0f32)
                 as crate::opus_types_h::opus_uint16 as i32;
         Tilt_Q14[i as usize] = silk_float2int((*psEncCtrl).Tilt[i as usize] * 16384.0f32);
@@ -351,17 +348,14 @@ pub unsafe extern "C" fn silk_NSQ_wrapper_FLP(
         i += 1
     }
     /* Call NSQ */
-    if (*psEnc).sCmn.nStatesDelayedDecision > 1 as i32
-        || (*psEnc).sCmn.warping_Q16 > 0 as i32
-    {
+    if (*psEnc).sCmn.nStatesDelayedDecision > 1 as i32 || (*psEnc).sCmn.warping_Q16 > 0 as i32 {
         crate::src::opus_1_2_1::silk::NSQ_del_dec::silk_NSQ_del_dec_c(
             &mut (*psEnc).sCmn as *mut _ as *const crate::structs_h::silk_encoder_state,
             psNSQ as *mut crate::structs_h::silk_nsq_state,
             psIndices as *mut crate::structs_h::SideInfoIndices,
             x16.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
             pulses,
-            PredCoef_Q12[0 as i32 as usize].as_mut_ptr()
-                as *const crate::opus_types_h::opus_int16,
+            PredCoef_Q12[0 as i32 as usize].as_mut_ptr() as *const crate::opus_types_h::opus_int16,
             LTPCoef_Q14.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
             AR_Q13.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
             HarmShapeGain_Q14.as_mut_ptr() as *const i32,
@@ -379,8 +373,7 @@ pub unsafe extern "C" fn silk_NSQ_wrapper_FLP(
             psIndices as *mut crate::structs_h::SideInfoIndices,
             x16.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
             pulses,
-            PredCoef_Q12[0 as i32 as usize].as_mut_ptr()
-                as *const crate::opus_types_h::opus_int16,
+            PredCoef_Q12[0 as i32 as usize].as_mut_ptr() as *const crate::opus_types_h::opus_int16,
             LTPCoef_Q14.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
             AR_Q13.as_mut_ptr() as *const crate::opus_types_h::opus_int16,
             HarmShapeGain_Q14.as_mut_ptr() as *const i32,

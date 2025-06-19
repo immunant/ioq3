@@ -130,8 +130,7 @@ pub unsafe extern "C" fn silk_inner_product_FLP(
     }
     /* add any remaining products */
     while i < dataSize {
-        result += *data1.offset(i as isize) as f64
-            * *data2.offset(i as isize) as f64;
+        result += *data1.offset(i as isize) as f64 * *data2.offset(i as isize) as f64;
         i += 1
     }
     return result;

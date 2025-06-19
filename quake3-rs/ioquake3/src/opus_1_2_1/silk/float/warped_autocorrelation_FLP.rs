@@ -161,8 +161,7 @@ pub unsafe extern "C" fn silk_warped_autocorrelation_FLP(
         i = 0 as i32;
         while i < order {
             /* Output of allpass section */
-            tmp2 = state[i as usize]
-                + warping as f64 * (state[(i + 1 as i32) as usize] - tmp1);
+            tmp2 = state[i as usize] + warping as f64 * (state[(i + 1 as i32) as usize] - tmp1);
             state[i as usize] = tmp1;
             C[i as usize] += state[0 as i32 as usize] * tmp1;
             /* Output of allpass section */

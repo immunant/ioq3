@@ -279,8 +279,7 @@ pub unsafe extern "C" fn CON_Shutdown() {
     ::libc::fcntl(
         0 as i32,
         4 as i32,
-        ::libc::fcntl(0 as i32, 3 as i32, 0 as i32)
-            & !(0o4000 as i32),
+        ::libc::fcntl(0 as i32, 3 as i32, 0 as i32) & !(0o4000 as i32),
     );
 }
 /*
@@ -379,15 +378,11 @@ pub unsafe extern "C" fn CON_Init() {
     // then SIGTTIN or SIGTOU is emitted, if not caught, turns into a SIGSTP
     crate::stdlib::signal(
         21 as i32,
-        ::std::mem::transmute::<isize, crate::stdlib::__sighandler_t>(
-            1 as i32 as isize,
-        ),
+        ::std::mem::transmute::<isize, crate::stdlib::__sighandler_t>(1 as i32 as isize),
     );
     crate::stdlib::signal(
         22 as i32,
-        ::std::mem::transmute::<isize, crate::stdlib::__sighandler_t>(
-            1 as i32 as isize,
-        ),
+        ::std::mem::transmute::<isize, crate::stdlib::__sighandler_t>(1 as i32 as isize),
     );
     // If SIGCONT is received, reinitialize console
     crate::stdlib::signal(
@@ -411,10 +406,7 @@ pub unsafe extern "C" fn CON_Init() {
     crate::src::qcommon::common::Field_Clear(
         &mut TTY_con as *mut _ as *mut crate::qcommon_h::field_t,
     );
-    ::libc::tcgetattr(
-        0 as i32,
-        &mut TTY_tc as *mut _ as *mut ::libc::termios,
-    );
+    ::libc::tcgetattr(0 as i32, &mut TTY_tc as *mut _ as *mut ::libc::termios);
     TTY_erase = TTY_tc.c_cc[2 as i32 as usize] as i32;
     TTY_eof = TTY_tc.c_cc[4 as i32 as usize] as i32;
     tc = TTY_tc;
@@ -466,10 +458,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             // we have something
             // backspace?
             // NOTE TTimo testing a lot of values .. seems it's the only way to get it to work everywhere
-            if key as i32 == TTY_erase
-                || key as i32 == 127 as i32
-                || key as i32 == 8 as i32
-            {
+            if key as i32 == TTY_erase || key as i32 == 127 as i32 || key as i32 == 8 as i32 {
                 if TTY_con.cursor > 0 as i32 {
                     TTY_con.cursor -= 1;
                     TTY_con.buffer[TTY_con.cursor as usize] = '\u{0}' as i32 as libc::c_char;
@@ -489,10 +478,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                         && TTY_con.buffer[0 as i32 as usize] as i32 != '\\' as i32
                     {
                         crate::stdlib::memmove(
-                            TTY_con
-                                .buffer
-                                .as_mut_ptr()
-                                .offset(1 as i32 as isize)
+                            TTY_con.buffer.as_mut_ptr().offset(1 as i32 as isize)
                                 as *mut libc::c_void,
                             TTY_con.buffer.as_mut_ptr() as *const libc::c_void,
                             (::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong)
@@ -506,12 +492,8 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                     {
                         crate::src::qcommon::q_shared::Q_strncpyz(
                             text.as_mut_ptr(),
-                            TTY_con
-                                .buffer
-                                .as_mut_ptr()
-                                .offset(1 as i32 as isize),
-                            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong
-                                as i32,
+                            TTY_con.buffer.as_mut_ptr().offset(1 as i32 as isize),
+                            ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
                         );
                     } else if TTY_con.cursor != 0 {
                         if (*crate::src::qcommon::common::con_autochat).integer != 0 {
@@ -646,10 +628,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             let fresh3;
             let fresh4 = (::std::mem::size_of::<crate::stdlib::fd_set>() as libc::c_ulong)
                 .wrapping_div(::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong);
-            let fresh5 = &mut *fdset
-                .__fds_bits
-                .as_mut_ptr()
-                .offset(0 as i32 as isize)
+            let fresh5 = &mut *fdset.__fds_bits.as_mut_ptr().offset(0 as i32 as isize)
                 as *mut crate::stdlib::__fd_mask;
             asm!("cld; rep; stosq" : "={cx}" (fresh1), "={di}" (fresh3) : "{ax}"
      (0 as i32), "0"
@@ -660,13 +639,12 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
             c2rust_asm_casts::AsmCast::cast_out(fresh2, fresh5, fresh3);
             fdset.__fds_bits[(0 as i32
                 / (8 as i32
-                    * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
-                        as i32)) as usize] |= ((1 as libc::c_ulong)
+                    * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong as i32))
+                as usize] |= ((1 as libc::c_ulong)
                 << 0 as i32
                     % (8 as i32
                         * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
-                            as i32))
-                as crate::stdlib::__fd_mask;
+                            as i32)) as crate::stdlib::__fd_mask;
             timeout.tv_sec = 0 as i32 as crate::stdlib::__time_t;
             timeout.tv_usec = 0 as i32 as crate::stdlib::__suseconds_t;
             if crate::stdlib::select(
@@ -684,8 +662,7 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                         << 0 as i32
                             % (8 as i32
                                 * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
-                                    as i32))
-                        as crate::stdlib::__fd_mask
+                                    as i32)) as crate::stdlib::__fd_mask
                     != 0 as i32 as libc::c_long)
             {
                 return 0 as *mut libc::c_char;
@@ -757,8 +734,7 @@ pub unsafe extern "C" fn CON_Print(mut msg: *const libc::c_char) {
     }
     // Only print prompt when msg ends with a newline, otherwise the console
     //   might get garbled when output does not fit on one line.
-    if *msg
-        .offset(crate::stdlib::strlen(msg).wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+    if *msg.offset(crate::stdlib::strlen(msg).wrapping_sub(1 as i32 as libc::c_ulong) as isize)
         as i32
         == '\n' as i32
     {

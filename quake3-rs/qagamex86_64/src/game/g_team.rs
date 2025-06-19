@@ -170,8 +170,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -624,8 +623,7 @@ pub unsafe extern "C" fn AddTeamScore(
     ) as *mut crate::g_local_h::gentity_s;
     (*te).r.svFlags |= 0x20 as i32;
     if team == crate::bg_public_h::TEAM_RED as i32 {
-        if crate::src::game::g_main::level.teamScores
-            [crate::bg_public_h::TEAM_RED as i32 as usize]
+        if crate::src::game::g_main::level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize]
             + score
             == crate::src::game::g_main::level.teamScores
                 [crate::bg_public_h::TEAM_BLUE as i32 as usize]
@@ -651,17 +649,14 @@ pub unsafe extern "C" fn AddTeamScore(
     } else if crate::src::game::g_main::level.teamScores
         [crate::bg_public_h::TEAM_BLUE as i32 as usize]
         + score
-        == crate::src::game::g_main::level.teamScores
-            [crate::bg_public_h::TEAM_RED as i32 as usize]
+        == crate::src::game::g_main::level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize]
     {
         //teams are tied sound
         (*te).s.eventParm = crate::bg_public_h::GTS_TEAMS_ARE_TIED as i32
     } else if crate::src::game::g_main::level.teamScores
         [crate::bg_public_h::TEAM_BLUE as i32 as usize]
-        <= crate::src::game::g_main::level.teamScores
-            [crate::bg_public_h::TEAM_RED as i32 as usize]
-        && crate::src::game::g_main::level.teamScores
-            [crate::bg_public_h::TEAM_BLUE as i32 as usize]
+        <= crate::src::game::g_main::level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize]
+        && crate::src::game::g_main::level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize]
             + score
             > crate::src::game::g_main::level.teamScores
                 [crate::bg_public_h::TEAM_RED as i32 as usize]
@@ -691,9 +686,7 @@ pub unsafe extern "C" fn OnSameTeam(
     if crate::src::game::g_main::g_gametype.integer < crate::bg_public_h::GT_TEAM as i32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    if (*(*ent1).client).sess.sessionTeam as u32
-        == (*(*ent2).client).sess.sessionTeam as u32
-    {
+    if (*(*ent1).client).sess.sessionTeam as u32 == (*(*ent2).client).sess.sessionTeam as u32 {
         return crate::src::qcommon::q_shared::qtrue;
     }
     return crate::src::qcommon::q_shared::qfalse;
@@ -748,8 +741,7 @@ pub unsafe extern "C" fn Team_SetFlagStatus(
     }
     if modified as u64 != 0 {
         let mut st: [libc::c_char; 4] = [0; 4];
-        if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_CTF as i32
-        {
+        if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_CTF as i32 {
             st[0 as i32 as usize] = ctfFlagStatusRemap[teamgame.redStatus as usize];
             st[1 as i32 as usize] = ctfFlagStatusRemap[teamgame.blueStatus as usize];
             st[2 as i32 as usize] = 0 as i32 as libc::c_char
@@ -946,8 +938,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
             | 0x10000 as i32
             | 0x800 as i32);
         (*(*attacker).client).ps.eFlags |= 0x10000 as i32;
-        (*(*attacker).client).rewardTime =
-            crate::src::game::g_main::level.time + 2000 as i32;
+        (*(*attacker).client).rewardTime = crate::src::game::g_main::level.time + 2000 as i32;
         return;
     }
     // flag and flag carrier area defense bonuses
@@ -964,9 +955,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
         carrier = crate::src::game::g_main::g_entities
             .as_mut_ptr()
             .offset(i as isize);
-        if (*carrier).inuse as u32 != 0
-            && (*(*carrier).client).ps.powerups[flag_pw as usize] != 0
-        {
+        if (*carrier).inuse as u32 != 0 && (*(*carrier).client).ps.powerups[flag_pw as usize] != 0 {
             break;
         }
         carrier = 0 as *mut crate::g_local_h::gentity_t;
@@ -992,18 +981,18 @@ pub unsafe extern "C" fn Team_FragBonuses(
     }
     // ok we have the attackers flag and a pointer to the carrier
     // check to see if we are defending the base's flag
-    v1[0 as i32 as usize] = (*targ).r.currentOrigin[0 as i32 as usize]
-        - (*flag).r.currentOrigin[0 as i32 as usize];
-    v1[1 as i32 as usize] = (*targ).r.currentOrigin[1 as i32 as usize]
-        - (*flag).r.currentOrigin[1 as i32 as usize];
-    v1[2 as i32 as usize] = (*targ).r.currentOrigin[2 as i32 as usize]
-        - (*flag).r.currentOrigin[2 as i32 as usize];
-    v2[0 as i32 as usize] = (*attacker).r.currentOrigin[0 as i32 as usize]
-        - (*flag).r.currentOrigin[0 as i32 as usize];
-    v2[1 as i32 as usize] = (*attacker).r.currentOrigin[1 as i32 as usize]
-        - (*flag).r.currentOrigin[1 as i32 as usize];
-    v2[2 as i32 as usize] = (*attacker).r.currentOrigin[2 as i32 as usize]
-        - (*flag).r.currentOrigin[2 as i32 as usize];
+    v1[0 as i32 as usize] =
+        (*targ).r.currentOrigin[0 as i32 as usize] - (*flag).r.currentOrigin[0 as i32 as usize];
+    v1[1 as i32 as usize] =
+        (*targ).r.currentOrigin[1 as i32 as usize] - (*flag).r.currentOrigin[1 as i32 as usize];
+    v1[2 as i32 as usize] =
+        (*targ).r.currentOrigin[2 as i32 as usize] - (*flag).r.currentOrigin[2 as i32 as usize];
+    v2[0 as i32 as usize] =
+        (*attacker).r.currentOrigin[0 as i32 as usize] - (*flag).r.currentOrigin[0 as i32 as usize];
+    v2[1 as i32 as usize] =
+        (*attacker).r.currentOrigin[1 as i32 as usize] - (*flag).r.currentOrigin[1 as i32 as usize];
+    v2[2 as i32 as usize] =
+        (*attacker).r.currentOrigin[2 as i32 as usize] - (*flag).r.currentOrigin[2 as i32 as usize];
     if (VectorLength(v1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
         < 1000 as i32 as f32
         && crate::src::game::g_syscalls::trap_InPVS(
@@ -1039,8 +1028,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
             | 0x10000 as i32
             | 0x800 as i32);
         (*(*attacker).client).ps.eFlags |= 0x10000 as i32;
-        (*(*attacker).client).rewardTime =
-            crate::src::game::g_main::level.time + 2000 as i32;
+        (*(*attacker).client).rewardTime = crate::src::game::g_main::level.time + 2000 as i32;
         return;
     }
     if !carrier.is_null() && carrier != attacker {
@@ -1092,8 +1080,7 @@ pub unsafe extern "C" fn Team_FragBonuses(
                 | 0x10000 as i32
                 | 0x800 as i32);
             (*(*attacker).client).ps.eFlags |= 0x10000 as i32;
-            (*(*attacker).client).rewardTime =
-                crate::src::game::g_main::level.time + 2000 as i32;
+            (*(*attacker).client).rewardTime = crate::src::game::g_main::level.time + 2000 as i32;
             return;
         }
     };
@@ -1116,9 +1103,7 @@ pub unsafe extern "C" fn Team_CheckHurtCarrier(
     if (*targ).client.is_null() || (*attacker).client.is_null() {
         return;
     }
-    if (*(*targ).client).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_RED as i32 as u32
-    {
+    if (*(*targ).client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_RED as i32 as u32 {
         flag_pw = crate::bg_public_h::PW_BLUEFLAG as i32
     } else {
         flag_pw = crate::bg_public_h::PW_REDFLAG as i32
@@ -1229,9 +1214,7 @@ pub unsafe extern "C" fn Team_TakeFlagSound(
             if teamgame.blueStatus as u32
                 != crate::src::qcommon::q_shared::FLAG_ATBASE as i32 as u32
             {
-                if teamgame.blueTakenTime
-                    > crate::src::game::g_main::level.time - 10000 as i32
-                {
+                if teamgame.blueTakenTime > crate::src::game::g_main::level.time - 10000 as i32 {
                     return;
                 }
             }
@@ -1239,12 +1222,9 @@ pub unsafe extern "C" fn Team_TakeFlagSound(
         }
         2 => {
             // CTF
-            if teamgame.redStatus as u32
-                != crate::src::qcommon::q_shared::FLAG_ATBASE as i32 as u32
+            if teamgame.redStatus as u32 != crate::src::qcommon::q_shared::FLAG_ATBASE as i32 as u32
             {
-                if teamgame.redTakenTime
-                    > crate::src::game::g_main::level.time - 10000 as i32
-                {
+                if teamgame.redTakenTime > crate::src::game::g_main::level.time - 10000 as i32 {
                     return;
                 }
             }
@@ -1355,9 +1335,7 @@ pub unsafe extern "C" fn Team_TouchOurFlag(
     let mut player: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
     let mut cl: *mut crate::g_local_h::gclient_t = (*other).client;
     let mut enemy_flag: i32 = 0;
-    if (*cl).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_RED as i32 as u32
-    {
+    if (*cl).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_RED as i32 as u32 {
         enemy_flag = crate::bg_public_h::PW_BLUEFLAG as i32
     } else {
         enemy_flag = crate::bg_public_h::PW_REDFLAG as i32
@@ -1413,8 +1391,7 @@ pub unsafe extern "C" fn Team_TouchOurFlag(
         | 0x800 as i32);
     (*(*other).client).ps.eFlags |= 0x800 as i32;
     (*(*other).client).rewardTime = crate::src::game::g_main::level.time + 2000 as i32;
-    (*(*other).client).ps.persistant[crate::bg_public_h::PERS_CAPTURES as i32 as usize] +=
-        1;
+    (*(*other).client).ps.persistant[crate::bg_public_h::PERS_CAPTURES as i32 as usize] += 1;
     // other gets another 10 frag bonus
     crate::src::game::g_combat::AddScore(
         other as *mut crate::g_local_h::gentity_s,
@@ -1430,17 +1407,11 @@ pub unsafe extern "C" fn Team_TouchOurFlag(
             .offset(i as isize) as *mut crate::g_local_h::gentity_t;
         // also make sure we don't award assist bonuses to the flag carrier himself.
         if !((*player).inuse as u64 == 0 || player == other) {
-            if (*(*player).client).sess.sessionTeam as u32
-                != (*cl).sess.sessionTeam as u32
-            {
-                (*(*player).client).pers.teamState.lasthurtcarrier =
-                    -(5 as i32) as f32
-            } else if (*(*player).client).sess.sessionTeam as u32
-                == (*cl).sess.sessionTeam as u32
-            {
+            if (*(*player).client).sess.sessionTeam as u32 != (*cl).sess.sessionTeam as u32 {
+                (*(*player).client).pers.teamState.lasthurtcarrier = -(5 as i32) as f32
+            } else if (*(*player).client).sess.sessionTeam as u32 == (*cl).sess.sessionTeam as u32 {
                 // award extra points for capture assists
-                if (*(*player).client).pers.teamState.lastreturnedflag
-                    + 10000 as i32 as f32
+                if (*(*player).client).pers.teamState.lastreturnedflag + 10000 as i32 as f32
                     > crate::src::game::g_main::level.time as f32
                 {
                     crate::src::game::g_combat::AddScore(
@@ -1462,8 +1433,7 @@ pub unsafe extern "C" fn Team_TouchOurFlag(
                     (*(*player).client).rewardTime =
                         crate::src::game::g_main::level.time + 2000 as i32
                 }
-                if (*(*player).client).pers.teamState.lastfraggedcarrier
-                    + 10000 as i32 as f32
+                if (*(*player).client).pers.teamState.lastfraggedcarrier + 10000 as i32 as f32
                     > crate::src::game::g_main::level.time as f32
                 {
                     crate::src::game::g_combat::AddScore(
@@ -1509,11 +1479,9 @@ pub unsafe extern "C" fn Team_TouchEnemyFlag(
         TeamName(team),
     ); // flags never expire
     if team == crate::bg_public_h::TEAM_RED as i32 {
-        (*cl).ps.powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize] =
-            2147483647 as i32
+        (*cl).ps.powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize] = 2147483647 as i32
     } else {
-        (*cl).ps.powerups[crate::bg_public_h::PW_BLUEFLAG as i32 as usize] =
-            2147483647 as i32
+        (*cl).ps.powerups[crate::bg_public_h::PW_BLUEFLAG as i32 as usize] = 2147483647 as i32
     }
     Team_SetFlagStatus(team, crate::src::qcommon::q_shared::FLAG_TAKEN);
     (*cl).pers.teamState.flagsince = crate::src::game::g_main::level.time as f32;
@@ -1579,18 +1547,12 @@ pub unsafe extern "C" fn Team_GetLocation(
     origin[2 as i32 as usize] = (*ent).r.currentOrigin[2 as i32 as usize];
     eloc = crate::src::game::g_main::level.locationHead;
     while !eloc.is_null() {
-        len = (origin[0 as i32 as usize]
-            - (*eloc).r.currentOrigin[0 as i32 as usize])
-            * (origin[0 as i32 as usize]
-                - (*eloc).r.currentOrigin[0 as i32 as usize])
-            + (origin[1 as i32 as usize]
-                - (*eloc).r.currentOrigin[1 as i32 as usize])
-                * (origin[1 as i32 as usize]
-                    - (*eloc).r.currentOrigin[1 as i32 as usize])
-            + (origin[2 as i32 as usize]
-                - (*eloc).r.currentOrigin[2 as i32 as usize])
-                * (origin[2 as i32 as usize]
-                    - (*eloc).r.currentOrigin[2 as i32 as usize]);
+        len = (origin[0 as i32 as usize] - (*eloc).r.currentOrigin[0 as i32 as usize])
+            * (origin[0 as i32 as usize] - (*eloc).r.currentOrigin[0 as i32 as usize])
+            + (origin[1 as i32 as usize] - (*eloc).r.currentOrigin[1 as i32 as usize])
+                * (origin[1 as i32 as usize] - (*eloc).r.currentOrigin[1 as i32 as usize])
+            + (origin[2 as i32 as usize] - (*eloc).r.currentOrigin[2 as i32 as usize])
+                * (origin[2 as i32 as usize] - (*eloc).r.currentOrigin[2 as i32 as usize]);
         if !(len > bestlen) {
             if !(crate::src::game::g_syscalls::trap_InPVS(
                 origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -1666,9 +1628,7 @@ pub unsafe extern "C" fn SelectRandomTeamSpawnPoint(
         if team as u32 == crate::bg_public_h::TEAM_RED as i32 as u32 {
             classname =
                 b"team_CTF_redplayer\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
-        } else if team as u32
-            == crate::bg_public_h::TEAM_BLUE as i32 as u32
-        {
+        } else if team as u32 == crate::bg_public_h::TEAM_BLUE as i32 as u32 {
             classname =
                 b"team_CTF_blueplayer\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
         } else {
@@ -1756,10 +1716,7 @@ pub unsafe extern "C" fn SelectCTFSpawnPoint(
 }
 /*---------------------------------------------------------------------------*/
 
-unsafe extern "C" fn SortClients(
-    mut a: *const libc::c_void,
-    mut b: *const libc::c_void,
-) -> i32 {
+unsafe extern "C" fn SortClients(mut a: *const libc::c_void, mut b: *const libc::c_void) -> i32 {
     return *(a as *mut i32) - *(b as *mut i32);
 }
 /*
@@ -1789,8 +1746,7 @@ pub unsafe extern "C" fn TeamplayInfoMessage(mut ent: *mut crate::g_local_h::gen
         return;
     }
     // send team info to spectator for team of followed client
-    if (*(*ent).client).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+    if (*(*ent).client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
     {
         if (*(*ent).client).sess.spectatorState as u32
             != crate::g_local_h::SPECTATOR_FOLLOW as i32 as u32
@@ -1806,9 +1762,7 @@ pub unsafe extern "C" fn TeamplayInfoMessage(mut ent: *mut crate::g_local_h::gen
     } else {
         team = (*(*ent).client).sess.sessionTeam as i32
     }
-    if team != crate::bg_public_h::TEAM_RED as i32
-        && team != crate::bg_public_h::TEAM_BLUE as i32
-    {
+    if team != crate::bg_public_h::TEAM_RED as i32 && team != crate::bg_public_h::TEAM_BLUE as i32 {
         return;
     }
     // figure out what client should be on the display
@@ -1820,8 +1774,7 @@ pub unsafe extern "C" fn TeamplayInfoMessage(mut ent: *mut crate::g_local_h::gen
         player = crate::src::game::g_main::g_entities
             .as_mut_ptr()
             .offset(crate::src::game::g_main::level.sortedClients[i as usize] as isize);
-        if (*player).inuse as u32 != 0
-            && (*(*player).client).sess.sessionTeam as u32 == team as u32
+        if (*player).inuse as u32 != 0 && (*(*player).client).sess.sessionTeam as u32 == team as u32
         {
             let fresh1 = cnt;
             cnt = cnt + 1;
@@ -1836,10 +1789,7 @@ pub unsafe extern "C" fn TeamplayInfoMessage(mut ent: *mut crate::g_local_h::gen
         ::std::mem::size_of::<i32>() as libc::c_ulong,
         Some(
             SortClients
-                as unsafe extern "C" fn(
-                    _: *const libc::c_void,
-                    _: *const libc::c_void,
-                ) -> i32,
+                as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
         ),
     );
     // send the latest information on all clients
@@ -1851,13 +1801,10 @@ pub unsafe extern "C" fn TeamplayInfoMessage(mut ent: *mut crate::g_local_h::gen
         player = crate::src::game::g_main::g_entities
             .as_mut_ptr()
             .offset(i as isize);
-        if (*player).inuse as u32 != 0
-            && (*(*player).client).sess.sessionTeam as u32 == team as u32
+        if (*player).inuse as u32 != 0 && (*(*player).client).sess.sessionTeam as u32 == team as u32
         {
-            h = (*(*player).client).ps.stats
-                [crate::bg_public_h::STAT_HEALTH as i32 as usize];
-            a = (*(*player).client).ps.stats
-                [crate::bg_public_h::STAT_ARMOR as i32 as usize];
+            h = (*(*player).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize];
+            a = (*(*player).client).ps.stats[crate::bg_public_h::STAT_ARMOR as i32 as usize];
             if h < 0 as i32 {
                 h = 0 as i32
             }
@@ -1891,8 +1838,7 @@ pub unsafe extern "C" fn TeamplayInfoMessage(mut ent: *mut crate::g_local_h::gen
         i += 1
     }
     crate::src::game::g_syscalls::trap_SendServerCommand(
-        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
-            as i32,
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32,
         crate::src::qcommon::q_shared::va(
             b"tinfo %i %s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             cnt,

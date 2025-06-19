@@ -3153,8 +3153,7 @@ unsafe extern "C" fn CG_ForceModelChange() {
     i = 0 as i32;
     while i < 64 as i32 {
         let mut clientInfo: *const libc::c_char = 0 as *const libc::c_char;
-        clientInfo =
-            CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + i);
+        clientInfo = CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + i);
         if !(*clientInfo.offset(0 as i32 as isize) == 0) {
             crate::src::cgame::cg_players::CG_NewClientInfo(i);
         }
@@ -3776,11 +3775,11 @@ unsafe extern "C" fn CG_RegisterSounds() {
             b"sound/player/footsteps/step%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
-        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_NORMAL as i32 as usize]
-            [i as usize] = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
-            name.as_mut_ptr(),
-            crate::src::qcommon::q_shared::qfalse,
-        );
+        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_NORMAL as i32 as usize][i as usize] =
+            crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                name.as_mut_ptr(),
+                crate::src::qcommon::q_shared::qfalse,
+            );
         crate::src::qcommon::q_shared::Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -3798,11 +3797,11 @@ unsafe extern "C" fn CG_RegisterSounds() {
             b"sound/player/footsteps/flesh%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
-        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_FLESH as i32 as usize]
-            [i as usize] = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
-            name.as_mut_ptr(),
-            crate::src::qcommon::q_shared::qfalse,
-        );
+        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_FLESH as i32 as usize][i as usize] =
+            crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                name.as_mut_ptr(),
+                crate::src::qcommon::q_shared::qfalse,
+            );
         crate::src::qcommon::q_shared::Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -3820,33 +3819,33 @@ unsafe extern "C" fn CG_RegisterSounds() {
             b"sound/player/footsteps/energy%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
-        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_ENERGY as i32 as usize]
-            [i as usize] = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
-            name.as_mut_ptr(),
-            crate::src::qcommon::q_shared::qfalse,
-        );
+        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_ENERGY as i32 as usize][i as usize] =
+            crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                name.as_mut_ptr(),
+                crate::src::qcommon::q_shared::qfalse,
+            );
         crate::src::qcommon::q_shared::Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             b"sound/player/footsteps/splash%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
-        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_SPLASH as i32 as usize]
-            [i as usize] = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
-            name.as_mut_ptr(),
-            crate::src::qcommon::q_shared::qfalse,
-        );
+        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_SPLASH as i32 as usize][i as usize] =
+            crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                name.as_mut_ptr(),
+                crate::src::qcommon::q_shared::qfalse,
+            );
         crate::src::qcommon::q_shared::Com_sprintf(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
             b"sound/player/footsteps/clank%i.wav\x00" as *const u8 as *const libc::c_char,
             i + 1 as i32,
         );
-        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_METAL as i32 as usize]
-            [i as usize] = crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
-            name.as_mut_ptr(),
-            crate::src::qcommon::q_shared::qfalse,
-        );
+        cgs.media.footsteps[crate::cg_local_h::FOOTSTEP_METAL as i32 as usize][i as usize] =
+            crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
+                name.as_mut_ptr(),
+                crate::src::qcommon::q_shared::qfalse,
+            );
         i += 1
     }
     // only register the items that the server says we need
@@ -4365,8 +4364,7 @@ unsafe extern "C" fn CG_RegisterClients() {
     while i < 64 as i32 {
         let mut clientInfo: *const libc::c_char = 0 as *const libc::c_char;
         if !(cg.clientNum == i) {
-            clientInfo =
-                CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + i);
+            clientInfo = CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + i);
             if !(*clientInfo.offset(0 as i32 as isize) == 0) {
                 crate::src::cgame::cg_info::CG_LoadingClient(i);
                 crate::src::cgame::cg_players::CG_NewClientInfo(i);

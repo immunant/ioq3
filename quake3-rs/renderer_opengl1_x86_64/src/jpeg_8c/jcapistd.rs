@@ -331,8 +331,7 @@ pub unsafe extern "C" fn jpeg_write_scanlines(
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr,
-            -(1 as i32),
+            cinfo as crate::jpeglib_h::j_common_ptr, -(1 as i32)
         );
     }
     /* Call progress monitor hook if present */
@@ -407,8 +406,7 @@ pub unsafe extern "C" fn jpeg_write_raw_data(
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr,
-            -(1 as i32),
+            cinfo as crate::jpeglib_h::j_common_ptr, -(1 as i32)
         );
         return 0 as i32 as crate::jmorecfg_h::JDIMENSION;
     }
@@ -437,8 +435,7 @@ pub unsafe extern "C" fn jpeg_write_raw_data(
         .expect("non-null function pointer")(cinfo);
     }
     /* Verify that at least one iMCU row has been passed. */
-    lines_per_iMCU_row =
-        ((*cinfo).max_v_samp_factor * 8 as i32) as crate::jmorecfg_h::JDIMENSION;
+    lines_per_iMCU_row = ((*cinfo).max_v_samp_factor * 8 as i32) as crate::jmorecfg_h::JDIMENSION;
     if num_lines < lines_per_iMCU_row {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BUFFER_SIZE as i32;
         Some(
@@ -461,8 +458,8 @@ pub unsafe extern "C" fn jpeg_write_raw_data(
         return 0 as i32 as crate::jmorecfg_h::JDIMENSION;
     }
     /* OK, we processed one iMCU row. */
-    (*cinfo).next_scanline =
-        ((*cinfo).next_scanline as u32).wrapping_add(lines_per_iMCU_row)
-            as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
+    (*cinfo).next_scanline = ((*cinfo).next_scanline as u32).wrapping_add(lines_per_iMCU_row)
+        as crate::jmorecfg_h::JDIMENSION
+        as crate::jmorecfg_h::JDIMENSION;
     return lines_per_iMCU_row;
 }

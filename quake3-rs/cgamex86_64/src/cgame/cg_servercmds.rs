@@ -186,8 +186,7 @@ CG_ParseScores
 unsafe extern "C" fn CG_ParseScores() {
     let mut i: i32 = 0;
     let mut powerups: i32 = 0;
-    crate::src::cgame::cg_main::cg.numScores =
-        atoi(crate::src::cgame::cg_main::CG_Argv(1 as i32));
+    crate::src::cgame::cg_main::cg.numScores = atoi(crate::src::cgame::cg_main::CG_Argv(1 as i32));
     if crate::src::cgame::cg_main::cg.numScores > 64 as i32 {
         crate::src::cgame::cg_main::cg.numScores = 64 as i32
     }
@@ -286,9 +285,7 @@ unsafe extern "C" fn CG_ParseTeamInfo() {
     }
     i = 0 as i32;
     while i < crate::src::cgame::cg_draw::numSortedTeamPlayers {
-        client = atoi(crate::src::cgame::cg_main::CG_Argv(
-            i * 6 as i32 + 2 as i32,
-        ));
+        client = atoi(crate::src::cgame::cg_main::CG_Argv(i * 6 as i32 + 2 as i32));
         if client < 0 as i32 || client >= 64 as i32 {
             crate::src::cgame::cg_main::CG_Error(
                 b"CG_ParseTeamInfo: bad client number: %d\x00" as *const u8 as *const libc::c_char,
@@ -296,21 +293,16 @@ unsafe extern "C" fn CG_ParseTeamInfo() {
             );
         }
         crate::src::cgame::cg_draw::sortedTeamPlayers[i as usize] = client;
-        crate::src::cgame::cg_main::cgs.clientinfo[client as usize].location = atoi(
-            crate::src::cgame::cg_main::CG_Argv(i * 6 as i32 + 3 as i32),
-        );
-        crate::src::cgame::cg_main::cgs.clientinfo[client as usize].health = atoi(
-            crate::src::cgame::cg_main::CG_Argv(i * 6 as i32 + 4 as i32),
-        );
-        crate::src::cgame::cg_main::cgs.clientinfo[client as usize].armor = atoi(
-            crate::src::cgame::cg_main::CG_Argv(i * 6 as i32 + 5 as i32),
-        );
-        crate::src::cgame::cg_main::cgs.clientinfo[client as usize].curWeapon = atoi(
-            crate::src::cgame::cg_main::CG_Argv(i * 6 as i32 + 6 as i32),
-        );
-        crate::src::cgame::cg_main::cgs.clientinfo[client as usize].powerups = atoi(
-            crate::src::cgame::cg_main::CG_Argv(i * 6 as i32 + 7 as i32),
-        );
+        crate::src::cgame::cg_main::cgs.clientinfo[client as usize].location =
+            atoi(crate::src::cgame::cg_main::CG_Argv(i * 6 as i32 + 3 as i32));
+        crate::src::cgame::cg_main::cgs.clientinfo[client as usize].health =
+            atoi(crate::src::cgame::cg_main::CG_Argv(i * 6 as i32 + 4 as i32));
+        crate::src::cgame::cg_main::cgs.clientinfo[client as usize].armor =
+            atoi(crate::src::cgame::cg_main::CG_Argv(i * 6 as i32 + 5 as i32));
+        crate::src::cgame::cg_main::cgs.clientinfo[client as usize].curWeapon =
+            atoi(crate::src::cgame::cg_main::CG_Argv(i * 6 as i32 + 6 as i32));
+        crate::src::cgame::cg_main::cgs.clientinfo[client as usize].powerups =
+            atoi(crate::src::cgame::cg_main::CG_Argv(i * 6 as i32 + 7 as i32));
         i += 1
     }
 }
@@ -438,27 +430,19 @@ Called on load to set the initial values from configure strings
 
 pub unsafe extern "C" fn CG_SetConfigValues() {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
-    crate::src::cgame::cg_main::cgs.scores1 = atoi(crate::src::cgame::cg_main::CG_ConfigString(
-        6 as i32,
-    ));
-    crate::src::cgame::cg_main::cgs.scores2 = atoi(crate::src::cgame::cg_main::CG_ConfigString(
-        7 as i32,
-    ));
-    crate::src::cgame::cg_main::cgs.levelStartTime = atoi(
-        crate::src::cgame::cg_main::CG_ConfigString(21 as i32),
-    );
-    if crate::src::cgame::cg_main::cgs.gametype as u32
-        == crate::bg_public_h::GT_CTF as i32 as u32
-    {
+    crate::src::cgame::cg_main::cgs.scores1 =
+        atoi(crate::src::cgame::cg_main::CG_ConfigString(6 as i32));
+    crate::src::cgame::cg_main::cgs.scores2 =
+        atoi(crate::src::cgame::cg_main::CG_ConfigString(7 as i32));
+    crate::src::cgame::cg_main::cgs.levelStartTime =
+        atoi(crate::src::cgame::cg_main::CG_ConfigString(21 as i32));
+    if crate::src::cgame::cg_main::cgs.gametype as u32 == crate::bg_public_h::GT_CTF as i32 as u32 {
         s = crate::src::cgame::cg_main::CG_ConfigString(23 as i32);
-        crate::src::cgame::cg_main::cgs.redflag =
-            *s.offset(0 as i32 as isize) as i32 - '0' as i32;
-        crate::src::cgame::cg_main::cgs.blueflag =
-            *s.offset(1 as i32 as isize) as i32 - '0' as i32
+        crate::src::cgame::cg_main::cgs.redflag = *s.offset(0 as i32 as isize) as i32 - '0' as i32;
+        crate::src::cgame::cg_main::cgs.blueflag = *s.offset(1 as i32 as isize) as i32 - '0' as i32
     }
-    crate::src::cgame::cg_main::cg.warmup = atoi(crate::src::cgame::cg_main::CG_ConfigString(
-        5 as i32,
-    ));
+    crate::src::cgame::cg_main::cg.warmup =
+        atoi(crate::src::cgame::cg_main::CG_ConfigString(5 as i32));
 }
 /*
 =====================
@@ -485,8 +469,7 @@ pub unsafe extern "C" fn CG_ShaderStateChanged() {
             o,
             n.offset_from(o) as libc::c_long as libc::c_ulong,
         );
-        originalShader[n.offset_from(o) as libc::c_long as usize] =
-            0 as i32 as libc::c_char;
+        originalShader[n.offset_from(o) as libc::c_long as usize] = 0 as i32 as libc::c_char;
         n = n.offset(1);
         t = ::libc::strstr(n, b":\x00" as *const u8 as *const libc::c_char);
         if !(!t.is_null() && *t as i32 != 0) {
@@ -506,8 +489,7 @@ pub unsafe extern "C" fn CG_ShaderStateChanged() {
                 t,
                 o.offset_from(t) as libc::c_long as libc::c_ulong,
             );
-            timeOffset[o.offset_from(t) as libc::c_long as usize] =
-                0 as i32 as libc::c_char;
+            timeOffset[o.offset_from(t) as libc::c_long as usize] = 0 as i32 as libc::c_char;
             o = o.offset(1);
             crate::src::cgame::cg_syscalls::trap_R_RemapShader(
                 originalShader.as_mut_ptr(),
@@ -566,8 +548,7 @@ unsafe extern "C" fn CG_ConfigStringModified() {
         );
     //MISSIONPACK
     } else if num >= 12 as i32 && num <= 12 as i32 + 1 as i32 {
-        crate::src::cgame::cg_main::cgs.teamVoteTime[(num - 12 as i32) as usize] =
-            atoi(str);
+        crate::src::cgame::cg_main::cgs.teamVoteTime[(num - 12 as i32) as usize] = atoi(str);
         crate::src::cgame::cg_main::cgs.teamVoteModified[(num - 12 as i32) as usize] =
             crate::src::qcommon::q_shared::qtrue
     } else if num >= 16 as i32 && num <= 16 as i32 + 1 as i32 {
@@ -580,8 +561,7 @@ unsafe extern "C" fn CG_ConfigStringModified() {
             crate::src::qcommon::q_shared::qtrue
     } else if num >= 14 as i32 && num <= 14 as i32 + 1 as i32 {
         crate::src::qcommon::q_shared::Q_strncpyz(
-            crate::src::cgame::cg_main::cgs.teamVoteString[(num - 14 as i32) as usize]
-                .as_mut_ptr(),
+            crate::src::cgame::cg_main::cgs.teamVoteString[(num - 14 as i32) as usize].as_mut_ptr(),
             str,
             ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
         );
@@ -591,13 +571,10 @@ unsafe extern "C" fn CG_ConfigStringModified() {
     } else if num >= 32 as i32 && num < 32 as i32 + 256 as i32 {
         crate::src::cgame::cg_main::cgs.gameModels[(num - 32 as i32) as usize] =
             crate::src::cgame::cg_syscalls::trap_R_RegisterModel(str)
-    } else if num >= 32 as i32 + 256 as i32
-        && num < 32 as i32 + 256 as i32 + 256 as i32
-    {
+    } else if num >= 32 as i32 + 256 as i32 && num < 32 as i32 + 256 as i32 + 256 as i32 {
         if *str.offset(0 as i32 as isize) as i32 != '*' as i32 {
             // player specific sounds don't register here
-            crate::src::cgame::cg_main::cgs.gameSounds
-                [(num - (32 as i32 + 256 as i32)) as usize] =
+            crate::src::cgame::cg_main::cgs.gameSounds[(num - (32 as i32 + 256 as i32)) as usize] =
                 crate::src::cgame::cg_syscalls::trap_S_RegisterSound(
                     str,
                     crate::src::qcommon::q_shared::qfalse,
@@ -642,9 +619,7 @@ unsafe extern "C" fn CG_AddToTeamChat(mut str: *const libc::c_char) {
     } else {
         chatHeight = 8 as i32
     }
-    if chatHeight <= 0 as i32
-        || crate::src::cgame::cg_main::cg_teamChatTime.integer <= 0 as i32
-    {
+    if chatHeight <= 0 as i32 || crate::src::cgame::cg_main::cg_teamChatTime.integer <= 0 as i32 {
         // team chat disabled, dump into normal chat
         crate::src::cgame::cg_main::cgs.teamLastChatPos = 0 as i32;
         crate::src::cgame::cg_main::cgs.teamChatPos =

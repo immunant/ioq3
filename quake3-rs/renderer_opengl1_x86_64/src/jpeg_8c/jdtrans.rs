@@ -282,9 +282,7 @@ pub unsafe extern "C" fn jpeg_read_coefficients(
                 break;
             }
             /* Advance progress counter if appropriate */
-            if !(*cinfo).progress.is_null()
-                && (retcode == 3 as i32 || retcode == 1 as i32)
-            {
+            if !(*cinfo).progress.is_null() && (retcode == 3 as i32 || retcode == 1 as i32) {
                 (*(*cinfo).progress).pass_counter += 1;
                 if (*(*cinfo).progress).pass_counter >= (*(*cinfo).progress).pass_limit {
                     /* startup underestimated number of scans; ratchet up one scan */

@@ -23,8 +23,7 @@ pub mod entcode_h {
         mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
     ) -> i32 {
         return (*_this).nbits_total
-            - (::std::mem::size_of::<u32>() as libc::c_ulong as i32
-                * 8 as i32
+            - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
                 - (*_this).rng.leading_zeros() as i32);
     }
 }
@@ -66,10 +65,7 @@ pub mod mathops_h {
         /* K0 = 1, K1 = log(2), K2 = 3-4*log(2), K3 = 3*log(2) - 2 */
         res.f =
             0.99992522f32 + frac * (0.69583354f32 + frac * (0.22606716f32 + 0.078024523f32 * frac));
-        res.i = res
-            .i
-            .wrapping_add((integer << 23 as i32) as u32)
-            & 0x7fffffff as i32 as u32;
+        res.i = res.i.wrapping_add((integer << 23 as i32) as u32) & 0x7fffffff as i32 as u32;
         return res.f;
     }
 
@@ -388,8 +384,7 @@ pub unsafe extern "C" fn opus_decoder_init(
         return -(3 as i32);
     }
     silkDecSizeBytes = align(silkDecSizeBytes);
-    (*st).silk_dec_offset =
-        align(::std::mem::size_of::<OpusDecoder>() as libc::c_ulong as i32);
+    (*st).silk_dec_offset = align(::std::mem::size_of::<OpusDecoder>() as libc::c_ulong as i32);
     (*st).celt_dec_offset = (*st).silk_dec_offset + silkDecSizeBytes;
     silk_dec =
         (st as *mut libc::c_char).offset((*st).silk_dec_offset as isize) as *mut libc::c_void;
@@ -504,9 +499,7 @@ unsafe extern "C" fn opus_packet_get_mode(mut data: *const u8) -> i32 {
     let mut mode: i32 = 0;
     if *data.offset(0 as i32 as isize) as i32 & 0x80 as i32 != 0 {
         mode = 1002 as i32
-    } else if *data.offset(0 as i32 as isize) as i32 & 0x60 as i32
-        == 0x60 as i32
-    {
+    } else if *data.offset(0 as i32 as isize) as i32 & 0x60 as i32 == 0x60 as i32 {
         mode = 1001 as i32
     } else {
         mode = 1000 as i32
@@ -658,9 +651,7 @@ unsafe extern "C" fn opus_decode_frame(
     pcm_transition_celt_size = 0 as i32;
     if !data.is_null()
         && (*st).prev_mode > 0 as i32
-        && (mode == 1002 as i32
-            && (*st).prev_mode != 1002 as i32
-            && (*st).prev_redundancy == 0
+        && (mode == 1002 as i32 && (*st).prev_mode != 1002 as i32 && (*st).prev_redundancy == 0
             || mode != 1002 as i32 && (*st).prev_mode == 1002 as i32)
     {
         transition = 1 as i32;
@@ -717,12 +708,11 @@ unsafe extern "C" fn opus_decode_frame(
             crate::src::opus_1_2_1::silk::dec_API::silk_InitDecoder(silk_dec);
         }
         /* The SILK PLC cannot produce frames of less than 10 ms */
-        (*st).DecControl.payloadSize_ms =
-            if 10 as i32 > 1000 as i32 * audiosize / (*st).Fs {
-                10 as i32
-            } else {
-                (1000 as i32 * audiosize) / (*st).Fs
-            };
+        (*st).DecControl.payloadSize_ms = if 10 as i32 > 1000 as i32 * audiosize / (*st).Fs {
+            10 as i32
+        } else {
+            (1000 as i32 * audiosize) / (*st).Fs
+        };
         if !data.is_null() {
             (*st).DecControl.nChannelsInternal = (*st).stream_channels;
             if mode == 1000 as i32 {
@@ -765,8 +755,7 @@ unsafe extern "C" fn opus_decode_frame(
                     silk_frame_size = frame_size;
                     i = 0 as i32;
                     while i < frame_size * (*st).channels {
-                        *pcm_ptr.offset(i as isize) =
-                            0 as i32 as crate::opus_types_h::opus_int16;
+                        *pcm_ptr.offset(i as isize) = 0 as i32 as crate::opus_types_h::opus_int16;
                         i += 1
                     }
                 } else {
@@ -784,9 +773,7 @@ unsafe extern "C" fn opus_decode_frame(
     if decode_fec == 0
         && mode != 1002 as i32
         && !data.is_null()
-        && ec_tell(&mut dec)
-            + 17 as i32
-            + 20 as i32 * ((*st).mode == 1001 as i32) as i32
+        && ec_tell(&mut dec) + 17 as i32 + 20 as i32 * ((*st).mode == 1001 as i32) as i32
             <= 8 as i32 * len
     {
         /* Check if we have a redundant 0-8 kHz band */
@@ -823,8 +810,7 @@ unsafe extern "C" fn opus_decode_frame(
                 redundancy = 0 as i32
             }
             /* Shrink decoder because of raw bits */
-            dec.storage = (dec.storage as u32)
-                .wrapping_sub(redundancy_bytes as u32)
+            dec.storage = (dec.storage as u32).wrapping_sub(redundancy_bytes as u32)
                 as crate::opus_types_h::opus_uint32
                 as crate::opus_types_h::opus_uint32
         }
@@ -919,10 +905,7 @@ unsafe extern "C" fn opus_decode_frame(
     if mode != 1000 as i32 {
         let mut celt_frame_size: i32 = if F20 < frame_size { F20 } else { frame_size };
         /* Make sure to discard any previous CELT state */
-        if mode != (*st).prev_mode
-            && (*st).prev_mode > 0 as i32
-            && (*st).prev_redundancy == 0
-        {
+        if mode != (*st).prev_mode && (*st).prev_mode > 0 as i32 && (*st).prev_redundancy == 0 {
             crate::src::opus_1_2_1::celt::celt_decoder::opus_custom_decoder_ctl(
                 celt_dec,
                 4028 as i32,
@@ -943,10 +926,7 @@ unsafe extern "C" fn opus_decode_frame(
             celt_accum,
         )
     } else {
-        let mut silence: [u8; 2] = [
-            0xff as i32 as u8,
-            0xff as i32 as u8,
-        ];
+        let mut silence: [u8; 2] = [0xff as i32 as u8, 0xff as i32 as u8];
         if celt_accum == 0 {
             i = 0 as i32;
             while i < frame_size * (*st).channels {
@@ -980,8 +960,7 @@ unsafe extern "C" fn opus_decode_frame(
         i = 0 as i32;
         while i < frame_size * (*st).channels {
             *pcm.offset(i as isize) = *pcm.offset(i as isize)
-                + 1.0f32 / 32768.0f32
-                    * *pcm_silk.offset(i as isize) as i32 as f32;
+                + 1.0f32 / 32768.0f32 * *pcm_silk.offset(i as isize) as i32 as f32;
             i += 1
         }
     }
@@ -1001,10 +980,7 @@ unsafe extern "C" fn opus_decode_frame(
     window = (*celt_mode).window;
     /* 5 ms redundant frame for SILK->CELT */
     if redundancy != 0 && celt_to_silk == 0 {
-        crate::src::opus_1_2_1::celt::celt_decoder::opus_custom_decoder_ctl(
-            celt_dec,
-            4028 as i32,
-        );
+        crate::src::opus_1_2_1::celt::celt_decoder::opus_custom_decoder_ctl(celt_dec, 4028 as i32);
         crate::src::opus_1_2_1::celt::celt_decoder::opus_custom_decoder_ctl(
             celt_dec,
             10010 as i32,
@@ -1204,9 +1180,7 @@ pub unsafe extern "C" fn opus_decode_native(
         let mut duration_copy: i32 = 0;
         let mut ret_0: i32 = 0;
         /* If no FEC can be present, run the PLC (recursive call) */
-        if frame_size < packet_frame_size
-            || packet_mode == 1002 as i32
-            || (*st).mode == 1002 as i32
+        if frame_size < packet_frame_size || packet_mode == 1002 as i32 || (*st).mode == 1002 as i32
         {
             return opus_decode_native(
                 st,
@@ -1297,10 +1271,8 @@ pub unsafe extern "C" fn opus_decode_native(
             (*st).softclip_mem.as_mut_ptr(),
         );
     } else {
-        (*st).softclip_mem[1 as i32 as usize] =
-            0 as i32 as crate::arch_h::opus_val16;
-        (*st).softclip_mem[0 as i32 as usize] =
-            (*st).softclip_mem[1 as i32 as usize]
+        (*st).softclip_mem[1 as i32 as usize] = 0 as i32 as crate::arch_h::opus_val16;
+        (*st).softclip_mem[0 as i32 as usize] = (*st).softclip_mem[1 as i32 as usize]
     }
     return nb_samples;
 }
@@ -1470,8 +1442,7 @@ pub unsafe extern "C" fn opus_decoder_ctl(
         }
         4028 => {
             crate::stdlib::memset(
-                &mut (*st).stream_channels as *mut i32 as *mut libc::c_char
-                    as *mut libc::c_void,
+                &mut (*st).stream_channels as *mut i32 as *mut libc::c_char as *mut libc::c_void,
                 0 as i32,
                 (::std::mem::size_of::<OpusDecoder>() as libc::c_ulong)
                     .wrapping_sub(
@@ -1614,25 +1585,18 @@ pub unsafe extern "C" fn opus_decoder_destroy(mut st: *mut OpusDecoder) {
 pub unsafe extern "C" fn opus_packet_get_bandwidth(mut data: *const u8) -> i32 {
     let mut bandwidth: i32 = 0;
     if *data.offset(0 as i32 as isize) as i32 & 0x80 as i32 != 0 {
-        bandwidth = 1102 as i32
-            + (*data.offset(0 as i32 as isize) as i32 >> 5 as i32
-                & 0x3 as i32);
+        bandwidth = 1102 as i32 + (*data.offset(0 as i32 as isize) as i32 >> 5 as i32 & 0x3 as i32);
         if bandwidth == 1102 as i32 {
             bandwidth = 1101 as i32
         }
-    } else if *data.offset(0 as i32 as isize) as i32 & 0x60 as i32
-        == 0x60 as i32
-    {
-        bandwidth =
-            if *data.offset(0 as i32 as isize) as i32 & 0x10 as i32 != 0 {
-                1105 as i32
-            } else {
-                1104 as i32
-            }
+    } else if *data.offset(0 as i32 as isize) as i32 & 0x60 as i32 == 0x60 as i32 {
+        bandwidth = if *data.offset(0 as i32 as isize) as i32 & 0x10 as i32 != 0 {
+            1105 as i32
+        } else {
+            1104 as i32
+        }
     } else {
-        bandwidth = 1101 as i32
-            + (*data.offset(0 as i32 as isize) as i32 >> 5 as i32
-                & 0x3 as i32)
+        bandwidth = 1101 as i32 + (*data.offset(0 as i32 as isize) as i32 >> 5 as i32 & 0x3 as i32)
     }
     return bandwidth;
 }
@@ -1643,9 +1607,7 @@ pub unsafe extern "C" fn opus_packet_get_bandwidth(mut data: *const u8) -> i32 {
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn opus_packet_get_nb_channels(
-    mut data: *const u8,
-) -> i32 {
+pub unsafe extern "C" fn opus_packet_get_nb_channels(mut data: *const u8) -> i32 {
     return if *data.offset(0 as i32 as isize) as i32 & 0x4 as i32 != 0 {
         2 as i32
     } else {

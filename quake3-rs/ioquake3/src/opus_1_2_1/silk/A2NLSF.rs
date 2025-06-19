@@ -154,10 +154,7 @@ pub use crate::src::opus_1_2_1::silk::A2NLSF::SigProc_FIX_h::silk_min_32;
 /* Transforms polynomials from cos(n*f) to cos(f)^n  */
 #[inline]
 
-unsafe extern "C" fn silk_A2NLSF_trans_poly(
-    mut p: *mut crate::opus_types_h::opus_int32,
-    dd: i32,
-)
+unsafe extern "C" fn silk_A2NLSF_trans_poly(mut p: *mut crate::opus_types_h::opus_int32, dd: i32)
 /* I      Polynomial order (= filter order / 2 )    */
 {
     let mut k: i32 = 0;
@@ -190,38 +187,29 @@ unsafe extern "C" fn silk_A2NLSF_eval_poly(
     let mut x_Q16: crate::opus_types_h::opus_int32 = 0;
     let mut y32: crate::opus_types_h::opus_int32 = 0;
     y32 = *p.offset(dd as isize);
-    x_Q16 = ((x as crate::opus_types_h::opus_uint32) << 4 as i32)
-        as crate::opus_types_h::opus_int32;
+    x_Q16 =
+        ((x as crate::opus_types_h::opus_uint32) << 4 as i32) as crate::opus_types_h::opus_int32;
     if (8 as i32 == dd) as i32 as libc::c_long != 0 {
-        y32 = (*p.offset(7 as i32 as isize) as i64
-            + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
+        y32 = (*p.offset(7 as i32 as isize) as i64 + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
             as crate::opus_types_h::opus_int32;
-        y32 = (*p.offset(6 as i32 as isize) as i64
-            + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
+        y32 = (*p.offset(6 as i32 as isize) as i64 + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
             as crate::opus_types_h::opus_int32;
-        y32 = (*p.offset(5 as i32 as isize) as i64
-            + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
+        y32 = (*p.offset(5 as i32 as isize) as i64 + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
             as crate::opus_types_h::opus_int32;
-        y32 = (*p.offset(4 as i32 as isize) as i64
-            + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
+        y32 = (*p.offset(4 as i32 as isize) as i64 + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
             as crate::opus_types_h::opus_int32;
-        y32 = (*p.offset(3 as i32 as isize) as i64
-            + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
+        y32 = (*p.offset(3 as i32 as isize) as i64 + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
             as crate::opus_types_h::opus_int32;
-        y32 = (*p.offset(2 as i32 as isize) as i64
-            + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
+        y32 = (*p.offset(2 as i32 as isize) as i64 + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
             as crate::opus_types_h::opus_int32;
-        y32 = (*p.offset(1 as i32 as isize) as i64
-            + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
+        y32 = (*p.offset(1 as i32 as isize) as i64 + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
             as crate::opus_types_h::opus_int32;
-        y32 = (*p.offset(0 as i32 as isize) as i64
-            + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
+        y32 = (*p.offset(0 as i32 as isize) as i64 + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
             as crate::opus_types_h::opus_int32
     } else {
         n = dd - 1 as i32;
         while n >= 0 as i32 {
-            y32 = (*p.offset(n as isize) as i64
-                + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
+            y32 = (*p.offset(n as isize) as i64 + (y32 as i64 * x_Q16 as i64 >> 16 as i32))
                 as crate::opus_types_h::opus_int32;
             n -= 1
             /* Q16 */
@@ -239,10 +227,10 @@ unsafe extern "C" fn silk_A2NLSF_init(
 ) {
     let mut k: i32 = 0;
     /* Convert filter coefs to even and odd polynomials */
-    *P.offset(dd as isize) = ((1 as i32 as crate::opus_types_h::opus_uint32)
-        << 16 as i32) as crate::opus_types_h::opus_int32; /* Q16 */
-    *Q.offset(dd as isize) = ((1 as i32 as crate::opus_types_h::opus_uint32)
-        << 16 as i32) as crate::opus_types_h::opus_int32;
+    *P.offset(dd as isize) = ((1 as i32 as crate::opus_types_h::opus_uint32) << 16 as i32)
+        as crate::opus_types_h::opus_int32; /* Q16 */
+    *Q.offset(dd as isize) = ((1 as i32 as crate::opus_types_h::opus_uint32) << 16 as i32)
+        as crate::opus_types_h::opus_int32;
     k = 0 as i32;
     while k < dd {
         *P.offset(k as isize) =
@@ -307,13 +295,12 @@ pub unsafe extern "C" fn silk_A2NLSF(
     silk_A2NLSF_init(a_Q16, P.as_mut_ptr(), Q.as_mut_ptr(), dd);
     /* Find roots, alternating between P and Q */
     p = P.as_mut_ptr(); /* Pointer to polynomial */
-    xlo = crate::src::opus_1_2_1::silk::table_LSF_cos::silk_LSFCosTab_FIX_Q12
-        [0 as i32 as usize] as crate::opus_types_h::opus_int32; /* Q12*/
+    xlo = crate::src::opus_1_2_1::silk::table_LSF_cos::silk_LSFCosTab_FIX_Q12[0 as i32 as usize]
+        as crate::opus_types_h::opus_int32; /* Q12*/
     ylo = silk_A2NLSF_eval_poly(p, xlo, dd);
     if ylo < 0 as i32 {
         /* Set the first NLSF to zero and move on to the next */
-        *NLSF.offset(0 as i32 as isize) =
-            0 as i32 as crate::opus_types_h::opus_int16;
+        *NLSF.offset(0 as i32 as isize) = 0 as i32 as crate::opus_types_h::opus_int16;
         /* Index of current root */
         p = Q.as_mut_ptr(); /* Pointer to polynomial */
         ylo = silk_A2NLSF_eval_poly(p, xlo, dd);
@@ -347,14 +334,11 @@ pub unsafe extern "C" fn silk_A2NLSF(
                 xmid = if 1 as i32 == 1 as i32 {
                     (xlo + xhi >> 1 as i32) + (xlo + xhi & 1 as i32)
                 } else {
-                    ((xlo + xhi >> 1 as i32 - 1 as i32) + 1 as i32)
-                        >> 1 as i32
+                    ((xlo + xhi >> 1 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
                 };
                 ymid = silk_A2NLSF_eval_poly(p, xmid, dd);
                 /* Detect zero crossing */
-                if ylo <= 0 as i32 && ymid >= 0 as i32
-                    || ylo >= 0 as i32 && ymid <= 0 as i32
-                {
+                if ylo <= 0 as i32 && ymid >= 0 as i32 || ylo >= 0 as i32 && ymid <= 0 as i32 {
                     /* Reduce frequency */
                     xhi = xmid;
                     yhi = ymid
@@ -370,8 +354,7 @@ pub unsafe extern "C" fn silk_A2NLSF(
             if (if ylo > 0 as i32 { ylo } else { -ylo }) < 65536 as i32 {
                 /* Avoid dividing by zero */
                 den = ylo - yhi;
-                nom = ((ylo as crate::opus_types_h::opus_uint32)
-                    << 8 as i32 - 3 as i32)
+                nom = ((ylo as crate::opus_types_h::opus_uint32) << 8 as i32 - 3 as i32)
                     as crate::opus_types_h::opus_int32
                     + (den >> 1 as i32);
                 if den != 0 as i32 {
@@ -395,10 +378,8 @@ pub unsafe extern "C" fn silk_A2NLSF(
             p = PQ[(root_ix & 1 as i32) as usize];
             /* Evaluate polynomial */
             xlo = crate::src::opus_1_2_1::silk::table_LSF_cos::silk_LSFCosTab_FIX_Q12
-                [(k - 1 as i32) as usize]
-                as crate::opus_types_h::opus_int32; /* Q12*/
-            ylo = (((1 as i32 - (root_ix & 2 as i32))
-                as crate::opus_types_h::opus_uint32)
+                [(k - 1 as i32) as usize] as crate::opus_types_h::opus_int32; /* Q12*/
+            ylo = (((1 as i32 - (root_ix & 2 as i32)) as crate::opus_types_h::opus_uint32)
                 << 12 as i32) as crate::opus_types_h::opus_int32
         } else {
             /* Increment loop counter */
@@ -411,13 +392,11 @@ pub unsafe extern "C" fn silk_A2NLSF(
                 if i > 16 as i32 {
                     /* Reset loop counter */
                     /* Set NLSFs to white spectrum and exit */
-                    *NLSF.offset(0 as i32 as isize) =
-                        (((1 as i32) << 15 as i32) / (d + 1 as i32))
-                            as crate::opus_types_h::opus_int16;
+                    *NLSF.offset(0 as i32 as isize) = (((1 as i32) << 15 as i32) / (d + 1 as i32))
+                        as crate::opus_types_h::opus_int16;
                     k = 1 as i32;
                     while k < d {
-                        *NLSF.offset(k as isize) = (*NLSF.offset((k - 1 as i32) as isize)
-                            as i32
+                        *NLSF.offset(k as isize) = (*NLSF.offset((k - 1 as i32) as isize) as i32
                             + *NLSF.offset(0 as i32 as isize) as i32)
                             as crate::opus_types_h::opus_int16;
                         k += 1
@@ -434,16 +413,14 @@ pub unsafe extern "C" fn silk_A2NLSF(
                 silk_A2NLSF_init(a_Q16, P.as_mut_ptr(), Q.as_mut_ptr(), dd);
                 p = P.as_mut_ptr();
                 xlo = crate::src::opus_1_2_1::silk::table_LSF_cos::silk_LSFCosTab_FIX_Q12
-                    [0 as i32 as usize]
-                    as crate::opus_types_h::opus_int32;
+                    [0 as i32 as usize] as crate::opus_types_h::opus_int32;
                 ylo = silk_A2NLSF_eval_poly(p, xlo, dd);
                 if ylo < 0 as i32 {
                     /* Error: Apply progressively more bandwidth expansion and run again */
                     /* Pointer to polynomial */
                     /* Q12*/
                     /* Set the first NLSF to zero and move on to the next */
-                    *NLSF.offset(0 as i32 as isize) =
-                        0 as i32 as crate::opus_types_h::opus_int16;
+                    *NLSF.offset(0 as i32 as isize) = 0 as i32 as crate::opus_types_h::opus_int16;
                     /* Index of current root */
                     p = Q.as_mut_ptr(); /* Pointer to polynomial */
                     ylo = silk_A2NLSF_eval_poly(p, xlo, dd);

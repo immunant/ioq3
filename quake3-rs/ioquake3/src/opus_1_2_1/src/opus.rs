@@ -109,12 +109,10 @@ pub unsafe extern "C" fn opus_pcm_soft_clip(
                 peak_pos = i;
                 end = i;
                 start = end;
-                maxval = crate::stdlib::fabs(*x.offset((i * C) as isize) as f64)
-                    as f32;
+                maxval = crate::stdlib::fabs(*x.offset((i * C) as isize) as f64) as f32;
                 /* Look for first zero crossing before clipping */
                 while start > 0 as i32
-                    && *x.offset((i * C) as isize)
-                        * *x.offset(((start - 1 as i32) * C) as isize)
+                    && *x.offset((i * C) as isize) * *x.offset(((start - 1 as i32) * C) as isize)
                         >= 0 as i32 as f32
                 {
                     start -= 1
@@ -125,12 +123,8 @@ pub unsafe extern "C" fn opus_pcm_soft_clip(
                         >= 0 as i32 as f32
                 {
                     /* Look for other peaks until the next zero-crossing. */
-                    if crate::stdlib::fabs(*x.offset((end * C) as isize) as f64)
-                        as f32
-                        > maxval
-                    {
-                        maxval = crate::stdlib::fabs(*x.offset((end * C) as isize) as f64)
-                            as f32;
+                    if crate::stdlib::fabs(*x.offset((end * C) as isize) as f64) as f32 > maxval {
+                        maxval = crate::stdlib::fabs(*x.offset((end * C) as isize) as f64) as f32;
                         peak_pos = end
                     }
                     end += 1
@@ -138,8 +132,7 @@ pub unsafe extern "C" fn opus_pcm_soft_clip(
                 /* Detect the special case where we clip before the first zero crossing */
                 special = (start == 0 as i32
                     && *x.offset((i * C) as isize) * *x.offset(0 as i32 as isize)
-                        >= 0 as i32 as f32)
-                    as i32;
+                        >= 0 as i32 as f32) as i32;
                 /* Compute a such that maxval + a*maxval^2 = 1 */
                 a = (maxval - 1 as i32 as f32) / (maxval * maxval);
                 /* Slightly boost "a" by 2^-22. This is just enough to ensure -ffast-math
@@ -193,19 +186,14 @@ pub unsafe extern "C" fn opus_pcm_soft_clip(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn encode_size(
-    mut size: i32,
-    mut data: *mut u8,
-) -> i32 {
+pub unsafe extern "C" fn encode_size(mut size: i32, mut data: *mut u8) -> i32 {
     if size < 252 as i32 {
         *data.offset(0 as i32 as isize) = size as u8;
         return 1 as i32;
     } else {
-        *data.offset(0 as i32 as isize) =
-            (252 as i32 + (size & 0x3 as i32)) as u8;
-        *data.offset(1 as i32 as isize) = (size
-            - *data.offset(0 as i32 as isize) as i32
-            >> 2 as i32) as u8;
+        *data.offset(0 as i32 as isize) = (252 as i32 + (size & 0x3 as i32)) as u8;
+        *data.offset(1 as i32 as isize) =
+            (size - *data.offset(0 as i32 as isize) as i32 >> 2 as i32) as u8;
         return 2 as i32;
     };
 }
@@ -239,21 +227,16 @@ pub unsafe extern "C" fn opus_packet_get_samples_per_frame(
 ) -> i32 {
     let mut audiosize: i32 = 0;
     if *data.offset(0 as i32 as isize) as i32 & 0x80 as i32 != 0 {
-        audiosize = *data.offset(0 as i32 as isize) as i32 >> 3 as i32
-            & 0x3 as i32;
+        audiosize = *data.offset(0 as i32 as isize) as i32 >> 3 as i32 & 0x3 as i32;
         audiosize = (Fs << audiosize) / 400 as i32
-    } else if *data.offset(0 as i32 as isize) as i32 & 0x60 as i32
-        == 0x60 as i32
-    {
-        audiosize =
-            if *data.offset(0 as i32 as isize) as i32 & 0x8 as i32 != 0 {
-                (Fs) / 50 as i32
-            } else {
-                (Fs) / 100 as i32
-            }
+    } else if *data.offset(0 as i32 as isize) as i32 & 0x60 as i32 == 0x60 as i32 {
+        audiosize = if *data.offset(0 as i32 as isize) as i32 & 0x8 as i32 != 0 {
+            (Fs) / 50 as i32
+        } else {
+            (Fs) / 100 as i32
+        }
     } else {
-        audiosize = *data.offset(0 as i32 as isize) as i32 >> 3 as i32
-            & 0x3 as i32;
+        audiosize = *data.offset(0 as i32 as isize) as i32 >> 3 as i32 & 0x3 as i32;
         if audiosize == 3 as i32 {
             audiosize = Fs * 60 as i32 / 1000 as i32
         } else {
@@ -355,8 +338,7 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
                 }
                 last_size = len / 2 as i32;
                 /* If last_size doesn't fit in size[0], we'll catch it later */
-                *size.offset(0 as i32 as isize) =
-                    last_size as crate::opus_types_h::opus_int16
+                *size.offset(0 as i32 as isize) = last_size as crate::opus_types_h::opus_int16
             }
         }
         2 => {
@@ -399,11 +381,7 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
                     data = data.offset(1);
                     p = *fresh2 as i32;
                     len -= 1;
-                    tmp = if p == 255 as i32 {
-                        254 as i32
-                    } else {
-                        p
-                    };
+                    tmp = if p == 255 as i32 { 254 as i32 } else { p };
                     len -= tmp;
                     pad += tmp;
                     if !(p == 255 as i32) {
@@ -454,8 +432,7 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
         bytes = parse_size(
             data,
             len,
-            size.offset(count as isize)
-                .offset(-(1 as i32 as isize)),
+            size.offset(count as isize).offset(-(1 as i32 as isize)),
         );
         len -= bytes;
         if (*size.offset((count - 1 as i32) as isize) as i32) < 0 as i32
@@ -474,9 +451,7 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
                 *size.offset(i as isize) = *size.offset((count - 1 as i32) as isize);
                 i += 1
             }
-        } else if bytes + *size.offset((count - 1 as i32) as isize) as i32
-            > last_size
-        {
+        } else if bytes + *size.offset((count - 1 as i32) as isize) as i32 > last_size {
             return -(4 as i32);
         }
     } else {
@@ -486,8 +461,7 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
         if last_size > 1275 as i32 {
             return -(4 as i32);
         }
-        *size.offset((count - 1 as i32) as isize) =
-            last_size as crate::opus_types_h::opus_int16
+        *size.offset((count - 1 as i32) as isize) = last_size as crate::opus_types_h::opus_int16
     }
     if !payload_offset.is_null() {
         *payload_offset = data.offset_from(data0) as libc::c_long as i32

@@ -337,9 +337,7 @@ pub unsafe extern "C" fn Options_MenuInit() {
     crate::src::ui::ui_syscalls::trap_GetClientState(
         &mut cstate as *mut _ as *mut crate::ui_public_h::uiClientState_t,
     );
-    if cstate.connState as u32
-        >= crate::src::qcommon::q_shared::CA_CONNECTED as i32 as u32
-    {
+    if cstate.connState as u32 >= crate::src::qcommon::q_shared::CA_CONNECTED as i32 as u32 {
         s_options.menu.fullscreen = crate::src::qcommon::q_shared::qfalse
     } else {
         s_options.menu.fullscreen = crate::src::qcommon::q_shared::qtrue
@@ -368,8 +366,7 @@ pub unsafe extern "C" fn Options_MenuInit() {
     s_options.framer.height = 334 as i32;
     y = 168 as i32;
     s_options.graphics.generic.type_0 = 9 as i32;
-    s_options.graphics.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_options.graphics.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_options.graphics.generic.callback =
         Some(Options_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_options.graphics.generic.id = 10 as i32;
@@ -381,8 +378,7 @@ pub unsafe extern "C" fn Options_MenuInit() {
     s_options.graphics.style = 0x1 as i32;
     y += 34 as i32;
     s_options.display.generic.type_0 = 9 as i32;
-    s_options.display.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_options.display.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_options.display.generic.callback =
         Some(Options_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_options.display.generic.id = 11 as i32;
@@ -394,8 +390,7 @@ pub unsafe extern "C" fn Options_MenuInit() {
     s_options.display.style = 0x1 as i32;
     y += 34 as i32;
     s_options.sound.generic.type_0 = 9 as i32;
-    s_options.sound.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_options.sound.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_options.sound.generic.callback =
         Some(Options_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_options.sound.generic.id = 12 as i32;
@@ -406,8 +401,7 @@ pub unsafe extern "C" fn Options_MenuInit() {
     s_options.sound.style = 0x1 as i32;
     y += 34 as i32;
     s_options.network.generic.type_0 = 9 as i32;
-    s_options.network.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_options.network.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_options.network.generic.callback =
         Some(Options_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_options.network.generic.id = 13 as i32;
@@ -419,8 +413,7 @@ pub unsafe extern "C" fn Options_MenuInit() {
     s_options.network.style = 0x1 as i32;
     s_options.back.generic.type_0 = 6 as i32;
     s_options.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    s_options.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_options.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_options.back.generic.callback =
         Some(Options_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_options.back.generic.id = 14 as i32;

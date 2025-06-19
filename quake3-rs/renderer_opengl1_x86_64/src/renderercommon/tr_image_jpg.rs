@@ -943,8 +943,7 @@ pub unsafe extern "C" fn RE_SaveJPGToBuffer(
                 .wrapping_mul(row_stride as u32)
                 .wrapping_sub(cinfo.next_scanline.wrapping_mul(row_stride as u32))
                 as isize,
-        )
-            as *mut crate::src::qcommon::q_shared::byte;
+        ) as *mut crate::src::qcommon::q_shared::byte;
         crate::src::jpeg_8c::jcapistd::jpeg_write_scanlines(
             &mut cinfo as *mut _ as *mut crate::jpeglib_h::jpeg_compress_struct,
             row_pointer.as_mut_ptr(),
@@ -994,9 +993,7 @@ pub unsafe extern "C" fn RE_SaveJPG(
     crate::src::renderergl1::tr_main::ri
         .FS_WriteFile
         .expect("non-null function pointer")(
-        filename,
-        out as *const libc::c_void,
-        bufSize as i32,
+        filename, out as *const libc::c_void, bufSize as i32
     );
     crate::src::renderergl1::tr_main::ri
         .Hunk_FreeTempMemory

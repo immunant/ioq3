@@ -303,8 +303,7 @@ pub unsafe extern "C" fn inflate_table(
         /* over-subscribed */
     } /* incomplete set */
     if left > 0 as i32
-        && (type_0 as u32
-            == crate::src::zlib::inftrees::CODES as i32 as u32
+        && (type_0 as u32 == crate::src::zlib::inftrees::CODES as i32 as u32
             || max != 1 as i32 as u32)
     {
         return -(1 as i32);
@@ -314,8 +313,7 @@ pub unsafe extern "C" fn inflate_table(
     len = 1 as i32 as u32;
     while len < 15 as i32 as u32 {
         offs[len.wrapping_add(1 as i32 as u32) as usize] =
-            (offs[len as usize] as i32 + count[len as usize] as i32)
-                as u16;
+            (offs[len as usize] as i32 + count[len as usize] as i32) as u16;
         len = len.wrapping_add(1)
     }
     /* sort symbols by length, by symbol order within each length */
@@ -464,8 +462,7 @@ pub unsafe extern "C" fn inflate_table(
             }
             /* check for enough space */
             used = used.wrapping_add((1 as u32) << curr);
-            if type_0 as u32
-                == crate::src::zlib::inftrees::LENS as i32 as u32
+            if type_0 as u32 == crate::src::zlib::inftrees::LENS as i32 as u32
                 && used >= (2048 as i32 - 592 as i32) as u32
             {
                 return 1 as i32;
@@ -474,8 +471,7 @@ pub unsafe extern "C" fn inflate_table(
             low = huff & mask;
             (*(*table).offset(low as isize)).op = curr as u8;
             (*(*table).offset(low as isize)).bits = root as u8;
-            (*(*table).offset(low as isize)).val =
-                next.offset_from(*table) as libc::c_long as u16
+            (*(*table).offset(low as isize)).val = next.offset_from(*table) as libc::c_long as u16
         }
     }
     /*

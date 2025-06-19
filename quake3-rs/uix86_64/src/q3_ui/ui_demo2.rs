@@ -642,9 +642,7 @@ unsafe extern "C" fn Demos_MenuInit() {
     s_demos.arrows.width = 128 as i32;
     s_demos.arrows.height = 48 as i32;
     s_demos.left.generic.type_0 = 6 as i32;
-    s_demos.left.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x800 as i32 as u32;
+    s_demos.left.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x800 as i32 as u32;
     s_demos.left.generic.x = 320 as i32 - 128 as i32 / 2 as i32;
     s_demos.left.generic.y = 400 as i32;
     s_demos.left.generic.id = 14 as i32;
@@ -655,9 +653,7 @@ unsafe extern "C" fn Demos_MenuInit() {
     s_demos.left.focuspic =
         b"menu/art/arrows_horz_left\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_demos.right.generic.type_0 = 6 as i32;
-    s_demos.right.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x800 as i32 as u32;
+    s_demos.right.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x800 as i32 as u32;
     s_demos.right.generic.x = 320 as i32;
     s_demos.right.generic.y = 400 as i32;
     s_demos.right.generic.id = 13 as i32;
@@ -669,8 +665,7 @@ unsafe extern "C" fn Demos_MenuInit() {
         b"menu/art/arrows_horz_right\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_demos.back.generic.type_0 = 6 as i32;
     s_demos.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    s_demos.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_demos.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_demos.back.generic.id = 10 as i32;
     s_demos.back.generic.callback =
         Some(Demos_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
@@ -682,8 +677,7 @@ unsafe extern "C" fn Demos_MenuInit() {
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_demos.go.generic.type_0 = 6 as i32;
     s_demos.go.generic.name = b"menu/art/play_0\x00" as *const u8 as *const libc::c_char;
-    s_demos.go.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_demos.go.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     s_demos.go.generic.id = 11 as i32;
     s_demos.go.generic.callback =
         Some(Demos_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
@@ -730,8 +724,7 @@ unsafe extern "C" fn Demos_MenuInit() {
         extension.as_mut_ptr(),
         s_demos.names.as_mut_ptr(),
         (::std::mem::size_of::<[libc::c_char; 32768]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
-            as i32,
+            .wrapping_div(::std::mem::size_of::<libc::c_char>() as libc::c_ulong) as i32,
     );
     demoname = s_demos.names.as_mut_ptr();
     i = 0 as i32;
@@ -777,8 +770,7 @@ unsafe extern "C" fn Demos_MenuInit() {
         *fresh1 = b"No Demos Found.\x00" as *const u8 as *const libc::c_char;
         s_demos.list.numitems = 1 as i32;
         //degenerate case, not selectable
-        s_demos.go.generic.flags |=
-            0x4000 as i32 as u32 | 0x1000 as i32 as u32
+        s_demos.go.generic.flags |= 0x4000 as i32 as u32 | 0x1000 as i32 as u32
     }
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
         &mut s_demos.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,

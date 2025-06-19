@@ -27,8 +27,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -418,8 +417,7 @@ pub unsafe extern "C" fn Q_rand(mut seed: *mut i32) -> i32 {
 #[no_mangle]
 
 pub unsafe extern "C" fn Q_random(mut seed: *mut i32) -> f32 {
-    return (Q_rand(seed) & 0xffff as i32) as f32
-        / 0x10000 as i32 as f32;
+    return (Q_rand(seed) & 0xffff as i32) as f32 / 0x10000 as i32 as f32;
 }
 #[no_mangle]
 
@@ -452,9 +450,7 @@ pub unsafe extern "C" fn ClampShort(mut i: i32) -> i16 {
 // this isn't a real cheap function to call!
 #[no_mangle]
 
-pub unsafe extern "C" fn DirToByte(
-    mut dir: *mut crate::src::qcommon::q_shared::vec_t,
-) -> i32 {
+pub unsafe extern "C" fn DirToByte(mut dir: *mut crate::src::qcommon::q_shared::vec_t) -> i32 {
     let mut i: i32 = 0;
     let mut best: i32 = 0;
     let mut d: f32 = 0.;
@@ -466,12 +462,9 @@ pub unsafe extern "C" fn DirToByte(
     best = 0 as i32;
     i = 0 as i32;
     while i < 162 as i32 {
-        d = *dir.offset(0 as i32 as isize)
-            * bytedirs[i as usize][0 as i32 as usize]
-            + *dir.offset(1 as i32 as isize)
-                * bytedirs[i as usize][1 as i32 as usize]
-            + *dir.offset(2 as i32 as isize)
-                * bytedirs[i as usize][2 as i32 as usize];
+        d = *dir.offset(0 as i32 as isize) * bytedirs[i as usize][0 as i32 as usize]
+            + *dir.offset(1 as i32 as isize) * bytedirs[i as usize][1 as i32 as usize]
+            + *dir.offset(2 as i32 as isize) * bytedirs[i as usize][2 as i32 as usize];
         if d > bestd {
             bestd = d;
             best = i
@@ -482,10 +475,7 @@ pub unsafe extern "C" fn DirToByte(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ByteToDir(
-    mut b: i32,
-    mut dir: *mut crate::src::qcommon::q_shared::vec_t,
-) {
+pub unsafe extern "C" fn ByteToDir(mut b: i32, mut dir: *mut crate::src::qcommon::q_shared::vec_t) {
     if b < 0 as i32 || b >= 162 as i32 {
         *dir.offset(0 as i32 as isize) = vec3_origin[0 as i32 as usize];
         *dir.offset(1 as i32 as isize) = vec3_origin[1 as i32 as usize];
@@ -498,43 +488,27 @@ pub unsafe extern "C" fn ByteToDir(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ColorBytes3(
-    mut r: f32,
-    mut g: f32,
-    mut b: f32,
-) -> u32 {
+pub unsafe extern "C" fn ColorBytes3(mut r: f32, mut g: f32, mut b: f32) -> u32 {
     let mut i: u32 = 0;
-    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte)
-        .offset(0 as i32 as isize) =
+    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte).offset(0 as i32 as isize) =
         (r * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte)
-        .offset(1 as i32 as isize) =
+    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte).offset(1 as i32 as isize) =
         (g * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte)
-        .offset(2 as i32 as isize) =
+    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte).offset(2 as i32 as isize) =
         (b * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
     return i;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ColorBytes4(
-    mut r: f32,
-    mut g: f32,
-    mut b: f32,
-    mut a: f32,
-) -> u32 {
+pub unsafe extern "C" fn ColorBytes4(mut r: f32, mut g: f32, mut b: f32, mut a: f32) -> u32 {
     let mut i: u32 = 0;
-    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte)
-        .offset(0 as i32 as isize) =
+    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte).offset(0 as i32 as isize) =
         (r * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte)
-        .offset(1 as i32 as isize) =
+    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte).offset(1 as i32 as isize) =
         (g * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte)
-        .offset(2 as i32 as isize) =
+    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte).offset(2 as i32 as isize) =
         (b * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte)
-        .offset(3 as i32 as isize) =
+    *(&mut i as *mut u32 as *mut crate::src::qcommon::q_shared::byte).offset(3 as i32 as isize) =
         (a * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
     return i;
 }
@@ -583,18 +557,12 @@ pub unsafe extern "C" fn PlaneFromPoints(
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut d1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut d2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    d1[0 as i32 as usize] =
-        *b.offset(0 as i32 as isize) - *a.offset(0 as i32 as isize);
-    d1[1 as i32 as usize] =
-        *b.offset(1 as i32 as isize) - *a.offset(1 as i32 as isize);
-    d1[2 as i32 as usize] =
-        *b.offset(2 as i32 as isize) - *a.offset(2 as i32 as isize);
-    d2[0 as i32 as usize] =
-        *c.offset(0 as i32 as isize) - *a.offset(0 as i32 as isize);
-    d2[1 as i32 as usize] =
-        *c.offset(1 as i32 as isize) - *a.offset(1 as i32 as isize);
-    d2[2 as i32 as usize] =
-        *c.offset(2 as i32 as isize) - *a.offset(2 as i32 as isize);
+    d1[0 as i32 as usize] = *b.offset(0 as i32 as isize) - *a.offset(0 as i32 as isize);
+    d1[1 as i32 as usize] = *b.offset(1 as i32 as isize) - *a.offset(1 as i32 as isize);
+    d1[2 as i32 as usize] = *b.offset(2 as i32 as isize) - *a.offset(2 as i32 as isize);
+    d2[0 as i32 as usize] = *c.offset(0 as i32 as isize) - *a.offset(0 as i32 as isize);
+    d2[1 as i32 as usize] = *c.offset(1 as i32 as isize) - *a.offset(1 as i32 as isize);
+    d2[2 as i32 as usize] = *c.offset(2 as i32 as isize) - *a.offset(2 as i32 as isize);
     CrossProduct(
         d2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         d1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -657,38 +625,25 @@ pub unsafe extern "C" fn RotatePointAroundVector(
         m.as_mut_ptr() as *const libc::c_void,
         ::std::mem::size_of::<[[f32; 3]; 3]>() as libc::c_ulong,
     );
-    im[0 as i32 as usize][1 as i32 as usize] =
-        m[1 as i32 as usize][0 as i32 as usize];
-    im[0 as i32 as usize][2 as i32 as usize] =
-        m[2 as i32 as usize][0 as i32 as usize];
-    im[1 as i32 as usize][0 as i32 as usize] =
-        m[0 as i32 as usize][1 as i32 as usize];
-    im[1 as i32 as usize][2 as i32 as usize] =
-        m[2 as i32 as usize][1 as i32 as usize];
-    im[2 as i32 as usize][0 as i32 as usize] =
-        m[0 as i32 as usize][2 as i32 as usize];
-    im[2 as i32 as usize][1 as i32 as usize] =
-        m[1 as i32 as usize][2 as i32 as usize];
+    im[0 as i32 as usize][1 as i32 as usize] = m[1 as i32 as usize][0 as i32 as usize];
+    im[0 as i32 as usize][2 as i32 as usize] = m[2 as i32 as usize][0 as i32 as usize];
+    im[1 as i32 as usize][0 as i32 as usize] = m[0 as i32 as usize][1 as i32 as usize];
+    im[1 as i32 as usize][2 as i32 as usize] = m[2 as i32 as usize][1 as i32 as usize];
+    im[2 as i32 as usize][0 as i32 as usize] = m[0 as i32 as usize][2 as i32 as usize];
+    im[2 as i32 as usize][1 as i32 as usize] = m[1 as i32 as usize][2 as i32 as usize];
     crate::stdlib::memset(
         zrot.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
         ::std::mem::size_of::<[[f32; 3]; 3]>() as libc::c_ulong,
     );
     zrot[2 as i32 as usize][2 as i32 as usize] = 1.0f32;
-    zrot[1 as i32 as usize][1 as i32 as usize] =
-        zrot[2 as i32 as usize][2 as i32 as usize];
-    zrot[0 as i32 as usize][0 as i32 as usize] =
-        zrot[1 as i32 as usize][1 as i32 as usize];
-    rad = (degrees as f64 * 3.14159265358979323846f64 / 180.0f32 as f64)
-        as f32;
-    zrot[0 as i32 as usize][0 as i32 as usize] =
-        crate::stdlib::cos(rad as f64) as f32;
-    zrot[0 as i32 as usize][1 as i32 as usize] =
-        crate::stdlib::sin(rad as f64) as f32;
-    zrot[1 as i32 as usize][0 as i32 as usize] =
-        -crate::stdlib::sin(rad as f64) as f32;
-    zrot[1 as i32 as usize][1 as i32 as usize] =
-        crate::stdlib::cos(rad as f64) as f32;
+    zrot[1 as i32 as usize][1 as i32 as usize] = zrot[2 as i32 as usize][2 as i32 as usize];
+    zrot[0 as i32 as usize][0 as i32 as usize] = zrot[1 as i32 as usize][1 as i32 as usize];
+    rad = (degrees as f64 * 3.14159265358979323846f64 / 180.0f32 as f64) as f32;
+    zrot[0 as i32 as usize][0 as i32 as usize] = crate::stdlib::cos(rad as f64) as f32;
+    zrot[0 as i32 as usize][1 as i32 as usize] = crate::stdlib::sin(rad as f64) as f32;
+    zrot[1 as i32 as usize][0 as i32 as usize] = -crate::stdlib::sin(rad as f64) as f32;
+    zrot[1 as i32 as usize][1 as i32 as usize] = crate::stdlib::cos(rad as f64) as f32;
     MatrixMultiply(m.as_mut_ptr(), zrot.as_mut_ptr(), tmpmat.as_mut_ptr());
     MatrixMultiply(tmpmat.as_mut_ptr(), im.as_mut_ptr(), rot.as_mut_ptr());
     i = 0 as i32;
@@ -720,12 +675,9 @@ pub unsafe extern "C" fn RotateAroundDirection(
     // rotate it around axis[0] by yaw
     if yaw != 0. {
         let mut temp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        temp[0 as i32 as usize] =
-            (*axis.offset(1 as i32 as isize))[0 as i32 as usize];
-        temp[1 as i32 as usize] =
-            (*axis.offset(1 as i32 as isize))[1 as i32 as usize];
-        temp[2 as i32 as usize] =
-            (*axis.offset(1 as i32 as isize))[2 as i32 as usize];
+        temp[0 as i32 as usize] = (*axis.offset(1 as i32 as isize))[0 as i32 as usize];
+        temp[1 as i32 as usize] = (*axis.offset(1 as i32 as isize))[1 as i32 as usize];
+        temp[2 as i32 as usize] = (*axis.offset(1 as i32 as isize))[2 as i32 as usize];
         RotatePointAroundVector(
             (*axis.offset(1 as i32 as isize)).as_mut_ptr(),
             (*axis.offset(0 as i32 as isize)).as_mut_ptr()
@@ -778,13 +730,11 @@ pub unsafe extern "C" fn vectoangles(
         }
         forward = crate::stdlib::sqrt(
             (*value1.offset(0 as i32 as isize) * *value1.offset(0 as i32 as isize)
-                + *value1.offset(1 as i32 as isize)
-                    * *value1.offset(1 as i32 as isize)) as f64,
+                + *value1.offset(1 as i32 as isize) * *value1.offset(1 as i32 as isize))
+                as f64,
         ) as f32;
-        pitch = (crate::stdlib::atan2(
-            *value1.offset(2 as i32 as isize) as f64,
-            forward as f64,
-        ) * 180 as i32 as f64
+        pitch = (crate::stdlib::atan2(*value1.offset(2 as i32 as isize) as f64, forward as f64)
+            * 180 as i32 as f64
             / 3.14159265358979323846f64) as f32;
         if pitch < 0 as i32 as f32 {
             pitch += 360 as i32 as f32
@@ -792,8 +742,7 @@ pub unsafe extern "C" fn vectoangles(
     }
     *angles.offset(0 as i32 as isize) = -pitch;
     *angles.offset(1 as i32 as isize) = yaw;
-    *angles.offset(2 as i32 as isize) =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    *angles.offset(2 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
 }
 /*
 =================
@@ -878,8 +827,7 @@ pub unsafe extern "C" fn ProjectPointOnPlane(
     let mut d: f32 = 0.;
     let mut n: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut inv_denom: f32 = 0.;
-    inv_denom = *normal.offset(0 as i32 as isize)
-        * *normal.offset(0 as i32 as isize)
+    inv_denom = *normal.offset(0 as i32 as isize) * *normal.offset(0 as i32 as isize)
         + *normal.offset(1 as i32 as isize) * *normal.offset(1 as i32 as isize)
         + *normal.offset(2 as i32 as isize) * *normal.offset(2 as i32 as isize);
     // zero vectors get here
@@ -891,12 +839,9 @@ pub unsafe extern "C" fn ProjectPointOnPlane(
     n[0 as i32 as usize] = *normal.offset(0 as i32 as isize) * inv_denom;
     n[1 as i32 as usize] = *normal.offset(1 as i32 as isize) * inv_denom;
     n[2 as i32 as usize] = *normal.offset(2 as i32 as isize) * inv_denom;
-    *dst.offset(0 as i32 as isize) =
-        *p.offset(0 as i32 as isize) - d * n[0 as i32 as usize];
-    *dst.offset(1 as i32 as isize) =
-        *p.offset(1 as i32 as isize) - d * n[1 as i32 as usize];
-    *dst.offset(2 as i32 as isize) =
-        *p.offset(2 as i32 as isize) - d * n[2 as i32 as usize];
+    *dst.offset(0 as i32 as isize) = *p.offset(0 as i32 as isize) - d * n[0 as i32 as usize];
+    *dst.offset(1 as i32 as isize) = *p.offset(1 as i32 as isize) - d * n[1 as i32 as usize];
+    *dst.offset(2 as i32 as isize) = *p.offset(2 as i32 as isize) - d * n[2 as i32 as usize];
 }
 /*
 ================
@@ -944,22 +889,16 @@ pub unsafe extern "C" fn VectorRotate(
 ) {
     *out.offset(0 as i32 as isize) = *in_0.offset(0 as i32 as isize)
         * (*matrix.offset(0 as i32 as isize))[0 as i32 as usize]
-        + *in_0.offset(1 as i32 as isize)
-            * (*matrix.offset(0 as i32 as isize))[1 as i32 as usize]
-        + *in_0.offset(2 as i32 as isize)
-            * (*matrix.offset(0 as i32 as isize))[2 as i32 as usize];
+        + *in_0.offset(1 as i32 as isize) * (*matrix.offset(0 as i32 as isize))[1 as i32 as usize]
+        + *in_0.offset(2 as i32 as isize) * (*matrix.offset(0 as i32 as isize))[2 as i32 as usize];
     *out.offset(1 as i32 as isize) = *in_0.offset(0 as i32 as isize)
         * (*matrix.offset(1 as i32 as isize))[0 as i32 as usize]
-        + *in_0.offset(1 as i32 as isize)
-            * (*matrix.offset(1 as i32 as isize))[1 as i32 as usize]
-        + *in_0.offset(2 as i32 as isize)
-            * (*matrix.offset(1 as i32 as isize))[2 as i32 as usize];
+        + *in_0.offset(1 as i32 as isize) * (*matrix.offset(1 as i32 as isize))[1 as i32 as usize]
+        + *in_0.offset(2 as i32 as isize) * (*matrix.offset(1 as i32 as isize))[2 as i32 as usize];
     *out.offset(2 as i32 as isize) = *in_0.offset(0 as i32 as isize)
         * (*matrix.offset(2 as i32 as isize))[0 as i32 as usize]
-        + *in_0.offset(1 as i32 as isize)
-            * (*matrix.offset(2 as i32 as isize))[1 as i32 as usize]
-        + *in_0.offset(2 as i32 as isize)
-            * (*matrix.offset(2 as i32 as isize))[2 as i32 as usize];
+        + *in_0.offset(1 as i32 as isize) * (*matrix.offset(2 as i32 as isize))[1 as i32 as usize]
+        + *in_0.offset(2 as i32 as isize) * (*matrix.offset(2 as i32 as isize))[2 as i32 as usize];
 }
 //============================================================================
 /*
@@ -999,11 +938,7 @@ LerpAngle
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn LerpAngle(
-    mut from: f32,
-    mut to: f32,
-    mut frac: f32,
-) -> f32 {
+pub unsafe extern "C" fn LerpAngle(mut from: f32, mut to: f32, mut frac: f32) -> f32 {
     let mut a: f32 = 0.;
     if to - from > 180 as i32 as f32 {
         to -= 360 as i32 as f32
@@ -1023,10 +958,7 @@ Always returns a value from -180 to 180
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AngleSubtract(
-    mut a1: f32,
-    mut a2: f32,
-) -> f32 {
+pub unsafe extern "C" fn AngleSubtract(mut a1: f32, mut a2: f32) -> f32 {
     let mut a: f32 = 0.;
     a = a1 - a2;
     while a > 180 as i32 as f32 {
@@ -1044,26 +976,19 @@ pub unsafe extern "C" fn AnglesSubtract(
     mut v2: *mut crate::src::qcommon::q_shared::vec_t,
     mut v3: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
-    *v3.offset(0 as i32 as isize) = AngleSubtract(
-        *v1.offset(0 as i32 as isize),
-        *v2.offset(0 as i32 as isize),
-    );
-    *v3.offset(1 as i32 as isize) = AngleSubtract(
-        *v1.offset(1 as i32 as isize),
-        *v2.offset(1 as i32 as isize),
-    );
-    *v3.offset(2 as i32 as isize) = AngleSubtract(
-        *v1.offset(2 as i32 as isize),
-        *v2.offset(2 as i32 as isize),
-    );
+    *v3.offset(0 as i32 as isize) =
+        AngleSubtract(*v1.offset(0 as i32 as isize), *v2.offset(0 as i32 as isize));
+    *v3.offset(1 as i32 as isize) =
+        AngleSubtract(*v1.offset(1 as i32 as isize), *v2.offset(1 as i32 as isize));
+    *v3.offset(2 as i32 as isize) =
+        AngleSubtract(*v1.offset(2 as i32 as isize), *v2.offset(2 as i32 as isize));
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn AngleMod(mut a: f32) -> f32 {
     a = (360.0f64 / 65536 as i32 as f64
-        * ((a as f64 * (65536 as i32 as f64 / 360.0f64))
-            as i32
-            & 65535 as i32) as f64) as f32;
+        * ((a as f64 * (65536 as i32 as f64 / 360.0f64)) as i32 & 65535 as i32) as f64)
+        as f32;
     return a;
 }
 /*
@@ -1077,9 +1002,8 @@ returns angle normalized to the range [0 <= angle < 360]
 
 pub unsafe extern "C" fn AngleNormalize360(mut angle: f32) -> f32 {
     return (360.0f64 / 65536 as i32 as f64
-        * ((angle as f64 * (65536 as i32 as f64 / 360.0f64))
-            as i32
-            & 65535 as i32) as f64) as f32;
+        * ((angle as f64 * (65536 as i32 as f64 / 360.0f64)) as i32 & 65535 as i32) as f64)
+        as f32;
 }
 /*
 =================
@@ -1106,10 +1030,7 @@ returns the normalized delta from angle1 to angle2
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn AngleDelta(
-    mut angle1: f32,
-    mut angle2: f32,
-) -> f32 {
+pub unsafe extern "C" fn AngleDelta(mut angle1: f32, mut angle2: f32) -> f32 {
     return AngleNormalize180(angle1 - angle2);
 }
 //============================================================
@@ -1171,8 +1092,7 @@ pub unsafe extern "C" fn BoxOnPlaneSide(
         while i < 3 as i32 {
             b = (*p).signbits as i32 >> i & 1 as i32;
             dist[b as usize] += (*p).normal[i as usize] * *emaxs.offset(i as isize);
-            dist[(b == 0) as i32 as usize] +=
-                (*p).normal[i as usize] * *emins.offset(i as isize);
+            dist[(b == 0) as i32 as usize] += (*p).normal[i as usize] * *emins.offset(i as isize);
             i += 1
         }
     }
@@ -1280,16 +1200,11 @@ pub unsafe extern "C" fn BoundsIntersectSphere(
     mut radius: crate::src::qcommon::q_shared::vec_t,
 ) -> crate::src::qcommon::q_shared::qboolean {
     if *origin.offset(0 as i32 as isize) - radius > *maxs.offset(0 as i32 as isize)
-        || *origin.offset(0 as i32 as isize) + radius
-            < *mins.offset(0 as i32 as isize)
-        || *origin.offset(1 as i32 as isize) - radius
-            > *maxs.offset(1 as i32 as isize)
-        || *origin.offset(1 as i32 as isize) + radius
-            < *mins.offset(1 as i32 as isize)
-        || *origin.offset(2 as i32 as isize) - radius
-            > *maxs.offset(2 as i32 as isize)
-        || *origin.offset(2 as i32 as isize) + radius
-            < *mins.offset(2 as i32 as isize)
+        || *origin.offset(0 as i32 as isize) + radius < *mins.offset(0 as i32 as isize)
+        || *origin.offset(1 as i32 as isize) - radius > *maxs.offset(1 as i32 as isize)
+        || *origin.offset(1 as i32 as isize) + radius < *mins.offset(1 as i32 as isize)
+        || *origin.offset(2 as i32 as isize) - radius > *maxs.offset(2 as i32 as isize)
+        || *origin.offset(2 as i32 as isize) + radius < *mins.offset(2 as i32 as isize)
     {
         return crate::src::qcommon::q_shared::qfalse;
     }
@@ -1326,8 +1241,7 @@ pub unsafe extern "C" fn VectorNormalize(
         + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize);
     if length != 0. {
         /* writing it this way allows gcc to recognize that rsqrt can be used */
-        ilength = 1 as i32 as f32
-            / crate::stdlib::sqrt(length as f64) as f32;
+        ilength = 1 as i32 as f32 / crate::stdlib::sqrt(length as f64) as f32;
         /* sqrt(length) = length * (1 / sqrt(length)) */
         length *= ilength;
         let ref mut fresh6 = *v.offset(0 as i32 as isize);
@@ -1352,8 +1266,7 @@ pub unsafe extern "C" fn VectorNormalize2(
         + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize);
     if length != 0. {
         /* writing it this way allows gcc to recognize that rsqrt can be used */
-        ilength = 1 as i32 as f32
-            / crate::stdlib::sqrt(length as f64) as f32;
+        ilength = 1 as i32 as f32 / crate::stdlib::sqrt(length as f64) as f32;
         /* sqrt(length) = length * (1 / sqrt(length)) */
         length *= ilength;
         *out.offset(0 as i32 as isize) = *v.offset(0 as i32 as isize) * ilength;
@@ -1497,64 +1410,64 @@ pub unsafe extern "C" fn MatrixMultiply(
     mut in2: *mut [f32; 3],
     mut out: *mut [f32; 3],
 ) {
-    (*out.offset(0 as i32 as isize))[0 as i32 as usize] = (*in1
-        .offset(0 as i32 as isize))[0 as i32 as usize]
+    (*out.offset(0 as i32 as isize))[0 as i32 as usize] = (*in1.offset(0 as i32 as isize))
+        [0 as i32 as usize]
         * (*in2.offset(0 as i32 as isize))[0 as i32 as usize]
         + (*in1.offset(0 as i32 as isize))[1 as i32 as usize]
             * (*in2.offset(1 as i32 as isize))[0 as i32 as usize]
         + (*in1.offset(0 as i32 as isize))[2 as i32 as usize]
             * (*in2.offset(2 as i32 as isize))[0 as i32 as usize];
-    (*out.offset(0 as i32 as isize))[1 as i32 as usize] = (*in1
-        .offset(0 as i32 as isize))[0 as i32 as usize]
+    (*out.offset(0 as i32 as isize))[1 as i32 as usize] = (*in1.offset(0 as i32 as isize))
+        [0 as i32 as usize]
         * (*in2.offset(0 as i32 as isize))[1 as i32 as usize]
         + (*in1.offset(0 as i32 as isize))[1 as i32 as usize]
             * (*in2.offset(1 as i32 as isize))[1 as i32 as usize]
         + (*in1.offset(0 as i32 as isize))[2 as i32 as usize]
             * (*in2.offset(2 as i32 as isize))[1 as i32 as usize];
-    (*out.offset(0 as i32 as isize))[2 as i32 as usize] = (*in1
-        .offset(0 as i32 as isize))[0 as i32 as usize]
+    (*out.offset(0 as i32 as isize))[2 as i32 as usize] = (*in1.offset(0 as i32 as isize))
+        [0 as i32 as usize]
         * (*in2.offset(0 as i32 as isize))[2 as i32 as usize]
         + (*in1.offset(0 as i32 as isize))[1 as i32 as usize]
             * (*in2.offset(1 as i32 as isize))[2 as i32 as usize]
         + (*in1.offset(0 as i32 as isize))[2 as i32 as usize]
             * (*in2.offset(2 as i32 as isize))[2 as i32 as usize];
-    (*out.offset(1 as i32 as isize))[0 as i32 as usize] = (*in1
-        .offset(1 as i32 as isize))[0 as i32 as usize]
+    (*out.offset(1 as i32 as isize))[0 as i32 as usize] = (*in1.offset(1 as i32 as isize))
+        [0 as i32 as usize]
         * (*in2.offset(0 as i32 as isize))[0 as i32 as usize]
         + (*in1.offset(1 as i32 as isize))[1 as i32 as usize]
             * (*in2.offset(1 as i32 as isize))[0 as i32 as usize]
         + (*in1.offset(1 as i32 as isize))[2 as i32 as usize]
             * (*in2.offset(2 as i32 as isize))[0 as i32 as usize];
-    (*out.offset(1 as i32 as isize))[1 as i32 as usize] = (*in1
-        .offset(1 as i32 as isize))[0 as i32 as usize]
+    (*out.offset(1 as i32 as isize))[1 as i32 as usize] = (*in1.offset(1 as i32 as isize))
+        [0 as i32 as usize]
         * (*in2.offset(0 as i32 as isize))[1 as i32 as usize]
         + (*in1.offset(1 as i32 as isize))[1 as i32 as usize]
             * (*in2.offset(1 as i32 as isize))[1 as i32 as usize]
         + (*in1.offset(1 as i32 as isize))[2 as i32 as usize]
             * (*in2.offset(2 as i32 as isize))[1 as i32 as usize];
-    (*out.offset(1 as i32 as isize))[2 as i32 as usize] = (*in1
-        .offset(1 as i32 as isize))[0 as i32 as usize]
+    (*out.offset(1 as i32 as isize))[2 as i32 as usize] = (*in1.offset(1 as i32 as isize))
+        [0 as i32 as usize]
         * (*in2.offset(0 as i32 as isize))[2 as i32 as usize]
         + (*in1.offset(1 as i32 as isize))[1 as i32 as usize]
             * (*in2.offset(1 as i32 as isize))[2 as i32 as usize]
         + (*in1.offset(1 as i32 as isize))[2 as i32 as usize]
             * (*in2.offset(2 as i32 as isize))[2 as i32 as usize];
-    (*out.offset(2 as i32 as isize))[0 as i32 as usize] = (*in1
-        .offset(2 as i32 as isize))[0 as i32 as usize]
+    (*out.offset(2 as i32 as isize))[0 as i32 as usize] = (*in1.offset(2 as i32 as isize))
+        [0 as i32 as usize]
         * (*in2.offset(0 as i32 as isize))[0 as i32 as usize]
         + (*in1.offset(2 as i32 as isize))[1 as i32 as usize]
             * (*in2.offset(1 as i32 as isize))[0 as i32 as usize]
         + (*in1.offset(2 as i32 as isize))[2 as i32 as usize]
             * (*in2.offset(2 as i32 as isize))[0 as i32 as usize];
-    (*out.offset(2 as i32 as isize))[1 as i32 as usize] = (*in1
-        .offset(2 as i32 as isize))[0 as i32 as usize]
+    (*out.offset(2 as i32 as isize))[1 as i32 as usize] = (*in1.offset(2 as i32 as isize))
+        [0 as i32 as usize]
         * (*in2.offset(0 as i32 as isize))[1 as i32 as usize]
         + (*in1.offset(2 as i32 as isize))[1 as i32 as usize]
             * (*in2.offset(1 as i32 as isize))[1 as i32 as usize]
         + (*in1.offset(2 as i32 as isize))[2 as i32 as usize]
             * (*in2.offset(2 as i32 as isize))[1 as i32 as usize];
-    (*out.offset(2 as i32 as isize))[2 as i32 as usize] = (*in1
-        .offset(2 as i32 as isize))[0 as i32 as usize]
+    (*out.offset(2 as i32 as isize))[2 as i32 as usize] = (*in1.offset(2 as i32 as isize))
+        [0 as i32 as usize]
         * (*in2.offset(0 as i32 as isize))[2 as i32 as usize]
         + (*in1.offset(2 as i32 as isize))[1 as i32 as usize]
             * (*in2.offset(1 as i32 as isize))[2 as i32 as usize]
@@ -1578,18 +1491,15 @@ pub unsafe extern "C" fn AngleVectors(
     static mut cy: f32 = 0.;
     // static to help MS compiler fp bugs
     angle = (*angles.offset(1 as i32 as isize) as f64
-        * (3.14159265358979323846f64 * 2 as i32 as f64
-            / 360 as i32 as f64)) as f32;
+        * (3.14159265358979323846f64 * 2 as i32 as f64 / 360 as i32 as f64)) as f32;
     sy = crate::stdlib::sin(angle as f64) as f32;
     cy = crate::stdlib::cos(angle as f64) as f32;
     angle = (*angles.offset(0 as i32 as isize) as f64
-        * (3.14159265358979323846f64 * 2 as i32 as f64
-            / 360 as i32 as f64)) as f32;
+        * (3.14159265358979323846f64 * 2 as i32 as f64 / 360 as i32 as f64)) as f32;
     sp = crate::stdlib::sin(angle as f64) as f32;
     cp = crate::stdlib::cos(angle as f64) as f32;
     angle = (*angles.offset(2 as i32 as isize) as f64
-        * (3.14159265358979323846f64 * 2 as i32 as f64
-            / 360 as i32 as f64)) as f32;
+        * (3.14159265358979323846f64 * 2 as i32 as f64 / 360 as i32 as f64)) as f32;
     sr = crate::stdlib::sin(angle as f64) as f32;
     cr = crate::stdlib::cos(angle as f64) as f32;
     if !forward.is_null() {
@@ -1599,11 +1509,9 @@ pub unsafe extern "C" fn AngleVectors(
     }
     if !right.is_null() {
         *right.offset(0 as i32 as isize) =
-            -(1 as i32) as f32 * sr * sp * cy
-                + -(1 as i32) as f32 * cr * -sy;
+            -(1 as i32) as f32 * sr * sp * cy + -(1 as i32) as f32 * cr * -sy;
         *right.offset(1 as i32 as isize) =
-            -(1 as i32) as f32 * sr * sp * sy
-                + -(1 as i32) as f32 * cr * cy;
+            -(1 as i32) as f32 * sr * sp * sy + -(1 as i32) as f32 * cr * cy;
         *right.offset(2 as i32 as isize) = -(1 as i32) as f32 * sr * cp
     }
     if !up.is_null() {
@@ -1633,12 +1541,9 @@ pub unsafe extern "C" fn PerpendicularVector(
     pos = 0 as i32;
     i = 0 as i32;
     while i < 3 as i32 {
-        if crate::stdlib::fabs(*src.offset(i as isize) as f64)
-            < minelem as f64
-        {
+        if crate::stdlib::fabs(*src.offset(i as isize) as f64) < minelem as f64 {
             pos = i;
-            minelem =
-                crate::stdlib::fabs(*src.offset(i as isize) as f64) as f32
+            minelem = crate::stdlib::fabs(*src.offset(i as isize) as f64) as f32
         }
         i += 1
     }

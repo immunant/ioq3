@@ -2158,43 +2158,35 @@ pub unsafe extern "C" fn crc32(
     while len >= 8 as i32 as u32 {
         let fresh0 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as i32 as usize]
-            [((crc as i32 ^ *fresh0 as i32) & 0xff as i32) as usize]
+        crc = crc_table[0 as i32 as usize][((crc as i32 ^ *fresh0 as i32) & 0xff as i32) as usize]
             ^ crc >> 8 as i32;
         let fresh1 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as i32 as usize]
-            [((crc as i32 ^ *fresh1 as i32) & 0xff as i32) as usize]
+        crc = crc_table[0 as i32 as usize][((crc as i32 ^ *fresh1 as i32) & 0xff as i32) as usize]
             ^ crc >> 8 as i32;
         let fresh2 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as i32 as usize]
-            [((crc as i32 ^ *fresh2 as i32) & 0xff as i32) as usize]
+        crc = crc_table[0 as i32 as usize][((crc as i32 ^ *fresh2 as i32) & 0xff as i32) as usize]
             ^ crc >> 8 as i32;
         let fresh3 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as i32 as usize]
-            [((crc as i32 ^ *fresh3 as i32) & 0xff as i32) as usize]
+        crc = crc_table[0 as i32 as usize][((crc as i32 ^ *fresh3 as i32) & 0xff as i32) as usize]
             ^ crc >> 8 as i32;
         let fresh4 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as i32 as usize]
-            [((crc as i32 ^ *fresh4 as i32) & 0xff as i32) as usize]
+        crc = crc_table[0 as i32 as usize][((crc as i32 ^ *fresh4 as i32) & 0xff as i32) as usize]
             ^ crc >> 8 as i32;
         let fresh5 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as i32 as usize]
-            [((crc as i32 ^ *fresh5 as i32) & 0xff as i32) as usize]
+        crc = crc_table[0 as i32 as usize][((crc as i32 ^ *fresh5 as i32) & 0xff as i32) as usize]
             ^ crc >> 8 as i32;
         let fresh6 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as i32 as usize]
-            [((crc as i32 ^ *fresh6 as i32) & 0xff as i32) as usize]
+        crc = crc_table[0 as i32 as usize][((crc as i32 ^ *fresh6 as i32) & 0xff as i32) as usize]
             ^ crc >> 8 as i32;
         let fresh7 = buf;
         buf = buf.offset(1);
-        crc = crc_table[0 as i32 as usize]
-            [((crc as i32 ^ *fresh7 as i32) & 0xff as i32) as usize]
+        crc = crc_table[0 as i32 as usize][((crc as i32 ^ *fresh7 as i32) & 0xff as i32) as usize]
             ^ crc >> 8 as i32;
         len = len.wrapping_sub(8 as i32 as u32)
     }
@@ -2231,8 +2223,7 @@ unsafe extern "C" fn crc32_little(
     while len != 0 && buf as crate::stddef_h::ptrdiff_t & 3 as i32 as libc::c_long != 0 {
         let fresh9 = buf;
         buf = buf.offset(1);
-        c = (crc_table[0 as i32 as usize]
-            [((c ^ *fresh9 as u32) & 0xff as i32 as u32) as usize]
+        c = (crc_table[0 as i32 as usize][((c ^ *fresh9 as u32) & 0xff as i32 as u32) as usize]
             ^ (c >> 8 as i32) as libc::c_ulong) as u4;
         len = len.wrapping_sub(1)
     }
@@ -2241,105 +2232,69 @@ unsafe extern "C" fn crc32_little(
         let fresh10 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh10;
-        c = (crc_table[3 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[2 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[1 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[3 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         let fresh11 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh11;
-        c = (crc_table[3 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[2 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[1 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[3 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         let fresh12 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh12;
-        c = (crc_table[3 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[2 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[1 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[3 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         let fresh13 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh13;
-        c = (crc_table[3 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[2 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[1 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[3 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         let fresh14 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh14;
-        c = (crc_table[3 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[2 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[1 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[3 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         let fresh15 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh15;
-        c = (crc_table[3 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[2 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[1 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[3 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         let fresh16 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh16;
-        c = (crc_table[3 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[2 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[1 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[3 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         let fresh17 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh17;
-        c = (crc_table[3 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[2 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[1 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[3 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         len = len.wrapping_sub(32 as i32 as u32)
     }
     while len >= 4 as i32 as u32 {
         let fresh18 = buf4;
         buf4 = buf4.offset(1);
         c ^= *fresh18;
-        c = (crc_table[3 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[2 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[1 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[3 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[2 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[1 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[0 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         len = len.wrapping_sub(4 as i32 as u32)
     }
     buf = buf4 as *const u8;
@@ -2377,8 +2332,7 @@ unsafe extern "C" fn crc32_big(
     while len != 0 && buf as crate::stddef_h::ptrdiff_t & 3 as i32 as libc::c_long != 0 {
         let fresh20 = buf;
         buf = buf.offset(1);
-        c = (crc_table[4 as i32 as usize]
-            [(c >> 24 as i32 ^ *fresh20 as u32) as usize]
+        c = (crc_table[4 as i32 as usize][(c >> 24 as i32 ^ *fresh20 as u32) as usize]
             ^ (c << 8 as i32) as libc::c_ulong) as u4;
         len = len.wrapping_sub(1)
     }
@@ -2387,97 +2341,61 @@ unsafe extern "C" fn crc32_big(
     while len >= 32 as i32 as u32 {
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[5 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[6 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[4 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[5 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[6 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[4 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[5 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[6 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[4 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[5 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[6 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[4 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[5 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[6 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[4 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[5 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[6 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[4 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[5 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[6 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[4 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[5 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[6 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[4 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         len = len.wrapping_sub(32 as i32 as u32)
     }
     while len >= 4 as i32 as u32 {
         buf4 = buf4.offset(1);
         c ^= *buf4;
-        c = (crc_table[4 as i32 as usize]
-            [(c & 0xff as i32 as u32) as usize]
-            ^ crc_table[5 as i32 as usize]
-                [(c >> 8 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[6 as i32 as usize]
-                [(c >> 16 as i32 & 0xff as i32 as u32) as usize]
-            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize])
-            as u4;
+        c = (crc_table[4 as i32 as usize][(c & 0xff as i32 as u32) as usize]
+            ^ crc_table[5 as i32 as usize][(c >> 8 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[6 as i32 as usize][(c >> 16 as i32 & 0xff as i32 as u32) as usize]
+            ^ crc_table[7 as i32 as usize][(c >> 24 as i32) as usize]) as u4;
         len = len.wrapping_sub(4 as i32 as u32)
     }
     buf4 = buf4.offset(1);
@@ -2486,8 +2404,7 @@ unsafe extern "C" fn crc32_big(
         loop {
             let fresh21 = buf;
             buf = buf.offset(1);
-            c = (crc_table[4 as i32 as usize]
-                [(c >> 24 as i32 ^ *fresh21 as u32) as usize]
+            c = (crc_table[4 as i32 as usize][(c >> 24 as i32 ^ *fresh21 as u32) as usize]
                 ^ (c << 8 as i32) as libc::c_ulong) as u4;
             len = len.wrapping_sub(1);
             if !(len != 0) {
@@ -2499,8 +2416,7 @@ unsafe extern "C" fn crc32_big(
     return (c >> 24 as i32)
         .wrapping_add(c >> 8 as i32 & 0xff00 as i32 as u32)
         .wrapping_add((c & 0xff00 as i32 as u32) << 8 as i32)
-        .wrapping_add((c & 0xff as i32 as u32) << 24 as i32)
-        as libc::c_ulong;
+        .wrapping_add((c & 0xff as i32 as u32) << 24 as i32) as libc::c_ulong;
 }
 /* BYFOUR */
 /* Local functions for crc concatenation */

@@ -490,8 +490,7 @@ unsafe extern "C" fn Main_MenuDraw() {
     refdef.time = crate::src::q3_ui::ui_atoms::uis.realtime;
     origin[0 as i32 as usize] = 300 as i32 as crate::src::qcommon::q_shared::vec_t;
     origin[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    origin[2 as i32 as usize] =
-        -(32 as i32) as crate::src::qcommon::q_shared::vec_t;
+    origin[2 as i32 as usize] = -(32 as i32) as crate::src::qcommon::q_shared::vec_t;
     crate::src::ui::ui_syscalls::trap_R_ClearScene();
     // add the model
     crate::stdlib::memset(
@@ -501,8 +500,7 @@ unsafe extern "C" fn Main_MenuDraw() {
     );
     adjust = (5.0f64
         * crate::stdlib::sin(
-            (crate::src::q3_ui::ui_atoms::uis.realtime as f32
-                / 5000 as i32 as f32) as f64,
+            (crate::src::q3_ui::ui_atoms::uis.realtime as f32 / 5000 as i32 as f32) as f64,
         )) as f32;
     angles[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     angles[1 as i32 as usize] = 180 as i32 as f32 + adjust;
@@ -593,8 +591,7 @@ unsafe extern "C" fn UI_TeamArenaExists() -> crate::src::qcommon::q_shared::qboo
     dirptr = dirlist.as_mut_ptr();
     i = 0 as i32;
     while i < numdirs {
-        dirlen = crate::stdlib::strlen(dirptr).wrapping_add(1 as i32 as libc::c_ulong)
-            as i32;
+        dirlen = crate::stdlib::strlen(dirptr).wrapping_add(1 as i32 as libc::c_ulong) as i32;
         descptr = dirptr.offset(dirlen as isize);
         if crate::src::qcommon::q_shared::Q_stricmp(
             dirptr,
@@ -713,10 +710,7 @@ pub unsafe extern "C" fn UI_MainMenu() {
         s_errorMessage.menu.draw = Some(Main_MenuDraw as unsafe extern "C" fn() -> ());
         s_errorMessage.menu.key = Some(
             ErrorMessage_Key
-                as unsafe extern "C" fn(
-                    _: i32,
-                )
-                    -> crate::src::qcommon::q_shared::sfxHandle_t,
+                as unsafe extern "C" fn(_: i32) -> crate::src::qcommon::q_shared::sfxHandle_t,
         );
         s_errorMessage.menu.fullscreen = crate::src::qcommon::q_shared::qtrue;
         s_errorMessage.menu.wrapAround = crate::src::qcommon::q_shared::qtrue;
@@ -734,8 +728,7 @@ pub unsafe extern "C" fn UI_MainMenu() {
     s_main.menu.showlogo = crate::src::qcommon::q_shared::qtrue;
     y = 134 as i32;
     s_main.singleplayer.generic.type_0 = 9 as i32;
-    s_main.singleplayer.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_main.singleplayer.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_main.singleplayer.generic.x = 320 as i32;
     s_main.singleplayer.generic.y = y;
     s_main.singleplayer.generic.id = 10 as i32;
@@ -747,8 +740,7 @@ pub unsafe extern "C" fn UI_MainMenu() {
     s_main.singleplayer.style = style;
     y += 34 as i32;
     s_main.multiplayer.generic.type_0 = 9 as i32;
-    s_main.multiplayer.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_main.multiplayer.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_main.multiplayer.generic.x = 320 as i32;
     s_main.multiplayer.generic.y = y;
     s_main.multiplayer.generic.id = 11 as i32;
@@ -760,8 +752,7 @@ pub unsafe extern "C" fn UI_MainMenu() {
     s_main.multiplayer.style = style;
     y += 34 as i32;
     s_main.setup.generic.type_0 = 9 as i32;
-    s_main.setup.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_main.setup.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_main.setup.generic.x = 320 as i32;
     s_main.setup.generic.y = y;
     s_main.setup.generic.id = 12 as i32;
@@ -772,8 +763,7 @@ pub unsafe extern "C" fn UI_MainMenu() {
     s_main.setup.style = style;
     y += 34 as i32;
     s_main.demos.generic.type_0 = 9 as i32;
-    s_main.demos.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_main.demos.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_main.demos.generic.x = 320 as i32;
     s_main.demos.generic.y = y;
     s_main.demos.generic.id = 13 as i32;
@@ -784,8 +774,7 @@ pub unsafe extern "C" fn UI_MainMenu() {
     s_main.demos.style = style;
     y += 34 as i32;
     s_main.cinematics.generic.type_0 = 9 as i32;
-    s_main.cinematics.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_main.cinematics.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_main.cinematics.generic.x = 320 as i32;
     s_main.cinematics.generic.y = y;
     s_main.cinematics.generic.id = 14 as i32;
@@ -795,20 +784,17 @@ pub unsafe extern "C" fn UI_MainMenu() {
         b"CINEMATICS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_main.cinematics.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     s_main.cinematics.style = style;
-    if crate::src::q3_ui::ui_atoms::uis.demoversion as u64 == 0
-        && UI_TeamArenaExists() as u32 != 0
+    if crate::src::q3_ui::ui_atoms::uis.demoversion as u64 == 0 && UI_TeamArenaExists() as u32 != 0
     {
         teamArena = crate::src::qcommon::q_shared::qtrue;
         y += 34 as i32;
         s_main.teamArena.generic.type_0 = 9 as i32;
-        s_main.teamArena.generic.flags =
-            0x8 as i32 as u32 | 0x100 as i32 as u32;
+        s_main.teamArena.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
         s_main.teamArena.generic.x = 320 as i32;
         s_main.teamArena.generic.y = y;
         s_main.teamArena.generic.id = 15 as i32;
-        s_main.teamArena.generic.callback = Some(
-            Main_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-        );
+        s_main.teamArena.generic.callback =
+            Some(Main_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
         s_main.teamArena.string =
             b"TEAM ARENA\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
         s_main.teamArena.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
@@ -817,22 +803,19 @@ pub unsafe extern "C" fn UI_MainMenu() {
     if crate::src::q3_ui::ui_atoms::uis.demoversion as u64 == 0 {
         y += 34 as i32;
         s_main.mods.generic.type_0 = 9 as i32;
-        s_main.mods.generic.flags =
-            0x8 as i32 as u32 | 0x100 as i32 as u32;
+        s_main.mods.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
         s_main.mods.generic.x = 320 as i32;
         s_main.mods.generic.y = y;
         s_main.mods.generic.id = 16 as i32;
-        s_main.mods.generic.callback = Some(
-            Main_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-        );
+        s_main.mods.generic.callback =
+            Some(Main_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
         s_main.mods.string = b"MODS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
         s_main.mods.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
         s_main.mods.style = style
     }
     y += 34 as i32;
     s_main.exit.generic.type_0 = 9 as i32;
-    s_main.exit.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_main.exit.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_main.exit.generic.x = 320 as i32;
     s_main.exit.generic.y = y;
     s_main.exit.generic.id = 17 as i32;

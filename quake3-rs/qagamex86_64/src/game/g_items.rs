@@ -319,14 +319,11 @@ pub unsafe extern "C" fn Pickup_Powerup(
                             == (*client).sess.sessionTeam as u32)
                     {
                         // if too far away, no sound
-                        delta[0 as i32 as usize] = (*ent).s.pos.trBase
-                            [0 as i32 as usize]
+                        delta[0 as i32 as usize] = (*ent).s.pos.trBase[0 as i32 as usize]
                             - (*client).ps.origin[0 as i32 as usize];
-                        delta[1 as i32 as usize] = (*ent).s.pos.trBase
-                            [1 as i32 as usize]
+                        delta[1 as i32 as usize] = (*ent).s.pos.trBase[1 as i32 as usize]
                             - (*client).ps.origin[1 as i32 as usize];
-                        delta[2 as i32 as usize] = (*ent).s.pos.trBase
-                            [2 as i32 as usize]
+                        delta[2 as i32 as usize] = (*ent).s.pos.trBase[2 as i32 as usize]
                             - (*client).ps.origin[2 as i32 as usize];
                         len = crate::src::qcommon::q_math::VectorNormalize(delta.as_mut_ptr());
                         if !(len > 192 as i32 as f32) {
@@ -338,12 +335,9 @@ pub unsafe extern "C" fn Pickup_Powerup(
                                 0 as *mut crate::src::qcommon::q_shared::vec_t,
                                 0 as *mut crate::src::qcommon::q_shared::vec_t,
                             );
-                            if !(((delta[0 as i32 as usize]
-                                * forward[0 as i32 as usize]
-                                + delta[1 as i32 as usize]
-                                    * forward[1 as i32 as usize]
-                                + delta[2 as i32 as usize]
-                                    * forward[2 as i32 as usize])
+                            if !(((delta[0 as i32 as usize] * forward[0 as i32 as usize]
+                                + delta[1 as i32 as usize] * forward[1 as i32 as usize]
+                                + delta[2 as i32 as usize] * forward[2 as i32 as usize])
                                 as f64)
                                 < 0.4f64)
                             {
@@ -362,9 +356,9 @@ pub unsafe extern "C" fn Pickup_Powerup(
                                 );
                                 if !(tr.fraction as f64 != 1.0f64) {
                                     // anti-reward
-                                    (*client).ps.persistant[crate::bg_public_h::PERS_PLAYEREVENTS
-                                        as i32
-                                        as usize] ^= 0x1 as i32
+                                    (*client).ps.persistant
+                                        [crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize] ^=
+                                        0x1 as i32
                                 }
                             }
                         }
@@ -383,11 +377,11 @@ pub unsafe extern "C" fn Pickup_Holdable(
     mut ent: *mut crate::g_local_h::gentity_t,
     mut other: *mut crate::g_local_h::gentity_t,
 ) -> i32 {
-    (*(*other).client).ps.stats[crate::bg_public_h::STAT_HOLDABLE_ITEM as i32 as usize] =
-        (*ent)
-            .item
-            .offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
-            as libc::c_long as i32;
+    (*(*other).client).ps.stats[crate::bg_public_h::STAT_HOLDABLE_ITEM as i32 as usize] = (*ent)
+        .item
+        .offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
+        as libc::c_long
+        as i32;
     if (*(*ent).item).giTag == crate::bg_public_h::HI_KAMIKAZE as i32 {
         (*(*other).client).ps.eFlags |= 0x200 as i32
     }
@@ -440,8 +434,7 @@ pub unsafe extern "C" fn Pickup_Weapon(
         }
         // dropped items and teamplay weapons always have full ammo
         if (*ent).flags & 0x1000 as i32 == 0
-            && crate::src::game::g_main::g_gametype.integer
-                != crate::bg_public_h::GT_TEAM as i32
+            && crate::src::game::g_main::g_gametype.integer != crate::bg_public_h::GT_TEAM as i32
         {
             // respawning rules
             // drop the quantity if the already have over the minimum
@@ -476,13 +469,10 @@ pub unsafe extern "C" fn Pickup_Health(
     let mut max: i32 = 0;
     let mut quantity: i32 = 0;
     // small and mega healths will go over the max
-    if (*(*ent).item).quantity != 5 as i32 && (*(*ent).item).quantity != 100 as i32
-    {
-        max =
-            (*(*other).client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
+    if (*(*ent).item).quantity != 5 as i32 && (*(*ent).item).quantity != 100 as i32 {
+        max = (*(*other).client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
     } else {
-        max = (*(*other).client).ps.stats
-            [crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
+        max = (*(*other).client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
             * 2 as i32
     }
     if (*ent).count != 0 {
@@ -494,8 +484,7 @@ pub unsafe extern "C" fn Pickup_Health(
     if (*other).health > max {
         (*other).health = max
     }
-    (*(*other).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] =
-        (*other).health;
+    (*(*other).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] = (*other).health;
     if (*(*ent).item).quantity == 100 as i32 {
         // mega health respawns slow
         return 35 as i32;
@@ -565,9 +554,7 @@ pub unsafe extern "C" fn RespawnItem(mut ent: *mut crate::g_local_h::gentity_t) 
     (*ent).s.eFlags &= !(0x80 as i32);
     (*ent).r.svFlags &= !(0x1 as i32);
     crate::src::game::g_syscalls::trap_LinkEntity(ent as *mut crate::g_local_h::gentity_s);
-    if (*(*ent).item).giType as u32
-        == crate::bg_public_h::IT_POWERUP as i32 as u32
-    {
+    if (*(*ent).item).giType as u32 == crate::bg_public_h::IT_POWERUP as i32 as u32 {
         // play powerup spawn sound to all clients
         let mut te: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
         // if the powerup respawn sound should Not be global
@@ -588,8 +575,7 @@ pub unsafe extern "C" fn RespawnItem(mut ent: *mut crate::g_local_h::gentity_t) 
         );
         (*te).r.svFlags |= 0x20 as i32
     }
-    if (*(*ent).item).giType as u32
-        == crate::bg_public_h::IT_HOLDABLE as i32 as u32
+    if (*(*ent).item).giType as u32 == crate::bg_public_h::IT_HOLDABLE as i32 as u32
         && (*(*ent).item).giTag == crate::bg_public_h::HI_KAMIKAZE as i32
     {
         // play powerup spawn sound to all clients
@@ -694,10 +680,8 @@ pub unsafe extern "C" fn Touch_Item(
         );
     }
     // powerup pickups are global broadcasts
-    if (*(*ent).item).giType as u32
-        == crate::bg_public_h::IT_POWERUP as i32 as u32
-        || (*(*ent).item).giType as u32
-            == crate::bg_public_h::IT_TEAM as i32 as u32
+    if (*(*ent).item).giType as u32 == crate::bg_public_h::IT_POWERUP as i32 as u32
+        || (*(*ent).item).giType as u32 == crate::bg_public_h::IT_TEAM as i32 as u32
     {
         // if we want the global sound to play
         if (*ent).speed == 0. {
@@ -741,8 +725,7 @@ pub unsafe extern "C" fn Touch_Item(
     if (*ent).random != 0. {
         respawn = (respawn as f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32) as f64
+                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)
                 * (*ent).random as f64) as i32;
         if respawn < 1 as i32 {
@@ -796,18 +779,12 @@ pub unsafe extern "C" fn LaunchItem(
     (*dropped).s.modelindex2 = 1 as i32;
     (*dropped).classname = (*item).classname;
     (*dropped).item = item;
-    (*dropped).r.mins[0 as i32 as usize] =
-        -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*dropped).r.mins[1 as i32 as usize] =
-        -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*dropped).r.mins[2 as i32 as usize] =
-        -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*dropped).r.maxs[0 as i32 as usize] =
-        15 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*dropped).r.maxs[1 as i32 as usize] =
-        15 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*dropped).r.maxs[2 as i32 as usize] =
-        15 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*dropped).r.mins[0 as i32 as usize] = -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*dropped).r.mins[1 as i32 as usize] = -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*dropped).r.mins[2 as i32 as usize] = -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*dropped).r.maxs[0 as i32 as usize] = 15 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*dropped).r.maxs[1 as i32 as usize] = 15 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*dropped).r.maxs[2 as i32 as usize] = 15 as i32 as crate::src::qcommon::q_shared::vec_t;
     (*dropped).r.contents = 0x40000000 as i32;
     (*dropped).touch = Some(
         Touch_Item
@@ -820,16 +797,12 @@ pub unsafe extern "C" fn LaunchItem(
     crate::src::game::g_utils::G_SetOrigin(dropped as *mut crate::g_local_h::gentity_s, origin);
     (*dropped).s.pos.trType = crate::src::qcommon::q_shared::TR_GRAVITY;
     (*dropped).s.pos.trTime = crate::src::game::g_main::level.time;
-    (*dropped).s.pos.trDelta[0 as i32 as usize] =
-        *velocity.offset(0 as i32 as isize);
-    (*dropped).s.pos.trDelta[1 as i32 as usize] =
-        *velocity.offset(1 as i32 as isize);
-    (*dropped).s.pos.trDelta[2 as i32 as usize] =
-        *velocity.offset(2 as i32 as isize);
+    (*dropped).s.pos.trDelta[0 as i32 as usize] = *velocity.offset(0 as i32 as isize);
+    (*dropped).s.pos.trDelta[1 as i32 as usize] = *velocity.offset(1 as i32 as isize);
+    (*dropped).s.pos.trDelta[2 as i32 as usize] = *velocity.offset(2 as i32 as isize);
     (*dropped).s.eFlags |= 0x20 as i32;
     if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_CTF as i32
-        && (*item).giType as u32
-            == crate::bg_public_h::IT_TEAM as i32 as u32
+        && (*item).giType as u32 == crate::bg_public_h::IT_TEAM as i32 as u32
     {
         // Special case for CTF flags
         (*dropped).think = Some(
@@ -878,18 +851,13 @@ pub unsafe extern "C" fn Drop_Item(
         0 as *mut crate::src::qcommon::q_shared::vec_t,
         0 as *mut crate::src::qcommon::q_shared::vec_t,
     );
-    velocity[0 as i32 as usize] =
-        velocity[0 as i32 as usize] * 150 as i32 as f32;
-    velocity[1 as i32 as usize] =
-        velocity[1 as i32 as usize] * 150 as i32 as f32;
-    velocity[2 as i32 as usize] =
-        velocity[2 as i32 as usize] * 150 as i32 as f32;
+    velocity[0 as i32 as usize] = velocity[0 as i32 as usize] * 150 as i32 as f32;
+    velocity[1 as i32 as usize] = velocity[1 as i32 as usize] * 150 as i32 as f32;
+    velocity[2 as i32 as usize] = velocity[2 as i32 as usize] * 150 as i32 as f32;
     velocity[2 as i32 as usize] = (velocity[2 as i32 as usize] as f64
         + (200 as i32 as f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32)
-                    as f64
+                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)
                 * 50 as i32 as f64))
         as crate::src::qcommon::q_shared::vec_t;
@@ -944,18 +912,12 @@ pub unsafe extern "C" fn FinishSpawningItem(mut ent: *mut crate::g_local_h::gent
         entityNum: 0,
     }; // store item number in modelindex
     let mut dest: crate::src::qcommon::q_shared::vec3_t = [0.; 3]; // zero indicates this isn't a dropped item
-    (*ent).r.mins[0 as i32 as usize] =
-        -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*ent).r.mins[1 as i32 as usize] =
-        -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*ent).r.mins[2 as i32 as usize] =
-        -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*ent).r.maxs[0 as i32 as usize] =
-        15 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*ent).r.maxs[1 as i32 as usize] =
-        15 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*ent).r.maxs[2 as i32 as usize] =
-        15 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*ent).r.mins[0 as i32 as usize] = -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*ent).r.mins[1 as i32 as usize] = -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*ent).r.mins[2 as i32 as usize] = -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*ent).r.maxs[0 as i32 as usize] = 15 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*ent).r.maxs[1 as i32 as usize] = 15 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*ent).r.maxs[2 as i32 as usize] = 15 as i32 as crate::src::qcommon::q_shared::vec_t;
     (*ent).s.eType = crate::bg_public_h::ET_ITEM as i32;
     (*ent).s.modelindex = (*ent)
         .item
@@ -990,8 +952,7 @@ pub unsafe extern "C" fn FinishSpawningItem(mut ent: *mut crate::g_local_h::gent
         // drop to floor
         dest[0 as i32 as usize] = (*ent).s.origin[0 as i32 as usize];
         dest[1 as i32 as usize] = (*ent).s.origin[1 as i32 as usize];
-        dest[2 as i32 as usize] =
-            (*ent).s.origin[2 as i32 as usize] - 4096 as i32 as f32;
+        dest[2 as i32 as usize] = (*ent).s.origin[2 as i32 as usize] - 4096 as i32 as f32;
         crate::src::game::g_syscalls::trap_Trace(
             &mut tr as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
             (*ent).s.origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -1027,21 +988,17 @@ pub unsafe extern "C" fn FinishSpawningItem(mut ent: *mut crate::g_local_h::gent
         return;
     }
     // powerups don't spawn in for a while
-    if (*(*ent).item).giType as u32
-        == crate::bg_public_h::IT_POWERUP as i32 as u32
-    {
+    if (*(*ent).item).giType as u32 == crate::bg_public_h::IT_POWERUP as i32 as u32 {
         let mut respawn: f32 = 0.;
         respawn = (45 as i32 as f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32) as f64
+                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)
                 * 15 as i32 as f64) as f32;
         (*ent).s.eFlags |= 0x80 as i32;
         (*ent).r.contents = 0 as i32;
-        (*ent).nextthink = (crate::src::game::g_main::level.time as f32
-            + respawn * 1000 as i32 as f32)
-            as i32;
+        (*ent).nextthink =
+            (crate::src::game::g_main::level.time as f32 + respawn * 1000 as i32 as f32) as i32;
         (*ent).think =
             Some(RespawnItem as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
         return;
@@ -1218,9 +1175,7 @@ pub unsafe extern "C" fn G_SpawnItem(
     (*ent).think =
         Some(FinishSpawningItem as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
     (*ent).physicsBounce = 0.50f64 as f32;
-    if (*item).giType as u32
-        == crate::bg_public_h::IT_POWERUP as i32 as u32
-    {
+    if (*item).giType as u32 == crate::bg_public_h::IT_POWERUP as i32 as u32 {
         crate::src::game::g_utils::G_SoundIndex(
             b"sound/items/poweruprespawn.wav\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -1261,14 +1216,11 @@ pub unsafe extern "C" fn G_BounceItem(
         + velocity[1 as i32 as usize] * (*trace).plane.normal[1 as i32 as usize]
         + velocity[2 as i32 as usize] * (*trace).plane.normal[2 as i32 as usize];
     (*ent).s.pos.trDelta[0 as i32 as usize] = velocity[0 as i32 as usize]
-        + (*trace).plane.normal[0 as i32 as usize]
-            * (-(2 as i32) as f32 * dot);
+        + (*trace).plane.normal[0 as i32 as usize] * (-(2 as i32) as f32 * dot);
     (*ent).s.pos.trDelta[1 as i32 as usize] = velocity[1 as i32 as usize]
-        + (*trace).plane.normal[1 as i32 as usize]
-            * (-(2 as i32) as f32 * dot);
+        + (*trace).plane.normal[1 as i32 as usize] * (-(2 as i32) as f32 * dot);
     (*ent).s.pos.trDelta[2 as i32 as usize] = velocity[2 as i32 as usize]
-        + (*trace).plane.normal[2 as i32 as usize]
-            * (-(2 as i32) as f32 * dot);
+        + (*trace).plane.normal[2 as i32 as usize] * (-(2 as i32) as f32 * dot);
     // cut the velocity to keep from bouncing forever
     (*ent).s.pos.trDelta[0 as i32 as usize] =
         (*ent).s.pos.trDelta[0 as i32 as usize] * (*ent).physicsBounce;
@@ -1280,18 +1232,14 @@ pub unsafe extern "C" fn G_BounceItem(
     if (*trace).plane.normal[2 as i32 as usize] > 0 as i32 as f32
         && (*ent).s.pos.trDelta[2 as i32 as usize] < 40 as i32 as f32
     {
+        (*trace).endpos[2 as i32 as usize] = ((*trace).endpos[2 as i32 as usize] as f64 + 1.0f64)
+            as crate::src::qcommon::q_shared::vec_t; // make sure it is off ground
+        (*trace).endpos[0 as i32 as usize] =
+            (*trace).endpos[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*trace).endpos[1 as i32 as usize] =
+            (*trace).endpos[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
         (*trace).endpos[2 as i32 as usize] =
-            ((*trace).endpos[2 as i32 as usize] as f64 + 1.0f64)
-                as crate::src::qcommon::q_shared::vec_t; // make sure it is off ground
-        (*trace).endpos[0 as i32 as usize] = (*trace).endpos[0 as i32 as usize]
-            as i32
-            as crate::src::qcommon::q_shared::vec_t;
-        (*trace).endpos[1 as i32 as usize] = (*trace).endpos[1 as i32 as usize]
-            as i32
-            as crate::src::qcommon::q_shared::vec_t;
-        (*trace).endpos[2 as i32 as usize] = (*trace).endpos[2 as i32 as usize]
-            as i32
-            as crate::src::qcommon::q_shared::vec_t;
+            (*trace).endpos[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::game::g_utils::G_SetOrigin(
             ent as *mut crate::g_local_h::gentity_s,
             (*trace).endpos.as_mut_ptr(),
@@ -1299,21 +1247,15 @@ pub unsafe extern "C" fn G_BounceItem(
         (*ent).s.groundEntityNum = (*trace).entityNum;
         return;
     }
-    (*ent).r.currentOrigin[0 as i32 as usize] = (*ent).r.currentOrigin
-        [0 as i32 as usize]
-        + (*trace).plane.normal[0 as i32 as usize];
-    (*ent).r.currentOrigin[1 as i32 as usize] = (*ent).r.currentOrigin
-        [1 as i32 as usize]
-        + (*trace).plane.normal[1 as i32 as usize];
-    (*ent).r.currentOrigin[2 as i32 as usize] = (*ent).r.currentOrigin
-        [2 as i32 as usize]
-        + (*trace).plane.normal[2 as i32 as usize];
-    (*ent).s.pos.trBase[0 as i32 as usize] =
-        (*ent).r.currentOrigin[0 as i32 as usize];
-    (*ent).s.pos.trBase[1 as i32 as usize] =
-        (*ent).r.currentOrigin[1 as i32 as usize];
-    (*ent).s.pos.trBase[2 as i32 as usize] =
-        (*ent).r.currentOrigin[2 as i32 as usize];
+    (*ent).r.currentOrigin[0 as i32 as usize] =
+        (*ent).r.currentOrigin[0 as i32 as usize] + (*trace).plane.normal[0 as i32 as usize];
+    (*ent).r.currentOrigin[1 as i32 as usize] =
+        (*ent).r.currentOrigin[1 as i32 as usize] + (*trace).plane.normal[1 as i32 as usize];
+    (*ent).r.currentOrigin[2 as i32 as usize] =
+        (*ent).r.currentOrigin[2 as i32 as usize] + (*trace).plane.normal[2 as i32 as usize];
+    (*ent).s.pos.trBase[0 as i32 as usize] = (*ent).r.currentOrigin[0 as i32 as usize];
+    (*ent).s.pos.trBase[1 as i32 as usize] = (*ent).r.currentOrigin[1 as i32 as usize];
+    (*ent).s.pos.trBase[2 as i32 as usize] = (*ent).r.currentOrigin[2 as i32 as usize];
     (*ent).s.pos.trTime = crate::src::game::g_main::level.time;
 }
 /*
@@ -1346,16 +1288,12 @@ pub unsafe extern "C" fn G_RunItem(mut ent: *mut crate::g_local_h::gentity_t) {
     let mut mask: i32 = 0;
     // if its groundentity has been set to none, it may have been pushed off an edge
     if (*ent).s.groundEntityNum == ((1 as i32) << 10 as i32) - 1 as i32 {
-        if (*ent).s.pos.trType as u32
-            != crate::src::qcommon::q_shared::TR_GRAVITY as i32 as u32
-        {
+        if (*ent).s.pos.trType as u32 != crate::src::qcommon::q_shared::TR_GRAVITY as i32 as u32 {
             (*ent).s.pos.trType = crate::src::qcommon::q_shared::TR_GRAVITY;
             (*ent).s.pos.trTime = crate::src::game::g_main::level.time
         }
     }
-    if (*ent).s.pos.trType as u32
-        == crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32
-    {
+    if (*ent).s.pos.trType as u32 == crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32 {
         // check think function
         crate::src::game::g_main::G_RunThink(ent as *mut crate::g_local_h::gentity_s);
         return;
@@ -1370,8 +1308,7 @@ pub unsafe extern "C" fn G_RunItem(mut ent: *mut crate::g_local_h::gentity_t) {
     if (*ent).clipmask != 0 {
         mask = (*ent).clipmask
     } else {
-        mask = (1 as i32 | 0x10000 as i32 | 0x2000000 as i32)
-            & !(0x2000000 as i32)
+        mask = (1 as i32 | 0x10000 as i32 | 0x2000000 as i32) & !(0x2000000 as i32)
         //MASK_SOLID;
     } // FIXME: avoid this for stationary?
     crate::src::game::g_syscalls::trap_Trace(
@@ -1402,8 +1339,7 @@ pub unsafe extern "C" fn G_RunItem(mut ent: *mut crate::g_local_h::gentity_t) {
     );
     if contents as u32 & 0x80000000 as u32 != 0 {
         if !(*ent).item.is_null()
-            && (*(*ent).item).giType as u32
-                == crate::bg_public_h::IT_TEAM as i32 as u32
+            && (*(*ent).item).giType as u32 == crate::bg_public_h::IT_TEAM as i32 as u32
         {
             crate::src::game::g_team::Team_FreeEntity(ent as *mut crate::g_local_h::gentity_s);
         } else {

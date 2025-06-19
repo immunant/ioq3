@@ -304,9 +304,7 @@ pub unsafe extern "C" fn DeathmatchScoreboardMessage(mut ent: *mut crate::g_loca
                 .as_mut_ptr()
                 .offset(i as isize) as isize,
         ) as *mut crate::g_local_h::gclient_s;
-        if (*cl).pers.connected as u32
-            == crate::g_local_h::CON_CONNECTING as i32 as u32
-        {
+        if (*cl).pers.connected as u32 == crate::g_local_h::CON_CONNECTING as i32 as u32 {
             ping = -(1 as i32)
         } else {
             ping = if (*cl).ps.ping < 999 as i32 {
@@ -320,10 +318,8 @@ pub unsafe extern "C" fn DeathmatchScoreboardMessage(mut ent: *mut crate::g_loca
         } else {
             accuracy = 0 as i32
         }
-        perfect = if (*cl).ps.persistant[crate::bg_public_h::PERS_RANK as i32 as usize]
-            == 0 as i32
-            && (*cl).ps.persistant[crate::bg_public_h::PERS_KILLED as i32 as usize]
-                == 0 as i32
+        perfect = if (*cl).ps.persistant[crate::bg_public_h::PERS_RANK as i32 as usize] == 0 as i32
+            && (*cl).ps.persistant[crate::bg_public_h::PERS_KILLED as i32 as usize] == 0 as i32
         {
             1 as i32
         } else {
@@ -345,8 +341,7 @@ pub unsafe extern "C" fn DeathmatchScoreboardMessage(mut ent: *mut crate::g_loca
             accuracy,
             (*cl).ps.persistant[crate::bg_public_h::PERS_IMPRESSIVE_COUNT as i32 as usize],
             (*cl).ps.persistant[crate::bg_public_h::PERS_EXCELLENT_COUNT as i32 as usize],
-            (*cl).ps.persistant
-                [crate::bg_public_h::PERS_GAUNTLET_FRAG_COUNT as i32 as usize],
+            (*cl).ps.persistant[crate::bg_public_h::PERS_GAUNTLET_FRAG_COUNT as i32 as usize],
             (*cl).ps.persistant[crate::bg_public_h::PERS_DEFEND_COUNT as i32 as usize],
             (*cl).ps.persistant[crate::bg_public_h::PERS_ASSIST_COUNT as i32 as usize],
             perfect,
@@ -366,8 +361,7 @@ pub unsafe extern "C" fn DeathmatchScoreboardMessage(mut ent: *mut crate::g_loca
         i += 1
     }
     crate::src::game::g_syscalls::trap_SendServerCommand(
-        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
-            as i32,
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32,
         crate::src::qcommon::q_shared::va(
             b"scores %i %i %i%s\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             i,
@@ -481,8 +475,7 @@ pub unsafe extern "C" fn StringIsInteger(
     foundDigit = crate::src::qcommon::q_shared::qfalse;
     i = 0 as i32;
     while i < len {
-        if *(*crate::stdlib::__ctype_b_loc()).offset(*s.offset(i as isize) as i32 as isize)
-            as i32
+        if *(*crate::stdlib::__ctype_b_loc()).offset(*s.offset(i as isize) as i32 as isize) as i32
             & crate::stdlib::_ISdigit as i32 as u16 as i32
             == 0
         {
@@ -521,9 +514,7 @@ pub unsafe extern "C" fn ClientNumberFromString(
                     .clients
                     .offset(idnum as isize)
                     as *mut crate::g_local_h::gclient_s;
-                if (*cl).pers.connected as u32
-                    == crate::g_local_h::CON_CONNECTED as i32 as u32
-                {
+                if (*cl).pers.connected as u32 == crate::g_local_h::CON_CONNECTED as i32 as u32 {
                     return idnum;
                 }
             }
@@ -534,9 +525,7 @@ pub unsafe extern "C" fn ClientNumberFromString(
         idnum = 0 as i32;
         cl = crate::src::game::g_main::level.clients;
         while idnum < crate::src::game::g_main::level.maxclients {
-            if !((*cl).pers.connected as u32
-                != crate::g_local_h::CON_CONNECTED as i32 as u32)
-            {
+            if !((*cl).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32) {
                 crate::src::qcommon::q_shared::Q_strncpyz(
                     cleanName.as_mut_ptr(),
                     (*cl).pers.netname.as_mut_ptr(),
@@ -552,8 +541,7 @@ pub unsafe extern "C" fn ClientNumberFromString(
         }
     }
     crate::src::game::g_syscalls::trap_SendServerCommand(
-        to.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
-            as i32,
+        to.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32,
         crate::src::qcommon::q_shared::va(
             b"print \"User %s is not on the server\n\"\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -626,11 +614,11 @@ pub unsafe extern "C" fn Cmd_Give_f(mut ent: *mut crate::g_local_h::gentity_t) {
             b"weapons\x00" as *const u8 as *const libc::c_char,
         ) == 0 as i32
     {
-        (*(*ent).client).ps.stats[crate::bg_public_h::STAT_WEAPONS as i32 as usize] =
-            ((1 as i32) << crate::bg_public_h::WP_NUM_WEAPONS as i32)
-                - 1 as i32
-                - ((1 as i32) << crate::bg_public_h::WP_GRAPPLING_HOOK as i32)
-                - ((1 as i32) << crate::bg_public_h::WP_NONE as i32);
+        (*(*ent).client).ps.stats[crate::bg_public_h::STAT_WEAPONS as i32 as usize] = ((1 as i32)
+            << crate::bg_public_h::WP_NUM_WEAPONS as i32)
+            - 1 as i32
+            - ((1 as i32) << crate::bg_public_h::WP_GRAPPLING_HOOK as i32)
+            - ((1 as i32) << crate::bg_public_h::WP_NONE as i32);
         if give_all as u64 == 0 {
             return;
         }
@@ -656,8 +644,7 @@ pub unsafe extern "C" fn Cmd_Give_f(mut ent: *mut crate::g_local_h::gentity_t) {
             b"armor\x00" as *const u8 as *const libc::c_char,
         ) == 0 as i32
     {
-        (*(*ent).client).ps.stats[crate::bg_public_h::STAT_ARMOR as i32 as usize] =
-            200 as i32;
+        (*(*ent).client).ps.stats[crate::bg_public_h::STAT_ARMOR as i32 as usize] = 200 as i32;
         if give_all as u64 == 0 {
             return;
         }
@@ -667,8 +654,8 @@ pub unsafe extern "C" fn Cmd_Give_f(mut ent: *mut crate::g_local_h::gentity_t) {
         b"excellent\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        (*(*ent).client).ps.persistant
-            [crate::bg_public_h::PERS_EXCELLENT_COUNT as i32 as usize] += 1;
+        (*(*ent).client).ps.persistant[crate::bg_public_h::PERS_EXCELLENT_COUNT as i32 as usize] +=
+            1;
         return;
     }
     if crate::src::qcommon::q_shared::Q_stricmp(
@@ -694,8 +681,7 @@ pub unsafe extern "C" fn Cmd_Give_f(mut ent: *mut crate::g_local_h::gentity_t) {
         b"defend\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        (*(*ent).client).ps.persistant
-            [crate::bg_public_h::PERS_DEFEND_COUNT as i32 as usize] += 1;
+        (*(*ent).client).ps.persistant[crate::bg_public_h::PERS_DEFEND_COUNT as i32 as usize] += 1;
         return;
     }
     if crate::src::qcommon::q_shared::Q_stricmp(
@@ -703,8 +689,7 @@ pub unsafe extern "C" fn Cmd_Give_f(mut ent: *mut crate::g_local_h::gentity_t) {
         b"assist\x00" as *const u8 as *const libc::c_char,
     ) == 0 as i32
     {
-        (*(*ent).client).ps.persistant
-            [crate::bg_public_h::PERS_ASSIST_COUNT as i32 as usize] += 1;
+        (*(*ent).client).ps.persistant[crate::bg_public_h::PERS_ASSIST_COUNT as i32 as usize] += 1;
         return;
     }
     // spawn a specific item right on the player
@@ -714,12 +699,9 @@ pub unsafe extern "C" fn Cmd_Give_f(mut ent: *mut crate::g_local_h::gentity_t) {
             return;
         }
         it_ent = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s;
-        (*it_ent).s.origin[0 as i32 as usize] =
-            (*ent).r.currentOrigin[0 as i32 as usize];
-        (*it_ent).s.origin[1 as i32 as usize] =
-            (*ent).r.currentOrigin[1 as i32 as usize];
-        (*it_ent).s.origin[2 as i32 as usize] =
-            (*ent).r.currentOrigin[2 as i32 as usize];
+        (*it_ent).s.origin[0 as i32 as usize] = (*ent).r.currentOrigin[0 as i32 as usize];
+        (*it_ent).s.origin[1 as i32 as usize] = (*ent).r.currentOrigin[1 as i32 as usize];
+        (*it_ent).s.origin[2 as i32 as usize] = (*ent).r.currentOrigin[2 as i32 as usize];
         (*it_ent).classname = (*it).classname;
         crate::src::game::g_items::G_SpawnItem(
             it_ent as *mut crate::g_local_h::gentity_s,
@@ -764,8 +746,7 @@ pub unsafe extern "C" fn Cmd_God_f(mut ent: *mut crate::g_local_h::gentity_t) {
         msg = b"godmode ON\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     }
     crate::src::game::g_syscalls::trap_SendServerCommand(
-        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
-            as i32,
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32,
         crate::src::qcommon::q_shared::va(
             b"print \"%s\"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             msg,
@@ -795,8 +776,7 @@ pub unsafe extern "C" fn Cmd_Notarget_f(mut ent: *mut crate::g_local_h::gentity_
         msg = b"notarget ON\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     }
     crate::src::game::g_syscalls::trap_SendServerCommand(
-        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
-            as i32,
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32,
         crate::src::qcommon::q_shared::va(
             b"print \"%s\"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             msg,
@@ -822,11 +802,10 @@ pub unsafe extern "C" fn Cmd_Noclip_f(mut ent: *mut crate::g_local_h::gentity_t)
     } else {
         msg = b"noclip ON\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
     }
-    (*(*ent).client).noclip = ((*(*ent).client).noclip as u64 == 0) as i32
-        as crate::src::qcommon::q_shared::qboolean;
+    (*(*ent).client).noclip =
+        ((*(*ent).client).noclip as u64 == 0) as i32 as crate::src::qcommon::q_shared::qboolean;
     crate::src::game::g_syscalls::trap_SendServerCommand(
-        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
-            as i32,
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32,
         crate::src::qcommon::q_shared::va(
             b"print \"%s\"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             msg,
@@ -859,9 +838,7 @@ pub unsafe extern "C" fn Cmd_LevelShot_f(mut ent: *mut crate::g_local_h::gentity
         return;
     }
     // doesn't work in single player
-    if crate::src::game::g_main::g_gametype.integer
-        == crate::bg_public_h::GT_SINGLE_PLAYER as i32
-    {
+    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_SINGLE_PLAYER as i32 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
             ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
                 as i32,
@@ -872,8 +849,7 @@ pub unsafe extern "C" fn Cmd_LevelShot_f(mut ent: *mut crate::g_local_h::gentity
     }
     crate::src::game::g_main::BeginIntermission();
     crate::src::game::g_syscalls::trap_SendServerCommand(
-        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
-            as i32,
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32,
         b"clientLevelShot\x00" as *const u8 as *const libc::c_char,
     );
 }
@@ -925,8 +901,7 @@ Cmd_Kill_f
 #[no_mangle]
 
 pub unsafe extern "C" fn Cmd_Kill_f(mut ent: *mut crate::g_local_h::gentity_t) {
-    if (*(*ent).client).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+    if (*(*ent).client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
     {
         return;
     }
@@ -935,8 +910,7 @@ pub unsafe extern "C" fn Cmd_Kill_f(mut ent: *mut crate::g_local_h::gentity_t) {
     }
     (*ent).flags &= !(0x10 as i32);
     (*ent).health = -(999 as i32);
-    (*(*ent).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] =
-        (*ent).health;
+    (*(*ent).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] = (*ent).health;
     crate::src::game::g_combat::player_die(
         ent as *mut crate::g_local_h::gentity_s,
         ent as *mut crate::g_local_h::gentity_s,
@@ -958,9 +932,7 @@ pub unsafe extern "C" fn BroadcastTeamChange(
     mut client: *mut crate::g_local_h::gclient_t,
     mut oldTeam: i32,
 ) {
-    if (*client).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_RED as i32 as u32
-    {
+    if (*client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_RED as i32 as u32 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
             -(1 as i32),
             crate::src::qcommon::q_shared::va(
@@ -969,9 +941,7 @@ pub unsafe extern "C" fn BroadcastTeamChange(
                 (*client).pers.netname.as_mut_ptr(),
             ),
         );
-    } else if (*client).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_BLUE as i32 as u32
-    {
+    } else if (*client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_BLUE as i32 as u32 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
             -(1 as i32),
             crate::src::qcommon::q_shared::va(
@@ -980,8 +950,7 @@ pub unsafe extern "C" fn BroadcastTeamChange(
                 (*client).pers.netname.as_mut_ptr(),
             ),
         );
-    } else if (*client).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+    } else if (*client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
         && oldTeam != crate::bg_public_h::TEAM_SPECTATOR as i32
     {
         crate::src::game::g_syscalls::trap_SendServerCommand(
@@ -992,9 +961,7 @@ pub unsafe extern "C" fn BroadcastTeamChange(
                 (*client).pers.netname.as_mut_ptr(),
             ),
         );
-    } else if (*client).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_FREE as i32 as u32
-    {
+    } else if (*client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_FREE as i32 as u32 {
         crate::src::game::g_syscalls::trap_SendServerCommand(
             -(1 as i32),
             crate::src::qcommon::q_shared::va(
@@ -1027,8 +994,7 @@ pub unsafe extern "C" fn SetTeam(
     // see what change is requested
     //
     client = (*ent).client;
-    clientNum =
-        client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long as i32;
+    clientNum = client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long as i32;
     specClient = 0 as i32;
     specState = crate::g_local_h::SPECTATOR_NOT;
     if crate::src::qcommon::q_shared::Q_stricmp(
@@ -1067,9 +1033,7 @@ pub unsafe extern "C" fn SetTeam(
     {
         team = crate::bg_public_h::TEAM_SPECTATOR as i32;
         specState = crate::g_local_h::SPECTATOR_FREE
-    } else if crate::src::game::g_main::g_gametype.integer
-        >= crate::bg_public_h::GT_TEAM as i32
-    {
+    } else if crate::src::game::g_main::g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32 {
         // if running a team game, assign player to one of the teams
         specState = crate::g_local_h::SPECTATOR_NOT;
         if crate::src::qcommon::q_shared::Q_stricmp(
@@ -1139,8 +1103,7 @@ pub unsafe extern "C" fn SetTeam(
         team = crate::bg_public_h::TEAM_FREE as i32
     }
     // override decision if limiting the players
-    if crate::src::game::g_main::g_gametype.integer
-        == crate::bg_public_h::GT_TOURNAMENT as i32
+    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_TOURNAMENT as i32
         && crate::src::game::g_main::level.numNonSpectatorClients >= 2 as i32
     {
         team = crate::bg_public_h::TEAM_SPECTATOR as i32
@@ -1161,10 +1124,8 @@ pub unsafe extern "C" fn SetTeam(
     // execute the team change
     //
     // if the player was dead leave the body, but only if they're actually in game
-    if (*client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-        <= 0 as i32
-        && (*client).pers.connected as u32
-            == crate::g_local_h::CON_CONNECTED as i32 as u32
+    if (*client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= 0 as i32
+        && (*client).pers.connected as u32 == crate::g_local_h::CON_CONNECTED as i32 as u32
     {
         crate::src::game::g_client::CopyToBodyQue(ent as *mut crate::g_local_h::gentity_s);
     }
@@ -1174,8 +1135,7 @@ pub unsafe extern "C" fn SetTeam(
         // Kill him (makes sure he loses flags, etc)
         (*ent).flags &= !(0x10 as i32);
         (*ent).health = 0 as i32;
-        (*(*ent).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] =
-            (*ent).health;
+        (*(*ent).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] = (*ent).health;
         crate::src::game::g_combat::player_die(
             ent as *mut crate::g_local_h::gentity_s,
             ent as *mut crate::g_local_h::gentity_s,
@@ -1192,9 +1152,7 @@ pub unsafe extern "C" fn SetTeam(
     (*client).sess.spectatorState = specState;
     (*client).sess.spectatorClient = specClient;
     (*client).sess.teamLeader = crate::src::qcommon::q_shared::qfalse;
-    if team == crate::bg_public_h::TEAM_RED as i32
-        || team == crate::bg_public_h::TEAM_BLUE as i32
-    {
+    if team == crate::bg_public_h::TEAM_RED as i32 || team == crate::bg_public_h::TEAM_BLUE as i32 {
         teamLeader = crate::src::game::g_client::TeamLeader(team);
         // if there is no team leader or the team leader is a bot and this client is not a bot
         if teamLeader == -(1 as i32)
@@ -1222,9 +1180,7 @@ pub unsafe extern "C" fn SetTeam(
     // get and distribute relevant parameters
     crate::src::game::g_client::ClientUserinfoChanged(clientNum);
     // client hasn't spawned yet, they sent an early team command, teampref userinfo, or g_teamAutoJoin is enabled
-    if (*client).pers.connected as u32
-        != crate::g_local_h::CON_CONNECTED as i32 as u32
-    {
+    if (*client).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32 {
         return;
     }
     crate::src::game::g_client::ClientBegin(clientNum);
@@ -1246,19 +1202,15 @@ pub unsafe extern "C" fn StopFollowing(mut ent: *mut crate::g_local_h::gentity_t
     (*(*ent).client).sess.spectatorState = crate::g_local_h::SPECTATOR_FREE;
     (*(*ent).client).ps.pm_flags &= !(4096 as i32);
     (*ent).r.svFlags &= !(0x8 as i32);
-    (*(*ent).client).ps.clientNum = ent
-        .offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-        as libc::c_long as i32;
+    (*(*ent).client).ps.clientNum =
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32;
     crate::src::game::g_client::SetClientViewAngle(
         ent as *mut crate::g_local_h::gentity_s,
         (*(*ent).client).ps.viewangles.as_mut_ptr(),
     );
     // don't use dead view angles
-    if (*(*ent).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-        <= 0 as i32
-    {
-        (*(*ent).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] =
-            1 as i32
+    if (*(*ent).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= 0 as i32 {
+        (*(*ent).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] = 1 as i32
     };
 }
 /*
@@ -1316,10 +1268,8 @@ pub unsafe extern "C" fn Cmd_Team_f(mut ent: *mut crate::g_local_h::gentity_t) {
         return;
     }
     // if they are playing a tournement game, count as a loss
-    if crate::src::game::g_main::g_gametype.integer
-        == crate::bg_public_h::GT_TOURNAMENT as i32
-        && (*(*ent).client).sess.sessionTeam as u32
-            == crate::bg_public_h::TEAM_FREE as i32 as u32
+    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_TOURNAMENT as i32
+        && (*(*ent).client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_FREE as i32 as u32
     {
         (*(*ent).client).sess.losses += 1
     }
@@ -1379,16 +1329,13 @@ pub unsafe extern "C" fn Cmd_Follow_f(mut ent: *mut crate::g_local_h::gentity_t)
         return;
     }
     // if they are playing a tournement game, count as a loss
-    if crate::src::game::g_main::g_gametype.integer
-        == crate::bg_public_h::GT_TOURNAMENT as i32
-        && (*(*ent).client).sess.sessionTeam as u32
-            == crate::bg_public_h::TEAM_FREE as i32 as u32
+    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_TOURNAMENT as i32
+        && (*(*ent).client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_FREE as i32 as u32
     {
         (*(*ent).client).sess.losses += 1
     }
     // first set them to spectator
-    if (*(*ent).client).sess.sessionTeam as u32
-        != crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+    if (*(*ent).client).sess.sessionTeam as u32 != crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
     {
         SetTeam(ent, b"spectator\x00" as *const u8 as *const libc::c_char);
     }
@@ -1409,16 +1356,13 @@ pub unsafe extern "C" fn Cmd_FollowCycle_f(
     let mut clientnum: i32 = 0;
     let mut original: i32 = 0;
     // if they are playing a tournement game, count as a loss
-    if crate::src::game::g_main::g_gametype.integer
-        == crate::bg_public_h::GT_TOURNAMENT as i32
-        && (*(*ent).client).sess.sessionTeam as u32
-            == crate::bg_public_h::TEAM_FREE as i32 as u32
+    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_TOURNAMENT as i32
+        && (*(*ent).client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_FREE as i32 as u32
     {
         (*(*ent).client).sess.losses += 1
     }
     // first set them to spectator
-    if (*(*ent).client).sess.spectatorState as u32
-        == crate::g_local_h::SPECTATOR_NOT as i32 as u32
+    if (*(*ent).client).sess.spectatorState as u32 == crate::g_local_h::SPECTATOR_NOT as i32 as u32
     {
         SetTeam(ent, b"spectator\x00" as *const u8 as *const libc::c_char);
     }
@@ -1498,9 +1442,7 @@ unsafe extern "C" fn G_SayTo(
     if (*other).client.is_null() {
         return;
     }
-    if (*(*other).client).pers.connected as u32
-        != crate::g_local_h::CON_CONNECTED as i32 as u32
-    {
+    if (*(*other).client).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32 {
         return;
     }
     if mode == 1 as i32
@@ -1513,18 +1455,14 @@ unsafe extern "C" fn G_SayTo(
         return;
     }
     // no chatting to players in tournements
-    if crate::src::game::g_main::g_gametype.integer
-        == crate::bg_public_h::GT_TOURNAMENT as i32
-        && (*(*other).client).sess.sessionTeam as u32
-            == crate::bg_public_h::TEAM_FREE as i32 as u32
-        && (*(*ent).client).sess.sessionTeam as u32
-            != crate::bg_public_h::TEAM_FREE as i32 as u32
+    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_TOURNAMENT as i32
+        && (*(*other).client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_FREE as i32 as u32
+        && (*(*ent).client).sess.sessionTeam as u32 != crate::bg_public_h::TEAM_FREE as i32 as u32
     {
         return;
     }
     crate::src::game::g_syscalls::trap_SendServerCommand(
-        other.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
-            as i32,
+        other.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32,
         crate::src::qcommon::q_shared::va(
             b"%s \"%s%c%c%s\"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             if mode == 1 as i32 {
@@ -1871,8 +1809,7 @@ Cmd_Where_f
 
 pub unsafe extern "C" fn Cmd_Where_f(mut ent: *mut crate::g_local_h::gentity_t) {
     crate::src::game::g_syscalls::trap_SendServerCommand(
-        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
-            as i32,
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32,
         crate::src::qcommon::q_shared::va(
             b"print \"%s\n\"\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             crate::src::game::g_utils::vtos(
@@ -1929,8 +1866,7 @@ pub unsafe extern "C" fn Cmd_CallVote_f(mut ent: *mut crate::g_local_h::gentity_
         );
         return;
     }
-    if (*(*ent).client).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+    if (*(*ent).client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
     {
         crate::src::game::g_syscalls::trap_SendServerCommand(
             ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
@@ -2320,8 +2256,7 @@ pub unsafe extern "C" fn Cmd_Vote_f(mut ent: *mut crate::g_local_h::gentity_t) {
         );
         return;
     }
-    if (*(*ent).client).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+    if (*(*ent).client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
     {
         crate::src::game::g_syscalls::trap_SendServerCommand(
             ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
@@ -2332,8 +2267,7 @@ pub unsafe extern "C" fn Cmd_Vote_f(mut ent: *mut crate::g_local_h::gentity_t) {
         return;
     }
     crate::src::game::g_syscalls::trap_SendServerCommand(
-        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
-            as i32,
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32,
         b"print \"Vote cast.\n\"\x00" as *const u8 as *const libc::c_char,
     );
     (*(*ent).client).ps.eFlags |= 0x4000 as i32;
@@ -2344,9 +2278,7 @@ pub unsafe extern "C" fn Cmd_Vote_f(mut ent: *mut crate::g_local_h::gentity_t) {
     );
     if ({
         let mut __res: i32 = 0;
-        if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-            > 1 as i32 as libc::c_ulong
-        {
+        if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
             if 0 != 0 {
                 let mut __c: i32 = msg[0 as i32 as usize] as i32;
                 __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -2434,8 +2366,7 @@ pub unsafe extern "C" fn Cmd_CallTeamVote_f(mut ent: *mut crate::g_local_h::gent
         );
         return;
     }
-    if (*(*ent).client).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+    if (*(*ent).client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
     {
         crate::src::game::g_syscalls::trap_SendServerCommand(
             ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
@@ -2561,8 +2492,7 @@ pub unsafe extern "C" fn Cmd_CallTeamVote_f(mut ent: *mut crate::g_local_h::gent
                                     .pers
                                     .netname
                                     .as_mut_ptr(),
-                                ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong
-                                    as i32,
+                                ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                             );
                             crate::src::qcommon::q_shared::Q_CleanStr(netname.as_mut_ptr());
                             if crate::src::qcommon::q_shared::Q_stricmp(
@@ -2722,8 +2652,7 @@ pub unsafe extern "C" fn Cmd_TeamVote_f(mut ent: *mut crate::g_local_h::gentity_
         );
         return;
     }
-    if (*(*ent).client).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+    if (*(*ent).client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
     {
         crate::src::game::g_syscalls::trap_SendServerCommand(
             ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
@@ -2734,8 +2663,7 @@ pub unsafe extern "C" fn Cmd_TeamVote_f(mut ent: *mut crate::g_local_h::gentity_
         return;
     }
     crate::src::game::g_syscalls::trap_SendServerCommand(
-        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
-            as i32,
+        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32,
         b"print \"Team vote cast.\n\"\x00" as *const u8 as *const libc::c_char,
     );
     (*(*ent).client).ps.eFlags |= 0x80000 as i32;
@@ -2746,9 +2674,7 @@ pub unsafe extern "C" fn Cmd_TeamVote_f(mut ent: *mut crate::g_local_h::gentity_
     );
     if ({
         let mut __res: i32 = 0;
-        if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-            > 1 as i32 as libc::c_ulong
-        {
+        if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
             if 0 != 0 {
                 let mut __c: i32 = msg[0 as i32 as usize] as i32;
                 __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -2835,8 +2761,7 @@ pub unsafe extern "C" fn Cmd_SetViewpos_f(mut ent: *mut crate::g_local_h::gentit
         buffer.as_mut_ptr(),
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
-    angles[1 as i32 as usize] =
-        atof(buffer.as_mut_ptr()) as crate::src::qcommon::q_shared::vec_t;
+    angles[1 as i32 as usize] = atof(buffer.as_mut_ptr()) as crate::src::qcommon::q_shared::vec_t;
     crate::src::game::g_misc::TeleportPlayer(
         ent as *mut crate::g_local_h::gentity_s,
         origin.as_mut_ptr(),
@@ -3095,8 +3020,7 @@ pub unsafe extern "C" fn ClientCommand(mut clientNum: i32) {
         .as_mut_ptr()
         .offset(clientNum as isize);
     if (*ent).client.is_null()
-        || (*(*ent).client).pers.connected as u32
-            != crate::g_local_h::CON_CONNECTED as i32 as u32
+        || (*(*ent).client).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32
     {
         if !(*ent).client.is_null() && (*(*ent).client).pers.localClient as u32 != 0 {
             // Handle early team command sent by UI when starting a local

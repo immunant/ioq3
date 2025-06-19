@@ -113,8 +113,7 @@ unsafe extern "C" fn op_validate_url_escapes(mut _s: *const libc::c_char) -> i32
     while *_s.offset(i as isize) != 0 {
         if *_s.offset(i as isize) as i32 == '%' as i32 {
             if (*(*crate::stdlib::__ctype_b_loc())
-                .offset(*_s.offset((i + 1 as i32) as isize) as i32 as isize)
-                as i32
+                .offset(*_s.offset((i + 1 as i32) as isize) as i32 as isize) as i32
                 & crate::stdlib::_ISxdigit as i32 as u16 as i32
                 == 0) as i32 as libc::c_long
                 != 0
@@ -161,11 +160,10 @@ unsafe extern "C" fn op_unescape_url_component(mut _s: *mut libc::c_char) -> *mu
     i = j;
     while *_s.offset(i as isize) != 0 {
         if *_s.offset(i as isize) as i32 == '%' as i32 {
-            *_s.offset(i as isize) =
-                (op_hex_value(*_s.offset((i + 1 as i32) as isize) as i32)
-                    << 4 as i32
-                    | op_hex_value(*_s.offset((i + 2 as i32) as isize) as i32))
-                    as libc::c_char;
+            *_s.offset(i as isize) = (op_hex_value(*_s.offset((i + 1 as i32) as isize) as i32)
+                << 4 as i32
+                | op_hex_value(*_s.offset((i + 2 as i32) as isize) as i32))
+                as libc::c_char;
             i += 2 as i32
         }
         i += 1;
@@ -199,8 +197,8 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
         return 0 as *const libc::c_char;
     }
     /*Make sure all escape sequences are valid to simplify unescaping later.*/
-    if (op_validate_url_escapes(scheme_end.offset(1 as i32 as isize)) < 0 as i32)
-        as i32 as libc::c_long
+    if (op_validate_url_escapes(scheme_end.offset(1 as i32 as isize)) < 0 as i32) as i32
+        as libc::c_long
         != 0
     {
         return 0 as *const libc::c_char;
@@ -235,8 +233,8 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
                 return 0 as *const libc::c_char;
             }
             /*An escaped "localhost" can take at most 27 characters.*/
-            if (host_end.offset_from(host) as libc::c_long > 27 as i32 as libc::c_long)
-                as i32 as libc::c_long
+            if (host_end.offset_from(host) as libc::c_long > 27 as i32 as libc::c_long) as i32
+                as libc::c_long
                 != 0
             {
                 return 0 as *const libc::c_char;

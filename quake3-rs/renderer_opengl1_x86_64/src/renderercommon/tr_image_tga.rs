@@ -295,9 +295,7 @@ pub unsafe extern "C" fn R_LoadTGA(
     }
     columns = targa_header.width as u32;
     rows = targa_header.height as u32;
-    numPixels = columns
-        .wrapping_mul(rows)
-        .wrapping_mul(4 as i32 as u32);
+    numPixels = columns.wrapping_mul(rows).wrapping_mul(4 as i32 as u32);
     if columns == 0
         || rows == 0
         || numPixels > 0x7fffffff as i32 as u32
@@ -331,9 +329,7 @@ pub unsafe extern "C" fn R_LoadTGA(
         buf_p = buf_p.offset(targa_header.id_length as i32 as isize)
         // skip TARGA image comment
     }
-    if targa_header.image_type as i32 == 2 as i32
-        || targa_header.image_type as i32 == 3 as i32
-    {
+    if targa_header.image_type as i32 == 2 as i32 || targa_header.image_type as i32 == 3 as i32 {
         if buf_p.offset(
             columns
                 .wrapping_mul(rows)
@@ -478,15 +474,10 @@ pub unsafe extern "C" fn R_LoadTGA(
                 let fresh20 = buf_p;
                 buf_p = buf_p.offset(1);
                 packetHeader = *fresh20;
-                packetSize = (1 as i32
-                    + (packetHeader as i32 & 0x7f as i32))
-                    as u8;
+                packetSize = (1 as i32 + (packetHeader as i32 & 0x7f as i32)) as u8;
                 if packetHeader as i32 & 0x80 as i32 != 0 {
                     // run-length packet
-                    if buf_p.offset(
-                        (targa_header.pixel_size as i32 / 8 as i32) as isize,
-                    ) > end
-                    {
+                    if buf_p.offset((targa_header.pixel_size as i32 / 8 as i32) as isize) > end {
                         crate::src::renderergl1::tr_main::ri
                             .Error
                             .expect("non-null function pointer")(
@@ -569,8 +560,7 @@ pub unsafe extern "C" fn R_LoadTGA(
                 } else {
                     // non run-length packet
                     if buf_p.offset(
-                        (targa_header.pixel_size as i32 / 8 as i32
-                            * packetSize as i32) as isize,
+                        (targa_header.pixel_size as i32 / 8 as i32 * packetSize as i32) as isize,
                     ) > end
                     {
                         crate::src::renderergl1::tr_main::ri

@@ -36,9 +36,8 @@ pub unsafe extern "C" fn silk_residual_energy_covar_FLP(
     let mut nrg: f32 = 0.0f32;
     let mut regularization: f32 = 0.;
     /* Safety checks */
-    regularization = 1e-8f32
-        * (*wXX.offset(0 as i32 as isize)
-            + *wXX.offset((D * D - 1 as i32) as isize));
+    regularization =
+        1e-8f32 * (*wXX.offset(0 as i32 as isize) + *wXX.offset((D * D - 1 as i32) as isize));
     k = 0 as i32;
     while k < 10 as i32 {
         nrg = wxx;
@@ -212,15 +211,13 @@ pub unsafe extern "C" fn silk_residual_energy_FLP(
         LPC_order,
     );
     *nrgs.offset(0 as i32 as isize) = ((*gains.offset(0 as i32 as isize)
-        * *gains.offset(0 as i32 as isize))
-        as f64
+        * *gains.offset(0 as i32 as isize)) as f64
         * crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP(
             LPC_res_ptr.offset((0 as i32 * shift) as isize),
             subfr_length,
         )) as f32;
     *nrgs.offset(1 as i32 as isize) = ((*gains.offset(1 as i32 as isize)
-        * *gains.offset(1 as i32 as isize))
-        as f64
+        * *gains.offset(1 as i32 as isize)) as f64
         * crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP(
             LPC_res_ptr.offset((1 as i32 * shift) as isize),
             subfr_length,
@@ -234,15 +231,13 @@ pub unsafe extern "C" fn silk_residual_energy_FLP(
             LPC_order,
         );
         *nrgs.offset(2 as i32 as isize) = ((*gains.offset(2 as i32 as isize)
-            * *gains.offset(2 as i32 as isize))
-            as f64
+            * *gains.offset(2 as i32 as isize)) as f64
             * crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP(
                 LPC_res_ptr.offset((0 as i32 * shift) as isize),
                 subfr_length,
             )) as f32;
         *nrgs.offset(3 as i32 as isize) = ((*gains.offset(3 as i32 as isize)
-            * *gains.offset(3 as i32 as isize))
-            as f64
+            * *gains.offset(3 as i32 as isize)) as f64
             * crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP(
                 LPC_res_ptr.offset((1 as i32 * shift) as isize),
                 subfr_length,

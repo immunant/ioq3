@@ -14,9 +14,7 @@ pub unsafe extern "C" fn G_Alloc(mut size: i32) -> *mut libc::c_void {
         crate::src::game::g_main::G_Printf(
             b"G_Alloc of %i bytes (%i left)\n\x00" as *const u8 as *const libc::c_char,
             size,
-            256 as i32 * 1024 as i32
-                - allocPoint
-                - (size + 31 as i32 & !(31 as i32)),
+            256 as i32 * 1024 as i32 - allocPoint - (size + 31 as i32 & !(31 as i32)),
         );
     }
     if allocPoint + size > 256 as i32 * 1024 as i32 {

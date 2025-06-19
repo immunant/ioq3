@@ -65,8 +65,7 @@ pub unsafe extern "C" fn mdct_init(
     let mut i: i32 = 0;
     let mut n2: i32 = n >> 1 as i32;
     (*lookup).log2n = crate::stdlib::rint(
-        crate::stdlib::log(n as f32 as f64)
-            / crate::stdlib::log(2.0f32 as f64),
+        crate::stdlib::log(n as f32 as f64) / crate::stdlib::log(2.0f32 as f64),
     ) as i32;
     let mut log2n: i32 = (*lookup).log2n;
     (*lookup).n = n;
@@ -75,36 +74,27 @@ pub unsafe extern "C" fn mdct_init(
     /* trig lookups... */
     i = 0 as i32;
     while i < n / 4 as i32 {
-        *T.offset((i * 2 as i32) as isize) = crate::stdlib::cos(
-            3.14159265358979323846f64 / n as f64
-                * (4 as i32 * i) as f64,
-        ) as f32;
-        *T.offset((i * 2 as i32 + 1 as i32) as isize) = -crate::stdlib::sin(
-            3.14159265358979323846f64 / n as f64
-                * (4 as i32 * i) as f64,
-        ) as f32;
+        *T.offset((i * 2 as i32) as isize) =
+            crate::stdlib::cos(3.14159265358979323846f64 / n as f64 * (4 as i32 * i) as f64) as f32;
+        *T.offset((i * 2 as i32 + 1 as i32) as isize) =
+            -crate::stdlib::sin(3.14159265358979323846f64 / n as f64 * (4 as i32 * i) as f64)
+                as f32;
         *T.offset((n2 + i * 2 as i32) as isize) = crate::stdlib::cos(
-            3.14159265358979323846f64 / (2 as i32 * n) as f64
-                * (2 as i32 * i + 1 as i32) as f64,
+            3.14159265358979323846f64 / (2 as i32 * n) as f64 * (2 as i32 * i + 1 as i32) as f64,
         ) as f32;
         *T.offset((n2 + i * 2 as i32 + 1 as i32) as isize) = crate::stdlib::sin(
-            3.14159265358979323846f64 / (2 as i32 * n) as f64
-                * (2 as i32 * i + 1 as i32) as f64,
-        )
-            as f32;
+            3.14159265358979323846f64 / (2 as i32 * n) as f64 * (2 as i32 * i + 1 as i32) as f64,
+        ) as f32;
         i += 1
     }
     i = 0 as i32;
     while i < n / 8 as i32 {
         *T.offset((n + i * 2 as i32) as isize) = (crate::stdlib::cos(
-            3.14159265358979323846f64 / n as f64
-                * (4 as i32 * i + 2 as i32) as f64,
+            3.14159265358979323846f64 / n as f64 * (4 as i32 * i + 2 as i32) as f64,
         ) * 0.5f64) as f32;
         *T.offset((n + i * 2 as i32 + 1 as i32) as isize) = (-crate::stdlib::sin(
-            3.14159265358979323846f64 / n as f64
-                * (4 as i32 * i + 2 as i32) as f64,
-        ) * 0.5f64)
-            as f32;
+            3.14159265358979323846f64 / n as f64 * (4 as i32 * i + 2 as i32) as f64,
+        ) * 0.5f64) as f32;
         i += 1
     }
     /* bitreverse lookup... */
@@ -132,14 +122,10 @@ pub unsafe extern "C" fn mdct_init(
 #[inline]
 
 unsafe extern "C" fn mdct_butterfly_8(mut x: *mut f32) {
-    let mut r0: f32 =
-        *x.offset(6 as i32 as isize) + *x.offset(2 as i32 as isize);
-    let mut r1: f32 =
-        *x.offset(6 as i32 as isize) - *x.offset(2 as i32 as isize);
-    let mut r2: f32 =
-        *x.offset(4 as i32 as isize) + *x.offset(0 as i32 as isize);
-    let mut r3: f32 =
-        *x.offset(4 as i32 as isize) - *x.offset(0 as i32 as isize);
+    let mut r0: f32 = *x.offset(6 as i32 as isize) + *x.offset(2 as i32 as isize);
+    let mut r1: f32 = *x.offset(6 as i32 as isize) - *x.offset(2 as i32 as isize);
+    let mut r2: f32 = *x.offset(4 as i32 as isize) + *x.offset(0 as i32 as isize);
+    let mut r3: f32 = *x.offset(4 as i32 as isize) - *x.offset(0 as i32 as isize);
     *x.offset(6 as i32 as isize) = r0 + r2;
     *x.offset(4 as i32 as isize) = r0 - r2;
     r0 = *x.offset(5 as i32 as isize) - *x.offset(1 as i32 as isize);
@@ -157,10 +143,8 @@ unsafe extern "C" fn mdct_butterfly_8(mut x: *mut f32) {
 #[inline]
 
 unsafe extern "C" fn mdct_butterfly_16(mut x: *mut f32) {
-    let mut r0: f32 =
-        *x.offset(1 as i32 as isize) - *x.offset(9 as i32 as isize);
-    let mut r1: f32 =
-        *x.offset(0 as i32 as isize) - *x.offset(8 as i32 as isize);
+    let mut r0: f32 = *x.offset(1 as i32 as isize) - *x.offset(9 as i32 as isize);
+    let mut r1: f32 = *x.offset(0 as i32 as isize) - *x.offset(8 as i32 as isize);
     *x.offset(8 as i32 as isize) += *x.offset(0 as i32 as isize);
     *x.offset(9 as i32 as isize) += *x.offset(1 as i32 as isize);
     *x.offset(0 as i32 as isize) = (r0 + r1) * 0.70710678118654752441f32;
@@ -190,10 +174,8 @@ unsafe extern "C" fn mdct_butterfly_16(mut x: *mut f32) {
 #[inline]
 
 unsafe extern "C" fn mdct_butterfly_32(mut x: *mut f32) {
-    let mut r0: f32 =
-        *x.offset(30 as i32 as isize) - *x.offset(14 as i32 as isize);
-    let mut r1: f32 =
-        *x.offset(31 as i32 as isize) - *x.offset(15 as i32 as isize);
+    let mut r0: f32 = *x.offset(30 as i32 as isize) - *x.offset(14 as i32 as isize);
+    let mut r1: f32 = *x.offset(31 as i32 as isize) - *x.offset(15 as i32 as isize);
     *x.offset(30 as i32 as isize) += *x.offset(14 as i32 as isize);
     *x.offset(31 as i32 as isize) += *x.offset(15 as i32 as isize);
     *x.offset(14 as i32 as isize) = r0;
@@ -202,10 +184,8 @@ unsafe extern "C" fn mdct_butterfly_32(mut x: *mut f32) {
     r1 = *x.offset(29 as i32 as isize) - *x.offset(13 as i32 as isize);
     *x.offset(28 as i32 as isize) += *x.offset(12 as i32 as isize);
     *x.offset(29 as i32 as isize) += *x.offset(13 as i32 as isize);
-    *x.offset(12 as i32 as isize) =
-        r0 * 0.92387953251128675613f32 - r1 * 0.38268343236508977175f32;
-    *x.offset(13 as i32 as isize) =
-        r0 * 0.38268343236508977175f32 + r1 * 0.92387953251128675613f32;
+    *x.offset(12 as i32 as isize) = r0 * 0.92387953251128675613f32 - r1 * 0.38268343236508977175f32;
+    *x.offset(13 as i32 as isize) = r0 * 0.38268343236508977175f32 + r1 * 0.92387953251128675613f32;
     r0 = *x.offset(26 as i32 as isize) - *x.offset(10 as i32 as isize);
     r1 = *x.offset(27 as i32 as isize) - *x.offset(11 as i32 as isize);
     *x.offset(26 as i32 as isize) += *x.offset(10 as i32 as isize);
@@ -216,10 +196,8 @@ unsafe extern "C" fn mdct_butterfly_32(mut x: *mut f32) {
     r1 = *x.offset(25 as i32 as isize) - *x.offset(9 as i32 as isize);
     *x.offset(24 as i32 as isize) += *x.offset(8 as i32 as isize);
     *x.offset(25 as i32 as isize) += *x.offset(9 as i32 as isize);
-    *x.offset(8 as i32 as isize) =
-        r0 * 0.38268343236508977175f32 - r1 * 0.92387953251128675613f32;
-    *x.offset(9 as i32 as isize) =
-        r1 * 0.38268343236508977175f32 + r0 * 0.92387953251128675613f32;
+    *x.offset(8 as i32 as isize) = r0 * 0.38268343236508977175f32 - r1 * 0.92387953251128675613f32;
+    *x.offset(9 as i32 as isize) = r1 * 0.38268343236508977175f32 + r0 * 0.92387953251128675613f32;
     r0 = *x.offset(22 as i32 as isize) - *x.offset(6 as i32 as isize);
     r1 = *x.offset(7 as i32 as isize) - *x.offset(23 as i32 as isize);
     *x.offset(22 as i32 as isize) += *x.offset(6 as i32 as isize);
@@ -230,10 +208,8 @@ unsafe extern "C" fn mdct_butterfly_32(mut x: *mut f32) {
     r1 = *x.offset(5 as i32 as isize) - *x.offset(21 as i32 as isize);
     *x.offset(20 as i32 as isize) += *x.offset(4 as i32 as isize);
     *x.offset(21 as i32 as isize) += *x.offset(5 as i32 as isize);
-    *x.offset(4 as i32 as isize) =
-        r1 * 0.92387953251128675613f32 + r0 * 0.38268343236508977175f32;
-    *x.offset(5 as i32 as isize) =
-        r1 * 0.38268343236508977175f32 - r0 * 0.92387953251128675613f32;
+    *x.offset(4 as i32 as isize) = r1 * 0.92387953251128675613f32 + r0 * 0.38268343236508977175f32;
+    *x.offset(5 as i32 as isize) = r1 * 0.38268343236508977175f32 - r0 * 0.92387953251128675613f32;
     r0 = *x.offset(2 as i32 as isize) - *x.offset(18 as i32 as isize);
     r1 = *x.offset(3 as i32 as isize) - *x.offset(19 as i32 as isize);
     *x.offset(18 as i32 as isize) += *x.offset(2 as i32 as isize);
@@ -244,24 +220,16 @@ unsafe extern "C" fn mdct_butterfly_32(mut x: *mut f32) {
     r1 = *x.offset(1 as i32 as isize) - *x.offset(17 as i32 as isize);
     *x.offset(16 as i32 as isize) += *x.offset(0 as i32 as isize);
     *x.offset(17 as i32 as isize) += *x.offset(1 as i32 as isize);
-    *x.offset(0 as i32 as isize) =
-        r1 * 0.38268343236508977175f32 + r0 * 0.92387953251128675613f32;
-    *x.offset(1 as i32 as isize) =
-        r1 * 0.92387953251128675613f32 - r0 * 0.38268343236508977175f32;
+    *x.offset(0 as i32 as isize) = r1 * 0.38268343236508977175f32 + r0 * 0.92387953251128675613f32;
+    *x.offset(1 as i32 as isize) = r1 * 0.92387953251128675613f32 - r0 * 0.38268343236508977175f32;
     mdct_butterfly_16(x);
     mdct_butterfly_16(x.offset(16 as i32 as isize));
 }
 /* N point first stage butterfly (in place, 2 register) */
 #[inline]
 
-unsafe extern "C" fn mdct_butterfly_first(
-    mut T: *mut f32,
-    mut x: *mut f32,
-    mut points: i32,
-) {
-    let mut x1: *mut f32 = x
-        .offset(points as isize)
-        .offset(-(8 as i32 as isize));
+unsafe extern "C" fn mdct_butterfly_first(mut T: *mut f32, mut x: *mut f32, mut points: i32) {
+    let mut x1: *mut f32 = x.offset(points as isize).offset(-(8 as i32 as isize));
     let mut x2: *mut f32 = x
         .offset((points >> 1 as i32) as isize)
         .offset(-(8 as i32 as isize));
@@ -317,9 +285,7 @@ unsafe extern "C" fn mdct_butterfly_generic(
     mut points: i32,
     mut trigint: i32,
 ) {
-    let mut x1: *mut f32 = x
-        .offset(points as isize)
-        .offset(-(8 as i32 as isize));
+    let mut x1: *mut f32 = x.offset(points as isize).offset(-(8 as i32 as isize));
     let mut x2: *mut f32 = x
         .offset((points >> 1 as i32) as isize)
         .offset(-(8 as i32 as isize));
@@ -443,19 +409,13 @@ unsafe extern "C" fn mdct_bitreverse(
     loop {
         let mut x0: *mut f32 = x.offset(*bit.offset(0 as i32 as isize) as isize);
         let mut x1: *mut f32 = x.offset(*bit.offset(1 as i32 as isize) as isize);
-        let mut r0: f32 =
-            *x0.offset(1 as i32 as isize) - *x1.offset(1 as i32 as isize);
-        let mut r1: f32 =
-            *x0.offset(0 as i32 as isize) + *x1.offset(0 as i32 as isize);
-        let mut r2: f32 =
-            r1 * *T.offset(0 as i32 as isize) + r0 * *T.offset(1 as i32 as isize);
-        let mut r3: f32 =
-            r1 * *T.offset(1 as i32 as isize) - r0 * *T.offset(0 as i32 as isize);
+        let mut r0: f32 = *x0.offset(1 as i32 as isize) - *x1.offset(1 as i32 as isize);
+        let mut r1: f32 = *x0.offset(0 as i32 as isize) + *x1.offset(0 as i32 as isize);
+        let mut r2: f32 = r1 * *T.offset(0 as i32 as isize) + r0 * *T.offset(1 as i32 as isize);
+        let mut r3: f32 = r1 * *T.offset(1 as i32 as isize) - r0 * *T.offset(0 as i32 as isize);
         w1 = w1.offset(-(4 as i32 as isize));
-        r0 = (*x0.offset(1 as i32 as isize) + *x1.offset(1 as i32 as isize))
-            * 0.5f32;
-        r1 = (*x0.offset(0 as i32 as isize) - *x1.offset(0 as i32 as isize))
-            * 0.5f32;
+        r0 = (*x0.offset(1 as i32 as isize) + *x1.offset(1 as i32 as isize)) * 0.5f32;
+        r1 = (*x0.offset(0 as i32 as isize) - *x1.offset(0 as i32 as isize)) * 0.5f32;
         *w0.offset(0 as i32 as isize) = r0 + r2;
         *w1.offset(2 as i32 as isize) = r0 - r2;
         *w0.offset(1 as i32 as isize) = r1 + r3;
@@ -466,10 +426,8 @@ unsafe extern "C" fn mdct_bitreverse(
         r1 = *x0.offset(0 as i32 as isize) + *x1.offset(0 as i32 as isize);
         r2 = r1 * *T.offset(2 as i32 as isize) + r0 * *T.offset(3 as i32 as isize);
         r3 = r1 * *T.offset(3 as i32 as isize) - r0 * *T.offset(2 as i32 as isize);
-        r0 = (*x0.offset(1 as i32 as isize) + *x1.offset(1 as i32 as isize))
-            * 0.5f32;
-        r1 = (*x0.offset(0 as i32 as isize) - *x1.offset(0 as i32 as isize))
-            * 0.5f32;
+        r0 = (*x0.offset(1 as i32 as isize) + *x1.offset(1 as i32 as isize)) * 0.5f32;
+        r1 = (*x0.offset(0 as i32 as isize) - *x1.offset(0 as i32 as isize)) * 0.5f32;
         *w0.offset(2 as i32 as isize) = r0 + r2;
         *w1.offset(0 as i32 as isize) = r0 - r2;
         *w0.offset(3 as i32 as isize) = r1 + r3;
@@ -493,9 +451,7 @@ pub unsafe extern "C" fn mdct_backward(
     let mut n2: i32 = n >> 1 as i32;
     let mut n4: i32 = n >> 2 as i32;
     /* rotate */
-    let mut iX: *mut f32 = in_0
-        .offset(n2 as isize)
-        .offset(-(7 as i32 as isize));
+    let mut iX: *mut f32 = in_0.offset(n2 as isize).offset(-(7 as i32 as isize));
     let mut oX: *mut f32 = out.offset(n2 as isize).offset(n4 as isize);
     let mut T: *mut f32 = (*init).trig.offset(n4 as isize);
     loop {
@@ -518,9 +474,7 @@ pub unsafe extern "C" fn mdct_backward(
             break;
         }
     }
-    iX = in_0
-        .offset(n2 as isize)
-        .offset(-(8 as i32 as isize));
+    iX = in_0.offset(n2 as isize).offset(-(8 as i32 as isize));
     oX = out.offset(n2 as isize).offset(n4 as isize);
     T = (*init).trig.offset(n4 as isize);
     loop {
@@ -634,8 +588,7 @@ pub unsafe extern "C" fn mdct_forward(
     let mut n8: i32 = n >> 3 as i32;
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-            as usize,
+        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
     );
     let mut w: *mut f32 = fresh4.as_mut_ptr() as *mut f32;
     let mut w2: *mut f32 = w.offset(n2 as isize);
@@ -694,8 +647,7 @@ pub unsafe extern "C" fn mdct_forward(
     i = 0 as i32;
     while i < n4 {
         x0 = x0.offset(-1);
-        *out.offset(i as isize) = (*w.offset(0 as i32 as isize)
-            * *T.offset(0 as i32 as isize)
+        *out.offset(i as isize) = (*w.offset(0 as i32 as isize) * *T.offset(0 as i32 as isize)
             + *w.offset(1 as i32 as isize) * *T.offset(1 as i32 as isize))
             * (*init).scale;
         *x0.offset(0 as i32 as isize) = (*w.offset(0 as i32 as isize)

@@ -208,18 +208,14 @@ pub unsafe extern "C" fn S_OggOpus_Callback_seek(
 // fclose() replacement
 #[no_mangle]
 
-pub unsafe extern "C" fn S_OggOpus_Callback_close(
-    mut _datasource: *mut libc::c_void,
-) -> i32 {
+pub unsafe extern "C" fn S_OggOpus_Callback_close(mut _datasource: *mut libc::c_void) -> i32 {
     // we do nothing here and close all things manually in S_OggOpus_CodecCloseStream()
     return 0 as i32;
 }
 // ftell() replacement
 #[no_mangle]
 
-pub unsafe extern "C" fn S_OggOpus_Callback_tell(
-    mut datasource: *mut libc::c_void,
-) -> i64 {
+pub unsafe extern "C" fn S_OggOpus_Callback_tell(mut datasource: *mut libc::c_void) -> i64 {
     let mut stream: *mut crate::src::client::snd_codec::snd_stream_t =
         0 as *mut crate::src::client::snd_codec::snd_stream_t;
     // check if input is valid
@@ -238,27 +234,14 @@ pub static mut S_OggOpus_Callbacks: crate::src::opusfile_0_9::src::opusfile::Opu
     let mut init = crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks {
         read: Some(
             S_OggOpus_Callback_read
-                as unsafe extern "C" fn(
-                    _: *mut libc::c_void,
-                    _: *mut u8,
-                    _: i32,
-                ) -> i32,
+                as unsafe extern "C" fn(_: *mut libc::c_void, _: *mut u8, _: i32) -> i32,
         ),
         seek: Some(
             S_OggOpus_Callback_seek
-                as unsafe extern "C" fn(
-                    _: *mut libc::c_void,
-                    _: i64,
-                    _: i32,
-                ) -> i32,
+                as unsafe extern "C" fn(_: *mut libc::c_void, _: i64, _: i32) -> i32,
         ),
-        tell: Some(
-            S_OggOpus_Callback_tell
-                as unsafe extern "C" fn(_: *mut libc::c_void) -> i64,
-        ),
-        close: Some(
-            S_OggOpus_Callback_close as unsafe extern "C" fn(_: *mut libc::c_void) -> i32,
-        ),
+        tell: Some(S_OggOpus_Callback_tell as unsafe extern "C" fn(_: *mut libc::c_void) -> i64),
+        close: Some(S_OggOpus_Callback_close as unsafe extern "C" fn(_: *mut libc::c_void) -> i32),
     };
     init
 };
@@ -336,9 +319,7 @@ pub unsafe extern "C" fn S_OggOpus_CodecOpenStream(
         );
         return 0 as *mut crate::src::client::snd_codec::snd_stream_t;
     }
-    if (*opusInfo).channel_count != 1 as i32
-        && (*opusInfo).channel_count != 2 as i32
-    {
+    if (*opusInfo).channel_count != 1 as i32 && (*opusInfo).channel_count != 2 as i32 {
         crate::src::opusfile_0_9::src::opusfile::op_free(of);
         crate::src::client::snd_codec::S_CodecUtilClose(
             &mut stream as *mut _ as *mut *mut crate::src::client::snd_codec::snd_stream_s,

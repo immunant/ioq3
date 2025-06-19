@@ -17,8 +17,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
     #[inline]
@@ -179,23 +178,17 @@ pub unsafe extern "C" fn RemoveColinearPoints(
     while i < (*w).numpoints {
         j = (i + 1 as i32) % (*w).numpoints;
         k = (i + (*w).numpoints - 1 as i32) % (*w).numpoints;
-        v1[0 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(j as isize))
-            [0 as i32 as usize]
+        v1[0 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(j as isize))[0 as i32 as usize]
             - (*(*w).p.as_mut_ptr().offset(i as isize))[0 as i32 as usize];
-        v1[1 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(j as isize))
-            [1 as i32 as usize]
+        v1[1 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(j as isize))[1 as i32 as usize]
             - (*(*w).p.as_mut_ptr().offset(i as isize))[1 as i32 as usize];
-        v1[2 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(j as isize))
-            [2 as i32 as usize]
+        v1[2 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(j as isize))[2 as i32 as usize]
             - (*(*w).p.as_mut_ptr().offset(i as isize))[2 as i32 as usize];
-        v2[0 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(i as isize))
-            [0 as i32 as usize]
+        v2[0 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(i as isize))[0 as i32 as usize]
             - (*(*w).p.as_mut_ptr().offset(k as isize))[0 as i32 as usize];
-        v2[1 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(i as isize))
-            [1 as i32 as usize]
+        v2[1 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(i as isize))[1 as i32 as usize]
             - (*(*w).p.as_mut_ptr().offset(k as isize))[1 as i32 as usize];
-        v2[2 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(i as isize))
-            [2 as i32 as usize]
+        v2[2 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(i as isize))[2 as i32 as usize]
             - (*(*w).p.as_mut_ptr().offset(k as isize))[2 as i32 as usize];
         crate::src::qcommon::q_math::VectorNormalize2(
             v1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -207,8 +200,7 @@ pub unsafe extern "C" fn RemoveColinearPoints(
         );
         if ((v1[0 as i32 as usize] * v2[0 as i32 as usize]
             + v1[1 as i32 as usize] * v2[1 as i32 as usize]
-            + v1[2 as i32 as usize] * v2[2 as i32 as usize])
-            as f64)
+            + v1[2 as i32 as usize] * v2[2 as i32 as usize]) as f64)
             < 0.999f64
         {
             p[nump as usize][0 as i32 as usize] =
@@ -248,23 +240,17 @@ pub unsafe extern "C" fn WindingPlane(
 ) {
     let mut v1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut v2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    v1[0 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(1 as i32 as isize))
-        [0 as i32 as usize]
+    v1[0 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(1 as i32 as isize))[0 as i32 as usize]
         - (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[0 as i32 as usize];
-    v1[1 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(1 as i32 as isize))
-        [1 as i32 as usize]
+    v1[1 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(1 as i32 as isize))[1 as i32 as usize]
         - (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[1 as i32 as usize];
-    v1[2 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(1 as i32 as isize))
-        [2 as i32 as usize]
+    v1[2 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(1 as i32 as isize))[2 as i32 as usize]
         - (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[2 as i32 as usize];
-    v2[0 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(2 as i32 as isize))
-        [0 as i32 as usize]
+    v2[0 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(2 as i32 as isize))[0 as i32 as usize]
         - (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[0 as i32 as usize];
-    v2[1 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(2 as i32 as isize))
-        [1 as i32 as usize]
+    v2[1 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(2 as i32 as isize))[1 as i32 as usize]
         - (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[1 as i32 as usize];
-    v2[2 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(2 as i32 as isize))
-        [2 as i32 as usize]
+    v2[2 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(2 as i32 as isize))[2 as i32 as usize]
         - (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[2 as i32 as usize];
     CrossProduct(
         v2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -300,29 +286,20 @@ pub unsafe extern "C" fn WindingArea(
     total = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     i = 2 as i32;
     while i < (*w).numpoints {
-        d1[0 as i32 as usize] = (*(*w)
-            .p
-            .as_mut_ptr()
-            .offset((i - 1 as i32) as isize))[0 as i32 as usize]
-            - (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[0 as i32 as usize];
-        d1[1 as i32 as usize] = (*(*w)
-            .p
-            .as_mut_ptr()
-            .offset((i - 1 as i32) as isize))[1 as i32 as usize]
-            - (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[1 as i32 as usize];
-        d1[2 as i32 as usize] = (*(*w)
-            .p
-            .as_mut_ptr()
-            .offset((i - 1 as i32) as isize))[2 as i32 as usize]
-            - (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[2 as i32 as usize];
-        d2[0 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(i as isize))
+        d1[0 as i32 as usize] = (*(*w).p.as_mut_ptr().offset((i - 1 as i32) as isize))
             [0 as i32 as usize]
             - (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[0 as i32 as usize];
-        d2[1 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(i as isize))
+        d1[1 as i32 as usize] = (*(*w).p.as_mut_ptr().offset((i - 1 as i32) as isize))
             [1 as i32 as usize]
             - (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[1 as i32 as usize];
-        d2[2 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(i as isize))
+        d1[2 as i32 as usize] = (*(*w).p.as_mut_ptr().offset((i - 1 as i32) as isize))
             [2 as i32 as usize]
+            - (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[2 as i32 as usize];
+        d2[0 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(i as isize))[0 as i32 as usize]
+            - (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[0 as i32 as usize];
+        d2[1 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(i as isize))[1 as i32 as usize]
+            - (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[1 as i32 as usize];
+        d2[2 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(i as isize))[2 as i32 as usize]
             - (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[2 as i32 as usize];
         CrossProduct(
             d1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -391,12 +368,9 @@ pub unsafe extern "C" fn WindingCenter(
 ) {
     let mut i: i32 = 0;
     let mut scale: f32 = 0.;
-    *center.offset(0 as i32 as isize) =
-        crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize];
-    *center.offset(1 as i32 as isize) =
-        crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize];
-    *center.offset(2 as i32 as isize) =
-        crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize];
+    *center.offset(0 as i32 as isize) = crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize];
+    *center.offset(1 as i32 as isize) = crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize];
+    *center.offset(2 as i32 as isize) = crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize];
     i = 0 as i32;
     while i < (*w).numpoints {
         *center.offset(0 as i32 as isize) = (*(*w).p.as_mut_ptr().offset(i as isize))
@@ -454,32 +428,20 @@ pub unsafe extern "C" fn BaseWindingForPlane(
             b"BaseWindingForPlane: no axis found\x00" as *const u8 as *const libc::c_char,
         );
     }
-    vup[0 as i32 as usize] =
-        crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize];
-    vup[1 as i32 as usize] =
-        crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize];
-    vup[2 as i32 as usize] =
-        crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize];
+    vup[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize];
+    vup[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize];
+    vup[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize];
     match x {
-        0 | 1 => {
-            vup[2 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t
-        }
-        2 => {
-            vup[0 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t
-        }
+        0 | 1 => vup[2 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t,
+        2 => vup[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t,
         _ => {}
     }
     v = vup[0 as i32 as usize] * *normal.offset(0 as i32 as isize)
         + vup[1 as i32 as usize] * *normal.offset(1 as i32 as isize)
         + vup[2 as i32 as usize] * *normal.offset(2 as i32 as isize);
-    vup[0 as i32 as usize] =
-        vup[0 as i32 as usize] + *normal.offset(0 as i32 as isize) * -v;
-    vup[1 as i32 as usize] =
-        vup[1 as i32 as usize] + *normal.offset(1 as i32 as isize) * -v;
-    vup[2 as i32 as usize] =
-        vup[2 as i32 as usize] + *normal.offset(2 as i32 as isize) * -v;
+    vup[0 as i32 as usize] = vup[0 as i32 as usize] + *normal.offset(0 as i32 as isize) * -v;
+    vup[1 as i32 as usize] = vup[1 as i32 as usize] + *normal.offset(1 as i32 as isize) * -v;
+    vup[2 as i32 as usize] = vup[2 as i32 as usize] + *normal.offset(2 as i32 as isize) * -v;
     crate::src::qcommon::q_math::VectorNormalize2(
         vup.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         vup.as_mut_ptr(),
@@ -492,18 +454,12 @@ pub unsafe extern "C" fn BaseWindingForPlane(
         normal as *const crate::src::qcommon::q_shared::vec_t,
         vright.as_mut_ptr(),
     );
-    vup[0 as i32 as usize] =
-        vup[0 as i32 as usize] * 65535 as i32 as f32;
-    vup[1 as i32 as usize] =
-        vup[1 as i32 as usize] * 65535 as i32 as f32;
-    vup[2 as i32 as usize] =
-        vup[2 as i32 as usize] * 65535 as i32 as f32;
-    vright[0 as i32 as usize] =
-        vright[0 as i32 as usize] * 65535 as i32 as f32;
-    vright[1 as i32 as usize] =
-        vright[1 as i32 as usize] * 65535 as i32 as f32;
-    vright[2 as i32 as usize] =
-        vright[2 as i32 as usize] * 65535 as i32 as f32;
+    vup[0 as i32 as usize] = vup[0 as i32 as usize] * 65535 as i32 as f32;
+    vup[1 as i32 as usize] = vup[1 as i32 as usize] * 65535 as i32 as f32;
+    vup[2 as i32 as usize] = vup[2 as i32 as usize] * 65535 as i32 as f32;
+    vright[0 as i32 as usize] = vright[0 as i32 as usize] * 65535 as i32 as f32;
+    vright[1 as i32 as usize] = vright[1 as i32 as usize] * 65535 as i32 as f32;
+    vright[2 as i32 as usize] = vright[2 as i32 as usize] * 65535 as i32 as f32;
     // project a really big	axis aligned box onto the plane
     w = AllocWinding(4 as i32);
     (*(*w).p.as_mut_ptr().offset(0 as i32 as isize))[0 as i32 as usize] =
@@ -712,74 +668,9 @@ pub unsafe extern "C" fn ClipWindingEpsilon(
         0.,
     ]; // VC 4.2 optimizer bug if not static
     let mut sides: [i32; 68] = [
-        0 as i32,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
+        0 as i32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     ];
     let mut counts: [i32; 3] = [0; 3];
     static mut dot: crate::src::qcommon::q_shared::vec_t = 0.;
@@ -883,8 +774,7 @@ pub unsafe extern "C" fn ClipWindingEpsilon(
                     .as_mut_ptr()
                     .offset(((i + 1 as i32) % (*in_0).numpoints) as isize))
                 .as_mut_ptr();
-                dot = dists[i as usize]
-                    / (dists[i as usize] - dists[(i + 1 as i32) as usize]);
+                dot = dists[i as usize] / (dists[i as usize] - dists[(i + 1 as i32) as usize]);
                 j = 0 as i32;
                 while j < 3 as i32 {
                     // avoid round off error when possible
@@ -1015,74 +905,9 @@ pub unsafe extern "C" fn ChopWindingInPlace(
         0.,
     ];
     let mut sides: [i32; 68] = [
-        0 as i32,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
+        0 as i32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     ];
     let mut counts: [i32; 3] = [0; 3];
     static mut dot: crate::src::qcommon::q_shared::vec_t = 0.;
@@ -1164,8 +989,7 @@ pub unsafe extern "C" fn ChopWindingInPlace(
                     .as_mut_ptr()
                     .offset(((i + 1 as i32) % (*in_0).numpoints) as isize))
                 .as_mut_ptr();
-                dot = dists[i as usize]
-                    / (dists[i as usize] - dists[(i + 1 as i32) as usize]);
+                dot = dists[i as usize] / (dists[i as usize] - dists[(i + 1 as i32) as usize]);
                 j = 0 as i32;
                 while j < 3 as i32 {
                     // avoid round off error when possible
@@ -1303,12 +1127,9 @@ pub unsafe extern "C" fn CheckWinding(mut w: *mut crate::src::qcommon::cm_polyli
         }
         // check the edge isn't degenerate
         p2 = (*(*w).p.as_mut_ptr().offset(j as isize)).as_mut_ptr();
-        dir[0 as i32 as usize] =
-            *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
-        dir[1 as i32 as usize] =
-            *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
-        dir[2 as i32 as usize] =
-            *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
+        dir[0 as i32 as usize] = *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
+        dir[1 as i32 as usize] = *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
+        dir[2 as i32 as usize] = *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
         if VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t) < 0.1f32 {
             crate::src::qcommon::common::Com_Error(
                 crate::src::qcommon::q_shared::ERR_DROP as i32,
@@ -1491,12 +1312,12 @@ pub unsafe extern "C" fn AddWindingToConvexHull(
         outside = crate::src::qcommon::q_shared::qfalse;
         j = 0 as i32;
         while j < numHullPoints {
-            dir[0 as i32 as usize] = *p.offset(0 as i32 as isize)
-                - hullPoints[j as usize][0 as i32 as usize];
-            dir[1 as i32 as usize] = *p.offset(1 as i32 as isize)
-                - hullPoints[j as usize][1 as i32 as usize];
-            dir[2 as i32 as usize] = *p.offset(2 as i32 as isize)
-                - hullPoints[j as usize][2 as i32 as usize];
+            dir[0 as i32 as usize] =
+                *p.offset(0 as i32 as isize) - hullPoints[j as usize][0 as i32 as usize];
+            dir[1 as i32 as usize] =
+                *p.offset(1 as i32 as isize) - hullPoints[j as usize][1 as i32 as usize];
+            dir[2 as i32 as usize] =
+                *p.offset(2 as i32 as isize) - hullPoints[j as usize][2 as i32 as usize];
             d = dir[0 as i32 as usize] * hullDirs[j as usize][0 as i32 as usize]
                 + dir[1 as i32 as usize] * hullDirs[j as usize][1 as i32 as usize]
                 + dir[2 as i32 as usize] * hullDirs[j as usize][2 as i32 as usize];
@@ -1516,8 +1337,7 @@ pub unsafe extern "C" fn AddWindingToConvexHull(
             j = 0 as i32;
             while j < numHullPoints {
                 if hullSide[(j % numHullPoints) as usize] as u64 == 0
-                    && hullSide[((j + 1 as i32) % numHullPoints) as usize] as u32
-                        != 0
+                    && hullSide[((j + 1 as i32) % numHullPoints) as usize] as u32 != 0
                 {
                     break;
                 }
@@ -1525,24 +1345,19 @@ pub unsafe extern "C" fn AddWindingToConvexHull(
             }
             if !(j == numHullPoints) {
                 // insert the point here
-                newHullPoints[0 as i32 as usize][0 as i32 as usize] =
-                    *p.offset(0 as i32 as isize);
-                newHullPoints[0 as i32 as usize][1 as i32 as usize] =
-                    *p.offset(1 as i32 as isize);
-                newHullPoints[0 as i32 as usize][2 as i32 as usize] =
-                    *p.offset(2 as i32 as isize);
+                newHullPoints[0 as i32 as usize][0 as i32 as usize] = *p.offset(0 as i32 as isize);
+                newHullPoints[0 as i32 as usize][1 as i32 as usize] = *p.offset(1 as i32 as isize);
+                newHullPoints[0 as i32 as usize][2 as i32 as usize] = *p.offset(2 as i32 as isize);
                 numNew = 1 as i32;
                 // copy over all points that aren't double fronts
                 j = (j + 1 as i32) % numHullPoints;
                 k = 0 as i32;
                 while k < numHullPoints {
                     if !(hullSide[((j + k) % numHullPoints) as usize] as u32 != 0
-                        && hullSide[((j + k + 1 as i32) % numHullPoints) as usize]
-                            as u32
-                            != 0)
+                        && hullSide[((j + k + 1 as i32) % numHullPoints) as usize] as u32 != 0)
                     {
-                        copy = hullPoints[((j + k + 1 as i32) % numHullPoints) as usize]
-                            .as_mut_ptr();
+                        copy =
+                            hullPoints[((j + k + 1 as i32) % numHullPoints) as usize].as_mut_ptr();
                         newHullPoints[numNew as usize][0 as i32 as usize] =
                             *copy.offset(0 as i32 as isize);
                         newHullPoints[numNew as usize][1 as i32 as usize] =

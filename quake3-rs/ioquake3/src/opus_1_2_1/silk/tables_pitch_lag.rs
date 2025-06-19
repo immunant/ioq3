@@ -157,8 +157,5 @@ pub static mut silk_pitch_contour_10_ms_iCDF: [u8; 12] = [
 ];
 #[no_mangle]
 
-pub static mut silk_pitch_contour_10_ms_NB_iCDF: [u8; 3] = [
-    113 as i32 as u8,
-    63 as i32 as u8,
-    0 as i32 as u8,
-];
+pub static mut silk_pitch_contour_10_ms_NB_iCDF: [u8; 3] =
+    [113 as i32 as u8, 63 as i32 as u8, 0 as i32 as u8];

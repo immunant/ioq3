@@ -248,9 +248,8 @@ pub mod cm_local_h {
         pub list: *mut i32,
         pub bounds: [crate::src::qcommon::q_shared::vec3_t; 2],
         pub lastLeaf: i32,
-        pub storeLeafs: Option<
-            unsafe extern "C" fn(_: *mut crate::cm_local_h::leafList_s, _: i32) -> (),
-        >,
+        pub storeLeafs:
+            Option<unsafe extern "C" fn(_: *mut crate::cm_local_h::leafList_s, _: i32) -> ()>,
     }
 }
 pub mod opus_private_h {
@@ -1003,13 +1002,9 @@ pub mod backends_h {
             ) -> *mut libc::c_void,
         >,
         pub free_info: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
-        pub forward:
-            Option<unsafe extern "C" fn(_: *mut crate::codec_h::vorbis_block) -> i32>,
+        pub forward: Option<unsafe extern "C" fn(_: *mut crate::codec_h::vorbis_block) -> i32>,
         pub inverse: Option<
-            unsafe extern "C" fn(
-                _: *mut crate::codec_h::vorbis_block,
-                _: *mut libc::c_void,
-            ) -> i32,
+            unsafe extern "C" fn(_: *mut crate::codec_h::vorbis_block, _: *mut libc::c_void) -> i32,
         >,
     }
 
@@ -2029,10 +2024,8 @@ pub mod tr_public_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct refimport_t {
-        pub Printf:
-            Option<unsafe extern "C" fn(_: i32, _: *const libc::c_char, _: ...) -> ()>,
-        pub Error:
-            Option<unsafe extern "C" fn(_: i32, _: *const libc::c_char, _: ...) -> !>,
+        pub Printf: Option<unsafe extern "C" fn(_: i32, _: *const libc::c_char, _: ...) -> ()>,
+        pub Error: Option<unsafe extern "C" fn(_: i32, _: *const libc::c_char, _: ...) -> !>,
         pub Milliseconds: Option<unsafe extern "C" fn() -> i32>,
         pub Hunk_Alloc: Option<
             unsafe extern "C" fn(
@@ -2040,8 +2033,7 @@ pub mod tr_public_h {
                 _: crate::src::qcommon::q_shared::ha_pref,
             ) -> *mut libc::c_void,
         >,
-        pub Hunk_AllocateTempMemory:
-            Option<unsafe extern "C" fn(_: i32) -> *mut libc::c_void>,
+        pub Hunk_AllocateTempMemory: Option<unsafe extern "C" fn(_: i32) -> *mut libc::c_void>,
         pub Hunk_FreeTempMemory: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
         pub Malloc: Option<unsafe extern "C" fn(_: i32) -> *mut libc::c_void>,
         pub Free: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
@@ -2054,8 +2046,7 @@ pub mod tr_public_h {
         >,
         pub Cvar_Set:
             Option<unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> ()>,
-        pub Cvar_SetValue:
-            Option<unsafe extern "C" fn(_: *const libc::c_char, _: f32) -> ()>,
+        pub Cvar_SetValue: Option<unsafe extern "C" fn(_: *const libc::c_char, _: f32) -> ()>,
         pub Cvar_CheckRange: Option<
             unsafe extern "C" fn(
                 _: *mut crate::src::qcommon::q_shared::cvar_t,
@@ -2070,8 +2061,7 @@ pub mod tr_public_h {
                 _: *const libc::c_char,
             ) -> (),
         >,
-        pub Cvar_VariableIntegerValue:
-            Option<unsafe extern "C" fn(_: *const libc::c_char) -> i32>,
+        pub Cvar_VariableIntegerValue: Option<unsafe extern "C" fn(_: *const libc::c_char) -> i32>,
         pub Cmd_AddCommand: Option<
             unsafe extern "C" fn(
                 _: *const libc::c_char,
@@ -2081,25 +2071,16 @@ pub mod tr_public_h {
         pub Cmd_RemoveCommand: Option<unsafe extern "C" fn(_: *const libc::c_char) -> ()>,
         pub Cmd_Argc: Option<unsafe extern "C" fn() -> i32>,
         pub Cmd_Argv: Option<unsafe extern "C" fn(_: i32) -> *mut libc::c_char>,
-        pub Cmd_ExecuteText:
-            Option<unsafe extern "C" fn(_: i32, _: *const libc::c_char) -> ()>,
-        pub CM_ClusterPVS: Option<
-            unsafe extern "C" fn(_: i32) -> *mut crate::src::qcommon::q_shared::byte,
-        >,
+        pub Cmd_ExecuteText: Option<unsafe extern "C" fn(_: i32, _: *const libc::c_char) -> ()>,
+        pub CM_ClusterPVS:
+            Option<unsafe extern "C" fn(_: i32) -> *mut crate::src::qcommon::q_shared::byte>,
         pub CM_DrawDebugSurface: Option<
             unsafe extern "C" fn(
-                _: Option<
-                    unsafe extern "C" fn(
-                        _: i32,
-                        _: i32,
-                        _: *mut f32,
-                    ) -> (),
-                >,
+                _: Option<unsafe extern "C" fn(_: i32, _: i32, _: *mut f32) -> ()>,
             ) -> (),
         >,
-        pub FS_FileIsInPAK: Option<
-            unsafe extern "C" fn(_: *const libc::c_char, _: *mut i32) -> i32,
-        >,
+        pub FS_FileIsInPAK:
+            Option<unsafe extern "C" fn(_: *const libc::c_char, _: *mut i32) -> i32>,
         pub FS_ReadFile: Option<
             unsafe extern "C" fn(_: *const libc::c_char, _: *mut *mut libc::c_void) -> libc::c_long,
         >,
@@ -2113,11 +2094,7 @@ pub mod tr_public_h {
         >,
         pub FS_FreeFileList: Option<unsafe extern "C" fn(_: *mut *mut libc::c_char) -> ()>,
         pub FS_WriteFile: Option<
-            unsafe extern "C" fn(
-                _: *const libc::c_char,
-                _: *const libc::c_void,
-                _: i32,
-            ) -> (),
+            unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_void, _: i32) -> (),
         >,
         pub FS_FileExists: Option<
             unsafe extern "C" fn(_: *const libc::c_char) -> crate::src::qcommon::q_shared::qboolean,
@@ -2136,10 +2113,7 @@ pub mod tr_public_h {
         pub CIN_RunCinematic:
             Option<unsafe extern "C" fn(_: i32) -> crate::src::qcommon::q_shared::e_status>,
         pub CL_WriteAVIVideoFrame: Option<
-            unsafe extern "C" fn(
-                _: *const crate::src::qcommon::q_shared::byte,
-                _: i32,
-            ) -> (),
+            unsafe extern "C" fn(_: *const crate::src::qcommon::q_shared::byte, _: i32) -> (),
         >,
         pub IN_Init: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
         pub IN_Shutdown: Option<unsafe extern "C" fn() -> ()>,
@@ -2751,9 +2725,8 @@ pub mod botlib_h {
                 _: i32,
             ) -> (),
         >,
-        pub PointContents: Option<
-            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
-        >,
+        pub PointContents:
+            Option<unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32>,
         pub inPVS: Option<
             unsafe extern "C" fn(
                 _: *mut crate::src::qcommon::q_shared::vec_t,
@@ -2770,8 +2743,7 @@ pub mod botlib_h {
                 _: *mut crate::src::qcommon::q_shared::vec_t,
             ) -> (),
         >,
-        pub BotClientCommand:
-            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> ()>,
+        pub BotClientCommand: Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> ()>,
         pub GetMemory: Option<unsafe extern "C" fn(_: i32) -> *mut libc::c_void>,
         pub FreeMemory: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
         pub AvailableMemory: Option<unsafe extern "C" fn() -> i32>,
@@ -2831,9 +2803,8 @@ pub mod botlib_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct aas_export_s {
-        pub AAS_EntityInfo: Option<
-            unsafe extern "C" fn(_: i32, _: *mut crate::be_aas_h::aas_entityinfo_s) -> (),
-        >,
+        pub AAS_EntityInfo:
+            Option<unsafe extern "C" fn(_: i32, _: *mut crate::be_aas_h::aas_entityinfo_s) -> ()>,
         pub AAS_Initialized: Option<unsafe extern "C" fn() -> i32>,
         pub AAS_PresenceTypeBoundingBox: Option<
             unsafe extern "C" fn(
@@ -2843,12 +2814,10 @@ pub mod botlib_h {
             ) -> (),
         >,
         pub AAS_Time: Option<unsafe extern "C" fn() -> f32>,
-        pub AAS_PointAreaNum: Option<
-            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
-        >,
-        pub AAS_PointReachabilityAreaIndex: Option<
-            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
-        >,
+        pub AAS_PointAreaNum:
+            Option<unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32>,
+        pub AAS_PointReachabilityAreaIndex:
+            Option<unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32>,
         pub AAS_TraceAreas: Option<
             unsafe extern "C" fn(
                 _: *mut crate::src::qcommon::q_shared::vec_t,
@@ -2866,23 +2835,13 @@ pub mod botlib_h {
                 _: i32,
             ) -> i32,
         >,
-        pub AAS_AreaInfo: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: *mut crate::be_aas_h::aas_areainfo_s,
-            ) -> i32,
-        >,
-        pub AAS_PointContents: Option<
-            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
-        >,
+        pub AAS_AreaInfo:
+            Option<unsafe extern "C" fn(_: i32, _: *mut crate::be_aas_h::aas_areainfo_s) -> i32>,
+        pub AAS_PointContents:
+            Option<unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32>,
         pub AAS_NextBSPEntity: Option<unsafe extern "C" fn(_: i32) -> i32>,
         pub AAS_ValueForBSPEpairKey: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: *mut libc::c_char,
-                _: *mut libc::c_char,
-                _: i32,
-            ) -> i32,
+            unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut libc::c_char, _: i32) -> i32,
         >,
         pub AAS_VectorForBSPEpairKey: Option<
             unsafe extern "C" fn(
@@ -2891,20 +2850,10 @@ pub mod botlib_h {
                 _: *mut crate::src::qcommon::q_shared::vec_t,
             ) -> i32,
         >,
-        pub AAS_FloatForBSPEpairKey: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: *mut libc::c_char,
-                _: *mut f32,
-            ) -> i32,
-        >,
-        pub AAS_IntForBSPEpairKey: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: *mut libc::c_char,
-                _: *mut i32,
-            ) -> i32,
-        >,
+        pub AAS_FloatForBSPEpairKey:
+            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut f32) -> i32>,
+        pub AAS_IntForBSPEpairKey:
+            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut i32) -> i32>,
         pub AAS_AreaReachability: Option<unsafe extern "C" fn(_: i32) -> i32>,
         pub AAS_AreaTravelTimeToGoalArea: Option<
             unsafe extern "C" fn(
@@ -2914,8 +2863,7 @@ pub mod botlib_h {
                 _: i32,
             ) -> i32,
         >,
-        pub AAS_EnableRoutingArea:
-            Option<unsafe extern "C" fn(_: i32, _: i32) -> i32>,
+        pub AAS_EnableRoutingArea: Option<unsafe extern "C" fn(_: i32, _: i32) -> i32>,
         pub AAS_PredictRoute: Option<
             unsafe extern "C" fn(
                 _: *mut crate::be_aas_h::aas_predictroute_s,
@@ -2943,9 +2891,8 @@ pub mod botlib_h {
                 _: i32,
             ) -> i32,
         >,
-        pub AAS_Swimming: Option<
-            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
-        >,
+        pub AAS_Swimming:
+            Option<unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32>,
         pub AAS_PredictClientMovement: Option<
             unsafe extern "C" fn(
                 _: *mut crate::be_aas_h::aas_clientmove_s,
@@ -2997,18 +2944,11 @@ pub mod botlib_h {
             ) -> (),
         >,
         pub EA_View: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
-            ) -> (),
+            unsafe extern "C" fn(_: i32, _: *mut crate::src::qcommon::q_shared::vec_t) -> (),
         >,
         pub EA_EndRegular: Option<unsafe extern "C" fn(_: i32, _: f32) -> ()>,
         pub EA_GetInput: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: f32,
-                _: *mut crate::botlib_h::bot_input_t,
-            ) -> (),
+            unsafe extern "C" fn(_: i32, _: f32, _: *mut crate::botlib_h::bot_input_t) -> (),
         >,
         pub EA_ResetInput: Option<unsafe extern "C" fn(_: i32) -> ()>,
     }
@@ -3018,44 +2958,21 @@ pub mod botlib_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct ai_export_s {
-        pub BotLoadCharacter:
-            Option<unsafe extern "C" fn(_: *mut libc::c_char, _: f32) -> i32>,
+        pub BotLoadCharacter: Option<unsafe extern "C" fn(_: *mut libc::c_char, _: f32) -> i32>,
         pub BotFreeCharacter: Option<unsafe extern "C" fn(_: i32) -> ()>,
-        pub Characteristic_Float:
-            Option<unsafe extern "C" fn(_: i32, _: i32) -> f32>,
-        pub Characteristic_BFloat: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: i32,
-                _: f32,
-                _: f32,
-            ) -> f32,
-        >,
-        pub Characteristic_Integer:
-            Option<unsafe extern "C" fn(_: i32, _: i32) -> i32>,
-        pub Characteristic_BInteger: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: i32,
-                _: i32,
-                _: i32,
-            ) -> i32,
-        >,
-        pub Characteristic_String: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: i32,
-                _: *mut libc::c_char,
-                _: i32,
-            ) -> (),
-        >,
+        pub Characteristic_Float: Option<unsafe extern "C" fn(_: i32, _: i32) -> f32>,
+        pub Characteristic_BFloat:
+            Option<unsafe extern "C" fn(_: i32, _: i32, _: f32, _: f32) -> f32>,
+        pub Characteristic_Integer: Option<unsafe extern "C" fn(_: i32, _: i32) -> i32>,
+        pub Characteristic_BInteger:
+            Option<unsafe extern "C" fn(_: i32, _: i32, _: i32, _: i32) -> i32>,
+        pub Characteristic_String:
+            Option<unsafe extern "C" fn(_: i32, _: i32, _: *mut libc::c_char, _: i32) -> ()>,
         pub BotAllocChatState: Option<unsafe extern "C" fn() -> i32>,
         pub BotFreeChatState: Option<unsafe extern "C" fn(_: i32) -> ()>,
-        pub BotQueueConsoleMessage: Option<
-            unsafe extern "C" fn(_: i32, _: i32, _: *mut libc::c_char) -> (),
-        >,
-        pub BotRemoveConsoleMessage:
-            Option<unsafe extern "C" fn(_: i32, _: i32) -> ()>,
+        pub BotQueueConsoleMessage:
+            Option<unsafe extern "C" fn(_: i32, _: i32, _: *mut libc::c_char) -> ()>,
+        pub BotRemoveConsoleMessage: Option<unsafe extern "C" fn(_: i32, _: i32) -> ()>,
         pub BotNextConsoleMessage: Option<
             unsafe extern "C" fn(
                 _: i32,
@@ -3078,8 +2995,7 @@ pub mod botlib_h {
                 _: *mut libc::c_char,
             ) -> (),
         >,
-        pub BotNumInitialChats:
-            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32>,
+        pub BotNumInitialChats: Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32>,
         pub BotReplyChat: Option<
             unsafe extern "C" fn(
                 _: i32,
@@ -3097,18 +3013,11 @@ pub mod botlib_h {
             ) -> i32,
         >,
         pub BotChatLength: Option<unsafe extern "C" fn(_: i32) -> i32>,
-        pub BotEnterChat:
-            Option<unsafe extern "C" fn(_: i32, _: i32, _: i32) -> ()>,
-        pub BotGetChatMessage: Option<
-            unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> (),
-        >,
-        pub StringContains: Option<
-            unsafe extern "C" fn(
-                _: *mut libc::c_char,
-                _: *mut libc::c_char,
-                _: i32,
-            ) -> i32,
-        >,
+        pub BotEnterChat: Option<unsafe extern "C" fn(_: i32, _: i32, _: i32) -> ()>,
+        pub BotGetChatMessage:
+            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> ()>,
+        pub StringContains:
+            Option<unsafe extern "C" fn(_: *mut libc::c_char, _: *mut libc::c_char, _: i32) -> i32>,
         pub BotFindMatch: Option<
             unsafe extern "C" fn(
                 _: *mut libc::c_char,
@@ -3127,45 +3036,27 @@ pub mod botlib_h {
         pub UnifyWhiteSpaces: Option<unsafe extern "C" fn(_: *mut libc::c_char) -> ()>,
         pub BotReplaceSynonyms:
             Option<unsafe extern "C" fn(_: *mut libc::c_char, _: libc::c_ulong) -> ()>,
-        pub BotLoadChatFile: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: *mut libc::c_char,
-                _: *mut libc::c_char,
-            ) -> i32,
-        >,
+        pub BotLoadChatFile:
+            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut libc::c_char) -> i32>,
         pub BotSetChatGender: Option<unsafe extern "C" fn(_: i32, _: i32) -> ()>,
-        pub BotSetChatName: Option<
-            unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> (),
-        >,
+        pub BotSetChatName:
+            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> ()>,
         pub BotResetGoalState: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub BotResetAvoidGoals: Option<unsafe extern "C" fn(_: i32) -> ()>,
-        pub BotRemoveFromAvoidGoals:
-            Option<unsafe extern "C" fn(_: i32, _: i32) -> ()>,
+        pub BotRemoveFromAvoidGoals: Option<unsafe extern "C" fn(_: i32, _: i32) -> ()>,
         pub BotPushGoal: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) -> (),
+            unsafe extern "C" fn(_: i32, _: *mut crate::src::botlib::be_ai_goal::bot_goal_s) -> (),
         >,
         pub BotPopGoal: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub BotEmptyGoalStack: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub BotDumpAvoidGoals: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub BotDumpGoalStack: Option<unsafe extern "C" fn(_: i32) -> ()>,
-        pub BotGoalName: Option<
-            unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> (),
-        >,
+        pub BotGoalName: Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: i32) -> ()>,
         pub BotGetTopGoal: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) -> i32,
+            unsafe extern "C" fn(_: i32, _: *mut crate::src::botlib::be_ai_goal::bot_goal_s) -> i32,
         >,
         pub BotGetSecondGoal: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) -> i32,
+            unsafe extern "C" fn(_: i32, _: *mut crate::src::botlib::be_ai_goal::bot_goal_s) -> i32,
         >,
         pub BotChooseLTGItem: Option<
             unsafe extern "C" fn(
@@ -3207,10 +3098,7 @@ pub mod botlib_h {
             ) -> i32,
         >,
         pub BotGetNextCampSpotGoal: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
-            ) -> i32,
+            unsafe extern "C" fn(_: i32, _: *mut crate::src::botlib::be_ai_goal::bot_goal_s) -> i32,
         >,
         pub BotGetMapLocationGoal: Option<
             unsafe extern "C" fn(
@@ -3218,21 +3106,15 @@ pub mod botlib_h {
                 _: *mut crate::src::botlib::be_ai_goal::bot_goal_s,
             ) -> i32,
         >,
-        pub BotAvoidGoalTime:
-            Option<unsafe extern "C" fn(_: i32, _: i32) -> f32>,
-        pub BotSetAvoidGoalTime:
-            Option<unsafe extern "C" fn(_: i32, _: i32, _: f32) -> ()>,
+        pub BotAvoidGoalTime: Option<unsafe extern "C" fn(_: i32, _: i32) -> f32>,
+        pub BotSetAvoidGoalTime: Option<unsafe extern "C" fn(_: i32, _: i32, _: f32) -> ()>,
         pub BotInitLevelItems: Option<unsafe extern "C" fn() -> ()>,
         pub BotUpdateEntityItems: Option<unsafe extern "C" fn() -> ()>,
-        pub BotLoadItemWeights:
-            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32>,
+        pub BotLoadItemWeights: Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32>,
         pub BotFreeItemWeights: Option<unsafe extern "C" fn(_: i32) -> ()>,
-        pub BotInterbreedGoalFuzzyLogic:
-            Option<unsafe extern "C" fn(_: i32, _: i32, _: i32) -> ()>,
-        pub BotSaveGoalFuzzyLogic:
-            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> ()>,
-        pub BotMutateGoalFuzzyLogic:
-            Option<unsafe extern "C" fn(_: i32, _: f32) -> ()>,
+        pub BotInterbreedGoalFuzzyLogic: Option<unsafe extern "C" fn(_: i32, _: i32, _: i32) -> ()>,
+        pub BotSaveGoalFuzzyLogic: Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> ()>,
+        pub BotMutateGoalFuzzyLogic: Option<unsafe extern "C" fn(_: i32, _: f32) -> ()>,
         pub BotAllocGoalState: Option<unsafe extern "C" fn(_: i32) -> i32>,
         pub BotFreeGoalState: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub BotResetMoveState: Option<unsafe extern "C" fn(_: i32) -> ()>,
@@ -3255,10 +3137,7 @@ pub mod botlib_h {
         pub BotResetAvoidReach: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub BotResetLastAvoidReach: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub BotReachabilityArea: Option<
-            unsafe extern "C" fn(
-                _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: i32,
-            ) -> i32,
+            unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t, _: i32) -> i32,
         >,
         pub BotMovementViewTarget: Option<
             unsafe extern "C" fn(
@@ -3294,8 +3173,7 @@ pub mod botlib_h {
                 _: i32,
             ) -> (),
         >,
-        pub BotChooseBestFightWeapon:
-            Option<unsafe extern "C" fn(_: i32, _: *mut i32) -> i32>,
+        pub BotChooseBestFightWeapon: Option<unsafe extern "C" fn(_: i32, _: *mut i32) -> i32>,
         pub BotGetWeaponInfo: Option<
             unsafe extern "C" fn(
                 _: i32,
@@ -3303,19 +3181,12 @@ pub mod botlib_h {
                 _: *mut crate::src::botlib::be_ai_weap::weaponinfo_s,
             ) -> (),
         >,
-        pub BotLoadWeaponWeights:
-            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32>,
+        pub BotLoadWeaponWeights: Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32>,
         pub BotAllocWeaponState: Option<unsafe extern "C" fn() -> i32>,
         pub BotFreeWeaponState: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub BotResetWeaponState: Option<unsafe extern "C" fn(_: i32) -> ()>,
         pub GeneticParentsAndChildSelection: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: *mut f32,
-                _: *mut i32,
-                _: *mut i32,
-                _: *mut i32,
-            ) -> i32,
+            unsafe extern "C" fn(_: i32, _: *mut f32, _: *mut i32, _: *mut i32, _: *mut i32) -> i32,
         >,
     }
 
@@ -3329,41 +3200,23 @@ pub mod botlib_h {
         pub ai: crate::botlib_h::ai_export_t,
         pub BotLibSetup: Option<unsafe extern "C" fn() -> i32>,
         pub BotLibShutdown: Option<unsafe extern "C" fn() -> i32>,
-        pub BotLibVarSet: Option<
-            unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> i32,
-        >,
+        pub BotLibVarSet:
+            Option<unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> i32>,
         pub BotLibVarGet: Option<
-            unsafe extern "C" fn(
-                _: *const libc::c_char,
-                _: *mut libc::c_char,
-                _: i32,
-            ) -> i32,
+            unsafe extern "C" fn(_: *const libc::c_char, _: *mut libc::c_char, _: i32) -> i32,
         >,
         pub PC_AddGlobalDefine: Option<unsafe extern "C" fn(_: *mut libc::c_char) -> i32>,
-        pub PC_LoadSourceHandle:
-            Option<unsafe extern "C" fn(_: *const libc::c_char) -> i32>,
+        pub PC_LoadSourceHandle: Option<unsafe extern "C" fn(_: *const libc::c_char) -> i32>,
         pub PC_FreeSourceHandle: Option<unsafe extern "C" fn(_: i32) -> i32>,
         pub PC_ReadTokenHandle: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: *mut crate::src::qcommon::q_shared::pc_token_t,
-            ) -> i32,
+            unsafe extern "C" fn(_: i32, _: *mut crate::src::qcommon::q_shared::pc_token_t) -> i32,
         >,
-        pub PC_SourceFileAndLine: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: *mut libc::c_char,
-                _: *mut i32,
-            ) -> i32,
-        >,
+        pub PC_SourceFileAndLine:
+            Option<unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut i32) -> i32>,
         pub BotLibStartFrame: Option<unsafe extern "C" fn(_: f32) -> i32>,
         pub BotLibLoadMap: Option<unsafe extern "C" fn(_: *const libc::c_char) -> i32>,
-        pub BotLibUpdateEntity: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: *mut crate::botlib_h::bot_entitystate_t,
-            ) -> i32,
-        >,
+        pub BotLibUpdateEntity:
+            Option<unsafe extern "C" fn(_: i32, _: *mut crate::botlib_h::bot_entitystate_t) -> i32>,
         pub Test: Option<
             unsafe extern "C" fn(
                 _: i32,
@@ -4149,8 +4002,7 @@ pub mod vm_local_h {
         pub name: [libc::c_char; 64],
         pub searchPath: *mut libc::c_void,
         pub dllHandle: *mut libc::c_void,
-        pub entryPoint:
-            Option<unsafe extern "C" fn(_: i32, _: ...) -> crate::stdlib::intptr_t>,
+        pub entryPoint: Option<unsafe extern "C" fn(_: i32, _: ...) -> crate::stdlib::intptr_t>,
         pub destroy: Option<unsafe extern "C" fn(_: *mut crate::qcommon_h::vm_t) -> ()>,
         pub currentlyInterpreting: crate::src::qcommon::q_shared::qboolean,
         pub compiled: crate::src::qcommon::q_shared::qboolean,
@@ -4448,10 +4300,7 @@ pub mod snd_local_h {
             ) -> (),
         >,
         pub StartLocalSound: Option<
-            unsafe extern "C" fn(
-                _: crate::src::qcommon::q_shared::sfxHandle_t,
-                _: i32,
-            ) -> (),
+            unsafe extern "C" fn(_: crate::src::qcommon::q_shared::sfxHandle_t, _: i32) -> (),
         >,
         pub StartBackgroundTrack:
             Option<unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> ()>,
@@ -4497,10 +4346,7 @@ pub mod snd_local_h {
             ) -> (),
         >,
         pub UpdateEntityPosition: Option<
-            unsafe extern "C" fn(
-                _: i32,
-                _: *const crate::src::qcommon::q_shared::vec_t,
-            ) -> (),
+            unsafe extern "C" fn(_: i32, _: *const crate::src::qcommon::q_shared::vec_t) -> (),
         >,
         pub Update: Option<unsafe extern "C" fn() -> ()>,
         pub DisableSounds: Option<unsafe extern "C" fn() -> ()>,
@@ -4516,9 +4362,8 @@ pub mod snd_local_h {
         pub SoundList: Option<unsafe extern "C" fn() -> ()>,
         pub StartCapture: Option<unsafe extern "C" fn() -> ()>,
         pub AvailableCaptureSamples: Option<unsafe extern "C" fn() -> i32>,
-        pub Capture: Option<
-            unsafe extern "C" fn(_: i32, _: *mut crate::src::qcommon::q_shared::byte) -> (),
-        >,
+        pub Capture:
+            Option<unsafe extern "C" fn(_: i32, _: *mut crate::src::qcommon::q_shared::byte) -> ()>,
         pub StopCapture: Option<unsafe extern "C" fn() -> ()>,
         pub MasterGain: Option<unsafe extern "C" fn(_: f32) -> ()>,
     }
@@ -6676,8 +6521,7 @@ pub mod qcommon_h {
 
     pub type xcommand_t = Option<unsafe extern "C" fn() -> ()>;
 
-    pub type completionFunc_t =
-        Option<unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()>;
+    pub type completionFunc_t = Option<unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()>;
 
     #[repr(C)]
     #[derive(Copy, Clone)]
@@ -7162,11 +7006,7 @@ pub mod stdlib {
         #[no_mangle]
         pub fn SDL_UnloadObject(handle: *mut libc::c_void);
         #[no_mangle]
-        pub fn SDL_WarpMouseInWindow(
-            window: *mut crate::stdlib::SDL_Window,
-            x: i32,
-            y: i32,
-        );
+        pub fn SDL_WarpMouseInWindow(window: *mut crate::stdlib::SDL_Window, x: i32, y: i32);
 
         #[no_mangle]
         pub fn SDL_SetRelativeMouseMode(enabled: crate::stdlib::SDL_bool) -> i32;
@@ -7400,11 +7240,8 @@ pub mod stdlib {
         ) -> libc::c_ulong;
 
         #[no_mangle]
-        pub fn fseek(
-            __stream: *mut crate::stdlib::FILE,
-            __off: libc::c_long,
-            __whence: i32,
-        ) -> i32;
+        pub fn fseek(__stream: *mut crate::stdlib::FILE, __off: libc::c_long, __whence: i32)
+            -> i32;
 
         #[no_mangle]
         pub fn ftell(__stream: *mut crate::stdlib::FILE) -> libc::c_long;
@@ -7468,18 +7305,10 @@ pub mod stdlib {
         pub fn memset(_: *mut libc::c_void, _: i32, _: libc::c_ulong) -> *mut libc::c_void;
 
         #[no_mangle]
-        pub fn memcmp(
-            _: *const libc::c_void,
-            _: *const libc::c_void,
-            _: libc::c_ulong,
-        ) -> i32;
+        pub fn memcmp(_: *const libc::c_void, _: *const libc::c_void, _: libc::c_ulong) -> i32;
 
         #[no_mangle]
-        pub fn memchr(
-            _: *const libc::c_void,
-            _: i32,
-            _: libc::c_ulong,
-        ) -> *mut libc::c_void;
+        pub fn memchr(_: *const libc::c_void, _: i32, _: libc::c_ulong) -> *mut libc::c_void;
 
         #[no_mangle]
         pub fn strncpy(
@@ -7496,11 +7325,7 @@ pub mod stdlib {
         ) -> *mut libc::c_char;
 
         #[no_mangle]
-        pub fn strncmp(
-            _: *const libc::c_char,
-            _: *const libc::c_char,
-            _: libc::c_ulong,
-        ) -> i32;
+        pub fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> i32;
 
         #[no_mangle]
         pub fn strspn(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_ulong;
@@ -7588,18 +7413,13 @@ pub mod stdlib {
         ) -> *mut libc::c_char;
 
         #[no_mangle]
-        pub fn execvp(__file: *const libc::c_char, __argv: *const *mut libc::c_char)
-            -> i32;
+        pub fn execvp(__file: *const libc::c_char, __argv: *const *mut libc::c_char) -> i32;
     }
     pub type FILE = crate::stdlib::_IO_FILE;
     pub type SDL_AudioFormat = crate::stdlib::Uint16;
 
     pub type SDL_AudioCallback = Option<
-        unsafe extern "C" fn(
-            _: *mut libc::c_void,
-            _: *mut crate::stdlib::Uint8,
-            _: i32,
-        ) -> (),
+        unsafe extern "C" fn(_: *mut libc::c_void, _: *mut crate::stdlib::Uint8, _: i32) -> (),
     >;
 
     #[repr(C)]

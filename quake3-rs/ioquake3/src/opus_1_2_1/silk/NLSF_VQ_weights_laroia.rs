@@ -371,14 +371,10 @@ pub unsafe extern "C" fn silk_NLSF_VQ_weights_laroia(
     let mut tmp1_int: crate::opus_types_h::opus_int32 = 0;
     let mut tmp2_int: crate::opus_types_h::opus_int32 = 0;
     /* First value */
-    tmp1_int = silk_max_int(
-        *pNLSF_Q15.offset(0 as i32 as isize) as i32,
-        1 as i32,
-    );
+    tmp1_int = silk_max_int(*pNLSF_Q15.offset(0 as i32 as isize) as i32, 1 as i32);
     tmp1_int = ((1 as i32) << 15 as i32 + 2 as i32) / tmp1_int;
     tmp2_int = silk_max_int(
-        *pNLSF_Q15.offset(1 as i32 as isize) as i32
-            - *pNLSF_Q15.offset(0 as i32 as isize) as i32,
+        *pNLSF_Q15.offset(1 as i32 as isize) as i32 - *pNLSF_Q15.offset(0 as i32 as isize) as i32,
         1 as i32,
     );
     tmp2_int = ((1 as i32) << 15 as i32 + 2 as i32) / tmp2_int;
@@ -393,8 +389,8 @@ pub unsafe extern "C" fn silk_NLSF_VQ_weights_laroia(
             1 as i32,
         );
         tmp1_int = ((1 as i32) << 15 as i32 + 2 as i32) / tmp1_int;
-        *pNLSFW_Q_OUT.offset(k as isize) = silk_min_int(tmp1_int + tmp2_int, 0x7fff as i32)
-            as crate::opus_types_h::opus_int16;
+        *pNLSFW_Q_OUT.offset(k as isize) =
+            silk_min_int(tmp1_int + tmp2_int, 0x7fff as i32) as crate::opus_types_h::opus_int16;
         tmp2_int = silk_max_int(
             *pNLSF_Q15.offset((k + 2 as i32) as isize) as i32
                 - *pNLSF_Q15.offset((k + 1 as i32) as isize) as i32,
@@ -402,14 +398,12 @@ pub unsafe extern "C" fn silk_NLSF_VQ_weights_laroia(
         );
         tmp2_int = ((1 as i32) << 15 as i32 + 2 as i32) / tmp2_int;
         *pNLSFW_Q_OUT.offset((k + 1 as i32) as isize) =
-            silk_min_int(tmp1_int + tmp2_int, 0x7fff as i32)
-                as crate::opus_types_h::opus_int16;
+            silk_min_int(tmp1_int + tmp2_int, 0x7fff as i32) as crate::opus_types_h::opus_int16;
         k += 2 as i32
     }
     /* Last value */
     tmp1_int = silk_max_int(
-        ((1 as i32) << 15 as i32)
-            - *pNLSF_Q15.offset((D - 1 as i32) as isize) as i32,
+        ((1 as i32) << 15 as i32) - *pNLSF_Q15.offset((D - 1 as i32) as isize) as i32,
         1 as i32,
     );
     tmp1_int = ((1 as i32) << 15 as i32 + 2 as i32) / tmp1_int;

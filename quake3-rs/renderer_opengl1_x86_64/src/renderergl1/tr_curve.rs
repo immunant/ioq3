@@ -26,8 +26,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
     #[inline]
@@ -164,26 +163,22 @@ unsafe extern "C" fn LerpDrawVert(
         0.5f32 * ((*a).st[0 as i32 as usize] + (*b).st[0 as i32 as usize]);
     (*out).st[1 as i32 as usize] =
         0.5f32 * ((*a).st[1 as i32 as usize] + (*b).st[1 as i32 as usize]);
-    (*out).lightmap[0 as i32 as usize] = 0.5f32
-        * ((*a).lightmap[0 as i32 as usize] + (*b).lightmap[0 as i32 as usize]);
-    (*out).lightmap[1 as i32 as usize] = 0.5f32
-        * ((*a).lightmap[1 as i32 as usize] + (*b).lightmap[1 as i32 as usize]);
+    (*out).lightmap[0 as i32 as usize] =
+        0.5f32 * ((*a).lightmap[0 as i32 as usize] + (*b).lightmap[0 as i32 as usize]);
+    (*out).lightmap[1 as i32 as usize] =
+        0.5f32 * ((*a).lightmap[1 as i32 as usize] + (*b).lightmap[1 as i32 as usize]);
     (*out).color[0 as i32 as usize] = ((*a).color[0 as i32 as usize] as i32
         + (*b).color[0 as i32 as usize] as i32
-        >> 1 as i32)
-        as crate::src::qcommon::q_shared::byte;
+        >> 1 as i32) as crate::src::qcommon::q_shared::byte;
     (*out).color[1 as i32 as usize] = ((*a).color[1 as i32 as usize] as i32
         + (*b).color[1 as i32 as usize] as i32
-        >> 1 as i32)
-        as crate::src::qcommon::q_shared::byte;
+        >> 1 as i32) as crate::src::qcommon::q_shared::byte;
     (*out).color[2 as i32 as usize] = ((*a).color[2 as i32 as usize] as i32
         + (*b).color[2 as i32 as usize] as i32
-        >> 1 as i32)
-        as crate::src::qcommon::q_shared::byte;
+        >> 1 as i32) as crate::src::qcommon::q_shared::byte;
     (*out).color[3 as i32 as usize] = ((*a).color[3 as i32 as usize] as i32
         + (*b).color[3 as i32 as usize] as i32
-        >> 1 as i32)
-        as crate::src::qcommon::q_shared::byte;
+        >> 1 as i32) as crate::src::qcommon::q_shared::byte;
 }
 /*
 ============
@@ -289,18 +284,15 @@ unsafe extern "C" fn MakeMeshNormals(
     wrapWidth = crate::src::qcommon::q_shared::qfalse;
     i = 0 as i32;
     while i < height {
-        delta[0 as i32 as usize] = (*ctrl.offset(i as isize))[0 as i32 as usize]
-            .xyz[0 as i32 as usize]
-            - (*ctrl.offset(i as isize))[(width - 1 as i32) as usize].xyz
-                [0 as i32 as usize];
-        delta[1 as i32 as usize] = (*ctrl.offset(i as isize))[0 as i32 as usize]
-            .xyz[1 as i32 as usize]
-            - (*ctrl.offset(i as isize))[(width - 1 as i32) as usize].xyz
-                [1 as i32 as usize];
-        delta[2 as i32 as usize] = (*ctrl.offset(i as isize))[0 as i32 as usize]
-            .xyz[2 as i32 as usize]
-            - (*ctrl.offset(i as isize))[(width - 1 as i32) as usize].xyz
-                [2 as i32 as usize];
+        delta[0 as i32 as usize] = (*ctrl.offset(i as isize))[0 as i32 as usize].xyz
+            [0 as i32 as usize]
+            - (*ctrl.offset(i as isize))[(width - 1 as i32) as usize].xyz[0 as i32 as usize];
+        delta[1 as i32 as usize] = (*ctrl.offset(i as isize))[0 as i32 as usize].xyz
+            [1 as i32 as usize]
+            - (*ctrl.offset(i as isize))[(width - 1 as i32) as usize].xyz[1 as i32 as usize];
+        delta[2 as i32 as usize] = (*ctrl.offset(i as isize))[0 as i32 as usize].xyz
+            [2 as i32 as usize]
+            - (*ctrl.offset(i as isize))[(width - 1 as i32) as usize].xyz[2 as i32 as usize];
         len =
             VectorLengthSquared(delta.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
         if len as f64 > 1.0f64 {
@@ -314,18 +306,15 @@ unsafe extern "C" fn MakeMeshNormals(
     wrapHeight = crate::src::qcommon::q_shared::qfalse;
     i = 0 as i32;
     while i < width {
-        delta[0 as i32 as usize] = (*ctrl.offset(0 as i32 as isize))[i as usize]
-            .xyz[0 as i32 as usize]
-            - (*ctrl.offset((height - 1 as i32) as isize))[i as usize].xyz
-                [0 as i32 as usize];
-        delta[1 as i32 as usize] = (*ctrl.offset(0 as i32 as isize))[i as usize]
-            .xyz[1 as i32 as usize]
-            - (*ctrl.offset((height - 1 as i32) as isize))[i as usize].xyz
-                [1 as i32 as usize];
-        delta[2 as i32 as usize] = (*ctrl.offset(0 as i32 as isize))[i as usize]
-            .xyz[2 as i32 as usize]
-            - (*ctrl.offset((height - 1 as i32) as isize))[i as usize].xyz
-                [2 as i32 as usize];
+        delta[0 as i32 as usize] = (*ctrl.offset(0 as i32 as isize))[i as usize].xyz
+            [0 as i32 as usize]
+            - (*ctrl.offset((height - 1 as i32) as isize))[i as usize].xyz[0 as i32 as usize];
+        delta[1 as i32 as usize] = (*ctrl.offset(0 as i32 as isize))[i as usize].xyz
+            [1 as i32 as usize]
+            - (*ctrl.offset((height - 1 as i32) as isize))[i as usize].xyz[1 as i32 as usize];
+        delta[2 as i32 as usize] = (*ctrl.offset(0 as i32 as isize))[i as usize].xyz
+            [2 as i32 as usize]
+            - (*ctrl.offset((height - 1 as i32) as isize))[i as usize].xyz[2 as i32 as usize];
         len =
             VectorLengthSquared(delta.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
         if len as f64 > 1.0f64 {
@@ -349,10 +338,8 @@ unsafe extern "C" fn MakeMeshNormals(
             while k < 8 as i32 {
                 around[k as usize][2 as i32 as usize] =
                     0 as i32 as crate::src::qcommon::q_shared::vec_t;
-                around[k as usize][1 as i32 as usize] =
-                    around[k as usize][2 as i32 as usize];
-                around[k as usize][0 as i32 as usize] =
-                    around[k as usize][1 as i32 as usize];
+                around[k as usize][1 as i32 as usize] = around[k as usize][2 as i32 as usize];
+                around[k as usize][0 as i32 as usize] = around[k as usize][1 as i32 as usize];
                 good[k as usize] = crate::src::qcommon::q_shared::qfalse;
                 dist = 1 as i32;
                 while dist <= 3 as i32 {
@@ -393,20 +380,16 @@ unsafe extern "C" fn MakeMeshNormals(
                     // degenerate edge, get more dist
                     } else {
                         good[k as usize] = crate::src::qcommon::q_shared::qtrue;
-                        around[k as usize][0 as i32 as usize] =
-                            temp[0 as i32 as usize];
-                        around[k as usize][1 as i32 as usize] =
-                            temp[1 as i32 as usize];
-                        around[k as usize][2 as i32 as usize] =
-                            temp[2 as i32 as usize];
+                        around[k as usize][0 as i32 as usize] = temp[0 as i32 as usize];
+                        around[k as usize][1 as i32 as usize] = temp[1 as i32 as usize];
+                        around[k as usize][2 as i32 as usize] = temp[2 as i32 as usize];
                         break;
                         // good edge
                     }
                 }
                 k += 1
             }
-            sum[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            sum[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
             sum[1 as i32 as usize] = sum[2 as i32 as usize];
             sum[0 as i32 as usize] = sum[1 as i32 as usize];
             k = 0 as i32;
@@ -426,12 +409,9 @@ unsafe extern "C" fn MakeMeshNormals(
                         normal.as_mut_ptr(),
                     ) == 0 as i32 as f32)
                     {
-                        sum[0 as i32 as usize] =
-                            normal[0 as i32 as usize] + sum[0 as i32 as usize];
-                        sum[1 as i32 as usize] =
-                            normal[1 as i32 as usize] + sum[1 as i32 as usize];
-                        sum[2 as i32 as usize] =
-                            normal[2 as i32 as usize] + sum[2 as i32 as usize];
+                        sum[0 as i32 as usize] = normal[0 as i32 as usize] + sum[0 as i32 as usize];
+                        sum[1 as i32 as usize] = normal[1 as i32 as usize] + sum[1 as i32 as usize];
+                        sum[2 as i32 as usize] = normal[2 as i32 as usize] + sum[2 as i32 as usize];
                     }
                 }
                 k += 1
@@ -502,8 +482,7 @@ unsafe extern "C" fn InvertErrorTable(
     );
     i = 0 as i32;
     while i < width {
-        (*errorTable.offset(1 as i32 as isize))[i as usize] =
-            copy[0 as i32 as usize][i as usize];
+        (*errorTable.offset(1 as i32 as isize))[i as usize] = copy[0 as i32 as usize][i as usize];
         i += 1
         //[width-1-i];
     }
@@ -625,11 +604,7 @@ pub unsafe extern "C" fn R_CreateSurfaceGridMesh(
         .Malloc
         .expect("non-null function pointer")(size)
         as *mut crate::tr_local_h::srfGridMesh_t;
-    crate::stdlib::memset(
-        grid as *mut libc::c_void,
-        0 as i32,
-        size as libc::c_ulong,
-    );
+    crate::stdlib::memset(grid as *mut libc::c_void, 0 as i32, size as libc::c_ulong);
     (*grid).widthLodError = crate::src::renderergl1::tr_main::ri
         .Malloc
         .expect("non-null function pointer")(width * 4 as i32)
@@ -681,20 +656,14 @@ pub unsafe extern "C" fn R_CreateSurfaceGridMesh(
     (*grid).localOrigin[2 as i32 as usize] = (*grid).meshBounds[0 as i32 as usize]
         [2 as i32 as usize]
         + (*grid).meshBounds[1 as i32 as usize][2 as i32 as usize];
-    (*grid).localOrigin[0 as i32 as usize] =
-        (*grid).localOrigin[0 as i32 as usize] * 0.5f32;
-    (*grid).localOrigin[1 as i32 as usize] =
-        (*grid).localOrigin[1 as i32 as usize] * 0.5f32;
-    (*grid).localOrigin[2 as i32 as usize] =
-        (*grid).localOrigin[2 as i32 as usize] * 0.5f32;
-    tmpVec[0 as i32 as usize] = (*grid).meshBounds[0 as i32 as usize]
-        [0 as i32 as usize]
+    (*grid).localOrigin[0 as i32 as usize] = (*grid).localOrigin[0 as i32 as usize] * 0.5f32;
+    (*grid).localOrigin[1 as i32 as usize] = (*grid).localOrigin[1 as i32 as usize] * 0.5f32;
+    (*grid).localOrigin[2 as i32 as usize] = (*grid).localOrigin[2 as i32 as usize] * 0.5f32;
+    tmpVec[0 as i32 as usize] = (*grid).meshBounds[0 as i32 as usize][0 as i32 as usize]
         - (*grid).localOrigin[0 as i32 as usize];
-    tmpVec[1 as i32 as usize] = (*grid).meshBounds[0 as i32 as usize]
-        [1 as i32 as usize]
+    tmpVec[1 as i32 as usize] = (*grid).meshBounds[0 as i32 as usize][1 as i32 as usize]
         - (*grid).localOrigin[1 as i32 as usize];
-    tmpVec[2 as i32 as usize] = (*grid).meshBounds[0 as i32 as usize]
-        [2 as i32 as usize]
+    tmpVec[2 as i32 as usize] = (*grid).meshBounds[0 as i32 as usize][2 as i32 as usize]
         - (*grid).localOrigin[2 as i32 as usize];
     (*grid).meshRadius =
         VectorLength(tmpVec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
@@ -746,14 +715,8 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
                 0 as i32 as crate::src::qcommon::q_shared::vec_t,
                 0 as i32 as crate::src::qcommon::q_shared::vec_t,
             ],
-            st: [
-                0 as i32 as f32,
-                0 as i32 as f32,
-            ],
-            lightmap: [
-                0 as i32 as f32,
-                0 as i32 as f32,
-            ],
+            st: [0 as i32 as f32, 0 as i32 as f32],
+            lightmap: [0 as i32 as f32, 0 as i32 as f32],
             normal: [
                 0 as i32 as crate::src::qcommon::q_shared::vec_t,
                 0 as i32 as crate::src::qcommon::q_shared::vec_t,
@@ -775,14 +738,8 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
                 0 as i32 as crate::src::qcommon::q_shared::vec_t,
                 0 as i32 as crate::src::qcommon::q_shared::vec_t,
             ],
-            st: [
-                0 as i32 as f32,
-                0 as i32 as f32,
-            ],
-            lightmap: [
-                0 as i32 as f32,
-                0 as i32 as f32,
-            ],
+            st: [0 as i32 as f32, 0 as i32 as f32],
+            lightmap: [0 as i32 as f32, 0 as i32 as f32],
             normal: [
                 0 as i32 as crate::src::qcommon::q_shared::vec_t,
                 0 as i32 as crate::src::qcommon::q_shared::vec_t,
@@ -804,14 +761,8 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
                 0 as i32 as crate::src::qcommon::q_shared::vec_t,
                 0 as i32 as crate::src::qcommon::q_shared::vec_t,
             ],
-            st: [
-                0 as i32 as f32,
-                0 as i32 as f32,
-            ],
-            lightmap: [
-                0 as i32 as f32,
-                0 as i32 as f32,
-            ],
+            st: [0 as i32 as f32, 0 as i32 as f32],
+            lightmap: [0 as i32 as f32, 0 as i32 as f32],
             normal: [
                 0 as i32 as crate::src::qcommon::q_shared::vec_t,
                 0 as i32 as crate::src::qcommon::q_shared::vec_t,
@@ -882,23 +833,20 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
                 // using dist-from-line will not account for internal
                 // texture warping, but it gives a lot less polygons than
                 // dist-from-midpoint
-                midxyz[0 as i32 as usize] = midxyz[0 as i32 as usize]
-                    - ctrl[i as usize][j as usize].xyz[0 as i32 as usize]; // we will do the sqrt later
-                midxyz[1 as i32 as usize] = midxyz[1 as i32 as usize]
-                    - ctrl[i as usize][j as usize].xyz[1 as i32 as usize];
-                midxyz[2 as i32 as usize] = midxyz[2 as i32 as usize]
-                    - ctrl[i as usize][j as usize].xyz[2 as i32 as usize];
-                dir_0[0 as i32 as usize] = ctrl[i as usize]
-                    [(j + 2 as i32) as usize]
-                    .xyz[0 as i32 as usize]
+                midxyz[0 as i32 as usize] =
+                    midxyz[0 as i32 as usize] - ctrl[i as usize][j as usize].xyz[0 as i32 as usize]; // we will do the sqrt later
+                midxyz[1 as i32 as usize] =
+                    midxyz[1 as i32 as usize] - ctrl[i as usize][j as usize].xyz[1 as i32 as usize];
+                midxyz[2 as i32 as usize] =
+                    midxyz[2 as i32 as usize] - ctrl[i as usize][j as usize].xyz[2 as i32 as usize];
+                dir_0[0 as i32 as usize] = ctrl[i as usize][(j + 2 as i32) as usize].xyz
+                    [0 as i32 as usize]
                     - ctrl[i as usize][j as usize].xyz[0 as i32 as usize];
-                dir_0[1 as i32 as usize] = ctrl[i as usize]
-                    [(j + 2 as i32) as usize]
-                    .xyz[1 as i32 as usize]
+                dir_0[1 as i32 as usize] = ctrl[i as usize][(j + 2 as i32) as usize].xyz
+                    [1 as i32 as usize]
                     - ctrl[i as usize][j as usize].xyz[1 as i32 as usize];
-                dir_0[2 as i32 as usize] = ctrl[i as usize]
-                    [(j + 2 as i32) as usize]
-                    .xyz[2 as i32 as usize]
+                dir_0[2 as i32 as usize] = ctrl[i as usize][(j + 2 as i32) as usize].xyz
+                    [2 as i32 as usize]
                     - ctrl[i as usize][j as usize].xyz[2 as i32 as usize];
                 crate::src::qcommon::q_math::VectorNormalize(dir_0.as_mut_ptr());
                 d = midxyz[0 as i32 as usize] * dir_0[0 as i32 as usize]
@@ -924,8 +872,7 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
             maxLen = crate::stdlib::sqrt(maxLen as f64) as f32;
             // if all the points are on the lines, remove the entire columns
             if maxLen < 0.1f32 {
-                errorTable[dir as usize][(j + 1 as i32) as usize] =
-                    999 as i32 as f32
+                errorTable[dir as usize][(j + 1 as i32) as usize] = 999 as i32 as f32
             } else if width + 2 as i32 > 65 as i32 {
                 errorTable[dir as usize][(j + 1 as i32) as usize] = 1.0f32 / maxLen
             // see if we want to insert subdivided columns
@@ -960,8 +907,7 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
                     LerpDrawVert(&mut prev, &mut next, &mut mid);
                     k = width - 1 as i32;
                     while k > j + 3 as i32 {
-                        ctrl[i as usize][k as usize] =
-                            ctrl[i as usize][(k - 2 as i32) as usize];
+                        ctrl[i as usize][k as usize] = ctrl[i as usize][(k - 2 as i32) as usize];
                         k -= 1
                     }
                     ctrl[i as usize][(j + 1 as i32) as usize] = prev;
@@ -985,15 +931,12 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
     // cull out any rows or columns that are colinear
     i = 1 as i32;
     while i < width - 1 as i32 {
-        if !(errorTable[0 as i32 as usize][i as usize]
-            != 999 as i32 as f32)
-        {
+        if !(errorTable[0 as i32 as usize][i as usize] != 999 as i32 as f32) {
             j = i + 1 as i32;
             while j < width {
                 k = 0 as i32;
                 while k < height {
-                    ctrl[k as usize][(j - 1 as i32) as usize] =
-                        ctrl[k as usize][j as usize];
+                    ctrl[k as usize][(j - 1 as i32) as usize] = ctrl[k as usize][j as usize];
                     k += 1
                 }
                 errorTable[0 as i32 as usize][(j - 1 as i32) as usize] =
@@ -1006,15 +949,12 @@ pub unsafe extern "C" fn R_SubdividePatchToGrid(
     }
     i = 1 as i32;
     while i < height - 1 as i32 {
-        if !(errorTable[1 as i32 as usize][i as usize]
-            != 999 as i32 as f32)
-        {
+        if !(errorTable[1 as i32 as usize][i as usize] != 999 as i32 as f32) {
             j = i + 1 as i32;
             while j < height {
                 k = 0 as i32;
                 while k < width {
-                    ctrl[(j - 1 as i32) as usize][k as usize] =
-                        ctrl[j as usize][k as usize];
+                    ctrl[(j - 1 as i32) as usize][k as usize] = ctrl[j as usize][k as usize];
                     k += 1
                 }
                 errorTable[1 as i32 as usize][(j - 1 as i32) as usize] =
@@ -1122,8 +1062,7 @@ pub unsafe extern "C" fn R_GridInsertColumn(
     }
     j = 0 as i32;
     while j < (*grid).height {
-        errorTable[1 as i32 as usize][j as usize] =
-            *(*grid).heightLodError.offset(j as isize);
+        errorTable[1 as i32 as usize][j as usize] = *(*grid).heightLodError.offset(j as isize);
         j += 1
     }
     // put all the aproximating points on the curve
@@ -1599,8 +1538,7 @@ pub unsafe extern "C" fn R_GridInsertRow(
     }
     j = 0 as i32;
     while j < (*grid).width {
-        errorTable[0 as i32 as usize][j as usize] =
-            *(*grid).widthLodError.offset(j as isize);
+        errorTable[0 as i32 as usize][j as usize] = *(*grid).widthLodError.offset(j as isize);
         j += 1
     }
     // put all the aproximating points on the curve

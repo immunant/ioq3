@@ -376,11 +376,7 @@ static mut lastConnState: crate::src::qcommon::q_shared::connstate_t =
 
 static mut lastLoadingText: [libc::c_char; 1024] = [0; 1024];
 
-unsafe extern "C" fn UI_ReadableSize(
-    mut buf: *mut libc::c_char,
-    mut bufsize: i32,
-    mut value: i32,
-) {
+unsafe extern "C" fn UI_ReadableSize(mut buf: *mut libc::c_char, mut bufsize: i32, mut value: i32) {
     if value > 1024 as i32 * 1024 as i32 * 1024 as i32 {
         // gigs
         crate::src::qcommon::q_shared::Com_sprintf(
@@ -393,8 +389,7 @@ unsafe extern "C" fn UI_ReadableSize(
             buf.offset(crate::stdlib::strlen(buf) as isize),
             (bufsize as libc::c_ulong).wrapping_sub(crate::stdlib::strlen(buf)) as i32,
             b".%02d GB\x00" as *const u8 as *const libc::c_char,
-            value % (1024 as i32 * 1024 as i32 * 1024 as i32)
-                * 100 as i32
+            value % (1024 as i32 * 1024 as i32 * 1024 as i32) * 100 as i32
                 / (1024 as i32 * 1024 as i32 * 1024 as i32),
         );
     } else if value > 1024 as i32 * 1024 as i32 {
@@ -409,8 +404,7 @@ unsafe extern "C" fn UI_ReadableSize(
             buf.offset(crate::stdlib::strlen(buf) as isize),
             (bufsize as libc::c_ulong).wrapping_sub(crate::stdlib::strlen(buf)) as i32,
             b".%02d MB\x00" as *const u8 as *const libc::c_char,
-            value % (1024 as i32 * 1024 as i32) * 100 as i32
-                / (1024 as i32 * 1024 as i32),
+            value % (1024 as i32 * 1024 as i32) * 100 as i32 / (1024 as i32 * 1024 as i32),
         );
     } else if value > 1024 as i32 {
         // kilos
@@ -431,11 +425,7 @@ unsafe extern "C" fn UI_ReadableSize(
 }
 // Assumes time is in msec
 
-unsafe extern "C" fn UI_PrintTime(
-    mut buf: *mut libc::c_char,
-    mut bufsize: i32,
-    mut time: i32,
-) {
+unsafe extern "C" fn UI_PrintTime(mut buf: *mut libc::c_char, mut bufsize: i32, mut time: i32) {
     time /= 1000 as i32; // change to seconds
     if time > 3600 as i32 {
         // in the hours range
@@ -498,16 +488,13 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
     ) as i32;
     leftWidth = (crate::src::q3_ui::ui_atoms::UI_ProportionalStringWidth(dlText.as_mut_ptr())
         as f32
-        * crate::src::q3_ui::ui_atoms::UI_ProportionalSizeScale(style))
-        as i32;
-    width = (crate::src::q3_ui::ui_atoms::UI_ProportionalStringWidth(etaText.as_mut_ptr())
-        as f32
+        * crate::src::q3_ui::ui_atoms::UI_ProportionalSizeScale(style)) as i32;
+    width = (crate::src::q3_ui::ui_atoms::UI_ProportionalStringWidth(etaText.as_mut_ptr()) as f32
         * crate::src::q3_ui::ui_atoms::UI_ProportionalSizeScale(style)) as i32;
     if width > leftWidth {
         leftWidth = width
     }
-    width = (crate::src::q3_ui::ui_atoms::UI_ProportionalStringWidth(xferText.as_mut_ptr())
-        as f32
+    width = (crate::src::q3_ui::ui_atoms::UI_ProportionalStringWidth(xferText.as_mut_ptr()) as f32
         * crate::src::q3_ui::ui_atoms::UI_ProportionalSizeScale(style)) as i32;
     if width > leftWidth {
         leftWidth = width
@@ -538,8 +525,7 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
         s = crate::src::qcommon::q_shared::va(
             b"%s (%d%%)\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
             downloadName,
-            (downloadCount as f32 * 100.0f32 / downloadSize as f32)
-                as i32,
+            (downloadCount as f32 * 100.0f32 / downloadSize as f32) as i32,
         )
     } else {
         s = downloadName
@@ -596,10 +582,8 @@ unsafe extern "C" fn UI_DisplayDownloadInfo(mut downloadName: *const libc::c_cha
         // Extrapolate estimated completion time
         if downloadSize != 0 && xferRate != 0 {
             let mut n: i32 = downloadSize / xferRate; // estimated time for entire d/l in secs
-                                                              // We do it in K (/1024) because we'd overflow around 4MB
-            n = (n - downloadCount / 1024 as i32 * n
-                / (downloadSize / 1024 as i32))
-                * 1000 as i32;
+                                                      // We do it in K (/1024) because we'd overflow around 4MB
+            n = (n - downloadCount / 1024 as i32 * n / (downloadSize / 1024 as i32)) * 1000 as i32;
             UI_PrintTime(
                 dlTimeBuf.as_mut_ptr(),
                 ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
@@ -820,9 +804,7 @@ pub unsafe extern "C" fn UI_DrawConnectScreen(
         crate::src::q3_ui::ui_qmenu::menu_text_color.as_mut_ptr(),
     );
     // print any server info (server full, bad version, etc)
-    if (cstate.connState as u32)
-        < crate::src::qcommon::q_shared::CA_CONNECTED as i32 as u32
-    {
+    if (cstate.connState as u32) < crate::src::qcommon::q_shared::CA_CONNECTED as i32 as u32 {
         crate::src::q3_ui::ui_atoms::UI_DrawProportionalString_AutoWrapped(
             320 as i32,
             192 as i32,

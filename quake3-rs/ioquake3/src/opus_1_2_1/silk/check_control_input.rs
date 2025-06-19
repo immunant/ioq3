@@ -159,19 +159,13 @@ pub unsafe extern "C" fn check_control_input(
     if (*encControl).useCBR < 0 as i32 || (*encControl).useCBR > 1 as i32 {
         return -(109 as i32);
     }
-    if (*encControl).useInBandFEC < 0 as i32
-        || (*encControl).useInBandFEC > 1 as i32
-    {
+    if (*encControl).useInBandFEC < 0 as i32 || (*encControl).useInBandFEC > 1 as i32 {
         return -(107 as i32);
     }
-    if (*encControl).nChannelsAPI < 1 as i32
-        || (*encControl).nChannelsAPI > 2 as i32
-    {
+    if (*encControl).nChannelsAPI < 1 as i32 || (*encControl).nChannelsAPI > 2 as i32 {
         return -(111 as i32);
     }
-    if (*encControl).nChannelsInternal < 1 as i32
-        || (*encControl).nChannelsInternal > 2 as i32
-    {
+    if (*encControl).nChannelsInternal < 1 as i32 || (*encControl).nChannelsInternal > 2 as i32 {
         return -(111 as i32);
     }
     if (*encControl).nChannelsInternal > (*encControl).nChannelsAPI {

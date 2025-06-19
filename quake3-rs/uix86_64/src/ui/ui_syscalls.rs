@@ -283,9 +283,7 @@ pub unsafe extern "C" fn trap_Cvar_Set(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_Cvar_VariableValue(
-    mut var_name: *const libc::c_char,
-) -> f32 {
+pub unsafe extern "C" fn trap_Cvar_VariableValue(mut var_name: *const libc::c_char) -> f32 {
     let mut fi: crate::src::qcommon::q_shared::floatint_t =
         crate::src::qcommon::q_shared::floatint_t { f: 0. };
     fi.i = syscall.expect("non-null function pointer")(
@@ -310,10 +308,7 @@ pub unsafe extern "C" fn trap_Cvar_VariableStringBuffer(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_Cvar_SetValue(
-    mut var_name: *const libc::c_char,
-    mut value: f32,
-) {
+pub unsafe extern "C" fn trap_Cvar_SetValue(mut var_name: *const libc::c_char, mut value: f32) {
     syscall.expect("non-null function pointer")(
         crate::ui_public_h::UI_CVAR_SETVALUE as i32 as crate::stdlib::intptr_t,
         var_name,
@@ -396,10 +391,7 @@ pub unsafe extern "C" fn trap_Argv(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_Cmd_ExecuteText(
-    mut exec_when: i32,
-    mut text: *const libc::c_char,
-) {
+pub unsafe extern "C" fn trap_Cmd_ExecuteText(mut exec_when: i32, mut text: *const libc::c_char) {
     syscall.expect("non-null function pointer")(
         crate::ui_public_h::UI_CMD_EXECUTETEXT as i32 as crate::stdlib::intptr_t,
         exec_when,
@@ -714,10 +706,7 @@ pub unsafe extern "C" fn trap_Key_GetBindingBuf(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_Key_SetBinding(
-    mut keynum: i32,
-    mut binding: *const libc::c_char,
-) {
+pub unsafe extern "C" fn trap_Key_SetBinding(mut keynum: i32, mut binding: *const libc::c_char) {
     syscall.expect("non-null function pointer")(
         crate::ui_public_h::UI_KEY_SETBINDING as i32 as crate::stdlib::intptr_t,
         keynum,
@@ -775,10 +764,7 @@ pub unsafe extern "C" fn trap_Key_SetCatcher(mut catcher: i32) {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_GetClipboardData(
-    mut buf: *mut libc::c_char,
-    mut bufsize: i32,
-) {
+pub unsafe extern "C" fn trap_GetClipboardData(mut buf: *mut libc::c_char, mut bufsize: i32) {
     syscall.expect("non-null function pointer")(
         crate::ui_public_h::UI_GETCLIPBOARDDATA as i32 as crate::stdlib::intptr_t,
         buf,
@@ -857,10 +843,7 @@ pub unsafe extern "C" fn trap_LAN_GetServerInfo(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_LAN_GetServerPing(
-    mut source: i32,
-    mut n: i32,
-) -> i32 {
+pub unsafe extern "C" fn trap_LAN_GetServerPing(mut source: i32, mut n: i32) -> i32 {
     return syscall.expect("non-null function pointer")(
         crate::ui_public_h::UI_LAN_GETSERVERPING as i32 as crate::stdlib::intptr_t,
         source,
@@ -964,10 +947,7 @@ pub unsafe extern "C" fn trap_LAN_MarkServerVisible(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_LAN_ServerIsVisible(
-    mut source: i32,
-    mut n: i32,
-) -> i32 {
+pub unsafe extern "C" fn trap_LAN_ServerIsVisible(mut source: i32, mut n: i32) -> i32 {
     return syscall.expect("non-null function pointer")(
         crate::ui_public_h::UI_LAN_SERVERISVISIBLE as i32 as crate::stdlib::intptr_t,
         source,
@@ -1000,10 +980,7 @@ pub unsafe extern "C" fn trap_LAN_AddServer(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_LAN_RemoveServer(
-    mut source: i32,
-    mut addr: *const libc::c_char,
-) {
+pub unsafe extern "C" fn trap_LAN_RemoveServer(mut source: i32, mut addr: *const libc::c_char) {
     syscall.expect("non-null function pointer")(
         crate::ui_public_h::UI_LAN_REMOVESERVER as i32 as crate::stdlib::intptr_t,
         source,

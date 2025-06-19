@@ -734,8 +734,7 @@ pub unsafe extern "C" fn AAS_DumpAASData() {
     crate::src::botlib::be_aas_main::aasworld.clusters = 0 as *mut crate::aasfile_h::aas_cluster_t;
     crate::src::botlib::be_aas_main::aasworld.numclusters = 0 as i32;
     //
-    crate::src::botlib::be_aas_main::aasworld.loaded =
-        crate::src::qcommon::q_shared::qfalse as i32;
+    crate::src::botlib::be_aas_main::aasworld.loaded = crate::src::qcommon::q_shared::qfalse as i32;
     crate::src::botlib::be_aas_main::aasworld.initialized =
         crate::src::qcommon::q_shared::qfalse as i32;
     crate::src::botlib::be_aas_main::aasworld.savefile =
@@ -804,9 +803,8 @@ pub unsafe extern "C" fn AAS_LoadAASLump(
         //end if
     }
     //allocate memory
-    buf = crate::src::botlib::l_memory::GetClearedHunkMemory(
-        (length + 1 as i32) as libc::c_ulong,
-    ) as *mut libc::c_char;
+    buf = crate::src::botlib::l_memory::GetClearedHunkMemory((length + 1 as i32) as libc::c_ulong)
+        as *mut libc::c_char;
     //read the data
     if length != 0 {
         crate::src::botlib::be_interface::botimport
@@ -830,8 +828,7 @@ pub unsafe extern "C" fn AAS_DData(mut data: *mut u8, mut size: i32) {
     i = 0 as i32;
     while i < size {
         let ref mut fresh0 = *data.offset(i as isize);
-        *fresh0 = (*fresh0 as i32 ^ i as u8 as i32 * 119 as i32)
-            as u8;
+        *fresh0 = (*fresh0 as i32 ^ i as u8 as i32 * 119 as i32) as u8;
         i += 1
     }
     //end for
@@ -892,8 +889,7 @@ pub unsafe extern "C" fn AAS_LoadAASFile(mut filename: *mut libc::c_char) -> i32
         ::std::mem::size_of::<crate::aasfile_h::aas_header_t>() as libc::c_ulong as i32,
         fp,
     );
-    lastoffset =
-        ::std::mem::size_of::<crate::aasfile_h::aas_header_t>() as libc::c_ulong as i32;
+    lastoffset = ::std::mem::size_of::<crate::aasfile_h::aas_header_t>() as libc::c_ulong as i32;
     //check header identification
     header.ident = header.ident; //end if
     if header.ident
@@ -1112,8 +1108,7 @@ pub unsafe extern "C" fn AAS_LoadAASFile(mut filename: *mut libc::c_char) -> i32
         offset,
         length,
         &mut lastoffset,
-        ::std::mem::size_of::<crate::aasfile_h::aas_areasettings_t>() as libc::c_ulong
-            as i32,
+        ::std::mem::size_of::<crate::aasfile_h::aas_areasettings_t>() as libc::c_ulong as i32,
     )
         as *mut crate::aasfile_h::aas_areasettings_t;
     crate::src::botlib::be_aas_main::aasworld.numareasettings = (length as libc::c_ulong)
@@ -1135,8 +1130,7 @@ pub unsafe extern "C" fn AAS_LoadAASFile(mut filename: *mut libc::c_char) -> i32
         offset,
         length,
         &mut lastoffset,
-        ::std::mem::size_of::<crate::aasfile_h::aas_reachability_t>() as libc::c_ulong
-            as i32,
+        ::std::mem::size_of::<crate::aasfile_h::aas_reachability_t>() as libc::c_ulong as i32,
     )
         as *mut crate::aasfile_h::aas_reachability_t;
     crate::src::botlib::be_aas_main::aasworld.reachabilitysize = (length as libc::c_ulong)
@@ -1195,8 +1189,7 @@ pub unsafe extern "C" fn AAS_LoadAASFile(mut filename: *mut libc::c_char) -> i32
         offset,
         length,
         &mut lastoffset,
-        ::std::mem::size_of::<crate::aasfile_h::aas_portalindex_t>() as libc::c_ulong
-            as i32,
+        ::std::mem::size_of::<crate::aasfile_h::aas_portalindex_t>() as libc::c_ulong as i32,
     )
         as *mut crate::aasfile_h::aas_portalindex_t;
     crate::src::botlib::be_aas_main::aasworld.portalindexsize = (length as libc::c_ulong)
@@ -1231,8 +1224,7 @@ pub unsafe extern "C" fn AAS_LoadAASFile(mut filename: *mut libc::c_char) -> i32
     //swap everything
     AAS_SwapAASData();
     //aas file is loaded
-    crate::src::botlib::be_aas_main::aasworld.loaded =
-        crate::src::qcommon::q_shared::qtrue as i32;
+    crate::src::botlib::be_aas_main::aasworld.loaded = crate::src::qcommon::q_shared::qtrue as i32;
     //close the file
     crate::src::botlib::be_interface::botimport
         .FS_FCloseFile
@@ -1523,8 +1515,7 @@ pub unsafe extern "C" fn AAS_WriteAASFile(
         crate::src::qcommon::q_shared::FS_SEEK_SET as i32,
     );
     AAS_DData(
-        (&mut header as *mut crate::aasfile_h::aas_header_t as *mut u8)
-            .offset(8 as i32 as isize),
+        (&mut header as *mut crate::aasfile_h::aas_header_t as *mut u8).offset(8 as i32 as isize),
         (::std::mem::size_of::<crate::aasfile_h::aas_header_t>() as libc::c_ulong)
             .wrapping_sub(8 as i32 as libc::c_ulong) as i32,
     );

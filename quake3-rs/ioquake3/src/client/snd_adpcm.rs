@@ -190,11 +190,7 @@ pub unsafe extern "C" fn S_AdpcmEncode(
         val = *fresh0 as i32;
         /* Step 1 - compute difference with previous value */
         diff = val - valpred;
-        sign = if diff < 0 as i32 {
-            8 as i32
-        } else {
-            0 as i32
-        };
+        sign = if diff < 0 as i32 { 8 as i32 } else { 0 as i32 };
         if sign != 0 {
             diff = -diff
         }

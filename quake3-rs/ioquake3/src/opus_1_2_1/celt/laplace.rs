@@ -14,14 +14,9 @@ pub use crate::src::opus_1_2_1::celt::entcode::ec_window;
 
 /* When called, decay is positive and at most 11456. */
 
-unsafe extern "C" fn ec_laplace_get_freq1(
-    mut fs0: u32,
-    mut decay: i32,
-) -> u32 {
+unsafe extern "C" fn ec_laplace_get_freq1(mut fs0: u32, mut decay: i32) -> u32 {
     let mut ft: u32 = 0;
-    ft = ((32768 as i32
-        - ((1 as i32) << 0 as i32) * (2 as i32 * 16 as i32))
-        as u32)
+    ft = ((32768 as i32 - ((1 as i32) << 0 as i32) * (2 as i32 * 16 as i32)) as u32)
         .wrapping_sub(fs0);
     return ft.wrapping_mul((16384 as i32 - decay) as u32) >> 15 as i32;
 }
@@ -47,9 +42,7 @@ pub unsafe extern "C" fn ec_laplace_encode(
         i = 1 as i32;
         while fs > 0 as i32 as u32 && i < val {
             fs = fs.wrapping_mul(2 as i32 as u32);
-            fl = fl.wrapping_add(fs.wrapping_add(
-                (2 as i32 * ((1 as i32) << 0 as i32)) as u32,
-            ));
+            fl = fl.wrapping_add(fs.wrapping_add((2 as i32 * ((1 as i32) << 0 as i32)) as u32));
             fs = fs.wrapping_mul(decay as u32) >> 15 as i32;
             i += 1
         }
@@ -68,13 +61,9 @@ pub unsafe extern "C" fn ec_laplace_encode(
             } else {
                 (ndi_max) - 1 as i32
             };
-            fl = fl.wrapping_add(
-                ((2 as i32 * di + 1 as i32 + s)
-                    * ((1 as i32) << 0 as i32)) as u32,
-            );
-            fs = if (((1 as i32) << 0 as i32) as u32)
-                < (32768 as i32 as u32).wrapping_sub(fl)
-            {
+            fl =
+                fl.wrapping_add(((2 as i32 * di + 1 as i32 + s) * ((1 as i32) << 0 as i32)) as u32);
+            fs = if (((1 as i32) << 0 as i32) as u32) < (32768 as i32 as u32).wrapping_sub(fl) {
                 ((1 as i32) << 0 as i32) as u32
             } else {
                 (32768 as i32 as u32).wrapping_sub(fl)
@@ -151,8 +140,7 @@ pub unsafe extern "C" fn ec_laplace_decode(
     if fm >= fs {
         val += 1;
         fl = fs;
-        fs = ec_laplace_get_freq1(fs, decay)
-            .wrapping_add(((1 as i32) << 0 as i32) as u32);
+        fs = ec_laplace_get_freq1(fs, decay).wrapping_add(((1 as i32) << 0 as i32) as u32);
         /* Search the decaying part of the PDF.*/
         while fs > ((1 as i32) << 0 as i32) as u32
             && fm >= fl.wrapping_add((2 as i32 as u32).wrapping_mul(fs))
@@ -160,9 +148,7 @@ pub unsafe extern "C" fn ec_laplace_decode(
             fs = fs.wrapping_mul(2 as i32 as u32);
             fl = fl.wrapping_add(fs);
             fs = fs
-                .wrapping_sub(
-                    (2 as i32 * ((1 as i32) << 0 as i32)) as u32,
-                )
+                .wrapping_sub((2 as i32 * ((1 as i32) << 0 as i32)) as u32)
                 .wrapping_mul(decay as u32)
                 >> 15 as i32;
             fs = fs.wrapping_add(((1 as i32) << 0 as i32) as u32);
@@ -173,9 +159,7 @@ pub unsafe extern "C" fn ec_laplace_decode(
             let mut di: i32 = 0;
             di = (fm.wrapping_sub(fl) >> 0 as i32 + 1 as i32) as i32;
             val += di;
-            fl = fl.wrapping_add(
-                (2 as i32 * di * ((1 as i32) << 0 as i32)) as u32,
-            )
+            fl = fl.wrapping_add((2 as i32 * di * ((1 as i32) << 0 as i32)) as u32)
         }
         if fm < fl.wrapping_add(fs) {
             val = -val

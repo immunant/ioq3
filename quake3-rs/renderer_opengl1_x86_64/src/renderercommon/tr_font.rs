@@ -70,12 +70,10 @@ static mut fdFile: *mut crate::src::qcommon::q_shared::byte =
 
 pub unsafe extern "C" fn readInt() -> i32 {
     let mut i: i32 = (*fdFile.offset(fdOffset as isize) as u32
-        | (*fdFile.offset((fdOffset + 1 as i32) as isize) as u32)
-            << 8 as i32
-        | (*fdFile.offset((fdOffset + 2 as i32) as isize) as u32)
-            << 16 as i32
-        | (*fdFile.offset((fdOffset + 3 as i32) as isize) as u32)
-            << 24 as i32) as i32;
+        | (*fdFile.offset((fdOffset + 1 as i32) as isize) as u32) << 8 as i32
+        | (*fdFile.offset((fdOffset + 2 as i32) as isize) as u32) << 16 as i32
+        | (*fdFile.offset((fdOffset + 3 as i32) as isize) as u32) << 24 as i32)
+        as i32;
     fdOffset += 4 as i32;
     return i;
 }

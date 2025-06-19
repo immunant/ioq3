@@ -37,8 +37,7 @@ pub mod entcode_h {
         mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
     ) -> i32 {
         return (*_this).nbits_total
-            - (::std::mem::size_of::<u32>() as libc::c_ulong as i32
-                * 8 as i32
+            - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
                 - (*_this).rng.leading_zeros() as i32);
     }
 }
@@ -53,11 +52,10 @@ pub mod mathops_h {
         let mut in_0: crate::mathops_h::C2RustUnnamed_61 =
             crate::mathops_h::C2RustUnnamed_61 { f: 0. };
         in_0.f = x;
-        integer = (in_0.i >> 23 as i32).wrapping_sub(127 as i32 as u32)
-            as i32;
-        in_0.i =
-            (in_0.i as u32).wrapping_sub((integer << 23 as i32) as u32)
-                as crate::opus_types_h::opus_uint32 as crate::opus_types_h::opus_uint32;
+        integer = (in_0.i >> 23 as i32).wrapping_sub(127 as i32 as u32) as i32;
+        in_0.i = (in_0.i as u32).wrapping_sub((integer << 23 as i32) as u32)
+            as crate::opus_types_h::opus_uint32
+            as crate::opus_types_h::opus_uint32;
         frac = in_0.f - 1.5f32;
         frac = -0.41445418f32
             + frac * (0.95909232f32 + frac * (-0.33951290f32 + frac * 0.16541097f32));
@@ -543,11 +541,7 @@ static mut e_prob_model: [[[u8; 42]; 2]; 4] = [
     ],
 ];
 
-static mut small_energy_icdf: [u8; 3] = [
-    2 as i32 as u8,
-    1 as i32 as u8,
-    0 as i32 as u8,
-];
+static mut small_energy_icdf: [u8; 3] = [2 as i32 as u8, 1 as i32 as u8, 0 as i32 as u8];
 
 unsafe extern "C" fn loss_distortion(
     mut eBands: *const crate::arch_h::opus_val16,
@@ -664,50 +658,26 @@ unsafe extern "C" fn quant_coarse_energy_impl(
             bits_left = budget - tell - 3 as i32 * C * (end - i);
             if i != start && bits_left < 30 as i32 {
                 if bits_left < 24 as i32 {
-                    qi = if (1 as i32) < qi {
-                        1 as i32
-                    } else {
-                        qi
-                    }
+                    qi = if (1 as i32) < qi { 1 as i32 } else { qi }
                 }
                 if bits_left < 16 as i32 {
-                    qi = if -(1 as i32) > qi {
-                        -(1 as i32)
-                    } else {
-                        qi
-                    }
+                    qi = if -(1 as i32) > qi { -(1 as i32) } else { qi }
                 }
             }
             if lfe != 0 && i >= 2 as i32 {
-                qi = if qi < 0 as i32 {
-                    qi
-                } else {
-                    0 as i32
-                }
+                qi = if qi < 0 as i32 { qi } else { 0 as i32 }
             }
             if budget - tell >= 15 as i32 {
                 let mut pi: i32 = 0;
-                pi = 2 as i32
-                    * (if i < 20 as i32 {
-                        i
-                    } else {
-                        20 as i32
-                    });
+                pi = 2 as i32 * (if i < 20 as i32 { i } else { 20 as i32 });
                 crate::src::opus_1_2_1::celt::laplace::ec_laplace_encode(
                     enc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                     &mut qi,
-                    ((*prob_model.offset(pi as isize) as i32) << 7 as i32)
-                        as u32,
-                    (*prob_model.offset((pi + 1 as i32) as isize) as i32)
-                        << 6 as i32,
+                    ((*prob_model.offset(pi as isize) as i32) << 7 as i32) as u32,
+                    (*prob_model.offset((pi + 1 as i32) as isize) as i32) << 6 as i32,
                 );
             } else if budget - tell >= 2 as i32 {
-                qi = if -(1 as i32)
-                    > (if qi < 1 as i32 {
-                        qi
-                    } else {
-                        1 as i32
-                    }) {
+                qi = if -(1 as i32) > (if qi < 1 as i32 { qi } else { 1 as i32 }) {
                     -(1 as i32)
                 } else if qi < 1 as i32 {
                     qi
@@ -721,11 +691,7 @@ unsafe extern "C" fn quant_coarse_energy_impl(
                     2 as i32 as u32,
                 );
             } else if budget - tell >= 1 as i32 {
-                qi = if (0 as i32) < qi {
-                    0 as i32
-                } else {
-                    qi
-                };
+                qi = if (0 as i32) < qi { 0 as i32 } else { qi };
                 crate::src::opus_1_2_1::celt::entenc::ec_enc_bit_logp(
                     enc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                     -qi,
@@ -797,8 +763,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
         || two_pass == 0
             && *delayedIntra > (2 as i32 * C * (end - start)) as f32
             && nbAvailableBytes > (end - start) * C) as i32;
-    intra_bias = (budget as f32 * *delayedIntra * loss_rate as f32
-        / (C * 512 as i32) as f32)
+    intra_bias = (budget as f32 * *delayedIntra * loss_rate as f32 / (C * 512 as i32) as f32)
         as crate::opus_types_h::opus_int32;
     new_distortion = loss_distortion(eBands, oldEBands, start, effEnd, (*m).nbEBands, C);
     tell = ec_tell(enc) as crate::opus_types_h::opus_uint32;
@@ -836,8 +801,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
         ((C * (*m).nbEBands) as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
             .wrapping_add(
-                (0 as i32 as libc::c_long
-                    * oldEBands_intra.offset_from(oldEBands) as libc::c_long)
+                (0 as i32 as libc::c_long * oldEBands_intra.offset_from(oldEBands) as libc::c_long)
                     as libc::c_ulong,
             ),
     );
@@ -896,8 +860,8 @@ pub unsafe extern "C" fn quant_coarse_energy(
         }
         let mut fresh2 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<u8>() as libc::c_ulong)
-                .wrapping_mul(save_bytes as libc::c_ulong) as usize,
+            (::std::mem::size_of::<u8>() as libc::c_ulong).wrapping_mul(save_bytes as libc::c_ulong)
+                as usize,
         );
         intra_bits = fresh2.as_mut_ptr() as *mut u8;
         /* Copy bits from intra bit-stream */
@@ -907,8 +871,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
             (nintra_bytes.wrapping_sub(nstart_bytes) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as libc::c_long
-                        * intra_bits.offset_from(intra_buf) as libc::c_long)
+                    (0 as i32 as libc::c_long * intra_bits.offset_from(intra_buf) as libc::c_long)
                         as libc::c_ulong,
                 ),
         );
@@ -973,8 +936,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
                         ::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong
                     )
                     .wrapping_add(
-                        (0 as i32 as libc::c_long
-                            * error.offset_from(error_intra) as libc::c_long)
+                        (0 as i32 as libc::c_long * error.offset_from(error_intra) as libc::c_long)
                             as libc::c_ulong,
                     ),
             );
@@ -998,8 +960,7 @@ pub unsafe extern "C" fn quant_coarse_energy(
             ((C * (*m).nbEBands) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::opus_val16>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as libc::c_long
-                        * error.offset_from(error_intra) as libc::c_long)
+                    (0 as i32 as libc::c_long * error.offset_from(error_intra) as libc::c_long)
                         as libc::c_ulong,
                 ),
         );
@@ -1028,9 +989,8 @@ pub unsafe extern "C" fn quant_fine_energy(
     /* Encode finer resolution */
     i = start;
     while i < end {
-        let mut frac: crate::opus_types_h::opus_int16 = ((1 as i32)
-            << *fine_quant.offset(i as isize))
-            as crate::opus_types_h::opus_int16;
+        let mut frac: crate::opus_types_h::opus_int16 =
+            ((1 as i32) << *fine_quant.offset(i as isize)) as crate::opus_types_h::opus_int16;
         if !(*fine_quant.offset(i as isize) <= 0 as i32) {
             c = 0 as i32;
             loop {
@@ -1038,8 +998,7 @@ pub unsafe extern "C" fn quant_fine_energy(
                 let mut offset: crate::arch_h::opus_val16 = 0.;
                 q2 = crate::stdlib::floor(
                     ((*error.offset((i + c * (*m).nbEBands) as isize) + 0.5f32)
-                        * frac as i32 as f32)
-                        as f64,
+                        * frac as i32 as f32) as f64,
                 ) as i32;
                 if q2 > frac as i32 - 1 as i32 {
                     q2 = frac as i32 - 1 as i32
@@ -1053,8 +1012,7 @@ pub unsafe extern "C" fn quant_fine_energy(
                     *fine_quant.offset(i as isize) as u32,
                 );
                 offset = (q2 as f32 + 0.5f32)
-                    * ((1 as i32) << 14 as i32 - *fine_quant.offset(i as isize))
-                        as f32
+                    * ((1 as i32) << 14 as i32 - *fine_quant.offset(i as isize)) as f32
                     * (1.0f32 / 16384 as i32 as f32)
                     - 0.5f32;
                 let ref mut fresh3 = *oldEBands.offset((i + c * (*m).nbEBands) as isize);
@@ -1100,9 +1058,7 @@ pub unsafe extern "C" fn quant_energy_finalise(
                 loop {
                     let mut q2: i32 = 0;
                     let mut offset: crate::arch_h::opus_val16 = 0.;
-                    q2 = if *error.offset((i + c * (*m).nbEBands) as isize)
-                        < 0 as i32 as f32
-                    {
+                    q2 = if *error.offset((i + c * (*m).nbEBands) as isize) < 0 as i32 as f32 {
                         0 as i32
                     } else {
                         1 as i32
@@ -1113,10 +1069,8 @@ pub unsafe extern "C" fn quant_energy_finalise(
                         1 as i32 as u32,
                     );
                     offset = (q2 as f32 - 0.5f32)
-                        * ((1 as i32)
-                            << 14 as i32
-                                - *fine_quant.offset(i as isize)
-                                - 1 as i32) as f32
+                        * ((1 as i32) << 14 as i32 - *fine_quant.offset(i as isize) - 1 as i32)
+                            as f32
                         * (1.0f32 / 16384 as i32 as f32);
                     let ref mut fresh5 = *oldEBands.offset((i + c * (*m).nbEBands) as isize);
                     *fresh5 += offset;
@@ -1164,10 +1118,7 @@ pub unsafe extern "C" fn unquant_coarse_energy(
         beta = beta_coef[LM as usize];
         coef = pred_coef[LM as usize]
     }
-    budget = (*dec)
-        .storage
-        .wrapping_mul(8 as i32 as u32)
-        as crate::opus_types_h::opus_int32;
+    budget = (*dec).storage.wrapping_mul(8 as i32 as u32) as crate::opus_types_h::opus_int32;
     /* Decode at a fixed coarse resolution */
     i = start;
     while i < end {
@@ -1182,18 +1133,11 @@ pub unsafe extern "C" fn unquant_coarse_energy(
             tell = ec_tell(dec);
             if budget - tell >= 15 as i32 {
                 let mut pi: i32 = 0;
-                pi = 2 as i32
-                    * (if i < 20 as i32 {
-                        i
-                    } else {
-                        20 as i32
-                    });
+                pi = 2 as i32 * (if i < 20 as i32 { i } else { 20 as i32 });
                 qi = crate::src::opus_1_2_1::celt::laplace::ec_laplace_decode(
                     dec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                    ((*prob_model.offset(pi as isize) as i32) << 7 as i32)
-                        as u32,
-                    (*prob_model.offset((pi + 1 as i32) as isize) as i32)
-                        << 6 as i32,
+                    ((*prob_model.offset(pi as isize) as i32) << 7 as i32) as u32,
+                    (*prob_model.offset((pi + 1 as i32) as isize) as i32) << 6 as i32,
                 )
             } else if budget - tell >= 2 as i32 {
                 qi = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
@@ -1254,8 +1198,7 @@ pub unsafe extern "C" fn unquant_fine_energy(
                     *fine_quant.offset(i as isize) as u32,
                 ) as i32;
                 offset = (q2 as f32 + 0.5f32)
-                    * ((1 as i32) << 14 as i32 - *fine_quant.offset(i as isize))
-                        as f32
+                    * ((1 as i32) << 14 as i32 - *fine_quant.offset(i as isize)) as f32
                     * (1.0f32 / 16384 as i32 as f32)
                     - 0.5f32;
                 let ref mut fresh7 = *oldEBands.offset((i + c * (*m).nbEBands) as isize);
@@ -1302,10 +1245,8 @@ pub unsafe extern "C" fn unquant_energy_finalise(
                         1 as i32 as u32,
                     ) as i32;
                     offset = (q2 as f32 - 0.5f32)
-                        * ((1 as i32)
-                            << 14 as i32
-                                - *fine_quant.offset(i as isize)
-                                - 1 as i32) as f32
+                        * ((1 as i32) << 14 as i32 - *fine_quant.offset(i as isize) - 1 as i32)
+                            as f32
                         * (1.0f32 / 16384 as i32 as f32);
                     let ref mut fresh8 = *oldEBands.offset((i + c * (*m).nbEBands) as isize);
                     *fresh8 += offset;

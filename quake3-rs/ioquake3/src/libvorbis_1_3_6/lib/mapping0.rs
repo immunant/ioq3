@@ -253,8 +253,7 @@ unsafe extern "C" fn mapping0_unpack(
                 (*info).submaps = (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                     opb as *mut crate::ogg_h::oggpack_buffer,
                     4 as i32,
-                ) + 1 as i32 as libc::c_long)
-                    as i32;
+                ) + 1 as i32 as libc::c_long) as i32;
                 if (*info).submaps <= 0 as i32 {
                     current_block = 1977384903651761240;
                 } else {
@@ -306,19 +305,19 @@ unsafe extern "C" fn mapping0_unpack(
                                                     as crate::config_types_h::ogg_uint32_t,
                                             ),
                                         ) as i32; /* + .345 is a hack; the original
-                                                          todB estimation used on IEEE 754
-                                                          compliant machines had a bug that
-                                                          returned dB values about a third
-                                                          of a decibel too high.  The bug
-                                                          was harmless because tunings
-                                                          implicitly took that into
-                                                          account.  However, fixing the bug
-                                                          in the estimator requires
-                                                          changing all the tunings as well.
-                                                          For now, it's easier to sync
-                                                          things back up here, and
-                                                          recalibrate the tunings in the
-                                                          next major model upgrade. */
+                                                  todB estimation used on IEEE 754
+                                                  compliant machines had a bug that
+                                                  returned dB values about a third
+                                                  of a decibel too high.  The bug
+                                                  was harmless because tunings
+                                                  implicitly took that into
+                                                  account.  However, fixing the bug
+                                                  in the estimator requires
+                                                  changing all the tunings as well.
+                                                  For now, it's easier to sync
+                                                  things back up here, and
+                                                  recalibrate the tunings in the
+                                                  next major model upgrade. */
                                     let mut testA: i32 = (*info).coupling_ang[i as usize];
                                     if testM < 0 as i32
                                         || testA < 0 as i32
@@ -387,8 +386,7 @@ unsafe extern "C" fn mapping0_unpack(
                                                                      i32)
                                                         as i32;
                                                 if (*info).floorsubmap[i as usize] >= (*ci).floors
-                                                    || (*info).floorsubmap[i as usize]
-                                                        < 0 as i32
+                                                    || (*info).floorsubmap[i as usize] < 0 as i32
                                                 {
                                                     current_block = 1977384903651761240;
                                                     break;
@@ -402,8 +400,7 @@ unsafe extern "C" fn mapping0_unpack(
                                                         as i32;
                                                 if (*info).residuesubmap[i as usize]
                                                     >= (*ci).residues
-                                                    || (*info).residuesubmap[i as usize]
-                                                        < 0 as i32
+                                                    || (*info).residuesubmap[i as usize] < 0 as i32
                                                 {
                                                     current_block = 1977384903651761240;
                                                     break;
@@ -447,20 +444,18 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
             .wrapping_mul((*vi).channels as libc::c_ulong) as usize,
     );
     let mut nonzero: *mut i32 = fresh0.as_mut_ptr() as *mut i32;
-    let mut gmdct: *mut *mut f32 =
-        crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
-            vb as *mut crate::codec_h::vorbis_block,
-            ((*vi).channels as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
-                as libc::c_long,
-        ) as *mut *mut f32;
-    let mut iwork: *mut *mut i32 =
-        crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
-            vb as *mut crate::codec_h::vorbis_block,
-            ((*vi).channels as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<*mut i32>() as libc::c_ulong)
-                as libc::c_long,
-        ) as *mut *mut i32;
+    let mut gmdct: *mut *mut f32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
+        vb as *mut crate::codec_h::vorbis_block,
+        ((*vi).channels as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
+            as libc::c_long,
+    ) as *mut *mut f32;
+    let mut iwork: *mut *mut i32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
+        vb as *mut crate::codec_h::vorbis_block,
+        ((*vi).channels as libc::c_ulong)
+            .wrapping_mul(::std::mem::size_of::<*mut i32>() as libc::c_ulong)
+            as libc::c_long,
+    ) as *mut *mut i32;
     let mut floor_posts: *mut *mut *mut i32 =
         crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut crate::codec_h::vorbis_block,
@@ -479,14 +474,10 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
     let mut modenumber: i32 = (*vb).W as i32;
     let mut info: *mut crate::backends_h::vorbis_info_mapping0 =
         (*ci).map_param[modenumber as usize] as *mut crate::backends_h::vorbis_info_mapping0;
-    let mut psy_look: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy =
-        (*b).psy.offset(blocktype as isize).offset(
-            (if (*vb).W != 0 {
-                2 as i32
-            } else {
-                0 as i32
-            }) as isize,
-        );
+    let mut psy_look: *mut crate::src::libvorbis_1_3_6::lib::psy::vorbis_look_psy = (*b)
+        .psy
+        .offset(blocktype as isize)
+        .offset((if (*vb).W != 0 { 2 as i32 } else { 0 as i32 }) as isize);
     (*vb).mode = modenumber;
     i = 0 as i32;
     while i < (*vi).channels {
@@ -546,32 +537,28 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
            things back up here, and
            recalibrate the tunings in the
            next major model upgrade. */
-        *logfft.offset(0 as i32 as isize) =
-            ((scale_dB + todB(pcm)) as f64 + 0.345f64) as f32; /* +
-                                                                                    .345 is a hack; the original todB
-                                                                                    estimation used on IEEE 754
-                                                                                    compliant machines had a bug that
-                                                                                    returned dB values about a third
-                                                                                    of a decibel too high.  The bug
-                                                                                    was harmless because tunings
-                                                                                    implicitly took that into
-                                                                                    account.  However, fixing the bug
-                                                                                    in the estimator requires
-                                                                                    changing all the tunings as well.
-                                                                                    For now, it's easier to sync
-                                                                                    things back up here, and
-                                                                                    recalibrate the tunings in the
-                                                                                    next major model upgrade. */
+        *logfft.offset(0 as i32 as isize) = ((scale_dB + todB(pcm)) as f64 + 0.345f64) as f32; /* +
+                                                                                               .345 is a hack; the original todB
+                                                                                               estimation used on IEEE 754
+                                                                                               compliant machines had a bug that
+                                                                                               returned dB values about a third
+                                                                                               of a decibel too high.  The bug
+                                                                                               was harmless because tunings
+                                                                                               implicitly took that into
+                                                                                               account.  However, fixing the bug
+                                                                                               in the estimator requires
+                                                                                               changing all the tunings as well.
+                                                                                               For now, it's easier to sync
+                                                                                               things back up here, and
+                                                                                               recalibrate the tunings in the
+                                                                                               next major model upgrade. */
         *local_ampmax.offset(i as isize) = *logfft.offset(0 as i32 as isize);
         j = 1 as i32;
         while j < n - 1 as i32 {
             let mut temp: f32 = *pcm.offset(j as isize) * *pcm.offset(j as isize)
-                + *pcm.offset((j + 1 as i32) as isize)
-                    * *pcm.offset((j + 1 as i32) as isize);
-            let ref mut fresh4 =
-                *logfft.offset((j + 1 as i32 >> 1 as i32) as isize);
-            *fresh4 = ((scale_dB + 0.5f32 * todB(&mut temp)) as f64 + 0.345f64)
-                as f32;
+                + *pcm.offset((j + 1 as i32) as isize) * *pcm.offset((j + 1 as i32) as isize);
+            let ref mut fresh4 = *logfft.offset((j + 1 as i32 >> 1 as i32) as isize);
+            *fresh4 = ((scale_dB + 0.5f32 * todB(&mut temp)) as f64 + 0.345f64) as f32;
             temp = *fresh4;
             if temp > *local_ampmax.offset(i as isize) {
                 *local_ampmax.offset(i as isize) = temp
@@ -589,14 +576,12 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
     let mut noise: *mut f32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut crate::codec_h::vorbis_block,
         ((n / 2 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-            as libc::c_long,
+            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as libc::c_long,
     ) as *mut f32;
     let mut tone: *mut f32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut crate::codec_h::vorbis_block,
         ((n / 2 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-            as libc::c_long,
+            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as libc::c_long,
     ) as *mut f32;
     i = 0 as i32;
     while i < (*vi).channels {
@@ -605,19 +590,19 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
         let mut submap: i32 = (*info).chmuxlist[i as usize];
         /* the following makes things clearer to *me* anyway */
         let mut mdct: *mut f32 = *gmdct.offset(i as isize); /* + .345 is a hack; the original
-                                                                      todB estimation used on IEEE 754
-                                                                      compliant machines had a bug that
-                                                                      returned dB values about a third
-                                                                      of a decibel too high.  The bug
-                                                                      was harmless because tunings
-                                                                      implicitly took that into
-                                                                      account.  However, fixing the bug
-                                                                      in the estimator requires
-                                                                      changing all the tunings as well.
-                                                                      For now, it's easier to sync
-                                                                      things back up here, and
-                                                                      recalibrate the tunings in the
-                                                                      next major model upgrade. */
+                                                            todB estimation used on IEEE 754
+                                                            compliant machines had a bug that
+                                                            returned dB values about a third
+                                                            of a decibel too high.  The bug
+                                                            was harmless because tunings
+                                                            implicitly took that into
+                                                            account.  However, fixing the bug
+                                                            in the estimator requires
+                                                            changing all the tunings as well.
+                                                            For now, it's easier to sync
+                                                            things back up here, and
+                                                            recalibrate the tunings in the
+                                                            next major model upgrade. */
         let mut logfft_0: *mut f32 = *(*vb).pcm.offset(i as isize);
         let mut logmdct: *mut f32 = logfft_0.offset((n / 2 as i32) as isize);
         let mut logmask: *mut f32 = logfft_0;
@@ -637,8 +622,7 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
         );
         j = 0 as i32;
         while j < n / 2 as i32 {
-            *logmdct.offset(j as isize) =
-                (todB(mdct.offset(j as isize)) as f64 + 0.345f64) as f32;
+            *logmdct.offset(j as isize) = (todB(mdct.offset(j as isize)) as f64 + 0.345f64) as f32;
             j += 1
         }
         /* first step; noise masking.  Not only does 'noise masking'
@@ -681,8 +665,8 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
         if (*ci).floor_type[(*info).floorsubmap[submap as usize] as usize] != 1 as i32 {
             return -(1 as i32);
         }
-        let ref mut fresh6 = *(*floor_posts.offset(i as isize))
-            .offset((15 as i32 / 2 as i32) as isize);
+        let ref mut fresh6 =
+            *(*floor_posts.offset(i as isize)).offset((15 as i32 / 2 as i32) as isize);
         *fresh6 = crate::src::libvorbis_1_3_6::lib::floor1::floor1_fit(
             vb as *mut crate::codec_h::vorbis_block,
             *(*b)
@@ -698,9 +682,8 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
         if crate::src::libvorbis_1_3_6::lib::bitrate::vorbis_bitrate_managed(
             vb as *mut crate::codec_h::vorbis_block,
         ) != 0
-            && !(*(*floor_posts.offset(i as isize))
-                .offset((15 as i32 / 2 as i32) as isize))
-            .is_null()
+            && !(*(*floor_posts.offset(i as isize)).offset((15 as i32 / 2 as i32) as isize))
+                .is_null()
         {
             /* higher rate by way of lower noise curve */
             crate::src::libvorbis_1_3_6::lib::psy::_vp_offset_and_mix(
@@ -712,8 +695,8 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
                 mdct,
                 logmdct,
             );
-            let ref mut fresh7 = *(*floor_posts.offset(i as isize))
-                .offset((15 as i32 - 1 as i32) as isize);
+            let ref mut fresh7 =
+                *(*floor_posts.offset(i as isize)).offset((15 as i32 - 1 as i32) as isize);
             *fresh7 = crate::src::libvorbis_1_3_6::lib::floor1::floor1_fit(
                 vb as *mut crate::codec_h::vorbis_block,
                 *(*b)
@@ -734,8 +717,7 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
                 mdct,
                 logmdct,
             );
-            let ref mut fresh8 =
-                *(*floor_posts.offset(i as isize)).offset(0 as i32 as isize);
+            let ref mut fresh8 = *(*floor_posts.offset(i as isize)).offset(0 as i32 as isize);
             *fresh8 = crate::src::libvorbis_1_3_6::lib::floor1::floor1_fit(
                 vb as *mut crate::codec_h::vorbis_block,
                 *(*b)
@@ -759,8 +741,7 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
                         as *mut crate::codec_internal_h::vorbis_look_floor1
                         as *mut crate::codec_internal_h::vorbis_look_floor1,
                     *(*floor_posts.offset(i as isize)).offset(0 as i32 as isize),
-                    *(*floor_posts.offset(i as isize))
-                        .offset((15 as i32 / 2 as i32) as isize),
+                    *(*floor_posts.offset(i as isize)).offset((15 as i32 / 2 as i32) as isize),
                     k * 65536 as i32 / (15 as i32 / 2 as i32),
                 );
                 k += 1
@@ -775,12 +756,9 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
                         .offset((*info).floorsubmap[submap as usize] as isize)
                         as *mut crate::codec_internal_h::vorbis_look_floor1
                         as *mut crate::codec_internal_h::vorbis_look_floor1,
-                    *(*floor_posts.offset(i as isize))
-                        .offset((15 as i32 / 2 as i32) as isize),
-                    *(*floor_posts.offset(i as isize))
-                        .offset((15 as i32 - 1 as i32) as isize),
-                    (k - 15 as i32 / 2 as i32) * 65536 as i32
-                        / (15 as i32 / 2 as i32),
+                    *(*floor_posts.offset(i as isize)).offset((15 as i32 / 2 as i32) as isize),
+                    *(*floor_posts.offset(i as isize)).offset((15 as i32 - 1 as i32) as isize),
+                    (k - 15 as i32 / 2 as i32) * 65536 as i32 / (15 as i32 / 2 as i32),
                 );
                 k += 1
             }
@@ -1073,10 +1051,8 @@ unsafe extern "C" fn mapping0_inverse(
     /* channel coupling */
     i = (*info).coupling_steps - 1 as i32;
     while i >= 0 as i32 {
-        let mut pcmM: *mut f32 =
-            *(*vb).pcm.offset((*info).coupling_mag[i as usize] as isize);
-        let mut pcmA: *mut f32 =
-            *(*vb).pcm.offset((*info).coupling_ang[i as usize] as isize);
+        let mut pcmM: *mut f32 = *(*vb).pcm.offset((*info).coupling_mag[i as usize] as isize);
+        let mut pcmA: *mut f32 = *(*vb).pcm.offset((*info).coupling_ang[i as usize] as isize);
         j = 0 as i32;
         while (j as libc::c_long) < n / 2 as i32 as libc::c_long {
             let mut mag: f32 = *pcmM.offset(j as isize);
@@ -1158,8 +1134,7 @@ pub static mut mapping0_exportbundle: crate::backends_h::vorbis_func_mapping = {
         ),
         free_info: Some(mapping0_free_info as unsafe extern "C" fn(_: *mut libc::c_void) -> ()),
         forward: Some(
-            mapping0_forward
-                as unsafe extern "C" fn(_: *mut crate::codec_h::vorbis_block) -> i32,
+            mapping0_forward as unsafe extern "C" fn(_: *mut crate::codec_h::vorbis_block) -> i32,
         ),
         inverse: Some(
             mapping0_inverse

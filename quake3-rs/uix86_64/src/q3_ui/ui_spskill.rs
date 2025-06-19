@@ -584,10 +584,7 @@ UI_SPSkillMenu_SkillEvent
 =================
 */
 
-unsafe extern "C" fn UI_SPSkillMenu_SkillEvent(
-    mut ptr: *mut libc::c_void,
-    mut notification: i32,
-) {
+unsafe extern "C" fn UI_SPSkillMenu_SkillEvent(mut ptr: *mut libc::c_void, mut notification: i32) {
     let mut id: i32 = 0;
     let mut skill: i32 = 0;
     if notification != 3 as i32 {
@@ -606,8 +603,7 @@ unsafe extern "C" fn UI_SPSkillMenu_SkillEvent(
         skill as f32,
     );
     SetSkillColor(skill, crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr());
-    skillMenuInfo.art_skillPic.shader =
-        skillMenuInfo.skillpics[(skill - 1 as i32) as usize];
+    skillMenuInfo.art_skillPic.shader = skillMenuInfo.skillpics[(skill - 1 as i32) as usize];
     if id == 14 as i32 {
         crate::src::ui::ui_syscalls::trap_S_StartLocalSound(
             skillMenuInfo.nightmareSound,
@@ -626,10 +622,7 @@ UI_SPSkillMenu_FightEvent
 =================
 */
 
-unsafe extern "C" fn UI_SPSkillMenu_FightEvent(
-    mut _ptr: *mut libc::c_void,
-    mut notification: i32,
-) {
+unsafe extern "C" fn UI_SPSkillMenu_FightEvent(mut _ptr: *mut libc::c_void, mut notification: i32) {
     if notification != 3 as i32 {
         return;
     }
@@ -641,10 +634,7 @@ UI_SPSkillMenu_BackEvent
 =================
 */
 
-unsafe extern "C" fn UI_SPSkillMenu_BackEvent(
-    mut _ptr: *mut libc::c_void,
-    mut notification: i32,
-) {
+unsafe extern "C" fn UI_SPSkillMenu_BackEvent(mut _ptr: *mut libc::c_void, mut notification: i32) {
     if notification != 3 as i32 {
         return;
     }
@@ -663,9 +653,7 @@ UI_SPSkillMenu_Key
 unsafe extern "C" fn UI_SPSkillMenu_Key(
     mut key: i32,
 ) -> crate::src::qcommon::q_shared::sfxHandle_t {
-    if key == crate::keycodes_h::K_MOUSE2 as i32
-        || key == crate::keycodes_h::K_ESCAPE as i32
-    {
+    if key == crate::keycodes_h::K_MOUSE2 as i32 || key == crate::keycodes_h::K_ESCAPE as i32 {
         crate::src::ui::ui_syscalls::trap_S_StartLocalSound(
             skillMenuInfo.silenceSound,
             crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32,
@@ -750,8 +738,7 @@ unsafe extern "C" fn UI_SPSkillMenu_Init() {
     skillMenuInfo.art_frame.generic.type_0 = 6 as i32;
     skillMenuInfo.art_frame.generic.name =
         b"menu/art/cut_frame\x00" as *const u8 as *const libc::c_char;
-    skillMenuInfo.art_frame.generic.flags =
-        0x4 as i32 as u32 | 0x4000 as i32 as u32;
+    skillMenuInfo.art_frame.generic.flags = 0x4 as i32 as u32 | 0x4000 as i32 as u32;
     skillMenuInfo.art_frame.generic.x = 142 as i32;
     skillMenuInfo.art_frame.generic.y = 118 as i32;
     skillMenuInfo.art_frame.width = 359 as i32;
@@ -765,70 +752,55 @@ unsafe extern "C" fn UI_SPSkillMenu_Init() {
     skillMenuInfo.art_banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
     skillMenuInfo.art_banner.style = 0x1 as i32;
     skillMenuInfo.item_baby.generic.type_0 = 9 as i32;
-    skillMenuInfo.item_baby.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    skillMenuInfo.item_baby.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     skillMenuInfo.item_baby.generic.x = 320 as i32;
     skillMenuInfo.item_baby.generic.y = 170 as i32;
-    skillMenuInfo.item_baby.generic.callback = Some(
-        UI_SPSkillMenu_SkillEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    skillMenuInfo.item_baby.generic.callback =
+        Some(UI_SPSkillMenu_SkillEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     skillMenuInfo.item_baby.generic.id = 10 as i32;
     skillMenuInfo.item_baby.string =
         b"I Can Win\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     skillMenuInfo.item_baby.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     skillMenuInfo.item_baby.style = 0x1 as i32;
     skillMenuInfo.item_easy.generic.type_0 = 9 as i32;
-    skillMenuInfo.item_easy.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    skillMenuInfo.item_easy.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     skillMenuInfo.item_easy.generic.x = 320 as i32;
     skillMenuInfo.item_easy.generic.y = 198 as i32;
-    skillMenuInfo.item_easy.generic.callback = Some(
-        UI_SPSkillMenu_SkillEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    skillMenuInfo.item_easy.generic.callback =
+        Some(UI_SPSkillMenu_SkillEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     skillMenuInfo.item_easy.generic.id = 11 as i32;
     skillMenuInfo.item_easy.string =
         b"Bring It On\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     skillMenuInfo.item_easy.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     skillMenuInfo.item_easy.style = 0x1 as i32;
     skillMenuInfo.item_medium.generic.type_0 = 9 as i32;
-    skillMenuInfo.item_medium.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    skillMenuInfo.item_medium.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     skillMenuInfo.item_medium.generic.x = 320 as i32;
     skillMenuInfo.item_medium.generic.y = 227 as i32;
-    skillMenuInfo.item_medium.generic.callback = Some(
-        UI_SPSkillMenu_SkillEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    skillMenuInfo.item_medium.generic.callback =
+        Some(UI_SPSkillMenu_SkillEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     skillMenuInfo.item_medium.generic.id = 12 as i32;
     skillMenuInfo.item_medium.string =
         b"Hurt Me Plenty\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     skillMenuInfo.item_medium.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     skillMenuInfo.item_medium.style = 0x1 as i32;
     skillMenuInfo.item_hard.generic.type_0 = 9 as i32;
-    skillMenuInfo.item_hard.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    skillMenuInfo.item_hard.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     skillMenuInfo.item_hard.generic.x = 320 as i32;
     skillMenuInfo.item_hard.generic.y = 255 as i32;
-    skillMenuInfo.item_hard.generic.callback = Some(
-        UI_SPSkillMenu_SkillEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    skillMenuInfo.item_hard.generic.callback =
+        Some(UI_SPSkillMenu_SkillEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     skillMenuInfo.item_hard.generic.id = 13 as i32;
     skillMenuInfo.item_hard.string =
         b"Hardcore\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     skillMenuInfo.item_hard.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     skillMenuInfo.item_hard.style = 0x1 as i32;
     skillMenuInfo.item_nightmare.generic.type_0 = 9 as i32;
-    skillMenuInfo.item_nightmare.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    skillMenuInfo.item_nightmare.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     skillMenuInfo.item_nightmare.generic.x = 320 as i32;
     skillMenuInfo.item_nightmare.generic.y = 283 as i32;
-    skillMenuInfo.item_nightmare.generic.callback = Some(
-        UI_SPSkillMenu_SkillEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    skillMenuInfo.item_nightmare.generic.callback =
+        Some(UI_SPSkillMenu_SkillEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     skillMenuInfo.item_nightmare.generic.id = 14 as i32;
     skillMenuInfo.item_nightmare.string =
         b"NIGHTMARE!\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
@@ -837,22 +809,18 @@ unsafe extern "C" fn UI_SPSkillMenu_Init() {
     skillMenuInfo.item_back.generic.type_0 = 6 as i32;
     skillMenuInfo.item_back.generic.name =
         b"menu/art/back_0.tga\x00" as *const u8 as *const libc::c_char;
-    skillMenuInfo.item_back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    skillMenuInfo.item_back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     skillMenuInfo.item_back.generic.x = 0 as i32;
     skillMenuInfo.item_back.generic.y = 480 as i32 - 64 as i32;
-    skillMenuInfo.item_back.generic.callback = Some(
-        UI_SPSkillMenu_BackEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    skillMenuInfo.item_back.generic.callback =
+        Some(UI_SPSkillMenu_BackEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     skillMenuInfo.item_back.generic.id = 15 as i32;
     skillMenuInfo.item_back.width = 128 as i32;
     skillMenuInfo.item_back.height = 64 as i32;
     skillMenuInfo.item_back.focuspic =
         b"menu/art/back_1.tga\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     skillMenuInfo.art_skillPic.generic.type_0 = 6 as i32;
-    skillMenuInfo.art_skillPic.generic.flags =
-        0x4 as i32 as u32 | 0x4000 as i32 as u32;
+    skillMenuInfo.art_skillPic.generic.flags = 0x4 as i32 as u32 | 0x4000 as i32 as u32;
     skillMenuInfo.art_skillPic.generic.x = 320 as i32 - 64 as i32;
     skillMenuInfo.art_skillPic.generic.y = 368 as i32;
     skillMenuInfo.art_skillPic.width = 128 as i32;
@@ -860,12 +828,9 @@ unsafe extern "C" fn UI_SPSkillMenu_Init() {
     skillMenuInfo.item_fight.generic.type_0 = 6 as i32;
     skillMenuInfo.item_fight.generic.name =
         b"menu/art/fight_0\x00" as *const u8 as *const libc::c_char;
-    skillMenuInfo.item_fight.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
-    skillMenuInfo.item_fight.generic.callback = Some(
-        UI_SPSkillMenu_FightEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    skillMenuInfo.item_fight.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
+    skillMenuInfo.item_fight.generic.callback =
+        Some(UI_SPSkillMenu_FightEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     skillMenuInfo.item_fight.generic.id = 16 as i32;
     skillMenuInfo.item_fight.generic.x = 640 as i32;
     skillMenuInfo.item_fight.generic.y = 480 as i32 - 64 as i32;
@@ -923,8 +888,7 @@ unsafe extern "C" fn UI_SPSkillMenu_Init() {
         ),
     ) as i32;
     SetSkillColor(skill, crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr());
-    skillMenuInfo.art_skillPic.shader =
-        skillMenuInfo.skillpics[(skill - 1 as i32) as usize];
+    skillMenuInfo.art_skillPic.shader = skillMenuInfo.skillpics[(skill - 1 as i32) as usize];
     if skill == 5 as i32 {
         crate::src::ui::ui_syscalls::trap_S_StartLocalSound(
             skillMenuInfo.nightmareSound,

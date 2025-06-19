@@ -290,14 +290,11 @@ unsafe extern "C" fn fill_input_buffer(
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr,
-            -(1 as i32),
+            cinfo as crate::jpeglib_h::j_common_ptr, -(1 as i32)
         );
         /* Insert a fake EOI marker */
-        *(*src).buffer.offset(0 as i32 as isize) =
-            0xff as i32 as crate::jmorecfg_h::JOCTET;
-        *(*src).buffer.offset(1 as i32 as isize) =
-            0xd9 as i32 as crate::jmorecfg_h::JOCTET;
+        *(*src).buffer.offset(0 as i32 as isize) = 0xff as i32 as crate::jmorecfg_h::JOCTET;
+        *(*src).buffer.offset(1 as i32 as isize) = 0xd9 as i32 as crate::jmorecfg_h::JOCTET;
         nbytes = 2 as i32 as crate::stddef_h::size_t
     }
     (*src).pub_0.next_input_byte = (*src).buffer;
@@ -320,10 +317,7 @@ unsafe extern "C" fn fill_mem_input_buffer(
             .emit_message
             .expect("non-null function pointer"),
     )
-    .expect("non-null function pointer")(
-        cinfo as crate::jpeglib_h::j_common_ptr,
-        -(1 as i32),
-    );
+    .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr, -(1 as i32));
     /* Insert a fake EOI marker */
     mybuffer[0 as i32 as usize] = 0xff as i32 as crate::jmorecfg_h::JOCTET;
     mybuffer[1 as i32 as usize] = 0xd9 as i32 as crate::jmorecfg_h::JOCTET;

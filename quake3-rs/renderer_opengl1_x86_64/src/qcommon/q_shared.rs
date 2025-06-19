@@ -266,8 +266,8 @@ pub unsafe extern "C" fn Q_IsColorString(
     if (*p.offset(1 as i32 as isize) as i32) < 0 as i32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    if *(*crate::stdlib::__ctype_b_loc())
-        .offset(*p.offset(1 as i32 as isize) as i32 as isize) as i32
+    if *(*crate::stdlib::__ctype_b_loc()).offset(*p.offset(1 as i32 as isize) as i32 as isize)
+        as i32
         & crate::stdlib::_ISalnum as i32 as u16 as i32
         == 0 as i32
     {
@@ -277,11 +277,7 @@ pub unsafe extern "C" fn Q_IsColorString(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn Com_Clamp(
-    mut min: f32,
-    mut max: f32,
-    mut value: f32,
-) -> f32 {
+pub unsafe extern "C" fn Com_Clamp(mut min: f32, mut max: f32, mut value: f32) -> f32 {
     if value < min {
         return min;
     }
@@ -466,8 +462,7 @@ pub unsafe extern "C" fn ShortSwap(mut l: i16) -> i16 {
     let mut b1: crate::src::qcommon::q_shared::byte = 0;
     let mut b2: crate::src::qcommon::q_shared::byte = 0;
     b1 = (l as i32 & 255 as i32) as crate::src::qcommon::q_shared::byte;
-    b2 = (l as i32 >> 8 as i32 & 255 as i32)
-        as crate::src::qcommon::q_shared::byte;
+    b2 = (l as i32 >> 8 as i32 & 255 as i32) as crate::src::qcommon::q_shared::byte;
     return (((b1 as i32) << 8 as i32) + b2 as i32) as i16;
 }
 #[no_mangle]
@@ -743,16 +738,12 @@ pub unsafe extern "C" fn COM_Compress(mut data_p: *mut libc::c_char) -> i32 {
                 break;
             }
             // skip double slash comments
-            if c == '/' as i32
-                && *in_0.offset(1 as i32 as isize) as i32 == '/' as i32
-            {
+            if c == '/' as i32 && *in_0.offset(1 as i32 as isize) as i32 == '/' as i32 {
                 while *in_0 as i32 != 0 && *in_0 as i32 != '\n' as i32 {
                     in_0 = in_0.offset(1)
                 }
             // skip /* */ comments
-            } else if c == '/' as i32
-                && *in_0.offset(1 as i32 as isize) as i32 == '*' as i32
-            {
+            } else if c == '/' as i32 && *in_0.offset(1 as i32 as isize) as i32 == '*' as i32 {
                 while *in_0 as i32 != 0
                     && (*in_0 as i32 != '*' as i32
                         || *in_0.offset(1 as i32 as isize) as i32 != '/' as i32)
@@ -859,9 +850,7 @@ pub unsafe extern "C" fn COM_ParseExt(
             }
         } else {
             // skip /* */ comments
-            if !(c == '/' as i32
-                && *data.offset(1 as i32 as isize) as i32 == '*' as i32)
-            {
+            if !(c == '/' as i32 && *data.offset(1 as i32 as isize) as i32 == '*' as i32) {
                 break;
             }
             data = data.offset(2 as i32 as isize);
@@ -1179,16 +1168,12 @@ pub unsafe extern "C" fn Q_isanumber(
         return crate::src::qcommon::q_shared::qfalse;
     }
     ::libc::strtod(s, &mut p);
-    return (*p as i32 == '\u{0}' as i32) as i32
-        as crate::src::qcommon::q_shared::qboolean;
+    return (*p as i32 == '\u{0}' as i32) as i32 as crate::src::qcommon::q_shared::qboolean;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn Q_isintegral(
-    mut f: f32,
-) -> crate::src::qcommon::q_shared::qboolean {
-    return (f as i32 as f32 == f) as i32
-        as crate::src::qcommon::q_shared::qboolean;
+pub unsafe extern "C" fn Q_isintegral(mut f: f32) -> crate::src::qcommon::q_shared::qboolean {
+    return (f as i32 as f32 == f) as i32 as crate::src::qcommon::q_shared::qboolean;
 }
 /*
 =============
@@ -1266,11 +1251,7 @@ pub unsafe extern "C" fn Q_stricmpn(
                 c2 -= 'a' as i32 - 'A' as i32
             }
             if c1 != c2 {
-                return if c1 < c2 {
-                    -(1 as i32)
-                } else {
-                    1 as i32
-                };
+                return if c1 < c2 { -(1 as i32) } else { 1 as i32 };
             }
         }
         if !(c1 != 0) {
@@ -1303,11 +1284,7 @@ pub unsafe extern "C" fn Q_strncmp(
             // strings are equal until end point
         }
         if c1 != c2 {
-            return if c1 < c2 {
-                -(1 as i32)
-            } else {
-                1 as i32
-            };
+            return if c1 < c2 { -(1 as i32) } else { 1 as i32 };
         }
         if !(c1 != 0) {
             break;
@@ -1336,9 +1313,7 @@ pub unsafe extern "C" fn Q_strlwr(mut s1: *mut libc::c_char) -> *mut libc::c_cha
     while *s != 0 {
         *s = ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                > 1 as i32 as libc::c_ulong
-            {
+            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
                 if 0 != 0 {
                     let mut __c: i32 = *s as i32;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1366,9 +1341,7 @@ pub unsafe extern "C" fn Q_strupr(mut s1: *mut libc::c_char) -> *mut libc::c_cha
     while *s != 0 {
         *s = ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                > 1 as i32 as libc::c_ulong
-            {
+            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
                 if 0 != 0 {
                     let mut __c: i32 = *s as i32;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -1575,11 +1548,7 @@ pub unsafe extern "C" fn Com_TruncateLongString(
     if length <= 64 as i32 {
         Q_strncpyz(buffer, s, 64 as i32);
     } else {
-        Q_strncpyz(
-            buffer,
-            s,
-            64 as i32 / 2 as i32 - 3 as i32,
-        );
+        Q_strncpyz(buffer, s, 64 as i32 / 2 as i32 - 3 as i32);
         Q_strcat(
             buffer,
             64 as i32,

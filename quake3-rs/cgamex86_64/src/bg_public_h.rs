@@ -68,12 +68,8 @@ pub struct pmove_t {
             _: i32,
         ) -> (),
     >,
-    pub pointcontents: Option<
-        unsafe extern "C" fn(
-            _: *const crate::src::qcommon::q_shared::vec_t,
-            _: i32,
-        ) -> i32,
-    >,
+    pub pointcontents:
+        Option<unsafe extern "C" fn(_: *const crate::src::qcommon::q_shared::vec_t, _: i32) -> i32>,
 }
 pub const STAT_HEALTH: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 0;
 pub const STAT_HOLDABLE_ITEM: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 1;

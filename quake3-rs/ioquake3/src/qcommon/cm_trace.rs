@@ -307,27 +307,18 @@ pub unsafe extern "C" fn RotatePoint(
     tvec[0 as i32 as usize] = *point.offset(0 as i32 as isize);
     tvec[1 as i32 as usize] = *point.offset(1 as i32 as isize);
     tvec[2 as i32 as usize] = *point.offset(2 as i32 as isize);
-    *point.offset(0 as i32 as isize) = (*matrix.offset(0 as i32 as isize))
-        [0 as i32 as usize]
+    *point.offset(0 as i32 as isize) = (*matrix.offset(0 as i32 as isize))[0 as i32 as usize]
         * tvec[0 as i32 as usize]
-        + (*matrix.offset(0 as i32 as isize))[1 as i32 as usize]
-            * tvec[1 as i32 as usize]
-        + (*matrix.offset(0 as i32 as isize))[2 as i32 as usize]
-            * tvec[2 as i32 as usize];
-    *point.offset(1 as i32 as isize) = (*matrix.offset(1 as i32 as isize))
-        [0 as i32 as usize]
+        + (*matrix.offset(0 as i32 as isize))[1 as i32 as usize] * tvec[1 as i32 as usize]
+        + (*matrix.offset(0 as i32 as isize))[2 as i32 as usize] * tvec[2 as i32 as usize];
+    *point.offset(1 as i32 as isize) = (*matrix.offset(1 as i32 as isize))[0 as i32 as usize]
         * tvec[0 as i32 as usize]
-        + (*matrix.offset(1 as i32 as isize))[1 as i32 as usize]
-            * tvec[1 as i32 as usize]
-        + (*matrix.offset(1 as i32 as isize))[2 as i32 as usize]
-            * tvec[2 as i32 as usize];
-    *point.offset(2 as i32 as isize) = (*matrix.offset(2 as i32 as isize))
-        [0 as i32 as usize]
+        + (*matrix.offset(1 as i32 as isize))[1 as i32 as usize] * tvec[1 as i32 as usize]
+        + (*matrix.offset(1 as i32 as isize))[2 as i32 as usize] * tvec[2 as i32 as usize];
+    *point.offset(2 as i32 as isize) = (*matrix.offset(2 as i32 as isize))[0 as i32 as usize]
         * tvec[0 as i32 as usize]
-        + (*matrix.offset(2 as i32 as isize))[1 as i32 as usize]
-            * tvec[1 as i32 as usize]
-        + (*matrix.offset(2 as i32 as isize))[2 as i32 as usize]
-            * tvec[2 as i32 as usize];
+        + (*matrix.offset(2 as i32 as isize))[1 as i32 as usize] * tvec[1 as i32 as usize]
+        + (*matrix.offset(2 as i32 as isize))[2 as i32 as usize] * tvec[2 as i32 as usize];
 }
 /*
 ================
@@ -386,12 +377,9 @@ pub unsafe extern "C" fn CM_ProjectPointOntoVector(
     mut vProj: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
     let mut pVec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    pVec[0 as i32 as usize] =
-        *point.offset(0 as i32 as isize) - *vStart.offset(0 as i32 as isize);
-    pVec[1 as i32 as usize] =
-        *point.offset(1 as i32 as isize) - *vStart.offset(1 as i32 as isize);
-    pVec[2 as i32 as usize] =
-        *point.offset(2 as i32 as isize) - *vStart.offset(2 as i32 as isize);
+    pVec[0 as i32 as usize] = *point.offset(0 as i32 as isize) - *vStart.offset(0 as i32 as isize);
+    pVec[1 as i32 as usize] = *point.offset(1 as i32 as isize) - *vStart.offset(1 as i32 as isize);
+    pVec[2 as i32 as usize] = *point.offset(2 as i32 as isize) - *vStart.offset(2 as i32 as isize);
     // project onto the directional vector for this segment
     *vProj.offset(0 as i32 as isize) = *vStart.offset(0 as i32 as isize)
         + *vDir.offset(0 as i32 as isize)
@@ -440,28 +428,19 @@ pub unsafe extern "C" fn CM_DistanceFromLineSquared(
         if crate::stdlib::fabs((proj[j as usize] - *lp1.offset(j as isize)) as f64)
             < crate::stdlib::fabs((proj[j as usize] - *lp2.offset(j as isize)) as f64)
         {
-            t[0 as i32 as usize] =
-                *p.offset(0 as i32 as isize) - *lp1.offset(0 as i32 as isize);
-            t[1 as i32 as usize] =
-                *p.offset(1 as i32 as isize) - *lp1.offset(1 as i32 as isize);
-            t[2 as i32 as usize] =
-                *p.offset(2 as i32 as isize) - *lp1.offset(2 as i32 as isize)
+            t[0 as i32 as usize] = *p.offset(0 as i32 as isize) - *lp1.offset(0 as i32 as isize);
+            t[1 as i32 as usize] = *p.offset(1 as i32 as isize) - *lp1.offset(1 as i32 as isize);
+            t[2 as i32 as usize] = *p.offset(2 as i32 as isize) - *lp1.offset(2 as i32 as isize)
         } else {
-            t[0 as i32 as usize] =
-                *p.offset(0 as i32 as isize) - *lp2.offset(0 as i32 as isize);
-            t[1 as i32 as usize] =
-                *p.offset(1 as i32 as isize) - *lp2.offset(1 as i32 as isize);
-            t[2 as i32 as usize] =
-                *p.offset(2 as i32 as isize) - *lp2.offset(2 as i32 as isize)
+            t[0 as i32 as usize] = *p.offset(0 as i32 as isize) - *lp2.offset(0 as i32 as isize);
+            t[1 as i32 as usize] = *p.offset(1 as i32 as isize) - *lp2.offset(1 as i32 as isize);
+            t[2 as i32 as usize] = *p.offset(2 as i32 as isize) - *lp2.offset(2 as i32 as isize)
         }
         return VectorLengthSquared(t.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
     }
-    t[0 as i32 as usize] =
-        *p.offset(0 as i32 as isize) - proj[0 as i32 as usize];
-    t[1 as i32 as usize] =
-        *p.offset(1 as i32 as isize) - proj[1 as i32 as usize];
-    t[2 as i32 as usize] =
-        *p.offset(2 as i32 as isize) - proj[2 as i32 as usize];
+    t[0 as i32 as usize] = *p.offset(0 as i32 as isize) - proj[0 as i32 as usize];
+    t[1 as i32 as usize] = *p.offset(1 as i32 as isize) - proj[1 as i32 as usize];
+    t[2 as i32 as usize] = *p.offset(2 as i32 as isize) - proj[2 as i32 as usize];
     return VectorLengthSquared(t.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
 }
 /*
@@ -476,12 +455,9 @@ pub unsafe extern "C" fn CM_VectorDistanceSquared(
     mut p2: *mut crate::src::qcommon::q_shared::vec_t,
 ) -> f32 {
     let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    dir[0 as i32 as usize] =
-        *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
-    dir[1 as i32 as usize] =
-        *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
-    dir[2 as i32 as usize] =
-        *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
+    dir[0 as i32 as usize] = *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
+    dir[1 as i32 as usize] = *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
+    dir[2 as i32 as usize] = *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
     return VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
 }
 /*
@@ -560,26 +536,23 @@ pub unsafe extern "C" fn CM_TestBoxInBrush(
             // adjust the plane distance appropriately for radius
             dist = (*plane).dist + (*tw).sphere.radius;
             // find the closest point on the capsule to the plane
-            t = (*plane).normal[0 as i32 as usize]
-                * (*tw).sphere.offset[0 as i32 as usize]
-                + (*plane).normal[1 as i32 as usize]
-                    * (*tw).sphere.offset[1 as i32 as usize]
-                + (*plane).normal[2 as i32 as usize]
-                    * (*tw).sphere.offset[2 as i32 as usize];
+            t = (*plane).normal[0 as i32 as usize] * (*tw).sphere.offset[0 as i32 as usize]
+                + (*plane).normal[1 as i32 as usize] * (*tw).sphere.offset[1 as i32 as usize]
+                + (*plane).normal[2 as i32 as usize] * (*tw).sphere.offset[2 as i32 as usize];
             if t > 0 as i32 as f32 {
-                startp[0 as i32 as usize] = (*tw).start[0 as i32 as usize]
-                    - (*tw).sphere.offset[0 as i32 as usize];
-                startp[1 as i32 as usize] = (*tw).start[1 as i32 as usize]
-                    - (*tw).sphere.offset[1 as i32 as usize];
-                startp[2 as i32 as usize] = (*tw).start[2 as i32 as usize]
-                    - (*tw).sphere.offset[2 as i32 as usize]
+                startp[0 as i32 as usize] =
+                    (*tw).start[0 as i32 as usize] - (*tw).sphere.offset[0 as i32 as usize];
+                startp[1 as i32 as usize] =
+                    (*tw).start[1 as i32 as usize] - (*tw).sphere.offset[1 as i32 as usize];
+                startp[2 as i32 as usize] =
+                    (*tw).start[2 as i32 as usize] - (*tw).sphere.offset[2 as i32 as usize]
             } else {
-                startp[0 as i32 as usize] = (*tw).start[0 as i32 as usize]
-                    + (*tw).sphere.offset[0 as i32 as usize];
-                startp[1 as i32 as usize] = (*tw).start[1 as i32 as usize]
-                    + (*tw).sphere.offset[1 as i32 as usize];
-                startp[2 as i32 as usize] = (*tw).start[2 as i32 as usize]
-                    + (*tw).sphere.offset[2 as i32 as usize]
+                startp[0 as i32 as usize] =
+                    (*tw).start[0 as i32 as usize] + (*tw).sphere.offset[0 as i32 as usize];
+                startp[1 as i32 as usize] =
+                    (*tw).start[1 as i32 as usize] + (*tw).sphere.offset[1 as i32 as usize];
+                startp[2 as i32 as usize] =
+                    (*tw).start[2 as i32 as usize] + (*tw).sphere.offset[2 as i32 as usize]
             }
             d1 = startp[0 as i32 as usize] * (*plane).normal[0 as i32 as usize]
                 + startp[1 as i32 as usize] * (*plane).normal[1 as i32 as usize]
@@ -606,12 +579,9 @@ pub unsafe extern "C" fn CM_TestBoxInBrush(
                         * (*plane).normal[1 as i32 as usize]
                     + (*tw).offsets[(*plane).signbits as usize][2 as i32 as usize]
                         * (*plane).normal[2 as i32 as usize]);
-            d1 = (*tw).start[0 as i32 as usize]
-                * (*plane).normal[0 as i32 as usize]
-                + (*tw).start[1 as i32 as usize]
-                    * (*plane).normal[1 as i32 as usize]
-                + (*tw).start[2 as i32 as usize]
-                    * (*plane).normal[2 as i32 as usize]
+            d1 = (*tw).start[0 as i32 as usize] * (*plane).normal[0 as i32 as usize]
+                + (*tw).start[1 as i32 as usize] * (*plane).normal[1 as i32 as usize]
+                + (*tw).start[2 as i32 as usize] * (*plane).normal[2 as i32 as usize]
                 - dist;
             // if completely in front of face, no intersection
             if d1 > 0 as i32 as f32 {
@@ -767,12 +737,9 @@ pub unsafe extern "C" fn CM_TestCapsuleInCapsule(
         (*tw).trace.startsolid = (*tw).trace.allsolid;
         (*tw).trace.fraction = 0 as i32 as f32
     }
-    tmp[0 as i32 as usize] =
-        p1[0 as i32 as usize] - bottom[0 as i32 as usize];
-    tmp[1 as i32 as usize] =
-        p1[1 as i32 as usize] - bottom[1 as i32 as usize];
-    tmp[2 as i32 as usize] =
-        p1[2 as i32 as usize] - bottom[2 as i32 as usize];
+    tmp[0 as i32 as usize] = p1[0 as i32 as usize] - bottom[0 as i32 as usize];
+    tmp[1 as i32 as usize] = p1[1 as i32 as usize] - bottom[1 as i32 as usize];
+    tmp[2 as i32 as usize] = p1[2 as i32 as usize] - bottom[2 as i32 as usize];
     if VectorLengthSquared(tmp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t) < r {
         (*tw).trace.allsolid = crate::src::qcommon::q_shared::qtrue;
         (*tw).trace.startsolid = (*tw).trace.allsolid;
@@ -790,12 +757,9 @@ pub unsafe extern "C" fn CM_TestCapsuleInCapsule(
         (*tw).trace.startsolid = (*tw).trace.allsolid;
         (*tw).trace.fraction = 0 as i32 as f32
     }
-    tmp[0 as i32 as usize] =
-        p2[0 as i32 as usize] - bottom[0 as i32 as usize];
-    tmp[1 as i32 as usize] =
-        p2[1 as i32 as usize] - bottom[1 as i32 as usize];
-    tmp[2 as i32 as usize] =
-        p2[2 as i32 as usize] - bottom[2 as i32 as usize];
+    tmp[0 as i32 as usize] = p2[0 as i32 as usize] - bottom[0 as i32 as usize];
+    tmp[1 as i32 as usize] = p2[1 as i32 as usize] - bottom[1 as i32 as usize];
+    tmp[2 as i32 as usize] = p2[2 as i32 as usize] - bottom[2 as i32 as usize];
     if VectorLengthSquared(tmp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t) < r {
         (*tw).trace.allsolid = crate::src::qcommon::q_shared::qtrue;
         (*tw).trace.startsolid = (*tw).trace.allsolid;
@@ -811,12 +775,9 @@ pub unsafe extern "C" fn CM_TestCapsuleInCapsule(
         p1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         top[2 as i32 as usize] = p1[2 as i32 as usize];
         // if the cylinders overlap
-        tmp[0 as i32 as usize] =
-            top[0 as i32 as usize] - p1[0 as i32 as usize];
-        tmp[1 as i32 as usize] =
-            top[1 as i32 as usize] - p1[1 as i32 as usize];
-        tmp[2 as i32 as usize] =
-            top[2 as i32 as usize] - p1[2 as i32 as usize];
+        tmp[0 as i32 as usize] = top[0 as i32 as usize] - p1[0 as i32 as usize];
+        tmp[1 as i32 as usize] = top[1 as i32 as usize] - p1[1 as i32 as usize];
+        tmp[2 as i32 as usize] = top[2 as i32 as usize] - p1[2 as i32 as usize];
         if VectorLengthSquared(tmp.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t) < r
         {
             (*tw).trace.allsolid = crate::src::qcommon::q_shared::qtrue;
@@ -868,18 +829,14 @@ pub unsafe extern "C" fn CM_TestBoundingBoxInCapsule(
         size[1 as i32 as usize][0 as i32 as usize]
     };
     (*tw).sphere.halfheight = size[1 as i32 as usize][2 as i32 as usize];
-    (*tw).sphere.offset[0 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*tw).sphere.offset[1 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*tw).sphere.offset[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*tw).sphere.offset[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     (*tw).sphere.offset[2 as i32 as usize] =
         size[1 as i32 as usize][2 as i32 as usize] - (*tw).sphere.radius;
     // replace the capsule with the bounding box
     h = crate::src::qcommon::cm_load::CM_TempBoxModel(
-        (*tw).size[0 as i32 as usize].as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
-        (*tw).size[1 as i32 as usize].as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+        (*tw).size[0 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        (*tw).size[1 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         crate::src::qcommon::q_shared::qfalse as i32,
     );
     // calculate collision
@@ -902,24 +859,18 @@ pub unsafe extern "C" fn CM_PositionTest(mut tw: *mut crate::cm_local_h::traceWo
         storeLeafs: None,
     };
     // identify the leafs we are touching
-    ll.bounds[0 as i32 as usize][0 as i32 as usize] = (*tw).start
-        [0 as i32 as usize]
-        + (*tw).size[0 as i32 as usize][0 as i32 as usize];
-    ll.bounds[0 as i32 as usize][1 as i32 as usize] = (*tw).start
-        [1 as i32 as usize]
-        + (*tw).size[0 as i32 as usize][1 as i32 as usize];
-    ll.bounds[0 as i32 as usize][2 as i32 as usize] = (*tw).start
-        [2 as i32 as usize]
-        + (*tw).size[0 as i32 as usize][2 as i32 as usize];
-    ll.bounds[1 as i32 as usize][0 as i32 as usize] = (*tw).start
-        [0 as i32 as usize]
-        + (*tw).size[1 as i32 as usize][0 as i32 as usize];
-    ll.bounds[1 as i32 as usize][1 as i32 as usize] = (*tw).start
-        [1 as i32 as usize]
-        + (*tw).size[1 as i32 as usize][1 as i32 as usize];
-    ll.bounds[1 as i32 as usize][2 as i32 as usize] = (*tw).start
-        [2 as i32 as usize]
-        + (*tw).size[1 as i32 as usize][2 as i32 as usize];
+    ll.bounds[0 as i32 as usize][0 as i32 as usize] =
+        (*tw).start[0 as i32 as usize] + (*tw).size[0 as i32 as usize][0 as i32 as usize];
+    ll.bounds[0 as i32 as usize][1 as i32 as usize] =
+        (*tw).start[1 as i32 as usize] + (*tw).size[0 as i32 as usize][1 as i32 as usize];
+    ll.bounds[0 as i32 as usize][2 as i32 as usize] =
+        (*tw).start[2 as i32 as usize] + (*tw).size[0 as i32 as usize][2 as i32 as usize];
+    ll.bounds[1 as i32 as usize][0 as i32 as usize] =
+        (*tw).start[0 as i32 as usize] + (*tw).size[1 as i32 as usize][0 as i32 as usize];
+    ll.bounds[1 as i32 as usize][1 as i32 as usize] =
+        (*tw).start[1 as i32 as usize] + (*tw).size[1 as i32 as usize][1 as i32 as usize];
+    ll.bounds[1 as i32 as usize][2 as i32 as usize] =
+        (*tw).start[2 as i32 as usize] + (*tw).size[1 as i32 as usize][2 as i32 as usize];
     i = 0 as i32;
     while i < 3 as i32 {
         ll.bounds[0 as i32 as usize][i as usize] -= 1 as i32 as f32;
@@ -1040,38 +991,35 @@ pub unsafe extern "C" fn CM_TraceThroughBrush(
             // adjust the plane distance appropriately for radius
             dist = (*plane).dist + (*tw).sphere.radius;
             // find the closest point on the capsule to the plane
-            t = (*plane).normal[0 as i32 as usize]
-                * (*tw).sphere.offset[0 as i32 as usize]
-                + (*plane).normal[1 as i32 as usize]
-                    * (*tw).sphere.offset[1 as i32 as usize]
-                + (*plane).normal[2 as i32 as usize]
-                    * (*tw).sphere.offset[2 as i32 as usize];
+            t = (*plane).normal[0 as i32 as usize] * (*tw).sphere.offset[0 as i32 as usize]
+                + (*plane).normal[1 as i32 as usize] * (*tw).sphere.offset[1 as i32 as usize]
+                + (*plane).normal[2 as i32 as usize] * (*tw).sphere.offset[2 as i32 as usize];
             if t > 0 as i32 as f32 {
-                startp[0 as i32 as usize] = (*tw).start[0 as i32 as usize]
-                    - (*tw).sphere.offset[0 as i32 as usize];
-                startp[1 as i32 as usize] = (*tw).start[1 as i32 as usize]
-                    - (*tw).sphere.offset[1 as i32 as usize];
-                startp[2 as i32 as usize] = (*tw).start[2 as i32 as usize]
-                    - (*tw).sphere.offset[2 as i32 as usize];
-                endp[0 as i32 as usize] = (*tw).end[0 as i32 as usize]
-                    - (*tw).sphere.offset[0 as i32 as usize];
-                endp[1 as i32 as usize] = (*tw).end[1 as i32 as usize]
-                    - (*tw).sphere.offset[1 as i32 as usize];
-                endp[2 as i32 as usize] = (*tw).end[2 as i32 as usize]
-                    - (*tw).sphere.offset[2 as i32 as usize]
+                startp[0 as i32 as usize] =
+                    (*tw).start[0 as i32 as usize] - (*tw).sphere.offset[0 as i32 as usize];
+                startp[1 as i32 as usize] =
+                    (*tw).start[1 as i32 as usize] - (*tw).sphere.offset[1 as i32 as usize];
+                startp[2 as i32 as usize] =
+                    (*tw).start[2 as i32 as usize] - (*tw).sphere.offset[2 as i32 as usize];
+                endp[0 as i32 as usize] =
+                    (*tw).end[0 as i32 as usize] - (*tw).sphere.offset[0 as i32 as usize];
+                endp[1 as i32 as usize] =
+                    (*tw).end[1 as i32 as usize] - (*tw).sphere.offset[1 as i32 as usize];
+                endp[2 as i32 as usize] =
+                    (*tw).end[2 as i32 as usize] - (*tw).sphere.offset[2 as i32 as usize]
             } else {
-                startp[0 as i32 as usize] = (*tw).start[0 as i32 as usize]
-                    + (*tw).sphere.offset[0 as i32 as usize];
-                startp[1 as i32 as usize] = (*tw).start[1 as i32 as usize]
-                    + (*tw).sphere.offset[1 as i32 as usize];
-                startp[2 as i32 as usize] = (*tw).start[2 as i32 as usize]
-                    + (*tw).sphere.offset[2 as i32 as usize];
-                endp[0 as i32 as usize] = (*tw).end[0 as i32 as usize]
-                    + (*tw).sphere.offset[0 as i32 as usize];
-                endp[1 as i32 as usize] = (*tw).end[1 as i32 as usize]
-                    + (*tw).sphere.offset[1 as i32 as usize];
-                endp[2 as i32 as usize] = (*tw).end[2 as i32 as usize]
-                    + (*tw).sphere.offset[2 as i32 as usize]
+                startp[0 as i32 as usize] =
+                    (*tw).start[0 as i32 as usize] + (*tw).sphere.offset[0 as i32 as usize];
+                startp[1 as i32 as usize] =
+                    (*tw).start[1 as i32 as usize] + (*tw).sphere.offset[1 as i32 as usize];
+                startp[2 as i32 as usize] =
+                    (*tw).start[2 as i32 as usize] + (*tw).sphere.offset[2 as i32 as usize];
+                endp[0 as i32 as usize] =
+                    (*tw).end[0 as i32 as usize] + (*tw).sphere.offset[0 as i32 as usize];
+                endp[1 as i32 as usize] =
+                    (*tw).end[1 as i32 as usize] + (*tw).sphere.offset[1 as i32 as usize];
+                endp[2 as i32 as usize] =
+                    (*tw).end[2 as i32 as usize] + (*tw).sphere.offset[2 as i32 as usize]
             }
             d1 = startp[0 as i32 as usize] * (*plane).normal[0 as i32 as usize]
                 + startp[1 as i32 as usize] * (*plane).normal[1 as i32 as usize]
@@ -1089,18 +1037,14 @@ pub unsafe extern "C" fn CM_TraceThroughBrush(
                 startout = crate::src::qcommon::q_shared::qtrue
             }
             // if completely in front of face, no intersection with the entire brush
-            if d1 > 0 as i32 as f32
-                && (d2 as f64 >= 0.125f64 || d2 >= d1)
-            {
+            if d1 > 0 as i32 as f32 && (d2 as f64 >= 0.125f64 || d2 >= d1) {
                 return;
             }
             // if it doesn't cross the plane, the plane isn't relevant
-            if !(d1 <= 0 as i32 as f32 && d2 <= 0 as i32 as f32)
-            {
+            if !(d1 <= 0 as i32 as f32 && d2 <= 0 as i32 as f32) {
                 // crosses face
                 if d1 > d2 {
-                    f = ((d1 as f64 - 0.125f64) / (d1 - d2) as f64)
-                        as f32; // leave
+                    f = ((d1 as f64 - 0.125f64) / (d1 - d2) as f64) as f32; // leave
                     if f < 0 as i32 as f32 {
                         f = 0 as i32 as f32
                     }
@@ -1110,8 +1054,7 @@ pub unsafe extern "C" fn CM_TraceThroughBrush(
                         leadside = side
                     }
                 } else {
-                    f = ((d1 as f64 + 0.125f64) / (d1 - d2) as f64)
-                        as f32;
+                    f = ((d1 as f64 + 0.125f64) / (d1 - d2) as f64) as f32;
                     if f > 1 as i32 as f32 {
                         f = 1 as i32 as f32
                     }
@@ -1141,12 +1084,9 @@ pub unsafe extern "C" fn CM_TraceThroughBrush(
                         * (*plane).normal[1 as i32 as usize]
                     + (*tw).offsets[(*plane).signbits as usize][2 as i32 as usize]
                         * (*plane).normal[2 as i32 as usize]);
-            d1 = (*tw).start[0 as i32 as usize]
-                * (*plane).normal[0 as i32 as usize]
-                + (*tw).start[1 as i32 as usize]
-                    * (*plane).normal[1 as i32 as usize]
-                + (*tw).start[2 as i32 as usize]
-                    * (*plane).normal[2 as i32 as usize]
+            d1 = (*tw).start[0 as i32 as usize] * (*plane).normal[0 as i32 as usize]
+                + (*tw).start[1 as i32 as usize] * (*plane).normal[1 as i32 as usize]
+                + (*tw).start[2 as i32 as usize] * (*plane).normal[2 as i32 as usize]
                 - dist;
             d2 = (*tw).end[0 as i32 as usize] * (*plane).normal[0 as i32 as usize]
                 + (*tw).end[1 as i32 as usize] * (*plane).normal[1 as i32 as usize]
@@ -1160,18 +1100,14 @@ pub unsafe extern "C" fn CM_TraceThroughBrush(
                 startout = crate::src::qcommon::q_shared::qtrue
             }
             // if completely in front of face, no intersection with the entire brush
-            if d1 > 0 as i32 as f32
-                && (d2 as f64 >= 0.125f64 || d2 >= d1)
-            {
+            if d1 > 0 as i32 as f32 && (d2 as f64 >= 0.125f64 || d2 >= d1) {
                 return;
             }
             // if it doesn't cross the plane, the plane isn't relevant
-            if !(d1 <= 0 as i32 as f32 && d2 <= 0 as i32 as f32)
-            {
+            if !(d1 <= 0 as i32 as f32 && d2 <= 0 as i32 as f32) {
                 // crosses face
                 if d1 > d2 {
-                    f = ((d1 as f64 - 0.125f64) / (d1 - d2) as f64)
-                        as f32; // leave
+                    f = ((d1 as f64 - 0.125f64) / (d1 - d2) as f64) as f32; // leave
                     if f < 0 as i32 as f32 {
                         f = 0 as i32 as f32
                     }
@@ -1181,8 +1117,7 @@ pub unsafe extern "C" fn CM_TraceThroughBrush(
                         leadside = side
                     }
                 } else {
-                    f = ((d1 as f64 + 0.125f64) / (d1 - d2) as f64)
-                        as f32;
+                    f = ((d1 as f64 + 0.125f64) / (d1 - d2) as f64) as f32;
                     if f > 1 as i32 as f32 {
                         f = 1 as i32 as f32
                     }
@@ -1329,23 +1264,17 @@ pub unsafe extern "C" fn CM_TraceThroughSphere(
     let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut intersection: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     // if inside the sphere
-    dir[0 as i32 as usize] =
-        *start.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
-    dir[1 as i32 as usize] =
-        *start.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
-    dir[2 as i32 as usize] =
-        *start.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize);
+    dir[0 as i32 as usize] = *start.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
+    dir[1 as i32 as usize] = *start.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
+    dir[2 as i32 as usize] = *start.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize);
     l1 = VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
     if l1 < radius * radius {
         (*tw).trace.fraction = 0 as i32 as f32;
         (*tw).trace.startsolid = crate::src::qcommon::q_shared::qtrue;
         // test for allsolid
-        dir[0 as i32 as usize] =
-            *end.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
-        dir[1 as i32 as usize] =
-            *end.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
-        dir[2 as i32 as usize] =
-            *end.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize);
+        dir[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
+        dir[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
+        dir[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize);
         l1 = VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
         if l1 < radius * radius {
             (*tw).trace.allsolid = crate::src::qcommon::q_shared::qtrue
@@ -1353,26 +1282,18 @@ pub unsafe extern "C" fn CM_TraceThroughSphere(
         return;
     }
     //
-    dir[0 as i32 as usize] =
-        *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
-    dir[1 as i32 as usize] =
-        *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
-    dir[2 as i32 as usize] =
-        *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
+    dir[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
+    dir[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
+    dir[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
     length = crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
     //
     l1 = CM_DistanceFromLineSquared(origin, start, end, dir.as_mut_ptr());
-    v1[0 as i32 as usize] =
-        *end.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
-    v1[1 as i32 as usize] =
-        *end.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
-    v1[2 as i32 as usize] =
-        *end.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize);
+    v1[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
+    v1[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
+    v1[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize);
     l2 = VectorLengthSquared(v1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
     // if no intersection with the sphere and the end point is at least an epsilon away
-    if l1 >= radius * radius
-        && l2 as f64
-            > (radius as f64 + 0.125f64) * (radius as f64 + 0.125f64)
+    if l1 >= radius * radius && l2 as f64 > (radius as f64 + 0.125f64) * (radius as f64 + 0.125f64)
     {
         return;
     }
@@ -1382,12 +1303,9 @@ pub unsafe extern "C" fn CM_TraceThroughSphere(
     //	b = 2 * (dir[0] * (start[0] - origin[0]) + dir[1] * (start[1] - origin[1]) + dir[2] * (start[2] - origin[2]));
     //	c = (start[0] - origin[0])^2 + (start[1] - origin[1])^2 + (start[2] - origin[2])^2 - radius^2;
     //
-    v1[0 as i32 as usize] =
-        *start.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
-    v1[1 as i32 as usize] =
-        *start.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
-    v1[2 as i32 as usize] =
-        *start.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize);
+    v1[0 as i32 as usize] = *start.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
+    v1[1 as i32 as usize] = *start.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
+    v1[2 as i32 as usize] = *start.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize);
     // dir is normalized so a = 1
     //a = 1.0f;//dir[0] * dir[0] + dir[1] * dir[1] + dir[2] * dir[2];
     b = 2.0f32
@@ -1417,12 +1335,12 @@ pub unsafe extern "C" fn CM_TraceThroughSphere(
                 *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
             dir[2 as i32 as usize] =
                 *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
-            intersection[0 as i32 as usize] = *start.offset(0 as i32 as isize)
-                + dir[0 as i32 as usize] * fraction;
-            intersection[1 as i32 as usize] = *start.offset(1 as i32 as isize)
-                + dir[1 as i32 as usize] * fraction;
-            intersection[2 as i32 as usize] = *start.offset(2 as i32 as isize)
-                + dir[2 as i32 as usize] * fraction;
+            intersection[0 as i32 as usize] =
+                *start.offset(0 as i32 as isize) + dir[0 as i32 as usize] * fraction;
+            intersection[1 as i32 as usize] =
+                *start.offset(1 as i32 as isize) + dir[1 as i32 as usize] * fraction;
+            intersection[2 as i32 as usize] =
+                *start.offset(2 as i32 as isize) + dir[2 as i32 as usize] * fraction;
             dir[0 as i32 as usize] =
                 intersection[0 as i32 as usize] - *origin.offset(0 as i32 as isize);
             dir[1 as i32 as usize] =
@@ -1436,18 +1354,16 @@ pub unsafe extern "C" fn CM_TraceThroughSphere(
             (*tw).trace.plane.normal[0 as i32 as usize] = dir[0 as i32 as usize];
             (*tw).trace.plane.normal[1 as i32 as usize] = dir[1 as i32 as usize];
             (*tw).trace.plane.normal[2 as i32 as usize] = dir[2 as i32 as usize];
-            intersection[0 as i32 as usize] = (*tw).modelOrigin[0 as i32 as usize]
-                + intersection[0 as i32 as usize];
-            intersection[1 as i32 as usize] = (*tw).modelOrigin[1 as i32 as usize]
-                + intersection[1 as i32 as usize];
-            intersection[2 as i32 as usize] = (*tw).modelOrigin[2 as i32 as usize]
-                + intersection[2 as i32 as usize];
+            intersection[0 as i32 as usize] =
+                (*tw).modelOrigin[0 as i32 as usize] + intersection[0 as i32 as usize];
+            intersection[1 as i32 as usize] =
+                (*tw).modelOrigin[1 as i32 as usize] + intersection[1 as i32 as usize];
+            intersection[2 as i32 as usize] =
+                (*tw).modelOrigin[2 as i32 as usize] + intersection[2 as i32 as usize];
             (*tw).trace.plane.dist = (*tw).trace.plane.normal[0 as i32 as usize]
                 * intersection[0 as i32 as usize]
-                + (*tw).trace.plane.normal[1 as i32 as usize]
-                    * intersection[1 as i32 as usize]
-                + (*tw).trace.plane.normal[2 as i32 as usize]
-                    * intersection[2 as i32 as usize];
+                + (*tw).trace.plane.normal[1 as i32 as usize] * intersection[1 as i32 as usize]
+                + (*tw).trace.plane.normal[2 as i32 as usize] * intersection[2 as i32 as usize];
             (*tw).trace.contents = 0x2000000 as i32
         }
     } else {
@@ -1500,28 +1416,20 @@ pub unsafe extern "C" fn CM_TraceThroughVerticalCylinder(
     org2d[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     org2d[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     // if between lower and upper cylinder bounds
-    if *start.offset(2 as i32 as isize)
-        <= *origin.offset(2 as i32 as isize) + halfheight
-        && *start.offset(2 as i32 as isize)
-            >= *origin.offset(2 as i32 as isize) - halfheight
+    if *start.offset(2 as i32 as isize) <= *origin.offset(2 as i32 as isize) + halfheight
+        && *start.offset(2 as i32 as isize) >= *origin.offset(2 as i32 as isize) - halfheight
     {
         // if inside the cylinder
-        dir[0 as i32 as usize] =
-            start2d[0 as i32 as usize] - org2d[0 as i32 as usize];
-        dir[1 as i32 as usize] =
-            start2d[1 as i32 as usize] - org2d[1 as i32 as usize];
-        dir[2 as i32 as usize] =
-            start2d[2 as i32 as usize] - org2d[2 as i32 as usize];
+        dir[0 as i32 as usize] = start2d[0 as i32 as usize] - org2d[0 as i32 as usize];
+        dir[1 as i32 as usize] = start2d[1 as i32 as usize] - org2d[1 as i32 as usize];
+        dir[2 as i32 as usize] = start2d[2 as i32 as usize] - org2d[2 as i32 as usize];
         l1 = VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
         if l1 < radius * radius {
             (*tw).trace.fraction = 0 as i32 as f32;
             (*tw).trace.startsolid = crate::src::qcommon::q_shared::qtrue;
-            dir[0 as i32 as usize] =
-                end2d[0 as i32 as usize] - org2d[0 as i32 as usize];
-            dir[1 as i32 as usize] =
-                end2d[1 as i32 as usize] - org2d[1 as i32 as usize];
-            dir[2 as i32 as usize] =
-                end2d[2 as i32 as usize] - org2d[2 as i32 as usize];
+            dir[0 as i32 as usize] = end2d[0 as i32 as usize] - org2d[0 as i32 as usize];
+            dir[1 as i32 as usize] = end2d[1 as i32 as usize] - org2d[1 as i32 as usize];
+            dir[2 as i32 as usize] = end2d[2 as i32 as usize] - org2d[2 as i32 as usize];
             l1 = VectorLengthSquared(
                 dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
             );
@@ -1532,12 +1440,9 @@ pub unsafe extern "C" fn CM_TraceThroughVerticalCylinder(
         }
     }
     //
-    dir[0 as i32 as usize] =
-        end2d[0 as i32 as usize] - start2d[0 as i32 as usize];
-    dir[1 as i32 as usize] =
-        end2d[1 as i32 as usize] - start2d[1 as i32 as usize];
-    dir[2 as i32 as usize] =
-        end2d[2 as i32 as usize] - start2d[2 as i32 as usize];
+    dir[0 as i32 as usize] = end2d[0 as i32 as usize] - start2d[0 as i32 as usize];
+    dir[1 as i32 as usize] = end2d[1 as i32 as usize] - start2d[1 as i32 as usize];
+    dir[2 as i32 as usize] = end2d[2 as i32 as usize] - start2d[2 as i32 as usize];
     length = crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
     //
     l1 = CM_DistanceFromLineSquared(
@@ -1546,17 +1451,12 @@ pub unsafe extern "C" fn CM_TraceThroughVerticalCylinder(
         end2d.as_mut_ptr(),
         dir.as_mut_ptr(),
     );
-    v1[0 as i32 as usize] =
-        end2d[0 as i32 as usize] - org2d[0 as i32 as usize];
-    v1[1 as i32 as usize] =
-        end2d[1 as i32 as usize] - org2d[1 as i32 as usize];
-    v1[2 as i32 as usize] =
-        end2d[2 as i32 as usize] - org2d[2 as i32 as usize];
+    v1[0 as i32 as usize] = end2d[0 as i32 as usize] - org2d[0 as i32 as usize];
+    v1[1 as i32 as usize] = end2d[1 as i32 as usize] - org2d[1 as i32 as usize];
+    v1[2 as i32 as usize] = end2d[2 as i32 as usize] - org2d[2 as i32 as usize];
     l2 = VectorLengthSquared(v1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
     // if no intersection with the cylinder and the end point is at least an epsilon away
-    if l1 >= radius * radius
-        && l2 as f64
-            > (radius as f64 + 0.125f64) * (radius as f64 + 0.125f64)
+    if l1 >= radius * radius && l2 as f64 > (radius as f64 + 0.125f64) * (radius as f64 + 0.125f64)
     {
         return;
     }
@@ -1569,12 +1469,9 @@ pub unsafe extern "C" fn CM_TraceThroughVerticalCylinder(
     // t ^ 2 * (dir[0] ^ 2 + dir[1] ^ 2) + t * (2 * v1[0] * dir[0] + 2 * v1[1] * dir[1]) +
     //						v1[0] ^ 2 + v1[1] ^ 2 - radius ^ 2 = 0
     //
-    v1[0 as i32 as usize] =
-        *start.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
-    v1[1 as i32 as usize] =
-        *start.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
-    v1[2 as i32 as usize] =
-        *start.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize);
+    v1[0 as i32 as usize] = *start.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
+    v1[1 as i32 as usize] = *start.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
+    v1[2 as i32 as usize] = *start.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize);
     // dir is normalized so we can use a = 1
     //a = 1.0f;// * (dir[0] * dir[0] + dir[1] * dir[1]);
     b = 2.0f32
@@ -1601,53 +1498,42 @@ pub unsafe extern "C" fn CM_TraceThroughVerticalCylinder(
                 *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
             dir[2 as i32 as usize] =
                 *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
-            intersection[0 as i32 as usize] = *start.offset(0 as i32 as isize)
-                + dir[0 as i32 as usize] * fraction;
-            intersection[1 as i32 as usize] = *start.offset(1 as i32 as isize)
-                + dir[1 as i32 as usize] * fraction;
-            intersection[2 as i32 as usize] = *start.offset(2 as i32 as isize)
-                + dir[2 as i32 as usize] * fraction;
+            intersection[0 as i32 as usize] =
+                *start.offset(0 as i32 as isize) + dir[0 as i32 as usize] * fraction;
+            intersection[1 as i32 as usize] =
+                *start.offset(1 as i32 as isize) + dir[1 as i32 as usize] * fraction;
+            intersection[2 as i32 as usize] =
+                *start.offset(2 as i32 as isize) + dir[2 as i32 as usize] * fraction;
             // if the intersection is between the cylinder lower and upper bound
-            if intersection[2 as i32 as usize]
-                <= *origin.offset(2 as i32 as isize) + halfheight
-                && intersection[2 as i32 as usize]
-                    >= *origin.offset(2 as i32 as isize) - halfheight
+            if intersection[2 as i32 as usize] <= *origin.offset(2 as i32 as isize) + halfheight
+                && intersection[2 as i32 as usize] >= *origin.offset(2 as i32 as isize) - halfheight
             {
                 //
                 (*tw).trace.fraction = fraction;
-                dir[0 as i32 as usize] = intersection[0 as i32 as usize]
-                    - *origin.offset(0 as i32 as isize);
-                dir[1 as i32 as usize] = intersection[1 as i32 as usize]
-                    - *origin.offset(1 as i32 as isize);
-                dir[2 as i32 as usize] = intersection[2 as i32 as usize]
-                    - *origin.offset(2 as i32 as isize);
+                dir[0 as i32 as usize] =
+                    intersection[0 as i32 as usize] - *origin.offset(0 as i32 as isize);
+                dir[1 as i32 as usize] =
+                    intersection[1 as i32 as usize] - *origin.offset(1 as i32 as isize);
                 dir[2 as i32 as usize] =
-                    0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                    intersection[2 as i32 as usize] - *origin.offset(2 as i32 as isize);
+                dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
                 scale = 1 as i32 as f32 / (radius + 1.0f32);
                 dir[0 as i32 as usize] = dir[0 as i32 as usize] * scale;
                 dir[1 as i32 as usize] = dir[1 as i32 as usize] * scale;
                 dir[2 as i32 as usize] = dir[2 as i32 as usize] * scale;
-                (*tw).trace.plane.normal[0 as i32 as usize] =
-                    dir[0 as i32 as usize];
-                (*tw).trace.plane.normal[1 as i32 as usize] =
-                    dir[1 as i32 as usize];
-                (*tw).trace.plane.normal[2 as i32 as usize] =
-                    dir[2 as i32 as usize];
-                intersection[0 as i32 as usize] = (*tw).modelOrigin
-                    [0 as i32 as usize]
-                    + intersection[0 as i32 as usize];
-                intersection[1 as i32 as usize] = (*tw).modelOrigin
-                    [1 as i32 as usize]
-                    + intersection[1 as i32 as usize];
-                intersection[2 as i32 as usize] = (*tw).modelOrigin
-                    [2 as i32 as usize]
-                    + intersection[2 as i32 as usize];
+                (*tw).trace.plane.normal[0 as i32 as usize] = dir[0 as i32 as usize];
+                (*tw).trace.plane.normal[1 as i32 as usize] = dir[1 as i32 as usize];
+                (*tw).trace.plane.normal[2 as i32 as usize] = dir[2 as i32 as usize];
+                intersection[0 as i32 as usize] =
+                    (*tw).modelOrigin[0 as i32 as usize] + intersection[0 as i32 as usize];
+                intersection[1 as i32 as usize] =
+                    (*tw).modelOrigin[1 as i32 as usize] + intersection[1 as i32 as usize];
+                intersection[2 as i32 as usize] =
+                    (*tw).modelOrigin[2 as i32 as usize] + intersection[2 as i32 as usize];
                 (*tw).trace.plane.dist = (*tw).trace.plane.normal[0 as i32 as usize]
                     * intersection[0 as i32 as usize]
-                    + (*tw).trace.plane.normal[1 as i32 as usize]
-                        * intersection[1 as i32 as usize]
-                    + (*tw).trace.plane.normal[2 as i32 as usize]
-                        * intersection[2 as i32 as usize];
+                    + (*tw).trace.plane.normal[1 as i32 as usize] * intersection[1 as i32 as usize]
+                    + (*tw).trace.plane.normal[2 as i32 as usize] * intersection[2 as i32 as usize];
                 (*tw).trace.contents = 0x2000000 as i32
             }
         }
@@ -1687,18 +1573,12 @@ pub unsafe extern "C" fn CM_TraceCapsuleThroughCapsule(
     let mut h: f32 = 0.;
     crate::src::qcommon::cm_load::CM_ModelBounds(model, mins.as_mut_ptr(), maxs.as_mut_ptr());
     // test trace bounds vs. capsule bounds
-    if (*tw).bounds[0 as i32 as usize][0 as i32 as usize]
-        > maxs[0 as i32 as usize] + 1.0f32
-        || (*tw).bounds[0 as i32 as usize][1 as i32 as usize]
-            > maxs[1 as i32 as usize] + 1.0f32
-        || (*tw).bounds[0 as i32 as usize][2 as i32 as usize]
-            > maxs[2 as i32 as usize] + 1.0f32
-        || (*tw).bounds[1 as i32 as usize][0 as i32 as usize]
-            < mins[0 as i32 as usize] - 1.0f32
-        || (*tw).bounds[1 as i32 as usize][1 as i32 as usize]
-            < mins[1 as i32 as usize] - 1.0f32
-        || (*tw).bounds[1 as i32 as usize][2 as i32 as usize]
-            < mins[2 as i32 as usize] - 1.0f32
+    if (*tw).bounds[0 as i32 as usize][0 as i32 as usize] > maxs[0 as i32 as usize] + 1.0f32
+        || (*tw).bounds[0 as i32 as usize][1 as i32 as usize] > maxs[1 as i32 as usize] + 1.0f32
+        || (*tw).bounds[0 as i32 as usize][2 as i32 as usize] > maxs[2 as i32 as usize] + 1.0f32
+        || (*tw).bounds[1 as i32 as usize][0 as i32 as usize] < mins[0 as i32 as usize] - 1.0f32
+        || (*tw).bounds[1 as i32 as usize][1 as i32 as usize] < mins[1 as i32 as usize] - 1.0f32
+        || (*tw).bounds[1 as i32 as usize][2 as i32 as usize] < mins[2 as i32 as usize] - 1.0f32
     {
         return;
     }
@@ -1832,18 +1712,14 @@ pub unsafe extern "C" fn CM_TraceBoundingBoxThroughCapsule(
         size[1 as i32 as usize][0 as i32 as usize]
     };
     (*tw).sphere.halfheight = size[1 as i32 as usize][2 as i32 as usize];
-    (*tw).sphere.offset[0 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*tw).sphere.offset[1 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*tw).sphere.offset[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*tw).sphere.offset[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     (*tw).sphere.offset[2 as i32 as usize] =
         size[1 as i32 as usize][2 as i32 as usize] - (*tw).sphere.radius;
     // replace the capsule with the bounding box
     h = crate::src::qcommon::cm_load::CM_TempBoxModel(
-        (*tw).size[0 as i32 as usize].as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
-        (*tw).size[1 as i32 as usize].as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+        (*tw).size[0 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        (*tw).size[1 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         crate::src::qcommon::q_shared::qfalse as i32,
     );
     // calculate collision
@@ -1926,47 +1802,25 @@ pub unsafe extern "C" fn CM_TraceThroughTree(
         }
     }
     // see which sides we need to consider
-    if t1 >= offset + 1 as i32 as f32
-        && t2 >= offset + 1 as i32 as f32
-    {
-        CM_TraceThroughTree(
-            tw,
-            (*node).children[0 as i32 as usize],
-            p1f,
-            p2f,
-            p1,
-            p2,
-        );
+    if t1 >= offset + 1 as i32 as f32 && t2 >= offset + 1 as i32 as f32 {
+        CM_TraceThroughTree(tw, (*node).children[0 as i32 as usize], p1f, p2f, p1, p2);
         return;
     }
-    if t1 < -offset - 1 as i32 as f32
-        && t2 < -offset - 1 as i32 as f32
-    {
-        CM_TraceThroughTree(
-            tw,
-            (*node).children[1 as i32 as usize],
-            p1f,
-            p2f,
-            p1,
-            p2,
-        );
+    if t1 < -offset - 1 as i32 as f32 && t2 < -offset - 1 as i32 as f32 {
+        CM_TraceThroughTree(tw, (*node).children[1 as i32 as usize], p1f, p2f, p1, p2);
         return;
     }
     // put the crosspoint SURFACE_CLIP_EPSILON pixels on the near side
     if t1 < t2 {
         idist = (1.0f64 / (t1 - t2) as f64) as f32;
         side = 1 as i32;
-        frac2 = (((t1 + offset) as f64 + 0.125f64) * idist as f64)
-            as f32;
-        frac = (((t1 - offset) as f64 + 0.125f64) * idist as f64)
-            as f32
+        frac2 = (((t1 + offset) as f64 + 0.125f64) * idist as f64) as f32;
+        frac = (((t1 - offset) as f64 + 0.125f64) * idist as f64) as f32
     } else if t1 > t2 {
         idist = (1.0f64 / (t1 - t2) as f64) as f32;
         side = 0 as i32;
-        frac2 = (((t1 - offset) as f64 - 0.125f64) * idist as f64)
-            as f32;
-        frac = (((t1 + offset) as f64 + 0.125f64) * idist as f64)
-            as f32
+        frac2 = (((t1 - offset) as f64 - 0.125f64) * idist as f64) as f32;
+        frac = (((t1 + offset) as f64 + 0.125f64) * idist as f64) as f32
     } else {
         side = 0 as i32;
         frac = 1 as i32 as f32;
@@ -2107,13 +1961,10 @@ pub unsafe extern "C" fn CM_Trace(
     // bmodels
     i = 0 as i32;
     while i < 3 as i32 {
-        offset[i as usize] = ((*mins.offset(i as isize) + *maxs.offset(i as isize))
-            as f64
-            * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-        tw.size[0 as i32 as usize][i as usize] =
-            *mins.offset(i as isize) - offset[i as usize];
-        tw.size[1 as i32 as usize][i as usize] =
-            *maxs.offset(i as isize) - offset[i as usize];
+        offset[i as usize] = ((*mins.offset(i as isize) + *maxs.offset(i as isize)) as f64 * 0.5f64)
+            as crate::src::qcommon::q_shared::vec_t;
+        tw.size[0 as i32 as usize][i as usize] = *mins.offset(i as isize) - offset[i as usize];
+        tw.size[1 as i32 as usize][i as usize] = *maxs.offset(i as isize) - offset[i as usize];
         tw.start[i as usize] = *start.offset(i as isize) + offset[i as usize];
         tw.end[i as usize] = *end.offset(i as isize) + offset[i as usize];
         i += 1
@@ -2131,10 +1982,8 @@ pub unsafe extern "C" fn CM_Trace(
             tw.size[1 as i32 as usize][0 as i32 as usize]
         };
         tw.sphere.halfheight = tw.size[1 as i32 as usize][2 as i32 as usize];
-        tw.sphere.offset[0 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        tw.sphere.offset[1 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        tw.sphere.offset[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        tw.sphere.offset[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         tw.sphere.offset[2 as i32 as usize] =
             tw.size[1 as i32 as usize][2 as i32 as usize] - tw.sphere.radius
     }
@@ -2197,24 +2046,20 @@ pub unsafe extern "C" fn CM_Trace(
         i = 0 as i32;
         while i < 3 as i32 {
             if tw.start[i as usize] < tw.end[i as usize] {
-                tw.bounds[0 as i32 as usize][i as usize] = (tw.start[i as usize]
-                    as f64
+                tw.bounds[0 as i32 as usize][i as usize] = (tw.start[i as usize] as f64
                     - crate::stdlib::fabs(tw.sphere.offset[i as usize] as f64)
                     - tw.sphere.radius as f64)
                     as crate::src::qcommon::q_shared::vec_t;
-                tw.bounds[1 as i32 as usize][i as usize] = (tw.end[i as usize]
-                    as f64
+                tw.bounds[1 as i32 as usize][i as usize] = (tw.end[i as usize] as f64
                     + crate::stdlib::fabs(tw.sphere.offset[i as usize] as f64)
                     + tw.sphere.radius as f64)
                     as crate::src::qcommon::q_shared::vec_t
             } else {
-                tw.bounds[0 as i32 as usize][i as usize] = (tw.end[i as usize]
-                    as f64
+                tw.bounds[0 as i32 as usize][i as usize] = (tw.end[i as usize] as f64
                     - crate::stdlib::fabs(tw.sphere.offset[i as usize] as f64)
                     - tw.sphere.radius as f64)
                     as crate::src::qcommon::q_shared::vec_t;
-                tw.bounds[1 as i32 as usize][i as usize] = (tw.start[i as usize]
-                    as f64
+                tw.bounds[1 as i32 as usize][i as usize] = (tw.start[i as usize] as f64
                     + crate::stdlib::fabs(tw.sphere.offset[i as usize] as f64)
                     + tw.sphere.radius as f64)
                     as crate::src::qcommon::q_shared::vec_t
@@ -2263,26 +2108,19 @@ pub unsafe extern "C" fn CM_Trace(
         //
         // check for point special case
         //
-        if tw.size[0 as i32 as usize][0 as i32 as usize]
-            == 0 as i32 as f32
-            && tw.size[0 as i32 as usize][1 as i32 as usize]
-                == 0 as i32 as f32
-            && tw.size[0 as i32 as usize][2 as i32 as usize]
-                == 0 as i32 as f32
+        if tw.size[0 as i32 as usize][0 as i32 as usize] == 0 as i32 as f32
+            && tw.size[0 as i32 as usize][1 as i32 as usize] == 0 as i32 as f32
+            && tw.size[0 as i32 as usize][2 as i32 as usize] == 0 as i32 as f32
         {
             tw.isPoint = crate::src::qcommon::q_shared::qtrue;
-            tw.extents[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            tw.extents[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
             tw.extents[1 as i32 as usize] = tw.extents[2 as i32 as usize];
             tw.extents[0 as i32 as usize] = tw.extents[1 as i32 as usize]
         } else {
             tw.isPoint = crate::src::qcommon::q_shared::qfalse;
-            tw.extents[0 as i32 as usize] =
-                tw.size[1 as i32 as usize][0 as i32 as usize];
-            tw.extents[1 as i32 as usize] =
-                tw.size[1 as i32 as usize][1 as i32 as usize];
-            tw.extents[2 as i32 as usize] =
-                tw.size[1 as i32 as usize][2 as i32 as usize]
+            tw.extents[0 as i32 as usize] = tw.size[1 as i32 as usize][0 as i32 as usize];
+            tw.extents[1 as i32 as usize] = tw.size[1 as i32 as usize][1 as i32 as usize];
+            tw.extents[2 as i32 as usize] = tw.size[1 as i32 as usize][2 as i32 as usize]
         }
         //
         // general sweeping through world
@@ -2448,30 +2286,21 @@ pub unsafe extern "C" fn CM_TransformedBoxTrace(
     // bmodels
     i = 0 as i32;
     while i < 3 as i32 {
-        offset[i as usize] = ((*mins.offset(i as isize) + *maxs.offset(i as isize))
-            as f64
-            * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-        symetricSize[0 as i32 as usize][i as usize] =
-            *mins.offset(i as isize) - offset[i as usize];
-        symetricSize[1 as i32 as usize][i as usize] =
-            *maxs.offset(i as isize) - offset[i as usize];
+        offset[i as usize] = ((*mins.offset(i as isize) + *maxs.offset(i as isize)) as f64 * 0.5f64)
+            as crate::src::qcommon::q_shared::vec_t;
+        symetricSize[0 as i32 as usize][i as usize] = *mins.offset(i as isize) - offset[i as usize];
+        symetricSize[1 as i32 as usize][i as usize] = *maxs.offset(i as isize) - offset[i as usize];
         start_l[i as usize] = *start.offset(i as isize) + offset[i as usize];
         end_l[i as usize] = *end.offset(i as isize) + offset[i as usize];
         i += 1
     }
     // subtract origin offset
-    start_l[0 as i32 as usize] =
-        start_l[0 as i32 as usize] - *origin.offset(0 as i32 as isize);
-    start_l[1 as i32 as usize] =
-        start_l[1 as i32 as usize] - *origin.offset(1 as i32 as isize);
-    start_l[2 as i32 as usize] =
-        start_l[2 as i32 as usize] - *origin.offset(2 as i32 as isize);
-    end_l[0 as i32 as usize] =
-        end_l[0 as i32 as usize] - *origin.offset(0 as i32 as isize);
-    end_l[1 as i32 as usize] =
-        end_l[1 as i32 as usize] - *origin.offset(1 as i32 as isize);
-    end_l[2 as i32 as usize] =
-        end_l[2 as i32 as usize] - *origin.offset(2 as i32 as isize);
+    start_l[0 as i32 as usize] = start_l[0 as i32 as usize] - *origin.offset(0 as i32 as isize);
+    start_l[1 as i32 as usize] = start_l[1 as i32 as usize] - *origin.offset(1 as i32 as isize);
+    start_l[2 as i32 as usize] = start_l[2 as i32 as usize] - *origin.offset(2 as i32 as isize);
+    end_l[0 as i32 as usize] = end_l[0 as i32 as usize] - *origin.offset(0 as i32 as isize);
+    end_l[1 as i32 as usize] = end_l[1 as i32 as usize] - *origin.offset(1 as i32 as isize);
+    end_l[2 as i32 as usize] = end_l[2 as i32 as usize] - *origin.offset(2 as i32 as isize);
     // rotate start and end into the models frame of reference
     if model != 255 as i32
         && (*angles.offset(0 as i32 as isize) != 0.
@@ -2503,17 +2332,12 @@ pub unsafe extern "C" fn CM_TransformedBoxTrace(
         RotatePoint(start_l.as_mut_ptr(), matrix.as_mut_ptr());
         RotatePoint(end_l.as_mut_ptr(), matrix.as_mut_ptr());
         // rotated sphere offset for capsule
-        sphere.offset[0 as i32 as usize] =
-            matrix[0 as i32 as usize][2 as i32 as usize] * t;
-        sphere.offset[1 as i32 as usize] =
-            -matrix[1 as i32 as usize][2 as i32 as usize] * t;
-        sphere.offset[2 as i32 as usize] =
-            matrix[2 as i32 as usize][2 as i32 as usize] * t
+        sphere.offset[0 as i32 as usize] = matrix[0 as i32 as usize][2 as i32 as usize] * t;
+        sphere.offset[1 as i32 as usize] = -matrix[1 as i32 as usize][2 as i32 as usize] * t;
+        sphere.offset[2 as i32 as usize] = matrix[2 as i32 as usize][2 as i32 as usize] * t
     } else {
-        sphere.offset[0 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        sphere.offset[1 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        sphere.offset[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        sphere.offset[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         sphere.offset[2 as i32 as usize] = t
     }
     // sweep the box through the model
@@ -2538,13 +2362,10 @@ pub unsafe extern "C" fn CM_TransformedBoxTrace(
     // re-calculate the end position of the trace because the trace.endpos
     // calculated by CM_Trace could be rotated and have an offset
     trace.endpos[0 as i32 as usize] = *start.offset(0 as i32 as isize)
-        + trace.fraction
-            * (*end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize));
+        + trace.fraction * (*end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize));
     trace.endpos[1 as i32 as usize] = *start.offset(1 as i32 as isize)
-        + trace.fraction
-            * (*end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize));
+        + trace.fraction * (*end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize));
     trace.endpos[2 as i32 as usize] = *start.offset(2 as i32 as isize)
-        + trace.fraction
-            * (*end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize));
+        + trace.fraction * (*end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize));
     *results = trace;
 }

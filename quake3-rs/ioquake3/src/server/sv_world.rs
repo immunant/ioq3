@@ -212,20 +212,17 @@ unsafe extern "C" fn SV_CreateworldSector(
         (*anode).children[0 as i32 as usize] = (*anode).children[1 as i32 as usize];
         return anode;
     }
-    size[0 as i32 as usize] =
-        *maxs.offset(0 as i32 as isize) - *mins.offset(0 as i32 as isize);
-    size[1 as i32 as usize] =
-        *maxs.offset(1 as i32 as isize) - *mins.offset(1 as i32 as isize);
-    size[2 as i32 as usize] =
-        *maxs.offset(2 as i32 as isize) - *mins.offset(2 as i32 as isize);
+    size[0 as i32 as usize] = *maxs.offset(0 as i32 as isize) - *mins.offset(0 as i32 as isize);
+    size[1 as i32 as usize] = *maxs.offset(1 as i32 as isize) - *mins.offset(1 as i32 as isize);
+    size[2 as i32 as usize] = *maxs.offset(2 as i32 as isize) - *mins.offset(2 as i32 as isize);
     if size[0 as i32 as usize] > size[1 as i32 as usize] {
         (*anode).axis = 0 as i32
     } else {
         (*anode).axis = 1 as i32
     }
     (*anode).dist = (0.5f64
-        * (*maxs.offset((*anode).axis as isize) + *mins.offset((*anode).axis as isize))
-            as f64) as f32;
+        * (*maxs.offset((*anode).axis as isize) + *mins.offset((*anode).axis as isize)) as f64)
+        as f32;
     mins1[0 as i32 as usize] = *mins.offset(0 as i32 as isize);
     mins1[1 as i32 as usize] = *mins.offset(1 as i32 as isize);
     mins1[2 as i32 as usize] = *mins.offset(2 as i32 as isize);
@@ -240,16 +237,10 @@ unsafe extern "C" fn SV_CreateworldSector(
     maxs2[2 as i32 as usize] = *maxs.offset(2 as i32 as isize);
     mins2[(*anode).axis as usize] = (*anode).dist;
     maxs1[(*anode).axis as usize] = mins2[(*anode).axis as usize];
-    (*anode).children[0 as i32 as usize] = SV_CreateworldSector(
-        depth + 1 as i32,
-        mins2.as_mut_ptr(),
-        maxs2.as_mut_ptr(),
-    );
-    (*anode).children[1 as i32 as usize] = SV_CreateworldSector(
-        depth + 1 as i32,
-        mins1.as_mut_ptr(),
-        maxs1.as_mut_ptr(),
-    );
+    (*anode).children[0 as i32 as usize] =
+        SV_CreateworldSector(depth + 1 as i32, mins2.as_mut_ptr(), maxs2.as_mut_ptr());
+    (*anode).children[1 as i32 as usize] =
+        SV_CreateworldSector(depth + 1 as i32, mins1.as_mut_ptr(), maxs1.as_mut_ptr());
     return anode;
 }
 /*
@@ -358,8 +349,7 @@ pub unsafe extern "C" fn SV_LinkEntity(mut gEnt: *mut crate::g_public_h::sharedE
             j = 255 as i32
         }
         // and z maxs can be negative...
-        k = ((*gEnt).r.maxs[2 as i32 as usize] + 32 as i32 as f32)
-            as i32;
+        k = ((*gEnt).r.maxs[2 as i32 as usize] + 32 as i32 as f32) as i32;
         if k < 1 as i32 {
             k = 1 as i32
         }
@@ -518,18 +508,12 @@ unsafe extern "C" fn SV_AreaEntities_r(mut node: *mut worldSector_t, mut ap: *mu
         gcheck = crate::src::server::sv_game::SV_GEntityForSvEntity(
             check as *mut crate::server_h::svEntity_s,
         ) as *mut crate::g_public_h::sharedEntity_t;
-        if !((*gcheck).r.absmin[0 as i32 as usize]
-            > *(*ap).maxs.offset(0 as i32 as isize)
-            || (*gcheck).r.absmin[1 as i32 as usize]
-                > *(*ap).maxs.offset(1 as i32 as isize)
-            || (*gcheck).r.absmin[2 as i32 as usize]
-                > *(*ap).maxs.offset(2 as i32 as isize)
-            || (*gcheck).r.absmax[0 as i32 as usize]
-                < *(*ap).mins.offset(0 as i32 as isize)
-            || (*gcheck).r.absmax[1 as i32 as usize]
-                < *(*ap).mins.offset(1 as i32 as isize)
-            || (*gcheck).r.absmax[2 as i32 as usize]
-                < *(*ap).mins.offset(2 as i32 as isize))
+        if !((*gcheck).r.absmin[0 as i32 as usize] > *(*ap).maxs.offset(0 as i32 as isize)
+            || (*gcheck).r.absmin[1 as i32 as usize] > *(*ap).maxs.offset(1 as i32 as isize)
+            || (*gcheck).r.absmin[2 as i32 as usize] > *(*ap).maxs.offset(2 as i32 as isize)
+            || (*gcheck).r.absmax[0 as i32 as usize] < *(*ap).mins.offset(0 as i32 as isize)
+            || (*gcheck).r.absmax[1 as i32 as usize] < *(*ap).mins.offset(1 as i32 as isize)
+            || (*gcheck).r.absmax[2 as i32 as usize] < *(*ap).mins.offset(2 as i32 as isize))
         {
             if (*ap).count == (*ap).maxcount {
                 crate::src::qcommon::common::Com_Printf(
@@ -537,9 +521,9 @@ unsafe extern "C" fn SV_AreaEntities_r(mut node: *mut worldSector_t, mut ap: *mu
                 );
                 return;
             }
-            *(*ap).list.offset((*ap).count as isize) =
-                check.offset_from(crate::src::server::sv_main::sv.svEntities.as_mut_ptr())
-                    as libc::c_long as i32;
+            *(*ap).list.offset((*ap).count as isize) = check
+                .offset_from(crate::src::server::sv_main::sv.svEntities.as_mut_ptr())
+                as libc::c_long as i32;
             (*ap).count += 1
         }
         check = next
@@ -741,8 +725,7 @@ unsafe extern "C" fn SV_ClipMoveToEntities(mut clip: *mut moveclip_t) {
                     }
                     crate::src::qcommon::cm_trace::CM_TransformedBoxTrace(
                         &mut trace as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
-                        (*clip).start as *mut f32
-                            as *const crate::src::qcommon::q_shared::vec_t,
+                        (*clip).start as *mut f32 as *const crate::src::qcommon::q_shared::vec_t,
                         (*clip).end.as_mut_ptr() as *mut f32
                             as *const crate::src::qcommon::q_shared::vec_t,
                         (*clip).mins as *mut f32,
@@ -767,12 +750,10 @@ unsafe extern "C" fn SV_ClipMoveToEntities(mut clip: *mut moveclip_t) {
                         oldStart = (*clip).trace.startsolid;
                         trace.entityNum = (*touch).s.number;
                         (*clip).trace = trace;
-                        (*clip).trace.startsolid = ::std::mem::transmute::<
-                            u32,
-                            crate::src::qcommon::q_shared::qboolean,
-                        >(
-                            (*clip).trace.startsolid as u32 | oldStart as u32,
-                        )
+                        (*clip).trace.startsolid =
+                            ::std::mem::transmute::<u32, crate::src::qcommon::q_shared::qboolean>(
+                                (*clip).trace.startsolid as u32 | oldStart as u32,
+                            )
                     }
                 }
             }
@@ -880,18 +861,15 @@ pub unsafe extern "C" fn SV_Trace(
     i = 0 as i32;
     while i < 3 as i32 {
         if *end.offset(i as isize) > *start.offset(i as isize) {
-            clip.boxmins[i as usize] = *clip.start.offset(i as isize)
-                + *clip.mins.offset(i as isize)
-                - 1 as i32 as f32;
-            clip.boxmaxs[i as usize] = clip.end[i as usize]
-                + *clip.maxs.offset(i as isize)
-                + 1 as i32 as f32
+            clip.boxmins[i as usize] =
+                *clip.start.offset(i as isize) + *clip.mins.offset(i as isize) - 1 as i32 as f32;
+            clip.boxmaxs[i as usize] =
+                clip.end[i as usize] + *clip.maxs.offset(i as isize) + 1 as i32 as f32
         } else {
-            clip.boxmins[i as usize] = clip.end[i as usize] + *clip.mins.offset(i as isize)
-                - 1 as i32 as f32;
-            clip.boxmaxs[i as usize] = *clip.start.offset(i as isize)
-                + *clip.maxs.offset(i as isize)
-                + 1 as i32 as f32
+            clip.boxmins[i as usize] =
+                clip.end[i as usize] + *clip.mins.offset(i as isize) - 1 as i32 as f32;
+            clip.boxmaxs[i as usize] =
+                *clip.start.offset(i as isize) + *clip.maxs.offset(i as isize) + 1 as i32 as f32
         }
         i += 1
     }
@@ -1085,12 +1063,7 @@ pub unsafe extern "C" fn SV_PointContents(
     // get base contents from world
     contents = crate::src::qcommon::cm_test::CM_PointContents(p, 0 as i32);
     // or in contents from all the other entities
-    num = SV_AreaEntities(
-        p,
-        p,
-        touch.as_mut_ptr(),
-        (1 as i32) << 10 as i32,
-    );
+    num = SV_AreaEntities(p, p, touch.as_mut_ptr(), (1 as i32) << 10 as i32);
     i = 0 as i32;
     while i < num {
         if !(touch[i as usize] == passEntityNum) {

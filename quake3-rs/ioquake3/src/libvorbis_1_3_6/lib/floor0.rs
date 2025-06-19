@@ -62,14 +62,10 @@ unsafe extern "C" fn floor0_free_look(mut i: *mut libc::c_void) {
     if !look.is_null() {
         if !(*look).linearmap.is_null() {
             if !(*(*look).linearmap.offset(0 as i32 as isize)).is_null() {
-                ::libc::free(
-                    *(*look).linearmap.offset(0 as i32 as isize) as *mut libc::c_void
-                );
+                ::libc::free(*(*look).linearmap.offset(0 as i32 as isize) as *mut libc::c_void);
             }
             if !(*(*look).linearmap.offset(1 as i32 as isize)).is_null() {
-                ::libc::free(
-                    *(*look).linearmap.offset(1 as i32 as isize) as *mut libc::c_void
-                );
+                ::libc::free(*(*look).linearmap.offset(1 as i32 as isize) as *mut libc::c_void);
             }
             ::libc::free((*look).linearmap as *mut libc::c_void);
         }
@@ -185,22 +181,18 @@ unsafe extern "C" fn floor0_map_lazy_init(
         let mut info: *mut crate::backends_h::vorbis_info_floor0 =
             infoX as *mut crate::backends_h::vorbis_info_floor0;
         let mut W: i32 = (*vb).W as i32;
-        let mut n: i32 =
-            ((*ci).blocksizes[W as usize] / 2 as i32 as libc::c_long) as i32;
+        let mut n: i32 = ((*ci).blocksizes[W as usize] / 2 as i32 as libc::c_long) as i32;
         let mut j: i32 = 0;
         /* we choose a scaling constant so that:
           floor(bark(rate/2-1)*C)=mapped-1
         floor(bark(rate/2)*C)=mapped */
         let mut scale: f32 = ((*look).ln as f64
             / (13.1f32 as f64
-                * crate::stdlib::atan(
-                    (0.00074f32 * ((*info).rate as f32 / 2.0f32)) as f64,
-                )
+                * crate::stdlib::atan((0.00074f32 * ((*info).rate as f32 / 2.0f32)) as f64)
                 + 2.24f32 as f64
                     * crate::stdlib::atan(
-                        ((*info).rate as f32 / 2.0f32
-                            * ((*info).rate as f32 / 2.0f32)
-                            * 1.85e-8f32) as f64,
+                        ((*info).rate as f32 / 2.0f32 * ((*info).rate as f32 / 2.0f32) * 1.85e-8f32)
+                            as f64,
                     )
                 + (1e-4f32 * ((*info).rate as f32 / 2.0f32)) as f64))
             as f32;
@@ -220,21 +212,16 @@ unsafe extern "C" fn floor0_map_lazy_init(
             let mut val: i32 = crate::stdlib::floor(
                 (13.1f32 as f64
                     * crate::stdlib::atan(
-                        (0.00074f32
-                            * ((*info).rate as f32 / 2.0f32 / n as f32
-                                * j as f32)) as f64,
+                        (0.00074f32 * ((*info).rate as f32 / 2.0f32 / n as f32 * j as f32)) as f64,
                     )
                     + 2.24f32 as f64
                         * crate::stdlib::atan(
                             ((*info).rate as f32 / 2.0f32 / n as f32
                                 * j as f32
-                                * ((*info).rate as f32 / 2.0f32 / n as f32
-                                    * j as f32)
+                                * ((*info).rate as f32 / 2.0f32 / n as f32 * j as f32)
                                 * 1.85e-8f32) as f64,
                         )
-                    + (1e-4f32
-                        * ((*info).rate as f32 / 2.0f32 / n as f32
-                            * j as f32)) as f64)
+                    + (1e-4f32 * ((*info).rate as f32 / 2.0f32 / n as f32 * j as f32)) as f64)
                     * scale as f64,
             ) as i32;
             if val >= (*look).ln {
@@ -282,10 +269,8 @@ unsafe extern "C" fn floor0_inverse1(
     ) as i32;
     if ampraw > 0 as i32 {
         /* also handles the -1 out of data case */
-        let mut maxval: libc::c_long =
-            (((1 as i32) << (*info).ampbits) - 1 as i32) as libc::c_long;
-        let mut amp: f32 =
-            ampraw as f32 / maxval as f32 * (*info).ampdB as f32;
+        let mut maxval: libc::c_long = (((1 as i32) << (*info).ampbits) - 1 as i32) as libc::c_long;
+        let mut amp: f32 = ampraw as f32 / maxval as f32 * (*info).ampdB as f32;
         let mut booknum: i32 = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
             &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
             crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
@@ -303,14 +288,13 @@ unsafe extern "C" fn floor0_inverse1(
             /* the additional b->dim is a guard against any possible stack
             smash; b->dim is provably more than we can overflow the
             vector */
-            let mut lsp: *mut f32 =
-                crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
-                    vb as *mut crate::codec_h::vorbis_block,
-                    (::std::mem::size_of::<f32>() as libc::c_ulong).wrapping_mul(
-                        ((*look).m as libc::c_long + (*b).dim + 1 as i32 as libc::c_long)
-                            as libc::c_ulong,
-                    ) as libc::c_long,
-                ) as *mut f32;
+            let mut lsp: *mut f32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
+                vb as *mut crate::codec_h::vorbis_block,
+                (::std::mem::size_of::<f32>() as libc::c_ulong).wrapping_mul(
+                    ((*look).m as libc::c_long + (*b).dim + 1 as i32 as libc::c_long)
+                        as libc::c_ulong,
+                ) as libc::c_long,
+            ) as *mut f32;
             if !(crate::src::libvorbis_1_3_6::lib::codebook::vorbis_book_decodev_set(
                 b as *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
                 lsp,

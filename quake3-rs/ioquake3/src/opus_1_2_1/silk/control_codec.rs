@@ -150,8 +150,7 @@ pub mod SigProc_FLP_h {
         let mut k: crate::opus_types_h::opus_int32 = 0;
         k = length - 1 as i32;
         while k >= 0 as i32 {
-            *out.offset(k as isize) = if float2int(*in_0.offset(k as isize)) > 0x7fff as i32
-            {
+            *out.offset(k as isize) = if float2int(*in_0.offset(k as isize)) > 0x7fff as i32 {
                 0x7fff as i32
             } else if float2int(*in_0.offset(k as isize))
                 < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
@@ -444,8 +443,7 @@ unsafe extern "C" fn silk_setup_fs(
             (*psEnc).sCmn.frame_length = PacketSize_ms as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
                 * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
-            (*psEnc).sCmn.pitch_LPC_win_length = (10 as i32
-                + ((2 as i32) << 1 as i32))
+            (*psEnc).sCmn.pitch_LPC_win_length = (10 as i32 + ((2 as i32) << 1 as i32))
                 as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
                 * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
@@ -464,8 +462,7 @@ unsafe extern "C" fn silk_setup_fs(
             (*psEnc).sCmn.frame_length = 20 as i32 as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
                 * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
-            (*psEnc).sCmn.pitch_LPC_win_length = (20 as i32
-                + ((2 as i32) << 1 as i32))
+            (*psEnc).sCmn.pitch_LPC_win_length = (20 as i32 + ((2 as i32) << 1 as i32))
                 as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
                 * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
@@ -560,14 +557,12 @@ unsafe extern "C" fn silk_setup_fs(
             as crate::opus_types_h::opus_int32
             * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
         if (*psEnc).sCmn.nb_subfr == 4 as i32 {
-            (*psEnc).sCmn.pitch_LPC_win_length = (20 as i32
-                + ((2 as i32) << 1 as i32))
+            (*psEnc).sCmn.pitch_LPC_win_length = (20 as i32 + ((2 as i32) << 1 as i32))
                 as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
                 * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
         } else {
-            (*psEnc).sCmn.pitch_LPC_win_length = (10 as i32
-                + ((2 as i32) << 1 as i32))
+            (*psEnc).sCmn.pitch_LPC_win_length = (10 as i32 + ((2 as i32) << 1 as i32))
                 as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
                 * fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
@@ -596,8 +591,7 @@ unsafe extern "C" fn silk_setup_complexity(
     /* Set encoding complexity */
     if Complexity < 1 as i32 {
         (*psEncC).pitchEstimationComplexity = 0 as i32;
-        (*psEncC).pitchEstimationThreshold_Q16 = (0.8f64
-            * ((1 as i32 as i64) << 16 as i32) as f64
+        (*psEncC).pitchEstimationThreshold_Q16 = (0.8f64 * ((1 as i32 as i64) << 16 as i32) as f64
             + 0.5f64)
             as crate::opus_types_h::opus_int32;
         (*psEncC).pitchEstimationLPCOrder = 6 as i32;
@@ -609,8 +603,7 @@ unsafe extern "C" fn silk_setup_complexity(
         (*psEncC).warping_Q16 = 0 as i32
     } else if Complexity < 2 as i32 {
         (*psEncC).pitchEstimationComplexity = 1 as i32;
-        (*psEncC).pitchEstimationThreshold_Q16 = (0.76f64
-            * ((1 as i32 as i64) << 16 as i32) as f64
+        (*psEncC).pitchEstimationThreshold_Q16 = (0.76f64 * ((1 as i32 as i64) << 16 as i32) as f64
             + 0.5f64)
             as crate::opus_types_h::opus_int32;
         (*psEncC).pitchEstimationLPCOrder = 8 as i32;
@@ -622,8 +615,7 @@ unsafe extern "C" fn silk_setup_complexity(
         (*psEncC).warping_Q16 = 0 as i32
     } else if Complexity < 3 as i32 {
         (*psEncC).pitchEstimationComplexity = 0 as i32;
-        (*psEncC).pitchEstimationThreshold_Q16 = (0.8f64
-            * ((1 as i32 as i64) << 16 as i32) as f64
+        (*psEncC).pitchEstimationThreshold_Q16 = (0.8f64 * ((1 as i32 as i64) << 16 as i32) as f64
             + 0.5f64)
             as crate::opus_types_h::opus_int32;
         (*psEncC).pitchEstimationLPCOrder = 6 as i32;
@@ -635,8 +627,7 @@ unsafe extern "C" fn silk_setup_complexity(
         (*psEncC).warping_Q16 = 0 as i32
     } else if Complexity < 4 as i32 {
         (*psEncC).pitchEstimationComplexity = 1 as i32;
-        (*psEncC).pitchEstimationThreshold_Q16 = (0.76f64
-            * ((1 as i32 as i64) << 16 as i32) as f64
+        (*psEncC).pitchEstimationThreshold_Q16 = (0.76f64 * ((1 as i32 as i64) << 16 as i32) as f64
             + 0.5f64)
             as crate::opus_types_h::opus_int32;
         (*psEncC).pitchEstimationLPCOrder = 8 as i32;
@@ -648,8 +639,7 @@ unsafe extern "C" fn silk_setup_complexity(
         (*psEncC).warping_Q16 = 0 as i32
     } else if Complexity < 6 as i32 {
         (*psEncC).pitchEstimationComplexity = 1 as i32;
-        (*psEncC).pitchEstimationThreshold_Q16 = (0.74f64
-            * ((1 as i32 as i64) << 16 as i32) as f64
+        (*psEncC).pitchEstimationThreshold_Q16 = (0.74f64 * ((1 as i32 as i64) << 16 as i32) as f64
             + 0.5f64)
             as crate::opus_types_h::opus_int32;
         (*psEncC).pitchEstimationLPCOrder = 10 as i32;
@@ -659,14 +649,11 @@ unsafe extern "C" fn silk_setup_complexity(
         (*psEncC).useInterpolatedNLSFs = 1 as i32;
         (*psEncC).NLSF_MSVQ_Survivors = 6 as i32;
         (*psEncC).warping_Q16 = (*psEncC).fs_kHz
-            * ((0.015f32
-                * ((1 as i32 as i64) << 16 as i32) as f32)
-                as f64
-                + 0.5f64) as crate::opus_types_h::opus_int32
+            * ((0.015f32 * ((1 as i32 as i64) << 16 as i32) as f32) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32
     } else if Complexity < 8 as i32 {
         (*psEncC).pitchEstimationComplexity = 1 as i32;
-        (*psEncC).pitchEstimationThreshold_Q16 = (0.72f64
-            * ((1 as i32 as i64) << 16 as i32) as f64
+        (*psEncC).pitchEstimationThreshold_Q16 = (0.72f64 * ((1 as i32 as i64) << 16 as i32) as f64
             + 0.5f64)
             as crate::opus_types_h::opus_int32;
         (*psEncC).pitchEstimationLPCOrder = 12 as i32;
@@ -676,14 +663,11 @@ unsafe extern "C" fn silk_setup_complexity(
         (*psEncC).useInterpolatedNLSFs = 1 as i32;
         (*psEncC).NLSF_MSVQ_Survivors = 8 as i32;
         (*psEncC).warping_Q16 = (*psEncC).fs_kHz
-            * ((0.015f32
-                * ((1 as i32 as i64) << 16 as i32) as f32)
-                as f64
-                + 0.5f64) as crate::opus_types_h::opus_int32
+            * ((0.015f32 * ((1 as i32 as i64) << 16 as i32) as f32) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32
     } else {
         (*psEncC).pitchEstimationComplexity = 2 as i32;
-        (*psEncC).pitchEstimationThreshold_Q16 = (0.7f64
-            * ((1 as i32 as i64) << 16 as i32) as f64
+        (*psEncC).pitchEstimationThreshold_Q16 = (0.7f64 * ((1 as i32 as i64) << 16 as i32) as f64
             + 0.5f64)
             as crate::opus_types_h::opus_int32;
         (*psEncC).pitchEstimationLPCOrder = 16 as i32;
@@ -693,16 +677,13 @@ unsafe extern "C" fn silk_setup_complexity(
         (*psEncC).useInterpolatedNLSFs = 1 as i32;
         (*psEncC).NLSF_MSVQ_Survivors = 16 as i32;
         (*psEncC).warping_Q16 = (*psEncC).fs_kHz
-            * ((0.015f32
-                * ((1 as i32 as i64) << 16 as i32) as f32)
-                as f64
-                + 0.5f64) as crate::opus_types_h::opus_int32
+            * ((0.015f32 * ((1 as i32 as i64) << 16 as i32) as f32) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32
     }
     /* Do not allow higher pitch estimation LPC order than predict LPC order */
     (*psEncC).pitchEstimationLPCOrder =
         silk_min_int((*psEncC).pitchEstimationLPCOrder, (*psEncC).predictLPCOrder);
-    (*psEncC).shapeWinLength =
-        5 as i32 * (*psEncC).fs_kHz + 2 as i32 * (*psEncC).la_shape;
+    (*psEncC).shapeWinLength = 5 as i32 * (*psEncC).fs_kHz + 2 as i32 * (*psEncC).la_shape;
     (*psEncC).Complexity = Complexity;
     return ret;
 }
@@ -726,14 +707,10 @@ unsafe extern "C" fn silk_setup_LBRR(
             (*psEncC).LBRR_GainIncreases = silk_max_int(
                 7 as i32
                     - ((*psEncC).PacketLoss_perc as i64
-                        * (0.4f64
-                            * ((1 as i32 as i64) << 16 as i32)
-                                as f64
-                            + 0.5f64) as crate::opus_types_h::opus_int32
-                            as crate::opus_types_h::opus_int16
-                            as i64
-                        >> 16 as i32)
-                        as crate::opus_types_h::opus_int32,
+                        * (0.4f64 * ((1 as i32 as i64) << 16 as i32) as f64 + 0.5f64)
+                            as crate::opus_types_h::opus_int32
+                            as crate::opus_types_h::opus_int16 as i64
+                        >> 16 as i32) as crate::opus_types_h::opus_int32,
                 2 as i32,
             )
         }

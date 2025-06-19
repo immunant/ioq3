@@ -234,11 +234,9 @@ unsafe extern "C" fn use_merged_upsample(
         return 0 as i32;
     }
     /* jdmerge.c only supports YCC=>RGB color conversion */
-    if (*cinfo).jpeg_color_space as u32
-        != crate::jpeglib_h::JCS_YCbCr as i32 as u32
+    if (*cinfo).jpeg_color_space as u32 != crate::jpeglib_h::JCS_YCbCr as i32 as u32
         || (*cinfo).num_components != 3 as i32
-        || (*cinfo).out_color_space as u32
-            != crate::jpeglib_h::JCS_RGB as i32 as u32
+        || (*cinfo).out_color_space as u32 != crate::jpeglib_h::JCS_RGB as i32 as u32
         || (*cinfo).out_color_components != 3 as i32
     {
         return 0 as i32;
@@ -452,8 +450,7 @@ unsafe extern "C" fn prepare_range_limit_table(mut cinfo: crate::jpeglib_h::j_de
     .expect("non-null function pointer")(
         cinfo as crate::jpeglib_h::j_common_ptr,
         1 as i32,
-        ((5 as i32 * (255 as i32 + 1 as i32) + 128 as i32)
-            as libc::c_ulong)
+        ((5 as i32 * (255 as i32 + 1 as i32) + 128 as i32) as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::jmorecfg_h::JSAMPLE>() as libc::c_ulong),
     ) as *mut crate::jmorecfg_h::JSAMPLE;
     table = table.offset((255 as i32 + 1 as i32) as isize);
@@ -480,18 +477,14 @@ unsafe extern "C" fn prepare_range_limit_table(mut cinfo: crate::jpeglib_h::j_de
     }
     /* Second half of post-IDCT table */
     crate::stdlib::memset(
-        table.offset((2 as i32 * (255 as i32 + 1 as i32)) as isize)
-            as *mut libc::c_void,
+        table.offset((2 as i32 * (255 as i32 + 1 as i32)) as isize) as *mut libc::c_void,
         0 as i32,
-        ((2 as i32 * (255 as i32 + 1 as i32) - 128 as i32)
-            as libc::c_ulong)
+        ((2 as i32 * (255 as i32 + 1 as i32) - 128 as i32) as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::jmorecfg_h::JSAMPLE>() as libc::c_ulong),
     );
     crate::stdlib::memcpy(
-        table.offset(
-            (4 as i32 * (255 as i32 + 1 as i32) - 128 as i32)
-                as isize,
-        ) as *mut libc::c_void,
+        table.offset((4 as i32 * (255 as i32 + 1 as i32) - 128 as i32) as isize)
+            as *mut libc::c_void,
         (*cinfo).sample_range_limit as *const libc::c_void,
         (128 as i32 as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::jmorecfg_h::JSAMPLE>() as libc::c_ulong),
@@ -618,8 +611,8 @@ unsafe extern "C" fn master_selection(mut cinfo: crate::jpeglib_h::j_decompress_
         );
     }
     /* Initialize principal buffer controllers. */
-    use_c_buffer = ((*(*cinfo).inputctl).has_multiple_scans != 0 || (*cinfo).buffered_image != 0)
-        as i32;
+    use_c_buffer =
+        ((*(*cinfo).inputctl).has_multiple_scans != 0 || (*cinfo).buffered_image != 0) as i32;
     crate::src::jpeg_8c::jdcoefct::jinit_d_coef_controller(
         cinfo as *mut crate::jpeglib_h::jpeg_decompress_struct,
         use_c_buffer,
@@ -717,8 +710,7 @@ unsafe extern "C" fn prepare_for_output_pass(mut cinfo: crate::jpeglib_h::j_deco
             } else if (*cinfo).enable_1pass_quant != 0 {
                 (*cinfo).cquantize = (*master).quantizer_1pass
             } else {
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_MODE_CHANGE as i32;
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_MODE_CHANGE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit

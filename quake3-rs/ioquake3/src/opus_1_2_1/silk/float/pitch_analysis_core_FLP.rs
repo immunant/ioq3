@@ -84,8 +84,7 @@ pub mod SigProc_FLP_h {
         let mut k: crate::opus_types_h::opus_int32 = 0;
         k = length - 1 as i32;
         while k >= 0 as i32 {
-            *out.offset(k as isize) = if float2int(*in_0.offset(k as isize)) > 0x7fff as i32
-            {
+            *out.offset(k as isize) = if float2int(*in_0.offset(k as isize)) > 0x7fff as i32 {
                 0x7fff as i32
             } else if float2int(*in_0.offset(k as isize))
                 < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
@@ -294,10 +293,8 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
     /* Check for valid complexity setting */
     /* Set up frame lengths max / min lag for the sampling frequency */
     frame_length = (4 as i32 * 5 as i32 + nb_subfr * 5 as i32) * Fs_kHz;
-    frame_length_4kHz =
-        (4 as i32 * 5 as i32 + nb_subfr * 5 as i32) * 4 as i32;
-    frame_length_8kHz =
-        (4 as i32 * 5 as i32 + nb_subfr * 5 as i32) * 8 as i32;
+    frame_length_4kHz = (4 as i32 * 5 as i32 + nb_subfr * 5 as i32) * 4 as i32;
+    frame_length_8kHz = (4 as i32 * 5 as i32 + nb_subfr * 5 as i32) * 8 as i32;
     sf_length = 5 as i32 * Fs_kHz;
     sf_length_4kHz = 5 as i32 * 4 as i32;
     sf_length_8kHz = 5 as i32 * 8 as i32;
@@ -374,16 +371,14 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
     /* Low-pass filter */
     i = frame_length_4kHz - 1 as i32;
     while i > 0 as i32 {
-        frame_4kHz[i as usize] = if frame_4kHz[i as usize] as crate::opus_types_h::opus_int32
-            as f32
+        frame_4kHz[i as usize] = if frame_4kHz[i as usize] as crate::opus_types_h::opus_int32 as f32
             + frame_4kHz[(i - 1 as i32) as usize]
             > 0x7fff as i32 as f32
         {
             0x7fff as i32 as f32
         } else if frame_4kHz[i as usize] as crate::opus_types_h::opus_int32 as f32
             + frame_4kHz[(i - 1 as i32) as usize]
-            < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
-                as f32
+            < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32 as f32
         {
             0x8000 as i32 as crate::opus_types_h::opus_int16 as i32 as f32
         } else {
@@ -400,10 +395,7 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
         0 as i32,
         (::std::mem::size_of::<f32>() as libc::c_ulong)
             .wrapping_mul(nb_subfr as libc::c_ulong)
-            .wrapping_mul(
-                ((18 as i32 * 16 as i32 >> 1 as i32) + 5 as i32)
-                    as libc::c_ulong,
-            ),
+            .wrapping_mul(((18 as i32 * 16 as i32 >> 1 as i32) + 5 as i32) as libc::c_ulong),
     );
     target_ptr = &mut *frame_4kHz.as_mut_ptr().offset(
         ((sf_length_4kHz as crate::opus_types_h::opus_uint32) << 2 as i32)
@@ -444,8 +436,7 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
                 * *basis_ptr.offset(0 as i32 as isize) as f64
                 - *basis_ptr.offset(sf_length_8kHz as isize) as f64
                     * *basis_ptr.offset(sf_length_8kHz as isize) as f64;
-            C[0 as i32 as usize][d as usize] +=
-                (2 as i32 as f64 * cross_corr / normalizer) as f32;
+            C[0 as i32 as usize][d as usize] += (2 as i32 as f64 * cross_corr / normalizer) as f32;
             d += 1
         }
         /* Update target pointer */
@@ -455,8 +446,7 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
     /* Apply short-lag bias */
     i = max_lag_4kHz;
     while i >= min_lag_4kHz {
-        C[0 as i32 as usize][i as usize] -=
-            C[0 as i32 as usize][i as usize] * i as f32 / 4096.0f32;
+        C[0 as i32 as usize][i as usize] -= C[0 as i32 as usize][i as usize] * i as f32 / 4096.0f32;
         i -= 1
     }
     /* Sort */
@@ -475,8 +465,7 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
         crate::stdlib::memset(
             pitch_out as *mut libc::c_void,
             0 as i32,
-            (nb_subfr as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            (nb_subfr as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
         );
         *LTPCorr = 0.0f32;
         *lagIndex = 0 as i32 as crate::opus_types_h::opus_int16;
@@ -488,9 +477,9 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
     while i < length_d_srch {
         /* Convert to 8 kHz indices for the sorted correlation that exceeds the threshold */
         if C[0 as i32 as usize][(min_lag_4kHz + i) as usize] > threshold {
-            d_srch[i as usize] =
-                (((d_srch[i as usize] + min_lag_4kHz) as crate::opus_types_h::opus_uint32)
-                    << 1 as i32) as crate::opus_types_h::opus_int32;
+            d_srch[i as usize] = (((d_srch[i as usize] + min_lag_4kHz)
+                as crate::opus_types_h::opus_uint32)
+                << 1 as i32) as crate::opus_types_h::opus_int32;
             i += 1
         } else {
             length_d_srch = i;
@@ -511,8 +500,7 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
     i = max_lag_8kHz + 3 as i32;
     while i >= min_lag_8kHz {
         d_comp[i as usize] = (d_comp[i as usize] as i32
-            + (d_comp[(i - 1 as i32) as usize] as i32
-                + d_comp[(i - 2 as i32) as usize] as i32))
+            + (d_comp[(i - 1 as i32) as usize] as i32 + d_comp[(i - 2 as i32) as usize] as i32))
             as crate::opus_types_h::opus_int16;
         i -= 1
     }
@@ -539,8 +527,7 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
     i = min_lag_8kHz;
     while i < max_lag_8kHz + 4 as i32 {
         if d_comp[i as usize] as i32 > 0 as i32 {
-            d_comp[length_d_comp as usize] =
-                (i - 2 as i32) as crate::opus_types_h::opus_int16;
+            d_comp[length_d_comp as usize] = (i - 2 as i32) as crate::opus_types_h::opus_int16;
             length_d_comp += 1
         }
         i += 1
@@ -554,20 +541,15 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
     crate::stdlib::memset(
         C.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        ((4 as i32
-            * ((18 as i32 * 16 as i32 >> 1 as i32) + 5 as i32))
-            as libc::c_ulong)
+        ((4 as i32 * ((18 as i32 * 16 as i32 >> 1 as i32) + 5 as i32)) as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
     );
     if Fs_kHz == 8 as i32 {
-        target_ptr = &*frame
-            .offset((4 as i32 * 5 as i32 * 8 as i32) as isize)
-            as *const f32
+        target_ptr = &*frame.offset((4 as i32 * 5 as i32 * 8 as i32) as isize) as *const f32
     } else {
         target_ptr = &mut *frame_8kHz
             .as_mut_ptr()
-            .offset((4 as i32 * 5 as i32 * 8 as i32) as isize)
-            as *mut f32
+            .offset((4 as i32 * 5 as i32 * 8 as i32) as isize) as *mut f32
     }
     k = 0 as i32;
     while k < nb_subfr {
@@ -590,9 +572,8 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
                     basis_ptr,
                     sf_length_8kHz,
                 );
-                C[k as usize][d as usize] = (2 as i32 as f64 * cross_corr
-                    / (energy + energy_tmp))
-                    as f32
+                C[k as usize][d as usize] =
+                    (2 as i32 as f64 * cross_corr / (energy + energy_tmp)) as f32
             } else {
                 C[k as usize][d as usize] = 0.0f32
             }
@@ -692,8 +673,7 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
         crate::stdlib::memset(
             pitch_out as *mut libc::c_void,
             0 as i32,
-            (4 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            (4 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
         );
         *LTPCorr = 0.0f32;
         *lagIndex = 0 as i32 as crate::opus_types_h::opus_int16;
@@ -786,8 +766,7 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
                 .as_ptr()
                 .offset(0 as i32 as isize) as *const i8
         }
-        target_ptr = &*frame.offset((4 as i32 * 5 as i32 * Fs_kHz) as isize)
-            as *const f32;
+        target_ptr = &*frame.offset((4 as i32 * 5 as i32 * Fs_kHz) as isize) as *const f32;
         energy_tmp = crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP(
             target_ptr,
             nb_subfr * sf_length,
@@ -800,15 +779,13 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
                 energy = energy_tmp;
                 k = 0 as i32;
                 while k < nb_subfr {
-                    cross_corr += cross_corr_st3[k as usize][j as usize][lag_counter as usize]
-                        as f64;
-                    energy += energies_st3[k as usize][j as usize][lag_counter as usize]
-                        as f64;
+                    cross_corr +=
+                        cross_corr_st3[k as usize][j as usize][lag_counter as usize] as f64;
+                    energy += energies_st3[k as usize][j as usize][lag_counter as usize] as f64;
                     k += 1
                 }
                 if cross_corr > 0.0f64 {
-                    CCmax_new =
-                        (2 as i32 as f64 * cross_corr / energy) as f32;
+                    CCmax_new = (2 as i32 as f64 * cross_corr / energy) as f32;
                     /* Reduce depending on flatness of contour */
                     CCmax_new *= 1.0f32 - contour_bias * j as f32
                 } else {
@@ -816,8 +793,7 @@ pub unsafe extern "C" fn silk_pitch_analysis_core_FLP(
                 }
                 if CCmax_new > CCmax
                     && d + crate::src::opus_1_2_1::silk::pitch_est_tables::silk_CB_lags_stage3
-                        [0 as i32 as usize][j as usize]
-                        as i32
+                        [0 as i32 as usize][j as usize] as i32
                         <= max_lag
                 {
                     CCmax = CCmax_new;
@@ -993,10 +969,8 @@ unsafe extern "C" fn silk_P_Ana_calc_corr_st3(
     while k < nb_subfr {
         lag_counter = 0 as i32;
         /* Calculate the correlations for each subframe */
-        lag_low = *Lag_range_ptr.offset((k * 2 as i32 + 0 as i32) as isize)
-            as i32;
-        lag_high = *Lag_range_ptr.offset((k * 2 as i32 + 1 as i32) as isize)
-            as i32;
+        lag_low = *Lag_range_ptr.offset((k * 2 as i32 + 0 as i32) as isize) as i32;
+        lag_high = *Lag_range_ptr.offset((k * 2 as i32 + 1 as i32) as isize) as i32;
         crate::src::opus_1_2_1::celt::pitch::celt_pitch_xcorr_c(
             target_ptr,
             target_ptr
@@ -1013,8 +987,7 @@ unsafe extern "C" fn silk_P_Ana_calc_corr_st3(
             lag_counter += 1;
             j += 1
         }
-        delta = *Lag_range_ptr.offset((k * 2 as i32 + 0 as i32) as isize)
-            as i32;
+        delta = *Lag_range_ptr.offset((k * 2 as i32 + 0 as i32) as isize) as i32;
         i = 0 as i32;
         while i < nb_cbk_search {
             /* Fill out the 3 dim array that stores the correlations for */
@@ -1103,19 +1076,16 @@ unsafe extern "C" fn silk_P_Ana_calc_energy_st3(
         lag_counter = 0 as i32;
         /* Calculate the energy for first lag */
         basis_ptr = target_ptr.offset(
-            -((start_lag
-                + *Lag_range_ptr.offset((k * 2 as i32 + 0 as i32) as isize)
-                    as i32) as isize),
+            -((start_lag + *Lag_range_ptr.offset((k * 2 as i32 + 0 as i32) as isize) as i32)
+                as isize),
         );
         energy =
             crate::src::opus_1_2_1::silk::float::energy_FLP::silk_energy_FLP(basis_ptr, sf_length)
                 + 1e-3f64;
         scratch_mem[lag_counter as usize] = energy as f32;
         lag_counter += 1;
-        lag_diff = *Lag_range_ptr.offset((k * 2 as i32 + 1 as i32) as isize)
-            as i32
-            - *Lag_range_ptr.offset((k * 2 as i32 + 0 as i32) as isize)
-                as i32
+        lag_diff = *Lag_range_ptr.offset((k * 2 as i32 + 1 as i32) as isize) as i32
+            - *Lag_range_ptr.offset((k * 2 as i32 + 0 as i32) as isize) as i32
             + 1 as i32;
         i = 1 as i32;
         while i < lag_diff {
@@ -1123,14 +1093,12 @@ unsafe extern "C" fn silk_P_Ana_calc_energy_st3(
             energy -= *basis_ptr.offset((sf_length - i) as isize) as f64
                 * *basis_ptr.offset((sf_length - i) as isize) as f64;
             /* add part that comes into window */
-            energy += *basis_ptr.offset(-i as isize) as f64
-                * *basis_ptr.offset(-i as isize) as f64;
+            energy += *basis_ptr.offset(-i as isize) as f64 * *basis_ptr.offset(-i as isize) as f64;
             scratch_mem[lag_counter as usize] = energy as f32;
             lag_counter += 1;
             i += 1
         }
-        delta = *Lag_range_ptr.offset((k * 2 as i32 + 0 as i32) as isize)
-            as i32;
+        delta = *Lag_range_ptr.offset((k * 2 as i32 + 0 as i32) as isize) as i32;
         i = 0 as i32;
         while i < nb_cbk_search {
             /* Fill out the 3 dim array that stores the correlations for    */

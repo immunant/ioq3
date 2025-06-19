@@ -241,8 +241,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
     #[inline]
@@ -632,27 +631,18 @@ pub unsafe extern "C" fn G_RotatePoint(
     tvec[0 as i32 as usize] = *point.offset(0 as i32 as isize);
     tvec[1 as i32 as usize] = *point.offset(1 as i32 as isize);
     tvec[2 as i32 as usize] = *point.offset(2 as i32 as isize);
-    *point.offset(0 as i32 as isize) = (*matrix.offset(0 as i32 as isize))
-        [0 as i32 as usize]
+    *point.offset(0 as i32 as isize) = (*matrix.offset(0 as i32 as isize))[0 as i32 as usize]
         * tvec[0 as i32 as usize]
-        + (*matrix.offset(0 as i32 as isize))[1 as i32 as usize]
-            * tvec[1 as i32 as usize]
-        + (*matrix.offset(0 as i32 as isize))[2 as i32 as usize]
-            * tvec[2 as i32 as usize];
-    *point.offset(1 as i32 as isize) = (*matrix.offset(1 as i32 as isize))
-        [0 as i32 as usize]
+        + (*matrix.offset(0 as i32 as isize))[1 as i32 as usize] * tvec[1 as i32 as usize]
+        + (*matrix.offset(0 as i32 as isize))[2 as i32 as usize] * tvec[2 as i32 as usize];
+    *point.offset(1 as i32 as isize) = (*matrix.offset(1 as i32 as isize))[0 as i32 as usize]
         * tvec[0 as i32 as usize]
-        + (*matrix.offset(1 as i32 as isize))[1 as i32 as usize]
-            * tvec[1 as i32 as usize]
-        + (*matrix.offset(1 as i32 as isize))[2 as i32 as usize]
-            * tvec[2 as i32 as usize];
-    *point.offset(2 as i32 as isize) = (*matrix.offset(2 as i32 as isize))
-        [0 as i32 as usize]
+        + (*matrix.offset(1 as i32 as isize))[1 as i32 as usize] * tvec[1 as i32 as usize]
+        + (*matrix.offset(1 as i32 as isize))[2 as i32 as usize] * tvec[2 as i32 as usize];
+    *point.offset(2 as i32 as isize) = (*matrix.offset(2 as i32 as isize))[0 as i32 as usize]
         * tvec[0 as i32 as usize]
-        + (*matrix.offset(2 as i32 as isize))[1 as i32 as usize]
-            * tvec[1 as i32 as usize]
-        + (*matrix.offset(2 as i32 as isize))[2 as i32 as usize]
-            * tvec[2 as i32 as usize];
+        + (*matrix.offset(2 as i32 as isize))[1 as i32 as usize] * tvec[1 as i32 as usize]
+        + (*matrix.offset(2 as i32 as isize))[2 as i32 as usize] * tvec[2 as i32 as usize];
 }
 /*
 ==================
@@ -677,9 +667,7 @@ pub unsafe extern "C" fn G_TryPushingEntity(
     let mut block: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
     // EF_MOVER_STOP will just stop when contacting another entity
     // instead of pushing it, but entities can still ride on top of it
-    if (*pusher).s.eFlags & 0x400 as i32 != 0
-        && (*check).s.groundEntityNum != (*pusher).s.number
-    {
+    if (*pusher).s.eFlags & 0x400 as i32 != 0 && (*check).s.groundEntityNum != (*pusher).s.number {
         return crate::src::qcommon::q_shared::qfalse;
     }
     // save off the old position
@@ -693,27 +681,17 @@ pub unsafe extern "C" fn G_TryPushingEntity(
         );
     }
     (*pushed_p).ent = check;
-    (*pushed_p).origin[0 as i32 as usize] =
-        (*check).s.pos.trBase[0 as i32 as usize];
-    (*pushed_p).origin[1 as i32 as usize] =
-        (*check).s.pos.trBase[1 as i32 as usize];
-    (*pushed_p).origin[2 as i32 as usize] =
-        (*check).s.pos.trBase[2 as i32 as usize];
-    (*pushed_p).angles[0 as i32 as usize] =
-        (*check).s.apos.trBase[0 as i32 as usize];
-    (*pushed_p).angles[1 as i32 as usize] =
-        (*check).s.apos.trBase[1 as i32 as usize];
-    (*pushed_p).angles[2 as i32 as usize] =
-        (*check).s.apos.trBase[2 as i32 as usize];
+    (*pushed_p).origin[0 as i32 as usize] = (*check).s.pos.trBase[0 as i32 as usize];
+    (*pushed_p).origin[1 as i32 as usize] = (*check).s.pos.trBase[1 as i32 as usize];
+    (*pushed_p).origin[2 as i32 as usize] = (*check).s.pos.trBase[2 as i32 as usize];
+    (*pushed_p).angles[0 as i32 as usize] = (*check).s.apos.trBase[0 as i32 as usize];
+    (*pushed_p).angles[1 as i32 as usize] = (*check).s.apos.trBase[1 as i32 as usize];
+    (*pushed_p).angles[2 as i32 as usize] = (*check).s.apos.trBase[2 as i32 as usize];
     if !(*check).client.is_null() {
-        (*pushed_p).deltayaw =
-            (*(*check).client).ps.delta_angles[1 as i32 as usize] as f32;
-        (*pushed_p).origin[0 as i32 as usize] =
-            (*(*check).client).ps.origin[0 as i32 as usize];
-        (*pushed_p).origin[1 as i32 as usize] =
-            (*(*check).client).ps.origin[1 as i32 as usize];
-        (*pushed_p).origin[2 as i32 as usize] =
-            (*(*check).client).ps.origin[2 as i32 as usize]
+        (*pushed_p).deltayaw = (*(*check).client).ps.delta_angles[1 as i32 as usize] as f32;
+        (*pushed_p).origin[0 as i32 as usize] = (*(*check).client).ps.origin[0 as i32 as usize];
+        (*pushed_p).origin[1 as i32 as usize] = (*(*check).client).ps.origin[1 as i32 as usize];
+        (*pushed_p).origin[2 as i32 as usize] = (*(*check).client).ps.origin[2 as i32 as usize]
     }
     pushed_p = pushed_p.offset(1);
     // try moving the contacted entity
@@ -728,33 +706,27 @@ pub unsafe extern "C" fn G_TryPushingEntity(
         org[2 as i32 as usize] = (*(*check).client).ps.origin[2 as i32 as usize]
             - (*pusher).r.currentOrigin[2 as i32 as usize]
     } else {
-        org[0 as i32 as usize] = (*check).s.pos.trBase[0 as i32 as usize]
-            - (*pusher).r.currentOrigin[0 as i32 as usize];
-        org[1 as i32 as usize] = (*check).s.pos.trBase[1 as i32 as usize]
-            - (*pusher).r.currentOrigin[1 as i32 as usize];
-        org[2 as i32 as usize] = (*check).s.pos.trBase[2 as i32 as usize]
-            - (*pusher).r.currentOrigin[2 as i32 as usize]
+        org[0 as i32 as usize] =
+            (*check).s.pos.trBase[0 as i32 as usize] - (*pusher).r.currentOrigin[0 as i32 as usize];
+        org[1 as i32 as usize] =
+            (*check).s.pos.trBase[1 as i32 as usize] - (*pusher).r.currentOrigin[1 as i32 as usize];
+        org[2 as i32 as usize] =
+            (*check).s.pos.trBase[2 as i32 as usize] - (*pusher).r.currentOrigin[2 as i32 as usize]
     }
     org2[0 as i32 as usize] = org[0 as i32 as usize];
     org2[1 as i32 as usize] = org[1 as i32 as usize];
     org2[2 as i32 as usize] = org[2 as i32 as usize];
     G_RotatePoint(org2.as_mut_ptr(), matrix.as_mut_ptr());
-    move2[0 as i32 as usize] =
-        org2[0 as i32 as usize] - org[0 as i32 as usize];
-    move2[1 as i32 as usize] =
-        org2[1 as i32 as usize] - org[1 as i32 as usize];
-    move2[2 as i32 as usize] =
-        org2[2 as i32 as usize] - org[2 as i32 as usize];
+    move2[0 as i32 as usize] = org2[0 as i32 as usize] - org[0 as i32 as usize];
+    move2[1 as i32 as usize] = org2[1 as i32 as usize] - org[1 as i32 as usize];
+    move2[2 as i32 as usize] = org2[2 as i32 as usize] - org[2 as i32 as usize];
     // add movement
-    (*check).s.pos.trBase[0 as i32 as usize] = (*check).s.pos.trBase
-        [0 as i32 as usize]
-        + *move_0.offset(0 as i32 as isize);
-    (*check).s.pos.trBase[1 as i32 as usize] = (*check).s.pos.trBase
-        [1 as i32 as usize]
-        + *move_0.offset(1 as i32 as isize);
-    (*check).s.pos.trBase[2 as i32 as usize] = (*check).s.pos.trBase
-        [2 as i32 as usize]
-        + *move_0.offset(2 as i32 as isize);
+    (*check).s.pos.trBase[0 as i32 as usize] =
+        (*check).s.pos.trBase[0 as i32 as usize] + *move_0.offset(0 as i32 as isize);
+    (*check).s.pos.trBase[1 as i32 as usize] =
+        (*check).s.pos.trBase[1 as i32 as usize] + *move_0.offset(1 as i32 as isize);
+    (*check).s.pos.trBase[2 as i32 as usize] =
+        (*check).s.pos.trBase[2 as i32 as usize] + *move_0.offset(2 as i32 as isize);
     (*check).s.pos.trBase[0 as i32 as usize] =
         (*check).s.pos.trBase[0 as i32 as usize] + move2[0 as i32 as usize];
     (*check).s.pos.trBase[1 as i32 as usize] =
@@ -762,28 +734,21 @@ pub unsafe extern "C" fn G_TryPushingEntity(
     (*check).s.pos.trBase[2 as i32 as usize] =
         (*check).s.pos.trBase[2 as i32 as usize] + move2[2 as i32 as usize];
     if !(*check).client.is_null() {
-        (*(*check).client).ps.origin[0 as i32 as usize] = (*(*check).client).ps.origin
-            [0 as i32 as usize]
-            + *move_0.offset(0 as i32 as isize);
-        (*(*check).client).ps.origin[1 as i32 as usize] = (*(*check).client).ps.origin
-            [1 as i32 as usize]
-            + *move_0.offset(1 as i32 as isize);
-        (*(*check).client).ps.origin[2 as i32 as usize] = (*(*check).client).ps.origin
-            [2 as i32 as usize]
-            + *move_0.offset(2 as i32 as isize);
-        (*(*check).client).ps.origin[0 as i32 as usize] = (*(*check).client).ps.origin
-            [0 as i32 as usize]
-            + move2[0 as i32 as usize];
-        (*(*check).client).ps.origin[1 as i32 as usize] = (*(*check).client).ps.origin
-            [1 as i32 as usize]
-            + move2[1 as i32 as usize];
-        (*(*check).client).ps.origin[2 as i32 as usize] = (*(*check).client).ps.origin
-            [2 as i32 as usize]
-            + move2[2 as i32 as usize];
+        (*(*check).client).ps.origin[0 as i32 as usize] =
+            (*(*check).client).ps.origin[0 as i32 as usize] + *move_0.offset(0 as i32 as isize);
+        (*(*check).client).ps.origin[1 as i32 as usize] =
+            (*(*check).client).ps.origin[1 as i32 as usize] + *move_0.offset(1 as i32 as isize);
+        (*(*check).client).ps.origin[2 as i32 as usize] =
+            (*(*check).client).ps.origin[2 as i32 as usize] + *move_0.offset(2 as i32 as isize);
+        (*(*check).client).ps.origin[0 as i32 as usize] =
+            (*(*check).client).ps.origin[0 as i32 as usize] + move2[0 as i32 as usize];
+        (*(*check).client).ps.origin[1 as i32 as usize] =
+            (*(*check).client).ps.origin[1 as i32 as usize] + move2[1 as i32 as usize];
+        (*(*check).client).ps.origin[2 as i32 as usize] =
+            (*(*check).client).ps.origin[2 as i32 as usize] + move2[2 as i32 as usize];
         // make sure the client's view rotates when on a rotating mover
         (*(*check).client).ps.delta_angles[1 as i32 as usize] +=
-            (*amove.offset(1 as i32 as isize) * 65536 as i32 as f32
-                / 360 as i32 as f32) as i32
+            (*amove.offset(1 as i32 as isize) * 65536 as i32 as f32 / 360 as i32 as f32) as i32
                 & 65535 as i32
     }
     // may have pushed them off an edge
@@ -801,12 +766,9 @@ pub unsafe extern "C" fn G_TryPushingEntity(
             (*check).r.currentOrigin[2 as i32 as usize] =
                 (*(*check).client).ps.origin[2 as i32 as usize]
         } else {
-            (*check).r.currentOrigin[0 as i32 as usize] =
-                (*check).s.pos.trBase[0 as i32 as usize];
-            (*check).r.currentOrigin[1 as i32 as usize] =
-                (*check).s.pos.trBase[1 as i32 as usize];
-            (*check).r.currentOrigin[2 as i32 as usize] =
-                (*check).s.pos.trBase[2 as i32 as usize]
+            (*check).r.currentOrigin[0 as i32 as usize] = (*check).s.pos.trBase[0 as i32 as usize];
+            (*check).r.currentOrigin[1 as i32 as usize] = (*check).s.pos.trBase[1 as i32 as usize];
+            (*check).r.currentOrigin[2 as i32 as usize] = (*check).s.pos.trBase[2 as i32 as usize]
         }
         crate::src::game::g_syscalls::trap_LinkEntity(check as *mut crate::g_local_h::gentity_s);
         return crate::src::qcommon::q_shared::qtrue;
@@ -871,16 +833,13 @@ pub unsafe extern "C" fn G_CheckProxMinePosition(
         contents: 0,
         entityNum: 0,
     };
-    start[0 as i32 as usize] = ((*check).s.pos.trBase[0 as i32 as usize]
-        as f64
+    start[0 as i32 as usize] = ((*check).s.pos.trBase[0 as i32 as usize] as f64
         + (*check).movedir[0 as i32 as usize] as f64 * 0.125f64)
         as crate::src::qcommon::q_shared::vec_t;
-    start[1 as i32 as usize] = ((*check).s.pos.trBase[1 as i32 as usize]
-        as f64
+    start[1 as i32 as usize] = ((*check).s.pos.trBase[1 as i32 as usize] as f64
         + (*check).movedir[1 as i32 as usize] as f64 * 0.125f64)
         as crate::src::qcommon::q_shared::vec_t;
-    start[2 as i32 as usize] = ((*check).s.pos.trBase[2 as i32 as usize]
-        as f64
+    start[2 as i32 as usize] = ((*check).s.pos.trBase[2 as i32 as usize] as f64
         + (*check).movedir[2 as i32 as usize] as f64 * 0.125f64)
         as crate::src::qcommon::q_shared::vec_t;
     end[0 as i32 as usize] = (*check).s.pos.trBase[0 as i32 as usize]
@@ -924,14 +883,11 @@ pub unsafe extern "C" fn G_TryPushingProxMine(
     let mut move2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut ret: i32 = 0;
     // we need this for pushing things later
-    org[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
-        [0 as i32 as usize]
+    org[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize]
         - *amove.offset(0 as i32 as isize);
-    org[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
-        [1 as i32 as usize]
+    org[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize]
         - *amove.offset(1 as i32 as isize);
-    org[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
-        [2 as i32 as usize]
+    org[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize]
         - *amove.offset(2 as i32 as isize);
     crate::src::qcommon::q_math::AngleVectors(
         org.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -940,40 +896,31 @@ pub unsafe extern "C" fn G_TryPushingProxMine(
         up.as_mut_ptr(),
     );
     // try moving the contacted entity
-    (*check).s.pos.trBase[0 as i32 as usize] = (*check).s.pos.trBase
-        [0 as i32 as usize]
-        + *move_0.offset(0 as i32 as isize);
-    (*check).s.pos.trBase[1 as i32 as usize] = (*check).s.pos.trBase
-        [1 as i32 as usize]
-        + *move_0.offset(1 as i32 as isize);
-    (*check).s.pos.trBase[2 as i32 as usize] = (*check).s.pos.trBase
-        [2 as i32 as usize]
-        + *move_0.offset(2 as i32 as isize);
+    (*check).s.pos.trBase[0 as i32 as usize] =
+        (*check).s.pos.trBase[0 as i32 as usize] + *move_0.offset(0 as i32 as isize);
+    (*check).s.pos.trBase[1 as i32 as usize] =
+        (*check).s.pos.trBase[1 as i32 as usize] + *move_0.offset(1 as i32 as isize);
+    (*check).s.pos.trBase[2 as i32 as usize] =
+        (*check).s.pos.trBase[2 as i32 as usize] + *move_0.offset(2 as i32 as isize);
     // figure movement due to the pusher's amove
-    org[0 as i32 as usize] = (*check).s.pos.trBase[0 as i32 as usize]
-        - (*pusher).r.currentOrigin[0 as i32 as usize];
-    org[1 as i32 as usize] = (*check).s.pos.trBase[1 as i32 as usize]
-        - (*pusher).r.currentOrigin[1 as i32 as usize];
-    org[2 as i32 as usize] = (*check).s.pos.trBase[2 as i32 as usize]
-        - (*pusher).r.currentOrigin[2 as i32 as usize];
-    org2[0 as i32 as usize] = org[0 as i32 as usize]
-        * forward[0 as i32 as usize]
+    org[0 as i32 as usize] =
+        (*check).s.pos.trBase[0 as i32 as usize] - (*pusher).r.currentOrigin[0 as i32 as usize];
+    org[1 as i32 as usize] =
+        (*check).s.pos.trBase[1 as i32 as usize] - (*pusher).r.currentOrigin[1 as i32 as usize];
+    org[2 as i32 as usize] =
+        (*check).s.pos.trBase[2 as i32 as usize] - (*pusher).r.currentOrigin[2 as i32 as usize];
+    org2[0 as i32 as usize] = org[0 as i32 as usize] * forward[0 as i32 as usize]
         + org[1 as i32 as usize] * forward[1 as i32 as usize]
         + org[2 as i32 as usize] * forward[2 as i32 as usize];
-    org2[1 as i32 as usize] = -(org[0 as i32 as usize]
-        * right[0 as i32 as usize]
+    org2[1 as i32 as usize] = -(org[0 as i32 as usize] * right[0 as i32 as usize]
         + org[1 as i32 as usize] * right[1 as i32 as usize]
         + org[2 as i32 as usize] * right[2 as i32 as usize]);
-    org2[2 as i32 as usize] = org[0 as i32 as usize]
-        * up[0 as i32 as usize]
+    org2[2 as i32 as usize] = org[0 as i32 as usize] * up[0 as i32 as usize]
         + org[1 as i32 as usize] * up[1 as i32 as usize]
         + org[2 as i32 as usize] * up[2 as i32 as usize];
-    move2[0 as i32 as usize] =
-        org2[0 as i32 as usize] - org[0 as i32 as usize];
-    move2[1 as i32 as usize] =
-        org2[1 as i32 as usize] - org[1 as i32 as usize];
-    move2[2 as i32 as usize] =
-        org2[2 as i32 as usize] - org[2 as i32 as usize];
+    move2[0 as i32 as usize] = org2[0 as i32 as usize] - org[0 as i32 as usize];
+    move2[1 as i32 as usize] = org2[1 as i32 as usize] - org[1 as i32 as usize];
+    move2[2 as i32 as usize] = org2[2 as i32 as usize] - org[2 as i32 as usize];
     (*check).s.pos.trBase[0 as i32 as usize] =
         (*check).s.pos.trBase[0 as i32 as usize] + move2[0 as i32 as usize];
     (*check).s.pos.trBase[1 as i32 as usize] =
@@ -982,12 +929,9 @@ pub unsafe extern "C" fn G_TryPushingProxMine(
         (*check).s.pos.trBase[2 as i32 as usize] + move2[2 as i32 as usize];
     ret = G_CheckProxMinePosition(check) as i32;
     if ret != 0 {
-        (*check).r.currentOrigin[0 as i32 as usize] =
-            (*check).s.pos.trBase[0 as i32 as usize];
-        (*check).r.currentOrigin[1 as i32 as usize] =
-            (*check).s.pos.trBase[1 as i32 as usize];
-        (*check).r.currentOrigin[2 as i32 as usize] =
-            (*check).s.pos.trBase[2 as i32 as usize];
+        (*check).r.currentOrigin[0 as i32 as usize] = (*check).s.pos.trBase[0 as i32 as usize];
+        (*check).r.currentOrigin[1 as i32 as usize] = (*check).s.pos.trBase[1 as i32 as usize];
+        (*check).r.currentOrigin[2 as i32 as usize] = (*check).s.pos.trBase[2 as i32 as usize];
         crate::src::game::g_syscalls::trap_LinkEntity(check as *mut crate::g_local_h::gentity_s);
     }
     return ret as crate::src::qcommon::q_shared::qboolean;
@@ -1076,24 +1020,18 @@ pub unsafe extern "C" fn G_MoverPush(
         (1 as i32) << 10 as i32,
     );
     // move the pusher to its final position
-    (*pusher).r.currentOrigin[0 as i32 as usize] = (*pusher).r.currentOrigin
-        [0 as i32 as usize]
-        + *move_0.offset(0 as i32 as isize);
-    (*pusher).r.currentOrigin[1 as i32 as usize] = (*pusher).r.currentOrigin
-        [1 as i32 as usize]
-        + *move_0.offset(1 as i32 as isize);
-    (*pusher).r.currentOrigin[2 as i32 as usize] = (*pusher).r.currentOrigin
-        [2 as i32 as usize]
-        + *move_0.offset(2 as i32 as isize);
-    (*pusher).r.currentAngles[0 as i32 as usize] = (*pusher).r.currentAngles
-        [0 as i32 as usize]
-        + *amove.offset(0 as i32 as isize);
-    (*pusher).r.currentAngles[1 as i32 as usize] = (*pusher).r.currentAngles
-        [1 as i32 as usize]
-        + *amove.offset(1 as i32 as isize);
-    (*pusher).r.currentAngles[2 as i32 as usize] = (*pusher).r.currentAngles
-        [2 as i32 as usize]
-        + *amove.offset(2 as i32 as isize);
+    (*pusher).r.currentOrigin[0 as i32 as usize] =
+        (*pusher).r.currentOrigin[0 as i32 as usize] + *move_0.offset(0 as i32 as isize);
+    (*pusher).r.currentOrigin[1 as i32 as usize] =
+        (*pusher).r.currentOrigin[1 as i32 as usize] + *move_0.offset(1 as i32 as isize);
+    (*pusher).r.currentOrigin[2 as i32 as usize] =
+        (*pusher).r.currentOrigin[2 as i32 as usize] + *move_0.offset(2 as i32 as isize);
+    (*pusher).r.currentAngles[0 as i32 as usize] =
+        (*pusher).r.currentAngles[0 as i32 as usize] + *amove.offset(0 as i32 as isize);
+    (*pusher).r.currentAngles[1 as i32 as usize] =
+        (*pusher).r.currentAngles[1 as i32 as usize] + *amove.offset(1 as i32 as isize);
+    (*pusher).r.currentAngles[2 as i32 as usize] =
+        (*pusher).r.currentAngles[2 as i32 as usize] + *amove.offset(2 as i32 as isize);
     crate::src::game::g_syscalls::trap_LinkEntity(pusher as *mut crate::g_local_h::gentity_s);
     let mut current_block_46: u64;
     // see if any solid entities are inside the final position
@@ -1112,16 +1050,11 @@ pub unsafe extern "C" fn G_MoverPush(
             if (*check).s.groundEntityNum != (*pusher).s.number {
                 // see if the ent needs to be tested
                 if (*check).r.absmin[0 as i32 as usize] >= maxs[0 as i32 as usize]
-                    || (*check).r.absmin[1 as i32 as usize]
-                        >= maxs[1 as i32 as usize]
-                    || (*check).r.absmin[2 as i32 as usize]
-                        >= maxs[2 as i32 as usize]
-                    || (*check).r.absmax[0 as i32 as usize]
-                        <= mins[0 as i32 as usize]
-                    || (*check).r.absmax[1 as i32 as usize]
-                        <= mins[1 as i32 as usize]
-                    || (*check).r.absmax[2 as i32 as usize]
-                        <= mins[2 as i32 as usize]
+                    || (*check).r.absmin[1 as i32 as usize] >= maxs[1 as i32 as usize]
+                    || (*check).r.absmin[2 as i32 as usize] >= maxs[2 as i32 as usize]
+                    || (*check).r.absmax[0 as i32 as usize] <= mins[0 as i32 as usize]
+                    || (*check).r.absmax[1 as i32 as usize] <= mins[1 as i32 as usize]
+                    || (*check).r.absmax[2 as i32 as usize] <= mins[2 as i32 as usize]
                 {
                     current_block_46 = 9520865839495247062;
                 } else if G_TestEntityPosition(check).is_null() {
@@ -1145,8 +1078,7 @@ pub unsafe extern "C" fn G_MoverPush(
                         if (*pusher).s.pos.trType as u32
                             == crate::src::qcommon::q_shared::TR_SINE as i32 as u32
                             || (*pusher).s.apos.trType as u32
-                                == crate::src::qcommon::q_shared::TR_SINE as i32
-                                    as u32
+                                == crate::src::qcommon::q_shared::TR_SINE as i32 as u32
                         {
                             crate::src::game::g_combat::G_Damage(
                                 check as *mut crate::g_local_h::gentity_s,
@@ -1179,8 +1111,8 @@ pub unsafe extern "C" fn G_MoverPush(
                                 (*(*p).ent).s.apos.trBase[2 as i32 as usize] =
                                     (*p).angles[2 as i32 as usize];
                                 if !(*(*p).ent).client.is_null() {
-                                    (*(*(*p).ent).client).ps.delta_angles
-                                        [1 as i32 as usize] = (*p).deltayaw as i32;
+                                    (*(*(*p).ent).client).ps.delta_angles[1 as i32 as usize] =
+                                        (*p).deltayaw as i32;
                                     (*(*(*p).ent).client).ps.origin[0 as i32 as usize] =
                                         (*p).origin[0 as i32 as usize];
                                     (*(*(*p).ent).client).ps.origin[1 as i32 as usize] =
@@ -1312,10 +1244,8 @@ pub unsafe extern "C" fn G_RunMover(mut ent: *mut crate::g_local_h::gentity_t) {
         return;
     }
     // if stationary at one of the positions, don't move anything
-    if (*ent).s.pos.trType as u32
-        != crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32
-        || (*ent).s.apos.trType as u32
-            != crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32
+    if (*ent).s.pos.trType as u32 != crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32
+        || (*ent).s.apos.trType as u32 != crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32
     {
         G_MoverTeam(ent);
     }
@@ -1457,9 +1387,7 @@ Reached_BinaryMover
 pub unsafe extern "C" fn Reached_BinaryMover(mut ent: *mut crate::g_local_h::gentity_t) {
     // stop the looping sound
     (*ent).s.loopSound = (*ent).soundLoop;
-    if (*ent).moverState as u32
-        == crate::g_local_h::MOVER_1TO2 as i32 as u32
-    {
+    if (*ent).moverState as u32 == crate::g_local_h::MOVER_1TO2 as i32 as u32 {
         // reached pos2
         SetMoverState(
             ent,
@@ -1477,8 +1405,7 @@ pub unsafe extern "C" fn Reached_BinaryMover(mut ent: *mut crate::g_local_h::gen
         // return to pos1 after a delay
         (*ent).think =
             Some(ReturnToPos1 as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
-        (*ent).nextthink =
-            (crate::src::game::g_main::level.time as f32 + (*ent).wait) as i32;
+        (*ent).nextthink = (crate::src::game::g_main::level.time as f32 + (*ent).wait) as i32;
         // fire targets
         if (*ent).activator.is_null() {
             (*ent).activator = ent
@@ -1487,9 +1414,7 @@ pub unsafe extern "C" fn Reached_BinaryMover(mut ent: *mut crate::g_local_h::gen
             ent as *mut crate::g_local_h::gentity_s,
             (*ent).activator as *mut crate::g_local_h::gentity_s,
         );
-    } else if (*ent).moverState as u32
-        == crate::g_local_h::MOVER_2TO1 as i32 as u32
-    {
+    } else if (*ent).moverState as u32 == crate::g_local_h::MOVER_2TO1 as i32 as u32 {
         // reached pos1
         SetMoverState(
             ent,
@@ -1537,9 +1462,7 @@ pub unsafe extern "C" fn Use_BinaryMover(
         return;
     }
     (*ent).activator = activator;
-    if (*ent).moverState as u32
-        == crate::g_local_h::MOVER_POS1 as i32 as u32
-    {
+    if (*ent).moverState as u32 == crate::g_local_h::MOVER_POS1 as i32 as u32 {
         // start moving 50 msec later, becase if this was player
         // triggered, level.time hasn't been advanced yet
         MatchTeam(
@@ -1567,17 +1490,12 @@ pub unsafe extern "C" fn Use_BinaryMover(
         return;
     }
     // if all the way up, just delay before coming down
-    if (*ent).moverState as u32
-        == crate::g_local_h::MOVER_POS2 as i32 as u32
-    {
-        (*ent).nextthink =
-            (crate::src::game::g_main::level.time as f32 + (*ent).wait) as i32;
+    if (*ent).moverState as u32 == crate::g_local_h::MOVER_POS2 as i32 as u32 {
+        (*ent).nextthink = (crate::src::game::g_main::level.time as f32 + (*ent).wait) as i32;
         return;
     }
     // only partway down before reversing
-    if (*ent).moverState as u32
-        == crate::g_local_h::MOVER_2TO1 as i32 as u32
-    {
+    if (*ent).moverState as u32 == crate::g_local_h::MOVER_2TO1 as i32 as u32 {
         total = (*ent).s.pos.trDuration;
         partial = crate::src::game::g_main::level.time - (*ent).s.pos.trTime;
         if partial > total {
@@ -1598,9 +1516,7 @@ pub unsafe extern "C" fn Use_BinaryMover(
         return;
     }
     // only partway up before reversing
-    if (*ent).moverState as u32
-        == crate::g_local_h::MOVER_1TO2 as i32 as u32
-    {
+    if (*ent).moverState as u32 == crate::g_local_h::MOVER_1TO2 as i32 as u32 {
         total = (*ent).s.pos.trDuration;
         partial = crate::src::game::g_main::level.time - (*ent).s.pos.trTime;
         if partial > total {
@@ -1688,8 +1604,7 @@ pub unsafe extern "C" fn InitMover(mut ent: *mut crate::g_local_h::gentity_t) {
         if i > 255 as i32 {
             i = 255 as i32
         }
-        (*ent).s.constantLight =
-            r | g << 8 as i32 | b << 16 as i32 | i << 24 as i32
+        (*ent).s.constantLight = r | g << 8 as i32 | b << 16 as i32 | i << 24 as i32
     }
     (*ent).use_0 = Some(
         Use_BinaryMover
@@ -1714,24 +1629,17 @@ pub unsafe extern "C" fn InitMover(mut ent: *mut crate::g_local_h::gentity_t) {
     (*ent).s.pos.trBase[1 as i32 as usize] = (*ent).pos1[1 as i32 as usize];
     (*ent).s.pos.trBase[2 as i32 as usize] = (*ent).pos1[2 as i32 as usize];
     // calculate time to reach second position from speed
-    move_0[0 as i32 as usize] =
-        (*ent).pos2[0 as i32 as usize] - (*ent).pos1[0 as i32 as usize];
-    move_0[1 as i32 as usize] =
-        (*ent).pos2[1 as i32 as usize] - (*ent).pos1[1 as i32 as usize];
-    move_0[2 as i32 as usize] =
-        (*ent).pos2[2 as i32 as usize] - (*ent).pos1[2 as i32 as usize];
+    move_0[0 as i32 as usize] = (*ent).pos2[0 as i32 as usize] - (*ent).pos1[0 as i32 as usize];
+    move_0[1 as i32 as usize] = (*ent).pos2[1 as i32 as usize] - (*ent).pos1[1 as i32 as usize];
+    move_0[2 as i32 as usize] = (*ent).pos2[2 as i32 as usize] - (*ent).pos1[2 as i32 as usize];
     distance = VectorLength(move_0.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
     if (*ent).speed == 0. {
         (*ent).speed = 100 as i32 as f32
     }
-    (*ent).s.pos.trDelta[0 as i32 as usize] =
-        move_0[0 as i32 as usize] * (*ent).speed;
-    (*ent).s.pos.trDelta[1 as i32 as usize] =
-        move_0[1 as i32 as usize] * (*ent).speed;
-    (*ent).s.pos.trDelta[2 as i32 as usize] =
-        move_0[2 as i32 as usize] * (*ent).speed;
-    (*ent).s.pos.trDuration =
-        (distance * 1000 as i32 as f32 / (*ent).speed) as i32;
+    (*ent).s.pos.trDelta[0 as i32 as usize] = move_0[0 as i32 as usize] * (*ent).speed;
+    (*ent).s.pos.trDelta[1 as i32 as usize] = move_0[1 as i32 as usize] * (*ent).speed;
+    (*ent).s.pos.trDelta[2 as i32 as usize] = move_0[2 as i32 as usize] * (*ent).speed;
+    (*ent).s.pos.trDuration = (distance * 1000 as i32 as f32 / (*ent).speed) as i32;
     if (*ent).s.pos.trDuration <= 0 as i32 {
         (*ent).s.pos.trDuration = 1 as i32
     };
@@ -1761,8 +1669,7 @@ pub unsafe extern "C" fn Blocked_Door(
     if (*other).client.is_null() {
         // except CTF flags!!!!
         if (*other).s.eType == crate::bg_public_h::ET_ITEM as i32
-            && (*(*other).item).giType as u32
-                == crate::bg_public_h::IT_TEAM as i32 as u32
+            && (*(*other).item).giType as u32 == crate::bg_public_h::IT_TEAM as i32 as u32
         {
             crate::src::game::g_team::Team_DroppedFlagThink(
                 other as *mut crate::g_local_h::gentity_s,
@@ -1831,11 +1738,7 @@ unsafe extern "C" fn Touch_DoorTriggerSpectator(
     crate::src::game::g_misc::TeleportPlayer(
         other as *mut crate::g_local_h::gentity_s,
         origin.as_mut_ptr(),
-        crate::src::game::g_utils::tv(
-            10000000.0f64 as f32,
-            0 as i32 as f32,
-            0 as i32 as f32,
-        ),
+        crate::src::game::g_utils::tv(10000000.0f64 as f32, 0 as i32 as f32, 0 as i32 as f32),
     );
 }
 /*
@@ -1855,16 +1758,12 @@ pub unsafe extern "C" fn Touch_DoorTrigger(
             == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
     {
         // if the door is not open and not opening
-        if (*(*ent).parent).moverState as u32
-            != crate::g_local_h::MOVER_1TO2 as i32 as u32
-            && (*(*ent).parent).moverState as u32
-                != crate::g_local_h::MOVER_POS2 as i32 as u32
+        if (*(*ent).parent).moverState as u32 != crate::g_local_h::MOVER_1TO2 as i32 as u32
+            && (*(*ent).parent).moverState as u32 != crate::g_local_h::MOVER_POS2 as i32 as u32
         {
             Touch_DoorTriggerSpectator(ent, other, trace);
         }
-    } else if (*(*ent).parent).moverState as u32
-        != crate::g_local_h::MOVER_1TO2 as i32 as u32
-    {
+    } else if (*(*ent).parent).moverState as u32 != crate::g_local_h::MOVER_1TO2 as i32 as u32 {
         Use_BinaryMover((*ent).parent, ent, other);
     };
 }
@@ -2037,31 +1936,25 @@ pub unsafe extern "C" fn SP_func_door(mut ent: *mut crate::g_local_h::gentity_t)
         (*ent).s.angles.as_mut_ptr(),
         (*ent).movedir.as_mut_ptr(),
     );
-    abs_movedir[0 as i32 as usize] =
-        crate::stdlib::fabs((*ent).movedir[0 as i32 as usize] as f64)
-            as crate::src::qcommon::q_shared::vec_t;
-    abs_movedir[1 as i32 as usize] =
-        crate::stdlib::fabs((*ent).movedir[1 as i32 as usize] as f64)
-            as crate::src::qcommon::q_shared::vec_t;
-    abs_movedir[2 as i32 as usize] =
-        crate::stdlib::fabs((*ent).movedir[2 as i32 as usize] as f64)
-            as crate::src::qcommon::q_shared::vec_t;
-    size[0 as i32 as usize] =
-        (*ent).r.maxs[0 as i32 as usize] - (*ent).r.mins[0 as i32 as usize];
-    size[1 as i32 as usize] =
-        (*ent).r.maxs[1 as i32 as usize] - (*ent).r.mins[1 as i32 as usize];
-    size[2 as i32 as usize] =
-        (*ent).r.maxs[2 as i32 as usize] - (*ent).r.mins[2 as i32 as usize];
+    abs_movedir[0 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[0 as i32 as usize] as f64)
+        as crate::src::qcommon::q_shared::vec_t;
+    abs_movedir[1 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[1 as i32 as usize] as f64)
+        as crate::src::qcommon::q_shared::vec_t;
+    abs_movedir[2 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[2 as i32 as usize] as f64)
+        as crate::src::qcommon::q_shared::vec_t;
+    size[0 as i32 as usize] = (*ent).r.maxs[0 as i32 as usize] - (*ent).r.mins[0 as i32 as usize];
+    size[1 as i32 as usize] = (*ent).r.maxs[1 as i32 as usize] - (*ent).r.mins[1 as i32 as usize];
+    size[2 as i32 as usize] = (*ent).r.maxs[2 as i32 as usize] - (*ent).r.mins[2 as i32 as usize];
     distance = abs_movedir[0 as i32 as usize] * size[0 as i32 as usize]
         + abs_movedir[1 as i32 as usize] * size[1 as i32 as usize]
         + abs_movedir[2 as i32 as usize] * size[2 as i32 as usize]
         - lip;
-    (*ent).pos2[0 as i32 as usize] = (*ent).pos1[0 as i32 as usize]
-        + (*ent).movedir[0 as i32 as usize] * distance;
-    (*ent).pos2[1 as i32 as usize] = (*ent).pos1[1 as i32 as usize]
-        + (*ent).movedir[1 as i32 as usize] * distance;
-    (*ent).pos2[2 as i32 as usize] = (*ent).pos1[2 as i32 as usize]
-        + (*ent).movedir[2 as i32 as usize] * distance;
+    (*ent).pos2[0 as i32 as usize] =
+        (*ent).pos1[0 as i32 as usize] + (*ent).movedir[0 as i32 as usize] * distance;
+    (*ent).pos2[1 as i32 as usize] =
+        (*ent).pos1[1 as i32 as usize] + (*ent).movedir[1 as i32 as usize] * distance;
+    (*ent).pos2[2 as i32 as usize] =
+        (*ent).pos1[2 as i32 as usize] + (*ent).movedir[2 as i32 as usize] * distance;
     // if "start_open", reverse position 1 and 2
     if (*ent).spawnflags & 1 as i32 != 0 {
         let mut temp: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
@@ -2122,15 +2015,12 @@ pub unsafe extern "C" fn Touch_Plat(
     mut _trace: *mut crate::src::qcommon::q_shared::trace_t,
 ) {
     if (*other).client.is_null()
-        || (*(*other).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-            <= 0 as i32
+        || (*(*other).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= 0 as i32
     {
         return;
     }
     // delay return-to-pos1 by one second
-    if (*ent).moverState as u32
-        == crate::g_local_h::MOVER_POS2 as i32 as u32
-    {
+    if (*ent).moverState as u32 == crate::g_local_h::MOVER_POS2 as i32 as u32 {
         (*ent).nextthink = crate::src::game::g_main::level.time + 1000 as i32
     };
 }
@@ -2151,9 +2041,7 @@ pub unsafe extern "C" fn Touch_PlatCenterTrigger(
     if (*other).client.is_null() {
         return;
     }
-    if (*(*ent).parent).moverState as u32
-        == crate::g_local_h::MOVER_POS1 as i32 as u32
-    {
+    if (*(*ent).parent).moverState as u32 == crate::g_local_h::MOVER_POS1 as i32 as u32 {
         Use_BinaryMover((*ent).parent, ent, other);
     };
 }
@@ -2187,40 +2075,28 @@ pub unsafe extern "C" fn SpawnPlatTrigger(mut ent: *mut crate::g_local_h::gentit
     );
     (*trigger).r.contents = 0x40000000 as i32;
     (*trigger).parent = ent;
-    tmin[0 as i32 as usize] = (*ent).pos1[0 as i32 as usize]
-        + (*ent).r.mins[0 as i32 as usize]
-        + 33 as i32 as f32;
-    tmin[1 as i32 as usize] = (*ent).pos1[1 as i32 as usize]
-        + (*ent).r.mins[1 as i32 as usize]
-        + 33 as i32 as f32;
-    tmin[2 as i32 as usize] =
-        (*ent).pos1[2 as i32 as usize] + (*ent).r.mins[2 as i32 as usize];
-    tmax[0 as i32 as usize] = (*ent).pos1[0 as i32 as usize]
-        + (*ent).r.maxs[0 as i32 as usize]
-        - 33 as i32 as f32;
-    tmax[1 as i32 as usize] = (*ent).pos1[1 as i32 as usize]
-        + (*ent).r.maxs[1 as i32 as usize]
-        - 33 as i32 as f32;
-    tmax[2 as i32 as usize] = (*ent).pos1[2 as i32 as usize]
-        + (*ent).r.maxs[2 as i32 as usize]
-        + 8 as i32 as f32;
+    tmin[0 as i32 as usize] =
+        (*ent).pos1[0 as i32 as usize] + (*ent).r.mins[0 as i32 as usize] + 33 as i32 as f32;
+    tmin[1 as i32 as usize] =
+        (*ent).pos1[1 as i32 as usize] + (*ent).r.mins[1 as i32 as usize] + 33 as i32 as f32;
+    tmin[2 as i32 as usize] = (*ent).pos1[2 as i32 as usize] + (*ent).r.mins[2 as i32 as usize];
+    tmax[0 as i32 as usize] =
+        (*ent).pos1[0 as i32 as usize] + (*ent).r.maxs[0 as i32 as usize] - 33 as i32 as f32;
+    tmax[1 as i32 as usize] =
+        (*ent).pos1[1 as i32 as usize] + (*ent).r.maxs[1 as i32 as usize] - 33 as i32 as f32;
+    tmax[2 as i32 as usize] =
+        (*ent).pos1[2 as i32 as usize] + (*ent).r.maxs[2 as i32 as usize] + 8 as i32 as f32;
     if tmax[0 as i32 as usize] <= tmin[0 as i32 as usize] {
         tmin[0 as i32 as usize] = ((*ent).pos1[0 as i32 as usize] as f64
-            + ((*ent).r.mins[0 as i32 as usize] + (*ent).r.maxs[0 as i32 as usize])
-                as f64
-                * 0.5f64)
+            + ((*ent).r.mins[0 as i32 as usize] + (*ent).r.maxs[0 as i32 as usize]) as f64 * 0.5f64)
             as crate::src::qcommon::q_shared::vec_t;
-        tmax[0 as i32 as usize] =
-            tmin[0 as i32 as usize] + 1 as i32 as f32
+        tmax[0 as i32 as usize] = tmin[0 as i32 as usize] + 1 as i32 as f32
     }
     if tmax[1 as i32 as usize] <= tmin[1 as i32 as usize] {
         tmin[1 as i32 as usize] = ((*ent).pos1[1 as i32 as usize] as f64
-            + ((*ent).r.mins[1 as i32 as usize] + (*ent).r.maxs[1 as i32 as usize])
-                as f64
-                * 0.5f64)
+            + ((*ent).r.mins[1 as i32 as usize] + (*ent).r.maxs[1 as i32 as usize]) as f64 * 0.5f64)
             as crate::src::qcommon::q_shared::vec_t;
-        tmax[1 as i32 as usize] =
-            tmin[1 as i32 as usize] + 1 as i32 as f32
+        tmax[1 as i32 as usize] = tmin[1 as i32 as usize] + 1 as i32 as f32
     }
     (*trigger).r.mins[0 as i32 as usize] = tmin[0 as i32 as usize];
     (*trigger).r.mins[1 as i32 as usize] = tmin[1 as i32 as usize];
@@ -2256,8 +2132,7 @@ pub unsafe extern "C" fn SP_func_plat(mut ent: *mut crate::g_local_h::gentity_t)
             as *mut libc::c_char,
     );
     (*ent).soundPos1 = (*ent).soundPos2;
-    (*ent).s.angles[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*ent).s.angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     (*ent).s.angles[1 as i32 as usize] = (*ent).s.angles[2 as i32 as usize];
     (*ent).s.angles[0 as i32 as usize] = (*ent).s.angles[1 as i32 as usize];
     crate::src::game::g_spawn::G_SpawnFloat(
@@ -2293,9 +2168,7 @@ pub unsafe extern "C" fn SP_func_plat(mut ent: *mut crate::g_local_h::gentity_t)
     ) as u64
         == 0
     {
-        height = (*ent).r.maxs[2 as i32 as usize]
-            - (*ent).r.mins[2 as i32 as usize]
-            - lip
+        height = (*ent).r.maxs[2 as i32 as usize] - (*ent).r.mins[2 as i32 as usize] - lip
     }
     // pos1 is the rest (bottom) position, pos2 is the top
     (*ent).pos2[0 as i32 as usize] = (*ent).s.origin[0 as i32 as usize];
@@ -2352,9 +2225,7 @@ pub unsafe extern "C" fn Touch_Button(
     if (*other).client.is_null() {
         return;
     }
-    if (*ent).moverState as u32
-        == crate::g_local_h::MOVER_POS1 as i32 as u32
-    {
+    if (*ent).moverState as u32 == crate::g_local_h::MOVER_POS1 as i32 as u32 {
         Use_BinaryMover(ent, other, other);
     };
 }
@@ -2407,31 +2278,25 @@ pub unsafe extern "C" fn SP_func_button(mut ent: *mut crate::g_local_h::gentity_
         (*ent).s.angles.as_mut_ptr(),
         (*ent).movedir.as_mut_ptr(),
     );
-    abs_movedir[0 as i32 as usize] =
-        crate::stdlib::fabs((*ent).movedir[0 as i32 as usize] as f64)
-            as crate::src::qcommon::q_shared::vec_t;
-    abs_movedir[1 as i32 as usize] =
-        crate::stdlib::fabs((*ent).movedir[1 as i32 as usize] as f64)
-            as crate::src::qcommon::q_shared::vec_t;
-    abs_movedir[2 as i32 as usize] =
-        crate::stdlib::fabs((*ent).movedir[2 as i32 as usize] as f64)
-            as crate::src::qcommon::q_shared::vec_t;
-    size[0 as i32 as usize] =
-        (*ent).r.maxs[0 as i32 as usize] - (*ent).r.mins[0 as i32 as usize];
-    size[1 as i32 as usize] =
-        (*ent).r.maxs[1 as i32 as usize] - (*ent).r.mins[1 as i32 as usize];
-    size[2 as i32 as usize] =
-        (*ent).r.maxs[2 as i32 as usize] - (*ent).r.mins[2 as i32 as usize];
+    abs_movedir[0 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[0 as i32 as usize] as f64)
+        as crate::src::qcommon::q_shared::vec_t;
+    abs_movedir[1 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[1 as i32 as usize] as f64)
+        as crate::src::qcommon::q_shared::vec_t;
+    abs_movedir[2 as i32 as usize] = crate::stdlib::fabs((*ent).movedir[2 as i32 as usize] as f64)
+        as crate::src::qcommon::q_shared::vec_t;
+    size[0 as i32 as usize] = (*ent).r.maxs[0 as i32 as usize] - (*ent).r.mins[0 as i32 as usize];
+    size[1 as i32 as usize] = (*ent).r.maxs[1 as i32 as usize] - (*ent).r.mins[1 as i32 as usize];
+    size[2 as i32 as usize] = (*ent).r.maxs[2 as i32 as usize] - (*ent).r.mins[2 as i32 as usize];
     distance = abs_movedir[0 as i32 as usize] * size[0 as i32 as usize]
         + abs_movedir[1 as i32 as usize] * size[1 as i32 as usize]
         + abs_movedir[2 as i32 as usize] * size[2 as i32 as usize]
         - lip;
-    (*ent).pos2[0 as i32 as usize] = (*ent).pos1[0 as i32 as usize]
-        + (*ent).movedir[0 as i32 as usize] * distance;
-    (*ent).pos2[1 as i32 as usize] = (*ent).pos1[1 as i32 as usize]
-        + (*ent).movedir[1 as i32 as usize] * distance;
-    (*ent).pos2[2 as i32 as usize] = (*ent).pos1[2 as i32 as usize]
-        + (*ent).movedir[2 as i32 as usize] * distance;
+    (*ent).pos2[0 as i32 as usize] =
+        (*ent).pos1[0 as i32 as usize] + (*ent).movedir[0 as i32 as usize] * distance;
+    (*ent).pos2[1 as i32 as usize] =
+        (*ent).pos1[1 as i32 as usize] + (*ent).movedir[1 as i32 as usize] * distance;
+    (*ent).pos2[2 as i32 as usize] =
+        (*ent).pos1[2 as i32 as usize] + (*ent).movedir[2 as i32 as usize] * distance;
     if (*ent).health != 0 {
         // shootable button
         (*ent).takedamage = crate::src::qcommon::q_shared::qtrue
@@ -2489,12 +2354,9 @@ pub unsafe extern "C" fn Reached_Train(mut ent: *mut crate::g_local_h::gentity_t
     (*ent).pos1[0 as i32 as usize] = (*next).s.origin[0 as i32 as usize];
     (*ent).pos1[1 as i32 as usize] = (*next).s.origin[1 as i32 as usize];
     (*ent).pos1[2 as i32 as usize] = (*next).s.origin[2 as i32 as usize];
-    (*ent).pos2[0 as i32 as usize] =
-        (*(*next).nextTrain).s.origin[0 as i32 as usize];
-    (*ent).pos2[1 as i32 as usize] =
-        (*(*next).nextTrain).s.origin[1 as i32 as usize];
-    (*ent).pos2[2 as i32 as usize] =
-        (*(*next).nextTrain).s.origin[2 as i32 as usize];
+    (*ent).pos2[0 as i32 as usize] = (*(*next).nextTrain).s.origin[0 as i32 as usize];
+    (*ent).pos2[1 as i32 as usize] = (*(*next).nextTrain).s.origin[1 as i32 as usize];
+    (*ent).pos2[2 as i32 as usize] = (*(*next).nextTrain).s.origin[2 as i32 as usize];
     // if the path_corner has a speed, use that
     if (*next).speed != 0. {
         speed = (*next).speed
@@ -2506,15 +2368,11 @@ pub unsafe extern "C" fn Reached_Train(mut ent: *mut crate::g_local_h::gentity_t
         speed = 1 as i32 as f32
     }
     // calculate duration
-    move_0[0 as i32 as usize] =
-        (*ent).pos2[0 as i32 as usize] - (*ent).pos1[0 as i32 as usize];
-    move_0[1 as i32 as usize] =
-        (*ent).pos2[1 as i32 as usize] - (*ent).pos1[1 as i32 as usize];
-    move_0[2 as i32 as usize] =
-        (*ent).pos2[2 as i32 as usize] - (*ent).pos1[2 as i32 as usize];
+    move_0[0 as i32 as usize] = (*ent).pos2[0 as i32 as usize] - (*ent).pos1[0 as i32 as usize];
+    move_0[1 as i32 as usize] = (*ent).pos2[1 as i32 as usize] - (*ent).pos1[1 as i32 as usize];
+    move_0[2 as i32 as usize] = (*ent).pos2[2 as i32 as usize] - (*ent).pos1[2 as i32 as usize];
     length = VectorLength(move_0.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
-    (*ent).s.pos.trDuration =
-        (length * 1000 as i32 as f32 / speed) as i32;
+    (*ent).s.pos.trDuration = (length * 1000 as i32 as f32 / speed) as i32;
     // Tequila comment: Be sure to send to clients after any fast move case
     (*ent).r.svFlags &= !(0x1 as i32);
     // Tequila comment: Fast move case
@@ -2542,8 +2400,7 @@ pub unsafe extern "C" fn Reached_Train(mut ent: *mut crate::g_local_h::gentity_t
     // if there is a "wait" value on the target, don't start moving yet
     if (*next).wait != 0. {
         (*ent).nextthink = (crate::src::game::g_main::level.time as f32
-            + (*next).wait * 1000 as i32 as f32)
-            as i32;
+            + (*next).wait * 1000 as i32 as f32) as i32;
         (*ent).think = Some(
             Think_BeginMoving as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> (),
         );
@@ -2663,8 +2520,7 @@ The train spawns at the first target it is pointing at.
 #[no_mangle]
 
 pub unsafe extern "C" fn SP_func_train(mut self_0: *mut crate::g_local_h::gentity_t) {
-    (*self_0).s.angles[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*self_0).s.angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     (*self_0).s.angles[1 as i32 as usize] = (*self_0).s.angles[2 as i32 as usize];
     (*self_0).s.angles[0 as i32 as usize] = (*self_0).s.angles[1 as i32 as usize];
     if (*self_0).spawnflags & 4 as i32 != 0 {
@@ -2771,18 +2627,12 @@ pub unsafe extern "C" fn SP_func_rotating(mut ent: *mut crate::g_local_h::gentit
     (*ent).s.pos.trBase[0 as i32 as usize] = (*ent).s.origin[0 as i32 as usize];
     (*ent).s.pos.trBase[1 as i32 as usize] = (*ent).s.origin[1 as i32 as usize];
     (*ent).s.pos.trBase[2 as i32 as usize] = (*ent).s.origin[2 as i32 as usize];
-    (*ent).r.currentOrigin[0 as i32 as usize] =
-        (*ent).s.pos.trBase[0 as i32 as usize];
-    (*ent).r.currentOrigin[1 as i32 as usize] =
-        (*ent).s.pos.trBase[1 as i32 as usize];
-    (*ent).r.currentOrigin[2 as i32 as usize] =
-        (*ent).s.pos.trBase[2 as i32 as usize];
-    (*ent).r.currentAngles[0 as i32 as usize] =
-        (*ent).s.apos.trBase[0 as i32 as usize];
-    (*ent).r.currentAngles[1 as i32 as usize] =
-        (*ent).s.apos.trBase[1 as i32 as usize];
-    (*ent).r.currentAngles[2 as i32 as usize] =
-        (*ent).s.apos.trBase[2 as i32 as usize];
+    (*ent).r.currentOrigin[0 as i32 as usize] = (*ent).s.pos.trBase[0 as i32 as usize];
+    (*ent).r.currentOrigin[1 as i32 as usize] = (*ent).s.pos.trBase[1 as i32 as usize];
+    (*ent).r.currentOrigin[2 as i32 as usize] = (*ent).s.pos.trBase[2 as i32 as usize];
+    (*ent).r.currentAngles[0 as i32 as usize] = (*ent).s.apos.trBase[0 as i32 as usize];
+    (*ent).r.currentAngles[1 as i32 as usize] = (*ent).s.apos.trBase[1 as i32 as usize];
+    (*ent).r.currentAngles[2 as i32 as usize] = (*ent).s.apos.trBase[2 as i32 as usize];
     crate::src::game::g_syscalls::trap_LinkEntity(ent as *mut crate::g_local_h::gentity_s);
 }
 /*
@@ -2895,16 +2745,13 @@ pub unsafe extern "C" fn SP_func_pendulum(mut ent: *mut crate::g_local_h::gentit
         (*ent).model,
     );
     // find pendulum length
-    length = crate::stdlib::fabs((*ent).r.mins[2 as i32 as usize] as f64)
-        as f32;
+    length = crate::stdlib::fabs((*ent).r.mins[2 as i32 as usize] as f64) as f32;
     if length < 8 as i32 as f32 {
         length = 8 as i32 as f32
     }
-    freq = (1 as i32 as f64
-        / (3.14159265358979323846f64 * 2 as i32 as f64)
+    freq = (1 as i32 as f64 / (3.14159265358979323846f64 * 2 as i32 as f64)
         * crate::stdlib::sqrt(
-            (crate::src::game::g_main::g_gravity.value
-                / (3 as i32 as f32 * length)) as f64,
+            (crate::src::game::g_main::g_gravity.value / (3 as i32 as f32 * length)) as f64,
         )) as f32;
     (*ent).s.pos.trDuration = (1000 as i32 as f32 / freq) as i32;
     InitMover(ent);

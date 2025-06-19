@@ -36,12 +36,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /* fprintf(1, '%d, ', round(1024 * ([1 ./ (1 + exp(-(1:5))), 1] - 1 ./ (1 + exp(-(0:5)))))); */
 
 static mut sigm_LUT_slope_Q10: [crate::opus_types_h::opus_int32; 6] = [
-    237 as i32,
-    153 as i32,
-    73 as i32,
-    30 as i32,
-    12 as i32,
-    7 as i32,
+    237 as i32, 153 as i32, 73 as i32, 30 as i32, 12 as i32, 7 as i32,
 ];
 /* fprintf(1, '%d, ', round(32767 * 1 ./ (1 + exp(-(0:5))))); */
 

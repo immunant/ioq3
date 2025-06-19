@@ -336,8 +336,7 @@ unsafe extern "C" fn forward_DCT(
             i += 1
         }
         bi = bi.wrapping_add(1);
-        start_col = (start_col as u32)
-            .wrapping_add((*compptr).DCT_h_scaled_size as u32)
+        start_col = (start_col as u32).wrapping_add((*compptr).DCT_h_scaled_size as u32)
             as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION
     }
 }
@@ -384,14 +383,12 @@ unsafe extern "C" fn forward_DCT_float(
              * The maximum coefficient size is +-16K (for 12-bit data), so this
              * code should work for either 16-bit or 32-bit ints.
              */
-            *output_ptr.offset(i as isize) = ((temp + 16384.5f64 as f32) as i32
-                - 16384 as i32)
-                as crate::jmorecfg_h::JCOEF;
+            *output_ptr.offset(i as isize) =
+                ((temp + 16384.5f64 as f32) as i32 - 16384 as i32) as crate::jmorecfg_h::JCOEF;
             i += 1
         }
         bi = bi.wrapping_add(1);
-        start_col = (start_col as u32)
-            .wrapping_add((*compptr).DCT_h_scaled_size as u32)
+        start_col = (start_col as u32).wrapping_add((*compptr).DCT_h_scaled_size as u32)
             as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION
     }
 }
@@ -809,12 +806,9 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: crate::jpeglib_h::j_compress_
                 }
             },
             _ => {
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_DCTSIZE as i32;
-                (*(*cinfo).err).msg_parm.i[0 as i32 as usize] =
-                    (*compptr).DCT_h_scaled_size;
-                (*(*cinfo).err).msg_parm.i[1 as i32 as usize] =
-                    (*compptr).DCT_v_scaled_size;
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_DCTSIZE as i32;
+                (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*compptr).DCT_h_scaled_size;
+                (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = (*compptr).DCT_v_scaled_size;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
@@ -831,8 +825,7 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: crate::jpeglib_h::j_compress_
             || qtblno >= 4 as i32
             || (*cinfo).quant_tbl_ptrs[qtblno as usize].is_null()
         {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_NO_QUANT_TABLE as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NO_QUANT_TABLE as i32;
             (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = qtblno;
             Some(
                 (*(*cinfo).err)
@@ -852,26 +845,26 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: crate::jpeglib_h::j_compress_
                  * coefficients multiplied by 8 (to counteract scaling).
                  */
                 if (*fdct).divisors[qtblno as usize].is_null() {
-                    (*fdct).divisors[qtblno as usize] =
-                        Some(
-                            (*(*cinfo).mem)
-                                .alloc_small
-                                .expect("non-null function pointer"),
-                        )
-                        .expect("non-null function pointer")(
-                            cinfo as crate::jpeglib_h::j_common_ptr,
-                            1 as i32,
-                            (64 as i32 as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<crate::jdct_h::DCTELEM>()
-                                    as libc::c_ulong),
-                        ) as *mut crate::jdct_h::DCTELEM
+                    (*fdct).divisors[qtblno as usize] = Some(
+                        (*(*cinfo).mem)
+                            .alloc_small
+                            .expect("non-null function pointer"),
+                    )
+                    .expect("non-null function pointer")(
+                        cinfo as crate::jpeglib_h::j_common_ptr,
+                        1 as i32,
+                        (64 as i32 as libc::c_ulong)
+                            .wrapping_mul(
+                                ::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong
+                            ),
+                    )
+                        as *mut crate::jdct_h::DCTELEM
                 }
                 dtbl = (*fdct).divisors[qtblno as usize];
                 i = 0 as i32;
                 while i < 64 as i32 {
-                    *dtbl.offset(i as isize) = ((*qtbl).quantval[i as usize]
-                        as crate::jdct_h::DCTELEM)
-                        << 3 as i32;
+                    *dtbl.offset(i as isize) =
+                        ((*qtbl).quantval[i as usize] as crate::jdct_h::DCTELEM) << 3 as i32;
                     i += 1
                 }
                 (*fdct).pub_0.forward_DCT[ci as usize] = Some(
@@ -961,19 +954,20 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: crate::jpeglib_h::j_compress_
                     1247 as i32 as crate::jmorecfg_h::INT16,
                 ];
                 if (*fdct).divisors[qtblno as usize].is_null() {
-                    (*fdct).divisors[qtblno as usize] =
-                        Some(
-                            (*(*cinfo).mem)
-                                .alloc_small
-                                .expect("non-null function pointer"),
-                        )
-                        .expect("non-null function pointer")(
-                            cinfo as crate::jpeglib_h::j_common_ptr,
-                            1 as i32,
-                            (64 as i32 as libc::c_ulong)
-                                .wrapping_mul(::std::mem::size_of::<crate::jdct_h::DCTELEM>()
-                                    as libc::c_ulong),
-                        ) as *mut crate::jdct_h::DCTELEM
+                    (*fdct).divisors[qtblno as usize] = Some(
+                        (*(*cinfo).mem)
+                            .alloc_small
+                            .expect("non-null function pointer"),
+                    )
+                    .expect("non-null function pointer")(
+                        cinfo as crate::jpeglib_h::j_common_ptr,
+                        1 as i32,
+                        (64 as i32 as libc::c_ulong)
+                            .wrapping_mul(
+                                ::std::mem::size_of::<crate::jdct_h::DCTELEM>() as libc::c_ulong
+                            ),
+                    )
+                        as *mut crate::jdct_h::DCTELEM
                 }
                 dtbl = (*fdct).divisors[qtblno as usize];
                 i = 0 as i32;
@@ -1023,19 +1017,17 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: crate::jpeglib_h::j_compress_
                     0.275899379f64,
                 ];
                 if (*fdct).float_divisors[qtblno as usize].is_null() {
-                    (*fdct).float_divisors[qtblno as usize] =
-                        Some(
-                            (*(*cinfo).mem)
-                                .alloc_small
-                                .expect("non-null function pointer"),
-                        )
-                        .expect("non-null function pointer")(
-                            cinfo as crate::jpeglib_h::j_common_ptr,
-                            1 as i32,
-                            (64 as i32 as libc::c_ulong).wrapping_mul(
-                                ::std::mem::size_of::<f32>() as libc::c_ulong,
-                            ),
-                        ) as *mut f32
+                    (*fdct).float_divisors[qtblno as usize] = Some(
+                        (*(*cinfo).mem)
+                            .alloc_small
+                            .expect("non-null function pointer"),
+                    )
+                    .expect("non-null function pointer")(
+                        cinfo as crate::jpeglib_h::j_common_ptr,
+                        1 as i32,
+                        (64 as i32 as libc::c_ulong)
+                            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+                    ) as *mut f32
                 }
                 fdtbl = (*fdct).float_divisors[qtblno as usize];
                 i = 0 as i32;
@@ -1068,8 +1060,7 @@ unsafe extern "C" fn start_pass_fdctmgr(mut cinfo: crate::jpeglib_h::j_compress_
                 )
             }
             _ => {
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_NOT_COMPILED as i32;
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NOT_COMPILED as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit

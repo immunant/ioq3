@@ -262,29 +262,20 @@ pub unsafe extern "C" fn BotDefaultCharacteristics(
     while i < 80 as i32 {
         if !((*(*ch).c.as_mut_ptr().offset(i as isize)).type_0 != 0) {
             //
-            if (*(*defaultch).c.as_mut_ptr().offset(i as isize)).type_0 as i32
-                == 2 as i32
-            {
-                (*(*ch).c.as_mut_ptr().offset(i as isize)).type_0 =
-                    2 as i32 as libc::c_char; //end if
+            if (*(*defaultch).c.as_mut_ptr().offset(i as isize)).type_0 as i32 == 2 as i32 {
+                (*(*ch).c.as_mut_ptr().offset(i as isize)).type_0 = 2 as i32 as libc::c_char; //end if
                 (*(*ch).c.as_mut_ptr().offset(i as isize)).value._float =
                     (*(*defaultch).c.as_mut_ptr().offset(i as isize))
                         .value
                         ._float
-            } else if (*(*defaultch).c.as_mut_ptr().offset(i as isize)).type_0 as i32
-                == 1 as i32
-            {
-                (*(*ch).c.as_mut_ptr().offset(i as isize)).type_0 =
-                    1 as i32 as libc::c_char; //end else if
+            } else if (*(*defaultch).c.as_mut_ptr().offset(i as isize)).type_0 as i32 == 1 as i32 {
+                (*(*ch).c.as_mut_ptr().offset(i as isize)).type_0 = 1 as i32 as libc::c_char; //end else if
                 (*(*ch).c.as_mut_ptr().offset(i as isize)).value.integer =
                     (*(*defaultch).c.as_mut_ptr().offset(i as isize))
                         .value
                         .integer
-            } else if (*(*defaultch).c.as_mut_ptr().offset(i as isize)).type_0 as i32
-                == 3 as i32
-            {
-                (*(*ch).c.as_mut_ptr().offset(i as isize)).type_0 =
-                    3 as i32 as libc::c_char;
+            } else if (*(*defaultch).c.as_mut_ptr().offset(i as isize)).type_0 as i32 == 3 as i32 {
+                (*(*ch).c.as_mut_ptr().offset(i as isize)).type_0 = 3 as i32 as libc::c_char;
                 let ref mut fresh0 = (*(*ch).c.as_mut_ptr().offset(i as isize)).value.string;
                 *fresh0 = crate::src::botlib::l_memory::GetMemory(
                     crate::stdlib::strlen(
@@ -418,9 +409,7 @@ pub unsafe extern "C" fn BotLoadCharacterFromFile(
                         break;
                         //end else
                     } //end if
-                    if token.type_0 != 3 as i32
-                        || token.subtype & 0x1000 as i32 == 0
-                    {
+                    if token.type_0 != 3 as i32 || token.subtype & 0x1000 as i32 == 0 {
                         crate::src::botlib::l_precomp::SourceError(
                             source as *mut crate::src::botlib::l_precomp::source_s,
                             b"expected integer index, found %s\x00" as *const u8
@@ -908,15 +897,11 @@ pub unsafe extern "C" fn BotInterpolateCharacters(
                     + ((*(*ch2).c.as_mut_ptr().offset(i as isize)).value._float
                         - (*(*ch1).c.as_mut_ptr().offset(i as isize)).value._float)
                         * scale
-        } else if (*(*ch1).c.as_mut_ptr().offset(i as isize)).type_0 as i32
-            == 1 as i32
-        {
+        } else if (*(*ch1).c.as_mut_ptr().offset(i as isize)).type_0 as i32 == 1 as i32 {
             (*(*out).c.as_mut_ptr().offset(i as isize)).type_0 = 1 as i32 as libc::c_char; //end else if
             (*(*out).c.as_mut_ptr().offset(i as isize)).value.integer =
                 (*(*ch1).c.as_mut_ptr().offset(i as isize)).value.integer
-        } else if (*(*ch1).c.as_mut_ptr().offset(i as isize)).type_0 as i32
-            == 3 as i32
-        {
+        } else if (*(*ch1).c.as_mut_ptr().offset(i as isize)).type_0 as i32 == 3 as i32 {
             (*(*out).c.as_mut_ptr().offset(i as isize)).type_0 = 3 as i32 as libc::c_char;
             let ref mut fresh2 = (*(*out).c.as_mut_ptr().offset(i as isize)).value.string;
             *fresh2 = crate::src::botlib::l_memory::GetMemory(
@@ -973,10 +958,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn BotLoadCharacter(
-    mut charfile: *mut libc::c_char,
-    mut skill: f32,
-) -> i32 {
+pub unsafe extern "C" fn BotLoadCharacter(mut charfile: *mut libc::c_char, mut skill: f32) -> i32 {
     let mut firstskill: i32 = 0;
     let mut secondskill: i32 = 0;
     let mut handle: i32 = 0;
@@ -987,10 +969,7 @@ pub unsafe extern "C" fn BotLoadCharacter(
         skill = 5.0f64 as f32
     }
     //skill 1, 4 and 5 should be available in the character files
-    if skill as f64 == 1.0f64
-        || skill as f64 == 4.0f64
-        || skill as f64 == 5.0f64
-    {
+    if skill as f64 == 1.0f64 || skill as f64 == 4.0f64 || skill as f64 == 5.0f64 {
         return BotLoadCharacterSkill(charfile, skill);
     } //end if
       //check if there's a cached skill
@@ -1047,10 +1026,7 @@ pub unsafe extern "C" fn BotLoadCharacter(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn CheckCharacteristicIndex(
-    mut character: i32,
-    mut index: i32,
-) -> i32 {
+pub unsafe extern "C" fn CheckCharacteristicIndex(mut character: i32, mut index: i32) -> i32 {
     let mut ch: *mut bot_character_t = 0 as *mut bot_character_t; //end if
     ch = BotCharacterFromHandle(character); //end if
     if ch.is_null() {
@@ -1090,10 +1066,7 @@ pub unsafe extern "C" fn CheckCharacteristicIndex(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn Characteristic_Float(
-    mut character: i32,
-    mut index: i32,
-) -> f32 {
+pub unsafe extern "C" fn Characteristic_Float(mut character: i32, mut index: i32) -> f32 {
     let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
     ch = BotCharacterFromHandle(character);
     if ch.is_null() {
@@ -1106,9 +1079,7 @@ pub unsafe extern "C" fn Characteristic_Float(
     //an integer will be converted to a float
     if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as i32 == 1 as i32 {
         return (*(*ch).c.as_mut_ptr().offset(index as isize)).value.integer as f32;
-    } else if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as i32
-        == 2 as i32
-    {
+    } else if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as i32 == 2 as i32 {
         //end if
         //floats are just returned
         return (*(*ch).c.as_mut_ptr().offset(index as isize)).value._float;
@@ -1182,10 +1153,7 @@ pub unsafe extern "C" fn Characteristic_BFloat(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn Characteristic_Integer(
-    mut character: i32,
-    mut index: i32,
-) -> i32 {
+pub unsafe extern "C" fn Characteristic_Integer(mut character: i32, mut index: i32) -> i32 {
     let mut ch: *mut bot_character_t = 0 as *mut bot_character_t;
     ch = BotCharacterFromHandle(character);
     if ch.is_null() {
@@ -1198,9 +1166,7 @@ pub unsafe extern "C" fn Characteristic_Integer(
     //an integer will just be returned
     if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as i32 == 1 as i32 {
         return (*(*ch).c.as_mut_ptr().offset(index as isize)).value.integer;
-    } else if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as i32
-        == 2 as i32
-    {
+    } else if (*(*ch).c.as_mut_ptr().offset(index as isize)).type_0 as i32 == 2 as i32 {
         //end if
         //floats are casted to integers
         return (*(*ch).c.as_mut_ptr().offset(index as isize)).value._float as i32;

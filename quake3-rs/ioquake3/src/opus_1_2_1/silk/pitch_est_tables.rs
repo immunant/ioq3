@@ -28,16 +28,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #[no_mangle]
 
 pub static mut silk_CB_lags_stage2_10_ms: [[i8; 3]; 2] = [
-    [
-        0 as i32 as i8,
-        1 as i32 as i8,
-        0 as i32 as i8,
-    ],
-    [
-        0 as i32 as i8,
-        0 as i32 as i8,
-        1 as i32 as i8,
-    ],
+    [0 as i32 as i8, 1 as i32 as i8, 0 as i32 as i8],
+    [0 as i32 as i8, 0 as i32 as i8, 1 as i32 as i8],
 ];
 #[no_mangle]
 
@@ -74,14 +66,8 @@ pub static mut silk_CB_lags_stage3_10_ms: [[i8; 12]; 2] = [
 #[no_mangle]
 
 pub static mut silk_Lag_range_stage3_10_ms: [[i8; 2]; 2] = [
-    [
-        -(3 as i32) as i8,
-        7 as i32 as i8,
-    ],
-    [
-        -(2 as i32) as i8,
-        7 as i32 as i8,
-    ],
+    [-(3 as i32) as i8, 7 as i32 as i8],
+    [-(2 as i32) as i8, 7 as i32 as i8],
 ];
 #[no_mangle]
 
@@ -291,64 +277,25 @@ pub static mut silk_CB_lags_stage3: [[i8; 34]; 4] = [
 
 pub static mut silk_Lag_range_stage3: [[[i8; 2]; 4]; 3] = [
     [
-        [
-            -(5 as i32) as i8,
-            8 as i32 as i8,
-        ],
-        [
-            -(1 as i32) as i8,
-            6 as i32 as i8,
-        ],
-        [
-            -(1 as i32) as i8,
-            6 as i32 as i8,
-        ],
-        [
-            -(4 as i32) as i8,
-            10 as i32 as i8,
-        ],
+        [-(5 as i32) as i8, 8 as i32 as i8],
+        [-(1 as i32) as i8, 6 as i32 as i8],
+        [-(1 as i32) as i8, 6 as i32 as i8],
+        [-(4 as i32) as i8, 10 as i32 as i8],
     ],
     [
-        [
-            -(6 as i32) as i8,
-            10 as i32 as i8,
-        ],
-        [
-            -(2 as i32) as i8,
-            6 as i32 as i8,
-        ],
-        [
-            -(1 as i32) as i8,
-            6 as i32 as i8,
-        ],
-        [
-            -(5 as i32) as i8,
-            10 as i32 as i8,
-        ],
+        [-(6 as i32) as i8, 10 as i32 as i8],
+        [-(2 as i32) as i8, 6 as i32 as i8],
+        [-(1 as i32) as i8, 6 as i32 as i8],
+        [-(5 as i32) as i8, 10 as i32 as i8],
     ],
     [
-        [
-            -(9 as i32) as i8,
-            12 as i32 as i8,
-        ],
-        [
-            -(3 as i32) as i8,
-            7 as i32 as i8,
-        ],
-        [
-            -(2 as i32) as i8,
-            7 as i32 as i8,
-        ],
-        [
-            -(7 as i32) as i8,
-            13 as i32 as i8,
-        ],
+        [-(9 as i32) as i8, 12 as i32 as i8],
+        [-(3 as i32) as i8, 7 as i32 as i8],
+        [-(2 as i32) as i8, 7 as i32 as i8],
+        [-(7 as i32) as i8, 13 as i32 as i8],
     ],
 ];
 #[no_mangle]
 
-pub static mut silk_nb_cbk_searchs_stage3: [i8; 3] = [
-    16 as i32 as i8,
-    24 as i32 as i8,
-    34 as i32 as i8,
-];
+pub static mut silk_nb_cbk_searchs_stage3: [i8; 3] =
+    [16 as i32 as i8, 24 as i32 as i8, 34 as i32 as i8];

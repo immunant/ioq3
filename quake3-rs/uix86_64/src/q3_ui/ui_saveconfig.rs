@@ -197,10 +197,7 @@ UI_SaveConfigMenu_BackEvent
 ===============
 */
 
-unsafe extern "C" fn UI_SaveConfigMenu_BackEvent(
-    mut _ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_SaveConfigMenu_BackEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
     if event != 3 as i32 {
         return;
     }
@@ -212,10 +209,7 @@ UI_SaveConfigMenu_SaveEvent
 ===============
 */
 
-unsafe extern "C" fn UI_SaveConfigMenu_SaveEvent(
-    mut _ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_SaveConfigMenu_SaveEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
     let mut configname: [libc::c_char; 64] = [0; 64];
     if event != 3 as i32 {
         return;
@@ -311,8 +305,7 @@ unsafe extern "C" fn UI_SaveConfigMenu_Init() {
     saveConfig.background.width = 359 as i32;
     saveConfig.background.height = 256 as i32;
     saveConfig.savename.generic.type_0 = 4 as i32;
-    saveConfig.savename.generic.flags =
-        0x8000 as i32 as u32 | 0x80000 as i32 as u32;
+    saveConfig.savename.generic.flags = 0x8000 as i32 as u32 | 0x80000 as i32 as u32;
     saveConfig.savename.generic.ownerdraw =
         Some(UI_SaveConfigMenu_SavenameDraw as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     saveConfig.savename.field.widthInChars = 20 as i32;
@@ -322,16 +315,13 @@ unsafe extern "C" fn UI_SaveConfigMenu_Init() {
     saveConfig.savename.generic.left = 240 as i32;
     saveConfig.savename.generic.top = 155 as i32 + 72 as i32;
     saveConfig.savename.generic.right = 233 as i32 + 20 as i32 * 8 as i32;
-    saveConfig.savename.generic.bottom =
-        155 as i32 + 72 as i32 + 16 as i32 + 2 as i32;
+    saveConfig.savename.generic.bottom = 155 as i32 + 72 as i32 + 16 as i32 + 2 as i32;
     saveConfig.back.generic.type_0 = 6 as i32;
     saveConfig.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    saveConfig.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    saveConfig.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     saveConfig.back.generic.id = 11 as i32;
     saveConfig.back.generic.callback = Some(
-        UI_SaveConfigMenu_BackEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_SaveConfigMenu_BackEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     saveConfig.back.generic.x = 0 as i32;
     saveConfig.back.generic.y = 480 as i32 - 64 as i32;
@@ -341,12 +331,10 @@ unsafe extern "C" fn UI_SaveConfigMenu_Init() {
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     saveConfig.save.generic.type_0 = 6 as i32;
     saveConfig.save.generic.name = b"menu/art/save_0\x00" as *const u8 as *const libc::c_char;
-    saveConfig.save.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    saveConfig.save.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     saveConfig.save.generic.id = 12 as i32;
     saveConfig.save.generic.callback = Some(
-        UI_SaveConfigMenu_SaveEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_SaveConfigMenu_SaveEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     saveConfig.save.generic.x = 640 as i32;
     saveConfig.save.generic.y = 480 as i32 - 64 as i32;

@@ -338,20 +338,19 @@ unsafe extern "C" fn SV_WriteSnapshotToClient(
     let mut i: i32 = 0;
     let mut snapFlags: i32 = 0;
     // this is the snapshot we are creating
-    frame = &mut *(*client).frames.as_mut_ptr().offset(
-        ((*client).netchan.outgoingSequence & 32 as i32 - 1 as i32) as isize,
-    ) as *mut crate::server_h::clientSnapshot_t;
+    frame = &mut *(*client)
+        .frames
+        .as_mut_ptr()
+        .offset(((*client).netchan.outgoingSequence & 32 as i32 - 1 as i32) as isize)
+        as *mut crate::server_h::clientSnapshot_t;
     // try to use a previous frame as the source for delta compressing the snapshot
     if (*client).deltaMessage <= 0 as i32
-        || (*client).state as u32
-            != crate::server_h::CS_ACTIVE as i32 as u32
+        || (*client).state as u32 != crate::server_h::CS_ACTIVE as i32 as u32
     {
         // client is asking for a retransmit
         oldframe = 0 as *mut crate::server_h::clientSnapshot_t;
         lastframe = 0 as i32
-    } else if (*client).netchan.outgoingSequence - (*client).deltaMessage
-        >= 32 as i32 - 3 as i32
-    {
+    } else if (*client).netchan.outgoingSequence - (*client).deltaMessage >= 32 as i32 - 3 as i32 {
         // client hasn't gotten a good message through in a long time
         crate::src::qcommon::common::Com_DPrintf(
             b"%s: Delta request from out of date packet.\n\x00" as *const u8 as *const libc::c_char,
@@ -413,8 +412,7 @@ unsafe extern "C" fn SV_WriteSnapshotToClient(
     if (*client).rateDelayed as u64 != 0 {
         snapFlags |= 1 as i32
     }
-    if (*client).state as u32 != crate::server_h::CS_ACTIVE as i32 as u32
-    {
+    if (*client).state as u32 != crate::server_h::CS_ACTIVE as i32 as u32 {
         snapFlags |= 2 as i32
     }
     crate::src::qcommon::msg::MSG_WriteByte(msg as *mut crate::qcommon_h::msg_t, snapFlags);
@@ -481,8 +479,7 @@ pub unsafe extern "C" fn SV_UpdateServerCommandsToClient(
         crate::src::qcommon::msg::MSG_WriteLong(msg as *mut crate::qcommon_h::msg_t, i);
         crate::src::qcommon::msg::MSG_WriteString(
             msg as *mut crate::qcommon_h::msg_t,
-            (*client).reliableCommands[(i & 64 as i32 - 1 as i32) as usize]
-                .as_mut_ptr(),
+            (*client).reliableCommands[(i & 64 as i32 - 1 as i32) as usize].as_mut_ptr(),
         );
         i += 1
     }
@@ -628,8 +625,7 @@ unsafe extern "C" fn SV_AddEntitiesVisibleFromPoint(
                                                 as *const libc::c_char,
                                         );
                                     }
-                                    if !(*ent).r.singleClient
-                                        & (1 as i32) << (*frame).ps.clientNum
+                                    if !(*ent).r.singleClient & (1 as i32) << (*frame).ps.clientNum
                                         != 0
                                     {
                                         current_block_26 = 7651349459974463963;
@@ -690,12 +686,10 @@ unsafe extern "C" fn SV_AddEntitiesVisibleFromPoint(
                                                                 l = (*svEnt).clusternums
                                                                     [i as usize];
                                                                 if *bitvector.offset(
-                                                                    (l >> 3 as i32)
-                                                                        as isize,
+                                                                    (l >> 3 as i32) as isize,
                                                                 )
                                                                     as i32
-                                                                    & (1 as i32)
-                                                                        << (l & 7 as i32)
+                                                                    & (1 as i32) << (l & 7 as i32)
                                                                     != 0
                                                                 {
                                                                     break;
@@ -714,8 +708,7 @@ unsafe extern "C" fn SV_AddEntitiesVisibleFromPoint(
                                                                         )
                                                                             as i32
                                                                             & (1 as i32)
-                                                                                << (l & 7
-                                                                                    as i32)
+                                                                                << (l & 7 as i32)
                                                                             != 0
                                                                         {
                                                                             break;
@@ -758,8 +751,7 @@ unsafe extern "C" fn SV_AddEntitiesVisibleFromPoint(
                                                                                 as usize] = (*ent)
                                                                                 .s
                                                                                 .origin
-                                                                                [0 as i32
-                                                                                    as usize]
+                                                                                [0 as i32 as usize]
                                                                                 - *origin.offset(
                                                                                     0 as i32
                                                                                         as isize,
@@ -768,8 +760,7 @@ unsafe extern "C" fn SV_AddEntitiesVisibleFromPoint(
                                                                                 as usize] = (*ent)
                                                                                 .s
                                                                                 .origin
-                                                                                [1 as i32
-                                                                                    as usize]
+                                                                                [1 as i32 as usize]
                                                                                 - *origin.offset(
                                                                                     1 as i32
                                                                                         as isize,
@@ -778,8 +769,7 @@ unsafe extern "C" fn SV_AddEntitiesVisibleFromPoint(
                                                                                 as usize] = (*ent)
                                                                                 .s
                                                                                 .origin
-                                                                                [2 as i32
-                                                                                    as usize]
+                                                                                [2 as i32 as usize]
                                                                                 - *origin.offset(
                                                                                     2 as i32
                                                                                         as isize,
@@ -874,9 +864,11 @@ unsafe extern "C" fn SV_BuildClientSnapshot(mut client: *mut crate::server_h::cl
     // bump the counter used to prevent double adding
     crate::src::server::sv_main::sv.snapshotCounter += 1;
     // this is the frame we are creating
-    frame = &mut *(*client).frames.as_mut_ptr().offset(
-        ((*client).netchan.outgoingSequence & 32 as i32 - 1 as i32) as isize,
-    ) as *mut crate::server_h::clientSnapshot_t;
+    frame = &mut *(*client)
+        .frames
+        .as_mut_ptr()
+        .offset(((*client).netchan.outgoingSequence & 32 as i32 - 1 as i32) as isize)
+        as *mut crate::server_h::clientSnapshot_t;
     // clear everything in this snapshot
     entityNumbers.numSnapshotEntities = 0 as i32;
     crate::stdlib::memset(
@@ -887,10 +879,7 @@ unsafe extern "C" fn SV_BuildClientSnapshot(mut client: *mut crate::server_h::cl
     // https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=62
     (*frame).num_entities = 0 as i32;
     clent = (*client).gentity;
-    if clent.is_null()
-        || (*client).state as u32
-            == crate::server_h::CS_ZOMBIE as i32 as u32
-    {
+    if clent.is_null() || (*client).state as u32 == crate::server_h::CS_ZOMBIE as i32 as u32 {
         return;
     }
     // grab the current playerState_t
@@ -935,10 +924,7 @@ unsafe extern "C" fn SV_BuildClientSnapshot(mut client: *mut crate::server_h::cl
         ::std::mem::size_of::<i32>() as libc::c_ulong,
         Some(
             SV_QsortEntityNumbers
-                as unsafe extern "C" fn(
-                    _: *const libc::c_void,
-                    _: *const libc::c_void,
-                ) -> i32,
+                as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
         ),
     );
     // now that all viewpoint's areabits have been OR'd together, invert
@@ -946,8 +932,7 @@ unsafe extern "C" fn SV_BuildClientSnapshot(mut client: *mut crate::server_h::cl
     i = 0 as i32;
     while i < 32 as i32 / 4 as i32 {
         *((*frame).areabits.as_mut_ptr() as *mut i32).offset(i as isize) =
-            *((*frame).areabits.as_mut_ptr() as *mut i32).offset(i as isize)
-                ^ -(1 as i32);
+            *((*frame).areabits.as_mut_ptr() as *mut i32).offset(i as isize) ^ -(1 as i32);
         i += 1
     }
     // copy the entity states out
@@ -1071,14 +1056,11 @@ pub unsafe extern "C" fn SV_SendMessageToClient(
     mut client: *mut crate::server_h::client_t,
 ) {
     // record information about the message
-    (*client).frames
-        [((*client).netchan.outgoingSequence & 32 as i32 - 1 as i32) as usize]
+    (*client).frames[((*client).netchan.outgoingSequence & 32 as i32 - 1 as i32) as usize]
         .messageSize = (*msg).cursize;
-    (*client).frames
-        [((*client).netchan.outgoingSequence & 32 as i32 - 1 as i32) as usize]
+    (*client).frames[((*client).netchan.outgoingSequence & 32 as i32 - 1 as i32) as usize]
         .messageSent = crate::src::server::sv_main::svs.time;
-    (*client).frames
-        [((*client).netchan.outgoingSequence & 32 as i32 - 1 as i32) as usize]
+    (*client).frames[((*client).netchan.outgoingSequence & 32 as i32 - 1 as i32) as usize]
         .messageAcked = -(1 as i32);
     // send the datagram
     crate::src::server::sv_net_chan::SV_Netchan_Transmit(
@@ -1301,8 +1283,7 @@ pub unsafe extern "C" fn SV_SendClientMessages() {
             as *mut crate::server_h::client_t; // It's not time yet
         if !((*c).state as u64 == 0) {
             if !(((crate::src::server::sv_main::svs.time - (*c).lastSnapshotTime) as f32)
-                < (*c).snapshotMsec as f32
-                    * (*crate::src::qcommon::common::com_timescale).value)
+                < (*c).snapshotMsec as f32 * (*crate::src::qcommon::common::com_timescale).value)
             {
                 if !(*(*c).downloadName.as_mut_ptr() != 0) {
                     if (*c).netchan.unsentFragments as u32 != 0

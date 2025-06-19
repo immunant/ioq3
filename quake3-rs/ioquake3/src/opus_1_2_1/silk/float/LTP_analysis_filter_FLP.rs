@@ -158,8 +158,8 @@ pub unsafe extern "C" fn silk_LTP_analysis_filter_FLP(
             /* Subtract long-term prediction */
             j = 0 as i32;
             while j < 5 as i32 {
-                *LTP_res_ptr.offset(i as isize) -= Btmp[j as usize]
-                    * *x_lag_ptr.offset((5 as i32 / 2 as i32 - j) as isize);
+                *LTP_res_ptr.offset(i as isize) -=
+                    Btmp[j as usize] * *x_lag_ptr.offset((5 as i32 / 2 as i32 - j) as isize);
                 j += 1
             }
             *LTP_res_ptr.offset(i as isize) *= inv_gain;

@@ -943,8 +943,7 @@ pub unsafe extern "C" fn G_NewString(mut string: *const libc::c_char) -> *mut li
     let mut new_p: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut i: i32 = 0;
     let mut l: i32 = 0;
-    l = crate::stdlib::strlen(string).wrapping_add(1 as i32 as libc::c_ulong)
-        as i32;
+    l = crate::stdlib::strlen(string).wrapping_add(1 as i32 as libc::c_ulong) as i32;
     newb = crate::src::game::g_mem::G_Alloc(l) as *mut libc::c_char;
     new_p = newb;
     // turn \n into a real linefeed
@@ -1011,26 +1010,22 @@ pub unsafe extern "C" fn G_ParseField(
                         &mut *vec.as_mut_ptr().offset(2 as i32 as isize)
                             as *mut crate::src::qcommon::q_shared::vec_t,
                     );
-                    *(b.offset((*f).ofs as isize) as *mut f32)
-                        .offset(0 as i32 as isize) = vec[0 as i32 as usize];
-                    *(b.offset((*f).ofs as isize) as *mut f32)
-                        .offset(1 as i32 as isize) = vec[1 as i32 as usize];
-                    *(b.offset((*f).ofs as isize) as *mut f32)
-                        .offset(2 as i32 as isize) = vec[2 as i32 as usize]
+                    *(b.offset((*f).ofs as isize) as *mut f32).offset(0 as i32 as isize) =
+                        vec[0 as i32 as usize];
+                    *(b.offset((*f).ofs as isize) as *mut f32).offset(1 as i32 as isize) =
+                        vec[1 as i32 as usize];
+                    *(b.offset((*f).ofs as isize) as *mut f32).offset(2 as i32 as isize) =
+                        vec[2 as i32 as usize]
                 }
                 0 => *(b.offset((*f).ofs as isize) as *mut i32) = atoi(value),
-                1 => {
-                    *(b.offset((*f).ofs as isize) as *mut f32) =
-                        atof(value) as f32
-                }
+                1 => *(b.offset((*f).ofs as isize) as *mut f32) = atof(value) as f32,
                 4 => {
                     v = atof(value) as f32;
-                    *(b.offset((*f).ofs as isize) as *mut f32)
-                        .offset(0 as i32 as isize) = 0 as i32 as f32;
-                    *(b.offset((*f).ofs as isize) as *mut f32)
-                        .offset(1 as i32 as isize) = v;
-                    *(b.offset((*f).ofs as isize) as *mut f32)
-                        .offset(2 as i32 as isize) = 0 as i32 as f32
+                    *(b.offset((*f).ofs as isize) as *mut f32).offset(0 as i32 as isize) =
+                        0 as i32 as f32;
+                    *(b.offset((*f).ofs as isize) as *mut f32).offset(1 as i32 as isize) = v;
+                    *(b.offset((*f).ofs as isize) as *mut f32).offset(2 as i32 as isize) =
+                        0 as i32 as f32
                 }
                 _ => {}
             }
@@ -1077,9 +1072,7 @@ pub unsafe extern "C" fn G_SpawnGEntityFromSpawnVars() {
         i += 1
     }
     // check for "notsingle" flag
-    if crate::src::game::g_main::g_gametype.integer
-        == crate::bg_public_h::GT_SINGLE_PLAYER as i32
-    {
+    if crate::src::game::g_main::g_gametype.integer == crate::bg_public_h::GT_SINGLE_PLAYER as i32 {
         G_SpawnInt(
             b"notsingle\x00" as *const u8 as *const libc::c_char,
             b"0\x00" as *const u8 as *const libc::c_char,
@@ -1206,8 +1199,7 @@ pub unsafe extern "C" fn G_AddSpawnVarToken(mut string: *const libc::c_char) -> 
     let mut l: i32 = 0;
     let mut dest: *mut libc::c_char = 0 as *mut libc::c_char;
     l = crate::stdlib::strlen(string) as i32;
-    if crate::src::game::g_main::level.numSpawnVarChars + l + 1 as i32 > 4096 as i32
-    {
+    if crate::src::game::g_main::level.numSpawnVarChars + l + 1 as i32 > 4096 as i32 {
         crate::src::game::g_main::G_Error(
             b"G_AddSpawnVarToken: MAX_SPAWN_VARS_CHARS\x00" as *const u8 as *const libc::c_char,
         );
@@ -1389,27 +1381,21 @@ pub unsafe extern "C" fn SP_worldspawn() {
         b"g_enableBreath\x00" as *const u8 as *const libc::c_char,
         s,
     );
-    crate::src::game::g_main::g_entities
-        [(((1 as i32) << 10 as i32) - 2 as i32) as usize]
+    crate::src::game::g_main::g_entities[(((1 as i32) << 10 as i32) - 2 as i32) as usize]
         .s
         .number = ((1 as i32) << 10 as i32) - 2 as i32;
-    crate::src::game::g_main::g_entities
-        [(((1 as i32) << 10 as i32) - 2 as i32) as usize]
+    crate::src::game::g_main::g_entities[(((1 as i32) << 10 as i32) - 2 as i32) as usize]
         .r
         .ownerNum = ((1 as i32) << 10 as i32) - 1 as i32;
-    crate::src::game::g_main::g_entities
-        [(((1 as i32) << 10 as i32) - 2 as i32) as usize]
+    crate::src::game::g_main::g_entities[(((1 as i32) << 10 as i32) - 2 as i32) as usize]
         .classname = b"worldspawn\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    crate::src::game::g_main::g_entities
-        [(((1 as i32) << 10 as i32) - 1 as i32) as usize]
+    crate::src::game::g_main::g_entities[(((1 as i32) << 10 as i32) - 1 as i32) as usize]
         .s
         .number = ((1 as i32) << 10 as i32) - 1 as i32;
-    crate::src::game::g_main::g_entities
-        [(((1 as i32) << 10 as i32) - 1 as i32) as usize]
+    crate::src::game::g_main::g_entities[(((1 as i32) << 10 as i32) - 1 as i32) as usize]
         .r
         .ownerNum = ((1 as i32) << 10 as i32) - 1 as i32;
-    crate::src::game::g_main::g_entities
-        [(((1 as i32) << 10 as i32) - 1 as i32) as usize]
+    crate::src::game::g_main::g_entities[(((1 as i32) << 10 as i32) - 1 as i32) as usize]
         .classname = b"nothing\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     // see if we want a warmup time
     crate::src::game::g_syscalls::trap_SetConfigstring(

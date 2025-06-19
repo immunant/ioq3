@@ -93,7 +93,7 @@ pub unsafe extern "C" fn res0_free_look(mut i: *mut libc::c_void) {
         }
         fprintf(stderr,"\n");*/
         j = 0 as i32; /* residue vectors to group and
-                              code with a partitioned book */
+                      code with a partitioned book */
         while j < (*look).parts {
             if !(*(*look).partbooks.offset(j as isize)).is_null() {
                 ::libc::free(*(*look).partbooks.offset(j as isize) as *mut libc::c_void);
@@ -120,8 +120,7 @@ pub unsafe extern "C" fn res0_free_look(mut i: *mut libc::c_void) {
 unsafe extern "C" fn icount(mut v: u32) -> i32 {
     let mut ret: i32 = 0 as i32;
     while v != 0 {
-        ret = (ret as u32).wrapping_add(v & 1 as i32 as u32)
-            as i32 as i32;
+        ret = (ret as u32).wrapping_add(v & 1 as i32 as u32) as i32 as i32;
         v >>= 1 as i32
     }
     return ret;
@@ -335,8 +334,7 @@ pub unsafe extern "C" fn res0_unpack(
                                         (*(*ci).book_param[(*info).groupbook as usize]).entries
                                             as i32;
                                     let mut dim: i32 =
-                                        (*(*ci).book_param[(*info).groupbook as usize]).dim
-                                            as i32;
+                                        (*(*ci).book_param[(*info).groupbook as usize]).dim as i32;
                                     let mut partvals: i32 = 1 as i32;
                                     if !(dim < 1 as i32) {
                                         loop {
@@ -449,8 +447,7 @@ pub unsafe extern "C" fn res0_look(
         let mut mult: libc::c_long = ((*look).partvals / (*look).parts) as libc::c_long;
         let ref mut fresh3 = *(*look).decodemap.offset(j as isize);
         *fresh3 = crate::stdlib::malloc(
-            (dim as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+            (dim as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
         ) as *mut i32;
         k = 0 as i32;
         while k < dim {
@@ -481,22 +478,14 @@ unsafe extern "C" fn local_book_besterror(
     let mut index: i32 = 0 as i32;
     /* assumes integer/centered encoder codebook maptype 1 no more than dim 8 */
     let mut p: [i32; 8] = [
-        0 as i32,
-        0 as i32,
-        0 as i32,
-        0 as i32,
-        0 as i32,
-        0 as i32,
-        0 as i32,
-        0 as i32,
+        0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32,
     ];
     if del != 1 as i32 {
         i = 0 as i32;
         o = dim;
         while i < dim {
             o -= 1;
-            let mut v: i32 =
-                (*a.offset(o as isize) - minval + (del >> 1 as i32)) / del;
+            let mut v: i32 = (*a.offset(o as isize) - minval + (del >> 1 as i32)) / del;
             let mut m: i32 = if v < ze {
                 (ze - v << 1 as i32) - 1 as i32
             } else {
@@ -526,11 +515,7 @@ unsafe extern "C" fn local_book_besterror(
                 + (if m_0 < 0 as i32 {
                     0 as i32
                 } else {
-                    (if m_0 >= qv {
-                        (qv) - 1 as i32
-                    } else {
-                        m_0
-                    })
+                    (if m_0 >= qv { (qv) - 1 as i32 } else { m_0 })
                 });
             p[o as usize] = v_0 * del + minval;
             i += 1
@@ -541,17 +526,9 @@ unsafe extern "C" fn local_book_besterror(
         let mut best: i32 = -(1 as i32);
         /* assumes integer/centered encoder codebook maptype 1 no more than dim 8 */
         let mut e: [i32; 8] = [
-            0 as i32,
-            0 as i32,
-            0 as i32,
-            0 as i32,
-            0 as i32,
-            0 as i32,
-            0 as i32,
-            0 as i32,
+            0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32,
         ];
-        let mut maxval: i32 =
-            (*book).minval + (*book).delta * ((*book).quantvals - 1 as i32);
+        let mut maxval: i32 = (*book).minval + (*book).delta * ((*book).quantvals - 1 as i32);
         i = 0 as i32;
         while (i as libc::c_long) < (*book).entries {
             if *(*c).lengthlist.offset(i as isize) as i32 > 0 as i32 {
@@ -644,8 +621,7 @@ unsafe extern "C" fn _01class(
                 .wrapping_mul(::std::mem::size_of::<*mut libc::c_long>() as libc::c_ulong)
                 as libc::c_long,
         ) as *mut *mut libc::c_long;
-    let mut scale: f32 =
-        (100.0f64 / samples_per_partition as f64) as f32;
+    let mut scale: f32 = (100.0f64 / samples_per_partition as f64) as f32;
     /* we find the partition type for each partition of each
     channel.  We'll go back and do the interleaved encoding in a
     bit.  For now, clarity */
@@ -668,8 +644,7 @@ unsafe extern "C" fn _01class(
     }
     i = 0 as i32 as libc::c_long;
     while i < partvals as libc::c_long {
-        let mut offset: i32 =
-            (i * samples_per_partition as libc::c_long + (*info).begin) as i32;
+        let mut offset: i32 = (i * samples_per_partition as libc::c_long + (*info).begin) as i32;
         j = 0 as i32 as libc::c_long;
         while j < ch as libc::c_long {
             let mut max: i32 = 0 as i32;
@@ -941,16 +916,14 @@ unsafe extern "C" fn _01inverse(
     let mut n: i32 = (end as libc::c_long - (*info).begin) as i32;
     if n > 0 as i32 {
         let mut partvals: i32 = n / samples_per_partition;
-        let mut partwords: i32 =
-            (partvals + partitions_per_word - 1 as i32) / partitions_per_word;
+        let mut partwords: i32 = (partvals + partitions_per_word - 1 as i32) / partitions_per_word;
         let mut fresh8 = ::std::vec::from_elem(
             0,
             (ch as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<*mut *mut i32>() as libc::c_ulong)
                 as usize,
         );
-        let mut partword: *mut *mut *mut i32 =
-            fresh8.as_mut_ptr() as *mut *mut *mut i32;
+        let mut partword: *mut *mut *mut i32 = fresh8.as_mut_ptr() as *mut *mut *mut i32;
         j = 0 as i32 as libc::c_long;
         while j < ch as libc::c_long {
             let ref mut fresh9 = *partword.offset(j as isize);
@@ -1243,8 +1216,7 @@ pub unsafe extern "C" fn res2_forward(
     let mut work: *mut i32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut crate::codec_h::vorbis_block,
         ((ch as libc::c_long * n) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
-            as libc::c_long,
+            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as libc::c_long,
     ) as *mut i32;
     i = 0 as i32 as libc::c_long;
     while i < ch as libc::c_long {
@@ -1310,8 +1282,7 @@ pub unsafe extern "C" fn res2_inverse(
     let mut n: i32 = (end as libc::c_long - (*info).begin) as i32;
     if n > 0 as i32 {
         let mut partvals: i32 = n / samples_per_partition;
-        let mut partwords: i32 =
-            (partvals + partitions_per_word - 1 as i32) / partitions_per_word;
+        let mut partwords: i32 = (partvals + partitions_per_word - 1 as i32) / partitions_per_word;
         let mut partword: *mut *mut i32 =
             crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
                 vb as *mut crate::codec_h::vorbis_block,

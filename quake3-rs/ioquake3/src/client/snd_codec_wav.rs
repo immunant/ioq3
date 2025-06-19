@@ -52,9 +52,7 @@ FGetLittleLong
 =================
 */
 
-unsafe extern "C" fn FGetLittleLong(
-    mut f: crate::src::qcommon::q_shared::fileHandle_t,
-) -> i32 {
+unsafe extern "C" fn FGetLittleLong(mut f: crate::src::qcommon::q_shared::fileHandle_t) -> i32 {
     let mut v: i32 = 0;
     crate::src::qcommon::files::FS_Read(
         &mut v as *mut i32 as *mut libc::c_void,
@@ -69,9 +67,7 @@ FGetLittleShort
 =================
 */
 
-unsafe extern "C" fn FGetLittleShort(
-    mut f: crate::src::qcommon::q_shared::fileHandle_t,
-) -> i16 {
+unsafe extern "C" fn FGetLittleShort(mut f: crate::src::qcommon::q_shared::fileHandle_t) -> i16 {
     let mut v: i16 = 0;
     crate::src::qcommon::files::FS_Read(
         &mut v as *mut i16 as *mut libc::c_void,
@@ -126,8 +122,7 @@ unsafe extern "C" fn S_FindRIFFChunk(
             break;
         }
         // If this is the right chunk, return
-        if crate::src::qcommon::q_shared::Q_strncmp(name.as_mut_ptr(), chunk, 4 as i32) == 0
-        {
+        if crate::src::qcommon::q_shared::Q_strncmp(name.as_mut_ptr(), chunk, 4 as i32) == 0 {
             return len;
         }
         len = len + 2 as i32 - 1 as i32 & !(2 as i32 - 1 as i32);
@@ -164,8 +159,7 @@ unsafe extern "C" fn S_ByteSwapRawSamples(
     }
     i = 0 as i32;
     while i < samples {
-        *(data as *mut i16).offset(i as isize) =
-            *(data as *mut i16).offset(i as isize);
+        *(data as *mut i16).offset(i as isize) = *(data as *mut i16).offset(i as isize);
         i += 1
     }
 }
@@ -183,11 +177,7 @@ unsafe extern "C" fn S_ReadRIFFHeader(
     let mut bits: i32 = 0;
     let mut fmtlen: i32 = 0 as i32;
     // skip the riff wav header
-    crate::src::qcommon::files::FS_Read(
-        dump.as_mut_ptr() as *mut libc::c_void,
-        12 as i32,
-        file,
-    );
+    crate::src::qcommon::files::FS_Read(dump.as_mut_ptr() as *mut libc::c_void, 12 as i32, file);
     // Scan for the format chunk
     fmtlen = S_FindRIFFChunk(
         file,

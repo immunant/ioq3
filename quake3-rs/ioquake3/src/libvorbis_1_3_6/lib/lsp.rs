@@ -65,13 +65,11 @@ pub unsafe extern "C" fn vorbis_lsp_to_curve(
     mut ampoffset: f32,
 ) {
     let mut i: i32 = 0;
-    let mut wdel: f32 =
-        (3.14159265358979323846f64 / ln as f64) as f32;
+    let mut wdel: f32 = (3.14159265358979323846f64 / ln as f64) as f32;
     i = 0 as i32;
     while i < m {
-        *lsp.offset(i as isize) = (2.0f32 as f64
-            * crate::stdlib::cos(*lsp.offset(i as isize) as f64))
-            as f32;
+        *lsp.offset(i as isize) =
+            (2.0f32 as f64 * crate::stdlib::cos(*lsp.offset(i as isize) as f64)) as f32;
         i += 1
     }
     i = 0 as i32;
@@ -80,9 +78,7 @@ pub unsafe extern "C" fn vorbis_lsp_to_curve(
         let mut k: i32 = *map.offset(i as isize);
         let mut p: f32 = 0.5f32;
         let mut q: f32 = 0.5f32;
-        let mut w: f32 = (2.0f32 as f64
-            * crate::stdlib::cos((wdel * k as f32) as f64))
-            as f32;
+        let mut w: f32 = (2.0f32 as f64 * crate::stdlib::cos((wdel * k as f32) as f64)) as f32;
         j = 1 as i32;
         while j < m {
             q *= w - *lsp.offset((j - 1 as i32) as isize);
@@ -101,8 +97,7 @@ pub unsafe extern "C" fn vorbis_lsp_to_curve(
             q *= q * (2.0f32 + w)
         }
         q = crate::stdlib::exp(
-            (amp as f64 / crate::stdlib::sqrt((p + q) as f64)
-                - ampoffset as f64)
+            (amp as f64 / crate::stdlib::sqrt((p + q) as f64) - ampoffset as f64)
                 * 0.11512925f32 as f64,
         ) as f32;
         *curve.offset(i as isize) *= q;
@@ -175,9 +170,7 @@ unsafe extern "C" fn Laguerre_With_Deflation(
                 i -= 1
             }
             /* Laguerre's method */
-            denom = (m - 1 as i32) as f64
-                * ((m - 1 as i32) as f64 * pp * pp
-                    - m as f64 * p * ppp); /* complex root!  The LPC generator handed us a bad filter */
+            denom = (m - 1 as i32) as f64 * ((m - 1 as i32) as f64 * pp * pp - m as f64 * p * ppp); /* complex root!  The LPC generator handed us a bad filter */
             if denom < 0 as i32 as f64 {
                 return -(1 as i32);
             }
@@ -215,20 +208,14 @@ unsafe extern "C" fn Laguerre_With_Deflation(
 }
 /* for spit-and-polish only */
 
-unsafe extern "C" fn Newton_Raphson(
-    mut a: *mut f32,
-    mut ord: i32,
-    mut r: *mut f32,
-) -> i32 {
+unsafe extern "C" fn Newton_Raphson(mut a: *mut f32, mut ord: i32, mut r: *mut f32) -> i32 {
     let mut i: i32 = 0;
     let mut k: i32 = 0;
     let mut count: i32 = 0 as i32;
     let mut error: f64 = 1.0f32 as f64;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (ord as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f64>() as libc::c_ulong)
-            as usize,
+        (ord as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f64>() as libc::c_ulong) as usize,
     );
     let mut root: *mut f64 = fresh1.as_mut_ptr() as *mut f64;
     i = 0 as i32;
@@ -345,21 +332,18 @@ pub unsafe extern "C" fn vorbis_lpc_to_lsp(
     if g1_order > g2_order {
         i = 2 as i32;
         while i <= g2_order {
-            *g2.offset((g2_order - i) as isize) +=
-                *g2.offset((g2_order - i + 2 as i32) as isize);
+            *g2.offset((g2_order - i) as isize) += *g2.offset((g2_order - i + 2 as i32) as isize);
             i += 1
         }
     } else {
         i = 1 as i32;
         while i <= g1_order {
-            *g1.offset((g1_order - i) as isize) -=
-                *g1.offset((g1_order - i + 1 as i32) as isize);
+            *g1.offset((g1_order - i) as isize) -= *g1.offset((g1_order - i + 1 as i32) as isize);
             i += 1
         }
         i = 1 as i32;
         while i <= g2_order {
-            *g2.offset((g2_order - i) as isize) +=
-                *g2.offset((g2_order - i + 1 as i32) as isize);
+            *g2.offset((g2_order - i) as isize) += *g2.offset((g2_order - i + 1 as i32) as isize);
             i += 1
         }
     }
@@ -378,23 +362,13 @@ pub unsafe extern "C" fn vorbis_lpc_to_lsp(
         g1r as *mut libc::c_void,
         g1_order as crate::stddef_h::size_t,
         ::std::mem::size_of::<f32>() as libc::c_ulong,
-        Some(
-            comp as unsafe extern "C" fn(
-                _: *const libc::c_void,
-                _: *const libc::c_void,
-            ) -> i32,
-        ),
+        Some(comp as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32),
     );
     crate::stdlib::qsort(
         g2r as *mut libc::c_void,
         g2_order as crate::stddef_h::size_t,
         ::std::mem::size_of::<f32>() as libc::c_ulong,
-        Some(
-            comp as unsafe extern "C" fn(
-                _: *const libc::c_void,
-                _: *const libc::c_void,
-            ) -> i32,
-        ),
+        Some(comp as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32),
     );
     i = 0 as i32;
     while i < g1_order {

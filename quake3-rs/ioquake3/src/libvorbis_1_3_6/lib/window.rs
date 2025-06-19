@@ -8248,12 +8248,10 @@ pub unsafe extern "C" fn _vorbis_apply_window(
     let mut n: libc::c_long = *blocksizes.offset(W as isize);
     let mut ln: libc::c_long = *blocksizes.offset(lW as isize);
     let mut rn: libc::c_long = *blocksizes.offset(nW as isize);
-    let mut leftbegin: libc::c_long =
-        n / 4 as i32 as libc::c_long - ln / 4 as i32 as libc::c_long;
+    let mut leftbegin: libc::c_long = n / 4 as i32 as libc::c_long - ln / 4 as i32 as libc::c_long;
     let mut leftend: libc::c_long = leftbegin + ln / 2 as i32 as libc::c_long;
-    let mut rightbegin: libc::c_long = n / 2 as i32 as libc::c_long
-        + n / 4 as i32 as libc::c_long
-        - rn / 4 as i32 as libc::c_long;
+    let mut rightbegin: libc::c_long =
+        n / 2 as i32 as libc::c_long + n / 4 as i32 as libc::c_long - rn / 4 as i32 as libc::c_long;
     let mut rightend: libc::c_long = rightbegin + rn / 2 as i32 as libc::c_long;
     let mut i: i32 = 0;
     let mut p: i32 = 0;

@@ -785,13 +785,9 @@ pub unsafe extern "C" fn G_UseTargets(
         return;
     }
     if !(*ent).targetShaderName.is_null() && !(*ent).targetShaderNewName.is_null() {
-        let mut f: f32 =
-            (crate::src::game::g_main::level.time as f64 * 0.001f64) as f32;
+        let mut f: f32 = (crate::src::game::g_main::level.time as f64 * 0.001f64) as f32;
         AddRemap((*ent).targetShaderName, (*ent).targetShaderNewName, f);
-        crate::src::game::g_syscalls::trap_SetConfigstring(
-            24 as i32,
-            BuildShaderStateConfig(),
-        );
+        crate::src::game::g_syscalls::trap_SetConfigstring(24 as i32, BuildShaderStateConfig());
     }
     if (*ent).target.is_null() {
         return;
@@ -832,11 +828,7 @@ for making temporary vectors for function calls
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn tv(
-    mut x: f32,
-    mut y: f32,
-    mut z: f32,
-) -> *mut f32 {
+pub unsafe extern "C" fn tv(mut x: f32, mut y: f32, mut z: f32) -> *mut f32 {
     static mut index: i32 = 0;
     static mut vecs: [crate::src::qcommon::q_shared::vec3_t; 8] = [[0.; 3]; 8];
     let mut v: *mut f32 = 0 as *mut f32;
@@ -946,9 +938,7 @@ pub unsafe extern "C" fn G_SetMovedir(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn vectoyaw(
-    mut vec: *const crate::src::qcommon::q_shared::vec_t,
-) -> f32 {
+pub unsafe extern "C" fn vectoyaw(mut vec: *const crate::src::qcommon::q_shared::vec_t) -> f32 {
     let mut yaw: f32 = 0.;
     if *vec.offset(1 as i32 as isize) == 0 as i32 as f32
         && *vec.offset(0 as i32 as isize) == 0 as i32 as f32
@@ -977,8 +967,8 @@ pub unsafe extern "C" fn vectoyaw(
 pub unsafe extern "C" fn G_InitGentity(mut e: *mut crate::g_local_h::gentity_t) {
     (*e).inuse = crate::src::qcommon::q_shared::qtrue;
     (*e).classname = b"noclass\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    (*e).s.number = e.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long
-        as i32;
+    (*e).s.number =
+        e.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32;
     (*e).r.ownerNum = ((1 as i32) << 10 as i32) - 1 as i32;
 }
 /*
@@ -1016,8 +1006,7 @@ pub unsafe extern "C" fn G_Spawn() -> *mut crate::g_local_h::gentity_t {
                 // the first couple seconds of server time can involve a lot of
                 // freeing and allocating, so relax the replacement policy
                 if !(force == 0
-                    && (*e).freetime
-                        > crate::src::game::g_main::level.startTime + 2000 as i32
+                    && (*e).freetime > crate::src::game::g_main::level.startTime + 2000 as i32
                     && crate::src::game::g_main::level.time - (*e).freetime < 1000 as i32)
                 {
                     // reuse this slot
@@ -1028,16 +1017,12 @@ pub unsafe extern "C" fn G_Spawn() -> *mut crate::g_local_h::gentity_t {
             i += 1;
             e = e.offset(1)
         }
-        if crate::src::game::g_main::level.num_entities
-            < ((1 as i32) << 10 as i32) - 2 as i32
-        {
+        if crate::src::game::g_main::level.num_entities < ((1 as i32) << 10 as i32) - 2 as i32 {
             break;
         }
         force += 1
     }
-    if crate::src::game::g_main::level.num_entities
-        == ((1 as i32) << 10 as i32) - 2 as i32
-    {
+    if crate::src::game::g_main::level.num_entities == ((1 as i32) << 10 as i32) - 2 as i32 {
         i = 0 as i32;
         while i < (1 as i32) << 10 as i32 {
             crate::src::game::g_main::G_Printf(
@@ -1077,9 +1062,7 @@ G_EntitiesFree
 pub unsafe extern "C" fn G_EntitiesFree() -> crate::src::qcommon::q_shared::qboolean {
     let mut i: i32 = 0;
     let mut e: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
-    if crate::src::game::g_main::level.num_entities
-        < ((1 as i32) << 10 as i32) - 2 as i32
-    {
+    if crate::src::game::g_main::level.num_entities < ((1 as i32) << 10 as i32) - 2 as i32 {
         // can open a new slot if needed
         return crate::src::qcommon::q_shared::qtrue;
     }
@@ -1182,18 +1165,18 @@ pub unsafe extern "C" fn G_KillBox(mut ent: *mut crate::g_local_h::gentity_t) {
     let mut hit: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t;
     let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    mins[0 as i32 as usize] = (*(*ent).client).ps.origin[0 as i32 as usize]
-        + (*ent).r.mins[0 as i32 as usize];
-    mins[1 as i32 as usize] = (*(*ent).client).ps.origin[1 as i32 as usize]
-        + (*ent).r.mins[1 as i32 as usize];
-    mins[2 as i32 as usize] = (*(*ent).client).ps.origin[2 as i32 as usize]
-        + (*ent).r.mins[2 as i32 as usize];
-    maxs[0 as i32 as usize] = (*(*ent).client).ps.origin[0 as i32 as usize]
-        + (*ent).r.maxs[0 as i32 as usize];
-    maxs[1 as i32 as usize] = (*(*ent).client).ps.origin[1 as i32 as usize]
-        + (*ent).r.maxs[1 as i32 as usize];
-    maxs[2 as i32 as usize] = (*(*ent).client).ps.origin[2 as i32 as usize]
-        + (*ent).r.maxs[2 as i32 as usize];
+    mins[0 as i32 as usize] =
+        (*(*ent).client).ps.origin[0 as i32 as usize] + (*ent).r.mins[0 as i32 as usize];
+    mins[1 as i32 as usize] =
+        (*(*ent).client).ps.origin[1 as i32 as usize] + (*ent).r.mins[1 as i32 as usize];
+    mins[2 as i32 as usize] =
+        (*(*ent).client).ps.origin[2 as i32 as usize] + (*ent).r.mins[2 as i32 as usize];
+    maxs[0 as i32 as usize] =
+        (*(*ent).client).ps.origin[0 as i32 as usize] + (*ent).r.maxs[0 as i32 as usize];
+    maxs[1 as i32 as usize] =
+        (*(*ent).client).ps.origin[1 as i32 as usize] + (*ent).r.maxs[1 as i32 as usize];
+    maxs[2 as i32 as usize] =
+        (*(*ent).client).ps.origin[2 as i32 as usize] + (*ent).r.maxs[2 as i32 as usize];
     num = crate::src::game::g_syscalls::trap_EntitiesInBox(
         mins.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         maxs.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -1324,12 +1307,9 @@ pub unsafe extern "C" fn G_SetOrigin(
     (*ent).s.pos.trType = crate::src::qcommon::q_shared::TR_STATIONARY;
     (*ent).s.pos.trTime = 0 as i32;
     (*ent).s.pos.trDuration = 0 as i32;
-    (*ent).s.pos.trDelta[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*ent).s.pos.trDelta[1 as i32 as usize] =
-        (*ent).s.pos.trDelta[2 as i32 as usize];
-    (*ent).s.pos.trDelta[0 as i32 as usize] =
-        (*ent).s.pos.trDelta[1 as i32 as usize];
+    (*ent).s.pos.trDelta[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*ent).s.pos.trDelta[1 as i32 as usize] = (*ent).s.pos.trDelta[2 as i32 as usize];
+    (*ent).s.pos.trDelta[0 as i32 as usize] = (*ent).s.pos.trDelta[1 as i32 as usize];
     (*ent).r.currentOrigin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     (*ent).r.currentOrigin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     (*ent).r.currentOrigin[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
@@ -1358,38 +1338,23 @@ pub unsafe extern "C" fn DebugLine(
         1 as i32 as crate::src::qcommon::q_shared::vec_t,
     ];
     let mut dot: f32 = 0.;
-    points[0 as i32 as usize][0 as i32 as usize] =
-        *start.offset(0 as i32 as isize);
-    points[0 as i32 as usize][1 as i32 as usize] =
-        *start.offset(1 as i32 as isize);
-    points[0 as i32 as usize][2 as i32 as usize] =
-        *start.offset(2 as i32 as isize);
-    points[1 as i32 as usize][0 as i32 as usize] =
-        *start.offset(0 as i32 as isize);
-    points[1 as i32 as usize][1 as i32 as usize] =
-        *start.offset(1 as i32 as isize);
-    points[1 as i32 as usize][2 as i32 as usize] =
-        *start.offset(2 as i32 as isize);
+    points[0 as i32 as usize][0 as i32 as usize] = *start.offset(0 as i32 as isize);
+    points[0 as i32 as usize][1 as i32 as usize] = *start.offset(1 as i32 as isize);
+    points[0 as i32 as usize][2 as i32 as usize] = *start.offset(2 as i32 as isize);
+    points[1 as i32 as usize][0 as i32 as usize] = *start.offset(0 as i32 as isize);
+    points[1 as i32 as usize][1 as i32 as usize] = *start.offset(1 as i32 as isize);
+    points[1 as i32 as usize][2 as i32 as usize] = *start.offset(2 as i32 as isize);
     //points[1][2] -= 2;
-    points[2 as i32 as usize][0 as i32 as usize] =
-        *end.offset(0 as i32 as isize);
-    points[2 as i32 as usize][1 as i32 as usize] =
-        *end.offset(1 as i32 as isize);
-    points[2 as i32 as usize][2 as i32 as usize] =
-        *end.offset(2 as i32 as isize);
+    points[2 as i32 as usize][0 as i32 as usize] = *end.offset(0 as i32 as isize);
+    points[2 as i32 as usize][1 as i32 as usize] = *end.offset(1 as i32 as isize);
+    points[2 as i32 as usize][2 as i32 as usize] = *end.offset(2 as i32 as isize);
     //points[2][2] -= 2;
-    points[3 as i32 as usize][0 as i32 as usize] =
-        *end.offset(0 as i32 as isize);
-    points[3 as i32 as usize][1 as i32 as usize] =
-        *end.offset(1 as i32 as isize);
-    points[3 as i32 as usize][2 as i32 as usize] =
-        *end.offset(2 as i32 as isize);
-    dir[0 as i32 as usize] =
-        *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
-    dir[1 as i32 as usize] =
-        *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
-    dir[2 as i32 as usize] =
-        *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
+    points[3 as i32 as usize][0 as i32 as usize] = *end.offset(0 as i32 as isize);
+    points[3 as i32 as usize][1 as i32 as usize] = *end.offset(1 as i32 as isize);
+    points[3 as i32 as usize][2 as i32 as usize] = *end.offset(2 as i32 as isize);
+    dir[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
+    dir[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
+    dir[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
     crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
     dot = dir[0 as i32 as usize] * up[0 as i32 as usize]
         + dir[1 as i32 as usize] * up[1 as i32 as usize]
@@ -1406,42 +1371,30 @@ pub unsafe extern "C" fn DebugLine(
         );
     }
     crate::src::qcommon::q_math::VectorNormalize(cross.as_mut_ptr());
-    points[0 as i32 as usize][0 as i32 as usize] = points
-        [0 as i32 as usize][0 as i32 as usize]
-        + cross[0 as i32 as usize] * 2 as i32 as f32;
-    points[0 as i32 as usize][1 as i32 as usize] = points
-        [0 as i32 as usize][1 as i32 as usize]
-        + cross[1 as i32 as usize] * 2 as i32 as f32;
-    points[0 as i32 as usize][2 as i32 as usize] = points
-        [0 as i32 as usize][2 as i32 as usize]
-        + cross[2 as i32 as usize] * 2 as i32 as f32;
-    points[1 as i32 as usize][0 as i32 as usize] = points
-        [1 as i32 as usize][0 as i32 as usize]
+    points[0 as i32 as usize][0 as i32 as usize] =
+        points[0 as i32 as usize][0 as i32 as usize] + cross[0 as i32 as usize] * 2 as i32 as f32;
+    points[0 as i32 as usize][1 as i32 as usize] =
+        points[0 as i32 as usize][1 as i32 as usize] + cross[1 as i32 as usize] * 2 as i32 as f32;
+    points[0 as i32 as usize][2 as i32 as usize] =
+        points[0 as i32 as usize][2 as i32 as usize] + cross[2 as i32 as usize] * 2 as i32 as f32;
+    points[1 as i32 as usize][0 as i32 as usize] = points[1 as i32 as usize][0 as i32 as usize]
         + cross[0 as i32 as usize] * -(2 as i32) as f32;
-    points[1 as i32 as usize][1 as i32 as usize] = points
-        [1 as i32 as usize][1 as i32 as usize]
+    points[1 as i32 as usize][1 as i32 as usize] = points[1 as i32 as usize][1 as i32 as usize]
         + cross[1 as i32 as usize] * -(2 as i32) as f32;
-    points[1 as i32 as usize][2 as i32 as usize] = points
-        [1 as i32 as usize][2 as i32 as usize]
+    points[1 as i32 as usize][2 as i32 as usize] = points[1 as i32 as usize][2 as i32 as usize]
         + cross[2 as i32 as usize] * -(2 as i32) as f32;
-    points[2 as i32 as usize][0 as i32 as usize] = points
-        [2 as i32 as usize][0 as i32 as usize]
+    points[2 as i32 as usize][0 as i32 as usize] = points[2 as i32 as usize][0 as i32 as usize]
         + cross[0 as i32 as usize] * -(2 as i32) as f32;
-    points[2 as i32 as usize][1 as i32 as usize] = points
-        [2 as i32 as usize][1 as i32 as usize]
+    points[2 as i32 as usize][1 as i32 as usize] = points[2 as i32 as usize][1 as i32 as usize]
         + cross[1 as i32 as usize] * -(2 as i32) as f32;
-    points[2 as i32 as usize][2 as i32 as usize] = points
-        [2 as i32 as usize][2 as i32 as usize]
+    points[2 as i32 as usize][2 as i32 as usize] = points[2 as i32 as usize][2 as i32 as usize]
         + cross[2 as i32 as usize] * -(2 as i32) as f32;
-    points[3 as i32 as usize][0 as i32 as usize] = points
-        [3 as i32 as usize][0 as i32 as usize]
-        + cross[0 as i32 as usize] * 2 as i32 as f32;
-    points[3 as i32 as usize][1 as i32 as usize] = points
-        [3 as i32 as usize][1 as i32 as usize]
-        + cross[1 as i32 as usize] * 2 as i32 as f32;
-    points[3 as i32 as usize][2 as i32 as usize] = points
-        [3 as i32 as usize][2 as i32 as usize]
-        + cross[2 as i32 as usize] * 2 as i32 as f32;
+    points[3 as i32 as usize][0 as i32 as usize] =
+        points[3 as i32 as usize][0 as i32 as usize] + cross[0 as i32 as usize] * 2 as i32 as f32;
+    points[3 as i32 as usize][1 as i32 as usize] =
+        points[3 as i32 as usize][1 as i32 as usize] + cross[1 as i32 as usize] * 2 as i32 as f32;
+    points[3 as i32 as usize][2 as i32 as usize] =
+        points[3 as i32 as usize][2 as i32 as usize] + cross[2 as i32 as usize] * 2 as i32 as f32;
     return crate::src::game::g_syscalls::trap_DebugPolygonCreate(
         color,
         4 as i32,

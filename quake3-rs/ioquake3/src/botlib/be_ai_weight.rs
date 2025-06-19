@@ -576,7 +576,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
     ) == 0.
     {
         avail = -(1 as i32); //end if
-                                     //end if
+                             //end if
         n = 0 as i32; //end for
         while n < 128 as i32 {
             config = weightFileList[n as usize];
@@ -586,8 +586,7 @@ pub unsafe extern "C" fn ReadWeightConfig(
                 if avail == -(1 as i32) {
                     avail = n
                 }
-            } else if ::libc::strcmp(filename, (*config).filename.as_mut_ptr()) == 0 as i32
-            {
+            } else if ::libc::strcmp(filename, (*config).filename.as_mut_ptr()) == 0 as i32 {
                 //end if
                 //botimport.Print( PRT_MESSAGE, "retained %s\n", filename );
                 return config;
@@ -906,8 +905,7 @@ pub unsafe extern "C" fn FuzzyWeightUndecided_r(
             return FuzzyWeightUndecided_r(inventory, (*fs).child);
         } else {
             return (*fs).minweight
-                + (::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32
+                + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
                     * ((*fs).maxweight - (*fs).minweight);
         }
     } else {
@@ -918,8 +916,7 @@ pub unsafe extern "C" fn FuzzyWeightUndecided_r(
                     w1 = FuzzyWeightUndecided_r(inventory, (*fs).child)
                 } else {
                     w1 = (*fs).minweight
-                        + (::libc::rand() & 0x7fff as i32) as f32
-                            / 0x7fff as i32 as f32
+                        + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
                             * ((*fs).maxweight - (*fs).minweight)
                 }
                 //second weight
@@ -927,8 +924,7 @@ pub unsafe extern "C" fn FuzzyWeightUndecided_r(
                     w2 = FuzzyWeight_r(inventory, (*(*fs).next).child)
                 } else {
                     w2 = (*(*fs).next).minweight
-                        + (::libc::rand() & 0x7fff as i32) as f32
-                            / 0x7fff as i32 as f32
+                        + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
                             * ((*(*fs).next).maxweight - (*(*fs).next).minweight)
                 }
                 //the scale factor
@@ -997,24 +993,16 @@ pub unsafe extern "C" fn EvolveFuzzySeperator_r(
         EvolveFuzzySeperator_r((*fs).child); //end if
     } else if (*fs).type_0 == 1 as i32 {
         //every once in a while an evolution leap occurs, mutation
-        if (((::libc::rand() & 0x7fff as i32) as f32
-            / 0x7fff as i32 as f32) as f64)
-            < 0.01f64
-        {
+        if (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64) < 0.01f64 {
             (*fs).weight = ((*fs).weight as f64
                 + 2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
-                        as f64
+                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)
-                    * ((*fs).maxweight - (*fs).minweight) as f64)
-                as f32
+                    * ((*fs).maxweight - (*fs).minweight) as f64) as f32
         } else {
             (*fs).weight = ((*fs).weight as f64
                 + 2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
-                        as f64
+                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)
                     * ((*fs).maxweight - (*fs).minweight) as f64
                     * 0.5f64) as f32
@@ -1131,8 +1119,7 @@ pub unsafe extern "C" fn ScaleFuzzySeperatorBalanceRange_r(
         //end else if
         ScaleFuzzySeperatorBalanceRange_r((*fs).child, scale); //end if
     } else if (*fs).type_0 == 1 as i32 {
-        let mut mid: f32 =
-            (((*fs).minweight + (*fs).maxweight) as f64 * 0.5f64) as f32;
+        let mut mid: f32 = (((*fs).minweight + (*fs).maxweight) as f64 * 0.5f64) as f32;
         //end if
         (*fs).maxweight = mid + ((*fs).maxweight - mid) * scale;
         (*fs).minweight = mid + ((*fs).minweight - mid) * scale;

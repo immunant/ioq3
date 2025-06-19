@@ -241,8 +241,7 @@ pub unsafe extern "C" fn jpeg_CreateCompress(
     {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STRUCT_SIZE as i32;
         (*(*cinfo).err).msg_parm.i[0 as i32 as usize] =
-            ::std::mem::size_of::<crate::jpeglib_h::jpeg_compress_struct>() as libc::c_ulong
-                as i32;
+            ::std::mem::size_of::<crate::jpeglib_h::jpeg_compress_struct>() as libc::c_ulong as i32;
         (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = structsize as i32;
         Some(
             (*(*cinfo).err)
@@ -373,8 +372,7 @@ pub unsafe extern "C" fn jpeg_finish_compress(mut cinfo: crate::jpeglib_h::j_com
     if (*cinfo).global_state == 101 as i32 || (*cinfo).global_state == 102 as i32 {
         /* Terminate first pass */
         if (*cinfo).next_scanline < (*cinfo).image_height {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_TOO_LITTLE_DATA as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_TOO_LITTLE_DATA as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -435,8 +433,7 @@ pub unsafe extern "C" fn jpeg_finish_compress(mut cinfo: crate::jpeglib_h::j_com
                 0 as *mut libc::c_void as crate::jpeglib_h::JSAMPIMAGE,
             ) == 0
             {
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_CANT_SUSPEND as i32;
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_CANT_SUSPEND as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit

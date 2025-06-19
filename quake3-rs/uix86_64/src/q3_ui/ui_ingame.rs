@@ -509,8 +509,7 @@ pub unsafe extern "C" fn InGame_MenuInit() {
     //y = 96;
     y = 88 as i32;
     s_ingame.team.generic.type_0 = 9 as i32;
-    s_ingame.team.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_ingame.team.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_ingame.team.generic.x = 320 as i32;
     s_ingame.team.generic.y = y;
     s_ingame.team.generic.id = 10 as i32;
@@ -521,8 +520,7 @@ pub unsafe extern "C" fn InGame_MenuInit() {
     s_ingame.team.style = 0x1 as i32 | 0x10 as i32;
     y += 28 as i32;
     s_ingame.addbots.generic.type_0 = 9 as i32;
-    s_ingame.addbots.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_ingame.addbots.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_ingame.addbots.generic.x = 320 as i32;
     s_ingame.addbots.generic.y = y;
     s_ingame.addbots.generic.id = 11 as i32;
@@ -546,8 +544,7 @@ pub unsafe extern "C" fn InGame_MenuInit() {
     }
     y += 28 as i32;
     s_ingame.removebots.generic.type_0 = 9 as i32;
-    s_ingame.removebots.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_ingame.removebots.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_ingame.removebots.generic.x = 320 as i32;
     s_ingame.removebots.generic.y = y;
     s_ingame.removebots.generic.id = 12 as i32;
@@ -571,8 +568,7 @@ pub unsafe extern "C" fn InGame_MenuInit() {
     }
     y += 28 as i32;
     s_ingame.teamorders.generic.type_0 = 9 as i32;
-    s_ingame.teamorders.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_ingame.teamorders.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_ingame.teamorders.generic.x = 320 as i32;
     s_ingame.teamorders.generic.y = y;
     s_ingame.teamorders.generic.id = 19 as i32;
@@ -606,8 +602,7 @@ pub unsafe extern "C" fn InGame_MenuInit() {
     }
     y += 28 as i32;
     s_ingame.setup.generic.type_0 = 9 as i32;
-    s_ingame.setup.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_ingame.setup.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_ingame.setup.generic.x = 320 as i32;
     s_ingame.setup.generic.y = y;
     s_ingame.setup.generic.id = 13 as i32;
@@ -618,8 +613,7 @@ pub unsafe extern "C" fn InGame_MenuInit() {
     s_ingame.setup.style = 0x1 as i32 | 0x10 as i32;
     y += 28 as i32;
     s_ingame.server.generic.type_0 = 9 as i32;
-    s_ingame.server.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_ingame.server.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_ingame.server.generic.x = 320 as i32;
     s_ingame.server.generic.y = y;
     s_ingame.server.generic.id = 14 as i32;
@@ -631,8 +625,7 @@ pub unsafe extern "C" fn InGame_MenuInit() {
     s_ingame.server.style = 0x1 as i32 | 0x10 as i32;
     y += 28 as i32;
     s_ingame.restart.generic.type_0 = 9 as i32;
-    s_ingame.restart.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_ingame.restart.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_ingame.restart.generic.x = 320 as i32;
     s_ingame.restart.generic.y = y;
     s_ingame.restart.generic.id = 16 as i32;
@@ -650,8 +643,7 @@ pub unsafe extern "C" fn InGame_MenuInit() {
     }
     y += 28 as i32;
     s_ingame.resume.generic.type_0 = 9 as i32;
-    s_ingame.resume.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_ingame.resume.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_ingame.resume.generic.x = 320 as i32;
     s_ingame.resume.generic.y = y;
     s_ingame.resume.generic.id = 18 as i32;
@@ -663,8 +655,7 @@ pub unsafe extern "C" fn InGame_MenuInit() {
     s_ingame.resume.style = 0x1 as i32 | 0x10 as i32;
     y += 28 as i32;
     s_ingame.leave.generic.type_0 = 9 as i32;
-    s_ingame.leave.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_ingame.leave.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_ingame.leave.generic.x = 320 as i32;
     s_ingame.leave.generic.y = y;
     s_ingame.leave.generic.id = 15 as i32;
@@ -676,8 +667,7 @@ pub unsafe extern "C" fn InGame_MenuInit() {
     s_ingame.leave.style = 0x1 as i32 | 0x10 as i32;
     y += 28 as i32;
     s_ingame.quit.generic.type_0 = 9 as i32;
-    s_ingame.quit.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_ingame.quit.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_ingame.quit.generic.x = 320 as i32;
     s_ingame.quit.generic.y = y;
     s_ingame.quit.generic.id = 17 as i32;

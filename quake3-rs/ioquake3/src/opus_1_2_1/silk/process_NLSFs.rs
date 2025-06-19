@@ -274,12 +274,10 @@ pub unsafe extern "C" fn silk_process_NLSFs(
     /* Calculate mu values */
     /* **********************/
     /* NLSF_mu  = 0.003 - 0.0015 * psEnc->speech_activity; */
-    NLSF_mu_Q20 = ((0.003f64
-        * ((1 as i32 as i64) << 20 as i32) as f64
-        + 0.5f64) as crate::opus_types_h::opus_int32 as i64
-        + ((-0.001f64
-            * ((1 as i32 as i64) << 28 as i32) as f64
-            + 0.5f64) as crate::opus_types_h::opus_int32 as i64
+    NLSF_mu_Q20 = ((0.003f64 * ((1 as i32 as i64) << 20 as i32) as f64 + 0.5f64)
+        as crate::opus_types_h::opus_int32 as i64
+        + ((-0.001f64 * ((1 as i32 as i64) << 28 as i32) as f64 + 0.5f64)
+            as crate::opus_types_h::opus_int32 as i64
             * (*psEncC).speech_activity_Q8 as crate::opus_types_h::opus_int16 as i64
             >> 16 as i32)) as crate::opus_types_h::opus_int32;
     if (*psEncC).nb_subfr == 2 as i32 {
@@ -294,8 +292,7 @@ pub unsafe extern "C" fn silk_process_NLSFs(
     );
     /* Update NLSF weights for interpolated NLSFs */
     doInterpolate = ((*psEncC).useInterpolatedNLSFs == 1 as i32
-        && ((*psEncC).indices.NLSFInterpCoef_Q2 as i32) < 4 as i32)
-        as i32;
+        && ((*psEncC).indices.NLSFInterpCoef_Q2 as i32) < 4 as i32) as i32;
     if doInterpolate != 0 {
         /* Calculate the interpolated NLSF vector for the first half */
         crate::src::opus_1_2_1::silk::interpolate::silk_interpolate(

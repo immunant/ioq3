@@ -728,8 +728,7 @@ pub unsafe extern "C" fn RB_AddFlare(
             - 1 as i32
     {
         (*f).visible = crate::src::qcommon::q_shared::qfalse;
-        (*f).fadeTime =
-            crate::src::renderergl1::tr_backend::backEnd.refdef.time - 2000 as i32
+        (*f).fadeTime = crate::src::renderergl1::tr_backend::backEnd.refdef.time - 2000 as i32
     }
     (*f).addedFrame = crate::src::renderergl1::tr_backend::backEnd
         .viewParms
@@ -791,10 +790,8 @@ pub unsafe extern "C" fn RB_AddDlightFlares() {
                     .offset(j as isize) as *mut crate::tr_local_h::fog_t;
                 k = 0 as i32;
                 while k < 3 as i32 {
-                    if (*l).origin[k as usize]
-                        < (*fog).bounds[0 as i32 as usize][k as usize]
-                        || (*l).origin[k as usize]
-                            > (*fog).bounds[1 as i32 as usize][k as usize]
+                    if (*l).origin[k as usize] < (*fog).bounds[0 as i32 as usize][k as usize]
+                        || (*l).origin[k as usize] > (*fog).bounds[1 as i32 as usize][k as usize]
                     {
                         break;
                     }
@@ -871,22 +868,18 @@ pub unsafe extern "C" fn RB_TestFlare(mut f: *mut flare_t) {
     if visible as u64 != 0 {
         if (*f).visible as u64 == 0 {
             (*f).visible = crate::src::qcommon::q_shared::qtrue;
-            (*f).fadeTime =
-                crate::src::renderergl1::tr_backend::backEnd.refdef.time - 1 as i32
+            (*f).fadeTime = crate::src::renderergl1::tr_backend::backEnd.refdef.time - 1 as i32
         }
-        fade = (crate::src::renderergl1::tr_backend::backEnd.refdef.time - (*f).fadeTime)
-            as f32
+        fade = (crate::src::renderergl1::tr_backend::backEnd.refdef.time - (*f).fadeTime) as f32
             / 1000.0f32
             * (*crate::src::renderergl1::tr_init::r_flareFade).value
     } else {
         if (*f).visible as u64 != 0 {
             (*f).visible = crate::src::qcommon::q_shared::qfalse;
-            (*f).fadeTime =
-                crate::src::renderergl1::tr_backend::backEnd.refdef.time - 1 as i32
+            (*f).fadeTime = crate::src::renderergl1::tr_backend::backEnd.refdef.time - 1 as i32
         }
         fade = 1.0f32
-            - (crate::src::renderergl1::tr_backend::backEnd.refdef.time - (*f).fadeTime)
-                as f32
+            - (crate::src::renderergl1::tr_backend::backEnd.refdef.time - (*f).fadeTime) as f32
                 / 1000.0f32
                 * (*crate::src::renderergl1::tr_init::r_flareFade).value
     }
@@ -951,28 +944,23 @@ pub unsafe extern "C" fn RB_RenderFlare(mut f: *mut flare_t) {
      * As you can see, the intensity will have a max. of 1 when the distance is 0.
      * The coefficient flareCoeff will determine the falloff speed with increasing distance.
      */
-    factor = (distance as f64
-        + size as f64 * crate::stdlib::sqrt(flareCoeff as f64))
-        as f32;
+    factor = (distance as f64 + size as f64 * crate::stdlib::sqrt(flareCoeff as f64)) as f32;
     intensity = flareCoeff as f32 * size * size / (factor * factor);
-    color[0 as i32 as usize] =
-        (*f).color[0 as i32 as usize] * ((*f).drawIntensity * intensity);
-    color[1 as i32 as usize] =
-        (*f).color[1 as i32 as usize] * ((*f).drawIntensity * intensity);
-    color[2 as i32 as usize] =
-        (*f).color[2 as i32 as usize] * ((*f).drawIntensity * intensity);
+    color[0 as i32 as usize] = (*f).color[0 as i32 as usize] * ((*f).drawIntensity * intensity);
+    color[1 as i32 as usize] = (*f).color[1 as i32 as usize] * ((*f).drawIntensity * intensity);
+    color[2 as i32 as usize] = (*f).color[2 as i32 as usize] * ((*f).drawIntensity * intensity);
     // Calculations for fogging
     if !crate::src::renderergl1::tr_main::tr.world.is_null()
         && (*f).fogNum > 0 as i32
         && (*f).fogNum < (*crate::src::renderergl1::tr_main::tr.world).numfogs
     {
         crate::src::renderergl1::tr_shade::tess.numVertexes = 1 as i32;
-        crate::src::renderergl1::tr_shade::tess.xyz[0 as i32 as usize]
-            [0 as i32 as usize] = (*f).origin[0 as i32 as usize];
-        crate::src::renderergl1::tr_shade::tess.xyz[0 as i32 as usize]
-            [1 as i32 as usize] = (*f).origin[1 as i32 as usize];
-        crate::src::renderergl1::tr_shade::tess.xyz[0 as i32 as usize]
-            [2 as i32 as usize] = (*f).origin[2 as i32 as usize];
+        crate::src::renderergl1::tr_shade::tess.xyz[0 as i32 as usize][0 as i32 as usize] =
+            (*f).origin[0 as i32 as usize];
+        crate::src::renderergl1::tr_shade::tess.xyz[0 as i32 as usize][1 as i32 as usize] =
+            (*f).origin[1 as i32 as usize];
+        crate::src::renderergl1::tr_shade::tess.xyz[0 as i32 as usize][2 as i32 as usize] =
+            (*f).origin[2 as i32 as usize];
         crate::src::renderergl1::tr_shade::tess.fogNum = (*f).fogNum;
         crate::src::renderergl1::tr_shade_calc::RB_CalcModulateColorsByFog(fogFactors.as_mut_ptr());
         // We don't need to render the flare if colors are 0 anyways.
@@ -983,15 +971,12 @@ pub unsafe extern "C" fn RB_RenderFlare(mut f: *mut flare_t) {
             return;
         }
     }
-    iColor[0 as i32 as usize] = (color[0 as i32 as usize]
-        * fogFactors[0 as i32 as usize] as i32 as f32)
-        as i32;
-    iColor[1 as i32 as usize] = (color[1 as i32 as usize]
-        * fogFactors[1 as i32 as usize] as i32 as f32)
-        as i32;
-    iColor[2 as i32 as usize] = (color[2 as i32 as usize]
-        * fogFactors[2 as i32 as usize] as i32 as f32)
-        as i32;
+    iColor[0 as i32 as usize] =
+        (color[0 as i32 as usize] * fogFactors[0 as i32 as usize] as i32 as f32) as i32;
+    iColor[1 as i32 as usize] =
+        (color[1 as i32 as usize] * fogFactors[1 as i32 as usize] as i32 as f32) as i32;
+    iColor[2 as i32 as usize] =
+        (color[2 as i32 as usize] * fogFactors[2 as i32 as usize] as i32 as f32) as i32;
     crate::src::renderergl1::tr_shade::RB_BeginSurface(
         crate::src::renderergl1::tr_main::tr.flareShader as *mut crate::tr_local_h::shader_s,
         (*f).fogNum,

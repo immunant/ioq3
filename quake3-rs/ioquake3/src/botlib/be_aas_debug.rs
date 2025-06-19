@@ -544,15 +544,13 @@ pub unsafe extern "C" fn AAS_ShowBoundingBox(
                 let fresh2 = j;
                 j = j + 1;
                 lines[fresh2 as usize] = debuglines[line as usize];
-                debuglinevisible[line as usize] =
-                    crate::src::qcommon::q_shared::qtrue as i32;
+                debuglinevisible[line as usize] = crate::src::qcommon::q_shared::qtrue as i32;
                 numdebuglines += 1
             } else if debuglinevisible[line as usize] == 0 {
                 let fresh3 = j;
                 j = j + 1;
                 lines[fresh3 as usize] = debuglines[line as usize];
-                debuglinevisible[line as usize] =
-                    crate::src::qcommon::q_shared::qtrue as i32
+                debuglinevisible[line as usize] = crate::src::qcommon::q_shared::qtrue as i32
             }
             line += 1
             //end else
@@ -572,8 +570,7 @@ pub unsafe extern "C" fn AAS_ShowBoundingBox(
             .expect("non-null function pointer")(
             lines[1 as i32 as usize],
             bboxcorners[(4 as i32 + i) as usize].as_mut_ptr(),
-            bboxcorners[(4 as i32 + (i + 1 as i32 & 3 as i32)) as usize]
-                .as_mut_ptr(),
+            bboxcorners[(4 as i32 + (i + 1 as i32 & 3 as i32)) as usize].as_mut_ptr(),
             1 as i32,
         );
         //vertical lines
@@ -687,12 +684,12 @@ pub unsafe extern "C" fn AAS_ShowFace(mut facenum: i32) {
     start[2 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
         .vertexes
         .offset((*edge).v[0 as i32 as usize] as isize))[2 as i32 as usize];
-    end[0 as i32 as usize] = start[0 as i32 as usize]
-        + (*plane).normal[0 as i32 as usize] * 20 as i32 as f32;
-    end[1 as i32 as usize] = start[1 as i32 as usize]
-        + (*plane).normal[1 as i32 as usize] * 20 as i32 as f32;
-    end[2 as i32 as usize] = start[2 as i32 as usize]
-        + (*plane).normal[2 as i32 as usize] * 20 as i32 as f32;
+    end[0 as i32 as usize] =
+        start[0 as i32 as usize] + (*plane).normal[0 as i32 as usize] * 20 as i32 as f32;
+    end[1 as i32 as usize] =
+        start[1 as i32 as usize] + (*plane).normal[1 as i32 as usize] * 20 as i32 as f32;
+    end[2 as i32 as usize] =
+        start[2 as i32 as usize] + (*plane).normal[2 as i32 as usize] * 20 as i32 as f32;
     AAS_DebugLine(start.as_mut_ptr(), end.as_mut_ptr(), 1 as i32);
 }
 //end of the function AAS_ShowFace
@@ -704,11 +701,7 @@ pub unsafe extern "C" fn AAS_ShowFace(mut facenum: i32) {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_ShowFacePolygon(
-    mut facenum: i32,
-    mut color: i32,
-    mut flip: i32,
-) {
+pub unsafe extern "C" fn AAS_ShowFacePolygon(mut facenum: i32, mut color: i32, mut flip: i32) {
     let mut i: i32 = 0;
     let mut edgenum: i32 = 0;
     let mut numpoints: i32 = 0;
@@ -740,22 +733,23 @@ pub unsafe extern "C" fn AAS_ShowFacePolygon(
                 .offset(((*face).firstedge + i) as isize);
             edge = &mut *crate::src::botlib::be_aas_main::aasworld
                 .edges
-                .offset(
-                    (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum)
-                        as isize,
-                ) as *mut crate::aasfile_h::aas_edge_t;
+                .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
+                as *mut crate::aasfile_h::aas_edge_t;
             points[numpoints as usize][0 as i32 as usize] =
-                (*crate::src::botlib::be_aas_main::aasworld.vertexes.offset(
-                    (*edge).v[(edgenum < 0 as i32) as i32 as usize] as isize,
-                ))[0 as i32 as usize];
+                (*crate::src::botlib::be_aas_main::aasworld
+                    .vertexes
+                    .offset((*edge).v[(edgenum < 0 as i32) as i32 as usize] as isize))
+                    [0 as i32 as usize];
             points[numpoints as usize][1 as i32 as usize] =
-                (*crate::src::botlib::be_aas_main::aasworld.vertexes.offset(
-                    (*edge).v[(edgenum < 0 as i32) as i32 as usize] as isize,
-                ))[1 as i32 as usize];
+                (*crate::src::botlib::be_aas_main::aasworld
+                    .vertexes
+                    .offset((*edge).v[(edgenum < 0 as i32) as i32 as usize] as isize))
+                    [1 as i32 as usize];
             points[numpoints as usize][2 as i32 as usize] =
-                (*crate::src::botlib::be_aas_main::aasworld.vertexes.offset(
-                    (*edge).v[(edgenum < 0 as i32) as i32 as usize] as isize,
-                ))[2 as i32 as usize];
+                (*crate::src::botlib::be_aas_main::aasworld
+                    .vertexes
+                    .offset((*edge).v[(edgenum < 0 as i32) as i32 as usize] as isize))
+                    [2 as i32 as usize];
             numpoints += 1;
             i -= 1
         }
@@ -769,22 +763,23 @@ pub unsafe extern "C" fn AAS_ShowFacePolygon(
                 .offset(((*face).firstedge + i) as isize);
             edge = &mut *crate::src::botlib::be_aas_main::aasworld
                 .edges
-                .offset(
-                    (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum)
-                        as isize,
-                ) as *mut crate::aasfile_h::aas_edge_t;
+                .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
+                as *mut crate::aasfile_h::aas_edge_t;
             points[numpoints as usize][0 as i32 as usize] =
-                (*crate::src::botlib::be_aas_main::aasworld.vertexes.offset(
-                    (*edge).v[(edgenum < 0 as i32) as i32 as usize] as isize,
-                ))[0 as i32 as usize];
+                (*crate::src::botlib::be_aas_main::aasworld
+                    .vertexes
+                    .offset((*edge).v[(edgenum < 0 as i32) as i32 as usize] as isize))
+                    [0 as i32 as usize];
             points[numpoints as usize][1 as i32 as usize] =
-                (*crate::src::botlib::be_aas_main::aasworld.vertexes.offset(
-                    (*edge).v[(edgenum < 0 as i32) as i32 as usize] as isize,
-                ))[1 as i32 as usize];
+                (*crate::src::botlib::be_aas_main::aasworld
+                    .vertexes
+                    .offset((*edge).v[(edgenum < 0 as i32) as i32 as usize] as isize))
+                    [1 as i32 as usize];
             points[numpoints as usize][2 as i32 as usize] =
-                (*crate::src::botlib::be_aas_main::aasworld.vertexes.offset(
-                    (*edge).v[(edgenum < 0 as i32) as i32 as usize] as isize,
-                ))[2 as i32 as usize];
+                (*crate::src::botlib::be_aas_main::aasworld
+                    .vertexes
+                    .offset((*edge).v[(edgenum < 0 as i32) as i32 as usize] as isize))
+                    [2 as i32 as usize];
             numpoints += 1;
             i += 1
         }
@@ -923,8 +918,7 @@ pub unsafe extern "C" fn AAS_ShowArea(mut areanum: i32, mut groundfacesonly: i32
                     .DebugLineCreate
                     .expect("non-null function pointer")(
                 );
-                debuglinevisible[line as usize] =
-                    crate::src::qcommon::q_shared::qfalse as i32;
+                debuglinevisible[line as usize] = crate::src::qcommon::q_shared::qfalse as i32;
                 numdebuglines += 1
             }
             if debuglinevisible[line as usize] == 0 {
@@ -1050,11 +1044,7 @@ pub unsafe extern "C" fn AAS_ShowAreaPolygons(
         }
         match current_block_11 {
             8236137900636309791 => {
-                AAS_ShowFacePolygon(
-                    facenum,
-                    color,
-                    ((*face).frontarea != areanum) as i32,
-                );
+                AAS_ShowFacePolygon(facenum, color, ((*face).frontarea != areanum) as i32);
             }
             _ => {}
         }
@@ -1135,12 +1125,9 @@ pub unsafe extern "C" fn AAS_DrawArrow(
         1 as i32 as crate::src::qcommon::q_shared::vec_t,
     ];
     let mut dot: f32 = 0.;
-    dir[0 as i32 as usize] =
-        *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
-    dir[1 as i32 as usize] =
-        *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
-    dir[2 as i32 as usize] =
-        *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
+    dir[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
+    dir[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
+    dir[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
     crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
     dot = dir[0 as i32 as usize] * up[0 as i32 as usize]
         + dir[1 as i32 as usize] * up[1 as i32 as usize]
@@ -1156,27 +1143,21 @@ pub unsafe extern "C" fn AAS_DrawArrow(
             cross.as_mut_ptr(),
         );
     }
-    p1[0 as i32 as usize] = *end.offset(0 as i32 as isize)
-        + dir[0 as i32 as usize] * -(6 as i32) as f32;
-    p1[1 as i32 as usize] = *end.offset(1 as i32 as isize)
-        + dir[1 as i32 as usize] * -(6 as i32) as f32;
-    p1[2 as i32 as usize] = *end.offset(2 as i32 as isize)
-        + dir[2 as i32 as usize] * -(6 as i32) as f32;
+    p1[0 as i32 as usize] =
+        *end.offset(0 as i32 as isize) + dir[0 as i32 as usize] * -(6 as i32) as f32;
+    p1[1 as i32 as usize] =
+        *end.offset(1 as i32 as isize) + dir[1 as i32 as usize] * -(6 as i32) as f32;
+    p1[2 as i32 as usize] =
+        *end.offset(2 as i32 as isize) + dir[2 as i32 as usize] * -(6 as i32) as f32;
     p2[0 as i32 as usize] = p1[0 as i32 as usize];
     p2[1 as i32 as usize] = p1[1 as i32 as usize];
     p2[2 as i32 as usize] = p1[2 as i32 as usize];
-    p1[0 as i32 as usize] = p1[0 as i32 as usize]
-        + cross[0 as i32 as usize] * 6 as i32 as f32;
-    p1[1 as i32 as usize] = p1[1 as i32 as usize]
-        + cross[1 as i32 as usize] * 6 as i32 as f32;
-    p1[2 as i32 as usize] = p1[2 as i32 as usize]
-        + cross[2 as i32 as usize] * 6 as i32 as f32;
-    p2[0 as i32 as usize] = p2[0 as i32 as usize]
-        + cross[0 as i32 as usize] * -(6 as i32) as f32;
-    p2[1 as i32 as usize] = p2[1 as i32 as usize]
-        + cross[1 as i32 as usize] * -(6 as i32) as f32;
-    p2[2 as i32 as usize] = p2[2 as i32 as usize]
-        + cross[2 as i32 as usize] * -(6 as i32) as f32;
+    p1[0 as i32 as usize] = p1[0 as i32 as usize] + cross[0 as i32 as usize] * 6 as i32 as f32;
+    p1[1 as i32 as usize] = p1[1 as i32 as usize] + cross[1 as i32 as usize] * 6 as i32 as f32;
+    p1[2 as i32 as usize] = p1[2 as i32 as usize] + cross[2 as i32 as usize] * 6 as i32 as f32;
+    p2[0 as i32 as usize] = p2[0 as i32 as usize] + cross[0 as i32 as usize] * -(6 as i32) as f32;
+    p2[1 as i32 as usize] = p2[1 as i32 as usize] + cross[1 as i32 as usize] * -(6 as i32) as f32;
+    p2[2 as i32 as usize] = p2[2 as i32 as usize] + cross[2 as i32 as usize] * -(6 as i32) as f32;
     AAS_DebugLine(start, end, linecolor);
     AAS_DebugLine(p1.as_mut_ptr(), end, arrowcolor);
     AAS_DebugLine(p2.as_mut_ptr(), end, arrowcolor);
@@ -1253,12 +1234,10 @@ pub unsafe extern "C" fn AAS_ShowReachability(
         velocity[0 as i32 as usize] = dir[0 as i32 as usize] * speed;
         velocity[1 as i32 as usize] = dir[1 as i32 as usize] * speed;
         velocity[2 as i32 as usize] = dir[2 as i32 as usize] * speed;
-        cmdmove[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        cmdmove[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         cmdmove[1 as i32 as usize] = cmdmove[2 as i32 as usize];
         cmdmove[0 as i32 as usize] = cmdmove[1 as i32 as usize];
-        cmdmove[2 as i32 as usize] =
-            crate::src::botlib::be_aas_move::aassettings.phys_jumpvel;
+        cmdmove[2 as i32 as usize] = crate::src::botlib::be_aas_move::aassettings.phys_jumpvel;
         crate::src::botlib::be_aas_move::AAS_PredictClientMovement(
             &mut move_0 as *mut _ as *mut crate::be_aas_h::aas_clientmove_s,
             -(1 as i32),
@@ -1270,11 +1249,7 @@ pub unsafe extern "C" fn AAS_ShowReachability(
             3 as i32,
             30 as i32,
             0.1f32,
-            1 as i32
-                | 4 as i32
-                | 8 as i32
-                | 16 as i32
-                | 32 as i32,
+            1 as i32 | 4 as i32 | 8 as i32 | 16 as i32 | 32 as i32,
             0 as i32,
             crate::src::qcommon::q_shared::qtrue as i32,
         );
@@ -1283,11 +1258,7 @@ pub unsafe extern "C" fn AAS_ShowReachability(
                 reach as *mut crate::aasfile_h::aas_reachability_s,
                 dir.as_mut_ptr(),
             );
-            AAS_DrawCross(
-                dir.as_mut_ptr(),
-                4 as i32 as f32,
-                3 as i32,
-            );
+            AAS_DrawCross(dir.as_mut_ptr(), 4 as i32 as f32, 3 as i32);
         }
     } else if (*reach).traveltype & 0xffffff as i32 == 12 as i32 {
         //
@@ -1316,10 +1287,8 @@ pub unsafe extern "C" fn AAS_ShowReachability(
         cmdmove[0 as i32 as usize] = dir[0 as i32 as usize] * speed;
         cmdmove[1 as i32 as usize] = dir[1 as i32 as usize] * speed;
         cmdmove[2 as i32 as usize] = dir[2 as i32 as usize] * speed;
-        velocity[0 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        velocity[1 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        velocity[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        velocity[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         velocity[2 as i32 as usize] = zvel;
         //
         crate::src::botlib::be_aas_move::AAS_PredictClientMovement(
@@ -1333,22 +1302,14 @@ pub unsafe extern "C" fn AAS_ShowReachability(
             30 as i32,
             30 as i32,
             0.1f32,
-            4 as i32
-                | 8 as i32
-                | 16 as i32
-                | 32 as i32
-                | 128 as i32
-                | 1024 as i32,
+            4 as i32 | 8 as i32 | 16 as i32 | 32 as i32 | 128 as i32 | 1024 as i32,
             (*reach).areanum,
             crate::src::qcommon::q_shared::qtrue as i32,
         );
     } else if (*reach).traveltype & 0xffffff as i32 == 18 as i32 {
-        cmdmove[0 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        cmdmove[1 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        cmdmove[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        cmdmove[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        cmdmove[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        cmdmove[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         //
         dir[0 as i32 as usize] =
             (*reach).end[0 as i32 as usize] - (*reach).start[0 as i32 as usize];
@@ -1360,15 +1321,11 @@ pub unsafe extern "C" fn AAS_ShowReachability(
         crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
         //set the velocity
         //NOTE: the edgenum is the horizontal velocity
-        velocity[0 as i32 as usize] =
-            dir[0 as i32 as usize] * (*reach).edgenum as f32;
-        velocity[1 as i32 as usize] =
-            dir[1 as i32 as usize] * (*reach).edgenum as f32;
-        velocity[2 as i32 as usize] =
-            dir[2 as i32 as usize] * (*reach).edgenum as f32;
+        velocity[0 as i32 as usize] = dir[0 as i32 as usize] * (*reach).edgenum as f32;
+        velocity[1 as i32 as usize] = dir[1 as i32 as usize] * (*reach).edgenum as f32;
+        velocity[2 as i32 as usize] = dir[2 as i32 as usize] * (*reach).edgenum as f32;
         //NOTE: the facenum is the Z velocity
-        velocity[2 as i32 as usize] =
-            (*reach).facenum as crate::src::qcommon::q_shared::vec_t;
+        velocity[2 as i32 as usize] = (*reach).facenum as crate::src::qcommon::q_shared::vec_t;
         //
         crate::src::botlib::be_aas_move::AAS_PredictClientMovement(
             &mut move_0 as *mut _ as *mut crate::be_aas_h::aas_clientmove_s,
@@ -1381,12 +1338,7 @@ pub unsafe extern "C" fn AAS_ShowReachability(
             30 as i32,
             30 as i32,
             0.1f32,
-            4 as i32
-                | 8 as i32
-                | 16 as i32
-                | 32 as i32
-                | 128 as i32
-                | 1024 as i32,
+            4 as i32 | 8 as i32 | 16 as i32 | 32 as i32 | 128 as i32 | 1024 as i32,
             (*reach).areanum,
             crate::src::qcommon::q_shared::qtrue as i32,
         );
@@ -1459,11 +1411,7 @@ pub unsafe extern "C" fn AAS_ShowReachableAreas(mut areanum: i32) {
 //end of the function ShowReachableAreas
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_FloodAreas_r(
-    mut areanum: i32,
-    mut cluster: i32,
-    mut done: *mut i32,
-) {
+pub unsafe extern "C" fn AAS_FloodAreas_r(mut areanum: i32, mut cluster: i32, mut done: *mut i32) {
     let mut nextareanum: i32 = 0;
     let mut i: i32 = 0;
     let mut facenum: i32 = 0;
@@ -1503,8 +1451,7 @@ pub unsafe extern "C" fn AAS_FloodAreas_r(
         }
         if !(nextareanum == 0) {
             if !(*done.offset(nextareanum as isize) != 0) {
-                *done.offset(nextareanum as isize) =
-                    crate::src::qcommon::q_shared::qtrue as i32;
+                *done.offset(nextareanum as isize) = crate::src::qcommon::q_shared::qtrue as i32;
                 if !((*crate::src::botlib::be_aas_main::aasworld
                     .areasettings
                     .offset(nextareanum as isize))
@@ -1531,8 +1478,7 @@ pub unsafe extern "C" fn AAS_FloodAreas_r(
         nextareanum = (*reach).areanum;
         if !(nextareanum == 0) {
             if !(*done.offset(nextareanum as isize) != 0) {
-                *done.offset(nextareanum as isize) =
-                    crate::src::qcommon::q_shared::qtrue as i32;
+                *done.offset(nextareanum as isize) = crate::src::qcommon::q_shared::qtrue as i32;
                 if !((*crate::src::botlib::be_aas_main::aasworld
                     .areasettings
                     .offset(nextareanum as isize))

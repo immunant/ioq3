@@ -278,9 +278,7 @@ pub unsafe extern "C" fn jpeg_start_decompress(
                     break;
                 }
                 /* Advance progress counter if appropriate */
-                if !(*cinfo).progress.is_null()
-                    && (retcode == 3 as i32 || retcode == 1 as i32)
-                {
+                if !(*cinfo).progress.is_null() && (retcode == 3 as i32 || retcode == 1 as i32) {
                     (*(*cinfo).progress).pass_counter += 1;
                     if (*(*cinfo).progress).pass_counter >= (*(*cinfo).progress).pass_limit {
                         /* jdmaster underestimated number of scans; ratchet up one scan */
@@ -442,8 +440,7 @@ pub unsafe extern "C" fn jpeg_read_scanlines(
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr,
-            -(1 as i32),
+            cinfo as crate::jpeglib_h::j_common_ptr, -(1 as i32)
         );
         return 0 as i32 as crate::jmorecfg_h::JDIMENSION;
     }
@@ -502,8 +499,7 @@ pub unsafe extern "C" fn jpeg_read_raw_data(
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr,
-            -(1 as i32),
+            cinfo as crate::jpeglib_h::j_common_ptr, -(1 as i32)
         );
         return 0 as i32 as crate::jmorecfg_h::JDIMENSION;
     }
@@ -542,9 +538,9 @@ pub unsafe extern "C" fn jpeg_read_raw_data(
         return 0 as i32 as crate::jmorecfg_h::JDIMENSION;
     } /* suspension forced, can do nothing more */
     /* OK, we processed one iMCU row. */
-    (*cinfo).output_scanline =
-        ((*cinfo).output_scanline as u32).wrapping_add(lines_per_iMCU_row)
-            as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
+    (*cinfo).output_scanline = ((*cinfo).output_scanline as u32).wrapping_add(lines_per_iMCU_row)
+        as crate::jmorecfg_h::JDIMENSION
+        as crate::jmorecfg_h::JDIMENSION;
     return lines_per_iMCU_row;
 }
 /* Additional entry points for buffered-image mode. */

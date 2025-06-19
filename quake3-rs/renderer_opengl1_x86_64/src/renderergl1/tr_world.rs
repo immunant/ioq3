@@ -280,8 +280,7 @@ unsafe extern "C" fn R_CullGrid(
     if (*crate::src::renderergl1::tr_init::r_nocurves).integer != 0 {
         return crate::src::qcommon::q_shared::qtrue;
     }
-    if crate::src::renderergl1::tr_main::tr.currentEntityNum
-        != ((1 as i32) << 10 as i32) - 1 as i32
+    if crate::src::renderergl1::tr_main::tr.currentEntityNum != ((1 as i32) << 10 as i32) - 1 as i32
     {
         sphereCull = crate::src::renderergl1::tr_main::R_CullLocalPointAndRadius(
             (*cv).localOrigin.as_mut_ptr(),
@@ -357,9 +356,7 @@ unsafe extern "C" fn R_CullSurface(
     if *surface as u32 != crate::tr_local_h::SF_FACE as i32 as u32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    if (*shader).cullType as u32
-        == crate::tr_local_h::CT_TWO_SIDED as i32 as u32
-    {
+    if (*shader).cullType as u32 == crate::tr_local_h::CT_TWO_SIDED as i32 as u32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
     // face culling
@@ -376,9 +373,7 @@ unsafe extern "C" fn R_CullSurface(
     // don't cull exactly on the plane, because there are levels of rounding
     // through the BSP, ICD, and hardware that may cause pixel gaps if an
     // epsilon isn't allowed here
-    if (*shader).cullType as u32
-        == crate::tr_local_h::CT_FRONT_SIDED as i32 as u32
-    {
+    if (*shader).cullType as u32 == crate::tr_local_h::CT_FRONT_SIDED as i32 as u32 {
         if d < (*sface).plane.dist - 8 as i32 as f32 {
             return crate::src::qcommon::q_shared::qtrue;
         }
@@ -402,12 +397,9 @@ unsafe extern "C" fn R_DlightFace(
                 .refdef
                 .dlights
                 .offset(i as isize) as *mut crate::tr_local_h::dlight_s;
-            d = (*dl).origin[0 as i32 as usize]
-                * (*face).plane.normal[0 as i32 as usize]
-                + (*dl).origin[1 as i32 as usize]
-                    * (*face).plane.normal[1 as i32 as usize]
-                + (*dl).origin[2 as i32 as usize]
-                    * (*face).plane.normal[2 as i32 as usize]
+            d = (*dl).origin[0 as i32 as usize] * (*face).plane.normal[0 as i32 as usize]
+                + (*dl).origin[1 as i32 as usize] * (*face).plane.normal[1 as i32 as usize]
+                + (*dl).origin[2 as i32 as usize] * (*face).plane.normal[2 as i32 as usize]
                 - (*face).plane.dist;
             if d < -(*dl).radius || d > (*dl).radius {
                 // dlight doesn't reach the plane
@@ -493,16 +485,12 @@ unsafe extern "C" fn R_DlightSurface(
             (*surf).data as *mut crate::tr_local_h::srfSurfaceFace_t,
             dlightBits,
         )
-    } else if *(*surf).data as u32
-        == crate::tr_local_h::SF_GRID as i32 as u32
-    {
+    } else if *(*surf).data as u32 == crate::tr_local_h::SF_GRID as i32 as u32 {
         dlightBits = R_DlightGrid(
             (*surf).data as *mut crate::tr_local_h::srfGridMesh_t,
             dlightBits,
         )
-    } else if *(*surf).data as u32
-        == crate::tr_local_h::SF_TRIANGLES as i32 as u32
-    {
+    } else if *(*surf).data as u32 == crate::tr_local_h::SF_TRIANGLES as i32 as u32 {
         dlightBits = R_DlightTrisurf(
             (*surf).data as *mut crate::tr_local_h::srfTriangles_t,
             dlightBits,
@@ -726,12 +714,10 @@ unsafe extern "C" fn R_RecursiveWorldNode(
                             * (*(*node).plane).normal[2 as i32 as usize]
                         - (*(*node).plane).dist;
                     if dist > -(*dl).radius {
-                        newDlights[0 as i32 as usize] |=
-                            ((1 as i32) << i) as u32
+                        newDlights[0 as i32 as usize] |= ((1 as i32) << i) as u32
                     }
                     if dist < (*dl).radius {
-                        newDlights[1 as i32 as usize] |=
-                            ((1 as i32) << i) as u32
+                        newDlights[1 as i32 as usize] |= ((1 as i32) << i) as u32
                     }
                 }
                 i += 1
@@ -854,9 +840,7 @@ R_ClusterPVS
 ==============
 */
 
-unsafe extern "C" fn R_ClusterPVS(
-    mut cluster: i32,
-) -> *const crate::src::qcommon::q_shared::byte {
+unsafe extern "C" fn R_ClusterPVS(mut cluster: i32) -> *const crate::src::qcommon::q_shared::byte {
     if (*crate::src::renderergl1::tr_main::tr.world).vis.is_null()
         || cluster < 0 as i32
         || cluster >= (*crate::src::renderergl1::tr_main::tr.world).numClusters
@@ -985,8 +969,7 @@ unsafe extern "C" fn R_MarkLeaves() {
             {
                 // check for door connection
                 if !(crate::src::renderergl1::tr_main::tr.refdef.areamask
-                    [((*leaf).area >> 3 as i32) as usize]
-                    as i32
+                    [((*leaf).area >> 3 as i32) as usize] as i32
                     & (1 as i32) << ((*leaf).area & 7 as i32)
                     != 0)
                 {
@@ -1358,18 +1341,15 @@ pub unsafe extern "C" fn R_AddWorldSurfaces() {
     if crate::src::renderergl1::tr_main::tr.refdef.rdflags & 0x1 as i32 != 0 {
         return;
     }
-    crate::src::renderergl1::tr_main::tr.currentEntityNum =
-        ((1 as i32) << 10 as i32) - 1 as i32;
+    crate::src::renderergl1::tr_main::tr.currentEntityNum = ((1 as i32) << 10 as i32) - 1 as i32;
     crate::src::renderergl1::tr_main::tr.shiftedEntityNum =
         crate::src::renderergl1::tr_main::tr.currentEntityNum << 7 as i32;
     // determine which leaves are in the PVS / areamask
     R_MarkLeaves();
     // clear out the visible min/max
     crate::src::qcommon::q_math::ClearBounds(
-        crate::src::renderergl1::tr_main::tr.viewParms.visBounds[0 as i32 as usize]
-            .as_mut_ptr(),
-        crate::src::renderergl1::tr_main::tr.viewParms.visBounds[1 as i32 as usize]
-            .as_mut_ptr(),
+        crate::src::renderergl1::tr_main::tr.viewParms.visBounds[0 as i32 as usize].as_mut_ptr(),
+        crate::src::renderergl1::tr_main::tr.viewParms.visBounds[1 as i32 as usize].as_mut_ptr(),
     );
     // perform frustum culling and add all the potentially visible surfaces
     if crate::src::renderergl1::tr_main::tr.refdef.num_dlights > 32 as i32 {

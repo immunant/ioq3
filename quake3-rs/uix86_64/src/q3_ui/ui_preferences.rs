@@ -446,20 +446,16 @@ unsafe extern "C" fn Preferences_SetMenuItems() {
     ) != 0 as i32 as f32) as i32;
     s_preferences.identifytarget.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"cg_drawCrosshairNames\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as i32 as f32)
-        as i32;
+    ) != 0 as i32 as f32) as i32;
     s_preferences.dynamiclights.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"r_dynamiclight\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as i32 as f32)
-        as i32;
+    ) != 0 as i32 as f32) as i32;
     s_preferences.highqualitysky.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"r_fastsky\x00" as *const u8 as *const libc::c_char,
-    ) == 0 as i32 as f32)
-        as i32;
+    ) == 0 as i32 as f32) as i32;
     s_preferences.synceveryframe.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"r_finish\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as i32 as f32)
-        as i32;
+    ) != 0 as i32 as f32) as i32;
     s_preferences.forcemodel.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"cg_forcemodel\x00" as *const u8 as *const libc::c_char,
     ) != 0 as i32 as f32) as i32;
@@ -472,8 +468,7 @@ unsafe extern "C" fn Preferences_SetMenuItems() {
     ) as i32;
     s_preferences.allowdownload.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"cl_allowDownload\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as i32 as f32)
-        as i32;
+    ) != 0 as i32 as f32) as i32;
 }
 
 unsafe extern "C" fn Preferences_Event(mut ptr: *mut libc::c_void, mut notification: i32) {
@@ -664,10 +659,8 @@ unsafe extern "C" fn Preferences_MenuInit() {
     s_preferences.framer.height = 334 as i32;
     y = 144 as i32;
     s_preferences.crosshair.generic.type_0 = 3 as i32;
-    s_preferences.crosshair.generic.flags = 0x100 as i32 as u32
-        | 0x2 as i32 as u32
-        | 0x8000 as i32 as u32
-        | 0x10000 as i32 as u32;
+    s_preferences.crosshair.generic.flags =
+        0x100 as i32 as u32 | 0x2 as i32 as u32 | 0x8000 as i32 as u32 | 0x10000 as i32 as u32;
     s_preferences.crosshair.generic.x = 360 as i32;
     s_preferences.crosshair.generic.y = y;
     s_preferences.crosshair.generic.name = b"Crosshair:\x00" as *const u8 as *const libc::c_char;
@@ -689,8 +682,7 @@ unsafe extern "C" fn Preferences_MenuInit() {
     s_preferences.simpleitems.generic.type_0 = 5 as i32;
     s_preferences.simpleitems.generic.name =
         b"Simple Items:\x00" as *const u8 as *const libc::c_char;
-    s_preferences.simpleitems.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_preferences.simpleitems.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_preferences.simpleitems.generic.callback =
         Some(Preferences_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_preferences.simpleitems.generic.id = 128 as i32;
@@ -700,8 +692,7 @@ unsafe extern "C" fn Preferences_MenuInit() {
     s_preferences.wallmarks.generic.type_0 = 5 as i32;
     s_preferences.wallmarks.generic.name =
         b"Marks on Walls:\x00" as *const u8 as *const libc::c_char;
-    s_preferences.wallmarks.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_preferences.wallmarks.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_preferences.wallmarks.generic.callback =
         Some(Preferences_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_preferences.wallmarks.generic.id = 131 as i32;
@@ -710,8 +701,7 @@ unsafe extern "C" fn Preferences_MenuInit() {
     y += 16 as i32 + 2 as i32;
     s_preferences.brass.generic.type_0 = 5 as i32;
     s_preferences.brass.generic.name = b"Ejecting Brass:\x00" as *const u8 as *const libc::c_char;
-    s_preferences.brass.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_preferences.brass.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_preferences.brass.generic.callback =
         Some(Preferences_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_preferences.brass.generic.id = 130 as i32;
@@ -721,8 +711,7 @@ unsafe extern "C" fn Preferences_MenuInit() {
     s_preferences.dynamiclights.generic.type_0 = 5 as i32;
     s_preferences.dynamiclights.generic.name =
         b"Dynamic Lights:\x00" as *const u8 as *const libc::c_char;
-    s_preferences.dynamiclights.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_preferences.dynamiclights.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_preferences.dynamiclights.generic.callback =
         Some(Preferences_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_preferences.dynamiclights.generic.id = 132 as i32;
@@ -732,8 +721,7 @@ unsafe extern "C" fn Preferences_MenuInit() {
     s_preferences.identifytarget.generic.type_0 = 5 as i32;
     s_preferences.identifytarget.generic.name =
         b"Identify Target:\x00" as *const u8 as *const libc::c_char;
-    s_preferences.identifytarget.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_preferences.identifytarget.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_preferences.identifytarget.generic.callback =
         Some(Preferences_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_preferences.identifytarget.generic.id = 133 as i32;
@@ -743,8 +731,7 @@ unsafe extern "C" fn Preferences_MenuInit() {
     s_preferences.highqualitysky.generic.type_0 = 5 as i32;
     s_preferences.highqualitysky.generic.name =
         b"High Quality Sky:\x00" as *const u8 as *const libc::c_char;
-    s_preferences.highqualitysky.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_preferences.highqualitysky.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_preferences.highqualitysky.generic.callback =
         Some(Preferences_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_preferences.highqualitysky.generic.id = 129 as i32;
@@ -754,8 +741,7 @@ unsafe extern "C" fn Preferences_MenuInit() {
     s_preferences.synceveryframe.generic.type_0 = 5 as i32;
     s_preferences.synceveryframe.generic.name =
         b"Sync Every Frame:\x00" as *const u8 as *const libc::c_char;
-    s_preferences.synceveryframe.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_preferences.synceveryframe.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_preferences.synceveryframe.generic.callback =
         Some(Preferences_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_preferences.synceveryframe.generic.id = 134 as i32;
@@ -765,8 +751,7 @@ unsafe extern "C" fn Preferences_MenuInit() {
     s_preferences.forcemodel.generic.type_0 = 5 as i32;
     s_preferences.forcemodel.generic.name =
         b"Force Player Models:\x00" as *const u8 as *const libc::c_char;
-    s_preferences.forcemodel.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_preferences.forcemodel.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_preferences.forcemodel.generic.callback =
         Some(Preferences_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_preferences.forcemodel.generic.id = 135 as i32;
@@ -776,8 +761,7 @@ unsafe extern "C" fn Preferences_MenuInit() {
     s_preferences.drawteamoverlay.generic.type_0 = 3 as i32;
     s_preferences.drawteamoverlay.generic.name =
         b"Draw Team Overlay:\x00" as *const u8 as *const libc::c_char;
-    s_preferences.drawteamoverlay.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_preferences.drawteamoverlay.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_preferences.drawteamoverlay.generic.callback =
         Some(Preferences_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_preferences.drawteamoverlay.generic.id = 136 as i32;
@@ -788,8 +772,7 @@ unsafe extern "C" fn Preferences_MenuInit() {
     s_preferences.allowdownload.generic.type_0 = 5 as i32;
     s_preferences.allowdownload.generic.name =
         b"Automatic Downloading:\x00" as *const u8 as *const libc::c_char;
-    s_preferences.allowdownload.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_preferences.allowdownload.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_preferences.allowdownload.generic.callback =
         Some(Preferences_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_preferences.allowdownload.generic.id = 137 as i32;
@@ -797,8 +780,7 @@ unsafe extern "C" fn Preferences_MenuInit() {
     s_preferences.allowdownload.generic.y = y;
     s_preferences.back.generic.type_0 = 6 as i32;
     s_preferences.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    s_preferences.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_preferences.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_preferences.back.generic.callback =
         Some(Preferences_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_preferences.back.generic.id = 138 as i32;

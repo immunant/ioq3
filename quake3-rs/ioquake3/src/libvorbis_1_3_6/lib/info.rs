@@ -140,12 +140,10 @@ pub unsafe extern "C" fn vorbis_comment_add(
         (((*vc).comments + 2 as i32) as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
     ) as *mut i32;
-    *(*vc).comment_lengths.offset((*vc).comments as isize) =
-        crate::stdlib::strlen(comment) as i32;
+    *(*vc).comment_lengths.offset((*vc).comments as isize) = crate::stdlib::strlen(comment) as i32;
     let ref mut fresh4 = *(*vc).user_comments.offset((*vc).comments as isize);
     *fresh4 = crate::stdlib::malloc(
-        (*(*vc).comment_lengths.offset((*vc).comments as isize) + 1 as i32)
-            as libc::c_ulong,
+        (*(*vc).comment_lengths.offset((*vc).comments as isize) + 1 as i32) as libc::c_ulong,
     ) as *mut libc::c_char;
     ::libc::strcpy(
         *(*vc).user_comments.offset((*vc).comments as isize),
@@ -186,9 +184,7 @@ unsafe extern "C" fn tagcompare(
     while c < n {
         if ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                > 1 as i32 as libc::c_ulong
-            {
+            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
                 if 0 != 0 {
                     let mut __c: i32 = *s1.offset(c as isize) as i32;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -206,9 +202,7 @@ unsafe extern "C" fn tagcompare(
             __res
         }) != ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                > 1 as i32 as libc::c_ulong
-            {
+            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
                 if 0 != 0 {
                     let mut __c: i32 = *s2.offset(c as isize) as i32;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -240,8 +234,7 @@ pub unsafe extern "C" fn vorbis_comment_query(
 ) -> *mut libc::c_char {
     let mut i: libc::c_long = 0;
     let mut found: i32 = 0 as i32;
-    let mut taglen: i32 =
-        crate::stdlib::strlen(tag).wrapping_add(1 as i32 as libc::c_ulong) as i32;
+    let mut taglen: i32 = crate::stdlib::strlen(tag).wrapping_add(1 as i32 as libc::c_ulong) as i32;
     let mut fulltag: *mut libc::c_char =
         crate::stdlib::malloc((taglen + 1 as i32) as libc::c_ulong) as *mut libc::c_char;
     ::libc::strcpy(fulltag, tag);
@@ -271,8 +264,7 @@ pub unsafe extern "C" fn vorbis_comment_query_count(
 ) -> i32 {
     let mut i: i32 = 0; /* +1 for the = we append */
     let mut count: i32 = 0 as i32;
-    let mut taglen: i32 =
-        crate::stdlib::strlen(tag).wrapping_add(1 as i32 as libc::c_ulong) as i32;
+    let mut taglen: i32 = crate::stdlib::strlen(tag).wrapping_add(1 as i32 as libc::c_ulong) as i32;
     let mut fulltag: *mut libc::c_char =
         crate::stdlib::malloc((taglen + 1 as i32) as libc::c_ulong) as *mut libc::c_char;
     ::libc::strcpy(fulltag, tag);
@@ -505,12 +497,8 @@ unsafe extern "C" fn _vorbis_unpack_info(
     if !((*vi).rate < 1 as i32 as libc::c_long) {
         if !((*vi).channels < 1 as i32) {
             if !((*ci).blocksizes[0 as i32 as usize] < 64 as i32 as libc::c_long) {
-                if !((*ci).blocksizes[1 as i32 as usize]
-                    < (*ci).blocksizes[0 as i32 as usize])
-                {
-                    if !((*ci).blocksizes[1 as i32 as usize]
-                        > 8192 as i32 as libc::c_long)
-                    {
+                if !((*ci).blocksizes[1 as i32 as usize] < (*ci).blocksizes[0 as i32 as usize]) {
+                    if !((*ci).blocksizes[1 as i32 as usize] > 8192 as i32 as libc::c_long) {
                         if !(crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                             opb as *mut crate::ogg_h::oggpack_buffer,
                             1 as i32,
@@ -571,11 +559,10 @@ unsafe extern "C" fn _vorbis_unpack_comment(
                             current_block = 6057473163062296781;
                             break;
                         }
-                        let mut len: i32 =
-                            crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                                opb as *mut crate::ogg_h::oggpack_buffer,
-                                32 as i32,
-                            ) as i32;
+                        let mut len: i32 = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
+                            opb as *mut crate::ogg_h::oggpack_buffer,
+                            32 as i32,
+                        ) as i32;
                         if len < 0 as i32 {
                             current_block = 16389255375241467587;
                             break;
@@ -659,8 +646,7 @@ unsafe extern "C" fn _vorbis_unpack_books(
                 let mut times: i32 = (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                     opb as *mut crate::ogg_h::oggpack_buffer,
                     6 as i32,
-                ) + 1 as i32 as libc::c_long)
-                    as i32;
+                ) + 1 as i32 as libc::c_long) as i32;
                 if !(times <= 0 as i32) {
                     i = 0 as i32;
                     loop {
@@ -668,11 +654,10 @@ unsafe extern "C" fn _vorbis_unpack_books(
                             current_block = 17860125682698302841;
                             break;
                         }
-                        let mut test: i32 =
-                            crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                                opb as *mut crate::ogg_h::oggpack_buffer,
-                                16 as i32,
-                            ) as i32;
+                        let mut test: i32 = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
+                            opb as *mut crate::ogg_h::oggpack_buffer,
+                            16 as i32,
+                        ) as i32;
                         if test < 0 as i32 || test >= 1 as i32 {
                             current_block = 9493312797378346061;
                             break;
@@ -744,8 +729,7 @@ unsafe extern "C" fn _vorbis_unpack_books(
                                                                      i32)
                                                         as i32;
                                                 if (*ci).residue_type[i as usize] < 0 as i32
-                                                    || (*ci).residue_type[i as usize]
-                                                        >= 3 as i32
+                                                    || (*ci).residue_type[i as usize] >= 3 as i32
                                                 {
                                                     current_block = 9493312797378346061;
                                                     break;
@@ -796,8 +780,7 @@ unsafe extern "C" fn _vorbis_unpack_books(
                                                                                  i32)
                                                                     as
                                                                     i32;
-                                                            if (*ci).map_type[i as usize]
-                                                                < 0 as i32
+                                                            if (*ci).map_type[i as usize] < 0 as i32
                                                                 || (*ci).map_type[i as usize]
                                                                     >= 1 as i32
                                                             {
@@ -837,9 +820,7 @@ unsafe extern "C" fn _vorbis_unpack_books(
                                                                              libc::c_long)
                                                                         as
                                                                         i32; /* top level EOP check */
-                                                                if !((*ci).modes
-                                                                    <= 0 as i32)
-                                                                {
+                                                                if !((*ci).modes <= 0 as i32) {
                                                                     i = 0 as i32;
                                                                     loop {
                                                                         if !(i < (*ci).modes) {
@@ -985,9 +966,7 @@ unsafe extern "C" fn _vorbis_unpack_books(
 /* Is this packet a vorbis ID header? */
 #[no_mangle]
 
-pub unsafe extern "C" fn vorbis_synthesis_idheader(
-    mut op: *mut crate::ogg_h::ogg_packet,
-) -> i32 {
+pub unsafe extern "C" fn vorbis_synthesis_idheader(mut op: *mut crate::ogg_h::ogg_packet) -> i32 {
     let mut opb: crate::ogg_h::oggpack_buffer = crate::ogg_h::oggpack_buffer {
         endbyte: 0,
         endbit: 0,
@@ -1672,10 +1651,7 @@ pub unsafe extern "C" fn vorbis_granule_time(
             0xffffffff as u32 as crate::config_types_h::ogg_int64_t;
         granuleoff <<= 31 as i32;
         granuleoff |= 0x7ffffffff as libc::c_long;
-        return (granulepos as f64
-            + 2 as i32 as f64
-            + granuleoff as f64
-            + granuleoff as f64)
+        return (granulepos as f64 + 2 as i32 as f64 + granuleoff as f64 + granuleoff as f64)
             / (*(*v).vi).rate as f64;
     };
 }

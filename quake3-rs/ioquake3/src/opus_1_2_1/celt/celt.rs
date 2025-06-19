@@ -46,9 +46,7 @@ Written by Jean-Marc Valin and Gregory Maxwell */
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn resampling_factor(
-    mut rate: crate::opus_types_h::opus_int32,
-) -> i32 {
+pub unsafe extern "C" fn resampling_factor(mut rate: crate::opus_types_h::opus_int32) -> i32 {
     let mut ret: i32 = 0;
     match rate {
         48000 => ret = 1 as i32,
@@ -148,16 +146,8 @@ pub unsafe extern "C" fn comb_filter(
     }
     /* When the gain is zero, T0 and/or T1 is set to zero. We need
     to have then be at least 2 to avoid processing garbage data. */
-    T0 = if T0 > 15 as i32 {
-        T0
-    } else {
-        15 as i32
-    };
-    T1 = if T1 > 15 as i32 {
-        T1
-    } else {
-        15 as i32
-    };
+    T0 = if T0 > 15 as i32 { T0 } else { 15 as i32 };
+    T1 = if T1 > 15 as i32 { T1 } else { 15 as i32 };
     g00 = g0 * gains[tapset0 as usize][0 as i32 as usize];
     g01 = g0 * gains[tapset0 as usize][1 as i32 as usize];
     g02 = g0 * gains[tapset0 as usize][2 as i32 as usize];
@@ -292,14 +282,15 @@ pub unsafe extern "C" fn init_caps(
         N = (*(*m).eBands.offset((i + 1 as i32) as isize) as i32
             - *(*m).eBands.offset(i as isize) as i32)
             << LM;
-        *cap.offset(i as isize) =
-            (*(*m).cache.caps.offset(
-                ((*m).nbEBands * (2 as i32 * LM + C - 1 as i32) + i) as isize,
-            ) as i32
-                + 64 as i32)
-                * C
-                * N
-                >> 2 as i32;
+        *cap.offset(i as isize) = (*(*m)
+            .cache
+            .caps
+            .offset(((*m).nbEBands * (2 as i32 * LM + C - 1 as i32) + i) as isize)
+            as i32
+            + 64 as i32)
+            * C
+            * N
+            >> 2 as i32;
         i += 1
     }
 }

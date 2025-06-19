@@ -170,66 +170,57 @@ pub unsafe extern "C" fn silk_ana_filt_bank_1(
             << 10 as i32) as crate::opus_types_h::opus_int32;
         /* All-pass section for even input sample */
         Y = in32 - *S.offset(0 as i32 as isize);
-        X = (Y as i64
-            + (Y as i64 * A_fb1_21 as i64 >> 16 as i32))
+        X = (Y as i64 + (Y as i64 * A_fb1_21 as i64 >> 16 as i32))
             as crate::opus_types_h::opus_int32;
         out_1 = *S.offset(0 as i32 as isize) + X;
         *S.offset(0 as i32 as isize) = in32 + X;
         /* Convert to Q10 */
-        in32 = ((*in_0.offset((2 as i32 * k + 1 as i32) as isize)
-            as crate::opus_types_h::opus_int32
+        in32 = ((*in_0.offset((2 as i32 * k + 1 as i32) as isize) as crate::opus_types_h::opus_int32
             as crate::opus_types_h::opus_uint32)
             << 10 as i32) as crate::opus_types_h::opus_int32;
         /* All-pass section for odd input sample, and add to output of previous section */
         Y = in32 - *S.offset(1 as i32 as isize);
-        X = (Y as i64 * A_fb1_20 as i64 >> 16 as i32)
-            as crate::opus_types_h::opus_int32;
+        X = (Y as i64 * A_fb1_20 as i64 >> 16 as i32) as crate::opus_types_h::opus_int32;
         out_2 = *S.offset(1 as i32 as isize) + X;
         *S.offset(1 as i32 as isize) = in32 + X;
         /* Add/subtract, convert back to int16 and store to output */
         *outL.offset(k as isize) = if (if 11 as i32 == 1 as i32 {
             (out_2 + out_1 >> 1 as i32) + (out_2 + out_1 & 1 as i32)
         } else {
-            ((out_2 + out_1 >> 11 as i32 - 1 as i32) + 1 as i32)
-                >> 1 as i32
+            ((out_2 + out_1 >> 11 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
         }) > 0x7fff as i32
         {
             0x7fff as i32
         } else if (if 11 as i32 == 1 as i32 {
             (out_2 + out_1 >> 1 as i32) + (out_2 + out_1 & 1 as i32)
         } else {
-            ((out_2 + out_1 >> 11 as i32 - 1 as i32) + 1 as i32)
-                >> 1 as i32
+            ((out_2 + out_1 >> 11 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
         }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
         {
             0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
         } else if 11 as i32 == 1 as i32 {
             (out_2 + out_1 >> 1 as i32) + (out_2 + out_1 & 1 as i32)
         } else {
-            ((out_2 + out_1 >> 11 as i32 - 1 as i32) + 1 as i32)
-                >> 1 as i32
+            ((out_2 + out_1 >> 11 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
         } as crate::opus_types_h::opus_int16;
         *outH.offset(k as isize) = if (if 11 as i32 == 1 as i32 {
             (out_2 - out_1 >> 1 as i32) + (out_2 - out_1 & 1 as i32)
         } else {
-            ((out_2 - out_1 >> 11 as i32 - 1 as i32) + 1 as i32)
-                >> 1 as i32
+            ((out_2 - out_1 >> 11 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
         }) > 0x7fff as i32
         {
             0x7fff as i32
         } else if (if 11 as i32 == 1 as i32 {
             (out_2 - out_1 >> 1 as i32) + (out_2 - out_1 & 1 as i32)
         } else {
-            ((out_2 - out_1 >> 11 as i32 - 1 as i32) + 1 as i32)
-                >> 1 as i32
+            ((out_2 - out_1 >> 11 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
         }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
         {
             0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
         } else if 11 as i32 == 1 as i32 {
             (out_2 - out_1 >> 1 as i32) + (out_2 - out_1 & 1 as i32)
         } else {
-            ((out_2 - out_1 >> 11 as i32 - 1 as i32) + 1 as i32)
-                >> 1 as i32
+            ((out_2 - out_1 >> 11 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
         } as crate::opus_types_h::opus_int16;
         k += 1
     }

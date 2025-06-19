@@ -126,8 +126,7 @@ unsafe extern "C" fn ec_read_byte_from_end(
         (*_this).end_offs = (*_this).end_offs.wrapping_add(1);
         *(*_this)
             .buf
-            .offset((*_this).storage.wrapping_sub((*_this).end_offs) as isize)
-            as i32
+            .offset((*_this).storage.wrapping_sub((*_this).end_offs) as isize) as i32
     } else {
         0 as i32
     };
@@ -139,9 +138,7 @@ unsafe extern "C" fn ec_dec_normalize(
     mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_dec,
 ) {
     /*If the range is too small, rescale it and input some bits.*/
-    while (*_this).rng
-        <= (1 as u32) << 32 as i32 - 1 as i32 >> 8 as i32
-    {
+    while (*_this).rng <= (1 as u32) << 32 as i32 - 1 as i32 >> 8 as i32 {
         let mut sym: i32 = 0;
         (*_this).nbits_total += 8 as i32;
         (*_this).rng <<= 8 as i32;
@@ -151,15 +148,11 @@ unsafe extern "C" fn ec_dec_normalize(
         (*_this).rem = ec_read_byte(_this);
         /*Take the rest of the bits we need from this new symbol.*/
         sym = (sym << 8 as i32 | (*_this).rem)
-            >> 8 as i32
-                - ((32 as i32 - 2 as i32) % 8 as i32 + 1 as i32);
+            >> 8 as i32 - ((32 as i32 - 2 as i32) % 8 as i32 + 1 as i32);
         /*And subtract them from val, capped to be less than EC_CODE_TOP.*/
-        (*_this).val = ((*_this).val << 8 as i32).wrapping_add(
-            ((1 as u32) << 8 as i32)
-                .wrapping_sub(1 as i32 as u32)
-                & !sym as u32,
-        ) & ((1 as u32) << 32 as i32 - 1 as i32)
-            .wrapping_sub(1 as i32 as u32)
+        (*_this).val = ((*_this).val << 8 as i32)
+            .wrapping_add(((1 as u32) << 8 as i32).wrapping_sub(1 as i32 as u32) & !sym as u32)
+            & ((1 as u32) << 32 as i32 - 1 as i32).wrapping_sub(1 as i32 as u32)
     }
 }
 #[no_mangle]
@@ -178,23 +171,13 @@ pub unsafe extern "C" fn ec_dec_init(
     The final value after the ec_dec_normalize() call will be the same as in
      the encoder, but we have to compensate for the bits that are added there.*/
     (*_this).nbits_total = 32 as i32 + 1 as i32
-        - (32 as i32
-            - ((32 as i32 - 2 as i32) % 8 as i32 + 1 as i32))
-            / 8 as i32
-            * 8 as i32;
+        - (32 as i32 - ((32 as i32 - 2 as i32) % 8 as i32 + 1 as i32)) / 8 as i32 * 8 as i32;
     (*_this).offs = 0 as i32 as crate::opus_types_h::opus_uint32;
-    (*_this).rng = (1 as u32)
-        << (32 as i32 - 2 as i32) % 8 as i32 + 1 as i32;
+    (*_this).rng = (1 as u32) << (32 as i32 - 2 as i32) % 8 as i32 + 1 as i32;
     (*_this).rem = ec_read_byte(_this);
-    (*_this).val = (*_this)
-        .rng
-        .wrapping_sub(1 as i32 as u32)
-        .wrapping_sub(
-            ((*_this).rem
-                >> 8 as i32
-                    - ((32 as i32 - 2 as i32) % 8 as i32
-                        + 1 as i32)) as u32,
-        );
+    (*_this).val = (*_this).rng.wrapping_sub(1 as i32 as u32).wrapping_sub(
+        ((*_this).rem >> 8 as i32 - ((32 as i32 - 2 as i32) % 8 as i32 + 1 as i32)) as u32,
+    );
     (*_this).error = 0 as i32;
     /*Normalize the interval.*/
     ec_dec_normalize(_this);
@@ -208,14 +191,10 @@ pub unsafe extern "C" fn ec_decode(
     let mut s: u32 = 0;
     (*_this).ext = celt_udiv((*_this).rng, _ft);
     s = (*_this).val.wrapping_div((*_this).ext);
-    return _ft.wrapping_sub(
-        s.wrapping_add(1 as i32 as u32)
-            .wrapping_add(
-                _ft.wrapping_sub(s.wrapping_add(1 as i32 as u32))
-                    & -((_ft < s.wrapping_add(1 as i32 as u32)) as i32)
-                        as u32,
-            ),
-    );
+    return _ft.wrapping_sub(s.wrapping_add(1 as i32 as u32).wrapping_add(
+        _ft.wrapping_sub(s.wrapping_add(1 as i32 as u32))
+            & -((_ft < s.wrapping_add(1 as i32 as u32)) as i32) as u32,
+    ));
 }
 #[no_mangle]
 
@@ -226,13 +205,10 @@ pub unsafe extern "C" fn ec_decode_bin(
     let mut s: u32 = 0;
     (*_this).ext = (*_this).rng >> _bits;
     s = (*_this).val.wrapping_div((*_this).ext);
-    return ((1 as u32) << _bits).wrapping_sub(
-        s.wrapping_add(1 as u32).wrapping_add(
-            ((1 as u32) << _bits).wrapping_sub(s.wrapping_add(1 as u32))
-                & -(((1 as u32) << _bits < s.wrapping_add(1 as u32))
-                    as i32) as u32,
-        ),
-    );
+    return ((1 as u32) << _bits).wrapping_sub(s.wrapping_add(1 as u32).wrapping_add(
+        ((1 as u32) << _bits).wrapping_sub(s.wrapping_add(1 as u32))
+            & -(((1 as u32) << _bits < s.wrapping_add(1 as u32)) as i32) as u32,
+    ));
 }
 #[no_mangle]
 
@@ -244,8 +220,8 @@ pub unsafe extern "C" fn ec_dec_update(
 ) {
     let mut s: crate::opus_types_h::opus_uint32 = 0;
     s = (*_this).ext.wrapping_mul(_ft.wrapping_sub(_fh));
-    (*_this).val = ((*_this).val as u32).wrapping_sub(s)
-        as crate::opus_types_h::opus_uint32 as crate::opus_types_h::opus_uint32;
+    (*_this).val = ((*_this).val as u32).wrapping_sub(s) as crate::opus_types_h::opus_uint32
+        as crate::opus_types_h::opus_uint32;
     (*_this).rng = if _fl > 0 as i32 as u32 {
         (*_this).ext.wrapping_mul(_fh.wrapping_sub(_fl))
     } else {
@@ -322,12 +298,7 @@ pub unsafe extern "C" fn ec_dec_uint(
         ftb -= 8 as i32;
         ft = (_ft >> ftb).wrapping_add(1 as i32 as u32);
         s = ec_decode(_this, ft);
-        ec_dec_update(
-            _this,
-            s,
-            s.wrapping_add(1 as i32 as u32),
-            ft,
-        );
+        ec_dec_update(_this, s, s.wrapping_add(1 as i32 as u32), ft);
         t = s << ftb | ec_dec_bits(_this, ftb as u32);
         if t <= _ft {
             return t;
@@ -337,12 +308,7 @@ pub unsafe extern "C" fn ec_dec_uint(
     } else {
         _ft = _ft.wrapping_add(1);
         s = ec_decode(_this, _ft);
-        ec_dec_update(
-            _this,
-            s,
-            s.wrapping_add(1 as i32 as u32),
-            _ft,
-        );
+        ec_dec_update(_this, s, s.wrapping_add(1 as i32 as u32), _ft);
         return s;
     };
 }
@@ -450,14 +416,11 @@ pub unsafe extern "C" fn ec_dec_bits(
             }
         }
     }
-    ret = window
-        & ((1 as i32 as crate::opus_types_h::opus_uint32) << _bits)
-            .wrapping_sub(1 as u32);
+    ret = window & ((1 as i32 as crate::opus_types_h::opus_uint32) << _bits).wrapping_sub(1 as u32);
     window >>= _bits;
     available = (available as u32).wrapping_sub(_bits) as i32 as i32;
     (*_this).end_window = window;
     (*_this).nend_bits = available;
-    (*_this).nbits_total =
-        ((*_this).nbits_total as u32).wrapping_add(_bits) as i32 as i32;
+    (*_this).nbits_total = ((*_this).nbits_total as u32).wrapping_add(_bits) as i32 as i32;
     return ret;
 }

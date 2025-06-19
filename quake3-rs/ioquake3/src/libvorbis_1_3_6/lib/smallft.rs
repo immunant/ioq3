@@ -36,17 +36,8 @@ function: *unnormalized* fft transform
  * FORTRAN version
  */
 
-unsafe extern "C" fn drfti1(
-    mut n: i32,
-    mut wa: *mut f32,
-    mut ifac: *mut i32,
-) {
-    static mut ntryh: [i32; 4] = [
-        4 as i32,
-        2 as i32,
-        3 as i32,
-        5 as i32,
-    ];
+unsafe extern "C" fn drfti1(mut n: i32, mut wa: *mut f32, mut ifac: *mut i32) {
+    static mut ntryh: [i32; 4] = [4 as i32, 2 as i32, 3 as i32, 5 as i32];
     static mut tpi: f32 = 6.28318530717958648f32;
     let mut arg: f32 = 0.;
     let mut argh: f32 = 0.;
@@ -130,12 +121,10 @@ unsafe extern "C" fn drfti1(
                 arg = fi * argld;
                 let fresh0 = i;
                 i = i + 1;
-                *wa.offset(fresh0 as isize) =
-                    crate::stdlib::cos(arg as f64) as f32;
+                *wa.offset(fresh0 as isize) = crate::stdlib::cos(arg as f64) as f32;
                 let fresh1 = i;
                 i = i + 1;
-                *wa.offset(fresh1 as isize) =
-                    crate::stdlib::sin(arg as f64) as f32;
+                *wa.offset(fresh1 as isize) = crate::stdlib::sin(arg as f64) as f32;
                 ii += 2 as i32
             }
             is += ido;
@@ -146,11 +135,7 @@ unsafe extern "C" fn drfti1(
     }
 }
 
-unsafe extern "C" fn fdrffti(
-    mut n: i32,
-    mut wsave: *mut f32,
-    mut ifac: *mut i32,
-) {
+unsafe extern "C" fn fdrffti(mut n: i32, mut wsave: *mut f32, mut ifac: *mut i32) {
     if n == 1 as i32 {
         return;
     }
@@ -181,8 +166,7 @@ unsafe extern "C" fn dradf2(
     t3 = ido << 1 as i32;
     k = 0 as i32;
     while k < l1 {
-        *ch.offset((t1 << 1 as i32) as isize) =
-            *cc.offset(t1 as isize) + *cc.offset(t2 as isize);
+        *ch.offset((t1 << 1 as i32) as isize) = *cc.offset(t1 as isize) + *cc.offset(t2 as isize);
         *ch.offset(((t1 << 1 as i32) + t3 - 1 as i32) as isize) =
             *cc.offset(t1 as isize) - *cc.offset(t2 as isize);
         t1 += ido;
@@ -207,18 +191,14 @@ unsafe extern "C" fn dradf2(
                 t4 -= 2 as i32;
                 t5 += 2 as i32;
                 t6 += 2 as i32;
-                tr2 = *wa1.offset((i - 2 as i32) as isize)
-                    * *cc.offset((t3 - 1 as i32) as isize)
+                tr2 = *wa1.offset((i - 2 as i32) as isize) * *cc.offset((t3 - 1 as i32) as isize)
                     + *wa1.offset((i - 1 as i32) as isize) * *cc.offset(t3 as isize);
                 ti2 = *wa1.offset((i - 2 as i32) as isize) * *cc.offset(t3 as isize)
-                    - *wa1.offset((i - 1 as i32) as isize)
-                        * *cc.offset((t3 - 1 as i32) as isize);
+                    - *wa1.offset((i - 1 as i32) as isize) * *cc.offset((t3 - 1 as i32) as isize);
                 *ch.offset(t6 as isize) = *cc.offset(t5 as isize) + ti2;
                 *ch.offset(t4 as isize) = ti2 - *cc.offset(t5 as isize);
-                *ch.offset((t6 - 1 as i32) as isize) =
-                    *cc.offset((t5 - 1 as i32) as isize) + tr2;
-                *ch.offset((t4 - 1 as i32) as isize) =
-                    *cc.offset((t5 - 1 as i32) as isize) - tr2;
+                *ch.offset((t6 - 1 as i32) as isize) = *cc.offset((t5 - 1 as i32) as isize) + tr2;
+                *ch.offset((t4 - 1 as i32) as isize) = *cc.offset((t5 - 1 as i32) as isize) - tr2;
                 i += 2 as i32
             }
             t1 += ido;
@@ -290,8 +270,7 @@ unsafe extern "C" fn dradf4(
         *ch.offset(t5 as isize) = tr1 + tr2;
         *ch.offset(((ido << 2 as i32) + t5 - 1 as i32) as isize) = tr2 - tr1;
         t5 += ido << 1 as i32;
-        *ch.offset((t5 - 1 as i32) as isize) =
-            *cc.offset(t3 as isize) - *cc.offset(t4 as isize);
+        *ch.offset((t5 - 1 as i32) as isize) = *cc.offset(t3 as isize) - *cc.offset(t4 as isize);
         *ch.offset(t5 as isize) = *cc.offset(t2 as isize) - *cc.offset(t1 as isize);
         t1 += ido;
         t2 += ido;
@@ -317,26 +296,20 @@ unsafe extern "C" fn dradf4(
                 t4 += 2 as i32;
                 t5 -= 2 as i32;
                 t3 += t0;
-                cr2 = *wa1.offset((i - 2 as i32) as isize)
-                    * *cc.offset((t3 - 1 as i32) as isize)
+                cr2 = *wa1.offset((i - 2 as i32) as isize) * *cc.offset((t3 - 1 as i32) as isize)
                     + *wa1.offset((i - 1 as i32) as isize) * *cc.offset(t3 as isize);
                 ci2 = *wa1.offset((i - 2 as i32) as isize) * *cc.offset(t3 as isize)
-                    - *wa1.offset((i - 1 as i32) as isize)
-                        * *cc.offset((t3 - 1 as i32) as isize);
+                    - *wa1.offset((i - 1 as i32) as isize) * *cc.offset((t3 - 1 as i32) as isize);
                 t3 += t0;
-                cr3 = *wa2.offset((i - 2 as i32) as isize)
-                    * *cc.offset((t3 - 1 as i32) as isize)
+                cr3 = *wa2.offset((i - 2 as i32) as isize) * *cc.offset((t3 - 1 as i32) as isize)
                     + *wa2.offset((i - 1 as i32) as isize) * *cc.offset(t3 as isize);
                 ci3 = *wa2.offset((i - 2 as i32) as isize) * *cc.offset(t3 as isize)
-                    - *wa2.offset((i - 1 as i32) as isize)
-                        * *cc.offset((t3 - 1 as i32) as isize);
+                    - *wa2.offset((i - 1 as i32) as isize) * *cc.offset((t3 - 1 as i32) as isize);
                 t3 += t0;
-                cr4 = *wa3.offset((i - 2 as i32) as isize)
-                    * *cc.offset((t3 - 1 as i32) as isize)
+                cr4 = *wa3.offset((i - 2 as i32) as isize) * *cc.offset((t3 - 1 as i32) as isize)
                     + *wa3.offset((i - 1 as i32) as isize) * *cc.offset(t3 as isize);
                 ci4 = *wa3.offset((i - 2 as i32) as isize) * *cc.offset(t3 as isize)
-                    - *wa3.offset((i - 1 as i32) as isize)
-                        * *cc.offset((t3 - 1 as i32) as isize);
+                    - *wa3.offset((i - 1 as i32) as isize) * *cc.offset((t3 - 1 as i32) as isize);
                 tr1 = cr2 + cr4;
                 tr4 = cr4 - cr2;
                 ti1 = ci2 + ci4;
@@ -372,10 +345,8 @@ unsafe extern "C" fn dradf4(
     while k < l1 {
         ti1 = -hsqt2 * (*cc.offset(t1 as isize) + *cc.offset(t2 as isize));
         tr1 = hsqt2 * (*cc.offset(t1 as isize) - *cc.offset(t2 as isize));
-        *ch.offset((t4 - 1 as i32) as isize) =
-            tr1 + *cc.offset((t6 - 1 as i32) as isize);
-        *ch.offset((t4 + t5 - 1 as i32) as isize) =
-            *cc.offset((t6 - 1 as i32) as isize) - tr1;
+        *ch.offset((t4 - 1 as i32) as isize) = tr1 + *cc.offset((t6 - 1 as i32) as isize);
+        *ch.offset((t4 + t5 - 1 as i32) as isize) = *cc.offset((t6 - 1 as i32) as isize) - tr1;
         *ch.offset(t4 as isize) = ti1 - *cc.offset((t1 + t0) as isize);
         *ch.offset((t4 + t5) as isize) = ti1 + *cc.offset((t1 + t0) as isize);
         t1 += ido;
@@ -484,8 +455,7 @@ unsafe extern "C" fn dradfg(
                             + *wa.offset(idij as isize) * *c1.offset(t3 as isize);
                         *ch.offset(t3 as isize) = *wa.offset((idij - 1 as i32) as isize)
                             * *c1.offset(t3 as isize)
-                            - *wa.offset(idij as isize)
-                                * *c1.offset((t3 - 1 as i32) as isize);
+                            - *wa.offset(idij as isize) * *c1.offset((t3 - 1 as i32) as isize);
                         i += 2 as i32
                     }
                     k += 1
@@ -512,8 +482,7 @@ unsafe extern "C" fn dradfg(
                             + *wa.offset(idij as isize) * *c1.offset(t3 as isize);
                         *ch.offset(t3 as isize) = *wa.offset((idij - 1 as i32) as isize)
                             * *c1.offset(t3 as isize)
-                            - *wa.offset(idij as isize)
-                                * *c1.offset((t3 - 1 as i32) as isize);
+                            - *wa.offset(idij as isize) * *c1.offset((t3 - 1 as i32) as isize);
                         t3 += ido;
                         k += 1
                     }
@@ -541,8 +510,7 @@ unsafe extern "C" fn dradfg(
                     while k < l1 {
                         t5 += ido;
                         t6 += ido;
-                        *c1.offset((t5 - 1 as i32) as isize) = *ch
-                            .offset((t5 - 1 as i32) as isize)
+                        *c1.offset((t5 - 1 as i32) as isize) = *ch.offset((t5 - 1 as i32) as isize)
                             + *ch.offset((t6 - 1 as i32) as isize);
                         *c1.offset((t6 - 1 as i32) as isize) =
                             *ch.offset(t5 as isize) - *ch.offset(t6 as isize);
@@ -570,8 +538,7 @@ unsafe extern "C" fn dradfg(
                     while i < ido {
                         t5 += 2 as i32;
                         t6 += 2 as i32;
-                        *c1.offset((t5 - 1 as i32) as isize) = *ch
-                            .offset((t5 - 1 as i32) as isize)
+                        *c1.offset((t5 - 1 as i32) as isize) = *ch.offset((t5 - 1 as i32) as isize)
                             + *ch.offset((t6 - 1 as i32) as isize);
                         *c1.offset((t6 - 1 as i32) as isize) =
                             *ch.offset(t5 as isize) - *ch.offset(t6 as isize);
@@ -771,12 +738,10 @@ unsafe extern "C" fn dradfg(
                 t9 = i + t5;
                 k = 0 as i32;
                 while k < l1 {
-                    *cc.offset((t7 - 1 as i32) as isize) = *ch
-                        .offset((t8 - 1 as i32) as isize)
-                        + *ch.offset((t9 - 1 as i32) as isize);
-                    *cc.offset((t6 - 1 as i32) as isize) = *ch
-                        .offset((t8 - 1 as i32) as isize)
-                        - *ch.offset((t9 - 1 as i32) as isize);
+                    *cc.offset((t7 - 1 as i32) as isize) =
+                        *ch.offset((t8 - 1 as i32) as isize) + *ch.offset((t9 - 1 as i32) as isize);
+                    *cc.offset((t6 - 1 as i32) as isize) =
+                        *ch.offset((t8 - 1 as i32) as isize) - *ch.offset((t9 - 1 as i32) as isize);
                     *cc.offset(t7 as isize) = *ch.offset(t8 as isize) + *ch.offset(t9 as isize);
                     *cc.offset(t6 as isize) = *ch.offset(t9 as isize) - *ch.offset(t8 as isize);
                     t6 += t10;
@@ -1004,16 +969,13 @@ unsafe extern "C" fn dradb2(
                 t4 += 2 as i32;
                 t5 -= 2 as i32;
                 t6 += 2 as i32;
-                *ch.offset((t3 - 1 as i32) as isize) = *cc
-                    .offset((t4 - 1 as i32) as isize)
-                    + *cc.offset((t5 - 1 as i32) as isize);
-                tr2 = *cc.offset((t4 - 1 as i32) as isize)
-                    - *cc.offset((t5 - 1 as i32) as isize);
+                *ch.offset((t3 - 1 as i32) as isize) =
+                    *cc.offset((t4 - 1 as i32) as isize) + *cc.offset((t5 - 1 as i32) as isize);
+                tr2 = *cc.offset((t4 - 1 as i32) as isize) - *cc.offset((t5 - 1 as i32) as isize);
                 *ch.offset(t3 as isize) = *cc.offset(t4 as isize) - *cc.offset(t5 as isize);
                 ti2 = *cc.offset(t4 as isize) + *cc.offset(t5 as isize);
-                *ch.offset((t6 - 1 as i32) as isize) =
-                    *wa1.offset((i - 2 as i32) as isize) * tr2
-                        - *wa1.offset((i - 1 as i32) as isize) * ti2;
+                *ch.offset((t6 - 1 as i32) as isize) = *wa1.offset((i - 2 as i32) as isize) * tr2
+                    - *wa1.offset((i - 1 as i32) as isize) * ti2;
                 *ch.offset(t6 as isize) = *wa1.offset((i - 2 as i32) as isize) * ti2
                     + *wa1.offset((i - 1 as i32) as isize) * tr2;
                 i += 2 as i32
@@ -1031,8 +993,8 @@ unsafe extern "C" fn dradb2(
     k = 0 as i32;
     while k < l1 {
         *ch.offset(t1 as isize) = *cc.offset(t2 as isize) + *cc.offset(t2 as isize);
-        *ch.offset((t1 + t0) as isize) = -(*cc.offset((t2 + 1 as i32) as isize)
-            + *cc.offset((t2 + 1 as i32) as isize));
+        *ch.offset((t1 + t0) as isize) =
+            -(*cc.offset((t2 + 1 as i32) as isize) + *cc.offset((t2 + 1 as i32) as isize));
         t1 += ido;
         t2 += ido << 1 as i32;
         k += 1
@@ -1080,8 +1042,7 @@ unsafe extern "C" fn dradb3(
     t5 = 0 as i32;
     k = 0 as i32;
     while k < l1 {
-        tr2 = *cc.offset((t3 - 1 as i32) as isize)
-            + *cc.offset((t3 - 1 as i32) as isize);
+        tr2 = *cc.offset((t3 - 1 as i32) as isize) + *cc.offset((t3 - 1 as i32) as isize);
         cr2 = *cc.offset(t5 as isize) + taur * tr2;
         *ch.offset(t1 as isize) = *cc.offset(t5 as isize) + tr2;
         ci3 = taui * (*cc.offset(t3 as isize) + *cc.offset(t3 as isize));
@@ -1113,30 +1074,25 @@ unsafe extern "C" fn dradb3(
             t8 += 2 as i32;
             t9 += 2 as i32;
             t10 += 2 as i32;
-            tr2 = *cc.offset((t5 - 1 as i32) as isize)
-                + *cc.offset((t6 - 1 as i32) as isize);
+            tr2 = *cc.offset((t5 - 1 as i32) as isize) + *cc.offset((t6 - 1 as i32) as isize);
             cr2 = *cc.offset((t7 - 1 as i32) as isize) + taur * tr2;
-            *ch.offset((t8 - 1 as i32) as isize) =
-                *cc.offset((t7 - 1 as i32) as isize) + tr2;
+            *ch.offset((t8 - 1 as i32) as isize) = *cc.offset((t7 - 1 as i32) as isize) + tr2;
             ti2 = *cc.offset(t5 as isize) - *cc.offset(t6 as isize);
             ci2 = *cc.offset(t7 as isize) + taur * ti2;
             *ch.offset(t8 as isize) = *cc.offset(t7 as isize) + ti2;
             cr3 = taui
-                * (*cc.offset((t5 - 1 as i32) as isize)
-                    - *cc.offset((t6 - 1 as i32) as isize));
+                * (*cc.offset((t5 - 1 as i32) as isize) - *cc.offset((t6 - 1 as i32) as isize));
             ci3 = taui * (*cc.offset(t5 as isize) + *cc.offset(t6 as isize));
             dr2 = cr2 - ci3;
             dr3 = cr2 + ci3;
             di2 = ci2 + cr3;
             di3 = ci2 - cr3;
-            *ch.offset((t9 - 1 as i32) as isize) =
-                *wa1.offset((i - 2 as i32) as isize) * dr2
-                    - *wa1.offset((i - 1 as i32) as isize) * di2;
+            *ch.offset((t9 - 1 as i32) as isize) = *wa1.offset((i - 2 as i32) as isize) * dr2
+                - *wa1.offset((i - 1 as i32) as isize) * di2;
             *ch.offset(t9 as isize) = *wa1.offset((i - 2 as i32) as isize) * di2
                 + *wa1.offset((i - 1 as i32) as isize) * dr2;
-            *ch.offset((t10 - 1 as i32) as isize) =
-                *wa2.offset((i - 2 as i32) as isize) * dr3
-                    - *wa2.offset((i - 1 as i32) as isize) * di3;
+            *ch.offset((t10 - 1 as i32) as isize) = *wa2.offset((i - 2 as i32) as isize) * dr3
+                - *wa2.offset((i - 1 as i32) as isize) * di3;
             *ch.offset(t10 as isize) = *wa2.offset((i - 2 as i32) as isize) * di3
                 + *wa2.offset((i - 1 as i32) as isize) * dr3;
             i += 2 as i32
@@ -1190,8 +1146,7 @@ unsafe extern "C" fn dradb4(
     while k < l1 {
         t4 = t3 + t6;
         t5 = t1;
-        tr3 = *cc.offset((t4 - 1 as i32) as isize)
-            + *cc.offset((t4 - 1 as i32) as isize);
+        tr3 = *cc.offset((t4 - 1 as i32) as isize) + *cc.offset((t4 - 1 as i32) as isize);
         tr4 = *cc.offset(t4 as isize) + *cc.offset(t4 as isize);
         t4 += t6;
         tr1 = *cc.offset(t3 as isize) - *cc.offset((t4 - 1 as i32) as isize);
@@ -1230,14 +1185,10 @@ unsafe extern "C" fn dradb4(
                 ti2 = *cc.offset(t2 as isize) - *cc.offset(t5 as isize);
                 ti3 = *cc.offset(t3 as isize) - *cc.offset(t4 as isize);
                 tr4 = *cc.offset(t3 as isize) + *cc.offset(t4 as isize);
-                tr1 = *cc.offset((t2 - 1 as i32) as isize)
-                    - *cc.offset((t5 - 1 as i32) as isize);
-                tr2 = *cc.offset((t2 - 1 as i32) as isize)
-                    + *cc.offset((t5 - 1 as i32) as isize);
-                ti4 = *cc.offset((t3 - 1 as i32) as isize)
-                    - *cc.offset((t4 - 1 as i32) as isize);
-                tr3 = *cc.offset((t3 - 1 as i32) as isize)
-                    + *cc.offset((t4 - 1 as i32) as isize);
+                tr1 = *cc.offset((t2 - 1 as i32) as isize) - *cc.offset((t5 - 1 as i32) as isize);
+                tr2 = *cc.offset((t2 - 1 as i32) as isize) + *cc.offset((t5 - 1 as i32) as isize);
+                ti4 = *cc.offset((t3 - 1 as i32) as isize) - *cc.offset((t4 - 1 as i32) as isize);
+                tr3 = *cc.offset((t3 - 1 as i32) as isize) + *cc.offset((t4 - 1 as i32) as isize);
                 *ch.offset((t7 - 1 as i32) as isize) = tr2 + tr3;
                 cr3 = tr2 - tr3;
                 *ch.offset(t7 as isize) = ti2 + ti3;
@@ -1247,21 +1198,18 @@ unsafe extern "C" fn dradb4(
                 ci2 = ti1 + ti4;
                 ci4 = ti1 - ti4;
                 t8 = t7 + t0;
-                *ch.offset((t8 - 1 as i32) as isize) =
-                    *wa1.offset((i - 2 as i32) as isize) * cr2
-                        - *wa1.offset((i - 1 as i32) as isize) * ci2;
+                *ch.offset((t8 - 1 as i32) as isize) = *wa1.offset((i - 2 as i32) as isize) * cr2
+                    - *wa1.offset((i - 1 as i32) as isize) * ci2;
                 *ch.offset(t8 as isize) = *wa1.offset((i - 2 as i32) as isize) * ci2
                     + *wa1.offset((i - 1 as i32) as isize) * cr2;
                 t8 += t0;
-                *ch.offset((t8 - 1 as i32) as isize) =
-                    *wa2.offset((i - 2 as i32) as isize) * cr3
-                        - *wa2.offset((i - 1 as i32) as isize) * ci3;
+                *ch.offset((t8 - 1 as i32) as isize) = *wa2.offset((i - 2 as i32) as isize) * cr3
+                    - *wa2.offset((i - 1 as i32) as isize) * ci3;
                 *ch.offset(t8 as isize) = *wa2.offset((i - 2 as i32) as isize) * ci3
                     + *wa2.offset((i - 1 as i32) as isize) * cr3;
                 t8 += t0;
-                *ch.offset((t8 - 1 as i32) as isize) =
-                    *wa3.offset((i - 2 as i32) as isize) * cr4
-                        - *wa3.offset((i - 1 as i32) as isize) * ci4;
+                *ch.offset((t8 - 1 as i32) as isize) = *wa3.offset((i - 2 as i32) as isize) * cr4
+                    - *wa3.offset((i - 1 as i32) as isize) * ci4;
                 *ch.offset(t8 as isize) = *wa3.offset((i - 2 as i32) as isize) * ci4
                     + *wa3.offset((i - 1 as i32) as isize) * cr4;
                 i += 2 as i32
@@ -1282,10 +1230,8 @@ unsafe extern "C" fn dradb4(
         t5 = t3;
         ti1 = *cc.offset(t1 as isize) + *cc.offset(t4 as isize);
         ti2 = *cc.offset(t4 as isize) - *cc.offset(t1 as isize);
-        tr1 = *cc.offset((t1 - 1 as i32) as isize)
-            - *cc.offset((t4 - 1 as i32) as isize);
-        tr2 = *cc.offset((t1 - 1 as i32) as isize)
-            + *cc.offset((t4 - 1 as i32) as isize);
+        tr1 = *cc.offset((t1 - 1 as i32) as isize) - *cc.offset((t4 - 1 as i32) as isize);
+        tr2 = *cc.offset((t1 - 1 as i32) as isize) + *cc.offset((t4 - 1 as i32) as isize);
         *ch.offset(t5 as isize) = tr2 + tr2;
         t5 += t0;
         *ch.offset(t5 as isize) = sqrt2 * (tr1 - ti1);
@@ -1403,8 +1349,8 @@ unsafe extern "C" fn dradbg(
         t6 = t5;
         k = 0 as i32;
         while k < l1 {
-            *ch.offset(t3 as isize) = *cc.offset((t6 - 1 as i32) as isize)
-                + *cc.offset((t6 - 1 as i32) as isize);
+            *ch.offset(t3 as isize) =
+                *cc.offset((t6 - 1 as i32) as isize) + *cc.offset((t6 - 1 as i32) as isize);
             *ch.offset(t4 as isize) = *cc.offset(t6 as isize) + *cc.offset(t6 as isize);
             t3 += ido;
             t4 += ido;
@@ -1484,11 +1430,9 @@ unsafe extern "C" fn dradbg(
                         t6 += 2 as i32;
                         t9 += 2 as i32;
                         t11 -= 2 as i32;
-                        *ch.offset((t5 - 1 as i32) as isize) = *cc
-                            .offset((t9 - 1 as i32) as isize)
+                        *ch.offset((t5 - 1 as i32) as isize) = *cc.offset((t9 - 1 as i32) as isize)
                             + *cc.offset((t11 - 1 as i32) as isize);
-                        *ch.offset((t6 - 1 as i32) as isize) = *cc
-                            .offset((t9 - 1 as i32) as isize)
+                        *ch.offset((t6 - 1 as i32) as isize) = *cc.offset((t9 - 1 as i32) as isize)
                             - *cc.offset((t11 - 1 as i32) as isize);
                         *ch.offset(t5 as isize) =
                             *cc.offset(t9 as isize) - *cc.offset(t11 as isize);
@@ -1713,8 +1657,7 @@ unsafe extern "C" fn dradbg(
                 while i < ido {
                     idij += 2 as i32;
                     t3 += 2 as i32;
-                    *c1.offset((t3 - 1 as i32) as isize) = *wa
-                        .offset((idij - 1 as i32) as isize)
+                    *c1.offset((t3 - 1 as i32) as isize) = *wa.offset((idij - 1 as i32) as isize)
                         * *ch.offset((t3 - 1 as i32) as isize)
                         - *wa.offset(idij as isize) * *ch.offset(t3 as isize);
                     *c1.offset(t3 as isize) = *wa.offset((idij - 1 as i32) as isize)
@@ -1744,8 +1687,7 @@ unsafe extern "C" fn dradbg(
                 t3 = t2;
                 k = 0 as i32;
                 while k < l1 {
-                    *c1.offset((t3 - 1 as i32) as isize) = *wa
-                        .offset((idij - 1 as i32) as isize)
+                    *c1.offset((t3 - 1 as i32) as isize) = *wa.offset((idij - 1 as i32) as isize)
                         * *ch.offset((t3 - 1 as i32) as isize)
                         - *wa.offset(idij as isize) * *ch.offset(t3 as isize);
                     *c1.offset(t3 as isize) = *wa.offset((idij - 1 as i32) as isize)

@@ -2352,8 +2352,7 @@ pub unsafe extern "C" fn Field_VariableSizeDraw(
         } else {
             cursorChar = 10 as i32
         }
-        i = (drawLen as libc::c_ulong).wrapping_sub(crate::stdlib::strlen(str.as_mut_ptr()))
-            as i32;
+        i = (drawLen as libc::c_ulong).wrapping_sub(crate::stdlib::strlen(str.as_mut_ptr())) as i32;
         if size == 8 as i32 {
             crate::src::client::cl_scrn::SCR_DrawSmallChar(
                 x + ((*edit).cursor - prestep - i) * size,
@@ -2383,15 +2382,7 @@ pub unsafe extern "C" fn Field_Draw(
     mut showCursor: crate::src::qcommon::q_shared::qboolean,
     mut noColorEscape: crate::src::qcommon::q_shared::qboolean,
 ) {
-    Field_VariableSizeDraw(
-        edit,
-        x,
-        y,
-        width,
-        8 as i32,
-        showCursor,
-        noColorEscape,
-    );
+    Field_VariableSizeDraw(edit, x, y, width, 8 as i32, showCursor, noColorEscape);
 }
 #[no_mangle]
 
@@ -2403,15 +2394,7 @@ pub unsafe extern "C" fn Field_BigDraw(
     mut showCursor: crate::src::qcommon::q_shared::qboolean,
     mut noColorEscape: crate::src::qcommon::q_shared::qboolean,
 ) {
-    Field_VariableSizeDraw(
-        edit,
-        x,
-        y,
-        width,
-        16 as i32,
-        showCursor,
-        noColorEscape,
-    );
+    Field_VariableSizeDraw(edit, x, y, width, 16 as i32, showCursor, noColorEscape);
 }
 /*
 ================
@@ -2455,8 +2438,7 @@ pub unsafe extern "C" fn Field_KeyDownEvent(
 ) {
     let mut len: i32 = 0;
     // shift-insert is paste
-    if (key == crate::keycodes_h::K_INS as i32
-        || key == crate::keycodes_h::K_KP_INS as i32)
+    if (key == crate::keycodes_h::K_INS as i32 || key == crate::keycodes_h::K_KP_INS as i32)
         && keys[crate::keycodes_h::K_SHIFT as i32 as usize].down as u32 != 0
     {
         Field_Paste(edit);
@@ -2464,8 +2446,7 @@ pub unsafe extern "C" fn Field_KeyDownEvent(
     }
     key = {
         let mut __res: i32 = 0;
-        if ::std::mem::size_of::<i32>() as libc::c_ulong > 1 as i32 as libc::c_ulong
-        {
+        if ::std::mem::size_of::<i32>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
             if 0 != 0 {
                 let mut __c: i32 = key;
                 __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -2492,8 +2473,7 @@ pub unsafe extern "C" fn Field_KeyDownEvent(
                         .buffer
                         .as_mut_ptr()
                         .offset((*edit).cursor as isize)
-                        .offset(1 as i32 as isize)
-                        as *const libc::c_void,
+                        .offset(1 as i32 as isize) as *const libc::c_void,
                     (len - (*edit).cursor) as libc::c_ulong,
                 );
             }
@@ -2511,8 +2491,8 @@ pub unsafe extern "C" fn Field_KeyDownEvent(
         143 => (*edit).cursor = 0 as i32,
         144 => (*edit).cursor = len,
         139 => {
-            key_overstrikeMode = (key_overstrikeMode as u64 == 0) as i32
-                as crate::src::qcommon::q_shared::qboolean
+            key_overstrikeMode =
+                (key_overstrikeMode as u64 == 0) as i32 as crate::src::qcommon::q_shared::qboolean
         }
         _ => {}
     }
@@ -2530,10 +2510,7 @@ Field_CharEvent
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Field_CharEvent(
-    mut edit: *mut crate::qcommon_h::field_t,
-    mut ch: i32,
-) {
+pub unsafe extern "C" fn Field_CharEvent(mut edit: *mut crate::qcommon_h::field_t, mut ch: i32) {
     let mut len: i32 = 0;
     if ch == 'v' as i32 - 'a' as i32 + 1 as i32 {
         // ctrl-v is paste
@@ -2633,16 +2610,12 @@ Handles history and console scrollback
 
 pub unsafe extern "C" fn Console_Key(mut key: i32) {
     // ctrl-L clears screen
-    if key == 'l' as i32
-        && keys[crate::keycodes_h::K_CTRL as i32 as usize].down as u32 != 0
-    {
+    if key == 'l' as i32 && keys[crate::keycodes_h::K_CTRL as i32 as usize].down as u32 != 0 {
         crate::src::qcommon::cmd::Cbuf_AddText(b"clear\n\x00" as *const u8 as *const libc::c_char);
         return;
     }
     // enter finishes the line
-    if key == crate::keycodes_h::K_ENTER as i32
-        || key == crate::keycodes_h::K_KP_ENTER as i32
-    {
+    if key == crate::keycodes_h::K_ENTER as i32 || key == crate::keycodes_h::K_KP_ENTER as i32 {
         // if not in the game explicitly prepend a slash if needed
         if crate::src::client::cl_main::clc.state as u32
             != crate::src::qcommon::q_shared::CA_ACTIVE as i32 as u32
@@ -2674,10 +2647,7 @@ pub unsafe extern "C" fn Console_Key(mut key: i32) {
             || g_consoleField.buffer[0 as i32 as usize] as i32 == '/' as i32
         {
             crate::src::qcommon::cmd::Cbuf_AddText(
-                g_consoleField
-                    .buffer
-                    .as_mut_ptr()
-                    .offset(1 as i32 as isize),
+                g_consoleField.buffer.as_mut_ptr().offset(1 as i32 as isize),
             ); // valid command
             crate::src::qcommon::cmd::Cbuf_AddText(b"\n\x00" as *const u8 as *const libc::c_char);
         } else if g_consoleField.buffer[0 as i32 as usize] == 0 {
@@ -2724,9 +2694,7 @@ pub unsafe extern "C" fn Console_Key(mut key: i32) {
         || key == crate::keycodes_h::K_KP_UPARROW as i32
         || ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<i32>() as libc::c_ulong
-                > 1 as i32 as libc::c_ulong
-            {
+            if ::std::mem::size_of::<i32>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
                 if 0 != 0 {
                     let mut __c: i32 = key;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -2756,9 +2724,7 @@ pub unsafe extern "C" fn Console_Key(mut key: i32) {
         || key == crate::keycodes_h::K_KP_DOWNARROW as i32
         || ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<i32>() as libc::c_ulong
-                > 1 as i32 as libc::c_ulong
-            {
+            if ::std::mem::size_of::<i32>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
                 if 0 != 0 {
                     let mut __c: i32 = key;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -2853,9 +2819,7 @@ pub unsafe extern "C" fn Message_Key(mut key: i32) {
         );
         return;
     }
-    if key == crate::keycodes_h::K_ENTER as i32
-        || key == crate::keycodes_h::K_KP_ENTER as i32
-    {
+    if key == crate::keycodes_h::K_ENTER as i32 || key == crate::keycodes_h::K_KP_ENTER as i32 {
         if chatField.buffer[0 as i32 as usize] as i32 != 0
             && crate::src::client::cl_main::clc.state as u32
                 == crate::src::qcommon::q_shared::CA_ACTIVE as i32 as u32
@@ -2914,9 +2878,7 @@ Key_IsDown
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Key_IsDown(
-    mut keynum: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+pub unsafe extern "C" fn Key_IsDown(mut keynum: i32) -> crate::src::qcommon::q_shared::qboolean {
     if keynum < 0 as i32 || keynum >= crate::keycodes_h::MAX_KEYS as i32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
@@ -2946,12 +2908,9 @@ pub unsafe extern "C" fn Key_StringToKeynum(mut str: *mut libc::c_char) -> i32 {
     if *str.offset(1 as i32 as isize) == 0 {
         return {
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                > 1 as i32 as libc::c_ulong
-            {
+            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
                 if 0 != 0 {
-                    let mut __c: i32 =
-                        *str.offset(0 as i32 as isize) as i32;
+                    let mut __c: i32 = *str.offset(0 as i32 as isize) as i32;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
                         __c
                     } else {
@@ -3004,11 +2963,7 @@ pub unsafe extern "C" fn Key_KeynumToString(mut keynum: i32) -> *mut libc::c_cha
         return b"<OUT OF RANGE>\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     }
     // check for printable ascii (don't use quote)
-    if keynum > 32 as i32
-        && keynum < 127 as i32
-        && keynum != '\"' as i32
-        && keynum != ';' as i32
-    {
+    if keynum > 32 as i32 && keynum < 127 as i32 && keynum != '\"' as i32 && keynum != ';' as i32 {
         tinystr[0 as i32 as usize] = keynum as libc::c_char;
         tinystr[1 as i32 as usize] = 0 as i32 as libc::c_char;
         return tinystr.as_mut_ptr();
@@ -3360,9 +3315,7 @@ pub unsafe extern "C" fn CL_InitKeyCommands() {
     );
     crate::src::qcommon::cmd::Cmd_SetCommandCompletionFunc(
         b"unbind\x00" as *const u8 as *const libc::c_char,
-        Some(
-            Key_CompleteUnbind as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
-        ),
+        Some(Key_CompleteUnbind as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
         b"unbindall\x00" as *const u8 as *const libc::c_char,
@@ -3441,12 +3394,11 @@ pub unsafe extern "C" fn CL_ParseBinding(
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     // run all bind commands if console, ui, etc aren't reading keys
-    allCommands = (Key_GetCatcher() == 0 as i32) as i32
-        as crate::src::qcommon::q_shared::qboolean;
+    allCommands = (Key_GetCatcher() == 0 as i32) as i32 as crate::src::qcommon::q_shared::qboolean;
     // allow button up commands if in game even if key catcher is set
     allowUpCmds = (crate::src::client::cl_main::clc.state as u32
-        != crate::src::qcommon::q_shared::CA_DISCONNECTED as i32 as u32)
-        as i32 as crate::src::qcommon::q_shared::qboolean;
+        != crate::src::qcommon::q_shared::CA_DISCONNECTED as i32 as u32) as i32
+        as crate::src::qcommon::q_shared::qboolean;
     loop {
         while *(*crate::stdlib::__ctype_b_loc()).offset(*p as i32 as isize) as i32
             & crate::stdlib::_ISspace as i32 as u16 as i32
@@ -3462,9 +3414,7 @@ pub unsafe extern "C" fn CL_ParseBinding(
             // button commands add keynum and time as parameters
             // so that multiple sources can be discriminated and
             // subframe corrected
-            if allCommands as u32 != 0
-                || allowUpCmds as u32 != 0 && down as u64 == 0
-            {
+            if allCommands as u32 != 0 || allowUpCmds as u32 != 0 && down as u64 == 0 {
                 let mut cmd: [libc::c_char; 1024] = [0; 1024];
                 crate::src::qcommon::q_shared::Com_sprintf(
                     cmd.as_mut_ptr(),
@@ -3669,9 +3619,7 @@ pub unsafe extern "C" fn CL_KeyUpEvent(mut key: i32, mut time: u32) {
             key,
             crate::src::qcommon::q_shared::qfalse as i32,
         );
-    } else if Key_GetCatcher() & 0x8 as i32 != 0
-        && !crate::src::client::cl_main::cgvm.is_null()
-    {
+    } else if Key_GetCatcher() & 0x8 as i32 != 0 && !crate::src::client::cl_main::cgvm.is_null() {
         crate::src::qcommon::vm::VM_Call(
             crate::src::client::cl_main::cgvm,
             crate::cg_public_h::CG_KEY_EVENT as i32,
@@ -4093,11 +4041,7 @@ pub unsafe extern "C" fn Key_ClearStates() {
     i = 0 as i32;
     while i < crate::keycodes_h::MAX_KEYS as i32 {
         if keys[i as usize].down as u64 != 0 {
-            CL_KeyEvent(
-                i,
-                crate::src::qcommon::q_shared::qfalse,
-                0 as i32 as u32,
-            );
+            CL_KeyEvent(i, crate::src::qcommon::q_shared::qfalse, 0 as i32 as u32);
         }
         keys[i as usize].down = crate::src::qcommon::q_shared::qfalse;
         keys[i as usize].repeats = 0 as i32;
@@ -4229,14 +4173,12 @@ pub unsafe extern "C" fn CL_LoadConsoleHistory() {
             }
         }
         crate::stdlib::memmove(
+            &mut *historyEditLines.as_mut_ptr().offset(0 as i32 as isize)
+                as *mut crate::qcommon_h::field_t as *mut libc::c_void,
             &mut *historyEditLines
                 .as_mut_ptr()
-                .offset(0 as i32 as isize) as *mut crate::qcommon_h::field_t
-                as *mut libc::c_void,
-            &mut *historyEditLines
-                .as_mut_ptr()
-                .offset((i + 1 as i32) as isize)
-                as *mut crate::qcommon_h::field_t as *const libc::c_void,
+                .offset((i + 1 as i32) as isize) as *mut crate::qcommon_h::field_t
+                as *const libc::c_void,
             (numLines as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::qcommon_h::field_t>() as libc::c_ulong),
         );
@@ -4465,8 +4407,8 @@ pub unsafe extern "C" fn CL_SaveConsoleHistory() {
     i = (nextHistoryLine - 1 as i32) % 32 as i32;
     loop {
         if historyEditLines[i as usize].buffer[0 as i32 as usize] != 0 {
-            lineLength = crate::stdlib::strlen(historyEditLines[i as usize].buffer.as_mut_ptr())
-                as i32;
+            lineLength =
+                crate::stdlib::strlen(historyEditLines[i as usize].buffer.as_mut_ptr()) as i32;
             saveBufferLength = crate::stdlib::strlen(consoleSaveBuffer.as_mut_ptr()) as i32;
             //ICK
             additionalLength = (lineLength as libc::c_ulong).wrapping_add(crate::stdlib::strlen(

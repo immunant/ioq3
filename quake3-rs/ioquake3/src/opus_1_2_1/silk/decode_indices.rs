@@ -373,15 +373,14 @@ pub unsafe extern "C" fn silk_decode_indices(
                     .as_ptr(),
                 8 as i32 as u32,
             ) as crate::opus_types_h::opus_uint32)
-                << 3 as i32) as crate::opus_types_h::opus_int32
-                as i8;
-        (*psDec).indices.GainsIndices[0 as i32 as usize] =
-            ((*psDec).indices.GainsIndices[0 as i32 as usize] as i32
-                + crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
-                    psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                    crate::src::opus_1_2_1::silk::tables_other::silk_uniform8_iCDF.as_ptr(),
-                    8 as i32 as u32,
-                ) as i8 as i32) as i8
+                << 3 as i32) as crate::opus_types_h::opus_int32 as i8;
+        (*psDec).indices.GainsIndices[0 as i32 as usize] = ((*psDec).indices.GainsIndices
+            [0 as i32 as usize] as i32
+            + crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
+                psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+                crate::src::opus_1_2_1::silk::tables_other::silk_uniform8_iCDF.as_ptr(),
+                8 as i32 as u32,
+            ) as i8 as i32) as i8
     }
     /* Remaining subframes */
     i = 1 as i32;
@@ -434,8 +433,7 @@ pub unsafe extern "C" fn silk_decode_indices(
                 8 as i32 as u32,
             )
         }
-        (*psDec).indices.NLSFIndices[(i + 1 as i32) as usize] =
-            (Ix - 4 as i32) as i8;
+        (*psDec).indices.NLSFIndices[(i + 1 as i32) as usize] = (Ix - 4 as i32) as i8;
         i += 1
     }
     /* Decode LSF interpolation factor */
@@ -464,8 +462,7 @@ pub unsafe extern "C" fn silk_decode_indices(
             ) as crate::opus_types_h::opus_int16 as i32;
             if delta_lagIndex > 0 as i32 {
                 delta_lagIndex = delta_lagIndex - 9 as i32;
-                (*psDec).indices.lagIndex = ((*psDec).ec_prevLagIndex as i32
-                    + delta_lagIndex)
+                (*psDec).indices.lagIndex = ((*psDec).ec_prevLagIndex as i32 + delta_lagIndex)
                     as crate::opus_types_h::opus_int16;
                 decode_absolute_lagIndex = 0 as i32
             }
@@ -476,8 +473,7 @@ pub unsafe extern "C" fn silk_decode_indices(
                 psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 crate::src::opus_1_2_1::silk::tables_pitch_lag::silk_pitch_lag_iCDF.as_ptr(),
                 8 as i32 as u32,
-            ) as crate::opus_types_h::opus_int16
-                as i32
+            ) as crate::opus_types_h::opus_int16 as i32
                 * ((*psDec).fs_kHz >> 1 as i32))
                 as crate::opus_types_h::opus_int16;
             (*psDec).indices.lagIndex = ((*psDec).indices.lagIndex as i32

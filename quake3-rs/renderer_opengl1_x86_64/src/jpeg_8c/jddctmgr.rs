@@ -732,12 +732,9 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                 }
             },
             _ => {
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_DCTSIZE as i32;
-                (*(*cinfo).err).msg_parm.i[0 as i32 as usize] =
-                    (*compptr).DCT_h_scaled_size;
-                (*(*cinfo).err).msg_parm.i[1 as i32 as usize] =
-                    (*compptr).DCT_v_scaled_size;
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_DCTSIZE as i32;
+                (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*compptr).DCT_h_scaled_size;
+                (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = (*compptr).DCT_v_scaled_size;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
@@ -888,8 +885,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
                         while row < 8 as i32 {
                             col = 0 as i32;
                             while col < 8 as i32 {
-                                *fmtbl.offset(i as isize) = ((*qtbl).quantval[i as usize]
-                                    as f64
+                                *fmtbl.offset(i as isize) = ((*qtbl).quantval[i as usize] as f64
                                     * aanscalefactor[row as usize]
                                     * aanscalefactor[col as usize]
                                     * 0.125f64)

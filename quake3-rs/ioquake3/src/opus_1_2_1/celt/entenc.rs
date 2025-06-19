@@ -94,8 +94,7 @@ unsafe extern "C" fn ec_write_byte_at_end(
     (*_this).end_offs = (*_this).end_offs.wrapping_add(1);
     *(*_this)
         .buf
-        .offset((*_this).storage.wrapping_sub((*_this).end_offs) as isize) =
-        _value as u8;
+        .offset((*_this).storage.wrapping_sub((*_this).end_offs) as isize) = _value as u8;
     return 0 as i32;
 }
 /*Outputs a symbol, with a carry bit.
@@ -113,9 +112,7 @@ unsafe extern "C" fn ec_enc_carry_out(
     mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
     mut _c: i32,
 ) {
-    if _c as u32
-        != ((1 as u32) << 8 as i32).wrapping_sub(1 as i32 as u32)
-    {
+    if _c as u32 != ((1 as u32) << 8 as i32).wrapping_sub(1 as i32 as u32) {
         /*No further carry propagation possible, flush buffer.*/
         let mut carry: i32 = 0;
         carry = _c >> 8 as i32;
@@ -129,8 +126,7 @@ unsafe extern "C" fn ec_enc_carry_out(
             sym = ((1 as u32) << 8 as i32)
                 .wrapping_sub(1 as i32 as u32)
                 .wrapping_add(carry as u32)
-                & ((1 as u32) << 8 as i32)
-                    .wrapping_sub(1 as i32 as u32);
+                & ((1 as u32) << 8 as i32).wrapping_sub(1 as i32 as u32);
             loop {
                 (*_this).error |= ec_write_byte(_this, sym);
                 (*_this).ext = (*_this).ext.wrapping_sub(1);
@@ -139,10 +135,7 @@ unsafe extern "C" fn ec_enc_carry_out(
                 }
             }
         }
-        (*_this).rem = (_c as u32
-            & ((1 as u32) << 8 as i32)
-                .wrapping_sub(1 as i32 as u32))
-            as i32
+        (*_this).rem = (_c as u32 & ((1 as u32) << 8 as i32).wrapping_sub(1 as i32 as u32)) as i32
     } else {
         (*_this).ext = (*_this).ext.wrapping_add(1)
     };
@@ -153,18 +146,14 @@ unsafe extern "C" fn ec_enc_normalize(
     mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_enc,
 ) {
     /*If the range is too small, output some bits and rescale it.*/
-    while (*_this).rng
-        <= (1 as u32) << 32 as i32 - 1 as i32 >> 8 as i32
-    {
+    while (*_this).rng <= (1 as u32) << 32 as i32 - 1 as i32 >> 8 as i32 {
         ec_enc_carry_out(
             _this,
-            ((*_this).val >> 32 as i32 - 8 as i32 - 1 as i32)
-                as i32,
+            ((*_this).val >> 32 as i32 - 8 as i32 - 1 as i32) as i32,
         );
         /*Move the next-to-high-order symbol into the high-order position.*/
         (*_this).val = (*_this).val << 8 as i32
-            & ((1 as u32) << 32 as i32 - 1 as i32)
-                .wrapping_sub(1 as i32 as u32);
+            & ((1 as u32) << 32 as i32 - 1 as i32).wrapping_sub(1 as i32 as u32);
         (*_this).rng <<= 8 as i32;
         (*_this).nbits_total += 8 as i32
     }
@@ -209,9 +198,9 @@ pub unsafe extern "C" fn ec_encode(
             as crate::opus_types_h::opus_uint32;
         (*_this).rng = r.wrapping_mul(_fh.wrapping_sub(_fl))
     } else {
-        (*_this).rng =
-            ((*_this).rng as u32).wrapping_sub(r.wrapping_mul(_ft.wrapping_sub(_fh)))
-                as crate::opus_types_h::opus_uint32 as crate::opus_types_h::opus_uint32
+        (*_this).rng = ((*_this).rng as u32).wrapping_sub(r.wrapping_mul(_ft.wrapping_sub(_fh)))
+            as crate::opus_types_h::opus_uint32
+            as crate::opus_types_h::opus_uint32
     }
     ec_enc_normalize(_this);
 }
@@ -274,19 +263,20 @@ pub unsafe extern "C" fn ec_enc_icdf(
     let mut r: crate::opus_types_h::opus_uint32 = 0;
     r = (*_this).rng >> _ftb;
     if _s > 0 as i32 {
-        (*_this).val = ((*_this).val as u32).wrapping_add((*_this).rng.wrapping_sub(
-            r.wrapping_mul(*_icdf.offset((_s - 1 as i32) as isize) as u32),
-        )) as crate::opus_types_h::opus_uint32
+        (*_this).val = ((*_this).val as u32).wrapping_add(
+            (*_this)
+                .rng
+                .wrapping_sub(r.wrapping_mul(*_icdf.offset((_s - 1 as i32) as isize) as u32)),
+        ) as crate::opus_types_h::opus_uint32
             as crate::opus_types_h::opus_uint32;
         (*_this).rng = r.wrapping_mul(
-            (*_icdf.offset((_s - 1 as i32) as isize) as i32
-                - *_icdf.offset(_s as isize) as i32) as u32,
+            (*_icdf.offset((_s - 1 as i32) as isize) as i32 - *_icdf.offset(_s as isize) as i32)
+                as u32,
         )
     } else {
-        (*_this).rng = ((*_this).rng as u32)
-            .wrapping_sub(r.wrapping_mul(*_icdf.offset(_s as isize) as u32))
-            as crate::opus_types_h::opus_uint32
-            as crate::opus_types_h::opus_uint32
+        (*_this).rng =
+            ((*_this).rng as u32).wrapping_sub(r.wrapping_mul(*_icdf.offset(_s as isize) as u32))
+                as crate::opus_types_h::opus_uint32 as crate::opus_types_h::opus_uint32
     }
     ec_enc_normalize(_this);
 }
@@ -308,16 +298,10 @@ pub unsafe extern "C" fn ec_enc_uint(
         ftb -= 8 as i32;
         ft = (_ft >> ftb).wrapping_add(1 as i32 as u32);
         fl = _fl >> ftb;
-        ec_encode(
-            _this,
-            fl,
-            fl.wrapping_add(1 as i32 as u32),
-            ft,
-        );
+        ec_encode(_this, fl, fl.wrapping_add(1 as i32 as u32), ft);
         ec_enc_bits(
             _this,
-            _fl & ((1 as i32 as crate::opus_types_h::opus_uint32) << ftb)
-                .wrapping_sub(1 as u32),
+            _fl & ((1 as i32 as crate::opus_types_h::opus_uint32) << ftb).wrapping_sub(1 as u32),
             ftb as u32,
         );
     } else {
@@ -348,9 +332,7 @@ pub unsafe extern "C" fn ec_enc_bits(
         loop {
             (*_this).error |= ec_write_byte_at_end(
                 _this,
-                window
-                    & ((1 as u32) << 8 as i32)
-                        .wrapping_sub(1 as i32 as u32),
+                window & ((1 as u32) << 8 as i32).wrapping_sub(1 as i32 as u32),
             );
             window >>= 8 as i32;
             used -= 8 as i32;
@@ -363,8 +345,7 @@ pub unsafe extern "C" fn ec_enc_bits(
     used = (used as u32).wrapping_add(_bits) as i32 as i32;
     (*_this).end_window = window;
     (*_this).nend_bits = used;
-    (*_this).nbits_total =
-        ((*_this).nbits_total as u32).wrapping_add(_bits) as i32 as i32;
+    (*_this).nbits_total = ((*_this).nbits_total as u32).wrapping_add(_bits) as i32 as i32;
 }
 #[no_mangle]
 
@@ -380,16 +361,13 @@ pub unsafe extern "C" fn ec_enc_patch_initial_bits(
     if (*_this).offs > 0 as i32 as u32 {
         /*The first byte has been finalized.*/
         *(*_this).buf.offset(0 as i32 as isize) =
-            (*(*_this).buf.offset(0 as i32 as isize) as u32 & !mask
-                | _val << shift) as u8
+            (*(*_this).buf.offset(0 as i32 as isize) as u32 & !mask | _val << shift) as u8
     } else if (*_this).rem >= 0 as i32 {
         /*The first byte is still awaiting carry propagation.*/
         (*_this).rem = ((*_this).rem as u32 & !mask | _val << shift) as i32
-    } else if (*_this).rng <= (1 as u32) << 32 as i32 - 1 as i32 >> _nbits
-    {
+    } else if (*_this).rng <= (1 as u32) << 32 as i32 - 1 as i32 >> _nbits {
         /*The renormalization loop has never been run.*/
-        (*_this).val = (*_this).val
-            & !(mask << 32 as i32 - 8 as i32 - 1 as i32)
+        (*_this).val = (*_this).val & !(mask << 32 as i32 - 8 as i32 - 1 as i32)
             | _val << 32 as i32 - 8 as i32 - 1 as i32 + shift
     } else {
         /*The encoder hasn't even encoded _nbits of data yet.*/
@@ -526,12 +504,9 @@ pub unsafe extern "C" fn ec_enc_done(
     /*We output the minimum number of bits that ensures that the symbols encoded
     thus far will be decoded correctly regardless of the bits that follow.*/
     l = 32 as i32
-        - (::std::mem::size_of::<u32>() as libc::c_ulong as i32
-            * 8 as i32
+        - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
             - (*_this).rng.leading_zeros() as i32);
-    msk = ((1 as u32) << 32 as i32 - 1 as i32)
-        .wrapping_sub(1 as i32 as u32)
-        >> l;
+    msk = ((1 as u32) << 32 as i32 - 1 as i32).wrapping_sub(1 as i32 as u32) >> l;
     end = (*_this).val.wrapping_add(msk) & !msk;
     if end | msk >= (*_this).val.wrapping_add((*_this).rng) {
         l += 1;
@@ -539,13 +514,8 @@ pub unsafe extern "C" fn ec_enc_done(
         end = (*_this).val.wrapping_add(msk) & !msk
     }
     while l > 0 as i32 {
-        ec_enc_carry_out(
-            _this,
-            (end >> 32 as i32 - 8 as i32 - 1 as i32) as i32,
-        );
-        end = end << 8 as i32
-            & ((1 as u32) << 32 as i32 - 1 as i32)
-                .wrapping_sub(1 as i32 as u32);
+        ec_enc_carry_out(_this, (end >> 32 as i32 - 8 as i32 - 1 as i32) as i32);
+        end = end << 8 as i32 & ((1 as u32) << 32 as i32 - 1 as i32).wrapping_sub(1 as i32 as u32);
         l -= 8 as i32
     }
     /*If we have a buffered byte flush it into the output buffer.*/
@@ -558,9 +528,7 @@ pub unsafe extern "C" fn ec_enc_done(
     while used >= 8 as i32 {
         (*_this).error |= ec_write_byte_at_end(
             _this,
-            window
-                & ((1 as u32) << 8 as i32)
-                    .wrapping_sub(1 as i32 as u32),
+            window & ((1 as u32) << 8 as i32).wrapping_sub(1 as i32 as u32),
         );
         window >>= 8 as i32;
         used -= 8 as i32
@@ -592,11 +560,9 @@ pub unsafe extern "C" fn ec_enc_done(
                     (*_this)
                         .storage
                         .wrapping_sub((*_this).end_offs)
-                        .wrapping_sub(1 as i32 as u32)
-                        as isize,
+                        .wrapping_sub(1 as i32 as u32) as isize,
                 );
-                *fresh1 = (*fresh1 as i32 | window as u8 as i32)
-                    as u8
+                *fresh1 = (*fresh1 as i32 | window as u8 as i32) as u8
             }
         }
     };

@@ -101,12 +101,9 @@ pub mod q_shared_h {
         mut p2: *const crate::src::qcommon::q_shared::vec_t,
     ) -> crate::src::qcommon::q_shared::vec_t {
         let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        v[0 as i32 as usize] =
-            *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
-        v[1 as i32 as usize] =
-            *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
-        v[2 as i32 as usize] =
-            *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
+        v[0 as i32 as usize] = *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
+        v[1 as i32 as usize] = *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
+        v[2 as i32 as usize] = *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
         return v[0 as i32 as usize] * v[0 as i32 as usize]
             + v[1 as i32 as usize] * v[1 as i32 as usize]
             + v[2 as i32 as usize] * v[2 as i32 as usize];
@@ -590,9 +587,7 @@ pub unsafe extern "C" fn S_ChannelSetup() {
     }
     let ref mut fresh2 = *(q as *mut *mut crate::snd_local_h::channel_t);
     *fresh2 = 0 as *mut crate::snd_local_h::channel_t;
-    freelist = p
-        .offset(96 as i32 as isize)
-        .offset(-(1 as i32 as isize));
+    freelist = p.offset(96 as i32 as isize).offset(-(1 as i32 as isize));
     crate::src::qcommon::common::Com_DPrintf(
         b"Channel memory manager started\n\x00" as *const u8 as *const libc::c_char,
     );
@@ -615,9 +610,7 @@ unsafe extern "C" fn S_HashSFXName(mut name: *const libc::c_char) -> libc::c_lon
     while *name.offset(i as isize) as i32 != '\u{0}' as i32 {
         letter = ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                > 1 as i32 as libc::c_ulong
-            {
+            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
                 if 0 != 0 {
                     let mut __c: i32 = *name.offset(i as isize) as i32;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -892,10 +885,8 @@ pub unsafe extern "C" fn S_SpatializeOrigin(
         rscale = 1.0f64 as crate::src::qcommon::q_shared::vec_t;
         lscale = 1.0f64 as crate::src::qcommon::q_shared::vec_t
     } else {
-        rscale =
-            (0.5f64 * (1.0f64 + dot as f64)) as crate::src::qcommon::q_shared::vec_t;
-        lscale =
-            (0.5f64 * (1.0f64 - dot as f64)) as crate::src::qcommon::q_shared::vec_t;
+        rscale = (0.5f64 * (1.0f64 + dot as f64)) as crate::src::qcommon::q_shared::vec_t;
+        lscale = (0.5f64 * (1.0f64 - dot as f64)) as crate::src::qcommon::q_shared::vec_t;
         if rscale < 0 as i32 as f32 {
             rscale = 0 as i32 as crate::src::qcommon::q_shared::vec_t
         }
@@ -904,14 +895,12 @@ pub unsafe extern "C" fn S_SpatializeOrigin(
         }
     }
     // add in distance effect
-    scale = ((1.0f64 - dist as f64) * rscale as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+    scale = ((1.0f64 - dist as f64) * rscale as f64) as crate::src::qcommon::q_shared::vec_t;
     *right_vol = (master_vol as f32 * scale) as i32;
     if *right_vol < 0 as i32 {
         *right_vol = 0 as i32
     }
-    scale = ((1.0f64 - dist as f64) * lscale as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+    scale = ((1.0f64 - dist as f64) * lscale as f64) as crate::src::qcommon::q_shared::vec_t;
     *left_vol = (master_vol as f32 * scale) as i32;
     if *left_vol < 0 as i32 {
         *left_vol = 0 as i32
@@ -939,12 +928,9 @@ unsafe extern "C" fn S_Base_HearingThroughEntity(
         sorigin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
         sorigin[2 as i32 as usize] = *origin.offset(2 as i32 as isize)
     } else {
-        sorigin[0 as i32 as usize] =
-            loopSounds[entityNum as usize].origin[0 as i32 as usize];
-        sorigin[1 as i32 as usize] =
-            loopSounds[entityNum as usize].origin[1 as i32 as usize];
-        sorigin[2 as i32 as usize] =
-            loopSounds[entityNum as usize].origin[2 as i32 as usize]
+        sorigin[0 as i32 as usize] = loopSounds[entityNum as usize].origin[0 as i32 as usize];
+        sorigin[1 as i32 as usize] = loopSounds[entityNum as usize].origin[1 as i32 as usize];
+        sorigin[2 as i32 as usize] = loopSounds[entityNum as usize].origin[2 as i32 as usize]
     }
     if listener_number == entityNum {
         // This is an outrageous hack to detect
@@ -998,9 +984,7 @@ unsafe extern "C" fn S_Base_StartSoundEx(
     if s_soundStarted == 0 || s_soundMuted as u32 != 0 {
         return;
     }
-    if origin.is_null()
-        && (entityNum < 0 as i32 || entityNum >= (1 as i32) << 10 as i32)
-    {
+    if origin.is_null() && (entityNum < 0 as i32 || entityNum >= (1 as i32) << 10 as i32) {
         crate::src::qcommon::common::Com_Error(
             crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"S_StartSound: bad entitynum %i\x00" as *const u8 as *const libc::c_char,
@@ -1016,9 +1000,7 @@ unsafe extern "C" fn S_Base_StartSoundEx(
     }
     sfx =
         &mut *s_knownSfx.as_mut_ptr().offset(sfxHandle as isize) as *mut crate::snd_local_h::sfx_t;
-    if (*sfx).inMemory as u32
-        == crate::src::qcommon::q_shared::qfalse as i32 as u32
-    {
+    if (*sfx).inMemory as u32 == crate::src::qcommon::q_shared::qfalse as i32 as u32 {
         S_memoryLoad(sfx);
     }
     if (*s_show).integer == 1 as i32 {
@@ -1036,9 +1018,7 @@ unsafe extern "C" fn S_Base_StartSoundEx(
         allowed = 8 as i32
     }
     fullVolume = crate::src::qcommon::q_shared::qfalse;
-    if localSound as u32 != 0
-        || S_Base_HearingThroughEntity(entityNum, origin) as u32 != 0
-    {
+    if localSound as u32 != 0 || S_Base_HearingThroughEntity(entityNum, origin) as u32 != 0 {
         fullVolume = crate::src::qcommon::q_shared::qtrue
     }
     ch = s_channels.as_mut_ptr();
@@ -1085,8 +1065,7 @@ unsafe extern "C" fn S_Base_StartSoundEx(
             while i < 96 as i32 {
                 if (*ch).entnum != listener_number
                     && (*ch).allocTime < oldest
-                    && (*ch).entchannel
-                        != crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32
+                    && (*ch).entchannel != crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32
                 {
                     oldest = (*ch).allocTime;
                     chosen = i
@@ -1323,9 +1302,7 @@ pub unsafe extern "C" fn S_Base_AddLoopingSound(
     }
     sfx =
         &mut *s_knownSfx.as_mut_ptr().offset(sfxHandle as isize) as *mut crate::snd_local_h::sfx_t;
-    if (*sfx).inMemory as u32
-        == crate::src::qcommon::q_shared::qfalse as i32 as u32
-    {
+    if (*sfx).inMemory as u32 == crate::src::qcommon::q_shared::qfalse as i32 as u32 {
         S_memoryLoad(sfx);
     }
     if (*sfx).soundLength == 0 {
@@ -1335,12 +1312,9 @@ pub unsafe extern "C" fn S_Base_AddLoopingSound(
             (*sfx).soundName.as_mut_ptr(),
         );
     }
-    loopSounds[entityNum as usize].origin[0 as i32 as usize] =
-        *origin.offset(0 as i32 as isize);
-    loopSounds[entityNum as usize].origin[1 as i32 as usize] =
-        *origin.offset(1 as i32 as isize);
-    loopSounds[entityNum as usize].origin[2 as i32 as usize] =
-        *origin.offset(2 as i32 as isize);
+    loopSounds[entityNum as usize].origin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
+    loopSounds[entityNum as usize].origin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
+    loopSounds[entityNum as usize].origin[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
     loopSounds[entityNum as usize].velocity[0 as i32 as usize] =
         *velocity.offset(0 as i32 as isize);
     loopSounds[entityNum as usize].velocity[1 as i32 as usize] =
@@ -1366,14 +1340,11 @@ pub unsafe extern "C" fn S_Base_AddLoopingSound(
             loopSounds[entityNum as usize].origin.as_mut_ptr()
                 as *const crate::src::qcommon::q_shared::vec_t,
         );
-        out[0 as i32 as usize] = loopSounds[entityNum as usize].origin
-            [0 as i32 as usize]
+        out[0 as i32 as usize] = loopSounds[entityNum as usize].origin[0 as i32 as usize]
             + loopSounds[entityNum as usize].velocity[0 as i32 as usize];
-        out[1 as i32 as usize] = loopSounds[entityNum as usize].origin
-            [1 as i32 as usize]
+        out[1 as i32 as usize] = loopSounds[entityNum as usize].origin[1 as i32 as usize]
             + loopSounds[entityNum as usize].velocity[1 as i32 as usize];
-        out[2 as i32 as usize] = loopSounds[entityNum as usize].origin
-            [2 as i32 as usize]
+        out[2 as i32 as usize] = loopSounds[entityNum as usize].origin[2 as i32 as usize]
             + loopSounds[entityNum as usize].velocity[2 as i32 as usize];
         lenb = DistanceSquared(
             loopSounds[listener_number as usize].origin.as_mut_ptr()
@@ -1388,8 +1359,7 @@ pub unsafe extern "C" fn S_Base_AddLoopingSound(
             loopSounds[entityNum as usize].oldDopplerScale =
                 loopSounds[entityNum as usize].dopplerScale
         }
-        loopSounds[entityNum as usize].dopplerScale =
-            lenb / (lena * 100 as i32 as f32);
+        loopSounds[entityNum as usize].dopplerScale = lenb / (lena * 100 as i32 as f32);
         if loopSounds[entityNum as usize].dopplerScale as f64 <= 1.0f64 {
             loopSounds[entityNum as usize].doppler = crate::src::qcommon::q_shared::qfalse
         // don't bother doing the math
@@ -1429,9 +1399,7 @@ pub unsafe extern "C" fn S_Base_AddRealLoopingSound(
     }
     sfx =
         &mut *s_knownSfx.as_mut_ptr().offset(sfxHandle as isize) as *mut crate::snd_local_h::sfx_t;
-    if (*sfx).inMemory as u32
-        == crate::src::qcommon::q_shared::qfalse as i32 as u32
-    {
+    if (*sfx).inMemory as u32 == crate::src::qcommon::q_shared::qfalse as i32 as u32 {
         S_memoryLoad(sfx);
     }
     if (*sfx).soundLength == 0 {
@@ -1441,12 +1409,9 @@ pub unsafe extern "C" fn S_Base_AddRealLoopingSound(
             (*sfx).soundName.as_mut_ptr(),
         );
     }
-    loopSounds[entityNum as usize].origin[0 as i32 as usize] =
-        *origin.offset(0 as i32 as isize);
-    loopSounds[entityNum as usize].origin[1 as i32 as usize] =
-        *origin.offset(1 as i32 as isize);
-    loopSounds[entityNum as usize].origin[2 as i32 as usize] =
-        *origin.offset(2 as i32 as isize);
+    loopSounds[entityNum as usize].origin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
+    loopSounds[entityNum as usize].origin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
+    loopSounds[entityNum as usize].origin[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
     loopSounds[entityNum as usize].velocity[0 as i32 as usize] =
         *velocity.offset(0 as i32 as isize);
     loopSounds[entityNum as usize].velocity[1 as i32 as usize] =
@@ -1597,8 +1562,7 @@ pub unsafe extern "C" fn S_ByteSwapRawSamples(
     }
     i = 0 as i32;
     while i < samples {
-        *(data as *mut i16).offset(i as isize) =
-            *(data as *mut i16).offset(i as isize);
+        *(data as *mut i16).offset(i as isize) = *(data as *mut i16).offset(i as isize);
         i += 1
     }
 }
@@ -1632,9 +1596,7 @@ pub unsafe extern "C" fn S_Base_RawSamples(
     if s_soundStarted == 0 || s_soundMuted as u32 != 0 {
         return;
     }
-    if stream < 0 as i32
-        || stream >= 64 as i32 * 2 as i32 + 1 as i32
-    {
+    if stream < 0 as i32 || stream >= 64 as i32 * 2 as i32 + 1 as i32 {
         return;
     }
     rawsamples = s_rawsamples[stream as usize].as_mut_ptr();
@@ -1657,11 +1619,9 @@ pub unsafe extern "C" fn S_Base_RawSamples(
             leftvol = rightvol
         }
         intVolumeLeft =
-            (leftvol as f32 * volume * (*crate::src::client::snd_main::s_volume).value)
-                as i32;
+            (leftvol as f32 * volume * (*crate::src::client::snd_main::s_volume).value) as i32;
         intVolumeRight =
-            (rightvol as f32 * volume * (*crate::src::client::snd_main::s_volume).value)
-                as i32
+            (rightvol as f32 * volume * (*crate::src::client::snd_main::s_volume).value) as i32
     }
     if s_rawend[stream as usize] < s_soundtime {
         crate::src::qcommon::common::Com_DPrintf(
@@ -1681,14 +1641,11 @@ pub unsafe extern "C" fn S_Base_RawSamples(
             while i < samples {
                 dst = s_rawend[stream as usize] & 16384 as i32 - 1 as i32;
                 s_rawend[stream as usize] += 1;
-                (*rawsamples.offset(dst as isize)).left = *(data as *mut i16)
-                    .offset((i * 2 as i32) as isize)
-                    as i32
-                    * intVolumeLeft;
-                (*rawsamples.offset(dst as isize)).right = *(data as *mut i16)
-                    .offset((i * 2 as i32 + 1 as i32) as isize)
-                    as i32
-                    * intVolumeRight;
+                (*rawsamples.offset(dst as isize)).left =
+                    *(data as *mut i16).offset((i * 2 as i32) as isize) as i32 * intVolumeLeft;
+                (*rawsamples.offset(dst as isize)).right =
+                    *(data as *mut i16).offset((i * 2 as i32 + 1 as i32) as isize) as i32
+                        * intVolumeRight;
                 i += 1
             }
         } else {
@@ -1700,14 +1657,11 @@ pub unsafe extern "C" fn S_Base_RawSamples(
                 }
                 dst = s_rawend[stream as usize] & 16384 as i32 - 1 as i32;
                 s_rawend[stream as usize] += 1;
-                (*rawsamples.offset(dst as isize)).left = *(data as *mut i16)
-                    .offset((src * 2 as i32) as isize)
-                    as i32
-                    * intVolumeLeft;
-                (*rawsamples.offset(dst as isize)).right = *(data as *mut i16)
-                    .offset((src * 2 as i32 + 1 as i32) as isize)
-                    as i32
-                    * intVolumeRight;
+                (*rawsamples.offset(dst as isize)).left =
+                    *(data as *mut i16).offset((src * 2 as i32) as isize) as i32 * intVolumeLeft;
+                (*rawsamples.offset(dst as isize)).right =
+                    *(data as *mut i16).offset((src * 2 as i32 + 1 as i32) as isize) as i32
+                        * intVolumeRight;
                 i += 1
             }
         }
@@ -1737,14 +1691,12 @@ pub unsafe extern "C" fn S_Base_RawSamples(
             }
             dst = s_rawend[stream as usize] & 16384 as i32 - 1 as i32;
             s_rawend[stream as usize] += 1;
-            (*rawsamples.offset(dst as isize)).left = *(data as *mut libc::c_char)
-                .offset((src * 2 as i32) as isize)
-                as i32
-                * intVolumeLeft;
-            (*rawsamples.offset(dst as isize)).right = *(data as *mut libc::c_char)
-                .offset((src * 2 as i32 + 1 as i32) as isize)
-                as i32
-                * intVolumeRight;
+            (*rawsamples.offset(dst as isize)).left =
+                *(data as *mut libc::c_char).offset((src * 2 as i32) as isize) as i32
+                    * intVolumeLeft;
+            (*rawsamples.offset(dst as isize)).right =
+                *(data as *mut libc::c_char).offset((src * 2 as i32 + 1 as i32) as isize) as i32
+                    * intVolumeRight;
             i += 1
         }
     } else if s_channels_0 == 1 as i32 && width == 1 as i32 {
@@ -1759,13 +1711,11 @@ pub unsafe extern "C" fn S_Base_RawSamples(
             dst = s_rawend[stream as usize] & 16384 as i32 - 1 as i32;
             s_rawend[stream as usize] += 1;
             (*rawsamples.offset(dst as isize)).left =
-                (*(data as *mut crate::src::qcommon::q_shared::byte).offset(src as isize)
-                    as i32
+                (*(data as *mut crate::src::qcommon::q_shared::byte).offset(src as isize) as i32
                     - 128 as i32)
                     * intVolumeLeft;
             (*rawsamples.offset(dst as isize)).right =
-                (*(data as *mut crate::src::qcommon::q_shared::byte).offset(src as isize)
-                    as i32
+                (*(data as *mut crate::src::qcommon::q_shared::byte).offset(src as isize) as i32
                     - 128 as i32)
                     * intVolumeRight;
             i += 1
@@ -1800,12 +1750,9 @@ pub unsafe extern "C" fn S_Base_UpdateEntityPosition(
             entityNum,
         );
     }
-    loopSounds[entityNum as usize].origin[0 as i32 as usize] =
-        *origin.offset(0 as i32 as isize);
-    loopSounds[entityNum as usize].origin[1 as i32 as usize] =
-        *origin.offset(1 as i32 as isize);
-    loopSounds[entityNum as usize].origin[2 as i32 as usize] =
-        *origin.offset(2 as i32 as isize);
+    loopSounds[entityNum as usize].origin[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
+    loopSounds[entityNum as usize].origin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
+    loopSounds[entityNum as usize].origin[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
 }
 /*
 ============
@@ -1976,22 +1923,19 @@ pub unsafe extern "C" fn S_GetSoundtime() {
     static mut buffers: i32 = 0;
     static mut oldsamplepos: i32 = 0;
     if crate::src::client::cl_avi::CL_VideoRecording() as u64 != 0 {
-        let mut fps: f32 =
-            if (*crate::src::client::cl_main::cl_aviFrameRate).value < 1000.0f32 {
-                (*crate::src::client::cl_main::cl_aviFrameRate).value
-            } else {
-                1000.0f32
-            };
+        let mut fps: f32 = if (*crate::src::client::cl_main::cl_aviFrameRate).value < 1000.0f32 {
+            (*crate::src::client::cl_main::cl_aviFrameRate).value
+        } else {
+            1000.0f32
+        };
         let mut frameDuration: f32 = (if dma.speed as f32 / fps > 1.0f32 {
             (dma.speed as f32) / fps
         } else {
             1.0f32
-        }) + crate::src::client::cl_main::clc
-            .aviSoundFrameRemainder;
+        }) + crate::src::client::cl_main::clc.aviSoundFrameRemainder;
         let mut msec: i32 = frameDuration as i32;
         s_soundtime += msec;
-        crate::src::client::cl_main::clc.aviSoundFrameRemainder =
-            frameDuration - msec as f32;
+        crate::src::client::cl_main::clc.aviSoundFrameRemainder = frameDuration - msec as f32;
         return;
     }
     // it is possible to miscount buffers if it has wrapped twice between
@@ -2009,9 +1953,7 @@ pub unsafe extern "C" fn S_GetSoundtime() {
     oldsamplepos = samplepos;
     s_soundtime = buffers * dma.fullsamples + samplepos / dma.channels;
     if dma.submission_chunk < 256 as i32 {
-        s_paintedtime = (s_soundtime as f32
-            + (*s_mixPreStep).value * dma.speed as f32)
-            as i32
+        s_paintedtime = (s_soundtime as f32 + (*s_mixPreStep).value * dma.speed as f32) as i32
     } else {
         s_paintedtime = s_soundtime + dma.submission_chunk
     };
@@ -2074,9 +2016,7 @@ pub unsafe extern "C" fn S_Update_() {
         // 85hz
     }
     ma = (*s_mixahead).value * dma.speed as f32;
-    op = ((*s_mixPreStep).value as f64
-        + (sane * dma.speed as f32) as f64 * 0.01f64)
-        as f32;
+    op = ((*s_mixPreStep).value as f64 + (sane * dma.speed as f32) as f64 * 0.01f64) as f32;
     if op < ma {
         ma = op
     }
@@ -2505,10 +2445,7 @@ pub unsafe extern "C" fn S_Base_Init(
     );
     (*si).StartLocalSound = Some(
         S_Base_StartLocalSound
-            as unsafe extern "C" fn(
-                _: crate::src::qcommon::q_shared::sfxHandle_t,
-                _: i32,
-            ) -> (),
+            as unsafe extern "C" fn(_: crate::src::qcommon::q_shared::sfxHandle_t, _: i32) -> (),
     );
     (*si).StartBackgroundTrack = Some(
         S_Base_StartBackgroundTrack
@@ -2551,8 +2488,7 @@ pub unsafe extern "C" fn S_Base_Init(
                 _: crate::src::qcommon::q_shared::sfxHandle_t,
             ) -> (),
     );
-    (*si).StopLoopingSound =
-        Some(S_Base_StopLoopingSound as unsafe extern "C" fn(_: i32) -> ());
+    (*si).StopLoopingSound = Some(S_Base_StopLoopingSound as unsafe extern "C" fn(_: i32) -> ());
     (*si).Respatialize = Some(
         S_Base_Respatialize
             as unsafe extern "C" fn(
@@ -2564,10 +2500,7 @@ pub unsafe extern "C" fn S_Base_Init(
     );
     (*si).UpdateEntityPosition = Some(
         S_Base_UpdateEntityPosition
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *const crate::src::qcommon::q_shared::vec_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: i32, _: *const crate::src::qcommon::q_shared::vec_t) -> (),
     );
     (*si).Update = Some(S_Base_Update as unsafe extern "C" fn() -> ());
     (*si).DisableSounds = Some(S_Base_DisableSounds as unsafe extern "C" fn() -> ());
@@ -2587,10 +2520,7 @@ pub unsafe extern "C" fn S_Base_Init(
         Some(S_Base_AvailableCaptureSamples as unsafe extern "C" fn() -> i32);
     (*si).Capture = Some(
         S_Base_Capture
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut crate::src::qcommon::q_shared::byte,
-            ) -> (),
+            as unsafe extern "C" fn(_: i32, _: *mut crate::src::qcommon::q_shared::byte) -> (),
     );
     (*si).StopCapture = Some(S_Base_StopCapture as unsafe extern "C" fn() -> ());
     (*si).MasterGain = Some(S_Base_MasterGain as unsafe extern "C" fn(_: f32) -> ());

@@ -52,8 +52,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
     #[inline]
@@ -433,10 +432,7 @@ pub unsafe extern "C" fn BotInitMoveState(
 //========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AngleDiff(
-    mut ang1: f32,
-    mut ang2: f32,
-) -> f32 {
+pub unsafe extern "C" fn AngleDiff(mut ang1: f32, mut ang2: f32) -> f32 {
     let mut diff: f32 = 0.; //end else
     diff = ang1 - ang2; //end if
     if ang1 > ang2 {
@@ -527,14 +523,11 @@ pub unsafe extern "C" fn BotFuzzyPointReachabilityArea(
                     if crate::src::botlib::be_aas_reach::AAS_AreaReachability(areas[j as usize])
                         != 0
                     {
-                        v[0 as i32 as usize] = points[j as usize]
-                            [0 as i32 as usize]
+                        v[0 as i32 as usize] = points[j as usize][0 as i32 as usize]
                             - *origin.offset(0 as i32 as isize); //end if
-                        v[1 as i32 as usize] = points[j as usize]
-                            [1 as i32 as usize]
+                        v[1 as i32 as usize] = points[j as usize][1 as i32 as usize]
                             - *origin.offset(1 as i32 as isize);
-                        v[2 as i32 as usize] = points[j as usize]
-                            [2 as i32 as usize]
+                        v[2 as i32 as usize] = points[j as usize][2 as i32 as usize]
                             - *origin.offset(2 as i32 as isize);
                         dist = VectorLength(
                             v.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
@@ -635,12 +628,12 @@ pub unsafe extern "C" fn BotReachabilityArea(
         mins.as_mut_ptr(),
         maxs.as_mut_ptr(),
     ); //end if
-    end[0 as i32 as usize] = *origin.offset(0 as i32 as isize)
-        + up[0 as i32 as usize] * -(3 as i32) as f32;
-    end[1 as i32 as usize] = *origin.offset(1 as i32 as isize)
-        + up[1 as i32 as usize] * -(3 as i32) as f32;
-    end[2 as i32 as usize] = *origin.offset(2 as i32 as isize)
-        + up[2 as i32 as usize] * -(3 as i32) as f32;
+    end[0 as i32 as usize] =
+        *origin.offset(0 as i32 as isize) + up[0 as i32 as usize] * -(3 as i32) as f32;
+    end[1 as i32 as usize] =
+        *origin.offset(1 as i32 as isize) + up[1 as i32 as usize] * -(3 as i32) as f32;
+    end[2 as i32 as usize] =
+        *origin.offset(2 as i32 as isize) + up[2 as i32 as usize] * -(3 as i32) as f32;
     bsptrace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
         origin,
         mins.as_mut_ptr(),
@@ -662,10 +655,8 @@ pub unsafe extern "C" fn BotReachabilityArea(
         //if standing on a func_plat or func_bobbing then the bot is assumed to be
         //in the area the reachability points to
         if modeltype == 1 as i32 || modeltype == 2 as i32 {
-            reachnum = crate::src::botlib::be_aas_route::AAS_NextModelReachability(
-                0 as i32,
-                modelnum,
-            );
+            reachnum =
+                crate::src::botlib::be_aas_route::AAS_NextModelReachability(0 as i32, modelnum);
             if reachnum != 0 {
                 crate::src::botlib::be_aas_route::AAS_ReachabilityFromNum(
                     reachnum,
@@ -922,9 +913,7 @@ pub unsafe extern "C" fn BotOnMover(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn MoverDown(
-    mut reach: *mut crate::aasfile_h::aas_reachability_t,
-) -> i32 {
+pub unsafe extern "C" fn MoverDown(mut reach: *mut crate::aasfile_h::aas_reachability_t) -> i32 {
     let mut modelnum: i32 = 0;
     let mut mins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
@@ -960,9 +949,7 @@ pub unsafe extern "C" fn MoverDown(
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
     //if the top of the plat is below the reachability start point
-    if origin[2 as i32 as usize] + maxs[2 as i32 as usize]
-        < (*reach).start[2 as i32 as usize]
-    {
+    if origin[2 as i32 as usize] + maxs[2 as i32 as usize] < (*reach).start[2 as i32 as usize] {
         return crate::src::qcommon::q_shared::qtrue as i32;
     }
     return crate::src::qcommon::q_shared::qfalse as i32;
@@ -985,8 +972,7 @@ pub unsafe extern "C" fn BotSetBrushModelTypes() {
     crate::stdlib::memset(
         modeltypes.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (256 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (256 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
     );
     //
     ent = crate::src::botlib::be_aas_bspq3::AAS_NextBSPEntity(0 as i32); //end if
@@ -1095,12 +1081,12 @@ pub unsafe extern "C" fn BotOnTopOfEntity(mut ms: *mut bot_movestate_t) -> i32 {
         mins.as_mut_ptr(),
         maxs.as_mut_ptr(),
     );
-    end[0 as i32 as usize] = (*ms).origin[0 as i32 as usize]
-        + up[0 as i32 as usize] * -(3 as i32) as f32;
-    end[1 as i32 as usize] = (*ms).origin[1 as i32 as usize]
-        + up[1 as i32 as usize] * -(3 as i32) as f32;
-    end[2 as i32 as usize] = (*ms).origin[2 as i32 as usize]
-        + up[2 as i32 as usize] * -(3 as i32) as f32;
+    end[0 as i32 as usize] =
+        (*ms).origin[0 as i32 as usize] + up[0 as i32 as usize] * -(3 as i32) as f32;
+    end[1 as i32 as usize] =
+        (*ms).origin[1 as i32 as usize] + up[1 as i32 as usize] * -(3 as i32) as f32;
+    end[2 as i32 as usize] =
+        (*ms).origin[2 as i32 as usize] + up[2 as i32 as usize] * -(3 as i32) as f32;
     trace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
         (*ms).origin.as_mut_ptr(),
         mins.as_mut_ptr(),
@@ -1223,28 +1209,19 @@ pub unsafe extern "C" fn DistanceFromLineSquared(
         if crate::stdlib::fabs((proj[j as usize] - *lp1.offset(j as isize)) as f64)
             < crate::stdlib::fabs((proj[j as usize] - *lp2.offset(j as isize)) as f64)
         {
-            dir[0 as i32 as usize] =
-                *p.offset(0 as i32 as isize) - *lp1.offset(0 as i32 as isize);
-            dir[1 as i32 as usize] =
-                *p.offset(1 as i32 as isize) - *lp1.offset(1 as i32 as isize);
-            dir[2 as i32 as usize] =
-                *p.offset(2 as i32 as isize) - *lp1.offset(2 as i32 as isize)
+            dir[0 as i32 as usize] = *p.offset(0 as i32 as isize) - *lp1.offset(0 as i32 as isize);
+            dir[1 as i32 as usize] = *p.offset(1 as i32 as isize) - *lp1.offset(1 as i32 as isize);
+            dir[2 as i32 as usize] = *p.offset(2 as i32 as isize) - *lp1.offset(2 as i32 as isize)
         } else {
-            dir[0 as i32 as usize] =
-                *p.offset(0 as i32 as isize) - *lp2.offset(0 as i32 as isize);
-            dir[1 as i32 as usize] =
-                *p.offset(1 as i32 as isize) - *lp2.offset(1 as i32 as isize);
-            dir[2 as i32 as usize] =
-                *p.offset(2 as i32 as isize) - *lp2.offset(2 as i32 as isize)
+            dir[0 as i32 as usize] = *p.offset(0 as i32 as isize) - *lp2.offset(0 as i32 as isize);
+            dir[1 as i32 as usize] = *p.offset(1 as i32 as isize) - *lp2.offset(1 as i32 as isize);
+            dir[2 as i32 as usize] = *p.offset(2 as i32 as isize) - *lp2.offset(2 as i32 as isize)
         }
         return VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
     }
-    dir[0 as i32 as usize] =
-        *p.offset(0 as i32 as isize) - proj[0 as i32 as usize];
-    dir[1 as i32 as usize] =
-        *p.offset(1 as i32 as isize) - proj[1 as i32 as usize];
-    dir[2 as i32 as usize] =
-        *p.offset(2 as i32 as isize) - proj[2 as i32 as usize];
+    dir[0 as i32 as usize] = *p.offset(0 as i32 as isize) - proj[0 as i32 as usize];
+    dir[1 as i32 as usize] = *p.offset(1 as i32 as isize) - proj[1 as i32 as usize];
+    dir[2 as i32 as usize] = *p.offset(2 as i32 as isize) - proj[2 as i32 as usize];
     return VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
 }
 //end of the function DistanceFromLineSquared
@@ -1261,12 +1238,9 @@ pub unsafe extern "C" fn VectorDistanceSquared(
     mut p2: *mut crate::src::qcommon::q_shared::vec_t,
 ) -> f32 {
     let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    dir[0 as i32 as usize] =
-        *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
-    dir[1 as i32 as usize] =
-        *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
-    dir[2 as i32 as usize] =
-        *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
+    dir[0 as i32 as usize] = *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
+    dir[1 as i32 as usize] = *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
+    dir[2 as i32 as usize] = *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
     return VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
 }
 //end of the function VectorDistanceSquared
@@ -1452,8 +1426,7 @@ pub unsafe extern "C" fn BotGetReachabilityToGoal(
     besttime = 0 as i32;
     bestreachnum = 0 as i32;
     //
-    reachnum =
-        crate::src::botlib::be_aas_route::AAS_NextAreaReachability(areanum, 0 as i32); //end for
+    reachnum = crate::src::botlib::be_aas_route::AAS_NextAreaReachability(areanum, 0 as i32); //end for
     while reachnum != 0 {
         //check if it isn't a reachability to avoid
         i = 0 as i32; //end for
@@ -1498,7 +1471,7 @@ pub unsafe extern "C" fn BotGetReachabilityToGoal(
                         } else {
                             //add the travel time towards the area
                             t += reach.traveltime as i32; // + AAS_AreaTravelTime(areanum, origin, reach.start);
-                                                                  //if the travel time is better than the ones already found
+                                                          //if the travel time is better than the ones already found
                             if besttime == 0 || t < besttime {
                                 besttime = t;
                                 bestreachnum = reachnum
@@ -1532,12 +1505,9 @@ pub unsafe extern "C" fn BotAddToTarget(
 ) -> i32 {
     let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3]; //end if
     let mut curdist: f32 = 0.;
-    dir[0 as i32 as usize] =
-        *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
-    dir[1 as i32 as usize] =
-        *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
-    dir[2 as i32 as usize] =
-        *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
+    dir[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
+    dir[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
+    dir[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
     curdist = crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
     if *dist + curdist < maxdist {
         *target.offset(0 as i32 as isize) = *end.offset(0 as i32 as isize);
@@ -1546,12 +1516,12 @@ pub unsafe extern "C" fn BotAddToTarget(
         *dist += curdist;
         return crate::src::qcommon::q_shared::qfalse as i32;
     } else {
-        *target.offset(0 as i32 as isize) = *start.offset(0 as i32 as isize)
-            + dir[0 as i32 as usize] * (maxdist - *dist);
-        *target.offset(1 as i32 as isize) = *start.offset(1 as i32 as isize)
-            + dir[1 as i32 as usize] * (maxdist - *dist);
-        *target.offset(2 as i32 as isize) = *start.offset(2 as i32 as isize)
-            + dir[2 as i32 as usize] * (maxdist - *dist);
+        *target.offset(0 as i32 as isize) =
+            *start.offset(0 as i32 as isize) + dir[0 as i32 as usize] * (maxdist - *dist);
+        *target.offset(1 as i32 as isize) =
+            *start.offset(1 as i32 as isize) + dir[1 as i32 as usize] * (maxdist - *dist);
+        *target.offset(2 as i32 as isize) =
+            *start.offset(2 as i32 as isize) + dir[2 as i32 as usize] * (maxdist - *dist);
         *dist = maxdist;
         return crate::src::qcommon::q_shared::qtrue as i32;
     };
@@ -1770,8 +1740,7 @@ pub unsafe extern "C" fn BotPredictVisiblePosition(
     crate::stdlib::memset(
         avoidreach.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (1 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (1 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
     );
     lastgoalareanum = (*goal).areanum;
     lastareanum = areanum;
@@ -1897,22 +1866,16 @@ pub unsafe extern "C" fn MoverBottomCenter(
         ); //end if
     }
     //get a point just above the plat in the bottom position
-    mids[0 as i32 as usize] =
-        mins[0 as i32 as usize] + maxs[0 as i32 as usize];
-    mids[1 as i32 as usize] =
-        mins[1 as i32 as usize] + maxs[1 as i32 as usize];
-    mids[2 as i32 as usize] =
-        mins[2 as i32 as usize] + maxs[2 as i32 as usize];
-    *bottomcenter.offset(0 as i32 as isize) = (origin[0 as i32 as usize]
-        as f64
+    mids[0 as i32 as usize] = mins[0 as i32 as usize] + maxs[0 as i32 as usize];
+    mids[1 as i32 as usize] = mins[1 as i32 as usize] + maxs[1 as i32 as usize];
+    mids[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
+    *bottomcenter.offset(0 as i32 as isize) = (origin[0 as i32 as usize] as f64
         + mids[0 as i32 as usize] as f64 * 0.5f64)
         as crate::src::qcommon::q_shared::vec_t;
-    *bottomcenter.offset(1 as i32 as isize) = (origin[1 as i32 as usize]
-        as f64
+    *bottomcenter.offset(1 as i32 as isize) = (origin[1 as i32 as usize] as f64
         + mids[1 as i32 as usize] as f64 * 0.5f64)
         as crate::src::qcommon::q_shared::vec_t;
-    *bottomcenter.offset(2 as i32 as isize) = (origin[2 as i32 as usize]
-        as f64
+    *bottomcenter.offset(2 as i32 as isize) = (origin[2 as i32 as usize] as f64
         + mids[2 as i32 as usize] as f64 * 0.5f64)
         as crate::src::qcommon::q_shared::vec_t;
     *bottomcenter.offset(2 as i32 as isize) = (*reach).start[2 as i32 as usize];
@@ -1967,18 +1930,17 @@ pub unsafe extern "C" fn BotGapDistance(
     //
     dist = 8 as i32; //end for
     while dist <= 100 as i32 {
-        start[0 as i32 as usize] = *origin.offset(0 as i32 as isize)
-            + *hordir.offset(0 as i32 as isize) * dist as f32;
-        start[1 as i32 as usize] = *origin.offset(1 as i32 as isize)
-            + *hordir.offset(1 as i32 as isize) * dist as f32;
-        start[2 as i32 as usize] = *origin.offset(2 as i32 as isize)
-            + *hordir.offset(2 as i32 as isize) * dist as f32;
+        start[0 as i32 as usize] =
+            *origin.offset(0 as i32 as isize) + *hordir.offset(0 as i32 as isize) * dist as f32;
+        start[1 as i32 as usize] =
+            *origin.offset(1 as i32 as isize) + *hordir.offset(1 as i32 as isize) * dist as f32;
+        start[2 as i32 as usize] =
+            *origin.offset(2 as i32 as isize) + *hordir.offset(2 as i32 as isize) * dist as f32;
         start[2 as i32 as usize] = startz + 24 as i32 as f32;
         end[0 as i32 as usize] = start[0 as i32 as usize];
         end[1 as i32 as usize] = start[1 as i32 as usize];
         end[2 as i32 as usize] = start[2 as i32 as usize];
-        end[2 as i32 as usize] -=
-            48 as i32 as f32 + (*sv_maxbarrier).value;
+        end[2 as i32 as usize] -= 48 as i32 as f32 + (*sv_maxbarrier).value;
         trace = crate::src::botlib::be_aas_sample::AAS_TraceClientBBox(
             start.as_mut_ptr(),
             end.as_mut_ptr(),
@@ -1989,15 +1951,12 @@ pub unsafe extern "C" fn BotGapDistance(
         //if solid is found the bot can't walk any further and fall into a gap
         if trace.startsolid as u64 == 0 {
             //if it is a gap
-            if trace.endpos[2 as i32 as usize]
-                < startz - (*sv_maxstep).value - 8 as i32 as f32
-            {
+            if trace.endpos[2 as i32 as usize] < startz - (*sv_maxstep).value - 8 as i32 as f32 {
                 end[0 as i32 as usize] = trace.endpos[0 as i32 as usize]; //end if
                 end[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
                 end[2 as i32 as usize] = trace.endpos[2 as i32 as usize];
                 end[2 as i32 as usize] -= 20 as i32 as f32;
-                if crate::src::botlib::be_aas_bspq3::AAS_PointContents(end.as_mut_ptr())
-                    & 32 as i32
+                if crate::src::botlib::be_aas_bspq3::AAS_PointContents(end.as_mut_ptr()) & 32 as i32
                     != 0
                 {
                     break;
@@ -2055,9 +2014,7 @@ pub unsafe extern "C" fn BotCheckBarrierJump(
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
     //if very low ceiling it isn't possible to jump up to a barrier
-    if trace.endpos[2 as i32 as usize] - (*ms).origin[2 as i32 as usize]
-        < (*sv_maxstep).value
-    {
+    if trace.endpos[2 as i32 as usize] - (*ms).origin[2 as i32 as usize] < (*sv_maxstep).value {
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
     //
@@ -2066,16 +2023,13 @@ pub unsafe extern "C" fn BotCheckBarrierJump(
     hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
     end[0 as i32 as usize] = ((*ms).origin[0 as i32 as usize] as f64
-        + hordir[0 as i32 as usize] as f64
-            * (((*ms).thinktime * speed) as f64 * 0.5f64))
+        + hordir[0 as i32 as usize] as f64 * (((*ms).thinktime * speed) as f64 * 0.5f64))
         as crate::src::qcommon::q_shared::vec_t;
     end[1 as i32 as usize] = ((*ms).origin[1 as i32 as usize] as f64
-        + hordir[1 as i32 as usize] as f64
-            * (((*ms).thinktime * speed) as f64 * 0.5f64))
+        + hordir[1 as i32 as usize] as f64 * (((*ms).thinktime * speed) as f64 * 0.5f64))
         as crate::src::qcommon::q_shared::vec_t;
     end[2 as i32 as usize] = ((*ms).origin[2 as i32 as usize] as f64
-        + hordir[2 as i32 as usize] as f64
-            * (((*ms).thinktime * speed) as f64 * 0.5f64))
+        + hordir[2 as i32 as usize] as f64 * (((*ms).thinktime * speed) as f64 * 0.5f64))
         as crate::src::qcommon::q_shared::vec_t;
     start[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
     start[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
@@ -2116,9 +2070,7 @@ pub unsafe extern "C" fn BotCheckBarrierJump(
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
     //if less than the maximum step height
-    if trace.endpos[2 as i32 as usize] - (*ms).origin[2 as i32 as usize]
-        < (*sv_maxstep).value
-    {
+    if trace.endpos[2 as i32 as usize] - (*ms).origin[2 as i32 as usize] < (*sv_maxstep).value {
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
     //
@@ -2220,8 +2172,7 @@ pub unsafe extern "C" fn BotWalkInDirection(
         //horizontal direction
         hordir[0 as i32 as usize] = *dir.offset(0 as i32 as isize);
         hordir[1 as i32 as usize] = *dir.offset(1 as i32 as isize);
-        hordir[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
         //if the bot is not supposed to jump
         if type_0 & 4 as i32 == 0 {
@@ -2246,15 +2197,10 @@ pub unsafe extern "C" fn BotWalkInDirection(
         //
         if type_0 & 4 as i32 != 0 {
             //end else
-            cmdmove[2 as i32 as usize] =
-                400 as i32 as crate::src::qcommon::q_shared::vec_t; //end if
+            cmdmove[2 as i32 as usize] = 400 as i32 as crate::src::qcommon::q_shared::vec_t; //end if
             maxframes = (3 as i32 as f64 / 0.1f64) as i32;
             cmdframes = 1 as i32;
-            stopevent = 1 as i32
-                | 32 as i32
-                | 4 as i32
-                | 8 as i32
-                | 16 as i32
+            stopevent = 1 as i32 | 32 as i32 | 4 as i32 | 8 as i32 | 16 as i32
         } else {
             maxframes = 2 as i32;
             cmdframes = 2 as i32;
@@ -2266,9 +2212,8 @@ pub unsafe extern "C" fn BotWalkInDirection(
         origin[0 as i32 as usize] = (*ms).origin[0 as i32 as usize]; //qtrue);
         origin[1 as i32 as usize] = (*ms).origin[1 as i32 as usize];
         origin[2 as i32 as usize] = (*ms).origin[2 as i32 as usize];
-        origin[2 as i32 as usize] = (origin[2 as i32 as usize] as f64
-            + 0.5f64)
-            as crate::src::qcommon::q_shared::vec_t;
+        origin[2 as i32 as usize] =
+            (origin[2 as i32 as usize] as f64 + 0.5f64) as crate::src::qcommon::q_shared::vec_t;
         crate::src::botlib::be_aas_move::AAS_PredictClientMovement(
             &mut move_0 as *mut _ as *mut crate::be_aas_h::aas_clientmove_s,
             (*ms).entitynum,
@@ -2330,13 +2275,11 @@ pub unsafe extern "C" fn BotWalkInDirection(
             move_0.endpos[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
         tmpdir[1 as i32 as usize] =
             move_0.endpos[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        tmpdir[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        tmpdir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         //
         //AAS_DrawCross(move.endpos, 4, LINECOLOR_BLUE);
         //the bot is blocked by something
-        if (VectorLength(tmpdir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
-            as f64)
+        if (VectorLength(tmpdir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t) as f64)
             < (speed * (*ms).thinktime) as f64 * 0.5f64
         {
             return crate::src::qcommon::q_shared::qfalse as i32;
@@ -2423,10 +2366,8 @@ pub unsafe extern "C" fn Intersection(
     dy2 = *p4.offset(1 as i32 as isize) - *p3.offset(1 as i32 as isize);
     d = dy1 * dx2 - dx1 * dy2;
     if d != 0 as i32 as f32 {
-        x1 = *p1.offset(1 as i32 as isize) * dx1
-            - *p1.offset(0 as i32 as isize) * dy1;
-        x2 = *p3.offset(1 as i32 as isize) * dx2
-            - *p3.offset(0 as i32 as isize) * dy2;
+        x1 = *p1.offset(1 as i32 as isize) * dx1 - *p1.offset(0 as i32 as isize) * dy1;
+        x2 = *p3.offset(1 as i32 as isize) * dx2 - *p3.offset(0 as i32 as isize) * dy2;
         *out.offset(0 as i32 as isize) =
             ((dx1 * x2 - dx2 * x1) / d) as i32 as crate::src::qcommon::q_shared::vec_t;
         *out.offset(1 as i32 as isize) =
@@ -2492,21 +2433,20 @@ pub unsafe extern "C" fn BotCheckBlocked(
     if crate::stdlib::fabs(
         (*dir.offset(0 as i32 as isize) * up[0 as i32 as usize]
             + *dir.offset(1 as i32 as isize) * up[1 as i32 as usize]
-            + *dir.offset(2 as i32 as isize) * up[2 as i32 as usize])
-            as f64,
+            + *dir.offset(2 as i32 as isize) * up[2 as i32 as usize]) as f64,
     ) < 0.7f64
     {
         //end if
         mins[2 as i32 as usize] += (*sv_maxstep).value;
         maxs[2 as i32 as usize] -= 10 as i32 as f32 //if the bot can step on
-                                                                              //a little lower to avoid low ceiling
+                                                    //a little lower to avoid low ceiling
     }
-    end[0 as i32 as usize] = (*ms).origin[0 as i32 as usize]
-        + *dir.offset(0 as i32 as isize) * 3 as i32 as f32;
-    end[1 as i32 as usize] = (*ms).origin[1 as i32 as usize]
-        + *dir.offset(1 as i32 as isize) * 3 as i32 as f32;
-    end[2 as i32 as usize] = (*ms).origin[2 as i32 as usize]
-        + *dir.offset(2 as i32 as isize) * 3 as i32 as f32;
+    end[0 as i32 as usize] =
+        (*ms).origin[0 as i32 as usize] + *dir.offset(0 as i32 as isize) * 3 as i32 as f32;
+    end[1 as i32 as usize] =
+        (*ms).origin[1 as i32 as usize] + *dir.offset(1 as i32 as isize) * 3 as i32 as f32;
+    end[2 as i32 as usize] =
+        (*ms).origin[2 as i32 as usize] + *dir.offset(2 as i32 as isize) * 3 as i32 as f32;
     trace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
         (*ms).origin.as_mut_ptr(),
         mins.as_mut_ptr(),
@@ -2533,12 +2473,12 @@ pub unsafe extern "C" fn BotCheckBlocked(
             mins.as_mut_ptr(),
             maxs.as_mut_ptr(),
         );
-        end[0 as i32 as usize] = (*ms).origin[0 as i32 as usize]
-            + up[0 as i32 as usize] * -(3 as i32) as f32;
-        end[1 as i32 as usize] = (*ms).origin[1 as i32 as usize]
-            + up[1 as i32 as usize] * -(3 as i32) as f32;
-        end[2 as i32 as usize] = (*ms).origin[2 as i32 as usize]
-            + up[2 as i32 as usize] * -(3 as i32) as f32;
+        end[0 as i32 as usize] =
+            (*ms).origin[0 as i32 as usize] + up[0 as i32 as usize] * -(3 as i32) as f32;
+        end[1 as i32 as usize] =
+            (*ms).origin[1 as i32 as usize] + up[1 as i32 as usize] * -(3 as i32) as f32;
+        end[2 as i32 as usize] =
+            (*ms).origin[2 as i32 as usize] + up[2 as i32 as usize] * -(3 as i32) as f32;
         trace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
             (*ms).origin.as_mut_ptr(),
             mins.as_mut_ptr(),
@@ -2599,10 +2539,8 @@ pub unsafe extern "C" fn BotTravel_Walk(
         init
     };
     //first walk straight to the reachability start
-    hordir[0 as i32 as usize] =
-        (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    hordir[1 as i32 as usize] =
-        (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    hordir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
     //
@@ -2620,14 +2558,11 @@ pub unsafe extern "C" fn BotTravel_Walk(
             (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
         hordir[1 as i32 as usize] =
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr())
     }
     //if going towards a crouch area
-    if crate::src::botlib::be_aas_sample::AAS_AreaPresenceType((*reach).areanum) & 2 as i32
-        == 0
-    {
+    if crate::src::botlib::be_aas_sample::AAS_AreaPresenceType((*reach).areanum) & 2 as i32 == 0 {
         //end if
         //if pretty close to the reachable area
         if dist < 20 as i32 as f32 {
@@ -2644,15 +2579,13 @@ pub unsafe extern "C" fn BotTravel_Walk(
     if (*ms).moveflags & 512 as i32 != 0 {
         //end else
         if dist > 0 as i32 as f32 {
-            speed = 200 as i32 as f32
-                - (180 as i32 as f32 - 1 as i32 as f32 * dist)
+            speed = 200 as i32 as f32 - (180 as i32 as f32 - 1 as i32 as f32 * dist)
         } else {
             speed = 200 as i32 as f32
         } //end if
         crate::src::botlib::be_ea::EA_Walk((*ms).client);
     } else if dist > 0 as i32 as f32 {
-        speed = 400 as i32 as f32
-            - (360 as i32 as f32 - 2 as i32 as f32 * dist)
+        speed = 400 as i32 as f32 - (360 as i32 as f32 - 2 as i32 as f32 * dist)
     } else {
         speed = 400 as i32 as f32
     }
@@ -2714,18 +2647,15 @@ pub unsafe extern "C" fn BotFinishTravel_Walk(
             return result;
         } //end if*/
     //go straight to the reachability end
-    hordir[0 as i32 as usize] =
-        (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    hordir[1 as i32 as usize] =
-        (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    hordir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    hordir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
     //
     if dist > 100 as i32 as f32 {
         dist = 100 as i32 as f32
     }
-    speed = 400 as i32 as f32
-        - (400 as i32 as f32 - 3 as i32 as f32 * dist);
+    speed = 400 as i32 as f32 - (400 as i32 as f32 - 3 as i32 as f32 * dist);
     //
     crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), speed);
     result.movedir[0 as i32 as usize] = hordir[0 as i32 as usize];
@@ -2774,10 +2704,8 @@ pub unsafe extern "C" fn BotTravel_Crouch(
     //
     speed = 400 as i32 as f32;
     //walk straight to reachability end
-    hordir[0 as i32 as usize] =
-        (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    hordir[1 as i32 as usize] =
-        (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    hordir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    hordir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
     //
@@ -2836,10 +2764,8 @@ pub unsafe extern "C" fn BotTravel_BarrierJump(
         init
     };
     //walk straight to reachability start
-    hordir[0 as i32 as usize] =
-        (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    hordir[1 as i32 as usize] =
-        (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    hordir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
     //
@@ -2857,8 +2783,7 @@ pub unsafe extern "C" fn BotTravel_BarrierJump(
         if dist > 60 as i32 as f32 {
             dist = 60 as i32 as f32
         }
-        speed = 360 as i32 as f32
-            - (360 as i32 as f32 - 6 as i32 as f32 * dist);
+        speed = 360 as i32 as f32 - (360 as i32 as f32 - 6 as i32 as f32 * dist);
         crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), speed);
     }
     result.movedir[0 as i32 as usize] = hordir[0 as i32 as usize];
@@ -2909,8 +2834,7 @@ pub unsafe extern "C" fn BotFinishTravel_BarrierJump(
             (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
         hordir[1 as i32 as usize] =
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         //
         BotCheckBlocked(
             ms,
@@ -2919,11 +2843,7 @@ pub unsafe extern "C" fn BotFinishTravel_BarrierJump(
             &mut result,
         );
         //
-        crate::src::botlib::be_ea::EA_Move(
-            (*ms).client,
-            hordir.as_mut_ptr(),
-            400 as i32 as f32,
-        );
+        crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), 400 as i32 as f32);
         result.movedir[0 as i32 as usize] = hordir[0 as i32 as usize];
         result.movedir[1 as i32 as usize] = hordir[1 as i32 as usize];
         result.movedir[2 as i32 as usize] = hordir[2 as i32 as usize]
@@ -2968,12 +2888,9 @@ pub unsafe extern "C" fn BotTravel_Swim(
         init
     };
     //swim straight to reachability end
-    dir[0 as i32 as usize] =
-        (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    dir[1 as i32 as usize] =
-        (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    dir[2 as i32 as usize] =
-        (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
+    dir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    dir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    dir[2 as i32 as usize] = (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
     crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
     //
     BotCheckBlocked(
@@ -2983,11 +2900,7 @@ pub unsafe extern "C" fn BotTravel_Swim(
         &mut result,
     );
     //elemantary actions
-    crate::src::botlib::be_ea::EA_Move(
-        (*ms).client,
-        dir.as_mut_ptr(),
-        400 as i32 as f32,
-    );
+    crate::src::botlib::be_ea::EA_Move((*ms).client, dir.as_mut_ptr(), 400 as i32 as f32);
     //
     result.movedir[0 as i32 as usize] = dir[0 as i32 as usize];
     result.movedir[1 as i32 as usize] = dir[1 as i32 as usize];
@@ -3039,12 +2952,9 @@ pub unsafe extern "C" fn BotTravel_WaterJump(
         init
     };
     //swim straight to reachability end
-    dir[0 as i32 as usize] =
-        (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    dir[1 as i32 as usize] =
-        (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    dir[2 as i32 as usize] =
-        (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
+    dir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    dir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    dir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
     hordir[0 as i32 as usize] = dir[0 as i32 as usize];
     hordir[1 as i32 as usize] = dir[1 as i32 as usize];
     hordir[2 as i32 as usize] = dir[2 as i32 as usize];
@@ -3052,9 +2962,7 @@ pub unsafe extern "C" fn BotTravel_WaterJump(
     dir[2 as i32 as usize] = (dir[2 as i32 as usize] as f64
         + (15 as i32 as f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32)
-                    as f64
+                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)
                 * 40 as i32 as f64))
         as crate::src::qcommon::q_shared::vec_t;
@@ -3136,41 +3044,28 @@ pub unsafe extern "C" fn BotFinishTravel_WaterJump(
         return result;
     }
     //swim straight to reachability end
-    dir[0 as i32 as usize] =
-        (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    dir[1 as i32 as usize] =
-        (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    dir[2 as i32 as usize] =
-        (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
+    dir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    dir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    dir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
     dir[0 as i32 as usize] = (dir[0 as i32 as usize] as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32) as f64
-                - 0.5f64)
+            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 10 as i32 as f64)
         as crate::src::qcommon::q_shared::vec_t;
     dir[1 as i32 as usize] = (dir[1 as i32 as usize] as f64
         + 2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32) as f64
-                - 0.5f64)
+            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
             * 10 as i32 as f64)
         as crate::src::qcommon::q_shared::vec_t;
     dir[2 as i32 as usize] = (dir[2 as i32 as usize] as f64
         + (70 as i32 as f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32)
-                    as f64
+                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)
                 * 10 as i32 as f64))
         as crate::src::qcommon::q_shared::vec_t;
     //elemantary actions
-    crate::src::botlib::be_ea::EA_Move(
-        (*ms).client,
-        dir.as_mut_ptr(),
-        400 as i32 as f32,
-    );
+    crate::src::botlib::be_ea::EA_Move((*ms).client, dir.as_mut_ptr(), 400 as i32 as f32);
     //set the ideal view angles
     crate::src::qcommon::q_math::vectoangles(
         dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -3225,12 +3120,9 @@ pub unsafe extern "C" fn BotTravel_WalkOffLedge(
         init
     };
     //check if the bot is blocked by anything
-    dir[0 as i32 as usize] =
-        (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    dir[1 as i32 as usize] =
-        (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    dir[2 as i32 as usize] =
-        (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
+    dir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    dir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    dir[2 as i32 as usize] = (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
     crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
     BotCheckBlocked(
         ms,
@@ -3239,19 +3131,14 @@ pub unsafe extern "C" fn BotTravel_WalkOffLedge(
         &mut result,
     );
     //if the reachability start and end are practically above each other
-    dir[0 as i32 as usize] =
-        (*reach).end[0 as i32 as usize] - (*reach).start[0 as i32 as usize];
-    dir[1 as i32 as usize] =
-        (*reach).end[1 as i32 as usize] - (*reach).start[1 as i32 as usize];
-    dir[2 as i32 as usize] =
-        (*reach).end[2 as i32 as usize] - (*reach).start[2 as i32 as usize];
+    dir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*reach).start[0 as i32 as usize];
+    dir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*reach).start[1 as i32 as usize];
+    dir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*reach).start[2 as i32 as usize];
     dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     reachhordist = VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
     //walk straight to the reachability start
-    hordir[0 as i32 as usize] =
-        (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    hordir[1 as i32 as usize] =
-        (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    hordir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
     //if pretty close to the start focus on the reachability end
@@ -3260,8 +3147,7 @@ pub unsafe extern "C" fn BotTravel_WalkOffLedge(
             (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
         hordir[1 as i32 as usize] =
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr()); //end else
                                                                            //end if
         if reachhordist < 20 as i32 as f32 {
@@ -3281,8 +3167,7 @@ pub unsafe extern "C" fn BotTravel_WalkOffLedge(
         if dist > 64 as i32 as f32 {
             dist = 64 as i32 as f32
         } //end if
-        speed = 400 as i32 as f32
-            - (256 as i32 as f32 - 4 as i32 as f32 * dist)
+        speed = 400 as i32 as f32 - (256 as i32 as f32 - 4 as i32 as f32 * dist)
     } else {
         speed = 400 as i32 as f32
     }
@@ -3325,12 +3210,12 @@ pub unsafe extern "C" fn BotAirControl(
     org[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     org[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     org[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
-    vel[0 as i32 as usize] = (*velocity.offset(0 as i32 as isize) as f64
-        * 0.1f64) as crate::src::qcommon::q_shared::vec_t;
-    vel[1 as i32 as usize] = (*velocity.offset(1 as i32 as isize) as f64
-        * 0.1f64) as crate::src::qcommon::q_shared::vec_t;
-    vel[2 as i32 as usize] = (*velocity.offset(2 as i32 as isize) as f64
-        * 0.1f64) as crate::src::qcommon::q_shared::vec_t;
+    vel[0 as i32 as usize] = (*velocity.offset(0 as i32 as isize) as f64 * 0.1f64)
+        as crate::src::qcommon::q_shared::vec_t;
+    vel[1 as i32 as usize] = (*velocity.offset(1 as i32 as isize) as f64 * 0.1f64)
+        as crate::src::qcommon::q_shared::vec_t;
+    vel[2 as i32 as usize] = (*velocity.offset(2 as i32 as isize) as f64 * 0.1f64)
+        as crate::src::qcommon::q_shared::vec_t;
     i = 0 as i32;
     while i < 50 as i32 {
         vel[2 as i32 as usize] = (vel[2 as i32 as usize] as f64
@@ -3338,8 +3223,7 @@ pub unsafe extern "C" fn BotAirControl(
             as crate::src::qcommon::q_shared::vec_t;
         //end else
         if vel[2 as i32 as usize] < 0 as i32 as f32
-            && org[2 as i32 as usize] + vel[2 as i32 as usize]
-                < *goal.offset(2 as i32 as isize)
+            && org[2 as i32 as usize] + vel[2 as i32 as usize] < *goal.offset(2 as i32 as isize)
         {
             //if going down and next position would be below the goal
             vel[0 as i32 as usize] = vel[0 as i32 as usize]
@@ -3351,12 +3235,9 @@ pub unsafe extern "C" fn BotAirControl(
             vel[2 as i32 as usize] = vel[2 as i32 as usize]
                 * ((*goal.offset(2 as i32 as isize) - org[2 as i32 as usize])
                     / vel[2 as i32 as usize]);
-            org[0 as i32 as usize] =
-                org[0 as i32 as usize] + vel[0 as i32 as usize];
-            org[1 as i32 as usize] =
-                org[1 as i32 as usize] + vel[1 as i32 as usize];
-            org[2 as i32 as usize] =
-                org[2 as i32 as usize] + vel[2 as i32 as usize];
+            org[0 as i32 as usize] = org[0 as i32 as usize] + vel[0 as i32 as usize];
+            org[1 as i32 as usize] = org[1 as i32 as usize] + vel[1 as i32 as usize];
+            org[2 as i32 as usize] = org[2 as i32 as usize] + vel[2 as i32 as usize];
             *dir.offset(0 as i32 as isize) =
                 *goal.offset(0 as i32 as isize) - org[0 as i32 as usize];
             *dir.offset(1 as i32 as isize) =
@@ -3367,25 +3248,18 @@ pub unsafe extern "C" fn BotAirControl(
             if dist > 32 as i32 as f32 {
                 dist = 32 as i32 as f32
             }
-            *speed = 400 as i32 as f32
-                - (400 as i32 as f32 - 13 as i32 as f32 * dist);
+            *speed = 400 as i32 as f32 - (400 as i32 as f32 - 13 as i32 as f32 * dist);
             return crate::src::qcommon::q_shared::qtrue as i32;
         } else {
-            org[0 as i32 as usize] =
-                org[0 as i32 as usize] + vel[0 as i32 as usize];
-            org[1 as i32 as usize] =
-                org[1 as i32 as usize] + vel[1 as i32 as usize];
-            org[2 as i32 as usize] =
-                org[2 as i32 as usize] + vel[2 as i32 as usize]
+            org[0 as i32 as usize] = org[0 as i32 as usize] + vel[0 as i32 as usize];
+            org[1 as i32 as usize] = org[1 as i32 as usize] + vel[1 as i32 as usize];
+            org[2 as i32 as usize] = org[2 as i32 as usize] + vel[2 as i32 as usize]
         }
         i += 1
     }
-    *dir.offset(0 as i32 as isize) =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    *dir.offset(1 as i32 as isize) =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    *dir.offset(2 as i32 as isize) =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    *dir.offset(0 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    *dir.offset(1 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    *dir.offset(2 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     *speed = 400 as i32 as f32;
     return crate::src::qcommon::q_shared::qfalse as i32;
 }
@@ -3431,12 +3305,9 @@ pub unsafe extern "C" fn BotFinishTravel_WalkOffLedge(
         init
     };
     //
-    dir[0 as i32 as usize] =
-        (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    dir[1 as i32 as usize] =
-        (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    dir[2 as i32 as usize] =
-        (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
+    dir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    dir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    dir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
     BotCheckBlocked(
         ms,
         dir.as_mut_ptr(),
@@ -3444,21 +3315,18 @@ pub unsafe extern "C" fn BotFinishTravel_WalkOffLedge(
         &mut result,
     );
     //
-    v[0 as i32 as usize] =
-        (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    v[1 as i32 as usize] =
-        (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    v[2 as i32 as usize] =
-        (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
+    v[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    v[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    v[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
     v[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     dist = crate::src::qcommon::q_math::VectorNormalize(v.as_mut_ptr());
     if dist > 16 as i32 as f32 {
-        end[0 as i32 as usize] = (*reach).end[0 as i32 as usize]
-            + v[0 as i32 as usize] * 16 as i32 as f32;
-        end[1 as i32 as usize] = (*reach).end[1 as i32 as usize]
-            + v[1 as i32 as usize] * 16 as i32 as f32;
-        end[2 as i32 as usize] = (*reach).end[2 as i32 as usize]
-            + v[2 as i32 as usize] * 16 as i32 as f32
+        end[0 as i32 as usize] =
+            (*reach).end[0 as i32 as usize] + v[0 as i32 as usize] * 16 as i32 as f32;
+        end[1 as i32 as usize] =
+            (*reach).end[1 as i32 as usize] + v[1 as i32 as usize] * 16 as i32 as f32;
+        end[2 as i32 as usize] =
+            (*reach).end[2 as i32 as usize] + v[2 as i32 as usize] * 16 as i32 as f32
     } else {
         end[0 as i32 as usize] = (*reach).end[0 as i32 as usize];
         end[1 as i32 as usize] = (*reach).end[1 as i32 as usize];
@@ -3478,8 +3346,7 @@ pub unsafe extern "C" fn BotFinishTravel_WalkOffLedge(
         hordir[0 as i32 as usize] = dir[0 as i32 as usize];
         hordir[1 as i32 as usize] = dir[1 as i32 as usize];
         hordir[2 as i32 as usize] = dir[2 as i32 as usize];
-        hordir[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         //
         speed = 400 as i32 as f32
     }
@@ -3664,10 +3531,8 @@ pub unsafe extern "C" fn BotTravel_Jump(
         runstart.as_mut_ptr(),
     );
     //*
-    hordir[0 as i32 as usize] =
-        runstart[0 as i32 as usize] - (*reach).start[0 as i32 as usize];
-    hordir[1 as i32 as usize] =
-        runstart[1 as i32 as usize] - (*reach).start[1 as i32 as usize];
+    hordir[0 as i32 as usize] = runstart[0 as i32 as usize] - (*reach).start[0 as i32 as usize];
+    hordir[1 as i32 as usize] = runstart[1 as i32 as usize] - (*reach).start[1 as i32 as usize];
     hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
     //
@@ -3675,21 +3540,21 @@ pub unsafe extern "C" fn BotTravel_Jump(
     start[1 as i32 as usize] = (*reach).start[1 as i32 as usize];
     start[2 as i32 as usize] = (*reach).start[2 as i32 as usize];
     start[2 as i32 as usize] += 1 as i32 as f32;
-    runstart[0 as i32 as usize] = (*reach).start[0 as i32 as usize]
-        + hordir[0 as i32 as usize] * 80 as i32 as f32;
-    runstart[1 as i32 as usize] = (*reach).start[1 as i32 as usize]
-        + hordir[1 as i32 as usize] * 80 as i32 as f32;
-    runstart[2 as i32 as usize] = (*reach).start[2 as i32 as usize]
-        + hordir[2 as i32 as usize] * 80 as i32 as f32;
+    runstart[0 as i32 as usize] =
+        (*reach).start[0 as i32 as usize] + hordir[0 as i32 as usize] * 80 as i32 as f32;
+    runstart[1 as i32 as usize] =
+        (*reach).start[1 as i32 as usize] + hordir[1 as i32 as usize] * 80 as i32 as f32;
+    runstart[2 as i32 as usize] =
+        (*reach).start[2 as i32 as usize] + hordir[2 as i32 as usize] * 80 as i32 as f32;
     //check for a gap
     gapdist = 0 as i32; //end for
     while gapdist < 80 as i32 {
-        end[0 as i32 as usize] = start[0 as i32 as usize]
-            + hordir[0 as i32 as usize] * (gapdist + 10 as i32) as f32;
-        end[1 as i32 as usize] = start[1 as i32 as usize]
-            + hordir[1 as i32 as usize] * (gapdist + 10 as i32) as f32;
-        end[2 as i32 as usize] = start[2 as i32 as usize]
-            + hordir[2 as i32 as usize] * (gapdist + 10 as i32) as f32;
+        end[0 as i32 as usize] =
+            start[0 as i32 as usize] + hordir[0 as i32 as usize] * (gapdist + 10 as i32) as f32;
+        end[1 as i32 as usize] =
+            start[1 as i32 as usize] + hordir[1 as i32 as usize] * (gapdist + 10 as i32) as f32;
+        end[2 as i32 as usize] =
+            start[2 as i32 as usize] + hordir[2 as i32 as usize] * (gapdist + 10 as i32) as f32;
         end[2 as i32 as usize] += 1 as i32 as f32;
         if crate::src::botlib::be_aas_sample::AAS_PointAreaNum(end.as_mut_ptr())
             != (*ms).reachareanum
@@ -3699,35 +3564,28 @@ pub unsafe extern "C" fn BotTravel_Jump(
         gapdist += 10 as i32
     }
     if gapdist < 80 as i32 {
-        runstart[0 as i32 as usize] = (*reach).start[0 as i32 as usize]
-            + hordir[0 as i32 as usize] * gapdist as f32;
-        runstart[1 as i32 as usize] = (*reach).start[1 as i32 as usize]
-            + hordir[1 as i32 as usize] * gapdist as f32;
-        runstart[2 as i32 as usize] = (*reach).start[2 as i32 as usize]
-            + hordir[2 as i32 as usize] * gapdist as f32
+        runstart[0 as i32 as usize] =
+            (*reach).start[0 as i32 as usize] + hordir[0 as i32 as usize] * gapdist as f32;
+        runstart[1 as i32 as usize] =
+            (*reach).start[1 as i32 as usize] + hordir[1 as i32 as usize] * gapdist as f32;
+        runstart[2 as i32 as usize] =
+            (*reach).start[2 as i32 as usize] + hordir[2 as i32 as usize] * gapdist as f32
     }
     //
-    dir1[0 as i32 as usize] =
-        (*ms).origin[0 as i32 as usize] - (*reach).start[0 as i32 as usize];
-    dir1[1 as i32 as usize] =
-        (*ms).origin[1 as i32 as usize] - (*reach).start[1 as i32 as usize];
-    dir1[2 as i32 as usize] =
-        (*ms).origin[2 as i32 as usize] - (*reach).start[2 as i32 as usize];
+    dir1[0 as i32 as usize] = (*ms).origin[0 as i32 as usize] - (*reach).start[0 as i32 as usize];
+    dir1[1 as i32 as usize] = (*ms).origin[1 as i32 as usize] - (*reach).start[1 as i32 as usize];
+    dir1[2 as i32 as usize] = (*ms).origin[2 as i32 as usize] - (*reach).start[2 as i32 as usize];
     dir1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     dist1 = crate::src::qcommon::q_math::VectorNormalize(dir1.as_mut_ptr());
-    dir2[0 as i32 as usize] =
-        (*ms).origin[0 as i32 as usize] - runstart[0 as i32 as usize];
-    dir2[1 as i32 as usize] =
-        (*ms).origin[1 as i32 as usize] - runstart[1 as i32 as usize];
-    dir2[2 as i32 as usize] =
-        (*ms).origin[2 as i32 as usize] - runstart[2 as i32 as usize];
+    dir2[0 as i32 as usize] = (*ms).origin[0 as i32 as usize] - runstart[0 as i32 as usize];
+    dir2[1 as i32 as usize] = (*ms).origin[1 as i32 as usize] - runstart[1 as i32 as usize];
+    dir2[2 as i32 as usize] = (*ms).origin[2 as i32 as usize] - runstart[2 as i32 as usize];
     dir2[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     dist2 = crate::src::qcommon::q_math::VectorNormalize(dir2.as_mut_ptr());
     //if just before the reachability start
     if ((dir1[0 as i32 as usize] * dir2[0 as i32 as usize]
         + dir1[1 as i32 as usize] * dir2[1 as i32 as usize]
-        + dir1[2 as i32 as usize] * dir2[2 as i32 as usize])
-        as f64)
+        + dir1[2 as i32 as usize] * dir2[2 as i32 as usize]) as f64)
         < -0.8f64
         || dist2 < 5 as i32 as f32
     {
@@ -3736,8 +3594,7 @@ pub unsafe extern "C" fn BotTravel_Jump(
             (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
         hordir[1 as i32 as usize] =
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
         //		botimport.Print(PRT_MESSAGE, "between jump start and run start point\n");
         //elemantary action jump
@@ -3746,28 +3603,20 @@ pub unsafe extern "C" fn BotTravel_Jump(
         } else if dist1 < 32 as i32 as f32 {
             crate::src::botlib::be_ea::EA_DelayedJump((*ms).client);
         }
-        crate::src::botlib::be_ea::EA_Move(
-            (*ms).client,
-            hordir.as_mut_ptr(),
-            600 as i32 as f32,
-        );
+        crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), 600 as i32 as f32);
         //
         (*ms).jumpreach = (*ms).lastreachnum
     } else {
         //		botimport.Print(PRT_MESSAGE, "going towards run start point\n");
-        hordir[0 as i32 as usize] =
-            runstart[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-        hordir[1 as i32 as usize] =
-            runstart[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        hordir[0 as i32 as usize] = runstart[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+        hordir[1 as i32 as usize] = runstart[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
         //
         if dist2 > 80 as i32 as f32 {
             dist2 = 80 as i32 as f32
         }
-        speed = 400 as i32 as f32
-            - (400 as i32 as f32 - 5 as i32 as f32 * dist2);
+        speed = 400 as i32 as f32 - (400 as i32 as f32 - 5 as i32 as f32 * dist2);
         crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), speed);
     }
     result.movedir[0 as i32 as usize] = hordir[0 as i32 as usize];
@@ -3820,10 +3669,8 @@ pub unsafe extern "C" fn BotFinishTravel_Jump(
         return result;
     }
     //go straight to the reachability end
-    hordir[0 as i32 as usize] =
-        (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    hordir[1 as i32 as usize] =
-        (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    hordir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    hordir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
     //
@@ -3836,8 +3683,7 @@ pub unsafe extern "C" fn BotFinishTravel_Jump(
     //
     if ((hordir[0 as i32 as usize] * hordir2[0 as i32 as usize]
         + hordir[1 as i32 as usize] * hordir2[1 as i32 as usize]
-        + hordir[2 as i32 as usize] * hordir2[2 as i32 as usize])
-        as f64)
+        + hordir[2 as i32 as usize] * hordir2[2 as i32 as usize]) as f64)
         < -0.5f64
         && dist < 24 as i32 as f32
     {
@@ -3901,26 +3747,18 @@ pub unsafe extern "C" fn BotTravel_Ladder(
     //	if ((ms->moveflags & MFL_AGAINSTLADDER))
     //NOTE: not a good idea for ladders starting in water
     // || !(ms->moveflags & MFL_ONGROUND))
-    dir[0 as i32 as usize] =
-        (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
-    dir[1 as i32 as usize] =
-        (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    dir[2 as i32 as usize] =
-        (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
+    dir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
+    dir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    dir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
     crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
     viewdir[0 as i32 as usize] = dir[0 as i32 as usize];
     viewdir[1 as i32 as usize] = dir[1 as i32 as usize];
-    viewdir[2 as i32 as usize] =
-        3 as i32 as f32 * dir[2 as i32 as usize];
+    viewdir[2 as i32 as usize] = 3 as i32 as f32 * dir[2 as i32 as usize];
     crate::src::qcommon::q_math::vectoangles(
         viewdir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         result.ideal_viewangles.as_mut_ptr(),
     );
-    crate::src::botlib::be_ea::EA_Move(
-        (*ms).client,
-        origin.as_mut_ptr(),
-        0 as i32 as f32,
-    );
+    crate::src::botlib::be_ea::EA_Move((*ms).client, origin.as_mut_ptr(), 0 as i32 as f32);
     crate::src::botlib::be_ea::EA_MoveForward((*ms).client);
     result.flags |= 1 as i32;
     //botimport.Print(PRT_MESSAGE, "against ladder or not on ground\n");
@@ -3993,12 +3831,9 @@ pub unsafe extern "C" fn BotTravel_Teleport(
         return result;
     }
     //walk straight to center of the teleporter
-    hordir[0 as i32 as usize] =
-        (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    hordir[1 as i32 as usize] =
-        (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    hordir[2 as i32 as usize] =
-        (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
+    hordir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    hordir[2 as i32 as usize] = (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
     if (*ms).moveflags & 4 as i32 == 0 {
         hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
     }
@@ -4011,17 +3846,9 @@ pub unsafe extern "C" fn BotTravel_Teleport(
         &mut result,
     );
     if dist < 30 as i32 as f32 {
-        crate::src::botlib::be_ea::EA_Move(
-            (*ms).client,
-            hordir.as_mut_ptr(),
-            200 as i32 as f32,
-        );
+        crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), 200 as i32 as f32);
     } else {
-        crate::src::botlib::be_ea::EA_Move(
-            (*ms).client,
-            hordir.as_mut_ptr(),
-            400 as i32 as f32,
-        );
+        crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), 400 as i32 as f32);
     }
     if (*ms).moveflags & 4 as i32 != 0 {
         result.flags |= 2 as i32
@@ -4080,9 +3907,8 @@ pub unsafe extern "C" fn BotTravel_Elevator(
         //end else
         //DEBUG_ELEVATOR
         //if vertically not too far from the end point
-        if crate::stdlib::fabsf(
-            (*ms).origin[2 as i32 as usize] - (*reach).end[2 as i32 as usize],
-        ) < (*sv_maxbarrier).value
+        if crate::stdlib::fabsf((*ms).origin[2 as i32 as usize] - (*reach).end[2 as i32 as usize])
+            < (*sv_maxbarrier).value
         {
             hordir[0 as i32 as usize] =
                 (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end else
@@ -4090,14 +3916,11 @@ pub unsafe extern "C" fn BotTravel_Elevator(
                 (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
             hordir[2 as i32 as usize] =
                 (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-            hordir[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
             crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
             //DEBUG_ELEVATOR
             //move to the end point
-            if BotCheckBarrierJump(ms, hordir.as_mut_ptr(), 100 as i32 as f32)
-                == 0
-            {
+            if BotCheckBarrierJump(ms, hordir.as_mut_ptr(), 100 as i32 as f32) == 0 {
                 crate::src::botlib::be_ea::EA_Move(
                     (*ms).client,
                     hordir.as_mut_ptr(),
@@ -4116,8 +3939,7 @@ pub unsafe extern "C" fn BotTravel_Elevator(
                 bottomcenter[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
             hordir[2 as i32 as usize] =
                 bottomcenter[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-            hordir[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
             dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
             //end if
             if dist > 10 as i32 as f32 {
@@ -4127,9 +3949,7 @@ pub unsafe extern "C" fn BotTravel_Elevator(
                 if dist > 100 as i32 as f32 {
                     dist = 100 as i32 as f32
                 }
-                speed = 400 as i32 as f32
-                    - (400 as i32 as f32
-                        - 4 as i32 as f32 * dist);
+                speed = 400 as i32 as f32 - (400 as i32 as f32 - 4 as i32 as f32 * dist);
                 //
                 crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), speed);
                 result.movedir[0 as i32 as usize] = hordir[0 as i32 as usize];
@@ -4141,23 +3961,18 @@ pub unsafe extern "C" fn BotTravel_Elevator(
     } else {
         //DEBUG_ELEVATOR
         //if very near the reachability end
-        dir[0 as i32 as usize] =
-            (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
-        dir[1 as i32 as usize] =
-            (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        dir[2 as i32 as usize] =
-            (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
+        dir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
+        dir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+        dir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         dist = VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
         if dist < 64 as i32 as f32 {
             if dist > 60 as i32 as f32 {
                 dist = 60 as i32 as f32
             }
-            speed = 360 as i32 as f32
-                - (360 as i32 as f32 - 6 as i32 as f32 * dist);
+            speed = 360 as i32 as f32 - (360 as i32 as f32 - 6 as i32 as f32 * dist);
             //
             if (*ms).moveflags & 4 as i32 != 0
-                || BotCheckBarrierJump(ms, dir.as_mut_ptr(), 50 as i32 as f32)
-                    == 0
+                || BotCheckBarrierJump(ms, dir.as_mut_ptr(), 50 as i32 as f32) == 0
             {
                 if speed > 5 as i32 as f32 {
                     crate::src::botlib::be_ea::EA_Move((*ms).client, dir.as_mut_ptr(), speed);
@@ -4183,8 +3998,7 @@ pub unsafe extern "C" fn BotTravel_Elevator(
         dir1[2 as i32 as usize] =
             (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         if (*ms).moveflags & 4 as i32 == 0 {
-            dir1[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t
+            dir1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
         }
         dist1 = crate::src::qcommon::q_math::VectorNormalize(dir1.as_mut_ptr());
         //if the elevator isn't down
@@ -4206,12 +4020,10 @@ pub unsafe extern "C" fn BotTravel_Elevator(
             if dist > 60 as i32 as f32 {
                 dist = 60 as i32 as f32
             }
-            speed = 360 as i32 as f32
-                - (360 as i32 as f32 - 6 as i32 as f32 * dist);
+            speed = 360 as i32 as f32 - (360 as i32 as f32 - 6 as i32 as f32 * dist);
             //
             if (*ms).moveflags & 4 as i32 == 0
-                && BotCheckBarrierJump(ms, dir.as_mut_ptr(), 50 as i32 as f32)
-                    == 0
+                && BotCheckBarrierJump(ms, dir.as_mut_ptr(), 50 as i32 as f32) == 0
             {
                 if speed > 5 as i32 as f32 {
                     crate::src::botlib::be_ea::EA_Move((*ms).client, dir.as_mut_ptr(), speed);
@@ -4232,15 +4044,11 @@ pub unsafe extern "C" fn BotTravel_Elevator(
         }
         //get direction and distance to elevator bottom center
         MoverBottomCenter(reach, bottomcenter.as_mut_ptr());
-        dir2[0 as i32 as usize] =
-            bottomcenter[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-        dir2[1 as i32 as usize] =
-            bottomcenter[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        dir2[2 as i32 as usize] =
-            bottomcenter[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
+        dir2[0 as i32 as usize] = bottomcenter[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+        dir2[1 as i32 as usize] = bottomcenter[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+        dir2[2 as i32 as usize] = bottomcenter[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         if (*ms).moveflags & 4 as i32 == 0 {
-            dir2[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t
+            dir2[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
         }
         dist2 = crate::src::qcommon::q_math::VectorNormalize(dir2.as_mut_ptr());
         //if very close to the reachability start or
@@ -4278,8 +4086,7 @@ pub unsafe extern "C" fn BotTravel_Elevator(
         if dist > 60 as i32 as f32 {
             dist = 60 as i32 as f32
         }
-        speed = 400 as i32 as f32
-            - (400 as i32 as f32 - 6 as i32 as f32 * dist);
+        speed = 400 as i32 as f32 - (400 as i32 as f32 - 6 as i32 as f32 * dist);
         //
         if (*ms).moveflags & 4 as i32 == 0
             && BotCheckBarrierJump(ms, dir.as_mut_ptr(), 50 as i32 as f32) == 0
@@ -4344,30 +4151,19 @@ pub unsafe extern "C" fn BotFinishTravel_Elevator(
     bottomdir[2 as i32 as usize] =
         bottomcenter[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
     //
-    topdir[0 as i32 as usize] =
-        (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    topdir[1 as i32 as usize] =
-        (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-    topdir[2 as i32 as usize] =
-        (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
+    topdir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    topdir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    topdir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
     //
     if crate::stdlib::fabs(bottomdir[2 as i32 as usize] as f64)
         < crate::stdlib::fabs(topdir[2 as i32 as usize] as f64)
     {
         //end else
         crate::src::qcommon::q_math::VectorNormalize(bottomdir.as_mut_ptr()); //end if
-        crate::src::botlib::be_ea::EA_Move(
-            (*ms).client,
-            bottomdir.as_mut_ptr(),
-            300 as i32 as f32,
-        );
+        crate::src::botlib::be_ea::EA_Move((*ms).client, bottomdir.as_mut_ptr(), 300 as i32 as f32);
     } else {
         crate::src::qcommon::q_math::VectorNormalize(topdir.as_mut_ptr());
-        crate::src::botlib::be_ea::EA_Move(
-            (*ms).client,
-            topdir.as_mut_ptr(),
-            300 as i32 as f32,
-        );
+        crate::src::botlib::be_ea::EA_Move((*ms).client, topdir.as_mut_ptr(), 300 as i32 as f32);
     }
     return result;
 }
@@ -4408,18 +4204,12 @@ pub unsafe extern "C" fn BotFuncBobStartEnd(
                 as *mut libc::c_char,
             modelnum,
         );
-        *start.offset(0 as i32 as isize) =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        *start.offset(1 as i32 as isize) =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        *start.offset(2 as i32 as isize) =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        *end.offset(0 as i32 as isize) =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        *end.offset(1 as i32 as isize) =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        *end.offset(2 as i32 as isize) =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        *start.offset(0 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        *start.offset(1 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        *start.offset(2 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        *end.offset(0 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        *end.offset(1 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        *end.offset(2 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         return;
     }
     crate::src::botlib::be_aas_bspq3::AAS_BSPModelMinsMaxsOrigin(
@@ -4429,18 +4219,15 @@ pub unsafe extern "C" fn BotFuncBobStartEnd(
         maxs.as_mut_ptr(),
         0 as *mut crate::src::qcommon::q_shared::vec_t,
     );
+    mid[0 as i32 as usize] = mins[0 as i32 as usize] + maxs[0 as i32 as usize];
+    mid[1 as i32 as usize] = mins[1 as i32 as usize] + maxs[1 as i32 as usize];
+    mid[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
     mid[0 as i32 as usize] =
-        mins[0 as i32 as usize] + maxs[0 as i32 as usize];
+        (mid[0 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     mid[1 as i32 as usize] =
-        mins[1 as i32 as usize] + maxs[1 as i32 as usize];
+        (mid[1 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     mid[2 as i32 as usize] =
-        mins[2 as i32 as usize] + maxs[2 as i32 as usize];
-    mid[0 as i32 as usize] = (mid[0 as i32 as usize] as f64 * 0.5f64)
-        as crate::src::qcommon::q_shared::vec_t;
-    mid[1 as i32 as usize] = (mid[1 as i32 as usize] as f64 * 0.5f64)
-        as crate::src::qcommon::q_shared::vec_t;
-    mid[2 as i32 as usize] = (mid[2 as i32 as usize] as f64 * 0.5f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        (mid[2 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     *start.offset(0 as i32 as isize) = mid[0 as i32 as usize];
     *start.offset(1 as i32 as isize) = mid[1 as i32 as usize];
     *start.offset(2 as i32 as isize) = mid[2 as i32 as usize];
@@ -4541,12 +4328,9 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
     if BotOnMover((*ms).origin.as_mut_ptr(), (*ms).entitynum, reach) != 0 {
         //end else
         //if near end point of reachability
-        dir[0 as i32 as usize] =
-            bob_origin[0 as i32 as usize] - bob_end[0 as i32 as usize];
-        dir[1 as i32 as usize] =
-            bob_origin[1 as i32 as usize] - bob_end[1 as i32 as usize];
-        dir[2 as i32 as usize] =
-            bob_origin[2 as i32 as usize] - bob_end[2 as i32 as usize];
+        dir[0 as i32 as usize] = bob_origin[0 as i32 as usize] - bob_end[0 as i32 as usize];
+        dir[1 as i32 as usize] = bob_origin[1 as i32 as usize] - bob_end[1 as i32 as usize];
+        dir[2 as i32 as usize] = bob_origin[2 as i32 as usize] - bob_end[2 as i32 as usize];
         if VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
             < 24 as i32 as f32
         {
@@ -4557,13 +4341,10 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
                 (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
             hordir[2 as i32 as usize] =
                 (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-            hordir[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
             crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
             //move to the end point
-            if BotCheckBarrierJump(ms, hordir.as_mut_ptr(), 100 as i32 as f32)
-                == 0
-            {
+            if BotCheckBarrierJump(ms, hordir.as_mut_ptr(), 100 as i32 as f32) == 0 {
                 crate::src::botlib::be_ea::EA_Move(
                     (*ms).client,
                     hordir.as_mut_ptr(),
@@ -4582,8 +4363,7 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
                 bottomcenter[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
             hordir[2 as i32 as usize] =
                 bottomcenter[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-            hordir[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
             dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
             //end if
             if dist > 10 as i32 as f32 {
@@ -4592,9 +4372,7 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
                 if dist > 100 as i32 as f32 {
                     dist = 100 as i32 as f32
                 }
-                speed = 400 as i32 as f32
-                    - (400 as i32 as f32
-                        - 4 as i32 as f32 * dist);
+                speed = 400 as i32 as f32 - (400 as i32 as f32 - 4 as i32 as f32 * dist);
                 //
                 crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), speed);
                 result.movedir[0 as i32 as usize] = hordir[0 as i32 as usize];
@@ -4604,23 +4382,18 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
         }
     } else {
         //if very near the reachability end
-        dir[0 as i32 as usize] =
-            (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
-        dir[1 as i32 as usize] =
-            (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        dir[2 as i32 as usize] =
-            (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
+        dir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
+        dir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+        dir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         dist = VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
         if dist < 64 as i32 as f32 {
             if dist > 60 as i32 as f32 {
                 dist = 60 as i32 as f32
             }
-            speed = 360 as i32 as f32
-                - (360 as i32 as f32 - 6 as i32 as f32 * dist);
+            speed = 360 as i32 as f32 - (360 as i32 as f32 - 6 as i32 as f32 * dist);
             //if swimming or no barrier jump
             if (*ms).moveflags & 4 as i32 != 0
-                || BotCheckBarrierJump(ms, dir.as_mut_ptr(), 50 as i32 as f32)
-                    == 0
+                || BotCheckBarrierJump(ms, dir.as_mut_ptr(), 50 as i32 as f32) == 0
             {
                 if speed > 5 as i32 as f32 {
                     crate::src::botlib::be_ea::EA_Move((*ms).client, dir.as_mut_ptr(), speed);
@@ -4646,17 +4419,13 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
         dir1[2 as i32 as usize] =
             (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         if (*ms).moveflags & 4 as i32 == 0 {
-            dir1[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t
+            dir1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
         }
         dist1 = crate::src::qcommon::q_math::VectorNormalize(dir1.as_mut_ptr());
         //if func_bobbing is Not its start position
-        dir[0 as i32 as usize] =
-            bob_origin[0 as i32 as usize] - bob_start[0 as i32 as usize]; //end if
-        dir[1 as i32 as usize] =
-            bob_origin[1 as i32 as usize] - bob_start[1 as i32 as usize];
-        dir[2 as i32 as usize] =
-            bob_origin[2 as i32 as usize] - bob_start[2 as i32 as usize];
+        dir[0 as i32 as usize] = bob_origin[0 as i32 as usize] - bob_start[0 as i32 as usize]; //end if
+        dir[1 as i32 as usize] = bob_origin[1 as i32 as usize] - bob_start[1 as i32 as usize];
+        dir[2 as i32 as usize] = bob_origin[2 as i32 as usize] - bob_start[2 as i32 as usize];
         if VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
             > 16 as i32 as f32
         {
@@ -4675,12 +4444,10 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
             if dist > 60 as i32 as f32 {
                 dist = 60 as i32 as f32
             }
-            speed = 360 as i32 as f32
-                - (360 as i32 as f32 - 6 as i32 as f32 * dist);
+            speed = 360 as i32 as f32 - (360 as i32 as f32 - 6 as i32 as f32 * dist);
             //
             if (*ms).moveflags & 4 as i32 == 0
-                && BotCheckBarrierJump(ms, dir.as_mut_ptr(), 50 as i32 as f32)
-                    == 0
+                && BotCheckBarrierJump(ms, dir.as_mut_ptr(), 50 as i32 as f32) == 0
             {
                 if speed > 5 as i32 as f32 {
                     crate::src::botlib::be_ea::EA_Move((*ms).client, dir.as_mut_ptr(), speed);
@@ -4701,15 +4468,11 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
         }
         //get direction and distance to func_bob bottom center
         MoverBottomCenter(reach, bottomcenter.as_mut_ptr());
-        dir2[0 as i32 as usize] =
-            bottomcenter[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-        dir2[1 as i32 as usize] =
-            bottomcenter[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        dir2[2 as i32 as usize] =
-            bottomcenter[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
+        dir2[0 as i32 as usize] = bottomcenter[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+        dir2[1 as i32 as usize] = bottomcenter[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+        dir2[2 as i32 as usize] = bottomcenter[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         if (*ms).moveflags & 4 as i32 == 0 {
-            dir2[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t
+            dir2[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
         }
         dist2 = crate::src::qcommon::q_math::VectorNormalize(dir2.as_mut_ptr());
         //if very close to the reachability start or
@@ -4745,8 +4508,7 @@ pub unsafe extern "C" fn BotTravel_FuncBobbing(
         if dist > 60 as i32 as f32 {
             dist = 60 as i32 as f32
         }
-        speed = 400 as i32 as f32
-            - (400 as i32 as f32 - 6 as i32 as f32 * dist);
+        speed = 400 as i32 as f32 - (400 as i32 as f32 - 6 as i32 as f32 * dist);
         //
         if (*ms).moveflags & 4 as i32 == 0
             && BotCheckBarrierJump(ms, dir.as_mut_ptr(), 50 as i32 as f32) == 0
@@ -4815,12 +4577,9 @@ pub unsafe extern "C" fn BotFinishTravel_FuncBobbing(
         bob_origin.as_mut_ptr(),
     );
     //
-    dir[0 as i32 as usize] =
-        bob_origin[0 as i32 as usize] - bob_end[0 as i32 as usize];
-    dir[1 as i32 as usize] =
-        bob_origin[1 as i32 as usize] - bob_end[1 as i32 as usize];
-    dir[2 as i32 as usize] =
-        bob_origin[2 as i32 as usize] - bob_end[2 as i32 as usize];
+    dir[0 as i32 as usize] = bob_origin[0 as i32 as usize] - bob_end[0 as i32 as usize];
+    dir[1 as i32 as usize] = bob_origin[1 as i32 as usize] - bob_end[1 as i32 as usize];
+    dir[2 as i32 as usize] = bob_origin[2 as i32 as usize] - bob_end[2 as i32 as usize];
     dist = VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
     //if the func_bobbing is near the end
     if dist < 16 as i32 as f32 {
@@ -4832,16 +4591,14 @@ pub unsafe extern "C" fn BotFinishTravel_FuncBobbing(
         hordir[2 as i32 as usize] =
             (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         if (*ms).moveflags & 4 as i32 == 0 {
-            hordir[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t
+            hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
         }
         dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
         //
         if dist > 60 as i32 as f32 {
             dist = 60 as i32 as f32
         }
-        speed = 360 as i32 as f32
-            - (360 as i32 as f32 - 6 as i32 as f32 * dist);
+        speed = 360 as i32 as f32 - (360 as i32 as f32 - 6 as i32 as f32 * dist);
         //
         if speed > 5 as i32 as f32 {
             crate::src::botlib::be_ea::EA_Move((*ms).client, dir.as_mut_ptr(), speed);
@@ -4862,8 +4619,7 @@ pub unsafe extern "C" fn BotFinishTravel_FuncBobbing(
         hordir[2 as i32 as usize] =
             bottomcenter[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         if (*ms).moveflags & 4 as i32 == 0 {
-            hordir[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t
+            hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
         }
         dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
         //end if
@@ -4873,8 +4629,7 @@ pub unsafe extern "C" fn BotFinishTravel_FuncBobbing(
             if dist > 100 as i32 as f32 {
                 dist = 100 as i32 as f32
             }
-            speed = 400 as i32 as f32
-                - (400 as i32 as f32 - 4 as i32 as f32 * dist);
+            speed = 400 as i32 as f32 - (400 as i32 as f32 - 4 as i32 as f32 * dist);
             //
             crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), speed);
             result.movedir[0 as i32 as usize] = hordir[0 as i32 as usize];
@@ -4934,8 +4689,7 @@ pub unsafe extern "C" fn GrappleState(
     //or visible grapple entity
     i = crate::src::botlib::be_aas_entity::AAS_NextEntity(0 as i32); //end for
     while i != 0 {
-        if crate::src::botlib::be_aas_entity::AAS_EntityType(i)
-            == (*entitytypemissile).value as i32
+        if crate::src::botlib::be_aas_entity::AAS_EntityType(i) == (*entitytypemissile).value as i32
         {
             crate::src::botlib::be_aas_entity::AAS_EntityInfo(
                 i,
@@ -5075,12 +4829,9 @@ pub unsafe extern "C" fn BotTravel_Grapple(
                                          //DEBUG_GRAPPLE
                                          //
                                          //
-        dir[0 as i32 as usize] =
-            (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-        dir[1 as i32 as usize] =
-            (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        dir[2 as i32 as usize] =
-            (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
+        dir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+        dir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+        dir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         dist = VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
         //if very close to the grapple end or the grappled is hooked and
@@ -5099,9 +4850,7 @@ pub unsafe extern "C" fn BotTravel_Grapple(
                 return result;
             }
         //end if
-        } else if state == 0
-            || state == 2 as i32
-                && dist > (*ms).lastgrappledist - 2 as i32 as f32
+        } else if state == 0 || state == 2 as i32 && dist > (*ms).lastgrappledist - 2 as i32 as f32
         {
             if ((*ms).grapplevisible_time as f64)
                 < crate::src::botlib::be_aas_main::AAS_Time() as f64 - 0.4f64
@@ -5140,8 +4889,7 @@ pub unsafe extern "C" fn BotTravel_Grapple(
         dir[2 as i32 as usize] =
             (*reach).start[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
         if (*ms).moveflags & 4 as i32 == 0 {
-            dir[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t
+            dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
         }
         org[0 as i32 as usize] =
             (*ms).origin[0 as i32 as usize] + (*ms).viewoffset[0 as i32 as usize];
@@ -5149,12 +4897,9 @@ pub unsafe extern "C" fn BotTravel_Grapple(
             (*ms).origin[1 as i32 as usize] + (*ms).viewoffset[1 as i32 as usize];
         org[2 as i32 as usize] =
             (*ms).origin[2 as i32 as usize] + (*ms).viewoffset[2 as i32 as usize];
-        viewdir[0 as i32 as usize] =
-            (*reach).end[0 as i32 as usize] - org[0 as i32 as usize];
-        viewdir[1 as i32 as usize] =
-            (*reach).end[1 as i32 as usize] - org[1 as i32 as usize];
-        viewdir[2 as i32 as usize] =
-            (*reach).end[2 as i32 as usize] - org[2 as i32 as usize];
+        viewdir[0 as i32 as usize] = (*reach).end[0 as i32 as usize] - org[0 as i32 as usize];
+        viewdir[1 as i32 as usize] = (*reach).end[1 as i32 as usize] - org[1 as i32 as usize];
+        viewdir[2 as i32 as usize] = (*reach).end[2 as i32 as usize] - org[2 as i32 as usize];
         //
         dist = crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
         crate::src::qcommon::q_math::vectoangles(
@@ -5176,12 +4921,12 @@ pub unsafe extern "C" fn BotTravel_Grapple(
                 < 2 as i32 as f64
         {
             //end else
-            org[0 as i32 as usize] = (*ms).origin[0 as i32 as usize]
-                + (*ms).viewoffset[0 as i32 as usize]; //end if
-            org[1 as i32 as usize] = (*ms).origin[1 as i32 as usize]
-                + (*ms).viewoffset[1 as i32 as usize];
-            org[2 as i32 as usize] = (*ms).origin[2 as i32 as usize]
-                + (*ms).viewoffset[2 as i32 as usize];
+            org[0 as i32 as usize] =
+                (*ms).origin[0 as i32 as usize] + (*ms).viewoffset[0 as i32 as usize]; //end if
+            org[1 as i32 as usize] =
+                (*ms).origin[1 as i32 as usize] + (*ms).viewoffset[1 as i32 as usize];
+            org[2 as i32 as usize] =
+                (*ms).origin[2 as i32 as usize] + (*ms).viewoffset[2 as i32 as usize];
             trace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
                 org.as_mut_ptr(),
                 0 as *mut crate::src::qcommon::q_shared::vec_t,
@@ -5216,9 +4961,7 @@ pub unsafe extern "C" fn BotTravel_Grapple(
             (*ms).lastgrappledist = 999999 as i32 as f32
         } else {
             if dist < 70 as i32 as f32 {
-                speed = 300 as i32 as f32
-                    - (300 as i32 as f32
-                        - 4 as i32 as f32 * dist)
+                speed = 300 as i32 as f32 - (300 as i32 as f32 - 4 as i32 as f32 * dist)
             } else {
                 speed = 400 as i32 as f32
             }
@@ -5283,10 +5026,8 @@ pub unsafe extern "C" fn BotTravel_RocketJump(
     };
     //botimport.Print(PRT_MESSAGE, "BotTravel_RocketJump: bah\n");
     //
-    hordir[0 as i32 as usize] =
-        (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    hordir[1 as i32 as usize] =
-        (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    hordir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     //
     dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
@@ -5296,8 +5037,7 @@ pub unsafe extern "C" fn BotTravel_RocketJump(
         result.ideal_viewangles.as_mut_ptr(),
     );
     //look straight down
-    result.ideal_viewangles[0 as i32 as usize] =
-        90 as i32 as crate::src::qcommon::q_shared::vec_t;
+    result.ideal_viewangles[0 as i32 as usize] = 90 as i32 as crate::src::qcommon::q_shared::vec_t;
     //
     if dist < 5 as i32 as f32
         && crate::stdlib::fabs(AngleDiff(
@@ -5316,26 +5056,20 @@ pub unsafe extern "C" fn BotTravel_RocketJump(
             (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
         hordir[1 as i32 as usize] =
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
         //botimport.Print(PRT_MESSAGE, "between jump start and run start point\n");
         //elemantary action jump
         crate::src::botlib::be_ea::EA_Jump((*ms).client);
         crate::src::botlib::be_ea::EA_Attack((*ms).client);
-        crate::src::botlib::be_ea::EA_Move(
-            (*ms).client,
-            hordir.as_mut_ptr(),
-            800 as i32 as f32,
-        );
+        crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), 800 as i32 as f32);
         //
         (*ms).jumpreach = (*ms).lastreachnum
     } else {
         if dist > 80 as i32 as f32 {
             dist = 80 as i32 as f32
         }
-        speed = 400 as i32 as f32
-            - (400 as i32 as f32 - 5 as i32 as f32 * dist);
+        speed = 400 as i32 as f32 - (400 as i32 as f32 - 5 as i32 as f32 * dist);
         crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), speed);
     }
     //look in the movement direction
@@ -5344,8 +5078,7 @@ pub unsafe extern "C" fn BotTravel_RocketJump(
         result.ideal_viewangles.as_mut_ptr(),
     );
     //look straight down
-    result.ideal_viewangles[0 as i32 as usize] =
-        90 as i32 as crate::src::qcommon::q_shared::vec_t;
+    result.ideal_viewangles[0 as i32 as usize] = 90 as i32 as crate::src::qcommon::q_shared::vec_t;
     //set the view angles directly
     crate::src::botlib::be_ea::EA_View((*ms).client, result.ideal_viewangles.as_mut_ptr());
     //view is important for the movement
@@ -5405,10 +5138,8 @@ pub unsafe extern "C" fn BotTravel_BFGJump(
     };
     //botimport.Print(PRT_MESSAGE, "BotTravel_BFGJump: bah\n");
     //
-    hordir[0 as i32 as usize] =
-        (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    hordir[1 as i32 as usize] =
-        (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    hordir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     //
     dist = crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
@@ -5430,26 +5161,20 @@ pub unsafe extern "C" fn BotTravel_BFGJump(
             (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //end if
         hordir[1 as i32 as usize] =
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
         //botimport.Print(PRT_MESSAGE, "between jump start and run start point\n");
         //elemantary action jump
         crate::src::botlib::be_ea::EA_Jump((*ms).client);
         crate::src::botlib::be_ea::EA_Attack((*ms).client);
-        crate::src::botlib::be_ea::EA_Move(
-            (*ms).client,
-            hordir.as_mut_ptr(),
-            800 as i32 as f32,
-        );
+        crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), 800 as i32 as f32);
         //
         (*ms).jumpreach = (*ms).lastreachnum
     } else {
         if dist > 80 as i32 as f32 {
             dist = 80 as i32 as f32
         }
-        speed = 400 as i32 as f32
-            - (400 as i32 as f32 - 5 as i32 as f32 * dist);
+        speed = 400 as i32 as f32 - (400 as i32 as f32 - 5 as i32 as f32 * dist);
         crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), speed);
     }
     //look in the movement direction
@@ -5458,17 +5183,13 @@ pub unsafe extern "C" fn BotTravel_BFGJump(
         result.ideal_viewangles.as_mut_ptr(),
     );
     //look straight down
-    result.ideal_viewangles[0 as i32 as usize] =
-        90 as i32 as crate::src::qcommon::q_shared::vec_t;
+    result.ideal_viewangles[0 as i32 as usize] = 90 as i32 as crate::src::qcommon::q_shared::vec_t;
     //set the view angles directly
     crate::src::botlib::be_ea::EA_View((*ms).client, result.ideal_viewangles.as_mut_ptr());
     //view is important for the movement
     result.flags |= 8 as i32;
     //select the rocket launcher
-    crate::src::botlib::be_ea::EA_SelectWeapon(
-        (*ms).client,
-        (*weapindex_bfg10k).value as i32,
-    );
+    crate::src::botlib::be_ea::EA_SelectWeapon((*ms).client, (*weapindex_bfg10k).value as i32);
     //weapon is used for movement
     result.weapon = (*weapindex_bfg10k).value as i32;
     result.flags |= 16 as i32;
@@ -5547,8 +5268,7 @@ pub unsafe extern "C" fn BotFinishTravel_WeaponJump(
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
         hordir[2 as i32 as usize] =
             (*reach).end[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
-        hordir[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
         speed = 400 as i32 as f32
     }
@@ -5597,10 +5317,8 @@ pub unsafe extern "C" fn BotTravel_JumpPad(
         init
     };
     //first walk straight to the reachability start
-    hordir[0 as i32 as usize] =
-        (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
-    hordir[1 as i32 as usize] =
-        (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
+    hordir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
+    hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
     hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     //
     BotCheckBlocked(
@@ -5610,11 +5328,7 @@ pub unsafe extern "C" fn BotTravel_JumpPad(
         &mut result,
     );
     //elemantary action move in direction
-    crate::src::botlib::be_ea::EA_Move(
-        (*ms).client,
-        hordir.as_mut_ptr(),
-        400 as i32 as f32,
-    );
+    crate::src::botlib::be_ea::EA_Move((*ms).client, hordir.as_mut_ptr(), 400 as i32 as f32);
     result.movedir[0 as i32 as usize] = hordir[0 as i32 as usize];
     result.movedir[1 as i32 as usize] = hordir[1 as i32 as usize];
     result.movedir[2 as i32 as usize] = hordir[2 as i32 as usize];
@@ -5670,8 +5384,7 @@ pub unsafe extern "C" fn BotFinishTravel_JumpPad(
             (*reach).end[0 as i32 as usize] - (*ms).origin[0 as i32 as usize];
         hordir[1 as i32 as usize] =
             (*reach).end[1 as i32 as usize] - (*ms).origin[1 as i32 as usize];
-        hordir[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
         speed = 400 as i32 as f32
     }
@@ -5775,10 +5488,8 @@ pub unsafe extern "C" fn BotMoveInGoalArea(
     let mut speed: f32 = 0.;
     //DEBUG
     //walk straight to the goal origin
-    dir[0 as i32 as usize] =
-        (*goal).origin[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //endif
-    dir[1 as i32 as usize] =
-        (*goal).origin[1 as i32 as usize] - (*ms).origin[1 as i32 as usize]; //end if
+    dir[0 as i32 as usize] = (*goal).origin[0 as i32 as usize] - (*ms).origin[0 as i32 as usize]; //endif
+    dir[1 as i32 as usize] = (*goal).origin[1 as i32 as usize] - (*ms).origin[1 as i32 as usize]; //end if
     if (*ms).moveflags & 4 as i32 != 0 {
         dir[2 as i32 as usize] =
             (*goal).origin[2 as i32 as usize] - (*ms).origin[2 as i32 as usize];
@@ -5792,8 +5503,7 @@ pub unsafe extern "C" fn BotMoveInGoalArea(
     if dist > 100 as i32 as f32 {
         dist = 100 as i32 as f32
     }
-    speed = 400 as i32 as f32
-        - (400 as i32 as f32 - 4 as i32 as f32 * dist);
+    speed = 400 as i32 as f32 - (400 as i32 as f32 - 4 as i32 as f32 * dist);
     if speed < 10 as i32 as f32 {
         speed = 0 as i32 as f32
     }
@@ -5929,8 +5639,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
                         || reach.facenum & 0xffff as i32 != modelnum
                     {
                         reachnum = crate::src::botlib::be_aas_route::AAS_NextModelReachability(
-                            0 as i32,
-                            modelnum,
+                            0 as i32, modelnum,
                         );
                         if reachnum != 0 {
                             //end if
@@ -5973,8 +5682,7 @@ pub unsafe extern "C" fn BotMoveToGoal(
                         || reach.facenum & 0xffff as i32 != modelnum
                     {
                         reachnum = crate::src::botlib::be_aas_route::AAS_NextModelReachability(
-                            0 as i32,
-                            modelnum,
+                            0 as i32, modelnum,
                         );
                         if reachnum != 0 {
                             //end if
@@ -6092,11 +5800,9 @@ pub unsafe extern "C" fn BotMoveToGoal(
                 || reach.traveltype & 0xffffff as i32 == 19 as i32
             {
                 //special elevator case
-                if (*result).flags & 128 as i32 != 0
-                    || (*result).flags & 64 as i32 != 0
-                {
-                    (*ms).reachability_time = crate::src::botlib::be_aas_main::AAS_Time()
-                        + 5 as i32 as f32
+                if (*result).flags & 128 as i32 != 0 || (*result).flags & 64 as i32 != 0 {
+                    (*ms).reachability_time =
+                        crate::src::botlib::be_aas_main::AAS_Time() + 5 as i32 as f32
                 } //end if
                   //end if
                 if (*ms).areanum == reach.areanum
@@ -6227,14 +5933,11 @@ pub unsafe extern "C" fn BotMoveToGoal(
         //end if
         foundjumppad = crate::src::qcommon::q_shared::qfalse as i32;
         end[0 as i32 as usize] = (*ms).origin[0 as i32 as usize]
-            + (*ms).velocity[0 as i32 as usize]
-                * (-(2 as i32) as f32 * (*ms).thinktime);
+            + (*ms).velocity[0 as i32 as usize] * (-(2 as i32) as f32 * (*ms).thinktime);
         end[1 as i32 as usize] = (*ms).origin[1 as i32 as usize]
-            + (*ms).velocity[1 as i32 as usize]
-                * (-(2 as i32) as f32 * (*ms).thinktime);
+            + (*ms).velocity[1 as i32 as usize] * (-(2 as i32) as f32 * (*ms).thinktime);
         end[2 as i32 as usize] = (*ms).origin[2 as i32 as usize]
-            + (*ms).velocity[2 as i32 as usize]
-                * (-(2 as i32) as f32 * (*ms).thinktime);
+            + (*ms).velocity[2 as i32 as usize] * (-(2 as i32) as f32 * (*ms).thinktime);
         numareas = crate::src::botlib::be_aas_sample::AAS_TraceAreas(
             (*ms).origin.as_mut_ptr(),
             end.as_mut_ptr(),
@@ -6384,20 +6087,17 @@ pub unsafe extern "C" fn BotResetAvoidReach(mut movestate: i32) {
     crate::stdlib::memset(
         (*ms).avoidreach.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (1 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (1 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
     );
     crate::stdlib::memset(
         (*ms).avoidreachtimes.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (1 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+        (1 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
     );
     crate::stdlib::memset(
         (*ms).avoidreachtries.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (1 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (1 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
     );
 }
 //resets the last avoid reachability

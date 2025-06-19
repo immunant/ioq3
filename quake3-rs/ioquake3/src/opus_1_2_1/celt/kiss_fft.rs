@@ -89,42 +89,26 @@ unsafe extern "C" fn kf_bfly2(
             crate::src::opus_1_2_1::celt::kiss_fft::kiss_fft_cpx { r: 0., i: 0. };
         Fout2 = Fout.offset(4 as i32 as isize);
         t = *Fout2.offset(0 as i32 as isize);
-        (*Fout2.offset(0 as i32 as isize)).r =
-            (*Fout.offset(0 as i32 as isize)).r - t.r;
-        (*Fout2.offset(0 as i32 as isize)).i =
-            (*Fout.offset(0 as i32 as isize)).i - t.i;
+        (*Fout2.offset(0 as i32 as isize)).r = (*Fout.offset(0 as i32 as isize)).r - t.r;
+        (*Fout2.offset(0 as i32 as isize)).i = (*Fout.offset(0 as i32 as isize)).i - t.i;
         (*Fout.offset(0 as i32 as isize)).r += t.r;
         (*Fout.offset(0 as i32 as isize)).i += t.i;
-        t.r = ((*Fout2.offset(1 as i32 as isize)).r
-            + (*Fout2.offset(1 as i32 as isize)).i)
-            * tw;
-        t.i = ((*Fout2.offset(1 as i32 as isize)).i
-            - (*Fout2.offset(1 as i32 as isize)).r)
-            * tw;
-        (*Fout2.offset(1 as i32 as isize)).r =
-            (*Fout.offset(1 as i32 as isize)).r - t.r;
-        (*Fout2.offset(1 as i32 as isize)).i =
-            (*Fout.offset(1 as i32 as isize)).i - t.i;
+        t.r = ((*Fout2.offset(1 as i32 as isize)).r + (*Fout2.offset(1 as i32 as isize)).i) * tw;
+        t.i = ((*Fout2.offset(1 as i32 as isize)).i - (*Fout2.offset(1 as i32 as isize)).r) * tw;
+        (*Fout2.offset(1 as i32 as isize)).r = (*Fout.offset(1 as i32 as isize)).r - t.r;
+        (*Fout2.offset(1 as i32 as isize)).i = (*Fout.offset(1 as i32 as isize)).i - t.i;
         (*Fout.offset(1 as i32 as isize)).r += t.r;
         (*Fout.offset(1 as i32 as isize)).i += t.i;
         t.r = (*Fout2.offset(2 as i32 as isize)).i;
         t.i = -(*Fout2.offset(2 as i32 as isize)).r;
-        (*Fout2.offset(2 as i32 as isize)).r =
-            (*Fout.offset(2 as i32 as isize)).r - t.r;
-        (*Fout2.offset(2 as i32 as isize)).i =
-            (*Fout.offset(2 as i32 as isize)).i - t.i;
+        (*Fout2.offset(2 as i32 as isize)).r = (*Fout.offset(2 as i32 as isize)).r - t.r;
+        (*Fout2.offset(2 as i32 as isize)).i = (*Fout.offset(2 as i32 as isize)).i - t.i;
         (*Fout.offset(2 as i32 as isize)).r += t.r;
         (*Fout.offset(2 as i32 as isize)).i += t.i;
-        t.r = ((*Fout2.offset(3 as i32 as isize)).i
-            - (*Fout2.offset(3 as i32 as isize)).r)
-            * tw;
-        t.i = -((*Fout2.offset(3 as i32 as isize)).i
-            + (*Fout2.offset(3 as i32 as isize)).r)
-            * tw;
-        (*Fout2.offset(3 as i32 as isize)).r =
-            (*Fout.offset(3 as i32 as isize)).r - t.r;
-        (*Fout2.offset(3 as i32 as isize)).i =
-            (*Fout.offset(3 as i32 as isize)).i - t.i;
+        t.r = ((*Fout2.offset(3 as i32 as isize)).i - (*Fout2.offset(3 as i32 as isize)).r) * tw;
+        t.i = -((*Fout2.offset(3 as i32 as isize)).i + (*Fout2.offset(3 as i32 as isize)).r) * tw;
+        (*Fout2.offset(3 as i32 as isize)).r = (*Fout.offset(3 as i32 as isize)).r - t.r;
+        (*Fout2.offset(3 as i32 as isize)).i = (*Fout.offset(3 as i32 as isize)).i - t.i;
         (*Fout.offset(3 as i32 as isize)).r += t.r;
         (*Fout.offset(3 as i32 as isize)).i += t.i;
         Fout = Fout.offset(8 as i32 as isize);
@@ -153,18 +137,14 @@ unsafe extern "C" fn kf_bfly4(
             scratch0.i = (*Fout).i - (*Fout.offset(2 as i32 as isize)).i;
             (*Fout).r += (*Fout.offset(2 as i32 as isize)).r;
             (*Fout).i += (*Fout.offset(2 as i32 as isize)).i;
-            scratch1.r = (*Fout.offset(1 as i32 as isize)).r
-                + (*Fout.offset(3 as i32 as isize)).r;
-            scratch1.i = (*Fout.offset(1 as i32 as isize)).i
-                + (*Fout.offset(3 as i32 as isize)).i;
+            scratch1.r = (*Fout.offset(1 as i32 as isize)).r + (*Fout.offset(3 as i32 as isize)).r;
+            scratch1.i = (*Fout.offset(1 as i32 as isize)).i + (*Fout.offset(3 as i32 as isize)).i;
             (*Fout.offset(2 as i32 as isize)).r = (*Fout).r - scratch1.r;
             (*Fout.offset(2 as i32 as isize)).i = (*Fout).i - scratch1.i;
             (*Fout).r += scratch1.r;
             (*Fout).i += scratch1.i;
-            scratch1.r = (*Fout.offset(1 as i32 as isize)).r
-                - (*Fout.offset(3 as i32 as isize)).r;
-            scratch1.i = (*Fout.offset(1 as i32 as isize)).i
-                - (*Fout.offset(3 as i32 as isize)).i;
+            scratch1.r = (*Fout.offset(1 as i32 as isize)).r - (*Fout.offset(3 as i32 as isize)).r;
+            scratch1.i = (*Fout.offset(1 as i32 as isize)).i - (*Fout.offset(3 as i32 as isize)).i;
             (*Fout.offset(1 as i32 as isize)).r = scratch0.r + scratch1.i;
             (*Fout.offset(1 as i32 as isize)).i = scratch0.i - scratch1.r;
             (*Fout.offset(3 as i32 as isize)).r = scratch0.r - scratch1.i;
@@ -206,10 +186,8 @@ unsafe extern "C" fn kf_bfly4(
                     - (*Fout.offset(m3 as isize)).i * (*tw3).i;
                 scratch[2 as i32 as usize].i = (*Fout.offset(m3 as isize)).r * (*tw3).i
                     + (*Fout.offset(m3 as isize)).i * (*tw3).r;
-                scratch[5 as i32 as usize].r =
-                    (*Fout).r - scratch[1 as i32 as usize].r;
-                scratch[5 as i32 as usize].i =
-                    (*Fout).i - scratch[1 as i32 as usize].i;
+                scratch[5 as i32 as usize].r = (*Fout).r - scratch[1 as i32 as usize].r;
+                scratch[5 as i32 as usize].i = (*Fout).i - scratch[1 as i32 as usize].i;
                 (*Fout).r += scratch[1 as i32 as usize].r;
                 (*Fout).i += scratch[1 as i32 as usize].i;
                 scratch[3 as i32 as usize].r =
@@ -292,10 +270,8 @@ unsafe extern "C" fn kf_bfly3(
                 scratch[1 as i32 as usize].i - scratch[2 as i32 as usize].i;
             tw1 = tw1.offset(fstride as isize);
             tw2 = tw2.offset(fstride.wrapping_mul(2 as i32 as libc::c_ulong) as isize);
-            (*Fout.offset(m as isize)).r =
-                (*Fout).r - scratch[3 as i32 as usize].r * 0.5f32;
-            (*Fout.offset(m as isize)).i =
-                (*Fout).i - scratch[3 as i32 as usize].i * 0.5f32;
+            (*Fout.offset(m as isize)).r = (*Fout).r - scratch[3 as i32 as usize].r * 0.5f32;
+            (*Fout.offset(m as isize)).i = (*Fout).i - scratch[3 as i32 as usize].i * 0.5f32;
             scratch[0 as i32 as usize].r *= epi3.i;
             scratch[0 as i32 as usize].i *= epi3.i;
             (*Fout).r += scratch[3 as i32 as usize].r;
@@ -375,64 +351,40 @@ unsafe extern "C" fn kf_bfly5(
                 * (*tw.offset((u as libc::c_ulong).wrapping_mul(fstride) as isize)).i
                 + (*Fout1).i * (*tw.offset((u as libc::c_ulong).wrapping_mul(fstride) as isize)).r;
             scratch[2 as i32 as usize].r = (*Fout2).r
-                * (*tw.offset(
-                    ((2 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize,
-                ))
-                .r
+                * (*tw.offset(((2 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize)).r
                 - (*Fout2).i
-                    * (*tw.offset(
-                        ((2 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize,
-                    ))
+                    * (*tw
+                        .offset(((2 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize))
                     .i;
             scratch[2 as i32 as usize].i = (*Fout2).r
-                * (*tw.offset(
-                    ((2 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize,
-                ))
-                .i
+                * (*tw.offset(((2 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize)).i
                 + (*Fout2).i
-                    * (*tw.offset(
-                        ((2 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize,
-                    ))
+                    * (*tw
+                        .offset(((2 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize))
                     .r;
             scratch[3 as i32 as usize].r = (*Fout3).r
-                * (*tw.offset(
-                    ((3 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize,
-                ))
-                .r
+                * (*tw.offset(((3 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize)).r
                 - (*Fout3).i
-                    * (*tw.offset(
-                        ((3 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize,
-                    ))
+                    * (*tw
+                        .offset(((3 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize))
                     .i;
             scratch[3 as i32 as usize].i = (*Fout3).r
-                * (*tw.offset(
-                    ((3 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize,
-                ))
-                .i
+                * (*tw.offset(((3 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize)).i
                 + (*Fout3).i
-                    * (*tw.offset(
-                        ((3 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize,
-                    ))
+                    * (*tw
+                        .offset(((3 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize))
                     .r;
             scratch[4 as i32 as usize].r = (*Fout4).r
-                * (*tw.offset(
-                    ((4 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize,
-                ))
-                .r
+                * (*tw.offset(((4 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize)).r
                 - (*Fout4).i
-                    * (*tw.offset(
-                        ((4 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize,
-                    ))
+                    * (*tw
+                        .offset(((4 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize))
                     .i;
             scratch[4 as i32 as usize].i = (*Fout4).r
-                * (*tw.offset(
-                    ((4 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize,
-                ))
-                .i
+                * (*tw.offset(((4 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize)).i
                 + (*Fout4).i
-                    * (*tw.offset(
-                        ((4 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize,
-                    ))
+                    * (*tw
+                        .offset(((4 as i32 * u) as libc::c_ulong).wrapping_mul(fstride) as isize))
                     .r;
             scratch[7 as i32 as usize].r =
                 scratch[1 as i32 as usize].r + scratch[4 as i32 as usize].r;
@@ -450,46 +402,32 @@ unsafe extern "C" fn kf_bfly5(
                 scratch[2 as i32 as usize].r - scratch[3 as i32 as usize].r;
             scratch[9 as i32 as usize].i =
                 scratch[2 as i32 as usize].i - scratch[3 as i32 as usize].i;
-            (*Fout0).r = (*Fout0).r
-                + (scratch[7 as i32 as usize].r + scratch[8 as i32 as usize].r);
-            (*Fout0).i = (*Fout0).i
-                + (scratch[7 as i32 as usize].i + scratch[8 as i32 as usize].i);
+            (*Fout0).r = (*Fout0).r + (scratch[7 as i32 as usize].r + scratch[8 as i32 as usize].r);
+            (*Fout0).i = (*Fout0).i + (scratch[7 as i32 as usize].i + scratch[8 as i32 as usize].i);
             scratch[5 as i32 as usize].r = scratch[0 as i32 as usize].r
-                + (scratch[7 as i32 as usize].r * ya.r
-                    + scratch[8 as i32 as usize].r * yb.r);
+                + (scratch[7 as i32 as usize].r * ya.r + scratch[8 as i32 as usize].r * yb.r);
             scratch[5 as i32 as usize].i = scratch[0 as i32 as usize].i
-                + (scratch[7 as i32 as usize].i * ya.r
-                    + scratch[8 as i32 as usize].i * yb.r);
-            scratch[6 as i32 as usize].r = scratch[10 as i32 as usize].i * ya.i
-                + scratch[9 as i32 as usize].i * yb.i;
-            scratch[6 as i32 as usize].i = -(scratch[10 as i32 as usize].r * ya.i
-                + scratch[9 as i32 as usize].r * yb.i);
-            (*Fout1).r =
-                scratch[5 as i32 as usize].r - scratch[6 as i32 as usize].r;
-            (*Fout1).i =
-                scratch[5 as i32 as usize].i - scratch[6 as i32 as usize].i;
-            (*Fout4).r =
-                scratch[5 as i32 as usize].r + scratch[6 as i32 as usize].r;
-            (*Fout4).i =
-                scratch[5 as i32 as usize].i + scratch[6 as i32 as usize].i;
+                + (scratch[7 as i32 as usize].i * ya.r + scratch[8 as i32 as usize].i * yb.r);
+            scratch[6 as i32 as usize].r =
+                scratch[10 as i32 as usize].i * ya.i + scratch[9 as i32 as usize].i * yb.i;
+            scratch[6 as i32 as usize].i =
+                -(scratch[10 as i32 as usize].r * ya.i + scratch[9 as i32 as usize].r * yb.i);
+            (*Fout1).r = scratch[5 as i32 as usize].r - scratch[6 as i32 as usize].r;
+            (*Fout1).i = scratch[5 as i32 as usize].i - scratch[6 as i32 as usize].i;
+            (*Fout4).r = scratch[5 as i32 as usize].r + scratch[6 as i32 as usize].r;
+            (*Fout4).i = scratch[5 as i32 as usize].i + scratch[6 as i32 as usize].i;
             scratch[11 as i32 as usize].r = scratch[0 as i32 as usize].r
-                + (scratch[7 as i32 as usize].r * yb.r
-                    + scratch[8 as i32 as usize].r * ya.r);
+                + (scratch[7 as i32 as usize].r * yb.r + scratch[8 as i32 as usize].r * ya.r);
             scratch[11 as i32 as usize].i = scratch[0 as i32 as usize].i
-                + (scratch[7 as i32 as usize].i * yb.r
-                    + scratch[8 as i32 as usize].i * ya.r);
-            scratch[12 as i32 as usize].r = scratch[9 as i32 as usize].i * ya.i
-                - scratch[10 as i32 as usize].i * yb.i;
-            scratch[12 as i32 as usize].i = scratch[10 as i32 as usize].r * yb.i
-                - scratch[9 as i32 as usize].r * ya.i;
-            (*Fout2).r =
-                scratch[11 as i32 as usize].r + scratch[12 as i32 as usize].r;
-            (*Fout2).i =
-                scratch[11 as i32 as usize].i + scratch[12 as i32 as usize].i;
-            (*Fout3).r =
-                scratch[11 as i32 as usize].r - scratch[12 as i32 as usize].r;
-            (*Fout3).i =
-                scratch[11 as i32 as usize].i - scratch[12 as i32 as usize].i;
+                + (scratch[7 as i32 as usize].i * yb.r + scratch[8 as i32 as usize].i * ya.r);
+            scratch[12 as i32 as usize].r =
+                scratch[9 as i32 as usize].i * ya.i - scratch[10 as i32 as usize].i * yb.i;
+            scratch[12 as i32 as usize].i =
+                scratch[10 as i32 as usize].r * yb.i - scratch[9 as i32 as usize].r * ya.i;
+            (*Fout2).r = scratch[11 as i32 as usize].r + scratch[12 as i32 as usize].r;
+            (*Fout2).i = scratch[11 as i32 as usize].i + scratch[12 as i32 as usize].i;
+            (*Fout3).r = scratch[11 as i32 as usize].r - scratch[12 as i32 as usize].r;
+            (*Fout3).i = scratch[11 as i32 as usize].i - scratch[12 as i32 as usize].i;
             Fout0 = Fout0.offset(1);
             Fout1 = Fout1.offset(1);
             Fout2 = Fout2.offset(1);

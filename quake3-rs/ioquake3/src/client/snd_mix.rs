@@ -94,11 +94,9 @@ pub unsafe extern "C" fn S_WriteLinearBlastStereo16() {
         }
         val = *snd_p.offset((i + 1 as i32) as isize) >> 8 as i32;
         if val > 0x7fff as i32 {
-            *snd_out.offset((i + 1 as i32) as isize) =
-                0x7fff as i32 as i16
+            *snd_out.offset((i + 1 as i32) as isize) = 0x7fff as i32 as i16
         } else if val < -(32768 as i32) {
-            *snd_out.offset((i + 1 as i32) as isize) =
-                -(32768 as i32) as i16
+            *snd_out.offset((i + 1 as i32) as isize) = -(32768 as i32) as i16
         } else {
             *snd_out.offset((i + 1 as i32) as isize) = val as i16
         }
@@ -107,10 +105,7 @@ pub unsafe extern "C" fn S_WriteLinearBlastStereo16() {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn S_TransferStereo16(
-    mut pbuf: *mut libc::c_ulong,
-    mut endtime: i32,
-) {
+pub unsafe extern "C" fn S_TransferStereo16(mut pbuf: *mut libc::c_ulong, mut endtime: i32) {
     let mut lpos: i32 = 0;
     let mut ls_paintedtime: i32 = 0;
     snd_p = paintbuffer.as_mut_ptr() as *mut i32;
@@ -163,8 +158,7 @@ pub unsafe extern "C" fn S_TransferPaintBuffer(mut endtime: i32) {
             paintbuffer[i as usize].right = (crate::stdlib::sin(
                 (crate::src::client::snd_dma::s_paintedtime + i) as f64 * 0.1f64,
             ) * 20000 as i32 as f64
-                * 256 as i32 as f64)
-                as i32;
+                * 256 as i32 as f64) as i32;
             paintbuffer[i as usize].left = paintbuffer[i as usize].right;
             i += 1
         }
@@ -244,8 +238,7 @@ pub unsafe extern "C" fn S_TransferPaintBuffer(mut endtime: i32) {
                 } else if val < -(32768 as i32) {
                     val = -(32768 as i32)
                 }
-                *out_1.offset(out_idx as isize) =
-                    ((val >> 8 as i32) + 128 as i32) as u8;
+                *out_1.offset(out_idx as isize) = ((val >> 8 as i32) + 128 as i32) as u8;
                 out_idx = (out_idx + 1 as i32) % crate::src::client::snd_dma::dma.samples;
                 i += 1
             }
@@ -352,31 +345,23 @@ unsafe extern "C" fn S_PaintChannelFrom16_scalar(
                 }
                 if (*sc).soundChannels == 2 as i32 {
                     fdata[0 as i32 as usize] +=
-                        *samples.offset((j & 1024 as i32 - 1 as i32) as isize)
-                            as i32 as f32;
-                    fdata[1 as i32 as usize] += *samples.offset(
-                        (j + 1 as i32 & 1024 as i32 - 1 as i32) as isize,
-                    ) as i32
-                        as f32
+                        *samples.offset((j & 1024 as i32 - 1 as i32) as isize) as i32 as f32;
+                    fdata[1 as i32 as usize] += *samples
+                        .offset((j + 1 as i32 & 1024 as i32 - 1 as i32) as isize)
+                        as i32 as f32
                 } else {
                     fdata[0 as i32 as usize] +=
-                        *samples.offset((j & 1024 as i32 - 1 as i32) as isize)
-                            as i32 as f32;
+                        *samples.offset((j & 1024 as i32 - 1 as i32) as isize) as i32 as f32;
                     fdata[1 as i32 as usize] +=
-                        *samples.offset((j & 1024 as i32 - 1 as i32) as isize)
-                            as i32 as f32
+                        *samples.offset((j & 1024 as i32 - 1 as i32) as isize) as i32 as f32
                 }
                 j += (*sc).soundChannels
             }
             fdiv = (256 as i32 * (boff - aoff) / (*sc).soundChannels) as f32;
             let ref mut fresh2 = (*samp.offset(i as isize)).left;
-            *fresh2 = (*fresh2 as f32
-                + fdata[0 as i32 as usize] * fleftvol / fdiv)
-                as i32;
+            *fresh2 = (*fresh2 as f32 + fdata[0 as i32 as usize] * fleftvol / fdiv) as i32;
             let ref mut fresh3 = (*samp.offset(i as isize)).right;
-            *fresh3 = (*fresh3 as f32
-                + fdata[1 as i32 as usize] * frightvol / fdiv)
-                as i32;
+            *fresh3 = (*fresh3 as f32 + fdata[1 as i32 as usize] * frightvol / fdiv) as i32;
             i += 1
         }
     };
@@ -566,8 +551,7 @@ pub unsafe extern "C" fn S_PaintChannelFromMuLaw(
         i = 0 as i32;
         while i < count {
             data = crate::src::client::snd_wavelet::mulawToShort
-                [*samples.offset(ooff as i32 as isize) as usize]
-                as i32;
+                [*samples.offset(ooff as i32 as isize) as usize] as i32;
             ooff = ooff + (*ch).dopplerScale;
             (*samp.offset(i as isize)).left += data * leftvol >> 8 as i32;
             (*samp.offset(i as isize)).right += data * rightvol >> 8 as i32;
@@ -603,8 +587,7 @@ pub unsafe extern "C" fn S_PaintChannels(mut endtime: i32) {
     if (*crate::src::client::snd_main::s_muted).integer != 0 {
         snd_vol = 0 as i32
     } else {
-        snd_vol = ((*crate::src::client::snd_main::s_volume).value
-            * 255 as i32 as f32) as i32
+        snd_vol = ((*crate::src::client::snd_main::s_volume).value * 255 as i32 as f32) as i32
     }
     //Com_Printf ("%i to %i\n", s_paintedtime, endtime);
     while crate::src::client::snd_dma::s_paintedtime < endtime {
@@ -629,12 +612,11 @@ pub unsafe extern "C" fn S_PaintChannels(mut endtime: i32) {
                 // copy from the streaming sound source
                 let mut rawsamples: *const crate::snd_local_h::portable_samplepair_t =
                     crate::src::client::snd_dma::s_rawsamples[stream as usize].as_mut_ptr();
-                let stop: i32 =
-                    if end < crate::src::client::snd_dma::s_rawend[stream as usize] {
-                        end
-                    } else {
-                        crate::src::client::snd_dma::s_rawend[stream as usize]
-                    };
+                let stop: i32 = if end < crate::src::client::snd_dma::s_rawend[stream as usize] {
+                    end
+                } else {
+                    crate::src::client::snd_dma::s_rawend[stream as usize]
+                };
                 i = crate::src::client::snd_dma::s_paintedtime;
                 while i < stop {
                     let s: i32 = i & 16384 as i32 - 1 as i32;
@@ -652,8 +634,7 @@ pub unsafe extern "C" fn S_PaintChannels(mut endtime: i32) {
         i = 0 as i32;
         while i < 96 as i32 {
             if !((*ch).thesfx.is_null()
-                || ((*ch).leftvol as f64) < 0.25f64
-                    && ((*ch).rightvol as f64) < 0.25f64)
+                || ((*ch).leftvol as f64) < 0.25f64 && ((*ch).rightvol as f64) < 0.25f64)
             {
                 ltime = crate::src::client::snd_dma::s_paintedtime;
                 sc = (*ch).thesfx;

@@ -513,28 +513,25 @@ pub unsafe extern "C" fn G_BounceProjectile(
     let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut newv: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut dot: f32 = 0.;
-    v[0 as i32 as usize] =
-        *impact.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
-    v[1 as i32 as usize] =
-        *impact.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
-    v[2 as i32 as usize] =
-        *impact.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
+    v[0 as i32 as usize] = *impact.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
+    v[1 as i32 as usize] = *impact.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
+    v[2 as i32 as usize] = *impact.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
     dot = v[0 as i32 as usize] * *dir.offset(0 as i32 as isize)
         + v[1 as i32 as usize] * *dir.offset(1 as i32 as isize)
         + v[2 as i32 as usize] * *dir.offset(2 as i32 as isize);
-    newv[0 as i32 as usize] = v[0 as i32 as usize]
-        + *dir.offset(0 as i32 as isize) * (-(2 as i32) as f32 * dot);
-    newv[1 as i32 as usize] = v[1 as i32 as usize]
-        + *dir.offset(1 as i32 as isize) * (-(2 as i32) as f32 * dot);
-    newv[2 as i32 as usize] = v[2 as i32 as usize]
-        + *dir.offset(2 as i32 as isize) * (-(2 as i32) as f32 * dot);
+    newv[0 as i32 as usize] =
+        v[0 as i32 as usize] + *dir.offset(0 as i32 as isize) * (-(2 as i32) as f32 * dot);
+    newv[1 as i32 as usize] =
+        v[1 as i32 as usize] + *dir.offset(1 as i32 as isize) * (-(2 as i32) as f32 * dot);
+    newv[2 as i32 as usize] =
+        v[2 as i32 as usize] + *dir.offset(2 as i32 as isize) * (-(2 as i32) as f32 * dot);
     crate::src::qcommon::q_math::VectorNormalize(newv.as_mut_ptr());
-    *endout.offset(0 as i32 as isize) = *impact.offset(0 as i32 as isize)
-        + newv[0 as i32 as usize] * 8192 as i32 as f32;
-    *endout.offset(1 as i32 as isize) = *impact.offset(1 as i32 as isize)
-        + newv[1 as i32 as usize] * 8192 as i32 as f32;
-    *endout.offset(2 as i32 as isize) = *impact.offset(2 as i32 as isize)
-        + newv[2 as i32 as usize] * 8192 as i32 as f32;
+    *endout.offset(0 as i32 as isize) =
+        *impact.offset(0 as i32 as isize) + newv[0 as i32 as usize] * 8192 as i32 as f32;
+    *endout.offset(1 as i32 as isize) =
+        *impact.offset(1 as i32 as isize) + newv[1 as i32 as usize] * 8192 as i32 as f32;
+    *endout.offset(2 as i32 as isize) =
+        *impact.offset(2 as i32 as isize) + newv[2 as i32 as usize] * 8192 as i32 as f32;
 }
 /*
 ======================================================================
@@ -590,12 +587,12 @@ pub unsafe extern "C" fn CheckGauntletAttack(
         up.as_mut_ptr(),
         muzzle.as_mut_ptr(),
     );
-    end[0 as i32 as usize] = muzzle[0 as i32 as usize]
-        + forward[0 as i32 as usize] * 32 as i32 as f32;
-    end[1 as i32 as usize] = muzzle[1 as i32 as usize]
-        + forward[1 as i32 as usize] * 32 as i32 as f32;
-    end[2 as i32 as usize] = muzzle[2 as i32 as usize]
-        + forward[2 as i32 as usize] * 32 as i32 as f32;
+    end[0 as i32 as usize] =
+        muzzle[0 as i32 as usize] + forward[0 as i32 as usize] * 32 as i32 as f32;
+    end[1 as i32 as usize] =
+        muzzle[1 as i32 as usize] + forward[1 as i32 as usize] * 32 as i32 as f32;
+    end[2 as i32 as usize] =
+        muzzle[2 as i32 as usize] + forward[2 as i32 as usize] * 32 as i32 as f32;
     crate::src::game::g_syscalls::trap_Trace(
         &mut tr as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
         muzzle.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -719,45 +716,31 @@ pub unsafe extern "C" fn Bullet_Fire(
     let mut i: i32 = 0;
     let mut passent: i32 = 0;
     damage = (damage as f32 * s_quadFactor) as i32;
-    r = (((::libc::rand() & 0x7fff as i32) as f32
-        / 0x7fff as i32 as f32) as f64
+    r = (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
         * 3.14159265358979323846f64
         * 2.0f32 as f64) as f32;
     u = (crate::stdlib::sin(r as f64)
         * (2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32) as f64
-                - 0.5f64))
+            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64))
         * spread as f64
         * 16 as i32 as f64) as f32;
     r = (crate::stdlib::cos(r as f64)
         * (2.0f64
-            * (((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32) as f64
-                - 0.5f64))
+            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64))
         * spread as f64
         * 16 as i32 as f64) as f32;
-    end[0 as i32 as usize] = muzzle[0 as i32 as usize]
-        + forward[0 as i32 as usize]
-            * (8192 as i32 * 16 as i32) as f32;
-    end[1 as i32 as usize] = muzzle[1 as i32 as usize]
-        + forward[1 as i32 as usize]
-            * (8192 as i32 * 16 as i32) as f32;
-    end[2 as i32 as usize] = muzzle[2 as i32 as usize]
-        + forward[2 as i32 as usize]
-            * (8192 as i32 * 16 as i32) as f32;
     end[0 as i32 as usize] =
-        end[0 as i32 as usize] + right[0 as i32 as usize] * r;
+        muzzle[0 as i32 as usize] + forward[0 as i32 as usize] * (8192 as i32 * 16 as i32) as f32;
     end[1 as i32 as usize] =
-        end[1 as i32 as usize] + right[1 as i32 as usize] * r;
+        muzzle[1 as i32 as usize] + forward[1 as i32 as usize] * (8192 as i32 * 16 as i32) as f32;
     end[2 as i32 as usize] =
-        end[2 as i32 as usize] + right[2 as i32 as usize] * r;
-    end[0 as i32 as usize] =
-        end[0 as i32 as usize] + up[0 as i32 as usize] * u;
-    end[1 as i32 as usize] =
-        end[1 as i32 as usize] + up[1 as i32 as usize] * u;
-    end[2 as i32 as usize] =
-        end[2 as i32 as usize] + up[2 as i32 as usize] * u;
+        muzzle[2 as i32 as usize] + forward[2 as i32 as usize] * (8192 as i32 * 16 as i32) as f32;
+    end[0 as i32 as usize] = end[0 as i32 as usize] + right[0 as i32 as usize] * r;
+    end[1 as i32 as usize] = end[1 as i32 as usize] + right[1 as i32 as usize] * r;
+    end[2 as i32 as usize] = end[2 as i32 as usize] + right[2 as i32 as usize] * r;
+    end[0 as i32 as usize] = end[0 as i32 as usize] + up[0 as i32 as usize] * u;
+    end[1 as i32 as usize] = end[1 as i32 as usize] + up[1 as i32 as usize] * u;
+    end[2 as i32 as usize] = end[2 as i32 as usize] + up[2 as i32 as usize] * u;
     passent = (*ent).s.number;
     i = 0 as i32;
     if i < 10 as i32 {
@@ -951,29 +934,18 @@ pub unsafe extern "C" fn ShotgunPattern(
             * 700 as i32 as f32
             * 16 as i32 as f32;
         end[0 as i32 as usize] = *origin.offset(0 as i32 as isize)
-            + forward_0[0 as i32 as usize]
-                * (8192 as i32 * 16 as i32) as f32;
+            + forward_0[0 as i32 as usize] * (8192 as i32 * 16 as i32) as f32;
         end[1 as i32 as usize] = *origin.offset(1 as i32 as isize)
-            + forward_0[1 as i32 as usize]
-                * (8192 as i32 * 16 as i32) as f32;
+            + forward_0[1 as i32 as usize] * (8192 as i32 * 16 as i32) as f32;
         end[2 as i32 as usize] = *origin.offset(2 as i32 as isize)
-            + forward_0[2 as i32 as usize]
-                * (8192 as i32 * 16 as i32) as f32;
-        end[0 as i32 as usize] =
-            end[0 as i32 as usize] + right_0[0 as i32 as usize] * r;
-        end[1 as i32 as usize] =
-            end[1 as i32 as usize] + right_0[1 as i32 as usize] * r;
-        end[2 as i32 as usize] =
-            end[2 as i32 as usize] + right_0[2 as i32 as usize] * r;
-        end[0 as i32 as usize] =
-            end[0 as i32 as usize] + up_0[0 as i32 as usize] * u;
-        end[1 as i32 as usize] =
-            end[1 as i32 as usize] + up_0[1 as i32 as usize] * u;
-        end[2 as i32 as usize] =
-            end[2 as i32 as usize] + up_0[2 as i32 as usize] * u;
-        if ShotgunPellet(origin, end.as_mut_ptr(), ent) as u32 != 0
-            && hitClient as u64 == 0
-        {
+            + forward_0[2 as i32 as usize] * (8192 as i32 * 16 as i32) as f32;
+        end[0 as i32 as usize] = end[0 as i32 as usize] + right_0[0 as i32 as usize] * r;
+        end[1 as i32 as usize] = end[1 as i32 as usize] + right_0[1 as i32 as usize] * r;
+        end[2 as i32 as usize] = end[2 as i32 as usize] + right_0[2 as i32 as usize] * r;
+        end[0 as i32 as usize] = end[0 as i32 as usize] + up_0[0 as i32 as usize] * u;
+        end[1 as i32 as usize] = end[1 as i32 as usize] + up_0[1 as i32 as usize] * u;
+        end[2 as i32 as usize] = end[2 as i32 as usize] + up_0[2 as i32 as usize] * u;
+        if ShotgunPellet(origin, end.as_mut_ptr(), ent) as u32 != 0 && hitClient as u64 == 0 {
             hitClient = crate::src::qcommon::q_shared::qtrue;
             (*(*ent).client).accuracy_hits += 1
         }
@@ -989,21 +961,15 @@ pub unsafe extern "C" fn weapon_supershotgun_fire(mut ent: *mut crate::g_local_h
         muzzle.as_mut_ptr(),
         crate::bg_public_h::EV_SHOTGUN as i32,
     ) as *mut crate::g_local_h::gentity_s; // seed for spread pattern
+    (*tent).s.origin2[0 as i32 as usize] = forward[0 as i32 as usize] * 4096 as i32 as f32;
+    (*tent).s.origin2[1 as i32 as usize] = forward[1 as i32 as usize] * 4096 as i32 as f32;
+    (*tent).s.origin2[2 as i32 as usize] = forward[2 as i32 as usize] * 4096 as i32 as f32;
     (*tent).s.origin2[0 as i32 as usize] =
-        forward[0 as i32 as usize] * 4096 as i32 as f32;
+        (*tent).s.origin2[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     (*tent).s.origin2[1 as i32 as usize] =
-        forward[1 as i32 as usize] * 4096 as i32 as f32;
+        (*tent).s.origin2[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     (*tent).s.origin2[2 as i32 as usize] =
-        forward[2 as i32 as usize] * 4096 as i32 as f32;
-    (*tent).s.origin2[0 as i32 as usize] = (*tent).s.origin2[0 as i32 as usize]
-        as i32
-        as crate::src::qcommon::q_shared::vec_t;
-    (*tent).s.origin2[1 as i32 as usize] = (*tent).s.origin2[1 as i32 as usize]
-        as i32
-        as crate::src::qcommon::q_shared::vec_t;
-    (*tent).s.origin2[2 as i32 as usize] = (*tent).s.origin2[2 as i32 as usize]
-        as i32
-        as crate::src::qcommon::q_shared::vec_t;
+        (*tent).s.origin2[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     (*tent).s.eventParm = ::libc::rand() & 255 as i32;
     (*tent).s.otherEntityNum = (*ent).s.number;
     ShotgunPattern(
@@ -1107,12 +1073,12 @@ pub unsafe extern "C" fn weapon_railgun_fire(mut ent: *mut crate::g_local_h::gen
     let mut unlinkedEntities: [*mut crate::g_local_h::gentity_t; 4] =
         [0 as *mut crate::g_local_h::gentity_t; 4];
     damage = (100 as i32 as f32 * s_quadFactor) as i32;
-    end[0 as i32 as usize] = muzzle[0 as i32 as usize]
-        + forward[0 as i32 as usize] * 8192 as i32 as f32;
-    end[1 as i32 as usize] = muzzle[1 as i32 as usize]
-        + forward[1 as i32 as usize] * 8192 as i32 as f32;
-    end[2 as i32 as usize] = muzzle[2 as i32 as usize]
-        + forward[2 as i32 as usize] * 8192 as i32 as f32;
+    end[0 as i32 as usize] =
+        muzzle[0 as i32 as usize] + forward[0 as i32 as usize] * 8192 as i32 as f32;
+    end[1 as i32 as usize] =
+        muzzle[1 as i32 as usize] + forward[1 as i32 as usize] * 8192 as i32 as f32;
+    end[2 as i32 as usize] =
+        muzzle[2 as i32 as usize] + forward[2 as i32 as usize] * 8192 as i32 as f32;
     // trace only against the solids, so the railgun will go through people
     unlinked = 0 as i32;
     hits = 0 as i32;
@@ -1184,18 +1150,18 @@ pub unsafe extern "C" fn weapon_railgun_fire(mut ent: *mut crate::g_local_h::gen
     (*tent).s.origin2[1 as i32 as usize] = muzzle[1 as i32 as usize];
     (*tent).s.origin2[2 as i32 as usize] = muzzle[2 as i32 as usize];
     // move origin a bit to come closer to the drawn gun muzzle
-    (*tent).s.origin2[0 as i32 as usize] = (*tent).s.origin2[0 as i32 as usize]
-        + right[0 as i32 as usize] * 4 as i32 as f32;
-    (*tent).s.origin2[1 as i32 as usize] = (*tent).s.origin2[1 as i32 as usize]
-        + right[1 as i32 as usize] * 4 as i32 as f32;
-    (*tent).s.origin2[2 as i32 as usize] = (*tent).s.origin2[2 as i32 as usize]
-        + right[2 as i32 as usize] * 4 as i32 as f32;
-    (*tent).s.origin2[0 as i32 as usize] = (*tent).s.origin2[0 as i32 as usize]
-        + up[0 as i32 as usize] * -(1 as i32) as f32;
-    (*tent).s.origin2[1 as i32 as usize] = (*tent).s.origin2[1 as i32 as usize]
-        + up[1 as i32 as usize] * -(1 as i32) as f32;
-    (*tent).s.origin2[2 as i32 as usize] = (*tent).s.origin2[2 as i32 as usize]
-        + up[2 as i32 as usize] * -(1 as i32) as f32;
+    (*tent).s.origin2[0 as i32 as usize] =
+        (*tent).s.origin2[0 as i32 as usize] + right[0 as i32 as usize] * 4 as i32 as f32;
+    (*tent).s.origin2[1 as i32 as usize] =
+        (*tent).s.origin2[1 as i32 as usize] + right[1 as i32 as usize] * 4 as i32 as f32;
+    (*tent).s.origin2[2 as i32 as usize] =
+        (*tent).s.origin2[2 as i32 as usize] + right[2 as i32 as usize] * 4 as i32 as f32;
+    (*tent).s.origin2[0 as i32 as usize] =
+        (*tent).s.origin2[0 as i32 as usize] + up[0 as i32 as usize] * -(1 as i32) as f32;
+    (*tent).s.origin2[1 as i32 as usize] =
+        (*tent).s.origin2[1 as i32 as usize] + up[1 as i32 as usize] * -(1 as i32) as f32;
+    (*tent).s.origin2[2 as i32 as usize] =
+        (*tent).s.origin2[2 as i32 as usize] + up[2 as i32 as usize] * -(1 as i32) as f32;
     // no explosion at end if SURF_NOIMPACT, but still make the trail
     if trace.surfaceFlags & 0x10 as i32 != 0 {
         (*tent).s.eventParm = 255 as i32
@@ -1264,24 +1230,18 @@ pub unsafe extern "C" fn Weapon_HookThink(mut ent: *mut crate::g_local_h::gentit
         oldorigin[0 as i32 as usize] = (*ent).r.currentOrigin[0 as i32 as usize];
         oldorigin[1 as i32 as usize] = (*ent).r.currentOrigin[1 as i32 as usize];
         oldorigin[2 as i32 as usize] = (*ent).r.currentOrigin[2 as i32 as usize];
-        v[0 as i32 as usize] =
-            ((*(*ent).enemy).r.currentOrigin[0 as i32 as usize] as f64
-                + ((*(*ent).enemy).r.mins[0 as i32 as usize]
-                    + (*(*ent).enemy).r.maxs[0 as i32 as usize])
-                    as f64
-                    * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-        v[1 as i32 as usize] =
-            ((*(*ent).enemy).r.currentOrigin[1 as i32 as usize] as f64
-                + ((*(*ent).enemy).r.mins[1 as i32 as usize]
-                    + (*(*ent).enemy).r.maxs[1 as i32 as usize])
-                    as f64
-                    * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-        v[2 as i32 as usize] =
-            ((*(*ent).enemy).r.currentOrigin[2 as i32 as usize] as f64
-                + ((*(*ent).enemy).r.mins[2 as i32 as usize]
-                    + (*(*ent).enemy).r.maxs[2 as i32 as usize])
-                    as f64
-                    * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        v[0 as i32 as usize] = ((*(*ent).enemy).r.currentOrigin[0 as i32 as usize] as f64
+            + ((*(*ent).enemy).r.mins[0 as i32 as usize]
+                + (*(*ent).enemy).r.maxs[0 as i32 as usize]) as f64
+                * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        v[1 as i32 as usize] = ((*(*ent).enemy).r.currentOrigin[1 as i32 as usize] as f64
+            + ((*(*ent).enemy).r.mins[1 as i32 as usize]
+                + (*(*ent).enemy).r.maxs[1 as i32 as usize]) as f64
+                * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        v[2 as i32 as usize] = ((*(*ent).enemy).r.currentOrigin[2 as i32 as usize] as f64
+            + ((*(*ent).enemy).r.mins[2 as i32 as usize]
+                + (*(*ent).enemy).r.maxs[2 as i32 as usize]) as f64
+                * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
         SnapVectorTowards(v.as_mut_ptr(), oldorigin.as_mut_ptr());
         crate::src::game::g_utils::G_SetOrigin(
             ent as *mut crate::g_local_h::gentity_s,
@@ -1331,12 +1291,12 @@ pub unsafe extern "C" fn Weapon_LightningFire(mut ent: *mut crate::g_local_h::ge
     passent = (*ent).s.number;
     i = 0 as i32;
     if i < 10 as i32 {
-        end[0 as i32 as usize] = muzzle[0 as i32 as usize]
-            + forward[0 as i32 as usize] * 768 as i32 as f32;
-        end[1 as i32 as usize] = muzzle[1 as i32 as usize]
-            + forward[1 as i32 as usize] * 768 as i32 as f32;
-        end[2 as i32 as usize] = muzzle[2 as i32 as usize]
-            + forward[2 as i32 as usize] * 768 as i32 as f32;
+        end[0 as i32 as usize] =
+            muzzle[0 as i32 as usize] + forward[0 as i32 as usize] * 768 as i32 as f32;
+        end[1 as i32 as usize] =
+            muzzle[1 as i32 as usize] + forward[1 as i32 as usize] * 768 as i32 as f32;
+        end[2 as i32 as usize] =
+            muzzle[2 as i32 as usize] + forward[2 as i32 as usize] * 768 as i32 as f32;
         crate::src::game::g_syscalls::trap_Trace(
             &mut tr as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
             muzzle.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -1410,9 +1370,7 @@ pub unsafe extern "C" fn LogAccuracyHit(
     if (*attacker).client.is_null() {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    if (*(*target).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-        <= 0 as i32
-    {
+    if (*(*target).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= 0 as i32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
     if crate::src::game::g_team::OnSameTeam(
@@ -1453,15 +1411,12 @@ pub unsafe extern "C" fn CalcMuzzlePoint(
     *muzzlePoint.offset(2 as i32 as isize) = *muzzlePoint.offset(2 as i32 as isize)
         + *forward_0.offset(2 as i32 as isize) * 14 as i32 as f32;
     // snap to integer coordinates for more efficient network bandwidth usage
-    *muzzlePoint.offset(0 as i32 as isize) = *muzzlePoint.offset(0 as i32 as isize)
-        as i32
-        as crate::src::qcommon::q_shared::vec_t;
-    *muzzlePoint.offset(1 as i32 as isize) = *muzzlePoint.offset(1 as i32 as isize)
-        as i32
-        as crate::src::qcommon::q_shared::vec_t;
-    *muzzlePoint.offset(2 as i32 as isize) = *muzzlePoint.offset(2 as i32 as isize)
-        as i32
-        as crate::src::qcommon::q_shared::vec_t;
+    *muzzlePoint.offset(0 as i32 as isize) =
+        *muzzlePoint.offset(0 as i32 as isize) as i32 as crate::src::qcommon::q_shared::vec_t;
+    *muzzlePoint.offset(1 as i32 as isize) =
+        *muzzlePoint.offset(1 as i32 as isize) as i32 as crate::src::qcommon::q_shared::vec_t;
+    *muzzlePoint.offset(2 as i32 as isize) =
+        *muzzlePoint.offset(2 as i32 as isize) as i32 as crate::src::qcommon::q_shared::vec_t;
 }
 /*
 ===============
@@ -1492,15 +1447,12 @@ pub unsafe extern "C" fn CalcMuzzlePointOrigin(
     *muzzlePoint.offset(2 as i32 as isize) = *muzzlePoint.offset(2 as i32 as isize)
         + *forward_0.offset(2 as i32 as isize) * 14 as i32 as f32;
     // snap to integer coordinates for more efficient network bandwidth usage
-    *muzzlePoint.offset(0 as i32 as isize) = *muzzlePoint.offset(0 as i32 as isize)
-        as i32
-        as crate::src::qcommon::q_shared::vec_t;
-    *muzzlePoint.offset(1 as i32 as isize) = *muzzlePoint.offset(1 as i32 as isize)
-        as i32
-        as crate::src::qcommon::q_shared::vec_t;
-    *muzzlePoint.offset(2 as i32 as isize) = *muzzlePoint.offset(2 as i32 as isize)
-        as i32
-        as crate::src::qcommon::q_shared::vec_t;
+    *muzzlePoint.offset(0 as i32 as isize) =
+        *muzzlePoint.offset(0 as i32 as isize) as i32 as crate::src::qcommon::q_shared::vec_t;
+    *muzzlePoint.offset(1 as i32 as isize) =
+        *muzzlePoint.offset(1 as i32 as isize) as i32 as crate::src::qcommon::q_shared::vec_t;
+    *muzzlePoint.offset(2 as i32 as isize) =
+        *muzzlePoint.offset(2 as i32 as isize) as i32 as crate::src::qcommon::q_shared::vec_t;
 }
 /*
 ===============
@@ -1548,9 +1500,7 @@ pub unsafe extern "C" fn FireWeapon(mut ent: *mut crate::g_local_h::gentity_t) {
             weapon_supershotgun_fire(ent);
         }
         2 => {
-            if crate::src::game::g_main::g_gametype.integer
-                != crate::bg_public_h::GT_TEAM as i32
-            {
+            if crate::src::game::g_main::g_gametype.integer != crate::bg_public_h::GT_TEAM as i32 {
                 Bullet_Fire(
                     ent,
                     200 as i32 as f32,

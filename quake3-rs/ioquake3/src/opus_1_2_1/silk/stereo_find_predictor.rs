@@ -8,8 +8,7 @@ pub mod macros_h {
     ) -> crate::opus_types_h::opus_int32 {
         return if in32 != 0 {
             (32 as i32)
-                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32
-                    * 8 as i32
+                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
                     - (in32 as u32).leading_zeros() as i32)
         } else {
             32 as i32
@@ -110,8 +109,7 @@ pub mod Inlines_h {
         /* increment using fractional part of input */
         y = (y as i64
             + (y as i64
-                * (213 as i32 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
+                * (213 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
                     * frac_Q7 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32)
                     as crate::opus_types_h::opus_int16 as i64
                 >> 16 as i32)) as crate::opus_types_h::opus_int32;
@@ -143,32 +141,27 @@ pub mod Inlines_h {
         /* Inverse of b32, with 14 bits of precision */
         b32_inv = (0x7fffffff as i32 >> 2 as i32) / (b32_nrm >> 16 as i32); /* Q: 29 + 16 - b_headrm        */
         /* First approximation */
-        result = (a32_nrm as i64
-            * b32_inv as crate::opus_types_h::opus_int16 as i64
-            >> 16 as i32) as crate::opus_types_h::opus_int32; /* Q: 29 + a_headrm - b_headrm  */
+        result = (a32_nrm as i64 * b32_inv as crate::opus_types_h::opus_int16 as i64 >> 16 as i32)
+            as crate::opus_types_h::opus_int32; /* Q: 29 + a_headrm - b_headrm  */
         /* Compute residual by subtracting product of denominator and first approximation */
         /* It's OK to overflow because the final value of a32_nrm should always be small */
         a32_nrm = (a32_nrm as crate::opus_types_h::opus_uint32).wrapping_sub(
-            (((b32_nrm as i64 * result as i64 >> 32 as i32)
-                as crate::opus_types_h::opus_int32
+            (((b32_nrm as i64 * result as i64 >> 32 as i32) as crate::opus_types_h::opus_int32
                 as crate::opus_types_h::opus_uint32)
                 << 3 as i32) as crate::opus_types_h::opus_int32
                 as crate::opus_types_h::opus_uint32,
         ) as crate::opus_types_h::opus_int32; /* Q: a_headrm   */
         /* Refinement */
         result = (result as i64
-            + (a32_nrm as i64
-                * b32_inv as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32; /* Q: 29 + a_headrm - b_headrm  */
+            + (a32_nrm as i64 * b32_inv as crate::opus_types_h::opus_int16 as i64 >> 16 as i32))
+            as crate::opus_types_h::opus_int32; /* Q: 29 + a_headrm - b_headrm  */
         /* Convert to Qres domain */
         lshift = 29 as i32 + a_headrm - b_headrm - Qres;
         if lshift < 0 as i32 {
             return (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift
                 > 0x7fffffff as i32 >> -lshift
             {
-                (if result
-                    > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift
-                {
+                (if result > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift {
                     (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> -lshift
                 } else {
                     (if result < 0x7fffffff as i32 >> -lshift {
@@ -181,9 +174,7 @@ pub mod Inlines_h {
                 (if result > 0x7fffffff as i32 >> -lshift {
                     (0x7fffffff as i32) >> -lshift
                 } else {
-                    (if result
-                        < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift
-                    {
+                    (if result < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift {
                         (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> -lshift
                     } else {
                         result
@@ -336,25 +327,23 @@ pub unsafe extern "C" fn silk_stereo_find_predictor(
         x, y, scale, length,
     );
     pred_Q13 = silk_DIV32_varQ(corr, nrgx, 13 as i32);
-    pred_Q13 =
-        if -((1 as i32) << 14 as i32) > (1 as i32) << 14 as i32 {
-            if pred_Q13 > -((1 as i32) << 14 as i32) {
-                -((1 as i32) << 14 as i32)
-            } else if pred_Q13 < (1 as i32) << 14 as i32 {
-                (1 as i32) << 14 as i32
-            } else {
-                pred_Q13
-            }
-        } else if pred_Q13 > (1 as i32) << 14 as i32 {
-            (1 as i32) << 14 as i32
-        } else if pred_Q13 < -((1 as i32) << 14 as i32) {
+    pred_Q13 = if -((1 as i32) << 14 as i32) > (1 as i32) << 14 as i32 {
+        if pred_Q13 > -((1 as i32) << 14 as i32) {
             -((1 as i32) << 14 as i32)
+        } else if pred_Q13 < (1 as i32) << 14 as i32 {
+            (1 as i32) << 14 as i32
         } else {
             pred_Q13
-        };
-    pred2_Q10 = (pred_Q13 as i64
-        * pred_Q13 as crate::opus_types_h::opus_int16 as i64
-        >> 16 as i32) as crate::opus_types_h::opus_int32;
+        }
+    } else if pred_Q13 > (1 as i32) << 14 as i32 {
+        (1 as i32) << 14 as i32
+    } else if pred_Q13 < -((1 as i32) << 14 as i32) {
+        -((1 as i32) << 14 as i32)
+    } else {
+        pred_Q13
+    };
+    pred2_Q10 = (pred_Q13 as i64 * pred_Q13 as crate::opus_types_h::opus_int16 as i64 >> 16 as i32)
+        as crate::opus_types_h::opus_int32;
     /* Faster update for signals with large prediction parameters */
     smooth_coef_Q16 = silk_max_int(
         smooth_coef_Q16,
@@ -366,35 +355,29 @@ pub unsafe extern "C" fn silk_stereo_find_predictor(
     );
     /* Smoothed mid and residual norms */
     scale = scale >> 1 as i32;
-    *mid_res_amp_Q0.offset(0 as i32 as isize) =
-        (*mid_res_amp_Q0.offset(0 as i32 as isize) as i64
-            + ((((silk_SQRT_APPROX(nrgx) as crate::opus_types_h::opus_uint32) << scale)
-                as crate::opus_types_h::opus_int32
-                - *mid_res_amp_Q0.offset(0 as i32 as isize))
-                as i64
-                * smooth_coef_Q16 as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+    *mid_res_amp_Q0.offset(0 as i32 as isize) = (*mid_res_amp_Q0.offset(0 as i32 as isize) as i64
+        + ((((silk_SQRT_APPROX(nrgx) as crate::opus_types_h::opus_uint32) << scale)
+            as crate::opus_types_h::opus_int32
+            - *mid_res_amp_Q0.offset(0 as i32 as isize)) as i64
+            * smooth_coef_Q16 as crate::opus_types_h::opus_int16 as i64
+            >> 16 as i32))
+        as crate::opus_types_h::opus_int32;
     /* Residual energy = nrgy - 2 * pred * corr + pred^2 * nrgx */
     nrgy = nrgy
-        - (((corr as i64
-            * pred_Q13 as crate::opus_types_h::opus_int16 as i64
-            >> 16 as i32) as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_uint32)
+        - (((corr as i64 * pred_Q13 as crate::opus_types_h::opus_int16 as i64 >> 16 as i32)
+            as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_uint32)
             << 3 as i32 + 1 as i32) as crate::opus_types_h::opus_int32;
     nrgy = nrgy
-        + (((nrgx as i64
-            * pred2_Q10 as crate::opus_types_h::opus_int16 as i64
-            >> 16 as i32) as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_uint32)
+        + (((nrgx as i64 * pred2_Q10 as crate::opus_types_h::opus_int16 as i64 >> 16 as i32)
+            as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_uint32)
             << 6 as i32) as crate::opus_types_h::opus_int32;
-    *mid_res_amp_Q0.offset(1 as i32 as isize) =
-        (*mid_res_amp_Q0.offset(1 as i32 as isize) as i64
-            + ((((silk_SQRT_APPROX(nrgy) as crate::opus_types_h::opus_uint32) << scale)
-                as crate::opus_types_h::opus_int32
-                - *mid_res_amp_Q0.offset(1 as i32 as isize))
-                as i64
-                * smooth_coef_Q16 as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+    *mid_res_amp_Q0.offset(1 as i32 as isize) = (*mid_res_amp_Q0.offset(1 as i32 as isize) as i64
+        + ((((silk_SQRT_APPROX(nrgy) as crate::opus_types_h::opus_uint32) << scale)
+            as crate::opus_types_h::opus_int32
+            - *mid_res_amp_Q0.offset(1 as i32 as isize)) as i64
+            * smooth_coef_Q16 as crate::opus_types_h::opus_int16 as i64
+            >> 16 as i32))
+        as crate::opus_types_h::opus_int32;
     /* Ratio of smoothed residual and mid norms */
     *ratio_Q14 = silk_DIV32_varQ(
         *mid_res_amp_Q0.offset(1 as i32 as isize),

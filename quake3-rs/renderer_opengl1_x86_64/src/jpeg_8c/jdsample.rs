@@ -332,13 +332,13 @@ unsafe extern "C" fn sep_upsample(
         num_rows as i32,
     );
     /* Adjust counts */
-    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows)
-        as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
+    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION
+        as crate::jmorecfg_h::JDIMENSION;
     (*upsample).rows_to_go = ((*upsample).rows_to_go as u32).wrapping_sub(num_rows)
         as crate::jmorecfg_h::JDIMENSION
         as crate::jmorecfg_h::JDIMENSION;
-    (*upsample).next_row_out = ((*upsample).next_row_out as u32).wrapping_add(num_rows)
-        as i32 as i32;
+    (*upsample).next_row_out =
+        ((*upsample).next_row_out as u32).wrapping_add(num_rows) as i32 as i32;
     /* When the buffer is emptied, declare this input row group consumed */
     if (*upsample).next_row_out >= (*cinfo).max_v_samp_factor {
         *in_row_group_ctr = (*in_row_group_ctr).wrapping_add(1)
@@ -628,9 +628,7 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: crate::jpeglib_h::j_decompre
                         _: *mut crate::jpeglib_h::JSAMPARRAY,
                     ) -> (),
             )
-        } else if h_in_group * 2 as i32 == h_out_group
-            && v_in_group * 2 as i32 == v_out_group
-        {
+        } else if h_in_group * 2 as i32 == h_out_group && v_in_group * 2 as i32 == v_out_group {
             /* Special case for 2h2v upsampling */
             (*upsample).methods[ci as usize] = Some(
                 h2v2_upsample
@@ -641,9 +639,7 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: crate::jpeglib_h::j_decompre
                         _: *mut crate::jpeglib_h::JSAMPARRAY,
                     ) -> (),
             )
-        } else if h_out_group % h_in_group == 0 as i32
-            && v_out_group % v_in_group == 0 as i32
-        {
+        } else if h_out_group % h_in_group == 0 as i32 && v_out_group % v_in_group == 0 as i32 {
             /* Generic integral-factors upsampling method */
             (*upsample).methods[ci as usize] = Some(
                 int_upsample

@@ -135,8 +135,7 @@ pub unsafe extern "C" fn silk_burg_modified_FLP(
     crate::stdlib::memset(
         C_first_row.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (24 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f64>() as libc::c_ulong),
+        (24 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f64>() as libc::c_ulong),
     );
     s = 0 as i32;
     while s < nb_subfr {
@@ -156,12 +155,10 @@ pub unsafe extern "C" fn silk_burg_modified_FLP(
     crate::stdlib::memcpy(
         C_last_row.as_mut_ptr() as *mut libc::c_void,
         C_first_row.as_mut_ptr() as *const libc::c_void,
-        (24 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f64>() as libc::c_ulong),
+        (24 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f64>() as libc::c_ulong),
     );
     /* Initialize */
-    CAf[0 as i32 as usize] =
-        C0 + 1e-5f32 as f64 * C0 + 1e-9f32 as f64;
+    CAf[0 as i32 as usize] = C0 + 1e-5f32 as f64 * C0 + 1e-9f32 as f64;
     CAb[0 as i32 as usize] = CAf[0 as i32 as usize];
     invGain = 1.0f32 as f64;
     reached_max_gain = 0 as i32;
@@ -178,11 +175,9 @@ pub unsafe extern "C" fn silk_burg_modified_FLP(
             tmp2 = *x_ptr.offset((subfr_length - n - 1 as i32) as isize) as f64;
             k = 0 as i32;
             while k < n {
-                C_first_row[k as usize] -= (*x_ptr.offset(n as isize)
-                    * *x_ptr.offset((n - k - 1 as i32) as isize))
-                    as f64;
-                C_last_row[k as usize] -= (*x_ptr
-                    .offset((subfr_length - n - 1 as i32) as isize)
+                C_first_row[k as usize] -=
+                    (*x_ptr.offset(n as isize) * *x_ptr.offset((n - k - 1 as i32) as isize)) as f64;
+                C_last_row[k as usize] -= (*x_ptr.offset((subfr_length - n - 1 as i32) as isize)
                     * *x_ptr.offset((subfr_length - n + k) as isize))
                     as f64;
                 Atmp = Af[k as usize];
@@ -193,9 +188,8 @@ pub unsafe extern "C" fn silk_burg_modified_FLP(
             k = 0 as i32;
             while k <= n {
                 CAf[k as usize] -= tmp1 * *x_ptr.offset((n - k) as isize) as f64;
-                CAb[k as usize] -= tmp2
-                    * *x_ptr.offset((subfr_length - n + k - 1 as i32) as isize)
-                        as f64;
+                CAb[k as usize] -=
+                    tmp2 * *x_ptr.offset((subfr_length - n + k - 1 as i32) as isize) as f64;
                 k += 1
             }
             s += 1

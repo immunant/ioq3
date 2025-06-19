@@ -529,10 +529,7 @@ UI_TeamOrdersMenu_BackEvent
 ===============
 */
 
-unsafe extern "C" fn UI_TeamOrdersMenu_BackEvent(
-    mut _ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_TeamOrdersMenu_BackEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
     if event != 3 as i32 {
         return;
     }
@@ -687,10 +684,7 @@ UI_TeamOrdersMenu_ListEvent
 ===============
 */
 
-unsafe extern "C" fn UI_TeamOrdersMenu_ListEvent(
-    mut ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_TeamOrdersMenu_ListEvent(mut ptr: *mut libc::c_void, mut event: i32) {
     let mut id: i32 = 0;
     let mut selection: i32 = 0;
     let mut message: [libc::c_char; 256] = [0; 256];
@@ -862,19 +856,16 @@ unsafe extern "C" fn UI_TeamOrdersMenu_Init() {
     teamOrdersMenuInfo.list.generic.ownerdraw =
         Some(UI_TeamOrdersMenu_ListDraw as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     teamOrdersMenuInfo.list.generic.callback = Some(
-        UI_TeamOrdersMenu_ListEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_TeamOrdersMenu_ListEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     teamOrdersMenuInfo.list.generic.x = 320 as i32 - 64 as i32;
     teamOrdersMenuInfo.list.generic.y = 120 as i32;
     teamOrdersMenuInfo.back.generic.type_0 = 6 as i32;
     teamOrdersMenuInfo.back.generic.name =
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    teamOrdersMenuInfo.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    teamOrdersMenuInfo.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     teamOrdersMenuInfo.back.generic.callback = Some(
-        UI_TeamOrdersMenu_BackEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_TeamOrdersMenu_BackEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     teamOrdersMenuInfo.back.generic.x = 0 as i32;
     teamOrdersMenuInfo.back.generic.y = 480 as i32 - 64 as i32;

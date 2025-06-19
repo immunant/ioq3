@@ -511,8 +511,7 @@ pub unsafe extern "C" fn multi_trigger(
             + ((*ent).wait as f64
                 + (*ent).random as f64
                     * (2.0f64
-                        * (((::libc::rand() & 0x7fff as i32) as f32
-                            / 0x7fff as i32 as f32)
+                        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                             as f64
                             - 0.5f64)))
                 * 1000 as i32 as f64) as i32
@@ -660,18 +659,18 @@ pub unsafe extern "C" fn AimAtTarget(mut self_0: *mut crate::g_local_h::gentity_
     let mut time: f32 = 0.;
     let mut forward: f32 = 0.;
     let mut dist: f32 = 0.;
-    origin[0 as i32 as usize] = (*self_0).r.absmin[0 as i32 as usize]
-        + (*self_0).r.absmax[0 as i32 as usize];
-    origin[1 as i32 as usize] = (*self_0).r.absmin[1 as i32 as usize]
-        + (*self_0).r.absmax[1 as i32 as usize];
-    origin[2 as i32 as usize] = (*self_0).r.absmin[2 as i32 as usize]
-        + (*self_0).r.absmax[2 as i32 as usize];
-    origin[0 as i32 as usize] = (origin[0 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    origin[1 as i32 as usize] = (origin[1 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    origin[2 as i32 as usize] = (origin[2 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+    origin[0 as i32 as usize] =
+        (*self_0).r.absmin[0 as i32 as usize] + (*self_0).r.absmax[0 as i32 as usize];
+    origin[1 as i32 as usize] =
+        (*self_0).r.absmin[1 as i32 as usize] + (*self_0).r.absmax[1 as i32 as usize];
+    origin[2 as i32 as usize] =
+        (*self_0).r.absmin[2 as i32 as usize] + (*self_0).r.absmax[2 as i32 as usize];
+    origin[0 as i32 as usize] =
+        (origin[0 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+    origin[1 as i32 as usize] =
+        (origin[1 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+    origin[2 as i32 as usize] =
+        (origin[2 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     ent = crate::src::game::g_utils::G_PickTarget((*self_0).target)
         as *mut crate::g_local_h::gentity_s;
     if ent.is_null() {
@@ -680,8 +679,7 @@ pub unsafe extern "C" fn AimAtTarget(mut self_0: *mut crate::g_local_h::gentity_
     }
     height = (*ent).s.origin[2 as i32 as usize] - origin[2 as i32 as usize];
     gravity = crate::src::game::g_main::g_gravity.value;
-    time = crate::stdlib::sqrt(height as f64 / (0.5f64 * gravity as f64))
-        as f32;
+    time = crate::stdlib::sqrt(height as f64 / (0.5f64 * gravity as f64)) as f32;
     if time == 0. {
         crate::src::game::g_utils::G_FreeEntity(self_0 as *mut crate::g_local_h::gentity_s);
         return;
@@ -693,16 +691,12 @@ pub unsafe extern "C" fn AimAtTarget(mut self_0: *mut crate::g_local_h::gentity_
         (*ent).s.origin[1 as i32 as usize] - origin[1 as i32 as usize];
     (*self_0).s.origin2[2 as i32 as usize] =
         (*ent).s.origin[2 as i32 as usize] - origin[2 as i32 as usize];
-    (*self_0).s.origin2[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*self_0).s.origin2[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     dist = crate::src::qcommon::q_math::VectorNormalize((*self_0).s.origin2.as_mut_ptr());
     forward = dist / time;
-    (*self_0).s.origin2[0 as i32 as usize] =
-        (*self_0).s.origin2[0 as i32 as usize] * forward;
-    (*self_0).s.origin2[1 as i32 as usize] =
-        (*self_0).s.origin2[1 as i32 as usize] * forward;
-    (*self_0).s.origin2[2 as i32 as usize] =
-        (*self_0).s.origin2[2 as i32 as usize] * forward;
+    (*self_0).s.origin2[0 as i32 as usize] = (*self_0).s.origin2[0 as i32 as usize] * forward;
+    (*self_0).s.origin2[1 as i32 as usize] = (*self_0).s.origin2[1 as i32 as usize] * forward;
+    (*self_0).s.origin2[2 as i32 as usize] = (*self_0).s.origin2[2 as i32 as usize] * forward;
     (*self_0).s.origin2[2 as i32 as usize] = time * gravity;
 }
 /*QUAKED trigger_push (.5 .5 .5) ?
@@ -746,21 +740,15 @@ pub unsafe extern "C" fn Use_target_push(
     if (*(*activator).client).ps.pm_type != crate::bg_public_h::PM_NORMAL as i32 {
         return;
     }
-    if (*(*activator).client).ps.powerups[crate::bg_public_h::PW_FLIGHT as i32 as usize]
-        != 0
-    {
+    if (*(*activator).client).ps.powerups[crate::bg_public_h::PW_FLIGHT as i32 as usize] != 0 {
         return;
     }
-    (*(*activator).client).ps.velocity[0 as i32 as usize] =
-        (*self_0).s.origin2[0 as i32 as usize];
-    (*(*activator).client).ps.velocity[1 as i32 as usize] =
-        (*self_0).s.origin2[1 as i32 as usize];
-    (*(*activator).client).ps.velocity[2 as i32 as usize] =
-        (*self_0).s.origin2[2 as i32 as usize];
+    (*(*activator).client).ps.velocity[0 as i32 as usize] = (*self_0).s.origin2[0 as i32 as usize];
+    (*(*activator).client).ps.velocity[1 as i32 as usize] = (*self_0).s.origin2[1 as i32 as usize];
+    (*(*activator).client).ps.velocity[2 as i32 as usize] = (*self_0).s.origin2[2 as i32 as usize];
     // play fly sound every 1.5 seconds
     if (*activator).fly_sound_debounce_time < crate::src::game::g_main::level.time {
-        (*activator).fly_sound_debounce_time =
-            crate::src::game::g_main::level.time + 1500 as i32;
+        (*activator).fly_sound_debounce_time = crate::src::game::g_main::level.time + 1500 as i32;
         crate::src::game::g_utils::G_Sound(
             activator as *mut crate::g_local_h::gentity_s,
             crate::src::qcommon::q_shared::CHAN_AUTO as i32,
@@ -799,18 +787,12 @@ pub unsafe extern "C" fn SP_target_push(mut self_0: *mut crate::g_local_h::genti
         )
     }
     if !(*self_0).target.is_null() {
-        (*self_0).r.absmin[0 as i32 as usize] =
-            (*self_0).s.origin[0 as i32 as usize];
-        (*self_0).r.absmin[1 as i32 as usize] =
-            (*self_0).s.origin[1 as i32 as usize];
-        (*self_0).r.absmin[2 as i32 as usize] =
-            (*self_0).s.origin[2 as i32 as usize];
-        (*self_0).r.absmax[0 as i32 as usize] =
-            (*self_0).s.origin[0 as i32 as usize];
-        (*self_0).r.absmax[1 as i32 as usize] =
-            (*self_0).s.origin[1 as i32 as usize];
-        (*self_0).r.absmax[2 as i32 as usize] =
-            (*self_0).s.origin[2 as i32 as usize];
+        (*self_0).r.absmin[0 as i32 as usize] = (*self_0).s.origin[0 as i32 as usize];
+        (*self_0).r.absmin[1 as i32 as usize] = (*self_0).s.origin[1 as i32 as usize];
+        (*self_0).r.absmin[2 as i32 as usize] = (*self_0).s.origin[2 as i32 as usize];
+        (*self_0).r.absmax[0 as i32 as usize] = (*self_0).s.origin[0 as i32 as usize];
+        (*self_0).r.absmax[1 as i32 as usize] = (*self_0).s.origin[1 as i32 as usize];
+        (*self_0).r.absmax[2 as i32 as usize] = (*self_0).s.origin[2 as i32 as usize];
         (*self_0).think =
             Some(AimAtTarget as unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ());
         (*self_0).nextthink = crate::src::game::g_main::level.time + 100 as i32
@@ -1048,9 +1030,7 @@ pub unsafe extern "C" fn func_timer_think(mut self_0: *mut crate::g_local_h::gen
         + 1000 as i32 as f64
             * ((*self_0).wait as f64
                 + 2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
-                        as f64
+                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)
                     * (*self_0).random as f64)) as i32;
 }

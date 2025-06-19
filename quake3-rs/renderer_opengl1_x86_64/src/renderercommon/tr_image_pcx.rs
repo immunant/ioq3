@@ -255,8 +255,7 @@ pub unsafe extern "C" fn R_LoadPCX(
     if raw
         .b
         .offset_from(pcx as *mut crate::src::qcommon::q_shared::byte) as libc::c_long
-        >= end.offset_from(769 as i32 as *mut crate::src::qcommon::q_shared::byte)
-            as libc::c_long
+        >= end.offset_from(769 as i32 as *mut crate::src::qcommon::q_shared::byte) as libc::c_long
         || *end.offset(-(769 as i32) as isize) as i32 != 0xc as i32
     {
         crate::src::renderergl1::tr_main::ri
@@ -277,21 +276,16 @@ pub unsafe extern "C" fn R_LoadPCX(
     palette = end.offset(-(768 as i32 as isize));
     out = crate::src::renderergl1::tr_main::ri
         .Malloc
-        .expect("non-null function pointer")(
-        (4 as i32 as u32).wrapping_mul(size) as i32,
-    ) as *mut crate::src::qcommon::q_shared::byte;
+        .expect("non-null function pointer")((4 as i32 as u32).wrapping_mul(size) as i32)
+        as *mut crate::src::qcommon::q_shared::byte;
     pix = out;
     i = 0 as i32;
     while (i as u32) < size {
         let mut p: u8 = *pic8.offset(i as isize);
-        *pix.offset(0 as i32 as isize) =
-            *palette.offset((p as i32 * 3 as i32) as isize);
-        *pix.offset(1 as i32 as isize) =
-            *palette.offset((p as i32 * 3 as i32 + 1 as i32) as isize);
-        *pix.offset(2 as i32 as isize) =
-            *palette.offset((p as i32 * 3 as i32 + 2 as i32) as isize);
-        *pix.offset(3 as i32 as isize) =
-            255 as i32 as crate::src::qcommon::q_shared::byte;
+        *pix.offset(0 as i32 as isize) = *palette.offset((p as i32 * 3 as i32) as isize);
+        *pix.offset(1 as i32 as isize) = *palette.offset((p as i32 * 3 as i32 + 1 as i32) as isize);
+        *pix.offset(2 as i32 as isize) = *palette.offset((p as i32 * 3 as i32 + 2 as i32) as isize);
+        *pix.offset(3 as i32 as isize) = 255 as i32 as crate::src::qcommon::q_shared::byte;
         pix = pix.offset(4 as i32 as isize);
         i += 1
     }

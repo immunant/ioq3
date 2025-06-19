@@ -133,17 +133,15 @@ unsafe extern "C" fn CL_Netchan_Encode(mut msg: *mut crate::qcommon_h::msg_t) {
         if *string.offset(index as isize) as i32 > 127 as i32
             || *string.offset(index as isize) as i32 == '%' as i32
         {
-            key = (key as i32 ^ ('.' as i32) << (i & 1 as i32))
-                as crate::src::qcommon::q_shared::byte
+            key =
+                (key as i32 ^ ('.' as i32) << (i & 1 as i32)) as crate::src::qcommon::q_shared::byte
         } else {
-            key = (key as i32
-                ^ (*string.offset(index as isize) as i32) << (i & 1 as i32))
+            key = (key as i32 ^ (*string.offset(index as isize) as i32) << (i & 1 as i32))
                 as crate::src::qcommon::q_shared::byte
         }
         index += 1;
         // encode the data with this key
-        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as i32
-            ^ key as i32)
+        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as i32 ^ key as i32)
             as crate::src::qcommon::q_shared::byte;
         i += 1
     }
@@ -182,8 +180,8 @@ unsafe extern "C" fn CL_Netchan_Decode(mut msg: *mut crate::qcommon_h::msg_t) {
         .as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
     index = 0 as i32 as libc::c_long;
     // xor the client challenge with the netchan sequence number (need something that changes every message)
-    key = (crate::src::client::cl_main::clc.challenge as u32
-        ^ *((*msg).data as *mut u32)) as crate::src::qcommon::q_shared::byte;
+    key = (crate::src::client::cl_main::clc.challenge as u32 ^ *((*msg).data as *mut u32))
+        as crate::src::qcommon::q_shared::byte;
     i = ((*msg).readcount + 4 as i32) as libc::c_long;
     while i < (*msg).cursize as libc::c_long {
         // modify the key with the last sent and with this message acknowledged client command
@@ -197,14 +195,12 @@ unsafe extern "C" fn CL_Netchan_Decode(mut msg: *mut crate::qcommon_h::msg_t) {
                 as crate::src::qcommon::q_shared::byte
         } else {
             key = (key as i32
-                ^ (*string.offset(index as isize) as i32)
-                    << (i & 1 as i32 as libc::c_long))
+                ^ (*string.offset(index as isize) as i32) << (i & 1 as i32 as libc::c_long))
                 as crate::src::qcommon::q_shared::byte
         }
         index += 1;
         // decode the data with this key
-        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as i32
-            ^ key as i32)
+        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as i32 ^ key as i32)
             as crate::src::qcommon::q_shared::byte;
         i += 1
     }

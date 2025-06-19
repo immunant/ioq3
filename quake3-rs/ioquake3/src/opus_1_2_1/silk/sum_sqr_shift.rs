@@ -8,8 +8,7 @@ pub mod macros_h {
     ) -> crate::opus_types_h::opus_int32 {
         return if in32 != 0 {
             (32 as i32)
-                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32
-                    * 8 as i32
+                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
                     - (in32 as u32).leading_zeros() as i32)
         } else {
             32 as i32
@@ -404,8 +403,7 @@ pub unsafe extern "C" fn silk_sum_sqr_shift(
                 * *x.offset((i + 1 as i32) as isize) as crate::opus_types_h::opus_int32)
                 as crate::opus_types_h::opus_uint32,
         ) as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_uint32;
-        nrg =
-            (nrg as u32).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32;
+        nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32;
         i += 2 as i32
     }
     if i < len {
@@ -429,8 +427,7 @@ pub unsafe extern "C" fn silk_sum_sqr_shift(
                 * *x.offset((i + 1 as i32) as isize) as crate::opus_types_h::opus_int32)
                 as crate::opus_types_h::opus_uint32,
         ) as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_uint32;
-        nrg =
-            (nrg as u32).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32;
+        nrg = (nrg as u32).wrapping_add(nrg_tmp >> shft) as crate::opus_types_h::opus_int32;
         i += 2 as i32
     }
     if i < len {

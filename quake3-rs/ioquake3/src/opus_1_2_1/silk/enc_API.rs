@@ -8,8 +8,7 @@ pub mod entcode_h {
         mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
     ) -> i32 {
         return (*_this).nbits_total
-            - (::std::mem::size_of::<u32>() as libc::c_ulong as i32
-                * 8 as i32
+            - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
                 - (*_this).rng.leading_zeros() as i32);
     }
 }
@@ -142,9 +141,7 @@ unsafe extern "C" fn silk_QueryEncoder(
     state_Fxx = (*psEnc).state_Fxx.as_mut_ptr();
     (*encStatus).nChannelsAPI = (*psEnc).nChannelsAPI;
     (*encStatus).nChannelsInternal = (*psEnc).nChannelsInternal;
-    (*encStatus).API_sampleRate = (*state_Fxx.offset(0 as i32 as isize))
-        .sCmn
-        .API_fs_Hz;
+    (*encStatus).API_sampleRate = (*state_Fxx.offset(0 as i32 as isize)).sCmn.API_fs_Hz;
     (*encStatus).maxInternalSampleRate = (*state_Fxx.offset(0 as i32 as isize))
         .sCmn
         .maxInternal_fs_Hz;
@@ -154,21 +151,11 @@ unsafe extern "C" fn silk_QueryEncoder(
     (*encStatus).desiredInternalSampleRate = (*state_Fxx.offset(0 as i32 as isize))
         .sCmn
         .desiredInternal_fs_Hz;
-    (*encStatus).payloadSize_ms = (*state_Fxx.offset(0 as i32 as isize))
-        .sCmn
-        .PacketSize_ms;
-    (*encStatus).bitRate = (*state_Fxx.offset(0 as i32 as isize))
-        .sCmn
-        .TargetRate_bps;
-    (*encStatus).packetLossPercentage = (*state_Fxx.offset(0 as i32 as isize))
-        .sCmn
-        .PacketLoss_perc;
-    (*encStatus).complexity = (*state_Fxx.offset(0 as i32 as isize))
-        .sCmn
-        .Complexity;
-    (*encStatus).useInBandFEC = (*state_Fxx.offset(0 as i32 as isize))
-        .sCmn
-        .useInBandFEC;
+    (*encStatus).payloadSize_ms = (*state_Fxx.offset(0 as i32 as isize)).sCmn.PacketSize_ms;
+    (*encStatus).bitRate = (*state_Fxx.offset(0 as i32 as isize)).sCmn.TargetRate_bps;
+    (*encStatus).packetLossPercentage = (*state_Fxx.offset(0 as i32 as isize)).sCmn.PacketLoss_perc;
+    (*encStatus).complexity = (*state_Fxx.offset(0 as i32 as isize)).sCmn.Complexity;
+    (*encStatus).useInBandFEC = (*state_Fxx.offset(0 as i32 as isize)).sCmn.useInBandFEC;
     (*encStatus).useDTX = (*state_Fxx.offset(0 as i32 as isize)).sCmn.useDTX;
     (*encStatus).useCBR = (*state_Fxx.offset(0 as i32 as isize)).sCmn.useCBR;
     (*encStatus).internalSampleRate = (*state_Fxx.offset(0 as i32 as isize)).sCmn.fs_kHz
@@ -180,8 +167,7 @@ unsafe extern "C" fn silk_QueryEncoder(
         .allow_bandwidth_switch;
     (*encStatus).inWBmodeWithoutVariableLP =
         ((*state_Fxx.offset(0 as i32 as isize)).sCmn.fs_kHz == 16 as i32
-            && (*state_Fxx.offset(0 as i32 as isize)).sCmn.sLP.mode == 0 as i32)
-            as i32;
+            && (*state_Fxx.offset(0 as i32 as isize)).sCmn.sLP.mode == 0 as i32) as i32;
     return ret;
 }
 /* *************************/
@@ -233,14 +219,9 @@ pub unsafe extern "C" fn silk_Encode(
             .sCmn
             .first_frame_after_reset = 1 as i32
     }
-    (*psEnc).state_Fxx[1 as i32 as usize]
-        .sCmn
-        .nFramesEncoded = 0 as i32;
-    (*psEnc).state_Fxx[0 as i32 as usize]
-        .sCmn
-        .nFramesEncoded = (*psEnc).state_Fxx[1 as i32 as usize]
-        .sCmn
-        .nFramesEncoded;
+    (*psEnc).state_Fxx[1 as i32 as usize].sCmn.nFramesEncoded = 0 as i32;
+    (*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded =
+        (*psEnc).state_Fxx[1 as i32 as usize].sCmn.nFramesEncoded;
     /* Check values in encoder control structure */
     ret = crate::src::opus_1_2_1::silk::check_control_input::check_control_input(
         encControl as *mut crate::control_h::silk_EncControlStruct,
@@ -252,10 +233,7 @@ pub unsafe extern "C" fn silk_Encode(
     if (*encControl).nChannelsInternal > (*psEnc).nChannelsInternal {
         /* Mono -> Stereo transition: init state of second channel and stereo state */
         ret += crate::src::opus_1_2_1::silk::init_encoder::silk_init_encoder(
-            &mut *(*psEnc)
-                .state_Fxx
-                .as_mut_ptr()
-                .offset(1 as i32 as isize) as *mut _
+            &mut *(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize) as *mut _
                 as *mut crate::structs_FLP_h::silk_encoder_state_FLP,
             (*psEnc).state_Fxx[0 as i32 as usize].sCmn.arch,
         );
@@ -274,57 +252,40 @@ pub unsafe extern "C" fn silk_Encode(
         (*psEnc).sStereo.mid_side_amp_Q0[2 as i32 as usize] = 0 as i32;
         (*psEnc).sStereo.mid_side_amp_Q0[3 as i32 as usize] = 1 as i32;
         (*psEnc).sStereo.width_prev_Q14 = 0 as i32 as crate::opus_types_h::opus_int16;
-        (*psEnc).sStereo.smth_width_Q14 = ((1 as i32 as i64
-            * ((1 as i32 as i64) << 14 as i32))
-            as f64
-            + 0.5f64) as crate::opus_types_h::opus_int32
-            as crate::opus_types_h::opus_int16;
+        (*psEnc).sStereo.smth_width_Q14 =
+            ((1 as i32 as i64 * ((1 as i32 as i64) << 14 as i32)) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_int16;
         if (*psEnc).nChannelsAPI == 2 as i32 {
             crate::stdlib::memcpy(
-                &mut (*(*psEnc)
-                    .state_Fxx
-                    .as_mut_ptr()
-                    .offset(1 as i32 as isize))
-                .sCmn
-                .resampler_state
+                &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
+                    .sCmn
+                    .resampler_state
                     as *mut crate::resampler_structs_h::silk_resampler_state_struct
                     as *mut libc::c_void,
-                &mut (*(*psEnc)
-                    .state_Fxx
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize))
-                .sCmn
-                .resampler_state
+                &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
+                    .sCmn
+                    .resampler_state
                     as *mut crate::resampler_structs_h::silk_resampler_state_struct
                     as *const libc::c_void,
                 ::std::mem::size_of::<crate::resampler_structs_h::silk_resampler_state_struct>()
                     as libc::c_ulong,
             );
             crate::stdlib::memcpy(
-                &mut (*(*psEnc)
-                    .state_Fxx
-                    .as_mut_ptr()
-                    .offset(1 as i32 as isize))
-                .sCmn
-                .In_HP_State as *mut [crate::opus_types_h::opus_int32; 2]
+                &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
+                    .sCmn
+                    .In_HP_State as *mut [crate::opus_types_h::opus_int32; 2]
                     as *mut libc::c_void,
-                &mut (*(*psEnc)
-                    .state_Fxx
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize))
-                .sCmn
-                .In_HP_State as *mut [crate::opus_types_h::opus_int32; 2]
+                &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
+                    .sCmn
+                    .In_HP_State as *mut [crate::opus_types_h::opus_int32; 2]
                     as *const libc::c_void,
                 ::std::mem::size_of::<[crate::opus_types_h::opus_int32; 2]>() as libc::c_ulong,
             );
         }
     }
     transition = ((*encControl).payloadSize_ms
-        != (*psEnc).state_Fxx[0 as i32 as usize]
-            .sCmn
-            .PacketSize_ms
-        || (*psEnc).nChannelsInternal != (*encControl).nChannelsInternal)
-        as i32;
+        != (*psEnc).state_Fxx[0 as i32 as usize].sCmn.PacketSize_ms
+        || (*psEnc).nChannelsInternal != (*encControl).nChannelsInternal) as i32;
     (*psEnc).nChannelsAPI = (*encControl).nChannelsAPI;
     (*psEnc).nChannelsInternal = (*encControl).nChannelsInternal;
     nBlocksOf10ms = 100 as i32 * nSamplesIn / (*encControl).API_sampleRate;
@@ -369,9 +330,7 @@ pub unsafe extern "C" fn silk_Encode(
             return -(101 as i32);
         }
         /* Make sure no more than one packet can be produced */
-        if 1000 as i32 * nSamplesIn
-            > (*encControl).payloadSize_ms * (*encControl).API_sampleRate
-        {
+        if 1000 as i32 * nSamplesIn > (*encControl).payloadSize_ms * (*encControl).API_sampleRate {
             return -(101 as i32);
         }
     }
@@ -396,11 +355,7 @@ pub unsafe extern "C" fn silk_Encode(
         }
         if (*psEnc).state_Fxx[n as usize].sCmn.first_frame_after_reset != 0 || transition != 0 {
             i = 0 as i32;
-            while i
-                < (*psEnc).state_Fxx[0 as i32 as usize]
-                    .sCmn
-                    .nFramesPerPacket
-            {
+            while i < (*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesPerPacket {
                 (*psEnc).state_Fxx[n as usize].sCmn.LBRR_flags[i as usize] = 0 as i32;
                 i += 1
             }
@@ -409,9 +364,8 @@ pub unsafe extern "C" fn silk_Encode(
         n += 1
     }
     /* Input buffering/resampling and encoding */
-    nSamplesToBufferMax = 10 as i32
-        * nBlocksOf10ms
-        * (*psEnc).state_Fxx[0 as i32 as usize].sCmn.fs_kHz;
+    nSamplesToBufferMax =
+        10 as i32 * nBlocksOf10ms * (*psEnc).state_Fxx[0 as i32 as usize].sCmn.fs_kHz;
     nSamplesFromInputMax = nSamplesToBufferMax
         * (*psEnc).state_Fxx[0 as i32 as usize].sCmn.API_fs_Hz
         / ((*psEnc).state_Fxx[0 as i32 as usize].sCmn.fs_kHz * 1000 as i32);
@@ -422,27 +376,18 @@ pub unsafe extern "C" fn silk_Encode(
     );
     buf = fresh0.as_mut_ptr() as *mut crate::opus_types_h::opus_int16;
     loop {
-        nSamplesToBuffer = (*psEnc).state_Fxx[0 as i32 as usize]
-            .sCmn
-            .frame_length
-            - (*psEnc).state_Fxx[0 as i32 as usize]
-                .sCmn
-                .inputBufIx;
+        nSamplesToBuffer = (*psEnc).state_Fxx[0 as i32 as usize].sCmn.frame_length
+            - (*psEnc).state_Fxx[0 as i32 as usize].sCmn.inputBufIx;
         nSamplesToBuffer = if nSamplesToBuffer < nSamplesToBufferMax {
             nSamplesToBuffer
         } else {
             nSamplesToBufferMax
         };
-        nSamplesFromInput = nSamplesToBuffer
-            * (*psEnc).state_Fxx[0 as i32 as usize].sCmn.API_fs_Hz
+        nSamplesFromInput = nSamplesToBuffer * (*psEnc).state_Fxx[0 as i32 as usize].sCmn.API_fs_Hz
             / ((*psEnc).state_Fxx[0 as i32 as usize].sCmn.fs_kHz * 1000 as i32);
         /* Resample and write to buffer */
-        if (*encControl).nChannelsAPI == 2 as i32
-            && (*encControl).nChannelsInternal == 2 as i32
-        {
-            let mut id: i32 = (*psEnc).state_Fxx[0 as i32 as usize]
-                .sCmn
-                .nFramesEncoded;
+        if (*encControl).nChannelsAPI == 2 as i32 && (*encControl).nChannelsInternal == 2 as i32 {
+            let mut id: i32 = (*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded;
             n = 0 as i32;
             while n < nSamplesFromInput {
                 *buf.offset(n as isize) = *samplesIn.offset((2 as i32 * n) as isize);
@@ -451,20 +396,14 @@ pub unsafe extern "C" fn silk_Encode(
             /* Making sure to start both resamplers from the same state when switching from mono to stereo */
             if (*psEnc).nPrevChannelsInternal == 1 as i32 && id == 0 as i32 {
                 crate::stdlib::memcpy(
-                    &mut (*(*psEnc)
-                        .state_Fxx
-                        .as_mut_ptr()
-                        .offset(1 as i32 as isize))
-                    .sCmn
-                    .resampler_state
+                    &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
+                        .sCmn
+                        .resampler_state
                         as *mut crate::resampler_structs_h::silk_resampler_state_struct
                         as *mut libc::c_void,
-                    &mut (*(*psEnc)
-                        .state_Fxx
-                        .as_mut_ptr()
-                        .offset(0 as i32 as isize))
-                    .sCmn
-                    .resampler_state
+                    &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
+                        .sCmn
+                        .resampler_state
                         as *mut crate::resampler_structs_h::silk_resampler_state_struct
                         as *const libc::c_void,
                     ::std::mem::size_of::<crate::resampler_structs_h::silk_resampler_state_struct>()
@@ -472,87 +411,57 @@ pub unsafe extern "C" fn silk_Encode(
                 );
             }
             ret += crate::src::opus_1_2_1::silk::resampler::silk_resampler(
-                &mut (*(*psEnc)
-                    .state_Fxx
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize))
-                .sCmn
-                .resampler_state as *mut _
-                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
-                &mut *(*(*psEnc)
-                    .state_Fxx
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize))
-                .sCmn
-                .inputBuf
-                .as_mut_ptr()
-                .offset(
-                    ((*(*psEnc)
-                        .state_Fxx
-                        .as_mut_ptr()
-                        .offset(0 as i32 as isize))
+                &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                     .sCmn
-                    .inputBufIx
-                        + 2 as i32) as isize,
-                ),
+                    .resampler_state as *mut _
+                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
+                &mut *(*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
+                    .sCmn
+                    .inputBuf
+                    .as_mut_ptr()
+                    .offset(
+                        ((*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
+                            .sCmn
+                            .inputBufIx
+                            + 2 as i32) as isize,
+                    ),
                 buf as *const crate::opus_types_h::opus_int16,
                 nSamplesFromInput,
             );
-            (*psEnc).state_Fxx[0 as i32 as usize]
-                .sCmn
-                .inputBufIx += nSamplesToBuffer;
-            nSamplesToBuffer = (*psEnc).state_Fxx[1 as i32 as usize]
-                .sCmn
-                .frame_length
-                - (*psEnc).state_Fxx[1 as i32 as usize]
-                    .sCmn
-                    .inputBufIx;
+            (*psEnc).state_Fxx[0 as i32 as usize].sCmn.inputBufIx += nSamplesToBuffer;
+            nSamplesToBuffer = (*psEnc).state_Fxx[1 as i32 as usize].sCmn.frame_length
+                - (*psEnc).state_Fxx[1 as i32 as usize].sCmn.inputBufIx;
             nSamplesToBuffer = if nSamplesToBuffer
-                < 10 as i32
-                    * nBlocksOf10ms
-                    * (*psEnc).state_Fxx[1 as i32 as usize].sCmn.fs_kHz
+                < 10 as i32 * nBlocksOf10ms * (*psEnc).state_Fxx[1 as i32 as usize].sCmn.fs_kHz
             {
                 nSamplesToBuffer
             } else {
-                (10 as i32 * nBlocksOf10ms)
-                    * (*psEnc).state_Fxx[1 as i32 as usize].sCmn.fs_kHz
+                (10 as i32 * nBlocksOf10ms) * (*psEnc).state_Fxx[1 as i32 as usize].sCmn.fs_kHz
             };
             n = 0 as i32;
             while n < nSamplesFromInput {
-                *buf.offset(n as isize) =
-                    *samplesIn.offset((2 as i32 * n + 1 as i32) as isize);
+                *buf.offset(n as isize) = *samplesIn.offset((2 as i32 * n + 1 as i32) as isize);
                 n += 1
             }
             ret += crate::src::opus_1_2_1::silk::resampler::silk_resampler(
-                &mut (*(*psEnc)
-                    .state_Fxx
-                    .as_mut_ptr()
-                    .offset(1 as i32 as isize))
-                .sCmn
-                .resampler_state as *mut _
-                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
-                &mut *(*(*psEnc)
-                    .state_Fxx
-                    .as_mut_ptr()
-                    .offset(1 as i32 as isize))
-                .sCmn
-                .inputBuf
-                .as_mut_ptr()
-                .offset(
-                    ((*(*psEnc)
-                        .state_Fxx
-                        .as_mut_ptr()
-                        .offset(1 as i32 as isize))
+                &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
                     .sCmn
-                    .inputBufIx
-                        + 2 as i32) as isize,
-                ),
+                    .resampler_state as *mut _
+                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
+                &mut *(*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
+                    .sCmn
+                    .inputBuf
+                    .as_mut_ptr()
+                    .offset(
+                        ((*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
+                            .sCmn
+                            .inputBufIx
+                            + 2 as i32) as isize,
+                    ),
                 buf as *const crate::opus_types_h::opus_int16,
                 nSamplesFromInput,
             );
-            (*psEnc).state_Fxx[1 as i32 as usize]
-                .sCmn
-                .inputBufIx += nSamplesToBuffer
+            (*psEnc).state_Fxx[1 as i32 as usize].sCmn.inputBufIx += nSamplesToBuffer
         } else if (*encControl).nChannelsAPI == 2 as i32
             && (*encControl).nChannelsInternal == 1 as i32
         {
@@ -560,98 +469,71 @@ pub unsafe extern "C" fn silk_Encode(
             n = 0 as i32;
             while n < nSamplesFromInput {
                 sum = *samplesIn.offset((2 as i32 * n) as isize) as i32
-                    + *samplesIn.offset((2 as i32 * n + 1 as i32) as isize)
-                        as i32;
+                    + *samplesIn.offset((2 as i32 * n + 1 as i32) as isize) as i32;
                 *buf.offset(n as isize) = if 1 as i32 == 1 as i32 {
                     (sum >> 1 as i32) + (sum & 1 as i32)
                 } else {
-                    ((sum >> 1 as i32 - 1 as i32) + 1 as i32)
-                        >> 1 as i32
+                    ((sum >> 1 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
                 } as crate::opus_types_h::opus_int16;
                 n += 1
             }
             ret += crate::src::opus_1_2_1::silk::resampler::silk_resampler(
-                &mut (*(*psEnc)
-                    .state_Fxx
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize))
-                .sCmn
-                .resampler_state as *mut _
-                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
-                &mut *(*(*psEnc)
-                    .state_Fxx
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize))
-                .sCmn
-                .inputBuf
-                .as_mut_ptr()
-                .offset(
-                    ((*(*psEnc)
-                        .state_Fxx
-                        .as_mut_ptr()
-                        .offset(0 as i32 as isize))
+                &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                     .sCmn
-                    .inputBufIx
-                        + 2 as i32) as isize,
-                ),
+                    .resampler_state as *mut _
+                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
+                &mut *(*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
+                    .sCmn
+                    .inputBuf
+                    .as_mut_ptr()
+                    .offset(
+                        ((*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
+                            .sCmn
+                            .inputBufIx
+                            + 2 as i32) as isize,
+                    ),
                 buf as *const crate::opus_types_h::opus_int16,
                 nSamplesFromInput,
             );
             /* On the first mono frame, average the results for the two resampler states  */
             if (*psEnc).nPrevChannelsInternal == 2 as i32
-                && (*psEnc).state_Fxx[0 as i32 as usize]
-                    .sCmn
-                    .nFramesEncoded
-                    == 0 as i32
+                && (*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded == 0 as i32
             {
                 ret += crate::src::opus_1_2_1::silk::resampler::silk_resampler(
-                    &mut (*(*psEnc)
-                        .state_Fxx
-                        .as_mut_ptr()
-                        .offset(1 as i32 as isize))
-                    .sCmn
-                    .resampler_state as *mut _
-                        as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
-                    &mut *(*(*psEnc)
-                        .state_Fxx
-                        .as_mut_ptr()
-                        .offset(1 as i32 as isize))
-                    .sCmn
-                    .inputBuf
-                    .as_mut_ptr()
-                    .offset(
-                        ((*(*psEnc)
-                            .state_Fxx
-                            .as_mut_ptr()
-                            .offset(1 as i32 as isize))
+                    &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
                         .sCmn
-                        .inputBufIx
-                            + 2 as i32) as isize,
-                    ),
+                        .resampler_state as *mut _
+                        as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
+                    &mut *(*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
+                        .sCmn
+                        .inputBuf
+                        .as_mut_ptr()
+                        .offset(
+                            ((*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
+                                .sCmn
+                                .inputBufIx
+                                + 2 as i32) as isize,
+                        ),
                     buf as *const crate::opus_types_h::opus_int16,
                     nSamplesFromInput,
                 );
                 n = 0 as i32;
-                while n
-                    < (*psEnc).state_Fxx[0 as i32 as usize]
-                        .sCmn
-                        .frame_length
-                {
+                while n < (*psEnc).state_Fxx[0 as i32 as usize].sCmn.frame_length {
                     (*psEnc).state_Fxx[0 as i32 as usize].sCmn.inputBuf[((*psEnc).state_Fxx
                         [0 as i32 as usize]
                         .sCmn
                         .inputBufIx
                         + n
                         + 2 as i32)
-                        as usize] = ((*psEnc).state_Fxx[0 as i32 as usize].sCmn.inputBuf
-                        [((*psEnc).state_Fxx[0 as i32 as usize]
-                            .sCmn
-                            .inputBufIx
-                            + n
-                            + 2 as i32) as usize]
-                        as i32
-                        + (*psEnc).state_Fxx[1 as i32 as usize].sCmn.inputBuf[((*psEnc)
-                            .state_Fxx[1 as i32 as usize]
+                        as usize] = ((*psEnc).state_Fxx[0 as i32 as usize].sCmn.inputBuf[((*psEnc)
+                        .state_Fxx[0 as i32 as usize]
+                        .sCmn
+                        .inputBufIx
+                        + n
+                        + 2 as i32)
+                        as usize] as i32
+                        + (*psEnc).state_Fxx[1 as i32 as usize].sCmn.inputBuf[((*psEnc).state_Fxx
+                            [1 as i32 as usize]
                             .sCmn
                             .inputBufIx
                             + n
@@ -662,9 +544,7 @@ pub unsafe extern "C" fn silk_Encode(
                     n += 1
                 }
             }
-            (*psEnc).state_Fxx[0 as i32 as usize]
-                .sCmn
-                .inputBufIx += nSamplesToBuffer
+            (*psEnc).state_Fxx[0 as i32 as usize].sCmn.inputBufIx += nSamplesToBuffer
         } else {
             crate::stdlib::memcpy(
                 buf as *mut libc::c_void,
@@ -675,69 +555,44 @@ pub unsafe extern "C" fn silk_Encode(
                     ),
             );
             ret += crate::src::opus_1_2_1::silk::resampler::silk_resampler(
-                &mut (*(*psEnc)
-                    .state_Fxx
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize))
-                .sCmn
-                .resampler_state as *mut _
-                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
-                &mut *(*(*psEnc)
-                    .state_Fxx
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize))
-                .sCmn
-                .inputBuf
-                .as_mut_ptr()
-                .offset(
-                    ((*(*psEnc)
-                        .state_Fxx
-                        .as_mut_ptr()
-                        .offset(0 as i32 as isize))
+                &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                     .sCmn
-                    .inputBufIx
-                        + 2 as i32) as isize,
-                ),
+                    .resampler_state as *mut _
+                    as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
+                &mut *(*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
+                    .sCmn
+                    .inputBuf
+                    .as_mut_ptr()
+                    .offset(
+                        ((*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
+                            .sCmn
+                            .inputBufIx
+                            + 2 as i32) as isize,
+                    ),
                 buf as *const crate::opus_types_h::opus_int16,
                 nSamplesFromInput,
             );
-            (*psEnc).state_Fxx[0 as i32 as usize]
-                .sCmn
-                .inputBufIx += nSamplesToBuffer
+            (*psEnc).state_Fxx[0 as i32 as usize].sCmn.inputBufIx += nSamplesToBuffer
         }
         samplesIn = samplesIn.offset((nSamplesFromInput * (*encControl).nChannelsAPI) as isize);
         nSamplesIn -= nSamplesFromInput;
         /* Default */
         (*psEnc).allowBandwidthSwitch = 0 as i32;
         /* Silk encoder */
-        if !((*psEnc).state_Fxx[0 as i32 as usize]
-            .sCmn
-            .inputBufIx
-            >= (*psEnc).state_Fxx[0 as i32 as usize]
-                .sCmn
-                .frame_length)
+        if !((*psEnc).state_Fxx[0 as i32 as usize].sCmn.inputBufIx
+            >= (*psEnc).state_Fxx[0 as i32 as usize].sCmn.frame_length)
         {
             break;
         }
         /* Enough data in input buffer, so encode */
         /* Deal with LBRR data */
-        if (*psEnc).state_Fxx[0 as i32 as usize]
-            .sCmn
-            .nFramesEncoded
-            == 0 as i32
-            && prefillFlag == 0
+        if (*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded == 0 as i32 && prefillFlag == 0
         {
             /* Create space at start of payload for VAD and FEC flags */
-            let mut iCDF: [u8; 2] = [
-                0 as i32 as u8,
-                0 as i32 as u8,
-            ];
+            let mut iCDF: [u8; 2] = [0 as i32 as u8, 0 as i32 as u8];
             iCDF[0 as i32 as usize] = (256 as i32
                 - (256 as i32
-                    >> ((*psEnc).state_Fxx[0 as i32 as usize]
-                        .sCmn
-                        .nFramesPerPacket
-                        + 1 as i32)
+                    >> ((*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesPerPacket + 1 as i32)
                         * (*encControl).nChannelsInternal))
                 as u8;
             crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
@@ -770,8 +625,8 @@ pub unsafe extern "C" fn silk_Encode(
                         psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                         LBRR_symbol - 1 as i32,
                         crate::src::opus_1_2_1::silk::tables_other::silk_LBRR_flags_iCDF_ptr
-                            [((*psEnc).state_Fxx[n as usize].sCmn.nFramesPerPacket
-                                - 2 as i32) as usize],
+                            [((*psEnc).state_Fxx[n as usize].sCmn.nFramesPerPacket - 2 as i32)
+                                as usize],
                         8 as i32 as u32,
                     );
                 }
@@ -779,26 +634,18 @@ pub unsafe extern "C" fn silk_Encode(
             }
             /* Code LBRR indices and excitation signals */
             i = 0 as i32;
-            while i
-                < (*psEnc).state_Fxx[0 as i32 as usize]
-                    .sCmn
-                    .nFramesPerPacket
-            {
+            while i < (*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesPerPacket {
                 n = 0 as i32;
                 while n < (*encControl).nChannelsInternal {
                     if (*psEnc).state_Fxx[n as usize].sCmn.LBRR_flags[i as usize] != 0 {
                         let mut condCoding: i32 = 0;
-                        if (*encControl).nChannelsInternal == 2 as i32
-                            && n == 0 as i32
-                        {
+                        if (*encControl).nChannelsInternal == 2 as i32 && n == 0 as i32 {
                             crate::src::opus_1_2_1::silk::stereo_encode_pred::silk_stereo_encode_pred(psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                                                     (*psEnc).sStereo.predIx[i
                                                                                 as
                                                                                 usize].as_mut_ptr());
                             /* For LBRR data there's no need to code the mid-only flag if the side-channel LBRR flag is set */
-                            if (*psEnc).state_Fxx[1 as i32 as usize]
-                                .sCmn
-                                .LBRR_flags[i as usize]
+                            if (*psEnc).state_Fxx[1 as i32 as usize].sCmn.LBRR_flags[i as usize]
                                 == 0 as i32
                             {
                                 crate::src::opus_1_2_1::silk::stereo_encode_pred::silk_stereo_encode_mid_only(psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
@@ -864,37 +711,25 @@ pub unsafe extern "C" fn silk_Encode(
             nBits -= (*psEnc).nBitsUsedLBRR
         }
         /* Divide by number of uncoded frames left in packet */
-        nBits = nBits
-            / (*psEnc).state_Fxx[0 as i32 as usize]
-                .sCmn
-                .nFramesPerPacket;
+        nBits = nBits / (*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesPerPacket;
         /* Convert to bits/second */
         if (*encControl).payloadSize_ms == 10 as i32 {
             TargetRate_bps = nBits as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
-                * 100 as i32 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
+                * 100 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
         } else {
             TargetRate_bps = nBits as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
-                * 50 as i32 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
+                * 50 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
         }
         /* Subtract fraction of bits in excess of target in previous frames and packets */
         TargetRate_bps -= (*psEnc).nBitsExceeded * 1000 as i32 / 500 as i32;
-        if prefillFlag == 0
-            && (*psEnc).state_Fxx[0 as i32 as usize]
-                .sCmn
-                .nFramesEncoded
-                > 0 as i32
+        if prefillFlag == 0 && (*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded > 0 as i32
         {
             /* Compare actual vs target bits so far in this packet */
             let mut bitsBalance: crate::opus_types_h::opus_int32 = ec_tell(psRangeEnc)
                 - (*psEnc).nBitsUsedLBRR
-                - nBits
-                    * (*psEnc).state_Fxx[0 as i32 as usize]
-                        .sCmn
-                        .nFramesEncoded;
+                - nBits * (*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded;
             TargetRate_bps -= bitsBalance * 1000 as i32 / 500 as i32
         }
         /* Never exceed input bitrate */
@@ -917,33 +752,23 @@ pub unsafe extern "C" fn silk_Encode(
         if (*encControl).nChannelsInternal == 2 as i32 {
             crate::src::opus_1_2_1::silk::stereo_LR_to_MS::silk_stereo_LR_to_MS(
                 &mut (*psEnc).sStereo as *mut _ as *mut crate::structs_h::stereo_enc_state,
-                &mut *(*(*psEnc)
-                    .state_Fxx
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize))
-                .sCmn
-                .inputBuf
-                .as_mut_ptr()
-                .offset(2 as i32 as isize),
-                &mut *(*(*psEnc)
-                    .state_Fxx
-                    .as_mut_ptr()
-                    .offset(1 as i32 as isize))
-                .sCmn
-                .inputBuf
-                .as_mut_ptr()
-                .offset(2 as i32 as isize),
-                (*psEnc).sStereo.predIx[(*psEnc).state_Fxx[0 as i32 as usize]
+                &mut *(*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                     .sCmn
-                    .nFramesEncoded as usize]
+                    .inputBuf
+                    .as_mut_ptr()
+                    .offset(2 as i32 as isize),
+                &mut *(*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
+                    .sCmn
+                    .inputBuf
+                    .as_mut_ptr()
+                    .offset(2 as i32 as isize),
+                (*psEnc).sStereo.predIx
+                    [(*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded as usize]
                     .as_mut_ptr(),
                 &mut *(*psEnc).sStereo.mid_only_flags.as_mut_ptr().offset(
-                    (*(*psEnc)
-                        .state_Fxx
-                        .as_mut_ptr()
-                        .offset(0 as i32 as isize))
-                    .sCmn
-                    .nFramesEncoded as isize,
+                    (*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
+                        .sCmn
+                        .nFramesEncoded as isize,
                 ),
                 MStargetRates_bps.as_mut_ptr(),
                 TargetRate_bps,
@@ -952,23 +777,17 @@ pub unsafe extern "C" fn silk_Encode(
                     .speech_activity_Q8,
                 (*encControl).toMono,
                 (*psEnc).state_Fxx[0 as i32 as usize].sCmn.fs_kHz,
-                (*psEnc).state_Fxx[0 as i32 as usize]
-                    .sCmn
-                    .frame_length,
+                (*psEnc).state_Fxx[0 as i32 as usize].sCmn.frame_length,
             );
-            if (*psEnc).sStereo.mid_only_flags[(*psEnc).state_Fxx[0 as i32 as usize]
-                .sCmn
-                .nFramesEncoded as usize] as i32
+            if (*psEnc).sStereo.mid_only_flags
+                [(*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded as usize]
+                as i32
                 == 0 as i32
             {
                 /* Reset side channel encoder memory for first frame with side coding */
                 if (*psEnc).prev_decode_only_middle == 1 as i32 {
                     crate::stdlib::memset(
-                        &mut (*(*psEnc)
-                            .state_Fxx
-                            .as_mut_ptr()
-                            .offset(1 as i32 as isize))
-                        .sShape
+                        &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize)).sShape
                             as *mut crate::structs_FLP_h::silk_shape_state_FLP
                             as *mut libc::c_void,
                         0 as i32,
@@ -976,12 +795,9 @@ pub unsafe extern "C" fn silk_Encode(
                             as libc::c_ulong,
                     );
                     crate::stdlib::memset(
-                        &mut (*(*psEnc)
-                            .state_Fxx
-                            .as_mut_ptr()
-                            .offset(1 as i32 as isize))
-                        .sCmn
-                        .sNSQ as *mut crate::structs_h::silk_nsq_state
+                        &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
+                            .sCmn
+                            .sNSQ as *mut crate::structs_h::silk_nsq_state
                             as *mut libc::c_void,
                         0 as i32,
                         ::std::mem::size_of::<crate::structs_h::silk_nsq_state>() as libc::c_ulong,
@@ -996,13 +812,10 @@ pub unsafe extern "C" fn silk_Encode(
                             as libc::c_ulong,
                     );
                     crate::stdlib::memset(
-                        &mut (*(*psEnc)
-                            .state_Fxx
-                            .as_mut_ptr()
-                            .offset(1 as i32 as isize))
-                        .sCmn
-                        .sLP
-                        .In_LP_State
+                        &mut (*(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize))
+                            .sCmn
+                            .sLP
+                            .In_LP_State
                             as *mut [crate::opus_types_h::opus_int32; 2]
                             as *mut libc::c_void,
                         0 as i32,
@@ -1010,16 +823,9 @@ pub unsafe extern "C" fn silk_Encode(
                             as libc::c_ulong,
                     );
                     (*psEnc).state_Fxx[1 as i32 as usize].sCmn.prevLag = 100 as i32;
-                    (*psEnc).state_Fxx[1 as i32 as usize]
-                        .sCmn
-                        .sNSQ
-                        .lagPrev = 100 as i32;
-                    (*psEnc).state_Fxx[1 as i32 as usize]
-                        .sShape
-                        .LastGainIndex = 10 as i32 as i8;
-                    (*psEnc).state_Fxx[1 as i32 as usize]
-                        .sCmn
-                        .prevSignalType = 0 as i32 as i8;
+                    (*psEnc).state_Fxx[1 as i32 as usize].sCmn.sNSQ.lagPrev = 100 as i32;
+                    (*psEnc).state_Fxx[1 as i32 as usize].sShape.LastGainIndex = 10 as i32 as i8;
+                    (*psEnc).state_Fxx[1 as i32 as usize].sCmn.prevSignalType = 0 as i32 as i8;
                     (*psEnc).state_Fxx[1 as i32 as usize]
                         .sCmn
                         .sNSQ
@@ -1029,41 +835,30 @@ pub unsafe extern "C" fn silk_Encode(
                         .first_frame_after_reset = 1 as i32
                 }
                 crate::src::opus_1_2_1::silk::float::encode_frame_FLP::silk_encode_do_VAD_FLP(
-                    &mut *(*psEnc)
-                        .state_Fxx
-                        .as_mut_ptr()
-                        .offset(1 as i32 as isize) as *mut _
+                    &mut *(*psEnc).state_Fxx.as_mut_ptr().offset(1 as i32 as isize) as *mut _
                         as *mut crate::structs_FLP_h::silk_encoder_state_FLP,
                 );
             } else {
-                (*psEnc).state_Fxx[1 as i32 as usize].sCmn.VAD_flags[(*psEnc).state_Fxx
-                    [0 as i32 as usize]
-                    .sCmn
-                    .nFramesEncoded
-                    as usize] = 0 as i32 as i8
+                (*psEnc).state_Fxx[1 as i32 as usize].sCmn.VAD_flags
+                    [(*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded as usize] =
+                    0 as i32 as i8
             }
             if prefillFlag == 0 {
                 crate::src::opus_1_2_1::silk::stereo_encode_pred::silk_stereo_encode_pred(
                     psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                    (*psEnc).sStereo.predIx[(*psEnc).state_Fxx[0 as i32 as usize]
-                        .sCmn
-                        .nFramesEncoded as usize]
+                    (*psEnc).sStereo.predIx
+                        [(*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded as usize]
                         .as_mut_ptr(),
                 );
-                if (*psEnc).state_Fxx[1 as i32 as usize].sCmn.VAD_flags[(*psEnc).state_Fxx
-                    [0 as i32 as usize]
-                    .sCmn
-                    .nFramesEncoded
-                    as usize] as i32
+                if (*psEnc).state_Fxx[1 as i32 as usize].sCmn.VAD_flags
+                    [(*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded as usize]
+                    as i32
                     == 0 as i32
                 {
                     crate::src::opus_1_2_1::silk::stereo_encode_pred::silk_stereo_encode_mid_only(
                         psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                        (*psEnc).sStereo.mid_only_flags[(*psEnc).state_Fxx
-                            [0 as i32 as usize]
-                            .sCmn
-                            .nFramesEncoded
-                            as usize],
+                        (*psEnc).sStereo.mid_only_flags
+                            [(*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded as usize],
                     );
                 }
             }
@@ -1075,39 +870,29 @@ pub unsafe extern "C" fn silk_Encode(
                     .inputBuf
                     .as_mut_ptr() as *mut libc::c_void,
                 (*psEnc).sStereo.sMid.as_mut_ptr() as *const libc::c_void,
-                (2 as i32 as libc::c_ulong)
-                    .wrapping_mul(
-                        ::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong
-                    ),
+                (2 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
+                    crate::opus_types_h::opus_int16,
+                >() as libc::c_ulong),
             );
             crate::stdlib::memcpy(
                 (*psEnc).sStereo.sMid.as_mut_ptr() as *mut libc::c_void,
-                &mut *(*(*psEnc)
-                    .state_Fxx
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize))
-                .sCmn
-                .inputBuf
-                .as_mut_ptr()
-                .offset(
-                    (*(*psEnc)
-                        .state_Fxx
-                        .as_mut_ptr()
-                        .offset(0 as i32 as isize))
+                &mut *(*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
                     .sCmn
-                    .frame_length as isize,
-                ) as *mut crate::opus_types_h::opus_int16 as *const libc::c_void,
-                (2 as i32 as libc::c_ulong)
-                    .wrapping_mul(
-                        ::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong
-                    ),
+                    .inputBuf
+                    .as_mut_ptr()
+                    .offset(
+                        (*(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize))
+                            .sCmn
+                            .frame_length as isize,
+                    ) as *mut crate::opus_types_h::opus_int16
+                    as *const libc::c_void,
+                (2 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
+                    crate::opus_types_h::opus_int16,
+                >() as libc::c_ulong),
             );
         }
         crate::src::opus_1_2_1::silk::float::encode_frame_FLP::silk_encode_do_VAD_FLP(
-            &mut *(*psEnc)
-                .state_Fxx
-                .as_mut_ptr()
-                .offset(0 as i32 as isize) as *mut _
+            &mut *(*psEnc).state_Fxx.as_mut_ptr().offset(0 as i32 as isize) as *mut _
                 as *mut crate::structs_FLP_h::silk_encoder_state_FLP,
         );
         /* Encode */
@@ -1126,15 +911,12 @@ pub unsafe extern "C" fn silk_Encode(
                     maxBits = maxBits * 3 as i32 / 4 as i32
                 }
             }
-            useCBR = ((*encControl).useCBR != 0 && curr_block == tot_blocks - 1 as i32)
-                as i32;
+            useCBR = ((*encControl).useCBR != 0 && curr_block == tot_blocks - 1 as i32) as i32;
             if (*encControl).nChannelsInternal == 1 as i32 {
                 channelRate_bps = TargetRate_bps
             } else {
                 channelRate_bps = MStargetRates_bps[n as usize];
-                if n == 0 as i32
-                    && MStargetRates_bps[1 as i32 as usize] > 0 as i32
-                {
+                if n == 0 as i32 && MStargetRates_bps[1 as i32 as usize] > 0 as i32 {
                     useCBR = 0 as i32;
                     /* Give mid up to 1/2 of the max bits for that frame */
                     maxBits -= (*encControl).maxBits / (tot_blocks * 2 as i32)
@@ -1148,12 +930,7 @@ pub unsafe extern "C" fn silk_Encode(
                     channelRate_bps,
                 );
                 /* Use independent coding if no previous frame available */
-                if (*psEnc).state_Fxx[0 as i32 as usize]
-                    .sCmn
-                    .nFramesEncoded
-                    - n
-                    <= 0 as i32
-                {
+                if (*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded - n <= 0 as i32 {
                     condCoding_0 = 0 as i32
                 } else if n > 0 as i32 && (*psEnc).prev_decode_only_middle != 0 {
                     /* If we skipped a side frame in this packet, we don't
@@ -1180,19 +957,13 @@ pub unsafe extern "C" fn silk_Encode(
             (*psEnc).state_Fxx[n as usize].sCmn.nFramesEncoded += 1;
             n += 1
         }
-        (*psEnc).prev_decode_only_middle =
-            (*psEnc).sStereo.mid_only_flags[((*psEnc).state_Fxx[0 as i32 as usize]
-                .sCmn
-                .nFramesEncoded
-                - 1 as i32) as usize] as i32;
+        (*psEnc).prev_decode_only_middle = (*psEnc).sStereo.mid_only_flags
+            [((*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded - 1 as i32) as usize]
+            as i32;
         /* Insert VAD and FEC flags at beginning of bitstream */
         if *nBytesOut > 0 as i32
-            && (*psEnc).state_Fxx[0 as i32 as usize]
-                .sCmn
-                .nFramesEncoded
-                == (*psEnc).state_Fxx[0 as i32 as usize]
-                    .sCmn
-                    .nFramesPerPacket
+            && (*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesEncoded
+                == (*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesPerPacket
         {
             flags = 0 as i32;
             n = 0 as i32;
@@ -1201,8 +972,7 @@ pub unsafe extern "C" fn silk_Encode(
                 while i < (*psEnc).state_Fxx[n as usize].sCmn.nFramesPerPacket {
                     flags = ((flags as crate::opus_types_h::opus_uint32) << 1 as i32)
                         as crate::opus_types_h::opus_int32;
-                    flags |=
-                        (*psEnc).state_Fxx[n as usize].sCmn.VAD_flags[i as usize] as i32;
+                    flags |= (*psEnc).state_Fxx[n as usize].sCmn.VAD_flags[i as usize] as i32;
                     i += 1
                 }
                 flags = ((flags as crate::opus_types_h::opus_uint32) << 1 as i32)
@@ -1214,10 +984,7 @@ pub unsafe extern "C" fn silk_Encode(
                 crate::src::opus_1_2_1::celt::entenc::ec_enc_patch_initial_bits(
                     psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                     flags as u32,
-                    (((*psEnc).state_Fxx[0 as i32 as usize]
-                        .sCmn
-                        .nFramesPerPacket
-                        + 1 as i32)
+                    (((*psEnc).state_Fxx[0 as i32 as usize].sCmn.nFramesPerPacket + 1 as i32)
                         * (*encControl).nChannelsInternal) as u32,
                 );
             }
@@ -1248,18 +1015,12 @@ pub unsafe extern "C" fn silk_Encode(
             };
             /* Update flag indicating if bandwidth switching is allowed */
             speech_act_thr_for_switch_Q8 =
-                (((0.05f32
-                    * ((1 as i32 as i64) << 8 as i32) as f32)
-                    as f64
-                    + 0.5f64) as crate::opus_types_h::opus_int32
-                    as i64
-                    + ((((1 as i32 as f32 - 0.05f32)
-                        / 5000 as i32 as f32
-                        * ((1 as i32 as i64)
-                            << 16 as i32 + 8 as i32)
-                            as f32) as f64
-                        + 0.5f64) as crate::opus_types_h::opus_int32
-                        as i64
+                (((0.05f32 * ((1 as i32 as i64) << 8 as i32) as f32) as f64 + 0.5f64)
+                    as crate::opus_types_h::opus_int32 as i64
+                    + ((((1 as i32 as f32 - 0.05f32) / 5000 as i32 as f32
+                        * ((1 as i32 as i64) << 16 as i32 + 8 as i32) as f32)
+                        as f64
+                        + 0.5f64) as crate::opus_types_h::opus_int32 as i64
                         * (*psEnc).timeSinceSwitchAllowed_ms as crate::opus_types_h::opus_int16
                             as i64
                         >> 16 as i32)) as crate::opus_types_h::opus_int32;
@@ -1284,8 +1045,7 @@ pub unsafe extern "C" fn silk_Encode(
     (*encControl).allowBandwidthSwitch = (*psEnc).allowBandwidthSwitch;
     (*encControl).inWBmodeWithoutVariableLP =
         ((*psEnc).state_Fxx[0 as i32 as usize].sCmn.fs_kHz == 16 as i32
-            && (*psEnc).state_Fxx[0 as i32 as usize].sCmn.sLP.mode == 0 as i32)
-            as i32;
+            && (*psEnc).state_Fxx[0 as i32 as usize].sCmn.sLP.mode == 0 as i32) as i32;
     (*encControl).internalSampleRate = (*psEnc).state_Fxx[0 as i32 as usize].sCmn.fs_kHz
         as crate::opus_types_h::opus_int16
         as crate::opus_types_h::opus_int32

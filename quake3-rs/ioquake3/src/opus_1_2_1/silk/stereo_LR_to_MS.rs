@@ -8,8 +8,7 @@ pub mod macros_h {
     ) -> crate::opus_types_h::opus_int32 {
         return if in32 != 0 {
             (32 as i32)
-                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32
-                    * 8 as i32
+                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
                     - (in32 as u32).leading_zeros() as i32)
         } else {
             32 as i32
@@ -69,32 +68,27 @@ pub mod Inlines_h {
         /* Inverse of b32, with 14 bits of precision */
         b32_inv = (0x7fffffff as i32 >> 2 as i32) / (b32_nrm >> 16 as i32); /* Q: 29 + 16 - b_headrm        */
         /* First approximation */
-        result = (a32_nrm as i64
-            * b32_inv as crate::opus_types_h::opus_int16 as i64
-            >> 16 as i32) as crate::opus_types_h::opus_int32; /* Q: 29 + a_headrm - b_headrm  */
+        result = (a32_nrm as i64 * b32_inv as crate::opus_types_h::opus_int16 as i64 >> 16 as i32)
+            as crate::opus_types_h::opus_int32; /* Q: 29 + a_headrm - b_headrm  */
         /* Compute residual by subtracting product of denominator and first approximation */
         /* It's OK to overflow because the final value of a32_nrm should always be small */
         a32_nrm = (a32_nrm as crate::opus_types_h::opus_uint32).wrapping_sub(
-            (((b32_nrm as i64 * result as i64 >> 32 as i32)
-                as crate::opus_types_h::opus_int32
+            (((b32_nrm as i64 * result as i64 >> 32 as i32) as crate::opus_types_h::opus_int32
                 as crate::opus_types_h::opus_uint32)
                 << 3 as i32) as crate::opus_types_h::opus_int32
                 as crate::opus_types_h::opus_uint32,
         ) as crate::opus_types_h::opus_int32; /* Q: a_headrm   */
         /* Refinement */
         result = (result as i64
-            + (a32_nrm as i64
-                * b32_inv as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32; /* Q: 29 + a_headrm - b_headrm  */
+            + (a32_nrm as i64 * b32_inv as crate::opus_types_h::opus_int16 as i64 >> 16 as i32))
+            as crate::opus_types_h::opus_int32; /* Q: 29 + a_headrm - b_headrm  */
         /* Convert to Qres domain */
         lshift = 29 as i32 + a_headrm - b_headrm - Qres;
         if lshift < 0 as i32 {
             return (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift
                 > 0x7fffffff as i32 >> -lshift
             {
-                (if result
-                    > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift
-                {
+                (if result > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift {
                     (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> -lshift
                 } else {
                     (if result < 0x7fffffff as i32 >> -lshift {
@@ -107,9 +101,7 @@ pub mod Inlines_h {
                 (if result > 0x7fffffff as i32 >> -lshift {
                     (0x7fffffff as i32) >> -lshift
                 } else {
-                    (if result
-                        < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift
-                    {
+                    (if result < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> -lshift {
                         (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> -lshift
                     } else {
                         result
@@ -325,31 +317,26 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
         sum = if 2 as i32 == 1 as i32 {
             (*mid.offset(n as isize) as i32
                 + *mid.offset((n + 2 as i32) as isize) as crate::opus_types_h::opus_int32
-                + ((*mid.offset((n + 1 as i32) as isize)
-                    as crate::opus_types_h::opus_uint32)
+                + ((*mid.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_uint32)
                     << 1 as i32) as crate::opus_types_h::opus_int32
                 >> 1 as i32)
                 + (*mid.offset(n as isize) as i32
-                    + *mid.offset((n + 2 as i32) as isize)
-                        as crate::opus_types_h::opus_int32
-                    + ((*mid.offset((n + 1 as i32) as isize)
-                        as crate::opus_types_h::opus_uint32)
-                        << 1 as i32)
-                        as crate::opus_types_h::opus_int32
+                    + *mid.offset((n + 2 as i32) as isize) as crate::opus_types_h::opus_int32
+                    + ((*mid.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_uint32)
+                        << 1 as i32) as crate::opus_types_h::opus_int32
                     & 1 as i32)
         } else {
             ((*mid.offset(n as isize) as i32
                 + *mid.offset((n + 2 as i32) as isize) as crate::opus_types_h::opus_int32
-                + ((*mid.offset((n + 1 as i32) as isize)
-                    as crate::opus_types_h::opus_uint32)
+                + ((*mid.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_uint32)
                     << 1 as i32) as crate::opus_types_h::opus_int32
                 >> 2 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
         };
         *LP_mid.offset(n as isize) = sum as crate::opus_types_h::opus_int16;
-        *HP_mid.offset(n as isize) = (*mid.offset((n + 1 as i32) as isize) as i32
-            - sum) as crate::opus_types_h::opus_int16;
+        *HP_mid.offset(n as isize) =
+            (*mid.offset((n + 1 as i32) as isize) as i32 - sum) as crate::opus_types_h::opus_int16;
         n += 1
     }
     /* LP and HP filter side signal */
@@ -370,42 +357,36 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
         sum = if 2 as i32 == 1 as i32 {
             (*side.offset(n as isize) as i32
                 + *side.offset((n + 2 as i32) as isize) as crate::opus_types_h::opus_int32
-                + ((*side.offset((n + 1 as i32) as isize)
-                    as crate::opus_types_h::opus_uint32)
+                + ((*side.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_uint32)
                     << 1 as i32) as crate::opus_types_h::opus_int32
                 >> 1 as i32)
                 + (*side.offset(n as isize) as i32
-                    + *side.offset((n + 2 as i32) as isize)
-                        as crate::opus_types_h::opus_int32
-                    + ((*side.offset((n + 1 as i32) as isize)
-                        as crate::opus_types_h::opus_uint32)
-                        << 1 as i32)
-                        as crate::opus_types_h::opus_int32
+                    + *side.offset((n + 2 as i32) as isize) as crate::opus_types_h::opus_int32
+                    + ((*side.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_uint32)
+                        << 1 as i32) as crate::opus_types_h::opus_int32
                     & 1 as i32)
         } else {
             ((*side.offset(n as isize) as i32
                 + *side.offset((n + 2 as i32) as isize) as crate::opus_types_h::opus_int32
-                + ((*side.offset((n + 1 as i32) as isize)
-                    as crate::opus_types_h::opus_uint32)
+                + ((*side.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_uint32)
                     << 1 as i32) as crate::opus_types_h::opus_int32
                 >> 2 as i32 - 1 as i32)
                 + 1 as i32)
                 >> 1 as i32
         };
         *LP_side.offset(n as isize) = sum as crate::opus_types_h::opus_int16;
-        *HP_side.offset(n as isize) = (*side.offset((n + 1 as i32) as isize) as i32
-            - sum) as crate::opus_types_h::opus_int16;
+        *HP_side.offset(n as isize) =
+            (*side.offset((n + 1 as i32) as isize) as i32 - sum) as crate::opus_types_h::opus_int16;
         n += 1
     }
     /* Find energies and predictors */
     is10msFrame = (frame_length == 10 as i32 * fs_kHz) as i32;
     smooth_coef_Q16 = if is10msFrame != 0 {
-        (0.01f64 / 2 as i32 as f64
-            * ((1 as i32 as i64) << 16 as i32) as f64
-            + 0.5f64) as crate::opus_types_h::opus_int32
+        (0.01f64 / 2 as i32 as f64 * ((1 as i32 as i64) << 16 as i32) as f64 + 0.5f64)
+            as crate::opus_types_h::opus_int32
     } else {
-        (0.01f64 * ((1 as i32 as i64) << 16 as i32) as f64
-            + 0.5f64) as crate::opus_types_h::opus_int32
+        (0.01f64 * ((1 as i32 as i64) << 16 as i32) as f64 + 0.5f64)
+            as crate::opus_types_h::opus_int32
     };
     smooth_coef_Q16 = ((prev_speech_act_Q8 as crate::opus_types_h::opus_int16
         as crate::opus_types_h::opus_int32
@@ -440,20 +421,15 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
     /* Ratio of the norms of residual and mid signals */
     frac_Q16 = HP_ratio_Q14
         + LP_ratio_Q14 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-            * 3 as i32 as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32;
+            * 3 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
     frac_Q16 = if frac_Q16
-        < ((1 as i32 as i64
-            * ((1 as i32 as i64) << 16 as i32))
-            as f64
-            + 0.5f64) as crate::opus_types_h::opus_int32
+        < ((1 as i32 as i64 * ((1 as i32 as i64) << 16 as i32)) as f64 + 0.5f64)
+            as crate::opus_types_h::opus_int32
     {
         frac_Q16
     } else {
-        ((1 as i32 as i64
-            * ((1 as i32 as i64) << 16 as i32))
-            as f64
-            + 0.5f64) as crate::opus_types_h::opus_int32
+        ((1 as i32 as i64 * ((1 as i32 as i64) << 16 as i32)) as f64 + 0.5f64)
+            as crate::opus_types_h::opus_int32
     };
     /* Determine bitrate distribution between mid and side, and possibly reduce stereo width */
     total_rate_bps -= if is10msFrame != 0 {
@@ -466,16 +442,13 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
     }
     min_mid_rate_bps = 2000 as i32
         + fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-            * 900 as i32 as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32;
+            * 900 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32;
     /* Default bitrate distribution: 8 parts for Mid and (5+3*frac) parts for Side. so: mid_rate = ( 8 / ( 13 + 3 * frac ) ) * total_ rate */
     frac_3_Q16 = 3 as i32 * frac_Q16;
     *mid_side_rates_bps.offset(0 as i32 as isize) = silk_DIV32_varQ(
         total_rate_bps,
-        (((8 as i32 + 5 as i32) as i64
-            * ((1 as i32 as i64) << 16 as i32))
-            as f64
-            + 0.5f64) as crate::opus_types_h::opus_int32
+        (((8 as i32 + 5 as i32) as i64 * ((1 as i32 as i64) << 16 as i32)) as f64 + 0.5f64)
+            as crate::opus_types_h::opus_int32
             + frac_3_Q16,
         16 as i32 + 3 as i32,
     );
@@ -486,50 +459,37 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
             total_rate_bps - *mid_side_rates_bps.offset(0 as i32 as isize);
         /* width = 4 * ( 2 * side_rate - min_rate ) / ( ( 1 + 3 * frac ) * min_rate ) */
         width_Q14 = silk_DIV32_varQ(
-            ((*mid_side_rates_bps.offset(1 as i32 as isize)
-                as crate::opus_types_h::opus_uint32)
+            ((*mid_side_rates_bps.offset(1 as i32 as isize) as crate::opus_types_h::opus_uint32)
                 << 1 as i32) as crate::opus_types_h::opus_int32
                 - min_mid_rate_bps,
-            ((((1 as i32 as i64
-                * ((1 as i32 as i64) << 16 as i32))
-                as f64
-                + 0.5f64) as crate::opus_types_h::opus_int32
+            ((((1 as i32 as i64 * ((1 as i32 as i64) << 16 as i32)) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32
                 + frac_3_Q16) as i64
                 * min_mid_rate_bps as crate::opus_types_h::opus_int16 as i64
                 >> 16 as i32) as crate::opus_types_h::opus_int32,
             14 as i32 + 2 as i32,
         );
         width_Q14 = if 0 as i32
-            > ((1 as i32 as i64
-                * ((1 as i32 as i64) << 14 as i32))
-                as f64
-                + 0.5f64) as crate::opus_types_h::opus_int32
+            > ((1 as i32 as i64 * ((1 as i32 as i64) << 14 as i32)) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32
         {
             if width_Q14 > 0 as i32 {
                 0 as i32
             } else if width_Q14
-                < ((1 as i32 as i64
-                    * ((1 as i32 as i64) << 14 as i32))
-                    as f64
-                    + 0.5f64) as crate::opus_types_h::opus_int32
+                < ((1 as i32 as i64 * ((1 as i32 as i64) << 14 as i32)) as f64 + 0.5f64)
+                    as crate::opus_types_h::opus_int32
             {
-                ((1 as i32 as i64
-                    * ((1 as i32 as i64) << 14 as i32))
-                    as f64
-                    + 0.5f64) as crate::opus_types_h::opus_int32
+                ((1 as i32 as i64 * ((1 as i32 as i64) << 14 as i32)) as f64 + 0.5f64)
+                    as crate::opus_types_h::opus_int32
             } else {
                 width_Q14
             }
         } else if width_Q14
-            > ((1 as i32 as i64
-                * ((1 as i32 as i64) << 14 as i32))
-                as f64
-                + 0.5f64) as crate::opus_types_h::opus_int32
+            > ((1 as i32 as i64 * ((1 as i32 as i64) << 14 as i32)) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32
         {
-            ((1 as i32 as i64
-                * ((1 as i32 as i64) << 14 as i32))
-                as f64
-                + 0.5f64) as crate::opus_types_h::opus_int32
+            ((1 as i32 as i64 * ((1 as i32 as i64) << 14 as i32)) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32
         } else if width_Q14 < 0 as i32 {
             0 as i32
         } else {
@@ -538,10 +498,8 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
     } else {
         *mid_side_rates_bps.offset(1 as i32 as isize) =
             total_rate_bps - *mid_side_rates_bps.offset(0 as i32 as isize);
-        width_Q14 = ((1 as i32 as i64
-            * ((1 as i32 as i64) << 14 as i32))
-            as f64
-            + 0.5f64) as crate::opus_types_h::opus_int32
+        width_Q14 = ((1 as i32 as i64 * ((1 as i32 as i64) << 14 as i32)) as f64 + 0.5f64)
+            as crate::opus_types_h::opus_int32
     }
     /* Smoother */
     (*state).smth_width_Q14 = ((*state).smth_width_Q14 as i64
@@ -562,22 +520,18 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
         );
     } else if (*state).width_prev_Q14 as i32 == 0 as i32
         && (8 as i32 * total_rate_bps < 13 as i32 * min_mid_rate_bps
-            || ((frac_Q16 as i64 * (*state).smth_width_Q14 as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32)
-                < (0.05f64
-                    * ((1 as i32 as i64) << 14 as i32)
-                        as f64
-                    + 0.5f64) as crate::opus_types_h::opus_int32)
+            || ((frac_Q16 as i64 * (*state).smth_width_Q14 as i64 >> 16 as i32)
+                as crate::opus_types_h::opus_int32)
+                < (0.05f64 * ((1 as i32 as i64) << 14 as i32) as f64 + 0.5f64)
+                    as crate::opus_types_h::opus_int32)
     {
         /* Code as panned-mono; previous frame already had zero width */
         /* Scale down and quantize predictors */
-        pred_Q13[0 as i32 as usize] = (*state).smth_width_Q14
-            as crate::opus_types_h::opus_int32
+        pred_Q13[0 as i32 as usize] = (*state).smth_width_Q14 as crate::opus_types_h::opus_int32
             * pred_Q13[0 as i32 as usize] as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
             >> 14 as i32;
-        pred_Q13[1 as i32 as usize] = (*state).smth_width_Q14
-            as crate::opus_types_h::opus_int32
+        pred_Q13[1 as i32 as usize] = (*state).smth_width_Q14 as crate::opus_types_h::opus_int32
             * pred_Q13[1 as i32 as usize] as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
             >> 14 as i32;
@@ -594,22 +548,18 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
         *mid_only_flag = 1 as i32 as i8
     } else if (*state).width_prev_Q14 as i32 != 0 as i32
         && (8 as i32 * total_rate_bps < 11 as i32 * min_mid_rate_bps
-            || ((frac_Q16 as i64 * (*state).smth_width_Q14 as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32)
-                < (0.02f64
-                    * ((1 as i32 as i64) << 14 as i32)
-                        as f64
-                    + 0.5f64) as crate::opus_types_h::opus_int32)
+            || ((frac_Q16 as i64 * (*state).smth_width_Q14 as i64 >> 16 as i32)
+                as crate::opus_types_h::opus_int32)
+                < (0.02f64 * ((1 as i32 as i64) << 14 as i32) as f64 + 0.5f64)
+                    as crate::opus_types_h::opus_int32)
     {
         /* Transition to zero-width stereo */
         /* Scale down and quantize predictors */
-        pred_Q13[0 as i32 as usize] = (*state).smth_width_Q14
-            as crate::opus_types_h::opus_int32
+        pred_Q13[0 as i32 as usize] = (*state).smth_width_Q14 as crate::opus_types_h::opus_int32
             * pred_Q13[0 as i32 as usize] as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
             >> 14 as i32;
-        pred_Q13[1 as i32 as usize] = (*state).smth_width_Q14
-            as crate::opus_types_h::opus_int32
+        pred_Q13[1 as i32 as usize] = (*state).smth_width_Q14 as crate::opus_types_h::opus_int32
             * pred_Q13[1 as i32 as usize] as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
             >> 14 as i32;
@@ -622,28 +572,23 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
         pred_Q13[0 as i32 as usize] = 0 as i32;
         pred_Q13[1 as i32 as usize] = 0 as i32
     } else if (*state).smth_width_Q14 as i32
-        > (0.95f64
-            * ((1 as i32 as i64) << 14 as i32) as f64
-            + 0.5f64) as crate::opus_types_h::opus_int32
+        > (0.95f64 * ((1 as i32 as i64) << 14 as i32) as f64 + 0.5f64)
+            as crate::opus_types_h::opus_int32
     {
         /* Full-width stereo coding */
         crate::src::opus_1_2_1::silk::stereo_quant_pred::silk_stereo_quant_pred(
             pred_Q13.as_mut_ptr(),
             ix,
         );
-        width_Q14 = ((1 as i32 as i64
-            * ((1 as i32 as i64) << 14 as i32))
-            as f64
-            + 0.5f64) as crate::opus_types_h::opus_int32
+        width_Q14 = ((1 as i32 as i64 * ((1 as i32 as i64) << 14 as i32)) as f64 + 0.5f64)
+            as crate::opus_types_h::opus_int32
     } else {
         /* Reduced-width stereo coding; scale down and quantize predictors */
-        pred_Q13[0 as i32 as usize] = (*state).smth_width_Q14
-            as crate::opus_types_h::opus_int32
+        pred_Q13[0 as i32 as usize] = (*state).smth_width_Q14 as crate::opus_types_h::opus_int32
             * pred_Q13[0 as i32 as usize] as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
             >> 14 as i32;
-        pred_Q13[1 as i32 as usize] = (*state).smth_width_Q14
-            as crate::opus_types_h::opus_int32
+        pred_Q13[1 as i32 as usize] = (*state).smth_width_Q14 as crate::opus_types_h::opus_int32
             * pred_Q13[1 as i32 as usize] as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
             >> 14 as i32;
@@ -667,8 +612,7 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
     } else {
         (*state).silent_side_len = 0 as i32 as crate::opus_types_h::opus_int16
     }
-    if *mid_only_flag as i32 == 0 as i32
-        && *mid_side_rates_bps.offset(1 as i32 as isize) < 1 as i32
+    if *mid_only_flag as i32 == 0 as i32 && *mid_side_rates_bps.offset(1 as i32 as isize) < 1 as i32
     {
         *mid_side_rates_bps.offset(1 as i32 as isize) = 1 as i32;
         *mid_side_rates_bps.offset(0 as i32 as isize) = silk_max_int(
@@ -683,20 +627,17 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
         as crate::opus_types_h::opus_int32; /* Q8  */
     denom_Q16 = ((1 as i32) << 16 as i32) / (8 as i32 * fs_kHz); /* Q11 */
     delta0_Q13 = -if 16 as i32 == 1 as i32 {
-        ((pred_Q13[0 as i32 as usize]
-            - (*state).pred_prev_Q13[0 as i32 as usize] as i32)
+        ((pred_Q13[0 as i32 as usize] - (*state).pred_prev_Q13[0 as i32 as usize] as i32)
             as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
             * denom_Q16 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
             >> 1 as i32)
-            + ((pred_Q13[0 as i32 as usize]
-                - (*state).pred_prev_Q13[0 as i32 as usize] as i32)
+            + ((pred_Q13[0 as i32 as usize] - (*state).pred_prev_Q13[0 as i32 as usize] as i32)
                 as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
                 * denom_Q16 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
                 & 1 as i32)
     } else {
-        (((pred_Q13[0 as i32 as usize]
-            - (*state).pred_prev_Q13[0 as i32 as usize] as i32)
+        (((pred_Q13[0 as i32 as usize] - (*state).pred_prev_Q13[0 as i32 as usize] as i32)
             as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
             * denom_Q16 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
             >> 16 as i32 - 1 as i32)
@@ -704,20 +645,17 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
             >> 1 as i32
     }; /* Q8  */
     delta1_Q13 = -if 16 as i32 == 1 as i32 {
-        ((pred_Q13[1 as i32 as usize]
-            - (*state).pred_prev_Q13[1 as i32 as usize] as i32)
+        ((pred_Q13[1 as i32 as usize] - (*state).pred_prev_Q13[1 as i32 as usize] as i32)
             as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
             * denom_Q16 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
             >> 1 as i32)
-            + ((pred_Q13[1 as i32 as usize]
-                - (*state).pred_prev_Q13[1 as i32 as usize] as i32)
+            + ((pred_Q13[1 as i32 as usize] - (*state).pred_prev_Q13[1 as i32 as usize] as i32)
                 as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
                 * denom_Q16 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
                 & 1 as i32)
     } else {
-        (((pred_Q13[1 as i32 as usize]
-            - (*state).pred_prev_Q13[1 as i32 as usize] as i32)
+        (((pred_Q13[1 as i32 as usize] - (*state).pred_prev_Q13[1 as i32 as usize] as i32)
             as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
             * denom_Q16 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
             >> 16 as i32 - 1 as i32)
@@ -740,18 +678,14 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
                 << 1 as i32) as crate::opus_types_h::opus_int32)
             as crate::opus_types_h::opus_uint32)
             << 9 as i32) as crate::opus_types_h::opus_int32;
-        sum = ((w_Q24 as i64
-            * *side.offset((n + 1 as i32) as isize) as i64
-            >> 16 as i32) as crate::opus_types_h::opus_int32
-            as i64
-            + (sum as i64
-                * pred0_Q13 as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+        sum = ((w_Q24 as i64 * *side.offset((n + 1 as i32) as isize) as i64 >> 16 as i32)
+            as crate::opus_types_h::opus_int32 as i64
+            + (sum as i64 * pred0_Q13 as crate::opus_types_h::opus_int16 as i64 >> 16 as i32))
+            as crate::opus_types_h::opus_int32;
         sum = (sum as i64
             + (((*mid.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_int32
                 as crate::opus_types_h::opus_uint32)
-                << 11 as i32) as crate::opus_types_h::opus_int32
-                as i64
+                << 11 as i32) as crate::opus_types_h::opus_int32 as i64
                 * pred1_Q13 as crate::opus_types_h::opus_int16 as i64
                 >> 16 as i32)) as crate::opus_types_h::opus_int32;
         *x2.offset((n - 1 as i32) as isize) = if (if 8 as i32 == 1 as i32 {
@@ -787,18 +721,14 @@ pub unsafe extern "C" fn silk_stereo_LR_to_MS(
                 << 1 as i32) as crate::opus_types_h::opus_int32)
             as crate::opus_types_h::opus_uint32)
             << 9 as i32) as crate::opus_types_h::opus_int32;
-        sum = ((w_Q24 as i64
-            * *side.offset((n + 1 as i32) as isize) as i64
-            >> 16 as i32) as crate::opus_types_h::opus_int32
-            as i64
-            + (sum as i64
-                * pred0_Q13 as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+        sum = ((w_Q24 as i64 * *side.offset((n + 1 as i32) as isize) as i64 >> 16 as i32)
+            as crate::opus_types_h::opus_int32 as i64
+            + (sum as i64 * pred0_Q13 as crate::opus_types_h::opus_int16 as i64 >> 16 as i32))
+            as crate::opus_types_h::opus_int32;
         sum = (sum as i64
             + (((*mid.offset((n + 1 as i32) as isize) as crate::opus_types_h::opus_int32
                 as crate::opus_types_h::opus_uint32)
-                << 11 as i32) as crate::opus_types_h::opus_int32
-                as i64
+                << 11 as i32) as crate::opus_types_h::opus_int32 as i64
                 * pred1_Q13 as crate::opus_types_h::opus_int16 as i64
                 >> 16 as i32)) as crate::opus_types_h::opus_int32;
         *x2.offset((n - 1 as i32) as isize) = if (if 8 as i32 == 1 as i32 {

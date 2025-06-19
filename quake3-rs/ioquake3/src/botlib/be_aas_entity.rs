@@ -10,8 +10,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
     #[inline]
@@ -290,18 +289,18 @@ pub unsafe extern "C" fn AAS_UpdateEntity(
         //don't link the world model
         if entnum != ((1 as i32) << 10 as i32) - 2 as i32 {
             //absolute mins and maxs
-            absmins[0 as i32 as usize] = (*ent).i.mins[0 as i32 as usize]
-                + (*ent).i.origin[0 as i32 as usize];
-            absmins[1 as i32 as usize] = (*ent).i.mins[1 as i32 as usize]
-                + (*ent).i.origin[1 as i32 as usize];
-            absmins[2 as i32 as usize] = (*ent).i.mins[2 as i32 as usize]
-                + (*ent).i.origin[2 as i32 as usize];
-            absmaxs[0 as i32 as usize] = (*ent).i.maxs[0 as i32 as usize]
-                + (*ent).i.origin[0 as i32 as usize];
-            absmaxs[1 as i32 as usize] = (*ent).i.maxs[1 as i32 as usize]
-                + (*ent).i.origin[1 as i32 as usize];
-            absmaxs[2 as i32 as usize] = (*ent).i.maxs[2 as i32 as usize]
-                + (*ent).i.origin[2 as i32 as usize];
+            absmins[0 as i32 as usize] =
+                (*ent).i.mins[0 as i32 as usize] + (*ent).i.origin[0 as i32 as usize];
+            absmins[1 as i32 as usize] =
+                (*ent).i.mins[1 as i32 as usize] + (*ent).i.origin[1 as i32 as usize];
+            absmins[2 as i32 as usize] =
+                (*ent).i.mins[2 as i32 as usize] + (*ent).i.origin[2 as i32 as usize];
+            absmaxs[0 as i32 as usize] =
+                (*ent).i.maxs[0 as i32 as usize] + (*ent).i.origin[0 as i32 as usize];
+            absmaxs[1 as i32 as usize] =
+                (*ent).i.maxs[1 as i32 as usize] + (*ent).i.origin[1 as i32 as usize];
+            absmaxs[2 as i32 as usize] =
+                (*ent).i.maxs[2 as i32 as usize] + (*ent).i.origin[2 as i32 as usize];
             //unlink the entity
             crate::src::botlib::be_aas_sample::AAS_UnlinkFromAreas(
                 (*ent).areas as *mut crate::be_aas_def_h::aas_link_s,
@@ -357,8 +356,7 @@ pub unsafe extern "C" fn AAS_EntityInfo(
         ); //end if
         return;
     }
-    if entnum < 0 as i32 || entnum >= crate::src::botlib::be_aas_main::aasworld.maxentities
-    {
+    if entnum < 0 as i32 || entnum >= crate::src::botlib::be_aas_main::aasworld.maxentities {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
@@ -396,8 +394,7 @@ pub unsafe extern "C" fn AAS_EntityOrigin(
     mut entnum: i32,
     mut origin: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
-    if entnum < 0 as i32 || entnum >= crate::src::botlib::be_aas_main::aasworld.maxentities
-    {
+    if entnum < 0 as i32 || entnum >= crate::src::botlib::be_aas_main::aasworld.maxentities {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
@@ -453,8 +450,7 @@ pub unsafe extern "C" fn AAS_EntityOrigin(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_EntityModelindex(mut entnum: i32) -> i32 {
-    if entnum < 0 as i32 || entnum >= crate::src::botlib::be_aas_main::aasworld.maxentities
-    {
+    if entnum < 0 as i32 || entnum >= crate::src::botlib::be_aas_main::aasworld.maxentities {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
@@ -484,8 +480,7 @@ pub unsafe extern "C" fn AAS_EntityType(mut entnum: i32) -> i32 {
     if crate::src::botlib::be_aas_main::aasworld.initialized == 0 {
         return 0 as i32;
     } //end if
-    if entnum < 0 as i32 || entnum >= crate::src::botlib::be_aas_main::aasworld.maxentities
-    {
+    if entnum < 0 as i32 || entnum >= crate::src::botlib::be_aas_main::aasworld.maxentities {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
@@ -584,8 +579,7 @@ pub unsafe extern "C" fn AAS_EntityModelNum(mut entnum: i32) -> i32 {
     if crate::src::botlib::be_aas_main::aasworld.initialized == 0 {
         return 0 as i32;
     } //end if
-    if entnum < 0 as i32 || entnum >= crate::src::botlib::be_aas_main::aasworld.maxentities
-    {
+    if entnum < 0 as i32 || entnum >= crate::src::botlib::be_aas_main::aasworld.maxentities {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
@@ -625,12 +619,9 @@ pub unsafe extern "C" fn AAS_OriginOfMoverWithModelNum(
             .offset(i as isize) as *mut crate::be_aas_def_h::aas_entity_t;
         if (*ent).i.type_0 == ET_MOVER as i32 {
             if (*ent).i.modelindex == modelnum {
-                *origin.offset(0 as i32 as isize) =
-                    (*ent).i.origin[0 as i32 as usize];
-                *origin.offset(1 as i32 as isize) =
-                    (*ent).i.origin[1 as i32 as usize];
-                *origin.offset(2 as i32 as isize) =
-                    (*ent).i.origin[2 as i32 as usize];
+                *origin.offset(0 as i32 as isize) = (*ent).i.origin[0 as i32 as usize];
+                *origin.offset(1 as i32 as isize) = (*ent).i.origin[1 as i32 as usize];
+                *origin.offset(2 as i32 as isize) = (*ent).i.origin[2 as i32 as usize];
                 return crate::src::qcommon::q_shared::qtrue as i32;
             }
             //end if
@@ -659,8 +650,7 @@ pub unsafe extern "C" fn AAS_EntitySize(
     if crate::src::botlib::be_aas_main::aasworld.initialized == 0 {
         return;
     }
-    if entnum < 0 as i32 || entnum >= crate::src::botlib::be_aas_main::aasworld.maxentities
-    {
+    if entnum < 0 as i32 || entnum >= crate::src::botlib::be_aas_main::aasworld.maxentities {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
@@ -835,18 +825,14 @@ pub unsafe extern "C" fn AAS_NearestEntity(
             .entities
             .offset(i as isize) as *mut crate::be_aas_def_h::aas_entity_t;
         if !((*ent).i.modelindex != modelindex) {
-            dir[0 as i32 as usize] = (*ent).i.origin[0 as i32 as usize]
-                - *origin.offset(0 as i32 as isize);
-            dir[1 as i32 as usize] = (*ent).i.origin[1 as i32 as usize]
-                - *origin.offset(1 as i32 as isize);
-            dir[2 as i32 as usize] = (*ent).i.origin[2 as i32 as usize]
-                - *origin.offset(2 as i32 as isize);
-            if crate::stdlib::fabsf(dir[0 as i32 as usize])
-                < 40 as i32 as f32
-            {
-                if crate::stdlib::fabsf(dir[1 as i32 as usize])
-                    < 40 as i32 as f32
-                {
+            dir[0 as i32 as usize] =
+                (*ent).i.origin[0 as i32 as usize] - *origin.offset(0 as i32 as isize);
+            dir[1 as i32 as usize] =
+                (*ent).i.origin[1 as i32 as usize] - *origin.offset(1 as i32 as isize);
+            dir[2 as i32 as usize] =
+                (*ent).i.origin[2 as i32 as usize] - *origin.offset(2 as i32 as isize);
+            if crate::stdlib::fabsf(dir[0 as i32 as usize]) < 40 as i32 as f32 {
+                if crate::stdlib::fabsf(dir[1 as i32 as usize]) < 40 as i32 as f32 {
                     dist = VectorLength(
                         dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                     );

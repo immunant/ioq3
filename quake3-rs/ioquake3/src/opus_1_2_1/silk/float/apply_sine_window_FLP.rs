@@ -222,13 +222,11 @@ pub unsafe extern "C" fn silk_apply_sine_window_FLP(
     while k < length {
         *px_win.offset((k + 0 as i32) as isize) =
             *px.offset((k + 0 as i32) as isize) * 0.5f32 * (S0 + S1);
-        *px_win.offset((k + 1 as i32) as isize) =
-            *px.offset((k + 1 as i32) as isize) * S1;
+        *px_win.offset((k + 1 as i32) as isize) = *px.offset((k + 1 as i32) as isize) * S1;
         S0 = c * S1 - S0;
         *px_win.offset((k + 2 as i32) as isize) =
             *px.offset((k + 2 as i32) as isize) * 0.5f32 * (S1 + S0);
-        *px_win.offset((k + 3 as i32) as isize) =
-            *px.offset((k + 3 as i32) as isize) * S0;
+        *px_win.offset((k + 3 as i32) as isize) = *px.offset((k + 3 as i32) as isize) * S0;
         S1 = c * S0 - S1;
         k += 4 as i32
     }

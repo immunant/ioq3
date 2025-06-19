@@ -82,28 +82,17 @@ static mut OP_FILE_CALLBACKS: crate::src::opusfile_0_9::src::opusfile::OpusFileC
     {
         let mut init = crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks {
             read: Some(
-                op_fread
-                    as unsafe extern "C" fn(
-                        _: *mut libc::c_void,
-                        _: *mut u8,
-                        _: i32,
-                    ) -> i32,
+                op_fread as unsafe extern "C" fn(_: *mut libc::c_void, _: *mut u8, _: i32) -> i32,
             ),
             seek: Some(
-                op_fseek
-                    as unsafe extern "C" fn(
-                        _: *mut libc::c_void,
-                        _: i64,
-                        _: i32,
-                    ) -> i32,
+                op_fseek as unsafe extern "C" fn(_: *mut libc::c_void, _: i64, _: i32) -> i32,
             ),
             tell: Some(op_ftell as unsafe extern "C" fn(_: *mut libc::c_void) -> i64),
             close: ::std::mem::transmute::<
                 Option<unsafe extern "C" fn(_: *mut crate::stdlib::FILE) -> i32>,
                 crate::src::opusfile_0_9::src::opusfile::op_close_func,
             >(Some(
-                crate::stdlib::fclose
-                    as unsafe extern "C" fn(_: *mut crate::stdlib::FILE) -> i32,
+                crate::stdlib::fclose as unsafe extern "C" fn(_: *mut crate::stdlib::FILE) -> i32,
             )),
         };
         init
@@ -255,20 +244,10 @@ unsafe extern "C" fn op_mem_close(mut _stream: *mut libc::c_void) -> i32 {
 static mut OP_MEM_CALLBACKS: crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks = {
     let mut init = crate::src::opusfile_0_9::src::opusfile::OpusFileCallbacks {
         read: Some(
-            op_mem_read
-                as unsafe extern "C" fn(
-                    _: *mut libc::c_void,
-                    _: *mut u8,
-                    _: i32,
-                ) -> i32,
+            op_mem_read as unsafe extern "C" fn(_: *mut libc::c_void, _: *mut u8, _: i32) -> i32,
         ),
         seek: Some(
-            op_mem_seek
-                as unsafe extern "C" fn(
-                    _: *mut libc::c_void,
-                    _: i64,
-                    _: i32,
-                ) -> i32,
+            op_mem_seek as unsafe extern "C" fn(_: *mut libc::c_void, _: i64, _: i32) -> i32,
         ),
         tell: Some(op_mem_tell as unsafe extern "C" fn(_: *mut libc::c_void) -> i64),
         close: Some(op_mem_close as unsafe extern "C" fn(_: *mut libc::c_void) -> i32),

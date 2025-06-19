@@ -320,8 +320,7 @@ pub unsafe extern "C" fn silk_decoder_set_fs(
             &mut (*psDec).resampler_state as *mut _
                 as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
             fs_kHz as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-                * 1000 as i32 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32,
+                * 1000 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32,
             fs_API_Hz,
             0 as i32,
         );

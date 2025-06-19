@@ -422,8 +422,7 @@ pub unsafe extern "C" fn LAN_LoadCachedServers() {
     ) != 0
     {
         crate::src::qcommon::files::FS_Read(
-            &mut crate::src::client::cl_main::cls.numglobalservers as *mut i32
-                as *mut libc::c_void,
+            &mut crate::src::client::cl_main::cls.numglobalservers as *mut i32 as *mut libc::c_void,
             ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
             fileIn,
         );
@@ -483,14 +482,12 @@ pub unsafe extern "C" fn LAN_SaveServersToCache() {
             b"servercache.dat\x00" as *const u8 as *const libc::c_char,
         );
     crate::src::qcommon::files::FS_Write(
-        &mut crate::src::client::cl_main::cls.numglobalservers as *mut i32
-            as *const libc::c_void,
+        &mut crate::src::client::cl_main::cls.numglobalservers as *mut i32 as *const libc::c_void,
         ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
         fileOut,
     );
     crate::src::qcommon::files::FS_Write(
-        &mut crate::src::client::cl_main::cls.numfavoriteservers as *mut i32
-            as *const libc::c_void,
+        &mut crate::src::client::cl_main::cls.numfavoriteservers as *mut i32 as *const libc::c_void,
         ::std::mem::size_of::<i32>() as libc::c_ulong as i32,
         fileOut,
     );
@@ -506,15 +503,13 @@ pub unsafe extern "C" fn LAN_SaveServersToCache() {
     crate::src::qcommon::files::FS_Write(
         &mut crate::src::client::cl_main::cls.globalServers
             as *mut [crate::client_h::serverInfo_t; 4096] as *const libc::c_void,
-        ::std::mem::size_of::<[crate::client_h::serverInfo_t; 4096]>() as libc::c_ulong
-            as i32,
+        ::std::mem::size_of::<[crate::client_h::serverInfo_t; 4096]>() as libc::c_ulong as i32,
         fileOut,
     );
     crate::src::qcommon::files::FS_Write(
         &mut crate::src::client::cl_main::cls.favoriteServers
             as *mut [crate::client_h::serverInfo_t; 128] as *const libc::c_void,
-        ::std::mem::size_of::<[crate::client_h::serverInfo_t; 128]>() as libc::c_ulong
-            as i32,
+        ::std::mem::size_of::<[crate::client_h::serverInfo_t; 128]>() as libc::c_ulong as i32,
         fileOut,
     );
     crate::src::qcommon::files::FS_FCloseFile(fileOut);
@@ -1162,11 +1157,7 @@ LAN_GetPingInfo
 ====================
 */
 
-unsafe extern "C" fn LAN_GetPingInfo(
-    mut n: i32,
-    mut buf: *mut libc::c_char,
-    mut buflen: i32,
-) {
+unsafe extern "C" fn LAN_GetPingInfo(mut n: i32, mut buf: *mut libc::c_char, mut buflen: i32) {
     crate::src::client::cl_main::CL_GetPingInfo(n, buf, buflen);
 }
 /*
@@ -1243,27 +1234,21 @@ LAN_ServerIsVisible
 =======================
 */
 
-unsafe extern "C" fn LAN_ServerIsVisible(
-    mut source: i32,
-    mut n: i32,
-) -> i32 {
+unsafe extern "C" fn LAN_ServerIsVisible(mut source: i32, mut n: i32) -> i32 {
     match source {
         0 => {
             if n >= 0 as i32 && n < 128 as i32 {
-                return crate::src::client::cl_main::cls.localServers[n as usize].visible
-                    as i32;
+                return crate::src::client::cl_main::cls.localServers[n as usize].visible as i32;
             }
         }
         1 | 2 => {
             if n >= 0 as i32 && n < 4096 as i32 {
-                return crate::src::client::cl_main::cls.globalServers[n as usize].visible
-                    as i32;
+                return crate::src::client::cl_main::cls.globalServers[n as usize].visible as i32;
             }
         }
         3 => {
             if n >= 0 as i32 && n < 128 as i32 {
-                return crate::src::client::cl_main::cls.favoriteServers[n as usize].visible
-                    as i32;
+                return crate::src::client::cl_main::cls.favoriteServers[n as usize].visible as i32;
             }
         }
         _ => {}
@@ -1368,15 +1353,12 @@ unsafe extern "C" fn CLUI_GetCDKey(mut buf: *mut libc::c_char, mut _buflen: i32)
     gamedir = crate::src::qcommon::cvar::Cvar_VariableString(
         b"fs_game\x00" as *const u8 as *const libc::c_char,
     );
-    if UI_usesUniqueCDKey() as u32 != 0
-        && *gamedir.offset(0 as i32 as isize) as i32 != 0 as i32
-    {
+    if UI_usesUniqueCDKey() as u32 != 0 && *gamedir.offset(0 as i32 as isize) as i32 != 0 as i32 {
         crate::stdlib::memcpy(
             buf as *mut libc::c_void,
             &mut *crate::src::qcommon::common::cl_cdkey
                 .as_mut_ptr()
-                .offset(16 as i32 as isize) as *mut libc::c_char
-                as *const libc::c_void,
+                .offset(16 as i32 as isize) as *mut libc::c_char as *const libc::c_void,
             16 as i32 as libc::c_ulong,
         );
         *buf.offset(16 as i32 as isize) = 0 as i32 as libc::c_char
@@ -1400,19 +1382,15 @@ unsafe extern "C" fn CLUI_SetCDKey(mut buf: *mut libc::c_char) {
     gamedir = crate::src::qcommon::cvar::Cvar_VariableString(
         b"fs_game\x00" as *const u8 as *const libc::c_char,
     );
-    if UI_usesUniqueCDKey() as u32 != 0
-        && *gamedir.offset(0 as i32 as isize) as i32 != 0 as i32
-    {
+    if UI_usesUniqueCDKey() as u32 != 0 && *gamedir.offset(0 as i32 as isize) as i32 != 0 as i32 {
         crate::stdlib::memcpy(
             &mut *crate::src::qcommon::common::cl_cdkey
                 .as_mut_ptr()
-                .offset(16 as i32 as isize) as *mut libc::c_char
-                as *mut libc::c_void,
+                .offset(16 as i32 as isize) as *mut libc::c_char as *mut libc::c_void,
             buf as *const libc::c_void,
             16 as i32 as libc::c_ulong,
         );
-        crate::src::qcommon::common::cl_cdkey[32 as i32 as usize] =
-            0 as i32 as libc::c_char;
+        crate::src::qcommon::common::cl_cdkey[32 as i32 as usize] = 0 as i32 as libc::c_char;
         // set the flag so the fle will be written at the next opportunity
         crate::src::qcommon::cvar::cvar_modifiedFlags |= 0x1 as i32
     } else {
@@ -1619,9 +1597,8 @@ pub unsafe extern "C" fn CL_UISystemCalls(
                     crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
                         as *const libc::c_char,
                 );
-                *args.offset(1 as i32 as isize) = crate::src::qcommon::q_shared::EXEC_INSERT
-                    as i32
-                    as crate::stdlib::intptr_t
+                *args.offset(1 as i32 as isize) =
+                    crate::src::qcommon::q_shared::EXEC_INSERT as i32 as crate::stdlib::intptr_t
             }
             crate::src::qcommon::cmd::Cbuf_ExecuteText(
                 *args.offset(1 as i32 as isize) as i32,
@@ -1643,8 +1620,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             crate::src::qcommon::files::FS_Read(
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 *args.offset(2 as i32 as isize) as i32,
-                *args.offset(3 as i32 as isize)
-                    as crate::src::qcommon::q_shared::fileHandle_t,
+                *args.offset(3 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t,
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1652,14 +1628,14 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             crate::src::qcommon::files::FS_Write(
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize)),
                 *args.offset(2 as i32 as isize) as i32,
-                *args.offset(3 as i32 as isize)
-                    as crate::src::qcommon::q_shared::fileHandle_t,
+                *args.offset(3 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t,
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
         16 => {
-            crate::src::qcommon::files::FS_FCloseFile(*args.offset(1 as i32 as isize)
-                as crate::src::qcommon::q_shared::fileHandle_t);
+            crate::src::qcommon::files::FS_FCloseFile(
+                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t
+            );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
         17 => {
@@ -1675,8 +1651,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         }
         86 => {
             return crate::src::qcommon::files::FS_Seek(
-                *args.offset(1 as i32 as isize)
-                    as crate::src::qcommon::q_shared::fileHandle_t,
+                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::fileHandle_t,
                 *args.offset(2 as i32 as isize),
                 *args.offset(3 as i32 as isize) as i32,
             ) as crate::stdlib::intptr_t
@@ -1764,8 +1739,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
                 .expect("non-null function pointer")(
                 crate::src::qcommon::vm::VM_ArgPtr(
                 *args.offset(1 as i32 as isize),
-            )
-                as *const f32
+            ) as *const f32
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1825,8 +1799,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         }
         32 => {
             crate::src::client::snd_main::S_StartLocalSound(
-                *args.offset(1 as i32 as isize)
-                    as crate::src::qcommon::q_shared::sfxHandle_t,
+                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::sfxHandle_t,
                 *args.offset(2 as i32 as isize) as i32,
             );
             return 0 as i32 as crate::stdlib::intptr_t;
@@ -1858,16 +1831,15 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             return 0 as i32 as crate::stdlib::intptr_t;
         }
         36 => {
-            return crate::src::client::cl_keys::Key_IsDown(
-                *args.offset(1 as i32 as isize) as i32
-            ) as crate::stdlib::intptr_t
+            return crate::src::client::cl_keys::Key_IsDown(*args.offset(1 as i32 as isize) as i32)
+                as crate::stdlib::intptr_t
         }
         37 => {
             return crate::src::client::cl_keys::Key_GetOverstrikeMode() as crate::stdlib::intptr_t
         }
         38 => {
             crate::src::client::cl_keys::Key_SetOverstrikeMode(
-                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::qboolean,
+                *args.offset(1 as i32 as isize) as crate::src::qcommon::q_shared::qboolean
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1880,8 +1852,8 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             // Don't allow the ui module to close the console
             crate::src::client::cl_keys::Key_SetCatcher(
                 (*args.offset(1 as i32 as isize)
-                    | (crate::src::client::cl_keys::Key_GetCatcher() & 0x1 as i32)
-                        as libc::c_long) as i32,
+                    | (crate::src::client::cl_keys::Key_GetCatcher() & 0x1 as i32) as libc::c_long)
+                    as i32,
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -1894,15 +1866,17 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             return 0 as i32 as crate::stdlib::intptr_t;
         }
         44 => {
-            GetClientState(crate::src::qcommon::vm::VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            ) as *mut crate::ui_public_h::uiClientState_t);
+            GetClientState(
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut crate::ui_public_h::uiClientState_t,
+            );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
         43 => {
-            CL_GetGlconfig(crate::src::qcommon::vm::VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            ) as *mut crate::tr_types_h::glconfig_t);
+            CL_GetGlconfig(
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut crate::tr_types_h::glconfig_t,
+            );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
         45 => {
@@ -1949,8 +1923,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
                 *args.offset(3 as i32 as isize) as i32,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize))
-                    as *mut i32,
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(4 as i32 as isize)) as *mut i32,
             );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
@@ -2045,9 +2018,10 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             return 0 as i32 as crate::stdlib::intptr_t;
         }
         54 => {
-            CLUI_SetCDKey(crate::src::qcommon::vm::VM_ArgPtr(
-                *args.offset(1 as i32 as isize),
-            ) as *mut libc::c_char);
+            CLUI_SetCDKey(
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(1 as i32 as isize))
+                    as *mut libc::c_char,
+            );
             return 0 as i32 as crate::stdlib::intptr_t;
         }
         87 => return 0 as i32 as crate::stdlib::intptr_t,
@@ -2090,14 +2064,14 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             return *args.offset(1 as i32 as isize);
         }
         103 => {
-            return FloatAsInt(crate::stdlib::sin(
-                _vmf(*args.offset(1 as i32 as isize)) as f64
-            ) as f32) as crate::stdlib::intptr_t
+            return FloatAsInt(
+                crate::stdlib::sin(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
+            ) as crate::stdlib::intptr_t
         }
         104 => {
-            return FloatAsInt(crate::stdlib::cos(
-                _vmf(*args.offset(1 as i32 as isize)) as f64
-            ) as f32) as crate::stdlib::intptr_t
+            return FloatAsInt(
+                crate::stdlib::cos(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
+            ) as crate::stdlib::intptr_t
         }
         105 => {
             return FloatAsInt(crate::stdlib::atan2(
@@ -2106,19 +2080,19 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             ) as f32) as crate::stdlib::intptr_t
         }
         106 => {
-            return FloatAsInt(crate::stdlib::sqrt(
-                _vmf(*args.offset(1 as i32 as isize)) as f64
-            ) as f32) as crate::stdlib::intptr_t
+            return FloatAsInt(
+                crate::stdlib::sqrt(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
+            ) as crate::stdlib::intptr_t
         }
         107 => {
-            return FloatAsInt(crate::stdlib::floor(
-                _vmf(*args.offset(1 as i32 as isize)) as f64
-            ) as f32) as crate::stdlib::intptr_t
+            return FloatAsInt(
+                crate::stdlib::floor(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
+            ) as crate::stdlib::intptr_t
         }
         108 => {
-            return FloatAsInt(crate::stdlib::ceil(
-                _vmf(*args.offset(1 as i32 as isize)) as f64
-            ) as f32) as crate::stdlib::intptr_t
+            return FloatAsInt(
+                crate::stdlib::ceil(_vmf(*args.offset(1 as i32 as isize)) as f64) as f32,
+            ) as crate::stdlib::intptr_t
         }
         57 => {
             return (*botlib_export)
@@ -2140,7 +2114,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
             return (*botlib_export)
                 .PC_FreeSourceHandle
                 .expect("non-null function pointer")(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             ) as crate::stdlib::intptr_t
         }
         60 => {
@@ -2159,8 +2133,7 @@ pub unsafe extern "C" fn CL_UISystemCalls(
                 *args.offset(1 as i32 as isize) as i32,
                 crate::src::qcommon::vm::VM_ArgPtr(*args.offset(2 as i32 as isize))
                     as *mut libc::c_char,
-                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize))
-                    as *mut i32,
+                crate::src::qcommon::vm::VM_ArgPtr(*args.offset(3 as i32 as isize)) as *mut i32,
             ) as crate::stdlib::intptr_t
         }
         62 => {
@@ -2200,18 +2173,16 @@ pub unsafe extern "C" fn CL_UISystemCalls(
         }
         76 => {
             return crate::src::client::cl_cin::CIN_StopCinematic(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             ) as crate::stdlib::intptr_t
         }
         77 => {
             return crate::src::client::cl_cin::CIN_RunCinematic(
-                *args.offset(1 as i32 as isize) as i32,
+                *args.offset(1 as i32 as isize) as i32
             ) as crate::stdlib::intptr_t
         }
         78 => {
-            crate::src::client::cl_cin::CIN_DrawCinematic(
-                *args.offset(1 as i32 as isize) as i32
-            );
+            crate::src::client::cl_cin::CIN_DrawCinematic(*args.offset(1 as i32 as isize) as i32);
             return 0 as i32 as crate::stdlib::intptr_t;
         }
         79 => {
@@ -2486,10 +2457,8 @@ pub unsafe extern "C" fn CL_InitUI() {
     ) as crate::qcommon_h::vmInterpret_t;
     if crate::src::client::cl_parse::cl_connectedToPureServer != 0 {
         // if sv_pure is set we only allow qvms to be loaded
-        if interpret as u32
-            != crate::qcommon_h::VMI_COMPILED as i32 as u32
-            && interpret as u32
-                != crate::qcommon_h::VMI_BYTECODE as i32 as u32
+        if interpret as u32 != crate::qcommon_h::VMI_COMPILED as i32 as u32
+            && interpret as u32 != crate::qcommon_h::VMI_BYTECODE as i32 as u32
         {
             interpret = crate::qcommon_h::VMI_COMPILED
         }
@@ -2509,8 +2478,7 @@ pub unsafe extern "C" fn CL_InitUI() {
         );
     }
     // sanity check
-    v = crate::src::qcommon::vm::VM_Call(uivm, crate::ui_public_h::UI_GETAPIVERSION as i32)
-        as i32;
+    v = crate::src::qcommon::vm::VM_Call(uivm, crate::ui_public_h::UI_GETAPIVERSION as i32) as i32;
     if v == 4 as i32 {
         //		Com_Printf(S_COLOR_YELLOW "WARNING: loading old Quake III Arena User Interface version %d\n", v );
         // init for this gamestate
@@ -2520,8 +2488,7 @@ pub unsafe extern "C" fn CL_InitUI() {
             (crate::src::client::cl_main::clc.state as u32
                 >= crate::src::qcommon::q_shared::CA_AUTHORIZING as i32 as u32
                 && (crate::src::client::cl_main::clc.state as u32)
-                    < crate::src::qcommon::q_shared::CA_ACTIVE as i32 as u32)
-                as i32,
+                    < crate::src::qcommon::q_shared::CA_ACTIVE as i32 as u32) as i32,
         );
     } else if v != 6 as i32 {
         // Free uivm now, so UI_SHUTDOWN doesn't get called later.
@@ -2541,8 +2508,7 @@ pub unsafe extern "C" fn CL_InitUI() {
             (crate::src::client::cl_main::clc.state as u32
                 >= crate::src::qcommon::q_shared::CA_AUTHORIZING as i32 as u32
                 && (crate::src::client::cl_main::clc.state as u32)
-                    < crate::src::qcommon::q_shared::CA_ACTIVE as i32 as u32)
-                as i32,
+                    < crate::src::qcommon::q_shared::CA_ACTIVE as i32 as u32) as i32,
         );
     };
 }
@@ -2553,8 +2519,8 @@ pub unsafe extern "C" fn UI_usesUniqueCDKey() -> crate::src::qcommon::q_shared::
         return (crate::src::qcommon::vm::VM_Call(
             uivm,
             crate::ui_public_h::UI_HASUNIQUECDKEY as i32,
-        ) == crate::src::qcommon::q_shared::qtrue as i32 as libc::c_long)
-            as i32 as crate::src::qcommon::q_shared::qboolean;
+        ) == crate::src::qcommon::q_shared::qtrue as i32 as libc::c_long) as i32
+            as crate::src::qcommon::q_shared::qboolean;
     } else {
         return crate::src::qcommon::q_shared::qfalse;
     };

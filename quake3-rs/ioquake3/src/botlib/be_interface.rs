@@ -729,17 +729,13 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut crate::botlib_h::aas_export_t
     //--------------------------------------------
     (*aas).AAS_EntityInfo = Some(
         crate::src::botlib::be_aas_entity::AAS_EntityInfo
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut crate::be_aas_h::aas_entityinfo_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: i32, _: *mut crate::be_aas_h::aas_entityinfo_t) -> (),
     );
     //--------------------------------------------
     // be_aas_main.c
     //--------------------------------------------
-    (*aas).AAS_Initialized = Some(
-        crate::src::botlib::be_aas_main::AAS_Initialized as unsafe extern "C" fn() -> i32,
-    );
+    (*aas).AAS_Initialized =
+        Some(crate::src::botlib::be_aas_main::AAS_Initialized as unsafe extern "C" fn() -> i32);
     (*aas).AAS_PresenceTypeBoundingBox = Some(
         crate::src::botlib::be_aas_sample::AAS_PresenceTypeBoundingBox
             as unsafe extern "C" fn(
@@ -782,10 +778,7 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut crate::botlib_h::aas_export_t
     );
     (*aas).AAS_AreaInfo = Some(
         crate::src::botlib::be_aas_sample::AAS_AreaInfo
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut crate::be_aas_h::aas_areainfo_t,
-            ) -> i32,
+            as unsafe extern "C" fn(_: i32, _: *mut crate::be_aas_h::aas_areainfo_t) -> i32,
     );
     //--------------------------------------------
     // be_aas_bspq3.c
@@ -795,8 +788,7 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut crate::botlib_h::aas_export_t
             as unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t) -> i32,
     );
     (*aas).AAS_NextBSPEntity = Some(
-        crate::src::botlib::be_aas_bspq3::AAS_NextBSPEntity
-            as unsafe extern "C" fn(_: i32) -> i32,
+        crate::src::botlib::be_aas_bspq3::AAS_NextBSPEntity as unsafe extern "C" fn(_: i32) -> i32,
     );
     (*aas).AAS_ValueForBSPEpairKey = Some(
         crate::src::botlib::be_aas_bspq3::AAS_ValueForBSPEpairKey
@@ -817,19 +809,11 @@ unsafe extern "C" fn Init_AAS_Export(mut aas: *mut crate::botlib_h::aas_export_t
     );
     (*aas).AAS_FloatForBSPEpairKey = Some(
         crate::src::botlib::be_aas_bspq3::AAS_FloatForBSPEpairKey
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut libc::c_char,
-                _: *mut f32,
-            ) -> i32,
+            as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut f32) -> i32,
     );
     (*aas).AAS_IntForBSPEpairKey = Some(
         crate::src::botlib::be_aas_bspq3::AAS_IntForBSPEpairKey
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut libc::c_char,
-                _: *mut i32,
-            ) -> i32,
+            as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut i32) -> i32,
     );
     //--------------------------------------------
     // be_aas_reach.c
@@ -932,18 +916,14 @@ unsafe extern "C" fn Init_EA_Export(mut ea: *mut crate::botlib_h::ea_export_t) {
         crate::src::botlib::be_ea::EA_SayTeam
             as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> (),
     );
-    (*ea).EA_Action = Some(
-        crate::src::botlib::be_ea::EA_Action
-            as unsafe extern "C" fn(_: i32, _: i32) -> (),
-    );
+    (*ea).EA_Action =
+        Some(crate::src::botlib::be_ea::EA_Action as unsafe extern "C" fn(_: i32, _: i32) -> ());
     (*ea).EA_Gesture =
         Some(crate::src::botlib::be_ea::EA_Gesture as unsafe extern "C" fn(_: i32) -> ());
-    (*ea).EA_Talk =
-        Some(crate::src::botlib::be_ea::EA_Talk as unsafe extern "C" fn(_: i32) -> ());
+    (*ea).EA_Talk = Some(crate::src::botlib::be_ea::EA_Talk as unsafe extern "C" fn(_: i32) -> ());
     (*ea).EA_Attack =
         Some(crate::src::botlib::be_ea::EA_Attack as unsafe extern "C" fn(_: i32) -> ());
-    (*ea).EA_Use =
-        Some(crate::src::botlib::be_ea::EA_Use as unsafe extern "C" fn(_: i32) -> ());
+    (*ea).EA_Use = Some(crate::src::botlib::be_ea::EA_Use as unsafe extern "C" fn(_: i32) -> ());
     (*ea).EA_Respawn =
         Some(crate::src::botlib::be_ea::EA_Respawn as unsafe extern "C" fn(_: i32) -> ());
     (*ea).EA_Crouch =
@@ -952,9 +932,8 @@ unsafe extern "C" fn Init_EA_Export(mut ea: *mut crate::botlib_h::ea_export_t) {
         Some(crate::src::botlib::be_ea::EA_MoveUp as unsafe extern "C" fn(_: i32) -> ());
     (*ea).EA_MoveDown =
         Some(crate::src::botlib::be_ea::EA_MoveDown as unsafe extern "C" fn(_: i32) -> ());
-    (*ea).EA_MoveForward = Some(
-        crate::src::botlib::be_ea::EA_MoveForward as unsafe extern "C" fn(_: i32) -> (),
-    );
+    (*ea).EA_MoveForward =
+        Some(crate::src::botlib::be_ea::EA_MoveForward as unsafe extern "C" fn(_: i32) -> ());
     (*ea).EA_MoveBack =
         Some(crate::src::botlib::be_ea::EA_MoveBack as unsafe extern "C" fn(_: i32) -> ());
     (*ea).EA_MoveLeft =
@@ -962,14 +941,11 @@ unsafe extern "C" fn Init_EA_Export(mut ea: *mut crate::botlib_h::ea_export_t) {
     (*ea).EA_MoveRight =
         Some(crate::src::botlib::be_ea::EA_MoveRight as unsafe extern "C" fn(_: i32) -> ());
     (*ea).EA_SelectWeapon = Some(
-        crate::src::botlib::be_ea::EA_SelectWeapon
-            as unsafe extern "C" fn(_: i32, _: i32) -> (),
+        crate::src::botlib::be_ea::EA_SelectWeapon as unsafe extern "C" fn(_: i32, _: i32) -> (),
     );
-    (*ea).EA_Jump =
-        Some(crate::src::botlib::be_ea::EA_Jump as unsafe extern "C" fn(_: i32) -> ());
-    (*ea).EA_DelayedJump = Some(
-        crate::src::botlib::be_ea::EA_DelayedJump as unsafe extern "C" fn(_: i32) -> (),
-    );
+    (*ea).EA_Jump = Some(crate::src::botlib::be_ea::EA_Jump as unsafe extern "C" fn(_: i32) -> ());
+    (*ea).EA_DelayedJump =
+        Some(crate::src::botlib::be_ea::EA_DelayedJump as unsafe extern "C" fn(_: i32) -> ());
     (*ea).EA_Move = Some(
         crate::src::botlib::be_ea::EA_Move
             as unsafe extern "C" fn(
@@ -980,26 +956,17 @@ unsafe extern "C" fn Init_EA_Export(mut ea: *mut crate::botlib_h::ea_export_t) {
     );
     (*ea).EA_View = Some(
         crate::src::botlib::be_ea::EA_View
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut crate::src::qcommon::q_shared::vec_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: i32, _: *mut crate::src::qcommon::q_shared::vec_t) -> (),
     );
     (*ea).EA_GetInput = Some(
         crate::src::botlib::be_ea::EA_GetInput
-            as unsafe extern "C" fn(
-                _: i32,
-                _: f32,
-                _: *mut crate::botlib_h::bot_input_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: i32, _: f32, _: *mut crate::botlib_h::bot_input_t) -> (),
     );
     (*ea).EA_EndRegular = Some(
-        crate::src::botlib::be_ea::EA_EndRegular
-            as unsafe extern "C" fn(_: i32, _: f32) -> (),
+        crate::src::botlib::be_ea::EA_EndRegular as unsafe extern "C" fn(_: i32, _: f32) -> (),
     );
-    (*ea).EA_ResetInput = Some(
-        crate::src::botlib::be_ea::EA_ResetInput as unsafe extern "C" fn(_: i32) -> (),
-    );
+    (*ea).EA_ResetInput =
+        Some(crate::src::botlib::be_ea::EA_ResetInput as unsafe extern "C" fn(_: i32) -> ());
 }
 /*
 ============
@@ -1016,8 +983,7 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
             as unsafe extern "C" fn(_: *mut libc::c_char, _: f32) -> i32,
     );
     (*ai).BotFreeCharacter = Some(
-        crate::src::botlib::be_ai_char::BotFreeCharacter
-            as unsafe extern "C" fn(_: i32) -> (),
+        crate::src::botlib::be_ai_char::BotFreeCharacter as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).Characteristic_Float = Some(
         crate::src::botlib::be_ai_char::Characteristic_Float
@@ -1025,12 +991,7 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
     );
     (*ai).Characteristic_BFloat = Some(
         crate::src::botlib::be_ai_char::Characteristic_BFloat
-            as unsafe extern "C" fn(
-                _: i32,
-                _: i32,
-                _: f32,
-                _: f32,
-            ) -> f32,
+            as unsafe extern "C" fn(_: i32, _: i32, _: f32, _: f32) -> f32,
     );
     (*ai).Characteristic_Integer = Some(
         crate::src::botlib::be_ai_char::Characteristic_Integer
@@ -1038,31 +999,19 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
     );
     (*ai).Characteristic_BInteger = Some(
         crate::src::botlib::be_ai_char::Characteristic_BInteger
-            as unsafe extern "C" fn(
-                _: i32,
-                _: i32,
-                _: i32,
-                _: i32,
-            ) -> i32,
+            as unsafe extern "C" fn(_: i32, _: i32, _: i32, _: i32) -> i32,
     );
     (*ai).Characteristic_String = Some(
         crate::src::botlib::be_ai_char::Characteristic_String
-            as unsafe extern "C" fn(
-                _: i32,
-                _: i32,
-                _: *mut libc::c_char,
-                _: i32,
-            ) -> (),
+            as unsafe extern "C" fn(_: i32, _: i32, _: *mut libc::c_char, _: i32) -> (),
     );
     //-----------------------------------
     // be_ai_chat.h
     //-----------------------------------
-    (*ai).BotAllocChatState = Some(
-        crate::src::botlib::be_ai_chat::BotAllocChatState as unsafe extern "C" fn() -> i32,
-    );
+    (*ai).BotAllocChatState =
+        Some(crate::src::botlib::be_ai_chat::BotAllocChatState as unsafe extern "C" fn() -> i32);
     (*ai).BotFreeChatState = Some(
-        crate::src::botlib::be_ai_chat::BotFreeChatState
-            as unsafe extern "C" fn(_: i32) -> (),
+        crate::src::botlib::be_ai_chat::BotFreeChatState as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotQueueConsoleMessage = Some(
         crate::src::botlib::be_ai_chat::BotQueueConsoleMessage
@@ -1120,10 +1069,8 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
                 _: *mut libc::c_char,
             ) -> i32,
     );
-    (*ai).BotChatLength = Some(
-        crate::src::botlib::be_ai_chat::BotChatLength
-            as unsafe extern "C" fn(_: i32) -> i32,
-    );
+    (*ai).BotChatLength =
+        Some(crate::src::botlib::be_ai_chat::BotChatLength as unsafe extern "C" fn(_: i32) -> i32);
     (*ai).BotEnterChat = Some(
         crate::src::botlib::be_ai_chat::BotEnterChat
             as unsafe extern "C" fn(_: i32, _: i32, _: i32) -> (),
@@ -1134,11 +1081,7 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
     );
     (*ai).StringContains = Some(
         crate::src::botlib::be_ai_chat::StringContains
-            as unsafe extern "C" fn(
-                _: *mut libc::c_char,
-                _: *mut libc::c_char,
-                _: i32,
-            ) -> i32,
+            as unsafe extern "C" fn(_: *mut libc::c_char, _: *mut libc::c_char, _: i32) -> i32,
     );
     (*ai).BotFindMatch = Some(
         crate::src::botlib::be_ai_chat::BotFindMatch
@@ -1167,11 +1110,7 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
     );
     (*ai).BotLoadChatFile = Some(
         crate::src::botlib::be_ai_chat::BotLoadChatFile
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut libc::c_char,
-                _: *mut libc::c_char,
-            ) -> i32,
+            as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut libc::c_char) -> i32,
     );
     (*ai).BotSetChatGender = Some(
         crate::src::botlib::be_ai_chat::BotSetChatGender
@@ -1185,12 +1124,10 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
     // be_ai_goal.h
     //-----------------------------------
     (*ai).BotResetGoalState = Some(
-        crate::src::botlib::be_ai_goal::BotResetGoalState
-            as unsafe extern "C" fn(_: i32) -> (),
+        crate::src::botlib::be_ai_goal::BotResetGoalState as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotResetAvoidGoals = Some(
-        crate::src::botlib::be_ai_goal::BotResetAvoidGoals
-            as unsafe extern "C" fn(_: i32) -> (),
+        crate::src::botlib::be_ai_goal::BotResetAvoidGoals as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotRemoveFromAvoidGoals = Some(
         crate::src::botlib::be_ai_goal::BotRemoveFromAvoidGoals
@@ -1203,20 +1140,16 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
                 _: *mut crate::src::botlib::be_ai_goal::bot_goal_t,
             ) -> (),
     );
-    (*ai).BotPopGoal = Some(
-        crate::src::botlib::be_ai_goal::BotPopGoal as unsafe extern "C" fn(_: i32) -> (),
-    );
+    (*ai).BotPopGoal =
+        Some(crate::src::botlib::be_ai_goal::BotPopGoal as unsafe extern "C" fn(_: i32) -> ());
     (*ai).BotEmptyGoalStack = Some(
-        crate::src::botlib::be_ai_goal::BotEmptyGoalStack
-            as unsafe extern "C" fn(_: i32) -> (),
+        crate::src::botlib::be_ai_goal::BotEmptyGoalStack as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotDumpAvoidGoals = Some(
-        crate::src::botlib::be_ai_goal::BotDumpAvoidGoals
-            as unsafe extern "C" fn(_: i32) -> (),
+        crate::src::botlib::be_ai_goal::BotDumpAvoidGoals as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotDumpGoalStack = Some(
-        crate::src::botlib::be_ai_goal::BotDumpGoalStack
-            as unsafe extern "C" fn(_: i32) -> (),
+        crate::src::botlib::be_ai_goal::BotDumpGoalStack as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotGoalName = Some(
         crate::src::botlib::be_ai_goal::BotGoalName
@@ -1311,8 +1244,7 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
             as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32,
     );
     (*ai).BotFreeItemWeights = Some(
-        crate::src::botlib::be_ai_goal::BotFreeItemWeights
-            as unsafe extern "C" fn(_: i32) -> (),
+        crate::src::botlib::be_ai_goal::BotFreeItemWeights as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotInterbreedGoalFuzzyLogic = Some(
         crate::src::botlib::be_ai_goal::BotInterbreedGoalFuzzyLogic
@@ -1327,19 +1259,16 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
             as unsafe extern "C" fn(_: i32, _: f32) -> (),
     );
     (*ai).BotAllocGoalState = Some(
-        crate::src::botlib::be_ai_goal::BotAllocGoalState
-            as unsafe extern "C" fn(_: i32) -> i32,
+        crate::src::botlib::be_ai_goal::BotAllocGoalState as unsafe extern "C" fn(_: i32) -> i32,
     );
     (*ai).BotFreeGoalState = Some(
-        crate::src::botlib::be_ai_goal::BotFreeGoalState
-            as unsafe extern "C" fn(_: i32) -> (),
+        crate::src::botlib::be_ai_goal::BotFreeGoalState as unsafe extern "C" fn(_: i32) -> (),
     );
     //-----------------------------------
     // be_ai_move.h
     //-----------------------------------
     (*ai).BotResetMoveState = Some(
-        crate::src::botlib::be_ai_move::BotResetMoveState
-            as unsafe extern "C" fn(_: i32) -> (),
+        crate::src::botlib::be_ai_move::BotResetMoveState as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotMoveToGoal = Some(
         crate::src::botlib::be_ai_move::BotMoveToGoal
@@ -1360,8 +1289,7 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
             ) -> i32,
     );
     (*ai).BotResetAvoidReach = Some(
-        crate::src::botlib::be_ai_move::BotResetAvoidReach
-            as unsafe extern "C" fn(_: i32) -> (),
+        crate::src::botlib::be_ai_move::BotResetAvoidReach as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotResetLastAvoidReach = Some(
         crate::src::botlib::be_ai_move::BotResetLastAvoidReach
@@ -1369,10 +1297,7 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
     );
     (*ai).BotReachabilityArea = Some(
         crate::src::botlib::be_ai_move::BotReachabilityArea
-            as unsafe extern "C" fn(
-                _: *mut crate::src::qcommon::q_shared::vec_t,
-                _: i32,
-            ) -> i32,
+            as unsafe extern "C" fn(_: *mut crate::src::qcommon::q_shared::vec_t, _: i32) -> i32,
     );
     (*ai).BotMovementViewTarget = Some(
         crate::src::botlib::be_ai_move::BotMovementViewTarget
@@ -1394,12 +1319,10 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
                 _: *mut crate::src::qcommon::q_shared::vec_t,
             ) -> i32,
     );
-    (*ai).BotAllocMoveState = Some(
-        crate::src::botlib::be_ai_move::BotAllocMoveState as unsafe extern "C" fn() -> i32,
-    );
+    (*ai).BotAllocMoveState =
+        Some(crate::src::botlib::be_ai_move::BotAllocMoveState as unsafe extern "C" fn() -> i32);
     (*ai).BotFreeMoveState = Some(
-        crate::src::botlib::be_ai_move::BotFreeMoveState
-            as unsafe extern "C" fn(_: i32) -> (),
+        crate::src::botlib::be_ai_move::BotFreeMoveState as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotInitMoveState = Some(
         crate::src::botlib::be_ai_move::BotInitMoveState
@@ -1436,17 +1359,13 @@ unsafe extern "C" fn Init_AI_Export(mut ai: *mut crate::botlib_h::ai_export_t) {
         crate::src::botlib::be_ai_weap::BotLoadWeaponWeights
             as unsafe extern "C" fn(_: i32, _: *mut libc::c_char) -> i32,
     );
-    (*ai).BotAllocWeaponState = Some(
-        crate::src::botlib::be_ai_weap::BotAllocWeaponState
-            as unsafe extern "C" fn() -> i32,
-    );
+    (*ai).BotAllocWeaponState =
+        Some(crate::src::botlib::be_ai_weap::BotAllocWeaponState as unsafe extern "C" fn() -> i32);
     (*ai).BotFreeWeaponState = Some(
-        crate::src::botlib::be_ai_weap::BotFreeWeaponState
-            as unsafe extern "C" fn(_: i32) -> (),
+        crate::src::botlib::be_ai_weap::BotFreeWeaponState as unsafe extern "C" fn(_: i32) -> (),
     );
     (*ai).BotResetWeaponState = Some(
-        crate::src::botlib::be_ai_weap::BotResetWeaponState
-            as unsafe extern "C" fn(_: i32) -> (),
+        crate::src::botlib::be_ai_weap::BotResetWeaponState as unsafe extern "C" fn(_: i32) -> (),
     );
     //-----------------------------------
     // be_ai_gen.h
@@ -1493,21 +1412,15 @@ pub unsafe extern "C" fn GetBotLibAPI(
     Init_AAS_Export(&mut be_botlib_export.aas);
     Init_EA_Export(&mut be_botlib_export.ea);
     Init_AI_Export(&mut be_botlib_export.ai);
-    be_botlib_export.BotLibSetup =
-        Some(Export_BotLibSetup as unsafe extern "C" fn() -> i32);
-    be_botlib_export.BotLibShutdown =
-        Some(Export_BotLibShutdown as unsafe extern "C" fn() -> i32);
+    be_botlib_export.BotLibSetup = Some(Export_BotLibSetup as unsafe extern "C" fn() -> i32);
+    be_botlib_export.BotLibShutdown = Some(Export_BotLibShutdown as unsafe extern "C" fn() -> i32);
     be_botlib_export.BotLibVarSet = Some(
         Export_BotLibVarSet
             as unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> i32,
     );
     be_botlib_export.BotLibVarGet = Some(
         Export_BotLibVarGet
-            as unsafe extern "C" fn(
-                _: *const libc::c_char,
-                _: *mut libc::c_char,
-                _: i32,
-            ) -> i32,
+            as unsafe extern "C" fn(_: *const libc::c_char, _: *mut libc::c_char, _: i32) -> i32,
     );
     be_botlib_export.PC_AddGlobalDefine = Some(
         crate::src::botlib::l_precomp::PC_AddGlobalDefine
@@ -1518,8 +1431,7 @@ pub unsafe extern "C" fn GetBotLibAPI(
             as unsafe extern "C" fn(_: *const libc::c_char) -> i32,
     );
     be_botlib_export.PC_FreeSourceHandle = Some(
-        crate::src::botlib::l_precomp::PC_FreeSourceHandle
-            as unsafe extern "C" fn(_: i32) -> i32,
+        crate::src::botlib::l_precomp::PC_FreeSourceHandle as unsafe extern "C" fn(_: i32) -> i32,
     );
     be_botlib_export.PC_ReadTokenHandle = Some(
         crate::src::botlib::l_precomp::PC_ReadTokenHandle
@@ -1530,11 +1442,7 @@ pub unsafe extern "C" fn GetBotLibAPI(
     );
     be_botlib_export.PC_SourceFileAndLine = Some(
         crate::src::botlib::l_precomp::PC_SourceFileAndLine
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut libc::c_char,
-                _: *mut i32,
-            ) -> i32,
+            as unsafe extern "C" fn(_: i32, _: *mut libc::c_char, _: *mut i32) -> i32,
     );
     be_botlib_export.BotLibStartFrame =
         Some(Export_BotLibStartFrame as unsafe extern "C" fn(_: f32) -> i32);
@@ -1542,10 +1450,7 @@ pub unsafe extern "C" fn GetBotLibAPI(
         Some(Export_BotLibLoadMap as unsafe extern "C" fn(_: *const libc::c_char) -> i32);
     be_botlib_export.BotLibUpdateEntity = Some(
         Export_BotLibUpdateEntity
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut crate::botlib_h::bot_entitystate_t,
-            ) -> i32,
+            as unsafe extern "C" fn(_: i32, _: *mut crate::botlib_h::bot_entitystate_t) -> i32,
     );
     be_botlib_export.Test = Some(
         BotExportTest

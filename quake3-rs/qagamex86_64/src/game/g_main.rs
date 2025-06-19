@@ -1966,11 +1966,7 @@ G_InitGame
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn G_InitGame(
-    mut levelTime: i32,
-    mut randomSeed: i32,
-    mut restart: i32,
-) {
+pub unsafe extern "C" fn G_InitGame(mut levelTime: i32, mut randomSeed: i32, mut restart: i32) {
     let mut i: i32 = 0;
     G_Printf(b"------- Game Initialization -------\n\x00" as *const u8 as *const libc::c_char);
     G_Printf(
@@ -2358,9 +2354,7 @@ pub unsafe extern "C" fn AddTournamentPlayer() {
     i = 0 as i32;
     while i < level.maxclients {
         client = &mut *level.clients.offset(i as isize) as *mut crate::g_local_h::gclient_s;
-        if !((*client).pers.connected as u32
-            != crate::g_local_h::CON_CONNECTED as i32 as u32)
-        {
+        if !((*client).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32) {
             if !((*client).sess.sessionTeam as u32
                 != crate::bg_public_h::TEAM_SPECTATOR as i32 as u32)
             {
@@ -2407,9 +2401,7 @@ pub unsafe extern "C" fn AddTournamentQueue(mut client: *mut crate::g_local_h::g
     index = 0 as i32;
     while index < level.maxclients {
         curclient = &mut *level.clients.offset(index as isize) as *mut crate::g_local_h::gclient_s;
-        if (*curclient).pers.connected as u32
-            != crate::g_local_h::CON_DISCONNECTED as i32 as u32
-        {
+        if (*curclient).pers.connected as u32 != crate::g_local_h::CON_DISCONNECTED as i32 as u32 {
             if curclient == client {
                 (*curclient).sess.spectatorNum = 0 as i32
             } else if (*curclient).sess.sessionTeam as u32
@@ -2507,45 +2499,32 @@ SortRanks
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SortRanks(
-    mut a: *const libc::c_void,
-    mut b: *const libc::c_void,
-) -> i32 {
+pub unsafe extern "C" fn SortRanks(mut a: *const libc::c_void, mut b: *const libc::c_void) -> i32 {
     let mut ca: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
     let mut cb: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
-    ca = &mut *level.clients.offset(*(a as *mut i32) as isize)
-        as *mut crate::g_local_h::gclient_s;
-    cb = &mut *level.clients.offset(*(b as *mut i32) as isize)
-        as *mut crate::g_local_h::gclient_s;
+    ca = &mut *level.clients.offset(*(a as *mut i32) as isize) as *mut crate::g_local_h::gclient_s;
+    cb = &mut *level.clients.offset(*(b as *mut i32) as isize) as *mut crate::g_local_h::gclient_s;
     // sort special clients last
-    if (*ca).sess.spectatorState as u32
-        == crate::g_local_h::SPECTATOR_SCOREBOARD as i32 as u32
+    if (*ca).sess.spectatorState as u32 == crate::g_local_h::SPECTATOR_SCOREBOARD as i32 as u32
         || (*ca).sess.spectatorClient < 0 as i32
     {
         return 1 as i32;
     }
-    if (*cb).sess.spectatorState as u32
-        == crate::g_local_h::SPECTATOR_SCOREBOARD as i32 as u32
+    if (*cb).sess.spectatorState as u32 == crate::g_local_h::SPECTATOR_SCOREBOARD as i32 as u32
         || (*cb).sess.spectatorClient < 0 as i32
     {
         return -(1 as i32);
     }
     // then connecting clients
-    if (*ca).pers.connected as u32
-        == crate::g_local_h::CON_CONNECTING as i32 as u32
-    {
+    if (*ca).pers.connected as u32 == crate::g_local_h::CON_CONNECTING as i32 as u32 {
         return 1 as i32;
     }
-    if (*cb).pers.connected as u32
-        == crate::g_local_h::CON_CONNECTING as i32 as u32
-    {
+    if (*cb).pers.connected as u32 == crate::g_local_h::CON_CONNECTING as i32 as u32 {
         return -(1 as i32);
     }
     // then spectators
-    if (*ca).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
-        && (*cb).sess.sessionTeam as u32
-            == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+    if (*ca).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+        && (*cb).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
     {
         if (*ca).sess.spectatorNum > (*cb).sess.spectatorNum {
             return -(1 as i32);
@@ -2555,14 +2534,10 @@ pub unsafe extern "C" fn SortRanks(
         }
         return 0 as i32;
     }
-    if (*ca).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
-    {
+    if (*ca).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32 {
         return 1 as i32;
     }
-    if (*cb).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
-    {
+    if (*cb).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32 {
         return -(1 as i32);
     }
     // then sort by score
@@ -2631,8 +2606,7 @@ pub unsafe extern "C" fn CalculateRanks() {
                             == crate::bg_public_h::TEAM_RED as i32 as u32
                         {
                             level.numteamVotingClients[0 as i32 as usize] += 1
-                        } else if (*level.clients.offset(i as isize)).sess.sessionTeam
-                            as u32
+                        } else if (*level.clients.offset(i as isize)).sess.sessionTeam as u32
                             == crate::bg_public_h::TEAM_BLUE as i32 as u32
                         {
                             level.numteamVotingClients[1 as i32 as usize] += 1
@@ -2654,10 +2628,7 @@ pub unsafe extern "C" fn CalculateRanks() {
         ::std::mem::size_of::<i32>() as libc::c_ulong,
         Some(
             SortRanks
-                as unsafe extern "C" fn(
-                    _: *const libc::c_void,
-                    _: *const libc::c_void,
-                ) -> i32,
+                as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
         ),
     );
     // set the rank value for all clients that are connected and not spectators
@@ -2672,16 +2643,13 @@ pub unsafe extern "C" fn CalculateRanks() {
             if level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize]
                 == level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize]
             {
-                (*cl).ps.persistant[crate::bg_public_h::PERS_RANK as i32 as usize] =
-                    2 as i32
+                (*cl).ps.persistant[crate::bg_public_h::PERS_RANK as i32 as usize] = 2 as i32
             } else if level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize]
                 > level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize]
             {
-                (*cl).ps.persistant[crate::bg_public_h::PERS_RANK as i32 as usize] =
-                    0 as i32
+                (*cl).ps.persistant[crate::bg_public_h::PERS_RANK as i32 as usize] = 0 as i32
             } else {
-                (*cl).ps.persistant[crate::bg_public_h::PERS_RANK as i32 as usize] =
-                    1 as i32
+                (*cl).ps.persistant[crate::bg_public_h::PERS_RANK as i32 as usize] = 1 as i32
             }
             i += 1
         }
@@ -2709,14 +2677,12 @@ pub unsafe extern "C" fn CalculateRanks() {
                     .clients
                     .offset(level.sortedClients[(i - 1 as i32) as usize] as isize))
                 .ps
-                .persistant[crate::bg_public_h::PERS_RANK as i32 as usize] =
-                    rank | 0x4000 as i32;
+                .persistant[crate::bg_public_h::PERS_RANK as i32 as usize] = rank | 0x4000 as i32;
                 (*level
                     .clients
                     .offset(level.sortedClients[i as usize] as isize))
                 .ps
-                .persistant[crate::bg_public_h::PERS_RANK as i32 as usize] =
-                    rank | 0x4000 as i32
+                .persistant[crate::bg_public_h::PERS_RANK as i32 as usize] = rank | 0x4000 as i32
             }
             score = newScore;
             if g_gametype.integer == crate::bg_public_h::GT_SINGLE_PLAYER as i32
@@ -2726,8 +2692,7 @@ pub unsafe extern "C" fn CalculateRanks() {
                     .clients
                     .offset(level.sortedClients[i as usize] as isize))
                 .ps
-                .persistant[crate::bg_public_h::PERS_RANK as i32 as usize] =
-                    rank | 0x4000 as i32
+                .persistant[crate::bg_public_h::PERS_RANK as i32 as usize] = rank | 0x4000 as i32
             }
             i += 1
         }
@@ -2863,24 +2828,15 @@ pub unsafe extern "C" fn MoveClientToIntermission(mut ent: *mut crate::g_local_h
     }
     FindIntermissionPoint();
     // move to the spot
-    (*ent).s.origin[0 as i32 as usize] =
-        level.intermission_origin[0 as i32 as usize];
-    (*ent).s.origin[1 as i32 as usize] =
-        level.intermission_origin[1 as i32 as usize];
-    (*ent).s.origin[2 as i32 as usize] =
-        level.intermission_origin[2 as i32 as usize];
-    (*(*ent).client).ps.origin[0 as i32 as usize] =
-        level.intermission_origin[0 as i32 as usize];
-    (*(*ent).client).ps.origin[1 as i32 as usize] =
-        level.intermission_origin[1 as i32 as usize];
-    (*(*ent).client).ps.origin[2 as i32 as usize] =
-        level.intermission_origin[2 as i32 as usize];
-    (*(*ent).client).ps.viewangles[0 as i32 as usize] =
-        level.intermission_angle[0 as i32 as usize];
-    (*(*ent).client).ps.viewangles[1 as i32 as usize] =
-        level.intermission_angle[1 as i32 as usize];
-    (*(*ent).client).ps.viewangles[2 as i32 as usize] =
-        level.intermission_angle[2 as i32 as usize];
+    (*ent).s.origin[0 as i32 as usize] = level.intermission_origin[0 as i32 as usize];
+    (*ent).s.origin[1 as i32 as usize] = level.intermission_origin[1 as i32 as usize];
+    (*ent).s.origin[2 as i32 as usize] = level.intermission_origin[2 as i32 as usize];
+    (*(*ent).client).ps.origin[0 as i32 as usize] = level.intermission_origin[0 as i32 as usize];
+    (*(*ent).client).ps.origin[1 as i32 as usize] = level.intermission_origin[1 as i32 as usize];
+    (*(*ent).client).ps.origin[2 as i32 as usize] = level.intermission_origin[2 as i32 as usize];
+    (*(*ent).client).ps.viewangles[0 as i32 as usize] = level.intermission_angle[0 as i32 as usize];
+    (*(*ent).client).ps.viewangles[1 as i32 as usize] = level.intermission_angle[1 as i32 as usize];
+    (*(*ent).client).ps.viewangles[2 as i32 as usize] = level.intermission_angle[2 as i32 as usize];
     (*(*ent).client).ps.pm_type = crate::bg_public_h::PM_INTERMISSION as i32;
     // clean up powerup info
     crate::stdlib::memset(
@@ -2926,18 +2882,12 @@ pub unsafe extern "C" fn FindIntermissionPoint() {
             crate::src::qcommon::q_shared::qfalse,
         ) as *mut crate::g_local_h::gentity_s;
     } else {
-        level.intermission_origin[0 as i32 as usize] =
-            (*ent).s.origin[0 as i32 as usize];
-        level.intermission_origin[1 as i32 as usize] =
-            (*ent).s.origin[1 as i32 as usize];
-        level.intermission_origin[2 as i32 as usize] =
-            (*ent).s.origin[2 as i32 as usize];
-        level.intermission_angle[0 as i32 as usize] =
-            (*ent).s.angles[0 as i32 as usize];
-        level.intermission_angle[1 as i32 as usize] =
-            (*ent).s.angles[1 as i32 as usize];
-        level.intermission_angle[2 as i32 as usize] =
-            (*ent).s.angles[2 as i32 as usize];
+        level.intermission_origin[0 as i32 as usize] = (*ent).s.origin[0 as i32 as usize];
+        level.intermission_origin[1 as i32 as usize] = (*ent).s.origin[1 as i32 as usize];
+        level.intermission_origin[2 as i32 as usize] = (*ent).s.origin[2 as i32 as usize];
+        level.intermission_angle[0 as i32 as usize] = (*ent).s.angles[0 as i32 as usize];
+        level.intermission_angle[1 as i32 as usize] = (*ent).s.angles[1 as i32 as usize];
+        level.intermission_angle[2 as i32 as usize] = (*ent).s.angles[2 as i32 as usize];
         // if it has a target, look towards it
         if !(*ent).target.is_null() {
             target = crate::src::game::g_utils::G_PickTarget((*ent).target)
@@ -3073,11 +3023,8 @@ pub unsafe extern "C" fn ExitLevel() {
     i = 0 as i32;
     while i < g_maxclients.integer {
         cl = level.clients.offset(i as isize);
-        if !((*cl).pers.connected as u32
-            != crate::g_local_h::CON_CONNECTED as i32 as u32)
-        {
-            (*cl).ps.persistant[crate::bg_public_h::PERS_SCORE as i32 as usize] =
-                0 as i32
+        if !((*cl).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32) {
+            (*cl).ps.persistant[crate::bg_public_h::PERS_SCORE as i32 as usize] = 0 as i32
         }
         i += 1
     }
@@ -3189,12 +3136,8 @@ pub unsafe extern "C" fn LogExit(mut string: *const libc::c_char) {
             .clients
             .offset(*level.sortedClients.as_mut_ptr().offset(i as isize) as isize)
             as *mut crate::g_local_h::gclient_s;
-        if !((*cl).sess.sessionTeam as u32
-            == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32)
-        {
-            if !((*cl).pers.connected as u32
-                == crate::g_local_h::CON_CONNECTING as i32 as u32)
-            {
+        if !((*cl).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32) {
+            if !((*cl).pers.connected as u32 == crate::g_local_h::CON_CONNECTING as i32 as u32) {
                 ping = if (*cl).ps.ping < 999 as i32 {
                     (*cl).ps.ping
                 } else {
@@ -3242,9 +3185,7 @@ pub unsafe extern "C" fn CheckIntermissionExit() {
     i = 0 as i32;
     while i < g_maxclients.integer {
         cl = level.clients.offset(i as isize);
-        if !((*cl).pers.connected as u32
-            != crate::g_local_h::CON_CONNECTED as i32 as u32)
-        {
+        if !((*cl).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32) {
             if !(g_entities[i as usize].r.svFlags & 0x8 as i32 != 0) {
                 playerCount += 1;
                 if (*cl).readyToExit as u64 != 0 {
@@ -3264,11 +3205,8 @@ pub unsafe extern "C" fn CheckIntermissionExit() {
     i = 0 as i32;
     while i < g_maxclients.integer {
         cl = level.clients.offset(i as isize);
-        if !((*cl).pers.connected as u32
-            != crate::g_local_h::CON_CONNECTED as i32 as u32)
-        {
-            (*cl).ps.stats[crate::bg_public_h::STAT_CLIENTS_READY as i32 as usize] =
-                readyMask
+        if !((*cl).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32) {
+            (*cl).ps.stats[crate::bg_public_h::STAT_CLIENTS_READY as i32 as usize] = readyMask
         }
         i += 1
     }
@@ -3363,9 +3301,7 @@ pub unsafe extern "C" fn CheckExitRules() {
         // always wait for sudden death
         return;
     }
-    if g_timelimit.integer < 0 as i32
-        || g_timelimit.integer > 2147483647 as i32 / 60000 as i32
-    {
+    if g_timelimit.integer < 0 as i32 || g_timelimit.integer > 2147483647 as i32 / 60000 as i32 {
         G_Printf(
             b"timelimit %i is out of range, defaulting to 0\n\x00" as *const u8
                 as *const libc::c_char,
@@ -3404,9 +3340,7 @@ pub unsafe extern "C" fn CheckExitRules() {
         );
     }
     if g_gametype.integer < crate::bg_public_h::GT_CTF as i32 && g_fraglimit.integer != 0 {
-        if level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize]
-            >= g_fraglimit.integer
-        {
+        if level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize] >= g_fraglimit.integer {
             crate::src::game::g_syscalls::trap_SendServerCommand(
                 -(1 as i32),
                 b"print \"Red hit the fraglimit.\n\"\x00" as *const u8 as *const libc::c_char,
@@ -3414,9 +3348,7 @@ pub unsafe extern "C" fn CheckExitRules() {
             LogExit(b"Fraglimit hit.\x00" as *const u8 as *const libc::c_char);
             return;
         }
-        if level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize]
-            >= g_fraglimit.integer
-        {
+        if level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize] >= g_fraglimit.integer {
             crate::src::game::g_syscalls::trap_SendServerCommand(
                 -(1 as i32),
                 b"print \"Blue hit the fraglimit.\n\"\x00" as *const u8 as *const libc::c_char,
@@ -3427,12 +3359,8 @@ pub unsafe extern "C" fn CheckExitRules() {
         i = 0 as i32;
         while i < g_maxclients.integer {
             cl = level.clients.offset(i as isize);
-            if !((*cl).pers.connected as u32
-                != crate::g_local_h::CON_CONNECTED as i32 as u32)
-            {
-                if !((*cl).sess.sessionTeam as u32
-                    != crate::bg_public_h::TEAM_FREE as i32 as u32)
-                {
+            if !((*cl).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32) {
+                if !((*cl).sess.sessionTeam as u32 != crate::bg_public_h::TEAM_FREE as i32 as u32) {
                     if (*cl).ps.persistant[crate::bg_public_h::PERS_SCORE as i32 as usize]
                         >= g_fraglimit.integer
                     {
@@ -3467,11 +3395,8 @@ pub unsafe extern "C" fn CheckExitRules() {
             &mut g_capturelimit as *mut _ as *mut crate::src::qcommon::q_shared::vmCvar_t,
         );
     }
-    if g_gametype.integer >= crate::bg_public_h::GT_CTF as i32
-        && g_capturelimit.integer != 0
-    {
-        if level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize]
-            >= g_capturelimit.integer
+    if g_gametype.integer >= crate::bg_public_h::GT_CTF as i32 && g_capturelimit.integer != 0 {
+        if level.teamScores[crate::bg_public_h::TEAM_RED as i32 as usize] >= g_capturelimit.integer
         {
             crate::src::game::g_syscalls::trap_SendServerCommand(
                 -(1 as i32),
@@ -3480,8 +3405,7 @@ pub unsafe extern "C" fn CheckExitRules() {
             LogExit(b"Capturelimit hit.\x00" as *const u8 as *const libc::c_char);
             return;
         }
-        if level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize]
-            >= g_capturelimit.integer
+        if level.teamScores[crate::bg_public_h::TEAM_BLUE as i32 as usize] >= g_capturelimit.integer
         {
             crate::src::game::g_syscalls::trap_SendServerCommand(
                 -(1 as i32),
@@ -3547,8 +3471,7 @@ pub unsafe extern "C" fn CheckTournament() {
             if level.numPlayingClients == 2 as i32 {
                 // fudge by -1 to account for extra delays
                 if g_warmup.integer > 1 as i32 {
-                    level.warmupTime =
-                        level.time + (g_warmup.integer - 1 as i32) * 1000 as i32
+                    level.warmupTime = level.time + (g_warmup.integer - 1 as i32) * 1000 as i32
                 } else {
                     level.warmupTime = 0 as i32
                 }
@@ -3584,15 +3507,9 @@ pub unsafe extern "C" fn CheckTournament() {
             crate::src::qcommon::q_shared::qfalse;
         if g_gametype.integer >= crate::bg_public_h::GT_TEAM as i32 {
             counts[crate::bg_public_h::TEAM_BLUE as i32 as usize] =
-                crate::src::game::g_client::TeamCount(
-                    -(1 as i32),
-                    crate::bg_public_h::TEAM_BLUE,
-                );
+                crate::src::game::g_client::TeamCount(-(1 as i32), crate::bg_public_h::TEAM_BLUE);
             counts[crate::bg_public_h::TEAM_RED as i32 as usize] =
-                crate::src::game::g_client::TeamCount(
-                    -(1 as i32),
-                    crate::bg_public_h::TEAM_RED,
-                );
+                crate::src::game::g_client::TeamCount(-(1 as i32), crate::bg_public_h::TEAM_RED);
             if counts[crate::bg_public_h::TEAM_RED as i32 as usize] < 1 as i32
                 || counts[crate::bg_public_h::TEAM_BLUE as i32 as usize] < 1 as i32
             {
@@ -3628,8 +3545,7 @@ pub unsafe extern "C" fn CheckTournament() {
         if level.warmupTime < 0 as i32 {
             // fudge by -1 to account for extra delays
             if g_warmup.integer > 1 as i32 {
-                level.warmupTime =
-                    level.time + (g_warmup.integer - 1 as i32) * 1000 as i32
+                level.warmupTime = level.time + (g_warmup.integer - 1 as i32) * 1000 as i32
             } else {
                 level.warmupTime = 0 as i32
             }
@@ -3719,9 +3635,7 @@ pub unsafe extern "C" fn PrintTeam(mut team: i32, mut message: *mut libc::c_char
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < level.maxclients {
-        if !((*level.clients.offset(i as isize)).sess.sessionTeam as u32
-            != team as u32)
-        {
+        if !((*level.clients.offset(i as isize)).sess.sessionTeam as u32 != team as u32) {
             crate::src::game::g_syscalls::trap_SendServerCommand(i, message);
         }
         i += 1
@@ -3752,9 +3666,7 @@ pub unsafe extern "C" fn SetLeader(mut team: i32, mut client: i32) {
         );
         return;
     }
-    if (*level.clients.offset(client as isize)).sess.sessionTeam as u32
-        != team as u32
-    {
+    if (*level.clients.offset(client as isize)).sess.sessionTeam as u32 != team as u32 {
         PrintTeam(
             team,
             crate::src::qcommon::q_shared::va(
@@ -3770,9 +3682,7 @@ pub unsafe extern "C" fn SetLeader(mut team: i32, mut client: i32) {
     }
     i = 0 as i32;
     while i < level.maxclients {
-        if !((*level.clients.offset(i as isize)).sess.sessionTeam as u32
-            != team as u32)
-        {
+        if !((*level.clients.offset(i as isize)).sess.sessionTeam as u32 != team as u32) {
             if (*level.clients.offset(i as isize)).sess.teamLeader as u64 != 0 {
                 (*level.clients.offset(i as isize)).sess.teamLeader =
                     crate::src::qcommon::q_shared::qfalse;
@@ -3806,9 +3716,7 @@ pub unsafe extern "C" fn CheckTeamLeader(mut team: i32) {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < level.maxclients {
-        if !((*level.clients.offset(i as isize)).sess.sessionTeam as u32
-            != team as u32)
-        {
+        if !((*level.clients.offset(i as isize)).sess.sessionTeam as u32 != team as u32) {
             if (*level.clients.offset(i as isize)).sess.teamLeader as u64 != 0 {
                 break;
             }
@@ -3818,9 +3726,7 @@ pub unsafe extern "C" fn CheckTeamLeader(mut team: i32) {
     if i >= level.maxclients {
         i = 0 as i32;
         while i < level.maxclients {
-            if !((*level.clients.offset(i as isize)).sess.sessionTeam as u32
-                != team as u32)
-            {
+            if !((*level.clients.offset(i as isize)).sess.sessionTeam as u32 != team as u32) {
                 if g_entities[i as usize].r.svFlags & 0x8 as i32 == 0 {
                     (*level.clients.offset(i as isize)).sess.teamLeader =
                         crate::src::qcommon::q_shared::qtrue;
@@ -3832,9 +3738,7 @@ pub unsafe extern "C" fn CheckTeamLeader(mut team: i32) {
         if i >= level.maxclients {
             i = 0 as i32;
             while i < level.maxclients {
-                if (*level.clients.offset(i as isize)).sess.sessionTeam as u32
-                    != team as u32
-                {
+                if (*level.clients.offset(i as isize)).sess.sessionTeam as u32 != team as u32 {
                     i += 1
                 } else {
                     (*level.clients.offset(i as isize)).sess.teamLeader =
@@ -4209,8 +4113,8 @@ pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
     //
     // go through all allocated objects
     //
-    ent = &mut *g_entities.as_mut_ptr().offset(0 as i32 as isize)
-        as *mut crate::g_local_h::gentity_t;
+    ent =
+        &mut *g_entities.as_mut_ptr().offset(0 as i32 as isize) as *mut crate::g_local_h::gentity_t;
     let mut current_block_24: u64;
     i = 0 as i32;
     while i < level.num_entities {
@@ -4262,8 +4166,7 @@ pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
                                 crate::src::game::g_items::G_RunItem(
                                     ent as *mut crate::g_local_h::gentity_s,
                                 );
-                            } else if (*ent).s.eType == crate::bg_public_h::ET_MOVER as i32
-                            {
+                            } else if (*ent).s.eType == crate::bg_public_h::ET_MOVER as i32 {
                                 crate::src::game::g_mover::G_RunMover(
                                     ent as *mut crate::g_local_h::gentity_s,
                                 );
@@ -4283,8 +4186,8 @@ pub unsafe extern "C" fn G_RunFrame(mut levelTime: i32) {
         ent = ent.offset(1)
     }
     // perform final fixups on the players
-    ent = &mut *g_entities.as_mut_ptr().offset(0 as i32 as isize)
-        as *mut crate::g_local_h::gentity_t;
+    ent =
+        &mut *g_entities.as_mut_ptr().offset(0 as i32 as isize) as *mut crate::g_local_h::gentity_t;
     i = 0 as i32;
     while i < level.maxclients {
         if (*ent).inuse as u64 != 0 {

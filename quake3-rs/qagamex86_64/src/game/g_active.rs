@@ -343,11 +343,10 @@ pub unsafe extern "C" fn P_DamageFeedback(mut player: *mut crate::g_local_h::gen
             (*client).damage_from.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             angles.as_mut_ptr(),
         );
-        (*client).ps.damagePitch = (angles[0 as i32 as usize] as f64 / 360.0f64
-            * 256 as i32 as f64)
-            as i32;
-        (*client).ps.damageYaw = (angles[1 as i32 as usize] as f64 / 360.0f64
-            * 256 as i32 as f64) as i32
+        (*client).ps.damagePitch =
+            (angles[0 as i32 as usize] as f64 / 360.0f64 * 256 as i32 as f64) as i32;
+        (*client).ps.damageYaw =
+            (angles[1 as i32 as usize] as f64 / 360.0f64 * 256 as i32 as f64) as i32
     }
     // play an appropriate pain sound
     if crate::src::game::g_main::level.time > (*player).pain_debounce_time
@@ -387,8 +386,7 @@ pub unsafe extern "C" fn P_WorldEffects(mut ent: *mut crate::g_local_h::gentity_
         return;
     }
     waterlevel = (*ent).waterlevel;
-    envirosuit = ((*(*ent).client).ps.powerups
-        [crate::bg_public_h::PW_BATTLESUIT as i32 as usize]
+    envirosuit = ((*(*ent).client).ps.powerups[crate::bg_public_h::PW_BATTLESUIT as i32 as usize]
         > crate::src::game::g_main::level.time) as i32
         as crate::src::qcommon::q_shared::qboolean;
     //
@@ -397,8 +395,7 @@ pub unsafe extern "C" fn P_WorldEffects(mut ent: *mut crate::g_local_h::gentity_
     if waterlevel == 3 as i32 {
         // envirosuit give air
         if envirosuit as u64 != 0 {
-            (*(*ent).client).airOutTime =
-                crate::src::game::g_main::level.time + 10000 as i32
+            (*(*ent).client).airOutTime = crate::src::game::g_main::level.time + 10000 as i32
         }
         // if out of air, start drowning
         if (*(*ent).client).airOutTime < crate::src::game::g_main::level.time {
@@ -411,8 +408,7 @@ pub unsafe extern "C" fn P_WorldEffects(mut ent: *mut crate::g_local_h::gentity_
                     (*ent).damage = 15 as i32
                 }
                 // don't play a normal pain sound
-                (*ent).pain_debounce_time =
-                    crate::src::game::g_main::level.time + 200 as i32;
+                (*ent).pain_debounce_time = crate::src::game::g_main::level.time + 200 as i32;
                 crate::src::game::g_combat::G_Damage(
                     ent as *mut crate::g_local_h::gentity_s,
                     0 as *mut crate::g_local_h::gentity_t as *mut crate::g_local_h::gentity_s,
@@ -590,9 +586,7 @@ pub unsafe extern "C" fn G_TouchTriggers(mut ent: *mut crate::g_local_h::gentity
         return;
     }
     // dead clients don't activate triggers!
-    if (*(*ent).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-        <= 0 as i32
-    {
+    if (*(*ent).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= 0 as i32 {
         return;
     }
     mins[0 as i32 as usize] =
@@ -614,18 +608,18 @@ pub unsafe extern "C" fn G_TouchTriggers(mut ent: *mut crate::g_local_h::gentity
         (1 as i32) << 10 as i32,
     );
     // can't use ent->absmin, because that has a one unit pad
-    mins[0 as i32 as usize] = (*(*ent).client).ps.origin[0 as i32 as usize]
-        + (*ent).r.mins[0 as i32 as usize];
-    mins[1 as i32 as usize] = (*(*ent).client).ps.origin[1 as i32 as usize]
-        + (*ent).r.mins[1 as i32 as usize];
-    mins[2 as i32 as usize] = (*(*ent).client).ps.origin[2 as i32 as usize]
-        + (*ent).r.mins[2 as i32 as usize];
-    maxs[0 as i32 as usize] = (*(*ent).client).ps.origin[0 as i32 as usize]
-        + (*ent).r.maxs[0 as i32 as usize];
-    maxs[1 as i32 as usize] = (*(*ent).client).ps.origin[1 as i32 as usize]
-        + (*ent).r.maxs[1 as i32 as usize];
-    maxs[2 as i32 as usize] = (*(*ent).client).ps.origin[2 as i32 as usize]
-        + (*ent).r.maxs[2 as i32 as usize];
+    mins[0 as i32 as usize] =
+        (*(*ent).client).ps.origin[0 as i32 as usize] + (*ent).r.mins[0 as i32 as usize];
+    mins[1 as i32 as usize] =
+        (*(*ent).client).ps.origin[1 as i32 as usize] + (*ent).r.mins[1 as i32 as usize];
+    mins[2 as i32 as usize] =
+        (*(*ent).client).ps.origin[2 as i32 as usize] + (*ent).r.mins[2 as i32 as usize];
+    maxs[0 as i32 as usize] =
+        (*(*ent).client).ps.origin[0 as i32 as usize] + (*ent).r.maxs[0 as i32 as usize];
+    maxs[1 as i32 as usize] =
+        (*(*ent).client).ps.origin[1 as i32 as usize] + (*ent).r.maxs[1 as i32 as usize];
+    maxs[2 as i32 as usize] =
+        (*(*ent).client).ps.origin[2 as i32 as usize] + (*ent).r.maxs[2 as i32 as usize];
     let mut current_block_19: u64;
     i = 0 as i32;
     while i < num {
@@ -704,9 +698,7 @@ pub unsafe extern "C" fn G_TouchTriggers(mut ent: *mut crate::g_local_h::gentity
                                         hit, ent, &mut trace,
                                     );
                                 }
-                                if (*ent).r.svFlags & 0x8 as i32 != 0
-                                    && (*ent).touch.is_some()
-                                {
+                                if (*ent).r.svFlags & 0x8 as i32 != 0 && (*ent).touch.is_some() {
                                     (*ent).touch.expect("non-null function pointer")(
                                         ent, hit, &mut trace,
                                     );
@@ -766,13 +758,10 @@ pub unsafe extern "C" fn SpectatorThink(
     }; // faster than normal
     let mut client: *mut crate::g_local_h::gclient_t = 0 as *mut crate::g_local_h::gclient_t;
     client = (*ent).client;
-    if (*client).sess.spectatorState as u32
-        != crate::g_local_h::SPECTATOR_FOLLOW as i32 as u32
+    if (*client).sess.spectatorState as u32 != crate::g_local_h::SPECTATOR_FOLLOW as i32 as u32
         || (*client).ps.pm_flags & 4096 as i32 == 0
     {
-        if (*client).sess.spectatorState as u32
-            == crate::g_local_h::SPECTATOR_FREE as i32 as u32
-        {
+        if (*client).sess.spectatorState as u32 == crate::g_local_h::SPECTATOR_FREE as i32 as u32 {
             if (*client).noclip as u64 != 0 {
                 (*client).ps.pm_type = crate::bg_public_h::PM_NOCLIP as i32
             } else {
@@ -790,8 +779,7 @@ pub unsafe extern "C" fn SpectatorThink(
         ); // spectators can fly through bodies
         pm.ps = &mut (*client).ps;
         pm.cmd = *ucmd;
-        pm.tracemask = (1 as i32 | 0x10000 as i32 | 0x2000000 as i32)
-            & !(0x2000000 as i32);
+        pm.tracemask = (1 as i32 | 0x10000 as i32 | 0x2000000 as i32) & !(0x2000000 as i32);
         pm.trace = Some(
             crate::src::game::g_syscalls::trap_Trace
                 as unsafe extern "C" fn(
@@ -845,8 +833,7 @@ pub unsafe extern "C" fn ClientInactivityTimer(
     if crate::src::game::g_main::g_inactivity.integer == 0 {
         // give everyone some time, so if the operator sets g_inactivity during
         // gameplay, everyone isn't kicked
-        (*client).inactivityTime =
-            crate::src::game::g_main::level.time + 60 as i32 * 1000 as i32;
+        (*client).inactivityTime = crate::src::game::g_main::level.time + 60 as i32 * 1000 as i32;
         (*client).inactivityWarning = crate::src::qcommon::q_shared::qfalse
     } else if (*client).pers.cmd.forwardmove as i32 != 0
         || (*client).pers.cmd.rightmove as i32 != 0
@@ -859,8 +846,7 @@ pub unsafe extern "C" fn ClientInactivityTimer(
     } else if (*client).pers.localClient as u64 == 0 {
         if crate::src::game::g_main::level.time > (*client).inactivityTime {
             crate::src::game::g_syscalls::trap_DropClient(
-                client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long
-                    as i32,
+                client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long as i32,
                 b"Dropped due to inactivity\x00" as *const u8 as *const libc::c_char,
             );
             return crate::src::qcommon::q_shared::qfalse;
@@ -870,8 +856,7 @@ pub unsafe extern "C" fn ClientInactivityTimer(
         {
             (*client).inactivityWarning = crate::src::qcommon::q_shared::qtrue;
             crate::src::game::g_syscalls::trap_SendServerCommand(
-                client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long
-                    as i32,
+                client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long as i32,
                 b"cp \"Ten seconds until inactivity drop!\n\"\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -904,9 +889,7 @@ pub unsafe extern "C" fn ClientTimerActions(
             {
                 (*ent).health += 15 as i32;
                 if (*ent).health as f64
-                    > (*client).ps.stats
-                        [crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
-                        as f64
+                    > (*client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize] as f64
                         * 1.1f64
                 {
                     (*ent).health = ((*client).ps.stats
@@ -920,13 +903,11 @@ pub unsafe extern "C" fn ClientTimerActions(
                     0 as i32,
                 );
             } else if (*ent).health
-                < (*client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
-                    * 2 as i32
+                < (*client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize] * 2 as i32
             {
                 (*ent).health += 5 as i32;
                 if (*ent).health
-                    > (*client).ps.stats
-                        [crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
+                    > (*client).ps.stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
                         * 2 as i32
                 {
                     (*ent).health = (*client).ps.stats
@@ -967,11 +948,7 @@ pub unsafe extern "C" fn ClientIntermissionThink(mut client: *mut crate::g_local
     // swap and latch button actions
     (*client).oldbuttons = (*client).buttons;
     (*client).buttons = (*client).pers.cmd.buttons;
-    if (*client).buttons
-        & (1 as i32 | 4 as i32)
-        & ((*client).oldbuttons ^ (*client).buttons)
-        != 0
-    {
+    if (*client).buttons & (1 as i32 | 4 as i32) & ((*client).oldbuttons ^ (*client).buttons) != 0 {
         // this used to be an ^1 but once a player says ready, it should stick
         (*client).readyToExit = crate::src::qcommon::q_shared::qtrue
     };
@@ -1041,9 +1018,7 @@ pub unsafe extern "C" fn ClientEvents(
                 // drop flags in CTF
                 item = 0 as *mut crate::bg_public_h::gitem_t;
                 j = 0 as i32;
-                if (*(*ent).client).ps.powerups
-                    [crate::bg_public_h::PW_REDFLAG as i32 as usize]
-                    != 0
+                if (*(*ent).client).ps.powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize] != 0
                 {
                     item = crate::src::game::bg_misc::BG_FindItemForPowerup(
                         crate::bg_public_h::PW_REDFLAG,
@@ -1125,8 +1100,7 @@ pub unsafe extern "C" fn SendPendingPredictableEvents(
         // create a temporary entity for this event which is sent to everyone
         // except the client who generated the event
         seq = (*ps).entityEventSequence & 2 as i32 - 1 as i32;
-        event = (*ps).events[seq as usize]
-            | ((*ps).entityEventSequence & 3 as i32) << 8 as i32;
+        event = (*ps).events[seq as usize] | ((*ps).entityEventSequence & 3 as i32) << 8 as i32;
         // set external event to zero before calling BG_PlayerStateToEntityState
         extEvent = (*ps).externalEvent;
         (*ps).externalEvent = 0 as i32;
@@ -1199,9 +1173,7 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut crate::g_local_h::gentit
         0 as *mut crate::src::qcommon::q_shared::usercmd_t;
     client = (*ent).client;
     // don't think if the client is not yet connected (and thus not yet spawned in)
-    if (*client).pers.connected as u32
-        != crate::g_local_h::CON_CONNECTED as i32 as u32
-    {
+    if (*client).pers.connected as u32 != crate::g_local_h::CON_CONNECTED as i32 as u32 {
         return;
     }
     // mark the time, so the connection sprite can be removed
@@ -1219,8 +1191,7 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut crate::g_local_h::gentit
     // following others may result in bad times, but we still want
     // to check for follow toggles
     if msec < 1 as i32
-        && (*client).sess.spectatorState as u32
-            != crate::g_local_h::SPECTATOR_FOLLOW as i32 as u32
+        && (*client).sess.spectatorState as u32 != crate::g_local_h::SPECTATOR_FOLLOW as i32 as u32
     {
         return;
     }
@@ -1246,9 +1217,7 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut crate::g_local_h::gentit
                 as *mut crate::src::qcommon::q_shared::vmCvar_t,
         );
     }
-    if crate::src::game::g_main::pmove_fixed.integer != 0
-        || (*client).pers.pmoveFixed as u32 != 0
-    {
+    if crate::src::game::g_main::pmove_fixed.integer != 0 || (*client).pers.pmoveFixed as u32 != 0 {
         (*ucmd).serverTime = ((*ucmd).serverTime + crate::src::game::g_main::pmove_msec.integer
             - 1 as i32)
             / crate::src::game::g_main::pmove_msec.integer
@@ -1264,9 +1233,7 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut crate::g_local_h::gentit
         return;
     }
     // spectators don't do much
-    if (*client).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
-    {
+    if (*client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32 {
         if (*client).sess.spectatorState as u32
             == crate::g_local_h::SPECTATOR_SCOREBOARD as i32 as u32
         {
@@ -1290,9 +1257,7 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut crate::g_local_h::gentit
     }
     if (*client).noclip as u64 != 0 {
         (*client).ps.pm_type = crate::bg_public_h::PM_NOCLIP as i32
-    } else if (*client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-        <= 0 as i32
-    {
+    } else if (*client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= 0 as i32 {
         (*client).ps.pm_type = crate::bg_public_h::PM_DEAD as i32
     } else {
         (*client).ps.pm_type = crate::bg_public_h::PM_NORMAL as i32
@@ -1336,13 +1301,9 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut crate::g_local_h::gentit
     pm.ps = &mut (*client).ps;
     pm.cmd = *ucmd;
     if (*pm.ps).pm_type == crate::bg_public_h::PM_DEAD as i32 {
-        pm.tracemask = (1 as i32 | 0x10000 as i32 | 0x2000000 as i32)
-            & !(0x2000000 as i32)
+        pm.tracemask = (1 as i32 | 0x10000 as i32 | 0x2000000 as i32) & !(0x2000000 as i32)
     } else if (*ent).r.svFlags & 0x8 as i32 != 0 {
-        pm.tracemask = 1 as i32
-            | 0x10000 as i32
-            | 0x2000000 as i32
-            | 0x400000 as i32
+        pm.tracemask = 1 as i32 | 0x10000 as i32 | 0x2000000 as i32 | 0x400000 as i32
     } else {
         pm.tracemask = 1 as i32 | 0x10000 as i32 | 0x2000000 as i32
     }
@@ -1360,14 +1321,10 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut crate::g_local_h::gentit
     );
     pm.pointcontents = Some(
         crate::src::game::g_syscalls::trap_PointContents
-            as unsafe extern "C" fn(
-                _: *const crate::src::qcommon::q_shared::vec_t,
-                _: i32,
-            ) -> i32,
+            as unsafe extern "C" fn(_: *const crate::src::qcommon::q_shared::vec_t, _: i32) -> i32,
     );
     pm.debugLevel = crate::src::game::g_main::g_debugMove.integer;
-    pm.noFootsteps = (crate::src::game::g_main::g_dmflags.integer & 32 as i32
-        > 0 as i32) as i32
+    pm.noFootsteps = (crate::src::game::g_main::g_dmflags.integer & 32 as i32 > 0 as i32) as i32
         as crate::src::qcommon::q_shared::qboolean;
     pm.pmove_fixed = (crate::src::game::g_main::pmove_fixed.integer as u32
         | (*client).pers.pmoveFixed as u32) as i32;
@@ -1400,12 +1357,9 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut crate::g_local_h::gentit
         // for grapple
     }
     // use the snapped origin for linking so it matches client predicted versions
-    (*ent).r.currentOrigin[0 as i32 as usize] =
-        (*ent).s.pos.trBase[0 as i32 as usize];
-    (*ent).r.currentOrigin[1 as i32 as usize] =
-        (*ent).s.pos.trBase[1 as i32 as usize];
-    (*ent).r.currentOrigin[2 as i32 as usize] =
-        (*ent).s.pos.trBase[2 as i32 as usize];
+    (*ent).r.currentOrigin[0 as i32 as usize] = (*ent).s.pos.trBase[0 as i32 as usize];
+    (*ent).r.currentOrigin[1 as i32 as usize] = (*ent).s.pos.trBase[1 as i32 as usize];
+    (*ent).r.currentOrigin[2 as i32 as usize] = (*ent).s.pos.trBase[2 as i32 as usize];
     (*ent).r.mins[0 as i32 as usize] = pm.mins[0 as i32 as usize];
     (*ent).r.mins[1 as i32 as usize] = pm.mins[1 as i32 as usize];
     (*ent).r.mins[2 as i32 as usize] = pm.mins[2 as i32 as usize];
@@ -1422,12 +1376,9 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut crate::g_local_h::gentit
         G_TouchTriggers(ent);
     }
     // NOTE: now copy the exact origin over otherwise clients can be snapped into solid
-    (*ent).r.currentOrigin[0 as i32 as usize] =
-        (*(*ent).client).ps.origin[0 as i32 as usize];
-    (*ent).r.currentOrigin[1 as i32 as usize] =
-        (*(*ent).client).ps.origin[1 as i32 as usize];
-    (*ent).r.currentOrigin[2 as i32 as usize] =
-        (*(*ent).client).ps.origin[2 as i32 as usize];
+    (*ent).r.currentOrigin[0 as i32 as usize] = (*(*ent).client).ps.origin[0 as i32 as usize];
+    (*ent).r.currentOrigin[1 as i32 as usize] = (*(*ent).client).ps.origin[1 as i32 as usize];
+    (*ent).r.currentOrigin[2 as i32 as usize] = (*(*ent).client).ps.origin[2 as i32 as usize];
     //test for solid areas in the AAS file
     crate::src::game::ai_main::BotTestAAS((*ent).r.currentOrigin.as_mut_ptr());
     // touch other objects
@@ -1441,9 +1392,7 @@ pub unsafe extern "C" fn ClientThink_real(mut ent: *mut crate::g_local_h::gentit
     (*client).buttons = (*ucmd).buttons;
     (*client).latched_buttons |= (*client).buttons & !(*client).oldbuttons;
     // check for respawning
-    if (*client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-        <= 0 as i32
-    {
+    if (*client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= 0 as i32 {
         // wait for the attack button to be pressed
         if crate::src::game::g_main::level.time > (*client).respawnTime {
             // forcerespawn is to prevent users from waiting out powerups
@@ -1529,10 +1478,8 @@ pub unsafe extern "C" fn SpectatorClientEndFrame(mut ent: *mut crate::g_local_h:
             cl = &mut *crate::src::game::g_main::level
                 .clients
                 .offset(clientNum as isize) as *mut crate::g_local_h::gclient_s;
-            if (*cl).pers.connected as u32
-                == crate::g_local_h::CON_CONNECTED as i32 as u32
-                && (*cl).sess.sessionTeam as u32
-                    != crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+            if (*cl).pers.connected as u32 == crate::g_local_h::CON_CONNECTED as i32 as u32
+                && (*cl).sess.sessionTeam as u32 != crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
             {
                 flags = (*cl).ps.eFlags & !(0x4000 as i32 | 0x80000 as i32)
                     | (*(*ent).client).ps.eFlags & (0x4000 as i32 | 0x80000 as i32);
@@ -1576,8 +1523,7 @@ while a slow client may have multiple ClientEndFrame between ClientThink.
 
 pub unsafe extern "C" fn ClientEndFrame(mut ent: *mut crate::g_local_h::gentity_t) {
     let mut i: i32 = 0;
-    if (*(*ent).client).sess.sessionTeam as u32
-        == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
+    if (*(*ent).client).sess.sessionTeam as u32 == crate::bg_public_h::TEAM_SPECTATOR as i32 as u32
     {
         SpectatorClientEndFrame(ent);
         return;
@@ -1608,8 +1554,7 @@ pub unsafe extern "C" fn ClientEndFrame(mut ent: *mut crate::g_local_h::gentity_
     } else {
         (*(*ent).client).ps.eFlags &= !(0x2000 as i32)
     } // FIXME: get rid of ent->health...
-    (*(*ent).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] =
-        (*ent).health;
+    (*(*ent).client).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] = (*ent).health;
     G_SetClientSound(ent);
     // set the latest infor
     if crate::src::game::g_main::g_smoothClients.integer != 0 {

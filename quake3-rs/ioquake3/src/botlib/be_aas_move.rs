@@ -24,8 +24,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -566,10 +565,8 @@ pub unsafe extern "C" fn AAS_AgainstLadder(
         side = (facenum < 0 as i32) as i32;
         face = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum)
-                    as isize,
-            ) as *mut crate::aasfile_h::aas_face_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
+            as *mut crate::aasfile_h::aas_face_t;
         //end if
         //if the face isn't a ladder face
         if !((*face).faceflags & 2 as i32 == 0) {
@@ -580,12 +577,9 @@ pub unsafe extern "C" fn AAS_AgainstLadder(
                 as *mut crate::aasfile_h::aas_plane_t;
             //if the origin is pretty close to the plane
             if crate::stdlib::fabsf(
-                (*plane).normal[0 as i32 as usize]
-                    * *origin.offset(0 as i32 as isize)
-                    + (*plane).normal[1 as i32 as usize]
-                        * *origin.offset(1 as i32 as isize)
-                    + (*plane).normal[2 as i32 as usize]
-                        * *origin.offset(2 as i32 as isize)
+                (*plane).normal[0 as i32 as usize] * *origin.offset(0 as i32 as isize)
+                    + (*plane).normal[1 as i32 as usize] * *origin.offset(1 as i32 as isize)
+                    + (*plane).normal[2 as i32 as usize] * *origin.offset(2 as i32 as isize)
                     - (*plane).dist,
             ) < 3 as i32 as f32
             {
@@ -654,9 +648,7 @@ pub unsafe extern "C" fn AAS_OnGround(
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
     //if too far from the hit plane
-    if *origin.offset(2 as i32 as isize) - trace.endpos[2 as i32 as usize]
-        > 10 as i32 as f32
-    {
+    if *origin.offset(2 as i32 as isize) - trace.endpos[2 as i32 as usize] > 10 as i32 as f32 {
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
     //check if the plane isn't too steep
@@ -797,10 +789,8 @@ pub unsafe extern "C" fn AAS_JumpReachRunStart(
         frames: 0,
     };
     //
-    hordir[0 as i32 as usize] =
-        (*reach).start[0 as i32 as usize] - (*reach).end[0 as i32 as usize];
-    hordir[1 as i32 as usize] =
-        (*reach).start[1 as i32 as usize] - (*reach).end[1 as i32 as usize];
+    hordir[0 as i32 as usize] = (*reach).start[0 as i32 as usize] - (*reach).end[0 as i32 as usize];
+    hordir[1 as i32 as usize] = (*reach).start[1 as i32 as usize] - (*reach).end[1 as i32 as usize];
     hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
     //start point
@@ -809,12 +799,9 @@ pub unsafe extern "C" fn AAS_JumpReachRunStart(
     start[2 as i32 as usize] = (*reach).start[2 as i32 as usize];
     start[2 as i32 as usize] += 1 as i32 as f32;
     //get command movement
-    cmdmove[0 as i32 as usize] =
-        hordir[0 as i32 as usize] * 400 as i32 as f32;
-    cmdmove[1 as i32 as usize] =
-        hordir[1 as i32 as usize] * 400 as i32 as f32;
-    cmdmove[2 as i32 as usize] =
-        hordir[2 as i32 as usize] * 400 as i32 as f32;
+    cmdmove[0 as i32 as usize] = hordir[0 as i32 as usize] * 400 as i32 as f32;
+    cmdmove[1 as i32 as usize] = hordir[1 as i32 as usize] * 400 as i32 as f32;
+    cmdmove[2 as i32 as usize] = hordir[2 as i32 as usize] * 400 as i32 as f32;
     //
     AAS_PredictClientMovement(
         &mut move_0,
@@ -827,11 +814,7 @@ pub unsafe extern "C" fn AAS_JumpReachRunStart(
         1 as i32,
         2 as i32,
         0.1f32,
-        4 as i32
-            | 8 as i32
-            | 16 as i32
-            | 32 as i32
-            | 64 as i32,
+        4 as i32 | 8 as i32 | 16 as i32 | 32 as i32 | 64 as i32,
         0 as i32,
         crate::src::qcommon::q_shared::qfalse as i32,
     );
@@ -909,12 +892,9 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
         ent: 0,
     };
     //look down (90 degrees)
-    viewangles[0 as i32 as usize] =
-        90 as i32 as crate::src::qcommon::q_shared::vec_t;
-    viewangles[1 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    viewangles[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    viewangles[0 as i32 as usize] = 90 as i32 as crate::src::qcommon::q_shared::vec_t;
+    viewangles[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    viewangles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     //get the start point shooting from
     start[0 as i32 as usize] = *origin.offset(0 as i32 as isize); //view offset Z
     start[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
@@ -926,23 +906,20 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
         right.as_mut_ptr(),
         0 as *mut crate::src::qcommon::q_shared::vec_t,
     );
-    start[0 as i32 as usize] += forward[0 as i32 as usize]
-        * rocketoffset[0 as i32 as usize]
+    start[0 as i32 as usize] += forward[0 as i32 as usize] * rocketoffset[0 as i32 as usize]
         + right[0 as i32 as usize] * rocketoffset[1 as i32 as usize];
-    start[1 as i32 as usize] += forward[1 as i32 as usize]
-        * rocketoffset[0 as i32 as usize]
+    start[1 as i32 as usize] += forward[1 as i32 as usize] * rocketoffset[0 as i32 as usize]
         + right[1 as i32 as usize] * rocketoffset[1 as i32 as usize];
-    start[2 as i32 as usize] += forward[2 as i32 as usize]
-        * rocketoffset[0 as i32 as usize]
+    start[2 as i32 as usize] += forward[2 as i32 as usize] * rocketoffset[0 as i32 as usize]
         + right[2 as i32 as usize] * rocketoffset[1 as i32 as usize]
         + rocketoffset[2 as i32 as usize];
     //end point of the trace
-    end[0 as i32 as usize] = start[0 as i32 as usize]
-        + forward[0 as i32 as usize] * 500 as i32 as f32;
-    end[1 as i32 as usize] = start[1 as i32 as usize]
-        + forward[1 as i32 as usize] * 500 as i32 as f32;
-    end[2 as i32 as usize] = start[2 as i32 as usize]
-        + forward[2 as i32 as usize] * 500 as i32 as f32;
+    end[0 as i32 as usize] =
+        start[0 as i32 as usize] + forward[0 as i32 as usize] * 500 as i32 as f32;
+    end[1 as i32 as usize] =
+        start[1 as i32 as usize] + forward[1 as i32 as usize] * 500 as i32 as f32;
+    end[2 as i32 as usize] =
+        start[2 as i32 as usize] + forward[2 as i32 as usize] * 500 as i32 as f32;
     //trace a line to get the impact point
     bsptrace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
         start.as_mut_ptr(),
@@ -953,12 +930,9 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
         1 as i32,
     ) as crate::botlib_h::bsp_trace_s;
     //calculate the damage the bot will get from the rocket impact
-    v[0 as i32 as usize] =
-        botmins[0 as i32 as usize] + botmaxs[0 as i32 as usize];
-    v[1 as i32 as usize] =
-        botmins[1 as i32 as usize] + botmaxs[1 as i32 as usize];
-    v[2 as i32 as usize] =
-        botmins[2 as i32 as usize] + botmaxs[2 as i32 as usize];
+    v[0 as i32 as usize] = botmins[0 as i32 as usize] + botmaxs[0 as i32 as usize];
+    v[1 as i32 as usize] = botmins[1 as i32 as usize] + botmaxs[1 as i32 as usize];
+    v[2 as i32 as usize] = botmins[2 as i32 as usize] + botmaxs[2 as i32 as usize];
     v[0 as i32 as usize] = (*origin.offset(0 as i32 as isize) as f64
         + v[0 as i32 as usize] as f64 * 0.5f64)
         as crate::src::qcommon::q_shared::vec_t;
@@ -968,17 +942,14 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
     v[2 as i32 as usize] = (*origin.offset(2 as i32 as isize) as f64
         + v[2 as i32 as usize] as f64 * 0.5f64)
         as crate::src::qcommon::q_shared::vec_t;
-    v[0 as i32 as usize] =
-        bsptrace.endpos[0 as i32 as usize] - v[0 as i32 as usize];
-    v[1 as i32 as usize] =
-        bsptrace.endpos[1 as i32 as usize] - v[1 as i32 as usize];
-    v[2 as i32 as usize] =
-        bsptrace.endpos[2 as i32 as usize] - v[2 as i32 as usize];
+    v[0 as i32 as usize] = bsptrace.endpos[0 as i32 as usize] - v[0 as i32 as usize];
+    v[1 as i32 as usize] = bsptrace.endpos[1 as i32 as usize] - v[1 as i32 as usize];
+    v[2 as i32 as usize] = bsptrace.endpos[2 as i32 as usize] - v[2 as i32 as usize];
     //
     points = (radiusdamage as f64
         - 0.5f64
-            * VectorLength(v.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
-                as f64) as f32;
+            * VectorLength(v.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t) as f64)
+        as f32;
     if points < 0 as i32 as f32 {
         points = 0 as i32 as f32
     }
@@ -989,12 +960,9 @@ pub unsafe extern "C" fn AAS_WeaponJumpZVelocity(
     //knockback is the same as the damage points
     knockback = points;
     //direction of the damage (from trace.endpos to bot origin)
-    dir[0 as i32 as usize] =
-        *origin.offset(0 as i32 as isize) - bsptrace.endpos[0 as i32 as usize];
-    dir[1 as i32 as usize] =
-        *origin.offset(1 as i32 as isize) - bsptrace.endpos[1 as i32 as usize];
-    dir[2 as i32 as usize] =
-        *origin.offset(2 as i32 as isize) - bsptrace.endpos[2 as i32 as usize];
+    dir[0 as i32 as usize] = *origin.offset(0 as i32 as isize) - bsptrace.endpos[0 as i32 as usize];
+    dir[1 as i32 as usize] = *origin.offset(1 as i32 as isize) - bsptrace.endpos[1 as i32 as usize];
+    dir[2 as i32 as usize] = *origin.offset(2 as i32 as isize) - bsptrace.endpos[2 as i32 as usize];
     crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
     //damage velocity
     kvel[0 as i32 as usize] = (dir[0 as i32 as usize] as f64
@@ -1061,8 +1029,7 @@ pub unsafe extern "C" fn AAS_Accelerate(
     let mut addspeed: f32 = 0.;
     let mut accelspeed: f32 = 0.;
     let mut currentspeed: f32 = 0.;
-    currentspeed = *velocity.offset(0 as i32 as isize)
-        * *wishdir.offset(0 as i32 as isize)
+    currentspeed = *velocity.offset(0 as i32 as isize) * *wishdir.offset(0 as i32 as isize)
         + *velocity.offset(1 as i32 as isize) * *wishdir.offset(1 as i32 as isize)
         + *velocity.offset(2 as i32 as isize) * *wishdir.offset(2 as i32 as isize);
     addspeed = wishspeed - currentspeed;
@@ -1102,8 +1069,7 @@ pub unsafe extern "C" fn AAS_ApplyFriction(
     //horizontal speed
     speed = crate::stdlib::sqrt(
         (*vel.offset(0 as i32 as isize) * *vel.offset(0 as i32 as isize)
-            + *vel.offset(1 as i32 as isize) * *vel.offset(1 as i32 as isize))
-            as f64,
+            + *vel.offset(1 as i32 as isize) * *vel.offset(1 as i32 as isize)) as f64,
     ) as f32;
     if speed != 0. {
         control = if speed < stopspeed { stopspeed } else { speed };
@@ -1154,18 +1120,12 @@ pub unsafe extern "C" fn AAS_ClipToBBox(
         bboxmins.as_mut_ptr(),
         bboxmaxs.as_mut_ptr(),
     );
-    absmins[0 as i32 as usize] =
-        *mins.offset(0 as i32 as isize) - bboxmaxs[0 as i32 as usize];
-    absmins[1 as i32 as usize] =
-        *mins.offset(1 as i32 as isize) - bboxmaxs[1 as i32 as usize];
-    absmins[2 as i32 as usize] =
-        *mins.offset(2 as i32 as isize) - bboxmaxs[2 as i32 as usize];
-    absmaxs[0 as i32 as usize] =
-        *maxs.offset(0 as i32 as isize) - bboxmins[0 as i32 as usize];
-    absmaxs[1 as i32 as usize] =
-        *maxs.offset(1 as i32 as isize) - bboxmins[1 as i32 as usize];
-    absmaxs[2 as i32 as usize] =
-        *maxs.offset(2 as i32 as isize) - bboxmins[2 as i32 as usize];
+    absmins[0 as i32 as usize] = *mins.offset(0 as i32 as isize) - bboxmaxs[0 as i32 as usize];
+    absmins[1 as i32 as usize] = *mins.offset(1 as i32 as isize) - bboxmaxs[1 as i32 as usize];
+    absmins[2 as i32 as usize] = *mins.offset(2 as i32 as isize) - bboxmaxs[2 as i32 as usize];
+    absmaxs[0 as i32 as usize] = *maxs.offset(0 as i32 as isize) - bboxmins[0 as i32 as usize];
+    absmaxs[1 as i32 as usize] = *maxs.offset(1 as i32 as isize) - bboxmins[1 as i32 as usize];
+    absmaxs[2 as i32 as usize] = *maxs.offset(2 as i32 as isize) - bboxmins[2 as i32 as usize];
     //
     (*trace).endpos[0 as i32 as usize] = *end.offset(0 as i32 as isize); //end for
     (*trace).endpos[1 as i32 as usize] = *end.offset(1 as i32 as isize);
@@ -1186,12 +1146,9 @@ pub unsafe extern "C" fn AAS_ClipToBBox(
         i += 1
     }
     //check bounding box collision
-    dir[0 as i32 as usize] =
-        *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize); //end for
-    dir[1 as i32 as usize] =
-        *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
-    dir[2 as i32 as usize] =
-        *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
+    dir[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize); //end for
+    dir[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
+    dir[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
     frac = 1 as i32 as f32;
     i = 0 as i32;
     while i < 3 as i32 {
@@ -1390,15 +1347,12 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
     org[0 as i32 as usize] = *origin.offset(0 as i32 as isize);
     org[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     org[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
-    org[2 as i32 as usize] = (org[2 as i32 as usize] as f64 + 0.25f64)
-        as crate::src::qcommon::q_shared::vec_t;
+    org[2 as i32 as usize] =
+        (org[2 as i32 as usize] as f64 + 0.25f64) as crate::src::qcommon::q_shared::vec_t;
     //velocity to test for the first frame
-    frame_test_vel[0 as i32 as usize] =
-        *velocity.offset(0 as i32 as isize) * frametime;
-    frame_test_vel[1 as i32 as usize] =
-        *velocity.offset(1 as i32 as isize) * frametime;
-    frame_test_vel[2 as i32 as usize] =
-        *velocity.offset(2 as i32 as isize) * frametime;
+    frame_test_vel[0 as i32 as usize] = *velocity.offset(0 as i32 as isize) * frametime;
+    frame_test_vel[1 as i32 as usize] = *velocity.offset(1 as i32 as isize) * frametime;
+    frame_test_vel[2 as i32 as usize] = *velocity.offset(2 as i32 as isize) * frametime;
     //
     jump_frame = -(1 as i32);
     //predict a maximum of 'maxframes' ahead
@@ -1411,8 +1365,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
         } else {
             phys_gravity
         };
-        frame_test_vel[2 as i32 as usize] = (frame_test_vel[2 as i32 as usize]
-            as f64
+        frame_test_vel[2 as i32 as usize] = (frame_test_vel[2 as i32 as usize] as f64
             - gravity as f64 * 0.1f64 * frametime as f64)
             as crate::src::qcommon::q_shared::vec_t;
         if onground != 0 || swimming != 0 {
@@ -1426,24 +1379,21 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
             //if on the ground or swimming
             //end if
             //apply friction
-            frame_test_vel[0 as i32 as usize] = frame_test_vel[0 as i32 as usize]
-                * (1 as i32 as f32 / frametime);
-            frame_test_vel[1 as i32 as usize] = frame_test_vel[1 as i32 as usize]
-                * (1 as i32 as f32 / frametime);
-            frame_test_vel[2 as i32 as usize] = frame_test_vel[2 as i32 as usize]
-                * (1 as i32 as f32 / frametime);
+            frame_test_vel[0 as i32 as usize] =
+                frame_test_vel[0 as i32 as usize] * (1 as i32 as f32 / frametime);
+            frame_test_vel[1 as i32 as usize] =
+                frame_test_vel[1 as i32 as usize] * (1 as i32 as f32 / frametime);
+            frame_test_vel[2 as i32 as usize] =
+                frame_test_vel[2 as i32 as usize] * (1 as i32 as f32 / frametime);
             AAS_ApplyFriction(
                 frame_test_vel.as_mut_ptr(),
                 friction,
                 phys_stopspeed,
                 frametime,
             );
-            frame_test_vel[0 as i32 as usize] =
-                frame_test_vel[0 as i32 as usize] * frametime;
-            frame_test_vel[1 as i32 as usize] =
-                frame_test_vel[1 as i32 as usize] * frametime;
-            frame_test_vel[2 as i32 as usize] =
-                frame_test_vel[2 as i32 as usize] * frametime
+            frame_test_vel[0 as i32 as usize] = frame_test_vel[0 as i32 as usize] * frametime;
+            frame_test_vel[1 as i32 as usize] = frame_test_vel[1 as i32 as usize] * frametime;
+            frame_test_vel[2 as i32 as usize] = frame_test_vel[2 as i32 as usize] * frametime
         }
         crouch = crate::src::qcommon::q_shared::qfalse as i32;
         if n < cmdframes {
@@ -1470,18 +1420,13 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
             */
             if onground != 0 {
                 //end if
-                if *cmdmove.offset(2 as i32 as isize)
-                    < -(300 as i32) as f32
-                {
+                if *cmdmove.offset(2 as i32 as isize) < -(300 as i32) as f32 {
                     crouch = crate::src::qcommon::q_shared::qtrue as i32; //end if
                     maxvel = phys_maxcrouchvelocity
                 }
                 //end else
                 //ax = 2;
-                if swimming == 0
-                    && *cmdmove.offset(2 as i32 as isize)
-                        > 1 as i32 as f32
-                {
+                if swimming == 0 && *cmdmove.offset(2 as i32 as isize) > 1 as i32 as f32 {
                     //if not swimming and upmove is positive then jump
                     frame_test_vel[2 as i32 as usize] = (phys_jumpvel as f64
                         - gravity as f64 * 0.1f64 * frametime as f64
@@ -1500,19 +1445,18 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                 accelerate = phys_swimaccelerate
             //ax = 3;
             } else {
-                wishdir[2 as i32 as usize] =
-                    0 as i32 as crate::src::qcommon::q_shared::vec_t
+                wishdir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
             }
             wishspeed = crate::src::qcommon::q_math::VectorNormalize(wishdir.as_mut_ptr());
             if wishspeed > maxvel {
                 wishspeed = maxvel
             }
-            frame_test_vel[0 as i32 as usize] = frame_test_vel[0 as i32 as usize]
-                * (1 as i32 as f32 / frametime);
-            frame_test_vel[1 as i32 as usize] = frame_test_vel[1 as i32 as usize]
-                * (1 as i32 as f32 / frametime);
-            frame_test_vel[2 as i32 as usize] = frame_test_vel[2 as i32 as usize]
-                * (1 as i32 as f32 / frametime);
+            frame_test_vel[0 as i32 as usize] =
+                frame_test_vel[0 as i32 as usize] * (1 as i32 as f32 / frametime);
+            frame_test_vel[1 as i32 as usize] =
+                frame_test_vel[1 as i32 as usize] * (1 as i32 as f32 / frametime);
+            frame_test_vel[2 as i32 as usize] =
+                frame_test_vel[2 as i32 as usize] * (1 as i32 as f32 / frametime);
             AAS_Accelerate(
                 frame_test_vel.as_mut_ptr(),
                 frametime,
@@ -1520,20 +1464,16 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                 wishspeed,
                 accelerate,
             );
-            frame_test_vel[0 as i32 as usize] =
-                frame_test_vel[0 as i32 as usize] * frametime;
-            frame_test_vel[1 as i32 as usize] =
-                frame_test_vel[1 as i32 as usize] * frametime;
-            frame_test_vel[2 as i32 as usize] =
-                frame_test_vel[2 as i32 as usize] * frametime
+            frame_test_vel[0 as i32 as usize] = frame_test_vel[0 as i32 as usize] * frametime;
+            frame_test_vel[1 as i32 as usize] = frame_test_vel[1 as i32 as usize] * frametime;
+            frame_test_vel[2 as i32 as usize] = frame_test_vel[2 as i32 as usize] * frametime
         }
         if crouch != 0 {
             //
             //end else
             presencetype = 4 as i32
         } else if presencetype == 4 as i32 {
-            if crate::src::botlib::be_aas_sample::AAS_PointPresenceType(org.as_mut_ptr())
-                & 2 as i32
+            if crate::src::botlib::be_aas_sample::AAS_PointPresenceType(org.as_mut_ptr()) & 2 as i32
                 != 0
             {
                 presencetype = 2 as i32
@@ -1548,12 +1488,9 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
         left_test_vel[2 as i32 as usize] = frame_test_vel[2 as i32 as usize];
         j = 0 as i32;
         loop {
-            end[0 as i32 as usize] =
-                org[0 as i32 as usize] + left_test_vel[0 as i32 as usize];
-            end[1 as i32 as usize] =
-                org[1 as i32 as usize] + left_test_vel[1 as i32 as usize];
-            end[2 as i32 as usize] =
-                org[2 as i32 as usize] + left_test_vel[2 as i32 as usize];
+            end[0 as i32 as usize] = org[0 as i32 as usize] + left_test_vel[0 as i32 as usize];
+            end[1 as i32 as usize] = org[1 as i32 as usize] + left_test_vel[1 as i32 as usize];
+            end[2 as i32 as usize] = org[2 as i32 as usize] + left_test_vel[2 as i32 as usize];
             //save the current origin
             //move linear during one frame
             //while there is a plane hit
@@ -1577,13 +1514,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                     1 as i32,
                 );
             }
-            if stopevent
-                & (512 as i32
-                    | 128 as i32
-                    | 256 as i32
-                    | 4096 as i32)
-                != 0
-            {
+            if stopevent & (512 as i32 | 128 as i32 | 256 as i32 | 4096 as i32) != 0 {
                 numareas = crate::src::botlib::be_aas_sample::AAS_TraceAreas(
                     org.as_mut_ptr(),
                     trace.endpos.as_mut_ptr(),
@@ -1609,15 +1540,12 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                                 points[i as usize][1 as i32 as usize];
                             (*move_0).endpos[2 as i32 as usize] =
                                 points[i as usize][2 as i32 as usize];
-                            (*move_0).velocity[0 as i32 as usize] = frame_test_vel
-                                [0 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
-                            (*move_0).velocity[1 as i32 as usize] = frame_test_vel
-                                [1 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
-                            (*move_0).velocity[2 as i32 as usize] = frame_test_vel
-                                [2 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[0 as i32 as usize] =
+                                frame_test_vel[0 as i32 as usize] * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[1 as i32 as usize] =
+                                frame_test_vel[1 as i32 as usize] * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[2 as i32 as usize] =
+                                frame_test_vel[2 as i32 as usize] * (1 as i32 as f32 / frametime);
                             (*move_0).endarea = areas[i as usize];
                             (*move_0).trace = trace;
                             (*move_0).stopevent = 512 as i32;
@@ -1644,15 +1572,12 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                                 points[i as usize][1 as i32 as usize];
                             (*move_0).endpos[2 as i32 as usize] =
                                 points[i as usize][2 as i32 as usize];
-                            (*move_0).velocity[0 as i32 as usize] = frame_test_vel
-                                [0 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
-                            (*move_0).velocity[1 as i32 as usize] = frame_test_vel
-                                [1 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
-                            (*move_0).velocity[2 as i32 as usize] = frame_test_vel
-                                [2 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[0 as i32 as usize] =
+                                frame_test_vel[0 as i32 as usize] * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[1 as i32 as usize] =
+                                frame_test_vel[1 as i32 as usize] * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[2 as i32 as usize] =
+                                frame_test_vel[2 as i32 as usize] * (1 as i32 as f32 / frametime);
                             (*move_0).endarea = areas[i as usize];
                             (*move_0).trace = trace;
                             (*move_0).stopevent = 128 as i32;
@@ -1681,15 +1606,12 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                             (*move_0).endpos[2 as i32 as usize] =
                                 points[i as usize][2 as i32 as usize];
                             (*move_0).endarea = areas[i as usize];
-                            (*move_0).velocity[0 as i32 as usize] = frame_test_vel
-                                [0 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
-                            (*move_0).velocity[1 as i32 as usize] = frame_test_vel
-                                [1 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
-                            (*move_0).velocity[2 as i32 as usize] = frame_test_vel
-                                [2 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[0 as i32 as usize] =
+                                frame_test_vel[0 as i32 as usize] * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[1 as i32 as usize] =
+                                frame_test_vel[1 as i32 as usize] * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[2 as i32 as usize] =
+                                frame_test_vel[2 as i32 as usize] * (1 as i32 as f32 / frametime);
                             (*move_0).trace = trace;
                             (*move_0).stopevent = 256 as i32;
                             (*move_0).presencetype = presencetype;
@@ -1715,15 +1637,12 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                             (*move_0).endpos[2 as i32 as usize] =
                                 points[i as usize][2 as i32 as usize];
                             (*move_0).endarea = areas[i as usize];
-                            (*move_0).velocity[0 as i32 as usize] = frame_test_vel
-                                [0 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
-                            (*move_0).velocity[1 as i32 as usize] = frame_test_vel
-                                [1 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
-                            (*move_0).velocity[2 as i32 as usize] = frame_test_vel
-                                [2 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[0 as i32 as usize] =
+                                frame_test_vel[0 as i32 as usize] * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[1 as i32 as usize] =
+                                frame_test_vel[1 as i32 as usize] * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[2 as i32 as usize] =
+                                frame_test_vel[2 as i32 as usize] * (1 as i32 as f32 / frametime);
                             (*move_0).trace = trace;
                             (*move_0).stopevent = 4096 as i32;
                             (*move_0).presencetype = presencetype;
@@ -1747,24 +1666,18 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                     maxs,
                 ) != 0
                 {
-                    (*move_0).endpos[0 as i32 as usize] =
-                        trace.endpos[0 as i32 as usize];
-                    (*move_0).endpos[1 as i32 as usize] =
-                        trace.endpos[1 as i32 as usize];
-                    (*move_0).endpos[2 as i32 as usize] =
-                        trace.endpos[2 as i32 as usize];
+                    (*move_0).endpos[0 as i32 as usize] = trace.endpos[0 as i32 as usize];
+                    (*move_0).endpos[1 as i32 as usize] = trace.endpos[1 as i32 as usize];
+                    (*move_0).endpos[2 as i32 as usize] = trace.endpos[2 as i32 as usize];
                     (*move_0).endarea = crate::src::botlib::be_aas_sample::AAS_PointAreaNum(
                         (*move_0).endpos.as_mut_ptr(),
                     );
-                    (*move_0).velocity[0 as i32 as usize] = frame_test_vel
-                        [0 as i32 as usize]
-                        * (1 as i32 as f32 / frametime);
-                    (*move_0).velocity[1 as i32 as usize] = frame_test_vel
-                        [1 as i32 as usize]
-                        * (1 as i32 as f32 / frametime);
-                    (*move_0).velocity[2 as i32 as usize] = frame_test_vel
-                        [2 as i32 as usize]
-                        * (1 as i32 as f32 / frametime);
+                    (*move_0).velocity[0 as i32 as usize] =
+                        frame_test_vel[0 as i32 as usize] * (1 as i32 as f32 / frametime);
+                    (*move_0).velocity[1 as i32 as usize] =
+                        frame_test_vel[1 as i32 as usize] * (1 as i32 as f32 / frametime);
+                    (*move_0).velocity[2 as i32 as usize] =
+                        frame_test_vel[2 as i32 as usize] * (1 as i32 as f32 / frametime);
                     (*move_0).trace = trace;
                     (*move_0).stopevent = 2048 as i32;
                     (*move_0).presencetype = presencetype;
@@ -1797,28 +1710,21 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                         start[0 as i32 as usize] = org[0 as i32 as usize];
                         start[1 as i32 as usize] = org[1 as i32 as usize];
                         start[2 as i32 as usize] = org[2 as i32 as usize];
-                        start[2 as i32 as usize] =
-                            (start[2 as i32 as usize] as f64 + 0.5f64)
-                                as crate::src::qcommon::q_shared::vec_t;
+                        start[2 as i32 as usize] = (start[2 as i32 as usize] as f64 + 0.5f64)
+                            as crate::src::qcommon::q_shared::vec_t;
                         if crate::src::botlib::be_aas_sample::AAS_PointAreaNum(start.as_mut_ptr())
                             == stopareanum
                         {
-                            (*move_0).endpos[0 as i32 as usize] =
-                                start[0 as i32 as usize];
-                            (*move_0).endpos[1 as i32 as usize] =
-                                start[1 as i32 as usize];
-                            (*move_0).endpos[2 as i32 as usize] =
-                                start[2 as i32 as usize];
+                            (*move_0).endpos[0 as i32 as usize] = start[0 as i32 as usize];
+                            (*move_0).endpos[1 as i32 as usize] = start[1 as i32 as usize];
+                            (*move_0).endpos[2 as i32 as usize] = start[2 as i32 as usize];
                             (*move_0).endarea = stopareanum;
-                            (*move_0).velocity[0 as i32 as usize] = frame_test_vel
-                                [0 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
-                            (*move_0).velocity[1 as i32 as usize] = frame_test_vel
-                                [1 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
-                            (*move_0).velocity[2 as i32 as usize] = frame_test_vel
-                                [2 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[0 as i32 as usize] =
+                                frame_test_vel[0 as i32 as usize] * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[1 as i32 as usize] =
+                                frame_test_vel[1 as i32 as usize] * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[2 as i32 as usize] =
+                                frame_test_vel[2 as i32 as usize] * (1 as i32 as f32 / frametime);
                             (*move_0).trace = trace;
                             (*move_0).stopevent = 1024 as i32;
                             (*move_0).presencetype = presencetype;
@@ -1841,16 +1747,13 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                     //if it is a vertical plane and the bot didn't jump recently
                     //end if
                     //check for a step
-                    start[0 as i32 as usize] = (org[0 as i32 as usize]
-                        as f64
+                    start[0 as i32 as usize] = (org[0 as i32 as usize] as f64
                         + (*plane).normal[0 as i32 as usize] as f64 * -0.25f64)
                         as crate::src::qcommon::q_shared::vec_t;
-                    start[1 as i32 as usize] = (org[1 as i32 as usize]
-                        as f64
+                    start[1 as i32 as usize] = (org[1 as i32 as usize] as f64
                         + (*plane).normal[1 as i32 as usize] as f64 * -0.25f64)
                         as crate::src::qcommon::q_shared::vec_t;
-                    start[2 as i32 as usize] = (org[2 as i32 as usize]
-                        as f64
+                    start[2 as i32 as usize] = (org[2 as i32 as usize] as f64
                         + (*plane).normal[2 as i32 as usize] as f64 * -0.25f64)
                         as crate::src::qcommon::q_shared::vec_t;
                     stepend[0 as i32 as usize] = start[0 as i32 as usize];
@@ -1868,23 +1771,17 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                         plane2 =
                             crate::src::botlib::be_aas_sample::AAS_PlaneFromNum(steptrace.planenum)
                                 as *mut crate::aasfile_h::aas_plane_s;
-                        if (*plane2).normal[0 as i32 as usize]
-                            * up[0 as i32 as usize]
-                            + (*plane2).normal[1 as i32 as usize]
-                                * up[1 as i32 as usize]
-                            + (*plane2).normal[2 as i32 as usize]
-                                * up[2 as i32 as usize]
+                        if (*plane2).normal[0 as i32 as usize] * up[0 as i32 as usize]
+                            + (*plane2).normal[1 as i32 as usize] * up[1 as i32 as usize]
+                            + (*plane2).normal[2 as i32 as usize] * up[2 as i32 as usize]
                             > phys_maxsteepness
                         {
-                            left_test_vel[0 as i32 as usize] = end
-                                [0 as i32 as usize]
-                                - steptrace.endpos[0 as i32 as usize];
-                            left_test_vel[1 as i32 as usize] = end
-                                [1 as i32 as usize]
-                                - steptrace.endpos[1 as i32 as usize];
-                            left_test_vel[2 as i32 as usize] = end
-                                [2 as i32 as usize]
-                                - steptrace.endpos[2 as i32 as usize];
+                            left_test_vel[0 as i32 as usize] =
+                                end[0 as i32 as usize] - steptrace.endpos[0 as i32 as usize];
+                            left_test_vel[1 as i32 as usize] =
+                                end[1 as i32 as usize] - steptrace.endpos[1 as i32 as usize];
+                            left_test_vel[2 as i32 as usize] =
+                                end[2 as i32 as usize] - steptrace.endpos[2 as i32 as usize];
                             left_test_vel[2 as i32 as usize] =
                                 0 as i32 as crate::src::qcommon::q_shared::vec_t;
                             frame_test_vel[2 as i32 as usize] =
@@ -1893,19 +1790,14 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                             //end if
                             //#ifdef AAS_MOVE_DEBUG
                             if visualize != 0 {
-                                if (steptrace.endpos[2 as i32 as usize]
-                                    - org[2 as i32 as usize])
+                                if (steptrace.endpos[2 as i32 as usize] - org[2 as i32 as usize])
                                     as f64
                                     > 0.125f64
                                 {
-                                    start[0 as i32 as usize] =
-                                        org[0 as i32 as usize]; //end if
-                                    start[1 as i32 as usize] =
-                                        org[1 as i32 as usize];
-                                    start[2 as i32 as usize] =
-                                        org[2 as i32 as usize];
-                                    start[2 as i32 as usize] =
-                                        steptrace.endpos[2 as i32 as usize];
+                                    start[0 as i32 as usize] = org[0 as i32 as usize]; //end if
+                                    start[1 as i32 as usize] = org[1 as i32 as usize];
+                                    start[2 as i32 as usize] = org[2 as i32 as usize];
+                                    start[2 as i32 as usize] = steptrace.endpos[2 as i32 as usize];
                                     crate::src::botlib::be_aas_debug::AAS_DebugLine(
                                         org.as_mut_ptr(),
                                         start.as_mut_ptr(),
@@ -1915,8 +1807,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                                 //end if
                             }
                             //#endif //AAS_MOVE_DEBUG
-                            org[2 as i32 as usize] =
-                                steptrace.endpos[2 as i32 as usize];
+                            org[2 as i32 as usize] = steptrace.endpos[2 as i32 as usize];
                             step = crate::src::qcommon::q_shared::qtrue as i32
                         }
                     }
@@ -1925,8 +1816,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                     //
                     //velocity left to test for this frame is the projection
                     //of the current test velocity into the hit plane
-                    left_test_vel[0 as i32 as usize] = left_test_vel
-                        [0 as i32 as usize]
+                    left_test_vel[0 as i32 as usize] = left_test_vel[0 as i32 as usize]
                         + (*plane).normal[0 as i32 as usize]
                             * -(left_test_vel[0 as i32 as usize]
                                 * (*plane).normal[0 as i32 as usize]
@@ -1934,8 +1824,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                                     * (*plane).normal[1 as i32 as usize]
                                 + left_test_vel[2 as i32 as usize]
                                     * (*plane).normal[2 as i32 as usize]);
-                    left_test_vel[1 as i32 as usize] = left_test_vel
-                        [1 as i32 as usize]
+                    left_test_vel[1 as i32 as usize] = left_test_vel[1 as i32 as usize]
                         + (*plane).normal[1 as i32 as usize]
                             * -(left_test_vel[0 as i32 as usize]
                                 * (*plane).normal[0 as i32 as usize]
@@ -1943,8 +1832,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                                     * (*plane).normal[1 as i32 as usize]
                                 + left_test_vel[2 as i32 as usize]
                                     * (*plane).normal[2 as i32 as usize]);
-                    left_test_vel[2 as i32 as usize] = left_test_vel
-                        [2 as i32 as usize]
+                    left_test_vel[2 as i32 as usize] = left_test_vel[2 as i32 as usize]
                         + (*plane).normal[2 as i32 as usize]
                             * -(left_test_vel[0 as i32 as usize]
                                 * (*plane).normal[0 as i32 as usize]
@@ -1953,14 +1841,10 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                                 + left_test_vel[2 as i32 as usize]
                                     * (*plane).normal[2 as i32 as usize]);
                     //end if
-                    old_frame_test_vel[0 as i32 as usize] =
-                        frame_test_vel[0 as i32 as usize];
-                    old_frame_test_vel[1 as i32 as usize] =
-                        frame_test_vel[1 as i32 as usize];
-                    old_frame_test_vel[2 as i32 as usize] =
-                        frame_test_vel[2 as i32 as usize];
-                    frame_test_vel[0 as i32 as usize] = frame_test_vel
-                        [0 as i32 as usize]
+                    old_frame_test_vel[0 as i32 as usize] = frame_test_vel[0 as i32 as usize];
+                    old_frame_test_vel[1 as i32 as usize] = frame_test_vel[1 as i32 as usize];
+                    old_frame_test_vel[2 as i32 as usize] = frame_test_vel[2 as i32 as usize];
+                    frame_test_vel[0 as i32 as usize] = frame_test_vel[0 as i32 as usize]
                         + (*plane).normal[0 as i32 as usize]
                             * -(frame_test_vel[0 as i32 as usize]
                                 * (*plane).normal[0 as i32 as usize]
@@ -1968,8 +1852,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                                     * (*plane).normal[1 as i32 as usize]
                                 + frame_test_vel[2 as i32 as usize]
                                     * (*plane).normal[2 as i32 as usize]);
-                    frame_test_vel[1 as i32 as usize] = frame_test_vel
-                        [1 as i32 as usize]
+                    frame_test_vel[1 as i32 as usize] = frame_test_vel[1 as i32 as usize]
                         + (*plane).normal[1 as i32 as usize]
                             * -(frame_test_vel[0 as i32 as usize]
                                 * (*plane).normal[0 as i32 as usize]
@@ -1977,8 +1860,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                                     * (*plane).normal[1 as i32 as usize]
                                 + frame_test_vel[2 as i32 as usize]
                                     * (*plane).normal[2 as i32 as usize]);
-                    frame_test_vel[2 as i32 as usize] = frame_test_vel
-                        [2 as i32 as usize]
+                    frame_test_vel[2 as i32 as usize] = frame_test_vel[2 as i32 as usize]
                         + (*plane).normal[2 as i32 as usize]
                             * -(frame_test_vel[0 as i32 as usize]
                                 * (*plane).normal[0 as i32 as usize]
@@ -2001,8 +1883,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                         //check for a landing on an almost horizontal floor
                         //end if
                         //end if
-                        if old_frame_test_vel[2 as i32 as usize]
-                            < 0 as i32 as f32
+                        if old_frame_test_vel[2 as i32 as usize] < 0 as i32 as f32
                             && frame_test_vel[2 as i32 as usize]
                                 > old_frame_test_vel[2 as i32 as usize]
                             && onground == 0
@@ -2015,19 +1896,15 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                         } //end if
                         if delta != 0. {
                             delta = delta * 10 as i32 as f32;
-                            delta =
-                                ((delta * delta) as f64 * 0.0001f64) as f32;
+                            delta = ((delta * delta) as f64 * 0.0001f64) as f32;
                             if swimming != 0 {
                                 delta = 0 as i32 as f32
                             }
                             //end if
                             if delta > 40 as i32 as f32 {
-                                (*move_0).endpos[0 as i32 as usize] =
-                                    org[0 as i32 as usize];
-                                (*move_0).endpos[1 as i32 as usize] =
-                                    org[1 as i32 as usize];
-                                (*move_0).endpos[2 as i32 as usize] =
-                                    org[2 as i32 as usize];
+                                (*move_0).endpos[0 as i32 as usize] = org[0 as i32 as usize];
+                                (*move_0).endpos[1 as i32 as usize] = org[1 as i32 as usize];
+                                (*move_0).endpos[2 as i32 as usize] = org[2 as i32 as usize];
                                 (*move_0).endarea =
                                     crate::src::botlib::be_aas_sample::AAS_PointAreaNum(
                                         org.as_mut_ptr(),
@@ -2118,15 +1995,12 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                 (*move_0).endpos[1 as i32 as usize] = org[1 as i32 as usize];
                 (*move_0).endpos[2 as i32 as usize] = org[2 as i32 as usize];
                 (*move_0).endarea = areanum;
-                (*move_0).velocity[0 as i32 as usize] = frame_test_vel
-                    [0 as i32 as usize]
-                    * (1 as i32 as f32 / frametime);
-                (*move_0).velocity[1 as i32 as usize] = frame_test_vel
-                    [1 as i32 as usize]
-                    * (1 as i32 as f32 / frametime);
-                (*move_0).velocity[2 as i32 as usize] = frame_test_vel
-                    [2 as i32 as usize]
-                    * (1 as i32 as f32 / frametime);
+                (*move_0).velocity[0 as i32 as usize] =
+                    frame_test_vel[0 as i32 as usize] * (1 as i32 as f32 / frametime);
+                (*move_0).velocity[1 as i32 as usize] =
+                    frame_test_vel[1 as i32 as usize] * (1 as i32 as f32 / frametime);
+                (*move_0).velocity[2 as i32 as usize] =
+                    frame_test_vel[2 as i32 as usize] * (1 as i32 as f32 / frametime);
                 (*move_0).stopevent = event & stopevent;
                 (*move_0).presencetype = presencetype;
                 (*move_0).endcontents = pc;
@@ -2143,15 +2017,12 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                 (*move_0).endpos[2 as i32 as usize] = org[2 as i32 as usize];
                 (*move_0).endarea =
                     crate::src::botlib::be_aas_sample::AAS_PointAreaNum(org.as_mut_ptr());
-                (*move_0).velocity[0 as i32 as usize] = frame_test_vel
-                    [0 as i32 as usize]
-                    * (1 as i32 as f32 / frametime);
-                (*move_0).velocity[1 as i32 as usize] = frame_test_vel
-                    [1 as i32 as usize]
-                    * (1 as i32 as f32 / frametime);
-                (*move_0).velocity[2 as i32 as usize] = frame_test_vel
-                    [2 as i32 as usize]
-                    * (1 as i32 as f32 / frametime);
+                (*move_0).velocity[0 as i32 as usize] =
+                    frame_test_vel[0 as i32 as usize] * (1 as i32 as f32 / frametime);
+                (*move_0).velocity[1 as i32 as usize] =
+                    frame_test_vel[1 as i32 as usize] * (1 as i32 as f32 / frametime);
+                (*move_0).velocity[2 as i32 as usize] =
+                    frame_test_vel[2 as i32 as usize] * (1 as i32 as f32 / frametime);
                 (*move_0).trace = trace;
                 (*move_0).stopevent = 1 as i32;
                 (*move_0).presencetype = presencetype;
@@ -2172,15 +2043,12 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
             (*move_0).endpos[2 as i32 as usize] = org[2 as i32 as usize];
             (*move_0).endarea =
                 crate::src::botlib::be_aas_sample::AAS_PointAreaNum(org.as_mut_ptr());
-            (*move_0).velocity[0 as i32 as usize] = frame_test_vel
-                [0 as i32 as usize]
-                * (1 as i32 as f32 / frametime);
-            (*move_0).velocity[1 as i32 as usize] = frame_test_vel
-                [1 as i32 as usize]
-                * (1 as i32 as f32 / frametime);
-            (*move_0).velocity[2 as i32 as usize] = frame_test_vel
-                [2 as i32 as usize]
-                * (1 as i32 as f32 / frametime);
+            (*move_0).velocity[0 as i32 as usize] =
+                frame_test_vel[0 as i32 as usize] * (1 as i32 as f32 / frametime);
+            (*move_0).velocity[1 as i32 as usize] =
+                frame_test_vel[1 as i32 as usize] * (1 as i32 as f32 / frametime);
+            (*move_0).velocity[2 as i32 as usize] =
+                frame_test_vel[2 as i32 as usize] * (1 as i32 as f32 / frametime);
             (*move_0).trace = trace;
             (*move_0).stopevent = 2 as i32;
             (*move_0).presencetype = presencetype;
@@ -2205,8 +2073,7 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                 end[0 as i32 as usize] = start[0 as i32 as usize];
                 end[1 as i32 as usize] = start[1 as i32 as usize];
                 end[2 as i32 as usize] = start[2 as i32 as usize];
-                end[2 as i32 as usize] -=
-                    48 as i32 as f32 + aassettings.phys_maxbarrier;
+                end[2 as i32 as usize] -= 48 as i32 as f32 + aassettings.phys_maxbarrier;
                 gaptrace = crate::src::botlib::be_aas_sample::AAS_TraceClientBBox(
                     start.as_mut_ptr(),
                     end.as_mut_ptr(),
@@ -2218,32 +2085,24 @@ pub unsafe extern "C" fn AAS_ClientMovementPrediction(
                     //if solid is found the bot cannot walk any further and will not fall into a gap
                     //if it is a gap (lower than one step height)
                     if gaptrace.endpos[2 as i32 as usize]
-                        < org[2 as i32 as usize]
-                            - aassettings.phys_maxstep
-                            - 1 as i32 as f32
+                        < org[2 as i32 as usize] - aassettings.phys_maxstep - 1 as i32 as f32
                     {
                         if crate::src::botlib::be_aas_bspq3::AAS_PointContents(end.as_mut_ptr())
                             & 32 as i32
                             == 0
                         {
-                            (*move_0).endpos[0 as i32 as usize] =
-                                lastorg[0 as i32 as usize];
-                            (*move_0).endpos[1 as i32 as usize] =
-                                lastorg[1 as i32 as usize];
-                            (*move_0).endpos[2 as i32 as usize] =
-                                lastorg[2 as i32 as usize];
+                            (*move_0).endpos[0 as i32 as usize] = lastorg[0 as i32 as usize];
+                            (*move_0).endpos[1 as i32 as usize] = lastorg[1 as i32 as usize];
+                            (*move_0).endpos[2 as i32 as usize] = lastorg[2 as i32 as usize];
                             (*move_0).endarea = crate::src::botlib::be_aas_sample::AAS_PointAreaNum(
                                 lastorg.as_mut_ptr(),
                             );
-                            (*move_0).velocity[0 as i32 as usize] = frame_test_vel
-                                [0 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
-                            (*move_0).velocity[1 as i32 as usize] = frame_test_vel
-                                [1 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
-                            (*move_0).velocity[2 as i32 as usize] = frame_test_vel
-                                [2 as i32 as usize]
-                                * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[0 as i32 as usize] =
+                                frame_test_vel[0 as i32 as usize] * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[1 as i32 as usize] =
+                                frame_test_vel[1 as i32 as usize] * (1 as i32 as f32 / frametime);
+                            (*move_0).velocity[2 as i32 as usize] =
+                                frame_test_vel[2 as i32 as usize] * (1 as i32 as f32 / frametime);
                             (*move_0).trace = trace;
                             (*move_0).stopevent = 64 as i32;
                             (*move_0).presencetype = presencetype;
@@ -2404,16 +2263,12 @@ pub unsafe extern "C" fn AAS_TestMovementPrediction(
     velocity[1 as i32 as usize] = velocity[2 as i32 as usize];
     velocity[0 as i32 as usize] = velocity[1 as i32 as usize];
     if AAS_Swimming(origin) == 0 {
-        *dir.offset(2 as i32 as isize) =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t
+        *dir.offset(2 as i32 as isize) = 0 as i32 as crate::src::qcommon::q_shared::vec_t
     }
     crate::src::qcommon::q_math::VectorNormalize(dir);
-    cmdmove[0 as i32 as usize] =
-        *dir.offset(0 as i32 as isize) * 400 as i32 as f32;
-    cmdmove[1 as i32 as usize] =
-        *dir.offset(1 as i32 as isize) * 400 as i32 as f32;
-    cmdmove[2 as i32 as usize] =
-        *dir.offset(2 as i32 as isize) * 400 as i32 as f32;
+    cmdmove[0 as i32 as usize] = *dir.offset(0 as i32 as isize) * 400 as i32 as f32;
+    cmdmove[1 as i32 as usize] = *dir.offset(1 as i32 as isize) * 400 as i32 as f32;
+    cmdmove[2 as i32 as usize] = *dir.offset(2 as i32 as isize) * 400 as i32 as f32;
     cmdmove[2 as i32 as usize] = 224 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::botlib::be_aas_debug::AAS_ClearShownDebugLines();
     AAS_PredictClientMovement(
@@ -2483,16 +2338,11 @@ pub unsafe extern "C" fn AAS_HorizontalVelocityForJump(
         return 0 as i32;
     }
     //time a player takes to fall the height
-    t = crate::stdlib::sqrt(
-        height2fall as f64 / (0.5f64 * phys_gravity as f64),
-    ) as f32;
+    t = crate::stdlib::sqrt(height2fall as f64 / (0.5f64 * phys_gravity as f64)) as f32;
     //direction from start to end
-    dir[0 as i32 as usize] =
-        *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
-    dir[1 as i32 as usize] =
-        *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
-    dir[2 as i32 as usize] =
-        *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
+    dir[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
+    dir[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
+    dir[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
     //
     if t + zvel / phys_gravity == 0.0f32 {
         *velocity = phys_maxvelocity;
@@ -2501,8 +2351,7 @@ pub unsafe extern "C" fn AAS_HorizontalVelocityForJump(
     //calculate horizontal speed
     *velocity = (crate::stdlib::sqrt(
         (dir[0 as i32 as usize] * dir[0 as i32 as usize]
-            + dir[1 as i32 as usize] * dir[1 as i32 as usize])
-            as f64,
+            + dir[1 as i32 as usize] * dir[1 as i32 as usize]) as f64,
     ) / (t + zvel / phys_gravity) as f64) as f32;
     //the horizontal speed must be lower than the max speed
     if *velocity > phys_maxvelocity {

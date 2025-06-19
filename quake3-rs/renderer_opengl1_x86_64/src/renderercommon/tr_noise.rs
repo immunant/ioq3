@@ -4,20 +4,11 @@ static mut s_noise_table: [f32; 256] = [0.; 256];
 
 static mut s_noise_perm: [i32; 256] = [0; 256];
 
-unsafe extern "C" fn GetNoiseValue(
-    mut x: i32,
-    mut y: i32,
-    mut z: i32,
-    mut t: i32,
-) -> f32 {
-    let mut index: i32 = s_noise_perm[(x + s_noise_perm[(y + s_noise_perm[(z + s_noise_perm
-        [(t & 256 as i32 - 1 as i32) as usize]
-        & 256 as i32 - 1 as i32)
-        as usize]
-        & 256 as i32 - 1 as i32)
-        as usize]
-        & 256 as i32 - 1 as i32)
-        as usize];
+unsafe extern "C" fn GetNoiseValue(mut x: i32, mut y: i32, mut z: i32, mut t: i32) -> f32 {
+    let mut index: i32 = s_noise_perm[(x + s_noise_perm[(y + s_noise_perm
+        [(z + s_noise_perm[(t & 256 as i32 - 1 as i32) as usize] & 256 as i32 - 1 as i32) as usize]
+        & 256 as i32 - 1 as i32) as usize]
+        & 256 as i32 - 1 as i32) as usize];
     return s_noise_table[index as usize];
 }
 #[no_mangle]
@@ -26,14 +17,10 @@ pub unsafe extern "C" fn R_NoiseInit() {
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 256 as i32 {
-        s_noise_table[i as usize] = ((::libc::rand() as f32
-            / 2147483647 as i32 as f32)
-            as f64
-            * 2.0f64
-            - 1.0f64) as f32;
+        s_noise_table[i as usize] =
+            ((::libc::rand() as f32 / 2147483647 as i32 as f32) as f64 * 2.0f64 - 1.0f64) as f32;
         s_noise_perm[i as usize] =
-            (::libc::rand() as f32 / 2147483647 as i32 as f32
-                * 255 as i32 as f32) as u8 as i32;
+            (::libc::rand() as f32 / 2147483647 as i32 as f32 * 255 as i32 as f32) as u8 as i32;
         i += 1
     }
 }
@@ -92,12 +79,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // these control use of specific extensions
 #[no_mangle]
 
-pub unsafe extern "C" fn R_NoiseGet4f(
-    mut x: f32,
-    mut y: f32,
-    mut z: f32,
-    mut t: f64,
-) -> f32 {
+pub unsafe extern "C" fn R_NoiseGet4f(mut x: f32, mut y: f32, mut z: f32, mut t: f64) -> f32 {
     let mut i: i32 = 0;
     let mut ix: i32 = 0;
     let mut iy: i32 = 0;
@@ -126,35 +108,21 @@ pub unsafe extern "C" fn R_NoiseGet4f(
         front[0 as i32 as usize] = GetNoiseValue(ix, iy, iz, it + i);
         front[1 as i32 as usize] = GetNoiseValue(ix + 1 as i32, iy, iz, it + i);
         front[2 as i32 as usize] = GetNoiseValue(ix, iy + 1 as i32, iz, it + i);
-        front[3 as i32 as usize] =
-            GetNoiseValue(ix + 1 as i32, iy + 1 as i32, iz, it + i);
+        front[3 as i32 as usize] = GetNoiseValue(ix + 1 as i32, iy + 1 as i32, iz, it + i);
         back[0 as i32 as usize] = GetNoiseValue(ix, iy, iz + 1 as i32, it + i);
-        back[1 as i32 as usize] =
-            GetNoiseValue(ix + 1 as i32, iy, iz + 1 as i32, it + i);
-        back[2 as i32 as usize] =
-            GetNoiseValue(ix, iy + 1 as i32, iz + 1 as i32, it + i);
-        back[3 as i32 as usize] = GetNoiseValue(
-            ix + 1 as i32,
-            iy + 1 as i32,
-            iz + 1 as i32,
-            it + i,
-        );
-        fvalue = (front[0 as i32 as usize] * (1.0f32 - fx)
-            + front[1 as i32 as usize] * fx)
+        back[1 as i32 as usize] = GetNoiseValue(ix + 1 as i32, iy, iz + 1 as i32, it + i);
+        back[2 as i32 as usize] = GetNoiseValue(ix, iy + 1 as i32, iz + 1 as i32, it + i);
+        back[3 as i32 as usize] =
+            GetNoiseValue(ix + 1 as i32, iy + 1 as i32, iz + 1 as i32, it + i);
+        fvalue = (front[0 as i32 as usize] * (1.0f32 - fx) + front[1 as i32 as usize] * fx)
             * (1.0f32 - fy)
-            + (front[2 as i32 as usize] * (1.0f32 - fx)
-                + front[3 as i32 as usize] * fx)
-                * fy;
-        bvalue = (back[0 as i32 as usize] * (1.0f32 - fx)
-            + back[1 as i32 as usize] * fx)
+            + (front[2 as i32 as usize] * (1.0f32 - fx) + front[3 as i32 as usize] * fx) * fy;
+        bvalue = (back[0 as i32 as usize] * (1.0f32 - fx) + back[1 as i32 as usize] * fx)
             * (1.0f32 - fy)
-            + (back[2 as i32 as usize] * (1.0f32 - fx)
-                + back[3 as i32 as usize] * fx)
-                * fy;
+            + (back[2 as i32 as usize] * (1.0f32 - fx) + back[3 as i32 as usize] * fx) * fy;
         value[i as usize] = fvalue * (1.0f32 - fz) + bvalue * fz;
         i += 1
     }
-    finalvalue =
-        value[0 as i32 as usize] * (1.0f32 - ft) + value[1 as i32 as usize] * ft;
+    finalvalue = value[0 as i32 as usize] * (1.0f32 - ft) + value[1 as i32 as usize] * ft;
     return finalvalue;
 }

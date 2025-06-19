@@ -202,8 +202,7 @@ pub struct refimport_t {
             _: *const libc::c_char,
         ) -> (),
     >,
-    pub Cvar_VariableIntegerValue:
-        Option<unsafe extern "C" fn(_: *const libc::c_char) -> i32>,
+    pub Cvar_VariableIntegerValue: Option<unsafe extern "C" fn(_: *const libc::c_char) -> i32>,
     pub Cmd_AddCommand: Option<
         unsafe extern "C" fn(_: *const libc::c_char, _: Option<unsafe extern "C" fn() -> ()>) -> (),
     >,
@@ -215,13 +214,10 @@ pub struct refimport_t {
         Option<unsafe extern "C" fn(_: i32) -> *mut crate::src::qcommon::q_shared::byte>,
     pub CM_DrawDebugSurface: Option<
         unsafe extern "C" fn(
-            _: Option<
-                unsafe extern "C" fn(_: i32, _: i32, _: *mut f32) -> (),
-            >,
+            _: Option<unsafe extern "C" fn(_: i32, _: i32, _: *mut f32) -> ()>,
         ) -> (),
     >,
-    pub FS_FileIsInPAK:
-        Option<unsafe extern "C" fn(_: *const libc::c_char, _: *mut i32) -> i32>,
+    pub FS_FileIsInPAK: Option<unsafe extern "C" fn(_: *const libc::c_char, _: *mut i32) -> i32>,
     pub FS_ReadFile: Option<
         unsafe extern "C" fn(_: *const libc::c_char, _: *mut *mut libc::c_void) -> libc::c_long,
     >,
@@ -234,28 +230,19 @@ pub struct refimport_t {
         ) -> *mut *mut libc::c_char,
     >,
     pub FS_FreeFileList: Option<unsafe extern "C" fn(_: *mut *mut libc::c_char) -> ()>,
-    pub FS_WriteFile: Option<
-        unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_void, _: i32) -> (),
-    >,
+    pub FS_WriteFile:
+        Option<unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_void, _: i32) -> ()>,
     pub FS_FileExists: Option<
         unsafe extern "C" fn(_: *const libc::c_char) -> crate::src::qcommon::q_shared::qboolean,
     >,
     pub CIN_UploadCinematic: Option<unsafe extern "C" fn(_: i32) -> ()>,
     pub CIN_PlayCinematic: Option<
-        unsafe extern "C" fn(
-            _: *const libc::c_char,
-            _: i32,
-            _: i32,
-            _: i32,
-            _: i32,
-            _: i32,
-        ) -> i32,
+        unsafe extern "C" fn(_: *const libc::c_char, _: i32, _: i32, _: i32, _: i32, _: i32) -> i32,
     >,
     pub CIN_RunCinematic:
         Option<unsafe extern "C" fn(_: i32) -> crate::src::qcommon::q_shared::e_status>,
-    pub CL_WriteAVIVideoFrame: Option<
-        unsafe extern "C" fn(_: *const crate::src::qcommon::q_shared::byte, _: i32) -> (),
-    >,
+    pub CL_WriteAVIVideoFrame:
+        Option<unsafe extern "C" fn(_: *const crate::src::qcommon::q_shared::byte, _: i32) -> ()>,
     pub IN_Init: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
     pub IN_Shutdown: Option<unsafe extern "C" fn() -> ()>,
     pub IN_Restart: Option<unsafe extern "C" fn() -> ()>,

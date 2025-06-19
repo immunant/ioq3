@@ -221,10 +221,7 @@ pub unsafe extern "C" fn R_LoadBMP(
     bmpHeader.importantColors = *(buf_p as *mut i32) as u32;
     buf_p = buf_p.offset(4 as i32 as isize);
     if bmpHeader.bitsPerPixel as i32 == 8 as i32 {
-        if buf_p
-            .offset(::std::mem::size_of::<[[u8; 4]; 256]>() as libc::c_ulong as isize)
-            > end
-        {
+        if buf_p.offset(::std::mem::size_of::<[[u8; 4]; 256]>() as libc::c_ulong as isize) > end {
             crate::src::renderergl1::tr_main::ri
                 .Error
                 .expect("non-null function pointer")(
@@ -353,7 +350,7 @@ pub unsafe extern "C" fn R_LoadBMP(
     bmpRGBA = crate::src::renderergl1::tr_main::ri
         .Malloc
         .expect("non-null function pointer")(
-        numPixels.wrapping_mul(4 as i32 as u32) as i32,
+        numPixels.wrapping_mul(4 as i32 as u32) as i32
     ) as *mut crate::src::qcommon::q_shared::byte;
     *pic = bmpRGBA;
     row = rows - 1 as i32;
@@ -390,15 +387,11 @@ pub unsafe extern "C" fn R_LoadBMP(
                     pixbuf = pixbuf.offset(2 as i32 as isize);
                     let fresh7 = pixbuf;
                     pixbuf = pixbuf.offset(1);
-                    *fresh7 = ((shortPixel as i32
-                        & (31 as i32) << 10 as i32)
-                        >> 7 as i32)
+                    *fresh7 = ((shortPixel as i32 & (31 as i32) << 10 as i32) >> 7 as i32)
                         as crate::src::qcommon::q_shared::byte;
                     let fresh8 = pixbuf;
                     pixbuf = pixbuf.offset(1);
-                    *fresh8 = ((shortPixel as i32
-                        & (31 as i32) << 5 as i32)
-                        >> 2 as i32)
+                    *fresh8 = ((shortPixel as i32 & (31 as i32) << 5 as i32) >> 2 as i32)
                         as crate::src::qcommon::q_shared::byte;
                     let fresh9 = pixbuf;
                     pixbuf = pixbuf.offset(1);

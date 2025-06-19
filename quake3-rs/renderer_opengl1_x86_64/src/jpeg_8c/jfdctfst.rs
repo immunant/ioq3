@@ -113,46 +113,45 @@ pub unsafe extern "C" fn jpeg_fdct_ifast(
     while ctr < 8 as i32 {
         elemptr = (*sample_data.offset(ctr as isize)).offset(start_col as isize);
         /* advance pointer to next row */
-        tmp0 = *elemptr.offset(0 as i32 as isize) as i32
-            + *elemptr.offset(7 as i32 as isize) as i32;
-        tmp7 = *elemptr.offset(0 as i32 as isize) as i32
-            - *elemptr.offset(7 as i32 as isize) as i32;
-        tmp1 = *elemptr.offset(1 as i32 as isize) as i32
-            + *elemptr.offset(6 as i32 as isize) as i32;
-        tmp6 = *elemptr.offset(1 as i32 as isize) as i32
-            - *elemptr.offset(6 as i32 as isize) as i32;
-        tmp2 = *elemptr.offset(2 as i32 as isize) as i32
-            + *elemptr.offset(5 as i32 as isize) as i32;
-        tmp5 = *elemptr.offset(2 as i32 as isize) as i32
-            - *elemptr.offset(5 as i32 as isize) as i32;
-        tmp3 = *elemptr.offset(3 as i32 as isize) as i32
-            + *elemptr.offset(4 as i32 as isize) as i32;
-        tmp4 = *elemptr.offset(3 as i32 as isize) as i32
-            - *elemptr.offset(4 as i32 as isize) as i32;
+        tmp0 =
+            *elemptr.offset(0 as i32 as isize) as i32 + *elemptr.offset(7 as i32 as isize) as i32;
+        tmp7 =
+            *elemptr.offset(0 as i32 as isize) as i32 - *elemptr.offset(7 as i32 as isize) as i32;
+        tmp1 =
+            *elemptr.offset(1 as i32 as isize) as i32 + *elemptr.offset(6 as i32 as isize) as i32;
+        tmp6 =
+            *elemptr.offset(1 as i32 as isize) as i32 - *elemptr.offset(6 as i32 as isize) as i32;
+        tmp2 =
+            *elemptr.offset(2 as i32 as isize) as i32 + *elemptr.offset(5 as i32 as isize) as i32;
+        tmp5 =
+            *elemptr.offset(2 as i32 as isize) as i32 - *elemptr.offset(5 as i32 as isize) as i32;
+        tmp3 =
+            *elemptr.offset(3 as i32 as isize) as i32 + *elemptr.offset(4 as i32 as isize) as i32;
+        tmp4 =
+            *elemptr.offset(3 as i32 as isize) as i32 - *elemptr.offset(4 as i32 as isize) as i32;
         tmp10 = tmp0 + tmp3;
         tmp13 = tmp0 - tmp3;
         tmp11 = tmp1 + tmp2;
         tmp12 = tmp1 - tmp2;
-        *dataptr.offset(0 as i32 as isize) =
-            tmp10 + tmp11 - 8 as i32 * 128 as i32;
+        *dataptr.offset(0 as i32 as isize) = tmp10 + tmp11 - 8 as i32 * 128 as i32;
         *dataptr.offset(4 as i32 as isize) = tmp10 - tmp11;
-        z1 = ((tmp12 + tmp13) as libc::c_long * 181 as i32 as crate::jmorecfg_h::INT32
-            >> 8 as i32) as crate::jdct_h::DCTELEM;
+        z1 = ((tmp12 + tmp13) as libc::c_long * 181 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
+            as crate::jdct_h::DCTELEM;
         *dataptr.offset(2 as i32 as isize) = tmp13 + z1;
         *dataptr.offset(6 as i32 as isize) = tmp13 - z1;
         tmp10 = tmp4 + tmp5;
         tmp11 = tmp5 + tmp6;
         tmp12 = tmp6 + tmp7;
-        z5 = ((tmp10 - tmp12) as libc::c_long * 98 as i32 as crate::jmorecfg_h::INT32
-            >> 8 as i32) as crate::jdct_h::DCTELEM;
-        z2 = (tmp10 as libc::c_long * 139 as i32 as crate::jmorecfg_h::INT32
-            >> 8 as i32) as crate::jdct_h::DCTELEM
+        z5 = ((tmp10 - tmp12) as libc::c_long * 98 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
+            as crate::jdct_h::DCTELEM;
+        z2 = (tmp10 as libc::c_long * 139 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
+            as crate::jdct_h::DCTELEM
             + z5;
-        z4 = (tmp12 as libc::c_long * 334 as i32 as crate::jmorecfg_h::INT32
-            >> 8 as i32) as crate::jdct_h::DCTELEM
+        z4 = (tmp12 as libc::c_long * 334 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
+            as crate::jdct_h::DCTELEM
             + z5;
-        z3 = (tmp11 as libc::c_long * 181 as i32 as crate::jmorecfg_h::INT32
-            >> 8 as i32) as crate::jdct_h::DCTELEM;
+        z3 = (tmp11 as libc::c_long * 181 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
+            as crate::jdct_h::DCTELEM;
         z11 = tmp7 + z3;
         z13 = tmp7 - z3;
         *dataptr.offset(5 as i32 as isize) = z13 + z2;
@@ -205,23 +204,23 @@ pub unsafe extern "C" fn jpeg_fdct_ifast(
         tmp12 = tmp1 - tmp2;
         *dataptr.offset((8 as i32 * 0 as i32) as isize) = tmp10 + tmp11;
         *dataptr.offset((8 as i32 * 4 as i32) as isize) = tmp10 - tmp11;
-        z1 = ((tmp12 + tmp13) as libc::c_long * 181 as i32 as crate::jmorecfg_h::INT32
-            >> 8 as i32) as crate::jdct_h::DCTELEM;
+        z1 = ((tmp12 + tmp13) as libc::c_long * 181 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
+            as crate::jdct_h::DCTELEM;
         *dataptr.offset((8 as i32 * 2 as i32) as isize) = tmp13 + z1;
         *dataptr.offset((8 as i32 * 6 as i32) as isize) = tmp13 - z1;
         tmp10 = tmp4 + tmp5;
         tmp11 = tmp5 + tmp6;
         tmp12 = tmp6 + tmp7;
-        z5 = ((tmp10 - tmp12) as libc::c_long * 98 as i32 as crate::jmorecfg_h::INT32
-            >> 8 as i32) as crate::jdct_h::DCTELEM;
-        z2 = (tmp10 as libc::c_long * 139 as i32 as crate::jmorecfg_h::INT32
-            >> 8 as i32) as crate::jdct_h::DCTELEM
+        z5 = ((tmp10 - tmp12) as libc::c_long * 98 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
+            as crate::jdct_h::DCTELEM;
+        z2 = (tmp10 as libc::c_long * 139 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
+            as crate::jdct_h::DCTELEM
             + z5;
-        z4 = (tmp12 as libc::c_long * 334 as i32 as crate::jmorecfg_h::INT32
-            >> 8 as i32) as crate::jdct_h::DCTELEM
+        z4 = (tmp12 as libc::c_long * 334 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
+            as crate::jdct_h::DCTELEM
             + z5;
-        z3 = (tmp11 as libc::c_long * 181 as i32 as crate::jmorecfg_h::INT32
-            >> 8 as i32) as crate::jdct_h::DCTELEM;
+        z3 = (tmp11 as libc::c_long * 181 as i32 as crate::jmorecfg_h::INT32 >> 8 as i32)
+            as crate::jdct_h::DCTELEM;
         z11 = tmp7 + z3;
         z13 = tmp7 - z3;
         *dataptr.offset((8 as i32 * 5 as i32) as isize) = z13 + z2;

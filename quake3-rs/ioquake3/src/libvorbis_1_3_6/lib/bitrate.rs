@@ -102,22 +102,18 @@ pub unsafe extern "C" fn vorbis_bitrate_init(
     );
     if !bi.is_null() && (*bi).reservoir_bits > 0 as i32 as libc::c_long {
         let mut ratesamples: libc::c_long = (*vi).rate;
-        let mut halfsamples: i32 =
-            ((*ci).blocksizes[0 as i32 as usize] >> 1 as i32) as i32;
-        (*bm).short_per_long = (*ci).blocksizes[1 as i32 as usize]
-            / (*ci).blocksizes[0 as i32 as usize];
+        let mut halfsamples: i32 = ((*ci).blocksizes[0 as i32 as usize] >> 1 as i32) as i32;
+        (*bm).short_per_long =
+            (*ci).blocksizes[1 as i32 as usize] / (*ci).blocksizes[0 as i32 as usize];
         (*bm).managed = 1 as i32;
         (*bm).avg_bitsper = crate::stdlib::rint(
-            1.0f64 * (*bi).avg_rate as f64 * halfsamples as f64
-                / ratesamples as f64,
+            1.0f64 * (*bi).avg_rate as f64 * halfsamples as f64 / ratesamples as f64,
         ) as libc::c_long;
         (*bm).min_bitsper = crate::stdlib::rint(
-            1.0f64 * (*bi).min_rate as f64 * halfsamples as f64
-                / ratesamples as f64,
+            1.0f64 * (*bi).min_rate as f64 * halfsamples as f64 / ratesamples as f64,
         ) as libc::c_long;
         (*bm).max_bitsper = crate::stdlib::rint(
-            1.0f64 * (*bi).max_rate as f64 * halfsamples as f64
-                / ratesamples as f64,
+            1.0f64 * (*bi).max_rate as f64 * halfsamples as f64 / ratesamples as f64,
         ) as libc::c_long;
         (*bm).avgfloat = (15 as i32 / 2 as i32) as f64;
         /* not a necessary fix, but one that leads to a more balanced
@@ -142,9 +138,7 @@ pub unsafe extern "C" fn vorbis_bitrate_clear(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn vorbis_bitrate_managed(
-    mut vb: *mut crate::codec_h::vorbis_block,
-) -> i32 {
+pub unsafe extern "C" fn vorbis_bitrate_managed(mut vb: *mut crate::codec_h::vorbis_block) -> i32 {
     let mut vd: *mut crate::codec_h::vorbis_dsp_state = (*vb).vd;
     let mut b: *mut crate::codec_internal_h::private_state =
         (*vd).backend_state as *mut crate::codec_internal_h::private_state;
@@ -158,9 +152,7 @@ pub unsafe extern "C" fn vorbis_bitrate_managed(
 /* finish taking in the block we just processed */
 #[no_mangle]
 
-pub unsafe extern "C" fn vorbis_bitrate_addblock(
-    mut vb: *mut crate::codec_h::vorbis_block,
-) -> i32 {
+pub unsafe extern "C" fn vorbis_bitrate_addblock(mut vb: *mut crate::codec_h::vorbis_block) -> i32 {
     let mut vbi: *mut crate::codec_internal_h::vorbis_block_internal =
         (*vb).internal as *mut crate::codec_internal_h::vorbis_block_internal;
     let mut vd: *mut crate::codec_h::vorbis_dsp_state = (*vb).vd;
@@ -187,8 +179,7 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(
     } else {
         (*bm).max_bitsper
     };
-    let mut samples: i32 =
-        ((*ci).blocksizes[(*vb).W as usize] >> 1 as i32) as i32;
+    let mut samples: i32 = ((*ci).blocksizes[(*vb).W as usize] >> 1 as i32) as i32;
     let mut desired_fill: libc::c_long =
         ((*bi).reservoir_bits as f64 * (*bi).reservoir_bias) as libc::c_long;
     if (*bm).managed == 0 {
@@ -242,8 +233,7 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(
                 ) * 8 as i32 as libc::c_long
             }
         }
-        slew = crate::stdlib::rint(choice as f64 - (*bm).avgfloat)
-            / samples as f64
+        slew = crate::stdlib::rint(choice as f64 - (*bm).avgfloat) / samples as f64
             * (*vi).rate as f64;
         if slew < -slewlimit {
             slew = -slewlimit
@@ -261,8 +251,7 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(
     if (*bm).min_bitsper > 0 as i32 as libc::c_long {
         /* do we need to force the bitrate up? */
         if this_bits < min_target_bits {
-            while (*bm).minmax_reservoir - (min_target_bits - this_bits)
-                < 0 as i32 as libc::c_long
+            while (*bm).minmax_reservoir - (min_target_bits - this_bits) < 0 as i32 as libc::c_long
             {
                 choice += 1;
                 if choice >= 15 as i32 {
@@ -341,13 +330,11 @@ pub unsafe extern "C" fn vorbis_bitrate_addblock(
     }
     /* now we have the final packet and the final packet size.  Update statistics */
     /* min and max reservoir */
-    if (*bm).min_bitsper > 0 as i32 as libc::c_long
-        || (*bm).max_bitsper > 0 as i32 as libc::c_long
+    if (*bm).min_bitsper > 0 as i32 as libc::c_long || (*bm).max_bitsper > 0 as i32 as libc::c_long
     {
         if max_target_bits > 0 as i32 as libc::c_long && this_bits > max_target_bits {
             (*bm).minmax_reservoir += this_bits - max_target_bits
-        } else if min_target_bits > 0 as i32 as libc::c_long && this_bits < min_target_bits
-        {
+        } else if min_target_bits > 0 as i32 as libc::c_long && this_bits < min_target_bits {
             (*bm).minmax_reservoir += this_bits - min_target_bits
         } else if (*bm).minmax_reservoir > desired_fill {
             if max_target_bits > 0 as i32 as libc::c_long {

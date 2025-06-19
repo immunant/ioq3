@@ -181,9 +181,7 @@ pub unsafe extern "C" fn BotValidTeamLeader(
     if crate::stdlib::strlen((*bs).teamleader.as_mut_ptr()) == 0 {
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
-    if crate::src::game::ai_dmq3::ClientFromName((*bs).teamleader.as_mut_ptr())
-        == -(1 as i32)
-    {
+    if crate::src::game::ai_dmq3::ClientFromName((*bs).teamleader.as_mut_ptr()) == -(1 as i32) {
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
     return crate::src::qcommon::q_shared::qtrue as i32;
@@ -393,8 +391,7 @@ pub unsafe extern "C" fn BotSortTeamMatesByBaseTravelTime(
                         if traveltime < traveltimes[j as usize] {
                             k = numteammates;
                             while k > j {
-                                traveltimes[k as usize] =
-                                    traveltimes[(k - 1 as i32) as usize];
+                                traveltimes[k as usize] = traveltimes[(k - 1 as i32) as usize];
                                 *teammates.offset(k as isize) =
                                     *teammates.offset((k - 1 as i32) as isize);
                                 k -= 1
@@ -516,24 +513,21 @@ pub unsafe extern "C" fn BotSortTeamMatesByTaskPreference(
     crate::stdlib::memcpy(
         &mut *teammates.offset(numteammates as isize) as *mut i32 as *mut libc::c_void,
         defenders.as_mut_ptr() as *const libc::c_void,
-        (numdefenders as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (numdefenders as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
     );
     numteammates += numdefenders;
     //roamers in the middle
     crate::stdlib::memcpy(
         &mut *teammates.offset(numteammates as isize) as *mut i32 as *mut libc::c_void,
         roamers.as_mut_ptr() as *const libc::c_void,
-        (numroamers as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (numroamers as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
     );
     numteammates += numroamers;
     //attacker in the back of the list
     crate::stdlib::memcpy(
         &mut *teammates.offset(numteammates as isize) as *mut i32 as *mut libc::c_void,
         attackers.as_mut_ptr() as *const libc::c_void,
-        (numattackers as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (numattackers as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
     );
     numteammates += numattackers;
     return numteammates;
@@ -649,70 +643,9 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
     let mut i: i32 = 0;
     let mut other: i32 = 0;
     let mut teammates: [i32; 64] = [
-        0 as i32,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
+        0 as i32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0,
     ];
     let mut name: [libc::c_char; 36] = [0; 36];
     let mut carriername: [libc::c_char; 36] = [0; 36];
@@ -837,13 +770,11 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
             );
         }
         _ => {
-            defenders = (numteammates as f32 as i32 as f64 * 0.4f64
-                + 0.5f64) as i32;
+            defenders = (numteammates as f32 as i32 as f64 * 0.4f64 + 0.5f64) as i32;
             if defenders > 4 as i32 {
                 defenders = 4 as i32
             }
-            attackers = (numteammates as f32 as i32 as f64 * 0.5f64
-                + 0.5f64) as i32;
+            attackers = (numteammates as f32 as i32 as f64 * 0.5f64 + 0.5f64) as i32;
             if attackers > 5 as i32 {
                 attackers = 5 as i32
             }
@@ -861,8 +792,7 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
                         crate::src::game::ai_dmq3::ClientName(
                             teammates[i as usize],
                             name.as_mut_ptr(),
-                            ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong
-                                as i32,
+                            ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                         );
                         if (*bs).flagcarrier == (*bs).client {
                             crate::src::game::ai_main::BotAI_BotInitialChat(
@@ -907,8 +837,7 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
                         crate::src::game::ai_dmq3::ClientName(
                             teammates[i as usize],
                             name.as_mut_ptr(),
-                            ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong
-                                as i32,
+                            ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                         );
                         crate::src::game::ai_main::BotAI_BotInitialChat(
                             bs as *mut crate::src::game::ai_main::bot_state_s,
@@ -930,8 +859,7 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
             i = 0 as i32;
             while i < attackers {
                 //
-                if !(teammates[(numteammates - i - 1 as i32) as usize] == (*bs).flagcarrier)
-                {
+                if !(teammates[(numteammates - i - 1 as i32) as usize] == (*bs).flagcarrier) {
                     //
                     crate::src::game::ai_dmq3::ClientName(
                         teammates[(numteammates - i - 1 as i32) as usize],
@@ -944,10 +872,7 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsNotAtBase(
                         name.as_mut_ptr(),
                         0 as *mut libc::c_void,
                     );
-                    BotSayTeamOrder(
-                        bs,
-                        teammates[(numteammates - i - 1 as i32) as usize],
-                    );
+                    BotSayTeamOrder(bs, teammates[(numteammates - i - 1 as i32) as usize]);
                     BotSayVoiceTeamOrder(
                         bs,
                         teammates[(numteammates - i - 1 as i32) as usize],
@@ -1082,15 +1007,11 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
             }
             _ => {
                 //keep some people near the base for when the flag is returned
-                defenders = (numteammates as f32 as i32 as f64
-                    * 0.3f64
-                    + 0.5f64) as i32;
+                defenders = (numteammates as f32 as i32 as f64 * 0.3f64 + 0.5f64) as i32;
                 if defenders > 3 as i32 {
                     defenders = 3 as i32
                 }
-                attackers = (numteammates as f32 as i32 as f64
-                    * 0.6f64
-                    + 0.5f64) as i32;
+                attackers = (numteammates as f32 as i32 as f64 * 0.6f64 + 0.5f64) as i32;
                 if attackers > 6 as i32 {
                     attackers = 6 as i32
                 }
@@ -1131,10 +1052,7 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                         name.as_mut_ptr(),
                         0 as *mut libc::c_void,
                     );
-                    BotSayTeamOrder(
-                        bs,
-                        teammates[(numteammates - i - 1 as i32) as usize],
-                    );
+                    BotSayTeamOrder(bs, teammates[(numteammates - i - 1 as i32) as usize]);
                     BotSayVoiceTeamOrder(
                         bs,
                         teammates[0 as i32 as usize],
@@ -1244,15 +1162,11 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
             }
             _ => {
                 //keep some people near the base for when the flag is returned
-                defenders = (numteammates as f32 as i32 as f64
-                    * 0.2f64
-                    + 0.5f64) as i32;
+                defenders = (numteammates as f32 as i32 as f64 * 0.2f64 + 0.5f64) as i32;
                 if defenders > 2 as i32 {
                     defenders = 2 as i32
                 }
-                attackers = (numteammates as f32 as i32 as f64
-                    * 0.7f64
-                    + 0.5f64) as i32;
+                attackers = (numteammates as f32 as i32 as f64 * 0.7f64 + 0.5f64) as i32;
                 if attackers > 7 as i32 {
                     attackers = 7 as i32
                 }
@@ -1293,10 +1207,7 @@ pub unsafe extern "C" fn BotCTFOrders_FlagNotAtBase(
                         name.as_mut_ptr(),
                         0 as *mut libc::c_void,
                     );
-                    BotSayTeamOrder(
-                        bs,
-                        teammates[(numteammates - i - 1 as i32) as usize],
-                    );
+                    BotSayTeamOrder(bs, teammates[(numteammates - i - 1 as i32) as usize]);
                     BotSayVoiceTeamOrder(
                         bs,
                         teammates[(numteammates - i - 1 as i32) as usize],
@@ -1410,14 +1321,12 @@ pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(
         }
         _ => {
             //60% will defend the base
-            defenders = (numteammates as f32 as i32 as f64 * 0.6f64
-                + 0.5f64) as i32;
+            defenders = (numteammates as f32 as i32 as f64 * 0.6f64 + 0.5f64) as i32;
             if defenders > 6 as i32 {
                 defenders = 6 as i32
             }
             //30% accompanies the flag carrier
-            attackers = (numteammates as f32 as i32 as f64 * 0.3f64
-                + 0.5f64) as i32;
+            attackers = (numteammates as f32 as i32 as f64 * 0.3f64 + 0.5f64) as i32;
             if attackers > 3 as i32 {
                 attackers = 3 as i32
             }
@@ -1456,15 +1365,12 @@ pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(
                 i = 0 as i32;
                 while i < attackers {
                     //
-                    if !(teammates[(numteammates - i - 1 as i32) as usize]
-                        == (*bs).flagcarrier)
-                    {
+                    if !(teammates[(numteammates - i - 1 as i32) as usize] == (*bs).flagcarrier) {
                         //
                         crate::src::game::ai_dmq3::ClientName(
                             teammates[(numteammates - i - 1 as i32) as usize],
                             name.as_mut_ptr(),
-                            ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong
-                                as i32,
+                            ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                         );
                         if (*bs).flagcarrier == (*bs).client {
                             crate::src::game::ai_main::BotAI_BotInitialChat(
@@ -1496,10 +1402,7 @@ pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(
                                     as *mut libc::c_char,
                             );
                         }
-                        BotSayTeamOrder(
-                            bs,
-                            teammates[(numteammates - i - 1 as i32) as usize],
-                        );
+                        BotSayTeamOrder(bs, teammates[(numteammates - i - 1 as i32) as usize]);
                     }
                     i += 1
                 }
@@ -1507,15 +1410,12 @@ pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(
                 i = 0 as i32;
                 while i < attackers {
                     //
-                    if !(teammates[(numteammates - i - 1 as i32) as usize]
-                        == (*bs).flagcarrier)
-                    {
+                    if !(teammates[(numteammates - i - 1 as i32) as usize] == (*bs).flagcarrier) {
                         //
                         crate::src::game::ai_dmq3::ClientName(
                             teammates[(numteammates - i - 1 as i32) as usize],
                             name.as_mut_ptr(),
-                            ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong
-                                as i32,
+                            ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                         );
                         crate::src::game::ai_main::BotAI_BotInitialChat(
                             bs as *mut crate::src::game::ai_main::bot_state_s,
@@ -1529,10 +1429,7 @@ pub unsafe extern "C" fn BotCTFOrders_EnemyFlagNotAtBase(
                             teammates[(numteammates - i - 1 as i32) as usize],
                             b"getflag\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                         );
-                        BotSayTeamOrder(
-                            bs,
-                            teammates[(numteammates - i - 1 as i32) as usize],
-                        );
+                        BotSayTeamOrder(bs, teammates[(numteammates - i - 1 as i32) as usize]);
                     }
                     i += 1
                 }
@@ -1555,70 +1452,9 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
     let mut attackers: i32 = 0;
     let mut i: i32 = 0;
     let mut teammates: [i32; 64] = [
-        0 as i32,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
+        0 as i32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0,
     ];
     let mut name: [libc::c_char; 36] = [0; 36];
     //sort team mates by travel time to base
@@ -1729,15 +1565,11 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                 );
             }
             _ => {
-                defenders = (numteammates as f32 as i32 as f64
-                    * 0.5f64
-                    + 0.5f64) as i32;
+                defenders = (numteammates as f32 as i32 as f64 * 0.5f64 + 0.5f64) as i32;
                 if defenders > 5 as i32 {
                     defenders = 5 as i32
                 }
-                attackers = (numteammates as f32 as i32 as f64
-                    * 0.4f64
-                    + 0.5f64) as i32;
+                attackers = (numteammates as f32 as i32 as f64 * 0.4f64 + 0.5f64) as i32;
                 if attackers > 4 as i32 {
                     attackers = 4 as i32
                 }
@@ -1778,10 +1610,7 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                         name.as_mut_ptr(),
                         0 as *mut libc::c_void,
                     );
-                    BotSayTeamOrder(
-                        bs,
-                        teammates[(numteammates - i - 1 as i32) as usize],
-                    );
+                    BotSayTeamOrder(bs, teammates[(numteammates - i - 1 as i32) as usize]);
                     BotSayVoiceTeamOrder(
                         bs,
                         teammates[(numteammates - i - 1 as i32) as usize],
@@ -1890,15 +1719,11 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                 );
             }
             _ => {
-                defenders = (numteammates as f32 as i32 as f64
-                    * 0.4f64
-                    + 0.5f64) as i32;
+                defenders = (numteammates as f32 as i32 as f64 * 0.4f64 + 0.5f64) as i32;
                 if defenders > 4 as i32 {
                     defenders = 4 as i32
                 }
-                attackers = (numteammates as f32 as i32 as f64
-                    * 0.5f64
-                    + 0.5f64) as i32;
+                attackers = (numteammates as f32 as i32 as f64 * 0.5f64 + 0.5f64) as i32;
                 if attackers > 5 as i32 {
                     attackers = 5 as i32
                 }
@@ -1939,10 +1764,7 @@ pub unsafe extern "C" fn BotCTFOrders_BothFlagsAtBase(
                         name.as_mut_ptr(),
                         0 as *mut libc::c_void,
                     );
-                    BotSayTeamOrder(
-                        bs,
-                        teammates[(numteammates - i - 1 as i32) as usize],
-                    );
+                    BotSayTeamOrder(bs, teammates[(numteammates - i - 1 as i32) as usize]);
                     BotSayVoiceTeamOrder(
                         bs,
                         teammates[(numteammates - i - 1 as i32) as usize],
@@ -2113,9 +1935,7 @@ pub unsafe extern "C" fn BotTeamOrders(mut bs: *mut crate::src::game::ai_main::b
                 while i < numteammates / 2 as i32 {
                     BotCreateGroup(
                         bs,
-                        &mut *teammates
-                            .as_mut_ptr()
-                            .offset((i * 2 as i32) as isize),
+                        &mut *teammates.as_mut_ptr().offset((i * 2 as i32) as isize),
                         2 as i32,
                     );
                     i += 1
@@ -2140,8 +1960,7 @@ pub unsafe extern "C" fn FindHumanTeamLeader(
     while i < 64 as i32 {
         if crate::src::game::g_main::g_entities[i as usize].inuse as u64 != 0 {
             // if this player is not a bot
-            if crate::src::game::g_main::g_entities[i as usize].r.svFlags & 0x8 as i32 == 0
-            {
+            if crate::src::game::g_main::g_entities[i as usize].r.svFlags & 0x8 as i32 == 0 {
                 // if this player is ok with being the leader
                 if crate::src::game::ai_cmd::notleader[i as usize] == 0 {
                     // if this player is on the same team
@@ -2153,8 +1972,7 @@ pub unsafe extern "C" fn FindHumanTeamLeader(
                         crate::src::game::ai_dmq3::ClientName(
                             i,
                             (*bs).teamleader.as_mut_ptr(),
-                            ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong
-                                as i32,
+                            ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong as i32,
                         );
                         // if not yet ordered to do anything
                         if crate::src::game::ai_dmq3::BotSetLastOrderedTask(
@@ -2227,19 +2045,15 @@ pub unsafe extern "C" fn BotTeamAI(mut bs: *mut crate::src::game::ai_main::bot_s
         if FindHumanTeamLeader(bs) == 0 {
             //
             if (*bs).askteamleader_time == 0. && (*bs).becometeamleader_time == 0. {
-                if (*bs).entergame_time + 10 as i32 as f32
-                    > crate::src::game::ai_main::floattime
-                {
+                if (*bs).entergame_time + 10 as i32 as f32 > crate::src::game::ai_main::floattime {
                     (*bs).askteamleader_time = crate::src::game::ai_main::floattime
                         + 5 as i32 as f32
-                        + (::libc::rand() & 0x7fff as i32) as f32
-                            / 0x7fff as i32 as f32
+                        + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
                             * 10 as i32 as f32
                 } else {
                     (*bs).becometeamleader_time = crate::src::game::ai_main::floattime
                         + 5 as i32 as f32
-                        + (::libc::rand() & 0x7fff as i32) as f32
-                            / 0x7fff as i32 as f32
+                        + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
                             * 10 as i32 as f32
                 }
             }
@@ -2252,16 +2066,11 @@ pub unsafe extern "C" fn BotTeamAI(mut bs: *mut crate::src::game::ai_main::bot_s
                     b"whoisteamleader\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     0 as *mut libc::c_void,
                 );
-                crate::src::game::g_syscalls::trap_BotEnterChat(
-                    (*bs).cs,
-                    0 as i32,
-                    1 as i32,
-                );
+                crate::src::game::g_syscalls::trap_BotEnterChat((*bs).cs, 0 as i32, 1 as i32);
                 (*bs).askteamleader_time = 0 as i32 as f32;
                 (*bs).becometeamleader_time = crate::src::game::ai_main::floattime
                     + 8 as i32 as f32
-                    + (::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32
+                    + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
                         * 10 as i32 as f32
             }
             if (*bs).becometeamleader_time != 0.
@@ -2272,11 +2081,7 @@ pub unsafe extern "C" fn BotTeamAI(mut bs: *mut crate::src::game::ai_main::bot_s
                     b"iamteamleader\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     0 as *mut libc::c_void,
                 );
-                crate::src::game::g_syscalls::trap_BotEnterChat(
-                    (*bs).cs,
-                    0 as i32,
-                    1 as i32,
-                );
+                crate::src::game::g_syscalls::trap_BotEnterChat((*bs).cs, 0 as i32, 1 as i32);
                 BotSayVoiceTeamOrder(
                     bs,
                     -(1 as i32),
@@ -2330,8 +2135,7 @@ pub unsafe extern "C" fn BotTeamAI(mut bs: *mut crate::src::game::ai_main::bot_s
             {
                 BotTeamOrders(bs);
                 //give orders again after 120 seconds
-                (*bs).teamgiveorders_time =
-                    crate::src::game::ai_main::floattime + 120 as i32 as f32
+                (*bs).teamgiveorders_time = crate::src::game::ai_main::floattime + 120 as i32 as f32
             }
         }
         4 => {
@@ -2347,13 +2151,11 @@ pub unsafe extern "C" fn BotTeamAI(mut bs: *mut crate::src::game::ai_main::bot_s
                 (*bs).forceorders = crate::src::qcommon::q_shared::qfalse as i32
             }
             //if there were no flag captures the last 3 minutes
-            if (*bs).lastflagcapture_time
-                < crate::src::game::ai_main::floattime - 240 as i32 as f32
+            if (*bs).lastflagcapture_time < crate::src::game::ai_main::floattime - 240 as i32 as f32
             {
                 (*bs).lastflagcapture_time = crate::src::game::ai_main::floattime;
                 //randomly change the CTF strategy
-                if (((::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32) as f64)
+                if (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64)
                     < 0.4f64
                 {
                     (*bs).ctfstrategy ^= 1 as i32;

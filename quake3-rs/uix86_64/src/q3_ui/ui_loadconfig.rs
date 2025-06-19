@@ -637,41 +637,33 @@ unsafe extern "C" fn LoadConfig_MenuInit() {
     s_configs.arrows.width = 128 as i32;
     s_configs.arrows.height = 48 as i32;
     s_configs.left.generic.type_0 = 6 as i32;
-    s_configs.left.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x800 as i32 as u32;
+    s_configs.left.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x800 as i32 as u32;
     s_configs.left.generic.x = 320 as i32 - 128 as i32 / 2 as i32;
     s_configs.left.generic.y = 400 as i32;
     s_configs.left.generic.id = 13 as i32;
-    s_configs.left.generic.callback = Some(
-        LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_configs.left.generic.callback =
+        Some(LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_configs.left.width = 128 as i32 / 2 as i32;
     s_configs.left.height = 48 as i32;
     s_configs.left.focuspic =
         b"menu/art/arrows_horz_left\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_configs.right.generic.type_0 = 6 as i32;
-    s_configs.right.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x800 as i32 as u32;
+    s_configs.right.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x800 as i32 as u32;
     s_configs.right.generic.x = 320 as i32;
     s_configs.right.generic.y = 400 as i32;
     s_configs.right.generic.id = 14 as i32;
-    s_configs.right.generic.callback = Some(
-        LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_configs.right.generic.callback =
+        Some(LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_configs.right.width = 128 as i32 / 2 as i32;
     s_configs.right.height = 48 as i32;
     s_configs.right.focuspic =
         b"menu/art/arrows_horz_right\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_configs.back.generic.type_0 = 6 as i32;
     s_configs.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    s_configs.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_configs.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_configs.back.generic.id = 10 as i32;
-    s_configs.back.generic.callback = Some(
-        LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_configs.back.generic.callback =
+        Some(LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_configs.back.generic.x = 0 as i32;
     s_configs.back.generic.y = 480 as i32 - 64 as i32;
     s_configs.back.width = 128 as i32;
@@ -680,12 +672,10 @@ unsafe extern "C" fn LoadConfig_MenuInit() {
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_configs.go.generic.type_0 = 6 as i32;
     s_configs.go.generic.name = b"menu/art/load_0\x00" as *const u8 as *const libc::c_char;
-    s_configs.go.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_configs.go.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     s_configs.go.generic.id = 11 as i32;
-    s_configs.go.generic.callback = Some(
-        LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_configs.go.generic.callback =
+        Some(LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_configs.go.generic.x = 640 as i32;
     s_configs.go.generic.y = 480 as i32 - 64 as i32;
     s_configs.go.width = 128 as i32;
@@ -695,9 +685,8 @@ unsafe extern "C" fn LoadConfig_MenuInit() {
     // scan for configs
     s_configs.list.generic.type_0 = 8 as i32;
     s_configs.list.generic.flags = 0x100 as i32 as u32;
-    s_configs.list.generic.callback = Some(
-        LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_configs.list.generic.callback =
+        Some(LoadConfig_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_configs.list.generic.id = 12 as i32;
     s_configs.list.generic.x = 118 as i32;
     s_configs.list.generic.y = 130 as i32;
@@ -718,8 +707,7 @@ unsafe extern "C" fn LoadConfig_MenuInit() {
         );
         s_configs.list.numitems = 1 as i32;
         //degenerate case, not selectable
-        s_configs.go.generic.flags |=
-            0x4000 as i32 as u32 | 0x1000 as i32 as u32
+        s_configs.go.generic.flags |= 0x4000 as i32 as u32 | 0x1000 as i32 as u32
     } else if s_configs.list.numitems > 128 as i32 {
         s_configs.list.numitems = 128 as i32
     }
@@ -731,9 +719,7 @@ unsafe extern "C" fn LoadConfig_MenuInit() {
         // strip extension
         len = crate::stdlib::strlen(configname) as i32;
         if crate::src::qcommon::q_shared::Q_stricmp(
-            configname
-                .offset(len as isize)
-                .offset(-(4 as i32 as isize)),
+            configname.offset(len as isize).offset(-(4 as i32 as isize)),
             b".cfg\x00" as *const u8 as *const libc::c_char,
         ) == 0
         {

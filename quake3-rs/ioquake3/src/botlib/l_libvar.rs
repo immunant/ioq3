@@ -108,14 +108,10 @@ pub unsafe extern "C" fn LibVarStringValue(mut string: *const libc::c_char) -> f
             //end if
         } //end else
         if dotfound != 0 {
-            value = value
-                + (*string as i32 - '0' as i32) as f32
-                    / dotfound as f32; //end if
+            value = value + (*string as i32 - '0' as i32) as f32 / dotfound as f32; //end if
             dotfound *= 10 as i32
         } else {
-            value = (value as f64 * 10.0f64
-                + (*string as i32 - '0' as i32) as f32 as f64)
-                as f32
+            value = (value as f64 * 10.0f64 + (*string as i32 - '0' as i32) as f32 as f64) as f32
         }
         string = string.offset(1)
     }

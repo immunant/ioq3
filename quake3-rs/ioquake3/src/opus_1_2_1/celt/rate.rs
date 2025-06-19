@@ -257,9 +257,7 @@ unsafe extern "C" fn interp_bits2pulses(
             Otherwise it is force-skipped.
             This ensures that we have enough bits to code the skip flag.*/
             if band_bits
-                >= (if *thresh.offset(j as isize)
-                    > alloc_floor + ((1 as i32) << 3 as i32)
-                {
+                >= (if *thresh.offset(j as isize) > alloc_floor + ((1 as i32) << 3 as i32) {
                     *thresh.offset(j as isize)
                 } else {
                     (alloc_floor) + ((1 as i32) << 3 as i32)
@@ -273,18 +271,12 @@ unsafe extern "C" fn interp_bits2pulses(
                     /*We choose a threshold with some hysteresis to keep bands from
                     fluctuating in and out, but we try not to fold below a certain point. */
                     if codedBands > 17 as i32 {
-                        depth_threshold = if j < prev {
-                            7 as i32
-                        } else {
-                            9 as i32
-                        }
+                        depth_threshold = if j < prev { 7 as i32 } else { 9 as i32 }
                     } else {
                         depth_threshold = 0 as i32
                     }
                     if codedBands <= start + 2 as i32
-                        || band_bits
-                            > depth_threshold * band_width << LM << 3 as i32
-                                >> 4 as i32
+                        || band_bits > depth_threshold * band_width << LM << 3 as i32 >> 4 as i32
                             && j <= signalBandwidth
                     {
                         crate::src::opus_1_2_1::celt::entenc::ec_enc_bit_logp(
@@ -342,12 +334,11 @@ unsafe extern "C" fn interp_bits2pulses(
                 (codedBands + 1 as i32 - start) as crate::opus_types_h::opus_uint32,
             );
         } else {
-            *intensity = (start as u32).wrapping_add(
-                crate::src::opus_1_2_1::celt::entdec::ec_dec_uint(
+            *intensity =
+                (start as u32).wrapping_add(crate::src::opus_1_2_1::celt::entdec::ec_dec_uint(
                     ec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                     (codedBands + 1 as i32 - start) as crate::opus_types_h::opus_uint32,
-                ),
-            ) as i32
+                )) as i32
         }
     } else {
         *intensity = 0 as i32
@@ -429,11 +420,7 @@ unsafe extern "C" fn interp_bits2pulses(
             *bits.offset(j as isize) = bit - excess;
             /* Compensate for the extra DoF in stereo */
             den = C * N
-                + (if C == 2 as i32
-                    && N > 2 as i32
-                    && *dual_stereo == 0
-                    && j < *intensity
-                {
+                + (if C == 2 as i32 && N > 2 as i32 && *dual_stereo == 0 && j < *intensity {
                     1 as i32
                 } else {
                     0 as i32
@@ -450,19 +437,16 @@ unsafe extern "C" fn interp_bits2pulses(
             fine energy bit */
             if *bits.offset(j as isize) + offset < (den * 2 as i32) << 3 as i32 {
                 offset += NClogN >> 2 as i32
-            } else if *bits.offset(j as isize) + offset
-                < (den * 3 as i32) << 3 as i32
-            {
+            } else if *bits.offset(j as isize) + offset < (den * 3 as i32) << 3 as i32 {
                 offset += NClogN >> 3 as i32
             }
             /* Divide with rounding */
-            *ebits.offset(j as isize) = if 0 as i32
-                > *bits.offset(j as isize) + offset + (den << 3 as i32 - 1 as i32)
-            {
-                0 as i32
-            } else {
-                (*bits.offset(j as isize) + offset) + (den << 3 as i32 - 1 as i32)
-            };
+            *ebits.offset(j as isize) =
+                if 0 as i32 > *bits.offset(j as isize) + offset + (den << 3 as i32 - 1 as i32) {
+                    0 as i32
+                } else {
+                    (*bits.offset(j as isize) + offset) + (den << 3 as i32 - 1 as i32)
+                };
             *ebits.offset(j as isize) = (celt_udiv(
                 *ebits.offset(j as isize) as crate::opus_types_h::opus_uint32,
                 den as crate::opus_types_h::opus_uint32,
@@ -479,9 +463,9 @@ unsafe extern "C" fn interp_bits2pulses(
             };
             /* If we rounded down or capped this band, make it a candidate for the
             final fine energy pass */
-            *fine_priority.offset(j as isize) =
-                (*ebits.offset(j as isize) * (den << 3 as i32)
-                    >= *bits.offset(j as isize) + offset) as i32;
+            *fine_priority.offset(j as isize) = (*ebits.offset(j as isize) * (den << 3 as i32)
+                >= *bits.offset(j as isize) + offset)
+                as i32;
             /* Remove the allocated fine bits; the rest are assigned to PVQ */
             *bits.offset(j as isize) -= C * *ebits.offset(j as isize) << 3 as i32
         } else {
@@ -501,9 +485,7 @@ unsafe extern "C" fn interp_bits2pulses(
         if excess > 0 as i32 {
             let mut extra_fine: i32 = 0;
             let mut extra_bits: i32 = 0;
-            extra_fine = if (excess >> stereo + 3 as i32)
-                < 8 as i32 - *ebits.offset(j as isize)
-            {
+            extra_fine = if (excess >> stereo + 3 as i32) < 8 as i32 - *ebits.offset(j as isize) {
                 (excess) >> stereo + 3 as i32
             } else {
                 (8 as i32) - *ebits.offset(j as isize)
@@ -523,8 +505,7 @@ unsafe extern "C" fn interp_bits2pulses(
     while j < end {
         *ebits.offset(j as isize) = *bits.offset(j as isize) >> stereo >> 3 as i32;
         *bits.offset(j as isize) = 0 as i32;
-        *fine_priority.offset(j as isize) =
-            (*ebits.offset(j as isize) < 1 as i32) as i32;
+        *fine_priority.offset(j as isize) = (*ebits.offset(j as isize) < 1 as i32) as i32;
         j += 1
     }
     return codedBands;
@@ -574,11 +555,7 @@ pub unsafe extern "C" fn compute_allocation(
     let mut bits2: *mut i32 = 0 as *mut i32;
     let mut thresh: *mut i32 = 0 as *mut i32;
     let mut trim_offset: *mut i32 = 0 as *mut i32;
-    total = if total > 0 as i32 {
-        total
-    } else {
-        0 as i32
-    };
+    total = if total > 0 as i32 { total } else { 0 as i32 };
     len = (*m).nbEBands;
     skip_start = start;
     /* Reserve a bit to signal the end of manually skipped bands. */
@@ -607,26 +584,22 @@ pub unsafe extern "C" fn compute_allocation(
     }
     let mut fresh2 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong)
-            as usize,
+        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong) as usize,
     );
     bits1 = fresh2.as_mut_ptr() as *mut i32;
     let mut fresh3 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong)
-            as usize,
+        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong) as usize,
     );
     bits2 = fresh3.as_mut_ptr() as *mut i32;
     let mut fresh4 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong)
-            as usize,
+        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong) as usize,
     );
     thresh = fresh4.as_mut_ptr() as *mut i32;
     let mut fresh5 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong)
-            as usize,
+        (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(len as libc::c_ulong) as usize,
     );
     trim_offset = fresh5.as_mut_ptr() as *mut i32;
     j = start;
@@ -682,11 +655,9 @@ pub unsafe extern "C" fn compute_allocation(
                 break;
             }
             let mut bitsj: i32 = 0;
-            let mut N: i32 = *(*m).eBands.offset((j + 1 as i32) as isize)
-                as i32
+            let mut N: i32 = *(*m).eBands.offset((j + 1 as i32) as isize) as i32
                 - *(*m).eBands.offset(j as isize) as i32;
-            bitsj = (C * N * *(*m).allocVectors.offset((mid * len + j) as isize) as i32)
-                << LM
+            bitsj = (C * N * *(*m).allocVectors.offset((mid * len + j) as isize) as i32) << LM
                 >> 2 as i32;
             if bitsj > 0 as i32 {
                 bitsj = if 0 as i32 > bitsj + *trim_offset.offset(j as isize) {
@@ -726,12 +697,10 @@ pub unsafe extern "C" fn compute_allocation(
     while j < end {
         let mut bits1j: i32 = 0;
         let mut bits2j: i32 = 0;
-        let mut N_0: i32 = *(*m).eBands.offset((j + 1 as i32) as isize)
-            as i32
+        let mut N_0: i32 = *(*m).eBands.offset((j + 1 as i32) as isize) as i32
             - *(*m).eBands.offset(j as isize) as i32;
-        bits1j = (C * N_0 * *(*m).allocVectors.offset((lo * len + j) as isize) as i32)
-            << LM
-            >> 2 as i32;
+        bits1j =
+            (C * N_0 * *(*m).allocVectors.offset((lo * len + j) as isize) as i32) << LM >> 2 as i32;
         bits2j = if hi >= (*m).nbAllocVectors {
             *cap.offset(j as isize)
         } else {

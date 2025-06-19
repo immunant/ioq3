@@ -694,12 +694,11 @@ pub unsafe extern "C" fn PS_CreatePunctuationTable(
         0 as *mut crate::src::botlib::l_script::punctuation_t;
     //get memory for the table
     if (*script).punctuationtable.is_null() {
-        (*script).punctuationtable = crate::src::botlib::l_memory::GetMemory(
-            (256 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-                *mut crate::src::botlib::l_script::punctuation_t,
-            >() as libc::c_ulong),
-        )
-            as *mut *mut crate::src::botlib::l_script::punctuation_t
+        (*script).punctuationtable =
+            crate::src::botlib::l_memory::GetMemory((256 as i32 as libc::c_ulong).wrapping_mul(
+                ::std::mem::size_of::<*mut crate::src::botlib::l_script::punctuation_t>()
+                    as libc::c_ulong,
+            )) as *mut *mut crate::src::botlib::l_script::punctuation_t
     }
     crate::stdlib::memset(
         (*script).punctuationtable as *mut libc::c_void,
@@ -726,11 +725,9 @@ pub unsafe extern "C" fn PS_CreatePunctuationTable(
                 if !lastp.is_null() {
                     (*lastp).next = newp
                 } else {
-                    let ref mut fresh0 =
-                        *(*script)
-                            .punctuationtable
-                            .offset(*(*newp).p.offset(0 as i32 as isize) as u32
-                                as isize);
+                    let ref mut fresh0 = *(*script)
+                        .punctuationtable
+                        .offset(*(*newp).p.offset(0 as i32 as isize) as u32 as isize);
                     *fresh0 = newp
                 }
                 break;
@@ -935,8 +932,7 @@ pub unsafe extern "C" fn PS_ReadWhiteSpace(
             }
         } else {
             //comments /* */
-            if !(*(*script).script_p.offset(1 as i32 as isize) as i32 == '*' as i32)
-            {
+            if !(*(*script).script_p.offset(1 as i32 as isize) as i32 == '*' as i32) {
                 break; //end do
             }
             (*script).script_p = (*script).script_p.offset(1);
@@ -949,8 +945,7 @@ pub unsafe extern "C" fn PS_ReadWhiteSpace(
                     (*script).line += 1
                 }
                 if *(*script).script_p as i32 == '*' as i32
-                    && *(*script).script_p.offset(1 as i32 as isize) as i32
-                        == '/' as i32
+                    && *(*script).script_p.offset(1 as i32 as isize) as i32 == '/' as i32
                 {
                     break;
                 }
@@ -1036,8 +1031,7 @@ pub unsafe extern "C" fn PS_ReadEscapeCharacter(
         }
         _ => {
             //NOTE: decimal ASCII code, NOT octal
-            if (*(*script).script_p as i32) < '0' as i32
-                || *(*script).script_p as i32 > '9' as i32
+            if (*(*script).script_p as i32) < '0' as i32 || *(*script).script_p as i32 > '9' as i32
             {
                 ScriptError(
                     script,
@@ -1125,9 +1119,7 @@ pub unsafe extern "C" fn PS_ReadString(
         //end if
         //if there is an escape character and
         //if escape characters inside a string are allowed
-        if *(*script).script_p as i32 == '\\' as i32
-            && (*script).flags & 0x8 as i32 == 0
-        {
+        if *(*script).script_p as i32 == '\\' as i32 && (*script).flags & 0x8 as i32 == 0 {
             if PS_ReadEscapeCharacter(
                 script,
                 &mut *(*token).string.as_mut_ptr().offset(len as isize),
@@ -1276,9 +1268,7 @@ pub unsafe extern "C" fn NumberValue(
                 string = string.offset(1)
             } //end if
             if dotfound != 0 {
-                *floatvalue = *floatvalue
-                    + (*string as i32 - '0' as i32) as f32
-                        / dotfound as f32; //end else if
+                *floatvalue = *floatvalue + (*string as i32 - '0' as i32) as f32 / dotfound as f32; //end else if
                 dotfound = dotfound.wrapping_mul(10 as i32 as libc::c_ulong)
             } else {
                 *floatvalue = (*floatvalue as f64 * 10.0f64
@@ -1303,16 +1293,13 @@ pub unsafe extern "C" fn NumberValue(
         while *string != 0 {
             *intvalue <<= 4 as i32; //end else if
             if *string as i32 >= 'a' as i32 && *string as i32 <= 'f' as i32 {
-                *intvalue = (*intvalue).wrapping_add(
-                    (*string as i32 - 'a' as i32 + 10 as i32) as libc::c_ulong,
-                )
+                *intvalue = (*intvalue)
+                    .wrapping_add((*string as i32 - 'a' as i32 + 10 as i32) as libc::c_ulong)
             } else if *string as i32 >= 'A' as i32 && *string as i32 <= 'F' as i32 {
-                *intvalue = (*intvalue).wrapping_add(
-                    (*string as i32 - 'A' as i32 + 10 as i32) as libc::c_ulong,
-                )
+                *intvalue = (*intvalue)
+                    .wrapping_add((*string as i32 - 'A' as i32 + 10 as i32) as libc::c_ulong)
             } else {
-                *intvalue =
-                    (*intvalue).wrapping_add((*string as i32 - '0' as i32) as libc::c_ulong)
+                *intvalue = (*intvalue).wrapping_add((*string as i32 - '0' as i32) as libc::c_ulong)
             }
             string = string.offset(1)
         }
@@ -1540,10 +1527,7 @@ pub unsafe extern "C" fn PS_ReadLiteral(
         //end else
         if PS_ReadEscapeCharacter(
             script,
-            &mut *(*token)
-                .string
-                .as_mut_ptr()
-                .offset(1 as i32 as isize),
+            &mut *(*token).string.as_mut_ptr().offset(1 as i32 as isize),
         ) == 0
         {
             return 0 as i32;
@@ -1642,9 +1626,7 @@ pub unsafe extern "C" fn PS_ReadPrimitive(
 ) -> i32 {
     let mut len: i32 = 0; //end while
     len = 0 as i32; //end if
-    while *(*script).script_p as i32 > ' ' as i32
-        && *(*script).script_p as i32 != ';' as i32
-    {
+    while *(*script).script_p as i32 > ' ' as i32 && *(*script).script_p as i32 != ';' as i32 {
         if len >= 1024 as i32 - 1 as i32 {
             ScriptError(
                 script,
@@ -1731,12 +1713,10 @@ pub unsafe extern "C" fn PS_ReadToken(
         if PS_ReadString(script, token, '\'' as i32) == 0 {
             return 0 as i32;
         }
-    } else if *(*script).script_p as i32 >= '0' as i32
-        && *(*script).script_p as i32 <= '9' as i32
+    } else if *(*script).script_p as i32 >= '0' as i32 && *(*script).script_p as i32 <= '9' as i32
         || *(*script).script_p as i32 == '.' as i32
             && (*(*script).script_p.offset(1 as i32 as isize) as i32 >= '0' as i32
-                && *(*script).script_p.offset(1 as i32 as isize) as i32
-                    <= '9' as i32)
+                && *(*script).script_p.offset(1 as i32 as isize) as i32 <= '9' as i32)
     {
         //end if
         //if (!PS_ReadLiteral(script, token)) return 0;
@@ -1751,10 +1731,8 @@ pub unsafe extern "C" fn PS_ReadToken(
     } else {
         //end else if
         //if there is a name
-        if *(*script).script_p as i32 >= 'a' as i32
-            && *(*script).script_p as i32 <= 'z' as i32
-            || *(*script).script_p as i32 >= 'A' as i32
-                && *(*script).script_p as i32 <= 'Z' as i32
+        if *(*script).script_p as i32 >= 'a' as i32 && *(*script).script_p as i32 <= 'z' as i32
+            || *(*script).script_p as i32 >= 'A' as i32 && *(*script).script_p as i32 <= 'Z' as i32
             || *(*script).script_p as i32 == '_' as i32
         {
             if PS_ReadName(script, token) == 0 {
@@ -2196,9 +2174,9 @@ pub unsafe extern "C" fn StripDoubleQuotes(mut string: *mut libc::c_char) {
             crate::stdlib::strlen(string),
         ); //end if
     }
-    if *string.offset(
-        crate::stdlib::strlen(string).wrapping_sub(1 as i32 as libc::c_ulong) as isize,
-    ) as i32
+    if *string
+        .offset(crate::stdlib::strlen(string).wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+        as i32
         == '\"' as i32
     {
         *string.offset(
@@ -2225,9 +2203,9 @@ pub unsafe extern "C" fn StripSingleQuotes(mut string: *mut libc::c_char) {
             crate::stdlib::strlen(string),
         ); //end if
     }
-    if *string.offset(
-        crate::stdlib::strlen(string).wrapping_sub(1 as i32 as libc::c_ulong) as isize,
-    ) as i32
+    if *string
+        .offset(crate::stdlib::strlen(string).wrapping_sub(1 as i32 as libc::c_ulong) as isize)
+        as i32
         == '\'' as i32
     {
         *string.offset(

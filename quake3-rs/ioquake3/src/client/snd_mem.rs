@@ -42,8 +42,7 @@ static mut inUse: i32 = 0 as i32;
 static mut totalInUse: i32 = 0 as i32;
 #[no_mangle]
 
-pub static mut sfxScratchBuffer: *mut i16 =
-    0 as *const i16 as *mut i16;
+pub static mut sfxScratchBuffer: *mut i16 = 0 as *const i16 as *mut i16;
 #[no_mangle]
 
 pub static mut sfxScratchPointer: *mut crate::snd_local_h::sfx_t =
@@ -161,8 +160,7 @@ unsafe extern "C" fn ResampleSfx(
     outcount = (samples as f32 / stepscale) as i32;
     srcsample = 0 as i32;
     samplefrac = 0 as i32;
-    fracstep = (stepscale * 256 as i32 as f32 * channels as f32)
-        as i32;
+    fracstep = (stepscale * 256 as i32 as f32 * channels as f32) as i32;
     chunk = (*sfx).soundData;
     i = 0 as i32;
     while i < outcount {
@@ -172,11 +170,9 @@ unsafe extern "C" fn ResampleSfx(
         j = 0 as i32;
         while j < channels {
             if inwidth == 2 as i32 {
-                sample =
-                    *(data as *mut i16).offset((srcsample + j) as isize) as i32
+                sample = *(data as *mut i16).offset((srcsample + j) as isize) as i32
             } else {
-                sample = (((*data.offset((srcsample + j) as isize) as i32
-                    - 128 as i32) as u32)
+                sample = (((*data.offset((srcsample + j) as isize) as i32 - 128 as i32) as u32)
                     << 8 as i32) as i32
             }
             part = i * channels + j & 1024 as i32 - 1 as i32;
@@ -226,8 +222,7 @@ unsafe extern "C" fn ResampleSfxRaw(
     outcount = (samples as f32 / stepscale) as i32;
     srcsample = 0 as i32;
     samplefrac = 0 as i32;
-    fracstep = (stepscale * 256 as i32 as f32 * channels as f32)
-        as i32;
+    fracstep = (stepscale * 256 as i32 as f32 * channels as f32) as i32;
     i = 0 as i32;
     while i < outcount {
         srcsample += samplefrac >> 8 as i32;
@@ -236,12 +231,9 @@ unsafe extern "C" fn ResampleSfxRaw(
         j = 0 as i32;
         while j < channels {
             if inwidth == 2 as i32 {
-                sample =
-                    *(data as *mut i16).offset((srcsample + j) as isize) as i32
+                sample = *(data as *mut i16).offset((srcsample + j) as isize) as i32
             } else {
-                sample = (*data.offset((srcsample + j) as isize) as i32
-                    - 128 as i32)
-                    << 8 as i32
+                sample = (*data.offset((srcsample + j) as isize) as i32 - 128 as i32) << 8 as i32
             }
             *sfx.offset((i * channels + j) as isize) = sample as i16;
             j += 1
@@ -367,8 +359,7 @@ pub unsafe extern "C" fn S_LoadSound(
     // manager to do the right thing for us and page
     // sound in as needed
     if info.channels == 1 as i32
-        && (*sfx).soundCompressed as u32
-            == crate::src::qcommon::q_shared::qtrue as i32 as u32
+        && (*sfx).soundCompressed as u32 == crate::src::qcommon::q_shared::qtrue as i32 as u32
     {
         (*sfx).soundCompressionMethod = 1 as i32;
         (*sfx).soundData = 0 as *mut crate::snd_local_h::sndBuffer;

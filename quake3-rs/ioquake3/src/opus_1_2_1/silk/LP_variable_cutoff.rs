@@ -151,19 +151,17 @@ unsafe extern "C" fn silk_LP_interpolate_filter_taps(
                 B_Q28 as *mut libc::c_void,
                 crate::src::opus_1_2_1::silk::tables_other::silk_Transition_LP_B_Q28[ind as usize]
                     .as_ptr() as *const libc::c_void,
-                (3 as i32 as libc::c_ulong)
-                    .wrapping_mul(
-                        ::std::mem::size_of::<crate::opus_types_h::opus_int32>() as libc::c_ulong
-                    ),
+                (3 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
+                    crate::opus_types_h::opus_int32,
+                >() as libc::c_ulong),
             );
             crate::stdlib::memcpy(
                 A_Q28 as *mut libc::c_void,
                 crate::src::opus_1_2_1::silk::tables_other::silk_Transition_LP_A_Q28[ind as usize]
                     .as_ptr() as *const libc::c_void,
-                (2 as i32 as libc::c_ulong)
-                    .wrapping_mul(
-                        ::std::mem::size_of::<crate::opus_types_h::opus_int32>() as libc::c_ulong
-                    ),
+                (2 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
+                    crate::opus_types_h::opus_int32,
+                >() as libc::c_ulong),
             );
         }
     } else {
@@ -405,36 +403,32 @@ pub unsafe extern "C" fn silk_LP_variable_cutoff(
     /* Run filter if needed */
     if (*psLP).mode != 0 as i32 {
         /* Calculate index and interpolation factor for interpolation */
-        fac_Q16 = (((5120 as i32 / (5 as i32 * 4 as i32)
-            - (*psLP).transition_frame_no) as crate::opus_types_h::opus_uint32)
-            << 16 as i32 - 6 as i32)
-            as crate::opus_types_h::opus_int32;
+        fac_Q16 = (((5120 as i32 / (5 as i32 * 4 as i32) - (*psLP).transition_frame_no)
+            as crate::opus_types_h::opus_uint32)
+            << 16 as i32 - 6 as i32) as crate::opus_types_h::opus_int32;
         ind = fac_Q16 >> 16 as i32;
         fac_Q16 -= ((ind as crate::opus_types_h::opus_uint32) << 16 as i32)
             as crate::opus_types_h::opus_int32;
         /* Interpolate filter coefficients */
         silk_LP_interpolate_filter_taps(B_Q28.as_mut_ptr(), A_Q28.as_mut_ptr(), ind, fac_Q16);
         /* Update transition frame number for next frame */
-        (*psLP).transition_frame_no =
-            if 0 as i32 > 5120 as i32 / (5 as i32 * 4 as i32) {
-                if (*psLP).transition_frame_no + (*psLP).mode > 0 as i32 {
-                    0 as i32
-                } else if (*psLP).transition_frame_no + (*psLP).mode
-                    < 5120 as i32 / (5 as i32 * 4 as i32)
-                {
-                    (5120 as i32) / (5 as i32 * 4 as i32)
-                } else {
-                    ((*psLP).transition_frame_no) + (*psLP).mode
-                }
+        (*psLP).transition_frame_no = if 0 as i32 > 5120 as i32 / (5 as i32 * 4 as i32) {
+            if (*psLP).transition_frame_no + (*psLP).mode > 0 as i32 {
+                0 as i32
             } else if (*psLP).transition_frame_no + (*psLP).mode
-                > 5120 as i32 / (5 as i32 * 4 as i32)
+                < 5120 as i32 / (5 as i32 * 4 as i32)
             {
                 (5120 as i32) / (5 as i32 * 4 as i32)
-            } else if (*psLP).transition_frame_no + (*psLP).mode < 0 as i32 {
-                0 as i32
             } else {
                 ((*psLP).transition_frame_no) + (*psLP).mode
-            };
+            }
+        } else if (*psLP).transition_frame_no + (*psLP).mode > 5120 as i32 / (5 as i32 * 4 as i32) {
+            (5120 as i32) / (5 as i32 * 4 as i32)
+        } else if (*psLP).transition_frame_no + (*psLP).mode < 0 as i32 {
+            0 as i32
+        } else {
+            ((*psLP).transition_frame_no) + (*psLP).mode
+        };
         /* ARMA low-pass filtering */
         crate::src::opus_1_2_1::silk::biquad_alt::silk_biquad_alt_stride1(
             frame,

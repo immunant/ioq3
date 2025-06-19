@@ -190,8 +190,7 @@ pub unsafe extern "C" fn silk_encode_pulses(
     crate::stdlib::memset(
         pulses_comb.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (8 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (8 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
     );
     /* ***************************/
     /* Prepare for shell coding */
@@ -204,8 +203,7 @@ pub unsafe extern "C" fn silk_encode_pulses(
         crate::stdlib::memset(
             &mut *pulses.offset(frame_length as isize) as *mut i8 as *mut libc::c_void,
             0 as i32,
-            (16 as i32 as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i8>() as libc::c_ulong),
+            (16 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i8>() as libc::c_ulong),
         );
     }
     /* Take the absolute value of the pulses */
@@ -301,8 +299,7 @@ pub unsafe extern "C" fn silk_encode_pulses(
             *fresh3 += 1;
             k = 0 as i32;
             while k < 16 as i32 {
-                *abs_pulses_ptr.offset(k as isize) =
-                    *abs_pulses_ptr.offset(k as isize) >> 1 as i32;
+                *abs_pulses_ptr.offset(k as isize) = *abs_pulses_ptr.offset(k as isize) >> 1 as i32;
                 k += 1
             }
         }
@@ -326,11 +323,9 @@ pub unsafe extern "C" fn silk_encode_pulses(
         i = 0 as i32;
         while i < iter {
             if *nRshifts.offset(i as isize) > 0 as i32 {
-                sumBits_Q5 += *nBits_ptr.offset((16 as i32 + 1 as i32) as isize)
-                    as i32
+                sumBits_Q5 += *nBits_ptr.offset((16 as i32 + 1 as i32) as isize) as i32
             } else {
-                sumBits_Q5 +=
-                    *nBits_ptr.offset(*sum_pulses.offset(i as isize) as isize) as i32
+                sumBits_Q5 += *nBits_ptr.offset(*sum_pulses.offset(i as isize) as isize) as i32
             }
             i += 1
         }
@@ -409,8 +404,7 @@ pub unsafe extern "C" fn silk_encode_pulses(
     i = 0 as i32;
     while i < iter {
         if *nRshifts.offset(i as isize) > 0 as i32 {
-            pulses_ptr =
-                &mut *pulses.offset((i * 16 as i32) as isize) as *mut i8;
+            pulses_ptr = &mut *pulses.offset((i * 16 as i32) as isize) as *mut i8;
             nLS = *nRshifts.offset(i as isize) - 1 as i32;
             k = 0 as i32;
             while k < 16 as i32 {

@@ -792,10 +792,7 @@ pub unsafe extern "C" fn CL_cURL_Init() -> crate::src::qcommon::q_shared::qboole
     qcurl_multi_perform = ::std::mem::transmute::<
         *mut libc::c_void,
         Option<
-            unsafe extern "C" fn(
-                _: *mut libc::c_void,
-                _: *mut i32,
-            ) -> crate::multi_h::CURLMcode,
+            unsafe extern "C" fn(_: *mut libc::c_void, _: *mut i32) -> crate::multi_h::CURLMcode,
         >,
     >(GPA(
         b"curl_multi_perform\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
@@ -809,10 +806,7 @@ pub unsafe extern "C" fn CL_cURL_Init() -> crate::src::qcommon::q_shared::qboole
     qcurl_multi_info_read = ::std::mem::transmute::<
         *mut libc::c_void,
         Option<
-            unsafe extern "C" fn(
-                _: *mut libc::c_void,
-                _: *mut i32,
-            ) -> *mut crate::multi_h::CURLMsg,
+            unsafe extern "C" fn(_: *mut libc::c_void, _: *mut i32) -> *mut crate::multi_h::CURLMsg,
         >,
     >(GPA(
         b"curl_multi_info_read\x00" as *const u8 as *const libc::c_char as *mut libc::c_char
@@ -934,8 +928,7 @@ unsafe extern "C" fn CL_cURL_CallbackWrite(
     crate::src::qcommon::files::FS_Write(
         buffer,
         size.wrapping_mul(nmemb) as i32,
-        *(stream as *mut crate::src::qcommon::q_shared::fileHandle_t)
-            .offset(0 as i32 as isize),
+        *(stream as *mut crate::src::qcommon::q_shared::fileHandle_t).offset(0 as i32 as isize),
     );
     return size.wrapping_mul(nmemb);
 }
@@ -1226,9 +1219,7 @@ pub unsafe extern "C" fn CL_cURL_PerformDownload() {
         crate::src::client::cl_main::clc.downloadCURLM,
         &mut c,
     );
-    while res as i32 == crate::multi_h::CURLM_CALL_MULTI_PERFORM as i32
-        && i < 100 as i32
-    {
+    while res as i32 == crate::multi_h::CURLM_CALL_MULTI_PERFORM as i32 && i < 100 as i32 {
         res = qcurl_multi_perform.expect("non-null function pointer")(
             crate::src::client::cl_main::clc.downloadCURLM,
             &mut c,
@@ -1247,8 +1238,7 @@ pub unsafe extern "C" fn CL_cURL_PerformDownload() {
     }
     crate::src::qcommon::files::FS_FCloseFile(crate::src::client::cl_main::clc.download);
     if (*msg).msg as u32 == crate::multi_h::CURLMSG_DONE as i32 as u32
-        && (*msg).data.result as u32
-            == crate::curl_h::CURLE_OK as i32 as u32
+        && (*msg).data.result as u32 == crate::curl_h::CURLE_OK as i32 as u32
     {
         crate::src::qcommon::files::FS_SV_Rename(
             crate::src::client::cl_main::clc

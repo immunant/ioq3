@@ -376,10 +376,7 @@ UI_AddBotsMenu_FightEvent
 =================
 */
 
-unsafe extern "C" fn UI_AddBotsMenu_FightEvent(
-    mut _ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_AddBotsMenu_FightEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
     let mut team: *const libc::c_char = 0 as *const libc::c_char;
     let mut skill: i32 = 0;
     if event != 3 as i32 {
@@ -531,10 +528,7 @@ unsafe extern "C" fn UI_AddBotsMenu_GetSortedBotNums() {
         ::std::mem::size_of::<i32>() as libc::c_ulong,
         Some(
             UI_AddBotsMenu_SortCompare
-                as unsafe extern "C" fn(
-                    _: *const libc::c_void,
-                    _: *const libc::c_void,
-                ) -> i32,
+                as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
         ),
     );
 }
@@ -570,11 +564,7 @@ unsafe extern "C" fn UI_AddBotsMenu_Init() {
     let mut gametype: i32 = 0;
     let mut count: i32 = 0;
     let mut info: [libc::c_char; 1024] = [0; 1024];
-    crate::src::ui::ui_syscalls::trap_GetConfigString(
-        0 as i32,
-        info.as_mut_ptr(),
-        1024 as i32,
-    );
+    crate::src::ui::ui_syscalls::trap_GetConfigString(0 as i32, info.as_mut_ptr(), 1024 as i32);
     gametype = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
         info.as_mut_ptr(),
         b"g_gametype\x00" as *const u8 as *const libc::c_char,
@@ -618,28 +608,23 @@ unsafe extern "C" fn UI_AddBotsMenu_Init() {
     addBotsMenuInfo.arrows.width = 64 as i32;
     addBotsMenuInfo.arrows.height = 128 as i32;
     addBotsMenuInfo.up.generic.type_0 = 6 as i32;
-    addBotsMenuInfo.up.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    addBotsMenuInfo.up.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     addBotsMenuInfo.up.generic.x = 200 as i32;
     addBotsMenuInfo.up.generic.y = 128 as i32;
     addBotsMenuInfo.up.generic.id = 13 as i32;
-    addBotsMenuInfo.up.generic.callback = Some(
-        UI_AddBotsMenu_UpEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    addBotsMenuInfo.up.generic.callback =
+        Some(UI_AddBotsMenu_UpEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     addBotsMenuInfo.up.width = 64 as i32;
     addBotsMenuInfo.up.height = 64 as i32;
     addBotsMenuInfo.up.focuspic =
         b"menu/art/arrows_vert_top\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     addBotsMenuInfo.down.generic.type_0 = 6 as i32;
-    addBotsMenuInfo.down.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    addBotsMenuInfo.down.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     addBotsMenuInfo.down.generic.x = 200 as i32;
     addBotsMenuInfo.down.generic.y = 128 as i32 + 64 as i32;
     addBotsMenuInfo.down.generic.id = 14 as i32;
-    addBotsMenuInfo.down.generic.callback = Some(
-        UI_AddBotsMenu_DownEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    addBotsMenuInfo.down.generic.callback =
+        Some(UI_AddBotsMenu_DownEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     addBotsMenuInfo.down.width = 64 as i32;
     addBotsMenuInfo.down.height = 64 as i32;
     addBotsMenuInfo.down.focuspic =
@@ -648,14 +633,12 @@ unsafe extern "C" fn UI_AddBotsMenu_Init() {
     y = 120 as i32;
     while n < count {
         addBotsMenuInfo.bots[n as usize].generic.type_0 = 9 as i32;
-        addBotsMenuInfo.bots[n as usize].generic.flags =
-            0x4 as i32 as u32 | 0x100 as i32 as u32;
+        addBotsMenuInfo.bots[n as usize].generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
         addBotsMenuInfo.bots[n as usize].generic.id = 20 as i32 + n;
         addBotsMenuInfo.bots[n as usize].generic.x = 320 as i32 - 56 as i32;
         addBotsMenuInfo.bots[n as usize].generic.y = y;
         addBotsMenuInfo.bots[n as usize].generic.callback = Some(
-            UI_AddBotsMenu_BotEvent
-                as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+            UI_AddBotsMenu_BotEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
         );
         addBotsMenuInfo.bots[n as usize].string = addBotsMenuInfo.botnames[n as usize].as_mut_ptr();
         addBotsMenuInfo.bots[n as usize].color =
@@ -666,8 +649,7 @@ unsafe extern "C" fn UI_AddBotsMenu_Init() {
     }
     y += 12 as i32;
     addBotsMenuInfo.skill.generic.type_0 = 3 as i32;
-    addBotsMenuInfo.skill.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    addBotsMenuInfo.skill.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     addBotsMenuInfo.skill.generic.x = 320 as i32;
     addBotsMenuInfo.skill.generic.y = y;
     addBotsMenuInfo.skill.generic.name = b"Skill:\x00" as *const u8 as *const libc::c_char;
@@ -683,8 +665,7 @@ unsafe extern "C" fn UI_AddBotsMenu_Init() {
     ) as i32;
     y += 16 as i32;
     addBotsMenuInfo.team.generic.type_0 = 3 as i32;
-    addBotsMenuInfo.team.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    addBotsMenuInfo.team.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     addBotsMenuInfo.team.generic.x = 320 as i32;
     addBotsMenuInfo.team.generic.y = y;
     addBotsMenuInfo.team.generic.name = b"Team: \x00" as *const u8 as *const libc::c_char;
@@ -697,13 +678,10 @@ unsafe extern "C" fn UI_AddBotsMenu_Init() {
     }
     addBotsMenuInfo.go.generic.type_0 = 6 as i32;
     addBotsMenuInfo.go.generic.name = b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char;
-    addBotsMenuInfo.go.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    addBotsMenuInfo.go.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     addBotsMenuInfo.go.generic.id = 11 as i32;
-    addBotsMenuInfo.go.generic.callback = Some(
-        UI_AddBotsMenu_FightEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    addBotsMenuInfo.go.generic.callback =
+        Some(UI_AddBotsMenu_FightEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     addBotsMenuInfo.go.generic.x = 320 as i32 + 128 as i32 - 128 as i32;
     addBotsMenuInfo.go.generic.y = 256 as i32 + 128 as i32 - 64 as i32;
     addBotsMenuInfo.go.width = 128 as i32;
@@ -712,13 +690,10 @@ unsafe extern "C" fn UI_AddBotsMenu_Init() {
         b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     addBotsMenuInfo.back.generic.type_0 = 6 as i32;
     addBotsMenuInfo.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    addBotsMenuInfo.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    addBotsMenuInfo.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     addBotsMenuInfo.back.generic.id = 10 as i32;
-    addBotsMenuInfo.back.generic.callback = Some(
-        UI_AddBotsMenu_BackEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    addBotsMenuInfo.back.generic.callback =
+        Some(UI_AddBotsMenu_BackEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     addBotsMenuInfo.back.generic.x = 320 as i32 - 128 as i32;
     addBotsMenuInfo.back.generic.y = 256 as i32 + 128 as i32 - 64 as i32;
     addBotsMenuInfo.back.width = 128 as i32;

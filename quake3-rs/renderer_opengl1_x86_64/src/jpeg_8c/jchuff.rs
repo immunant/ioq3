@@ -314,8 +314,7 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
         i = (*htbl).bits[l as usize] as i32;
         if i < 0 as i32 || p + i > 256 as i32 {
             /* protect against table overrun */
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -354,10 +353,8 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
         /* code is now 1 more than the last code used for codelength si; but
          * it must still fit in si bits, since no code is allowed to be all ones.
          */
-        if code as crate::jmorecfg_h::INT32 >= (1 as i32 as crate::jmorecfg_h::INT32) << si
-        {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
+        if code as crate::jmorecfg_h::INT32 >= (1 as i32 as crate::jmorecfg_h::INT32) << si {
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -386,17 +383,12 @@ unsafe extern "C" fn jpeg_make_c_derived_tbl(
      * but only 0..15 for DC.  (We could constrain them further
      * based on data depth and mode, but this seems enough.)
      */
-    maxsymbol = if isDC != 0 {
-        15 as i32
-    } else {
-        255 as i32
-    };
+    maxsymbol = if isDC != 0 { 15 as i32 } else { 255 as i32 };
     p = 0 as i32;
     while p < lastp {
         i = (*htbl).huffval[p as usize] as i32;
         if i < 0 as i32 || i > maxsymbol || (*dtbl).ehufsi[i as usize] as i32 != 0 {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_HUFF_TABLE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -449,8 +441,7 @@ unsafe extern "C" fn dump_buffer_e(mut entropy: huff_entropy_ptr)
     .expect("non-null function pointer")((*entropy).cinfo)
         == 0
     {
-        (*(*(*entropy).cinfo).err).msg_code =
-            crate::src::jpeg_8c::jerror::JERR_CANT_SUSPEND as i32;
+        (*(*(*entropy).cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_CANT_SUSPEND as i32;
         Some(
             (*(*(*entropy).cinfo).err)
                 .error_exit
@@ -494,14 +485,12 @@ unsafe extern "C" fn emit_bits_s(
             (*state).cinfo as crate::jpeglib_h::j_common_ptr
         ); /* new number of bits in buffer */
     } /* align incoming bits */
-    put_buffer &=
-        ((1 as i32 as crate::jmorecfg_h::INT32) << size) - 1 as i32 as libc::c_long; /* and merge with old buffer contents */
+    put_buffer &= ((1 as i32 as crate::jmorecfg_h::INT32) << size) - 1 as i32 as libc::c_long; /* and merge with old buffer contents */
     put_bits += size;
     put_buffer <<= 24 as i32 - put_bits;
     put_buffer |= (*state).cur.put_buffer;
     while put_bits >= 8 as i32 {
-        let mut c: i32 =
-            (put_buffer >> 16 as i32 & 0xff as i32 as libc::c_long) as i32;
+        let mut c: i32 = (put_buffer >> 16 as i32 & 0xff as i32 as libc::c_long) as i32;
         let fresh3 = (*state).next_output_byte;
         (*state).next_output_byte = (*state).next_output_byte.offset(1);
         *fresh3 = c as crate::jmorecfg_h::JOCTET;
@@ -532,11 +521,7 @@ unsafe extern "C" fn emit_bits_s(
 }
 #[inline]
 
-unsafe extern "C" fn emit_bits_e(
-    mut entropy: huff_entropy_ptr,
-    mut code: u32,
-    mut size: i32,
-)
+unsafe extern "C" fn emit_bits_e(mut entropy: huff_entropy_ptr, mut code: u32, mut size: i32)
 /* Emit some bits, unless we are in gather mode */
 {
     /* This routine is heavily used, so it's worth coding tightly. */
@@ -558,15 +543,13 @@ unsafe extern "C" fn emit_bits_e(
     if (*entropy).gather_statistics != 0 {
         return;
     } /* align incoming bits */
-    put_buffer &=
-        ((1 as i32 as crate::jmorecfg_h::INT32) << size) - 1 as i32 as libc::c_long;
+    put_buffer &= ((1 as i32 as crate::jmorecfg_h::INT32) << size) - 1 as i32 as libc::c_long;
     put_bits += size;
     put_buffer <<= 24 as i32 - put_bits;
     /* and merge with old buffer contents */
     put_buffer |= (*entropy).saved.put_buffer;
     while put_bits >= 8 as i32 {
-        let mut c: i32 =
-            (put_buffer >> 16 as i32 & 0xff as i32 as libc::c_long) as i32;
+        let mut c: i32 = (put_buffer >> 16 as i32 & 0xff as i32 as libc::c_long) as i32;
         let fresh5 = (*entropy).next_output_byte;
         (*entropy).next_output_byte = (*entropy).next_output_byte.offset(1);
         *fresh5 = c as crate::jmorecfg_h::JOCTET;
@@ -602,11 +585,7 @@ unsafe extern "C" fn flush_bits_s(mut state: *mut working_state) -> crate::jmore
 }
 
 unsafe extern "C" fn flush_bits_e(mut entropy: huff_entropy_ptr) {
-    emit_bits_e(
-        entropy,
-        0x7f as i32 as u32,
-        7 as i32,
-    );
+    emit_bits_e(entropy, 0x7f as i32 as u32, 7 as i32);
     (*entropy).saved.put_buffer = 0 as i32 as crate::jmorecfg_h::INT32;
     (*entropy).saved.put_bits = 0 as i32;
 }
@@ -841,8 +820,7 @@ unsafe extern "C" fn encode_mcu_DC_first(
          * Since we're encoding a difference, the range limit is twice as much.
          */
         if nbits > 10 as i32 + 1 as i32 {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_BAD_DCT_COEF as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_DCT_COEF as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -966,11 +944,7 @@ unsafe extern "C" fn encode_mcu_AC_first(
                     );
                 }
                 /* Count/emit Huffman symbol for run length / number of bits */
-                emit_ac_symbol(
-                    entropy,
-                    (*entropy).ac_tbl_no,
-                    (r << 4 as i32) + nbits,
-                );
+                emit_ac_symbol(entropy, (*entropy).ac_tbl_no, (r << 4 as i32) + nbits);
                 /* Emit that number of bits of the value, if positive, */
                 /* or the complement of its magnitude, if negative. */
                 emit_bits_e(entropy, temp2 as u32, nbits);
@@ -1140,15 +1114,9 @@ unsafe extern "C" fn encode_mcu_AC_refine(
                 /* Emit any pending EOBRUN and the BE correction bits */
                 emit_eobrun(entropy);
                 /* Count/emit Huffman symbol for run length / number of bits */
-                emit_ac_symbol(
-                    entropy,
-                    (*entropy).ac_tbl_no,
-                    (r << 4 as i32) + 1 as i32,
-                );
+                emit_ac_symbol(entropy, (*entropy).ac_tbl_no, (r << 4 as i32) + 1 as i32);
                 /* Emit output bit for newly-nonzero coef */
-                temp = if ((*block)[*natural_order.offset(k as isize) as usize] as i32)
-                    < 0 as i32
-                {
+                temp = if ((*block)[*natural_order.offset(k as isize) as usize] as i32) < 0 as i32 {
                     0 as i32
                 } else {
                     1 as i32
@@ -1172,8 +1140,7 @@ unsafe extern "C" fn encode_mcu_AC_refine(
          * 2. overflow of the correction bit buffer during the next MCU.
          */
         if (*entropy).EOBRUN == 0x7fff as i32 as u32
-            || (*entropy).BE
-                > (1000 as i32 - 64 as i32 + 1 as i32) as u32
+            || (*entropy).BE > (1000 as i32 - 64 as i32 + 1 as i32) as u32
         {
             emit_eobrun(entropy);
         }
@@ -1227,8 +1194,7 @@ unsafe extern "C" fn encode_one_block(
      * Since we're encoding a difference, the range limit is twice as much.
      */
     if nbits > 10 as i32 + 1 as i32 {
-        (*(*(*state).cinfo).err).msg_code =
-            crate::src::jpeg_8c::jerror::JERR_BAD_DCT_COEF as i32;
+        (*(*(*state).cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_DCT_COEF as i32;
         Some(
             (*(*(*state).cinfo).err)
                 .error_exit
@@ -1439,8 +1405,7 @@ unsafe extern "C" fn finish_pass_huff(mut cinfo: crate::jpeglib_h::j_compress_pt
         state.cinfo = cinfo;
         /* Flush out the last data */
         if flush_bits_s(&mut state) == 0 {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_CANT_SUSPEND as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_CANT_SUSPEND as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -1536,8 +1501,7 @@ unsafe extern "C" fn htest_one_block(
             }
             /* Check for out-of-range coefficient values */
             if nbits > 10 as i32 {
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_DCT_COEF as i32;
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_DCT_COEF as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
@@ -1758,13 +1722,10 @@ unsafe extern "C" fn jpeg_gen_optimal_table(
                 j -= 1
             }
             /* symbol of this length is now a prefix */
-            bits[i as usize] =
-                (bits[i as usize] as i32 - 2 as i32) as crate::jmorecfg_h::UINT8; /* remove two symbols */
-            bits[(i - 1 as i32) as usize] =
-                bits[(i - 1 as i32) as usize].wrapping_add(1); /* one goes in this length */
+            bits[i as usize] = (bits[i as usize] as i32 - 2 as i32) as crate::jmorecfg_h::UINT8; /* remove two symbols */
+            bits[(i - 1 as i32) as usize] = bits[(i - 1 as i32) as usize].wrapping_add(1); /* one goes in this length */
             bits[(j + 1 as i32) as usize] =
-                (bits[(j + 1 as i32) as usize] as i32 + 2 as i32)
-                    as crate::jmorecfg_h::UINT8; /* two new symbols in this length */
+                (bits[(j + 1 as i32) as usize] as i32 + 2 as i32) as crate::jmorecfg_h::UINT8; /* two new symbols in this length */
             bits[j as usize] = bits[j as usize].wrapping_sub(1)
         }
         i -= 1
@@ -1996,19 +1957,18 @@ unsafe extern "C" fn start_pass_huff(
                 /* Allocate and zero the statistics tables */
                 /* Note that jpeg_gen_optimal_table expects 257 entries in each table! */
                 if (*entropy).dc_count_ptrs[tbl as usize].is_null() {
-                    (*entropy).dc_count_ptrs[tbl as usize] =
-                        Some(
-                            (*(*cinfo).mem)
-                                .alloc_small
-                                .expect("non-null function pointer"),
-                        )
-                        .expect("non-null function pointer")(
-                            cinfo as crate::jpeglib_h::j_common_ptr,
-                            1 as i32,
-                            (257 as i32 as libc::c_ulong).wrapping_mul(
-                                ::std::mem::size_of::<libc::c_long>() as libc::c_ulong,
-                            ),
-                        ) as *mut libc::c_long
+                    (*entropy).dc_count_ptrs[tbl as usize] = Some(
+                        (*(*cinfo).mem)
+                            .alloc_small
+                            .expect("non-null function pointer"),
+                    )
+                    .expect("non-null function pointer")(
+                        cinfo as crate::jpeglib_h::j_common_ptr,
+                        1 as i32,
+                        (257 as i32 as libc::c_ulong)
+                            .wrapping_mul(::std::mem::size_of::<libc::c_long>() as libc::c_ulong),
+                    )
+                        as *mut libc::c_long
                 }
                 crate::stdlib::memset(
                     (*entropy).dc_count_ptrs[tbl as usize] as *mut libc::c_void,
@@ -2047,19 +2007,18 @@ unsafe extern "C" fn start_pass_huff(
                     );
                 }
                 if (*entropy).ac_count_ptrs[tbl as usize].is_null() {
-                    (*entropy).ac_count_ptrs[tbl as usize] =
-                        Some(
-                            (*(*cinfo).mem)
-                                .alloc_small
-                                .expect("non-null function pointer"),
-                        )
-                        .expect("non-null function pointer")(
-                            cinfo as crate::jpeglib_h::j_common_ptr,
-                            1 as i32,
-                            (257 as i32 as libc::c_ulong).wrapping_mul(
-                                ::std::mem::size_of::<libc::c_long>() as libc::c_ulong,
-                            ),
-                        ) as *mut libc::c_long
+                    (*entropy).ac_count_ptrs[tbl as usize] = Some(
+                        (*(*cinfo).mem)
+                            .alloc_small
+                            .expect("non-null function pointer"),
+                    )
+                    .expect("non-null function pointer")(
+                        cinfo as crate::jpeglib_h::j_common_ptr,
+                        1 as i32,
+                        (257 as i32 as libc::c_ulong)
+                            .wrapping_mul(::std::mem::size_of::<libc::c_long>() as libc::c_ulong),
+                    )
+                        as *mut libc::c_long
                 }
                 crate::stdlib::memset(
                     (*entropy).ac_count_ptrs[tbl as usize] as *mut libc::c_void,

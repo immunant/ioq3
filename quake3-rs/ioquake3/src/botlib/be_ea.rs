@@ -112,11 +112,7 @@ pub unsafe extern "C" fn EA_SayTeam(mut client: i32, mut str: *mut libc::c_char)
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn EA_Tell(
-    mut client: i32,
-    mut clientto: i32,
-    mut str: *mut libc::c_char,
-) {
+pub unsafe extern "C" fn EA_Tell(mut client: i32, mut clientto: i32, mut str: *mut libc::c_char) {
     crate::src::botlib::be_interface::botimport
         .BotClientCommand
         .expect("non-null function pointer")(

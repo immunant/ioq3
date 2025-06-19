@@ -155,9 +155,8 @@ pub unsafe extern "C" fn AAS_OptimizeEdge(
     let mut optedge: *mut crate::aasfile_h::aas_edge_t = 0 as *mut crate::aasfile_h::aas_edge_t;
     edge = &mut *crate::src::botlib::be_aas_main::aasworld
         .edges
-        .offset(
-            (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize,
-        ) as *mut crate::aasfile_h::aas_edge_t;
+        .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
+        as *mut crate::aasfile_h::aas_edge_t;
     if AAS_KeepEdge(edge) == 0 {
         return 0 as i32;
     }
@@ -261,9 +260,8 @@ pub unsafe extern "C" fn AAS_OptimizeFace(
     let mut optface: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
     face = &mut *crate::src::botlib::be_aas_main::aasworld
         .faces
-        .offset(
-            (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize,
-        ) as *mut crate::aasfile_h::aas_face_t;
+        .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
+        as *mut crate::aasfile_h::aas_face_t;
     if AAS_KeepFace(face) == 0 {
         return 0 as i32;
     }
@@ -324,10 +322,7 @@ pub unsafe extern "C" fn AAS_OptimizeFace(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_OptimizeArea(
-    mut optimized: *mut optimized_t,
-    mut areanum: i32,
-) {
+pub unsafe extern "C" fn AAS_OptimizeArea(mut optimized: *mut optimized_t, mut areanum: i32) {
     let mut i: i32 = 0;
     let mut facenum: i32 = 0;
     let mut optfacenum: i32 = 0;

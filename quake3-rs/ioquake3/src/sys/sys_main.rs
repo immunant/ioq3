@@ -8453,8 +8453,7 @@ pub unsafe extern "C" fn Sys_GetClipboardData() -> *mut libc::c_char {
         if *cliptext.offset(0 as i32 as isize) as i32 != '\u{0}' as i32 {
             let mut bufsize: crate::stddef_h::size_t =
                 crate::stdlib::strlen(cliptext).wrapping_add(1 as i32 as libc::c_ulong);
-            data =
-                crate::src::qcommon::common::Z_Malloc(bufsize as i32) as *mut libc::c_char;
+            data = crate::src::qcommon::common::Z_Malloc(bufsize as i32) as *mut libc::c_char;
             crate::src::qcommon::q_shared::Q_strncpyz(data, cliptext, bufsize as i32);
             // find first listed char and set to '\0'
             ::libc::strtok(data, b"\n\r\x08\x00" as *const u8 as *const libc::c_char);
@@ -8667,9 +8666,7 @@ Single exit point (regular exit or in case of error)
 unsafe extern "C" fn Sys_Exit(mut exitCode: i32) -> ! {
     crate::src::sys::con_tty::CON_Shutdown();
     crate::stdlib::SDL_Quit();
-    if exitCode < 2 as i32
-        && crate::src::qcommon::common::com_fullyInitialized as u32 != 0
-    {
+    if exitCode < 2 as i32 && crate::src::qcommon::common::com_fullyInitialized as u32 != 0 {
         // Normal exit
         Sys_RemovePIDFile(crate::src::qcommon::files::FS_GetCurrentGameDir());
     }
@@ -8762,14 +8759,7 @@ pub unsafe extern "C" fn Sys_AnsiColorPrint(mut msg: *const libc::c_char) {
     static mut buffer: [libc::c_char; 4096] = [0; 4096];
     let mut length: i32 = 0 as i32;
     static mut q3ToAnsi: [i32; 8] = [
-        30 as i32,
-        31 as i32,
-        32 as i32,
-        33 as i32,
-        34 as i32,
-        36 as i32,
-        35 as i32,
-        0 as i32,
+        30 as i32, 31 as i32, 32 as i32, 33 as i32, 34 as i32, 36 as i32, 35 as i32, 0 as i32,
     ];
     while *msg != 0 {
         if crate::src::qcommon::q_shared::Q_IsColorString(msg) as u32 != 0
@@ -8794,8 +8784,8 @@ pub unsafe extern "C" fn Sys_AnsiColorPrint(mut msg: *const libc::c_char) {
                     buffer.as_mut_ptr(),
                     ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
                     b"\x1b[%dm\x00" as *const u8 as *const libc::c_char,
-                    q3ToAnsi[(*msg.offset(1 as i32 as isize) as i32 - '0' as i32
-                        & 0x7 as i32) as usize],
+                    q3ToAnsi[(*msg.offset(1 as i32 as isize) as i32 - '0' as i32 & 0x7 as i32)
+                        as usize],
                 );
                 crate::stdlib::fputs(buffer.as_mut_ptr(), crate::stdlib::stderr);
                 msg = msg.offset(2 as i32 as isize)
@@ -9041,9 +9031,7 @@ Used to load a development dll instead of a virtual machine
 
 pub unsafe extern "C" fn Sys_LoadGameDll(
     mut name: *const libc::c_char,
-    mut entryPoint: *mut Option<
-        unsafe extern "C" fn(_: i32, _: ...) -> crate::stdlib::intptr_t,
-    >,
+    mut entryPoint: *mut Option<unsafe extern "C" fn(_: i32, _: ...) -> crate::stdlib::intptr_t>,
     mut systemcalls: Option<
         unsafe extern "C" fn(_: crate::stdlib::intptr_t, _: ...) -> crate::stdlib::intptr_t,
     >,
@@ -9218,10 +9206,7 @@ main
 =================
 */
 
-pub(crate) unsafe fn main_0(
-    mut argc: i32,
-    mut argv: *mut *mut libc::c_char,
-) -> i32 {
+pub(crate) unsafe fn main_0(mut argc: i32, mut argv: *mut *mut libc::c_char) -> i32 {
     let mut i: i32 = 0;
     let mut commandLine: [libc::c_char; 1024] = [
         0 as i32 as libc::c_char,
@@ -10263,12 +10248,8 @@ pub(crate) unsafe fn main_0(
         patch: 0,
     };
     crate::stdlib::SDL_GetVersion(&mut ver);
-    if (ver.major as i32 * 1000 as i32
-        + ver.minor as i32 * 100 as i32
-        + ver.patch as i32)
-        < 2 as i32 * 1000 as i32
-            + 0 as i32 * 100 as i32
-            + 5 as i32
+    if (ver.major as i32 * 1000 as i32 + ver.minor as i32 * 100 as i32 + ver.patch as i32)
+        < 2 as i32 * 1000 as i32 + 0 as i32 * 100 as i32 + 5 as i32
     {
         crate::src::sys::sys_unix::Sys_Dialog(crate::qcommon_h::DT_ERROR,
                    crate::src::qcommon::q_shared::va(b"SDL version 2.0.5 or greater is required, but only version %d.%d.%d was found. You may be able to obtain a more recent copy from http://www.libsdl.org/.\x00"
@@ -10328,45 +10309,35 @@ pub(crate) unsafe fn main_0(
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: i32) -> !>,
             crate::stdlib::__sighandler_t,
-        >(Some(
-            Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
-        )),
+        >(Some(Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !)),
     );
     crate::stdlib::signal(
         8 as i32,
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: i32) -> !>,
             crate::stdlib::__sighandler_t,
-        >(Some(
-            Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
-        )),
+        >(Some(Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !)),
     );
     crate::stdlib::signal(
         11 as i32,
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: i32) -> !>,
             crate::stdlib::__sighandler_t,
-        >(Some(
-            Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
-        )),
+        >(Some(Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !)),
     );
     crate::stdlib::signal(
         15 as i32,
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: i32) -> !>,
             crate::stdlib::__sighandler_t,
-        >(Some(
-            Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
-        )),
+        >(Some(Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !)),
     );
     crate::stdlib::signal(
         2 as i32,
         ::std::mem::transmute::<
             Option<unsafe extern "C" fn(_: i32) -> !>,
             crate::stdlib::__sighandler_t,
-        >(Some(
-            Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !,
-        )),
+        >(Some(Sys_SigHandler as unsafe extern "C" fn(_: i32) -> !)),
     );
     loop {
         crate::src::qcommon::common::Com_Frame();

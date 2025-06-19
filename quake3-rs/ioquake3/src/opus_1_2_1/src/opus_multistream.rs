@@ -84,9 +84,7 @@ pub unsafe extern "C" fn get_right_channel(
         (prev) + 1 as i32
     };
     while i < (*layout).nb_channels {
-        if (*layout).mapping[i as usize] as i32
-            == stream_id * 2 as i32 + 1 as i32
-        {
+        if (*layout).mapping[i as usize] as i32 == stream_id * 2 as i32 + 1 as i32 {
             return i;
         }
         i += 1
@@ -107,8 +105,7 @@ pub unsafe extern "C" fn get_mono_channel(
         (prev) + 1 as i32
     };
     while i < (*layout).nb_channels {
-        if (*layout).mapping[i as usize] as i32 == stream_id + (*layout).nb_coupled_streams
-        {
+        if (*layout).mapping[i as usize] as i32 == stream_id + (*layout).nb_coupled_streams {
             return i;
         }
         i += 1

@@ -435,9 +435,7 @@ unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char) -> libc::
     while *fname.offset(i as isize) as i32 != '\u{0}' as i32 {
         letter = ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                > 1 as i32 as libc::c_ulong
-            {
+            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
                 if 0 != 0 {
                     let mut __c: i32 = *fname.offset(i as isize) as i32;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -512,10 +510,7 @@ pub unsafe extern "C" fn GL_TextureMode(mut string: *const libc::c_char) {
     i = 0 as i32;
     while i < crate::src::renderergl1::tr_main::tr.numImages {
         glt = crate::src::renderergl1::tr_main::tr.images[i as usize];
-        if (*glt).flags as u32
-            & crate::tr_common_h::IMGFLAG_MIPMAP as i32 as u32
-            != 0
-        {
+        if (*glt).flags as u32 & crate::tr_common_h::IMGFLAG_MIPMAP as i32 as u32 != 0 {
             crate::src::renderergl1::tr_backend::GL_Bind(glt as *mut crate::tr_common_h::image_s);
             crate::src::sdl::sdl_glimp::qglTexParameterf.expect("non-null function pointer")(
                 0xde1 as i32 as crate::stdlib::GLenum,
@@ -640,10 +635,7 @@ pub unsafe extern "C" fn R_ImageList_f() {
             _ => {}
         }
         // mipmap adds about 50%
-        if (*image).flags as u32
-            & crate::tr_common_h::IMGFLAG_MIPMAP as i32 as u32
-            != 0
-        {
+        if (*image).flags as u32 & crate::tr_common_h::IMGFLAG_MIPMAP as i32 as u32 != 0 {
             estSize += estSize / 2 as i32
         }
         sizeSuffix = b"b \x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
@@ -762,14 +754,10 @@ unsafe extern "C" fn ResampleTexture(
     i = 0 as i32;
     while i < outheight {
         inrow = in_0.offset(
-            (inwidth
-                * ((i as f64 + 0.25f64) * inheight as f64
-                    / outheight as f64) as i32) as isize,
+            (inwidth * ((i as f64 + 0.25f64) * inheight as f64 / outheight as f64) as i32) as isize,
         );
         inrow2 = in_0.offset(
-            (inwidth
-                * ((i as f64 + 0.75f64) * inheight as f64
-                    / outheight as f64) as i32) as isize,
+            (inwidth * ((i as f64 + 0.75f64) * inheight as f64 / outheight as f64) as i32) as isize,
         );
         j = 0 as i32;
         while j < outwidth {
@@ -782,33 +770,33 @@ unsafe extern "C" fn ResampleTexture(
             pix4 = (inrow2 as *mut crate::src::qcommon::q_shared::byte)
                 .offset(p2[j as usize] as isize);
             *(out.offset(j as isize) as *mut crate::src::qcommon::q_shared::byte)
-                .offset(0 as i32 as isize) =
-                (*pix1.offset(0 as i32 as isize) as i32
-                    + *pix2.offset(0 as i32 as isize) as i32
-                    + *pix3.offset(0 as i32 as isize) as i32
-                    + *pix4.offset(0 as i32 as isize) as i32
-                    >> 2 as i32) as crate::src::qcommon::q_shared::byte;
+                .offset(0 as i32 as isize) = (*pix1.offset(0 as i32 as isize) as i32
+                + *pix2.offset(0 as i32 as isize) as i32
+                + *pix3.offset(0 as i32 as isize) as i32
+                + *pix4.offset(0 as i32 as isize) as i32
+                >> 2 as i32)
+                as crate::src::qcommon::q_shared::byte;
             *(out.offset(j as isize) as *mut crate::src::qcommon::q_shared::byte)
-                .offset(1 as i32 as isize) =
-                (*pix1.offset(1 as i32 as isize) as i32
-                    + *pix2.offset(1 as i32 as isize) as i32
-                    + *pix3.offset(1 as i32 as isize) as i32
-                    + *pix4.offset(1 as i32 as isize) as i32
-                    >> 2 as i32) as crate::src::qcommon::q_shared::byte;
+                .offset(1 as i32 as isize) = (*pix1.offset(1 as i32 as isize) as i32
+                + *pix2.offset(1 as i32 as isize) as i32
+                + *pix3.offset(1 as i32 as isize) as i32
+                + *pix4.offset(1 as i32 as isize) as i32
+                >> 2 as i32)
+                as crate::src::qcommon::q_shared::byte;
             *(out.offset(j as isize) as *mut crate::src::qcommon::q_shared::byte)
-                .offset(2 as i32 as isize) =
-                (*pix1.offset(2 as i32 as isize) as i32
-                    + *pix2.offset(2 as i32 as isize) as i32
-                    + *pix3.offset(2 as i32 as isize) as i32
-                    + *pix4.offset(2 as i32 as isize) as i32
-                    >> 2 as i32) as crate::src::qcommon::q_shared::byte;
+                .offset(2 as i32 as isize) = (*pix1.offset(2 as i32 as isize) as i32
+                + *pix2.offset(2 as i32 as isize) as i32
+                + *pix3.offset(2 as i32 as isize) as i32
+                + *pix4.offset(2 as i32 as isize) as i32
+                >> 2 as i32)
+                as crate::src::qcommon::q_shared::byte;
             *(out.offset(j as isize) as *mut crate::src::qcommon::q_shared::byte)
-                .offset(3 as i32 as isize) =
-                (*pix1.offset(3 as i32 as isize) as i32
-                    + *pix2.offset(3 as i32 as isize) as i32
-                    + *pix3.offset(3 as i32 as isize) as i32
-                    + *pix4.offset(3 as i32 as isize) as i32
-                    >> 2 as i32) as crate::src::qcommon::q_shared::byte;
+                .offset(3 as i32 as isize) = (*pix1.offset(3 as i32 as isize) as i32
+                + *pix2.offset(3 as i32 as isize) as i32
+                + *pix3.offset(3 as i32 as isize) as i32
+                + *pix4.offset(3 as i32 as isize) as i32
+                >> 2 as i32)
+                as crate::src::qcommon::q_shared::byte;
             j += 1
         }
         i += 1;
@@ -841,12 +829,9 @@ pub unsafe extern "C" fn R_LightScaleTexture(
             c = inwidth * inheight;
             i = 0 as i32;
             while i < c {
-                *p.offset(0 as i32 as isize) =
-                    s_gammatable[*p.offset(0 as i32 as isize) as usize];
-                *p.offset(1 as i32 as isize) =
-                    s_gammatable[*p.offset(1 as i32 as isize) as usize];
-                *p.offset(2 as i32 as isize) =
-                    s_gammatable[*p.offset(2 as i32 as isize) as usize];
+                *p.offset(0 as i32 as isize) = s_gammatable[*p.offset(0 as i32 as isize) as usize];
+                *p.offset(1 as i32 as isize) = s_gammatable[*p.offset(1 as i32 as isize) as usize];
+                *p.offset(2 as i32 as isize) = s_gammatable[*p.offset(2 as i32 as isize) as usize];
                 i += 1;
                 p = p.offset(4 as i32 as isize)
             }
@@ -894,11 +879,7 @@ Proper linear filter
 ================
 */
 
-unsafe extern "C" fn R_MipMap2(
-    mut in_0: *mut u32,
-    mut inWidth: i32,
-    mut inHeight: i32,
-) {
+unsafe extern "C" fn R_MipMap2(mut in_0: *mut u32, mut inWidth: i32, mut inHeight: i32) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
@@ -968,8 +949,7 @@ unsafe extern "C" fn R_MipMap2(
                             .offset(k as isize) as i32
                     + 4 as i32
                         * *(&mut *in_0.offset(
-                            ((i * 2 as i32 & inHeightMask) * inWidth
-                                + (j * 2 as i32 & inWidthMask))
+                            ((i * 2 as i32 & inHeightMask) * inWidth + (j * 2 as i32 & inWidthMask))
                                 as isize,
                         ) as *mut u32
                             as *mut crate::src::qcommon::q_shared::byte)
@@ -1105,20 +1085,16 @@ unsafe extern "C" fn R_MipMap(
         i = 0 as i32;
         while i < width {
             *out.offset(0 as i32 as isize) =
-                (*in_0.offset(0 as i32 as isize) as i32
-                    + *in_0.offset(4 as i32 as isize) as i32
+                (*in_0.offset(0 as i32 as isize) as i32 + *in_0.offset(4 as i32 as isize) as i32
                     >> 1 as i32) as crate::src::qcommon::q_shared::byte;
             *out.offset(1 as i32 as isize) =
-                (*in_0.offset(1 as i32 as isize) as i32
-                    + *in_0.offset(5 as i32 as isize) as i32
+                (*in_0.offset(1 as i32 as isize) as i32 + *in_0.offset(5 as i32 as isize) as i32
                     >> 1 as i32) as crate::src::qcommon::q_shared::byte;
             *out.offset(2 as i32 as isize) =
-                (*in_0.offset(2 as i32 as isize) as i32
-                    + *in_0.offset(6 as i32 as isize) as i32
+                (*in_0.offset(2 as i32 as isize) as i32 + *in_0.offset(6 as i32 as isize) as i32
                     >> 1 as i32) as crate::src::qcommon::q_shared::byte;
             *out.offset(3 as i32 as isize) =
-                (*in_0.offset(3 as i32 as isize) as i32
-                    + *in_0.offset(7 as i32 as isize) as i32
+                (*in_0.offset(3 as i32 as isize) as i32 + *in_0.offset(7 as i32 as isize) as i32
                     >> 1 as i32) as crate::src::qcommon::q_shared::byte;
             i += 1;
             out = out.offset(4 as i32 as isize);
@@ -1130,30 +1106,30 @@ unsafe extern "C" fn R_MipMap(
     while i < height {
         j = 0 as i32;
         while j < width {
-            *out.offset(0 as i32 as isize) =
-                (*in_0.offset(0 as i32 as isize) as i32
-                    + *in_0.offset(4 as i32 as isize) as i32
-                    + *in_0.offset((row + 0 as i32) as isize) as i32
-                    + *in_0.offset((row + 4 as i32) as isize) as i32
-                    >> 2 as i32) as crate::src::qcommon::q_shared::byte;
-            *out.offset(1 as i32 as isize) =
-                (*in_0.offset(1 as i32 as isize) as i32
-                    + *in_0.offset(5 as i32 as isize) as i32
-                    + *in_0.offset((row + 1 as i32) as isize) as i32
-                    + *in_0.offset((row + 5 as i32) as isize) as i32
-                    >> 2 as i32) as crate::src::qcommon::q_shared::byte;
-            *out.offset(2 as i32 as isize) =
-                (*in_0.offset(2 as i32 as isize) as i32
-                    + *in_0.offset(6 as i32 as isize) as i32
-                    + *in_0.offset((row + 2 as i32) as isize) as i32
-                    + *in_0.offset((row + 6 as i32) as isize) as i32
-                    >> 2 as i32) as crate::src::qcommon::q_shared::byte;
-            *out.offset(3 as i32 as isize) =
-                (*in_0.offset(3 as i32 as isize) as i32
-                    + *in_0.offset(7 as i32 as isize) as i32
-                    + *in_0.offset((row + 3 as i32) as isize) as i32
-                    + *in_0.offset((row + 7 as i32) as isize) as i32
-                    >> 2 as i32) as crate::src::qcommon::q_shared::byte;
+            *out.offset(0 as i32 as isize) = (*in_0.offset(0 as i32 as isize) as i32
+                + *in_0.offset(4 as i32 as isize) as i32
+                + *in_0.offset((row + 0 as i32) as isize) as i32
+                + *in_0.offset((row + 4 as i32) as isize) as i32
+                >> 2 as i32)
+                as crate::src::qcommon::q_shared::byte;
+            *out.offset(1 as i32 as isize) = (*in_0.offset(1 as i32 as isize) as i32
+                + *in_0.offset(5 as i32 as isize) as i32
+                + *in_0.offset((row + 1 as i32) as isize) as i32
+                + *in_0.offset((row + 5 as i32) as isize) as i32
+                >> 2 as i32)
+                as crate::src::qcommon::q_shared::byte;
+            *out.offset(2 as i32 as isize) = (*in_0.offset(2 as i32 as isize) as i32
+                + *in_0.offset(6 as i32 as isize) as i32
+                + *in_0.offset((row + 2 as i32) as isize) as i32
+                + *in_0.offset((row + 6 as i32) as isize) as i32
+                >> 2 as i32)
+                as crate::src::qcommon::q_shared::byte;
+            *out.offset(3 as i32 as isize) = (*in_0.offset(3 as i32 as isize) as i32
+                + *in_0.offset(7 as i32 as isize) as i32
+                + *in_0.offset((row + 3 as i32) as isize) as i32
+                + *in_0.offset((row + 7 as i32) as isize) as i32
+                >> 2 as i32)
+                as crate::src::qcommon::q_shared::byte;
             j += 1;
             out = out.offset(4 as i32 as isize);
             in_0 = in_0.offset(8 as i32 as isize)
@@ -1179,25 +1155,22 @@ unsafe extern "C" fn R_BlendOverTexture(
     let mut inverseAlpha: i32 = 0;
     let mut premult: [i32; 3] = [0; 3];
     inverseAlpha = 255 as i32 - *blend.offset(3 as i32 as isize) as i32;
-    premult[0 as i32 as usize] = *blend.offset(0 as i32 as isize) as i32
-        * *blend.offset(3 as i32 as isize) as i32;
-    premult[1 as i32 as usize] = *blend.offset(1 as i32 as isize) as i32
-        * *blend.offset(3 as i32 as isize) as i32;
-    premult[2 as i32 as usize] = *blend.offset(2 as i32 as isize) as i32
-        * *blend.offset(3 as i32 as isize) as i32;
+    premult[0 as i32 as usize] =
+        *blend.offset(0 as i32 as isize) as i32 * *blend.offset(3 as i32 as isize) as i32;
+    premult[1 as i32 as usize] =
+        *blend.offset(1 as i32 as isize) as i32 * *blend.offset(3 as i32 as isize) as i32;
+    premult[2 as i32 as usize] =
+        *blend.offset(2 as i32 as isize) as i32 * *blend.offset(3 as i32 as isize) as i32;
     i = 0 as i32;
     while i < pixelCount {
         *data.offset(0 as i32 as isize) =
-            (*data.offset(0 as i32 as isize) as i32 * inverseAlpha
-                + premult[0 as i32 as usize]
+            (*data.offset(0 as i32 as isize) as i32 * inverseAlpha + premult[0 as i32 as usize]
                 >> 9 as i32) as crate::src::qcommon::q_shared::byte;
         *data.offset(1 as i32 as isize) =
-            (*data.offset(1 as i32 as isize) as i32 * inverseAlpha
-                + premult[1 as i32 as usize]
+            (*data.offset(1 as i32 as isize) as i32 * inverseAlpha + premult[1 as i32 as usize]
                 >> 9 as i32) as crate::src::qcommon::q_shared::byte;
         *data.offset(2 as i32 as isize) =
-            (*data.offset(2 as i32 as isize) as i32 * inverseAlpha
-                + premult[2 as i32 as usize]
+            (*data.offset(2 as i32 as isize) as i32 * inverseAlpha + premult[2 as i32 as usize]
                 >> 9 as i32) as crate::src::qcommon::q_shared::byte;
         i += 1;
         data = data.offset(4 as i32 as isize)
@@ -1418,12 +1391,8 @@ unsafe extern "C" fn Upload32(
         while i < c {
             let mut luma: crate::src::qcommon::q_shared::byte = (0.2126f32
                 * *scan.offset((i * 4 as i32) as isize) as i32 as f32
-                + 0.7152f32
-                    * *scan.offset((i * 4 as i32 + 1 as i32) as isize)
-                        as i32 as f32
-                + 0.0722f32
-                    * *scan.offset((i * 4 as i32 + 2 as i32) as isize)
-                        as i32 as f32)
+                + 0.7152f32 * *scan.offset((i * 4 as i32 + 1 as i32) as isize) as i32 as f32
+                + 0.0722f32 * *scan.offset((i * 4 as i32 + 2 as i32) as isize) as i32 as f32)
                 as crate::src::qcommon::q_shared::byte;
             *scan.offset((i * 4 as i32) as isize) = luma;
             *scan.offset((i * 4 as i32 + 1 as i32) as isize) = luma;
@@ -1433,28 +1402,21 @@ unsafe extern "C" fn Upload32(
     } else if (*crate::src::renderergl1::tr_init::r_greyscale).value != 0. {
         i = 0 as i32;
         while i < c {
-            let mut luma_0: f32 = 0.2126f32
-                * *scan.offset((i * 4 as i32) as isize) as i32 as f32
-                + 0.7152f32
-                    * *scan.offset((i * 4 as i32 + 1 as i32) as isize)
-                        as i32 as f32
-                + 0.0722f32
-                    * *scan.offset((i * 4 as i32 + 2 as i32) as isize)
-                        as i32 as f32;
-            *scan.offset((i * 4 as i32) as isize) =
-                (*scan.offset((i * 4 as i32) as isize) as i32 as f32
-                    * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
-                    + luma_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value)
-                    as crate::src::qcommon::q_shared::byte;
+            let mut luma_0: f32 = 0.2126f32 * *scan.offset((i * 4 as i32) as isize) as i32 as f32
+                + 0.7152f32 * *scan.offset((i * 4 as i32 + 1 as i32) as isize) as i32 as f32
+                + 0.0722f32 * *scan.offset((i * 4 as i32 + 2 as i32) as isize) as i32 as f32;
+            *scan.offset((i * 4 as i32) as isize) = (*scan.offset((i * 4 as i32) as isize) as i32
+                as f32
+                * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
+                + luma_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value)
+                as crate::src::qcommon::q_shared::byte;
             *scan.offset((i * 4 as i32 + 1 as i32) as isize) =
-                (*scan.offset((i * 4 as i32 + 1 as i32) as isize) as i32
-                    as f32
+                (*scan.offset((i * 4 as i32 + 1 as i32) as isize) as i32 as f32
                     * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     + luma_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     as crate::src::qcommon::q_shared::byte;
             *scan.offset((i * 4 as i32 + 2 as i32) as isize) =
-                (*scan.offset((i * 4 as i32 + 2 as i32) as isize) as i32
-                    as f32
+                (*scan.offset((i * 4 as i32 + 2 as i32) as isize) as i32 as f32
                     * (1.0f32 - (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     + luma_0 * (*crate::src::renderergl1::tr_init::r_greyscale).value)
                     as crate::src::qcommon::q_shared::byte;
@@ -1470,30 +1432,16 @@ unsafe extern "C" fn Upload32(
     } else {
         i = 0 as i32;
         while i < c {
-            if *scan.offset((i * 4 as i32 + 0 as i32) as isize) as i32
-                as f32
-                > rMax
-            {
-                rMax = *scan.offset((i * 4 as i32 + 0 as i32) as isize)
-                    as f32
+            if *scan.offset((i * 4 as i32 + 0 as i32) as isize) as i32 as f32 > rMax {
+                rMax = *scan.offset((i * 4 as i32 + 0 as i32) as isize) as f32
             }
-            if *scan.offset((i * 4 as i32 + 1 as i32) as isize) as i32
-                as f32
-                > gMax
-            {
-                gMax = *scan.offset((i * 4 as i32 + 1 as i32) as isize)
-                    as f32
+            if *scan.offset((i * 4 as i32 + 1 as i32) as isize) as i32 as f32 > gMax {
+                gMax = *scan.offset((i * 4 as i32 + 1 as i32) as isize) as f32
             }
-            if *scan.offset((i * 4 as i32 + 2 as i32) as isize) as i32
-                as f32
-                > bMax
-            {
-                bMax = *scan.offset((i * 4 as i32 + 2 as i32) as isize)
-                    as f32
+            if *scan.offset((i * 4 as i32 + 2 as i32) as isize) as i32 as f32 > bMax {
+                bMax = *scan.offset((i * 4 as i32 + 2 as i32) as isize) as f32
             }
-            if *scan.offset((i * 4 as i32 + 3 as i32) as isize) as i32
-                != 255 as i32
-            {
+            if *scan.offset((i * 4 as i32 + 3 as i32) as isize) as i32 != 255 as i32 {
                 samples = 4 as i32;
                 break;
             } else {
@@ -1504,8 +1452,7 @@ unsafe extern "C" fn Upload32(
         if samples == 3 as i32 {
             if (*crate::src::renderergl1::tr_init::r_greyscale).integer != 0 {
                 if (*crate::src::renderergl1::tr_init::r_texturebits).integer == 16 as i32
-                    || (*crate::src::renderergl1::tr_init::r_texturebits).integer
-                        == 32 as i32
+                    || (*crate::src::renderergl1::tr_init::r_texturebits).integer == 32 as i32
                 {
                     internalFormat = 0x8040 as i32 as crate::stdlib::GLenum
                 } else {
@@ -1521,13 +1468,9 @@ unsafe extern "C" fn Upload32(
                     == crate::tr_types_h::TC_S3TC as i32 as u32
             {
                 internalFormat = 0x83a1 as i32 as crate::stdlib::GLenum
-            } else if (*crate::src::renderergl1::tr_init::r_texturebits).integer
-                == 16 as i32
-            {
+            } else if (*crate::src::renderergl1::tr_init::r_texturebits).integer == 16 as i32 {
                 internalFormat = 0x8050 as i32 as crate::stdlib::GLenum
-            } else if (*crate::src::renderergl1::tr_init::r_texturebits).integer
-                == 32 as i32
-            {
+            } else if (*crate::src::renderergl1::tr_init::r_texturebits).integer == 32 as i32 {
                 internalFormat = 0x8051 as i32 as crate::stdlib::GLenum
             } else {
                 internalFormat = 0x1907 as i32 as crate::stdlib::GLenum
@@ -1535,20 +1478,15 @@ unsafe extern "C" fn Upload32(
         } else if samples == 4 as i32 {
             if (*crate::src::renderergl1::tr_init::r_greyscale).integer != 0 {
                 if (*crate::src::renderergl1::tr_init::r_texturebits).integer == 16 as i32
-                    || (*crate::src::renderergl1::tr_init::r_texturebits).integer
-                        == 32 as i32
+                    || (*crate::src::renderergl1::tr_init::r_texturebits).integer == 32 as i32
                 {
                     internalFormat = 0x8045 as i32 as crate::stdlib::GLenum
                 } else {
                     internalFormat = 0x190a as i32 as crate::stdlib::GLenum
                 }
-            } else if (*crate::src::renderergl1::tr_init::r_texturebits).integer
-                == 16 as i32
-            {
+            } else if (*crate::src::renderergl1::tr_init::r_texturebits).integer == 16 as i32 {
                 internalFormat = 0x8056 as i32 as crate::stdlib::GLenum
-            } else if (*crate::src::renderergl1::tr_init::r_texturebits).integer
-                == 32 as i32
-            {
+            } else if (*crate::src::renderergl1::tr_init::r_texturebits).integer == 32 as i32 {
                 internalFormat = 0x8058 as i32 as crate::stdlib::GLenum
             } else {
                 internalFormat = 0x1908 as i32 as crate::stdlib::GLenum
@@ -1676,8 +1614,7 @@ unsafe extern "C" fn Upload32(
                 crate::src::qcommon::q_shared::Com_Clamp(
                     1 as i32 as f32,
                     crate::src::renderergl1::tr_init::maxAnisotropy as f32,
-                    (*crate::src::renderergl1::tr_init::r_ext_max_anisotropy).integer
-                        as f32,
+                    (*crate::src::renderergl1::tr_init::r_ext_max_anisotropy).integer as f32,
                 ) as crate::stdlib::GLint,
             );
         }
@@ -1790,17 +1727,13 @@ pub unsafe extern "C" fn R_CreateImage(
     ::libc::strcpy((*image).imgName.as_mut_ptr(), name);
     (*image).width = width;
     (*image).height = height;
-    if flags as u32
-        & crate::tr_common_h::IMGFLAG_CLAMPTOEDGE as i32 as u32
-        != 0
-    {
+    if flags as u32 & crate::tr_common_h::IMGFLAG_CLAMPTOEDGE as i32 as u32 != 0 {
         glWrapClampMode = 0x812f as i32
     } else {
         glWrapClampMode = 0x2901 as i32
     }
     // lightmaps are always allocated on TMU 1
-    if crate::src::sdl::sdl_glimp::qglActiveTextureARB.is_some() && isLightmap as u32 != 0
-    {
+    if crate::src::sdl::sdl_glimp::qglActiveTextureARB.is_some() && isLightmap as u32 != 0 {
         (*image).TMU = 1 as i32
     } else {
         (*image).TMU = 0 as i32
@@ -1813,16 +1746,13 @@ pub unsafe extern "C" fn R_CreateImage(
         pic as *mut u32,
         (*image).width,
         (*image).height,
-        ((*image).flags as u32
-            & crate::tr_common_h::IMGFLAG_MIPMAP as i32 as u32)
+        ((*image).flags as u32 & crate::tr_common_h::IMGFLAG_MIPMAP as i32 as u32)
             as crate::src::qcommon::q_shared::qboolean,
-        ((*image).flags as u32
-            & crate::tr_common_h::IMGFLAG_PICMIP as i32 as u32)
+        ((*image).flags as u32 & crate::tr_common_h::IMGFLAG_PICMIP as i32 as u32)
             as crate::src::qcommon::q_shared::qboolean,
         isLightmap,
-        ((*image).flags as u32
-            & crate::tr_common_h::IMGFLAG_NO_COMPRESSION as i32 as u32
-            == 0) as i32 as crate::src::qcommon::q_shared::qboolean,
+        ((*image).flags as u32 & crate::tr_common_h::IMGFLAG_NO_COMPRESSION as i32 as u32 == 0)
+            as i32 as crate::src::qcommon::q_shared::qboolean,
         &mut (*image).internalFormat,
         &mut (*image).uploadWidth,
         &mut (*image).uploadHeight,
@@ -2184,18 +2114,10 @@ unsafe extern "C" fn R_CreateDlightImage() {
         y = 0 as i32;
         while y < 16 as i32 {
             let mut d: f32 = 0.;
-            d = ((16 as i32 / 2 as i32) as f32
-                - 0.5f32
-                - x as f32)
-                * ((16 as i32 / 2 as i32) as f32
-                    - 0.5f32
-                    - x as f32)
-                + ((16 as i32 / 2 as i32) as f32
-                    - 0.5f32
-                    - y as f32)
-                    * ((16 as i32 / 2 as i32) as f32
-                        - 0.5f32
-                        - y as f32);
+            d = ((16 as i32 / 2 as i32) as f32 - 0.5f32 - x as f32)
+                * ((16 as i32 / 2 as i32) as f32 - 0.5f32 - x as f32)
+                + ((16 as i32 / 2 as i32) as f32 - 0.5f32 - y as f32)
+                    * ((16 as i32 / 2 as i32) as f32 - 0.5f32 - y as f32);
             b = (4000 as i32 as f32 / d) as i32;
             if b > 255 as i32 {
                 b = 255 as i32
@@ -2239,8 +2161,7 @@ pub unsafe extern "C" fn R_InitFogTable() {
     i = 0 as i32;
     while i < 256 as i32 {
         d = crate::stdlib::pow(
-            (i as f32 / (256 as i32 - 1 as i32) as f32)
-                as f64,
+            (i as f32 / (256 as i32 - 1 as i32) as f32) as f64,
             exp as f64,
         ) as f32;
         crate::src::renderergl1::tr_main::tr.fogTable[i as usize] = d;
@@ -2288,9 +2209,8 @@ unsafe extern "C" fn R_CreateFogImage() {
     let mut d: f32 = 0.;
     data = crate::src::renderergl1::tr_main::ri
         .Hunk_AllocateTempMemory
-        .expect("non-null function pointer")(
-        256 as i32 * 32 as i32 * 4 as i32,
-    ) as *mut crate::src::qcommon::q_shared::byte;
+        .expect("non-null function pointer")(256 as i32 * 32 as i32 * 4 as i32)
+        as *mut crate::src::qcommon::q_shared::byte;
     // S is distance, T is depth
     x = 0 as i32;
     while x < 256 as i32 {
@@ -2300,20 +2220,15 @@ unsafe extern "C" fn R_CreateFogImage() {
                 (x as f32 + 0.5f32) / 256 as i32 as f32,
                 (y as f32 + 0.5f32) / 32 as i32 as f32,
             );
-            let ref mut fresh0 = *data.offset(
-                ((y * 256 as i32 + x) * 4 as i32 + 2 as i32) as isize,
-            );
+            let ref mut fresh0 =
+                *data.offset(((y * 256 as i32 + x) * 4 as i32 + 2 as i32) as isize);
             *fresh0 = 255 as i32 as crate::src::qcommon::q_shared::byte;
-            let ref mut fresh1 = *data.offset(
-                ((y * 256 as i32 + x) * 4 as i32 + 1 as i32) as isize,
-            );
+            let ref mut fresh1 =
+                *data.offset(((y * 256 as i32 + x) * 4 as i32 + 1 as i32) as isize);
             *fresh1 = *fresh0;
-            *data.offset(
-                ((y * 256 as i32 + x) * 4 as i32 + 0 as i32) as isize,
-            ) = *fresh1;
-            *data.offset(
-                ((y * 256 as i32 + x) * 4 as i32 + 3 as i32) as isize,
-            ) = (255 as i32 as f32 * d) as crate::src::qcommon::q_shared::byte;
+            *data.offset(((y * 256 as i32 + x) * 4 as i32 + 0 as i32) as isize) = *fresh1;
+            *data.offset(((y * 256 as i32 + x) * 4 as i32 + 3 as i32) as isize) =
+                (255 as i32 as f32 * d) as crate::src::qcommon::q_shared::byte;
             y += 1
         }
         x += 1
@@ -2360,28 +2275,22 @@ unsafe extern "C" fn R_CreateDefaultImage() {
             data[x as usize][0 as i32 as usize][2 as i32 as usize];
         data[x as usize][0 as i32 as usize][0 as i32 as usize] =
             data[x as usize][0 as i32 as usize][1 as i32 as usize];
-        data[(16 as i32 - 1 as i32) as usize][x as usize]
-            [3 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
-        data[(16 as i32 - 1 as i32) as usize][x as usize]
-            [2 as i32 as usize] = data[(16 as i32 - 1 as i32) as usize]
-            [x as usize][3 as i32 as usize];
-        data[(16 as i32 - 1 as i32) as usize][x as usize]
-            [1 as i32 as usize] = data[(16 as i32 - 1 as i32) as usize]
-            [x as usize][2 as i32 as usize];
-        data[(16 as i32 - 1 as i32) as usize][x as usize]
-            [0 as i32 as usize] = data[(16 as i32 - 1 as i32) as usize]
-            [x as usize][1 as i32 as usize];
-        data[x as usize][(16 as i32 - 1 as i32) as usize]
-            [3 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
-        data[x as usize][(16 as i32 - 1 as i32) as usize]
-            [2 as i32 as usize] = data[x as usize]
-            [(16 as i32 - 1 as i32) as usize][3 as i32 as usize];
-        data[x as usize][(16 as i32 - 1 as i32) as usize]
-            [1 as i32 as usize] = data[x as usize]
-            [(16 as i32 - 1 as i32) as usize][2 as i32 as usize];
-        data[x as usize][(16 as i32 - 1 as i32) as usize]
-            [0 as i32 as usize] = data[x as usize]
-            [(16 as i32 - 1 as i32) as usize][1 as i32 as usize];
+        data[(16 as i32 - 1 as i32) as usize][x as usize][3 as i32 as usize] =
+            255 as i32 as crate::src::qcommon::q_shared::byte;
+        data[(16 as i32 - 1 as i32) as usize][x as usize][2 as i32 as usize] =
+            data[(16 as i32 - 1 as i32) as usize][x as usize][3 as i32 as usize];
+        data[(16 as i32 - 1 as i32) as usize][x as usize][1 as i32 as usize] =
+            data[(16 as i32 - 1 as i32) as usize][x as usize][2 as i32 as usize];
+        data[(16 as i32 - 1 as i32) as usize][x as usize][0 as i32 as usize] =
+            data[(16 as i32 - 1 as i32) as usize][x as usize][1 as i32 as usize];
+        data[x as usize][(16 as i32 - 1 as i32) as usize][3 as i32 as usize] =
+            255 as i32 as crate::src::qcommon::q_shared::byte;
+        data[x as usize][(16 as i32 - 1 as i32) as usize][2 as i32 as usize] =
+            data[x as usize][(16 as i32 - 1 as i32) as usize][3 as i32 as usize];
+        data[x as usize][(16 as i32 - 1 as i32) as usize][1 as i32 as usize] =
+            data[x as usize][(16 as i32 - 1 as i32) as usize][2 as i32 as usize];
+        data[x as usize][(16 as i32 - 1 as i32) as usize][0 as i32 as usize] =
+            data[x as usize][(16 as i32 - 1 as i32) as usize][1 as i32 as usize];
         x += 1
     }
     crate::src::renderergl1::tr_main::tr.defaultImage = R_CreateImage(
@@ -2428,9 +2337,9 @@ pub unsafe extern "C" fn R_CreateBuiltinImages() {
     while x < 16 as i32 {
         y = 0 as i32;
         while y < 16 as i32 {
-            data[y as usize][x as usize][2 as i32 as usize] =
-                crate::src::renderergl1::tr_main::tr.identityLightByte
-                    as crate::src::qcommon::q_shared::byte;
+            data[y as usize][x as usize][2 as i32 as usize] = crate::src::renderergl1::tr_main::tr
+                .identityLightByte
+                as crate::src::qcommon::q_shared::byte;
             data[y as usize][x as usize][1 as i32 as usize] =
                 data[y as usize][x as usize][2 as i32 as usize];
             data[y as usize][x as usize][0 as i32 as usize] =
@@ -2504,12 +2413,10 @@ pub unsafe extern "C" fn R_SetColorMappings() {
     if crate::src::renderergl1::tr_main::tr.overbrightBits < 0 as i32 {
         crate::src::renderergl1::tr_main::tr.overbrightBits = 0 as i32
     }
-    crate::src::renderergl1::tr_main::tr.identityLight = 1.0f32
-        / ((1 as i32) << crate::src::renderergl1::tr_main::tr.overbrightBits)
-            as f32;
-    crate::src::renderergl1::tr_main::tr.identityLightByte = (255 as i32 as f32
-        * crate::src::renderergl1::tr_main::tr.identityLight)
-        as i32;
+    crate::src::renderergl1::tr_main::tr.identityLight =
+        1.0f32 / ((1 as i32) << crate::src::renderergl1::tr_main::tr.overbrightBits) as f32;
+    crate::src::renderergl1::tr_main::tr.identityLightByte =
+        (255 as i32 as f32 * crate::src::renderergl1::tr_main::tr.identityLight) as i32;
     if (*crate::src::renderergl1::tr_init::r_intensity).value <= 1 as i32 as f32 {
         crate::src::renderergl1::tr_main::ri
             .Cvar_Set
@@ -2541,10 +2448,7 @@ pub unsafe extern "C" fn R_SetColorMappings() {
             inf = i
         } else {
             inf = (255 as i32 as f64
-                * crate::stdlib::pow(
-                    (i as f32 / 255.0f32) as f64,
-                    (1.0f32 / g) as f64,
-                )
+                * crate::stdlib::pow((i as f32 / 255.0f32) as f64, (1.0f32 / g) as f64)
                 + 0.5f32 as f64) as i32
         }
         inf <<= shift;
@@ -2559,8 +2463,7 @@ pub unsafe extern "C" fn R_SetColorMappings() {
     }
     i = 0 as i32;
     while i < 256 as i32 {
-        j = (i as f32 * (*crate::src::renderergl1::tr_init::r_intensity).value)
-            as i32;
+        j = (i as f32 * (*crate::src::renderergl1::tr_init::r_intensity).value) as i32;
         if j > 255 as i32 {
             j = 255 as i32
         }
@@ -2696,9 +2599,7 @@ unsafe extern "C" fn CommaParse(mut data_p: *mut *mut libc::c_char) -> *mut libc
             }
         } else {
             // skip /* */ comments
-            if !(c == '/' as i32
-                && *data.offset(1 as i32 as isize) as i32 == '*' as i32)
-            {
+            if !(c == '/' as i32 && *data.offset(1 as i32 as isize) as i32 == '*' as i32) {
                 break;
             }
             data = data.offset(2 as i32 as isize);
@@ -2847,8 +2748,7 @@ pub unsafe extern "C" fn RE_RegisterSkin(
         (*skin).surfaces = crate::src::renderergl1::tr_main::ri
             .Hunk_Alloc
             .expect("non-null function pointer")(
-            ::std::mem::size_of::<crate::tr_local_h::skinSurface_t>() as libc::c_ulong
-                as i32,
+            ::std::mem::size_of::<crate::tr_local_h::skinSurface_t>() as libc::c_ulong as i32,
             crate::src::qcommon::q_shared::h_low,
         ) as *mut crate::tr_local_h::skinSurface_t;
         let ref mut fresh3 = (*(*skin).surfaces.offset(0 as i32 as isize)).shader;

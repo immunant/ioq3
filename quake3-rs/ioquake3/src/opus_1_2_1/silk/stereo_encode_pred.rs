@@ -44,8 +44,7 @@ pub unsafe extern "C" fn silk_stereo_encode_pred(
 {
     let mut n: i32 = 0;
     /* Entropy coding */
-    n = 5 as i32
-        * (*ix.offset(0 as i32 as isize))[2 as i32 as usize] as i32
+    n = 5 as i32 * (*ix.offset(0 as i32 as isize))[2 as i32 as usize] as i32
         + (*ix.offset(1 as i32 as isize))[2 as i32 as usize] as i32;
     crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
         psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,

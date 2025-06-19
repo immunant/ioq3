@@ -224,8 +224,7 @@ unsafe extern "C" fn get_byte(mut cinfo: crate::jpeglib_h::j_decompress_ptr) -> 
             .expect("non-null function pointer")(cinfo)
             == 0
         {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_CANT_SUSPEND as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_CANT_SUSPEND as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -398,9 +397,7 @@ unsafe extern "C" fn process_restart(mut cinfo: crate::jpeglib_h::j_decompress_p
     ci = 0 as i32;
     while ci < (*cinfo).comps_in_scan {
         compptr = (*cinfo).cur_comp_info[ci as usize];
-        if (*cinfo).progressive_mode == 0
-            || (*cinfo).Ss == 0 as i32 && (*cinfo).Ah == 0 as i32
-        {
+        if (*cinfo).progressive_mode == 0 || (*cinfo).Ss == 0 as i32 && (*cinfo).Ah == 0 as i32 {
             crate::stdlib::memset(
                 (*entropy).dc_stats[(*compptr).dc_tbl_no as usize] as *mut libc::c_void,
                 0 as i32,
@@ -509,14 +506,14 @@ unsafe extern "C" fn decode_mcu_DC_first(
                 }
             }
             /* Section F.1.4.4.1.2: Establish dc_context conditioning category */
-            if m < ((1 as libc::c_long) << (*cinfo).arith_dc_L[tbl as usize] as i32
-                >> 1 as i32) as i32
+            if m < ((1 as libc::c_long) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32)
+                as i32
             {
                 /* small diff category */
                 (*entropy).dc_context[ci as usize] = 0 as i32
             } else if m
-                > ((1 as libc::c_long) << (*cinfo).arith_dc_U[tbl as usize] as i32
-                    >> 1 as i32) as i32
+                > ((1 as libc::c_long) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32)
+                    as i32
             {
                 /* zero diff category */
                 (*entropy).dc_context[ci as usize] = 12 as i32 + sign * 4 as i32
@@ -584,8 +581,7 @@ unsafe extern "C" fn decode_mcu_AC_first(
     /* Figure F.20: Decode_AC_coefficients */
     k = (*cinfo).Ss; /* EOB flag */
     while k <= (*cinfo).Se {
-        st = (*entropy).ac_stats[tbl as usize]
-            .offset((3 as i32 * (k - 1 as i32)) as isize); /* spectral overflow */
+        st = (*entropy).ac_stats[tbl as usize].offset((3 as i32 * (k - 1 as i32)) as isize); /* spectral overflow */
         if arith_decode(cinfo, st) != 0 {
             break;
         }
@@ -593,8 +589,7 @@ unsafe extern "C" fn decode_mcu_AC_first(
             st = st.offset(3 as i32 as isize);
             k += 1;
             if k > (*cinfo).Se {
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JWRN_ARITH_BAD_CODE as i32;
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JWRN_ARITH_BAD_CODE as i32;
                 Some(
                     (*(*cinfo).err)
                         .emit_message
@@ -694,8 +689,8 @@ unsafe extern "C" fn decode_mcu_DC_refine(
     while blkn < (*cinfo).blocks_in_MCU {
         /* Encoded data is simply the next bit of the two's-complement DC value */
         if arith_decode(cinfo, st) != 0 {
-            let ref mut fresh1 = (*(*MCU_data.offset(blkn as isize))
-                .offset(0 as i32 as isize))[0 as i32 as usize];
+            let ref mut fresh1 =
+                (*(*MCU_data.offset(blkn as isize)).offset(0 as i32 as isize))[0 as i32 as usize];
             *fresh1 = (*fresh1 as i32 | p1) as crate::jmorecfg_h::JCOEF
         }
         blkn += 1
@@ -746,8 +741,7 @@ unsafe extern "C" fn decode_mcu_AC_refine(
     }
     k = (*cinfo).Ss;
     while k <= (*cinfo).Se {
-        st = (*entropy).ac_stats[tbl as usize]
-            .offset((3 as i32 * (k - 1 as i32)) as isize);
+        st = (*entropy).ac_stats[tbl as usize].offset((3 as i32 * (k - 1 as i32)) as isize);
         if k > kex {
             if arith_decode(cinfo, st) != 0 {
                 break;
@@ -875,14 +869,14 @@ unsafe extern "C" fn decode_mcu(
                 }
             }
             /* Section F.1.4.4.1.2: Establish dc_context conditioning category */
-            if m < ((1 as libc::c_long) << (*cinfo).arith_dc_L[tbl as usize] as i32
-                >> 1 as i32) as i32
+            if m < ((1 as libc::c_long) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32)
+                as i32
             {
                 /* small diff category */
                 (*entropy).dc_context[ci as usize] = 0 as i32
             } else if m
-                > ((1 as libc::c_long) << (*cinfo).arith_dc_U[tbl as usize] as i32
-                    >> 1 as i32) as i32
+                > ((1 as libc::c_long) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32)
+                    as i32
             {
                 /* zero diff category */
                 (*entropy).dc_context[ci as usize] = 12 as i32 + sign * 4 as i32
@@ -914,8 +908,7 @@ unsafe extern "C" fn decode_mcu(
         /* Figure F.20: Decode_AC_coefficients */
         k = 1 as i32; /* EOB flag */
         while k <= (*cinfo).lim_Se {
-            st = (*entropy).ac_stats[tbl as usize]
-                .offset((3 as i32 * (k - 1 as i32)) as isize); /* spectral overflow */
+            st = (*entropy).ac_stats[tbl as usize].offset((3 as i32 * (k - 1 as i32)) as isize); /* spectral overflow */
             if arith_decode(cinfo, st) != 0 {
                 break;
             }
@@ -1055,8 +1048,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
             1247655281935294708 =>
             /* need not check for < 0 */
             {
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_BAD_PROGRESSION as i32;
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_PROGRESSION as i32;
                 (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = (*cinfo).Ss;
                 (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = (*cinfo).Se;
                 (*(*cinfo).err).msg_parm.i[2 as i32 as usize] = (*cinfo).Ah;
@@ -1080,13 +1072,10 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
         while ci < (*cinfo).comps_in_scan {
             let mut coefi: i32 = 0;
             let mut cindex: i32 = (*(*cinfo).cur_comp_info[ci as usize]).component_index;
-            let mut coef_bit_ptr: *mut i32 =
-                &mut *(*(*cinfo).coef_bits.offset(cindex as isize))
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize) as *mut i32;
-            if (*cinfo).Ss != 0
-                && *coef_bit_ptr.offset(0 as i32 as isize) < 0 as i32
-            {
+            let mut coef_bit_ptr: *mut i32 = &mut *(*(*cinfo).coef_bits.offset(cindex as isize))
+                .as_mut_ptr()
+                .offset(0 as i32 as isize) as *mut i32;
+            if (*cinfo).Ss != 0 && *coef_bit_ptr.offset(0 as i32 as isize) < 0 as i32 {
                 /* AC without prior DC scan */
                 (*(*cinfo).err).msg_code =
                     crate::src::jpeg_8c::jerror::JWRN_BOGUS_PROGRESSION as i32;
@@ -1104,12 +1093,11 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
             }
             coefi = (*cinfo).Ss;
             while coefi <= (*cinfo).Se {
-                let mut expected: i32 =
-                    if *coef_bit_ptr.offset(coefi as isize) < 0 as i32 {
-                        0 as i32
-                    } else {
-                        *coef_bit_ptr.offset(coefi as isize)
-                    };
+                let mut expected: i32 = if *coef_bit_ptr.offset(coefi as isize) < 0 as i32 {
+                    0 as i32
+                } else {
+                    *coef_bit_ptr.offset(coefi as isize)
+                };
                 if (*cinfo).Ah != expected {
                     (*(*cinfo).err).msg_code =
                         crate::src::jpeg_8c::jerror::JWRN_BOGUS_PROGRESSION as i32;
@@ -1177,8 +1165,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
             || (*cinfo).Al != 0 as i32
             || (*cinfo).Se < 64 as i32 && (*cinfo).Se != (*cinfo).lim_Se
         {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JWRN_NOT_SEQUENTIAL as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JWRN_NOT_SEQUENTIAL as i32;
             Some(
                 (*(*cinfo).err)
                     .emit_message
@@ -1202,13 +1189,10 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
     ci = 0 as i32;
     while ci < (*cinfo).comps_in_scan {
         compptr = (*cinfo).cur_comp_info[ci as usize];
-        if (*cinfo).progressive_mode == 0
-            || (*cinfo).Ss == 0 as i32 && (*cinfo).Ah == 0 as i32
-        {
+        if (*cinfo).progressive_mode == 0 || (*cinfo).Ss == 0 as i32 && (*cinfo).Ah == 0 as i32 {
             tbl = (*compptr).dc_tbl_no;
             if tbl < 0 as i32 || tbl >= 16 as i32 {
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_NO_ARITH_TABLE as i32;
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NO_ARITH_TABLE as i32;
                 (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = tbl;
                 Some(
                     (*(*cinfo).err)
@@ -1245,8 +1229,7 @@ unsafe extern "C" fn start_pass(mut cinfo: crate::jpeglib_h::j_decompress_ptr) {
         {
             tbl = (*compptr).ac_tbl_no;
             if tbl < 0 as i32 || tbl >= 16 as i32 {
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_NO_ARITH_TABLE as i32;
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NO_ARITH_TABLE as i32;
                 (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = tbl;
                 Some(
                     (*(*cinfo).err)

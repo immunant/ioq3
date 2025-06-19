@@ -10,8 +10,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -515,9 +514,7 @@ unsafe extern "C" fn PM_Friction() {
     drop_0 = 0 as i32 as f32;
     // apply ground friction
     if (*pm).waterlevel <= 1 as i32 {
-        if pml.walking as u32 != 0
-            && pml.groundTrace.surfaceFlags & 0x2 as i32 == 0
-        {
+        if pml.walking as u32 != 0 && pml.groundTrace.surfaceFlags & 0x2 as i32 == 0 {
             // if getting knocked back, no friction
             if (*(*pm).ps).pm_flags & 64 as i32 == 0 {
                 control = if speed < pm_stopspeed {
@@ -568,12 +565,9 @@ unsafe extern "C" fn PM_Accelerate(
     let mut addspeed: f32 = 0.;
     let mut accelspeed: f32 = 0.;
     let mut currentspeed: f32 = 0.;
-    currentspeed = (*(*pm).ps).velocity[0 as i32 as usize]
-        * *wishdir.offset(0 as i32 as isize)
-        + (*(*pm).ps).velocity[1 as i32 as usize]
-            * *wishdir.offset(1 as i32 as isize)
-        + (*(*pm).ps).velocity[2 as i32 as usize]
-            * *wishdir.offset(2 as i32 as isize);
+    currentspeed = (*(*pm).ps).velocity[0 as i32 as usize] * *wishdir.offset(0 as i32 as isize)
+        + (*(*pm).ps).velocity[1 as i32 as usize] * *wishdir.offset(1 as i32 as isize)
+        + (*(*pm).ps).velocity[2 as i32 as usize] * *wishdir.offset(2 as i32 as isize);
     addspeed = wishspeed - currentspeed;
     if addspeed <= 0 as i32 as f32 {
         return;
@@ -598,9 +592,7 @@ without getting a sqrt(2) distortion in speed.
 ============
 */
 
-unsafe extern "C" fn PM_CmdScale(
-    mut cmd: *mut crate::src::qcommon::q_shared::usercmd_t,
-) -> f32 {
+unsafe extern "C" fn PM_CmdScale(mut cmd: *mut crate::src::qcommon::q_shared::usercmd_t) -> f32 {
     let mut max: i32 = 0;
     let mut total: f32 = 0.;
     let mut scale: f32 = 0.;
@@ -617,11 +609,9 @@ unsafe extern "C" fn PM_CmdScale(
     total = crate::stdlib::sqrt(
         ((*cmd).forwardmove as i32 * (*cmd).forwardmove as i32
             + (*cmd).rightmove as i32 * (*cmd).rightmove as i32
-            + (*cmd).upmove as i32 * (*cmd).upmove as i32)
-            as f64,
+            + (*cmd).upmove as i32 * (*cmd).upmove as i32) as f64,
     ) as f32;
-    scale = (((*(*pm).ps).speed as f32 * max as f32) as f64
-        / (127.0f64 * total as f64)) as f32;
+    scale = (((*(*pm).ps).speed as f32 * max as f32) as f64 / (127.0f64 * total as f64)) as f32;
     return scale;
 }
 /*
@@ -635,12 +625,9 @@ to the facing dir
 
 unsafe extern "C" fn PM_SetMovementDir() {
     if (*pm).cmd.forwardmove as i32 != 0 || (*pm).cmd.rightmove as i32 != 0 {
-        if (*pm).cmd.rightmove as i32 == 0 as i32
-            && (*pm).cmd.forwardmove as i32 > 0 as i32
-        {
+        if (*pm).cmd.rightmove as i32 == 0 as i32 && (*pm).cmd.forwardmove as i32 > 0 as i32 {
             (*(*pm).ps).movementDir = 0 as i32
-        } else if ((*pm).cmd.rightmove as i32) < 0 as i32
-            && (*pm).cmd.forwardmove as i32 > 0 as i32
+        } else if ((*pm).cmd.rightmove as i32) < 0 as i32 && (*pm).cmd.forwardmove as i32 > 0 as i32
         {
             (*(*pm).ps).movementDir = 1 as i32
         } else if ((*pm).cmd.rightmove as i32) < 0 as i32
@@ -655,17 +642,13 @@ unsafe extern "C" fn PM_SetMovementDir() {
             && ((*pm).cmd.forwardmove as i32) < 0 as i32
         {
             (*(*pm).ps).movementDir = 4 as i32
-        } else if (*pm).cmd.rightmove as i32 > 0 as i32
-            && ((*pm).cmd.forwardmove as i32) < 0 as i32
+        } else if (*pm).cmd.rightmove as i32 > 0 as i32 && ((*pm).cmd.forwardmove as i32) < 0 as i32
         {
             (*(*pm).ps).movementDir = 5 as i32
-        } else if (*pm).cmd.rightmove as i32 > 0 as i32
-            && (*pm).cmd.forwardmove as i32 == 0 as i32
+        } else if (*pm).cmd.rightmove as i32 > 0 as i32 && (*pm).cmd.forwardmove as i32 == 0 as i32
         {
             (*(*pm).ps).movementDir = 6 as i32
-        } else if (*pm).cmd.rightmove as i32 > 0 as i32
-            && (*pm).cmd.forwardmove as i32 > 0 as i32
-        {
+        } else if (*pm).cmd.rightmove as i32 > 0 as i32 && (*pm).cmd.forwardmove as i32 > 0 as i32 {
             (*(*pm).ps).movementDir = 7 as i32
         }
     } else if (*(*pm).ps).movementDir == 2 as i32 {
@@ -702,8 +685,7 @@ unsafe extern "C" fn PM_CheckJump() -> crate::src::qcommon::q_shared::qboolean {
     pml.walking = crate::src::qcommon::q_shared::qfalse;
     (*(*pm).ps).pm_flags |= 2 as i32;
     (*(*pm).ps).groundEntityNum = ((1 as i32) << 10 as i32) - 1 as i32;
-    (*(*pm).ps).velocity[2 as i32 as usize] =
-        270 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*(*pm).ps).velocity[2 as i32 as usize] = 270 as i32 as crate::src::qcommon::q_shared::vec_t;
     PM_AddEvent(crate::bg_public_h::EV_JUMP as i32);
     if (*pm).cmd.forwardmove as i32 >= 0 as i32 {
         PM_ForceLegsAnim(crate::bg_public_h::LEGS_JUMP as i32);
@@ -733,15 +715,14 @@ unsafe extern "C" fn PM_CheckWaterJump() -> crate::src::qcommon::q_shared::qbool
     }
     flatforward[0 as i32 as usize] = pml.forward[0 as i32 as usize];
     flatforward[1 as i32 as usize] = pml.forward[1 as i32 as usize];
-    flatforward[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    flatforward[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::qcommon::q_math::VectorNormalize(flatforward.as_mut_ptr());
-    spot[0 as i32 as usize] = (*(*pm).ps).origin[0 as i32 as usize]
-        + flatforward[0 as i32 as usize] * 30 as i32 as f32;
-    spot[1 as i32 as usize] = (*(*pm).ps).origin[1 as i32 as usize]
-        + flatforward[1 as i32 as usize] * 30 as i32 as f32;
-    spot[2 as i32 as usize] = (*(*pm).ps).origin[2 as i32 as usize]
-        + flatforward[2 as i32 as usize] * 30 as i32 as f32;
+    spot[0 as i32 as usize] =
+        (*(*pm).ps).origin[0 as i32 as usize] + flatforward[0 as i32 as usize] * 30 as i32 as f32;
+    spot[1 as i32 as usize] =
+        (*(*pm).ps).origin[1 as i32 as usize] + flatforward[1 as i32 as usize] * 30 as i32 as f32;
+    spot[2 as i32 as usize] =
+        (*(*pm).ps).origin[2 as i32 as usize] + flatforward[2 as i32 as usize] * 30 as i32 as f32;
     spot[2 as i32 as usize] += 4 as i32 as f32;
     cont = (*pm).pointcontents.expect("non-null function pointer")(
         spot.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -759,14 +740,10 @@ unsafe extern "C" fn PM_CheckWaterJump() -> crate::src::qcommon::q_shared::qbool
         return crate::src::qcommon::q_shared::qfalse;
     }
     // jump out of water
-    (*(*pm).ps).velocity[0 as i32 as usize] =
-        pml.forward[0 as i32 as usize] * 200 as i32 as f32;
-    (*(*pm).ps).velocity[1 as i32 as usize] =
-        pml.forward[1 as i32 as usize] * 200 as i32 as f32;
-    (*(*pm).ps).velocity[2 as i32 as usize] =
-        pml.forward[2 as i32 as usize] * 200 as i32 as f32;
-    (*(*pm).ps).velocity[2 as i32 as usize] =
-        350 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*(*pm).ps).velocity[0 as i32 as usize] = pml.forward[0 as i32 as usize] * 200 as i32 as f32;
+    (*(*pm).ps).velocity[1 as i32 as usize] = pml.forward[1 as i32 as usize] * 200 as i32 as f32;
+    (*(*pm).ps).velocity[2 as i32 as usize] = pml.forward[2 as i32 as usize] * 200 as i32 as f32;
+    (*(*pm).ps).velocity[2 as i32 as usize] = 350 as i32 as crate::src::qcommon::q_shared::vec_t;
     (*(*pm).ps).pm_flags |= 256 as i32;
     (*(*pm).ps).pm_time = 2000 as i32;
     return crate::src::qcommon::q_shared::qtrue;
@@ -783,8 +760,7 @@ Flying out of the water
 unsafe extern "C" fn PM_WaterJumpMove() {
     // waterjump has no control, but falls
     crate::src::game::bg_slidemove::PM_StepSlideMove(crate::src::qcommon::q_shared::qtrue);
-    (*(*pm).ps).velocity[2 as i32 as usize] -=
-        (*(*pm).ps).gravity as f32 * pml.frametime;
+    (*(*pm).ps).velocity[2 as i32 as usize] -= (*(*pm).ps).gravity as f32 * pml.frametime;
     if (*(*pm).ps).velocity[2 as i32 as usize] < 0 as i32 as f32 {
         // cancel as soon as we are falling down again
         (*(*pm).ps).pm_flags &= !(256 as i32 | 32 as i32 | 64 as i32);
@@ -815,26 +791,19 @@ unsafe extern "C" fn PM_WaterMove() {
     // user intentions
     //
     if scale == 0. {
-        wishvel[0 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        wishvel[1 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        wishvel[2 as i32 as usize] =
-            -(60 as i32) as crate::src::qcommon::q_shared::vec_t
+        wishvel[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        wishvel[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        wishvel[2 as i32 as usize] = -(60 as i32) as crate::src::qcommon::q_shared::vec_t
     // sink towards bottom
     } else {
         i = 0 as i32;
         while i < 3 as i32 {
-            wishvel[i as usize] = scale
-                * pml.forward[i as usize]
-                * (*pm).cmd.forwardmove as i32 as f32
-                + scale
-                    * pml.right[i as usize]
-                    * (*pm).cmd.rightmove as i32 as f32;
+            wishvel[i as usize] =
+                scale * pml.forward[i as usize] * (*pm).cmd.forwardmove as i32 as f32
+                    + scale * pml.right[i as usize] * (*pm).cmd.rightmove as i32 as f32;
             i += 1
         }
-        wishvel[2 as i32 as usize] +=
-            scale * (*pm).cmd.upmove as i32 as f32
+        wishvel[2 as i32 as usize] += scale * (*pm).cmd.upmove as i32 as f32
     }
     wishdir[0 as i32 as usize] = wishvel[0 as i32 as usize];
     wishdir[1 as i32 as usize] = wishvel[1 as i32 as usize];
@@ -846,8 +815,7 @@ unsafe extern "C" fn PM_WaterMove() {
     PM_Accelerate(wishdir.as_mut_ptr(), wishspeed, pm_wateraccelerate);
     // make sure we can go up slopes easily under water
     if pml.groundPlane as u32 != 0
-        && (*(*pm).ps).velocity[0 as i32 as usize]
-            * pml.groundTrace.plane.normal[0 as i32 as usize]
+        && (*(*pm).ps).velocity[0 as i32 as usize] * pml.groundTrace.plane.normal[0 as i32 as usize]
             + (*(*pm).ps).velocity[1 as i32 as usize]
                 * pml.groundTrace.plane.normal[1 as i32 as usize]
             + (*(*pm).ps).velocity[2 as i32 as usize]
@@ -865,12 +833,9 @@ unsafe extern "C" fn PM_WaterMove() {
             1.001f32,
         );
         crate::src::qcommon::q_math::VectorNormalize((*(*pm).ps).velocity.as_mut_ptr());
-        (*(*pm).ps).velocity[0 as i32 as usize] =
-            (*(*pm).ps).velocity[0 as i32 as usize] * vel;
-        (*(*pm).ps).velocity[1 as i32 as usize] =
-            (*(*pm).ps).velocity[1 as i32 as usize] * vel;
-        (*(*pm).ps).velocity[2 as i32 as usize] =
-            (*(*pm).ps).velocity[2 as i32 as usize] * vel
+        (*(*pm).ps).velocity[0 as i32 as usize] = (*(*pm).ps).velocity[0 as i32 as usize] * vel;
+        (*(*pm).ps).velocity[1 as i32 as usize] = (*(*pm).ps).velocity[1 as i32 as usize] * vel;
+        (*(*pm).ps).velocity[2 as i32 as usize] = (*(*pm).ps).velocity[2 as i32 as usize] * vel
     }
     crate::src::game::bg_slidemove::PM_SlideMove(crate::src::qcommon::q_shared::qfalse);
 }
@@ -895,25 +860,18 @@ unsafe extern "C" fn PM_FlyMove() {
     // user intentions
     //
     if scale == 0. {
-        wishvel[0 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        wishvel[1 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        wishvel[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t
+        wishvel[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        wishvel[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        wishvel[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t
     } else {
         i = 0 as i32;
         while i < 3 as i32 {
-            wishvel[i as usize] = scale
-                * pml.forward[i as usize]
-                * (*pm).cmd.forwardmove as i32 as f32
-                + scale
-                    * pml.right[i as usize]
-                    * (*pm).cmd.rightmove as i32 as f32;
+            wishvel[i as usize] =
+                scale * pml.forward[i as usize] * (*pm).cmd.forwardmove as i32 as f32
+                    + scale * pml.right[i as usize] * (*pm).cmd.rightmove as i32 as f32;
             i += 1
         }
-        wishvel[2 as i32 as usize] +=
-            scale * (*pm).cmd.upmove as i32 as f32
+        wishvel[2 as i32 as usize] += scale * (*pm).cmd.upmove as i32 as f32
     }
     wishdir[0 as i32 as usize] = wishvel[0 as i32 as usize];
     wishdir[1 as i32 as usize] = wishvel[1 as i32 as usize];
@@ -955,8 +913,7 @@ unsafe extern "C" fn PM_AirMove() {
     // set the movementDir so clients can rotate the legs for strafing
     PM_SetMovementDir();
     // project moves down to flat plane
-    pml.forward[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    pml.forward[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     pml.right[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::qcommon::q_math::VectorNormalize(pml.forward.as_mut_ptr());
     crate::src::qcommon::q_math::VectorNormalize(pml.right.as_mut_ptr());
@@ -997,40 +954,25 @@ unsafe extern "C" fn PM_GrappleMove() {
     let mut vel: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut vlen: f32 = 0.;
-    v[0 as i32 as usize] =
-        pml.forward[0 as i32 as usize] * -(16 as i32) as f32;
-    v[1 as i32 as usize] =
-        pml.forward[1 as i32 as usize] * -(16 as i32) as f32;
-    v[2 as i32 as usize] =
-        pml.forward[2 as i32 as usize] * -(16 as i32) as f32;
-    v[0 as i32 as usize] =
-        (*(*pm).ps).grapplePoint[0 as i32 as usize] + v[0 as i32 as usize];
-    v[1 as i32 as usize] =
-        (*(*pm).ps).grapplePoint[1 as i32 as usize] + v[1 as i32 as usize];
-    v[2 as i32 as usize] =
-        (*(*pm).ps).grapplePoint[2 as i32 as usize] + v[2 as i32 as usize];
-    vel[0 as i32 as usize] =
-        v[0 as i32 as usize] - (*(*pm).ps).origin[0 as i32 as usize];
-    vel[1 as i32 as usize] =
-        v[1 as i32 as usize] - (*(*pm).ps).origin[1 as i32 as usize];
-    vel[2 as i32 as usize] =
-        v[2 as i32 as usize] - (*(*pm).ps).origin[2 as i32 as usize];
+    v[0 as i32 as usize] = pml.forward[0 as i32 as usize] * -(16 as i32) as f32;
+    v[1 as i32 as usize] = pml.forward[1 as i32 as usize] * -(16 as i32) as f32;
+    v[2 as i32 as usize] = pml.forward[2 as i32 as usize] * -(16 as i32) as f32;
+    v[0 as i32 as usize] = (*(*pm).ps).grapplePoint[0 as i32 as usize] + v[0 as i32 as usize];
+    v[1 as i32 as usize] = (*(*pm).ps).grapplePoint[1 as i32 as usize] + v[1 as i32 as usize];
+    v[2 as i32 as usize] = (*(*pm).ps).grapplePoint[2 as i32 as usize] + v[2 as i32 as usize];
+    vel[0 as i32 as usize] = v[0 as i32 as usize] - (*(*pm).ps).origin[0 as i32 as usize];
+    vel[1 as i32 as usize] = v[1 as i32 as usize] - (*(*pm).ps).origin[1 as i32 as usize];
+    vel[2 as i32 as usize] = v[2 as i32 as usize] - (*(*pm).ps).origin[2 as i32 as usize];
     vlen = VectorLength(vel.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
     crate::src::qcommon::q_math::VectorNormalize(vel.as_mut_ptr());
     if vlen <= 100 as i32 as f32 {
-        vel[0 as i32 as usize] =
-            vel[0 as i32 as usize] * (10 as i32 as f32 * vlen);
-        vel[1 as i32 as usize] =
-            vel[1 as i32 as usize] * (10 as i32 as f32 * vlen);
-        vel[2 as i32 as usize] =
-            vel[2 as i32 as usize] * (10 as i32 as f32 * vlen)
+        vel[0 as i32 as usize] = vel[0 as i32 as usize] * (10 as i32 as f32 * vlen);
+        vel[1 as i32 as usize] = vel[1 as i32 as usize] * (10 as i32 as f32 * vlen);
+        vel[2 as i32 as usize] = vel[2 as i32 as usize] * (10 as i32 as f32 * vlen)
     } else {
-        vel[0 as i32 as usize] =
-            vel[0 as i32 as usize] * 800 as i32 as f32;
-        vel[1 as i32 as usize] =
-            vel[1 as i32 as usize] * 800 as i32 as f32;
-        vel[2 as i32 as usize] =
-            vel[2 as i32 as usize] * 800 as i32 as f32
+        vel[0 as i32 as usize] = vel[0 as i32 as usize] * 800 as i32 as f32;
+        vel[1 as i32 as usize] = vel[1 as i32 as usize] * 800 as i32 as f32;
+        vel[2 as i32 as usize] = vel[2 as i32 as usize] * 800 as i32 as f32
     }
     (*(*pm).ps).velocity[0 as i32 as usize] = vel[0 as i32 as usize];
     (*(*pm).ps).velocity[1 as i32 as usize] = vel[1 as i32 as usize];
@@ -1065,12 +1007,9 @@ unsafe extern "C" fn PM_WalkMove() {
     let mut accelerate: f32 = 0.;
     let mut vel: f32 = 0.;
     if (*pm).waterlevel > 2 as i32
-        && pml.forward[0 as i32 as usize]
-            * pml.groundTrace.plane.normal[0 as i32 as usize]
-            + pml.forward[1 as i32 as usize]
-                * pml.groundTrace.plane.normal[1 as i32 as usize]
-            + pml.forward[2 as i32 as usize]
-                * pml.groundTrace.plane.normal[2 as i32 as usize]
+        && pml.forward[0 as i32 as usize] * pml.groundTrace.plane.normal[0 as i32 as usize]
+            + pml.forward[1 as i32 as usize] * pml.groundTrace.plane.normal[1 as i32 as usize]
+            + pml.forward[2 as i32 as usize] * pml.groundTrace.plane.normal[2 as i32 as usize]
             > 0 as i32 as f32
     {
         // begin swimming
@@ -1094,8 +1033,7 @@ unsafe extern "C" fn PM_WalkMove() {
     // set the movementDir so clients can rotate the legs for strafing
     PM_SetMovementDir();
     // project moves down to flat plane
-    pml.forward[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    pml.forward[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     pml.right[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     // project the forward and right directions onto the ground plane
     PM_ClipVelocity(
@@ -1135,18 +1073,14 @@ unsafe extern "C" fn PM_WalkMove() {
     if (*pm).waterlevel != 0 {
         let mut waterScale: f32 = 0.;
         waterScale = ((*pm).waterlevel as f64 / 3.0f64) as f32;
-        waterScale = (1.0f64
-            - (1.0f64 - pm_swimScale as f64) * waterScale as f64)
-            as f32;
+        waterScale = (1.0f64 - (1.0f64 - pm_swimScale as f64) * waterScale as f64) as f32;
         if wishspeed > (*(*pm).ps).speed as f32 * waterScale {
             wishspeed = (*(*pm).ps).speed as f32 * waterScale
         }
     }
     // when a player gets hit, they temporarily lose
     // full control, which allows them to be moved a bit
-    if pml.groundTrace.surfaceFlags & 0x2 as i32 != 0
-        || (*(*pm).ps).pm_flags & 64 as i32 != 0
-    {
+    if pml.groundTrace.surfaceFlags & 0x2 as i32 != 0 || (*(*pm).ps).pm_flags & 64 as i32 != 0 {
         accelerate = pm_airaccelerate
     } else {
         accelerate = pm_accelerate
@@ -1154,11 +1088,8 @@ unsafe extern "C" fn PM_WalkMove() {
     PM_Accelerate(wishdir.as_mut_ptr(), wishspeed, accelerate);
     //Com_Printf("velocity = %1.1f %1.1f %1.1f\n", pm->ps->velocity[0], pm->ps->velocity[1], pm->ps->velocity[2]);
     //Com_Printf("velocity1 = %1.1f\n", VectorLength(pm->ps->velocity));
-    if pml.groundTrace.surfaceFlags & 0x2 as i32 != 0
-        || (*(*pm).ps).pm_flags & 64 as i32 != 0
-    {
-        (*(*pm).ps).velocity[2 as i32 as usize] -=
-            (*(*pm).ps).gravity as f32 * pml.frametime
+    if pml.groundTrace.surfaceFlags & 0x2 as i32 != 0 || (*(*pm).ps).pm_flags & 64 as i32 != 0 {
+        (*(*pm).ps).velocity[2 as i32 as usize] -= (*(*pm).ps).gravity as f32 * pml.frametime
     }
     vel = VectorLength(
         (*(*pm).ps).velocity.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
@@ -1172,12 +1103,9 @@ unsafe extern "C" fn PM_WalkMove() {
     );
     // don't decrease velocity when going up or down a slope
     crate::src::qcommon::q_math::VectorNormalize((*(*pm).ps).velocity.as_mut_ptr());
-    (*(*pm).ps).velocity[0 as i32 as usize] =
-        (*(*pm).ps).velocity[0 as i32 as usize] * vel;
-    (*(*pm).ps).velocity[1 as i32 as usize] =
-        (*(*pm).ps).velocity[1 as i32 as usize] * vel;
-    (*(*pm).ps).velocity[2 as i32 as usize] =
-        (*(*pm).ps).velocity[2 as i32 as usize] * vel;
+    (*(*pm).ps).velocity[0 as i32 as usize] = (*(*pm).ps).velocity[0 as i32 as usize] * vel;
+    (*(*pm).ps).velocity[1 as i32 as usize] = (*(*pm).ps).velocity[1 as i32 as usize] * vel;
+    (*(*pm).ps).velocity[2 as i32 as usize] = (*(*pm).ps).velocity[2 as i32 as usize] * vel;
     // don't do anything if standing still
     if (*(*pm).ps).velocity[0 as i32 as usize] == 0.
         && (*(*pm).ps).velocity[1 as i32 as usize] == 0.
@@ -1204,20 +1132,14 @@ unsafe extern "C" fn PM_DeadMove() {
     );
     forward -= 20 as i32 as f32;
     if forward <= 0 as i32 as f32 {
-        (*(*pm).ps).velocity[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        (*(*pm).ps).velocity[1 as i32 as usize] =
-            (*(*pm).ps).velocity[2 as i32 as usize];
-        (*(*pm).ps).velocity[0 as i32 as usize] =
-            (*(*pm).ps).velocity[1 as i32 as usize]
+        (*(*pm).ps).velocity[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*(*pm).ps).velocity[1 as i32 as usize] = (*(*pm).ps).velocity[2 as i32 as usize];
+        (*(*pm).ps).velocity[0 as i32 as usize] = (*(*pm).ps).velocity[1 as i32 as usize]
     } else {
         crate::src::qcommon::q_math::VectorNormalize((*(*pm).ps).velocity.as_mut_ptr());
-        (*(*pm).ps).velocity[0 as i32 as usize] =
-            (*(*pm).ps).velocity[0 as i32 as usize] * forward;
-        (*(*pm).ps).velocity[1 as i32 as usize] =
-            (*(*pm).ps).velocity[1 as i32 as usize] * forward;
-        (*(*pm).ps).velocity[2 as i32 as usize] =
-            (*(*pm).ps).velocity[2 as i32 as usize] * forward
+        (*(*pm).ps).velocity[0 as i32 as usize] = (*(*pm).ps).velocity[0 as i32 as usize] * forward;
+        (*(*pm).ps).velocity[1 as i32 as usize] = (*(*pm).ps).velocity[1 as i32 as usize] * forward;
+        (*(*pm).ps).velocity[2 as i32 as usize] = (*(*pm).ps).velocity[2 as i32 as usize] * forward
     };
 }
 /*
@@ -1270,8 +1192,7 @@ unsafe extern "C" fn PM_NoclipMove() {
             (*(*pm).ps).velocity[0 as i32 as usize] * newspeed;
         (*(*pm).ps).velocity[1 as i32 as usize] =
             (*(*pm).ps).velocity[1 as i32 as usize] * newspeed;
-        (*(*pm).ps).velocity[2 as i32 as usize] =
-            (*(*pm).ps).velocity[2 as i32 as usize] * newspeed
+        (*(*pm).ps).velocity[2 as i32 as usize] = (*(*pm).ps).velocity[2 as i32 as usize] * newspeed
     }
     // accelerate
     scale = PM_CmdScale(&mut (*pm).cmd);
@@ -1341,8 +1262,7 @@ unsafe extern "C" fn PM_CrashLand() {
     }
     (*(*pm).ps).legsTimer = 130 as i32;
     // calculate the exact velocity on landing
-    dist = (*(*pm).ps).origin[2 as i32 as usize]
-        - pml.previous_origin[2 as i32 as usize];
+    dist = (*(*pm).ps).origin[2 as i32 as usize] - pml.previous_origin[2 as i32 as usize];
     vel = pml.previous_velocity[2 as i32 as usize];
     acc = -(*(*pm).ps).gravity as f32;
     a = acc / 2 as i32 as f32;
@@ -1352,8 +1272,7 @@ unsafe extern "C" fn PM_CrashLand() {
     if den < 0 as i32 as f32 {
         return;
     }
-    t = ((-b as f64 - crate::stdlib::sqrt(den as f64))
-        / (2 as i32 as f32 * a) as f64) as f32;
+    t = ((-b as f64 - crate::stdlib::sqrt(den as f64)) / (2 as i32 as f32 * a) as f64) as f32;
     delta = vel + t * acc;
     delta = ((delta * delta) as f64 * 0.0001f64) as f32;
     // ducking while falling doubles damage
@@ -1382,9 +1301,7 @@ unsafe extern "C" fn PM_CrashLand() {
             PM_AddEvent(crate::bg_public_h::EV_FALL_FAR as i32);
         } else if delta > 40 as i32 as f32 {
             // this is a pain grunt, so don't play it if dead
-            if (*(*pm).ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-                > 0 as i32
-            {
+            if (*(*pm).ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] > 0 as i32 {
                 PM_AddEvent(crate::bg_public_h::EV_FALL_MEDIUM as i32);
             }
         } else if delta > 7 as i32 as f32 {
@@ -1453,13 +1370,11 @@ unsafe extern "C" fn PM_CorrectAllSolid(
                     (*pm).tracemask,
                 );
                 if (*trace).allsolid as u64 == 0 {
-                    point[0 as i32 as usize] =
-                        (*(*pm).ps).origin[0 as i32 as usize];
-                    point[1 as i32 as usize] =
-                        (*(*pm).ps).origin[1 as i32 as usize];
-                    point[2 as i32 as usize] =
-                        ((*(*pm).ps).origin[2 as i32 as usize] as f64 - 0.25f64)
-                            as crate::src::qcommon::q_shared::vec_t;
+                    point[0 as i32 as usize] = (*(*pm).ps).origin[0 as i32 as usize];
+                    point[1 as i32 as usize] = (*(*pm).ps).origin[1 as i32 as usize];
+                    point[2 as i32 as usize] = ((*(*pm).ps).origin[2 as i32 as usize] as f64
+                        - 0.25f64)
+                        as crate::src::qcommon::q_shared::vec_t;
                     (*pm).trace.expect("non-null function pointer")(
                         trace,
                         (*(*pm).ps).origin.as_mut_ptr()
@@ -1575,9 +1490,8 @@ unsafe extern "C" fn PM_GroundTrace() {
         };
     point[0 as i32 as usize] = (*(*pm).ps).origin[0 as i32 as usize];
     point[1 as i32 as usize] = (*(*pm).ps).origin[1 as i32 as usize];
-    point[2 as i32 as usize] = ((*(*pm).ps).origin[2 as i32 as usize]
-        as f64
-        - 0.25f64) as crate::src::qcommon::q_shared::vec_t;
+    point[2 as i32 as usize] = ((*(*pm).ps).origin[2 as i32 as usize] as f64 - 0.25f64)
+        as crate::src::qcommon::q_shared::vec_t;
     (*pm).trace.expect("non-null function pointer")(
         &mut trace,
         (*(*pm).ps).origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -1603,12 +1517,9 @@ unsafe extern "C" fn PM_GroundTrace() {
     }
     // check if getting thrown off the ground
     if (*(*pm).ps).velocity[2 as i32 as usize] > 0 as i32 as f32
-        && (*(*pm).ps).velocity[0 as i32 as usize]
-            * trace.plane.normal[0 as i32 as usize]
-            + (*(*pm).ps).velocity[1 as i32 as usize]
-                * trace.plane.normal[1 as i32 as usize]
-            + (*(*pm).ps).velocity[2 as i32 as usize]
-                * trace.plane.normal[2 as i32 as usize]
+        && (*(*pm).ps).velocity[0 as i32 as usize] * trace.plane.normal[0 as i32 as usize]
+            + (*(*pm).ps).velocity[1 as i32 as usize] * trace.plane.normal[1 as i32 as usize]
+            + (*(*pm).ps).velocity[2 as i32 as usize] * trace.plane.normal[2 as i32 as usize]
             > 10 as i32 as f32
     {
         if (*pm).debugLevel != 0 {
@@ -1662,8 +1573,7 @@ unsafe extern "C" fn PM_GroundTrace() {
         }
         PM_CrashLand();
         // don't do landing time if we were just going down a slope
-        if pml.previous_velocity[2 as i32 as usize] < -(200 as i32) as f32
-        {
+        if pml.previous_velocity[2 as i32 as usize] < -(200 as i32) as f32 {
             // don't allow another jump for a little while
             (*(*pm).ps).pm_flags |= 32 as i32;
             (*(*pm).ps).pm_time = 250 as i32
@@ -1692,9 +1602,8 @@ unsafe extern "C" fn PM_SetWaterLevel() {
     (*pm).watertype = 0 as i32;
     point[0 as i32 as usize] = (*(*pm).ps).origin[0 as i32 as usize];
     point[1 as i32 as usize] = (*(*pm).ps).origin[1 as i32 as usize];
-    point[2 as i32 as usize] = (*(*pm).ps).origin[2 as i32 as usize]
-        + -(24 as i32) as f32
-        + 1 as i32 as f32;
+    point[2 as i32 as usize] =
+        (*(*pm).ps).origin[2 as i32 as usize] + -(24 as i32) as f32 + 1 as i32 as f32;
     cont = (*pm).pointcontents.expect("non-null function pointer")(
         point.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         (*(*pm).ps).clientNum,
@@ -1704,18 +1613,16 @@ unsafe extern "C" fn PM_SetWaterLevel() {
         sample1 = sample2 / 2 as i32;
         (*pm).watertype = cont;
         (*pm).waterlevel = 1 as i32;
-        point[2 as i32 as usize] = (*(*pm).ps).origin[2 as i32 as usize]
-            + -(24 as i32) as f32
-            + sample1 as f32;
+        point[2 as i32 as usize] =
+            (*(*pm).ps).origin[2 as i32 as usize] + -(24 as i32) as f32 + sample1 as f32;
         cont = (*pm).pointcontents.expect("non-null function pointer")(
             point.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             (*(*pm).ps).clientNum,
         );
         if cont & (32 as i32 | 8 as i32 | 16 as i32) != 0 {
             (*pm).waterlevel = 2 as i32;
-            point[2 as i32 as usize] = (*(*pm).ps).origin[2 as i32 as usize]
-                + -(24 as i32) as f32
-                + sample2 as f32;
+            point[2 as i32 as usize] =
+                (*(*pm).ps).origin[2 as i32 as usize] + -(24 as i32) as f32 + sample2 as f32;
             cont = (*pm).pointcontents.expect("non-null function pointer")(
                 point.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                 (*(*pm).ps).clientNum,
@@ -1755,50 +1662,32 @@ unsafe extern "C" fn PM_CheckDuck() {
     if (*(*pm).ps).powerups[crate::bg_public_h::PW_INVULNERABILITY as i32 as usize] != 0 {
         if (*(*pm).ps).pm_flags & 16384 as i32 != 0 {
             // invulnerability sphere has a 42 units radius
-            (*pm).mins[0 as i32 as usize] =
-                -(42 as i32) as crate::src::qcommon::q_shared::vec_t;
-            (*pm).mins[1 as i32 as usize] =
-                -(42 as i32) as crate::src::qcommon::q_shared::vec_t;
-            (*pm).mins[2 as i32 as usize] =
-                -(42 as i32) as crate::src::qcommon::q_shared::vec_t;
-            (*pm).maxs[0 as i32 as usize] =
-                42 as i32 as crate::src::qcommon::q_shared::vec_t;
-            (*pm).maxs[1 as i32 as usize] =
-                42 as i32 as crate::src::qcommon::q_shared::vec_t;
-            (*pm).maxs[2 as i32 as usize] =
-                42 as i32 as crate::src::qcommon::q_shared::vec_t
+            (*pm).mins[0 as i32 as usize] = -(42 as i32) as crate::src::qcommon::q_shared::vec_t;
+            (*pm).mins[1 as i32 as usize] = -(42 as i32) as crate::src::qcommon::q_shared::vec_t;
+            (*pm).mins[2 as i32 as usize] = -(42 as i32) as crate::src::qcommon::q_shared::vec_t;
+            (*pm).maxs[0 as i32 as usize] = 42 as i32 as crate::src::qcommon::q_shared::vec_t;
+            (*pm).maxs[1 as i32 as usize] = 42 as i32 as crate::src::qcommon::q_shared::vec_t;
+            (*pm).maxs[2 as i32 as usize] = 42 as i32 as crate::src::qcommon::q_shared::vec_t
         } else {
-            (*pm).mins[0 as i32 as usize] =
-                -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
-            (*pm).mins[1 as i32 as usize] =
-                -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
-            (*pm).mins[2 as i32 as usize] =
-                -(24 as i32) as crate::src::qcommon::q_shared::vec_t;
-            (*pm).maxs[0 as i32 as usize] =
-                15 as i32 as crate::src::qcommon::q_shared::vec_t;
-            (*pm).maxs[1 as i32 as usize] =
-                15 as i32 as crate::src::qcommon::q_shared::vec_t;
-            (*pm).maxs[2 as i32 as usize] =
-                16 as i32 as crate::src::qcommon::q_shared::vec_t
+            (*pm).mins[0 as i32 as usize] = -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+            (*pm).mins[1 as i32 as usize] = -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+            (*pm).mins[2 as i32 as usize] = -(24 as i32) as crate::src::qcommon::q_shared::vec_t;
+            (*pm).maxs[0 as i32 as usize] = 15 as i32 as crate::src::qcommon::q_shared::vec_t;
+            (*pm).maxs[1 as i32 as usize] = 15 as i32 as crate::src::qcommon::q_shared::vec_t;
+            (*pm).maxs[2 as i32 as usize] = 16 as i32 as crate::src::qcommon::q_shared::vec_t
         }
         (*(*pm).ps).pm_flags |= 1 as i32;
         (*(*pm).ps).viewheight = 12 as i32;
         return;
     }
     (*(*pm).ps).pm_flags &= !(16384 as i32);
-    (*pm).mins[0 as i32 as usize] =
-        -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*pm).mins[1 as i32 as usize] =
-        -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*pm).maxs[0 as i32 as usize] =
-        15 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*pm).maxs[1 as i32 as usize] =
-        15 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*pm).mins[2 as i32 as usize] =
-        -(24 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*pm).mins[0 as i32 as usize] = -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*pm).mins[1 as i32 as usize] = -(15 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*pm).maxs[0 as i32 as usize] = 15 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*pm).maxs[1 as i32 as usize] = 15 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*pm).mins[2 as i32 as usize] = -(24 as i32) as crate::src::qcommon::q_shared::vec_t;
     if (*(*pm).ps).pm_type == crate::bg_public_h::PM_DEAD as i32 {
-        (*pm).maxs[2 as i32 as usize] =
-            -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
+        (*pm).maxs[2 as i32 as usize] = -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
         (*(*pm).ps).viewheight = -(16 as i32);
         return;
     }
@@ -1808,8 +1697,7 @@ unsafe extern "C" fn PM_CheckDuck() {
     } else if (*(*pm).ps).pm_flags & 1 as i32 != 0 {
         // stand up if possible
         // try to stand up
-        (*pm).maxs[2 as i32 as usize] =
-            32 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*pm).maxs[2 as i32 as usize] = 32 as i32 as crate::src::qcommon::q_shared::vec_t;
         (*pm).trace.expect("non-null function pointer")(
             &mut trace,
             (*(*pm).ps).origin.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -1824,12 +1712,10 @@ unsafe extern "C" fn PM_CheckDuck() {
         }
     }
     if (*(*pm).ps).pm_flags & 1 as i32 != 0 {
-        (*pm).maxs[2 as i32 as usize] =
-            16 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*pm).maxs[2 as i32 as usize] = 16 as i32 as crate::src::qcommon::q_shared::vec_t;
         (*(*pm).ps).viewheight = 12 as i32
     } else {
-        (*pm).maxs[2 as i32 as usize] =
-            32 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*pm).maxs[2 as i32 as usize] = 32 as i32 as crate::src::qcommon::q_shared::vec_t;
         (*(*pm).ps).viewheight = 26 as i32
     };
 }
@@ -1850,14 +1736,12 @@ unsafe extern "C" fn PM_Footsteps() {
     // all cyclic walking effects
     //
     (*pm).xyspeed = crate::stdlib::sqrt(
-        ((*(*pm).ps).velocity[0 as i32 as usize]
-            * (*(*pm).ps).velocity[0 as i32 as usize]
-            + (*(*pm).ps).velocity[1 as i32 as usize]
-                * (*(*pm).ps).velocity[1 as i32 as usize]) as f64,
+        ((*(*pm).ps).velocity[0 as i32 as usize] * (*(*pm).ps).velocity[0 as i32 as usize]
+            + (*(*pm).ps).velocity[1 as i32 as usize] * (*(*pm).ps).velocity[1 as i32 as usize])
+            as f64,
     ) as f32;
     if (*(*pm).ps).groundEntityNum == ((1 as i32) << 10 as i32) - 1 as i32 {
-        if (*(*pm).ps).powerups[crate::bg_public_h::PW_INVULNERABILITY as i32 as usize] != 0
-        {
+        if (*(*pm).ps).powerups[crate::bg_public_h::PW_INVULNERABILITY as i32 as usize] != 0 {
             PM_ContinueLegsAnim(crate::bg_public_h::LEGS_IDLECR as i32);
         }
         // airborne leaves position in cycle intact, but doesn't advance
@@ -1916,13 +1800,9 @@ unsafe extern "C" fn PM_Footsteps() {
     }
     // check for footstep / splash sounds
     old = (*(*pm).ps).bobCycle;
-    (*(*pm).ps).bobCycle = (old as f32 + bobmove * pml.msec as f32)
-        as i32
-        & 255 as i32;
+    (*(*pm).ps).bobCycle = (old as f32 + bobmove * pml.msec as f32) as i32 & 255 as i32;
     // if we just crossed a cycle boundary, play an appropriate footstep event
-    if (old + 64 as i32 ^ (*(*pm).ps).bobCycle + 64 as i32) & 128 as i32
-        != 0
-    {
+    if (old + 64 as i32 ^ (*(*pm).ps).bobCycle + 64 as i32) & 128 as i32 != 0 {
         if (*pm).waterlevel == 0 as i32 {
             // on ground will only play sounds if running
             if footstep as u32 != 0 && (*pm).noFootsteps as u64 == 0 {
@@ -1986,8 +1866,7 @@ unsafe extern "C" fn PM_BeginWeaponChange(mut weapon: i32) {
     {
         return;
     }
-    if (*(*pm).ps).stats[crate::bg_public_h::STAT_WEAPONS as i32 as usize]
-        & (1 as i32) << weapon
+    if (*(*pm).ps).stats[crate::bg_public_h::STAT_WEAPONS as i32 as usize] & (1 as i32) << weapon
         == 0
     {
         return;
@@ -2014,8 +1893,7 @@ unsafe extern "C" fn PM_FinishWeaponChange() {
     {
         weapon = crate::bg_public_h::WP_NONE as i32
     }
-    if (*(*pm).ps).stats[crate::bg_public_h::STAT_WEAPONS as i32 as usize]
-        & (1 as i32) << weapon
+    if (*(*pm).ps).stats[crate::bg_public_h::STAT_WEAPONS as i32 as usize] & (1 as i32) << weapon
         == 0
     {
         weapon = crate::bg_public_h::WP_NONE as i32
@@ -2063,9 +1941,7 @@ unsafe extern "C" fn PM_Weapon() {
         return;
     }
     // check for dead player
-    if (*(*pm).ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-        <= 0 as i32
-    {
+    if (*(*pm).ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= 0 as i32 {
         (*(*pm).ps).weapon = crate::bg_public_h::WP_NONE as i32;
         return;
     }
@@ -2073,14 +1949,12 @@ unsafe extern "C" fn PM_Weapon() {
     if (*pm).cmd.buttons & 4 as i32 != 0 {
         if (*(*pm).ps).pm_flags & 1024 as i32 == 0 {
             if !((*crate::src::game::bg_misc::bg_itemlist.as_mut_ptr().offset(
-                (*(*pm).ps).stats[crate::bg_public_h::STAT_HOLDABLE_ITEM as i32 as usize]
-                    as isize,
+                (*(*pm).ps).stats[crate::bg_public_h::STAT_HOLDABLE_ITEM as i32 as usize] as isize,
             ))
             .giTag
                 == crate::bg_public_h::HI_MEDKIT as i32
                 && (*(*pm).ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-                    >= (*(*pm).ps).stats
-                        [crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
+                    >= (*(*pm).ps).stats[crate::bg_public_h::STAT_MAX_HEALTH as i32 as usize]
                         + 25 as i32)
             {
                 (*(*pm).ps).pm_flags |= 1024 as i32;
@@ -2093,8 +1967,7 @@ unsafe extern "C" fn PM_Weapon() {
                         ))
                         .giTag,
                 );
-                (*(*pm).ps).stats[crate::bg_public_h::STAT_HOLDABLE_ITEM as i32 as usize] =
-                    0 as i32
+                (*(*pm).ps).stats[crate::bg_public_h::STAT_HOLDABLE_ITEM as i32 as usize] = 0 as i32
             }
             return;
         }
@@ -2264,13 +2137,11 @@ pub unsafe extern "C" fn PM_UpdateViewAngles(
                 (*ps).delta_angles[i as usize] = 16000 as i32 - (*cmd).angles[i as usize];
                 temp = 16000 as i32 as i16
             } else if (temp as i32) < -(16000 as i32) {
-                (*ps).delta_angles[i as usize] =
-                    -(16000 as i32) - (*cmd).angles[i as usize];
+                (*ps).delta_angles[i as usize] = -(16000 as i32) - (*cmd).angles[i as usize];
                 temp = -(16000 as i32) as i16
             }
         }
-        (*ps).viewangles[i as usize] = (temp as i32 as f64
-            * (360.0f64 / 65536 as i32 as f64))
+        (*ps).viewangles[i as usize] = (temp as i32 as f64 * (360.0f64 / 65536 as i32 as f64))
             as crate::src::qcommon::q_shared::vec_t;
         i += 1
     }
@@ -2286,9 +2157,7 @@ pub unsafe extern "C" fn PmoveSingle(mut pmove: *mut crate::bg_public_h::pmove_t
     (*pm).numtouch = 0 as i32;
     (*pm).watertype = 0 as i32;
     (*pm).waterlevel = 0 as i32;
-    if (*(*pm).ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-        <= 0 as i32
-    {
+    if (*(*pm).ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= 0 as i32 {
         (*pm).tracemask &= !(0x2000000 as i32)
         // corpses can fly through bodies
     }
@@ -2352,12 +2221,9 @@ pub unsafe extern "C" fn PmoveSingle(mut pmove: *mut crate::bg_public_h::pmove_t
     pml.previous_origin[1 as i32 as usize] = (*(*pm).ps).origin[1 as i32 as usize];
     pml.previous_origin[2 as i32 as usize] = (*(*pm).ps).origin[2 as i32 as usize];
     // save old velocity for crashlanding
-    pml.previous_velocity[0 as i32 as usize] =
-        (*(*pm).ps).velocity[0 as i32 as usize];
-    pml.previous_velocity[1 as i32 as usize] =
-        (*(*pm).ps).velocity[1 as i32 as usize];
-    pml.previous_velocity[2 as i32 as usize] =
-        (*(*pm).ps).velocity[2 as i32 as usize];
+    pml.previous_velocity[0 as i32 as usize] = (*(*pm).ps).velocity[0 as i32 as usize];
+    pml.previous_velocity[1 as i32 as usize] = (*(*pm).ps).velocity[1 as i32 as usize];
+    pml.previous_velocity[2 as i32 as usize] = (*(*pm).ps).velocity[2 as i32 as usize];
     pml.frametime = (pml.msec as f64 * 0.001f64) as f32;
     // update the viewangles
     PM_UpdateViewAngles((*pm).ps, &mut (*pm).cmd);
@@ -2375,8 +2241,7 @@ pub unsafe extern "C" fn PmoveSingle(mut pmove: *mut crate::bg_public_h::pmove_t
     if ((*pm).cmd.forwardmove as i32) < 0 as i32 {
         (*(*pm).ps).pm_flags |= 16 as i32
     } else if (*pm).cmd.forwardmove as i32 > 0 as i32
-        || (*pm).cmd.forwardmove as i32 == 0 as i32
-            && (*pm).cmd.rightmove as i32 != 0
+        || (*pm).cmd.forwardmove as i32 == 0 as i32 && (*pm).cmd.rightmove as i32 != 0
     {
         (*(*pm).ps).pm_flags &= !(16 as i32)
     }
@@ -2470,8 +2335,8 @@ pub unsafe extern "C" fn Pmove(mut pmove: *mut crate::bg_public_h::pmove_t) {
     if finalTime > (*(*pmove).ps).commandTime + 1000 as i32 {
         (*(*pmove).ps).commandTime = finalTime - 1000 as i32
     }
-    (*(*pmove).ps).pmove_framecount = (*(*pmove).ps).pmove_framecount + 1 as i32
-        & ((1 as i32) << 6 as i32) - 1 as i32;
+    (*(*pmove).ps).pmove_framecount =
+        (*(*pmove).ps).pmove_framecount + 1 as i32 & ((1 as i32) << 6 as i32) - 1 as i32;
     // chop the move up if it is too long, to prevent framerate
     // dependent behavior
     while (*(*pmove).ps).commandTime != finalTime {

@@ -241,8 +241,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -500,24 +499,21 @@ pub unsafe extern "C" fn G_BounceMissile(
         + velocity[1 as i32 as usize] * (*trace).plane.normal[1 as i32 as usize]
         + velocity[2 as i32 as usize] * (*trace).plane.normal[2 as i32 as usize];
     (*ent).s.pos.trDelta[0 as i32 as usize] = velocity[0 as i32 as usize]
-        + (*trace).plane.normal[0 as i32 as usize]
-            * (-(2 as i32) as f32 * dot);
+        + (*trace).plane.normal[0 as i32 as usize] * (-(2 as i32) as f32 * dot);
     (*ent).s.pos.trDelta[1 as i32 as usize] = velocity[1 as i32 as usize]
-        + (*trace).plane.normal[1 as i32 as usize]
-            * (-(2 as i32) as f32 * dot);
+        + (*trace).plane.normal[1 as i32 as usize] * (-(2 as i32) as f32 * dot);
     (*ent).s.pos.trDelta[2 as i32 as usize] = velocity[2 as i32 as usize]
-        + (*trace).plane.normal[2 as i32 as usize]
-            * (-(2 as i32) as f32 * dot);
+        + (*trace).plane.normal[2 as i32 as usize] * (-(2 as i32) as f32 * dot);
     if (*ent).s.eFlags & 0x20 as i32 != 0 {
-        (*ent).s.pos.trDelta[0 as i32 as usize] =
-            ((*ent).s.pos.trDelta[0 as i32 as usize] as f64 * 0.65f64)
-                as crate::src::qcommon::q_shared::vec_t;
-        (*ent).s.pos.trDelta[1 as i32 as usize] =
-            ((*ent).s.pos.trDelta[1 as i32 as usize] as f64 * 0.65f64)
-                as crate::src::qcommon::q_shared::vec_t;
-        (*ent).s.pos.trDelta[2 as i32 as usize] =
-            ((*ent).s.pos.trDelta[2 as i32 as usize] as f64 * 0.65f64)
-                as crate::src::qcommon::q_shared::vec_t;
+        (*ent).s.pos.trDelta[0 as i32 as usize] = ((*ent).s.pos.trDelta[0 as i32 as usize] as f64
+            * 0.65f64)
+            as crate::src::qcommon::q_shared::vec_t;
+        (*ent).s.pos.trDelta[1 as i32 as usize] = ((*ent).s.pos.trDelta[1 as i32 as usize] as f64
+            * 0.65f64)
+            as crate::src::qcommon::q_shared::vec_t;
+        (*ent).s.pos.trDelta[2 as i32 as usize] = ((*ent).s.pos.trDelta[2 as i32 as usize] as f64
+            * 0.65f64)
+            as crate::src::qcommon::q_shared::vec_t;
         // check for stop
         if (*trace).plane.normal[2 as i32 as usize] as f64 > 0.2f64
             && VectorLength(
@@ -532,21 +528,15 @@ pub unsafe extern "C" fn G_BounceMissile(
             return;
         }
     }
-    (*ent).r.currentOrigin[0 as i32 as usize] = (*ent).r.currentOrigin
-        [0 as i32 as usize]
-        + (*trace).plane.normal[0 as i32 as usize];
-    (*ent).r.currentOrigin[1 as i32 as usize] = (*ent).r.currentOrigin
-        [1 as i32 as usize]
-        + (*trace).plane.normal[1 as i32 as usize];
-    (*ent).r.currentOrigin[2 as i32 as usize] = (*ent).r.currentOrigin
-        [2 as i32 as usize]
-        + (*trace).plane.normal[2 as i32 as usize];
-    (*ent).s.pos.trBase[0 as i32 as usize] =
-        (*ent).r.currentOrigin[0 as i32 as usize];
-    (*ent).s.pos.trBase[1 as i32 as usize] =
-        (*ent).r.currentOrigin[1 as i32 as usize];
-    (*ent).s.pos.trBase[2 as i32 as usize] =
-        (*ent).r.currentOrigin[2 as i32 as usize];
+    (*ent).r.currentOrigin[0 as i32 as usize] =
+        (*ent).r.currentOrigin[0 as i32 as usize] + (*trace).plane.normal[0 as i32 as usize];
+    (*ent).r.currentOrigin[1 as i32 as usize] =
+        (*ent).r.currentOrigin[1 as i32 as usize] + (*trace).plane.normal[1 as i32 as usize];
+    (*ent).r.currentOrigin[2 as i32 as usize] =
+        (*ent).r.currentOrigin[2 as i32 as usize] + (*trace).plane.normal[2 as i32 as usize];
+    (*ent).s.pos.trBase[0 as i32 as usize] = (*ent).r.currentOrigin[0 as i32 as usize];
+    (*ent).s.pos.trBase[1 as i32 as usize] = (*ent).r.currentOrigin[1 as i32 as usize];
+    (*ent).s.pos.trBase[2 as i32 as usize] = (*ent).r.currentOrigin[2 as i32 as usize];
     (*ent).s.pos.trTime = crate::src::game::g_main::level.time;
 }
 /*
@@ -623,9 +613,7 @@ pub unsafe extern "C" fn G_MissileImpact(
         .as_mut_ptr()
         .offset((*trace).entityNum as isize) as *mut crate::g_local_h::gentity_t;
     // check for bounce
-    if (*other).takedamage as u64 == 0
-        && (*ent).s.eFlags & (0x10 as i32 | 0x20 as i32) != 0
-    {
+    if (*other).takedamage as u64 == 0 && (*ent).s.eFlags & (0x10 as i32 | 0x20 as i32) != 0 {
         G_BounceMissile(ent, trace);
         crate::src::game::g_utils::G_AddEvent(
             ent as *mut crate::g_local_h::gentity_s,
@@ -660,8 +648,7 @@ pub unsafe extern "C" fn G_MissileImpact(
             if VectorLength(velocity.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
                 == 0 as i32 as f32
             {
-                velocity[2 as i32 as usize] =
-                    1 as i32 as crate::src::qcommon::q_shared::vec_t
+                velocity[2 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t
                 // stepped on a grenade
             }
             crate::src::game::g_combat::G_Damage(
@@ -695,24 +682,18 @@ pub unsafe extern "C" fn G_MissileImpact(
             );
             (*nent).s.otherEntityNum = (*other).s.number;
             (*ent).enemy = other;
-            v[0 as i32 as usize] =
-                ((*other).r.currentOrigin[0 as i32 as usize] as f64
-                    + ((*other).r.mins[0 as i32 as usize]
-                        + (*other).r.maxs[0 as i32 as usize])
-                        as f64
-                        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-            v[1 as i32 as usize] =
-                ((*other).r.currentOrigin[1 as i32 as usize] as f64
-                    + ((*other).r.mins[1 as i32 as usize]
-                        + (*other).r.maxs[1 as i32 as usize])
-                        as f64
-                        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-            v[2 as i32 as usize] =
-                ((*other).r.currentOrigin[2 as i32 as usize] as f64
-                    + ((*other).r.mins[2 as i32 as usize]
-                        + (*other).r.maxs[2 as i32 as usize])
-                        as f64
-                        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+            v[0 as i32 as usize] = ((*other).r.currentOrigin[0 as i32 as usize] as f64
+                + ((*other).r.mins[0 as i32 as usize] + (*other).r.maxs[0 as i32 as usize]) as f64
+                    * 0.5f64)
+                as crate::src::qcommon::q_shared::vec_t;
+            v[1 as i32 as usize] = ((*other).r.currentOrigin[1 as i32 as usize] as f64
+                + ((*other).r.mins[1 as i32 as usize] + (*other).r.maxs[1 as i32 as usize]) as f64
+                    * 0.5f64)
+                as crate::src::qcommon::q_shared::vec_t;
+            v[2 as i32 as usize] = ((*other).r.currentOrigin[2 as i32 as usize] as f64
+                + ((*other).r.mins[2 as i32 as usize] + (*other).r.maxs[2 as i32 as usize]) as f64
+                    * 0.5f64)
+                as crate::src::qcommon::q_shared::vec_t;
             crate::src::game::g_weapon::SnapVectorTowards(
                 v.as_mut_ptr(),
                 (*ent).s.pos.trBase.as_mut_ptr(),
@@ -941,21 +922,15 @@ pub unsafe extern "C" fn fire_plasma(
     (*bolt).s.pos.trBase[0 as i32 as usize] = *start.offset(0 as i32 as isize);
     (*bolt).s.pos.trBase[1 as i32 as usize] = *start.offset(1 as i32 as isize);
     (*bolt).s.pos.trBase[2 as i32 as usize] = *start.offset(2 as i32 as isize);
+    (*bolt).s.pos.trDelta[0 as i32 as usize] = *dir.offset(0 as i32 as isize) * 2000 as i32 as f32;
+    (*bolt).s.pos.trDelta[1 as i32 as usize] = *dir.offset(1 as i32 as isize) * 2000 as i32 as f32;
+    (*bolt).s.pos.trDelta[2 as i32 as usize] = *dir.offset(2 as i32 as isize) * 2000 as i32 as f32;
     (*bolt).s.pos.trDelta[0 as i32 as usize] =
-        *dir.offset(0 as i32 as isize) * 2000 as i32 as f32;
+        (*bolt).s.pos.trDelta[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     (*bolt).s.pos.trDelta[1 as i32 as usize] =
-        *dir.offset(1 as i32 as isize) * 2000 as i32 as f32;
+        (*bolt).s.pos.trDelta[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     (*bolt).s.pos.trDelta[2 as i32 as usize] =
-        *dir.offset(2 as i32 as isize) * 2000 as i32 as f32;
-    (*bolt).s.pos.trDelta[0 as i32 as usize] =
-        (*bolt).s.pos.trDelta[0 as i32 as usize] as i32
-            as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[1 as i32 as usize] =
-        (*bolt).s.pos.trDelta[1 as i32 as usize] as i32
-            as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[2 as i32 as usize] =
-        (*bolt).s.pos.trDelta[2 as i32 as usize] as i32
-            as crate::src::qcommon::q_shared::vec_t;
+        (*bolt).s.pos.trDelta[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     // save net bandwidth
     (*bolt).r.currentOrigin[0 as i32 as usize] = *start.offset(0 as i32 as isize);
     (*bolt).r.currentOrigin[1 as i32 as usize] = *start.offset(1 as i32 as isize);
@@ -1000,21 +975,15 @@ pub unsafe extern "C" fn fire_grenade(
     (*bolt).s.pos.trBase[0 as i32 as usize] = *start.offset(0 as i32 as isize);
     (*bolt).s.pos.trBase[1 as i32 as usize] = *start.offset(1 as i32 as isize);
     (*bolt).s.pos.trBase[2 as i32 as usize] = *start.offset(2 as i32 as isize);
+    (*bolt).s.pos.trDelta[0 as i32 as usize] = *dir.offset(0 as i32 as isize) * 700 as i32 as f32;
+    (*bolt).s.pos.trDelta[1 as i32 as usize] = *dir.offset(1 as i32 as isize) * 700 as i32 as f32;
+    (*bolt).s.pos.trDelta[2 as i32 as usize] = *dir.offset(2 as i32 as isize) * 700 as i32 as f32;
     (*bolt).s.pos.trDelta[0 as i32 as usize] =
-        *dir.offset(0 as i32 as isize) * 700 as i32 as f32;
+        (*bolt).s.pos.trDelta[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     (*bolt).s.pos.trDelta[1 as i32 as usize] =
-        *dir.offset(1 as i32 as isize) * 700 as i32 as f32;
+        (*bolt).s.pos.trDelta[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     (*bolt).s.pos.trDelta[2 as i32 as usize] =
-        *dir.offset(2 as i32 as isize) * 700 as i32 as f32;
-    (*bolt).s.pos.trDelta[0 as i32 as usize] =
-        (*bolt).s.pos.trDelta[0 as i32 as usize] as i32
-            as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[1 as i32 as usize] =
-        (*bolt).s.pos.trDelta[1 as i32 as usize] as i32
-            as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[2 as i32 as usize] =
-        (*bolt).s.pos.trDelta[2 as i32 as usize] as i32
-            as crate::src::qcommon::q_shared::vec_t;
+        (*bolt).s.pos.trDelta[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     // save net bandwidth
     (*bolt).r.currentOrigin[0 as i32 as usize] = *start.offset(0 as i32 as isize);
     (*bolt).r.currentOrigin[1 as i32 as usize] = *start.offset(1 as i32 as isize);
@@ -1058,21 +1027,15 @@ pub unsafe extern "C" fn fire_bfg(
     (*bolt).s.pos.trBase[0 as i32 as usize] = *start.offset(0 as i32 as isize);
     (*bolt).s.pos.trBase[1 as i32 as usize] = *start.offset(1 as i32 as isize);
     (*bolt).s.pos.trBase[2 as i32 as usize] = *start.offset(2 as i32 as isize);
+    (*bolt).s.pos.trDelta[0 as i32 as usize] = *dir.offset(0 as i32 as isize) * 2000 as i32 as f32;
+    (*bolt).s.pos.trDelta[1 as i32 as usize] = *dir.offset(1 as i32 as isize) * 2000 as i32 as f32;
+    (*bolt).s.pos.trDelta[2 as i32 as usize] = *dir.offset(2 as i32 as isize) * 2000 as i32 as f32;
     (*bolt).s.pos.trDelta[0 as i32 as usize] =
-        *dir.offset(0 as i32 as isize) * 2000 as i32 as f32;
+        (*bolt).s.pos.trDelta[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     (*bolt).s.pos.trDelta[1 as i32 as usize] =
-        *dir.offset(1 as i32 as isize) * 2000 as i32 as f32;
+        (*bolt).s.pos.trDelta[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     (*bolt).s.pos.trDelta[2 as i32 as usize] =
-        *dir.offset(2 as i32 as isize) * 2000 as i32 as f32;
-    (*bolt).s.pos.trDelta[0 as i32 as usize] =
-        (*bolt).s.pos.trDelta[0 as i32 as usize] as i32
-            as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[1 as i32 as usize] =
-        (*bolt).s.pos.trDelta[1 as i32 as usize] as i32
-            as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[2 as i32 as usize] =
-        (*bolt).s.pos.trDelta[2 as i32 as usize] as i32
-            as crate::src::qcommon::q_shared::vec_t;
+        (*bolt).s.pos.trDelta[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     // save net bandwidth
     (*bolt).r.currentOrigin[0 as i32 as usize] = *start.offset(0 as i32 as isize);
     (*bolt).r.currentOrigin[1 as i32 as usize] = *start.offset(1 as i32 as isize);
@@ -1116,21 +1079,15 @@ pub unsafe extern "C" fn fire_rocket(
     (*bolt).s.pos.trBase[0 as i32 as usize] = *start.offset(0 as i32 as isize);
     (*bolt).s.pos.trBase[1 as i32 as usize] = *start.offset(1 as i32 as isize);
     (*bolt).s.pos.trBase[2 as i32 as usize] = *start.offset(2 as i32 as isize);
+    (*bolt).s.pos.trDelta[0 as i32 as usize] = *dir.offset(0 as i32 as isize) * 900 as i32 as f32;
+    (*bolt).s.pos.trDelta[1 as i32 as usize] = *dir.offset(1 as i32 as isize) * 900 as i32 as f32;
+    (*bolt).s.pos.trDelta[2 as i32 as usize] = *dir.offset(2 as i32 as isize) * 900 as i32 as f32;
     (*bolt).s.pos.trDelta[0 as i32 as usize] =
-        *dir.offset(0 as i32 as isize) * 900 as i32 as f32;
+        (*bolt).s.pos.trDelta[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     (*bolt).s.pos.trDelta[1 as i32 as usize] =
-        *dir.offset(1 as i32 as isize) * 900 as i32 as f32;
+        (*bolt).s.pos.trDelta[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     (*bolt).s.pos.trDelta[2 as i32 as usize] =
-        *dir.offset(2 as i32 as isize) * 900 as i32 as f32;
-    (*bolt).s.pos.trDelta[0 as i32 as usize] =
-        (*bolt).s.pos.trDelta[0 as i32 as usize] as i32
-            as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[1 as i32 as usize] =
-        (*bolt).s.pos.trDelta[1 as i32 as usize] as i32
-            as crate::src::qcommon::q_shared::vec_t;
-    (*bolt).s.pos.trDelta[2 as i32 as usize] =
-        (*bolt).s.pos.trDelta[2 as i32 as usize] as i32
-            as crate::src::qcommon::q_shared::vec_t;
+        (*bolt).s.pos.trDelta[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     // save net bandwidth
     (*bolt).r.currentOrigin[0 as i32 as usize] = *start.offset(0 as i32 as isize);
     (*bolt).r.currentOrigin[1 as i32 as usize] = *start.offset(1 as i32 as isize);
@@ -1357,21 +1314,15 @@ pub unsafe extern "C" fn fire_grapple(
     (*hook).s.pos.trBase[0 as i32 as usize] = *start.offset(0 as i32 as isize);
     (*hook).s.pos.trBase[1 as i32 as usize] = *start.offset(1 as i32 as isize);
     (*hook).s.pos.trBase[2 as i32 as usize] = *start.offset(2 as i32 as isize);
+    (*hook).s.pos.trDelta[0 as i32 as usize] = *dir.offset(0 as i32 as isize) * 800 as i32 as f32;
+    (*hook).s.pos.trDelta[1 as i32 as usize] = *dir.offset(1 as i32 as isize) * 800 as i32 as f32;
+    (*hook).s.pos.trDelta[2 as i32 as usize] = *dir.offset(2 as i32 as isize) * 800 as i32 as f32;
     (*hook).s.pos.trDelta[0 as i32 as usize] =
-        *dir.offset(0 as i32 as isize) * 800 as i32 as f32;
+        (*hook).s.pos.trDelta[0 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     (*hook).s.pos.trDelta[1 as i32 as usize] =
-        *dir.offset(1 as i32 as isize) * 800 as i32 as f32;
+        (*hook).s.pos.trDelta[1 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     (*hook).s.pos.trDelta[2 as i32 as usize] =
-        *dir.offset(2 as i32 as isize) * 800 as i32 as f32;
-    (*hook).s.pos.trDelta[0 as i32 as usize] =
-        (*hook).s.pos.trDelta[0 as i32 as usize] as i32
-            as crate::src::qcommon::q_shared::vec_t;
-    (*hook).s.pos.trDelta[1 as i32 as usize] =
-        (*hook).s.pos.trDelta[1 as i32 as usize] as i32
-            as crate::src::qcommon::q_shared::vec_t;
-    (*hook).s.pos.trDelta[2 as i32 as usize] =
-        (*hook).s.pos.trDelta[2 as i32 as usize] as i32
-            as crate::src::qcommon::q_shared::vec_t;
+        (*hook).s.pos.trDelta[2 as i32 as usize] as i32 as crate::src::qcommon::q_shared::vec_t;
     // save net bandwidth
     (*hook).r.currentOrigin[0 as i32 as usize] = *start.offset(0 as i32 as isize);
     (*hook).r.currentOrigin[1 as i32 as usize] = *start.offset(1 as i32 as isize);

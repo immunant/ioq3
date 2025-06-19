@@ -50,38 +50,22 @@ unsafe extern "C" fn silk_LPC_analysis_filter16_FLP(
     while ix < length {
         s_ptr = &*s.offset((ix - 1 as i32) as isize) as *const f32;
         /* short-term prediction */
-        LPC_pred = *s_ptr.offset(0 as i32 as isize)
-            * *PredCoef.offset(0 as i32 as isize)
-            + *s_ptr.offset(-(1 as i32) as isize)
-                * *PredCoef.offset(1 as i32 as isize)
-            + *s_ptr.offset(-(2 as i32) as isize)
-                * *PredCoef.offset(2 as i32 as isize)
-            + *s_ptr.offset(-(3 as i32) as isize)
-                * *PredCoef.offset(3 as i32 as isize)
-            + *s_ptr.offset(-(4 as i32) as isize)
-                * *PredCoef.offset(4 as i32 as isize)
-            + *s_ptr.offset(-(5 as i32) as isize)
-                * *PredCoef.offset(5 as i32 as isize)
-            + *s_ptr.offset(-(6 as i32) as isize)
-                * *PredCoef.offset(6 as i32 as isize)
-            + *s_ptr.offset(-(7 as i32) as isize)
-                * *PredCoef.offset(7 as i32 as isize)
-            + *s_ptr.offset(-(8 as i32) as isize)
-                * *PredCoef.offset(8 as i32 as isize)
-            + *s_ptr.offset(-(9 as i32) as isize)
-                * *PredCoef.offset(9 as i32 as isize)
-            + *s_ptr.offset(-(10 as i32) as isize)
-                * *PredCoef.offset(10 as i32 as isize)
-            + *s_ptr.offset(-(11 as i32) as isize)
-                * *PredCoef.offset(11 as i32 as isize)
-            + *s_ptr.offset(-(12 as i32) as isize)
-                * *PredCoef.offset(12 as i32 as isize)
-            + *s_ptr.offset(-(13 as i32) as isize)
-                * *PredCoef.offset(13 as i32 as isize)
-            + *s_ptr.offset(-(14 as i32) as isize)
-                * *PredCoef.offset(14 as i32 as isize)
-            + *s_ptr.offset(-(15 as i32) as isize)
-                * *PredCoef.offset(15 as i32 as isize);
+        LPC_pred = *s_ptr.offset(0 as i32 as isize) * *PredCoef.offset(0 as i32 as isize)
+            + *s_ptr.offset(-(1 as i32) as isize) * *PredCoef.offset(1 as i32 as isize)
+            + *s_ptr.offset(-(2 as i32) as isize) * *PredCoef.offset(2 as i32 as isize)
+            + *s_ptr.offset(-(3 as i32) as isize) * *PredCoef.offset(3 as i32 as isize)
+            + *s_ptr.offset(-(4 as i32) as isize) * *PredCoef.offset(4 as i32 as isize)
+            + *s_ptr.offset(-(5 as i32) as isize) * *PredCoef.offset(5 as i32 as isize)
+            + *s_ptr.offset(-(6 as i32) as isize) * *PredCoef.offset(6 as i32 as isize)
+            + *s_ptr.offset(-(7 as i32) as isize) * *PredCoef.offset(7 as i32 as isize)
+            + *s_ptr.offset(-(8 as i32) as isize) * *PredCoef.offset(8 as i32 as isize)
+            + *s_ptr.offset(-(9 as i32) as isize) * *PredCoef.offset(9 as i32 as isize)
+            + *s_ptr.offset(-(10 as i32) as isize) * *PredCoef.offset(10 as i32 as isize)
+            + *s_ptr.offset(-(11 as i32) as isize) * *PredCoef.offset(11 as i32 as isize)
+            + *s_ptr.offset(-(12 as i32) as isize) * *PredCoef.offset(12 as i32 as isize)
+            + *s_ptr.offset(-(13 as i32) as isize) * *PredCoef.offset(13 as i32 as isize)
+            + *s_ptr.offset(-(14 as i32) as isize) * *PredCoef.offset(14 as i32 as isize)
+            + *s_ptr.offset(-(15 as i32) as isize) * *PredCoef.offset(15 as i32 as isize);
         /* prediction error */
         *r_LPC.offset(ix as isize) = *s_ptr.offset(1 as i32 as isize) - LPC_pred;
         ix += 1
@@ -105,30 +89,18 @@ unsafe extern "C" fn silk_LPC_analysis_filter12_FLP(
     while ix < length {
         s_ptr = &*s.offset((ix - 1 as i32) as isize) as *const f32;
         /* short-term prediction */
-        LPC_pred = *s_ptr.offset(0 as i32 as isize)
-            * *PredCoef.offset(0 as i32 as isize)
-            + *s_ptr.offset(-(1 as i32) as isize)
-                * *PredCoef.offset(1 as i32 as isize)
-            + *s_ptr.offset(-(2 as i32) as isize)
-                * *PredCoef.offset(2 as i32 as isize)
-            + *s_ptr.offset(-(3 as i32) as isize)
-                * *PredCoef.offset(3 as i32 as isize)
-            + *s_ptr.offset(-(4 as i32) as isize)
-                * *PredCoef.offset(4 as i32 as isize)
-            + *s_ptr.offset(-(5 as i32) as isize)
-                * *PredCoef.offset(5 as i32 as isize)
-            + *s_ptr.offset(-(6 as i32) as isize)
-                * *PredCoef.offset(6 as i32 as isize)
-            + *s_ptr.offset(-(7 as i32) as isize)
-                * *PredCoef.offset(7 as i32 as isize)
-            + *s_ptr.offset(-(8 as i32) as isize)
-                * *PredCoef.offset(8 as i32 as isize)
-            + *s_ptr.offset(-(9 as i32) as isize)
-                * *PredCoef.offset(9 as i32 as isize)
-            + *s_ptr.offset(-(10 as i32) as isize)
-                * *PredCoef.offset(10 as i32 as isize)
-            + *s_ptr.offset(-(11 as i32) as isize)
-                * *PredCoef.offset(11 as i32 as isize);
+        LPC_pred = *s_ptr.offset(0 as i32 as isize) * *PredCoef.offset(0 as i32 as isize)
+            + *s_ptr.offset(-(1 as i32) as isize) * *PredCoef.offset(1 as i32 as isize)
+            + *s_ptr.offset(-(2 as i32) as isize) * *PredCoef.offset(2 as i32 as isize)
+            + *s_ptr.offset(-(3 as i32) as isize) * *PredCoef.offset(3 as i32 as isize)
+            + *s_ptr.offset(-(4 as i32) as isize) * *PredCoef.offset(4 as i32 as isize)
+            + *s_ptr.offset(-(5 as i32) as isize) * *PredCoef.offset(5 as i32 as isize)
+            + *s_ptr.offset(-(6 as i32) as isize) * *PredCoef.offset(6 as i32 as isize)
+            + *s_ptr.offset(-(7 as i32) as isize) * *PredCoef.offset(7 as i32 as isize)
+            + *s_ptr.offset(-(8 as i32) as isize) * *PredCoef.offset(8 as i32 as isize)
+            + *s_ptr.offset(-(9 as i32) as isize) * *PredCoef.offset(9 as i32 as isize)
+            + *s_ptr.offset(-(10 as i32) as isize) * *PredCoef.offset(10 as i32 as isize)
+            + *s_ptr.offset(-(11 as i32) as isize) * *PredCoef.offset(11 as i32 as isize);
         /* prediction error */
         *r_LPC.offset(ix as isize) = *s_ptr.offset(1 as i32 as isize) - LPC_pred;
         ix += 1
@@ -152,26 +124,16 @@ unsafe extern "C" fn silk_LPC_analysis_filter10_FLP(
     while ix < length {
         s_ptr = &*s.offset((ix - 1 as i32) as isize) as *const f32;
         /* short-term prediction */
-        LPC_pred = *s_ptr.offset(0 as i32 as isize)
-            * *PredCoef.offset(0 as i32 as isize)
-            + *s_ptr.offset(-(1 as i32) as isize)
-                * *PredCoef.offset(1 as i32 as isize)
-            + *s_ptr.offset(-(2 as i32) as isize)
-                * *PredCoef.offset(2 as i32 as isize)
-            + *s_ptr.offset(-(3 as i32) as isize)
-                * *PredCoef.offset(3 as i32 as isize)
-            + *s_ptr.offset(-(4 as i32) as isize)
-                * *PredCoef.offset(4 as i32 as isize)
-            + *s_ptr.offset(-(5 as i32) as isize)
-                * *PredCoef.offset(5 as i32 as isize)
-            + *s_ptr.offset(-(6 as i32) as isize)
-                * *PredCoef.offset(6 as i32 as isize)
-            + *s_ptr.offset(-(7 as i32) as isize)
-                * *PredCoef.offset(7 as i32 as isize)
-            + *s_ptr.offset(-(8 as i32) as isize)
-                * *PredCoef.offset(8 as i32 as isize)
-            + *s_ptr.offset(-(9 as i32) as isize)
-                * *PredCoef.offset(9 as i32 as isize);
+        LPC_pred = *s_ptr.offset(0 as i32 as isize) * *PredCoef.offset(0 as i32 as isize)
+            + *s_ptr.offset(-(1 as i32) as isize) * *PredCoef.offset(1 as i32 as isize)
+            + *s_ptr.offset(-(2 as i32) as isize) * *PredCoef.offset(2 as i32 as isize)
+            + *s_ptr.offset(-(3 as i32) as isize) * *PredCoef.offset(3 as i32 as isize)
+            + *s_ptr.offset(-(4 as i32) as isize) * *PredCoef.offset(4 as i32 as isize)
+            + *s_ptr.offset(-(5 as i32) as isize) * *PredCoef.offset(5 as i32 as isize)
+            + *s_ptr.offset(-(6 as i32) as isize) * *PredCoef.offset(6 as i32 as isize)
+            + *s_ptr.offset(-(7 as i32) as isize) * *PredCoef.offset(7 as i32 as isize)
+            + *s_ptr.offset(-(8 as i32) as isize) * *PredCoef.offset(8 as i32 as isize)
+            + *s_ptr.offset(-(9 as i32) as isize) * *PredCoef.offset(9 as i32 as isize);
         /* prediction error */
         *r_LPC.offset(ix as isize) = *s_ptr.offset(1 as i32 as isize) - LPC_pred;
         ix += 1
@@ -195,22 +157,14 @@ unsafe extern "C" fn silk_LPC_analysis_filter8_FLP(
     while ix < length {
         s_ptr = &*s.offset((ix - 1 as i32) as isize) as *const f32;
         /* short-term prediction */
-        LPC_pred = *s_ptr.offset(0 as i32 as isize)
-            * *PredCoef.offset(0 as i32 as isize)
-            + *s_ptr.offset(-(1 as i32) as isize)
-                * *PredCoef.offset(1 as i32 as isize)
-            + *s_ptr.offset(-(2 as i32) as isize)
-                * *PredCoef.offset(2 as i32 as isize)
-            + *s_ptr.offset(-(3 as i32) as isize)
-                * *PredCoef.offset(3 as i32 as isize)
-            + *s_ptr.offset(-(4 as i32) as isize)
-                * *PredCoef.offset(4 as i32 as isize)
-            + *s_ptr.offset(-(5 as i32) as isize)
-                * *PredCoef.offset(5 as i32 as isize)
-            + *s_ptr.offset(-(6 as i32) as isize)
-                * *PredCoef.offset(6 as i32 as isize)
-            + *s_ptr.offset(-(7 as i32) as isize)
-                * *PredCoef.offset(7 as i32 as isize);
+        LPC_pred = *s_ptr.offset(0 as i32 as isize) * *PredCoef.offset(0 as i32 as isize)
+            + *s_ptr.offset(-(1 as i32) as isize) * *PredCoef.offset(1 as i32 as isize)
+            + *s_ptr.offset(-(2 as i32) as isize) * *PredCoef.offset(2 as i32 as isize)
+            + *s_ptr.offset(-(3 as i32) as isize) * *PredCoef.offset(3 as i32 as isize)
+            + *s_ptr.offset(-(4 as i32) as isize) * *PredCoef.offset(4 as i32 as isize)
+            + *s_ptr.offset(-(5 as i32) as isize) * *PredCoef.offset(5 as i32 as isize)
+            + *s_ptr.offset(-(6 as i32) as isize) * *PredCoef.offset(6 as i32 as isize)
+            + *s_ptr.offset(-(7 as i32) as isize) * *PredCoef.offset(7 as i32 as isize);
         /* prediction error */
         *r_LPC.offset(ix as isize) = *s_ptr.offset(1 as i32 as isize) - LPC_pred;
         ix += 1
@@ -234,18 +188,12 @@ unsafe extern "C" fn silk_LPC_analysis_filter6_FLP(
     while ix < length {
         s_ptr = &*s.offset((ix - 1 as i32) as isize) as *const f32;
         /* short-term prediction */
-        LPC_pred = *s_ptr.offset(0 as i32 as isize)
-            * *PredCoef.offset(0 as i32 as isize)
-            + *s_ptr.offset(-(1 as i32) as isize)
-                * *PredCoef.offset(1 as i32 as isize)
-            + *s_ptr.offset(-(2 as i32) as isize)
-                * *PredCoef.offset(2 as i32 as isize)
-            + *s_ptr.offset(-(3 as i32) as isize)
-                * *PredCoef.offset(3 as i32 as isize)
-            + *s_ptr.offset(-(4 as i32) as isize)
-                * *PredCoef.offset(4 as i32 as isize)
-            + *s_ptr.offset(-(5 as i32) as isize)
-                * *PredCoef.offset(5 as i32 as isize);
+        LPC_pred = *s_ptr.offset(0 as i32 as isize) * *PredCoef.offset(0 as i32 as isize)
+            + *s_ptr.offset(-(1 as i32) as isize) * *PredCoef.offset(1 as i32 as isize)
+            + *s_ptr.offset(-(2 as i32) as isize) * *PredCoef.offset(2 as i32 as isize)
+            + *s_ptr.offset(-(3 as i32) as isize) * *PredCoef.offset(3 as i32 as isize)
+            + *s_ptr.offset(-(4 as i32) as isize) * *PredCoef.offset(4 as i32 as isize)
+            + *s_ptr.offset(-(5 as i32) as isize) * *PredCoef.offset(5 as i32 as isize);
         /* prediction error */
         *r_LPC.offset(ix as isize) = *s_ptr.offset(1 as i32 as isize) - LPC_pred;
         ix += 1
@@ -401,7 +349,6 @@ pub unsafe extern "C" fn silk_LPC_analysis_filter_FLP(
     crate::stdlib::memset(
         r_LPC as *mut libc::c_void,
         0 as i32,
-        (Order as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+        (Order as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
     );
 }

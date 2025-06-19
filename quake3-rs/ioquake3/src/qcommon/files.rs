@@ -430,9 +430,7 @@ unsafe extern "C" fn FS_HashFileName(
     while *fname.offset(i as isize) as i32 != '\u{0}' as i32 {
         letter = ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                > 1 as i32 as libc::c_ulong
-            {
+            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
                 if 0 != 0 {
                     let mut __c: i32 = *fname.offset(i as isize) as i32;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -490,9 +488,7 @@ unsafe extern "C" fn FS_FileForHandle(
             b"FS_FileForHandle: out of range\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if fsh[f as usize].zipFile as u32
-        == crate::src::qcommon::q_shared::qtrue as i32 as u32
-    {
+    if fsh[f as usize].zipFile as u32 == crate::src::qcommon::q_shared::qtrue as i32 as u32 {
         crate::src::qcommon::common::Com_Error(
             crate::src::qcommon::q_shared::ERR_DROP as i32,
             b"FS_FileForHandle: can\'t get FILE on zip file\x00" as *const u8
@@ -812,9 +808,9 @@ pub unsafe extern "C" fn FS_SV_FileExists(
         file,
         b"\x00" as *const u8 as *const libc::c_char,
     );
-    *testpath.offset(
-        crate::stdlib::strlen(testpath).wrapping_sub(1 as i32 as libc::c_ulong) as isize,
-    ) = '\u{0}' as i32 as libc::c_char;
+    *testpath
+        .offset(crate::stdlib::strlen(testpath).wrapping_sub(1 as i32 as libc::c_ulong) as isize) =
+        '\u{0}' as i32 as libc::c_char;
     return FS_FileInPathExists(testpath);
 }
 /*
@@ -841,9 +837,9 @@ pub unsafe extern "C" fn FS_SV_FOpenFileWrite(
         filename,
         b"\x00" as *const u8 as *const libc::c_char,
     );
-    *ospath.offset(
-        crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as libc::c_ulong) as isize,
-    ) = '\u{0}' as i32 as libc::c_char;
+    *ospath
+        .offset(crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as libc::c_ulong) as isize) =
+        '\u{0}' as i32 as libc::c_char;
     f = FS_HandleForFile();
     fsh[f as usize].zipFile = crate::src::qcommon::q_shared::qfalse;
     if (*fs_debug).integer != 0 {
@@ -916,9 +912,9 @@ pub unsafe extern "C" fn FS_SV_FOpenFileRead(
         b"\x00" as *const u8 as *const libc::c_char,
     );
     // remove trailing slash
-    *ospath.offset(
-        crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as libc::c_ulong) as isize,
-    ) = '\u{0}' as i32 as libc::c_char;
+    *ospath
+        .offset(crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as libc::c_ulong) as isize) =
+        '\u{0}' as i32 as libc::c_char;
     if (*fs_debug).integer != 0 {
         crate::src::qcommon::common::Com_Printf(
             b"FS_SV_FOpenFileRead (fs_homepath): %s\n\x00" as *const u8 as *const libc::c_char,
@@ -941,8 +937,7 @@ pub unsafe extern "C" fn FS_SV_FOpenFileRead(
                 b"\x00" as *const u8 as *const libc::c_char,
             );
             *ospath.offset(
-                crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as libc::c_ulong)
-                    as isize,
+                crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as libc::c_ulong) as isize,
             ) = '\u{0}' as i32 as libc::c_char;
             if (*fs_debug).integer != 0 {
                 crate::src::qcommon::common::Com_Printf(
@@ -967,8 +962,7 @@ pub unsafe extern "C" fn FS_SV_FOpenFileRead(
                 b"\x00" as *const u8 as *const libc::c_char,
             );
             *ospath.offset(
-                crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as libc::c_ulong)
-                    as isize,
+                crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as libc::c_ulong) as isize,
             ) = '\u{0}' as i32 as libc::c_char;
             if (*fs_debug).integer != 0 {
                 crate::src::qcommon::common::Com_Printf(
@@ -993,8 +987,7 @@ pub unsafe extern "C" fn FS_SV_FOpenFileRead(
                 b"\x00" as *const u8 as *const libc::c_char,
             );
             *ospath.offset(
-                crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as libc::c_ulong)
-                    as isize,
+                crate::stdlib::strlen(ospath).wrapping_sub(1 as i32 as libc::c_ulong) as isize,
             ) = '\u{0}' as i32 as libc::c_char;
             if (*fs_debug).integer != 0 {
                 crate::src::qcommon::common::Com_Printf(
@@ -1127,9 +1120,7 @@ pub unsafe extern "C" fn FS_FCloseFile(mut f: crate::src::qcommon::q_shared::fil
             b"Filesystem call made without initialization\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if fsh[f as usize].zipFile as u32
-        == crate::src::qcommon::q_shared::qtrue as i32 as u32
-    {
+    if fsh[f as usize].zipFile as u32 == crate::src::qcommon::q_shared::qtrue as i32 as u32 {
         crate::src::qcommon::unzip::unzCloseCurrentFile(fsh[f as usize].handleFiles.file.z);
         if fsh[f as usize].handleFiles.unique as u64 != 0 {
             crate::src::qcommon::unzip::unzClose(fsh[f as usize].handleFiles.file.z);
@@ -1653,8 +1644,7 @@ pub unsafe extern "C" fn FS_FOpenFileReadDir(
                     crate::src::qcommon::q_shared::Q_strncpyz(
                         fsh[*file as usize].name.as_mut_ptr(),
                         filename,
-                        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong
-                            as i32,
+                        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
                     );
                     fsh[*file as usize].zipFile = crate::src::qcommon::q_shared::qtrue;
                     // set the file position in the zip file (also sets the current file info)
@@ -1973,9 +1963,7 @@ pub unsafe extern "C" fn FS_Read(
     }
     buf = buffer as *mut crate::src::qcommon::q_shared::byte;
     fs_readCount += len;
-    if fsh[f as usize].zipFile as u32
-        == crate::src::qcommon::q_shared::qfalse as i32 as u32
-    {
+    if fsh[f as usize].zipFile as u32 == crate::src::qcommon::q_shared::qfalse as i32 as u32 {
         remaining = len;
         tries = 0 as i32;
         while remaining != 0 {
@@ -2122,9 +2110,7 @@ pub unsafe extern "C" fn FS_Seek(
             b"Filesystem call made without initialization\x00" as *const u8 as *const libc::c_char,
         );
     }
-    if fsh[f as usize].zipFile as u32
-        == crate::src::qcommon::q_shared::qtrue as i32 as u32
-    {
+    if fsh[f as usize].zipFile as u32 == crate::src::qcommon::q_shared::qtrue as i32 as u32 {
         //FIXME: this is really, really crappy
         //(but better than what was here before)
         let mut buffer: [crate::src::qcommon::q_shared::byte; 65536] = [0; 65536];
@@ -2133,9 +2119,7 @@ pub unsafe extern "C" fn FS_Seek(
         // change negative offsets into FS_SEEK_SET
         if offset < 0 as i32 as libc::c_long {
             match origin {
-                1 => {
-                    remainder = (fsh[f as usize].zipFileLen as libc::c_long + offset) as i32
-                }
+                1 => remainder = (fsh[f as usize].zipFileLen as libc::c_long + offset) as i32,
                 0 => remainder = (currentPosition as libc::c_long + offset) as i32,
                 2 | _ => remainder = 0 as i32,
             }
@@ -2144,8 +2128,8 @@ pub unsafe extern "C" fn FS_Seek(
             }
             origin = crate::src::qcommon::q_shared::FS_SEEK_SET as i32
         } else if origin == crate::src::qcommon::q_shared::FS_SEEK_END as i32 {
-            remainder = ((fsh[f as usize].zipFileLen - currentPosition) as libc::c_long + offset)
-                as i32
+            remainder =
+                ((fsh[f as usize].zipFileLen - currentPosition) as libc::c_long + offset) as i32
         } else {
             remainder = offset as i32
         }
@@ -2170,11 +2154,7 @@ pub unsafe extern "C" fn FS_Seek(
         }
         //fallthrough
         while remainder > 65536 as i32 {
-            FS_Read(
-                buffer.as_mut_ptr() as *mut libc::c_void,
-                65536 as i32,
-                f,
-            );
+            FS_Read(buffer.as_mut_ptr() as *mut libc::c_void, 65536 as i32, f);
             remainder -= 65536 as i32
         }
         FS_Read(buffer.as_mut_ptr() as *mut libc::c_void, remainder, f);
@@ -2654,8 +2634,7 @@ unsafe extern "C" fn FS_LoadZipFile(
     fs_headerLongs = crate::src::qcommon::common::Z_Malloc(
         gi.number_entry
             .wrapping_add(1 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as i32,
     ) as *mut i32;
     let fresh2 = fs_numHeaderLongs;
     fs_numHeaderLongs = fs_numHeaderLongs + 1;
@@ -2707,8 +2686,7 @@ unsafe extern "C" fn FS_LoadZipFile(
         ) == 0
     {
         (*pack).pakBasename[crate::stdlib::strlen((*pack).pakBasename.as_mut_ptr())
-            .wrapping_sub(4 as i32 as libc::c_ulong) as usize] =
-            0 as i32 as libc::c_char
+            .wrapping_sub(4 as i32 as libc::c_ulong) as usize] = 0 as i32 as libc::c_char
     }
     (*pack).handle = uf;
     (*pack).numfiles = gi.number_entry as i32;
@@ -2756,11 +2734,9 @@ unsafe extern "C" fn FS_LoadZipFile(
         i += 1
     }
     (*pack).checksum = crate::src::qcommon::md4::Com_BlockChecksum(
-        &mut *fs_headerLongs.offset(1 as i32 as isize) as *mut i32
-            as *const libc::c_void,
+        &mut *fs_headerLongs.offset(1 as i32 as isize) as *mut i32 as *const libc::c_void,
         (::std::mem::size_of::<i32>() as libc::c_ulong)
-            .wrapping_mul((fs_numHeaderLongs - 1 as i32) as libc::c_ulong)
-            as i32,
+            .wrapping_mul((fs_numHeaderLongs - 1 as i32) as libc::c_ulong) as i32,
     ) as i32;
     (*pack).pure_checksum = crate::src::qcommon::md4::Com_BlockChecksum(
         fs_headerLongs as *const libc::c_void,
@@ -3163,10 +3139,8 @@ unsafe extern "C" fn Sys_ConcatenateFileLists(
     let mut cat: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
     let mut dst: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
     let mut src: *mut *mut libc::c_char = 0 as *mut *mut libc::c_char;
-    totalLength = (totalLength as u32).wrapping_add(Sys_CountFileList(list0))
-        as i32 as i32;
-    totalLength = (totalLength as u32).wrapping_add(Sys_CountFileList(list1))
-        as i32 as i32;
+    totalLength = (totalLength as u32).wrapping_add(Sys_CountFileList(list0)) as i32 as i32;
+    totalLength = (totalLength as u32).wrapping_add(Sys_CountFileList(list1)) as i32 as i32;
     /* Create new list. */
     cat = crate::src::qcommon::common::Z_Malloc(
         ((totalLength + 1 as i32) as libc::c_ulong)
@@ -3260,10 +3234,7 @@ A mod directory is a peer to baseq3 with a pk3 or pk3dir in it
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_GetModList(
-    mut listbuf: *mut libc::c_char,
-    mut bufsize: i32,
-) -> i32 {
+pub unsafe extern "C" fn FS_GetModList(mut listbuf: *mut libc::c_char, mut bufsize: i32) -> i32 {
     let mut nMods: i32 = 0;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -3397,8 +3368,7 @@ pub unsafe extern "C" fn FS_GetModList(
                 j += 1
             }
             if nPaks > 0 as i32 || nPakDirs > 0 as i32 {
-                nLen = crate::stdlib::strlen(name).wrapping_add(1 as i32 as libc::c_ulong)
-                    as i32;
+                nLen = crate::stdlib::strlen(name).wrapping_add(1 as i32 as libc::c_ulong) as i32;
                 // nLen is the length of the mod path
                 // we need to see if there is a description available
                 FS_GetModDescription(
@@ -3407,8 +3377,7 @@ pub unsafe extern "C" fn FS_GetModList(
                     ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
                 );
                 nDescLen = crate::stdlib::strlen(description.as_mut_ptr())
-                    .wrapping_add(1 as i32 as libc::c_ulong)
-                    as i32;
+                    .wrapping_add(1 as i32 as libc::c_ulong) as i32;
                 if !((nTotal + nLen + 1 as i32 + nDescLen + 1 as i32) < bufsize) {
                     break;
                 }
@@ -3543,10 +3512,7 @@ FS_SortFileList
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_SortFileList(
-    mut filelist: *mut *mut libc::c_char,
-    mut numfiles: i32,
-) {
+pub unsafe extern "C" fn FS_SortFileList(mut filelist: *mut *mut libc::c_char, mut numfiles: i32) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
@@ -3564,9 +3530,7 @@ pub unsafe extern "C" fn FS_SortFileList(
     while i < numfiles {
         j = 0 as i32;
         while j < numsortedfiles {
-            if FS_PathCmp(*filelist.offset(i as isize), *sortedlist.offset(j as isize))
-                < 0 as i32
-            {
+            if FS_PathCmp(*filelist.offset(i as isize), *sortedlist.offset(j as isize)) < 0 as i32 {
                 break;
             }
             j += 1
@@ -3796,10 +3760,7 @@ pub unsafe extern "C" fn FS_Which_f() {
 }
 //===========================================================================
 
-unsafe extern "C" fn paksort(
-    mut a: *const libc::c_void,
-    mut b: *const libc::c_void,
-) -> i32 {
+unsafe extern "C" fn paksort(mut a: *const libc::c_void, mut b: *const libc::c_void) -> i32 {
     let mut aa: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut bb: *mut libc::c_char = 0 as *mut libc::c_char;
     aa = *(a as *mut *mut libc::c_char);
@@ -3858,8 +3819,8 @@ pub unsafe extern "C" fn FS_AddGameDirectory(
         FS_BuildOSPath(path, dir, b"\x00" as *const u8 as *const libc::c_char),
         ::std::mem::size_of::<[libc::c_char; 4097]>() as libc::c_ulong as i32,
     ); // strip the trailing slash
-    curpath[crate::stdlib::strlen(curpath.as_mut_ptr())
-        .wrapping_sub(1 as i32 as libc::c_ulong) as usize] = '\u{0}' as i32 as libc::c_char;
+    curpath[crate::stdlib::strlen(curpath.as_mut_ptr()).wrapping_sub(1 as i32 as libc::c_ulong)
+        as usize] = '\u{0}' as i32 as libc::c_char;
     // Get .pk3 files
     pakfiles = crate::src::sys::sys_unix::Sys_ListFiles(
         curpath.as_mut_ptr(),
@@ -3873,11 +3834,7 @@ pub unsafe extern "C" fn FS_AddGameDirectory(
         numfiles as crate::stddef_h::size_t,
         ::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong,
         Some(
-            paksort
-                as unsafe extern "C" fn(
-                    _: *const libc::c_void,
-                    _: *const libc::c_void,
-                ) -> i32,
+            paksort as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
         ),
     );
     if fs_numServerPaks != 0 {
@@ -3898,10 +3855,7 @@ pub unsafe extern "C" fn FS_AddGameDirectory(
             ::std::mem::size_of::<*mut libc::c_char>() as libc::c_ulong,
             Some(
                 paksort
-                    as unsafe extern "C" fn(
-                        _: *const libc::c_void,
-                        _: *const libc::c_void,
-                    ) -> i32,
+                    as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
             ),
         );
     }
@@ -4628,12 +4582,11 @@ unsafe extern "C" fn FS_CheckPak0() {
                     3 as i32,
                 ) == 0
                 && *pakBasename.offset(3 as i32 as isize) as i32 >= '0' as i32
-                && *pakBasename.offset(3 as i32 as isize) as i32
-                    <= '0' as i32 + 9 as i32 - 1 as i32
+                && *pakBasename.offset(3 as i32 as isize) as i32 <= '0' as i32 + 9 as i32 - 1 as i32
             {
                 if (*curpack).checksum as u32
-                    != pak_checksums[(*pakBasename.offset(3 as i32 as isize) as i32
-                        - '0' as i32) as usize]
+                    != pak_checksums
+                        [(*pakBasename.offset(3 as i32 as isize) as i32 - '0' as i32) as usize]
                 {
                     if *pakBasename.offset(3 as i32 as isize) as i32 == '0' as i32 {
                         crate::src::qcommon::common::Com_Printf(b"\n\n**************************************************\nWARNING: baseq3/pak0.pk3 is present but its checksum (%u)\nis not correct. Please re-copy pak0.pk3 from your\nlegitimate Q3 CDROM.\n**************************************************\n\n\n\x00"
@@ -4663,13 +4616,11 @@ unsafe extern "C" fn FS_CheckPak0() {
                     3 as i32,
                 ) == 0
                 && *pakBasename.offset(3 as i32 as isize) as i32 >= '0' as i32
-                && *pakBasename.offset(3 as i32 as isize) as i32
-                    <= '0' as i32 + 4 as i32 - 1 as i32
+                && *pakBasename.offset(3 as i32 as isize) as i32 <= '0' as i32 + 4 as i32 - 1 as i32
             {
                 if (*curpack).checksum as u32
-                    != missionpak_checksums[(*pakBasename.offset(3 as i32 as isize)
-                        as i32
-                        - '0' as i32) as usize]
+                    != missionpak_checksums
+                        [(*pakBasename.offset(3 as i32 as isize) as i32 - '0' as i32) as usize]
                 {
                     crate::src::qcommon::common::Com_Printf(b"\n\n**************************************************\nWARNING: missionpack/pak%d.pk3 is present but its checksum (%u)\nis not correct. Please re-install Team Arena\n**************************************************\n\n\n\x00"
                                    as *const u8 as *const libc::c_char,
@@ -4973,12 +4924,10 @@ pub unsafe extern "C" fn FS_ReferencedPakPureChecksums() -> *const libc::c_char 
         if nFlags & 0x1 as i32 != 0 {
             // add a delimter between must haves and general refs
             //Q_strcat(info, sizeof(info), "@ ");
-            info[crate::stdlib::strlen(info.as_mut_ptr())
-                .wrapping_add(1 as i32 as libc::c_ulong) as usize] =
-                '\u{0}' as i32 as libc::c_char;
-            info[crate::stdlib::strlen(info.as_mut_ptr())
-                .wrapping_add(2 as i32 as libc::c_ulong) as usize] =
-                '\u{0}' as i32 as libc::c_char;
+            info[crate::stdlib::strlen(info.as_mut_ptr()).wrapping_add(1 as i32 as libc::c_ulong)
+                as usize] = '\u{0}' as i32 as libc::c_char;
+            info[crate::stdlib::strlen(info.as_mut_ptr()).wrapping_add(2 as i32 as libc::c_ulong)
+                as usize] = '\u{0}' as i32 as libc::c_char;
             info[crate::stdlib::strlen(info.as_mut_ptr()) as usize] = '@' as i32 as libc::c_char;
             info[crate::stdlib::strlen(info.as_mut_ptr()) as usize] = ' ' as i32 as libc::c_char
         }
@@ -5047,8 +4996,7 @@ pub unsafe extern "C" fn FS_ReferencedPakNames() -> *const libc::c_char {
                 if *info.as_mut_ptr() != 0 {
                     crate::src::qcommon::q_shared::Q_strcat(
                         info.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong
-                            as i32,
+                        ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as i32,
                         b" \x00" as *const u8 as *const libc::c_char,
                     );
                 }
@@ -5408,8 +5356,7 @@ pub unsafe extern "C" fn FS_ConditionalRestart(
     mut disconnect: crate::src::qcommon::q_shared::qboolean,
 ) -> crate::src::qcommon::q_shared::qboolean {
     if (*fs_gamedirvar).modified as u64 != 0 {
-        if FS_FilenameCompare(lastValidGame.as_mut_ptr(), (*fs_gamedirvar).string) as u32
-            != 0
+        if FS_FilenameCompare(lastValidGame.as_mut_ptr(), (*fs_gamedirvar).string) as u32 != 0
             && (*lastValidGame.as_mut_ptr() as i32 != 0
                 || FS_FilenameCompare(
                     (*fs_gamedirvar).string,
@@ -5502,13 +5449,9 @@ pub unsafe extern "C" fn FS_FOpenFileByMode(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn FS_FTell(
-    mut f: crate::src::qcommon::q_shared::fileHandle_t,
-) -> i32 {
+pub unsafe extern "C" fn FS_FTell(mut f: crate::src::qcommon::q_shared::fileHandle_t) -> i32 {
     let mut pos: i32 = 0;
-    if fsh[f as usize].zipFile as u32
-        == crate::src::qcommon::q_shared::qtrue as i32 as u32
-    {
+    if fsh[f as usize].zipFile as u32 == crate::src::qcommon::q_shared::qtrue as i32 as u32 {
         pos = crate::src::qcommon::unzip::unztell(fsh[f as usize].handleFiles.file.z) as i32
     } else {
         pos = crate::stdlib::ftell(fsh[f as usize].handleFiles.file.o) as i32

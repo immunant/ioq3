@@ -66,26 +66,19 @@ pub unsafe extern "C" fn ogg_page_granulepos(
         (*page.offset(13 as i32 as isize) as i32 & 0xff as i32)
             as crate::config_types_h::ogg_int64_t;
     granulepos = granulepos << 8 as i32
-        | (*page.offset(12 as i32 as isize) as i32 & 0xff as i32)
-            as libc::c_long;
+        | (*page.offset(12 as i32 as isize) as i32 & 0xff as i32) as libc::c_long;
     granulepos = granulepos << 8 as i32
-        | (*page.offset(11 as i32 as isize) as i32 & 0xff as i32)
-            as libc::c_long;
+        | (*page.offset(11 as i32 as isize) as i32 & 0xff as i32) as libc::c_long;
     granulepos = granulepos << 8 as i32
-        | (*page.offset(10 as i32 as isize) as i32 & 0xff as i32)
-            as libc::c_long;
+        | (*page.offset(10 as i32 as isize) as i32 & 0xff as i32) as libc::c_long;
     granulepos = granulepos << 8 as i32
-        | (*page.offset(9 as i32 as isize) as i32 & 0xff as i32)
-            as libc::c_long;
+        | (*page.offset(9 as i32 as isize) as i32 & 0xff as i32) as libc::c_long;
     granulepos = granulepos << 8 as i32
-        | (*page.offset(8 as i32 as isize) as i32 & 0xff as i32)
-            as libc::c_long;
+        | (*page.offset(8 as i32 as isize) as i32 & 0xff as i32) as libc::c_long;
     granulepos = granulepos << 8 as i32
-        | (*page.offset(7 as i32 as isize) as i32 & 0xff as i32)
-            as libc::c_long;
+        | (*page.offset(7 as i32 as isize) as i32 & 0xff as i32) as libc::c_long;
     granulepos = granulepos << 8 as i32
-        | (*page.offset(6 as i32 as isize) as i32 & 0xff as i32)
-            as libc::c_long;
+        | (*page.offset(6 as i32 as isize) as i32 & 0xff as i32) as libc::c_long;
     return granulepos;
 }
 #[no_mangle]
@@ -128,9 +121,7 @@ pub unsafe extern "C" fn ogg_page_packets(mut og: *const crate::ogg_h::ogg_page)
     let mut count: i32 = 0 as i32;
     i = 0 as i32;
     while i < n {
-        if (*(*og).header.offset((27 as i32 + i) as isize) as i32)
-            < 255 as i32
-        {
+        if (*(*og).header.offset((27 as i32 + i) as isize) as i32) < 255 as i32 {
             count += 1
         }
         i += 1
@@ -437,9 +428,7 @@ pub unsafe extern "C" fn ogg_stream_init(
 /* async/delayed error detection for the ogg_stream_state */
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_stream_check(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-) -> i32 {
+pub unsafe extern "C" fn ogg_stream_check(mut os: *mut crate::ogg_h::ogg_stream_state) -> i32 {
     if os.is_null() || (*os).body_data.is_null() {
         return -(1 as i32);
     }
@@ -448,9 +437,7 @@ pub unsafe extern "C" fn ogg_stream_check(
 /* _clear does not free os, only the non-flat storage within */
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_stream_clear(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-) -> i32 {
+pub unsafe extern "C" fn ogg_stream_clear(mut os: *mut crate::ogg_h::ogg_stream_state) -> i32 {
     if !os.is_null() {
         if !(*os).body_data.is_null() {
             ::libc::free((*os).body_data as *mut libc::c_void);
@@ -471,9 +458,7 @@ pub unsafe extern "C" fn ogg_stream_clear(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_stream_destroy(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-) -> i32 {
+pub unsafe extern "C" fn ogg_stream_destroy(mut os: *mut crate::ogg_h::ogg_stream_state) -> i32 {
     if !os.is_null() {
         ogg_stream_clear(os);
         ::libc::free(os as *mut libc::c_void);
@@ -495,8 +480,7 @@ unsafe extern "C" fn _os_body_expand(
             return -(1 as i32);
         }
         body_storage = (*os).body_storage + needed;
-        if body_storage < 9223372036854775807 as libc::c_long - 1024 as i32 as libc::c_long
-        {
+        if body_storage < 9223372036854775807 as libc::c_long - 1024 as i32 as libc::c_long {
             body_storage += 1024 as i32 as libc::c_long
         }
         ret = crate::stdlib::realloc(
@@ -526,8 +510,7 @@ unsafe extern "C" fn _os_lacing_expand(
             return -(1 as i32);
         }
         lacing_storage = (*os).lacing_storage + needed;
-        if lacing_storage < 9223372036854775807 as libc::c_long - 32 as i32 as libc::c_long
-        {
+        if lacing_storage < 9223372036854775807 as libc::c_long - 32 as i32 as libc::c_long {
             lacing_storage += 32 as i32 as libc::c_long
         }
         ret = crate::stdlib::realloc(
@@ -582,18 +565,14 @@ pub unsafe extern "C" fn ogg_page_checksum_set(mut og: *mut crate::ogg_h::ogg_pa
         while (i as libc::c_long) < (*og).body_len {
             crc_reg = crc_reg << 8 as i32
                 ^ crc_lookup[(crc_reg >> 24 as i32 & 0xff as i32 as u32
-                    ^ *(*og).body.offset(i as isize) as u32)
-                    as usize];
+                    ^ *(*og).body.offset(i as isize) as u32) as usize];
             i += 1
         }
-        *(*og).header.offset(22 as i32 as isize) =
-            (crc_reg & 0xff as i32 as u32) as u8;
-        *(*og).header.offset(23 as i32 as isize) =
-            (crc_reg >> 8 as i32 & 0xff as i32 as u32) as u8;
+        *(*og).header.offset(22 as i32 as isize) = (crc_reg & 0xff as i32 as u32) as u8;
+        *(*og).header.offset(23 as i32 as isize) = (crc_reg >> 8 as i32 & 0xff as i32 as u32) as u8;
         *(*og).header.offset(24 as i32 as isize) =
             (crc_reg >> 16 as i32 & 0xff as i32 as u32) as u8;
-        *(*og).header.offset(25 as i32 as isize) =
-            (crc_reg >> 24 as i32 & 0xff as i32 as u32) as u8
+        *(*og).header.offset(25 as i32 as isize) = (crc_reg >> 24 as i32 & 0xff as i32 as u32) as u8
     };
 }
 /* submit data to the internal buffer of the framing engine */
@@ -706,13 +685,7 @@ pub unsafe extern "C" fn ogg_stream_packetin(
     };
     iov.iov_base = (*op).packet as *mut libc::c_void;
     iov.iov_len = (*op).bytes as crate::stddef_h::size_t;
-    return ogg_stream_iovecin(
-        os,
-        &mut iov,
-        1 as i32,
-        (*op).e_o_s,
-        (*op).granulepos,
-    );
+    return ogg_stream_iovecin(os, &mut iov, 1 as i32, (*op).e_o_s, (*op).granulepos);
 }
 /* Conditionally flush a page; force==0 will only flush nominal-size
 pages, force==1 forces us to flush a page regardless of page size
@@ -750,8 +723,7 @@ unsafe extern "C" fn ogg_stream_flush_i(
         granule_pos = 0 as i32 as crate::config_types_h::ogg_int64_t;
         vals = 0 as i32;
         while vals < maxvals {
-            if (*(*os).lacing_vals.offset(vals as isize) & 0xff as i32) < 255 as i32
-            {
+            if (*(*os).lacing_vals.offset(vals as isize) & 0xff as i32) < 255 as i32 {
                 vals += 1;
                 break;
             } else {
@@ -775,11 +747,8 @@ unsafe extern "C" fn ogg_stream_flush_i(
                 force = 1 as i32;
                 break;
             } else {
-                acc += (*(*os).lacing_vals.offset(vals as isize) & 0xff as i32)
-                    as libc::c_long;
-                if (*(*os).lacing_vals.offset(vals as isize) & 0xff as i32)
-                    < 255 as i32
-                {
+                acc += (*(*os).lacing_vals.offset(vals as isize) & 0xff as i32) as libc::c_long;
+                if (*(*os).lacing_vals.offset(vals as isize) & 0xff as i32) < 255 as i32 {
                     granule_pos = *(*os).granule_vals.offset(vals as isize);
                     packets_done += 1;
                     packet_just_done = packets_done
@@ -806,31 +775,25 @@ unsafe extern "C" fn ogg_stream_flush_i(
     (*os).header[4 as i32 as usize] = 0 as i32 as u8;
     /* continued packet flag? */
     (*os).header[5 as i32 as usize] = 0 as i32 as u8;
-    if *(*os).lacing_vals.offset(0 as i32 as isize) & 0x100 as i32
-        == 0 as i32
-    {
-        (*os).header[5 as i32 as usize] = ((*os).header[5 as i32 as usize]
-            as i32
-            | 0x1 as i32) as u8
+    if *(*os).lacing_vals.offset(0 as i32 as isize) & 0x100 as i32 == 0 as i32 {
+        (*os).header[5 as i32 as usize] =
+            ((*os).header[5 as i32 as usize] as i32 | 0x1 as i32) as u8
     }
     /* first page flag? */
     if (*os).b_o_s == 0 as i32 {
-        (*os).header[5 as i32 as usize] = ((*os).header[5 as i32 as usize]
-            as i32
-            | 0x2 as i32) as u8
+        (*os).header[5 as i32 as usize] =
+            ((*os).header[5 as i32 as usize] as i32 | 0x2 as i32) as u8
     }
     /* last page flag? */
     if (*os).e_o_s != 0 && (*os).lacing_fill == vals as libc::c_long {
-        (*os).header[5 as i32 as usize] = ((*os).header[5 as i32 as usize]
-            as i32
-            | 0x4 as i32) as u8
+        (*os).header[5 as i32 as usize] =
+            ((*os).header[5 as i32 as usize] as i32 | 0x4 as i32) as u8
     }
     (*os).b_o_s = 1 as i32;
     /* 64 bits of PCM position */
     i = 6 as i32;
     while i < 14 as i32 {
-        (*os).header[i as usize] =
-            (granule_pos & 0xff as i32 as libc::c_long) as u8;
+        (*os).header[i as usize] = (granule_pos & 0xff as i32 as libc::c_long) as u8;
         granule_pos >>= 8 as i32;
         i += 1
     }
@@ -838,8 +801,7 @@ unsafe extern "C" fn ogg_stream_flush_i(
     let mut serialno: libc::c_long = (*os).serialno;
     i = 14 as i32;
     while i < 18 as i32 {
-        (*os).header[i as usize] =
-            (serialno & 0xff as i32 as libc::c_long) as u8;
+        (*os).header[i as usize] = (serialno & 0xff as i32 as libc::c_long) as u8;
         serialno >>= 8 as i32;
         i += 1
     }
@@ -976,9 +938,7 @@ pub unsafe extern "C" fn ogg_stream_pageout_fill(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_stream_eos(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-) -> i32 {
+pub unsafe extern "C" fn ogg_stream_eos(mut os: *mut crate::ogg_h::ogg_stream_state) -> i32 {
     if ogg_stream_check(os) != 0 {
         return 1 as i32;
     }
@@ -1030,9 +990,7 @@ pub unsafe extern "C" fn ogg_sync_clear(mut oy: *mut crate::ogg_h::ogg_sync_stat
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_sync_destroy(
-    mut oy: *mut crate::ogg_h::ogg_sync_state,
-) -> i32 {
+pub unsafe extern "C" fn ogg_sync_destroy(mut oy: *mut crate::ogg_h::ogg_sync_state) -> i32 {
     if !oy.is_null() {
         ogg_sync_clear(oy);
         ::libc::free(oy as *mut libc::c_void);
@@ -1140,8 +1098,7 @@ pub unsafe extern "C" fn ogg_sync_pageseek(
         {
             current_block = 8719873228262180869; /* not enough for header + seg table */
         } else {
-            headerbytes =
-                *page.offset(26 as i32 as isize) as i32 + 27 as i32;
+            headerbytes = *page.offset(26 as i32 as isize) as i32 + 27 as i32;
             if bytes < headerbytes as libc::c_long {
                 return 0 as i32 as libc::c_long;
             }
@@ -1382,8 +1339,7 @@ pub unsafe extern "C" fn ogg_stream_pagein(
         {
             bos = 0 as i32;
             while segptr < segments {
-                let mut val: i32 =
-                    *header.offset((27 as i32 + segptr) as isize) as i32;
+                let mut val: i32 = *header.offset((27 as i32 + segptr) as isize) as i32;
                 body = body.offset(val as isize);
                 bodysize -= val as libc::c_long;
                 if val < 255 as i32 {
@@ -1408,8 +1364,7 @@ pub unsafe extern "C" fn ogg_stream_pagein(
     }
     let mut saved: i32 = -(1 as i32);
     while segptr < segments {
-        let mut val_0: i32 =
-            *header.offset((27 as i32 + segptr) as isize) as i32;
+        let mut val_0: i32 = *header.offset((27 as i32 + segptr) as isize) as i32;
         *(*os).lacing_vals.offset((*os).lacing_fill as isize) = val_0;
         *(*os).granule_vals.offset((*os).lacing_fill as isize) =
             -(1 as i32) as crate::config_types_h::ogg_int64_t;
@@ -1435,8 +1390,7 @@ pub unsafe extern "C" fn ogg_stream_pagein(
         if (*os).lacing_fill > 0 as i32 as libc::c_long {
             *(*os)
                 .lacing_vals
-                .offset(((*os).lacing_fill - 1 as i32 as libc::c_long) as isize) |=
-                0x200 as i32
+                .offset(((*os).lacing_fill - 1 as i32 as libc::c_long) as isize) |= 0x200 as i32
         }
     }
     (*os).pageno = pageno + 1 as i32 as libc::c_long;
@@ -1458,9 +1412,7 @@ pub unsafe extern "C" fn ogg_sync_reset(mut oy: *mut crate::ogg_h::ogg_sync_stat
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn ogg_stream_reset(
-    mut os: *mut crate::ogg_h::ogg_stream_state,
-) -> i32 {
+pub unsafe extern "C" fn ogg_stream_reset(mut os: *mut crate::ogg_h::ogg_stream_state) -> i32 {
     if ogg_stream_check(os) != 0 {
         return -(1 as i32);
     }

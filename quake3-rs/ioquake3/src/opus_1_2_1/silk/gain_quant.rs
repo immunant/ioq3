@@ -116,11 +116,10 @@ pub unsafe extern "C" fn silk_gains_quant(
             / ((88 as i32 - 2 as i32) * 128 as i32 / 6 as i32))
             as i64
             * (crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(*gain_Q16.offset(k as isize))
-                - (2 as i32 * 128 as i32 / 6 as i32
-                    + 16 as i32 * 128 as i32))
+                - (2 as i32 * 128 as i32 / 6 as i32 + 16 as i32 * 128 as i32))
                 as crate::opus_types_h::opus_int16 as i64
-            >> 16 as i32)
-            as crate::opus_types_h::opus_int32 as i8;
+            >> 16 as i32) as crate::opus_types_h::opus_int32
+            as i8;
         /* 3967 = 31 in Q7 */
         if (*ind.offset(k as isize) as i32) < *prev_ind as i32 {
             let ref mut fresh0 = *ind.offset(k as isize);
@@ -129,9 +128,7 @@ pub unsafe extern "C" fn silk_gains_quant(
         *ind.offset(k as isize) = if 0 as i32 > 64 as i32 - 1 as i32 {
             if *ind.offset(k as isize) as i32 > 0 as i32 {
                 0 as i32
-            } else if (*ind.offset(k as isize) as i32)
-                < 64 as i32 - 1 as i32
-            {
+            } else if (*ind.offset(k as isize) as i32) < 64 as i32 - 1 as i32 {
                 (64 as i32) - 1 as i32
             } else {
                 *ind.offset(k as isize) as i32
@@ -147,26 +144,17 @@ pub unsafe extern "C" fn silk_gains_quant(
             /* Round towards previous quantized gain (hysteresis) */
             /* Compute delta indices and limit */
             /* Full index */
-            *ind.offset(k as isize) = if *prev_ind as i32 + -(4 as i32)
-                > 64 as i32 - 1 as i32
-            {
-                if *ind.offset(k as isize) as i32
-                    > *prev_ind as i32 + -(4 as i32)
-                {
+            *ind.offset(k as isize) = if *prev_ind as i32 + -(4 as i32) > 64 as i32 - 1 as i32 {
+                if *ind.offset(k as isize) as i32 > *prev_ind as i32 + -(4 as i32) {
                     (*prev_ind as i32) + -(4 as i32)
-                } else if (*ind.offset(k as isize) as i32)
-                    < 64 as i32 - 1 as i32
-                {
+                } else if (*ind.offset(k as isize) as i32) < 64 as i32 - 1 as i32 {
                     (64 as i32) - 1 as i32
                 } else {
                     *ind.offset(k as isize) as i32
                 }
-            } else if *ind.offset(k as isize) as i32 > 64 as i32 - 1 as i32
-            {
+            } else if *ind.offset(k as isize) as i32 > 64 as i32 - 1 as i32 {
                 (64 as i32) - 1 as i32
-            } else if (*ind.offset(k as isize) as i32)
-                < *prev_ind as i32 + -(4 as i32)
-            {
+            } else if (*ind.offset(k as isize) as i32) < *prev_ind as i32 + -(4 as i32) {
                 (*prev_ind as i32) + -(4 as i32)
             } else {
                 *ind.offset(k as isize) as i32
@@ -174,17 +162,13 @@ pub unsafe extern "C" fn silk_gains_quant(
             *prev_ind = *ind.offset(k as isize)
         } else {
             /* Delta index */
-            *ind.offset(k as isize) = (*ind.offset(k as isize) as i32
-                - *prev_ind as i32) as i8;
+            *ind.offset(k as isize) = (*ind.offset(k as isize) as i32 - *prev_ind as i32) as i8;
             /* Double the quantization step size for large gain increases, so that the max gain level can be reached */
-            double_step_size_threshold =
-                2 as i32 * 36 as i32 - 64 as i32 + *prev_ind as i32;
+            double_step_size_threshold = 2 as i32 * 36 as i32 - 64 as i32 + *prev_ind as i32;
             if *ind.offset(k as isize) as i32 > double_step_size_threshold {
                 *ind.offset(k as isize) = (double_step_size_threshold
-                    + (*ind.offset(k as isize) as i32 - double_step_size_threshold
-                        + 1 as i32
-                        >> 1 as i32))
-                    as i8
+                    + (*ind.offset(k as isize) as i32 - double_step_size_threshold + 1 as i32
+                        >> 1 as i32)) as i8
             }
             *ind.offset(k as isize) = if -(4 as i32) > 36 as i32 {
                 if *ind.offset(k as isize) as i32 > -(4 as i32) {
@@ -204,17 +188,12 @@ pub unsafe extern "C" fn silk_gains_quant(
             /* Accumulate deltas */
             if *ind.offset(k as isize) as i32 > double_step_size_threshold {
                 *prev_ind = (*prev_ind as i32
-                    + (((*ind.offset(k as isize) as crate::opus_types_h::opus_uint32)
-                        << 1 as i32)
+                    + (((*ind.offset(k as isize) as crate::opus_types_h::opus_uint32) << 1 as i32)
                         as crate::opus_types_h::opus_int32
                         - double_step_size_threshold)) as i8;
-                *prev_ind = silk_min_int(
-                    *prev_ind as i32,
-                    64 as i32 - 1 as i32,
-                ) as i8
+                *prev_ind = silk_min_int(*prev_ind as i32, 64 as i32 - 1 as i32) as i8
             } else {
-                *prev_ind = (*prev_ind as i32 + *ind.offset(k as isize) as i32)
-                    as i8
+                *prev_ind = (*prev_ind as i32 + *ind.offset(k as isize) as i32) as i8
             }
             /* Shift to make non-negative */
             let ref mut fresh1 = *ind.offset(k as isize);
@@ -222,14 +201,11 @@ pub unsafe extern "C" fn silk_gains_quant(
         }
         *gain_Q16.offset(k as isize) =
             crate::src::opus_1_2_1::silk::log2lin::silk_log2lin(silk_min_32(
-                ((65536 as i32
-                    * ((88 as i32 - 2 as i32) * 128 as i32
-                        / 6 as i32)
+                ((65536 as i32 * ((88 as i32 - 2 as i32) * 128 as i32 / 6 as i32)
                     / (64 as i32 - 1 as i32)) as i64
                     * *prev_ind as crate::opus_types_h::opus_int16 as i64
                     >> 16 as i32) as crate::opus_types_h::opus_int32
-                    + (2 as i32 * 128 as i32 / 6 as i32
-                        + 16 as i32 * 128 as i32),
+                    + (2 as i32 * 128 as i32 / 6 as i32 + 16 as i32 * 128 as i32),
                 3967 as i32,
             ));
         k += 1
@@ -255,16 +231,13 @@ pub unsafe extern "C" fn silk_gains_dequant(
     while k < nb_subfr {
         if k == 0 as i32 && conditional == 0 as i32 {
             /* Gain index is not allowed to go down more than 16 steps (~21.8 dB) */
-            *prev_ind = silk_max_int(
-                *ind.offset(k as isize) as i32,
-                *prev_ind as i32 - 16 as i32,
-            ) as i8
+            *prev_ind =
+                silk_max_int(*ind.offset(k as isize) as i32, *prev_ind as i32 - 16 as i32) as i8
         } else {
             /* Delta index */
             ind_tmp = *ind.offset(k as isize) as i32 + -(4 as i32);
             /* Accumulate deltas */
-            double_step_size_threshold =
-                2 as i32 * 36 as i32 - 64 as i32 + *prev_ind as i32;
+            double_step_size_threshold = 2 as i32 * 36 as i32 - 64 as i32 + *prev_ind as i32;
             if ind_tmp > double_step_size_threshold {
                 *prev_ind = (*prev_ind as i32
                     + (((ind_tmp as crate::opus_types_h::opus_uint32) << 1 as i32)
@@ -292,14 +265,11 @@ pub unsafe extern "C" fn silk_gains_dequant(
         /* 3967 = 31 in Q7 */
         *gain_Q16.offset(k as isize) =
             crate::src::opus_1_2_1::silk::log2lin::silk_log2lin(silk_min_32(
-                ((65536 as i32
-                    * ((88 as i32 - 2 as i32) * 128 as i32
-                        / 6 as i32)
+                ((65536 as i32 * ((88 as i32 - 2 as i32) * 128 as i32 / 6 as i32)
                     / (64 as i32 - 1 as i32)) as i64
                     * *prev_ind as crate::opus_types_h::opus_int16 as i64
                     >> 16 as i32) as crate::opus_types_h::opus_int32
-                    + (2 as i32 * 128 as i32 / 6 as i32
-                        + 16 as i32 * 128 as i32),
+                    + (2 as i32 * 128 as i32 / 6 as i32 + 16 as i32 * 128 as i32),
                 3967 as i32,
             ));
         k += 1

@@ -141,7 +141,6 @@ pub unsafe extern "C" fn silk_LTP_scale_ctrl_FLP(
         (*psEnc).sCmn.indices.LTP_scaleIndex = 0 as i32 as i8
     }
     (*psEncCtrl).LTP_scale = crate::src::opus_1_2_1::silk::tables_other::silk_LTPScales_table_Q14
-        [(*psEnc).sCmn.indices.LTP_scaleIndex as usize]
-        as f32
+        [(*psEnc).sCmn.indices.LTP_scaleIndex as usize] as f32
         / 16384.0f32;
 }

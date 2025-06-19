@@ -287,8 +287,8 @@ pub unsafe extern "C" fn CRC_ProcessByte(
     mut data: crate::src::qcommon::q_shared::byte,
 ) {
     *crcvalue = ((*crcvalue as i32) << 8 as i32
-        ^ crctable[(*crcvalue as i32 >> 8 as i32 ^ data as i32) as usize]
-            as i32) as u16;
+        ^ crctable[(*crcvalue as i32 >> 8 as i32 ^ data as i32) as usize] as i32)
+        as u16;
 }
 //end of the function CRC_ProcessByte
 //===========================================================================
@@ -311,10 +311,7 @@ pub unsafe extern "C" fn CRC_Value(mut crcvalue: u16) -> u16 {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn CRC_ProcessString(
-    mut data: *mut u8,
-    mut length: i32,
-) -> u16 {
+pub unsafe extern "C" fn CRC_ProcessString(mut data: *mut u8, mut length: i32) -> u16 {
     let mut crcvalue: u16 = 0; //end for
     let mut i: i32 = 0;
     let mut ind: i32 = 0;
@@ -325,8 +322,7 @@ pub unsafe extern "C" fn CRC_ProcessString(
         if ind < 0 as i32 || ind > 256 as i32 {
             ind = 0 as i32
         }
-        crcvalue = ((crcvalue as i32) << 8 as i32
-            ^ crctable[ind as usize] as i32) as u16;
+        crcvalue = ((crcvalue as i32) << 8 as i32 ^ crctable[ind as usize] as i32) as u16;
         i += 1
     }
     return CRC_Value(crcvalue);
@@ -349,8 +345,7 @@ pub unsafe extern "C" fn CRC_ContinueProcessString(
     i = 0 as i32;
     while i < length {
         *crc = ((*crc as i32) << 8 as i32
-            ^ crctable[(*crc as i32 >> 8 as i32
-                ^ *data.offset(i as isize) as i32) as usize] as i32)
+            ^ crctable[(*crc as i32 >> 8 as i32 ^ *data.offset(i as isize) as i32) as usize] as i32)
             as u16;
         i += 1
     }

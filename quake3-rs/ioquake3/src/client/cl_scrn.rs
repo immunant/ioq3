@@ -233,10 +233,8 @@ pub unsafe extern "C" fn SCR_AdjustFrom640(
     let mut xscale: f32 = 0.;
     let mut yscale: f32 = 0.;
     // scale for screen sizes
-    xscale = (crate::src::client::cl_main::cls.glconfig.vidWidth as f64 / 640.0f64)
-        as f32;
-    yscale = (crate::src::client::cl_main::cls.glconfig.vidHeight as f64 / 480.0f64)
-        as f32;
+    xscale = (crate::src::client::cl_main::cls.glconfig.vidWidth as f64 / 640.0f64) as f32;
+    yscale = (crate::src::client::cl_main::cls.glconfig.vidHeight as f64 / 480.0f64) as f32;
     if !x.is_null() {
         *x *= xscale
     }
@@ -323,12 +321,7 @@ pub unsafe extern "C" fn SCR_DrawPic(
 ** chars are drawn at 640*480 virtual screen size
 */
 
-unsafe extern "C" fn SCR_DrawChar(
-    mut x: i32,
-    mut y: i32,
-    mut size: f32,
-    mut ch: i32,
-) {
+unsafe extern "C" fn SCR_DrawChar(mut x: i32, mut y: i32, mut size: f32, mut ch: i32) {
     let mut row: i32 = 0;
     let mut col: i32 = 0;
     let mut frow: f32 = 0.;
@@ -374,11 +367,7 @@ unsafe extern "C" fn SCR_DrawChar(
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn SCR_DrawSmallChar(
-    mut x: i32,
-    mut y: i32,
-    mut ch: i32,
-) {
+pub unsafe extern "C" fn SCR_DrawSmallChar(mut x: i32, mut y: i32, mut ch: i32) {
     let mut row: i32 = 0;
     let mut col: i32 = 0;
     let mut frow: f32 = 0.;
@@ -450,12 +439,7 @@ pub unsafe extern "C" fn SCR_DrawStringExt(
         {
             s = s.offset(2 as i32 as isize)
         } else {
-            SCR_DrawChar(
-                xx + 2 as i32,
-                y + 2 as i32,
-                size,
-                *s as i32,
-            );
+            SCR_DrawChar(xx + 2 as i32, y + 2 as i32, size, *s as i32);
             xx = (xx as f32 + size) as i32;
             s = s.offset(1)
         }
@@ -471,11 +455,8 @@ pub unsafe extern "C" fn SCR_DrawStringExt(
             if forceColor as u64 == 0 {
                 crate::stdlib::memcpy(
                     color.as_mut_ptr() as *mut libc::c_void,
-                    crate::src::qcommon::q_math::g_color_table[(*s.offset(1 as i32 as isize)
-                        as i32
-                        - '0' as i32
-                        & 0x7 as i32)
-                        as usize]
+                    crate::src::qcommon::q_math::g_color_table
+                        [(*s.offset(1 as i32 as isize) as i32 - '0' as i32 & 0x7 as i32) as usize]
                         .as_mut_ptr() as *const libc::c_void,
                     ::std::mem::size_of::<crate::src::qcommon::q_shared::vec4_t>() as libc::c_ulong,
                 );
@@ -575,11 +556,8 @@ pub unsafe extern "C" fn SCR_DrawSmallStringExt(
             if forceColor as u64 == 0 {
                 crate::stdlib::memcpy(
                     color.as_mut_ptr() as *mut libc::c_void,
-                    crate::src::qcommon::q_math::g_color_table[(*s.offset(1 as i32 as isize)
-                        as i32
-                        - '0' as i32
-                        & 0x7 as i32)
-                        as usize]
+                    crate::src::qcommon::q_math::g_color_table
+                        [(*s.offset(1 as i32 as isize) as i32 - '0' as i32 & 0x7 as i32) as usize]
                         .as_mut_ptr() as *const libc::c_void,
                     ::std::mem::size_of::<crate::src::qcommon::q_shared::vec4_t>() as libc::c_ulong,
                 );
@@ -652,8 +630,7 @@ pub unsafe extern "C" fn SCR_DrawDemoRecording() {
     );
     SCR_DrawStringExt(
         (320 as i32 as libc::c_ulong).wrapping_sub(
-            crate::stdlib::strlen(string.as_mut_ptr())
-                .wrapping_mul(4 as i32 as libc::c_ulong),
+            crate::stdlib::strlen(string.as_mut_ptr()).wrapping_mul(4 as i32 as libc::c_ulong),
         ) as i32,
         20 as i32,
         8 as i32 as f32,
@@ -723,8 +700,7 @@ pub unsafe extern "C" fn SCR_DrawVoipMeter() {
     );
     SCR_DrawStringExt(
         (320 as i32 as libc::c_ulong).wrapping_sub(
-            crate::stdlib::strlen(string.as_mut_ptr())
-                .wrapping_mul(4 as i32 as libc::c_ulong),
+            crate::stdlib::strlen(string.as_mut_ptr()).wrapping_mul(4 as i32 as libc::c_ulong),
         ) as i32,
         10 as i32,
         8 as i32 as f32,
@@ -1159,12 +1135,10 @@ pub unsafe extern "C" fn SCR_DrawDebugGraph() {
                     .wrapping_div(::std::mem::size_of::<f32>() as libc::c_ulong),
             ) as i32;
         v = values[i as usize];
-        v = v * (*cl_graphscale).integer as f32
-            + (*cl_graphshift).integer as f32;
+        v = v * (*cl_graphscale).integer as f32 + (*cl_graphshift).integer as f32;
         if v < 0 as i32 as f32 {
             v += ((*cl_graphheight).integer
-                * (1 as i32
-                    + (-v / (*cl_graphheight).integer as f32) as i32))
+                * (1 as i32 + (-v / (*cl_graphheight).integer as f32) as i32))
                 as f32
         }
         h = v as i32 % (*cl_graphheight).integer;
@@ -1596,9 +1570,7 @@ pub unsafe extern "C" fn SCR_UpdateScreen() {
         } else {
             crate::src::client::cl_main::re
                 .EndFrame
-                .expect("non-null function pointer")(
-                0 as *mut i32, 0 as *mut i32
-            );
+                .expect("non-null function pointer")(0 as *mut i32, 0 as *mut i32);
         }
     }
     recursive = 0 as i32;

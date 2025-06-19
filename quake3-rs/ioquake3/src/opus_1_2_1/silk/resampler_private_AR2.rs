@@ -59,15 +59,11 @@ pub unsafe extern "C" fn silk_resampler_private_AR2(
         *out_Q8.offset(k as isize) = out32;
         out32 = ((out32 as crate::opus_types_h::opus_uint32) << 2 as i32)
             as crate::opus_types_h::opus_int32;
-        *S.offset(0 as i32 as isize) =
-            (*S.offset(1 as i32 as isize) as i64
-                + (out32 as i64
-                    * *A_Q14.offset(0 as i32 as isize) as i64
-                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
-        *S.offset(1 as i32 as isize) = (out32 as i64
-            * *A_Q14.offset(1 as i32 as isize) as i64
-            >> 16 as i32)
+        *S.offset(0 as i32 as isize) = (*S.offset(1 as i32 as isize) as i64
+            + (out32 as i64 * *A_Q14.offset(0 as i32 as isize) as i64 >> 16 as i32))
             as crate::opus_types_h::opus_int32;
+        *S.offset(1 as i32 as isize) = (out32 as i64 * *A_Q14.offset(1 as i32 as isize) as i64
+            >> 16 as i32) as crate::opus_types_h::opus_int32;
         k += 1
     }
 }

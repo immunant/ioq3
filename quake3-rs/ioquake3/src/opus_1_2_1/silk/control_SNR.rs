@@ -185,10 +185,8 @@ pub unsafe extern "C" fn silk_control_SNR(
             if TargetRate_bps <= *rateTable.offset(k as isize) {
                 frac_Q6 = (((TargetRate_bps - *rateTable.offset((k - 1 as i32) as isize))
                     as crate::opus_types_h::opus_uint32)
-                    << 6 as i32)
-                    as crate::opus_types_h::opus_int32
-                    / (*rateTable.offset(k as isize)
-                        - *rateTable.offset((k - 1 as i32) as isize));
+                    << 6 as i32) as crate::opus_types_h::opus_int32
+                    / (*rateTable.offset(k as isize) - *rateTable.offset((k - 1 as i32) as isize));
                 (*psEncC).SNR_dB_Q7 =
                     ((crate::src::opus_1_2_1::silk::tables_other::silk_SNR_table_Q1
                         [(k - 1 as i32) as usize]

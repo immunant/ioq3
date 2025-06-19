@@ -317,9 +317,7 @@ unsafe extern "C" fn empty_mem_output_buffer(
     let mut nextbuffer: *mut crate::jmorecfg_h::JOCTET = 0 as *mut crate::jmorecfg_h::JOCTET;
     let mut dest: my_mem_dest_ptr = (*cinfo).dest as my_mem_dest_ptr;
     /* Try to allocate new buffer with double size */
-    nextsize = (*dest)
-        .bufsize
-        .wrapping_mul(2 as i32 as libc::c_ulong);
+    nextsize = (*dest).bufsize.wrapping_mul(2 as i32 as libc::c_ulong);
     nextbuffer = malloc(nextsize) as *mut crate::jmorecfg_h::JOCTET;
     if nextbuffer.is_null() {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_OUT_OF_MEMORY as i32;
@@ -509,8 +507,7 @@ pub unsafe extern "C" fn jpeg_mem_dest(
         *outbuffer = malloc(4096 as i32 as libc::c_ulong) as *mut u8;
         (*dest).newbuffer = *outbuffer;
         if (*dest).newbuffer.is_null() {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_OUT_OF_MEMORY as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_OUT_OF_MEMORY as i32;
             (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = 10 as i32;
             Some(
                 (*(*cinfo).err)

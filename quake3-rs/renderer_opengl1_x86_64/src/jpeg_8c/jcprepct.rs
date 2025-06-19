@@ -210,8 +210,7 @@ unsafe extern "C" fn start_pass_prep(
     mut pass_mode: crate::jpegint_h::J_BUF_MODE,
 ) {
     let mut prep: my_prep_ptr = (*cinfo).prep as my_prep_ptr;
-    if pass_mode as u32 != crate::jpegint_h::JBUF_PASS_THRU as i32 as u32
-    {
+    if pass_mode as u32 != crate::jpegint_h::JBUF_PASS_THRU as i32 as u32 {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as i32;
         Some(
             (*(*cinfo).err)
@@ -304,9 +303,9 @@ unsafe extern "C" fn pre_process_data(
         *in_row_ctr = (*in_row_ctr as u32).wrapping_add(numrows as u32)
             as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
         (*prep).next_buf_row += numrows;
-        (*prep).rows_to_go =
-            ((*prep).rows_to_go as u32).wrapping_sub(numrows as u32)
-                as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
+        (*prep).rows_to_go = ((*prep).rows_to_go as u32).wrapping_sub(numrows as u32)
+            as crate::jmorecfg_h::JDIMENSION
+            as crate::jmorecfg_h::JDIMENSION;
         /* If at bottom of image, pad to fill the conversion buffer. */
         if (*prep).rows_to_go == 0 as i32 as u32
             && (*prep).next_buf_row < (*cinfo).max_v_samp_factor
@@ -343,9 +342,7 @@ unsafe extern "C" fn pre_process_data(
         /* If at bottom of image, pad the output to a full iMCU height.
          * Note we assume the caller is providing a one-iMCU-height output buffer!
          */
-        if !((*prep).rows_to_go == 0 as i32 as u32
-            && *out_row_group_ctr < out_row_groups_avail)
-        {
+        if !((*prep).rows_to_go == 0 as i32 as u32 && *out_row_group_ctr < out_row_groups_avail) {
             continue;
         }
         ci = 0 as i32;
@@ -433,8 +430,7 @@ unsafe extern "C" fn pre_process_context(
                 as crate::jmorecfg_h::JDIMENSION
                 as crate::jmorecfg_h::JDIMENSION;
             (*prep).next_buf_row += numrows;
-            (*prep).rows_to_go = ((*prep).rows_to_go as u32)
-                .wrapping_sub(numrows as u32)
+            (*prep).rows_to_go = ((*prep).rows_to_go as u32).wrapping_sub(numrows as u32)
                 as crate::jmorecfg_h::JDIMENSION
                 as crate::jmorecfg_h::JDIMENSION
         } else {
@@ -544,8 +540,7 @@ unsafe extern "C" fn create_context_buffer(mut cinfo: crate::jpeglib_h::j_compre
         while i < rgroup_height {
             let ref mut fresh0 = *fake_buffer.offset(i as isize);
             *fresh0 = *true_buffer.offset((2 as i32 * rgroup_height + i) as isize);
-            let ref mut fresh1 =
-                *fake_buffer.offset((4 as i32 * rgroup_height + i) as isize);
+            let ref mut fresh1 = *fake_buffer.offset((4 as i32 * rgroup_height + i) as isize);
             *fresh1 = *true_buffer.offset(i as isize);
             i += 1
         }

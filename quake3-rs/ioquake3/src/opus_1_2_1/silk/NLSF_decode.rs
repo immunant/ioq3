@@ -59,24 +59,19 @@ unsafe extern "C" fn silk_NLSF_residual_dequant(
             * *pred_coef_Q8.offset(i as isize) as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
             >> 8 as i32;
-        out_Q10 = ((*indices.offset(i as isize) as crate::opus_types_h::opus_uint32)
-            << 10 as i32) as crate::opus_types_h::opus_int32;
+        out_Q10 = ((*indices.offset(i as isize) as crate::opus_types_h::opus_uint32) << 10 as i32)
+            as crate::opus_types_h::opus_int32;
         if out_Q10 > 0 as i32 {
             out_Q10 = out_Q10
-                - (0.1f64
-                    * ((1 as i32 as i64) << 10 as i32)
-                        as f64
-                    + 0.5f64) as crate::opus_types_h::opus_int32
+                - (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
+                    as crate::opus_types_h::opus_int32
         } else if out_Q10 < 0 as i32 {
             out_Q10 = out_Q10
-                + (0.1f64
-                    * ((1 as i32 as i64) << 10 as i32)
-                        as f64
-                    + 0.5f64) as crate::opus_types_h::opus_int32
+                + (0.1f64 * ((1 as i32 as i64) << 10 as i32) as f64 + 0.5f64)
+                    as crate::opus_types_h::opus_int32
         }
         out_Q10 = (pred_Q10 as i64
-            + (out_Q10 as i64
-                * quant_step_size_Q16 as crate::opus_types_h::opus_int16 as i64
+            + (out_Q10 as i64 * quant_step_size_Q16 as crate::opus_types_h::opus_int16 as i64
                 >> 16 as i32)) as crate::opus_types_h::opus_int32;
         *x_Q10.offset(i as isize) = out_Q10 as crate::opus_types_h::opus_int16;
         i -= 1
@@ -356,20 +351,17 @@ pub unsafe extern "C" fn silk_NLSF_decode(
     /* Predictive residual dequantizer */
     silk_NLSF_residual_dequant(
         res_Q10.as_mut_ptr(),
-        &mut *NLSFIndices.offset(1 as i32 as isize) as *mut i8
-            as *const i8,
+        &mut *NLSFIndices.offset(1 as i32 as isize) as *mut i8 as *const i8,
         pred_Q8.as_mut_ptr() as *const u8,
         (*psNLSF_CB).quantStepSize_Q16 as i32,
         (*psNLSF_CB).order,
     );
     /* Apply inverse square-rooted weights to first stage and add to output */
     pCB_element = &*(*psNLSF_CB).CB1_NLSF_Q8.offset(
-        (*NLSFIndices.offset(0 as i32 as isize) as i32
-            * (*psNLSF_CB).order as i32) as isize,
+        (*NLSFIndices.offset(0 as i32 as isize) as i32 * (*psNLSF_CB).order as i32) as isize,
     ) as *const u8;
     pCB_Wght_Q9 = &*(*psNLSF_CB).CB1_Wght_Q9.offset(
-        (*NLSFIndices.offset(0 as i32 as isize) as i32
-            * (*psNLSF_CB).order as i32) as isize,
+        (*NLSFIndices.offset(0 as i32 as isize) as i32 * (*psNLSF_CB).order as i32) as isize,
     ) as *const crate::opus_types_h::opus_int16;
     i = 0 as i32;
     while i < (*psNLSF_CB).order as i32 {

@@ -156,16 +156,14 @@ unsafe extern "C" fn build_ycc_rgb_table(mut cinfo: crate::jpeglib_h::j_decompre
             ((1.40200f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32
                 * x
-                + ((1 as i32 as crate::jmorecfg_h::INT32)
-                    << 16 as i32 - 1 as i32)
+                + ((1 as i32 as crate::jmorecfg_h::INT32) << 16 as i32 - 1 as i32)
                 >> 16 as i32) as i32;
         /* Cb=>B value is nearest int to 1.77200 * x */
         *(*upsample).Cb_b_tab.offset(i as isize) =
             ((1.77200f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32
                 * x
-                + ((1 as i32 as crate::jmorecfg_h::INT32)
-                    << 16 as i32 - 1 as i32)
+                + ((1 as i32 as crate::jmorecfg_h::INT32) << 16 as i32 - 1 as i32)
                 >> 16 as i32) as i32;
         /* Cr=>G value is scaled-up -0.71414 * x */
         *(*upsample).Cr_g_tab.offset(i as isize) =
@@ -178,8 +176,7 @@ unsafe extern "C" fn build_ycc_rgb_table(mut cinfo: crate::jpeglib_h::j_decompre
             -((0.34414f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32)
                 * x
-                + ((1 as i32 as crate::jmorecfg_h::INT32)
-                    << 16 as i32 - 1 as i32);
+                + ((1 as i32 as crate::jmorecfg_h::INT32) << 16 as i32 - 1 as i32);
         i += 1;
         x += 1
     }
@@ -244,8 +241,8 @@ unsafe extern "C" fn merged_2v_upsample(
         /* Create output pointer array for upsampler. */
         work_ptrs[0 as i32 as usize] = *output_buf.offset(*out_row_ctr as isize);
         if num_rows > 1 as i32 as u32 {
-            work_ptrs[1 as i32 as usize] = *output_buf
-                .offset((*out_row_ctr).wrapping_add(1 as i32 as u32) as isize)
+            work_ptrs[1 as i32 as usize] =
+                *output_buf.offset((*out_row_ctr).wrapping_add(1 as i32 as u32) as isize)
         } else {
             work_ptrs[1 as i32 as usize] = (*upsample).spare_row;
             (*upsample).spare_full = 1 as i32
@@ -260,8 +257,8 @@ unsafe extern "C" fn merged_2v_upsample(
         );
     }
     /* Adjust counts */
-    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows)
-        as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
+    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION
+        as crate::jmorecfg_h::JDIMENSION;
     (*upsample).rows_to_go = ((*upsample).rows_to_go as u32).wrapping_sub(num_rows)
         as crate::jmorecfg_h::JDIMENSION
         as crate::jmorecfg_h::JDIMENSION;
@@ -346,8 +343,7 @@ unsafe extern "C" fn h2v1_merged_upsample(
         inptr2 = inptr2.offset(1);
         cr = *fresh1 as i32;
         cred = *Crrtab.offset(cr as isize);
-        cgreen = (*Cbgtab.offset(cb as isize) + *Crgtab.offset(cr as isize) >> 16 as i32)
-            as i32;
+        cgreen = (*Cbgtab.offset(cb as isize) + *Crgtab.offset(cr as isize) >> 16 as i32) as i32;
         cblue = *Cbbtab.offset(cb as isize);
         /* Fetch 2 Y values and emit 2 pixels */
         let fresh2 = inptr0;
@@ -371,8 +367,7 @@ unsafe extern "C" fn h2v1_merged_upsample(
         cb = *inptr1 as i32;
         cr = *inptr2 as i32;
         cred = *Crrtab.offset(cr as isize);
-        cgreen = (*Cbgtab.offset(cb as isize) + *Crgtab.offset(cr as isize) >> 16 as i32)
-            as i32;
+        cgreen = (*Cbgtab.offset(cb as isize) + *Crgtab.offset(cr as isize) >> 16 as i32) as i32;
         cblue = *Cbbtab.offset(cb as isize);
         y = *inptr0 as i32;
         *outptr.offset(0 as i32 as isize) = *range_limit.offset((y + cred) as isize);
@@ -432,8 +427,7 @@ unsafe extern "C" fn h2v2_merged_upsample(
         inptr2 = inptr2.offset(1);
         cr = *fresh5 as i32;
         cred = *Crrtab.offset(cr as isize);
-        cgreen = (*Cbgtab.offset(cb as isize) + *Crgtab.offset(cr as isize) >> 16 as i32)
-            as i32;
+        cgreen = (*Cbgtab.offset(cb as isize) + *Crgtab.offset(cr as isize) >> 16 as i32) as i32;
         cblue = *Cbbtab.offset(cb as isize);
         /* Fetch 4 Y values and emit 4 pixels */
         let fresh6 = inptr00;
@@ -471,8 +465,7 @@ unsafe extern "C" fn h2v2_merged_upsample(
         cb = *inptr1 as i32;
         cr = *inptr2 as i32;
         cred = *Crrtab.offset(cr as isize);
-        cgreen = (*Cbgtab.offset(cb as isize) + *Crgtab.offset(cr as isize) >> 16 as i32)
-            as i32;
+        cgreen = (*Cbgtab.offset(cb as isize) + *Crgtab.offset(cr as isize) >> 16 as i32) as i32;
         cblue = *Cbbtab.offset(cb as isize);
         y = *inptr00 as i32;
         *outptr0.offset(0 as i32 as isize) = *range_limit.offset((y + cred) as isize);

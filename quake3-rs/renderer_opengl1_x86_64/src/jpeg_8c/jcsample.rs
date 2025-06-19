@@ -335,8 +335,7 @@ unsafe extern "C" fn sep_downsample(
     while ci < (*cinfo).num_components {
         in_ptr = (*input_buf.offset(ci as isize)).offset(in_row_index as isize);
         out_ptr = (*output_buf.offset(ci as isize)).offset(
-            out_row_group_index
-                .wrapping_mul((*downsample).rowgroup_height[ci as usize] as u32)
+            out_row_group_index.wrapping_mul((*downsample).rowgroup_height[ci as usize] as u32)
                 as isize,
         );
         Some(
@@ -501,10 +500,8 @@ unsafe extern "C" fn h2v1_downsample(
         while outcol < output_cols {
             let fresh3 = outptr;
             outptr = outptr.offset(1);
-            *fresh3 = (*inptr as i32
-                + *inptr.offset(1 as i32 as isize) as i32
-                + bias
-                >> 1 as i32) as crate::jmorecfg_h::JSAMPLE;
+            *fresh3 = (*inptr as i32 + *inptr.offset(1 as i32 as isize) as i32 + bias >> 1 as i32)
+                as crate::jmorecfg_h::JSAMPLE;
             bias ^= 1 as i32;
             inptr = inptr.offset(2 as i32 as isize);
             outcol = outcol.wrapping_add(1)
@@ -619,8 +616,8 @@ unsafe extern "C" fn h2v2_smooth_downsample(
      * factors are scaled by 2^16 = 65536.
      * Also recall that SF = smoothing_factor / 1024.
      */
-    memberscale = (16384 as i32 - (*cinfo).smoothing_factor * 80 as i32)
-        as crate::jmorecfg_h::INT32; /* scaled (1-5*SF)/4 */
+    memberscale =
+        (16384 as i32 - (*cinfo).smoothing_factor * 80 as i32) as crate::jmorecfg_h::INT32; /* scaled (1-5*SF)/4 */
     neighscale = ((*cinfo).smoothing_factor * 16 as i32) as crate::jmorecfg_h::INT32; /* scaled SF/4 */
     outrow = 0 as i32;
     inrow = outrow;
@@ -649,13 +646,12 @@ unsafe extern "C" fn h2v2_smooth_downsample(
         neighsum += (*above_ptr as i32
             + *above_ptr.offset(2 as i32 as isize) as i32
             + *below_ptr as i32
-            + *below_ptr.offset(2 as i32 as isize) as i32)
-            as libc::c_long;
+            + *below_ptr.offset(2 as i32 as isize) as i32) as libc::c_long;
         membersum = membersum * memberscale + neighsum * neighscale;
         let fresh5 = outptr;
         outptr = outptr.offset(1);
-        *fresh5 = (membersum + 32768 as i32 as libc::c_long >> 16 as i32)
-            as crate::jmorecfg_h::JSAMPLE;
+        *fresh5 =
+            (membersum + 32768 as i32 as libc::c_long >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
         inptr0 = inptr0.offset(2 as i32 as isize);
         inptr1 = inptr1.offset(2 as i32 as isize);
         above_ptr = above_ptr.offset(2 as i32 as isize);
@@ -718,11 +714,10 @@ unsafe extern "C" fn h2v2_smooth_downsample(
         neighsum += (*above_ptr.offset(-(1 as i32) as isize) as i32
             + *above_ptr.offset(1 as i32 as isize) as i32
             + *below_ptr.offset(-(1 as i32) as isize) as i32
-            + *below_ptr.offset(1 as i32 as isize) as i32)
-            as libc::c_long;
+            + *below_ptr.offset(1 as i32 as isize) as i32) as libc::c_long;
         membersum = membersum * memberscale + neighsum * neighscale;
-        *outptr = (membersum + 32768 as i32 as libc::c_long >> 16 as i32)
-            as crate::jmorecfg_h::JSAMPLE;
+        *outptr =
+            (membersum + 32768 as i32 as libc::c_long >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
         inrow += 2 as i32;
         outrow += 1
     }
@@ -795,8 +790,8 @@ unsafe extern "C" fn fullsize_smooth_downsample(
         membersum = membersum * memberscale + neighsum * neighscale;
         let fresh10 = outptr;
         outptr = outptr.offset(1);
-        *fresh10 = (membersum + 32768 as i32 as libc::c_long >> 16 as i32)
-            as crate::jmorecfg_h::JSAMPLE;
+        *fresh10 =
+            (membersum + 32768 as i32 as libc::c_long >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
         lastcolsum = colsum;
         colsum = nextcolsum;
         colctr = output_cols.wrapping_sub(2 as i32 as u32);
@@ -806,8 +801,7 @@ unsafe extern "C" fn fullsize_smooth_downsample(
             membersum = *fresh11 as i32 as crate::jmorecfg_h::INT32;
             above_ptr = above_ptr.offset(1);
             below_ptr = below_ptr.offset(1);
-            nextcolsum =
-                *above_ptr as i32 + *below_ptr as i32 + *inptr as i32;
+            nextcolsum = *above_ptr as i32 + *below_ptr as i32 + *inptr as i32;
             neighsum = lastcolsum as libc::c_long
                 + (colsum as libc::c_long - membersum)
                 + nextcolsum as libc::c_long;
@@ -826,8 +820,8 @@ unsafe extern "C" fn fullsize_smooth_downsample(
             + (colsum as libc::c_long - membersum)
             + colsum as libc::c_long;
         membersum = membersum * memberscale + neighsum * neighscale;
-        *outptr = (membersum + 32768 as i32 as libc::c_long >> 16 as i32)
-            as crate::jmorecfg_h::JSAMPLE;
+        *outptr =
+            (membersum + 32768 as i32 as libc::c_long >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
         inrow += 1
     }
 }
@@ -930,9 +924,7 @@ pub unsafe extern "C" fn jinit_downsampler(mut cinfo: crate::jpeglib_h::j_compre
                         _: crate::jpeglib_h::JSAMPARRAY,
                     ) -> (),
             )
-        } else if h_in_group == h_out_group * 2 as i32
-            && v_in_group == v_out_group * 2 as i32
-        {
+        } else if h_in_group == h_out_group * 2 as i32 && v_in_group == v_out_group * 2 as i32 {
             if (*cinfo).smoothing_factor != 0 {
                 (*downsample).methods[ci as usize] = Some(
                     h2v2_smooth_downsample
@@ -955,9 +947,7 @@ pub unsafe extern "C" fn jinit_downsampler(mut cinfo: crate::jpeglib_h::j_compre
                         ) -> (),
                 )
             }
-        } else if h_in_group % h_out_group == 0 as i32
-            && v_in_group % v_out_group == 0 as i32
-        {
+        } else if h_in_group % h_out_group == 0 as i32 && v_in_group % v_out_group == 0 as i32 {
             smoothok = 0 as i32;
             (*downsample).methods[ci as usize] = Some(
                 int_downsample
@@ -995,8 +985,7 @@ pub unsafe extern "C" fn jinit_downsampler(mut cinfo: crate::jpeglib_h::j_compre
                 .expect("non-null function pointer"),
         )
         .expect("non-null function pointer")(
-            cinfo as crate::jpeglib_h::j_common_ptr,
-            0 as i32,
+            cinfo as crate::jpeglib_h::j_common_ptr, 0 as i32
         );
     };
 }

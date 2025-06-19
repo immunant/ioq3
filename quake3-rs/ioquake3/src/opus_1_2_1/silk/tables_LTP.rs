@@ -27,11 +27,8 @@ POSSIBILITY OF SUCH DAMAGE.
 ***********************************************************************/
 #[no_mangle]
 
-pub static mut silk_LTP_per_index_iCDF: [u8; 3] = [
-    179 as i32 as u8,
-    99 as i32 as u8,
-    0 as i32 as u8,
-];
+pub static mut silk_LTP_per_index_iCDF: [u8; 3] =
+    [179 as i32 as u8, 99 as i32 as u8, 0 as i32 as u8];
 
 static mut silk_LTP_gain_iCDF_0: [u8; 8] = [
     71 as i32 as u8,
@@ -658,42 +655,23 @@ static mut silk_LTP_gain_vq_2_gain: [u8; 32] = [
 pub static mut silk_LTP_vq_gain_ptrs_Q7: [*const u8; 3] = [0 as *const u8; 3];
 #[no_mangle]
 
-pub static mut silk_LTP_vq_sizes: [i8; 3] = [
-    8 as i32 as i8,
-    16 as i32 as i8,
-    32 as i32 as i8,
-];
+pub static mut silk_LTP_vq_sizes: [i8; 3] = [8 as i32 as i8, 16 as i32 as i8, 32 as i32 as i8];
 unsafe extern "C" fn run_static_initializers() {
     silk_LTP_vq_ptrs_Q7 = [
-        &*(*silk_LTP_gain_vq_0
+        &*(*silk_LTP_gain_vq_0.as_ptr().offset(0 as i32 as isize))
             .as_ptr()
-            .offset(0 as i32 as isize))
-        .as_ptr()
-        .offset(0 as i32 as isize) as *const i8 as *mut i8
-            as *const i8,
-        &*(*silk_LTP_gain_vq_1
+            .offset(0 as i32 as isize) as *const i8 as *mut i8 as *const i8,
+        &*(*silk_LTP_gain_vq_1.as_ptr().offset(0 as i32 as isize))
             .as_ptr()
-            .offset(0 as i32 as isize))
-        .as_ptr()
-        .offset(0 as i32 as isize) as *const i8 as *mut i8
-            as *const i8,
-        &*(*silk_LTP_gain_vq_2
+            .offset(0 as i32 as isize) as *const i8 as *mut i8 as *const i8,
+        &*(*silk_LTP_gain_vq_2.as_ptr().offset(0 as i32 as isize))
             .as_ptr()
-            .offset(0 as i32 as isize))
-        .as_ptr()
-        .offset(0 as i32 as isize) as *const i8 as *mut i8
-            as *const i8,
+            .offset(0 as i32 as isize) as *const i8 as *mut i8 as *const i8,
     ];
     silk_LTP_vq_gain_ptrs_Q7 = [
-        &*silk_LTP_gain_vq_0_gain
-            .as_ptr()
-            .offset(0 as i32 as isize) as *const u8,
-        &*silk_LTP_gain_vq_1_gain
-            .as_ptr()
-            .offset(0 as i32 as isize) as *const u8,
-        &*silk_LTP_gain_vq_2_gain
-            .as_ptr()
-            .offset(0 as i32 as isize) as *const u8,
+        &*silk_LTP_gain_vq_0_gain.as_ptr().offset(0 as i32 as isize) as *const u8,
+        &*silk_LTP_gain_vq_1_gain.as_ptr().offset(0 as i32 as isize) as *const u8,
+        &*silk_LTP_gain_vq_2_gain.as_ptr().offset(0 as i32 as isize) as *const u8,
     ]
 }
 #[used]

@@ -161,18 +161,12 @@ unsafe extern "C" fn CG_ResetEntity(mut cent: *mut crate::cg_local_h::centity_t)
         (*cent).previousEvent = 0 as i32
     }
     (*cent).trailTime = (*crate::src::cgame::cg_main::cg.snap).serverTime;
-    (*cent).lerpOrigin[0 as i32 as usize] =
-        (*cent).currentState.origin[0 as i32 as usize];
-    (*cent).lerpOrigin[1 as i32 as usize] =
-        (*cent).currentState.origin[1 as i32 as usize];
-    (*cent).lerpOrigin[2 as i32 as usize] =
-        (*cent).currentState.origin[2 as i32 as usize];
-    (*cent).lerpAngles[0 as i32 as usize] =
-        (*cent).currentState.angles[0 as i32 as usize];
-    (*cent).lerpAngles[1 as i32 as usize] =
-        (*cent).currentState.angles[1 as i32 as usize];
-    (*cent).lerpAngles[2 as i32 as usize] =
-        (*cent).currentState.angles[2 as i32 as usize];
+    (*cent).lerpOrigin[0 as i32 as usize] = (*cent).currentState.origin[0 as i32 as usize];
+    (*cent).lerpOrigin[1 as i32 as usize] = (*cent).currentState.origin[1 as i32 as usize];
+    (*cent).lerpOrigin[2 as i32 as usize] = (*cent).currentState.origin[2 as i32 as usize];
+    (*cent).lerpAngles[0 as i32 as usize] = (*cent).currentState.angles[0 as i32 as usize];
+    (*cent).lerpAngles[1 as i32 as usize] = (*cent).currentState.angles[1 as i32 as usize];
+    (*cent).lerpAngles[2 as i32 as usize] = (*cent).currentState.angles[2 as i32 as usize];
     if (*cent).currentState.eType == crate::bg_public_h::ET_PLAYER as i32 {
         crate::src::cgame::cg_players::CG_ResetPlayerEntity(
             cent as *mut crate::cg_local_h::centity_s,
@@ -406,9 +400,7 @@ unsafe extern "C" fn CG_SetNextSnap(mut snap: *mut crate::cg_public_h::snapshot_
     // if the next frame is a teleport for the playerstate, we
     // can't interpolate during demos
     if !crate::src::cgame::cg_main::cg.snap.is_null()
-        && ((*snap).ps.eFlags ^ (*crate::src::cgame::cg_main::cg.snap).ps.eFlags)
-            & 0x4 as i32
-            != 0
+        && ((*snap).ps.eFlags ^ (*crate::src::cgame::cg_main::cg.snap).ps.eFlags) & 0x4 as i32 != 0
     {
         crate::src::cgame::cg_main::cg.nextFrameTeleport = crate::src::qcommon::q_shared::qtrue
     } else {
@@ -463,20 +455,17 @@ unsafe extern "C" fn CG_ReadNextSnapshot() -> *mut crate::cg_public_h::snapshot_
             == &mut *crate::src::cgame::cg_main::cg
                 .activeSnapshots
                 .as_mut_ptr()
-                .offset(0 as i32 as isize)
-                as *mut crate::cg_public_h::snapshot_t
+                .offset(0 as i32 as isize) as *mut crate::cg_public_h::snapshot_t
         {
             dest = &mut *crate::src::cgame::cg_main::cg
                 .activeSnapshots
                 .as_mut_ptr()
-                .offset(1 as i32 as isize)
-                as *mut crate::cg_public_h::snapshot_t
+                .offset(1 as i32 as isize) as *mut crate::cg_public_h::snapshot_t
         } else {
             dest = &mut *crate::src::cgame::cg_main::cg
                 .activeSnapshots
                 .as_mut_ptr()
-                .offset(0 as i32 as isize)
-                as *mut crate::cg_public_h::snapshot_t
+                .offset(0 as i32 as isize) as *mut crate::cg_public_h::snapshot_t
         }
         // If there are additional snapshots, continue trying to
         // read them.

@@ -279,11 +279,7 @@ static mut facing: [i32; 2000] = [0; 2000];
 static mut shadowXyz: [crate::src::qcommon::q_shared::vec3_t; 1000] = [[0.; 3]; 1000];
 #[no_mangle]
 
-pub unsafe extern "C" fn R_AddEdgeDef(
-    mut i1: i32,
-    mut i2: i32,
-    mut facing_0: i32,
-) {
+pub unsafe extern "C" fn R_AddEdgeDef(mut i1: i32, mut i2: i32, mut facing_0: i32) {
     let mut c: i32 = 0;
     c = numEdgeDefs[i1 as usize];
     if c == 32 as i32 {
@@ -380,26 +376,23 @@ pub unsafe extern "C" fn RB_ShadowTessEnd() {
     if crate::src::renderergl1::tr_init::glConfig.stencilBits < 4 as i32 {
         return;
     }
-    lightDir[0 as i32 as usize] = (*crate::src::renderergl1::tr_backend::backEnd
-        .currentEntity)
-        .lightDir[0 as i32 as usize];
-    lightDir[1 as i32 as usize] = (*crate::src::renderergl1::tr_backend::backEnd
-        .currentEntity)
-        .lightDir[1 as i32 as usize];
-    lightDir[2 as i32 as usize] = (*crate::src::renderergl1::tr_backend::backEnd
-        .currentEntity)
-        .lightDir[2 as i32 as usize];
+    lightDir[0 as i32 as usize] =
+        (*crate::src::renderergl1::tr_backend::backEnd.currentEntity).lightDir[0 as i32 as usize];
+    lightDir[1 as i32 as usize] =
+        (*crate::src::renderergl1::tr_backend::backEnd.currentEntity).lightDir[1 as i32 as usize];
+    lightDir[2 as i32 as usize] =
+        (*crate::src::renderergl1::tr_backend::backEnd.currentEntity).lightDir[2 as i32 as usize];
     // project vertexes away from light direction
     i = 0 as i32;
     while i < crate::src::renderergl1::tr_shade::tess.numVertexes {
-        shadowXyz[i as usize][0 as i32 as usize] = crate::src::renderergl1::tr_shade::tess
-            .xyz[i as usize][0 as i32 as usize]
+        shadowXyz[i as usize][0 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.xyz
+            [i as usize][0 as i32 as usize]
             + lightDir[0 as i32 as usize] * -(512 as i32) as f32;
-        shadowXyz[i as usize][1 as i32 as usize] = crate::src::renderergl1::tr_shade::tess
-            .xyz[i as usize][1 as i32 as usize]
+        shadowXyz[i as usize][1 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.xyz
+            [i as usize][1 as i32 as usize]
             + lightDir[1 as i32 as usize] * -(512 as i32) as f32;
-        shadowXyz[i as usize][2 as i32 as usize] = crate::src::renderergl1::tr_shade::tess
-            .xyz[i as usize][2 as i32 as usize]
+        shadowXyz[i as usize][2 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.xyz
+            [i as usize][2 as i32 as usize]
             + lightDir[2 as i32 as usize] * -(512 as i32) as f32;
         i += 1
     }
@@ -422,27 +415,21 @@ pub unsafe extern "C" fn RB_ShadowTessEnd() {
         let mut v2: *mut f32 = 0 as *mut f32;
         let mut v3: *mut f32 = 0 as *mut f32;
         let mut d: f32 = 0.;
-        i1 = crate::src::renderergl1::tr_shade::tess.indexes
-            [(i * 3 as i32 + 0 as i32) as usize] as i32;
-        i2 = crate::src::renderergl1::tr_shade::tess.indexes
-            [(i * 3 as i32 + 1 as i32) as usize] as i32;
-        i3 = crate::src::renderergl1::tr_shade::tess.indexes
-            [(i * 3 as i32 + 2 as i32) as usize] as i32;
+        i1 = crate::src::renderergl1::tr_shade::tess.indexes[(i * 3 as i32 + 0 as i32) as usize]
+            as i32;
+        i2 = crate::src::renderergl1::tr_shade::tess.indexes[(i * 3 as i32 + 1 as i32) as usize]
+            as i32;
+        i3 = crate::src::renderergl1::tr_shade::tess.indexes[(i * 3 as i32 + 2 as i32) as usize]
+            as i32;
         v1 = crate::src::renderergl1::tr_shade::tess.xyz[i1 as usize].as_mut_ptr();
         v2 = crate::src::renderergl1::tr_shade::tess.xyz[i2 as usize].as_mut_ptr();
         v3 = crate::src::renderergl1::tr_shade::tess.xyz[i3 as usize].as_mut_ptr();
-        d1[0 as i32 as usize] =
-            *v2.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
-        d1[1 as i32 as usize] =
-            *v2.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
-        d1[2 as i32 as usize] =
-            *v2.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
-        d2[0 as i32 as usize] =
-            *v3.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
-        d2[1 as i32 as usize] =
-            *v3.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
-        d2[2 as i32 as usize] =
-            *v3.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
+        d1[0 as i32 as usize] = *v2.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
+        d1[1 as i32 as usize] = *v2.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
+        d1[2 as i32 as usize] = *v2.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
+        d2[0 as i32 as usize] = *v3.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
+        d2[1 as i32 as usize] = *v3.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
+        d2[2 as i32 as usize] = *v3.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
         CrossProduct(
             d1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             d2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -466,9 +453,7 @@ pub unsafe extern "C" fn RB_ShadowTessEnd() {
     crate::src::renderergl1::tr_backend::GL_Bind(
         crate::src::renderergl1::tr_main::tr.whiteImage as *mut crate::tr_common_h::image_s,
     );
-    crate::src::renderergl1::tr_backend::GL_State(
-        (0x2 as i32 | 0x10 as i32) as libc::c_ulong,
-    );
+    crate::src::renderergl1::tr_backend::GL_State((0x2 as i32 | 0x10 as i32) as libc::c_ulong);
     crate::src::sdl::sdl_glimp::qglColor3f.expect("non-null function pointer")(
         0.2f32, 0.2f32, 0.2f32,
     );
@@ -967,40 +952,34 @@ pub unsafe extern "C" fn RB_ProjectionShadowDeform() {
     let mut d: f32 = 0.;
     let mut lightDir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     xyz = crate::src::renderergl1::tr_shade::tess.xyz.as_mut_ptr() as *mut f32;
-    ground[0 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd.or.axis
-        [0 as i32 as usize][2 as i32 as usize];
-    ground[1 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd.or.axis
-        [1 as i32 as usize][2 as i32 as usize];
-    ground[2 as i32 as usize] = crate::src::renderergl1::tr_backend::backEnd.or.axis
-        [2 as i32 as usize][2 as i32 as usize];
+    ground[0 as i32 as usize] =
+        crate::src::renderergl1::tr_backend::backEnd.or.axis[0 as i32 as usize][2 as i32 as usize];
+    ground[1 as i32 as usize] =
+        crate::src::renderergl1::tr_backend::backEnd.or.axis[1 as i32 as usize][2 as i32 as usize];
+    ground[2 as i32 as usize] =
+        crate::src::renderergl1::tr_backend::backEnd.or.axis[2 as i32 as usize][2 as i32 as usize];
     groundDist = crate::src::renderergl1::tr_backend::backEnd.or.origin[2 as i32 as usize]
         - (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
             .e
             .shadowPlane;
-    lightDir[0 as i32 as usize] = (*crate::src::renderergl1::tr_backend::backEnd
-        .currentEntity)
-        .lightDir[0 as i32 as usize];
-    lightDir[1 as i32 as usize] = (*crate::src::renderergl1::tr_backend::backEnd
-        .currentEntity)
-        .lightDir[1 as i32 as usize];
-    lightDir[2 as i32 as usize] = (*crate::src::renderergl1::tr_backend::backEnd
-        .currentEntity)
-        .lightDir[2 as i32 as usize];
+    lightDir[0 as i32 as usize] =
+        (*crate::src::renderergl1::tr_backend::backEnd.currentEntity).lightDir[0 as i32 as usize];
+    lightDir[1 as i32 as usize] =
+        (*crate::src::renderergl1::tr_backend::backEnd.currentEntity).lightDir[1 as i32 as usize];
+    lightDir[2 as i32 as usize] =
+        (*crate::src::renderergl1::tr_backend::backEnd.currentEntity).lightDir[2 as i32 as usize];
     d = lightDir[0 as i32 as usize] * ground[0 as i32 as usize]
         + lightDir[1 as i32 as usize] * ground[1 as i32 as usize]
         + lightDir[2 as i32 as usize] * ground[2 as i32 as usize];
     // don't let the shadows get too long or go negative
     if (d as f64) < 0.5f64 {
-        lightDir[0 as i32 as usize] = (lightDir[0 as i32 as usize]
-            as f64
+        lightDir[0 as i32 as usize] = (lightDir[0 as i32 as usize] as f64
             + ground[0 as i32 as usize] as f64 * (0.5f64 - d as f64))
             as crate::src::qcommon::q_shared::vec_t;
-        lightDir[1 as i32 as usize] = (lightDir[1 as i32 as usize]
-            as f64
+        lightDir[1 as i32 as usize] = (lightDir[1 as i32 as usize] as f64
             + ground[1 as i32 as usize] as f64 * (0.5f64 - d as f64))
             as crate::src::qcommon::q_shared::vec_t;
-        lightDir[2 as i32 as usize] = (lightDir[2 as i32 as usize]
-            as f64
+        lightDir[2 as i32 as usize] = (lightDir[2 as i32 as usize] as f64
             + ground[2 as i32 as usize] as f64 * (0.5f64 - d as f64))
             as crate::src::qcommon::q_shared::vec_t;
         d = lightDir[0 as i32 as usize] * ground[0 as i32 as usize]

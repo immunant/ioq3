@@ -533,9 +533,8 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::en
             32 as i32 + 256 as i32 + 256 as i32 + attacker,
         )
     }
-    targetInfo = crate::src::cgame::cg_main::CG_ConfigString(
-        32 as i32 + 256 as i32 + 256 as i32 + target,
-    );
+    targetInfo =
+        crate::src::cgame::cg_main::CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + target);
     if targetInfo.is_null() {
         return;
     }
@@ -582,14 +581,10 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::en
         gender = (*ci).gender;
         match mod_0 {
             5 => {
-                if gender as u32
-                    == crate::bg_public_h::GENDER_FEMALE as i32 as u32
-                {
+                if gender as u32 == crate::bg_public_h::GENDER_FEMALE as i32 as u32 {
                     message = b"tripped on her own grenade\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
-                } else if gender as u32
-                    == crate::bg_public_h::GENDER_NEUTER as i32 as u32
-                {
+                } else if gender as u32 == crate::bg_public_h::GENDER_NEUTER as i32 as u32 {
                     message = b"tripped on its own grenade\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
                 } else {
@@ -598,14 +593,10 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::en
                 }
             }
             7 => {
-                if gender as u32
-                    == crate::bg_public_h::GENDER_FEMALE as i32 as u32
-                {
+                if gender as u32 == crate::bg_public_h::GENDER_FEMALE as i32 as u32 {
                     message = b"blew herself up\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
-                } else if gender as u32
-                    == crate::bg_public_h::GENDER_NEUTER as i32 as u32
-                {
+                } else if gender as u32 == crate::bg_public_h::GENDER_NEUTER as i32 as u32 {
                     message = b"blew itself up\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
                 } else {
@@ -614,14 +605,10 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::en
                 }
             }
             9 => {
-                if gender as u32
-                    == crate::bg_public_h::GENDER_FEMALE as i32 as u32
-                {
+                if gender as u32 == crate::bg_public_h::GENDER_FEMALE as i32 as u32 {
                     message = b"melted herself\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
-                } else if gender as u32
-                    == crate::bg_public_h::GENDER_NEUTER as i32 as u32
-                {
+                } else if gender as u32 == crate::bg_public_h::GENDER_NEUTER as i32 as u32 {
                     message = b"melted itself\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
                 } else {
@@ -634,14 +621,10 @@ unsafe extern "C" fn CG_Obituary(mut ent: *mut crate::src::qcommon::q_shared::en
                     as *mut libc::c_char
             }
             _ => {
-                if gender as u32
-                    == crate::bg_public_h::GENDER_FEMALE as i32 as u32
-                {
+                if gender as u32 == crate::bg_public_h::GENDER_FEMALE as i32 as u32 {
                     message = b"killed herself\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
-                } else if gender as u32
-                    == crate::bg_public_h::GENDER_NEUTER as i32 as u32
-                {
+                } else if gender as u32 == crate::bg_public_h::GENDER_NEUTER as i32 as u32 {
                     message = b"killed itself\x00" as *const u8 as *const libc::c_char
                         as *mut libc::c_char
                 } else {
@@ -828,8 +811,8 @@ unsafe extern "C" fn CG_UseItem(mut cent: *mut crate::cg_local_h::centity_t) {
     let mut es: *mut crate::src::qcommon::q_shared::entityState_t =
         0 as *mut crate::src::qcommon::q_shared::entityState_t;
     es = &mut (*cent).currentState;
-    itemNum = ((*es).event & !(0x100 as i32 | 0x200 as i32))
-        - crate::bg_public_h::EV_USE_ITEM0 as i32;
+    itemNum =
+        ((*es).event & !(0x100 as i32 | 0x200 as i32)) - crate::bg_public_h::EV_USE_ITEM0 as i32;
     if itemNum < 0 as i32 || itemNum > crate::bg_public_h::HI_NUM_HOLDABLE as i32 {
         itemNum = 0 as i32
     }
@@ -950,9 +933,8 @@ pub unsafe extern "C" fn CG_WaterLevel(mut cent: *mut crate::cg_local_h::centity
     waterlevel = 0 as i32;
     point[0 as i32 as usize] = (*cent).lerpOrigin[0 as i32 as usize];
     point[1 as i32 as usize] = (*cent).lerpOrigin[1 as i32 as usize];
-    point[2 as i32 as usize] = (*cent).lerpOrigin[2 as i32 as usize]
-        + -(24 as i32) as f32
-        + 1 as i32 as f32;
+    point[2 as i32 as usize] =
+        (*cent).lerpOrigin[2 as i32 as usize] + -(24 as i32) as f32 + 1 as i32 as f32;
     contents = crate::src::cgame::cg_predict::CG_PointContents(
         point.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         -(1 as i32),
@@ -961,18 +943,16 @@ pub unsafe extern "C" fn CG_WaterLevel(mut cent: *mut crate::cg_local_h::centity
         sample2 = viewheight - -(24 as i32);
         sample1 = sample2 / 2 as i32;
         waterlevel = 1 as i32;
-        point[2 as i32 as usize] = (*cent).lerpOrigin[2 as i32 as usize]
-            + -(24 as i32) as f32
-            + sample1 as f32;
+        point[2 as i32 as usize] =
+            (*cent).lerpOrigin[2 as i32 as usize] + -(24 as i32) as f32 + sample1 as f32;
         contents = crate::src::cgame::cg_predict::CG_PointContents(
             point.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             -(1 as i32),
         );
         if contents & (32 as i32 | 8 as i32 | 16 as i32) != 0 {
             waterlevel = 2 as i32;
-            point[2 as i32 as usize] = (*cent).lerpOrigin[2 as i32 as usize]
-                + -(24 as i32) as f32
-                + sample2 as f32;
+            point[2 as i32 as usize] =
+                (*cent).lerpOrigin[2 as i32 as usize] + -(24 as i32) as f32 + sample2 as f32;
             contents = crate::src::cgame::cg_predict::CG_PointContents(
                 point.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                 -(1 as i32),
@@ -1271,8 +1251,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
             {
                 // if we are interpolating, we don't need to smooth steps
                 if !(crate::src::cgame::cg_main::cg.demoPlayback as u32 != 0
-                    || (*crate::src::cgame::cg_main::cg.snap).ps.pm_flags & 4096 as i32
-                        != 0
+                    || (*crate::src::cgame::cg_main::cg.snap).ps.pm_flags & 4096 as i32 != 0
                     || crate::src::cgame::cg_main::cg_nopredict.integer != 0
                     || crate::src::cgame::cg_main::cg_synchronousClients.integer != 0)
                 {
@@ -1287,14 +1266,10 @@ pub unsafe extern "C" fn CG_EntityEvent(
                         oldStep = 0 as i32 as f32
                     }
                     // add this amount
-                    step = 4 as i32
-                        * (event - crate::bg_public_h::EV_STEP_4 as i32 + 1 as i32);
+                    step = 4 as i32 * (event - crate::bg_public_h::EV_STEP_4 as i32 + 1 as i32);
                     crate::src::cgame::cg_main::cg.stepChange = oldStep + step as f32;
-                    if crate::src::cgame::cg_main::cg.stepChange
-                        > 32 as i32 as f32
-                    {
-                        crate::src::cgame::cg_main::cg.stepChange =
-                            32 as i32 as f32
+                    if crate::src::cgame::cg_main::cg.stepChange > 32 as i32 as f32 {
+                        crate::src::cgame::cg_main::cg.stepChange = 32 as i32 as f32
                     }
                     crate::src::cgame::cg_main::cg.stepTime = crate::src::cgame::cg_main::cg.time
                 }
@@ -1447,10 +1422,8 @@ pub unsafe extern "C" fn CG_EntityEvent(
                     as *mut crate::bg_public_h::gitem_t;
                 // powerups and team items will have a separate global sound, this one
                 // will be played at prediction time
-                if (*item).giType as u32
-                    == crate::bg_public_h::IT_POWERUP as i32 as u32
-                    || (*item).giType as u32
-                        == crate::bg_public_h::IT_TEAM as i32 as u32
+                if (*item).giType as u32 == crate::bg_public_h::IT_POWERUP as i32 as u32
+                    || (*item).giType as u32 == crate::bg_public_h::IT_TEAM as i32 as u32
                 {
                     crate::src::cgame::cg_syscalls::trap_S_StartSound(
                         0 as *mut crate::src::qcommon::q_shared::vec_t,
@@ -1824,34 +1797,28 @@ pub unsafe extern "C" fn CG_EntityEvent(
                 && crate::src::cgame::cg_main::cg.renderingThirdPerson as u64 == 0
             {
                 if crate::src::cgame::cg_main::cg_drawGun.integer == 2 as i32 {
-                    (*es).origin2[0 as i32 as usize] = (*es).origin2
-                        [0 as i32 as usize]
+                    (*es).origin2[0 as i32 as usize] = (*es).origin2[0 as i32 as usize]
                         + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
                             [0 as i32 as usize]
                             * 8 as i32 as f32;
-                    (*es).origin2[1 as i32 as usize] = (*es).origin2
-                        [1 as i32 as usize]
+                    (*es).origin2[1 as i32 as usize] = (*es).origin2[1 as i32 as usize]
                         + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
                             [1 as i32 as usize]
                             * 8 as i32 as f32;
-                    (*es).origin2[2 as i32 as usize] = (*es).origin2
-                        [2 as i32 as usize]
+                    (*es).origin2[2 as i32 as usize] = (*es).origin2[2 as i32 as usize]
                         + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
                             [2 as i32 as usize]
                             * 8 as i32 as f32
                 } else if crate::src::cgame::cg_main::cg_drawGun.integer == 3 as i32 {
-                    (*es).origin2[0 as i32 as usize] = (*es).origin2
-                        [0 as i32 as usize]
+                    (*es).origin2[0 as i32 as usize] = (*es).origin2[0 as i32 as usize]
                         + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
                             [0 as i32 as usize]
                             * 4 as i32 as f32;
-                    (*es).origin2[1 as i32 as usize] = (*es).origin2
-                        [1 as i32 as usize]
+                    (*es).origin2[1 as i32 as usize] = (*es).origin2[1 as i32 as usize]
                         + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
                             [1 as i32 as usize]
                             * 4 as i32 as f32;
-                    (*es).origin2[2 as i32 as usize] = (*es).origin2
-                        [2 as i32 as usize]
+                    (*es).origin2[2 as i32 as usize] = (*es).origin2[2 as i32 as usize]
                         + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
                             [2 as i32 as usize]
                             * 4 as i32 as f32
@@ -2188,8 +2155,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
                 );
             }
             if (*es).number == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum {
-                crate::src::cgame::cg_main::cg.powerupActive =
-                    crate::bg_public_h::PW_QUAD as i32;
+                crate::src::cgame::cg_main::cg.powerupActive = crate::bg_public_h::PW_QUAD as i32;
                 crate::src::cgame::cg_main::cg.powerupTime = crate::src::cgame::cg_main::cg.time
             }
             crate::src::cgame::cg_syscalls::trap_S_StartSound(
@@ -2224,8 +2190,7 @@ pub unsafe extern "C" fn CG_EntityEvent(
                 );
             }
             if (*es).number == (*crate::src::cgame::cg_main::cg.snap).ps.clientNum {
-                crate::src::cgame::cg_main::cg.powerupActive =
-                    crate::bg_public_h::PW_REGEN as i32;
+                crate::src::cgame::cg_main::cg.powerupActive = crate::bg_public_h::PW_REGEN as i32;
                 crate::src::cgame::cg_main::cg.powerupTime = crate::src::cgame::cg_main::cg.time
             }
             crate::src::cgame::cg_syscalls::trap_S_StartSound(
@@ -2532,9 +2497,7 @@ pub unsafe extern "C" fn CG_CheckEvents(mut cent: *mut crate::cg_local_h::centit
             return;
         }
         (*cent).previousEvent = (*cent).currentState.event;
-        if (*cent).currentState.event & !(0x100 as i32 | 0x200 as i32)
-            == 0 as i32
-        {
+        if (*cent).currentState.event & !(0x100 as i32 | 0x200 as i32) == 0 as i32 {
             return;
         }
     }

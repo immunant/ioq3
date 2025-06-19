@@ -2342,20 +2342,15 @@ Controls_UpdateModel
 unsafe extern "C" fn Controls_UpdateModel(mut anim: i32) {
     s_controls.playerViewangles[2 as i32 as usize] =
         0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    s_controls.playerViewangles[1 as i32 as usize] =
-        s_controls.playerViewangles[2 as i32 as usize];
-    s_controls.playerViewangles[0 as i32 as usize] =
-        s_controls.playerViewangles[1 as i32 as usize];
+    s_controls.playerViewangles[1 as i32 as usize] = s_controls.playerViewangles[2 as i32 as usize];
+    s_controls.playerViewangles[0 as i32 as usize] = s_controls.playerViewangles[1 as i32 as usize];
     s_controls.playerMoveangles[2 as i32 as usize] =
         0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    s_controls.playerMoveangles[1 as i32 as usize] =
-        s_controls.playerMoveangles[2 as i32 as usize];
-    s_controls.playerMoveangles[0 as i32 as usize] =
-        s_controls.playerMoveangles[1 as i32 as usize];
+    s_controls.playerMoveangles[1 as i32 as usize] = s_controls.playerMoveangles[2 as i32 as usize];
+    s_controls.playerMoveangles[0 as i32 as usize] = s_controls.playerMoveangles[1 as i32 as usize];
     s_controls.playerViewangles[1 as i32 as usize] =
         (180 as i32 - 30 as i32) as crate::src::qcommon::q_shared::vec_t;
-    s_controls.playerMoveangles[1 as i32 as usize] =
-        s_controls.playerViewangles[1 as i32 as usize];
+    s_controls.playerMoveangles[1 as i32 as usize] = s_controls.playerViewangles[1 as i32 as usize];
     s_controls.playerLegs = crate::bg_public_h::LEGS_IDLE as i32;
     s_controls.playerTorso = crate::bg_public_h::TORSO_STAND as i32;
     s_controls.playerWeapon = crate::bg_public_h::WP_NUM_WEAPONS;
@@ -2366,25 +2361,17 @@ unsafe extern "C" fn Controls_UpdateModel(mut anim: i32) {
         3 => s_controls.playerLegs = crate::bg_public_h::LEGS_BACK as i32,
         4 => s_controls.playerLegs = crate::bg_public_h::LEGS_JUMP as i32,
         5 => s_controls.playerLegs = crate::bg_public_h::LEGS_IDLECR as i32,
-        8 => {
-            s_controls.playerViewangles[1 as i32 as usize] +=
-                90 as i32 as f32
-        }
-        9 => {
-            s_controls.playerViewangles[1 as i32 as usize] -=
-                90 as i32 as f32
-        }
+        8 => s_controls.playerViewangles[1 as i32 as usize] += 90 as i32 as f32,
+        9 => s_controls.playerViewangles[1 as i32 as usize] -= 90 as i32 as f32,
         6 => {
             s_controls.playerLegs = crate::bg_public_h::LEGS_WALK as i32;
-            s_controls.playerMoveangles[1 as i32 as usize] = s_controls.playerViewangles
-                [1 as i32 as usize]
-                + 90 as i32 as f32
+            s_controls.playerMoveangles[1 as i32 as usize] =
+                s_controls.playerViewangles[1 as i32 as usize] + 90 as i32 as f32
         }
         7 => {
             s_controls.playerLegs = crate::bg_public_h::LEGS_WALK as i32;
-            s_controls.playerMoveangles[1 as i32 as usize] = s_controls.playerViewangles
-                [1 as i32 as usize]
-                - 90 as i32 as f32
+            s_controls.playerMoveangles[1 as i32 as usize] =
+                s_controls.playerViewangles[1 as i32 as usize] - 90 as i32 as f32
         }
         10 => {
             s_controls.playerViewangles[0 as i32 as usize] =
@@ -2448,8 +2435,7 @@ unsafe extern "C" fn Controls_Update() {
             if control.is_null() {
                 break;
             }
-            (*control).flags |=
-                0x1000 as i32 as u32 | 0x4000 as i32 as u32;
+            (*control).flags |= 0x1000 as i32 as u32 | 0x4000 as i32 as u32;
             j += 1
         }
         i += 1
@@ -2462,9 +2448,7 @@ unsafe extern "C" fn Controls_Update() {
         if control.is_null() {
             break;
         }
-        (*control).flags &= !(0x2000 as i32 as u32
-            | 0x1000 as i32 as u32
-            | 0x4000 as i32 as u32);
+        (*control).flags &= !(0x2000 as i32 as u32 | 0x1000 as i32 as u32 | 0x4000 as i32 as u32);
         j += 1
     }
     // position controls
@@ -2508,18 +2492,14 @@ unsafe extern "C" fn Controls_Update() {
         i += 1
     }
     // makes sure flags are right on the group selection controls
-    s_controls.looking.generic.flags &= !(0x2000 as i32 as u32
-        | 0x40 as i32 as u32
-        | 0x80 as i32 as u32);
-    s_controls.movement.generic.flags &= !(0x2000 as i32 as u32
-        | 0x40 as i32 as u32
-        | 0x80 as i32 as u32);
-    s_controls.weapons.generic.flags &= !(0x2000 as i32 as u32
-        | 0x40 as i32 as u32
-        | 0x80 as i32 as u32);
-    s_controls.misc.generic.flags &= !(0x2000 as i32 as u32
-        | 0x40 as i32 as u32
-        | 0x80 as i32 as u32);
+    s_controls.looking.generic.flags &=
+        !(0x2000 as i32 as u32 | 0x40 as i32 as u32 | 0x80 as i32 as u32);
+    s_controls.movement.generic.flags &=
+        !(0x2000 as i32 as u32 | 0x40 as i32 as u32 | 0x80 as i32 as u32);
+    s_controls.weapons.generic.flags &=
+        !(0x2000 as i32 as u32 | 0x40 as i32 as u32 | 0x80 as i32 as u32);
+    s_controls.misc.generic.flags &=
+        !(0x2000 as i32 as u32 | 0x40 as i32 as u32 | 0x80 as i32 as u32);
     s_controls.looking.generic.flags |= 0x100 as i32 as u32;
     s_controls.movement.generic.flags |= 0x100 as i32 as u32;
     s_controls.weapons.generic.flags |= 0x100 as i32 as u32;
@@ -2528,23 +2508,19 @@ unsafe extern "C" fn Controls_Update() {
     match s_controls.section {
         0 => {
             s_controls.movement.generic.flags &= !(0x100 as i32 as u32);
-            s_controls.movement.generic.flags |=
-                0x40 as i32 as u32 | 0x80 as i32 as u32
+            s_controls.movement.generic.flags |= 0x40 as i32 as u32 | 0x80 as i32 as u32
         }
         1 => {
             s_controls.looking.generic.flags &= !(0x100 as i32 as u32);
-            s_controls.looking.generic.flags |=
-                0x40 as i32 as u32 | 0x80 as i32 as u32
+            s_controls.looking.generic.flags |= 0x40 as i32 as u32 | 0x80 as i32 as u32
         }
         2 => {
             s_controls.weapons.generic.flags &= !(0x100 as i32 as u32);
-            s_controls.weapons.generic.flags |=
-                0x40 as i32 as u32 | 0x80 as i32 as u32
+            s_controls.weapons.generic.flags |= 0x40 as i32 as u32 | 0x80 as i32 as u32
         }
         3 => {
             s_controls.misc.generic.flags &= !(0x100 as i32 as u32);
-            s_controls.misc.generic.flags |=
-                0x40 as i32 as u32 | 0x80 as i32 as u32
+            s_controls.misc.generic.flags |= 0x40 as i32 as u32 | 0x80 as i32 as u32
         }
         _ => {}
     };
@@ -2577,11 +2553,7 @@ unsafe extern "C" fn Controls_DrawKeyBinding(mut self_0: *mut libc::c_void) {
             b"???\x00" as *const u8 as *const libc::c_char,
         );
     } else {
-        crate::src::ui::ui_syscalls::trap_Key_KeynumToStringBuf(
-            b1,
-            name.as_mut_ptr(),
-            32 as i32,
-        );
+        crate::src::ui::ui_syscalls::trap_Key_KeynumToStringBuf(b1, name.as_mut_ptr(), 32 as i32);
         crate::src::qcommon::q_shared::Q_strupr(name.as_mut_ptr());
         b2 = g_bindings[(*a).generic.id as usize].bind2;
         if b2 != -(1 as i32) {
@@ -2958,9 +2930,7 @@ Controls_MenuKey
 =================
 */
 
-unsafe extern "C" fn Controls_MenuKey(
-    mut key: i32,
-) -> crate::src::qcommon::q_shared::sfxHandle_t {
+unsafe extern "C" fn Controls_MenuKey(mut key: i32) -> crate::src::qcommon::q_shared::sfxHandle_t {
     let mut current_block: u64;
     let mut id: i32 = 0;
     let mut _i: i32 = 0;
@@ -3259,9 +3229,7 @@ unsafe extern "C" fn Controls_InitWeapons() {
         .as_mut_ptr()
         .offset(1 as i32 as isize);
     while !(*item).classname.is_null() {
-        if !((*item).giType as u32
-            != crate::bg_public_h::IT_WEAPON as i32 as u32)
-        {
+        if !((*item).giType as u32 != crate::bg_public_h::IT_WEAPON as i32 as u32) {
             crate::src::ui::ui_syscalls::trap_R_RegisterModel(
                 (*item).world_model[0 as i32 as usize],
             );
@@ -3300,27 +3268,23 @@ unsafe extern "C" fn Controls_MenuInit() {
     s_controls.banner.style = 0x1 as i32;
     s_controls.framel.generic.type_0 = 6 as i32;
     s_controls.framel.generic.name = b"menu/art/frame2_l\x00" as *const u8 as *const libc::c_char;
-    s_controls.framel.generic.flags =
-        0x4 as i32 as u32 | 0x4000 as i32 as u32;
+    s_controls.framel.generic.flags = 0x4 as i32 as u32 | 0x4000 as i32 as u32;
     s_controls.framel.generic.x = 0 as i32;
     s_controls.framel.generic.y = 78 as i32;
     s_controls.framel.width = 256 as i32;
     s_controls.framel.height = 329 as i32;
     s_controls.framer.generic.type_0 = 6 as i32;
     s_controls.framer.generic.name = b"menu/art/frame1_r\x00" as *const u8 as *const libc::c_char;
-    s_controls.framer.generic.flags =
-        0x4 as i32 as u32 | 0x4000 as i32 as u32;
+    s_controls.framer.generic.flags = 0x4 as i32 as u32 | 0x4000 as i32 as u32;
     s_controls.framer.generic.x = 376 as i32;
     s_controls.framer.generic.y = 76 as i32;
     s_controls.framer.width = 256 as i32;
     s_controls.framer.height = 334 as i32;
     s_controls.looking.generic.type_0 = 9 as i32;
-    s_controls.looking.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_controls.looking.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     s_controls.looking.generic.id = 101 as i32;
-    s_controls.looking.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.looking.generic.callback =
+        Some(Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.looking.generic.x = 152 as i32;
     s_controls.looking.generic.y = 240 as i32 - 2 as i32 * 27 as i32;
     s_controls.looking.string =
@@ -3328,12 +3292,10 @@ unsafe extern "C" fn Controls_MenuInit() {
     s_controls.looking.style = 0x2 as i32;
     s_controls.looking.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     s_controls.movement.generic.type_0 = 9 as i32;
-    s_controls.movement.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_controls.movement.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     s_controls.movement.generic.id = 100 as i32;
-    s_controls.movement.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.movement.generic.callback =
+        Some(Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.movement.generic.x = 152 as i32;
     s_controls.movement.generic.y = 240 as i32 - 27 as i32;
     s_controls.movement.string =
@@ -3341,12 +3303,10 @@ unsafe extern "C" fn Controls_MenuInit() {
     s_controls.movement.style = 0x2 as i32;
     s_controls.movement.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     s_controls.weapons.generic.type_0 = 9 as i32;
-    s_controls.weapons.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_controls.weapons.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     s_controls.weapons.generic.id = 102 as i32;
-    s_controls.weapons.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.weapons.generic.callback =
+        Some(Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.weapons.generic.x = 152 as i32;
     s_controls.weapons.generic.y = 240 as i32;
     s_controls.weapons.string =
@@ -3354,12 +3314,10 @@ unsafe extern "C" fn Controls_MenuInit() {
     s_controls.weapons.style = 0x2 as i32;
     s_controls.weapons.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     s_controls.misc.generic.type_0 = 9 as i32;
-    s_controls.misc.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_controls.misc.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     s_controls.misc.generic.id = 103 as i32;
-    s_controls.misc.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.misc.generic.callback =
+        Some(Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.misc.generic.x = 152 as i32;
     s_controls.misc.generic.y = 240 as i32 + 27 as i32;
     s_controls.misc.string = b"MISC\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
@@ -3367,14 +3325,12 @@ unsafe extern "C" fn Controls_MenuInit() {
     s_controls.misc.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     s_controls.back.generic.type_0 = 6 as i32;
     s_controls.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    s_controls.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_controls.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_controls.back.generic.x = 0 as i32;
     s_controls.back.generic.y = 480 as i32 - 64 as i32;
     s_controls.back.generic.id = 105 as i32;
-    s_controls.back.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.back.generic.callback =
+        Some(Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.back.width = 128 as i32;
     s_controls.back.height = 64 as i32;
     s_controls.back.focuspic =
@@ -3388,277 +3344,202 @@ unsafe extern "C" fn Controls_MenuInit() {
     s_controls.player.width = 32 as i32 * 10 as i32;
     s_controls.player.height = 56 as i32 * 10 as i32;
     s_controls.walkforward.generic.type_0 = 2 as i32;
-    s_controls.walkforward.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.walkforward.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.walkforward.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.walkforward.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.walkforward.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.walkforward.generic.id = 3 as i32;
     s_controls.backpedal.generic.type_0 = 2 as i32;
-    s_controls.backpedal.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.backpedal.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.backpedal.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.backpedal.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.backpedal.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.backpedal.generic.id = 4 as i32;
     s_controls.stepleft.generic.type_0 = 2 as i32;
-    s_controls.stepleft.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.stepleft.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.stepleft.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.stepleft.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.stepleft.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.stepleft.generic.id = 5 as i32;
     s_controls.stepright.generic.type_0 = 2 as i32;
-    s_controls.stepright.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.stepright.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.stepright.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.stepright.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.stepright.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.stepright.generic.id = 6 as i32;
     s_controls.moveup.generic.type_0 = 2 as i32;
-    s_controls.moveup.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.moveup.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.moveup.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.moveup.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.moveup.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.moveup.generic.id = 7 as i32;
     s_controls.movedown.generic.type_0 = 2 as i32;
-    s_controls.movedown.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.movedown.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.movedown.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.movedown.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.movedown.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.movedown.generic.id = 8 as i32;
     s_controls.turnleft.generic.type_0 = 2 as i32;
-    s_controls.turnleft.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.turnleft.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.turnleft.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.turnleft.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.turnleft.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.turnleft.generic.id = 9 as i32;
     s_controls.turnright.generic.type_0 = 2 as i32;
-    s_controls.turnright.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.turnright.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.turnright.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.turnright.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.turnright.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.turnright.generic.id = 10 as i32;
     s_controls.sidestep.generic.type_0 = 2 as i32;
-    s_controls.sidestep.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.sidestep.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.sidestep.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.sidestep.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.sidestep.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.sidestep.generic.id = 11 as i32;
     s_controls.run.generic.type_0 = 2 as i32;
-    s_controls.run.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.run.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.run.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.run.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.run.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.run.generic.id = 2 as i32;
     s_controls.chainsaw.generic.type_0 = 2 as i32;
-    s_controls.chainsaw.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.chainsaw.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.chainsaw.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.chainsaw.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.chainsaw.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.chainsaw.generic.id = 17 as i32;
     s_controls.machinegun.generic.type_0 = 2 as i32;
-    s_controls.machinegun.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.machinegun.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.machinegun.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.machinegun.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.machinegun.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.machinegun.generic.id = 18 as i32;
     s_controls.shotgun.generic.type_0 = 2 as i32;
-    s_controls.shotgun.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.shotgun.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.shotgun.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.shotgun.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.shotgun.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.shotgun.generic.id = 19 as i32;
     s_controls.grenadelauncher.generic.type_0 = 2 as i32;
-    s_controls.grenadelauncher.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.grenadelauncher.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.grenadelauncher.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.grenadelauncher.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.grenadelauncher.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.grenadelauncher.generic.id = 20 as i32;
     s_controls.rocketlauncher.generic.type_0 = 2 as i32;
-    s_controls.rocketlauncher.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.rocketlauncher.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.rocketlauncher.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.rocketlauncher.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.rocketlauncher.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.rocketlauncher.generic.id = 21 as i32;
     s_controls.lightning.generic.type_0 = 2 as i32;
-    s_controls.lightning.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.lightning.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.lightning.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.lightning.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.lightning.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.lightning.generic.id = 22 as i32;
     s_controls.railgun.generic.type_0 = 2 as i32;
-    s_controls.railgun.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.railgun.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.railgun.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.railgun.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.railgun.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.railgun.generic.id = 23 as i32;
     s_controls.plasma.generic.type_0 = 2 as i32;
-    s_controls.plasma.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.plasma.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.plasma.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.plasma.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.plasma.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.plasma.generic.id = 24 as i32;
     s_controls.bfg.generic.type_0 = 2 as i32;
-    s_controls.bfg.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.bfg.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.bfg.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.bfg.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.bfg.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.bfg.generic.id = 25 as i32;
     s_controls.attack.generic.type_0 = 2 as i32;
-    s_controls.attack.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.attack.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.attack.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.attack.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.attack.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.attack.generic.id = 26 as i32;
     s_controls.prevweapon.generic.type_0 = 2 as i32;
-    s_controls.prevweapon.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.prevweapon.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.prevweapon.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.prevweapon.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.prevweapon.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.prevweapon.generic.id = 27 as i32;
     s_controls.nextweapon.generic.type_0 = 2 as i32;
-    s_controls.nextweapon.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.nextweapon.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.nextweapon.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.nextweapon.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.nextweapon.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.nextweapon.generic.id = 28 as i32;
     s_controls.lookup.generic.type_0 = 2 as i32;
-    s_controls.lookup.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.lookup.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.lookup.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.lookup.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.lookup.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.lookup.generic.id = 12 as i32;
     s_controls.lookdown.generic.type_0 = 2 as i32;
-    s_controls.lookdown.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.lookdown.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.lookdown.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.lookdown.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.lookdown.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.lookdown.generic.id = 13 as i32;
     s_controls.mouselook.generic.type_0 = 2 as i32;
-    s_controls.mouselook.generic.flags = 0x4 as i32 as u32
-        | 0x80 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.mouselook.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.mouselook.generic.flags =
+        0x4 as i32 as u32 | 0x80 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.mouselook.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.mouselook.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.mouselook.generic.id = 14 as i32;
@@ -3667,52 +3548,39 @@ unsafe extern "C" fn Controls_MenuInit() {
     s_controls.freelook.generic.x = 640 as i32 / 2 as i32;
     s_controls.freelook.generic.name = b"free look\x00" as *const u8 as *const libc::c_char;
     s_controls.freelook.generic.id = 35 as i32;
-    s_controls.freelook.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.freelook.generic.callback =
+        Some(Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.freelook.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.centerview.generic.type_0 = 2 as i32;
-    s_controls.centerview.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.centerview.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.centerview.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.centerview.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.centerview.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.centerview.generic.id = 15 as i32;
     s_controls.zoomview.generic.type_0 = 2 as i32;
-    s_controls.zoomview.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.zoomview.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.zoomview.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.zoomview.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.zoomview.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.zoomview.generic.id = 16 as i32;
     s_controls.useitem.generic.type_0 = 2 as i32;
-    s_controls.useitem.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.useitem.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.useitem.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.useitem.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.useitem.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.useitem.generic.id = 1 as i32;
     s_controls.showscores.generic.type_0 = 2 as i32;
-    s_controls.showscores.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.showscores.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.showscores.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.showscores.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.showscores.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.showscores.generic.id = 0 as i32;
@@ -3721,9 +3589,8 @@ unsafe extern "C" fn Controls_MenuInit() {
     s_controls.invertmouse.generic.x = 640 as i32 / 2 as i32;
     s_controls.invertmouse.generic.name = b"invert mouse\x00" as *const u8 as *const libc::c_char;
     s_controls.invertmouse.generic.id = 36 as i32;
-    s_controls.invertmouse.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.invertmouse.generic.callback =
+        Some(Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.invertmouse.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.smoothmouse.generic.type_0 = 5 as i32;
@@ -3731,9 +3598,8 @@ unsafe extern "C" fn Controls_MenuInit() {
     s_controls.smoothmouse.generic.x = 640 as i32 / 2 as i32;
     s_controls.smoothmouse.generic.name = b"smooth mouse\x00" as *const u8 as *const libc::c_char;
     s_controls.smoothmouse.generic.id = 42 as i32;
-    s_controls.smoothmouse.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.smoothmouse.generic.callback =
+        Some(Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.smoothmouse.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.alwaysrun.generic.type_0 = 5 as i32;
@@ -3741,9 +3607,8 @@ unsafe extern "C" fn Controls_MenuInit() {
     s_controls.alwaysrun.generic.x = 640 as i32 / 2 as i32;
     s_controls.alwaysrun.generic.name = b"always run\x00" as *const u8 as *const libc::c_char;
     s_controls.alwaysrun.generic.id = 37 as i32;
-    s_controls.alwaysrun.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.alwaysrun.generic.callback =
+        Some(Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.alwaysrun.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.autoswitch.generic.type_0 = 5 as i32;
@@ -3752,9 +3617,8 @@ unsafe extern "C" fn Controls_MenuInit() {
     s_controls.autoswitch.generic.name =
         b"autoswitch weapons\x00" as *const u8 as *const libc::c_char;
     s_controls.autoswitch.generic.id = 38 as i32;
-    s_controls.autoswitch.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.autoswitch.generic.callback =
+        Some(Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.autoswitch.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.sensitivity.generic.type_0 = 1 as i32;
@@ -3762,76 +3626,57 @@ unsafe extern "C" fn Controls_MenuInit() {
     s_controls.sensitivity.generic.flags = 0x2 as i32 as u32;
     s_controls.sensitivity.generic.name = b"mouse speed\x00" as *const u8 as *const libc::c_char;
     s_controls.sensitivity.generic.id = 39 as i32;
-    s_controls.sensitivity.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.sensitivity.generic.callback =
+        Some(Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.sensitivity.minvalue = 2 as i32 as f32;
     s_controls.sensitivity.maxvalue = 30 as i32 as f32;
     s_controls.sensitivity.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.gesture.generic.type_0 = 2 as i32;
-    s_controls.gesture.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.gesture.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.gesture.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.gesture.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.gesture.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.gesture.generic.id = 29 as i32;
     s_controls.chat.generic.type_0 = 2 as i32;
-    s_controls.chat.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.chat.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.chat.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.chat.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.chat.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.chat.generic.id = 30 as i32;
     s_controls.chat2.generic.type_0 = 2 as i32;
-    s_controls.chat2.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.chat2.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.chat2.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.chat2.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.chat2.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.chat2.generic.id = 31 as i32;
     s_controls.chat3.generic.type_0 = 2 as i32;
-    s_controls.chat3.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.chat3.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.chat3.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.chat3.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.chat3.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.chat3.generic.id = 32 as i32;
     s_controls.chat4.generic.type_0 = 2 as i32;
-    s_controls.chat4.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.chat4.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.chat4.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.chat4.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.chat4.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.chat4.generic.id = 33 as i32;
     s_controls.togglemenu.generic.type_0 = 2 as i32;
-    s_controls.togglemenu.generic.flags = 0x4 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2000 as i32 as u32
-        | 0x1000 as i32 as u32;
-    s_controls.togglemenu.generic.callback = Some(
-        Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.togglemenu.generic.flags =
+        0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x2000 as i32 as u32 | 0x1000 as i32 as u32;
+    s_controls.togglemenu.generic.callback =
+        Some(Controls_ActionEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.togglemenu.generic.ownerdraw =
         Some(Controls_DrawKeyBinding as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.togglemenu.generic.id = 34 as i32;
@@ -3840,9 +3685,8 @@ unsafe extern "C" fn Controls_MenuInit() {
     s_controls.joyenable.generic.x = 640 as i32 / 2 as i32;
     s_controls.joyenable.generic.name = b"joystick\x00" as *const u8 as *const libc::c_char;
     s_controls.joyenable.generic.id = 40 as i32;
-    s_controls.joyenable.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.joyenable.generic.callback =
+        Some(Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.joyenable.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.joythreshold.generic.type_0 = 1 as i32;
@@ -3851,16 +3695,14 @@ unsafe extern "C" fn Controls_MenuInit() {
     s_controls.joythreshold.generic.name =
         b"joystick threshold\x00" as *const u8 as *const libc::c_char;
     s_controls.joythreshold.generic.id = 41 as i32;
-    s_controls.joythreshold.generic.callback = Some(
-        Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_controls.joythreshold.generic.callback =
+        Some(Controls_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_controls.joythreshold.minvalue = 0.05f32;
     s_controls.joythreshold.maxvalue = 0.75f32;
     s_controls.joythreshold.generic.statusbar =
         Some(Controls_StatusBar as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_controls.name.generic.type_0 = 9 as i32;
-    s_controls.name.generic.flags =
-        0x8 as i32 as u32 | 0x4000 as i32 as u32;
+    s_controls.name.generic.flags = 0x8 as i32 as u32 | 0x4000 as i32 as u32;
     s_controls.name.generic.x = 320 as i32;
     s_controls.name.generic.y = 440 as i32;
     s_controls.name.string = playername.as_mut_ptr();

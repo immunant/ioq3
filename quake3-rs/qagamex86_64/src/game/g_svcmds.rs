@@ -269,18 +269,10 @@ UpdateIPBans
 */
 
 unsafe extern "C" fn UpdateIPBans() {
-    let mut b: [crate::src::qcommon::q_shared::byte; 4] = [
-        0 as i32 as crate::src::qcommon::q_shared::byte,
-        0,
-        0,
-        0,
-    ];
-    let mut m: [crate::src::qcommon::q_shared::byte; 4] = [
-        0 as i32 as crate::src::qcommon::q_shared::byte,
-        0,
-        0,
-        0,
-    ];
+    let mut b: [crate::src::qcommon::q_shared::byte; 4] =
+        [0 as i32 as crate::src::qcommon::q_shared::byte, 0, 0, 0];
+    let mut m: [crate::src::qcommon::q_shared::byte; 4] =
+        [0 as i32 as crate::src::qcommon::q_shared::byte, 0, 0, 0];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut iplist_final: [libc::c_char; 256] = [
@@ -679,20 +671,15 @@ pub unsafe extern "C" fn G_FilterPacket(
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut i: i32 = 0;
     let mut in_0: u32 = 0;
-    let mut m: [crate::src::qcommon::q_shared::byte; 4] = [
-        0 as i32 as crate::src::qcommon::q_shared::byte,
-        0,
-        0,
-        0,
-    ];
+    let mut m: [crate::src::qcommon::q_shared::byte; 4] =
+        [0 as i32 as crate::src::qcommon::q_shared::byte, 0, 0, 0];
     let mut p: *mut libc::c_char = 0 as *mut libc::c_char;
     i = 0 as i32;
     p = from;
     while *p as i32 != 0 && i < 4 as i32 {
         m[i as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte;
         while *p as i32 >= '0' as i32 && *p as i32 <= '9' as i32 {
-            m[i as usize] = (m[i as usize] as i32 * 10 as i32
-                + (*p as i32 - '0' as i32))
+            m[i as usize] = (m[i as usize] as i32 * 10 as i32 + (*p as i32 - '0' as i32))
                 as crate::src::qcommon::q_shared::byte;
             p = p.offset(1)
         }
@@ -706,8 +693,8 @@ pub unsafe extern "C" fn G_FilterPacket(
     i = 0 as i32;
     while i < numIPFilters {
         if in_0 & ipFilters[i as usize].mask == ipFilters[i as usize].compare {
-            return (crate::src::game::g_main::g_filterBan.integer != 0 as i32)
-                as i32 as crate::src::qcommon::q_shared::qboolean;
+            return (crate::src::game::g_main::g_filterBan.integer != 0 as i32) as i32
+                as crate::src::qcommon::q_shared::qboolean;
         }
         i += 1
     }
@@ -963,9 +950,7 @@ pub unsafe extern "C" fn ClientForString(
         cl = &mut *crate::src::game::g_main::level
             .clients
             .offset(idnum as isize) as *mut crate::g_local_h::gclient_s;
-        if (*cl).pers.connected as u32
-            == crate::g_local_h::CON_DISCONNECTED as i32 as u32
-        {
+        if (*cl).pers.connected as u32 == crate::g_local_h::CON_DISCONNECTED as i32 as u32 {
             crate::src::game::g_main::G_Printf(
                 b"Client %i is not connected\n\x00" as *const u8 as *const libc::c_char,
                 idnum,
@@ -979,9 +964,7 @@ pub unsafe extern "C" fn ClientForString(
     while i < crate::src::game::g_main::level.maxclients {
         cl = &mut *crate::src::game::g_main::level.clients.offset(i as isize)
             as *mut crate::g_local_h::gclient_s;
-        if !((*cl).pers.connected as u32
-            == crate::g_local_h::CON_DISCONNECTED as i32 as u32)
-        {
+        if !((*cl).pers.connected as u32 == crate::g_local_h::CON_DISCONNECTED as i32 as u32) {
             if crate::src::qcommon::q_shared::Q_stricmp((*cl).pers.netname.as_mut_ptr(), s) == 0 {
                 return cl;
             }

@@ -64,36 +64,31 @@ pub unsafe extern "C" fn silk_stereo_decode_pred(
         n - 5 as i32 * ix[0 as i32 as usize][2 as i32 as usize];
     n = 0 as i32;
     while n < 2 as i32 {
-        ix[n as usize][0 as i32 as usize] =
-            crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
-                psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                crate::src::opus_1_2_1::silk::tables_other::silk_uniform3_iCDF.as_ptr(),
-                8 as i32 as u32,
-            );
-        ix[n as usize][1 as i32 as usize] =
-            crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
-                psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                crate::src::opus_1_2_1::silk::tables_other::silk_uniform5_iCDF.as_ptr(),
-                8 as i32 as u32,
-            );
+        ix[n as usize][0 as i32 as usize] = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
+            psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+            crate::src::opus_1_2_1::silk::tables_other::silk_uniform3_iCDF.as_ptr(),
+            8 as i32 as u32,
+        );
+        ix[n as usize][1 as i32 as usize] = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
+            psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
+            crate::src::opus_1_2_1::silk::tables_other::silk_uniform5_iCDF.as_ptr(),
+            8 as i32 as u32,
+        );
         n += 1
     }
     /* Dequantize */
     n = 0 as i32;
     while n < 2 as i32 {
-        ix[n as usize][0 as i32 as usize] +=
-            3 as i32 * ix[n as usize][2 as i32 as usize];
+        ix[n as usize][0 as i32 as usize] += 3 as i32 * ix[n as usize][2 as i32 as usize];
         low_Q13 = crate::src::opus_1_2_1::silk::tables_other::silk_stereo_pred_quant_Q13
             [ix[n as usize][0 as i32 as usize] as usize]
             as crate::opus_types_h::opus_int32;
         step_Q13 = ((crate::src::opus_1_2_1::silk::tables_other::silk_stereo_pred_quant_Q13
-            [(ix[n as usize][0 as i32 as usize] + 1 as i32) as usize]
-            as i32
+            [(ix[n as usize][0 as i32 as usize] + 1 as i32) as usize] as i32
             - low_Q13) as i64
-            * (0.5f64 / 5 as i32 as f64
-                * ((1 as i32 as i64) << 16 as i32) as f64
-                + 0.5f64) as crate::opus_types_h::opus_int32
-                as crate::opus_types_h::opus_int16 as i64
+            * (0.5f64 / 5 as i32 as f64 * ((1 as i32 as i64) << 16 as i32) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32 as crate::opus_types_h::opus_int16
+                as i64
             >> 16 as i32) as crate::opus_types_h::opus_int32;
         *pred_Q13.offset(n as isize) = low_Q13
             + step_Q13 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32

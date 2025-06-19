@@ -380,8 +380,7 @@ pub unsafe extern "C" fn silk_encode_indices(
     /* ******************************************/
     /* Encode signal type and quantizer offset */
     /* ******************************************/
-    typeOffset = 2 as i32 * (*psIndices).signalType as i32
-        + (*psIndices).quantOffsetType as i32;
+    typeOffset = 2 as i32 * (*psIndices).signalType as i32 + (*psIndices).quantOffsetType as i32;
     if encode_LBRR != 0 || typeOffset >= 2 as i32 {
         crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
             psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
@@ -444,8 +443,8 @@ pub unsafe extern "C" fn silk_encode_indices(
         psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
         (*psIndices).NLSFIndices[0 as i32 as usize] as i32,
         &*(*(*psEncC).psNLSF_CB).CB1_iCDF.offset(
-            (((*psIndices).signalType as i32 >> 1 as i32)
-                * (*(*psEncC).psNLSF_CB).nVectors as i32) as isize,
+            (((*psIndices).signalType as i32 >> 1 as i32) * (*(*psEncC).psNLSF_CB).nVectors as i32)
+                as isize,
         ),
         8 as i32 as u32,
     );
@@ -457,9 +456,7 @@ pub unsafe extern "C" fn silk_encode_indices(
     );
     i = 0 as i32;
     while i < (*(*psEncC).psNLSF_CB).order as i32 {
-        if (*psIndices).NLSFIndices[(i + 1 as i32) as usize] as i32
-            >= 4 as i32
-        {
+        if (*psIndices).NLSFIndices[(i + 1 as i32) as usize] as i32 >= 4 as i32 {
             crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
                 psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 2 as i32 * 4 as i32,
@@ -470,14 +467,11 @@ pub unsafe extern "C" fn silk_encode_indices(
             );
             crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
                 psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                (*psIndices).NLSFIndices[(i + 1 as i32) as usize] as i32
-                    - 4 as i32,
+                (*psIndices).NLSFIndices[(i + 1 as i32) as usize] as i32 - 4 as i32,
                 crate::src::opus_1_2_1::silk::tables_other::silk_NLSF_EXT_iCDF.as_ptr(),
                 8 as i32 as u32,
             );
-        } else if (*psIndices).NLSFIndices[(i + 1 as i32) as usize] as i32
-            <= -(4 as i32)
-        {
+        } else if (*psIndices).NLSFIndices[(i + 1 as i32) as usize] as i32 <= -(4 as i32) {
             crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
                 psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                 0 as i32,
@@ -488,16 +482,14 @@ pub unsafe extern "C" fn silk_encode_indices(
             );
             crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
                 psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                -((*psIndices).NLSFIndices[(i + 1 as i32) as usize] as i32)
-                    - 4 as i32,
+                -((*psIndices).NLSFIndices[(i + 1 as i32) as usize] as i32) - 4 as i32,
                 crate::src::opus_1_2_1::silk::tables_other::silk_NLSF_EXT_iCDF.as_ptr(),
                 8 as i32 as u32,
             );
         } else {
             crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
                 psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                (*psIndices).NLSFIndices[(i + 1 as i32) as usize] as i32
-                    + 4 as i32,
+                (*psIndices).NLSFIndices[(i + 1 as i32) as usize] as i32 + 4 as i32,
                 &*(*(*psEncC).psNLSF_CB)
                     .ec_iCDF
                     .offset(*ec_ix.as_mut_ptr().offset(i as isize) as isize),
@@ -524,8 +516,7 @@ pub unsafe extern "C" fn silk_encode_indices(
         encode_absolute_lagIndex = 1 as i32;
         if condCoding == 2 as i32 && (*psEncC).ec_prevSignalType == 2 as i32 {
             /* Delta Encoding */
-            delta_lagIndex =
-                (*psIndices).lagIndex as i32 - (*psEncC).ec_prevLagIndex as i32;
+            delta_lagIndex = (*psIndices).lagIndex as i32 - (*psEncC).ec_prevLagIndex as i32;
             if delta_lagIndex < -(8 as i32) || delta_lagIndex > 11 as i32 {
                 delta_lagIndex = 0 as i32
             } else {
@@ -544,8 +535,7 @@ pub unsafe extern "C" fn silk_encode_indices(
             /* Absolute encoding */
             let mut pitch_high_bits: crate::opus_types_h::opus_int32 = 0;
             let mut pitch_low_bits: crate::opus_types_h::opus_int32 = 0;
-            pitch_high_bits =
-                (*psIndices).lagIndex as i32 / ((*psEncC).fs_kHz >> 1 as i32);
+            pitch_high_bits = (*psIndices).lagIndex as i32 / ((*psEncC).fs_kHz >> 1 as i32);
             pitch_low_bits = (*psIndices).lagIndex as i32
                 - pitch_high_bits as crate::opus_types_h::opus_int16
                     as crate::opus_types_h::opus_int32

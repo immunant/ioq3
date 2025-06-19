@@ -753,8 +753,7 @@ pub unsafe extern "C" fn CG_DrawInformation() {
         );
         y += 27 as i32
     }
-    if (crate::src::cgame::cg_main::cgs.gametype as u32)
-        < crate::bg_public_h::GT_CTF as i32 as u32
+    if (crate::src::cgame::cg_main::cgs.gametype as u32) < crate::bg_public_h::GT_CTF as i32 as u32
     {
         value = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
             info,
@@ -774,9 +773,7 @@ pub unsafe extern "C" fn CG_DrawInformation() {
             y += 27 as i32
         }
     }
-    if crate::src::cgame::cg_main::cgs.gametype as u32
-        >= crate::bg_public_h::GT_CTF as i32 as u32
-    {
+    if crate::src::cgame::cg_main::cgs.gametype as u32 >= crate::bg_public_h::GT_CTF as i32 as u32 {
         value = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
             info,
             b"capturelimit\x00" as *const u8 as *const libc::c_char,

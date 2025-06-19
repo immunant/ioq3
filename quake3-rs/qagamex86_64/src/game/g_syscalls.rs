@@ -487,9 +487,7 @@ pub unsafe extern "C" fn trap_Cvar_Set(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_Cvar_VariableIntegerValue(
-    mut var_name: *const libc::c_char,
-) -> i32 {
+pub unsafe extern "C" fn trap_Cvar_VariableIntegerValue(mut var_name: *const libc::c_char) -> i32 {
     return syscall.expect("non-null function pointer")(
         crate::g_public_h::G_CVAR_VARIABLE_INTEGER_VALUE as i32 as crate::stdlib::intptr_t,
         var_name,
@@ -529,10 +527,7 @@ pub unsafe extern "C" fn trap_LocateGameData(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_DropClient(
-    mut clientNum: i32,
-    mut reason: *const libc::c_char,
-) {
+pub unsafe extern "C" fn trap_DropClient(mut clientNum: i32, mut reason: *const libc::c_char) {
     syscall.expect("non-null function pointer")(
         crate::g_public_h::G_DROP_CLIENT as i32 as crate::stdlib::intptr_t,
         clientNum,
@@ -541,10 +536,7 @@ pub unsafe extern "C" fn trap_DropClient(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_SendServerCommand(
-    mut clientNum: i32,
-    mut text: *const libc::c_char,
-) {
+pub unsafe extern "C" fn trap_SendServerCommand(mut clientNum: i32, mut text: *const libc::c_char) {
     syscall.expect("non-null function pointer")(
         crate::g_public_h::G_SEND_SERVER_COMMAND as i32 as crate::stdlib::intptr_t,
         clientNum,
@@ -553,10 +545,7 @@ pub unsafe extern "C" fn trap_SendServerCommand(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_SetConfigstring(
-    mut num: i32,
-    mut string: *const libc::c_char,
-) {
+pub unsafe extern "C" fn trap_SetConfigstring(mut num: i32, mut string: *const libc::c_char) {
     syscall.expect("non-null function pointer")(
         crate::g_public_h::G_SET_CONFIGSTRING as i32 as crate::stdlib::intptr_t,
         num,
@@ -602,10 +591,7 @@ pub unsafe extern "C" fn trap_SetUserinfo(mut num: i32, mut buffer: *const libc:
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_GetServerinfo(
-    mut buffer: *mut libc::c_char,
-    mut bufferSize: i32,
-) {
+pub unsafe extern "C" fn trap_GetServerinfo(mut buffer: *mut libc::c_char, mut bufferSize: i32) {
     syscall.expect("non-null function pointer")(
         crate::g_public_h::G_GET_SERVERINFO as i32 as crate::stdlib::intptr_t,
         buffer,
@@ -934,10 +920,7 @@ pub unsafe extern "C" fn trap_BotLibLoadMap(mut mapname: *const libc::c_char) ->
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_BotLibUpdateEntity(
-    mut ent: i32,
-    mut bue: *mut libc::c_void,
-) -> i32 {
+pub unsafe extern "C" fn trap_BotLibUpdateEntity(mut ent: i32, mut bue: *mut libc::c_void) -> i32 {
     return syscall.expect("non-null function pointer")(
         crate::g_public_h::BOTLIB_UPDATENTITY as i32 as crate::stdlib::intptr_t,
         ent,
@@ -962,10 +945,7 @@ pub unsafe extern "C" fn trap_BotLibTest(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_BotGetSnapshotEntity(
-    mut clientNum: i32,
-    mut sequence: i32,
-) -> i32 {
+pub unsafe extern "C" fn trap_BotGetSnapshotEntity(mut clientNum: i32, mut sequence: i32) -> i32 {
     return syscall.expect("non-null function pointer")(
         crate::g_public_h::BOTLIB_GET_SNAPSHOT_ENTITY as i32 as crate::stdlib::intptr_t,
         clientNum,
@@ -1022,8 +1002,7 @@ pub unsafe extern "C" fn trap_AAS_PresenceTypeBoundingBox(
     mut maxs: *mut crate::src::qcommon::q_shared::vec_t,
 ) {
     syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AAS_PRESENCE_TYPE_BOUNDING_BOX as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AAS_PRESENCE_TYPE_BOUNDING_BOX as i32 as crate::stdlib::intptr_t,
         presencetype,
         mins,
         maxs,
@@ -1096,10 +1075,7 @@ pub unsafe extern "C" fn trap_AAS_BBoxAreas(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_AAS_AreaInfo(
-    mut areanum: i32,
-    mut info: *mut libc::c_void,
-) -> i32 {
+pub unsafe extern "C" fn trap_AAS_AreaInfo(mut areanum: i32, mut info: *mut libc::c_void) -> i32 {
     return syscall.expect("non-null function pointer")(
         crate::g_public_h::BOTLIB_AAS_AREA_INFO as i32 as crate::stdlib::intptr_t,
         areanum,
@@ -1133,8 +1109,7 @@ pub unsafe extern "C" fn trap_AAS_ValueForBSPEpairKey(
     mut size: i32,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AAS_VALUE_FOR_BSP_EPAIR_KEY as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AAS_VALUE_FOR_BSP_EPAIR_KEY as i32 as crate::stdlib::intptr_t,
         ent,
         key,
         value,
@@ -1149,8 +1124,7 @@ pub unsafe extern "C" fn trap_AAS_VectorForBSPEpairKey(
     mut v: *mut crate::src::qcommon::q_shared::vec_t,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AAS_VECTOR_FOR_BSP_EPAIR_KEY as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AAS_VECTOR_FOR_BSP_EPAIR_KEY as i32 as crate::stdlib::intptr_t,
         ent,
         key,
         v,
@@ -1164,8 +1138,7 @@ pub unsafe extern "C" fn trap_AAS_FloatForBSPEpairKey(
     mut value: *mut f32,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AAS_FLOAT_FOR_BSP_EPAIR_KEY as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AAS_FLOAT_FOR_BSP_EPAIR_KEY as i32 as crate::stdlib::intptr_t,
         ent,
         key,
         value,
@@ -1179,8 +1152,7 @@ pub unsafe extern "C" fn trap_AAS_IntForBSPEpairKey(
     mut value: *mut i32,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AAS_INT_FOR_BSP_EPAIR_KEY as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AAS_INT_FOR_BSP_EPAIR_KEY as i32 as crate::stdlib::intptr_t,
         ent,
         key,
         value,
@@ -1213,10 +1185,7 @@ pub unsafe extern "C" fn trap_AAS_AreaTravelTimeToGoalArea(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_AAS_EnableRoutingArea(
-    mut areanum: i32,
-    mut enable: i32,
-) -> i32 {
+pub unsafe extern "C" fn trap_AAS_EnableRoutingArea(mut areanum: i32, mut enable: i32) -> i32 {
     return syscall.expect("non-null function pointer")(
         crate::g_public_h::BOTLIB_AAS_ENABLE_ROUTING_AREA as i32 as crate::stdlib::intptr_t,
         areanum,
@@ -1266,8 +1235,7 @@ pub unsafe extern "C" fn trap_AAS_AlternativeRouteGoals(
     mut type_0: i32,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AAS_ALTERNATIVE_ROUTE_GOAL as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AAS_ALTERNATIVE_ROUTE_GOAL as i32 as crate::stdlib::intptr_t,
         start,
         startareanum,
         goal,
@@ -1306,8 +1274,7 @@ pub unsafe extern "C" fn trap_AAS_PredictClientMovement(
     mut visualize: i32,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AAS_PREDICT_CLIENT_MOVEMENT as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AAS_PREDICT_CLIENT_MOVEMENT as i32 as crate::stdlib::intptr_t,
         move_0,
         entnum,
         origin,
@@ -1559,10 +1526,7 @@ pub unsafe extern "C" fn trap_BotFreeCharacter(mut character: i32) {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_Characteristic_Float(
-    mut character: i32,
-    mut index: i32,
-) -> f32 {
+pub unsafe extern "C" fn trap_Characteristic_Float(mut character: i32, mut index: i32) -> f32 {
     let mut fi: crate::src::qcommon::q_shared::floatint_t =
         crate::src::qcommon::q_shared::floatint_t { f: 0. };
     fi.i = syscall.expect("non-null function pointer")(
@@ -1583,8 +1547,7 @@ pub unsafe extern "C" fn trap_Characteristic_BFloat(
     let mut fi: crate::src::qcommon::q_shared::floatint_t =
         crate::src::qcommon::q_shared::floatint_t { f: 0. };
     fi.i = syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AI_CHARACTERISTIC_BFLOAT as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AI_CHARACTERISTIC_BFLOAT as i32 as crate::stdlib::intptr_t,
         character,
         index,
         PASSFLOAT(min),
@@ -1594,13 +1557,9 @@ pub unsafe extern "C" fn trap_Characteristic_BFloat(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_Characteristic_Integer(
-    mut character: i32,
-    mut index: i32,
-) -> i32 {
+pub unsafe extern "C" fn trap_Characteristic_Integer(mut character: i32, mut index: i32) -> i32 {
     return syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AI_CHARACTERISTIC_INTEGER as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AI_CHARACTERISTIC_INTEGER as i32 as crate::stdlib::intptr_t,
         character,
         index,
     ) as i32;
@@ -1614,8 +1573,7 @@ pub unsafe extern "C" fn trap_Characteristic_BInteger(
     mut max: i32,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AI_CHARACTERISTIC_BINTEGER as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AI_CHARACTERISTIC_BINTEGER as i32 as crate::stdlib::intptr_t,
         character,
         index,
         min,
@@ -1631,8 +1589,7 @@ pub unsafe extern "C" fn trap_Characteristic_String(
     mut size: i32,
 ) {
     syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AI_CHARACTERISTIC_STRING as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AI_CHARACTERISTIC_STRING as i32 as crate::stdlib::intptr_t,
         character,
         index,
         buf,
@@ -1662,8 +1619,7 @@ pub unsafe extern "C" fn trap_BotQueueConsoleMessage(
     mut message: *mut libc::c_char,
 ) {
     syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AI_QUEUE_CONSOLE_MESSAGE as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AI_QUEUE_CONSOLE_MESSAGE as i32 as crate::stdlib::intptr_t,
         chatstate,
         type_0,
         message,
@@ -1671,13 +1627,9 @@ pub unsafe extern "C" fn trap_BotQueueConsoleMessage(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_BotRemoveConsoleMessage(
-    mut chatstate: i32,
-    mut handle: i32,
-) {
+pub unsafe extern "C" fn trap_BotRemoveConsoleMessage(mut chatstate: i32, mut handle: i32) {
     syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AI_REMOVE_CONSOLE_MESSAGE as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AI_REMOVE_CONSOLE_MESSAGE as i32 as crate::stdlib::intptr_t,
         chatstate,
         handle,
     );
@@ -1786,11 +1738,7 @@ pub unsafe extern "C" fn trap_BotChatLength(mut chatstate: i32) -> i32 {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_BotEnterChat(
-    mut chatstate: i32,
-    mut client: i32,
-    mut sendto: i32,
-) {
+pub unsafe extern "C" fn trap_BotEnterChat(mut chatstate: i32, mut client: i32, mut sendto: i32) {
     syscall.expect("non-null function pointer")(
         crate::g_public_h::BOTLIB_AI_ENTER_CHAT as i32 as crate::stdlib::intptr_t,
         chatstate,
@@ -1892,10 +1840,7 @@ pub unsafe extern "C" fn trap_BotLoadChatFile(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_BotSetChatGender(
-    mut chatstate: i32,
-    mut gender: i32,
-) {
+pub unsafe extern "C" fn trap_BotSetChatGender(mut chatstate: i32, mut gender: i32) {
     syscall.expect("non-null function pointer")(
         crate::g_public_h::BOTLIB_AI_SET_CHAT_GENDER as i32 as crate::stdlib::intptr_t,
         chatstate,
@@ -1934,13 +1879,9 @@ pub unsafe extern "C" fn trap_BotResetAvoidGoals(mut goalstate: i32) {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_BotRemoveFromAvoidGoals(
-    mut goalstate: i32,
-    mut number: i32,
-) {
+pub unsafe extern "C" fn trap_BotRemoveFromAvoidGoals(mut goalstate: i32, mut number: i32) {
     syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AI_REMOVE_FROM_AVOID_GOALS as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AI_REMOVE_FROM_AVOID_GOALS as i32 as crate::stdlib::intptr_t,
         goalstate,
         number,
     );
@@ -2110,8 +2051,7 @@ pub unsafe extern "C" fn trap_BotGetNextCampSpotGoal(
     mut goal: *mut libc::c_void,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AI_GET_NEXT_CAMP_SPOT_GOAL as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AI_GET_NEXT_CAMP_SPOT_GOAL as i32 as crate::stdlib::intptr_t,
         num,
         goal,
     ) as i32;
@@ -2123,18 +2063,14 @@ pub unsafe extern "C" fn trap_BotGetMapLocationGoal(
     mut goal: *mut libc::c_void,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AI_GET_MAP_LOCATION_GOAL as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AI_GET_MAP_LOCATION_GOAL as i32 as crate::stdlib::intptr_t,
         name,
         goal,
     ) as i32;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_BotAvoidGoalTime(
-    mut goalstate: i32,
-    mut number: i32,
-) -> f32 {
+pub unsafe extern "C" fn trap_BotAvoidGoalTime(mut goalstate: i32, mut number: i32) -> f32 {
     let mut fi: crate::src::qcommon::q_shared::floatint_t =
         crate::src::qcommon::q_shared::floatint_t { f: 0. };
     fi.i = syscall.expect("non-null function pointer")(
@@ -2200,8 +2136,7 @@ pub unsafe extern "C" fn trap_BotInterbreedGoalFuzzyLogic(
     mut child: i32,
 ) {
     syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AI_INTERBREED_GOAL_FUZZY_LOGIC as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AI_INTERBREED_GOAL_FUZZY_LOGIC as i32 as crate::stdlib::intptr_t,
         parent1,
         parent2,
         child,
@@ -2214,21 +2149,16 @@ pub unsafe extern "C" fn trap_BotSaveGoalFuzzyLogic(
     mut filename: *mut libc::c_char,
 ) {
     syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AI_SAVE_GOAL_FUZZY_LOGIC as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AI_SAVE_GOAL_FUZZY_LOGIC as i32 as crate::stdlib::intptr_t,
         goalstate,
         filename,
     );
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_BotMutateGoalFuzzyLogic(
-    mut goalstate: i32,
-    mut range: f32,
-) {
+pub unsafe extern "C" fn trap_BotMutateGoalFuzzyLogic(mut goalstate: i32, mut range: f32) {
     syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AI_MUTATE_GOAL_FUZZY_LOGIC as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AI_MUTATE_GOAL_FUZZY_LOGIC as i32 as crate::stdlib::intptr_t,
         goalstate,
         PASSFLOAT(range),
     );
@@ -2317,8 +2247,7 @@ pub unsafe extern "C" fn trap_BotResetAvoidReach(mut movestate: i32) {
 
 pub unsafe extern "C" fn trap_BotResetLastAvoidReach(mut movestate: i32) {
     syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AI_RESET_LAST_AVOID_REACH as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AI_RESET_LAST_AVOID_REACH as i32 as crate::stdlib::intptr_t,
         movestate,
     );
 }
@@ -2362,8 +2291,7 @@ pub unsafe extern "C" fn trap_BotPredictVisiblePosition(
     mut target: *mut crate::src::qcommon::q_shared::vec_t,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AI_PREDICT_VISIBLE_POSITION as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AI_PREDICT_VISIBLE_POSITION as i32 as crate::stdlib::intptr_t,
         origin,
         areanum,
         goal,
@@ -2388,10 +2316,7 @@ pub unsafe extern "C" fn trap_BotFreeMoveState(mut handle: i32) {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn trap_BotInitMoveState(
-    mut handle: i32,
-    mut initmove: *mut libc::c_void,
-) {
+pub unsafe extern "C" fn trap_BotInitMoveState(mut handle: i32, mut initmove: *mut libc::c_void) {
     syscall.expect("non-null function pointer")(
         crate::g_public_h::BOTLIB_AI_INIT_MOVE_STATE as i32 as crate::stdlib::intptr_t,
         handle,
@@ -2405,8 +2330,7 @@ pub unsafe extern "C" fn trap_BotChooseBestFightWeapon(
     mut inventory: *mut i32,
 ) -> i32 {
     return syscall.expect("non-null function pointer")(
-        crate::g_public_h::BOTLIB_AI_CHOOSE_BEST_FIGHT_WEAPON as i32
-            as crate::stdlib::intptr_t,
+        crate::g_public_h::BOTLIB_AI_CHOOSE_BEST_FIGHT_WEAPON as i32 as crate::stdlib::intptr_t,
         weaponstate,
         inventory,
     ) as i32;

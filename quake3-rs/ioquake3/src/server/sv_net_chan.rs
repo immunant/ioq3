@@ -150,14 +150,12 @@ unsafe extern "C" fn SV_Netchan_Encode(
                 as crate::src::qcommon::q_shared::byte
         } else {
             key = (key as i32
-                ^ (*string.offset(index as isize) as i32)
-                    << (i & 1 as i32 as libc::c_long))
+                ^ (*string.offset(index as isize) as i32) << (i & 1 as i32 as libc::c_long))
                 as crate::src::qcommon::q_shared::byte
         }
         index += 1;
         // encode the data with this key
-        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as i32
-            ^ key as i32)
+        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as i32 ^ key as i32)
             as crate::src::qcommon::q_shared::byte;
         i += 1
     }
@@ -201,8 +199,7 @@ unsafe extern "C" fn SV_Netchan_Decode(
     (*msg).oob = soob;
     (*msg).bit = sbit;
     (*msg).readcount = srdc;
-    string = (*client).reliableCommands
-        [(reliableAcknowledge & 64 as i32 - 1 as i32) as usize]
+    string = (*client).reliableCommands[(reliableAcknowledge & 64 as i32 - 1 as i32) as usize]
         .as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
     index = 0 as i32;
     //
@@ -217,17 +214,15 @@ unsafe extern "C" fn SV_Netchan_Decode(
         if *string.offset(index as isize) as i32 > 127 as i32
             || *string.offset(index as isize) as i32 == '%' as i32
         {
-            key = (key as i32 ^ ('.' as i32) << (i & 1 as i32))
-                as crate::src::qcommon::q_shared::byte
+            key =
+                (key as i32 ^ ('.' as i32) << (i & 1 as i32)) as crate::src::qcommon::q_shared::byte
         } else {
-            key = (key as i32
-                ^ (*string.offset(index as isize) as i32) << (i & 1 as i32))
+            key = (key as i32 ^ (*string.offset(index as isize) as i32) << (i & 1 as i32))
                 as crate::src::qcommon::q_shared::byte
         }
         index += 1;
         // decode the data with this key
-        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as i32
-            ^ key as i32)
+        *(*msg).data.offset(i as isize) = (*(*msg).data.offset(i as isize) as i32 ^ key as i32)
             as crate::src::qcommon::q_shared::byte;
         i += 1
     }
@@ -350,9 +345,7 @@ pub unsafe extern "C" fn SV_Netchan_Transmit(
         msg as *mut crate::qcommon_h::msg_t,
         crate::qcommon_h::svc_EOF as i32,
     );
-    if (*client).netchan.unsentFragments as u32 != 0
-        || !(*client).netchan_start_queue.is_null()
-    {
+    if (*client).netchan.unsentFragments as u32 != 0 || !(*client).netchan_start_queue.is_null() {
         let mut netbuf: *mut crate::server_h::netchan_buffer_t =
             0 as *mut crate::server_h::netchan_buffer_t;
         crate::src::qcommon::common::Com_DPrintf(
@@ -361,8 +354,7 @@ pub unsafe extern "C" fn SV_Netchan_Transmit(
         );
         netbuf = crate::src::qcommon::common::Z_Malloc(::std::mem::size_of::<
             crate::server_h::netchan_buffer_t,
-        >() as libc::c_ulong as i32)
-            as *mut crate::server_h::netchan_buffer_t;
+        >() as libc::c_ulong as i32) as *mut crate::server_h::netchan_buffer_t;
         // store the msg, we can't store it encoded, as the encoding depends on stuff we still have to finish sending
         crate::src::qcommon::msg::MSG_Copy(
             &mut (*netbuf).msg as *mut _ as *mut crate::qcommon_h::msg_t,

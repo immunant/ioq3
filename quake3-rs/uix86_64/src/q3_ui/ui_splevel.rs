@@ -678,8 +678,7 @@ unsafe extern "C" fn UI_SPLevelMenu_SetMenuArena(
     if selectedArenaSet > currentSet {
         levelMenuInfo.item_maps[n as usize].generic.flags |= 0x2000 as i32 as u32
     } else {
-        levelMenuInfo.item_maps[n as usize].generic.flags &=
-            !(0x2000 as i32 as u32)
+        levelMenuInfo.item_maps[n as usize].generic.flags &= !(0x2000 as i32 as u32)
     }
     levelMenuInfo.item_maps[n as usize].generic.flags &= !(0x4000 as i32 as u32);
 }
@@ -720,19 +719,11 @@ unsafe extern "C" fn UI_SPLevelMenu_SetMenuItems() {
                 .offset(0 as i32 as isize) as *mut _
                 as *mut crate::ui_local_h::menubitmap_s,
         );
-        levelMenuInfo.item_maps[0 as i32 as usize]
-            .generic
-            .bottom += 32 as i32;
+        levelMenuInfo.item_maps[0 as i32 as usize].generic.bottom += 32 as i32;
         levelMenuInfo.numMaps = 1 as i32;
-        levelMenuInfo.item_maps[1 as i32 as usize]
-            .generic
-            .flags |= 0x4000 as i32 as u32;
-        levelMenuInfo.item_maps[2 as i32 as usize]
-            .generic
-            .flags |= 0x4000 as i32 as u32;
-        levelMenuInfo.item_maps[3 as i32 as usize]
-            .generic
-            .flags |= 0x4000 as i32 as u32;
+        levelMenuInfo.item_maps[1 as i32 as usize].generic.flags |= 0x4000 as i32 as u32;
+        levelMenuInfo.item_maps[2 as i32 as usize].generic.flags |= 0x4000 as i32 as u32;
+        levelMenuInfo.item_maps[3 as i32 as usize].generic.flags |= 0x4000 as i32 as u32;
         levelMenuInfo.levelPicNames[1 as i32 as usize][0 as i32 as usize] =
             0 as i32 as libc::c_char;
         levelMenuInfo.levelPicNames[2 as i32 as usize][0 as i32 as usize] =
@@ -760,19 +751,11 @@ unsafe extern "C" fn UI_SPLevelMenu_SetMenuItems() {
                 .offset(0 as i32 as isize) as *mut _
                 as *mut crate::ui_local_h::menubitmap_s,
         );
-        levelMenuInfo.item_maps[0 as i32 as usize]
-            .generic
-            .bottom += 32 as i32;
+        levelMenuInfo.item_maps[0 as i32 as usize].generic.bottom += 32 as i32;
         levelMenuInfo.numMaps = 1 as i32;
-        levelMenuInfo.item_maps[1 as i32 as usize]
-            .generic
-            .flags |= 0x4000 as i32 as u32;
-        levelMenuInfo.item_maps[2 as i32 as usize]
-            .generic
-            .flags |= 0x4000 as i32 as u32;
-        levelMenuInfo.item_maps[3 as i32 as usize]
-            .generic
-            .flags |= 0x4000 as i32 as u32;
+        levelMenuInfo.item_maps[1 as i32 as usize].generic.flags |= 0x4000 as i32 as u32;
+        levelMenuInfo.item_maps[2 as i32 as usize].generic.flags |= 0x4000 as i32 as u32;
+        levelMenuInfo.item_maps[3 as i32 as usize].generic.flags |= 0x4000 as i32 as u32;
         levelMenuInfo.levelPicNames[1 as i32 as usize][0 as i32 as usize] =
             0 as i32 as libc::c_char;
         levelMenuInfo.levelPicNames[2 as i32 as usize][0 as i32 as usize] =
@@ -791,9 +774,7 @@ unsafe extern "C" fn UI_SPLevelMenu_SetMenuItems() {
                 .offset(0 as i32 as isize) as *mut _
                 as *mut crate::ui_local_h::menubitmap_s,
         );
-        levelMenuInfo.item_maps[0 as i32 as usize]
-            .generic
-            .bottom += 18 as i32;
+        levelMenuInfo.item_maps[0 as i32 as usize].generic.bottom += 18 as i32;
         levelMenuInfo.numMaps = 4 as i32;
         n = 0 as i32;
         while n < 4 as i32 {
@@ -811,15 +792,12 @@ unsafe extern "C" fn UI_SPLevelMenu_SetMenuItems() {
     }
     // enable/disable arrows when they are valid/invalid
     if selectedArenaSet == minTier {
-        levelMenuInfo.item_leftarrow.generic.flags |=
-            0x4000 as i32 as u32 | 0x1000 as i32 as u32
+        levelMenuInfo.item_leftarrow.generic.flags |= 0x4000 as i32 as u32 | 0x1000 as i32 as u32
     } else {
-        levelMenuInfo.item_leftarrow.generic.flags &=
-            !(0x4000 as i32 as u32 | 0x1000 as i32 as u32)
+        levelMenuInfo.item_leftarrow.generic.flags &= !(0x4000 as i32 as u32 | 0x1000 as i32 as u32)
     }
     if selectedArenaSet == maxTier {
-        levelMenuInfo.item_rightarrow.generic.flags |=
-            0x4000 as i32 as u32 | 0x1000 as i32 as u32
+        levelMenuInfo.item_rightarrow.generic.flags |= 0x4000 as i32 as u32 | 0x1000 as i32 as u32
     } else {
         levelMenuInfo.item_rightarrow.generic.flags &=
             !(0x4000 as i32 as u32 | 0x1000 as i32 as u32)
@@ -891,10 +869,7 @@ unsafe extern "C" fn UI_SPLevelMenu_ResetAction(
     UI_SPLevelMenu();
 }
 
-unsafe extern "C" fn UI_SPLevelMenu_ResetEvent(
-    mut _ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_SPLevelMenu_ResetEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
     if event != 3 as i32 {
         return;
     }
@@ -913,10 +888,7 @@ UI_SPLevelMenu_LevelEvent
 =================
 */
 
-unsafe extern "C" fn UI_SPLevelMenu_LevelEvent(
-    mut ptr: *mut libc::c_void,
-    mut notification: i32,
-) {
+unsafe extern "C" fn UI_SPLevelMenu_LevelEvent(mut ptr: *mut libc::c_void, mut notification: i32) {
     if notification != 3 as i32 {
         return;
     }
@@ -992,10 +964,7 @@ UI_SPLevelMenu_AwardEvent
 =================
 */
 
-unsafe extern "C" fn UI_SPLevelMenu_AwardEvent(
-    mut ptr: *mut libc::c_void,
-    mut notification: i32,
-) {
+unsafe extern "C" fn UI_SPLevelMenu_AwardEvent(mut ptr: *mut libc::c_void, mut notification: i32) {
     let mut n: i32 = 0;
     if notification != 3 as i32 {
         return;
@@ -1012,10 +981,7 @@ UI_SPLevelMenu_NextEvent
 =================
 */
 
-unsafe extern "C" fn UI_SPLevelMenu_NextEvent(
-    mut _ptr: *mut libc::c_void,
-    mut notification: i32,
-) {
+unsafe extern "C" fn UI_SPLevelMenu_NextEvent(mut _ptr: *mut libc::c_void, mut notification: i32) {
     if notification != 3 as i32 {
         return;
     }
@@ -1033,10 +999,7 @@ UI_SPLevelMenu_BackEvent
 =================
 */
 
-unsafe extern "C" fn UI_SPLevelMenu_BackEvent(
-    mut _ptr: *mut libc::c_void,
-    mut notification: i32,
-) {
+unsafe extern "C" fn UI_SPLevelMenu_BackEvent(mut _ptr: *mut libc::c_void, mut notification: i32) {
     if notification != 3 as i32 {
         return;
     }
@@ -1131,12 +1094,9 @@ unsafe extern "C" fn UI_SPLevelMenu_MenuDraw() {
         level = levelMenuInfo.awardLevels[n as usize];
         if level > 0 as i32 {
             if i & 1 as i32 != 0 {
-                x = 224 as i32
-                    - (i - 1 as i32) / 2 as i32
-                        * (48 as i32 + 16 as i32)
+                x = 224 as i32 - (i - 1 as i32) / 2 as i32 * (48 as i32 + 16 as i32)
             } else {
-                x = 368 as i32
-                    + i / 2 as i32 * (48 as i32 + 16 as i32)
+                x = 368 as i32 + i / 2 as i32 * (48 as i32 + 16 as i32)
             }
             i += 1;
             if !(level == 1 as i32) {
@@ -1207,19 +1167,14 @@ unsafe extern "C" fn UI_SPLevelMenu_MenuDraw() {
         return;
     }
     // show levelshots for levels of current tier
-    color[0 as i32 as usize] =
-        crate::src::q3_ui::ui_qmenu::color_white[0 as i32 as usize];
-    color[1 as i32 as usize] =
-        crate::src::q3_ui::ui_qmenu::color_white[1 as i32 as usize];
-    color[2 as i32 as usize] =
-        crate::src::q3_ui::ui_qmenu::color_white[2 as i32 as usize];
-    color[3 as i32 as usize] =
-        crate::src::q3_ui::ui_qmenu::color_white[3 as i32 as usize];
+    color[0 as i32 as usize] = crate::src::q3_ui::ui_qmenu::color_white[0 as i32 as usize];
+    color[1 as i32 as usize] = crate::src::q3_ui::ui_qmenu::color_white[1 as i32 as usize];
+    color[2 as i32 as usize] = crate::src::q3_ui::ui_qmenu::color_white[2 as i32 as usize];
+    color[3 as i32 as usize] = crate::src::q3_ui::ui_qmenu::color_white[3 as i32 as usize];
     color[3 as i32 as usize] = (0.5f64
         + 0.5f64
-            * crate::stdlib::sin(
-                (crate::src::q3_ui::ui_atoms::uis.realtime / 75 as i32) as f64,
-            )) as crate::src::qcommon::q_shared::vec_t;
+            * crate::stdlib::sin((crate::src::q3_ui::ui_atoms::uis.realtime / 75 as i32) as f64))
+        as crate::src::qcommon::q_shared::vec_t;
     n = 0 as i32;
     while n < levelMenuInfo.numMaps {
         x = levelMenuInfo.item_maps[n as usize].generic.x;
@@ -1306,8 +1261,7 @@ unsafe extern "C" fn UI_SPLevelMenu_MenuDraw() {
     //	UI_DrawString( 18, 212, va("Frags %i", fraglimit) , UI_LEFT|UI_SMALLFONT, color_orange );
     // draw bot opponents
     y += 24 as i32;
-    pad = (7 as i32 - levelMenuInfo.numBots) * (64 as i32 + 26 as i32)
-        / 2 as i32;
+    pad = (7 as i32 - levelMenuInfo.numBots) * (64 as i32 + 26 as i32) / 2 as i32;
     n = 0 as i32;
     while n < levelMenuInfo.numBots {
         x = 18 as i32 + pad + (64 as i32 + 26 as i32) * n;
@@ -1491,117 +1445,69 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
     levelMenuInfo.item_leftarrow.generic.type_0 = 6 as i32;
     levelMenuInfo.item_leftarrow.generic.name =
         b"menu/art/narrow_0\x00" as *const u8 as *const libc::c_char;
-    levelMenuInfo.item_leftarrow.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    levelMenuInfo.item_leftarrow.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     levelMenuInfo.item_leftarrow.generic.x = 18 as i32;
     levelMenuInfo.item_leftarrow.generic.y = 64 as i32;
     levelMenuInfo.item_leftarrow.generic.callback = Some(
-        UI_SPLevelMenu_LeftArrowEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_SPLevelMenu_LeftArrowEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     levelMenuInfo.item_leftarrow.generic.id = 10 as i32;
     levelMenuInfo.item_leftarrow.width = 16 as i32;
     levelMenuInfo.item_leftarrow.height = 114 as i32;
     levelMenuInfo.item_leftarrow.focuspic =
         b"menu/art/narrow_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    levelMenuInfo.item_maps[0 as i32 as usize]
-        .generic
-        .type_0 = 6 as i32;
-    levelMenuInfo.item_maps[0 as i32 as usize]
-        .generic
-        .name = levelMenuInfo.levelPicNames[0 as i32 as usize].as_mut_ptr();
-    levelMenuInfo.item_maps[0 as i32 as usize]
-        .generic
-        .flags = 0x4 as i32 as u32;
+    levelMenuInfo.item_maps[0 as i32 as usize].generic.type_0 = 6 as i32;
+    levelMenuInfo.item_maps[0 as i32 as usize].generic.name =
+        levelMenuInfo.levelPicNames[0 as i32 as usize].as_mut_ptr();
+    levelMenuInfo.item_maps[0 as i32 as usize].generic.flags = 0x4 as i32 as u32;
     levelMenuInfo.item_maps[0 as i32 as usize].generic.x = 46 as i32;
     levelMenuInfo.item_maps[0 as i32 as usize].generic.y = 64 as i32;
-    levelMenuInfo.item_maps[0 as i32 as usize]
-        .generic
-        .id = 11 as i32;
-    levelMenuInfo.item_maps[0 as i32 as usize]
-        .generic
-        .callback = Some(
-        UI_SPLevelMenu_LevelEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    levelMenuInfo.item_maps[0 as i32 as usize].generic.id = 11 as i32;
+    levelMenuInfo.item_maps[0 as i32 as usize].generic.callback =
+        Some(UI_SPLevelMenu_LevelEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     levelMenuInfo.item_maps[0 as i32 as usize].width = 128 as i32;
     levelMenuInfo.item_maps[0 as i32 as usize].height = 96 as i32;
-    levelMenuInfo.item_maps[1 as i32 as usize]
-        .generic
-        .type_0 = 6 as i32;
-    levelMenuInfo.item_maps[1 as i32 as usize]
-        .generic
-        .name = levelMenuInfo.levelPicNames[1 as i32 as usize].as_mut_ptr();
-    levelMenuInfo.item_maps[1 as i32 as usize]
-        .generic
-        .flags = 0x4 as i32 as u32;
+    levelMenuInfo.item_maps[1 as i32 as usize].generic.type_0 = 6 as i32;
+    levelMenuInfo.item_maps[1 as i32 as usize].generic.name =
+        levelMenuInfo.levelPicNames[1 as i32 as usize].as_mut_ptr();
+    levelMenuInfo.item_maps[1 as i32 as usize].generic.flags = 0x4 as i32 as u32;
     levelMenuInfo.item_maps[1 as i32 as usize].generic.x = 186 as i32;
     levelMenuInfo.item_maps[1 as i32 as usize].generic.y = 64 as i32;
-    levelMenuInfo.item_maps[1 as i32 as usize]
-        .generic
-        .id = 12 as i32;
-    levelMenuInfo.item_maps[1 as i32 as usize]
-        .generic
-        .callback = Some(
-        UI_SPLevelMenu_LevelEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    levelMenuInfo.item_maps[1 as i32 as usize].generic.id = 12 as i32;
+    levelMenuInfo.item_maps[1 as i32 as usize].generic.callback =
+        Some(UI_SPLevelMenu_LevelEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     levelMenuInfo.item_maps[1 as i32 as usize].width = 128 as i32;
     levelMenuInfo.item_maps[1 as i32 as usize].height = 96 as i32;
-    levelMenuInfo.item_maps[2 as i32 as usize]
-        .generic
-        .type_0 = 6 as i32;
-    levelMenuInfo.item_maps[2 as i32 as usize]
-        .generic
-        .name = levelMenuInfo.levelPicNames[2 as i32 as usize].as_mut_ptr();
-    levelMenuInfo.item_maps[2 as i32 as usize]
-        .generic
-        .flags = 0x4 as i32 as u32;
+    levelMenuInfo.item_maps[2 as i32 as usize].generic.type_0 = 6 as i32;
+    levelMenuInfo.item_maps[2 as i32 as usize].generic.name =
+        levelMenuInfo.levelPicNames[2 as i32 as usize].as_mut_ptr();
+    levelMenuInfo.item_maps[2 as i32 as usize].generic.flags = 0x4 as i32 as u32;
     levelMenuInfo.item_maps[2 as i32 as usize].generic.x = 326 as i32;
     levelMenuInfo.item_maps[2 as i32 as usize].generic.y = 64 as i32;
-    levelMenuInfo.item_maps[2 as i32 as usize]
-        .generic
-        .id = 13 as i32;
-    levelMenuInfo.item_maps[2 as i32 as usize]
-        .generic
-        .callback = Some(
-        UI_SPLevelMenu_LevelEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    levelMenuInfo.item_maps[2 as i32 as usize].generic.id = 13 as i32;
+    levelMenuInfo.item_maps[2 as i32 as usize].generic.callback =
+        Some(UI_SPLevelMenu_LevelEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     levelMenuInfo.item_maps[2 as i32 as usize].width = 128 as i32;
     levelMenuInfo.item_maps[2 as i32 as usize].height = 96 as i32;
-    levelMenuInfo.item_maps[3 as i32 as usize]
-        .generic
-        .type_0 = 6 as i32;
-    levelMenuInfo.item_maps[3 as i32 as usize]
-        .generic
-        .name = levelMenuInfo.levelPicNames[3 as i32 as usize].as_mut_ptr();
-    levelMenuInfo.item_maps[3 as i32 as usize]
-        .generic
-        .flags = 0x4 as i32 as u32;
+    levelMenuInfo.item_maps[3 as i32 as usize].generic.type_0 = 6 as i32;
+    levelMenuInfo.item_maps[3 as i32 as usize].generic.name =
+        levelMenuInfo.levelPicNames[3 as i32 as usize].as_mut_ptr();
+    levelMenuInfo.item_maps[3 as i32 as usize].generic.flags = 0x4 as i32 as u32;
     levelMenuInfo.item_maps[3 as i32 as usize].generic.x = 466 as i32;
     levelMenuInfo.item_maps[3 as i32 as usize].generic.y = 64 as i32;
-    levelMenuInfo.item_maps[3 as i32 as usize]
-        .generic
-        .id = 14 as i32;
-    levelMenuInfo.item_maps[3 as i32 as usize]
-        .generic
-        .callback = Some(
-        UI_SPLevelMenu_LevelEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    levelMenuInfo.item_maps[3 as i32 as usize].generic.id = 14 as i32;
+    levelMenuInfo.item_maps[3 as i32 as usize].generic.callback =
+        Some(UI_SPLevelMenu_LevelEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     levelMenuInfo.item_maps[3 as i32 as usize].width = 128 as i32;
     levelMenuInfo.item_maps[3 as i32 as usize].height = 96 as i32;
     levelMenuInfo.item_rightarrow.generic.type_0 = 6 as i32;
     levelMenuInfo.item_rightarrow.generic.name =
         b"menu/art/narrow_0\x00" as *const u8 as *const libc::c_char;
-    levelMenuInfo.item_rightarrow.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    levelMenuInfo.item_rightarrow.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     levelMenuInfo.item_rightarrow.generic.x = 606 as i32;
     levelMenuInfo.item_rightarrow.generic.y = 64 as i32;
     levelMenuInfo.item_rightarrow.generic.callback = Some(
-        UI_SPLevelMenu_RightArrowEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_SPLevelMenu_RightArrowEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     levelMenuInfo.item_rightarrow.generic.id = 15 as i32;
     levelMenuInfo.item_rightarrow.width = -(16 as i32);
@@ -1620,14 +1526,12 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
     );
     levelMenuInfo.item_player.generic.type_0 = 6 as i32;
     levelMenuInfo.item_player.generic.name = levelMenuInfo.playerPicName.as_mut_ptr();
-    levelMenuInfo.item_player.generic.flags =
-        0x4 as i32 as u32 | 0x800 as i32 as u32;
+    levelMenuInfo.item_player.generic.flags = 0x4 as i32 as u32 | 0x800 as i32 as u32;
     levelMenuInfo.item_player.generic.x = 288 as i32;
     levelMenuInfo.item_player.generic.y = 314 as i32 + 26 as i32;
     levelMenuInfo.item_player.generic.id = 16 as i32;
     levelMenuInfo.item_player.generic.callback = Some(
-        UI_SPLevelMenu_PlayerEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_SPLevelMenu_PlayerEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     levelMenuInfo.item_player.width = 64 as i32;
     levelMenuInfo.item_player.height = 64 as i32;
@@ -1636,32 +1540,25 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
         levelMenuInfo.awardLevels[n as usize] = crate::src::q3_ui::ui_gameinfo::UI_GetAwardLevel(n);
         n += 1
     }
-    levelMenuInfo.awardLevels[crate::ui_local_h::AWARD_FRAGS as i32 as usize] = 100
-        as i32
-        * (levelMenuInfo.awardLevels[crate::ui_local_h::AWARD_FRAGS as i32 as usize]
-            / 100 as i32);
+    levelMenuInfo.awardLevels[crate::ui_local_h::AWARD_FRAGS as i32 as usize] = 100 as i32
+        * (levelMenuInfo.awardLevels[crate::ui_local_h::AWARD_FRAGS as i32 as usize] / 100 as i32);
     y = 314 as i32 + 26 as i32;
     count = 0 as i32;
     n = 0 as i32;
     while n < 6 as i32 {
         if levelMenuInfo.awardLevels[n as usize] != 0 {
             if count & 1 as i32 != 0 {
-                x = 224 as i32
-                    - (count - 1 as i32) / 2 as i32
-                        * (48 as i32 + 16 as i32)
+                x = 224 as i32 - (count - 1 as i32) / 2 as i32 * (48 as i32 + 16 as i32)
             } else {
-                x = 368 as i32
-                    + count / 2 as i32 * (48 as i32 + 16 as i32)
+                x = 368 as i32 + count / 2 as i32 * (48 as i32 + 16 as i32)
             }
             levelMenuInfo.item_awards[count as usize].generic.type_0 = 6 as i32;
             levelMenuInfo.item_awards[count as usize].generic.name =
                 *crate::src::q3_ui::ui_sppostgame::ui_medalPicNames
                     .as_mut_ptr()
                     .offset(n as isize);
-            levelMenuInfo.item_awards[count as usize].generic.flags = 0x4 as i32
-                as u32
-                | 0x100000 as i32 as u32
-                | 0x800 as i32 as u32;
+            levelMenuInfo.item_awards[count as usize].generic.flags =
+                0x4 as i32 as u32 | 0x100000 as i32 as u32 | 0x800 as i32 as u32;
             levelMenuInfo.item_awards[count as usize].generic.x = x;
             levelMenuInfo.item_awards[count as usize].generic.y = y;
             levelMenuInfo.item_awards[count as usize].generic.id = 17 as i32 + n;
@@ -1678,14 +1575,11 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
     levelMenuInfo.item_back.generic.type_0 = 6 as i32;
     levelMenuInfo.item_back.generic.name =
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    levelMenuInfo.item_back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    levelMenuInfo.item_back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     levelMenuInfo.item_back.generic.x = 0 as i32;
     levelMenuInfo.item_back.generic.y = 480 as i32 - 64 as i32;
-    levelMenuInfo.item_back.generic.callback = Some(
-        UI_SPLevelMenu_BackEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    levelMenuInfo.item_back.generic.callback =
+        Some(UI_SPLevelMenu_BackEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     levelMenuInfo.item_back.generic.id = 23 as i32;
     levelMenuInfo.item_back.width = 128 as i32;
     levelMenuInfo.item_back.height = 64 as i32;
@@ -1694,14 +1588,11 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
     levelMenuInfo.item_reset.generic.type_0 = 6 as i32;
     levelMenuInfo.item_reset.generic.name =
         b"menu/art/reset_0\x00" as *const u8 as *const libc::c_char;
-    levelMenuInfo.item_reset.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    levelMenuInfo.item_reset.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     levelMenuInfo.item_reset.generic.x = 170 as i32;
     levelMenuInfo.item_reset.generic.y = 480 as i32 - 64 as i32;
-    levelMenuInfo.item_reset.generic.callback = Some(
-        UI_SPLevelMenu_ResetEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    levelMenuInfo.item_reset.generic.callback =
+        Some(UI_SPLevelMenu_ResetEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     levelMenuInfo.item_reset.generic.id = 24 as i32;
     levelMenuInfo.item_reset.width = 128 as i32;
     levelMenuInfo.item_reset.height = 64 as i32;
@@ -1710,13 +1601,11 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
     levelMenuInfo.item_custom.generic.type_0 = 6 as i32;
     levelMenuInfo.item_custom.generic.name =
         b"menu/art/skirmish_0\x00" as *const u8 as *const libc::c_char;
-    levelMenuInfo.item_custom.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    levelMenuInfo.item_custom.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     levelMenuInfo.item_custom.generic.x = 342 as i32;
     levelMenuInfo.item_custom.generic.y = 480 as i32 - 64 as i32;
     levelMenuInfo.item_custom.generic.callback = Some(
-        UI_SPLevelMenu_CustomEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_SPLevelMenu_CustomEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     levelMenuInfo.item_custom.generic.id = 25 as i32;
     levelMenuInfo.item_custom.width = 128 as i32;
@@ -1726,23 +1615,19 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
     levelMenuInfo.item_next.generic.type_0 = 6 as i32;
     levelMenuInfo.item_next.generic.name =
         b"menu/art/fight_0\x00" as *const u8 as *const libc::c_char;
-    levelMenuInfo.item_next.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    levelMenuInfo.item_next.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     levelMenuInfo.item_next.generic.x = 640 as i32;
     levelMenuInfo.item_next.generic.y = 480 as i32 - 64 as i32;
-    levelMenuInfo.item_next.generic.callback = Some(
-        UI_SPLevelMenu_NextEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    levelMenuInfo.item_next.generic.callback =
+        Some(UI_SPLevelMenu_NextEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     levelMenuInfo.item_next.generic.id = 26 as i32;
     levelMenuInfo.item_next.width = 128 as i32;
     levelMenuInfo.item_next.height = 64 as i32;
     levelMenuInfo.item_next.focuspic =
         b"menu/art/fight_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     levelMenuInfo.item_null.generic.type_0 = 6 as i32;
-    levelMenuInfo.item_null.generic.flags = 0x4 as i32 as u32
-        | 0x800 as i32 as u32
-        | 0x100000 as i32 as u32;
+    levelMenuInfo.item_null.generic.flags =
+        0x4 as i32 as u32 | 0x800 as i32 as u32 | 0x100000 as i32 as u32;
     levelMenuInfo.item_null.generic.x = 0 as i32;
     levelMenuInfo.item_null.generic.y = 0 as i32;
     levelMenuInfo.item_null.width = 640 as i32;
@@ -1788,18 +1673,10 @@ unsafe extern "C" fn UI_SPLevelMenu_Init() {
             .offset(3 as i32 as isize) as *mut crate::ui_local_h::menubitmap_s
             as *mut libc::c_void,
     );
-    levelMenuInfo.item_maps[0 as i32 as usize]
-        .generic
-        .bottom += 18 as i32;
-    levelMenuInfo.item_maps[1 as i32 as usize]
-        .generic
-        .bottom += 18 as i32;
-    levelMenuInfo.item_maps[2 as i32 as usize]
-        .generic
-        .bottom += 18 as i32;
-    levelMenuInfo.item_maps[3 as i32 as usize]
-        .generic
-        .bottom += 18 as i32;
+    levelMenuInfo.item_maps[0 as i32 as usize].generic.bottom += 18 as i32;
+    levelMenuInfo.item_maps[1 as i32 as usize].generic.bottom += 18 as i32;
+    levelMenuInfo.item_maps[2 as i32 as usize].generic.bottom += 18 as i32;
+    levelMenuInfo.item_maps[3 as i32 as usize].generic.bottom += 18 as i32;
     crate::src::q3_ui::ui_qmenu::Menu_AddItem(
         &mut levelMenuInfo.menu as *mut _ as *mut crate::ui_local_h::_tag_menuframework,
         &mut levelMenuInfo.item_rightarrow as *mut crate::ui_local_h::menubitmap_s

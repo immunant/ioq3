@@ -393,8 +393,7 @@ unsafe extern "C" fn set_bottom_pointers(mut cinfo: crate::jpeglib_h::j_decompre
         /* Count nondummy sample rows remaining for this component */
         rows_left = (*compptr)
             .downsampled_height
-            .wrapping_rem(iMCUheight as crate::jmorecfg_h::JDIMENSION)
-            as i32;
+            .wrapping_rem(iMCUheight as crate::jmorecfg_h::JDIMENSION) as i32;
         if rows_left == 0 as i32 {
             rows_left = iMCUheight
         }
@@ -402,9 +401,8 @@ unsafe extern "C" fn set_bottom_pointers(mut cinfo: crate::jpeglib_h::j_decompre
          * so we need only do it once.
          */
         if ci == 0 as i32 {
-            (*main_ptr).rowgroups_avail = ((rows_left - 1 as i32) / rgroup
-                + 1 as i32)
-                as crate::jmorecfg_h::JDIMENSION
+            (*main_ptr).rowgroups_avail =
+                ((rows_left - 1 as i32) / rgroup + 1 as i32) as crate::jmorecfg_h::JDIMENSION
         }
         /* Duplicate the last real sample row rgroup*2 times; this pads out the
          * last partial rowgroup and ensures at least one full rowgroup of context.
@@ -473,8 +471,7 @@ unsafe extern "C" fn start_pass_main(
             )
         }
         _ => {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -621,8 +618,8 @@ unsafe extern "C" fn process_data_context_main(
         /* Prepare to process first M-1 row groups of this iMCU row */
         {
             (*main_ptr).rowgroup_ctr = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
-            (*main_ptr).rowgroups_avail = ((*cinfo).min_DCT_v_scaled_size - 1 as i32)
-                as crate::jmorecfg_h::JDIMENSION;
+            (*main_ptr).rowgroups_avail =
+                ((*cinfo).min_DCT_v_scaled_size - 1 as i32) as crate::jmorecfg_h::JDIMENSION;
             /* Check for bottom of image: if so, tweak pointers to "duplicate"
              * the last sample row, and adjust rowgroups_avail to ignore padding rows.
              */
@@ -665,10 +662,10 @@ unsafe extern "C" fn process_data_context_main(
             (*main_ptr).buffer_full = 0 as i32;
             /* Still need to process last row group of this iMCU row, */
             /* which is saved at index M+1 of the other xbuffer */
-            (*main_ptr).rowgroup_ctr = ((*cinfo).min_DCT_v_scaled_size + 1 as i32)
-                as crate::jmorecfg_h::JDIMENSION;
-            (*main_ptr).rowgroups_avail = ((*cinfo).min_DCT_v_scaled_size + 2 as i32)
-                as crate::jmorecfg_h::JDIMENSION;
+            (*main_ptr).rowgroup_ctr =
+                ((*cinfo).min_DCT_v_scaled_size + 1 as i32) as crate::jmorecfg_h::JDIMENSION;
+            (*main_ptr).rowgroups_avail =
+                ((*cinfo).min_DCT_v_scaled_size + 2 as i32) as crate::jmorecfg_h::JDIMENSION;
             (*main_ptr).context_state = 2 as i32
         }
         _ => {}

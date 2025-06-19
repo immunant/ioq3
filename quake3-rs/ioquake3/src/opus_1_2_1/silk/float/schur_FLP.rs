@@ -92,9 +92,7 @@ pub unsafe extern "C" fn silk_schur_FLP(
     while k < order {
         /* Get reflection coefficient */
         rc_tmp = -C[(k + 1 as i32) as usize][0 as i32 as usize]
-            / (if C[0 as i32 as usize][1 as i32 as usize]
-                > 1e-9f32 as f64
-            {
+            / (if C[0 as i32 as usize][1 as i32 as usize] > 1e-9f32 as f64 {
                 C[0 as i32 as usize][1 as i32 as usize]
             } else {
                 1e-9f32 as f64
@@ -106,8 +104,7 @@ pub unsafe extern "C" fn silk_schur_FLP(
         while n < order - k {
             Ctmp1 = C[(n + k + 1 as i32) as usize][0 as i32 as usize];
             Ctmp2 = C[n as usize][1 as i32 as usize];
-            C[(n + k + 1 as i32) as usize][0 as i32 as usize] =
-                Ctmp1 + Ctmp2 * rc_tmp;
+            C[(n + k + 1 as i32) as usize][0 as i32 as usize] = Ctmp1 + Ctmp2 * rc_tmp;
             C[n as usize][1 as i32 as usize] = Ctmp2 + Ctmp1 * rc_tmp;
             n += 1
         }

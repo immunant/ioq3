@@ -10,8 +10,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
     #[inline]
@@ -430,8 +429,7 @@ pub unsafe extern "C" fn CG_BloodTrail(mut le: *mut crate::cg_local_h::localEnti
         // use the optimized version
         (*blood).leType = crate::cg_local_h::LE_FALL_SCALE_FADE;
         // drop a total of 40 units over its lifetime
-        (*blood).pos.trDelta[2 as i32 as usize] =
-            40 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*blood).pos.trDelta[2 as i32 as usize] = 40 as i32 as crate::src::qcommon::q_shared::vec_t;
         t += step
     }
 }
@@ -447,17 +445,13 @@ pub unsafe extern "C" fn CG_FragmentBounceMark(
     mut trace: *mut crate::src::qcommon::q_shared::trace_t,
 ) {
     let mut radius: i32 = 0;
-    if (*le).leMarkType as u32
-        == crate::cg_local_h::LEMT_BLOOD as i32 as u32
-    {
+    if (*le).leMarkType as u32 == crate::cg_local_h::LEMT_BLOOD as i32 as u32 {
         radius = 16 as i32 + (::libc::rand() & 31 as i32);
         crate::src::cgame::cg_marks::CG_ImpactMark(
             crate::src::cgame::cg_main::cgs.media.bloodMarkShader,
             (*trace).endpos.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             (*trace).plane.normal.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32
-                * 360 as i32 as f32,
+            (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 360 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
@@ -466,17 +460,13 @@ pub unsafe extern "C" fn CG_FragmentBounceMark(
             radius as f32,
             crate::src::qcommon::q_shared::qfalse,
         );
-    } else if (*le).leMarkType as u32
-        == crate::cg_local_h::LEMT_BURN as i32 as u32
-    {
+    } else if (*le).leMarkType as u32 == crate::cg_local_h::LEMT_BURN as i32 as u32 {
         radius = 8 as i32 + (::libc::rand() & 15 as i32);
         crate::src::cgame::cg_marks::CG_ImpactMark(
             crate::src::cgame::cg_main::cgs.media.burnMarkShader,
             (*trace).endpos.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             (*trace).plane.normal.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
-            (::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32
-                * 360 as i32 as f32,
+            (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 360 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
@@ -501,9 +491,7 @@ pub unsafe extern "C" fn CG_FragmentBounceSound(
     mut le: *mut crate::cg_local_h::localEntity_t,
     mut trace: *mut crate::src::qcommon::q_shared::trace_t,
 ) {
-    if (*le).leBounceSoundType as u32
-        == crate::cg_local_h::LEBS_BLOOD as i32 as u32
-    {
+    if (*le).leBounceSoundType as u32 == crate::cg_local_h::LEBS_BLOOD as i32 as u32 {
         // half the gibs will make splat sounds
         if ::libc::rand() & 1 as i32 != 0 {
             let mut r: i32 = ::libc::rand() & 3 as i32;
@@ -546,8 +534,7 @@ pub unsafe extern "C" fn CG_ReflectVelocity(
     // reflect the velocity on the trace plane
     hitTime = ((crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cg.frametime)
         as f32
-        + crate::src::cgame::cg_main::cg.frametime as f32 * (*trace).fraction)
-        as i32;
+        + crate::src::cgame::cg_main::cg.frametime as f32 * (*trace).fraction) as i32;
     crate::src::game::bg_misc::BG_EvaluateTrajectoryDelta(
         &mut (*le).pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
         hitTime,
@@ -557,14 +544,11 @@ pub unsafe extern "C" fn CG_ReflectVelocity(
         + velocity[1 as i32 as usize] * (*trace).plane.normal[1 as i32 as usize]
         + velocity[2 as i32 as usize] * (*trace).plane.normal[2 as i32 as usize];
     (*le).pos.trDelta[0 as i32 as usize] = velocity[0 as i32 as usize]
-        + (*trace).plane.normal[0 as i32 as usize]
-            * (-(2 as i32) as f32 * dot);
+        + (*trace).plane.normal[0 as i32 as usize] * (-(2 as i32) as f32 * dot);
     (*le).pos.trDelta[1 as i32 as usize] = velocity[1 as i32 as usize]
-        + (*trace).plane.normal[1 as i32 as usize]
-            * (-(2 as i32) as f32 * dot);
+        + (*trace).plane.normal[1 as i32 as usize] * (-(2 as i32) as f32 * dot);
     (*le).pos.trDelta[2 as i32 as usize] = velocity[2 as i32 as usize]
-        + (*trace).plane.normal[2 as i32 as usize]
-            * (-(2 as i32) as f32 * dot);
+        + (*trace).plane.normal[2 as i32 as usize] * (-(2 as i32) as f32 * dot);
     (*le).pos.trDelta[0 as i32 as usize] =
         (*le).pos.trDelta[0 as i32 as usize] * (*le).bounceFactor;
     (*le).pos.trDelta[1 as i32 as usize] =
@@ -612,9 +596,7 @@ pub unsafe extern "C" fn CG_AddFragment(mut le: *mut crate::cg_local_h::localEnt
             contents: 0,
             entityNum: 0,
         };
-    if (*le).pos.trType as u32
-        == crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32
-    {
+    if (*le).pos.trType as u32 == crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32 {
         // sink into the ground if near the removal time
         let mut t: i32 = 0;
         let mut oldZ: f32 = 0.;
@@ -631,12 +613,10 @@ pub unsafe extern "C" fn CG_AddFragment(mut le: *mut crate::cg_local_h::localEnt
                 (*le).refEntity.origin[2 as i32 as usize];
             (*le).refEntity.renderfx |= 0x80 as i32;
             oldZ = (*le).refEntity.origin[2 as i32 as usize];
-            (*le).refEntity.origin[2 as i32 as usize] =
-                ((*le).refEntity.origin[2 as i32 as usize] as f64
-                    - 16 as i32 as f64
-                        * (1.0f64
-                            - (t as f32 / 1000 as i32 as f32)
-                                as f64)) as f32;
+            (*le).refEntity.origin[2 as i32 as usize] = ((*le).refEntity.origin[2 as i32 as usize]
+                as f64
+                - 16 as i32 as f64 * (1.0f64 - (t as f32 / 1000 as i32 as f32) as f64))
+                as f32;
             crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
                 &mut (*le).refEntity as *mut _ as *const crate::tr_types_h::refEntity_t,
             );
@@ -685,9 +665,7 @@ pub unsafe extern "C" fn CG_AddFragment(mut le: *mut crate::cg_local_h::localEnt
             &mut (*le).refEntity as *mut _ as *const crate::tr_types_h::refEntity_t,
         );
         // add a blood trail
-        if (*le).leBounceSoundType as u32
-            == crate::cg_local_h::LEBS_BLOOD as i32 as u32
-        {
+        if (*le).leBounceSoundType as u32 == crate::cg_local_h::LEBS_BLOOD as i32 as u32 {
             CG_BloodTrail(le);
         }
         return;
@@ -765,18 +743,15 @@ unsafe extern "C" fn CG_AddMoveScaleFade(mut le: *mut crate::cg_local_h::localEn
         // fade / grow time
         c = (1.0f64
             - (((*le).fadeInTime - crate::src::cgame::cg_main::cg.time) as f32
-                / ((*le).fadeInTime - (*le).startTime) as f32)
-                as f64) as f32
+                / ((*le).fadeInTime - (*le).startTime) as f32) as f64) as f32
     } else {
         // fade / grow time
         c = ((*le).endTime - crate::src::cgame::cg_main::cg.time) as f32 * (*le).lifeRate
     }
-    (*re).shaderRGBA[3 as i32 as usize] =
-        (0xff as i32 as f32 * c * (*le).color[3 as i32 as usize])
-            as crate::src::qcommon::q_shared::byte;
+    (*re).shaderRGBA[3 as i32 as usize] = (0xff as i32 as f32 * c * (*le).color[3 as i32 as usize])
+        as crate::src::qcommon::q_shared::byte;
     if (*le).leFlags & crate::cg_local_h::LEF_PUFF_DONT_SCALE as i32 == 0 {
-        (*re).radius = ((*le).radius as f64 * (1.0f64 - c as f64)
-            + 8 as i32 as f64) as f32
+        (*re).radius = ((*le).radius as f64 * (1.0f64 - c as f64) + 8 as i32 as f64) as f32
     }
     crate::src::game::bg_misc::BG_EvaluateTrajectory(
         &mut (*le).pos as *mut _ as *const crate::src::qcommon::q_shared::trajectory_t,
@@ -818,11 +793,9 @@ unsafe extern "C" fn CG_AddScaleFade(mut le: *mut crate::cg_local_h::localEntity
     re = &mut (*le).refEntity;
     // fade / grow time
     c = ((*le).endTime - crate::src::cgame::cg_main::cg.time) as f32 * (*le).lifeRate;
-    (*re).shaderRGBA[3 as i32 as usize] =
-        (0xff as i32 as f32 * c * (*le).color[3 as i32 as usize])
-            as crate::src::qcommon::q_shared::byte;
-    (*re).radius = ((*le).radius as f64 * (1.0f64 - c as f64)
-        + 8 as i32 as f64) as f32;
+    (*re).shaderRGBA[3 as i32 as usize] = (0xff as i32 as f32 * c * (*le).color[3 as i32 as usize])
+        as crate::src::qcommon::q_shared::byte;
+    (*re).radius = ((*le).radius as f64 * (1.0f64 - c as f64) + 8 as i32 as f64) as f32;
     // if the view would be "inside" the sprite, kill the sprite
     // so it doesn't add too much overdraw
     delta[0 as i32 as usize] = (*re).origin[0 as i32 as usize]
@@ -859,16 +832,12 @@ unsafe extern "C" fn CG_AddFallScaleFade(mut le: *mut crate::cg_local_h::localEn
     re = &mut (*le).refEntity;
     // fade time
     c = ((*le).endTime - crate::src::cgame::cg_main::cg.time) as f32 * (*le).lifeRate;
-    (*re).shaderRGBA[3 as i32 as usize] =
-        (0xff as i32 as f32 * c * (*le).color[3 as i32 as usize])
-            as crate::src::qcommon::q_shared::byte;
-    (*re).origin[2 as i32 as usize] = ((*le).pos.trBase[2 as i32 as usize]
-        as f64
-        - (1.0f64 - c as f64)
-            * (*le).pos.trDelta[2 as i32 as usize] as f64)
+    (*re).shaderRGBA[3 as i32 as usize] = (0xff as i32 as f32 * c * (*le).color[3 as i32 as usize])
+        as crate::src::qcommon::q_shared::byte;
+    (*re).origin[2 as i32 as usize] = ((*le).pos.trBase[2 as i32 as usize] as f64
+        - (1.0f64 - c as f64) * (*le).pos.trDelta[2 as i32 as usize] as f64)
         as f32;
-    (*re).radius = ((*le).radius as f64 * (1.0f64 - c as f64)
-        + 16 as i32 as f64) as f32;
+    (*re).radius = ((*le).radius as f64 * (1.0f64 - c as f64) + 16 as i32 as f64) as f32;
     // if the view would be "inside" the sprite, kill the sprite
     // so it doesn't add too much overdraw
     delta[0 as i32 as usize] = (*re).origin[0 as i32 as usize]
@@ -907,9 +876,7 @@ unsafe extern "C" fn CG_AddExplosion(mut ex: *mut crate::cg_local_h::localEntity
         if (light as f64) < 0.5f64 {
             light = 1.0f64 as f32
         } else {
-            light = (1.0f64
-                - (light as f64 - 0.5f64) * 2 as i32 as f64)
-                as f32
+            light = (1.0f64 - (light as f64 - 0.5f64) * 2 as i32 as f64) as f32
         }
         light = (*ex).light * light;
         crate::src::cgame::cg_syscalls::trap_R_AddLightToScene(
@@ -958,18 +925,13 @@ unsafe extern "C" fn CG_AddSpriteExplosion(mut le: *mut crate::cg_local_h::local
         c = 1.0f64 as f32
         // can happen during connection problems
     }
-    re.shaderRGBA[0 as i32 as usize] =
-        0xff as i32 as crate::src::qcommon::q_shared::byte;
-    re.shaderRGBA[1 as i32 as usize] =
-        0xff as i32 as crate::src::qcommon::q_shared::byte;
-    re.shaderRGBA[2 as i32 as usize] =
-        0xff as i32 as crate::src::qcommon::q_shared::byte;
+    re.shaderRGBA[0 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
+    re.shaderRGBA[1 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
+    re.shaderRGBA[2 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
     re.shaderRGBA[3 as i32 as usize] =
-        ((0xff as i32 as f32 * c) as f64 * 0.33f64)
-            as crate::src::qcommon::q_shared::byte;
+        ((0xff as i32 as f32 * c) as f64 * 0.33f64) as crate::src::qcommon::q_shared::byte;
     re.reType = crate::tr_types_h::RT_SPRITE;
-    re.radius = (42 as i32 as f64 * (1.0f64 - c as f64)
-        + 30 as i32 as f64) as f32;
+    re.radius = (42 as i32 as f64 * (1.0f64 - c as f64) + 30 as i32 as f64) as f32;
     crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
         &mut re as *mut _ as *const crate::tr_types_h::refEntity_t,
     );
@@ -981,9 +943,7 @@ unsafe extern "C" fn CG_AddSpriteExplosion(mut le: *mut crate::cg_local_h::local
         if (light as f64) < 0.5f64 {
             light = 1.0f64 as f32
         } else {
-            light = (1.0f64
-                - (light as f64 - 0.5f64) * 2 as i32 as f64)
-                as f32
+            light = (1.0f64 - (light as f64 - 0.5f64) * 2 as i32 as f64) as f32
         }
         light = (*le).light * light;
         crate::src::cgame::cg_syscalls::trap_R_AddLightToScene(
@@ -1019,59 +979,41 @@ pub unsafe extern "C" fn CG_AddScorePlum(mut le: *mut crate::cg_local_h::localEn
     c = ((*le).endTime - crate::src::cgame::cg_main::cg.time) as f32 * (*le).lifeRate;
     score = (*le).radius as i32;
     if score < 0 as i32 {
-        (*re).shaderRGBA[0 as i32 as usize] =
-            0xff as i32 as crate::src::qcommon::q_shared::byte;
-        (*re).shaderRGBA[1 as i32 as usize] =
-            0x11 as i32 as crate::src::qcommon::q_shared::byte;
-        (*re).shaderRGBA[2 as i32 as usize] =
-            0x11 as i32 as crate::src::qcommon::q_shared::byte
+        (*re).shaderRGBA[0 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
+        (*re).shaderRGBA[1 as i32 as usize] = 0x11 as i32 as crate::src::qcommon::q_shared::byte;
+        (*re).shaderRGBA[2 as i32 as usize] = 0x11 as i32 as crate::src::qcommon::q_shared::byte
     } else {
-        (*re).shaderRGBA[0 as i32 as usize] =
-            0xff as i32 as crate::src::qcommon::q_shared::byte;
-        (*re).shaderRGBA[1 as i32 as usize] =
-            0xff as i32 as crate::src::qcommon::q_shared::byte;
-        (*re).shaderRGBA[2 as i32 as usize] =
-            0xff as i32 as crate::src::qcommon::q_shared::byte;
+        (*re).shaderRGBA[0 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
+        (*re).shaderRGBA[1 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
+        (*re).shaderRGBA[2 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
         if score >= 50 as i32 {
-            (*re).shaderRGBA[1 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::byte
+            (*re).shaderRGBA[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte
         } else if score >= 20 as i32 {
-            (*re).shaderRGBA[1 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::byte;
-            (*re).shaderRGBA[0 as i32 as usize] =
-                (*re).shaderRGBA[1 as i32 as usize]
+            (*re).shaderRGBA[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte;
+            (*re).shaderRGBA[0 as i32 as usize] = (*re).shaderRGBA[1 as i32 as usize]
         } else if score >= 10 as i32 {
-            (*re).shaderRGBA[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::byte
+            (*re).shaderRGBA[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte
         } else if score >= 2 as i32 {
-            (*re).shaderRGBA[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::byte;
-            (*re).shaderRGBA[0 as i32 as usize] =
-                (*re).shaderRGBA[2 as i32 as usize]
+            (*re).shaderRGBA[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::byte;
+            (*re).shaderRGBA[0 as i32 as usize] = (*re).shaderRGBA[2 as i32 as usize]
         }
     }
     if (c as f64) < 0.25f64 {
         (*re).shaderRGBA[3 as i32 as usize] =
-            ((0xff as i32 * 4 as i32) as f32 * c)
-                as crate::src::qcommon::q_shared::byte
+            ((0xff as i32 * 4 as i32) as f32 * c) as crate::src::qcommon::q_shared::byte
     } else {
-        (*re).shaderRGBA[3 as i32 as usize] =
-            0xff as i32 as crate::src::qcommon::q_shared::byte
+        (*re).shaderRGBA[3 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte
     }
     (*re).radius = (8 as i32 / 2 as i32) as f32;
     origin[0 as i32 as usize] = (*le).pos.trBase[0 as i32 as usize];
     origin[1 as i32 as usize] = (*le).pos.trBase[1 as i32 as usize];
     origin[2 as i32 as usize] = (*le).pos.trBase[2 as i32 as usize];
-    origin[2 as i32 as usize] +=
-        110 as i32 as f32 - c * 100 as i32 as f32;
-    dir[0 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg
-        [0 as i32 as usize]
+    origin[2 as i32 as usize] += 110 as i32 as f32 - c * 100 as i32 as f32;
+    dir[0 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg[0 as i32 as usize]
         - origin[0 as i32 as usize];
-    dir[1 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg
-        [1 as i32 as usize]
+    dir[1 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg[1 as i32 as usize]
         - origin[1 as i32 as usize];
-    dir[2 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg
-        [2 as i32 as usize]
+    dir[2 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.vieworg[2 as i32 as usize]
         - origin[2 as i32 as usize];
     CrossProduct(
         dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -1083,28 +1025,19 @@ pub unsafe extern "C" fn CG_AddScorePlum(mut le: *mut crate::cg_local_h::localEn
         + vec[0 as i32 as usize] as f64
             * (-(10 as i32) as f64
                 + 20 as i32 as f64
-                    * crate::stdlib::sin(
-                        (c * 2 as i32 as f32) as f64
-                            * 3.14159265358979323846f64,
-                    )))
+                    * crate::stdlib::sin((c * 2 as i32 as f32) as f64 * 3.14159265358979323846f64)))
         as crate::src::qcommon::q_shared::vec_t;
     origin[1 as i32 as usize] = (origin[1 as i32 as usize] as f64
         + vec[1 as i32 as usize] as f64
             * (-(10 as i32) as f64
                 + 20 as i32 as f64
-                    * crate::stdlib::sin(
-                        (c * 2 as i32 as f32) as f64
-                            * 3.14159265358979323846f64,
-                    )))
+                    * crate::stdlib::sin((c * 2 as i32 as f32) as f64 * 3.14159265358979323846f64)))
         as crate::src::qcommon::q_shared::vec_t;
     origin[2 as i32 as usize] = (origin[2 as i32 as usize] as f64
         + vec[2 as i32 as usize] as f64
             * (-(10 as i32) as f64
                 + 20 as i32 as f64
-                    * crate::stdlib::sin(
-                        (c * 2 as i32 as f32) as f64
-                            * 3.14159265358979323846f64,
-                    )))
+                    * crate::stdlib::sin((c * 2 as i32 as f32) as f64 * 3.14159265358979323846f64)))
         as crate::src::qcommon::q_shared::vec_t;
     // if the view would be "inside" the sprite, kill the sprite
     // so it doesn't add too much overdraw
@@ -1138,19 +1071,13 @@ pub unsafe extern "C" fn CG_AddScorePlum(mut le: *mut crate::cg_local_h::localEn
     while i < numdigits {
         (*re).origin[0 as i32 as usize] = origin[0 as i32 as usize]
             + vec[0 as i32 as usize]
-                * ((numdigits as f32 / 2 as i32 as f32
-                    - i as f32)
-                    * 8 as i32 as f32);
+                * ((numdigits as f32 / 2 as i32 as f32 - i as f32) * 8 as i32 as f32);
         (*re).origin[1 as i32 as usize] = origin[1 as i32 as usize]
             + vec[1 as i32 as usize]
-                * ((numdigits as f32 / 2 as i32 as f32
-                    - i as f32)
-                    * 8 as i32 as f32);
+                * ((numdigits as f32 / 2 as i32 as f32 - i as f32) * 8 as i32 as f32);
         (*re).origin[2 as i32 as usize] = origin[2 as i32 as usize]
             + vec[2 as i32 as usize]
-                * ((numdigits as f32 / 2 as i32 as f32
-                    - i as f32)
-                    * 8 as i32 as f32);
+                * ((numdigits as f32 / 2 as i32 as f32 - i as f32) * 8 as i32 as f32);
         (*re).customShader = crate::src::cgame::cg_main::cgs.media.numberShaders
             [digits[(numdigits - 1 as i32 - i) as usize] as usize];
         crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(

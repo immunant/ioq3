@@ -442,8 +442,7 @@ unsafe extern "C" fn UI_DriverInfo_Menu() {
     s_driverinfo.framer.height = 334 as i32;
     s_driverinfo.back.generic.type_0 = 6 as i32;
     s_driverinfo.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    s_driverinfo.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_driverinfo.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_driverinfo.back.generic.callback =
         Some(DriverInfo_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_driverinfo.back.generic.id = 100 as i32;
@@ -1359,8 +1358,7 @@ unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
         let mut x: *mut libc::c_char = 0 as *mut libc::c_char;
         let mut str: [libc::c_char; 8] = [0; 8];
         // calculate resolution's aspect ratio
-        x = ::libc::strchr(*resolutions.offset(r as isize), 'x' as i32)
-            .offset(1 as i32 as isize);
+        x = ::libc::strchr(*resolutions.offset(r as isize), 'x' as i32).offset(1 as i32 as isize);
         crate::src::qcommon::q_shared::Q_strncpyz(
             str.as_mut_ptr(),
             *resolutions.offset(r as isize),
@@ -1500,8 +1498,7 @@ unsafe extern "C" fn GraphicsOptions_CheckConfig() {
                     if !(s_ivo_templates[i as usize].fullscreen as u32
                         != s_graphicsoptions.fs.curvalue as u32)
                     {
-                        if !(s_ivo_templates[i as usize].tq as f32
-                            != s_graphicsoptions.tq.curvalue)
+                        if !(s_ivo_templates[i as usize].tq as f32 != s_graphicsoptions.tq.curvalue)
                         {
                             if !(s_ivo_templates[i as usize].lighting
                                 != s_graphicsoptions.lighting.curvalue)
@@ -1527,10 +1524,10 @@ unsafe extern "C" fn GraphicsOptions_CheckConfig() {
         i += 1
     }
     // return 'Custom' ivo template
-    s_graphicsoptions.list.curvalue =
-        (::std::mem::size_of::<[InitialVideoOptions_s; 6]>() as libc::c_ulong)
-            .wrapping_div(::std::mem::size_of::<InitialVideoOptions_s>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong) as i32;
+    s_graphicsoptions.list.curvalue = (::std::mem::size_of::<[InitialVideoOptions_s; 6]>()
+        as libc::c_ulong)
+        .wrapping_div(::std::mem::size_of::<InitialVideoOptions_s>() as libc::c_ulong)
+        .wrapping_sub(1 as i32 as libc::c_ulong) as i32;
 }
 /*
 =================
@@ -1546,9 +1543,7 @@ unsafe extern "C" fn GraphicsOptions_UpdateMenuItems() {
     } else {
         s_graphicsoptions.fs.generic.flags &= !(0x2000 as i32 as u32)
     }
-    if s_graphicsoptions.fs.curvalue == 0 as i32
-        || s_graphicsoptions.driver.curvalue == 1 as i32
-    {
+    if s_graphicsoptions.fs.curvalue == 0 as i32 || s_graphicsoptions.driver.curvalue == 1 as i32 {
         s_graphicsoptions.colordepth.curvalue = 0 as i32;
         s_graphicsoptions.colordepth.generic.flags |= 0x2000 as i32 as u32
     } else {
@@ -1559,49 +1554,36 @@ unsafe extern "C" fn GraphicsOptions_UpdateMenuItems() {
             s_graphicsoptions.texturebits.curvalue = 1 as i32
         }
     }
-    s_graphicsoptions.apply.generic.flags |=
-        0x1000 as i32 as u32 | 0x4000 as i32 as u32;
+    s_graphicsoptions.apply.generic.flags |= 0x1000 as i32 as u32 | 0x4000 as i32 as u32;
     if s_ivo.mode != s_graphicsoptions.mode.curvalue {
-        s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
+        s_graphicsoptions.apply.generic.flags &= !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if s_ivo.fullscreen as u32 != s_graphicsoptions.fs.curvalue as u32 {
-        s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
+        s_graphicsoptions.apply.generic.flags &= !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
-    if s_ivo.extensions as u32
-        != s_graphicsoptions.allow_extensions.curvalue as u32
-    {
-        s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
+    if s_ivo.extensions as u32 != s_graphicsoptions.allow_extensions.curvalue as u32 {
+        s_graphicsoptions.apply.generic.flags &= !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if s_ivo.tq as f32 != s_graphicsoptions.tq.curvalue {
-        s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
+        s_graphicsoptions.apply.generic.flags &= !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if s_ivo.lighting != s_graphicsoptions.lighting.curvalue {
-        s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
+        s_graphicsoptions.apply.generic.flags &= !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if s_ivo.colordepth != s_graphicsoptions.colordepth.curvalue {
-        s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
+        s_graphicsoptions.apply.generic.flags &= !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if s_ivo.driver != s_graphicsoptions.driver.curvalue {
-        s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
+        s_graphicsoptions.apply.generic.flags &= !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if s_ivo.texturebits != s_graphicsoptions.texturebits.curvalue {
-        s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
+        s_graphicsoptions.apply.generic.flags &= !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if s_ivo.geometry != s_graphicsoptions.geometry.curvalue {
-        s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
+        s_graphicsoptions.apply.generic.flags &= !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     if s_ivo.filter != s_graphicsoptions.filter.curvalue {
-        s_graphicsoptions.apply.generic.flags &=
-            !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
+        s_graphicsoptions.apply.generic.flags &= !(0x1000 as i32 as u32 | 0x4000 as i32 as u32)
     }
     GraphicsOptions_CheckConfig();
 }
@@ -1881,8 +1863,7 @@ unsafe extern "C" fn GraphicsOptions_TQEvent(mut _ptr: *mut libc::c_void, mut ev
     if event != 3 as i32 {
         return;
     }
-    s_graphicsoptions.tq.curvalue =
-        (s_graphicsoptions.tq.curvalue as f64 + 0.5f64) as i32 as f32;
+    s_graphicsoptions.tq.curvalue = (s_graphicsoptions.tq.curvalue as f64 + 0.5f64) as i32 as f32;
 }
 /*
 ================
@@ -1920,17 +1901,15 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
                 (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
                     .wrapping_sub(2 as i32 as libc::c_ulong) as i32,
             );
-            buf[crate::stdlib::strlen(buf.as_mut_ptr())
-                .wrapping_add(1 as i32 as libc::c_ulong) as usize] =
-                0 as i32 as libc::c_char;
+            buf[crate::stdlib::strlen(buf.as_mut_ptr()).wrapping_add(1 as i32 as libc::c_ulong)
+                as usize] = 0 as i32 as libc::c_char;
             buf[crate::stdlib::strlen(buf.as_mut_ptr()) as usize] = 'x' as i32 as libc::c_char;
             crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
                 b"r_customheight\x00" as *const u8 as *const libc::c_char,
                 buf.as_mut_ptr()
                     .offset(crate::stdlib::strlen(buf.as_mut_ptr()) as isize),
                 (::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong)
-                    .wrapping_sub(crate::stdlib::strlen(buf.as_mut_ptr()))
-                    as i32,
+                    .wrapping_sub(crate::stdlib::strlen(buf.as_mut_ptr())) as i32,
             );
             i = 0 as i32;
             while !detectedResolutions[i as usize].is_null() {
@@ -1971,8 +1950,7 @@ unsafe extern "C" fn GraphicsOptions_SetMenuItems() {
     }
     s_graphicsoptions.lighting.curvalue = (crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"r_vertexLight\x00" as *const u8 as *const libc::c_char,
-    ) != 0 as i32 as f32)
-        as i32;
+    ) != 0 as i32 as f32) as i32;
     match crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"r_texturebits\x00" as *const u8 as *const libc::c_char,
     ) as i32
@@ -2138,23 +2116,19 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.graphics.generic.type_0 = 9 as i32;
     s_graphicsoptions.graphics.generic.flags = 0x10 as i32 as u32;
     s_graphicsoptions.graphics.generic.id = 106 as i32;
-    s_graphicsoptions.graphics.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_graphicsoptions.graphics.generic.callback =
+        Some(GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_graphicsoptions.graphics.generic.x = 216 as i32;
-    s_graphicsoptions.graphics.generic.y =
-        240 as i32 - 2 as i32 * 27 as i32;
+    s_graphicsoptions.graphics.generic.y = 240 as i32 - 2 as i32 * 27 as i32;
     s_graphicsoptions.graphics.string =
         b"GRAPHICS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_graphicsoptions.graphics.style = 0x2 as i32;
     s_graphicsoptions.graphics.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     s_graphicsoptions.display.generic.type_0 = 9 as i32;
-    s_graphicsoptions.display.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_graphicsoptions.display.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     s_graphicsoptions.display.generic.id = 107 as i32;
-    s_graphicsoptions.display.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_graphicsoptions.display.generic.callback =
+        Some(GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_graphicsoptions.display.generic.x = 216 as i32;
     s_graphicsoptions.display.generic.y = 240 as i32 - 27 as i32;
     s_graphicsoptions.display.string =
@@ -2162,12 +2136,10 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.display.style = 0x2 as i32;
     s_graphicsoptions.display.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     s_graphicsoptions.sound.generic.type_0 = 9 as i32;
-    s_graphicsoptions.sound.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_graphicsoptions.sound.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     s_graphicsoptions.sound.generic.id = 108 as i32;
-    s_graphicsoptions.sound.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_graphicsoptions.sound.generic.callback =
+        Some(GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_graphicsoptions.sound.generic.x = 216 as i32;
     s_graphicsoptions.sound.generic.y = 240 as i32;
     s_graphicsoptions.sound.string =
@@ -2175,12 +2147,10 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.sound.style = 0x2 as i32;
     s_graphicsoptions.sound.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     s_graphicsoptions.network.generic.type_0 = 9 as i32;
-    s_graphicsoptions.network.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_graphicsoptions.network.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     s_graphicsoptions.network.generic.id = 109 as i32;
-    s_graphicsoptions.network.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_graphicsoptions.network.generic.callback =
+        Some(GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_graphicsoptions.network.generic.x = 216 as i32;
     s_graphicsoptions.network.generic.y = 240 as i32 + 27 as i32;
     s_graphicsoptions.network.string =
@@ -2191,69 +2161,59 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.list.generic.type_0 = 3 as i32;
     s_graphicsoptions.list.generic.name =
         b"Graphics Settings:\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.list.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.list.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_graphicsoptions.list.generic.x = 400 as i32;
     s_graphicsoptions.list.generic.y = y;
-    s_graphicsoptions.list.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_graphicsoptions.list.generic.callback =
+        Some(GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_graphicsoptions.list.generic.id = 103 as i32;
     s_graphicsoptions.list.itemnames = s_graphics_options_names.as_mut_ptr();
     y += 2 as i32 * (16 as i32 + 2 as i32);
     s_graphicsoptions.driver.generic.type_0 = 3 as i32;
     s_graphicsoptions.driver.generic.name = b"GL Driver:\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.driver.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.driver.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_graphicsoptions.driver.generic.x = 400 as i32;
     s_graphicsoptions.driver.generic.y = y;
     s_graphicsoptions.driver.itemnames = s_driver_names.as_mut_ptr();
-    s_graphicsoptions.driver.curvalue = (crate::src::q3_ui::ui_atoms::uis.glconfig.driverType
-        as u32
-        == crate::tr_types_h::GLDRV_VOODOO as i32 as u32)
-        as i32;
+    s_graphicsoptions.driver.curvalue =
+        (crate::src::q3_ui::ui_atoms::uis.glconfig.driverType as u32
+            == crate::tr_types_h::GLDRV_VOODOO as i32 as u32) as i32;
     y += 16 as i32 + 2 as i32;
     // references/modifies "r_allowExtensions"
     s_graphicsoptions.allow_extensions.generic.type_0 = 3 as i32;
     s_graphicsoptions.allow_extensions.generic.name =
         b"GL Extensions:\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.allow_extensions.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.allow_extensions.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_graphicsoptions.allow_extensions.generic.x = 400 as i32;
     s_graphicsoptions.allow_extensions.generic.y = y;
     s_graphicsoptions.allow_extensions.itemnames = enabled_names.as_mut_ptr();
     y += 16 as i32 + 2 as i32;
     s_graphicsoptions.ratio.generic.type_0 = 3 as i32;
     s_graphicsoptions.ratio.generic.name = b"Aspect Ratio:\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.ratio.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.ratio.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_graphicsoptions.ratio.generic.x = 400 as i32;
     s_graphicsoptions.ratio.generic.y = y;
     s_graphicsoptions.ratio.itemnames = ratios.as_mut_ptr();
-    s_graphicsoptions.ratio.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_graphicsoptions.ratio.generic.callback =
+        Some(GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_graphicsoptions.ratio.generic.id = 110 as i32;
     y += 16 as i32 + 2 as i32;
     // references/modifies "r_mode"
     s_graphicsoptions.mode.generic.type_0 = 3 as i32;
     s_graphicsoptions.mode.generic.name = b"Resolution:\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.mode.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.mode.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_graphicsoptions.mode.generic.x = 400 as i32;
     s_graphicsoptions.mode.generic.y = y;
     s_graphicsoptions.mode.itemnames = resolutions;
-    s_graphicsoptions.mode.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_graphicsoptions.mode.generic.callback =
+        Some(GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_graphicsoptions.mode.generic.id = 104 as i32;
     y += 16 as i32 + 2 as i32;
     // references "r_colorbits"
     s_graphicsoptions.colordepth.generic.type_0 = 3 as i32;
     s_graphicsoptions.colordepth.generic.name =
         b"Color Depth:\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.colordepth.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.colordepth.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_graphicsoptions.colordepth.generic.x = 400 as i32;
     s_graphicsoptions.colordepth.generic.y = y;
     s_graphicsoptions.colordepth.itemnames = colordepth_names.as_mut_ptr();
@@ -2261,8 +2221,7 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     // references/modifies "r_fullscreen"
     s_graphicsoptions.fs.generic.type_0 = 3 as i32;
     s_graphicsoptions.fs.generic.name = b"Fullscreen:\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.fs.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.fs.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_graphicsoptions.fs.generic.x = 400 as i32;
     s_graphicsoptions.fs.generic.y = y;
     s_graphicsoptions.fs.itemnames = enabled_names.as_mut_ptr();
@@ -2270,8 +2229,7 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     // references/modifies "r_vertexLight"
     s_graphicsoptions.lighting.generic.type_0 = 3 as i32;
     s_graphicsoptions.lighting.generic.name = b"Lighting:\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.lighting.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.lighting.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_graphicsoptions.lighting.generic.x = 400 as i32;
     s_graphicsoptions.lighting.generic.y = y;
     s_graphicsoptions.lighting.itemnames = lighting_names.as_mut_ptr();
@@ -2280,8 +2238,7 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.geometry.generic.type_0 = 3 as i32;
     s_graphicsoptions.geometry.generic.name =
         b"Geometric Detail:\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.geometry.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.geometry.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_graphicsoptions.geometry.generic.x = 400 as i32;
     s_graphicsoptions.geometry.generic.y = y;
     s_graphicsoptions.geometry.itemnames = quality_names.as_mut_ptr();
@@ -2289,22 +2246,19 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     // references/modifies "r_picmip"
     s_graphicsoptions.tq.generic.type_0 = 1 as i32;
     s_graphicsoptions.tq.generic.name = b"Texture Detail:\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.tq.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.tq.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_graphicsoptions.tq.generic.x = 400 as i32;
     s_graphicsoptions.tq.generic.y = y;
     s_graphicsoptions.tq.minvalue = 0 as i32 as f32;
     s_graphicsoptions.tq.maxvalue = 3 as i32 as f32;
-    s_graphicsoptions.tq.generic.callback = Some(
-        GraphicsOptions_TQEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_graphicsoptions.tq.generic.callback =
+        Some(GraphicsOptions_TQEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     y += 16 as i32 + 2 as i32;
     // references/modifies "r_textureBits"
     s_graphicsoptions.texturebits.generic.type_0 = 3 as i32;
     s_graphicsoptions.texturebits.generic.name =
         b"Texture Quality:\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.texturebits.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.texturebits.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_graphicsoptions.texturebits.generic.x = 400 as i32;
     s_graphicsoptions.texturebits.generic.y = y;
     s_graphicsoptions.texturebits.itemnames = tq_names.as_mut_ptr();
@@ -2313,18 +2267,15 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.filter.generic.type_0 = 3 as i32;
     s_graphicsoptions.filter.generic.name =
         b"Texture Filter:\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.filter.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_graphicsoptions.filter.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_graphicsoptions.filter.generic.x = 400 as i32;
     s_graphicsoptions.filter.generic.y = y;
     s_graphicsoptions.filter.itemnames = filter_names.as_mut_ptr();
     y += 2 as i32 * 16 as i32;
     s_graphicsoptions.driverinfo.generic.type_0 = 9 as i32;
-    s_graphicsoptions.driverinfo.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
-    s_graphicsoptions.driverinfo.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_graphicsoptions.driverinfo.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_graphicsoptions.driverinfo.generic.callback =
+        Some(GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_graphicsoptions.driverinfo.generic.id = 105 as i32;
     s_graphicsoptions.driverinfo.generic.x = 320 as i32;
     s_graphicsoptions.driverinfo.generic.y = y;
@@ -2335,11 +2286,9 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.back.generic.type_0 = 6 as i32;
     s_graphicsoptions.back.generic.name =
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
-    s_graphicsoptions.back.generic.callback = Some(
-        GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_graphicsoptions.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_graphicsoptions.back.generic.callback =
+        Some(GraphicsOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_graphicsoptions.back.generic.id = 101 as i32;
     s_graphicsoptions.back.generic.x = 0 as i32;
     s_graphicsoptions.back.generic.y = 480 as i32 - 64 as i32;
@@ -2350,13 +2299,10 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
     s_graphicsoptions.apply.generic.type_0 = 6 as i32;
     s_graphicsoptions.apply.generic.name =
         b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char;
-    s_graphicsoptions.apply.generic.flags = 0x10 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x1000 as i32 as u32
-        | 0x4000 as i32 as u32;
+    s_graphicsoptions.apply.generic.flags =
+        0x10 as i32 as u32 | 0x100 as i32 as u32 | 0x1000 as i32 as u32 | 0x4000 as i32 as u32;
     s_graphicsoptions.apply.generic.callback = Some(
-        GraphicsOptions_ApplyChanges
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        GraphicsOptions_ApplyChanges as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     s_graphicsoptions.apply.generic.x = 640 as i32;
     s_graphicsoptions.apply.generic.y = 480 as i32 - 64 as i32;
@@ -2463,8 +2409,7 @@ pub unsafe extern "C" fn GraphicsOptions_MenuInit() {
         && crate::src::q3_ui::ui_atoms::uis.glconfig.hardwareType as u32
             == crate::tr_types_h::GLHW_3DFX_2D3D as i32 as u32
     {
-        s_graphicsoptions.driver.generic.flags |=
-            0x1000 as i32 as u32 | 0x4000 as i32 as u32
+        s_graphicsoptions.driver.generic.flags |= 0x1000 as i32 as u32 | 0x4000 as i32 as u32
     };
 }
 /*

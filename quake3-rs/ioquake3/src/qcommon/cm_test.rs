@@ -257,24 +257,17 @@ pub unsafe extern "C" fn CM_BoxLeafnums(
         storeLeafs: None,
     };
     crate::src::qcommon::cm_load::cm.checkcount += 1;
-    ll.bounds[0 as i32 as usize][0 as i32 as usize] =
-        *mins.offset(0 as i32 as isize);
-    ll.bounds[0 as i32 as usize][1 as i32 as usize] =
-        *mins.offset(1 as i32 as isize);
-    ll.bounds[0 as i32 as usize][2 as i32 as usize] =
-        *mins.offset(2 as i32 as isize);
-    ll.bounds[1 as i32 as usize][0 as i32 as usize] =
-        *maxs.offset(0 as i32 as isize);
-    ll.bounds[1 as i32 as usize][1 as i32 as usize] =
-        *maxs.offset(1 as i32 as isize);
-    ll.bounds[1 as i32 as usize][2 as i32 as usize] =
-        *maxs.offset(2 as i32 as isize);
+    ll.bounds[0 as i32 as usize][0 as i32 as usize] = *mins.offset(0 as i32 as isize);
+    ll.bounds[0 as i32 as usize][1 as i32 as usize] = *mins.offset(1 as i32 as isize);
+    ll.bounds[0 as i32 as usize][2 as i32 as usize] = *mins.offset(2 as i32 as isize);
+    ll.bounds[1 as i32 as usize][0 as i32 as usize] = *maxs.offset(0 as i32 as isize);
+    ll.bounds[1 as i32 as usize][1 as i32 as usize] = *maxs.offset(1 as i32 as isize);
+    ll.bounds[1 as i32 as usize][2 as i32 as usize] = *maxs.offset(2 as i32 as isize);
     ll.count = 0 as i32;
     ll.maxcount = listsize;
     ll.list = list;
     ll.storeLeafs = Some(
-        CM_StoreLeafs
-            as unsafe extern "C" fn(_: *mut crate::cm_local_h::leafList_t, _: i32) -> (),
+        CM_StoreLeafs as unsafe extern "C" fn(_: *mut crate::cm_local_h::leafList_t, _: i32) -> (),
     );
     ll.lastLeaf = 0 as i32;
     ll.overflowed = crate::src::qcommon::q_shared::qfalse;
@@ -305,18 +298,12 @@ pub unsafe extern "C" fn CM_BoxBrushes(
         storeLeafs: None,
     };
     crate::src::qcommon::cm_load::cm.checkcount += 1;
-    ll.bounds[0 as i32 as usize][0 as i32 as usize] =
-        *mins.offset(0 as i32 as isize);
-    ll.bounds[0 as i32 as usize][1 as i32 as usize] =
-        *mins.offset(1 as i32 as isize);
-    ll.bounds[0 as i32 as usize][2 as i32 as usize] =
-        *mins.offset(2 as i32 as isize);
-    ll.bounds[1 as i32 as usize][0 as i32 as usize] =
-        *maxs.offset(0 as i32 as isize);
-    ll.bounds[1 as i32 as usize][1 as i32 as usize] =
-        *maxs.offset(1 as i32 as isize);
-    ll.bounds[1 as i32 as usize][2 as i32 as usize] =
-        *maxs.offset(2 as i32 as isize);
+    ll.bounds[0 as i32 as usize][0 as i32 as usize] = *mins.offset(0 as i32 as isize);
+    ll.bounds[0 as i32 as usize][1 as i32 as usize] = *mins.offset(1 as i32 as isize);
+    ll.bounds[0 as i32 as usize][2 as i32 as usize] = *mins.offset(2 as i32 as isize);
+    ll.bounds[1 as i32 as usize][0 as i32 as usize] = *maxs.offset(0 as i32 as isize);
+    ll.bounds[1 as i32 as usize][1 as i32 as usize] = *maxs.offset(1 as i32 as isize);
+    ll.bounds[1 as i32 as usize][2 as i32 as usize] = *maxs.offset(2 as i32 as isize);
     ll.count = 0 as i32;
     ll.maxcount = listsize;
     ll.list = list as *mut libc::c_void as *mut i32;
@@ -389,11 +376,9 @@ pub unsafe extern "C" fn CM_PointContents(
                 d = *p.offset(0 as i32 as isize)
                     * (*(*(*b).sides.offset(i as isize)).plane).normal[0 as i32 as usize]
                     + *p.offset(1 as i32 as isize)
-                        * (*(*(*b).sides.offset(i as isize)).plane).normal
-                            [1 as i32 as usize]
+                        * (*(*(*b).sides.offset(i as isize)).plane).normal[1 as i32 as usize]
                     + *p.offset(2 as i32 as isize)
-                        * (*(*(*b).sides.offset(i as isize)).plane).normal
-                            [2 as i32 as usize];
+                        * (*(*(*b).sides.offset(i as isize)).plane).normal[2 as i32 as usize];
                 // FIXME test for Cash
                 //			if ( d >= b->sides[i].plane->dist ) {
                 if d > (*(*(*b).sides.offset(i as isize)).plane).dist {
@@ -431,12 +416,9 @@ pub unsafe extern "C" fn CM_TransformedPointContents(
     let mut right: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut up: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     // subtract origin offset
-    p_l[0 as i32 as usize] =
-        *p.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
-    p_l[1 as i32 as usize] =
-        *p.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
-    p_l[2 as i32 as usize] =
-        *p.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize);
+    p_l[0 as i32 as usize] = *p.offset(0 as i32 as isize) - *origin.offset(0 as i32 as isize);
+    p_l[1 as i32 as usize] = *p.offset(1 as i32 as isize) - *origin.offset(1 as i32 as isize);
+    p_l[2 as i32 as usize] = *p.offset(2 as i32 as isize) - *origin.offset(2 as i32 as isize);
     // rotate start and end into the models frame of reference
     if model != 255 as i32
         && (*angles.offset(0 as i32 as isize) != 0.
@@ -452,16 +434,13 @@ pub unsafe extern "C" fn CM_TransformedPointContents(
         temp[0 as i32 as usize] = p_l[0 as i32 as usize];
         temp[1 as i32 as usize] = p_l[1 as i32 as usize];
         temp[2 as i32 as usize] = p_l[2 as i32 as usize];
-        p_l[0 as i32 as usize] = temp[0 as i32 as usize]
-            * forward[0 as i32 as usize]
+        p_l[0 as i32 as usize] = temp[0 as i32 as usize] * forward[0 as i32 as usize]
             + temp[1 as i32 as usize] * forward[1 as i32 as usize]
             + temp[2 as i32 as usize] * forward[2 as i32 as usize];
-        p_l[1 as i32 as usize] = -(temp[0 as i32 as usize]
-            * right[0 as i32 as usize]
+        p_l[1 as i32 as usize] = -(temp[0 as i32 as usize] * right[0 as i32 as usize]
             + temp[1 as i32 as usize] * right[1 as i32 as usize]
             + temp[2 as i32 as usize] * right[2 as i32 as usize]);
-        p_l[2 as i32 as usize] = temp[0 as i32 as usize]
-            * up[0 as i32 as usize]
+        p_l[2 as i32 as usize] = temp[0 as i32 as usize] * up[0 as i32 as usize]
             + temp[1 as i32 as usize] * up[1 as i32 as usize]
             + temp[2 as i32 as usize] * up[2 as i32 as usize]
     }
@@ -737,8 +716,7 @@ pub unsafe extern "C" fn CM_BoundsIntersect(
     mut mins2: *const crate::src::qcommon::q_shared::vec_t,
     mut maxs2: *const crate::src::qcommon::q_shared::vec_t,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    if (*maxs.offset(0 as i32 as isize) as f64)
-        < *mins2.offset(0 as i32 as isize) as f64 - 0.125f64
+    if (*maxs.offset(0 as i32 as isize) as f64) < *mins2.offset(0 as i32 as isize) as f64 - 0.125f64
         || (*maxs.offset(1 as i32 as isize) as f64)
             < *mins2.offset(1 as i32 as isize) as f64 - 0.125f64
         || (*maxs.offset(2 as i32 as isize) as f64)
@@ -811,8 +789,7 @@ pub unsafe extern "C" fn CM_BoundsIntersectPoint(
     mut maxs: *const crate::src::qcommon::q_shared::vec_t,
     mut point: *const crate::src::qcommon::q_shared::vec_t,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    if (*maxs.offset(0 as i32 as isize) as f64)
-        < *point.offset(0 as i32 as isize) as f64 - 0.125f64
+    if (*maxs.offset(0 as i32 as isize) as f64) < *point.offset(0 as i32 as isize) as f64 - 0.125f64
         || (*maxs.offset(1 as i32 as isize) as f64)
             < *point.offset(1 as i32 as isize) as f64 - 0.125f64
         || (*maxs.offset(2 as i32 as isize) as f64)

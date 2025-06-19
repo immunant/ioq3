@@ -105,24 +105,21 @@ unsafe extern "C" fn silk_resampler_private_IIR_FIR_INTERPOL(
         *fresh0 = if (if 15 as i32 == 1 as i32 {
             (res_Q15 >> 1 as i32) + (res_Q15 & 1 as i32)
         } else {
-            ((res_Q15 >> 15 as i32 - 1 as i32) + 1 as i32)
-                >> 1 as i32
+            ((res_Q15 >> 15 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
         }) > 0x7fff as i32
         {
             0x7fff as i32
         } else if (if 15 as i32 == 1 as i32 {
             (res_Q15 >> 1 as i32) + (res_Q15 & 1 as i32)
         } else {
-            ((res_Q15 >> 15 as i32 - 1 as i32) + 1 as i32)
-                >> 1 as i32
+            ((res_Q15 >> 15 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
         }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
         {
             0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
         } else if 15 as i32 == 1 as i32 {
             (res_Q15 >> 1 as i32) + (res_Q15 & 1 as i32)
         } else {
-            ((res_Q15 >> 15 as i32 - 1 as i32) + 1 as i32)
-                >> 1 as i32
+            ((res_Q15 >> 15 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
         } as crate::opus_types_h::opus_int16;
         index_Q16 += index_increment_Q16
     }
@@ -176,8 +173,7 @@ pub unsafe extern "C" fn silk_resampler_private_IIR_FIR(
     let mut fresh1 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong)
-            .wrapping_mul((2 as i32 * (*S).batchSize + 8 as i32) as libc::c_ulong)
-            as usize,
+            .wrapping_mul((2 as i32 * (*S).batchSize + 8 as i32) as libc::c_ulong) as usize,
     );
     buf = fresh1.as_mut_ptr() as *mut crate::opus_types_h::opus_int16;
     /* Copy buffered samples to start of buffer */
@@ -201,8 +197,7 @@ pub unsafe extern "C" fn silk_resampler_private_IIR_FIR(
             in_0,
             nSamplesIn,
         ); /* + 1 because 2x upsampling */
-        max_index_Q16 = ((nSamplesIn as crate::opus_types_h::opus_uint32)
-            << 16 as i32 + 1 as i32)
+        max_index_Q16 = ((nSamplesIn as crate::opus_types_h::opus_uint32) << 16 as i32 + 1 as i32)
             as crate::opus_types_h::opus_int32;
         out = silk_resampler_private_IIR_FIR_INTERPOL(out, buf, max_index_Q16, index_increment_Q16);
         in_0 = in_0.offset(nSamplesIn as isize);

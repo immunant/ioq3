@@ -78,19 +78,17 @@ pub unsafe extern "C" fn silk_encode_signs(
     while i < length {
         p = *sum_pulses.offset(i as isize);
         if p > 0 as i32 {
-            icdf[0 as i32 as usize] =
-                *icdf_ptr.offset(if (p & 0x1f as i32) < 6 as i32 {
-                    (p) & 0x1f as i32
-                } else {
-                    6 as i32
-                } as isize);
+            icdf[0 as i32 as usize] = *icdf_ptr.offset(if (p & 0x1f as i32) < 6 as i32 {
+                (p) & 0x1f as i32
+            } else {
+                6 as i32
+            } as isize);
             j = 0 as i32;
             while j < 16 as i32 {
                 if *q_ptr.offset(j as isize) as i32 != 0 as i32 {
                     crate::src::opus_1_2_1::celt::entenc::ec_enc_icdf(
                         psRangeEnc as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                        (*q_ptr.offset(j as isize) as i32 >> 15 as i32)
-                            + 1 as i32,
+                        (*q_ptr.offset(j as isize) as i32 >> 15 as i32) + 1 as i32,
                         icdf.as_mut_ptr(),
                         8 as i32 as u32,
                     );
@@ -211,12 +209,11 @@ pub unsafe extern "C" fn silk_decode_signs(
     while i < length {
         p = *sum_pulses.offset(i as isize);
         if p > 0 as i32 {
-            icdf[0 as i32 as usize] =
-                *icdf_ptr.offset(if (p & 0x1f as i32) < 6 as i32 {
-                    (p) & 0x1f as i32
-                } else {
-                    6 as i32
-                } as isize);
+            icdf[0 as i32 as usize] = *icdf_ptr.offset(if (p & 0x1f as i32) < 6 as i32 {
+                (p) & 0x1f as i32
+            } else {
+                6 as i32
+            } as isize);
             j = 0 as i32;
             while j < 16 as i32 {
                 if *q_ptr.offset(j as isize) as i32 > 0 as i32 {

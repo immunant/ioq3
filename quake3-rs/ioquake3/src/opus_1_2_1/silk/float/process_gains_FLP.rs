@@ -226,10 +226,8 @@ pub unsafe extern "C" fn silk_process_gains_FLP(
     /* Limit the quantized signal */
     InvMaxSqrVal = (crate::stdlib::pow(
         2.0f32 as f64,
-        (0.33f32
-            * (21.0f32
-                - (*psEnc).sCmn.SNR_dB_Q7 as f32
-                    * (1 as i32 as f32 / 128.0f32))) as f64,
+        (0.33f32 * (21.0f32 - (*psEnc).sCmn.SNR_dB_Q7 as f32 * (1 as i32 as f32 / 128.0f32)))
+            as f64,
     ) / (*psEnc).sCmn.subfr_length as f64) as f32;
     k = 0 as i32;
     while k < (*psEnc).sCmn.nb_subfr {
@@ -271,8 +269,7 @@ pub unsafe extern "C" fn silk_process_gains_FLP(
     }
     /* Set quantizer offset for voiced signals. Larger offset when LTP coding gain is low or tilt is high (ie low-pass) */
     if (*psEnc).sCmn.indices.signalType as i32 == 2 as i32 {
-        if (*psEncCtrl).LTPredCodGain
-            + (*psEnc).sCmn.input_tilt_Q15 as f32 * (1.0f32 / 32768.0f32)
+        if (*psEncCtrl).LTPredCodGain + (*psEnc).sCmn.input_tilt_Q15 as f32 * (1.0f32 / 32768.0f32)
             > 1.0f32
         {
             (*psEnc).sCmn.indices.quantOffsetType = 0 as i32 as i8
@@ -283,8 +280,7 @@ pub unsafe extern "C" fn silk_process_gains_FLP(
     /* Quantizer boundary adjustment */
     quant_offset = crate::src::opus_1_2_1::silk::tables_other::silk_Quantization_Offsets_Q10
         [((*psEnc).sCmn.indices.signalType as i32 >> 1 as i32) as usize]
-        [(*psEnc).sCmn.indices.quantOffsetType as usize] as i32
-        as f32
+        [(*psEnc).sCmn.indices.quantOffsetType as usize] as i32 as f32
         / 1024.0f32;
     (*psEncCtrl).Lambda = 1.2f32
         + -0.05f32 * (*psEnc).sCmn.nStatesDelayedDecision as f32

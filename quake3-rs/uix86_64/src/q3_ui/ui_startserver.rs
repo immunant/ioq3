@@ -556,13 +556,7 @@ static mut gametype_remap: [i32; 4] = [
     crate::bg_public_h::GT_CTF as i32,
 ];
 
-static mut gametype_remap2: [i32; 5] = [
-    0 as i32,
-    2 as i32,
-    0 as i32,
-    1 as i32,
-    3 as i32,
-];
+static mut gametype_remap2: [i32; 5] = [0 as i32, 2 as i32, 0 as i32, 1 as i32, 3 as i32];
 /*
 =================
 GametypeBits
@@ -661,8 +655,7 @@ unsafe extern "C" fn StartServer_Update() {
         s_startserver.mappics[i as usize].shader = 0 as i32;
         // reset
         s_startserver.mapbuttons[i as usize].generic.flags |= 0x100 as i32 as u32;
-        s_startserver.mapbuttons[i as usize].generic.flags &=
-            !(0x4000 as i32 as u32);
+        s_startserver.mapbuttons[i as usize].generic.flags &= !(0x4000 as i32 as u32);
         i += 1
     }
     while i < 4 as i32 {
@@ -670,8 +663,7 @@ unsafe extern "C" fn StartServer_Update() {
         s_startserver.mappics[i as usize].generic.name = 0 as *const libc::c_char;
         s_startserver.mappics[i as usize].shader = 0 as i32;
         // disable
-        s_startserver.mapbuttons[i as usize].generic.flags &=
-            !(0x100 as i32 as u32);
+        s_startserver.mapbuttons[i as usize].generic.flags &= !(0x100 as i32 as u32);
         s_startserver.mapbuttons[i as usize].generic.flags |= 0x4000 as i32 as u32;
         i += 1
     }
@@ -689,8 +681,7 @@ unsafe extern "C" fn StartServer_Update() {
         i = s_startserver.currentmap - top;
         if i >= 0 as i32 && i < 4 as i32 {
             s_startserver.mappics[i as usize].generic.flags |= 0x40 as i32 as u32;
-            s_startserver.mapbuttons[i as usize].generic.flags &=
-                !(0x100 as i32 as u32)
+            s_startserver.mapbuttons[i as usize].generic.flags &= !(0x100 as i32 as u32)
         }
         // set the map name
         info = crate::src::q3_ui::ui_gameinfo::UI_GetArenaInfoByNumber(
@@ -727,10 +718,7 @@ StartServer_GametypeEvent
 =================
 */
 
-unsafe extern "C" fn StartServer_GametypeEvent(
-    mut _ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn StartServer_GametypeEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
     let mut i: i32 = 0;
     let mut count: i32 = 0;
     let mut gamebits: i32 = 0;
@@ -742,8 +730,7 @@ unsafe extern "C" fn StartServer_GametypeEvent(
     count = crate::src::q3_ui::ui_gameinfo::UI_GetNumArenas();
     s_startserver.nummaps = 0 as i32;
     matchbits = (1 as i32) << gametype_remap[s_startserver.gametype.curvalue as usize];
-    if gametype_remap[s_startserver.gametype.curvalue as usize]
-        == crate::bg_public_h::GT_FFA as i32
+    if gametype_remap[s_startserver.gametype.curvalue as usize] == crate::bg_public_h::GT_FFA as i32
     {
         matchbits |= (1 as i32) << crate::bg_public_h::GT_SINGLE_PLAYER as i32
     }
@@ -760,8 +747,7 @@ unsafe extern "C" fn StartServer_GametypeEvent(
         }
         i += 1
     }
-    s_startserver.maxpages =
-        (s_startserver.nummaps + 4 as i32 - 1 as i32) / 4 as i32;
+    s_startserver.maxpages = (s_startserver.nummaps + 4 as i32 - 1 as i32) / 4 as i32;
     s_startserver.page = 0 as i32;
     s_startserver.currentmap = 0 as i32;
     StartServer_Update();
@@ -932,12 +918,9 @@ unsafe extern "C" fn StartServer_MenuInit() {
     s_startserver.framer.height = 334 as i32;
     s_startserver.gametype.generic.type_0 = 3 as i32;
     s_startserver.gametype.generic.name = b"Game Type:\x00" as *const u8 as *const libc::c_char;
-    s_startserver.gametype.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
-    s_startserver.gametype.generic.callback = Some(
-        StartServer_GametypeEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_startserver.gametype.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_startserver.gametype.generic.callback =
+        Some(StartServer_GametypeEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_startserver.gametype.generic.id = 10 as i32;
     s_startserver.gametype.generic.x = 320 as i32 - 24 as i32;
     s_startserver.gametype.generic.y = 368 as i32;
@@ -947,8 +930,7 @@ unsafe extern "C" fn StartServer_MenuInit() {
         x = i % 2 as i32 * (128 as i32 + 8 as i32) + 188 as i32;
         y = i / 2 as i32 * (128 as i32 + 8 as i32) + 96 as i32;
         s_startserver.mappics[i as usize].generic.type_0 = 6 as i32;
-        s_startserver.mappics[i as usize].generic.flags =
-            0x4 as i32 as u32 | 0x4000 as i32 as u32;
+        s_startserver.mappics[i as usize].generic.flags = 0x4 as i32 as u32 | 0x4000 as i32 as u32;
         s_startserver.mappics[i as usize].generic.x = x;
         s_startserver.mappics[i as usize].generic.y = y;
         s_startserver.mappics[i as usize].generic.id = 11 as i32 + i;
@@ -961,14 +943,11 @@ unsafe extern "C" fn StartServer_MenuInit() {
         s_startserver.mappics[i as usize].generic.ownerdraw =
             Some(StartServer_LevelshotDraw as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
         s_startserver.mapbuttons[i as usize].generic.type_0 = 6 as i32;
-        s_startserver.mapbuttons[i as usize].generic.flags = 0x4 as i32 as u32
-            | 0x100 as i32 as u32
-            | 0x8000 as i32 as u32;
+        s_startserver.mapbuttons[i as usize].generic.flags =
+            0x4 as i32 as u32 | 0x100 as i32 as u32 | 0x8000 as i32 as u32;
         s_startserver.mapbuttons[i as usize].generic.id = 11 as i32 + i;
-        s_startserver.mapbuttons[i as usize].generic.callback = Some(
-            StartServer_MapEvent
-                as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-        );
+        s_startserver.mapbuttons[i as usize].generic.callback =
+            Some(StartServer_MapEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
         s_startserver.mapbuttons[i as usize].generic.x = x - 30 as i32;
         s_startserver.mapbuttons[i as usize].generic.y = y - 32 as i32;
         s_startserver.mapbuttons[i as usize].width = 256 as i32;
@@ -990,11 +969,9 @@ unsafe extern "C" fn StartServer_MenuInit() {
     s_startserver.arrows.width = 128 as i32;
     s_startserver.arrows.height = 32 as i32;
     s_startserver.prevpage.generic.type_0 = 6 as i32;
-    s_startserver.prevpage.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
-    s_startserver.prevpage.generic.callback = Some(
-        StartServer_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_startserver.prevpage.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_startserver.prevpage.generic.callback =
+        Some(StartServer_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_startserver.prevpage.generic.id = 15 as i32;
     s_startserver.prevpage.generic.x = 260 as i32;
     s_startserver.prevpage.generic.y = 400 as i32;
@@ -1003,11 +980,9 @@ unsafe extern "C" fn StartServer_MenuInit() {
     s_startserver.prevpage.focuspic =
         b"menu/art/gs_arrows_l\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_startserver.nextpage.generic.type_0 = 6 as i32;
-    s_startserver.nextpage.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
-    s_startserver.nextpage.generic.callback = Some(
-        StartServer_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_startserver.nextpage.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_startserver.nextpage.generic.callback =
+        Some(StartServer_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_startserver.nextpage.generic.id = 16 as i32;
     s_startserver.nextpage.generic.x = 321 as i32;
     s_startserver.nextpage.generic.y = 400 as i32;
@@ -1016,8 +991,7 @@ unsafe extern "C" fn StartServer_MenuInit() {
     s_startserver.nextpage.focuspic =
         b"menu/art/gs_arrows_r\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_startserver.mapname.generic.type_0 = 9 as i32;
-    s_startserver.mapname.generic.flags =
-        0x8 as i32 as u32 | 0x4000 as i32 as u32;
+    s_startserver.mapname.generic.flags = 0x8 as i32 as u32 | 0x4000 as i32 as u32;
     s_startserver.mapname.generic.x = 320 as i32;
     s_startserver.mapname.generic.y = 440 as i32;
     s_startserver.mapname.string = mapnamebuffer.as_mut_ptr();
@@ -1025,11 +999,9 @@ unsafe extern "C" fn StartServer_MenuInit() {
     s_startserver.mapname.color = crate::src::q3_ui::ui_qmenu::text_color_normal.as_mut_ptr();
     s_startserver.back.generic.type_0 = 6 as i32;
     s_startserver.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    s_startserver.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
-    s_startserver.back.generic.callback = Some(
-        StartServer_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_startserver.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_startserver.back.generic.callback =
+        Some(StartServer_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_startserver.back.generic.id = 17 as i32;
     s_startserver.back.generic.x = 0 as i32;
     s_startserver.back.generic.y = 480 as i32 - 64 as i32;
@@ -1039,11 +1011,9 @@ unsafe extern "C" fn StartServer_MenuInit() {
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_startserver.next.generic.type_0 = 6 as i32;
     s_startserver.next.generic.name = b"menu/art/next_0\x00" as *const u8 as *const libc::c_char;
-    s_startserver.next.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
-    s_startserver.next.generic.callback = Some(
-        StartServer_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_startserver.next.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_startserver.next.generic.callback =
+        Some(StartServer_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_startserver.next.generic.id = 18 as i32;
     s_startserver.next.generic.x = 640 as i32;
     s_startserver.next.generic.y = 480 as i32 - 64 as i32;
@@ -1052,9 +1022,8 @@ unsafe extern "C" fn StartServer_MenuInit() {
     s_startserver.next.focuspic =
         b"menu/art/next_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_startserver.item_null.generic.type_0 = 6 as i32;
-    s_startserver.item_null.generic.flags = 0x4 as i32 as u32
-        | 0x800 as i32 as u32
-        | 0x100000 as i32 as u32;
+    s_startserver.item_null.generic.flags =
+        0x4 as i32 as u32 | 0x800 as i32 as u32 | 0x100000 as i32 as u32;
     s_startserver.item_null.generic.x = 0 as i32;
     s_startserver.item_null.generic.y = 0 as i32;
     s_startserver.item_null.width = 640 as i32;
@@ -1822,8 +1791,7 @@ unsafe extern "C" fn ServerOptions_Start() {
     while n < 12 as i32 {
         if !(s_serveroptions.playerType[n as usize].curvalue == 2 as i32) {
             if !(s_serveroptions.playerType[n as usize].curvalue == 1 as i32
-                && s_serveroptions.playerNameBuffers[n as usize][0 as i32 as usize]
-                    as i32
+                && s_serveroptions.playerNameBuffers[n as usize][0 as i32 as usize] as i32
                     == 0 as i32)
             {
                 maxclients += 1
@@ -1959,19 +1927,16 @@ unsafe extern "C" fn ServerOptions_Start() {
     n = 1 as i32;
     while n < 12 as i32 {
         if !(s_serveroptions.playerType[n as usize].curvalue != 1 as i32) {
-            if !(s_serveroptions.playerNameBuffers[n as usize][0 as i32 as usize]
-                as i32
+            if !(s_serveroptions.playerNameBuffers[n as usize][0 as i32 as usize] as i32
                 == 0 as i32)
             {
-                if !(s_serveroptions.playerNameBuffers[n as usize][0 as i32 as usize]
-                    as i32
+                if !(s_serveroptions.playerNameBuffers[n as usize][0 as i32 as usize] as i32
                     == '-' as i32)
                 {
                     if s_serveroptions.gametype >= crate::bg_public_h::GT_TEAM as i32 {
                         crate::src::qcommon::q_shared::Com_sprintf(
                             buf.as_mut_ptr(),
-                            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong
-                                as i32,
+                            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
                             b"addbot %s %i %s\n\x00" as *const u8 as *const libc::c_char,
                             s_serveroptions.playerNameBuffers[n as usize].as_mut_ptr(),
                             skill,
@@ -1981,8 +1946,7 @@ unsafe extern "C" fn ServerOptions_Start() {
                     } else {
                         crate::src::qcommon::q_shared::Com_sprintf(
                             buf.as_mut_ptr(),
-                            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong
-                                as i32,
+                            ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
                             b"addbot %s %i\n\x00" as *const u8 as *const libc::c_char,
                             s_serveroptions.playerNameBuffers[n as usize].as_mut_ptr(),
                             skill,
@@ -1998,23 +1962,19 @@ unsafe extern "C" fn ServerOptions_Start() {
         n += 1
     }
     // set player's team
-    if dedicated == 0 as i32
-        && s_serveroptions.gametype >= crate::bg_public_h::GT_TEAM as i32
-    {
+    if dedicated == 0 as i32 && s_serveroptions.gametype >= crate::bg_public_h::GT_TEAM as i32 {
         // send team command for vanilla q3 game qvm
         crate::src::ui::ui_syscalls::trap_Cmd_ExecuteText(
             crate::src::qcommon::q_shared::EXEC_APPEND as i32,
             crate::src::qcommon::q_shared::va(
                 b"wait 5; team %s\n\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                playerTeam_list
-                    [s_serveroptions.playerTeam[0 as i32 as usize].curvalue as usize],
+                playerTeam_list[s_serveroptions.playerTeam[0 as i32 as usize].curvalue as usize],
             ),
         );
         // set g_localTeamPref for ioq3 game qvm
         crate::src::ui::ui_syscalls::trap_Cvar_Set(
             b"g_localTeamPref\x00" as *const u8 as *const libc::c_char,
-            playerTeam_list
-                [s_serveroptions.playerTeam[0 as i32 as usize].curvalue as usize],
+            playerTeam_list[s_serveroptions.playerTeam[0 as i32 as usize].curvalue as usize],
         );
     };
 }
@@ -2052,9 +2012,7 @@ unsafe extern "C" fn ServerOptions_InitPlayerItems() {
     // if not a dedicated server, first slot is reserved for the human on the server
     if s_serveroptions.dedicated.curvalue == 0 as i32 {
         // human
-        s_serveroptions.playerType[0 as i32 as usize]
-            .generic
-            .flags |= 0x4000 as i32 as u32;
+        s_serveroptions.playerType[0 as i32 as usize].generic.flags |= 0x4000 as i32 as u32;
         s_serveroptions.playerType[0 as i32 as usize].curvalue = 0 as i32;
         crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(
             b"name\x00" as *const u8 as *const libc::c_char,
@@ -2104,9 +2062,7 @@ unsafe extern "C" fn ServerOptions_SetPlayerItems() {
     if s_serveroptions.dedicated.curvalue == 0 as i32 {
         s_serveroptions.player0.string =
             b"Human\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
-        s_serveroptions.playerName[0 as i32 as usize]
-            .generic
-            .flags &= !(0x1000 as i32 as u32);
+        s_serveroptions.playerName[0 as i32 as usize].generic.flags &= !(0x1000 as i32 as u32);
         start = 1 as i32
     } else {
         s_serveroptions.player0.string =
@@ -2176,10 +2132,7 @@ unsafe extern "C" fn ServerOptions_Event(mut ptr: *mut libc::c_void, mut event: 
     };
 }
 
-unsafe extern "C" fn ServerOptions_PlayerNameEvent(
-    mut ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn ServerOptions_PlayerNameEvent(mut ptr: *mut libc::c_void, mut event: i32) {
     let mut n: i32 = 0;
     if event != 3 as i32 {
         return;
@@ -2662,8 +2615,7 @@ unsafe extern "C" fn ServerOptions_MenuInit(
     s_serveroptions.banner.color = crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr();
     s_serveroptions.banner.style = 0x1 as i32;
     s_serveroptions.mappic.generic.type_0 = 6 as i32;
-    s_serveroptions.mappic.generic.flags =
-        0x4 as i32 as u32 | 0x4000 as i32 as u32;
+    s_serveroptions.mappic.generic.flags = 0x4 as i32 as u32 | 0x4000 as i32 as u32;
     s_serveroptions.mappic.generic.x = 352 as i32;
     s_serveroptions.mappic.generic.y = 80 as i32;
     s_serveroptions.mappic.width = 160 as i32;
@@ -2673,9 +2625,8 @@ unsafe extern "C" fn ServerOptions_MenuInit(
     s_serveroptions.mappic.generic.ownerdraw =
         Some(ServerOptions_LevelshotDraw as unsafe extern "C" fn(_: *mut libc::c_void) -> ());
     s_serveroptions.picframe.generic.type_0 = 6 as i32;
-    s_serveroptions.picframe.generic.flags = 0x4 as i32 as u32
-        | 0x4000 as i32 as u32
-        | 0x40 as i32 as u32;
+    s_serveroptions.picframe.generic.flags =
+        0x4 as i32 as u32 | 0x4000 as i32 as u32 | 0x40 as i32 as u32;
     s_serveroptions.picframe.generic.x = 352 as i32 - 38 as i32;
     s_serveroptions.picframe.generic.y = 80 as i32 - 40 as i32;
     s_serveroptions.picframe.width = 320 as i32;
@@ -2687,9 +2638,8 @@ unsafe extern "C" fn ServerOptions_MenuInit(
         s_serveroptions.fraglimit.generic.type_0 = 4 as i32;
         s_serveroptions.fraglimit.generic.name =
             b"Frag Limit:\x00" as *const u8 as *const libc::c_char;
-        s_serveroptions.fraglimit.generic.flags = 0x20 as i32 as u32
-            | 0x100 as i32 as u32
-            | 0x2 as i32 as u32;
+        s_serveroptions.fraglimit.generic.flags =
+            0x20 as i32 as u32 | 0x100 as i32 as u32 | 0x2 as i32 as u32;
         s_serveroptions.fraglimit.generic.x = 456 as i32;
         s_serveroptions.fraglimit.generic.y = y;
         s_serveroptions.fraglimit.generic.statusbar =
@@ -2700,9 +2650,8 @@ unsafe extern "C" fn ServerOptions_MenuInit(
         s_serveroptions.flaglimit.generic.type_0 = 4 as i32;
         s_serveroptions.flaglimit.generic.name =
             b"Capture Limit:\x00" as *const u8 as *const libc::c_char;
-        s_serveroptions.flaglimit.generic.flags = 0x20 as i32 as u32
-            | 0x100 as i32 as u32
-            | 0x2 as i32 as u32;
+        s_serveroptions.flaglimit.generic.flags =
+            0x20 as i32 as u32 | 0x100 as i32 as u32 | 0x2 as i32 as u32;
         s_serveroptions.flaglimit.generic.x = 456 as i32;
         s_serveroptions.flaglimit.generic.y = y;
         s_serveroptions.flaglimit.generic.statusbar =
@@ -2713,9 +2662,8 @@ unsafe extern "C" fn ServerOptions_MenuInit(
     y += 16 as i32 + 2 as i32;
     s_serveroptions.timelimit.generic.type_0 = 4 as i32;
     s_serveroptions.timelimit.generic.name = b"Time Limit:\x00" as *const u8 as *const libc::c_char;
-    s_serveroptions.timelimit.generic.flags = 0x20 as i32 as u32
-        | 0x100 as i32 as u32
-        | 0x2 as i32 as u32;
+    s_serveroptions.timelimit.generic.flags =
+        0x20 as i32 as u32 | 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_serveroptions.timelimit.generic.x = 456 as i32;
     s_serveroptions.timelimit.generic.y = y;
     s_serveroptions.timelimit.generic.statusbar =
@@ -2725,8 +2673,7 @@ unsafe extern "C" fn ServerOptions_MenuInit(
     if s_serveroptions.gametype >= crate::bg_public_h::GT_TEAM as i32 {
         y += 16 as i32 + 2 as i32;
         s_serveroptions.friendlyfire.generic.type_0 = 5 as i32;
-        s_serveroptions.friendlyfire.generic.flags =
-            0x100 as i32 as u32 | 0x2 as i32 as u32;
+        s_serveroptions.friendlyfire.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
         s_serveroptions.friendlyfire.generic.x = 456 as i32;
         s_serveroptions.friendlyfire.generic.y = y;
         s_serveroptions.friendlyfire.generic.name =
@@ -2734,8 +2681,7 @@ unsafe extern "C" fn ServerOptions_MenuInit(
     }
     y += 16 as i32 + 2 as i32;
     s_serveroptions.pure_0.generic.type_0 = 5 as i32;
-    s_serveroptions.pure_0.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_serveroptions.pure_0.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_serveroptions.pure_0.generic.x = 456 as i32;
     s_serveroptions.pure_0.generic.y = y;
     s_serveroptions.pure_0.generic.name = b"Pure Server:\x00" as *const u8 as *const libc::c_char;
@@ -2743,11 +2689,9 @@ unsafe extern "C" fn ServerOptions_MenuInit(
         y += 16 as i32 + 2 as i32;
         s_serveroptions.dedicated.generic.type_0 = 3 as i32;
         s_serveroptions.dedicated.generic.id = 22 as i32;
-        s_serveroptions.dedicated.generic.flags =
-            0x100 as i32 as u32 | 0x2 as i32 as u32;
-        s_serveroptions.dedicated.generic.callback = Some(
-            ServerOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-        );
+        s_serveroptions.dedicated.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
+        s_serveroptions.dedicated.generic.callback =
+            Some(ServerOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
         s_serveroptions.dedicated.generic.x = 456 as i32;
         s_serveroptions.dedicated.generic.y = y;
         s_serveroptions.dedicated.generic.name =
@@ -2769,16 +2713,14 @@ unsafe extern "C" fn ServerOptions_MenuInit(
     s_serveroptions.punkbuster.generic.type_0 = 3 as i32;
     s_serveroptions.punkbuster.generic.name =
         b"Punkbuster:\x00" as *const u8 as *const libc::c_char;
-    s_serveroptions.punkbuster.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_serveroptions.punkbuster.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_serveroptions.punkbuster.generic.id = 0 as i32;
     s_serveroptions.punkbuster.generic.x = 456 as i32;
     s_serveroptions.punkbuster.generic.y = y;
     s_serveroptions.punkbuster.itemnames = punkbuster_items.as_mut_ptr();
     y = 80 as i32;
     s_serveroptions.botSkill.generic.type_0 = 3 as i32;
-    s_serveroptions.botSkill.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_serveroptions.botSkill.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_serveroptions.botSkill.generic.name = b"Bot Skill:\x00" as *const u8 as *const libc::c_char;
     s_serveroptions.botSkill.generic.x = (32 as i32 as libc::c_ulong).wrapping_add(
         crate::stdlib::strlen(s_serveroptions.botSkill.generic.name)
@@ -2800,9 +2742,8 @@ unsafe extern "C" fn ServerOptions_MenuInit(
         s_serveroptions.playerType[n as usize].generic.type_0 = 3 as i32;
         s_serveroptions.playerType[n as usize].generic.flags = 0x2 as i32 as u32;
         s_serveroptions.playerType[n as usize].generic.id = 20 as i32;
-        s_serveroptions.playerType[n as usize].generic.callback = Some(
-            ServerOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-        );
+        s_serveroptions.playerType[n as usize].generic.callback =
+            Some(ServerOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
         s_serveroptions.playerType[n as usize].generic.x = 32 as i32;
         s_serveroptions.playerType[n as usize].generic.y = y;
         s_serveroptions.playerType[n as usize].itemnames = playerType_list.as_mut_ptr();
@@ -2840,11 +2781,9 @@ unsafe extern "C" fn ServerOptions_MenuInit(
     }
     s_serveroptions.back.generic.type_0 = 6 as i32;
     s_serveroptions.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    s_serveroptions.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
-    s_serveroptions.back.generic.callback = Some(
-        ServerOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_serveroptions.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_serveroptions.back.generic.callback =
+        Some(ServerOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_serveroptions.back.generic.id = 24 as i32;
     s_serveroptions.back.generic.x = 0 as i32;
     s_serveroptions.back.generic.y = 480 as i32 - 64 as i32;
@@ -2859,9 +2798,8 @@ unsafe extern "C" fn ServerOptions_MenuInit(
         | 0x4000 as i32 as u32
         | 0x2000 as i32 as u32
         | 0x1000 as i32 as u32;
-    s_serveroptions.next.generic.callback = Some(
-        ServerOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_serveroptions.next.generic.callback =
+        Some(ServerOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_serveroptions.next.generic.id = 18 as i32;
     s_serveroptions.next.generic.x = 640 as i32;
     s_serveroptions.next.generic.y = 480 as i32 - 64 as i32 - 72 as i32;
@@ -2873,11 +2811,9 @@ unsafe extern "C" fn ServerOptions_MenuInit(
         b"menu/art/next_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_serveroptions.go.generic.type_0 = 6 as i32;
     s_serveroptions.go.generic.name = b"menu/art/fight_0\x00" as *const u8 as *const libc::c_char;
-    s_serveroptions.go.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
-    s_serveroptions.go.generic.callback = Some(
-        ServerOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_serveroptions.go.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_serveroptions.go.generic.callback =
+        Some(ServerOptions_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_serveroptions.go.generic.id = 23 as i32;
     s_serveroptions.go.generic.x = 640 as i32;
     s_serveroptions.go.generic.y = 480 as i32 - 64 as i32;
@@ -3343,10 +3279,7 @@ unsafe extern "C" fn UI_BotSelectMenu_BuildList() {
         ::std::mem::size_of::<i32>() as libc::c_ulong,
         Some(
             UI_BotSelectMenu_SortCompare
-                as unsafe extern "C" fn(
-                    _: *const libc::c_void,
-                    _: *const libc::c_void,
-                ) -> i32,
+                as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
         ),
     );
 }
@@ -3442,15 +3375,12 @@ unsafe extern "C" fn UI_BotSelectMenu_UpdateGrid() {
                 botSelectInfo.picnames[i as usize].color =
                     crate::src::q3_ui::ui_qmenu::color_orange.as_mut_ptr()
             }
-            botSelectInfo.picbuttons[i as usize].generic.flags &=
-                !(0x4000 as i32 as u32)
+            botSelectInfo.picbuttons[i as usize].generic.flags &= !(0x4000 as i32 as u32)
         } else {
             // dead slot
             botSelectInfo.pics[i as usize].generic.name = 0 as *const libc::c_char;
-            botSelectInfo.picbuttons[i as usize].generic.flags |=
-                0x4000 as i32 as u32;
-            botSelectInfo.botnames[i as usize][0 as i32 as usize] =
-                0 as i32 as libc::c_char
+            botSelectInfo.picbuttons[i as usize].generic.flags |= 0x4000 as i32 as u32;
+            botSelectInfo.botnames[i as usize][0 as i32 as usize] = 0 as i32 as libc::c_char
         }
         botSelectInfo.pics[i as usize].generic.flags &= !(0x40 as i32 as u32);
         botSelectInfo.pics[i as usize].shader = 0 as i32;
@@ -3525,17 +3455,13 @@ UI_BotSelectMenu_LeftEvent
 =================
 */
 
-unsafe extern "C" fn UI_BotSelectMenu_LeftEvent(
-    mut _ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_BotSelectMenu_LeftEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
     if event != 3 as i32 {
         return;
     }
     if botSelectInfo.modelpage > 0 as i32 {
         botSelectInfo.modelpage -= 1;
-        botSelectInfo.selectedmodel =
-            botSelectInfo.modelpage * (4 as i32 * 4 as i32);
+        botSelectInfo.selectedmodel = botSelectInfo.modelpage * (4 as i32 * 4 as i32);
         UI_BotSelectMenu_UpdateGrid();
     };
 }
@@ -3545,17 +3471,13 @@ UI_BotSelectMenu_RightEvent
 =================
 */
 
-unsafe extern "C" fn UI_BotSelectMenu_RightEvent(
-    mut _ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_BotSelectMenu_RightEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
     if event != 3 as i32 {
         return;
     }
     if botSelectInfo.modelpage < botSelectInfo.numpages - 1 as i32 {
         botSelectInfo.modelpage += 1;
-        botSelectInfo.selectedmodel =
-            botSelectInfo.modelpage * (4 as i32 * 4 as i32);
+        botSelectInfo.selectedmodel = botSelectInfo.modelpage * (4 as i32 * 4 as i32);
         UI_BotSelectMenu_UpdateGrid();
     };
 }
@@ -3580,8 +3502,7 @@ unsafe extern "C" fn UI_BotSelectMenu_BotEvent(mut ptr: *mut libc::c_void, mut e
     i = (*(ptr as *mut crate::ui_local_h::menucommon_s)).id;
     botSelectInfo.pics[i as usize].generic.flags |= 0x40 as i32 as u32;
     botSelectInfo.picbuttons[i as usize].generic.flags &= !(0x100 as i32 as u32);
-    botSelectInfo.selectedmodel =
-        botSelectInfo.modelpage * (4 as i32 * 4 as i32) + i;
+    botSelectInfo.selectedmodel = botSelectInfo.modelpage * (4 as i32 * 4 as i32) + i;
 }
 /*
 =================
@@ -3589,10 +3510,7 @@ UI_BotSelectMenu_BackEvent
 =================
 */
 
-unsafe extern "C" fn UI_BotSelectMenu_BackEvent(
-    mut _ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_BotSelectMenu_BackEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
     if event != 3 as i32 {
         return;
     }
@@ -3604,10 +3522,7 @@ UI_BotSelectMenu_SelectEvent
 =================
 */
 
-unsafe extern "C" fn UI_BotSelectMenu_SelectEvent(
-    mut _ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_BotSelectMenu_SelectEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
     if event != 3 as i32 {
         return;
     }
@@ -3615,8 +3530,7 @@ unsafe extern "C" fn UI_BotSelectMenu_SelectEvent(
     s_serveroptions.newBot = crate::src::qcommon::q_shared::qtrue;
     crate::src::qcommon::q_shared::Q_strncpyz(
         s_serveroptions.newBotName.as_mut_ptr(),
-        botSelectInfo.botnames
-            [(botSelectInfo.selectedmodel % (4 as i32 * 4 as i32)) as usize]
+        botSelectInfo.botnames[(botSelectInfo.selectedmodel % (4 as i32 * 4 as i32)) as usize]
             .as_mut_ptr(),
         16 as i32,
     );
@@ -3687,8 +3601,7 @@ unsafe extern "C" fn UI_BotSelectMenu_Init(mut bot: *mut libc::c_char) {
         j = 0 as i32;
         while j < 4 as i32 {
             botSelectInfo.pics[k as usize].generic.type_0 = 6 as i32;
-            botSelectInfo.pics[k as usize].generic.flags =
-                0x4 as i32 as u32 | 0x4000 as i32 as u32;
+            botSelectInfo.pics[k as usize].generic.flags = 0x4 as i32 as u32 | 0x4000 as i32 as u32;
             botSelectInfo.pics[k as usize].generic.x = x;
             botSelectInfo.pics[k as usize].generic.y = y;
             botSelectInfo.pics[k as usize].generic.name =
@@ -3701,9 +3614,8 @@ unsafe extern "C" fn UI_BotSelectMenu_Init(mut bot: *mut libc::c_char) {
             botSelectInfo.pics[k as usize].focuscolor =
                 crate::src::qcommon::q_math::colorRed.as_mut_ptr();
             botSelectInfo.picbuttons[k as usize].generic.type_0 = 6 as i32;
-            botSelectInfo.picbuttons[k as usize].generic.flags = 0x4 as i32 as u32
-                | 0x8000 as i32 as u32
-                | 0x100 as i32 as u32;
+            botSelectInfo.picbuttons[k as usize].generic.flags =
+                0x4 as i32 as u32 | 0x8000 as i32 as u32 | 0x100 as i32 as u32;
             botSelectInfo.picbuttons[k as usize].generic.callback = Some(
                 UI_BotSelectMenu_BotEvent
                     as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
@@ -3747,11 +3659,9 @@ unsafe extern "C" fn UI_BotSelectMenu_Init(mut bot: *mut libc::c_char) {
     botSelectInfo.arrows.width = 128 as i32;
     botSelectInfo.arrows.height = 32 as i32;
     botSelectInfo.left.generic.type_0 = 6 as i32;
-    botSelectInfo.left.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    botSelectInfo.left.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     botSelectInfo.left.generic.callback = Some(
-        UI_BotSelectMenu_LeftEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_BotSelectMenu_LeftEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     botSelectInfo.left.generic.x = 260 as i32;
     botSelectInfo.left.generic.y = 440 as i32;
@@ -3760,11 +3670,9 @@ unsafe extern "C" fn UI_BotSelectMenu_Init(mut bot: *mut libc::c_char) {
     botSelectInfo.left.focuspic =
         b"menu/art/gs_arrows_l\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     botSelectInfo.right.generic.type_0 = 6 as i32;
-    botSelectInfo.right.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    botSelectInfo.right.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     botSelectInfo.right.generic.callback = Some(
-        UI_BotSelectMenu_RightEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_BotSelectMenu_RightEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     botSelectInfo.right.generic.x = 321 as i32;
     botSelectInfo.right.generic.y = 440 as i32;
@@ -3774,11 +3682,9 @@ unsafe extern "C" fn UI_BotSelectMenu_Init(mut bot: *mut libc::c_char) {
         b"menu/art/gs_arrows_r\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     botSelectInfo.back.generic.type_0 = 6 as i32;
     botSelectInfo.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    botSelectInfo.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    botSelectInfo.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     botSelectInfo.back.generic.callback = Some(
-        UI_BotSelectMenu_BackEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_BotSelectMenu_BackEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     botSelectInfo.back.generic.x = 0 as i32;
     botSelectInfo.back.generic.y = 480 as i32 - 64 as i32;
@@ -3788,11 +3694,9 @@ unsafe extern "C" fn UI_BotSelectMenu_Init(mut bot: *mut libc::c_char) {
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     botSelectInfo.go.generic.type_0 = 6 as i32;
     botSelectInfo.go.generic.name = b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char;
-    botSelectInfo.go.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    botSelectInfo.go.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     botSelectInfo.go.generic.callback = Some(
-        UI_BotSelectMenu_SelectEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_BotSelectMenu_SelectEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     botSelectInfo.go.generic.x = 640 as i32;
     botSelectInfo.go.generic.y = 480 as i32 - 64 as i32;

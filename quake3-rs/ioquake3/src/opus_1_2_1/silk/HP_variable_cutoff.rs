@@ -107,18 +107,14 @@ pub unsafe extern "C" fn silk_HP_variable_cutoff(
             + ((((-quality_Q15 as crate::opus_types_h::opus_uint32) << 2 as i32)
                 as crate::opus_types_h::opus_int32 as i64
                 * quality_Q15 as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32
-                as i64
+                >> 16 as i32) as crate::opus_types_h::opus_int32 as i64
                 * (pitch_freq_log_Q7
                     - (crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(
-                        ((60 as i32 as i64
-                            * ((1 as i32 as i64) << 16 as i32))
-                            as f64
-                            + 0.5f64) as crate::opus_types_h::opus_int32,
+                        ((60 as i32 as i64 * ((1 as i32 as i64) << 16 as i32)) as f64 + 0.5f64)
+                            as crate::opus_types_h::opus_int32,
                     ) - ((16 as i32) << 7 as i32)))
                     as crate::opus_types_h::opus_int16 as i64
-                >> 16 as i32))
-            as crate::opus_types_h::opus_int32;
+                >> 16 as i32)) as crate::opus_types_h::opus_int32;
         /* delta_freq = pitch_freq_log - psEnc->variable_HP_smth1; */
         delta_freq_Q7 = pitch_freq_log_Q7 - ((*psEncC1).variable_HP_smth1_Q15 >> 8 as i32);
         if delta_freq_Q7 < 0 as i32 {
@@ -126,58 +122,38 @@ pub unsafe extern "C" fn silk_HP_variable_cutoff(
             delta_freq_Q7 = delta_freq_Q7 * 3 as i32
         }
         /* limit delta, to reduce impact of outliers in pitch estimation */
-        delta_freq_Q7 = if -(((0.4f32
-            * ((1 as i32 as i64) << 7 as i32) as f32)
-            as f64
-            + 0.5f64) as crate::opus_types_h::opus_int32)
-            > ((0.4f32
-                * ((1 as i32 as i64) << 7 as i32) as f32)
-                as f64
-                + 0.5f64) as crate::opus_types_h::opus_int32
+        delta_freq_Q7 = if -(((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
+            as crate::opus_types_h::opus_int32)
+            > ((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32
         {
             if delta_freq_Q7
-                > -(((0.4f32
-                    * ((1 as i32 as i64) << 7 as i32) as f32)
-                    as f64
-                    + 0.5f64) as crate::opus_types_h::opus_int32)
+                > -(((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
+                    as crate::opus_types_h::opus_int32)
             {
-                -(((0.4f32
-                    * ((1 as i32 as i64) << 7 as i32) as f32)
-                    as f64
-                    + 0.5f64) as crate::opus_types_h::opus_int32)
+                -(((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
+                    as crate::opus_types_h::opus_int32)
             } else if delta_freq_Q7
-                < ((0.4f32
-                    * ((1 as i32 as i64) << 7 as i32) as f32)
-                    as f64
-                    + 0.5f64) as crate::opus_types_h::opus_int32
+                < ((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
+                    as crate::opus_types_h::opus_int32
             {
-                ((0.4f32
-                    * ((1 as i32 as i64) << 7 as i32) as f32)
-                    as f64
-                    + 0.5f64) as crate::opus_types_h::opus_int32
+                ((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
+                    as crate::opus_types_h::opus_int32
             } else {
                 delta_freq_Q7
             }
         } else if delta_freq_Q7
-            > ((0.4f32
-                * ((1 as i32 as i64) << 7 as i32) as f32)
-                as f64
-                + 0.5f64) as crate::opus_types_h::opus_int32
+            > ((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32
         {
-            ((0.4f32
-                * ((1 as i32 as i64) << 7 as i32) as f32)
-                as f64
-                + 0.5f64) as crate::opus_types_h::opus_int32
+            ((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32
         } else if delta_freq_Q7
-            < -(((0.4f32
-                * ((1 as i32 as i64) << 7 as i32) as f32)
-                as f64
-                + 0.5f64) as crate::opus_types_h::opus_int32)
+            < -(((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32)
         {
-            -(((0.4f32
-                * ((1 as i32 as i64) << 7 as i32) as f32)
-                as f64
-                + 0.5f64) as crate::opus_types_h::opus_int32)
+            -(((0.4f32 * ((1 as i32 as i64) << 7 as i32) as f32) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32)
         } else {
             delta_freq_Q7
         };
@@ -187,10 +163,8 @@ pub unsafe extern "C" fn silk_HP_variable_cutoff(
                 as crate::opus_types_h::opus_int32
                 * delta_freq_Q7 as crate::opus_types_h::opus_int16
                     as crate::opus_types_h::opus_int32) as i64
-                * ((0.1f32
-                    * ((1 as i32 as i64) << 16 as i32)
-                        as f32) as f64
-                    + 0.5f64) as crate::opus_types_h::opus_int32
+                * ((0.1f32 * ((1 as i32 as i64) << 16 as i32) as f32) as f64 + 0.5f64)
+                    as crate::opus_types_h::opus_int32
                     as crate::opus_types_h::opus_int16 as i64
                 >> 16 as i32))
             as crate::opus_types_h::opus_int32;
@@ -206,8 +180,7 @@ pub unsafe extern "C" fn silk_HP_variable_cutoff(
                 if (*psEncC1).variable_HP_smth1_Q15
                     > ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(60 as i32)
                         as crate::opus_types_h::opus_uint32)
-                        << 8 as i32)
-                        as crate::opus_types_h::opus_int32
+                        << 8 as i32) as crate::opus_types_h::opus_int32
                 {
                     ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(60 as i32)
                         as crate::opus_types_h::opus_uint32)
@@ -215,8 +188,7 @@ pub unsafe extern "C" fn silk_HP_variable_cutoff(
                 } else if (*psEncC1).variable_HP_smth1_Q15
                     < ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(100 as i32)
                         as crate::opus_types_h::opus_uint32)
-                        << 8 as i32)
-                        as crate::opus_types_h::opus_int32
+                        << 8 as i32) as crate::opus_types_h::opus_int32
                 {
                     ((crate::src::opus_1_2_1::silk::lin2log::silk_lin2log(100 as i32)
                         as crate::opus_types_h::opus_uint32)

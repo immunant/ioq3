@@ -228,10 +228,7 @@ pub unsafe extern "C" fn silk_Decode(
                 return -(203 as i32);
             }
             fs_kHz_dec = ((*decControl).internalSampleRate >> 10 as i32) + 1 as i32;
-            if fs_kHz_dec != 8 as i32
-                && fs_kHz_dec != 12 as i32
-                && fs_kHz_dec != 16 as i32
-            {
+            if fs_kHz_dec != 8 as i32 && fs_kHz_dec != 12 as i32 && fs_kHz_dec != 16 as i32 {
                 return -(200 as i32);
             }
             ret += crate::src::opus_1_2_1::silk::decoder_set_fs::silk_decoder_set_fs(
@@ -245,8 +242,7 @@ pub unsafe extern "C" fn silk_Decode(
     }
     if (*decControl).nChannelsAPI == 2 as i32
         && (*decControl).nChannelsInternal == 2 as i32
-        && ((*psDec).nChannelsAPI == 1 as i32
-            || (*psDec).nChannelsInternal == 1 as i32)
+        && ((*psDec).nChannelsAPI == 1 as i32 || (*psDec).nChannelsInternal == 1 as i32)
     {
         crate::stdlib::memset(
             (*psDec).sStereo.pred_prev_Q13.as_mut_ptr() as *mut libc::c_void,
@@ -277,8 +273,7 @@ pub unsafe extern "C" fn silk_Decode(
         ret = -(200 as i32);
         return ret;
     }
-    if lostFlag != 1 as i32
-        && (*channel_state.offset(0 as i32 as isize)).nFramesDecoded == 0 as i32
+    if lostFlag != 1 as i32 && (*channel_state.offset(0 as i32 as isize)).nFramesDecoded == 0 as i32
     {
         /* First decoder call for this payload */
         /* Decode VAD flags and LBRR flag */
@@ -310,14 +305,13 @@ pub unsafe extern "C" fn silk_Decode(
             );
             if (*channel_state.offset(n as isize)).LBRR_flag != 0 {
                 if (*channel_state.offset(n as isize)).nFramesPerPacket == 1 as i32 {
-                    (*channel_state.offset(n as isize)).LBRR_flags[0 as i32 as usize] =
-                        1 as i32
+                    (*channel_state.offset(n as isize)).LBRR_flags[0 as i32 as usize] = 1 as i32
                 } else {
                     LBRR_symbol = crate::src::opus_1_2_1::celt::entdec::ec_dec_icdf(
                         psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                         crate::src::opus_1_2_1::silk::tables_other::silk_LBRR_flags_iCDF_ptr
-                            [((*channel_state.offset(n as isize)).nFramesPerPacket
-                                - 2 as i32) as usize],
+                            [((*channel_state.offset(n as isize)).nFramesPerPacket - 2 as i32)
+                                as usize],
                         8 as i32 as u32,
                     ) + 1 as i32;
                     i = 0 as i32;
@@ -339,13 +333,10 @@ pub unsafe extern "C" fn silk_Decode(
                     if (*channel_state.offset(n as isize)).LBRR_flags[i as usize] != 0 {
                         let mut pulses: [crate::opus_types_h::opus_int16; 320] = [0; 320];
                         let mut condCoding: i32 = 0;
-                        if (*decControl).nChannelsInternal == 2 as i32
-                            && n == 0 as i32
-                        {
+                        if (*decControl).nChannelsInternal == 2 as i32 && n == 0 as i32 {
                             crate::src::opus_1_2_1::silk::stereo_decode_pred::silk_stereo_decode_pred(psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                                                     MS_pred_Q13.as_mut_ptr());
-                            if (*channel_state.offset(1 as i32 as isize)).LBRR_flags
-                                [i as usize]
+                            if (*channel_state.offset(1 as i32 as isize)).LBRR_flags[i as usize]
                                 == 0 as i32
                             {
                                 crate::src::opus_1_2_1::silk::stereo_decode_pred::silk_stereo_decode_mid_only(psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
@@ -374,8 +365,7 @@ pub unsafe extern "C" fn silk_Decode(
                             psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                             pulses.as_mut_ptr(),
                             (*channel_state.offset(n as isize)).indices.signalType as i32,
-                            (*channel_state.offset(n as isize)).indices.quantOffsetType
-                                as i32,
+                            (*channel_state.offset(n as isize)).indices.quantOffsetType as i32,
                             (*channel_state.offset(n as isize)).frame_length,
                         );
                     }
@@ -443,8 +433,7 @@ pub unsafe extern "C" fn silk_Decode(
             ::std::mem::size_of::<[crate::opus_types_h::opus_int32; 16]>() as libc::c_ulong,
         );
         (*psDec).channel_state[1 as i32 as usize].lagPrev = 100 as i32;
-        (*psDec).channel_state[1 as i32 as usize].LastGainIndex =
-            10 as i32 as i8;
+        (*psDec).channel_state[1 as i32 as usize].LastGainIndex = 10 as i32 as i8;
         (*psDec).channel_state[1 as i32 as usize].prevSignalType = 0 as i32;
         (*psDec).channel_state[1 as i32 as usize].first_frame_after_reset = 1 as i32
     }
@@ -452,8 +441,7 @@ pub unsafe extern "C" fn silk_Decode(
     we can delay allocating the temp buffer until after the SILK peak stack
     usage. We need to use a < and not a <= because of the two extra samples. */
     delay_stack_alloc = ((*decControl).internalSampleRate * (*decControl).nChannelsInternal
-        < (*decControl).API_sampleRate * (*decControl).nChannelsAPI)
-        as i32;
+        < (*decControl).API_sampleRate * (*decControl).nChannelsAPI) as i32;
     let mut fresh0 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong).wrapping_mul(
@@ -461,8 +449,7 @@ pub unsafe extern "C" fn silk_Decode(
                 0 as i32
             } else {
                 ((*decControl).nChannelsInternal)
-                    * ((*channel_state.offset(0 as i32 as isize)).frame_length
-                        + 2 as i32)
+                    * ((*channel_state.offset(0 as i32 as isize)).frame_length + 2 as i32)
             }) as libc::c_ulong,
         ) as usize,
     );
@@ -518,8 +505,7 @@ pub unsafe extern "C" fn silk_Decode(
                 &mut *channel_state.offset(n as isize) as *mut _
                     as *mut crate::structs_h::silk_decoder_state,
                 psRangeDec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
-                &mut *(*samplesOut1_tmp.as_mut_ptr().offset(n as isize))
-                    .offset(2 as i32 as isize),
+                &mut *(*samplesOut1_tmp.as_mut_ptr().offset(n as isize)).offset(2 as i32 as isize),
                 &mut nSamplesOutDec,
                 lostFlag,
                 condCoding_0,
@@ -527,8 +513,7 @@ pub unsafe extern "C" fn silk_Decode(
             )
         } else {
             crate::stdlib::memset(
-                &mut *(*samplesOut1_tmp.as_mut_ptr().offset(n as isize))
-                    .offset(2 as i32 as isize)
+                &mut *(*samplesOut1_tmp.as_mut_ptr().offset(n as isize)).offset(2 as i32 as isize)
                     as *mut crate::opus_types_h::opus_int16 as *mut libc::c_void,
                 0 as i32,
                 (nSamplesOutDec as libc::c_ulong)
@@ -541,9 +526,7 @@ pub unsafe extern "C" fn silk_Decode(
         *fresh1 += 1;
         n += 1
     }
-    if (*decControl).nChannelsAPI == 2 as i32
-        && (*decControl).nChannelsInternal == 2 as i32
-    {
+    if (*decControl).nChannelsAPI == 2 as i32 && (*decControl).nChannelsInternal == 2 as i32 {
         /* Convert Mid/Side to Left/Right */
         crate::src::opus_1_2_1::silk::stereo_MS_to_LR::silk_stereo_MS_to_LR(
             &mut (*psDec).sStereo as *mut _ as *mut crate::structs_h::stereo_dec_state,
@@ -564,10 +547,8 @@ pub unsafe extern "C" fn silk_Decode(
         );
         crate::stdlib::memcpy(
             (*psDec).sStereo.sMid.as_mut_ptr() as *mut libc::c_void,
-            &mut *(*samplesOut1_tmp
-                .as_mut_ptr()
-                .offset(0 as i32 as isize))
-            .offset(nSamplesOutDec as isize) as *mut crate::opus_types_h::opus_int16
+            &mut *(*samplesOut1_tmp.as_mut_ptr().offset(0 as i32 as isize))
+                .offset(nSamplesOutDec as isize) as *mut crate::opus_types_h::opus_int16
                 as *const libc::c_void,
             (2 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
                 crate::opus_types_h::opus_int16,
@@ -576,10 +557,9 @@ pub unsafe extern "C" fn silk_Decode(
     }
     /* Number of output samples */
     *nSamplesOut = nSamplesOutDec * (*decControl).API_sampleRate
-        / ((*channel_state.offset(0 as i32 as isize)).fs_kHz
-            as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
-            * 1000 as i32 as crate::opus_types_h::opus_int16
-                as crate::opus_types_h::opus_int32);
+        / ((*channel_state.offset(0 as i32 as isize)).fs_kHz as crate::opus_types_h::opus_int16
+            as crate::opus_types_h::opus_int32
+            * 1000 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32);
     /* Set up pointers to temp buffers */
     let mut fresh2 = ::std::vec::from_elem(
         0,
@@ -602,8 +582,7 @@ pub unsafe extern "C" fn silk_Decode(
         (::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong).wrapping_mul(
             (if delay_stack_alloc != 0 {
                 ((*decControl).nChannelsInternal)
-                    * ((*channel_state.offset(0 as i32 as isize)).frame_length
-                        + 2 as i32)
+                    * ((*channel_state.offset(0 as i32 as isize)).frame_length + 2 as i32)
             } else {
                 0 as i32
             }) as libc::c_ulong,
@@ -615,8 +594,8 @@ pub unsafe extern "C" fn silk_Decode(
             samplesOut1_tmp_storage2 as *mut libc::c_void,
             samplesOut as *const libc::c_void,
             (((*decControl).nChannelsInternal
-                * ((*channel_state.offset(0 as i32 as isize)).frame_length
-                    + 2 as i32)) as libc::c_ulong)
+                * ((*channel_state.offset(0 as i32 as isize)).frame_length + 2 as i32))
+                as libc::c_ulong)
                 .wrapping_mul(
                     ::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong
                 )
@@ -644,8 +623,7 @@ pub unsafe extern "C" fn silk_Decode(
             &mut (*channel_state.offset(n as isize)).resampler_state as *mut _
                 as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
             resample_out_ptr,
-            &mut *(*samplesOut1_tmp.as_mut_ptr().offset(n as isize))
-                .offset(1 as i32 as isize)
+            &mut *(*samplesOut1_tmp.as_mut_ptr().offset(n as isize)).offset(1 as i32 as isize)
                 as *mut crate::opus_types_h::opus_int16
                 as *const crate::opus_types_h::opus_int16,
             nSamplesOutDec,
@@ -662,9 +640,7 @@ pub unsafe extern "C" fn silk_Decode(
         n += 1
     }
     /* Create two channel output from mono stream */
-    if (*decControl).nChannelsAPI == 2 as i32
-        && (*decControl).nChannelsInternal == 1 as i32
-    {
+    if (*decControl).nChannelsAPI == 2 as i32 && (*decControl).nChannelsInternal == 1 as i32 {
         if stereo_to_mono != 0 {
             /* Resample right channel for newly collapsed stereo just in case
             we weren't doing collapsing when switching to mono */
@@ -672,10 +648,8 @@ pub unsafe extern "C" fn silk_Decode(
                 &mut (*channel_state.offset(1 as i32 as isize)).resampler_state as *mut _
                     as *mut crate::resampler_structs_h::_silk_resampler_state_struct,
                 resample_out_ptr,
-                &mut *(*samplesOut1_tmp
-                    .as_mut_ptr()
-                    .offset(0 as i32 as isize))
-                .offset(1 as i32 as isize)
+                &mut *(*samplesOut1_tmp.as_mut_ptr().offset(0 as i32 as isize))
+                    .offset(1 as i32 as isize)
                     as *mut crate::opus_types_h::opus_int16
                     as *const crate::opus_types_h::opus_int16,
                 nSamplesOutDec,
@@ -699,9 +673,8 @@ pub unsafe extern "C" fn silk_Decode(
     if (*channel_state.offset(0 as i32 as isize)).prevSignalType == 2 as i32 {
         let mut mult_tab: [i32; 3] = [6 as i32, 4 as i32, 3 as i32];
         (*decControl).prevPitchLag = (*channel_state.offset(0 as i32 as isize)).lagPrev
-            * mult_tab[((*channel_state.offset(0 as i32 as isize)).fs_kHz
-                - 8 as i32
-                >> 2 as i32) as usize]
+            * mult_tab[((*channel_state.offset(0 as i32 as isize)).fs_kHz - 8 as i32 >> 2 as i32)
+                as usize]
     } else {
         (*decControl).prevPitchLag = 0 as i32
     }

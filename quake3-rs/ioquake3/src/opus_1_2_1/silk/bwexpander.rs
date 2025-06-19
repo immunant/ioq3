@@ -138,28 +138,22 @@ pub unsafe extern "C" fn silk_bwexpander(
             (chirp_Q16 * *ar.offset(i as isize) as i32 >> 1 as i32)
                 + (chirp_Q16 * *ar.offset(i as isize) as i32 & 1 as i32)
         } else {
-            ((chirp_Q16 * *ar.offset(i as isize) as i32
-                >> 16 as i32 - 1 as i32)
-                + 1 as i32)
+            ((chirp_Q16 * *ar.offset(i as isize) as i32 >> 16 as i32 - 1 as i32) + 1 as i32)
                 >> 1 as i32
         } as crate::opus_types_h::opus_int16;
         chirp_Q16 += if 16 as i32 == 1 as i32 {
             (chirp_Q16 * chirp_minus_one_Q16 >> 1 as i32)
                 + (chirp_Q16 * chirp_minus_one_Q16 & 1 as i32)
         } else {
-            ((chirp_Q16 * chirp_minus_one_Q16 >> 16 as i32 - 1 as i32)
-                + 1 as i32)
-                >> 1 as i32
+            ((chirp_Q16 * chirp_minus_one_Q16 >> 16 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
         };
         i += 1
     }
     *ar.offset((d - 1 as i32) as isize) = if 16 as i32 == 1 as i32 {
         (chirp_Q16 * *ar.offset((d - 1 as i32) as isize) as i32 >> 1 as i32)
-            + (chirp_Q16 * *ar.offset((d - 1 as i32) as isize) as i32
-                & 1 as i32)
+            + (chirp_Q16 * *ar.offset((d - 1 as i32) as isize) as i32 & 1 as i32)
     } else {
-        ((chirp_Q16 * *ar.offset((d - 1 as i32) as isize) as i32
-            >> 16 as i32 - 1 as i32)
+        ((chirp_Q16 * *ar.offset((d - 1 as i32) as isize) as i32 >> 16 as i32 - 1 as i32)
             + 1 as i32)
             >> 1 as i32
     } as crate::opus_types_h::opus_int16;

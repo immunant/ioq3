@@ -38,13 +38,11 @@ pub type seek_file_func = Option<
     ) -> libc::c_long,
 >;
 
-pub type close_file_func = Option<
-    unsafe extern "C" fn(_: crate::zconf_h::voidpf, _: crate::zconf_h::voidpf) -> i32,
->;
+pub type close_file_func =
+    Option<unsafe extern "C" fn(_: crate::zconf_h::voidpf, _: crate::zconf_h::voidpf) -> i32>;
 
-pub type testerror_file_func = Option<
-    unsafe extern "C" fn(_: crate::zconf_h::voidpf, _: crate::zconf_h::voidpf) -> i32,
->;
+pub type testerror_file_func =
+    Option<unsafe extern "C" fn(_: crate::zconf_h::voidpf, _: crate::zconf_h::voidpf) -> i32>;
 
 pub type zlib_filefunc_def = crate::src::qcommon::ioapi::zlib_filefunc_def_s;
 

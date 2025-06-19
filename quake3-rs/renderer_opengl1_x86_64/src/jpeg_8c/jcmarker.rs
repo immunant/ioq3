@@ -348,8 +348,7 @@ unsafe extern "C" fn emit_byte(mut cinfo: crate::jpeglib_h::j_compress_ptr, mut 
         .expect("non-null function pointer")(cinfo)
             == 0
         {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_CANT_SUSPEND as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_CANT_SUSPEND as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -372,10 +371,7 @@ unsafe extern "C" fn emit_marker(
     emit_byte(cinfo, mark as i32);
 }
 
-unsafe extern "C" fn emit_2bytes(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut value: i32,
-)
+unsafe extern "C" fn emit_2bytes(mut cinfo: crate::jpeglib_h::j_compress_ptr, mut value: i32)
 /* Emit a 2-byte integer; these are always MSB first in JPEG files */
 {
     emit_byte(cinfo, value >> 8 as i32 & 0xff as i32);
@@ -385,10 +381,7 @@ unsafe extern "C" fn emit_2bytes(
  * Routines to write specific marker types.
  */
 
-unsafe extern "C" fn emit_dqt(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut index: i32,
-) -> i32
+unsafe extern "C" fn emit_dqt(mut cinfo: crate::jpeglib_h::j_compress_ptr, mut index: i32) -> i32
 /* Emit a DQT marker */
 /* Returns the precision used (0 = 8bits, 1 = 16bits) for baseline checking */ {
     let mut qtbl: *mut crate::jpeglib_h::JQUANT_TBL = (*cinfo).quant_tbl_ptrs[index as usize];
@@ -407,8 +400,7 @@ unsafe extern "C" fn emit_dqt(
     prec = 0 as i32;
     i = 0 as i32;
     while i <= (*cinfo).lim_Se {
-        if (*qtbl).quantval[*(*cinfo).natural_order.offset(i as isize) as usize] as i32
-            > 255 as i32
+        if (*qtbl).quantval[*(*cinfo).natural_order.offset(i as isize) as usize] as i32 > 255 as i32
         {
             prec = 1 as i32
         }
@@ -419,8 +411,7 @@ unsafe extern "C" fn emit_dqt(
         emit_2bytes(
             cinfo,
             if prec != 0 {
-                ((*cinfo).lim_Se * 2 as i32 + 2 as i32 + 1 as i32)
-                    + 2 as i32
+                ((*cinfo).lim_Se * 2 as i32 + 2 as i32 + 1 as i32) + 2 as i32
             } else {
                 ((*cinfo).lim_Se + 1 as i32 + 1 as i32) + 2 as i32
             },
@@ -429,16 +420,12 @@ unsafe extern "C" fn emit_dqt(
         i = 0 as i32;
         while i <= (*cinfo).lim_Se {
             /* The table entries must be emitted in zigzag order. */
-            let mut qval: u32 = (*qtbl).quantval
-                [*(*cinfo).natural_order.offset(i as isize) as usize]
-                as u32;
+            let mut qval: u32 =
+                (*qtbl).quantval[*(*cinfo).natural_order.offset(i as isize) as usize] as u32;
             if prec != 0 {
                 emit_byte(cinfo, (qval >> 8 as i32) as i32);
             }
-            emit_byte(
-                cinfo,
-                (qval & 0xff as i32 as u32) as i32,
-            );
+            emit_byte(cinfo, (qval & 0xff as i32 as u32) as i32);
             i += 1
         }
         (*qtbl).sent_table = 1 as i32
@@ -481,10 +468,7 @@ unsafe extern "C" fn emit_dht(
             length += (*htbl).bits[i as usize] as i32;
             i += 1
         }
-        emit_2bytes(
-            cinfo,
-            length + 2 as i32 + 1 as i32 + 16 as i32,
-        );
+        emit_2bytes(cinfo, length + 2 as i32 + 1 as i32 + 16 as i32);
         emit_byte(cinfo, index);
         i = 1 as i32;
         while i <= 16 as i32 {
@@ -576,18 +560,14 @@ unsafe extern "C" fn emit_sof(mut cinfo: crate::jpeglib_h::j_compress_ptr, mut c
     emit_marker(cinfo, code);
     emit_2bytes(
         cinfo,
-        3 as i32 * (*cinfo).num_components
-            + 2 as i32
-            + 5 as i32
-            + 1 as i32,
+        3 as i32 * (*cinfo).num_components + 2 as i32 + 5 as i32 + 1 as i32,
     );
     /* Make sure image isn't bigger than SOF field can handle */
     if (*cinfo).jpeg_height as libc::c_long > 65535 as libc::c_long
         || (*cinfo).jpeg_width as libc::c_long > 65535 as libc::c_long
     {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_IMAGE_TOO_BIG as i32;
-        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] =
-            65535 as i32 as u32 as i32;
+        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = 65535 as i32 as u32 as i32;
         Some(
             (*(*cinfo).err)
                 .error_exit
@@ -624,10 +604,7 @@ unsafe extern "C" fn emit_sos(mut cinfo: crate::jpeglib_h::j_compress_ptr)
     emit_marker(cinfo, M_SOS);
     emit_2bytes(
         cinfo,
-        2 as i32 * (*cinfo).comps_in_scan
-            + 2 as i32
-            + 1 as i32
-            + 3 as i32,
+        2 as i32 * (*cinfo).comps_in_scan + 2 as i32 + 1 as i32 + 3 as i32,
     );
     emit_byte(cinfo, (*cinfo).comps_in_scan);
     i = 0 as i32;
@@ -661,16 +638,10 @@ unsafe extern "C" fn emit_pseudo_sos(mut cinfo: crate::jpeglib_h::j_compress_ptr
 /* Emit a pseudo SOS marker */
 {
     emit_marker(cinfo, M_SOS); /* length */
-    emit_2bytes(
-        cinfo,
-        2 as i32 + 1 as i32 + 3 as i32,
-    ); /* Ns */
+    emit_2bytes(cinfo, 2 as i32 + 1 as i32 + 3 as i32); /* Ns */
     emit_byte(cinfo, 0 as i32); /* Ss */
     emit_byte(cinfo, 0 as i32); /* Se */
-    emit_byte(
-        cinfo,
-        (*cinfo).block_size * (*cinfo).block_size - 1 as i32,
-    );
+    emit_byte(cinfo, (*cinfo).block_size * (*cinfo).block_size - 1 as i32);
     emit_byte(cinfo, 0 as i32);
     /* Ah/Al */
 }
@@ -737,12 +708,7 @@ unsafe extern "C" fn emit_adobe_app14(mut cinfo: crate::jpeglib_h::j_compress_pt
     emit_marker(cinfo, M_APP14); /* length */
     emit_2bytes(
         cinfo,
-        2 as i32
-            + 5 as i32
-            + 2 as i32
-            + 2 as i32
-            + 2 as i32
-            + 1 as i32,
+        2 as i32 + 5 as i32 + 2 as i32 + 2 as i32 + 2 as i32 + 1 as i32,
     ); /* Identifier: ASCII "Adobe" */
     emit_byte(cinfo, 0x41 as i32); /* Version */
     emit_byte(cinfo, 0x64 as i32); /* Flags0 */
@@ -790,17 +756,11 @@ unsafe extern "C" fn write_marker_header(
         .expect("non-null function pointer")(cinfo as crate::jpeglib_h::j_common_ptr);
     }
     emit_marker(cinfo, marker as JPEG_MARKER);
-    emit_2bytes(
-        cinfo,
-        datalen.wrapping_add(2 as i32 as u32) as i32,
-    );
+    emit_2bytes(cinfo, datalen.wrapping_add(2 as i32 as u32) as i32);
     /* total length */
 }
 
-unsafe extern "C" fn write_marker_byte(
-    mut cinfo: crate::jpeglib_h::j_compress_ptr,
-    mut val: i32,
-)
+unsafe extern "C" fn write_marker_byte(mut cinfo: crate::jpeglib_h::j_compress_ptr, mut val: i32)
 /* Emit one byte of marker parameters following write_marker_header */
 {
     emit_byte(cinfo, val);
@@ -879,16 +839,14 @@ unsafe extern "C" fn write_frame_header(mut cinfo: crate::jpeglib_h::j_compress_
         if prec != 0 && is_baseline != 0 {
             is_baseline = 0 as i32;
             /* If it's baseline except for quantizer size, warn the user */
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JTRC_16BIT_TABLES as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JTRC_16BIT_TABLES as i32;
             Some(
                 (*(*cinfo).err)
                     .emit_message
                     .expect("non-null function pointer"),
             )
             .expect("non-null function pointer")(
-                cinfo as crate::jpeglib_h::j_common_ptr,
-                0 as i32,
+                cinfo as crate::jpeglib_h::j_common_ptr, 0 as i32
             );
         }
     }
@@ -1027,11 +985,7 @@ pub unsafe extern "C" fn jinit_marker_writer(mut cinfo: crate::jpeglib_h::j_comp
         Some(write_tables_only as unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr) -> ());
     (*marker).pub_0.write_marker_header = Some(
         write_marker_header
-            as unsafe extern "C" fn(
-                _: crate::jpeglib_h::j_compress_ptr,
-                _: i32,
-                _: u32,
-            ) -> (),
+            as unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr, _: i32, _: u32) -> (),
     );
     (*marker).pub_0.write_marker_byte = Some(
         write_marker_byte

@@ -447,10 +447,7 @@ UI_CinematicsMenu_BackEvent
 ===============
 */
 
-unsafe extern "C" fn UI_CinematicsMenu_BackEvent(
-    mut _ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_CinematicsMenu_BackEvent(mut _ptr: *mut libc::c_void, mut event: i32) {
     if event != 3 as i32 {
         return;
     }
@@ -533,28 +530,24 @@ unsafe extern "C" fn UI_CinematicsMenu_Init() {
     cinematicsMenuInfo.framer.height = 334 as i32;
     y = 100 as i32;
     cinematicsMenuInfo.cin_idlogo.generic.type_0 = 9 as i32;
-    cinematicsMenuInfo.cin_idlogo.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    cinematicsMenuInfo.cin_idlogo.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     cinematicsMenuInfo.cin_idlogo.generic.x = 320 as i32;
     cinematicsMenuInfo.cin_idlogo.generic.y = y;
     cinematicsMenuInfo.cin_idlogo.generic.id = 11 as i32;
-    cinematicsMenuInfo.cin_idlogo.generic.callback = Some(
-        UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    cinematicsMenuInfo.cin_idlogo.generic.callback =
+        Some(UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     cinematicsMenuInfo.cin_idlogo.string =
         b"ID LOGO\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     cinematicsMenuInfo.cin_idlogo.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     cinematicsMenuInfo.cin_idlogo.style = 0x1 as i32;
     y += 30 as i32;
     cinematicsMenuInfo.cin_intro.generic.type_0 = 9 as i32;
-    cinematicsMenuInfo.cin_intro.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    cinematicsMenuInfo.cin_intro.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     cinematicsMenuInfo.cin_intro.generic.x = 320 as i32;
     cinematicsMenuInfo.cin_intro.generic.y = y;
     cinematicsMenuInfo.cin_intro.generic.id = 12 as i32;
-    cinematicsMenuInfo.cin_intro.generic.callback = Some(
-        UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    cinematicsMenuInfo.cin_intro.generic.callback =
+        Some(UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     cinematicsMenuInfo.cin_intro.string =
         b"INTRO\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     cinematicsMenuInfo.cin_intro.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
@@ -564,14 +557,12 @@ unsafe extern "C" fn UI_CinematicsMenu_Init() {
     }
     y += 30 as i32;
     cinematicsMenuInfo.cin_tier1.generic.type_0 = 9 as i32;
-    cinematicsMenuInfo.cin_tier1.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    cinematicsMenuInfo.cin_tier1.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     cinematicsMenuInfo.cin_tier1.generic.x = 320 as i32;
     cinematicsMenuInfo.cin_tier1.generic.y = y;
     cinematicsMenuInfo.cin_tier1.generic.id = 13 as i32;
-    cinematicsMenuInfo.cin_tier1.generic.callback = Some(
-        UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    cinematicsMenuInfo.cin_tier1.generic.callback =
+        Some(UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     cinematicsMenuInfo.cin_tier1.string =
         b"Tier 1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     cinematicsMenuInfo.cin_tier1.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
@@ -581,14 +572,12 @@ unsafe extern "C" fn UI_CinematicsMenu_Init() {
     }
     y += 30 as i32;
     cinematicsMenuInfo.cin_tier2.generic.type_0 = 9 as i32;
-    cinematicsMenuInfo.cin_tier2.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    cinematicsMenuInfo.cin_tier2.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     cinematicsMenuInfo.cin_tier2.generic.x = 320 as i32;
     cinematicsMenuInfo.cin_tier2.generic.y = y;
     cinematicsMenuInfo.cin_tier2.generic.id = 14 as i32;
-    cinematicsMenuInfo.cin_tier2.generic.callback = Some(
-        UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    cinematicsMenuInfo.cin_tier2.generic.callback =
+        Some(UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     cinematicsMenuInfo.cin_tier2.string =
         b"Tier 2\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     cinematicsMenuInfo.cin_tier2.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
@@ -598,14 +587,12 @@ unsafe extern "C" fn UI_CinematicsMenu_Init() {
     }
     y += 30 as i32;
     cinematicsMenuInfo.cin_tier3.generic.type_0 = 9 as i32;
-    cinematicsMenuInfo.cin_tier3.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    cinematicsMenuInfo.cin_tier3.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     cinematicsMenuInfo.cin_tier3.generic.x = 320 as i32;
     cinematicsMenuInfo.cin_tier3.generic.y = y;
     cinematicsMenuInfo.cin_tier3.generic.id = 15 as i32;
-    cinematicsMenuInfo.cin_tier3.generic.callback = Some(
-        UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    cinematicsMenuInfo.cin_tier3.generic.callback =
+        Some(UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     cinematicsMenuInfo.cin_tier3.string =
         b"Tier 3\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     cinematicsMenuInfo.cin_tier3.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
@@ -615,14 +602,12 @@ unsafe extern "C" fn UI_CinematicsMenu_Init() {
     }
     y += 30 as i32;
     cinematicsMenuInfo.cin_tier4.generic.type_0 = 9 as i32;
-    cinematicsMenuInfo.cin_tier4.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    cinematicsMenuInfo.cin_tier4.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     cinematicsMenuInfo.cin_tier4.generic.x = 320 as i32;
     cinematicsMenuInfo.cin_tier4.generic.y = y;
     cinematicsMenuInfo.cin_tier4.generic.id = 16 as i32;
-    cinematicsMenuInfo.cin_tier4.generic.callback = Some(
-        UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    cinematicsMenuInfo.cin_tier4.generic.callback =
+        Some(UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     cinematicsMenuInfo.cin_tier4.string =
         b"Tier 4\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     cinematicsMenuInfo.cin_tier4.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
@@ -632,14 +617,12 @@ unsafe extern "C" fn UI_CinematicsMenu_Init() {
     }
     y += 30 as i32;
     cinematicsMenuInfo.cin_tier5.generic.type_0 = 9 as i32;
-    cinematicsMenuInfo.cin_tier5.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    cinematicsMenuInfo.cin_tier5.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     cinematicsMenuInfo.cin_tier5.generic.x = 320 as i32;
     cinematicsMenuInfo.cin_tier5.generic.y = y;
     cinematicsMenuInfo.cin_tier5.generic.id = 17 as i32;
-    cinematicsMenuInfo.cin_tier5.generic.callback = Some(
-        UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    cinematicsMenuInfo.cin_tier5.generic.callback =
+        Some(UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     cinematicsMenuInfo.cin_tier5.string =
         b"Tier 5\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     cinematicsMenuInfo.cin_tier5.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
@@ -649,14 +632,12 @@ unsafe extern "C" fn UI_CinematicsMenu_Init() {
     }
     y += 30 as i32;
     cinematicsMenuInfo.cin_tier6.generic.type_0 = 9 as i32;
-    cinematicsMenuInfo.cin_tier6.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    cinematicsMenuInfo.cin_tier6.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     cinematicsMenuInfo.cin_tier6.generic.x = 320 as i32;
     cinematicsMenuInfo.cin_tier6.generic.y = y;
     cinematicsMenuInfo.cin_tier6.generic.id = 18 as i32;
-    cinematicsMenuInfo.cin_tier6.generic.callback = Some(
-        UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    cinematicsMenuInfo.cin_tier6.generic.callback =
+        Some(UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     cinematicsMenuInfo.cin_tier6.string =
         b"Tier 6\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     cinematicsMenuInfo.cin_tier6.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
@@ -666,14 +647,12 @@ unsafe extern "C" fn UI_CinematicsMenu_Init() {
     }
     y += 30 as i32;
     cinematicsMenuInfo.cin_tier7.generic.type_0 = 9 as i32;
-    cinematicsMenuInfo.cin_tier7.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    cinematicsMenuInfo.cin_tier7.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     cinematicsMenuInfo.cin_tier7.generic.x = 320 as i32;
     cinematicsMenuInfo.cin_tier7.generic.y = y;
     cinematicsMenuInfo.cin_tier7.generic.id = 19 as i32;
-    cinematicsMenuInfo.cin_tier7.generic.callback = Some(
-        UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    cinematicsMenuInfo.cin_tier7.generic.callback =
+        Some(UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     cinematicsMenuInfo.cin_tier7.string =
         b"Tier 7\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     cinematicsMenuInfo.cin_tier7.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
@@ -683,14 +662,12 @@ unsafe extern "C" fn UI_CinematicsMenu_Init() {
     }
     y += 30 as i32;
     cinematicsMenuInfo.cin_end.generic.type_0 = 9 as i32;
-    cinematicsMenuInfo.cin_end.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    cinematicsMenuInfo.cin_end.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     cinematicsMenuInfo.cin_end.generic.x = 320 as i32;
     cinematicsMenuInfo.cin_end.generic.y = y;
     cinematicsMenuInfo.cin_end.generic.id = 20 as i32;
-    cinematicsMenuInfo.cin_end.generic.callback = Some(
-        UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    cinematicsMenuInfo.cin_end.generic.callback =
+        Some(UI_CinematicsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     cinematicsMenuInfo.cin_end.string =
         b"END\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     cinematicsMenuInfo.cin_end.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
@@ -701,12 +678,10 @@ unsafe extern "C" fn UI_CinematicsMenu_Init() {
     cinematicsMenuInfo.back.generic.type_0 = 6 as i32;
     cinematicsMenuInfo.back.generic.name =
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    cinematicsMenuInfo.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    cinematicsMenuInfo.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     cinematicsMenuInfo.back.generic.id = 10 as i32;
     cinematicsMenuInfo.back.generic.callback = Some(
-        UI_CinematicsMenu_BackEvent
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_CinematicsMenu_BackEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     cinematicsMenuInfo.back.generic.x = 0 as i32;
     cinematicsMenuInfo.back.generic.y = 480 as i32 - 64 as i32;

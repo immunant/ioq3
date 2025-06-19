@@ -120,8 +120,7 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
     mut stream: *mut crate::stdlib::Uint8,
     mut len: i32,
 ) {
-    let mut pos: i32 =
-        dmapos * (crate::src::client::snd_dma::dma.samplebits / 8 as i32);
+    let mut pos: i32 = dmapos * (crate::src::client::snd_dma::dma.samplebits / 8 as i32);
     if pos >= dmasize {
         pos = 0 as i32;
         dmapos = pos
@@ -168,8 +167,7 @@ unsafe extern "C" fn SNDDMA_AudioCallback(
             && crate::src::client::snd_dma::dma.samplebits == 32 as i32
         {
             let mut ptr: *mut f32 = stream as *mut f32;
-            len = (len as libc::c_ulong)
-                .wrapping_div(::std::mem::size_of::<f32>() as libc::c_ulong)
+            len = (len as libc::c_ulong).wrapping_div(::std::mem::size_of::<f32>() as libc::c_ulong)
                 as i32 as i32;
             i = 0 as i32;
             while i < len {
@@ -285,9 +283,7 @@ unsafe extern "C" fn SNDDMA_PrintAudiospec(
     crate::src::qcommon::common::Com_Printf(b"%s:\n\x00" as *const u8 as *const libc::c_char, str);
     i = 0 as i32;
     while i < formatToStringTableSize {
-        if (*spec).format as i32
-            == formatToStringTable[i as usize].enumFormat as i32
-        {
+        if (*spec).format as i32 == formatToStringTable[i as usize].enumFormat as i32 {
             fmt = formatToStringTable[i as usize].stringFormat
         }
         i += 1
@@ -471,10 +467,8 @@ pub unsafe extern "C" fn SNDDMA_Init() -> crate::src::qcommon::q_shared::qboolea
     // samples must be divisible by number of channels
     tmp -= tmp % obtained.channels as i32;
     dmapos = 0 as i32;
-    crate::src::client::snd_dma::dma.samplebits =
-        obtained.format as i32 & 0xff as i32;
-    crate::src::client::snd_dma::dma.isfloat =
-        obtained.format as i32 & (1 as i32) << 8 as i32;
+    crate::src::client::snd_dma::dma.samplebits = obtained.format as i32 & 0xff as i32;
+    crate::src::client::snd_dma::dma.isfloat = obtained.format as i32 & (1 as i32) << 8 as i32;
     crate::src::client::snd_dma::dma.channels = obtained.channels as i32;
     crate::src::client::snd_dma::dma.samples = tmp;
     crate::src::client::snd_dma::dma.fullsamples =
@@ -531,8 +525,7 @@ pub unsafe extern "C" fn SNDDMA_Init() -> crate::src::qcommon::q_shared::qboolea
         spec.freq = 48000 as i32;
         spec.format = 0x8010 as i32 as crate::stdlib::SDL_AudioFormat;
         spec.channels = 1 as i32 as crate::stdlib::Uint8;
-        spec.samples = (20 as i32 * 48 as i32 * 3 as i32 * 4 as i32)
-            as crate::stdlib::Uint16;
+        spec.samples = (20 as i32 * 48 as i32 * 3 as i32 * 4 as i32) as crate::stdlib::Uint16;
         sdlCaptureDevice = crate::stdlib::SDL_OpenAudioDevice(
             0 as *const libc::c_char,
             crate::stdlib::SDL_TRUE as i32,
@@ -644,8 +637,7 @@ pub unsafe extern "C" fn SNDDMA_StartCapture() {
 pub unsafe extern "C" fn SNDDMA_AvailableCaptureSamples() -> i32 {
     // divided by 2 to convert from bytes to (mono16) samples.
     return if sdlCaptureDevice != 0 {
-        crate::stdlib::SDL_GetQueuedAudioSize(sdlCaptureDevice)
-            .wrapping_div(2 as i32 as u32)
+        crate::stdlib::SDL_GetQueuedAudioSize(sdlCaptureDevice).wrapping_div(2 as i32 as u32)
     } else {
         0 as i32 as u32
     } as i32;

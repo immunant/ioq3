@@ -317,12 +317,7 @@ Draws large numbers for status bar and powerups
 ==============
 */
 
-unsafe extern "C" fn CG_DrawField(
-    mut x: i32,
-    mut y: i32,
-    mut width: i32,
-    mut value: i32,
-) {
+unsafe extern "C" fn CG_DrawField(mut x: i32, mut y: i32, mut width: i32, mut value: i32) {
     let mut num: [libc::c_char; 16] = [0; 16];
     let mut ptr: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut l: i32 = 0;
@@ -336,23 +331,11 @@ unsafe extern "C" fn CG_DrawField(
     }
     match width {
         1 => {
-            value = if value > 9 as i32 {
-                9 as i32
-            } else {
-                value
-            };
-            value = if value < 0 as i32 {
-                0 as i32
-            } else {
-                value
-            }
+            value = if value > 9 as i32 { 9 as i32 } else { value };
+            value = if value < 0 as i32 { 0 as i32 } else { value }
         }
         2 => {
-            value = if value > 99 as i32 {
-                99 as i32
-            } else {
-                value
-            };
+            value = if value > 99 as i32 { 99 as i32 } else { value };
             value = if value < -(9 as i32) {
                 -(9 as i32)
             } else {
@@ -542,25 +525,18 @@ pub unsafe extern "C" fn CG_DrawHead(
             mins.as_mut_ptr(),
             maxs.as_mut_ptr(),
         );
-        origin[2 as i32 as usize] = (-0.5f64
-            * (mins[2 as i32 as usize] + maxs[2 as i32 as usize]) as f64)
-            as vec_t;
-        origin[1 as i32 as usize] = (0.5f64
-            * (mins[1 as i32 as usize] + maxs[1 as i32 as usize]) as f64)
-            as vec_t;
+        origin[2 as i32 as usize] =
+            (-0.5f64 * (mins[2 as i32 as usize] + maxs[2 as i32 as usize]) as f64) as vec_t;
+        origin[1 as i32 as usize] =
+            (0.5f64 * (mins[1 as i32 as usize] + maxs[1 as i32 as usize]) as f64) as vec_t;
         // calculate distance so the head nearly fills the box
         // assume heads are taller than wide
-        len = (0.7f64
-            * (maxs[2 as i32 as usize] - mins[2 as i32 as usize]) as f64)
-            as f32; // len / tan( fov/2 )
+        len = (0.7f64 * (maxs[2 as i32 as usize] - mins[2 as i32 as usize]) as f64) as f32; // len / tan( fov/2 )
         origin[0 as i32 as usize] = (len as f64 / 0.268f64) as vec_t;
         // allow per-model tweaking
-        origin[0 as i32 as usize] =
-            origin[0 as i32 as usize] + (*ci).headOffset[0 as i32 as usize];
-        origin[1 as i32 as usize] =
-            origin[1 as i32 as usize] + (*ci).headOffset[1 as i32 as usize];
-        origin[2 as i32 as usize] =
-            origin[2 as i32 as usize] + (*ci).headOffset[2 as i32 as usize];
+        origin[0 as i32 as usize] = origin[0 as i32 as usize] + (*ci).headOffset[0 as i32 as usize];
+        origin[1 as i32 as usize] = origin[1 as i32 as usize] + (*ci).headOffset[1 as i32 as usize];
+        origin[2 as i32 as usize] = origin[2 as i32 as usize] + (*ci).headOffset[2 as i32 as usize];
         CG_Draw3DModel(
             x,
             y,
@@ -614,21 +590,16 @@ pub unsafe extern "C" fn CG_DrawFlagModel(
             mins.as_mut_ptr(),
             maxs.as_mut_ptr(),
         );
-        origin[2 as i32 as usize] = (-0.5f64
-            * (mins[2 as i32 as usize] + maxs[2 as i32 as usize]) as f64)
-            as vec_t;
-        origin[1 as i32 as usize] = (0.5f64
-            * (mins[1 as i32 as usize] + maxs[1 as i32 as usize]) as f64)
-            as vec_t;
+        origin[2 as i32 as usize] =
+            (-0.5f64 * (mins[2 as i32 as usize] + maxs[2 as i32 as usize]) as f64) as vec_t;
+        origin[1 as i32 as usize] =
+            (0.5f64 * (mins[1 as i32 as usize] + maxs[1 as i32 as usize]) as f64) as vec_t;
         // calculate distance so the flag nearly fills the box
         // assume heads are taller than wide
-        len = (0.5f64
-            * (maxs[2 as i32 as usize] - mins[2 as i32 as usize]) as f64)
-            as f32; // len / tan( fov/2 )
+        len = (0.5f64 * (maxs[2 as i32 as usize] - mins[2 as i32 as usize]) as f64) as f32; // len / tan( fov/2 )
         origin[0 as i32 as usize] = (len as f64 / 0.268f64) as vec_t;
-        angles[1 as i32 as usize] = (60 as i32 as f64
-            * crate::stdlib::sin(cg.time as f64 / 2000.0f64))
-            as vec_t;
+        angles[1 as i32 as usize] =
+            (60 as i32 as f64 * crate::stdlib::sin(cg.time as f64 / 2000.0f64)) as vec_t;
         if team == crate::bg_public_h::TEAM_RED as i32 {
             handle = cgs.media.redFlagModel
         } else if team == crate::bg_public_h::TEAM_BLUE as i32 {
@@ -691,45 +662,32 @@ unsafe extern "C" fn CG_DrawStatusBarHead(mut x: f32) {
     angles[2 as i32 as usize] = 0 as i32 as vec_t;
     angles[1 as i32 as usize] = angles[2 as i32 as usize];
     angles[0 as i32 as usize] = angles[1 as i32 as usize];
-    if cg.damageTime != 0.
-        && cg.time as f32 - cg.damageTime < 500 as i32 as f32
-    {
+    if cg.damageTime != 0. && cg.time as f32 - cg.damageTime < 500 as i32 as f32 {
         frac = (cg.time as f32 - cg.damageTime) / 500 as i32 as f32;
-        size = (48 as i32 as f64
-            * 1.25f64
-            * (1.5f64 - frac as f64 * 0.5f64)) as f32;
-        stretch = (size as f64 - 48 as i32 as f64 * 1.25f64)
-            as f32;
+        size = (48 as i32 as f64 * 1.25f64 * (1.5f64 - frac as f64 * 0.5f64)) as f32;
+        stretch = (size as f64 - 48 as i32 as f64 * 1.25f64) as f32;
         // kick in the direction of damage
-        x = (x as f64
-            - (stretch as f64 * 0.5f64
-                + (cg.damageX * stretch) as f64 * 0.5f64)) as f32;
-        cg.headStartYaw =
-            180 as i32 as f32 + cg.damageX * 45 as i32 as f32;
+        x = (x as f64 - (stretch as f64 * 0.5f64 + (cg.damageX * stretch) as f64 * 0.5f64)) as f32;
+        cg.headStartYaw = 180 as i32 as f32 + cg.damageX * 45 as i32 as f32;
         cg.headEndYaw = (180 as i32 as f64
             + 20 as i32 as f64
                 * crate::stdlib::cos(
                     2.0f64
-                        * (((::libc::rand() & 0x7fff as i32) as f32
-                            / 0x7fff as i32 as f32)
-                            as f64
+                        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                             - 0.5f64)
                         * 3.14159265358979323846f64,
                 )) as f32;
         cg.headEndPitch = (5 as i32 as f64
             * crate::stdlib::cos(
                 2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
-                        as f64
+                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)
                     * 3.14159265358979323846f64,
             )) as f32;
         cg.headStartTime = cg.time;
         cg.headEndTime = ((cg.time + 100 as i32) as f32
-            + (::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32
-                * 2000 as i32 as f32) as i32
+            + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 2000 as i32 as f32)
+            as i32
     } else {
         if cg.time >= cg.headEndTime {
             // select a new head angle
@@ -737,16 +695,13 @@ unsafe extern "C" fn CG_DrawStatusBarHead(mut x: f32) {
             cg.headStartPitch = cg.headEndPitch;
             cg.headStartTime = cg.headEndTime;
             cg.headEndTime = ((cg.time + 100 as i32) as f32
-                + (::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32
-                    * 2000 as i32 as f32)
-                as i32;
+                + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
+                    * 2000 as i32 as f32) as i32;
             cg.headEndYaw = (180 as i32 as f64
                 + 20 as i32 as f64
                     * crate::stdlib::cos(
                         2.0f64
-                            * (((::libc::rand() & 0x7fff as i32) as f32
-                                / 0x7fff as i32 as f32)
+                            * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                                 as f64
                                 - 0.5f64)
                             * 3.14159265358979323846f64,
@@ -754,9 +709,7 @@ unsafe extern "C" fn CG_DrawStatusBarHead(mut x: f32) {
             cg.headEndPitch = (5 as i32 as f64
                 * crate::stdlib::cos(
                     2.0f64
-                        * (((::libc::rand() & 0x7fff as i32) as f32
-                            / 0x7fff as i32 as f32)
-                            as f64
+                        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                             - 0.5f64)
                         * 3.14159265358979323846f64,
                 )) as f32
@@ -767,14 +720,10 @@ unsafe extern "C" fn CG_DrawStatusBarHead(mut x: f32) {
     if cg.headStartTime > cg.time {
         cg.headStartTime = cg.time
     }
-    frac = (cg.time - cg.headStartTime) as f32
-        / (cg.headEndTime - cg.headStartTime) as f32;
-    frac = frac
-        * frac
-        * (3 as i32 as f32 - 2 as i32 as f32 * frac);
+    frac = (cg.time - cg.headStartTime) as f32 / (cg.headEndTime - cg.headStartTime) as f32;
+    frac = frac * frac * (3 as i32 as f32 - 2 as i32 as f32 * frac);
     angles[1 as i32 as usize] = cg.headStartYaw + (cg.headEndYaw - cg.headStartYaw) * frac;
-    angles[0 as i32 as usize] =
-        cg.headStartPitch + (cg.headEndPitch - cg.headStartPitch) * frac;
+    angles[0 as i32 as usize] = cg.headStartPitch + (cg.headEndPitch - cg.headStartPitch) * frac;
     CG_DrawHead(
         x,
         480 as i32 as f32 - size,
@@ -890,8 +839,7 @@ unsafe extern "C" fn CG_DrawStatusBar() {
         origin[1 as i32 as usize] = 0 as i32 as vec_t;
         origin[2 as i32 as usize] = 0 as i32 as vec_t;
         angles[1 as i32 as usize] = (90 as i32 as f64
-            + 20 as i32 as f64
-                * crate::stdlib::sin(cg.time as f64 / 1000.0f64))
+            + 20 as i32 as f64 * crate::stdlib::sin(cg.time as f64 / 1000.0f64))
             as vec_t;
         CG_Draw3DModel(
             (32 as i32 * 3 as i32 + 4 as i32) as f32,
@@ -904,39 +852,23 @@ unsafe extern "C" fn CG_DrawStatusBar() {
             angles.as_mut_ptr(),
         );
     }
-    CG_DrawStatusBarHead(
-        (185 as i32 + 32 as i32 * 3 as i32 + 4 as i32)
-            as f32,
-    );
-    if cg.predictedPlayerState.powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize] != 0
-    {
+    CG_DrawStatusBarHead((185 as i32 + 32 as i32 * 3 as i32 + 4 as i32) as f32);
+    if cg.predictedPlayerState.powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize] != 0 {
         CG_DrawStatusBarFlag(
-            (185 as i32
-                + 32 as i32 * 3 as i32
-                + 4 as i32
-                + 48 as i32) as f32,
+            (185 as i32 + 32 as i32 * 3 as i32 + 4 as i32 + 48 as i32) as f32,
             crate::bg_public_h::TEAM_RED as i32,
         );
-    } else if cg.predictedPlayerState.powerups
-        [crate::bg_public_h::PW_BLUEFLAG as i32 as usize]
-        != 0
+    } else if cg.predictedPlayerState.powerups[crate::bg_public_h::PW_BLUEFLAG as i32 as usize] != 0
     {
         CG_DrawStatusBarFlag(
-            (185 as i32
-                + 32 as i32 * 3 as i32
-                + 4 as i32
-                + 48 as i32) as f32,
+            (185 as i32 + 32 as i32 * 3 as i32 + 4 as i32 + 48 as i32) as f32,
             crate::bg_public_h::TEAM_BLUE as i32,
         );
-    } else if cg.predictedPlayerState.powerups
-        [crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize]
+    } else if cg.predictedPlayerState.powerups[crate::bg_public_h::PW_NEUTRALFLAG as i32 as usize]
         != 0
     {
         CG_DrawStatusBarFlag(
-            (185 as i32
-                + 32 as i32 * 3 as i32
-                + 4 as i32
-                + 48 as i32) as f32,
+            (185 as i32 + 32 as i32 * 3 as i32 + 4 as i32 + 48 as i32) as f32,
             crate::bg_public_h::TEAM_FREE as i32,
         );
     }
@@ -944,12 +876,10 @@ unsafe extern "C" fn CG_DrawStatusBar() {
         origin[0 as i32 as usize] = 90 as i32 as vec_t;
         origin[1 as i32 as usize] = 0 as i32 as vec_t;
         origin[2 as i32 as usize] = -(10 as i32) as vec_t;
-        angles[1 as i32 as usize] = (((cg.time & 2047 as i32) * 360 as i32)
-            as f64
-            / 2048.0f64) as vec_t;
+        angles[1 as i32 as usize] =
+            (((cg.time & 2047 as i32) * 360 as i32) as f64 / 2048.0f64) as vec_t;
         CG_Draw3DModel(
-            (370 as i32 + 32 as i32 * 3 as i32 + 4 as i32)
-                as f32,
+            (370 as i32 + 32 as i32 * 3 as i32 + 4 as i32) as f32,
             432 as i32 as f32,
             48 as i32 as f32,
             48 as i32 as f32,
@@ -965,8 +895,7 @@ unsafe extern "C" fn CG_DrawStatusBar() {
     if (*cent).currentState.weapon != 0 {
         value = (*ps).ammo[(*cent).currentState.weapon as usize];
         if value > -(1 as i32) {
-            if cg.predictedPlayerState.weaponstate
-                == crate::bg_public_h::WEAPON_FIRING as i32
+            if cg.predictedPlayerState.weaponstate == crate::bg_public_h::WEAPON_FIRING as i32
                 && cg.predictedPlayerState.weaponTime > 100 as i32
             {
                 // draw as dark grey when reloading
@@ -980,12 +909,7 @@ unsafe extern "C" fn CG_DrawStatusBar() {
                 // red
             }
             crate::src::cgame::cg_syscalls::trap_R_SetColor(colors[color as usize].as_mut_ptr());
-            CG_DrawField(
-                0 as i32,
-                432 as i32,
-                3 as i32,
-                value,
-            );
+            CG_DrawField(0 as i32, 432 as i32, 3 as i32, value);
             crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
             // if we didn't draw a 3D icon, draw a 2D icon for ammo
             if cg_draw3dIcons.integer == 0 && cg_drawIcons.integer != 0 {
@@ -1008,31 +932,20 @@ unsafe extern "C" fn CG_DrawStatusBar() {
     //
     value = (*ps).stats[crate::bg_public_h::STAT_HEALTH as i32 as usize];
     if value > 100 as i32 {
-        crate::src::cgame::cg_syscalls::trap_R_SetColor(
-            colors[3 as i32 as usize].as_mut_ptr(),
-        );
+        crate::src::cgame::cg_syscalls::trap_R_SetColor(colors[3 as i32 as usize].as_mut_ptr());
     // white
     } else if value > 25 as i32 {
-        crate::src::cgame::cg_syscalls::trap_R_SetColor(
-            colors[0 as i32 as usize].as_mut_ptr(),
-        );
+        crate::src::cgame::cg_syscalls::trap_R_SetColor(colors[0 as i32 as usize].as_mut_ptr());
     // green
     } else if value > 0 as i32 {
         color = cg.time >> 8 as i32 & 1 as i32; // flash
         crate::src::cgame::cg_syscalls::trap_R_SetColor(colors[color as usize].as_mut_ptr());
     } else {
-        crate::src::cgame::cg_syscalls::trap_R_SetColor(
-            colors[1 as i32 as usize].as_mut_ptr(),
-        );
+        crate::src::cgame::cg_syscalls::trap_R_SetColor(colors[1 as i32 as usize].as_mut_ptr());
         // red
     }
     // stretch the health up when taking damage
-    CG_DrawField(
-        185 as i32,
-        432 as i32,
-        3 as i32,
-        value,
-    );
+    CG_DrawField(185 as i32, 432 as i32, 3 as i32, value);
     CG_ColorForHealth(hcolor.as_mut_ptr());
     crate::src::cgame::cg_syscalls::trap_R_SetColor(hcolor.as_mut_ptr());
     //
@@ -1040,21 +953,13 @@ unsafe extern "C" fn CG_DrawStatusBar() {
     //
     value = (*ps).stats[crate::bg_public_h::STAT_ARMOR as i32 as usize];
     if value > 0 as i32 {
-        crate::src::cgame::cg_syscalls::trap_R_SetColor(
-            colors[0 as i32 as usize].as_mut_ptr(),
-        );
-        CG_DrawField(
-            370 as i32,
-            432 as i32,
-            3 as i32,
-            value,
-        );
+        crate::src::cgame::cg_syscalls::trap_R_SetColor(colors[0 as i32 as usize].as_mut_ptr());
+        CG_DrawField(370 as i32, 432 as i32, 3 as i32, value);
         crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
         // if we didn't draw a 3D icon, draw a 2D icon for armor
         if cg_draw3dIcons.integer == 0 && cg_drawIcons.integer != 0 {
             CG_DrawPic(
-                (370 as i32 + 32 as i32 * 3 as i32 + 4 as i32)
-                    as f32,
+                (370 as i32 + 32 as i32 * 3 as i32 + 4 as i32) as f32,
                 432 as i32 as f32,
                 48 as i32 as f32,
                 48 as i32 as f32,
@@ -1084,20 +989,15 @@ unsafe extern "C" fn CG_DrawAttacker(mut y: f32) -> f32 {
     let mut info: *const libc::c_char = 0 as *const libc::c_char;
     let mut name: *const libc::c_char = 0 as *const libc::c_char;
     let mut clientNum: i32 = 0;
-    if cg.predictedPlayerState.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-        <= 0 as i32
-    {
+    if cg.predictedPlayerState.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= 0 as i32 {
         return y;
     }
     if cg.attackerTime == 0 {
         return y;
     }
-    clientNum = cg.predictedPlayerState.persistant
-        [crate::bg_public_h::PERS_ATTACKER as i32 as usize];
-    if clientNum < 0 as i32
-        || clientNum >= 64 as i32
-        || clientNum == (*cg.snap).ps.clientNum
-    {
+    clientNum =
+        cg.predictedPlayerState.persistant[crate::bg_public_h::PERS_ATTACKER as i32 as usize];
+    if clientNum < 0 as i32 || clientNum >= 64 as i32 || clientNum == (*cg.snap).ps.clientNum {
         return y;
     }
     if cgs.clientinfo[clientNum as usize].infoValid as u64 == 0 {
@@ -1148,12 +1048,7 @@ unsafe extern "C" fn CG_DrawSnapshot(mut y: f32) -> f32 {
         cgs.serverCommandSequence,
     );
     w = CG_DrawStrlen(s) * 16 as i32;
-    CG_DrawBigString(
-        635 as i32 - w,
-        (y + 2 as i32 as f32) as i32,
-        s,
-        1.0f32,
-    );
+    CG_DrawBigString(635 as i32 - w, (y + 2 as i32 as f32) as i32, s, 1.0f32);
     return y + 16 as i32 as f32 + 4 as i32 as f32;
 }
 
@@ -1192,12 +1087,7 @@ unsafe extern "C" fn CG_DrawFPS(mut y: f32) -> f32 {
             fps,
         );
         w = CG_DrawStrlen(s) * 16 as i32;
-        CG_DrawBigString(
-            635 as i32 - w,
-            (y + 2 as i32 as f32) as i32,
-            s,
-            1.0f32,
-        );
+        CG_DrawBigString(635 as i32 - w, (y + 2 as i32 as f32) as i32, s, 1.0f32);
     }
     return y + 16 as i32 as f32 + 4 as i32 as f32;
 }
@@ -1227,12 +1117,7 @@ unsafe extern "C" fn CG_DrawTimer(mut y: f32) -> f32 {
         seconds,
     );
     w = CG_DrawStrlen(s) * 16 as i32;
-    CG_DrawBigString(
-        635 as i32 - w,
-        (y + 2 as i32 as f32) as i32,
-        s,
-        1.0f32,
-    );
+    CG_DrawBigString(635 as i32 - w, (y + 2 as i32 as f32) as i32, s, 1.0f32);
     return y + 16 as i32 as f32 + 4 as i32 as f32;
 }
 /*
@@ -1290,8 +1175,7 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
             .offset(sortedTeamPlayers[i as usize] as isize);
         if (*ci).infoValid as u32 != 0
             && (*ci).team as u32
-                == (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
-                    as u32
+                == (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize] as u32
         {
             plyrs += 1;
             len = CG_DrawStrlen((*ci).name.as_mut_ptr());
@@ -1311,9 +1195,7 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
     lwidth = 0 as i32; // if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE )
     i = 1 as i32;
     while i < 64 as i32 {
-        p = CG_ConfigString(
-            32 as i32 + 256 as i32 + 256 as i32 + 64 as i32 + i,
-        );
+        p = CG_ConfigString(32 as i32 + 256 as i32 + 256 as i32 + 64 as i32 + i);
         if !p.is_null() && *p as i32 != 0 {
             len = CG_DrawStrlen(p);
             if len > lwidth {
@@ -1352,13 +1234,7 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
         hcolor[3 as i32 as usize] = 0.33f32
     }
     crate::src::cgame::cg_syscalls::trap_R_SetColor(hcolor.as_mut_ptr());
-    CG_DrawPic(
-        x as f32,
-        y,
-        w as f32,
-        h as f32,
-        cgs.media.teamStatusBar,
-    );
+    CG_DrawPic(x as f32, y, w as f32, h as f32, cgs.media.teamStatusBar);
     crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
     i = 0 as i32;
     while i < count {
@@ -1368,8 +1244,7 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
             .offset(sortedTeamPlayers[i as usize] as isize);
         if (*ci).infoValid as u32 != 0
             && (*ci).team as u32
-                == (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
-                    as u32
+                == (*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize] as u32
         {
             hcolor[3 as i32 as usize] = 1.0f64 as vec_t;
             hcolor[2 as i32 as usize] = hcolor[3 as i32 as usize];
@@ -1389,11 +1264,7 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
             );
             if lwidth != 0 {
                 p = CG_ConfigString(
-                    32 as i32
-                        + 256 as i32
-                        + 256 as i32
-                        + 64 as i32
-                        + (*ci).location,
+                    32 as i32 + 256 as i32 + 256 as i32 + 64 as i32 + (*ci).location,
                 );
                 if p.is_null() || *p == 0 {
                     p = b"unknown\x00" as *const u8 as *const libc::c_char
@@ -1424,10 +1295,7 @@ unsafe extern "C" fn CG_DrawTeamOverlay(
                 (*ci).health,
                 (*ci).armor,
             );
-            xx = x
-                + 8 as i32 * 3 as i32
-                + 8 as i32 * pwidth
-                + 8 as i32 * lwidth;
+            xx = x + 8 as i32 * 3 as i32 + 8 as i32 * pwidth + 8 as i32 * lwidth;
             CG_DrawStringExt(
                 xx,
                 y as i32,
@@ -1587,8 +1455,7 @@ unsafe extern "C" fn CG_DrawScores(mut y: f32) -> f32 {
             );
         }
         CG_DrawBigString(x + 4 as i32, y as i32, s, 1.0f32);
-        if cgs.gametype as u32 == crate::bg_public_h::GT_CTF as i32 as u32
-        {
+        if cgs.gametype as u32 == crate::bg_public_h::GT_CTF as i32 as u32 {
             // Display flag status
             item = crate::src::game::bg_misc::BG_FindItemForPowerup(crate::bg_public_h::PW_BLUEFLAG)
                 as *mut crate::bg_public_h::gitem_s;
@@ -1634,8 +1501,7 @@ unsafe extern "C" fn CG_DrawScores(mut y: f32) -> f32 {
             );
         }
         CG_DrawBigString(x + 4 as i32, y as i32, s, 1.0f32);
-        if cgs.gametype as u32 == crate::bg_public_h::GT_CTF as i32 as u32
-        {
+        if cgs.gametype as u32 == crate::bg_public_h::GT_CTF as i32 as u32 {
             // Display flag status
             item = crate::src::game::bg_misc::BG_FindItemForPowerup(crate::bg_public_h::PW_REDFLAG)
                 as *mut crate::bg_public_h::gitem_s;
@@ -1652,8 +1518,7 @@ unsafe extern "C" fn CG_DrawScores(mut y: f32) -> f32 {
                 }
             }
         }
-        if cgs.gametype as u32 >= crate::bg_public_h::GT_CTF as i32 as u32
-        {
+        if cgs.gametype as u32 >= crate::bg_public_h::GT_CTF as i32 as u32 {
             v = cgs.capturelimit
         } else {
             v = cgs.fraglimit
@@ -1671,10 +1536,8 @@ unsafe extern "C" fn CG_DrawScores(mut y: f32) -> f32 {
         let mut spectator: qboolean = qfalse;
         x = 640 as i32;
         score = (*cg.snap).ps.persistant[crate::bg_public_h::PERS_SCORE as i32 as usize];
-        spectator = ((*cg.snap).ps.persistant
-            [crate::bg_public_h::PERS_TEAM as i32 as usize]
-            == crate::bg_public_h::TEAM_SPECTATOR as i32) as i32
-            as qboolean;
+        spectator = ((*cg.snap).ps.persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
+            == crate::bg_public_h::TEAM_SPECTATOR as i32) as i32 as qboolean;
         // always show your score in the second box if not in first place
         if s1 != score {
             s2 = score
@@ -1820,8 +1683,7 @@ unsafe extern "C" fn CG_DrawPowerups(mut y: f32) -> f32 {
                             k = active - 1 as i32;
                             while k >= j {
                                 sorted[(k + 1 as i32) as usize] = sorted[k as usize];
-                                sortedTime[(k + 1 as i32) as usize] =
-                                    sortedTime[k as usize];
+                                sortedTime[(k + 1 as i32) as usize] = sortedTime[k as usize];
                                 k -= 1
                             }
                             break;
@@ -1848,12 +1710,7 @@ unsafe extern "C" fn CG_DrawPowerups(mut y: f32) -> f32 {
             color = 1 as i32;
             y -= 48 as i32 as f32;
             crate::src::cgame::cg_syscalls::trap_R_SetColor(colors[color as usize].as_mut_ptr());
-            CG_DrawField(
-                x,
-                y as i32,
-                2 as i32,
-                sortedTime[i as usize] / 1000 as i32,
-            );
+            CG_DrawField(x, y as i32, 2 as i32, sortedTime[i as usize] / 1000 as i32);
             t = (*ps).powerups[sorted[i as usize] as usize];
             if t - cg.time >= 5 as i32 * 1000 as i32 {
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
@@ -1867,23 +1724,16 @@ unsafe extern "C" fn CG_DrawPowerups(mut y: f32) -> f32 {
                 modulate[0 as i32 as usize] = modulate[1 as i32 as usize];
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(modulate.as_mut_ptr());
             }
-            if cg.powerupActive == sorted[i as usize]
-                && cg.time - cg.powerupTime < 200 as i32
-            {
-                f = (1.0f64
-                    - ((cg.time as f32 - cg.powerupTime as f32)
-                        / 200 as i32 as f32)
-                        as f64) as f32;
-                size = (48 as i32 as f64
-                    * (1.0f64 + (1.5f64 - 1.0f64) * f as f64))
-                    as f32
+            if cg.powerupActive == sorted[i as usize] && cg.time - cg.powerupTime < 200 as i32 {
+                f = (1.0f64 - ((cg.time as f32 - cg.powerupTime as f32) / 200 as i32 as f32) as f64)
+                    as f32;
+                size = (48 as i32 as f64 * (1.0f64 + (1.5f64 - 1.0f64) * f as f64)) as f32
             } else {
                 size = 48 as i32 as f32
             }
             CG_DrawPic(
                 640 as i32 as f32 - size,
-                y + (48 as i32 / 2 as i32) as f32
-                    - size / 2 as i32 as f32,
+                y + (48 as i32 / 2 as i32) as f32 - size / 2 as i32 as f32,
                 size,
                 size,
                 crate::src::cgame::cg_syscalls::trap_R_RegisterShader((*item).icon),
@@ -1923,9 +1773,7 @@ CG_DrawPickupItem
 unsafe extern "C" fn CG_DrawPickupItem(mut y: i32) -> i32 {
     let mut value: i32 = 0;
     let mut fadeColor: *mut f32 = 0 as *mut f32;
-    if (*cg.snap).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-        <= 0 as i32
-    {
+    if (*cg.snap).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] <= 0 as i32 {
         return y;
     }
     y -= 48 as i32;
@@ -2144,8 +1992,7 @@ unsafe extern "C" fn CG_DrawReward() {
             b"%d\x00" as *const u8 as *const libc::c_char,
             cg.rewardCount[0 as i32 as usize],
         );
-        x = ((640 as i32 - 8 as i32 * CG_DrawStrlen(buf.as_mut_ptr()))
-            / 2 as i32) as f32;
+        x = ((640 as i32 - 8 as i32 * CG_DrawStrlen(buf.as_mut_ptr())) / 2 as i32) as f32;
         CG_DrawStringExt(
             x as i32,
             (y + 48 as i32 as f32) as i32,
@@ -2197,8 +2044,7 @@ Adds the current interpolate / extrapolate bar for this frame
 pub unsafe extern "C" fn CG_AddLagometerFrameInfo() {
     let mut offset: i32 = 0;
     offset = cg.time - cg.latestSnapshotTime;
-    lagometer.frameSamples
-        [(lagometer.frameCount & 128 as i32 - 1 as i32) as usize] = offset;
+    lagometer.frameSamples[(lagometer.frameCount & 128 as i32 - 1 as i32) as usize] = offset;
     lagometer.frameCount += 1;
 }
 /*
@@ -2218,17 +2064,15 @@ pub unsafe extern "C" fn CG_AddLagometerSnapshotInfo(
 ) {
     // dropped packet
     if snap.is_null() {
-        lagometer.snapshotSamples
-            [(lagometer.snapshotCount & 128 as i32 - 1 as i32) as usize] =
+        lagometer.snapshotSamples[(lagometer.snapshotCount & 128 as i32 - 1 as i32) as usize] =
             -(1 as i32);
         lagometer.snapshotCount += 1;
         return;
     }
     // add this snapshot's info
-    lagometer.snapshotSamples
-        [(lagometer.snapshotCount & 128 as i32 - 1 as i32) as usize] = (*snap).ping;
-    lagometer.snapshotFlags
-        [(lagometer.snapshotCount & 128 as i32 - 1 as i32) as usize] =
+    lagometer.snapshotSamples[(lagometer.snapshotCount & 128 as i32 - 1 as i32) as usize] =
+        (*snap).ping;
+    lagometer.snapshotFlags[(lagometer.snapshotCount & 128 as i32 - 1 as i32) as usize] =
         (*snap).snapFlags;
     lagometer.snapshotCount += 1;
 }
@@ -2256,8 +2100,7 @@ unsafe extern "C" fn CG_DrawDisconnect() {
     let mut s: *const libc::c_char = 0 as *const libc::c_char;
     let mut w: i32 = 0;
     // draw the phone jack if we are completely past our buffers
-    cmdNum = crate::src::cgame::cg_syscalls::trap_GetCurrentCmdNumber() - 64 as i32
-        + 1 as i32;
+    cmdNum = crate::src::cgame::cg_syscalls::trap_GetCurrentCmdNumber() - 64 as i32 + 1 as i32;
     crate::src::cgame::cg_syscalls::trap_GetUserCmd(cmdNum, &mut cmd as *mut _ as *mut usercmd_s);
     if cmd.serverTime <= (*cg.snap).ps.commandTime || cmd.serverTime > cg.time {
         // special check for map_restart
@@ -2266,12 +2109,7 @@ unsafe extern "C" fn CG_DrawDisconnect() {
     // also add text in center of screen
     s = b"Connection Interrupted\x00" as *const u8 as *const libc::c_char;
     w = CG_DrawStrlen(s) * 16 as i32;
-    CG_DrawBigString(
-        320 as i32 - w / 2 as i32,
-        100 as i32,
-        s,
-        1.0f32,
-    );
+    CG_DrawBigString(320 as i32 - w / 2 as i32, 100 as i32, s, 1.0f32);
     // blink the icon
     if cg.time >> 9 as i32 & 1 as i32 != 0 {
         return;
@@ -2344,8 +2182,7 @@ unsafe extern "C" fn CG_DrawLagometer() {
             if color != 1 as i32 {
                 color = 1 as i32;
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(
-                    g_color_table[('3' as i32 - '0' as i32 & 0x7 as i32) as usize]
-                        .as_mut_ptr(),
+                    g_color_table[('3' as i32 - '0' as i32 & 0x7 as i32) as usize].as_mut_ptr(),
                 );
             }
             if v > range {
@@ -2366,8 +2203,7 @@ unsafe extern "C" fn CG_DrawLagometer() {
             if color != 2 as i32 {
                 color = 2 as i32;
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(
-                    g_color_table[('4' as i32 - '0' as i32 & 0x7 as i32) as usize]
-                        .as_mut_ptr(),
+                    g_color_table[('4' as i32 - '0' as i32 & 0x7 as i32) as usize].as_mut_ptr(),
                 );
             }
             v = -v;
@@ -2400,15 +2236,13 @@ unsafe extern "C" fn CG_DrawLagometer() {
                 if color != 5 as i32 {
                     color = 5 as i32;
                     crate::src::cgame::cg_syscalls::trap_R_SetColor(
-                        g_color_table[('3' as i32 - '0' as i32 & 0x7 as i32) as usize]
-                            .as_mut_ptr(),
+                        g_color_table[('3' as i32 - '0' as i32 & 0x7 as i32) as usize].as_mut_ptr(),
                     );
                 }
             } else if color != 3 as i32 {
                 color = 3 as i32;
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(
-                    g_color_table[('2' as i32 - '0' as i32 & 0x7 as i32) as usize]
-                        .as_mut_ptr(),
+                    g_color_table[('2' as i32 - '0' as i32 & 0x7 as i32) as usize].as_mut_ptr(),
                 );
             }
             v = v * vscale;
@@ -2430,8 +2264,7 @@ unsafe extern "C" fn CG_DrawLagometer() {
             if color != 4 as i32 {
                 color = 4 as i32;
                 crate::src::cgame::cg_syscalls::trap_R_SetColor(
-                    g_color_table[('1' as i32 - '0' as i32 & 0x7 as i32) as usize]
-                        .as_mut_ptr(),
+                    g_color_table[('1' as i32 - '0' as i32 & 0x7 as i32) as usize].as_mut_ptr(),
                 );
             }
             crate::src::cgame::cg_syscalls::trap_R_DrawStretchPic(
@@ -2530,9 +2363,7 @@ unsafe extern "C" fn CG_DrawCenterString() {
         let mut linebuffer: [libc::c_char; 1024] = [0; 1024];
         l = 0 as i32;
         while l < 50 as i32 {
-            if *start.offset(l as isize) == 0
-                || *start.offset(l as isize) as i32 == '\n' as i32
-            {
+            if *start.offset(l as isize) == 0 || *start.offset(l as isize) as i32 == '\n' as i32 {
                 break;
             }
             linebuffer[l as usize] = *start.offset(l as isize);
@@ -2552,8 +2383,7 @@ unsafe extern "C" fn CG_DrawCenterString() {
             (cg.centerPrintCharWidth as f64 * 1.5f64) as i32,
             0 as i32,
         );
-        y = (y as f64 + cg.centerPrintCharWidth as f64 * 1.5f64)
-            as i32;
+        y = (y as f64 + cg.centerPrintCharWidth as f64 * 1.5f64) as i32;
         while *start as i32 != 0 && *start as i32 != '\n' as i32 {
             start = start.offset(1)
         }
@@ -2622,12 +2452,8 @@ unsafe extern "C" fn CG_DrawCrosshair() {
     }
     hShader = cgs.media.crosshairShader[(ca % 10 as i32) as usize];
     crate::src::cgame::cg_syscalls::trap_R_DrawStretchPic(
-        ((x + cg.refdef.x as f32) as f64
-            + 0.5f64 * (cg.refdef.width as f32 - w) as f64)
-            as f32,
-        ((y + cg.refdef.y as f32) as f64
-            + 0.5f64 * (cg.refdef.height as f32 - h) as f64)
-            as f32,
+        ((x + cg.refdef.x as f32) as f64 + 0.5f64 * (cg.refdef.width as f32 - w) as f64) as f32,
+        ((y + cg.refdef.y as f32) as f64 + 0.5f64 * (cg.refdef.height as f32 - h) as f64) as f32,
         w,
         h,
         0 as i32 as f32,
@@ -2733,13 +2559,10 @@ unsafe extern "C" fn CG_DrawCrosshair3D() {
     );
     stereoSep = (zProj as f64 / atof(rendererinfos.as_mut_ptr())) as f32;
     xmax = (zProj as f64
-        * crate::stdlib::tan(
-            cg.refdef.fov_x as f64 * 3.14159265358979323846f64
-                / 360.0f32 as f64,
-        )) as f32;
+        * crate::stdlib::tan(cg.refdef.fov_x as f64 * 3.14159265358979323846f64 / 360.0f32 as f64))
+        as f32;
     // let the trace run through until a change in stereo separation of the crosshair becomes less than one pixel.
-    maxdist = cgs.glconfig.vidWidth as f32 * stereoSep * zProj
-        / (2 as i32 as f32 * xmax);
+    maxdist = cgs.glconfig.vidWidth as f32 * stereoSep * zProj / (2 as i32 as f32 * xmax);
     endpos[0 as i32 as usize] = cg.refdef.vieworg[0 as i32 as usize]
         + cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize] * maxdist;
     endpos[1 as i32 as usize] = cg.refdef.vieworg[1 as i32 as usize]
@@ -2802,14 +2625,11 @@ unsafe extern "C" fn CG_ScanForCrosshairEntity() {
     start[1 as i32 as usize] = cg.refdef.vieworg[1 as i32 as usize];
     start[2 as i32 as usize] = cg.refdef.vieworg[2 as i32 as usize];
     end[0 as i32 as usize] = start[0 as i32 as usize]
-        + cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize]
-            * 131072 as i32 as f32;
+        + cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize] * 131072 as i32 as f32;
     end[1 as i32 as usize] = start[1 as i32 as usize]
-        + cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize]
-            * 131072 as i32 as f32;
+        + cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize] * 131072 as i32 as f32;
     end[2 as i32 as usize] = start[2 as i32 as usize]
-        + cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize]
-            * 131072 as i32 as f32;
+        + cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize] * 131072 as i32 as f32;
     crate::src::cgame::cg_predict::CG_Trace(
         &mut trace as *mut _ as *mut trace_t,
         start.as_mut_ptr() as *const vec_t,
@@ -2873,8 +2693,7 @@ unsafe extern "C" fn CG_DrawCrosshairNames() {
         .as_mut_ptr();
     w = (CG_DrawStrlen(name) * 16 as i32) as f32;
     CG_DrawBigString(
-        (320 as i32 as f32 - w / 2 as i32 as f32)
-            as i32,
+        (320 as i32 as f32 - w / 2 as i32 as f32) as i32,
         170 as i32,
         name,
         *color.offset(3 as i32 as isize) * 0.5f32,
@@ -2895,18 +2714,14 @@ unsafe extern "C" fn CG_DrawSpectator() {
         b"SPECTATOR\x00" as *const u8 as *const libc::c_char,
         1.0f32,
     );
-    if cgs.gametype as u32
-        == crate::bg_public_h::GT_TOURNAMENT as i32 as u32
-    {
+    if cgs.gametype as u32 == crate::bg_public_h::GT_TOURNAMENT as i32 as u32 {
         CG_DrawBigString(
             320 as i32 - 15 as i32 * 8 as i32,
             460 as i32,
             b"waiting to play\x00" as *const u8 as *const libc::c_char,
             1.0f32,
         );
-    } else if cgs.gametype as u32
-        >= crate::bg_public_h::GT_TEAM as i32 as u32
-    {
+    } else if cgs.gametype as u32 >= crate::bg_public_h::GT_TEAM as i32 as u32 {
         CG_DrawBigString(
             320 as i32 - 39 as i32 * 8 as i32,
             460 as i32,
@@ -2980,8 +2795,7 @@ unsafe extern "C" fn CG_DrawTeamVote() {
             CHAN_LOCAL_SOUND as i32,
         );
     }
-    sec = (30000 as i32 - (cg.time - cgs.teamVoteTime[cs_offset as usize]))
-        / 1000 as i32;
+    sec = (30000 as i32 - (cg.time - cgs.teamVoteTime[cs_offset as usize])) / 1000 as i32;
     if sec < 0 as i32 {
         sec = 0 as i32
     }
@@ -3007,9 +2821,7 @@ CG_DrawIntermission
 
 unsafe extern "C" fn CG_DrawIntermission() {
     //	int key;
-    if cgs.gametype as u32
-        == crate::bg_public_h::GT_SINGLE_PLAYER as i32 as u32
-    {
+    if cgs.gametype as u32 == crate::bg_public_h::GT_SINGLE_PLAYER as i32 as u32 {
         CG_DrawCenterString();
         return;
     }
@@ -3042,8 +2854,7 @@ unsafe extern "C" fn CG_DrawFollow() -> qboolean {
     name = cgs.clientinfo[(*cg.snap).ps.clientNum as usize]
         .name
         .as_mut_ptr();
-    x = (0.5f64 * (640 as i32 - 32 as i32 * CG_DrawStrlen(name)) as f64)
-        as f32;
+    x = (0.5f64 * (640 as i32 - 32 as i32 * CG_DrawStrlen(name)) as f64) as f32;
     CG_DrawStringExt(
         x as i32,
         40 as i32,
@@ -3078,12 +2889,7 @@ unsafe extern "C" fn CG_DrawAmmoWarning() {
         s = b"LOW AMMO WARNING\x00" as *const u8 as *const libc::c_char
     }
     w = CG_DrawStrlen(s) * 16 as i32;
-    CG_DrawBigString(
-        320 as i32 - w / 2 as i32,
-        64 as i32,
-        s,
-        1.0f32,
-    );
+    CG_DrawBigString(320 as i32 - w / 2 as i32, 64 as i32, s, 1.0f32);
 }
 /*
 =================
@@ -3106,18 +2912,11 @@ unsafe extern "C" fn CG_DrawWarmup() {
     if sec < 0 as i32 {
         s = b"Waiting for players\x00" as *const u8 as *const libc::c_char;
         w = CG_DrawStrlen(s) * 16 as i32;
-        CG_DrawBigString(
-            320 as i32 - w / 2 as i32,
-            24 as i32,
-            s,
-            1.0f32,
-        );
+        CG_DrawBigString(320 as i32 - w / 2 as i32, 24 as i32, s, 1.0f32);
         cg.warmupCount = 0 as i32;
         return;
     }
-    if cgs.gametype as u32
-        == crate::bg_public_h::GT_TOURNAMENT as i32 as u32
-    {
+    if cgs.gametype as u32 == crate::bg_public_h::GT_TOURNAMENT as i32 as u32 {
         // find the two active players
         ci1 = 0 as *mut crate::cg_local_h::clientInfo_t;
         ci2 = 0 as *mut crate::cg_local_h::clientInfo_t;
@@ -3162,16 +2961,11 @@ unsafe extern "C" fn CG_DrawWarmup() {
             );
         }
     } else {
-        if cgs.gametype as u32 == crate::bg_public_h::GT_FFA as i32 as u32
-        {
+        if cgs.gametype as u32 == crate::bg_public_h::GT_FFA as i32 as u32 {
             s = b"Free For All\x00" as *const u8 as *const libc::c_char
-        } else if cgs.gametype as u32
-            == crate::bg_public_h::GT_TEAM as i32 as u32
-        {
+        } else if cgs.gametype as u32 == crate::bg_public_h::GT_TEAM as i32 as u32 {
             s = b"Team Deathmatch\x00" as *const u8 as *const libc::c_char
-        } else if cgs.gametype as u32
-            == crate::bg_public_h::GT_CTF as i32 as u32
-        {
+        } else if cgs.gametype as u32 == crate::bg_public_h::GT_CTF as i32 as u32 {
             s = b"Capture the Flag\x00" as *const u8 as *const libc::c_char
         } else {
             s = b"\x00" as *const u8 as *const libc::c_char
@@ -3279,8 +3073,7 @@ unsafe extern "C" fn CG_Draw2D(mut stereoFrame: stereoFrame_t) {
         }
         CG_DrawCrosshairNames();
     } else if cg.showScores as u64 == 0
-        && (*cg.snap).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize]
-            > 0 as i32
+        && (*cg.snap).ps.stats[crate::bg_public_h::STAT_HEALTH as i32 as usize] > 0 as i32
     {
         CG_DrawStatusBar();
         CG_DrawAmmoWarning();

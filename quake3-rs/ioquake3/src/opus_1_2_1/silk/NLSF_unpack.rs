@@ -296,23 +296,20 @@ pub unsafe extern "C" fn silk_NLSF_unpack(
         *ec_ix.offset(i as isize) = ((entry as i32 >> 1 as i32 & 7 as i32)
             as crate::opus_types_h::opus_int16
             as crate::opus_types_h::opus_int32
-            * (2 as i32 * 4 as i32 + 1 as i32)
-                as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32)
+            * (2 as i32 * 4 as i32 + 1 as i32) as crate::opus_types_h::opus_int16
+                as crate::opus_types_h::opus_int32)
             as crate::opus_types_h::opus_int16;
         *pred_Q8.offset(i as isize) = *(*psNLSF_CB).pred_Q8.offset(
-            (i + (entry as i32 & 1 as i32)
-                * ((*psNLSF_CB).order as i32 - 1 as i32)) as isize,
+            (i + (entry as i32 & 1 as i32) * ((*psNLSF_CB).order as i32 - 1 as i32)) as isize,
         );
-        *ec_ix.offset((i + 1 as i32) as isize) = ((entry as i32 >> 5 as i32
-            & 7 as i32)
+        *ec_ix.offset((i + 1 as i32) as isize) = ((entry as i32 >> 5 as i32 & 7 as i32)
             as crate::opus_types_h::opus_int16
             as crate::opus_types_h::opus_int32
-            * (2 as i32 * 4 as i32 + 1 as i32)
-                as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32)
+            * (2 as i32 * 4 as i32 + 1 as i32) as crate::opus_types_h::opus_int16
+                as crate::opus_types_h::opus_int32)
             as crate::opus_types_h::opus_int16;
         *pred_Q8.offset((i + 1 as i32) as isize) = *(*psNLSF_CB).pred_Q8.offset(
-            (i + (entry as i32 >> 4 as i32 & 1 as i32)
-                * ((*psNLSF_CB).order as i32 - 1 as i32)
+            (i + (entry as i32 >> 4 as i32 & 1 as i32) * ((*psNLSF_CB).order as i32 - 1 as i32)
                 + 1 as i32) as isize,
         );
         i += 2 as i32

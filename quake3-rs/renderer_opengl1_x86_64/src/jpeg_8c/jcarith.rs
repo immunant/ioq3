@@ -263,8 +263,7 @@ unsafe extern "C" fn emit_byte(mut val: i32, mut cinfo: crate::jpeglib_h::j_comp
         .expect("non-null function pointer")(cinfo)
             == 0
         {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_CANT_SUSPEND as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_CANT_SUSPEND as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit
@@ -365,9 +364,7 @@ unsafe extern "C" fn finish_pass(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
             ((*e).c >> 19 as i32 & 0xff as i32 as libc::c_long) as i32,
             cinfo,
         );
-        if (*e).c >> 19 as i32 & 0xff as i32 as libc::c_long
-            == 0xff as i32 as libc::c_long
-        {
+        if (*e).c >> 19 as i32 & 0xff as i32 as libc::c_long == 0xff as i32 as libc::c_long {
             emit_byte(0 as i32, cinfo);
         }
         if (*e).c & 0x7f800 as libc::c_long != 0 {
@@ -375,9 +372,7 @@ unsafe extern "C" fn finish_pass(mut cinfo: crate::jpeglib_h::j_compress_ptr) {
                 ((*e).c >> 11 as i32 & 0xff as i32 as libc::c_long) as i32,
                 cinfo,
             );
-            if (*e).c >> 11 as i32 & 0xff as i32 as libc::c_long
-                == 0xff as i32 as libc::c_long
-            {
+            if (*e).c >> 11 as i32 & 0xff as i32 as libc::c_long == 0xff as i32 as libc::c_long {
                 emit_byte(0 as i32, cinfo);
             }
         }
@@ -641,22 +636,14 @@ unsafe extern "C" fn encode_mcu_DC_first(
             /* Figure F.6: Encoding nonzero value v */
             /* Figure F.7: Encoding the sign of v */
             if v > 0 as i32 {
-                arith_encode(
-                    cinfo,
-                    st.offset(1 as i32 as isize),
-                    0 as i32,
-                ); /* Table F.4: SS = S0 + 1 */
+                arith_encode(cinfo, st.offset(1 as i32 as isize), 0 as i32); /* Table F.4: SS = S0 + 1 */
                 /* small positive diff category */
                 st = st.offset(2 as i32 as isize); /* Table F.4: SP = S0 + 2 */
                 (*entropy).dc_context[ci as usize] = 4 as i32
             } else {
                 v = -v;
                 /* small negative diff category */
-                arith_encode(
-                    cinfo,
-                    st.offset(1 as i32 as isize),
-                    1 as i32,
-                ); /* Table F.4: SS = S0 + 1 */
+                arith_encode(cinfo, st.offset(1 as i32 as isize), 1 as i32); /* Table F.4: SS = S0 + 1 */
                 st = st.offset(3 as i32 as isize); /* Table F.4: SN = S0 + 3 */
                 (*entropy).dc_context[ci as usize] = 8 as i32
             }
@@ -680,14 +667,14 @@ unsafe extern "C" fn encode_mcu_DC_first(
             }
             arith_encode(cinfo, st, 0 as i32);
             /* Section F.1.4.4.1.2: Establish dc_context conditioning category */
-            if m < ((1 as libc::c_long) << (*cinfo).arith_dc_L[tbl as usize] as i32
-                >> 1 as i32) as i32
+            if m < ((1 as libc::c_long) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32)
+                as i32
             {
                 /* large diff category */
                 (*entropy).dc_context[ci as usize] = 0 as i32
             } else if m
-                > ((1 as libc::c_long) << (*cinfo).arith_dc_U[tbl as usize] as i32
-                    >> 1 as i32) as i32
+                > ((1 as libc::c_long) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32)
+                    as i32
             {
                 (*entropy).dc_context[ci as usize] += 8 as i32
             } /* zero diff category */
@@ -698,15 +685,7 @@ unsafe extern "C" fn encode_mcu_DC_first(
                 if !(m != 0) {
                     break;
                 }
-                arith_encode(
-                    cinfo,
-                    st,
-                    if m & v != 0 {
-                        1 as i32
-                    } else {
-                        0 as i32
-                    },
-                );
+                arith_encode(cinfo, st, if m & v != 0 { 1 as i32 } else { 0 as i32 });
             }
         }
         blkn += 1
@@ -772,19 +751,14 @@ unsafe extern "C" fn encode_mcu_AC_first(
     /* Figure F.5: Encode_AC_Coefficients */
     k = (*cinfo).Ss; /* EOB decision */
     while k <= ke {
-        st = (*entropy).ac_stats[tbl as usize]
-            .offset((3 as i32 * (k - 1 as i32)) as isize);
+        st = (*entropy).ac_stats[tbl as usize].offset((3 as i32 * (k - 1 as i32)) as isize);
         arith_encode(cinfo, st, 0 as i32);
         loop {
             v = (*block)[*natural_order.offset(k as isize) as usize] as i32;
             if v >= 0 as i32 {
                 v >>= (*cinfo).Al;
                 if v != 0 {
-                    arith_encode(
-                        cinfo,
-                        st.offset(1 as i32 as isize),
-                        1 as i32,
-                    );
+                    arith_encode(cinfo, st.offset(1 as i32 as isize), 1 as i32);
                     arith_encode(cinfo, (*entropy).fixed_bin.as_mut_ptr(), 0 as i32);
                     break;
                 }
@@ -792,20 +766,12 @@ unsafe extern "C" fn encode_mcu_AC_first(
                 v = -v;
                 v >>= (*cinfo).Al;
                 if v != 0 {
-                    arith_encode(
-                        cinfo,
-                        st.offset(1 as i32 as isize),
-                        1 as i32,
-                    );
+                    arith_encode(cinfo, st.offset(1 as i32 as isize), 1 as i32);
                     arith_encode(cinfo, (*entropy).fixed_bin.as_mut_ptr(), 1 as i32);
                     break;
                 }
             }
-            arith_encode(
-                cinfo,
-                st.offset(1 as i32 as isize),
-                0 as i32,
-            );
+            arith_encode(cinfo, st.offset(1 as i32 as isize), 0 as i32);
             st = st.offset(3 as i32 as isize);
             k += 1
         }
@@ -847,22 +813,13 @@ unsafe extern "C" fn encode_mcu_AC_first(
             if !(m != 0) {
                 break;
             }
-            arith_encode(
-                cinfo,
-                st,
-                if m & v != 0 {
-                    1 as i32
-                } else {
-                    0 as i32
-                },
-            );
+            arith_encode(cinfo, st, if m & v != 0 { 1 as i32 } else { 0 as i32 });
         }
         k += 1
     }
     /* Encode EOB decision only if k <= cinfo->Se */
     if k <= (*cinfo).Se {
-        st = (*entropy).ac_stats[tbl as usize]
-            .offset((3 as i32 * (k - 1 as i32)) as isize);
+        st = (*entropy).ac_stats[tbl as usize].offset((3 as i32 * (k - 1 as i32)) as isize);
         arith_encode(cinfo, st, 1 as i32);
     }
     return 1 as i32;
@@ -898,8 +855,8 @@ unsafe extern "C" fn encode_mcu_DC_refine(
         arith_encode(
             cinfo,
             st,
-            (*(*MCU_data.offset(blkn as isize)).offset(0 as i32 as isize))
-                [0 as i32 as usize] as i32
+            (*(*MCU_data.offset(blkn as isize)).offset(0 as i32 as isize))[0 as i32 as usize]
+                as i32
                 >> Al
                 & 1 as i32,
         );
@@ -982,8 +939,7 @@ unsafe extern "C" fn encode_mcu_AC_refine(
     /* Figure G.10: Encode_AC_Coefficients_SA */
     k = (*cinfo).Ss; /* EOB decision */
     while k <= ke {
-        st = (*entropy).ac_stats[tbl as usize]
-            .offset((3 as i32 * (k - 1 as i32)) as isize);
+        st = (*entropy).ac_stats[tbl as usize].offset((3 as i32 * (k - 1 as i32)) as isize);
         if k > kex {
             arith_encode(cinfo, st, 0 as i32);
         }
@@ -994,18 +950,10 @@ unsafe extern "C" fn encode_mcu_AC_refine(
                 if v != 0 {
                     if v >> 1 as i32 != 0 {
                         /* previously nonzero coef */
-                        arith_encode(
-                            cinfo,
-                            st.offset(2 as i32 as isize),
-                            v & 1 as i32,
-                        );
+                        arith_encode(cinfo, st.offset(2 as i32 as isize), v & 1 as i32);
                     } else {
                         /* newly nonzero coef */
-                        arith_encode(
-                            cinfo,
-                            st.offset(1 as i32 as isize),
-                            1 as i32,
-                        );
+                        arith_encode(cinfo, st.offset(1 as i32 as isize), 1 as i32);
                         arith_encode(cinfo, (*entropy).fixed_bin.as_mut_ptr(), 0 as i32);
                     }
                     break;
@@ -1016,28 +964,16 @@ unsafe extern "C" fn encode_mcu_AC_refine(
                 if v != 0 {
                     if v >> 1 as i32 != 0 {
                         /* previously nonzero coef */
-                        arith_encode(
-                            cinfo,
-                            st.offset(2 as i32 as isize),
-                            v & 1 as i32,
-                        );
+                        arith_encode(cinfo, st.offset(2 as i32 as isize), v & 1 as i32);
                     } else {
                         /* newly nonzero coef */
-                        arith_encode(
-                            cinfo,
-                            st.offset(1 as i32 as isize),
-                            1 as i32,
-                        );
+                        arith_encode(cinfo, st.offset(1 as i32 as isize), 1 as i32);
                         arith_encode(cinfo, (*entropy).fixed_bin.as_mut_ptr(), 1 as i32);
                     }
                     break;
                 }
             }
-            arith_encode(
-                cinfo,
-                st.offset(1 as i32 as isize),
-                0 as i32,
-            );
+            arith_encode(cinfo, st.offset(1 as i32 as isize), 0 as i32);
             st = st.offset(3 as i32 as isize);
             k += 1
         }
@@ -1045,8 +981,7 @@ unsafe extern "C" fn encode_mcu_AC_refine(
     }
     /* Encode EOB decision only if k <= cinfo->Se */
     if k <= (*cinfo).Se {
-        st = (*entropy).ac_stats[tbl as usize]
-            .offset((3 as i32 * (k - 1 as i32)) as isize);
+        st = (*entropy).ac_stats[tbl as usize].offset((3 as i32 * (k - 1 as i32)) as isize);
         arith_encode(cinfo, st, 1 as i32);
     }
     return 1 as i32;
@@ -1095,35 +1030,25 @@ unsafe extern "C" fn encode_mcu(
         /* Table F.4: Point to statistics bin S0 for DC coefficient coding */
         st = (*entropy).dc_stats[tbl as usize].offset((*entropy).dc_context[ci as usize] as isize);
         /* Figure F.4: Encode_DC_DIFF */
-        v = (*block)[0 as i32 as usize] as i32
-            - (*entropy).last_dc_val[ci as usize];
+        v = (*block)[0 as i32 as usize] as i32 - (*entropy).last_dc_val[ci as usize];
         if v == 0 as i32 {
             arith_encode(cinfo, st, 0 as i32);
             (*entropy).dc_context[ci as usize] = 0 as i32
         /* zero diff category */
         } else {
-            (*entropy).last_dc_val[ci as usize] =
-                (*block)[0 as i32 as usize] as i32;
+            (*entropy).last_dc_val[ci as usize] = (*block)[0 as i32 as usize] as i32;
             arith_encode(cinfo, st, 1 as i32);
             /* Figure F.6: Encoding nonzero value v */
             /* Figure F.7: Encoding the sign of v */
             if v > 0 as i32 {
-                arith_encode(
-                    cinfo,
-                    st.offset(1 as i32 as isize),
-                    0 as i32,
-                ); /* Table F.4: SS = S0 + 1 */
+                arith_encode(cinfo, st.offset(1 as i32 as isize), 0 as i32); /* Table F.4: SS = S0 + 1 */
                 /* small positive diff category */
                 st = st.offset(2 as i32 as isize); /* Table F.4: SP = S0 + 2 */
                 (*entropy).dc_context[ci as usize] = 4 as i32
             } else {
                 v = -v;
                 /* small negative diff category */
-                arith_encode(
-                    cinfo,
-                    st.offset(1 as i32 as isize),
-                    1 as i32,
-                ); /* Table F.4: SS = S0 + 1 */
+                arith_encode(cinfo, st.offset(1 as i32 as isize), 1 as i32); /* Table F.4: SS = S0 + 1 */
                 st = st.offset(3 as i32 as isize); /* Table F.4: SN = S0 + 3 */
                 (*entropy).dc_context[ci as usize] = 8 as i32
             }
@@ -1147,14 +1072,14 @@ unsafe extern "C" fn encode_mcu(
             }
             arith_encode(cinfo, st, 0 as i32);
             /* Section F.1.4.4.1.2: Establish dc_context conditioning category */
-            if m < ((1 as libc::c_long) << (*cinfo).arith_dc_L[tbl as usize] as i32
-                >> 1 as i32) as i32
+            if m < ((1 as libc::c_long) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32)
+                as i32
             {
                 /* large diff category */
                 (*entropy).dc_context[ci as usize] = 0 as i32
             } else if m
-                > ((1 as libc::c_long) << (*cinfo).arith_dc_U[tbl as usize] as i32
-                    >> 1 as i32) as i32
+                > ((1 as libc::c_long) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32)
+                    as i32
             {
                 (*entropy).dc_context[ci as usize] += 8 as i32
             } /* zero diff category */
@@ -1165,15 +1090,7 @@ unsafe extern "C" fn encode_mcu(
                 if !(m != 0) {
                     break;
                 }
-                arith_encode(
-                    cinfo,
-                    st,
-                    if m & v != 0 {
-                        1 as i32
-                    } else {
-                        0 as i32
-                    },
-                );
+                arith_encode(cinfo, st, if m & v != 0 { 1 as i32 } else { 0 as i32 });
             }
         }
         /* Sections F.1.4.2 & F.1.4.4.2: Encoding of AC coefficients */
@@ -1189,27 +1106,18 @@ unsafe extern "C" fn encode_mcu(
         /* Figure F.5: Encode_AC_Coefficients */
         k = 1 as i32; /* EOB decision */
         while k <= ke {
-            st = (*entropy).ac_stats[tbl as usize]
-                .offset((3 as i32 * (k - 1 as i32)) as isize);
+            st = (*entropy).ac_stats[tbl as usize].offset((3 as i32 * (k - 1 as i32)) as isize);
             arith_encode(cinfo, st, 0 as i32);
             loop {
                 v = (*block)[*natural_order.offset(k as isize) as usize] as i32;
                 if !(v == 0 as i32) {
                     break;
                 }
-                arith_encode(
-                    cinfo,
-                    st.offset(1 as i32 as isize),
-                    0 as i32,
-                );
+                arith_encode(cinfo, st.offset(1 as i32 as isize), 0 as i32);
                 st = st.offset(3 as i32 as isize);
                 k += 1
             }
-            arith_encode(
-                cinfo,
-                st.offset(1 as i32 as isize),
-                1 as i32,
-            );
+            arith_encode(cinfo, st.offset(1 as i32 as isize), 1 as i32);
             /* Figure F.6: Encoding nonzero value v */
             /* Figure F.7: Encoding the sign of v */
             if v > 0 as i32 {
@@ -1256,22 +1164,13 @@ unsafe extern "C" fn encode_mcu(
                 if !(m != 0) {
                     break;
                 }
-                arith_encode(
-                    cinfo,
-                    st,
-                    if m & v != 0 {
-                        1 as i32
-                    } else {
-                        0 as i32
-                    },
-                );
+                arith_encode(cinfo, st, if m & v != 0 { 1 as i32 } else { 0 as i32 });
             }
             k += 1
         }
         /* Encode EOB decision only if k <= cinfo->lim_Se */
         if k <= (*cinfo).lim_Se {
-            st = (*entropy).ac_stats[tbl as usize]
-                .offset((3 as i32 * (k - 1 as i32)) as isize);
+            st = (*entropy).ac_stats[tbl as usize].offset((3 as i32 * (k - 1 as i32)) as isize);
             arith_encode(cinfo, st, 1 as i32);
         }
         blkn += 1
@@ -1361,8 +1260,7 @@ unsafe extern "C" fn start_pass(
         if (*cinfo).Ss == 0 as i32 && (*cinfo).Ah == 0 as i32 {
             tbl = (*compptr).dc_tbl_no;
             if tbl < 0 as i32 || tbl >= 16 as i32 {
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_NO_ARITH_TABLE as i32;
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NO_ARITH_TABLE as i32;
                 (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = tbl;
                 Some(
                     (*(*cinfo).err)
@@ -1398,8 +1296,7 @@ unsafe extern "C" fn start_pass(
         if (*cinfo).Se != 0 {
             tbl = (*compptr).ac_tbl_no;
             if tbl < 0 as i32 || tbl >= 16 as i32 {
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_NO_ARITH_TABLE as i32;
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NO_ARITH_TABLE as i32;
                 (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = tbl;
                 Some(
                     (*(*cinfo).err)

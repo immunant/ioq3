@@ -100,8 +100,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
             || (*(*c).lengthlist.offset(i as isize) as i32)
                 < *(*c)
                     .lengthlist
-                    .offset((i - 1 as i32 as libc::c_long) as isize)
-                    as i32
+                    .offset((i - 1 as i32 as libc::c_long) as isize) as i32
         {
             break;
         }
@@ -122,8 +121,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
         ); /* 1 to 32 */
         crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
             opb as *mut crate::ogg_h::oggpack_buffer,
-            (*(*c).lengthlist.offset(0 as i32 as isize) as i32 - 1 as i32)
-                as libc::c_ulong,
+            (*(*c).lengthlist.offset(0 as i32 as isize) as i32 - 1 as i32) as libc::c_ulong,
             5 as i32,
         );
         i = 1 as i32 as libc::c_long;
@@ -183,8 +181,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
             while i < (*c).entries {
                 crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
                     opb as *mut crate::ogg_h::oggpack_buffer,
-                    (*(*c).lengthlist.offset(i as isize) as i32 - 1 as i32)
-                        as libc::c_ulong,
+                    (*(*c).lengthlist.offset(i as isize) as i32 - 1 as i32) as libc::c_ulong,
                     5 as i32,
                 );
                 i += 1
@@ -211,8 +208,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
                     );
                     crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
                         opb as *mut crate::ogg_h::oggpack_buffer,
-                        (*(*c).lengthlist.offset(i as isize) as i32 - 1 as i32)
-                            as libc::c_ulong,
+                        (*(*c).lengthlist.offset(i as isize) as i32 - 1 as i32) as libc::c_ulong,
                         5 as i32,
                     );
                 }
@@ -350,11 +346,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                     1 as i32,
                                 );
                                 if (*s).entries
-                                    * (if unused != 0 {
-                                        1 as i32
-                                    } else {
-                                        5 as i32
-                                    }) as libc::c_long
+                                    * (if unused != 0 { 1 as i32 } else { 5 as i32 })
+                                        as libc::c_long
                                     + 7 as i32 as libc::c_long
                                     >> 3 as i32
                                     > (*opb).storage
@@ -392,9 +385,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                     current_block = 15187751986642917127;
                                                     break;
                                                 }
-                                                *(*s).lengthlist.offset(i as isize) = (num
-                                                    + 1 as i32 as libc::c_long)
-                                                    as libc::c_char
+                                                *(*s).lengthlist.offset(i as isize) =
+                                                    (num + 1 as i32 as libc::c_long) as libc::c_char
                                             } else {
                                                 *(*s).lengthlist.offset(i as isize) =
                                                     0 as i32 as libc::c_char
@@ -417,9 +409,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 current_block = 15187751986642917127;
                                                 break;
                                             }
-                                            *(*s).lengthlist.offset(i as isize) = (num_0
-                                                + 1 as i32 as libc::c_long)
-                                                as libc::c_char;
+                                            *(*s).lengthlist.offset(i as isize) =
+                                                (num_0 + 1 as i32 as libc::c_long) as libc::c_char;
                                             i += 1
                                         }
                                     }
@@ -522,8 +513,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 if (*s).q_sequencep == -(1 as i32) {
                                                     current_block = 15187751986642917127;
                                                 } else {
-                                                    let mut quantvals: i32 =
-                                                        0 as i32;
+                                                    let mut quantvals: i32 = 0 as i32;
                                                     match (*s).maptype {
                                                         1 => {
                                                             quantvals = if (*s).dim
@@ -536,8 +526,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                 as i32
                                                         }
                                                         2 => {
-                                                            quantvals = ((*s).entries * (*s).dim)
-                                                                as i32
+                                                            quantvals =
+                                                                ((*s).entries * (*s).dim) as i32
                                                         }
                                                         _ => {}
                                                     }
@@ -641,8 +631,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 if (*s).q_sequencep == -(1 as i32) {
                                                     current_block = 15187751986642917127;
                                                 } else {
-                                                    let mut quantvals: i32 =
-                                                        0 as i32;
+                                                    let mut quantvals: i32 = 0 as i32;
                                                     match (*s).maptype {
                                                         1 => {
                                                             quantvals = if (*s).dim
@@ -655,8 +644,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                 as i32
                                                         }
                                                         2 => {
-                                                            quantvals = ((*s).entries * (*s).dim)
-                                                                as i32
+                                                            quantvals =
+                                                                ((*s).entries * (*s).dim) as i32
                                                         }
                                                         _ => {}
                                                     }
@@ -741,11 +730,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                     1 as i32,
                                 );
                                 if (*s).entries
-                                    * (if unused != 0 {
-                                        1 as i32
-                                    } else {
-                                        5 as i32
-                                    }) as libc::c_long
+                                    * (if unused != 0 { 1 as i32 } else { 5 as i32 })
+                                        as libc::c_long
                                     + 7 as i32 as libc::c_long
                                     >> 3 as i32
                                     > (*opb).storage
@@ -780,9 +766,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                     current_block = 15187751986642917127;
                                                     break;
                                                 }
-                                                *(*s).lengthlist.offset(i as isize) = (num
-                                                    + 1 as i32 as libc::c_long)
-                                                    as libc::c_char
+                                                *(*s).lengthlist.offset(i as isize) =
+                                                    (num + 1 as i32 as libc::c_long) as libc::c_char
                                             } else {
                                                 *(*s).lengthlist.offset(i as isize) =
                                                     0 as i32 as libc::c_char
@@ -804,9 +789,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 current_block = 15187751986642917127;
                                                 break;
                                             }
-                                            *(*s).lengthlist.offset(i as isize) = (num_0
-                                                + 1 as i32 as libc::c_long)
-                                                as libc::c_char;
+                                            *(*s).lengthlist.offset(i as isize) =
+                                                (num_0 + 1 as i32 as libc::c_long) as libc::c_char;
                                             i += 1
                                         }
                                     }
@@ -903,8 +887,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 if (*s).q_sequencep == -(1 as i32) {
                                                     current_block = 15187751986642917127;
                                                 } else {
-                                                    let mut quantvals: i32 =
-                                                        0 as i32;
+                                                    let mut quantvals: i32 = 0 as i32;
                                                     match (*s).maptype {
                                                         1 => {
                                                             quantvals = if (*s).dim
@@ -917,8 +900,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                 as i32
                                                         }
                                                         2 => {
-                                                            quantvals = ((*s).entries * (*s).dim)
-                                                                as i32
+                                                            quantvals =
+                                                                ((*s).entries * (*s).dim) as i32
                                                         }
                                                         _ => {}
                                                     }
@@ -1016,8 +999,7 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                 if (*s).q_sequencep == -(1 as i32) {
                                                     current_block = 15187751986642917127;
                                                 } else {
-                                                    let mut quantvals: i32 =
-                                                        0 as i32;
+                                                    let mut quantvals: i32 = 0 as i32;
                                                     match (*s).maptype {
                                                         1 => {
                                                             quantvals = if (*s).dim
@@ -1030,8 +1012,8 @@ pub unsafe extern "C" fn vorbis_staticbook_unpack(
                                                                 as i32
                                                         }
                                                         2 => {
-                                                            quantvals = ((*s).entries * (*s).dim)
-                                                                as i32
+                                                            quantvals =
+                                                                ((*s).entries * (*s).dim) as i32
                                                         }
                                                         _ => {}
                                                     }
@@ -1146,16 +1128,11 @@ bitreverse is not in the main execution path. */
 unsafe extern "C" fn bitreverse(
     mut x: crate::config_types_h::ogg_uint32_t,
 ) -> crate::config_types_h::ogg_uint32_t {
-    x = x >> 16 as i32 & 0xffff as i32 as u32
-        | x << 16 as i32 & 0xffff0000 as u32;
-    x = x >> 8 as i32 & 0xff00ff as i32 as u32
-        | x << 8 as i32 & 0xff00ff00 as u32;
-    x = x >> 4 as i32 & 0xf0f0f0f as i32 as u32
-        | x << 4 as i32 & 0xf0f0f0f0 as u32;
-    x = x >> 2 as i32 & 0x33333333 as i32 as u32
-        | x << 2 as i32 & 0xcccccccc as u32;
-    return x >> 1 as i32 & 0x55555555 as i32 as u32
-        | x << 1 as i32 & 0xaaaaaaaa as u32;
+    x = x >> 16 as i32 & 0xffff as i32 as u32 | x << 16 as i32 & 0xffff0000 as u32;
+    x = x >> 8 as i32 & 0xff00ff as i32 as u32 | x << 8 as i32 & 0xff00ff00 as u32;
+    x = x >> 4 as i32 & 0xf0f0f0f as i32 as u32 | x << 4 as i32 & 0xf0f0f0f0 as u32;
+    x = x >> 2 as i32 & 0x33333333 as i32 as u32 | x << 2 as i32 & 0xcccccccc as u32;
+    return x >> 1 as i32 & 0x55555555 as i32 as u32 | x << 1 as i32 & 0xaaaaaaaa as u32;
 }
 #[inline]
 
@@ -1180,8 +1157,7 @@ unsafe extern "C" fn decode_packed_entry_number(
                 b as *mut crate::ogg_h::oggpack_buffer,
                 *(*book)
                     .dec_codelengths
-                    .offset((entry - 1 as i32 as libc::c_long) as isize)
-                    as i32,
+                    .offset((entry - 1 as i32 as libc::c_long) as isize) as i32,
             );
             return entry - 1 as i32 as libc::c_long;
         }
@@ -1280,8 +1256,8 @@ pub unsafe extern "C" fn vorbis_book_decodevs_add(
         let mut entry: *mut libc::c_long = fresh0.as_mut_ptr() as *mut libc::c_long;
         let mut fresh1 = ::std::vec::from_elem(
             0,
-            (::std::mem::size_of::<*mut f32>() as libc::c_ulong)
-                .wrapping_mul(step as libc::c_ulong) as usize,
+            (::std::mem::size_of::<*mut f32>() as libc::c_ulong).wrapping_mul(step as libc::c_ulong)
+                as usize,
         );
         let mut t: *mut *mut f32 = fresh1.as_mut_ptr() as *mut *mut f32;
         let mut i: i32 = 0;
@@ -1415,8 +1391,7 @@ pub unsafe extern "C" fn vorbis_book_decodevv_add(
             if entry == -(1 as i32) as libc::c_long {
                 return -(1 as i32) as libc::c_long;
             }
-            let mut t: *const f32 =
-                (*book).valuelist.offset((entry * (*book).dim) as isize);
+            let mut t: *const f32 = (*book).valuelist.offset((entry * (*book).dim) as isize);
             j = 0 as i32 as libc::c_long;
             while i < m as libc::c_long && j < (*book).dim {
                 let fresh8 = chptr;

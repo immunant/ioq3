@@ -1138,12 +1138,12 @@ unsafe extern "C" fn GLimp_CompareModes(
     let mut aspectB: f32 = (*modeB).w as f32 / (*modeB).h as f32;
     let mut areaA: i32 = (*modeA).w * (*modeA).h;
     let mut areaB: i32 = (*modeB).w * (*modeB).h;
-    let mut aspectDiffA: f32 = crate::stdlib::fabs(
-        (aspectA - crate::src::renderergl1::tr_init::displayAspect) as f64,
-    ) as f32;
-    let mut aspectDiffB: f32 = crate::stdlib::fabs(
-        (aspectB - crate::src::renderergl1::tr_init::displayAspect) as f64,
-    ) as f32;
+    let mut aspectDiffA: f32 =
+        crate::stdlib::fabs((aspectA - crate::src::renderergl1::tr_init::displayAspect) as f64)
+            as f32;
+    let mut aspectDiffB: f32 =
+        crate::stdlib::fabs((aspectB - crate::src::renderergl1::tr_init::displayAspect) as f64)
+            as f32;
     let mut aspectDiffsDiff: f32 = aspectDiffA - aspectDiffB;
     if aspectDiffsDiff > ASPECT_EPSILON {
         return 1 as i32;
@@ -2284,10 +2284,7 @@ unsafe extern "C" fn GLimp_DetectAvailableModes() {
             ::std::mem::size_of::<crate::stdlib::SDL_Rect>() as libc::c_ulong,
             Some(
                 GLimp_CompareModes
-                    as unsafe extern "C" fn(
-                        _: *const libc::c_void,
-                        _: *const libc::c_void,
-                    ) -> i32,
+                    as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32,
             ),
         );
     }
@@ -2374,9 +2371,9 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
             b"glGetString is NULL\x00" as *const u8 as *const libc::c_char,
         );
     }
-    version = qglGetString.expect("non-null function pointer")(
-        0x1f02 as i32 as crate::stdlib::GLenum,
-    ) as *const libc::c_char;
+    version =
+        qglGetString.expect("non-null function pointer")(0x1f02 as i32 as crate::stdlib::GLenum)
+            as *const libc::c_char;
     if version.is_null() {
         crate::src::renderergl1::tr_subs::Com_Error(
             crate::src::qcommon::q_shared::ERR_FATAL as i32,
@@ -2415,8 +2412,7 @@ unsafe extern "C" fn GLimp_GetProcAddresses(
         );
     }
     if fixedFunction as u64 != 0 {
-        if qglMajorVersion > 1 as i32
-            || qglMajorVersion == 1 as i32 && qglMinorVersion >= 2 as i32
+        if qglMajorVersion > 1 as i32 || qglMajorVersion == 1 as i32 && qglMinorVersion >= 2 as i32
         {
             qglBindTexture = ::std::mem::transmute::<
                 *mut libc::c_void,
@@ -6970,10 +6966,8 @@ unsafe extern "C" fn GLimp_SetMode(
         driverdata: 0 as *mut libc::c_void,
     };
     let mut display: i32 = 0 as i32;
-    let mut x: i32 =
-        (0x1fff0000 as u32 | 0 as i32 as u32) as i32;
-    let mut y: i32 =
-        (0x1fff0000 as u32 | 0 as i32 as u32) as i32;
+    let mut x: i32 = (0x1fff0000 as u32 | 0 as i32 as u32) as i32;
+    let mut y: i32 = (0x1fff0000 as u32 | 0 as i32 as u32) as i32;
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
@@ -7223,11 +7217,7 @@ unsafe extern "C" fn GLimp_SetMode(
         crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_STENCIL_SIZE, testStencilBits);
         crate::stdlib::SDL_GL_SetAttribute(
             crate::stdlib::SDL_GL_MULTISAMPLEBUFFERS,
-            if samples != 0 {
-                1 as i32
-            } else {
-                0 as i32
-            },
+            if samples != 0 { 1 as i32 } else { 0 as i32 },
         );
         crate::stdlib::SDL_GL_SetAttribute(crate::stdlib::SDL_GL_MULTISAMPLESAMPLES, samples);
         if (*crate::src::renderergl1::tr_init::r_stereoEnabled).integer != 0 {
@@ -7268,13 +7258,13 @@ unsafe extern "C" fn GLimp_SetMode(
                 };
                 match testColorBits {
                     16 => {
-                        mode_0.format = crate::stdlib::SDL_PIXELFORMAT_RGB565 as i32
-                            as crate::stdlib::Uint32;
+                        mode_0.format =
+                            crate::stdlib::SDL_PIXELFORMAT_RGB565 as i32 as crate::stdlib::Uint32;
                         current_block_184 = 1425453989644512380;
                     }
                     24 => {
-                        mode_0.format = crate::stdlib::SDL_PIXELFORMAT_RGB24 as i32
-                            as crate::stdlib::Uint32;
+                        mode_0.format =
+                            crate::stdlib::SDL_PIXELFORMAT_RGB24 as i32 as crate::stdlib::Uint32;
                         current_block_184 = 1425453989644512380;
                     }
                     _ => {
@@ -7572,9 +7562,9 @@ unsafe extern "C" fn GLimp_SetMode(
         return RSERR_INVALID_MODE as i32;
     }
     GLimp_DetectAvailableModes();
-    glstring = qglGetString.expect("non-null function pointer")(
-        0x1f01 as i32 as crate::stdlib::GLenum,
-    ) as *mut libc::c_char;
+    glstring =
+        qglGetString.expect("non-null function pointer")(0x1f01 as i32 as crate::stdlib::GLenum)
+            as *mut libc::c_char;
     crate::src::renderergl1::tr_main::ri
         .Printf
         .expect("non-null function pointer")(
@@ -7850,8 +7840,7 @@ unsafe extern "C" fn GLimp_InitExtensions(
                         &mut glint,
                     );
                     crate::src::renderergl1::tr_init::glConfig.numTextureUnits = glint;
-                    if crate::src::renderergl1::tr_init::glConfig.numTextureUnits > 1 as i32
-                    {
+                    if crate::src::renderergl1::tr_init::glConfig.numTextureUnits > 1 as i32 {
                         crate::src::renderergl1::tr_main::ri
                             .Printf
                             .expect("non-null function pointer")(
@@ -8161,18 +8150,16 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
         crate::src::renderergl1::tr_init::glConfig
             .vendor_string
             .as_mut_ptr(),
-        qglGetString.expect("non-null function pointer")(
-            0x1f00 as i32 as crate::stdlib::GLenum,
-        ) as *mut libc::c_char,
+        qglGetString.expect("non-null function pointer")(0x1f00 as i32 as crate::stdlib::GLenum)
+            as *mut libc::c_char,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     crate::src::qcommon::q_shared::Q_strncpyz(
         crate::src::renderergl1::tr_init::glConfig
             .renderer_string
             .as_mut_ptr(),
-        qglGetString.expect("non-null function pointer")(
-            0x1f01 as i32 as crate::stdlib::GLenum,
-        ) as *mut libc::c_char,
+        qglGetString.expect("non-null function pointer")(0x1f01 as i32 as crate::stdlib::GLenum)
+            as *mut libc::c_char,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     if *crate::src::renderergl1::tr_init::glConfig
@@ -8200,9 +8187,8 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
         crate::src::renderergl1::tr_init::glConfig
             .version_string
             .as_mut_ptr(),
-        qglGetString.expect("non-null function pointer")(
-            0x1f02 as i32 as crate::stdlib::GLenum,
-        ) as *mut libc::c_char,
+        qglGetString.expect("non-null function pointer")(0x1f02 as i32 as crate::stdlib::GLenum)
+            as *mut libc::c_char,
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     // manually create extension list if using OpenGL 3
@@ -8254,9 +8240,8 @@ pub unsafe extern "C" fn GLimp_Init(mut fixedFunction: crate::src::qcommon::q_sh
             crate::src::renderergl1::tr_init::glConfig
                 .extensions_string
                 .as_mut_ptr(),
-            qglGetString.expect("non-null function pointer")(
-                0x1f03 as i32 as crate::stdlib::GLenum,
-            ) as *mut libc::c_char,
+            qglGetString.expect("non-null function pointer")(0x1f03 as i32 as crate::stdlib::GLenum)
+                as *mut libc::c_char,
             ::std::mem::size_of::<[libc::c_char; 8192]>() as libc::c_ulong as i32,
         );
     }
@@ -8394,10 +8379,8 @@ pub unsafe extern "C" fn GLimp_EndFrame() {
                 crate::src::qcommon::q_shared::qfalse
         }
         // Is the state we want different from the current state?
-        needToToggle = (((*crate::src::renderergl1::tr_init::r_fullscreen).integer != 0)
-            as i32
-            != fullscreen) as i32
-            as crate::src::qcommon::q_shared::qboolean;
+        needToToggle = (((*crate::src::renderergl1::tr_init::r_fullscreen).integer != 0) as i32
+            != fullscreen) as i32 as crate::src::qcommon::q_shared::qboolean;
         if needToToggle as u64 != 0 {
             sdlToggled = (crate::stdlib::SDL_SetWindowFullscreen(
                 SDL_window,

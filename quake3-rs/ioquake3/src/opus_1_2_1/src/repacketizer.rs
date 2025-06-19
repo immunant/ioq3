@@ -148,12 +148,9 @@ unsafe extern "C" fn opus_repacketizer_cat_impl(
     }
     if (*rp).nb_frames == 0 as i32 {
         (*rp).toc = *data.offset(0 as i32 as isize);
-        (*rp).framesize = crate::src::opus_1_2_1::src::opus::opus_packet_get_samples_per_frame(
-            data,
-            8000 as i32,
-        )
-    } else if (*rp).toc as i32 & 0xfc as i32
-        != *data.offset(0 as i32 as isize) as i32 & 0xfc as i32
+        (*rp).framesize =
+            crate::src::opus_1_2_1::src::opus::opus_packet_get_samples_per_frame(data, 8000 as i32)
+    } else if (*rp).toc as i32 & 0xfc as i32 != *data.offset(0 as i32 as isize) as i32 & 0xfc as i32
     {
         /*fprintf(stderr, "toc mismatch: 0x%x vs 0x%x\n", rp->toc, data[0]);*/
         return -(4 as i32);
@@ -224,9 +221,7 @@ pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
     len = (*rp).len.as_mut_ptr().offset(begin as isize);
     frames = (*rp).frames.as_mut_ptr().offset(begin as isize);
     if self_delimited != 0 {
-        tot_size = 1 as i32
-            + (*len.offset((count - 1 as i32) as isize) as i32
-                >= 252 as i32) as i32
+        tot_size = 1 as i32 + (*len.offset((count - 1 as i32) as isize) as i32 >= 252 as i32) as i32
     } else {
         tot_size = 0 as i32
     }
@@ -241,33 +236,27 @@ pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
         ptr = ptr.offset(1);
         *fresh0 = ((*rp).toc as i32 & 0xfc as i32) as u8
     } else if count == 2 as i32 {
-        if *len.offset(1 as i32 as isize) as i32
-            == *len.offset(0 as i32 as isize) as i32
-        {
+        if *len.offset(1 as i32 as isize) as i32 == *len.offset(0 as i32 as isize) as i32 {
             /* Code 1 */
-            tot_size += 2 as i32 * *len.offset(0 as i32 as isize) as i32
-                + 1 as i32;
+            tot_size += 2 as i32 * *len.offset(0 as i32 as isize) as i32 + 1 as i32;
             if tot_size > maxlen {
                 return -(2 as i32);
             }
             let fresh1 = ptr;
             ptr = ptr.offset(1);
-            *fresh1 = ((*rp).toc as i32 & 0xfc as i32 | 0x1 as i32)
-                as u8
+            *fresh1 = ((*rp).toc as i32 & 0xfc as i32 | 0x1 as i32) as u8
         } else {
             /* Code 2 */
             tot_size += *len.offset(0 as i32 as isize) as i32
                 + *len.offset(1 as i32 as isize) as i32
                 + 2 as i32
-                + (*len.offset(0 as i32 as isize) as i32 >= 252 as i32)
-                    as i32;
+                + (*len.offset(0 as i32 as isize) as i32 >= 252 as i32) as i32;
             if tot_size > maxlen {
                 return -(2 as i32);
             }
             let fresh2 = ptr;
             ptr = ptr.offset(1);
-            *fresh2 = ((*rp).toc as i32 & 0xfc as i32 | 0x2 as i32)
-                as u8;
+            *fresh2 = ((*rp).toc as i32 & 0xfc as i32 | 0x2 as i32) as u8;
             ptr = ptr.offset(crate::src::opus_1_2_1::src::opus::encode_size(
                 *len.offset(0 as i32 as isize) as i32,
                 ptr,
@@ -281,18 +270,15 @@ pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
         /* Restart the process for the padding case */
         ptr = data;
         if self_delimited != 0 {
-            tot_size = 1 as i32
-                + (*len.offset((count - 1 as i32) as isize) as i32
-                    >= 252 as i32) as i32
+            tot_size =
+                1 as i32 + (*len.offset((count - 1 as i32) as isize) as i32 >= 252 as i32) as i32
         } else {
             tot_size = 0 as i32
         }
         vbr = 0 as i32;
         i = 1 as i32;
         while i < count {
-            if *len.offset(i as isize) as i32
-                != *len.offset(0 as i32 as isize) as i32
-            {
+            if *len.offset(i as isize) as i32 != *len.offset(0 as i32 as isize) as i32 {
                 vbr = 1 as i32;
                 break;
             } else {
@@ -314,21 +300,18 @@ pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
             }
             let fresh3 = ptr;
             ptr = ptr.offset(1);
-            *fresh3 = ((*rp).toc as i32 & 0xfc as i32 | 0x3 as i32)
-                as u8;
+            *fresh3 = ((*rp).toc as i32 & 0xfc as i32 | 0x3 as i32) as u8;
             let fresh4 = ptr;
             ptr = ptr.offset(1);
             *fresh4 = (count | 0x80 as i32) as u8
         } else {
-            tot_size +=
-                count * *len.offset(0 as i32 as isize) as i32 + 2 as i32;
+            tot_size += count * *len.offset(0 as i32 as isize) as i32 + 2 as i32;
             if tot_size > maxlen {
                 return -(2 as i32);
             }
             let fresh5 = ptr;
             ptr = ptr.offset(1);
-            *fresh5 = ((*rp).toc as i32 & 0xfc as i32 | 0x3 as i32)
-                as u8;
+            *fresh5 = ((*rp).toc as i32 & 0xfc as i32 | 0x3 as i32) as u8;
             let fresh6 = ptr;
             ptr = ptr.offset(1);
             *fresh6 = count as u8
@@ -352,8 +335,7 @@ pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
             }
             let fresh9 = ptr;
             ptr = ptr.offset(1);
-            *fresh9 =
-                (pad_amount - 255 as i32 * nb_255s - 1 as i32) as u8;
+            *fresh9 = (pad_amount - 255 as i32 * nb_255s - 1 as i32) as u8;
             tot_size += pad_amount
         }
         if vbr != 0 {
@@ -412,15 +394,7 @@ pub unsafe extern "C" fn opus_repacketizer_out_range(
     mut data: *mut u8,
     mut maxlen: crate::opus_types_h::opus_int32,
 ) -> crate::opus_types_h::opus_int32 {
-    return opus_repacketizer_out_range_impl(
-        rp,
-        begin,
-        end,
-        data,
-        maxlen,
-        0 as i32,
-        0 as i32,
-    );
+    return opus_repacketizer_out_range_impl(rp, begin, end, data, maxlen, 0 as i32, 0 as i32);
 }
 #[no_mangle]
 

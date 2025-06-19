@@ -18,10 +18,8 @@ pub mod arch_h {
         let mut in_0: crate::mathops_h::C2RustUnnamed_61 =
             crate::mathops_h::C2RustUnnamed_61 { f: 0. };
         in_0.f = x;
-        return (in_0.i >> 23 as i32 & 0xff as i32 as u32
-            == 0xff as i32 as u32
-            && in_0.i & 0x7fffff as i32 as u32 != 0 as i32 as u32)
-            as i32;
+        return (in_0.i >> 23 as i32 & 0xff as i32 as u32 == 0xff as i32 as u32
+            && in_0.i & 0x7fffff as i32 as u32 != 0 as i32 as u32) as i32;
     }
 
     /* ARCH_H */
@@ -293,8 +291,7 @@ unsafe extern "C" fn tansig_approx(mut x: f32) -> f32 {
         x = -x;
         sign = -(1 as i32) as f32
     }
-    i = crate::stdlib::floor((0.5f32 + 25 as i32 as f32 * x) as f64)
-        as i32;
+    i = crate::stdlib::floor((0.5f32 + 25 as i32 as f32 * x) as f64) as i32;
     x -= 0.04f32 * i as f32;
     y = tansig_table[i as usize];
     dy = 1 as i32 as f32 - y * y;

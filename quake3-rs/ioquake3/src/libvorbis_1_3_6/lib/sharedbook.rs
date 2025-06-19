@@ -68,8 +68,7 @@ pub unsafe extern "C" fn _float32_pack(mut val: f32) -> libc::c_long {
         val = -val
     }
     exp = crate::stdlib::floor(
-        crate::stdlib::log(val as f64) / crate::stdlib::log(2.0f32 as f64)
-            + 0.001f64,
+        crate::stdlib::log(val as f64) / crate::stdlib::log(2.0f32 as f64) + 0.001f64,
     ) as libc::c_long;
     mant = crate::stdlib::rint(crate::stdlib::ldexp(
         val as f64,
@@ -81,8 +80,7 @@ pub unsafe extern "C" fn _float32_pack(mut val: f32) -> libc::c_long {
 #[no_mangle]
 
 pub unsafe extern "C" fn _float32_unpack(mut val: libc::c_long) -> f32 {
-    let mut mant: f64 =
-        (val & 0x1fffff as i32 as libc::c_long) as f64;
+    let mut mant: f64 = (val & 0x1fffff as i32 as libc::c_long) as f64;
     let mut sign: i32 = (val & 0x80000000 as u32 as libc::c_long) as i32;
     let mut exp: libc::c_long = (val & 0x7fe00000 as libc::c_long) >> 21 as i32;
     if sign != 0 {
@@ -90,8 +88,7 @@ pub unsafe extern "C" fn _float32_unpack(mut val: libc::c_long) -> f32 {
     }
     return crate::stdlib::ldexp(
         mant,
-        (exp - (21 as i32 - 1 as i32) as libc::c_long
-            - 768 as i32 as libc::c_long) as i32,
+        (exp - (21 as i32 - 1 as i32) as libc::c_long - 768 as i32 as libc::c_long) as i32,
     ) as f32;
 }
 /* given a list of word lengths, generate a list of codewords.  Works
@@ -144,11 +141,10 @@ pub unsafe extern "C" fn _make_words(
                 if marker[j as usize] & 1 as i32 as u32 != 0 {
                     /* have to jump branches */
                     if j == 1 as i32 as libc::c_long {
-                        marker[1 as i32 as usize] =
-                            marker[1 as i32 as usize].wrapping_add(1)
+                        marker[1 as i32 as usize] = marker[1 as i32 as usize].wrapping_add(1)
                     } else {
-                        marker[j as usize] = marker[(j - 1 as i32 as libc::c_long) as usize]
-                            << 1 as i32
+                        marker[j as usize] =
+                            marker[(j - 1 as i32 as libc::c_long) as usize] << 1 as i32
                     }
                     break;
                 /* invariant says next upper marker would already
@@ -167,8 +163,7 @@ pub unsafe extern "C" fn _make_words(
                     break;
                 }
                 entry = marker[j as usize];
-                marker[j as usize] =
-                    marker[(j - 1 as i32 as libc::c_long) as usize] << 1 as i32;
+                marker[j as usize] = marker[(j - 1 as i32 as libc::c_long) as usize] << 1 as i32;
                 j += 1
             }
         } else if sparsecount == 0 as i32 as libc::c_long {
@@ -180,9 +175,7 @@ pub unsafe extern "C" fn _make_words(
     /* Single-entry codebooks are a retconned extension to the spec.
     They have a single codeword '0' of length 1 that results in an
     underpopulated tree.  Shield that case from the underformed tree check. */
-    if !(count == 1 as i32 as libc::c_long
-        && marker[2 as i32 as usize] == 2 as i32 as u32)
-    {
+    if !(count == 1 as i32 as libc::c_long && marker[2 as i32 as usize] == 2 as i32 as u32) {
         i = 1 as i32 as libc::c_long;
         while i < 33 as i32 as libc::c_long {
             if marker[i as usize] as libc::c_ulong
@@ -257,9 +250,7 @@ pub unsafe extern "C" fn _book_maptype1_quantvals(
                 break;
             }
             acc *= vals;
-            if (9223372036854775807 as libc::c_long / (vals + 1 as i32 as libc::c_long))
-                < acc1
-            {
+            if (9223372036854775807 as libc::c_long / (vals + 1 as i32 as libc::c_long)) < acc1 {
                 acc1 = 9223372036854775807 as libc::c_long
             } else {
                 acc1 *= vals + 1 as i32 as libc::c_long
@@ -314,24 +305,19 @@ pub unsafe extern "C" fn _book_unquantize(
                 quantvals = _book_maptype1_quantvals(b) as i32;
                 j = 0 as i32 as libc::c_long;
                 while j < (*b).entries {
-                    if !sparsemap.is_null()
-                        && *(*b).lengthlist.offset(j as isize) as i32 != 0
+                    if !sparsemap.is_null() && *(*b).lengthlist.offset(j as isize) as i32 != 0
                         || sparsemap.is_null()
                     {
                         let mut last: f32 = 0.0f32;
                         let mut indexdiv: i32 = 1 as i32;
                         k = 0 as i32 as libc::c_long;
                         while k < (*b).dim {
-                            let mut index: i32 = (j / indexdiv as libc::c_long
-                                % quantvals as libc::c_long)
-                                as i32;
-                            let mut val: f32 =
-                                *(*b).quantlist.offset(index as isize) as f32;
-                            val = (crate::stdlib::fabs(val as f64)
-                                * delta as f64
+                            let mut index: i32 =
+                                (j / indexdiv as libc::c_long % quantvals as libc::c_long) as i32;
+                            let mut val: f32 = *(*b).quantlist.offset(index as isize) as f32;
+                            val = (crate::stdlib::fabs(val as f64) * delta as f64
                                 + mindel as f64
-                                + last as f64)
-                                as f32;
+                                + last as f64) as f32;
                             if (*b).q_sequencep != 0 {
                                 last = val
                             }
@@ -354,21 +340,17 @@ pub unsafe extern "C" fn _book_unquantize(
             2 => {
                 j = 0 as i32 as libc::c_long;
                 while j < (*b).entries {
-                    if !sparsemap.is_null()
-                        && *(*b).lengthlist.offset(j as isize) as i32 != 0
+                    if !sparsemap.is_null() && *(*b).lengthlist.offset(j as isize) as i32 != 0
                         || sparsemap.is_null()
                     {
                         let mut last_0: f32 = 0.0f32;
                         k = 0 as i32 as libc::c_long;
                         while k < (*b).dim {
                             let mut val_0: f32 =
-                                *(*b).quantlist.offset((j * (*b).dim + k) as isize)
-                                    as f32;
-                            val_0 = (crate::stdlib::fabs(val_0 as f64)
-                                * delta as f64
+                                *(*b).quantlist.offset((j * (*b).dim + k) as isize) as f32;
+                            val_0 = (crate::stdlib::fabs(val_0 as f64) * delta as f64
                                 + mindel as f64
-                                + last_0 as f64)
-                                as f32;
+                                + last_0 as f64) as f32;
                             if (*b).q_sequencep != 0 {
                                 last_0 = val_0
                             }
@@ -460,16 +442,11 @@ pub unsafe extern "C" fn vorbis_book_init_encode(
     (*c).entries = (*s).entries;
     (*c).used_entries = (*s).entries;
     (*c).dim = (*s).dim;
-    (*c).codelist = _make_words(
-        (*s).lengthlist,
-        (*s).entries,
-        0 as i32 as libc::c_long,
-    );
+    (*c).codelist = _make_words((*s).lengthlist, (*s).entries, 0 as i32 as libc::c_long);
     //c->valuelist=_book_unquantize(s,s->entries,NULL);
     (*c).quantvals = _book_maptype1_quantvals(s) as i32;
     (*c).minval = crate::stdlib::rint(_float32_unpack((*s).q_min) as f64) as i32;
-    (*c).delta =
-        crate::stdlib::rint(_float32_unpack((*s).q_delta) as f64) as i32;
+    (*c).delta = crate::stdlib::rint(_float32_unpack((*s).q_delta) as f64) as i32;
     return 0 as i32;
 }
 
@@ -493,10 +470,7 @@ unsafe extern "C" fn bitreverse(
         as crate::config_types_h::ogg_uint32_t;
 }
 
-unsafe extern "C" fn sort32a(
-    mut a: *const libc::c_void,
-    mut b: *const libc::c_void,
-) -> i32 {
+unsafe extern "C" fn sort32a(mut a: *const libc::c_void, mut b: *const libc::c_void) -> i32 {
     return (**(a as *mut *mut crate::config_types_h::ogg_uint32_t)
         > **(b as *mut *mut crate::config_types_h::ogg_uint32_t)) as i32
         - ((**(a as *mut *mut crate::config_types_h::ogg_uint32_t))
@@ -576,8 +550,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
             );
             let mut fresh5 = ::std::vec::from_elem(
                 0,
-                (n as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
+                (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
                     as usize,
             );
             sortindex = fresh5.as_mut_ptr() as *mut i32;
@@ -601,8 +574,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
             ::libc::free(codes as *mut libc::c_void);
             (*c).valuelist = _book_unquantize(s, n, sortindex);
             (*c).dec_index = crate::stdlib::malloc(
-                (n as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+                (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
             ) as *mut i32;
             n = 0 as i32;
             i = 0 as i32;
@@ -651,8 +623,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                 *(*c).dec_firsttable.offset(0 as i32 as isize) = *fresh8
             } else {
                 (*c).dec_firsttablen =
-                    ov_ilog((*c).used_entries as crate::config_types_h::ogg_uint32_t)
-                        - 4 as i32;
+                    ov_ilog((*c).used_entries as crate::config_types_h::ogg_uint32_t) - 4 as i32;
                 if (*c).dec_firsttablen < 5 as i32 {
                     (*c).dec_firsttablen = 5 as i32
                 }
@@ -666,9 +637,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                 ) as *mut crate::config_types_h::ogg_uint32_t;
                 i = 0 as i32;
                 while i < n {
-                    if *(*c).dec_codelengths.offset(i as isize) as i32
-                        <= (*c).dec_firsttablen
-                    {
+                    if *(*c).dec_codelengths.offset(i as isize) as i32 <= (*c).dec_firsttablen {
                         let mut orig: crate::config_types_h::ogg_uint32_t =
                             bitreverse(*(*c).codelist.offset(i as isize));
                         j = 0 as i32;
@@ -679,8 +648,8 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                         {
                             *(*c).dec_firsttable.offset(
                                 (orig
-                                    | (j << *(*c).dec_codelengths.offset(i as isize) as i32)
-                                        as u32) as isize,
+                                    | (j << *(*c).dec_codelengths.offset(i as isize) as i32) as u32)
+                                    as isize,
                             ) = (i + 1 as i32) as crate::config_types_h::ogg_uint32_t;
                             j += 1
                         }
@@ -699,9 +668,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                     let mut word: crate::config_types_h::ogg_uint32_t = (i
                         << 32 as i32 - (*c).dec_firsttablen)
                         as crate::config_types_h::ogg_uint32_t;
-                    if *(*c).dec_firsttable.offset(bitreverse(word) as isize)
-                        == 0 as i32 as u32
-                    {
+                    if *(*c).dec_firsttable.offset(bitreverse(word) as isize) == 0 as i32 as u32 {
                         while (lo + 1 as i32 as libc::c_long) < n as libc::c_long
                             && *(*c)
                                 .codelist

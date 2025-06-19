@@ -200,8 +200,7 @@ Adds a \n to the text
 pub unsafe extern "C" fn Cbuf_InsertText(mut text: *const libc::c_char) {
     let mut len: i32 = 0;
     let mut i: i32 = 0;
-    len =
-        crate::stdlib::strlen(text).wrapping_add(1 as i32 as libc::c_ulong) as i32;
+    len = crate::stdlib::strlen(text).wrapping_add(1 as i32 as libc::c_ulong) as i32;
     if len + cmd_text.cursize > cmd_text.maxsize {
         crate::src::qcommon::common::Com_Printf(
             b"Cbuf_InsertText overflowed\n\x00" as *const u8 as *const libc::c_char,
@@ -233,10 +232,7 @@ Cbuf_ExecuteText
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cbuf_ExecuteText(
-    mut exec_when: i32,
-    mut text: *const libc::c_char,
-) {
+pub unsafe extern "C" fn Cbuf_ExecuteText(mut exec_when: i32, mut text: *const libc::c_char) {
     match exec_when {
         0 => {
             if !text.is_null() && crate::stdlib::strlen(text) > 0 as i32 as libc::c_ulong {
@@ -306,20 +302,17 @@ pub unsafe extern "C" fn Cbuf_Execute() {
                     if i < cmd_text.cursize - 1 as i32 {
                         if in_star_comment as u64 == 0
                             && *text.offset(i as isize) as i32 == '/' as i32
-                            && *text.offset((i + 1 as i32) as isize) as i32
-                                == '/' as i32
+                            && *text.offset((i + 1 as i32) as isize) as i32 == '/' as i32
                         {
                             in_slash_comment = crate::src::qcommon::q_shared::qtrue
                         } else if in_slash_comment as u64 == 0
                             && *text.offset(i as isize) as i32 == '/' as i32
-                            && *text.offset((i + 1 as i32) as isize) as i32
-                                == '*' as i32
+                            && *text.offset((i + 1 as i32) as isize) as i32 == '*' as i32
                         {
                             in_star_comment = crate::src::qcommon::q_shared::qtrue
                         } else if in_star_comment as u32 != 0
                             && *text.offset(i as isize) as i32 == '*' as i32
-                            && *text.offset((i + 1 as i32) as isize) as i32
-                                == '/' as i32
+                            && *text.offset((i + 1 as i32) as isize) as i32 == '/' as i32
                         {
                             in_star_comment = crate::src::qcommon::q_shared::qfalse;
                             // If we are in a star comment, then the part after it is valid
@@ -601,10 +594,7 @@ they can't have pointers returned to them
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cmd_ArgsBuffer(
-    mut buffer: *mut libc::c_char,
-    mut bufferLength: i32,
-) {
+pub unsafe extern "C" fn Cmd_ArgsBuffer(mut buffer: *mut libc::c_char, mut bufferLength: i32) {
     crate::src::qcommon::q_shared::Q_strncpyz(buffer, Cmd_Args(), bufferLength);
 }
 /*
@@ -635,8 +625,7 @@ pub unsafe extern "C" fn Cmd_Args_Sanitize() {
     while i < cmd_argc {
         let mut c: *mut libc::c_char = cmd_argv[i as usize];
         if crate::stdlib::strlen(c) > (256 as i32 - 1 as i32) as libc::c_ulong {
-            *c.offset((256 as i32 - 1 as i32) as isize) =
-                '\u{0}' as i32 as libc::c_char
+            *c.offset((256 as i32 - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char
         }
         loop {
             c = ::libc::strpbrk(c, b"\n\r;\x00" as *const u8 as *const libc::c_char);
@@ -746,8 +735,7 @@ unsafe extern "C" fn Cmd_TokenizeString2(
             cmd_argc += 1;
             // skip until whitespace, quote, or command
             while *text as i32 > ' ' as i32 {
-                if ignoreQuotes as u64 == 0
-                    && *text.offset(0 as i32 as isize) as i32 == '\"' as i32
+                if ignoreQuotes as u64 == 0 && *text.offset(0 as i32 as isize) as i32 == '\"' as i32
                 {
                     break;
                 }
@@ -995,11 +983,7 @@ pub unsafe extern "C" fn Cmd_ExecuteString(mut text: *const libc::c_char) {
     prev = &mut cmd_functions;
     while !(*prev).is_null() {
         cmd = *prev;
-        if crate::src::qcommon::q_shared::Q_stricmp(
-            cmd_argv[0 as i32 as usize],
-            (*cmd).name,
-        ) == 0
-        {
+        if crate::src::qcommon::q_shared::Q_stricmp(cmd_argv[0 as i32 as usize], (*cmd).name) == 0 {
             // rearrange the links so that the command will be
             // near the head of the list next time it is used
             *prev = (*cmd).next;
@@ -1090,10 +1074,7 @@ Cmd_CompleteCfgName
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cmd_CompleteCfgName(
-    mut _args: *mut libc::c_char,
-    mut argNum: i32,
-) {
+pub unsafe extern "C" fn Cmd_CompleteCfgName(mut _args: *mut libc::c_char, mut argNum: i32) {
     if argNum == 2 as i32 {
         crate::src::qcommon::common::Field_CompleteFilename(
             b"\x00" as *const u8 as *const libc::c_char,
@@ -1125,15 +1106,11 @@ pub unsafe extern "C" fn Cmd_Init() {
     );
     Cmd_SetCommandCompletionFunc(
         b"exec\x00" as *const u8 as *const libc::c_char,
-        Some(
-            Cmd_CompleteCfgName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
-        ),
+        Some(Cmd_CompleteCfgName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()),
     );
     Cmd_SetCommandCompletionFunc(
         b"execq\x00" as *const u8 as *const libc::c_char,
-        Some(
-            Cmd_CompleteCfgName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
-        ),
+        Some(Cmd_CompleteCfgName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()),
     );
     Cmd_AddCommand(
         b"vstr\x00" as *const u8 as *const libc::c_char,

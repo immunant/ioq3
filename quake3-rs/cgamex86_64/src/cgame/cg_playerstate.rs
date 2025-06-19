@@ -10,8 +10,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -238,12 +237,12 @@ pub unsafe extern "C" fn CG_CheckAmmo() {
             if !((*crate::src::cgame::cg_main::cg.snap).ps.ammo[i as usize] < 0 as i32) {
                 match i {
                     5 | 4 | 7 | 3 => {
-                        total += (*crate::src::cgame::cg_main::cg.snap).ps.ammo[i as usize]
-                            * 1000 as i32
+                        total +=
+                            (*crate::src::cgame::cg_main::cg.snap).ps.ammo[i as usize] * 1000 as i32
                     }
                     _ => {
-                        total += (*crate::src::cgame::cg_main::cg.snap).ps.ammo[i as usize]
-                            * 200 as i32
+                        total +=
+                            (*crate::src::cgame::cg_main::cg.snap).ps.ammo[i as usize] * 200 as i32
                     }
                 }
                 if total >= 5000 as i32 {
@@ -275,11 +274,7 @@ CG_DamageFeedback
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CG_DamageFeedback(
-    mut yawByte: i32,
-    mut pitchByte: i32,
-    mut damage: i32,
-) {
+pub unsafe extern "C" fn CG_DamageFeedback(mut yawByte: i32, mut pitchByte: i32, mut damage: i32) {
     let mut left: f32 = 0.;
     let mut front: f32 = 0.;
     let mut up: f32 = 0.;
@@ -316,32 +311,25 @@ pub unsafe extern "C" fn CG_DamageFeedback(
         crate::src::cgame::cg_main::cg.v_dmg_pitch = -kick
     } else {
         // positional
-        pitch = (pitchByte as f64 / 255.0f64 * 360 as i32 as f64)
-            as f32;
-        yaw = (yawByte as f64 / 255.0f64 * 360 as i32 as f64)
-            as f32;
+        pitch = (pitchByte as f64 / 255.0f64 * 360 as i32 as f64) as f32;
+        yaw = (yawByte as f64 / 255.0f64 * 360 as i32 as f64) as f32;
         angles[0 as i32 as usize] = pitch;
         angles[1 as i32 as usize] = yaw;
-        angles[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::AngleVectors(
             angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             dir.as_mut_ptr(),
             0 as *mut crate::src::qcommon::q_shared::vec_t,
             0 as *mut crate::src::qcommon::q_shared::vec_t,
         );
-        dir[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
-            [0 as i32 as usize]
-            - dir[0 as i32 as usize];
-        dir[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
-            [1 as i32 as usize]
-            - dir[1 as i32 as usize];
-        dir[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
-            [2 as i32 as usize]
-            - dir[2 as i32 as usize];
+        dir[0 as i32 as usize] =
+            crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize] - dir[0 as i32 as usize];
+        dir[1 as i32 as usize] =
+            crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize] - dir[1 as i32 as usize];
+        dir[2 as i32 as usize] =
+            crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize] - dir[2 as i32 as usize];
         front = dir[0 as i32 as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
-                [0 as i32 as usize]
+            * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize]
             + dir[1 as i32 as usize]
                 * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
                     [1 as i32 as usize]
@@ -349,8 +337,7 @@ pub unsafe extern "C" fn CG_DamageFeedback(
                 * crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
                     [2 as i32 as usize];
         left = dir[0 as i32 as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
-                [0 as i32 as usize]
+            * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
             + dir[1 as i32 as usize]
                 * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
                     [1 as i32 as usize]
@@ -358,8 +345,7 @@ pub unsafe extern "C" fn CG_DamageFeedback(
                 * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
                     [2 as i32 as usize];
         up = dir[0 as i32 as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
-                [0 as i32 as usize]
+            * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
             + dir[1 as i32 as usize]
                 * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
                     [1 as i32 as usize]
@@ -458,14 +444,13 @@ pub unsafe extern "C" fn CG_CheckPlayerstateEvents(
         {
             event = (*ps).events[(i & 2 as i32 - 1 as i32) as usize];
             (*cent).currentState.event = event;
-            (*cent).currentState.eventParm =
-                (*ps).eventParms[(i & 2 as i32 - 1 as i32) as usize];
+            (*cent).currentState.eventParm = (*ps).eventParms[(i & 2 as i32 - 1 as i32) as usize];
             crate::src::cgame::cg_event::CG_EntityEvent(
                 cent as *mut crate::cg_local_h::centity_s,
                 (*cent).lerpOrigin.as_mut_ptr(),
             );
-            crate::src::cgame::cg_main::cg.predictableEvents
-                [(i & 16 as i32 - 1 as i32) as usize] = event;
+            crate::src::cgame::cg_main::cg.predictableEvents[(i & 16 as i32 - 1 as i32) as usize] =
+                event;
             crate::src::cgame::cg_main::cg.eventSequence += 1
         }
         i += 1
@@ -666,10 +651,8 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
     if (*ps).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
         != (*ops).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
     {
-        if (*ps).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
-            & 0x1 as i32
-            != (*ops).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
-                & 0x1 as i32
+        if (*ps).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize] & 0x1 as i32
+            != (*ops).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize] & 0x1 as i32
         {
             crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
                 crate::src::cgame::cg_main::cgs.media.deniedSound,
@@ -677,8 +660,7 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
             );
         } else if (*ps).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
             & 0x2 as i32
-            != (*ops).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
-                & 0x2 as i32
+            != (*ops).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize] & 0x2 as i32
         {
             crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
                 crate::src::cgame::cg_main::cgs.media.humiliationSound,
@@ -686,8 +668,7 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
             );
         } else if (*ps).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
             & 0x4 as i32
-            != (*ops).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize]
-                & 0x4 as i32
+            != (*ops).persistant[crate::bg_public_h::PERS_PLAYEREVENTS as i32 as usize] & 0x4 as i32
         {
             crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
                 crate::src::cgame::cg_main::cgs.media.holyShitSound,
@@ -697,9 +678,7 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
         reward = crate::src::qcommon::q_shared::qtrue as i32
     }
     // check for flag pickup
-    if crate::src::cgame::cg_main::cgs.gametype as u32
-        > crate::bg_public_h::GT_TEAM as i32 as u32
-    {
+    if crate::src::cgame::cg_main::cgs.gametype as u32 > crate::bg_public_h::GT_TEAM as i32 as u32 {
         if (*ps).powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize]
             != (*ops).powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize]
             && (*ps).powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize] != 0
@@ -727,21 +706,17 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
                 if (crate::src::cgame::cg_main::cgs.gametype as u32)
                     < crate::bg_public_h::GT_TEAM as i32 as u32
                 {
-                    if (*ps).persistant[crate::bg_public_h::PERS_RANK as i32 as usize]
-                        == 0 as i32
-                    {
+                    if (*ps).persistant[crate::bg_public_h::PERS_RANK as i32 as usize] == 0 as i32 {
                         crate::src::cgame::cg_view::CG_AddBufferedSound(
                             crate::src::cgame::cg_main::cgs.media.takenLeadSound,
                         );
-                    } else if (*ps).persistant
-                        [crate::bg_public_h::PERS_RANK as i32 as usize]
+                    } else if (*ps).persistant[crate::bg_public_h::PERS_RANK as i32 as usize]
                         == 0x4000 as i32
                     {
                         crate::src::cgame::cg_view::CG_AddBufferedSound(
                             crate::src::cgame::cg_main::cgs.media.tiedLeadSound,
                         );
-                    } else if (*ops).persistant
-                        [crate::bg_public_h::PERS_RANK as i32 as usize]
+                    } else if (*ops).persistant[crate::bg_public_h::PERS_RANK as i32 as usize]
                         & !(0x4000 as i32)
                         == 0 as i32
                     {
@@ -759,20 +734,16 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
         msec = crate::src::cgame::cg_main::cg.time - crate::src::cgame::cg_main::cgs.levelStartTime;
         if crate::src::cgame::cg_main::cg.timelimitWarnings & 4 as i32 == 0
             && msec
-                > (crate::src::cgame::cg_main::cgs.timelimit * 60 as i32 + 2 as i32)
-                    * 1000 as i32
+                > (crate::src::cgame::cg_main::cgs.timelimit * 60 as i32 + 2 as i32) * 1000 as i32
         {
-            crate::src::cgame::cg_main::cg.timelimitWarnings |=
-                1 as i32 | 2 as i32 | 4 as i32;
+            crate::src::cgame::cg_main::cg.timelimitWarnings |= 1 as i32 | 2 as i32 | 4 as i32;
             crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
                 crate::src::cgame::cg_main::cgs.media.suddenDeathSound,
                 crate::src::qcommon::q_shared::CHAN_ANNOUNCER as i32,
             );
         } else if crate::src::cgame::cg_main::cg.timelimitWarnings & 2 as i32 == 0
             && msec
-                > (crate::src::cgame::cg_main::cgs.timelimit - 1 as i32)
-                    * 60 as i32
-                    * 1000 as i32
+                > (crate::src::cgame::cg_main::cgs.timelimit - 1 as i32) * 60 as i32 * 1000 as i32
         {
             crate::src::cgame::cg_main::cg.timelimitWarnings |= 1 as i32 | 2 as i32;
             crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
@@ -782,9 +753,7 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
         } else if crate::src::cgame::cg_main::cgs.timelimit > 5 as i32
             && crate::src::cgame::cg_main::cg.timelimitWarnings & 1 as i32 == 0
             && msec
-                > (crate::src::cgame::cg_main::cgs.timelimit - 5 as i32)
-                    * 60 as i32
-                    * 1000 as i32
+                > (crate::src::cgame::cg_main::cgs.timelimit - 5 as i32) * 60 as i32 * 1000 as i32
         {
             crate::src::cgame::cg_main::cg.timelimitWarnings |= 1 as i32;
             crate::src::cgame::cg_syscalls::trap_S_StartLocalSound(
@@ -808,8 +777,7 @@ pub unsafe extern "C" fn CG_CheckLocalSounds(
         if crate::src::cgame::cg_main::cg.fraglimitWarnings & 4 as i32 == 0
             && highScore == crate::src::cgame::cg_main::cgs.fraglimit - 1 as i32
         {
-            crate::src::cgame::cg_main::cg.fraglimitWarnings |=
-                1 as i32 | 2 as i32 | 4 as i32;
+            crate::src::cgame::cg_main::cg.fraglimitWarnings |= 1 as i32 | 2 as i32 | 4 as i32;
             crate::src::cgame::cg_view::CG_AddBufferedSound(
                 crate::src::cgame::cg_main::cgs.media.oneFragSound,
             );
@@ -1131,8 +1099,7 @@ pub unsafe extern "C" fn CG_TransitionPlayerState(
     CG_CheckPlayerstateEvents(ps, ops);
     // smooth the ducking viewheight change
     if (*ps).viewheight != (*ops).viewheight {
-        crate::src::cgame::cg_main::cg.duckChange =
-            ((*ps).viewheight - (*ops).viewheight) as f32;
+        crate::src::cgame::cg_main::cg.duckChange = ((*ps).viewheight - (*ops).viewheight) as f32;
         crate::src::cgame::cg_main::cg.duckTime = crate::src::cgame::cg_main::cg.time
     };
 }

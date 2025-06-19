@@ -152,20 +152,18 @@ pub unsafe extern "C" fn silk_resampler_down2(
             << 10 as i32) as crate::opus_types_h::opus_int32;
         /* All-pass section for even input sample */
         Y = in32 - *S.offset(0 as i32 as isize);
-        X = (Y as i64
-            + (Y as i64 * silk_resampler_down2_1 as i64
-                >> 16 as i32)) as crate::opus_types_h::opus_int32;
+        X = (Y as i64 + (Y as i64 * silk_resampler_down2_1 as i64 >> 16 as i32))
+            as crate::opus_types_h::opus_int32;
         out32 = *S.offset(0 as i32 as isize) + X;
         *S.offset(0 as i32 as isize) = in32 + X;
         /* Convert to Q10 */
-        in32 = ((*in_0.offset((2 as i32 * k + 1 as i32) as isize)
-            as crate::opus_types_h::opus_int32
+        in32 = ((*in_0.offset((2 as i32 * k + 1 as i32) as isize) as crate::opus_types_h::opus_int32
             as crate::opus_types_h::opus_uint32)
             << 10 as i32) as crate::opus_types_h::opus_int32;
         /* All-pass section for odd input sample, and add to output of previous section */
         Y = in32 - *S.offset(1 as i32 as isize);
-        X = (Y as i64 * silk_resampler_down2_0 as i64
-            >> 16 as i32) as crate::opus_types_h::opus_int32;
+        X = (Y as i64 * silk_resampler_down2_0 as i64 >> 16 as i32)
+            as crate::opus_types_h::opus_int32;
         out32 = out32 + *S.offset(1 as i32 as isize);
         out32 = out32 + X;
         *S.offset(1 as i32 as isize) = in32 + X;

@@ -232,10 +232,9 @@ pub unsafe extern "C" fn CG_InitMarkPolys() {
     cg_freeMarkPolys = cg_markPolys.as_mut_ptr();
     i = 0 as i32;
     while i < 256 as i32 - 1 as i32 {
-        cg_markPolys[i as usize].nextMark = &mut *cg_markPolys
-            .as_mut_ptr()
-            .offset((i + 1 as i32) as isize)
-            as *mut crate::cg_local_h::markPoly_t;
+        cg_markPolys[i as usize].nextMark =
+            &mut *cg_markPolys.as_mut_ptr().offset((i + 1 as i32) as isize)
+                as *mut crate::cg_local_h::markPoly_t;
         i += 1
     }
 }
@@ -337,10 +336,7 @@ pub unsafe extern "C" fn CG_ImpactMark(
     //	return;
     //}
     // create the texture axis
-    crate::src::qcommon::q_math::VectorNormalize2(
-        dir,
-        axis[0 as i32 as usize].as_mut_ptr(),
-    );
+    crate::src::qcommon::q_math::VectorNormalize2(dir, axis[0 as i32 as usize].as_mut_ptr());
     crate::src::qcommon::q_math::PerpendicularVector(
         axis[1 as i32 as usize].as_mut_ptr(),
         axis[0 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -375,12 +371,9 @@ pub unsafe extern "C" fn CG_ImpactMark(
         i += 1
     }
     // get the fragments
-    projection[0 as i32 as usize] =
-        *dir.offset(0 as i32 as isize) * -(20 as i32) as f32;
-    projection[1 as i32 as usize] =
-        *dir.offset(1 as i32 as isize) * -(20 as i32) as f32;
-    projection[2 as i32 as usize] =
-        *dir.offset(2 as i32 as isize) * -(20 as i32) as f32;
+    projection[0 as i32 as usize] = *dir.offset(0 as i32 as isize) * -(20 as i32) as f32;
+    projection[1 as i32 as usize] = *dir.offset(1 as i32 as isize) * -(20 as i32) as f32;
+    projection[2 as i32 as usize] = *dir.offset(2 as i32 as isize) * -(20 as i32) as f32;
     numFragments = crate::src::cgame::cg_syscalls::trap_CM_MarkFragments(
         4 as i32,
         originalPoints.as_mut_ptr() as *mut libc::c_void
@@ -391,14 +384,10 @@ pub unsafe extern "C" fn CG_ImpactMark(
         128 as i32,
         markFragments.as_mut_ptr() as *mut crate::src::qcommon::q_shared::markFragment_t,
     );
-    colors[0 as i32 as usize] =
-        (red * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    colors[1 as i32 as usize] =
-        (green * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    colors[2 as i32 as usize] =
-        (blue * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
-    colors[3 as i32 as usize] =
-        (alpha * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
+    colors[0 as i32 as usize] = (red * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
+    colors[1 as i32 as usize] = (green * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
+    colors[2 as i32 as usize] = (blue * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
+    colors[3 as i32 as usize] = (alpha * 255 as i32 as f32) as crate::src::qcommon::q_shared::byte;
     i = 0 as i32;
     mf = markFragments.as_mut_ptr();
     while i < numFragments {
@@ -431,25 +420,16 @@ pub unsafe extern "C" fn CG_ImpactMark(
             delta[2 as i32 as usize] =
                 (*v).xyz[2 as i32 as usize] - *origin.offset(2 as i32 as isize);
             (*v).st[0 as i32 as usize] = (0.5f64
-                + ((delta[0 as i32 as usize]
-                    * axis[1 as i32 as usize][0 as i32 as usize]
-                    + delta[1 as i32 as usize]
-                        * axis[1 as i32 as usize][1 as i32 as usize]
-                    + delta[2 as i32 as usize]
-                        * axis[1 as i32 as usize][2 as i32 as usize])
-                    * texCoordScale) as f64)
-                as f32;
+                + ((delta[0 as i32 as usize] * axis[1 as i32 as usize][0 as i32 as usize]
+                    + delta[1 as i32 as usize] * axis[1 as i32 as usize][1 as i32 as usize]
+                    + delta[2 as i32 as usize] * axis[1 as i32 as usize][2 as i32 as usize])
+                    * texCoordScale) as f64) as f32;
             (*v).st[1 as i32 as usize] = (0.5f64
-                + ((delta[0 as i32 as usize]
-                    * axis[2 as i32 as usize][0 as i32 as usize]
-                    + delta[1 as i32 as usize]
-                        * axis[2 as i32 as usize][1 as i32 as usize]
-                    + delta[2 as i32 as usize]
-                        * axis[2 as i32 as usize][2 as i32 as usize])
-                    * texCoordScale) as f64)
-                as f32;
-            *((*v).modulate.as_mut_ptr() as *mut i32) =
-                *(colors.as_mut_ptr() as *mut i32);
+                + ((delta[0 as i32 as usize] * axis[2 as i32 as usize][0 as i32 as usize]
+                    + delta[1 as i32 as usize] * axis[2 as i32 as usize][1 as i32 as usize]
+                    + delta[2 as i32 as usize] * axis[2 as i32 as usize][2 as i32 as usize])
+                    * texCoordScale) as f64) as f32;
+            *((*v).modulate.as_mut_ptr() as *mut i32) = *(colors.as_mut_ptr() as *mut i32);
             j += 1;
             v = v.offset(1)
         }
@@ -739,15 +719,13 @@ pub unsafe extern "C" fn CG_AddMarks() {
             if (*mp).markShader == crate::src::cgame::cg_main::cgs.media.energyMarkShader {
                 fade = (450 as i32 as f64
                     - 450 as i32 as f64
-                        * ((crate::src::cgame::cg_main::cg.time - (*mp).time) as f64
-                            / 3000.0f64)) as i32;
+                        * ((crate::src::cgame::cg_main::cg.time - (*mp).time) as f64 / 3000.0f64))
+                    as i32;
                 if fade < 255 as i32 {
                     if fade < 0 as i32 {
                         fade = 0 as i32
                     }
-                    if (*mp).verts[0 as i32 as usize].modulate[0 as i32 as usize]
-                        as i32
-                        != 0 as i32
+                    if (*mp).verts[0 as i32 as usize].modulate[0 as i32 as usize] as i32 != 0 as i32
                     {
                         j = 0 as i32;
                         while j < (*mp).poly.numVerts {

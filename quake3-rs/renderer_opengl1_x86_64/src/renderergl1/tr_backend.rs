@@ -642,25 +642,19 @@ pub unsafe extern "C" fn GL_BindMultitexture(
         texnum1 = (*crate::src::renderergl1::tr_main::tr.dlightImage).texnum as i32;
         texnum0 = texnum1
     }
-    if crate::src::renderergl1::tr_init::glState.currenttextures[1 as i32 as usize]
-        != texnum1
-    {
+    if crate::src::renderergl1::tr_init::glState.currenttextures[1 as i32 as usize] != texnum1 {
         GL_SelectTexture(1 as i32);
         (*image1).frameUsed = crate::src::renderergl1::tr_main::tr.frameCount;
-        crate::src::renderergl1::tr_init::glState.currenttextures[1 as i32 as usize] =
-            texnum1;
+        crate::src::renderergl1::tr_init::glState.currenttextures[1 as i32 as usize] = texnum1;
         crate::src::sdl::sdl_glimp::qglBindTexture.expect("non-null function pointer")(
             0xde1 as i32 as crate::stdlib::GLenum,
             texnum1 as crate::stdlib::GLuint,
         );
     }
-    if crate::src::renderergl1::tr_init::glState.currenttextures[0 as i32 as usize]
-        != texnum0
-    {
+    if crate::src::renderergl1::tr_init::glState.currenttextures[0 as i32 as usize] != texnum0 {
         GL_SelectTexture(0 as i32);
         (*image0).frameUsed = crate::src::renderergl1::tr_main::tr.frameCount;
-        crate::src::renderergl1::tr_init::glState.currenttextures[0 as i32 as usize] =
-            texnum0;
+        crate::src::renderergl1::tr_init::glState.currenttextures[0 as i32 as usize] = texnum0;
         crate::src::sdl::sdl_glimp::qglBindTexture.expect("non-null function pointer")(
             0xde1 as i32 as crate::stdlib::GLenum,
             texnum0 as crate::stdlib::GLuint,
@@ -690,8 +684,7 @@ pub unsafe extern "C" fn GL_Cull(mut cullType: i32) {
         cullFront = (cullType == crate::tr_local_h::CT_FRONT_SIDED as i32) as i32
             as crate::src::qcommon::q_shared::qboolean;
         if backEnd.viewParms.isMirror as u64 != 0 {
-            cullFront =
-                (cullFront as u64 == 0) as i32 as crate::src::qcommon::q_shared::qboolean
+            cullFront = (cullFront as u64 == 0) as i32 as crate::src::qcommon::q_shared::qboolean
         }
         crate::src::sdl::sdl_glimp::qglCullFace.expect("non-null function pointer")(if cullFront
             as u32
@@ -1042,12 +1035,9 @@ pub unsafe extern "C" fn RB_BeginDrawingView() {
     if backEnd.viewParms.isPortal as u64 != 0 {
         let mut plane: [f32; 4] = [0.; 4];
         let mut plane2: [crate::stdlib::GLdouble; 4] = [0.; 4];
-        plane[0 as i32 as usize] =
-            backEnd.viewParms.portalPlane.normal[0 as i32 as usize];
-        plane[1 as i32 as usize] =
-            backEnd.viewParms.portalPlane.normal[1 as i32 as usize];
-        plane[2 as i32 as usize] =
-            backEnd.viewParms.portalPlane.normal[2 as i32 as usize];
+        plane[0 as i32 as usize] = backEnd.viewParms.portalPlane.normal[0 as i32 as usize];
+        plane[1 as i32 as usize] = backEnd.viewParms.portalPlane.normal[1 as i32 as usize];
+        plane[2 as i32 as usize] = backEnd.viewParms.portalPlane.normal[2 as i32 as usize];
         plane[3 as i32 as usize] = backEnd.viewParms.portalPlane.dist;
         plane2[0 as i32 as usize] =
             (backEnd.viewParms.or.axis[0 as i32 as usize][0 as i32 as usize]
@@ -1070,14 +1060,11 @@ pub unsafe extern "C" fn RB_BeginDrawingView() {
                     * plane[1 as i32 as usize]
                 + backEnd.viewParms.or.axis[2 as i32 as usize][2 as i32 as usize]
                     * plane[2 as i32 as usize]) as crate::stdlib::GLdouble;
-        plane2[3 as i32 as usize] = (plane[0 as i32 as usize]
-            * backEnd.viewParms.or.origin[0 as i32 as usize]
-            + plane[1 as i32 as usize]
-                * backEnd.viewParms.or.origin[1 as i32 as usize]
-            + plane[2 as i32 as usize]
-                * backEnd.viewParms.or.origin[2 as i32 as usize]
-            - plane[3 as i32 as usize])
-            as crate::stdlib::GLdouble;
+        plane2[3 as i32 as usize] =
+            (plane[0 as i32 as usize] * backEnd.viewParms.or.origin[0 as i32 as usize]
+                + plane[1 as i32 as usize] * backEnd.viewParms.or.origin[1 as i32 as usize]
+                + plane[2 as i32 as usize] * backEnd.viewParms.or.origin[2 as i32 as usize]
+                - plane[3 as i32 as usize]) as crate::stdlib::GLdouble;
         crate::src::sdl::sdl_glimp::qglLoadMatrixf.expect("non-null function pointer")(
             s_flipMatrix.as_mut_ptr(),
         );
@@ -1610,17 +1597,13 @@ pub unsafe extern "C" fn RB_SetColor(mut data: *const libc::c_void) -> *const li
     let mut cmd: *const crate::tr_local_h::setColorCommand_t =
         0 as *const crate::tr_local_h::setColorCommand_t;
     cmd = data as *const crate::tr_local_h::setColorCommand_t;
-    backEnd.color2D[0 as i32 as usize] = ((*cmd).color[0 as i32 as usize]
-        * 255 as i32 as f32)
+    backEnd.color2D[0 as i32 as usize] = ((*cmd).color[0 as i32 as usize] * 255 as i32 as f32)
         as crate::src::qcommon::q_shared::byte;
-    backEnd.color2D[1 as i32 as usize] = ((*cmd).color[1 as i32 as usize]
-        * 255 as i32 as f32)
+    backEnd.color2D[1 as i32 as usize] = ((*cmd).color[1 as i32 as usize] * 255 as i32 as f32)
         as crate::src::qcommon::q_shared::byte;
-    backEnd.color2D[2 as i32 as usize] = ((*cmd).color[2 as i32 as usize]
-        * 255 as i32 as f32)
+    backEnd.color2D[2 as i32 as usize] = ((*cmd).color[2 as i32 as usize] * 255 as i32 as f32)
         as crate::src::qcommon::q_shared::byte;
-    backEnd.color2D[3 as i32 as usize] = ((*cmd).color[3 as i32 as usize]
-        * 255 as i32 as f32)
+    backEnd.color2D[3 as i32 as usize] = ((*cmd).color[3 as i32 as usize] * 255 as i32 as f32)
         as crate::src::qcommon::q_shared::byte;
     return cmd.offset(1 as i32 as isize) as *const libc::c_void;
 }
@@ -1653,8 +1636,7 @@ pub unsafe extern "C" fn RB_StretchPic(mut data: *const libc::c_void) -> *const 
         );
     }
     if crate::src::renderergl1::tr_shade::tess.numVertexes + 4 as i32 >= 1000 as i32
-        || crate::src::renderergl1::tr_shade::tess.numIndexes + 6 as i32
-            >= 6 as i32 * 1000 as i32
+        || crate::src::renderergl1::tr_shade::tess.numIndexes + 6 as i32 >= 6 as i32 * 1000 as i32
     {
         crate::src::renderergl1::tr_surface::RB_CheckOverflow(4 as i32, 6 as i32);
     }
@@ -1688,16 +1670,14 @@ pub unsafe extern "C" fn RB_StretchPic(mut data: *const libc::c_void) -> *const 
     *fresh2 = *fresh1;
     *(crate::src::renderergl1::tr_shade::tess.vertexColors[numVerts as usize].as_mut_ptr()
         as *mut i32) = *fresh2;
-    crate::src::renderergl1::tr_shade::tess.xyz[numVerts as usize][0 as i32 as usize] =
-        (*cmd).x;
-    crate::src::renderergl1::tr_shade::tess.xyz[numVerts as usize][1 as i32 as usize] =
-        (*cmd).y;
+    crate::src::renderergl1::tr_shade::tess.xyz[numVerts as usize][0 as i32 as usize] = (*cmd).x;
+    crate::src::renderergl1::tr_shade::tess.xyz[numVerts as usize][1 as i32 as usize] = (*cmd).y;
     crate::src::renderergl1::tr_shade::tess.xyz[numVerts as usize][2 as i32 as usize] =
         0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    crate::src::renderergl1::tr_shade::tess.texCoords[numVerts as usize]
-        [0 as i32 as usize][0 as i32 as usize] = (*cmd).s1;
-    crate::src::renderergl1::tr_shade::tess.texCoords[numVerts as usize]
-        [0 as i32 as usize][1 as i32 as usize] = (*cmd).t1;
+    crate::src::renderergl1::tr_shade::tess.texCoords[numVerts as usize][0 as i32 as usize]
+        [0 as i32 as usize] = (*cmd).s1;
+    crate::src::renderergl1::tr_shade::tess.texCoords[numVerts as usize][0 as i32 as usize]
+        [1 as i32 as usize] = (*cmd).t1;
     crate::src::renderergl1::tr_shade::tess.xyz[(numVerts + 1 as i32) as usize]
         [0 as i32 as usize] = (*cmd).x + (*cmd).w;
     crate::src::renderergl1::tr_shade::tess.xyz[(numVerts + 1 as i32) as usize]
@@ -1814,10 +1794,8 @@ pub unsafe extern "C" fn RB_ShowImages() {
     i = 0 as i32;
     while i < crate::src::renderergl1::tr_main::tr.numImages {
         image = crate::src::renderergl1::tr_main::tr.images[i as usize];
-        w = (crate::src::renderergl1::tr_init::glConfig.vidWidth / 20 as i32)
-            as f32;
-        h = (crate::src::renderergl1::tr_init::glConfig.vidHeight / 15 as i32)
-            as f32;
+        w = (crate::src::renderergl1::tr_init::glConfig.vidWidth / 20 as i32) as f32;
+        h = (crate::src::renderergl1::tr_init::glConfig.vidHeight / 15 as i32) as f32;
         x = (i % 20 as i32) as f32 * w;
         y = (i / 20 as i32) as f32 * h;
         // show in proportional size in mode 2
@@ -2400,8 +2378,7 @@ pub unsafe extern "C" fn RB_ExecuteRenderCommands(mut data: *const libc::c_void)
             .wrapping_add(::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong)
             .wrapping_sub(1 as i32 as libc::c_ulong)
             & !(::std::mem::size_of::<*mut libc::c_void>() as libc::c_ulong)
-                .wrapping_sub(1 as i32 as libc::c_ulong))
-            as *mut libc::c_void;
+                .wrapping_sub(1 as i32 as libc::c_ulong)) as *mut libc::c_void;
         match *(data as *const i32) {
             1 => data = RB_SetColor(data),
             2 => data = RB_StretchPic(data),

@@ -45,12 +45,10 @@ pub unsafe extern "C" fn Huff_putBit(
 ) {
     bloc = *offset;
     if bloc & 7 as i32 == 0 as i32 {
-        *fout.offset((bloc >> 3 as i32) as isize) =
-            0 as i32 as crate::src::qcommon::q_shared::byte
+        *fout.offset((bloc >> 3 as i32) as isize) = 0 as i32 as crate::src::qcommon::q_shared::byte
     }
     let ref mut fresh0 = *fout.offset((bloc >> 3 as i32) as isize);
-    *fresh0 = (*fresh0 as i32 | bit << (bloc & 7 as i32))
-        as crate::src::qcommon::q_shared::byte;
+    *fresh0 = (*fresh0 as i32 | bit << (bloc & 7 as i32)) as crate::src::qcommon::q_shared::byte;
     bloc += 1;
     *offset = bloc;
 }
@@ -73,9 +71,7 @@ pub unsafe extern "C" fn Huff_getBit(
 ) -> i32 {
     let mut t: i32 = 0;
     bloc = *offset;
-    t = *fin.offset((bloc >> 3 as i32) as isize) as i32
-        >> (bloc & 7 as i32)
-        & 0x1 as i32;
+    t = *fin.offset((bloc >> 3 as i32) as isize) as i32 >> (bloc & 7 as i32) & 0x1 as i32;
     bloc += 1;
     *offset = bloc;
     return t;
@@ -87,21 +83,18 @@ unsafe extern "C" fn add_bit(
     mut fout: *mut crate::src::qcommon::q_shared::byte,
 ) {
     if bloc & 7 as i32 == 0 as i32 {
-        *fout.offset((bloc >> 3 as i32) as isize) =
-            0 as i32 as crate::src::qcommon::q_shared::byte
+        *fout.offset((bloc >> 3 as i32) as isize) = 0 as i32 as crate::src::qcommon::q_shared::byte
     }
     let ref mut fresh1 = *fout.offset((bloc >> 3 as i32) as isize);
-    *fresh1 = (*fresh1 as i32 | (bit as i32) << (bloc & 7 as i32))
-        as crate::src::qcommon::q_shared::byte;
+    *fresh1 =
+        (*fresh1 as i32 | (bit as i32) << (bloc & 7 as i32)) as crate::src::qcommon::q_shared::byte;
     bloc += 1;
 }
 /* Receive one bit from the input file (buffered) */
 
 unsafe extern "C" fn get_bit(mut fin: *mut crate::src::qcommon::q_shared::byte) -> i32 {
     let mut t: i32 = 0;
-    t = *fin.offset((bloc >> 3 as i32) as isize) as i32
-        >> (bloc & 7 as i32)
-        & 0x1 as i32;
+    t = *fin.offset((bloc >> 3 as i32) as isize) as i32 >> (bloc & 7 as i32) & 0x1 as i32;
     bloc += 1;
     return t;
 }
@@ -433,10 +426,7 @@ pub unsafe extern "C" fn Huff_offsetTransmit(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn Huff_Decompress(
-    mut mbuf: *mut crate::qcommon_h::msg_t,
-    mut offset: i32,
-) {
+pub unsafe extern "C" fn Huff_Decompress(mut mbuf: *mut crate::qcommon_h::msg_t, mut offset: i32) {
     let mut ch: i32 = 0;
     let mut cch: i32 = 0;
     let mut i: i32 = 0;
@@ -531,10 +521,7 @@ pub unsafe extern "C" fn Huff_Decompress(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn Huff_Compress(
-    mut mbuf: *mut crate::qcommon_h::msg_t,
-    mut offset: i32,
-) {
+pub unsafe extern "C" fn Huff_Compress(mut mbuf: *mut crate::qcommon_h::msg_t, mut offset: i32) {
     let mut i: i32 = 0;
     let mut ch: i32 = 0;
     let mut size: i32 = 0;
@@ -585,10 +572,8 @@ pub unsafe extern "C" fn Huff_Compress(
     (*huff.tree).right = 0 as *mut crate::qcommon_h::nodetype;
     (*huff.tree).left = (*huff.tree).right;
     (*huff.tree).parent = (*huff.tree).left;
-    seq[0 as i32 as usize] =
-        (size >> 8 as i32) as crate::src::qcommon::q_shared::byte;
-    seq[1 as i32 as usize] =
-        (size & 0xff as i32) as crate::src::qcommon::q_shared::byte;
+    seq[0 as i32 as usize] = (size >> 8 as i32) as crate::src::qcommon::q_shared::byte;
+    seq[1 as i32 as usize] = (size & 0xff as i32) as crate::src::qcommon::q_shared::byte;
     bloc = 16 as i32;
     i = 0 as i32;
     while i < size {

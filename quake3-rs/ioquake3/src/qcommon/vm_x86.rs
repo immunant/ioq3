@@ -154,16 +154,14 @@ static mut jlabel: i32 = 0;
 static mut LastCommand: ELastCommand = LAST_COMMAND_NONE;
 
 unsafe extern "C" fn iss8(mut v: crate::stdlib::int32_t) -> i32 {
-    return (-(127 as i32) - 1 as i32 <= v && v <= 127 as i32)
-        as i32;
+    return (-(127 as i32) - 1 as i32 <= v && v <= 127 as i32) as i32;
 }
 
 unsafe extern "C" fn NextConstant4() -> i32 {
     return (*code.offset(pc as isize) as u32
         | (*code.offset((pc + 1 as i32) as isize) as u32) << 8 as i32
         | (*code.offset((pc + 2 as i32) as isize) as u32) << 16 as i32
-        | (*code.offset((pc + 3 as i32) as isize) as u32) << 24 as i32)
-        as i32;
+        | (*code.offset((pc + 3 as i32) as isize) as u32) << 24 as i32) as i32;
 }
 
 unsafe extern "C" fn Constant4() -> i32 {
@@ -279,8 +277,7 @@ unsafe extern "C" fn EmitPushStack(mut vm: *mut crate::qcommon_h::vm_t) {
             compiledOfs -= 3 as i32;
             *(*vm)
                 .instructionPointers
-                .offset((instruction - 1 as i32) as isize) =
-                compiledOfs as crate::stdlib::intptr_t;
+                .offset((instruction - 1 as i32) as isize) = compiledOfs as crate::stdlib::intptr_t;
             return;
         }
         if LastCommand as u32 == LAST_COMMAND_SUB_BL_2 as i32 as u32 {
@@ -288,8 +285,7 @@ unsafe extern "C" fn EmitPushStack(mut vm: *mut crate::qcommon_h::vm_t) {
             compiledOfs -= 3 as i32; //	sub bl, 1
             *(*vm)
                 .instructionPointers
-                .offset((instruction - 1 as i32) as isize) =
-                compiledOfs as crate::stdlib::intptr_t;
+                .offset((instruction - 1 as i32) as isize) = compiledOfs as crate::stdlib::intptr_t;
             EmitString(b"80 EB\x00" as *const u8 as *const libc::c_char);
             Emit1(1 as i32);
             return;
@@ -302,29 +298,23 @@ unsafe extern "C" fn EmitPushStack(mut vm: *mut crate::qcommon_h::vm_t) {
 
 unsafe extern "C" fn EmitMovEAXStack(mut vm: *mut crate::qcommon_h::vm_t, mut andit: i32) {
     if jlabel == 0 {
-        if LastCommand as u32 == LAST_COMMAND_MOV_STACK_EAX as i32 as u32
-        {
+        if LastCommand as u32 == LAST_COMMAND_MOV_STACK_EAX as i32 as u32 {
             // mov eax, dword ptr [edi + ebx * 4]
             // mov [edi + ebx * 4], eax
             compiledOfs -= 3 as i32;
             *(*vm)
                 .instructionPointers
-                .offset((instruction - 1 as i32) as isize) =
-                compiledOfs as crate::stdlib::intptr_t
+                .offset((instruction - 1 as i32) as isize) = compiledOfs as crate::stdlib::intptr_t
         } else if pop1 == crate::vm_local_h::OP_CONST as i32
-            && *buf.offset((compiledOfs - 7 as i32) as isize) as i32
-                == 0xc7 as i32
-            && *buf.offset((compiledOfs - 6 as i32) as isize) as i32
-                == 0x4 as i32
-            && *buf.offset((compiledOfs - 5 as i32) as isize) as i32
-                == 0x9f as i32
+            && *buf.offset((compiledOfs - 7 as i32) as isize) as i32 == 0xc7 as i32
+            && *buf.offset((compiledOfs - 6 as i32) as isize) as i32 == 0x4 as i32
+            && *buf.offset((compiledOfs - 5 as i32) as isize) as i32 == 0x9f as i32
         {
             // mov [edi + ebx * 4], 0x12345678
             compiledOfs -= 7 as i32; // mov	eax, 0x12345678
             *(*vm)
                 .instructionPointers
-                .offset((instruction - 1 as i32) as isize) =
-                compiledOfs as crate::stdlib::intptr_t;
+                .offset((instruction - 1 as i32) as isize) = compiledOfs as crate::stdlib::intptr_t;
             EmitString(b"B8\x00" as *const u8 as *const libc::c_char);
             if andit != 0 {
                 Emit4(lastConst & andit);
@@ -357,14 +347,12 @@ unsafe extern "C" fn EmitMovEAXStack(mut vm: *mut crate::qcommon_h::vm_t, mut an
 
 pub unsafe extern "C" fn EmitMovECXStack(mut vm: *mut crate::qcommon_h::vm_t) {
     if jlabel == 0 {
-        if LastCommand as u32 == LAST_COMMAND_MOV_STACK_EAX as i32 as u32
-        {
+        if LastCommand as u32 == LAST_COMMAND_MOV_STACK_EAX as i32 as u32 {
             // mov [edi + ebx * 4], eax
             compiledOfs -= 3 as i32; // mov ecx, eax
             *(*vm)
                 .instructionPointers
-                .offset((instruction - 1 as i32) as isize) =
-                compiledOfs as crate::stdlib::intptr_t; // mov ecx, eax
+                .offset((instruction - 1 as i32) as isize) = compiledOfs as crate::stdlib::intptr_t; // mov ecx, eax
             EmitString(b"89 C1\x00" as *const u8 as *const libc::c_char);
             return;
         }
@@ -385,20 +373,15 @@ pub unsafe extern "C" fn EmitMovECXStack(mut vm: *mut crate::qcommon_h::vm_t) {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn EmitMovEDXStack(
-    mut vm: *mut crate::qcommon_h::vm_t,
-    mut andit: i32,
-) {
+pub unsafe extern "C" fn EmitMovEDXStack(mut vm: *mut crate::qcommon_h::vm_t, mut andit: i32) {
     if jlabel == 0 {
-        if LastCommand as u32 == LAST_COMMAND_MOV_STACK_EAX as i32 as u32
-        {
+        if LastCommand as u32 == LAST_COMMAND_MOV_STACK_EAX as i32 as u32 {
             // mov edx, dword ptr [edi + ebx * 4]
             // mov dword ptr [edi + ebx * 4], eax
             compiledOfs -= 3 as i32;
             *(*vm)
                 .instructionPointers
-                .offset((instruction - 1 as i32) as isize) =
-                compiledOfs as crate::stdlib::intptr_t;
+                .offset((instruction - 1 as i32) as isize) = compiledOfs as crate::stdlib::intptr_t;
             EmitString(b"8B D0\x00" as *const u8 as *const libc::c_char);
         // mov edx, eax
         } else if pop1 == crate::vm_local_h::OP_DIVI as i32
@@ -412,19 +395,15 @@ pub unsafe extern "C" fn EmitMovEDXStack(
             EmitString(b"8B D0\x00" as *const u8 as *const libc::c_char);
         // mov edx, eax
         } else if pop1 == crate::vm_local_h::OP_CONST as i32
-            && *buf.offset((compiledOfs - 7 as i32) as isize) as i32
-                == 0xc7 as i32
-            && *buf.offset((compiledOfs - 6 as i32) as isize) as i32
-                == 0x7 as i32
-            && *buf.offset((compiledOfs - 5 as i32) as isize) as i32
-                == 0x9f as i32
+            && *buf.offset((compiledOfs - 7 as i32) as isize) as i32 == 0xc7 as i32
+            && *buf.offset((compiledOfs - 6 as i32) as isize) as i32 == 0x7 as i32
+            && *buf.offset((compiledOfs - 5 as i32) as isize) as i32 == 0x9f as i32
         {
             // mov dword ptr [edi + ebx * 4], 0x12345678
             compiledOfs -= 7 as i32; // mov edx, 0x12345678
             *(*vm)
                 .instructionPointers
-                .offset((instruction - 1 as i32) as isize) =
-                compiledOfs as crate::stdlib::intptr_t;
+                .offset((instruction - 1 as i32) as isize) = compiledOfs as crate::stdlib::intptr_t;
             EmitString(b"BA\x00" as *const u8 as *const libc::c_char);
             if andit != 0 {
                 Emit4(lastConst & andit);
@@ -498,9 +477,7 @@ unsafe extern "C" fn DoSyscall() {
             .dataBase
             .offset(vm_programStack as isize)
             .offset(4 as i32 as isize) as *mut i32;
-        ret = &mut *vm_opStackBase
-            .offset((vm_opStackOfs as i32 + 1 as i32) as isize)
-            as *mut i32;
+        ret = &mut *vm_opStackBase.offset((vm_opStackOfs as i32 + 1 as i32) as isize) as *mut i32;
         args[0 as i32 as usize] = !vm_syscallNum as crate::stdlib::intptr_t;
         index = 1 as i32;
         while (index as libc::c_ulong)
@@ -510,8 +487,7 @@ unsafe extern "C" fn DoSyscall() {
             args[index as usize] = *data.offset(index as isize) as crate::stdlib::intptr_t;
             index += 1
         }
-        *ret = (*savedVM).systemCall.expect("non-null function pointer")(args.as_mut_ptr())
-            as i32
+        *ret = (*savedVM).systemCall.expect("non-null function pointer")(args.as_mut_ptr()) as i32
     } else {
         match vm_syscallNum {
             0 => {
@@ -526,9 +502,7 @@ unsafe extern "C" fn DoSyscall() {
                     );
                 }
                 crate::src::qcommon::vm::VM_BlockCopy(
-                    *vm_opStackBase
-                        .offset((vm_opStackOfs as i32 - 1 as i32) as isize)
-                        as u32,
+                    *vm_opStackBase.offset((vm_opStackOfs as i32 - 1 as i32) as isize) as u32,
                     *vm_opStackBase.offset(vm_opStackOfs as isize) as u32,
                     vm_arg as crate::stddef_h::size_t,
                 );
@@ -552,10 +526,7 @@ Relative call to vm->codeBase + callOfs
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn EmitCallRel(
-    mut _vm: *mut crate::qcommon_h::vm_t,
-    mut callOfs: i32,
-) {
+pub unsafe extern "C" fn EmitCallRel(mut _vm: *mut crate::qcommon_h::vm_t, mut callOfs: i32) {
     EmitString(b"E8\x00" as *const u8 as *const libc::c_char); // call 0x12345678
     Emit4(callOfs - compiledOfs - 4 as i32);
 }
@@ -655,10 +626,7 @@ Emit the code that triggers execution of the jump violation handler
 =================
 */
 
-unsafe extern "C" fn EmitCallErrJump(
-    mut vm: *mut crate::qcommon_h::vm_t,
-    mut sysCallOfs: i32,
-) {
+unsafe extern "C" fn EmitCallErrJump(mut vm: *mut crate::qcommon_h::vm_t, mut sysCallOfs: i32) {
     EmitString(b"B8\x00" as *const u8 as *const libc::c_char); // mov eax, 0x12345678
     Emit4(VM_JMP_VIOLATION as i32);
     EmitCallRel(vm, sysCallOfs);
@@ -814,10 +782,7 @@ Emits x86 branch condition as given in op
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn EmitBranchConditions(
-    mut vm: *mut crate::qcommon_h::vm_t,
-    mut op: i32,
-) {
+pub unsafe extern "C" fn EmitBranchConditions(mut vm: *mut crate::qcommon_h::vm_t, mut op: i32) {
     match op {
         11 => {
             EmitJumpIns(
@@ -1232,8 +1197,7 @@ pub unsafe extern "C" fn VM_Compile(
         ) as *mut i32))
             < 0 as i32
             || *((*vm).jumpTableTargets.offset(
-                (i as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
+                (i as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
                     as isize,
             ) as *mut i32)
                 >= (*vm).instructionCount
@@ -1249,8 +1213,7 @@ pub unsafe extern "C" fn VM_Compile(
         }
         *jused.offset(
             *((*vm).jumpTableTargets.offset(
-                (i as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
+                (i as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
                     as isize,
             ) as *mut i32) as isize,
         ) = 1 as i32 as crate::src::qcommon::q_shared::byte;
@@ -1317,9 +1280,7 @@ pub unsafe extern "C" fn VM_Compile(
                         EmitString(b"C7 04 9F\x00" as *const u8 as *const libc::c_char);
                         lastConst = Constant4();
                         Emit4(lastConst);
-                        if *code.offset(pc as isize) as i32
-                            == crate::vm_local_h::OP_JUMP as i32
-                        {
+                        if *code.offset(pc as isize) as i32 == crate::vm_local_h::OP_JUMP as i32 {
                             if lastConst < 0 as i32 || lastConst >= (*vm).instructionCount {
                                 crate::src::qcommon::common::Z_Free(buf as *mut libc::c_void);
                                 crate::src::qcommon::common::Z_Free(jused as *mut libc::c_void);
@@ -1374,8 +1335,7 @@ pub unsafe extern "C" fn VM_Compile(
                     EmitString(b"C3\x00" as *const u8 as *const libc::c_char);
                 }
                 29 => {
-                    if *code.offset(pc as isize) as i32
-                        == crate::vm_local_h::OP_CONST as i32
+                    if *code.offset(pc as isize) as i32 == crate::vm_local_h::OP_CONST as i32
                         && *code.offset((pc + 5 as i32) as isize) as i32
                             == crate::vm_local_h::OP_ADD as i32
                         && *code.offset((pc + 6 as i32) as isize) as i32
@@ -1437,8 +1397,7 @@ pub unsafe extern "C" fn VM_Compile(
                         pc += 1;
                         pc += 1;
                         instruction += 3 as i32
-                    } else if *code.offset(pc as isize) as i32
-                        == crate::vm_local_h::OP_CONST as i32
+                    } else if *code.offset(pc as isize) as i32 == crate::vm_local_h::OP_CONST as i32
                         && *code.offset((pc + 5 as i32) as isize) as i32
                             == crate::vm_local_h::OP_SUB as i32
                         && *code.offset((pc + 6 as i32) as isize) as i32
@@ -1500,12 +1459,9 @@ pub unsafe extern "C" fn VM_Compile(
                         pc += 1; // mov dword ptr [edi + ebx * 4], eax
                         pc += 1; // mov eax, dword ptr [r9 + eax]
                         instruction += 3 as i32
-                    } else if *buf.offset((compiledOfs - 3 as i32) as isize) as i32
-                        == 0x89 as i32
-                        && *buf.offset((compiledOfs - 2 as i32) as isize) as i32
-                            == 0x4 as i32
-                        && *buf.offset((compiledOfs - 1 as i32) as isize) as i32
-                            == 0x9f as i32
+                    } else if *buf.offset((compiledOfs - 3 as i32) as isize) as i32 == 0x89 as i32
+                        && *buf.offset((compiledOfs - 2 as i32) as isize) as i32 == 0x4 as i32
+                        && *buf.offset((compiledOfs - 1 as i32) as isize) as i32 == 0x9f as i32
                     {
                         compiledOfs -= 3 as i32; // mov dword ptr [edi + ebx * 4], eax
                         *(*vm)
@@ -1994,8 +1950,7 @@ pub unsafe extern "C" fn VM_CallCompiled(
     arg = 0 as i32;
     while arg < 13 as i32 {
         *(&mut *image.offset((programStack + 8 as i32 + arg * 4 as i32) as isize)
-            as *mut crate::src::qcommon::q_shared::byte as *mut i32) =
-            *args.offset(arg as isize);
+            as *mut crate::src::qcommon::q_shared::byte as *mut i32) = *args.offset(arg as isize);
         arg += 1
     }
     *(&mut *image.offset((programStack + 4 as i32) as isize)
@@ -2006,8 +1961,7 @@ pub unsafe extern "C" fn VM_CallCompiled(
     entryPoint = (*vm).codeBase.offset((*vm).entryOfs as isize) as *mut libc::c_void;
     opStack = (stack.as_mut_ptr() as crate::stdlib::intptr_t + 16 as i32 as libc::c_long
         - 1 as i32 as libc::c_long
-        & !(16 as i32 - 1 as i32) as libc::c_long)
-        as *mut libc::c_void as *mut i32;
+        & !(16 as i32 - 1 as i32) as libc::c_long) as *mut libc::c_void as *mut i32;
     *opStack = 0xdeadbeef as u32 as i32;
     opStackOfs = 0 as i32;
     asm!("movq $5, %rax\nmovq $3, %r8\nmovq $4, %r9\npush %r15\npush %r14\npush %r13\npush %r12\ncallq *%rax\npop %r12\npop %r13\npop %r14\npop %r15\n"

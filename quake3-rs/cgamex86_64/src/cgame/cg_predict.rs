@@ -24,8 +24,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -696,8 +695,7 @@ unsafe extern "C" fn CG_InterpolatePlayerState(
         i += 256 as i32
         // handle wraparound
     }
-    (*out).bobCycle = ((*prev).ps.bobCycle as f32
-        + f * (i - (*prev).ps.bobCycle) as f32) as i32;
+    (*out).bobCycle = ((*prev).ps.bobCycle as f32 + f * (i - (*prev).ps.bobCycle) as f32) as i32;
     i = 0 as i32;
     while i < 3 as i32 {
         (*out).origin[i as usize] = (*prev).ps.origin[i as usize]
@@ -756,15 +754,12 @@ unsafe extern "C" fn CG_TouchItem(mut cent: *mut crate::cg_local_h::centity_t) {
         as *mut crate::bg_public_h::gitem_t;
     // Special case for flags.
     // We don't predict touching our own flag
-    if crate::src::cgame::cg_main::cgs.gametype as u32
-        == crate::bg_public_h::GT_CTF as i32 as u32
-    {
+    if crate::src::cgame::cg_main::cgs.gametype as u32 == crate::bg_public_h::GT_CTF as i32 as u32 {
         if crate::src::cgame::cg_main::cg
             .predictedPlayerState
             .persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
             == crate::bg_public_h::TEAM_RED as i32
-            && (*item).giType as u32
-                == crate::bg_public_h::IT_TEAM as i32 as u32
+            && (*item).giType as u32 == crate::bg_public_h::IT_TEAM as i32 as u32
             && (*item).giTag == crate::bg_public_h::PW_REDFLAG as i32
         {
             return;
@@ -773,8 +768,7 @@ unsafe extern "C" fn CG_TouchItem(mut cent: *mut crate::cg_local_h::centity_t) {
             .predictedPlayerState
             .persistant[crate::bg_public_h::PERS_TEAM as i32 as usize]
             == crate::bg_public_h::TEAM_BLUE as i32
-            && (*item).giType as u32
-                == crate::bg_public_h::IT_TEAM as i32 as u32
+            && (*item).giType as u32 == crate::bg_public_h::IT_TEAM as i32 as u32
             && (*item).giTag == crate::bg_public_h::PW_BLUEFLAG as i32
         {
             return;
@@ -792,12 +786,9 @@ unsafe extern "C" fn CG_TouchItem(mut cent: *mut crate::cg_local_h::centity_t) {
     // don't touch it again this prediction
     (*cent).miscTime = crate::src::cgame::cg_main::cg.time;
     // if it's a weapon, give them some predicted ammo so the autoswitch will work
-    if (*item).giType as u32
-        == crate::bg_public_h::IT_WEAPON as i32 as u32
-    {
+    if (*item).giType as u32 == crate::bg_public_h::IT_WEAPON as i32 as u32 {
         crate::src::cgame::cg_main::cg.predictedPlayerState.stats
-            [crate::bg_public_h::STAT_WEAPONS as i32 as usize] |=
-            (1 as i32) << (*item).giTag;
+            [crate::bg_public_h::STAT_WEAPONS as i32 as usize] |= (1 as i32) << (*item).giTag;
         if crate::src::cgame::cg_main::cg.predictedPlayerState.ammo[(*item).giTag as usize] == 0 {
             crate::src::cgame::cg_main::cg.predictedPlayerState.ammo[(*item).giTag as usize] =
                 1 as i32
@@ -1267,14 +1258,10 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
     );
     cg_pmove.pointcontents = Some(
         CG_PointContents
-            as unsafe extern "C" fn(
-                _: *const crate::src::qcommon::q_shared::vec_t,
-                _: i32,
-            ) -> i32,
+            as unsafe extern "C" fn(_: *const crate::src::qcommon::q_shared::vec_t, _: i32) -> i32,
     );
     if (*cg_pmove.ps).pm_type == crate::bg_public_h::PM_DEAD as i32 {
-        cg_pmove.tracemask = (1 as i32 | 0x10000 as i32 | 0x2000000 as i32)
-            & !(0x2000000 as i32)
+        cg_pmove.tracemask = (1 as i32 | 0x10000 as i32 | 0x2000000 as i32) & !(0x2000000 as i32)
     } else {
         cg_pmove.tracemask = 1 as i32 | 0x10000 as i32 | 0x2000000 as i32
     }
@@ -1285,8 +1272,7 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
         cg_pmove.tracemask &= !(0x2000000 as i32)
         // spectators can fly through bodies
     }
-    cg_pmove.noFootsteps = (crate::src::cgame::cg_main::cgs.dmflags & 32 as i32
-        > 0 as i32) as i32
+    cg_pmove.noFootsteps = (crate::src::cgame::cg_main::cgs.dmflags & 32 as i32 > 0 as i32) as i32
         as crate::src::qcommon::q_shared::qboolean;
     // save the state before the pmove so we can detect transitions
     oldPlayerState = crate::src::cgame::cg_main::cg.predictedPlayerState;
@@ -1396,11 +1382,9 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
                         crate::src::cgame::cg_main::cg.predictedError[2 as i32 as usize] =
                             0 as i32 as crate::src::qcommon::q_shared::vec_t;
                         crate::src::cgame::cg_main::cg.predictedError[1 as i32 as usize] =
-                            crate::src::cgame::cg_main::cg.predictedError
-                                [2 as i32 as usize];
+                            crate::src::cgame::cg_main::cg.predictedError[2 as i32 as usize];
                         crate::src::cgame::cg_main::cg.predictedError[0 as i32 as usize] =
-                            crate::src::cgame::cg_main::cg.predictedError
-                                [1 as i32 as usize];
+                            crate::src::cgame::cg_main::cg.predictedError[1 as i32 as usize];
                         if crate::src::cgame::cg_main::cg_showmiss.integer != 0 {
                             crate::src::cgame::cg_main::CG_Printf(
                                 b"PredictionTeleport\n\x00" as *const u8 as *const libc::c_char,
@@ -1442,15 +1426,12 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
                                 );
                             }
                         }
-                        delta[0 as i32 as usize] = oldPlayerState.origin
-                            [0 as i32 as usize]
-                            - adjusted[0 as i32 as usize];
-                        delta[1 as i32 as usize] = oldPlayerState.origin
-                            [1 as i32 as usize]
-                            - adjusted[1 as i32 as usize];
-                        delta[2 as i32 as usize] = oldPlayerState.origin
-                            [2 as i32 as usize]
-                            - adjusted[2 as i32 as usize];
+                        delta[0 as i32 as usize] =
+                            oldPlayerState.origin[0 as i32 as usize] - adjusted[0 as i32 as usize];
+                        delta[1 as i32 as usize] =
+                            oldPlayerState.origin[1 as i32 as usize] - adjusted[1 as i32 as usize];
+                        delta[2 as i32 as usize] =
+                            oldPlayerState.origin[2 as i32 as usize] - adjusted[2 as i32 as usize];
                         len = VectorLength(
                             delta.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                         );
@@ -1467,8 +1448,7 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
                                 let mut f: f32 = 0.;
                                 t = crate::src::cgame::cg_main::cg.time
                                     - crate::src::cgame::cg_main::cg.predictedErrorTime;
-                                f = (crate::src::cgame::cg_main::cg_errorDecay.value
-                                    - t as f32)
+                                f = (crate::src::cgame::cg_main::cg_errorDecay.value - t as f32)
                                     / crate::src::cgame::cg_main::cg_errorDecay.value;
                                 if f < 0 as i32 as f32 {
                                     f = 0 as i32 as f32
@@ -1482,41 +1462,35 @@ pub unsafe extern "C" fn CG_PredictPlayerState() {
                                         f as f64,
                                     );
                                 }
-                                crate::src::cgame::cg_main::cg.predictedError
-                                    [0 as i32 as usize] = crate::src::cgame::cg_main::cg
-                                    .predictedError[0 as i32 as usize]
-                                    * f;
-                                crate::src::cgame::cg_main::cg.predictedError
-                                    [1 as i32 as usize] = crate::src::cgame::cg_main::cg
-                                    .predictedError[1 as i32 as usize]
-                                    * f;
-                                crate::src::cgame::cg_main::cg.predictedError
-                                    [2 as i32 as usize] = crate::src::cgame::cg_main::cg
-                                    .predictedError[2 as i32 as usize]
-                                    * f
+                                crate::src::cgame::cg_main::cg.predictedError[0 as i32 as usize] =
+                                    crate::src::cgame::cg_main::cg.predictedError
+                                        [0 as i32 as usize]
+                                        * f;
+                                crate::src::cgame::cg_main::cg.predictedError[1 as i32 as usize] =
+                                    crate::src::cgame::cg_main::cg.predictedError
+                                        [1 as i32 as usize]
+                                        * f;
+                                crate::src::cgame::cg_main::cg.predictedError[2 as i32 as usize] =
+                                    crate::src::cgame::cg_main::cg.predictedError[2 as i32 as usize]
+                                        * f
                             } else {
-                                crate::src::cgame::cg_main::cg.predictedError
-                                    [2 as i32 as usize] =
+                                crate::src::cgame::cg_main::cg.predictedError[2 as i32 as usize] =
                                     0 as i32 as crate::src::qcommon::q_shared::vec_t;
-                                crate::src::cgame::cg_main::cg.predictedError
-                                    [1 as i32 as usize] = crate::src::cgame::cg_main::cg
-                                    .predictedError[2 as i32 as usize];
-                                crate::src::cgame::cg_main::cg.predictedError
-                                    [0 as i32 as usize] = crate::src::cgame::cg_main::cg
-                                    .predictedError[1 as i32 as usize]
+                                crate::src::cgame::cg_main::cg.predictedError[1 as i32 as usize] =
+                                    crate::src::cgame::cg_main::cg.predictedError
+                                        [2 as i32 as usize];
+                                crate::src::cgame::cg_main::cg.predictedError[0 as i32 as usize] =
+                                    crate::src::cgame::cg_main::cg.predictedError[1 as i32 as usize]
                             }
-                            crate::src::cgame::cg_main::cg.predictedError
-                                [0 as i32 as usize] = delta[0 as i32 as usize]
-                                + crate::src::cgame::cg_main::cg.predictedError
-                                    [0 as i32 as usize];
-                            crate::src::cgame::cg_main::cg.predictedError
-                                [1 as i32 as usize] = delta[1 as i32 as usize]
-                                + crate::src::cgame::cg_main::cg.predictedError
-                                    [1 as i32 as usize];
-                            crate::src::cgame::cg_main::cg.predictedError
-                                [2 as i32 as usize] = delta[2 as i32 as usize]
-                                + crate::src::cgame::cg_main::cg.predictedError
-                                    [2 as i32 as usize];
+                            crate::src::cgame::cg_main::cg.predictedError[0 as i32 as usize] = delta
+                                [0 as i32 as usize]
+                                + crate::src::cgame::cg_main::cg.predictedError[0 as i32 as usize];
+                            crate::src::cgame::cg_main::cg.predictedError[1 as i32 as usize] = delta
+                                [1 as i32 as usize]
+                                + crate::src::cgame::cg_main::cg.predictedError[1 as i32 as usize];
+                            crate::src::cgame::cg_main::cg.predictedError[2 as i32 as usize] = delta
+                                [2 as i32 as usize]
+                                + crate::src::cgame::cg_main::cg.predictedError[2 as i32 as usize];
                             crate::src::cgame::cg_main::cg.predictedErrorTime =
                                 crate::src::cgame::cg_main::cg.oldTime
                         }

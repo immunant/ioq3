@@ -284,9 +284,7 @@ unsafe extern "C" fn ServerInfo_MenuDraw() {
     let mut value: [libc::c_char; 1024] = [0; 1024];
     let mut i: i32 = 0 as i32;
     let mut y: i32 = 0;
-    y = 480 as i32 / 2 as i32
-        - s_serverinfo.numlines * 16 as i32 / 2 as i32
-        - 20 as i32;
+    y = 480 as i32 / 2 as i32 - s_serverinfo.numlines * 16 as i32 / 2 as i32 - 20 as i32;
     s = s_serverinfo.info.as_mut_ptr();
     while !s.is_null() && i < s_serverinfo.numlines {
         crate::src::qcommon::q_shared::Info_NextPair(&mut s, key.as_mut_ptr(), value.as_mut_ptr());
@@ -299,16 +297,14 @@ unsafe extern "C" fn ServerInfo_MenuDraw() {
             b":\x00" as *const u8 as *const libc::c_char,
         );
         crate::src::q3_ui::ui_atoms::UI_DrawString(
-            (640 as i32 as f64 * 0.50f64 - 8 as i32 as f64)
-                as i32,
+            (640 as i32 as f64 * 0.50f64 - 8 as i32 as f64) as i32,
             y,
             key.as_mut_ptr(),
             0x2 as i32 | 0x10 as i32,
             crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr(),
         );
         crate::src::q3_ui::ui_atoms::UI_DrawString(
-            (640 as i32 as f64 * 0.50f64 + 8 as i32 as f64)
-                as i32,
+            (640 as i32 as f64 * 0.50f64 + 8 as i32 as f64) as i32,
             y,
             value.as_mut_ptr(),
             0 as i32 | 0x10 as i32,
@@ -499,8 +495,7 @@ pub unsafe extern "C" fn UI_ServerInfoMenu() {
     s_serverinfo.framer.width = 256 as i32;
     s_serverinfo.framer.height = 334 as i32;
     s_serverinfo.add.generic.type_0 = 9 as i32;
-    s_serverinfo.add.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_serverinfo.add.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_serverinfo.add.generic.callback =
         Some(ServerInfo_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_serverinfo.add.generic.id = 100 as i32;
@@ -518,8 +513,7 @@ pub unsafe extern "C" fn UI_ServerInfoMenu() {
     }
     s_serverinfo.back.generic.type_0 = 6 as i32;
     s_serverinfo.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    s_serverinfo.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_serverinfo.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_serverinfo.back.generic.callback =
         Some(ServerInfo_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_serverinfo.back.generic.id = 101 as i32;

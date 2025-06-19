@@ -396,11 +396,7 @@ UI_ClampCvar
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_ClampCvar(
-    mut min: f32,
-    mut max: f32,
-    mut value: f32,
-) -> f32 {
+pub unsafe extern "C" fn UI_ClampCvar(mut min: f32, mut max: f32, mut value: f32) -> f32 {
     if value < min {
         return min;
     }
@@ -462,11 +458,7 @@ pub unsafe extern "C" fn UI_PushMenu(mut menu: *mut crate::ui_local_h::menuframe
     i = 0 as i32;
     while i < (*menu).nitems {
         item = (*menu).items[i as usize] as *mut crate::ui_local_h::menucommon_s;
-        if (*item).flags
-            & (0x2000 as i32 as u32
-                | 0x800 as i32 as u32
-                | 0x4000 as i32 as u32)
-            == 0
+        if (*item).flags & (0x2000 as i32 as u32 | 0x800 as i32 as u32 | 0x4000 as i32 as u32) == 0
         {
             (*menu).cursor_prev = -(1 as i32);
             crate::src::q3_ui::ui_qmenu::Menu_SetCursor(
@@ -741,8 +733,7 @@ unsafe extern "C" fn UI_DrawBannerString2(
     while *s != 0 {
         ch = (*s as i32 & 127 as i32) as u8;
         if ch as i32 == ' ' as i32 {
-            ax += (12 as i32 as f32 + 4 as i32 as f32)
-                * uis.xscale
+            ax += (12 as i32 as f32 + 4 as i32 as f32) * uis.xscale
         } else if ch as i32 >= 'A' as i32 && ch as i32 <= 'Z' as i32 {
             ch = (ch as i32 - 'A' as i32) as u8;
             fcol = propMapB[ch as usize][0 as i32 as usize] as f32 / 256.0f32;
@@ -789,8 +780,7 @@ pub unsafe extern "C" fn UI_DrawBannerString(
         if ch == ' ' as i32 {
             width += 12 as i32
         } else if ch >= 'A' as i32 && ch <= 'Z' as i32 {
-            width +=
-                propMapB[(ch - 'A' as i32) as usize][2 as i32 as usize] + 4 as i32
+            width += propMapB[(ch - 'A' as i32) as usize][2 as i32 as usize] + 4 as i32
         }
         s = s.offset(1)
     }
@@ -801,17 +791,11 @@ pub unsafe extern "C" fn UI_DrawBannerString(
         0 | _ => {}
     }
     if style & 0x800 as i32 != 0 {
-        drawcolor[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        drawcolor[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         drawcolor[1 as i32 as usize] = drawcolor[2 as i32 as usize];
         drawcolor[0 as i32 as usize] = drawcolor[1 as i32 as usize];
         drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
-        UI_DrawBannerString2(
-            x + 2 as i32,
-            y + 2 as i32,
-            str,
-            drawcolor.as_mut_ptr(),
-        );
+        UI_DrawBannerString2(x + 2 as i32, y + 2 as i32, str, drawcolor.as_mut_ptr());
     }
     UI_DrawBannerString2(x, y, str, color);
 }
@@ -869,9 +853,7 @@ unsafe extern "C" fn UI_DrawProportionalString2(
             frow = propMap[ch as usize][1 as i32 as usize] as f32 / 256.0f32;
             fwidth = propMap[ch as usize][2 as i32 as usize] as f32 / 256.0f32;
             fheight = 27 as i32 as f32 / 256.0f32;
-            aw = propMap[ch as usize][2 as i32 as usize] as f32
-                * uis.xscale
-                * sizeScale;
+            aw = propMap[ch as usize][2 as i32 as usize] as f32 * uis.xscale * sizeScale;
             ah = 27 as i32 as f32 * uis.yscale * sizeScale;
             crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
                 ax,
@@ -936,8 +918,7 @@ pub unsafe extern "C" fn UI_DrawProportionalString(
         0 | _ => {}
     }
     if style & 0x800 as i32 != 0 {
-        drawcolor[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        drawcolor[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         drawcolor[1 as i32 as usize] = drawcolor[2 as i32 as usize];
         drawcolor[0 as i32 as usize] = drawcolor[1 as i32 as usize];
         drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
@@ -951,15 +932,12 @@ pub unsafe extern "C" fn UI_DrawProportionalString(
         );
     }
     if style & 0x2000 as i32 != 0 {
-        drawcolor[0 as i32 as usize] =
-            (*color.offset(0 as i32 as isize) as f64 * 0.7f64)
-                as crate::src::qcommon::q_shared::vec_t;
-        drawcolor[1 as i32 as usize] =
-            (*color.offset(1 as i32 as isize) as f64 * 0.7f64)
-                as crate::src::qcommon::q_shared::vec_t;
-        drawcolor[2 as i32 as usize] =
-            (*color.offset(2 as i32 as isize) as f64 * 0.7f64)
-                as crate::src::qcommon::q_shared::vec_t;
+        drawcolor[0 as i32 as usize] = (*color.offset(0 as i32 as isize) as f64 * 0.7f64)
+            as crate::src::qcommon::q_shared::vec_t;
+        drawcolor[1 as i32 as usize] = (*color.offset(1 as i32 as isize) as f64 * 0.7f64)
+            as crate::src::qcommon::q_shared::vec_t;
+        drawcolor[2 as i32 as usize] = (*color.offset(2 as i32 as isize) as f64 * 0.7f64)
+            as crate::src::qcommon::q_shared::vec_t;
         drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
         UI_DrawProportionalString2(
             x,
@@ -972,15 +950,12 @@ pub unsafe extern "C" fn UI_DrawProportionalString(
         return;
     }
     if style & 0x4000 as i32 != 0 {
-        drawcolor[0 as i32 as usize] =
-            (*color.offset(0 as i32 as isize) as f64 * 0.7f64)
-                as crate::src::qcommon::q_shared::vec_t;
-        drawcolor[1 as i32 as usize] =
-            (*color.offset(1 as i32 as isize) as f64 * 0.7f64)
-                as crate::src::qcommon::q_shared::vec_t;
-        drawcolor[2 as i32 as usize] =
-            (*color.offset(2 as i32 as isize) as f64 * 0.7f64)
-                as crate::src::qcommon::q_shared::vec_t;
+        drawcolor[0 as i32 as usize] = (*color.offset(0 as i32 as isize) as f64 * 0.7f64)
+            as crate::src::qcommon::q_shared::vec_t;
+        drawcolor[1 as i32 as usize] = (*color.offset(1 as i32 as isize) as f64 * 0.7f64)
+            as crate::src::qcommon::q_shared::vec_t;
+        drawcolor[2 as i32 as usize] = (*color.offset(2 as i32 as isize) as f64 * 0.7f64)
+            as crate::src::qcommon::q_shared::vec_t;
         drawcolor[3 as i32 as usize] = *color.offset(3 as i32 as isize);
         UI_DrawProportionalString2(x, y, str, color, sizeScale, uis.charsetProp);
         drawcolor[0 as i32 as usize] = *color.offset(0 as i32 as isize);
@@ -1122,11 +1097,8 @@ unsafe extern "C" fn UI_DrawString2(
             if forceColor == 0 {
                 crate::stdlib::memcpy(
                     tempcolor.as_mut_ptr() as *mut libc::c_void,
-                    crate::src::qcommon::q_math::g_color_table[(*s.offset(1 as i32 as isize)
-                        as i32
-                        - '0' as i32
-                        & 0x7 as i32)
-                        as usize]
+                    crate::src::qcommon::q_math::g_color_table
+                        [(*s.offset(1 as i32 as isize) as i32 - '0' as i32 & 0x7 as i32) as usize]
                         .as_mut_ptr() as *const libc::c_void,
                     ::std::mem::size_of::<crate::src::qcommon::q_shared::vec4_t>() as libc::c_ulong,
                 );
@@ -1137,10 +1109,8 @@ unsafe extern "C" fn UI_DrawString2(
         } else {
             ch = (*s as i32 & 255 as i32) as libc::c_char;
             if ch as i32 != ' ' as i32 {
-                frow = ((ch as i32 >> 4 as i32) as f64 * 0.0625f64)
-                    as f32;
-                fcol = ((ch as i32 & 15 as i32) as f64 * 0.0625f64)
-                    as f32;
+                frow = ((ch as i32 >> 4 as i32) as f64 * 0.0625f64) as f32;
+                fcol = ((ch as i32 & 15 as i32) as f64 * 0.0625f64) as f32;
                 crate::src::ui::ui_syscalls::trap_R_DrawStretchPic(
                     ax,
                     ay,
@@ -1183,9 +1153,7 @@ pub unsafe extern "C" fn UI_DrawString(
     if str.is_null() {
         return;
     }
-    if style & 0x1000 as i32 != 0
-        && uis.realtime / 200 as i32 & 1 as i32 != 0
-    {
+    if style & 0x1000 as i32 != 0 && uis.realtime / 200 as i32 & 1 as i32 != 0 {
         return;
     }
     if style & 0x10 as i32 != 0 {
@@ -1199,25 +1167,19 @@ pub unsafe extern "C" fn UI_DrawString(
         charh = 16 as i32
     }
     if style & 0x4000 as i32 != 0 {
-        lowlight[0 as i32 as usize] = (0.8f64
-            * *color.offset(0 as i32 as isize) as f64)
+        lowlight[0 as i32 as usize] = (0.8f64 * *color.offset(0 as i32 as isize) as f64)
             as crate::src::qcommon::q_shared::vec_t;
-        lowlight[1 as i32 as usize] = (0.8f64
-            * *color.offset(1 as i32 as isize) as f64)
+        lowlight[1 as i32 as usize] = (0.8f64 * *color.offset(1 as i32 as isize) as f64)
             as crate::src::qcommon::q_shared::vec_t;
-        lowlight[2 as i32 as usize] = (0.8f64
-            * *color.offset(2 as i32 as isize) as f64)
+        lowlight[2 as i32 as usize] = (0.8f64 * *color.offset(2 as i32 as isize) as f64)
             as crate::src::qcommon::q_shared::vec_t;
-        lowlight[3 as i32 as usize] = (0.8f64
-            * *color.offset(3 as i32 as isize) as f64)
+        lowlight[3 as i32 as usize] = (0.8f64 * *color.offset(3 as i32 as isize) as f64)
             as crate::src::qcommon::q_shared::vec_t;
         UI_LerpColor(
             color,
             lowlight.as_mut_ptr(),
             newcolor.as_mut_ptr(),
-            (0.5f64
-                + 0.5f64 * crate::stdlib::sin((uis.realtime / 75 as i32) as f64))
-                as f32,
+            (0.5f64 + 0.5f64 * crate::stdlib::sin((uis.realtime / 75 as i32) as f64)) as f32,
         );
         drawcolor = newcolor.as_mut_ptr()
     } else {
@@ -1237,8 +1199,7 @@ pub unsafe extern "C" fn UI_DrawString(
         _ => {}
     }
     if style & 0x800 as i32 != 0 {
-        dropcolor[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        dropcolor[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         dropcolor[1 as i32 as usize] = dropcolor[2 as i32 as usize];
         dropcolor[0 as i32 as usize] = dropcolor[1 as i32 as usize];
         dropcolor[3 as i32 as usize] = *drawcolor.offset(3 as i32 as isize);
@@ -1416,10 +1377,7 @@ pub unsafe extern "C" fn UI_MouseEvent(mut dx: i32, mut dy: i32) {
     i = 0 as i32;
     while i < (*uis.activemenu).nitems {
         m = (*uis.activemenu).items[i as usize] as *mut crate::ui_local_h::menucommon_s;
-        if !((*m).flags
-            & (0x2000 as i32 as u32 | 0x4000 as i32 as u32)
-            != 0)
-        {
+        if !((*m).flags & (0x2000 as i32 as u32 | 0x4000 as i32 as u32) != 0) {
             if !(uis.cursorx < (*m).left
                 || uis.cursorx > (*m).right
                 || uis.cursory < (*m).top
@@ -1637,8 +1595,7 @@ pub unsafe extern "C" fn UI_Init() {
         // wide screen
         uis.bias = (0.5f64
             * (uis.glconfig.vidWidth as f64
-                - uis.glconfig.vidHeight as f64 * (640.0f64 / 480.0f64)))
-            as f32;
+                - uis.glconfig.vidHeight as f64 * (640.0f64 / 480.0f64))) as f32;
         uis.xscale = uis.yscale
     } else {
         // no wide screen
@@ -1902,12 +1859,7 @@ pub unsafe extern "C" fn UI_Refresh(mut realtime: i32) {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_DrawTextBox(
-    mut x: i32,
-    mut y: i32,
-    mut width: i32,
-    mut lines: i32,
-) {
+pub unsafe extern "C" fn UI_DrawTextBox(mut x: i32, mut y: i32, mut width: i32, mut lines: i32) {
     UI_FillRect(
         (x + 16 as i32 / 2 as i32) as f32,
         (y + 16 as i32 / 2 as i32) as f32,

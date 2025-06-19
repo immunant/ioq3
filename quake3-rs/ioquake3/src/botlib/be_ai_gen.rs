@@ -59,10 +59,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn GeneticSelection(
-    mut numranks: i32,
-    mut rankings: *mut f32,
-) -> i32 {
+pub unsafe extern "C" fn GeneticSelection(mut numranks: i32, mut rankings: *mut f32) -> i32 {
     let mut sum: f32 = 0.; //end for
     let mut i: i32 = 0; //end if
     let mut index: i32 = 0;
@@ -91,9 +88,8 @@ pub unsafe extern "C" fn GeneticSelection(
         //end for
     }
     //select a bot randomly
-    index = ((::libc::rand() & 0x7fff as i32) as f32
-        / 0x7fff as i32 as f32
-        * numranks as f32) as i32; //end for
+    index =
+        ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * numranks as f32) as i32; //end for
     i = 0 as i32;
     while i < numranks {
         if *rankings.offset(index as isize) >= 0 as i32 as f32 {
@@ -190,8 +186,7 @@ pub unsafe extern "C" fn GeneticParentsAndChildSelection(
     crate::stdlib::memcpy(
         rankings.as_mut_ptr() as *mut libc::c_void,
         ranks as *const libc::c_void,
-        (::std::mem::size_of::<f32>() as libc::c_ulong)
-            .wrapping_mul(numranks as libc::c_ulong),
+        (::std::mem::size_of::<f32>() as libc::c_ulong).wrapping_mul(numranks as libc::c_ulong),
     );
     //select first parent
     *parent1 = GeneticSelection(numranks, rankings.as_mut_ptr());

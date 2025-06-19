@@ -193,8 +193,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
     #[inline]
@@ -278,9 +277,7 @@ extern "C" {
     */
     #[no_mangle]
     pub fn BotDrawDebugPolygons(
-        drawPoly: Option<
-            unsafe extern "C" fn(_: i32, _: i32, _: *mut f32) -> (),
-        >,
+        drawPoly: Option<unsafe extern "C" fn(_: i32, _: i32, _: *mut f32) -> ()>,
         value: i32,
     );
 }
@@ -439,18 +436,12 @@ unsafe extern "C" fn CM_PlaneFromPoints(
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut d1: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut d2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    d1[0 as i32 as usize] =
-        *b.offset(0 as i32 as isize) - *a.offset(0 as i32 as isize);
-    d1[1 as i32 as usize] =
-        *b.offset(1 as i32 as isize) - *a.offset(1 as i32 as isize);
-    d1[2 as i32 as usize] =
-        *b.offset(2 as i32 as isize) - *a.offset(2 as i32 as isize);
-    d2[0 as i32 as usize] =
-        *c.offset(0 as i32 as isize) - *a.offset(0 as i32 as isize);
-    d2[1 as i32 as usize] =
-        *c.offset(1 as i32 as isize) - *a.offset(1 as i32 as isize);
-    d2[2 as i32 as usize] =
-        *c.offset(2 as i32 as isize) - *a.offset(2 as i32 as isize);
+    d1[0 as i32 as usize] = *b.offset(0 as i32 as isize) - *a.offset(0 as i32 as isize);
+    d1[1 as i32 as usize] = *b.offset(1 as i32 as isize) - *a.offset(1 as i32 as isize);
+    d1[2 as i32 as usize] = *b.offset(2 as i32 as isize) - *a.offset(2 as i32 as isize);
+    d2[0 as i32 as usize] = *c.offset(0 as i32 as isize) - *a.offset(0 as i32 as isize);
+    d2[1 as i32 as usize] = *c.offset(1 as i32 as isize) - *a.offset(1 as i32 as isize);
+    d2[2 as i32 as usize] = *c.offset(2 as i32 as isize) - *a.offset(2 as i32 as isize);
     CrossProduct(
         d2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         d1.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -494,8 +485,7 @@ unsafe extern "C" fn CM_NeedsSubdivision(
     // calculate the linear midpoint
     i = 0 as i32;
     while i < 3 as i32 {
-        lmid[i as usize] = (0.5f64
-            * (*a.offset(i as isize) + *c.offset(i as isize)) as f64)
+        lmid[i as usize] = (0.5f64 * (*a.offset(i as isize) + *c.offset(i as isize)) as f64)
             as crate::src::qcommon::q_shared::vec_t;
         i += 1
     }
@@ -509,15 +499,11 @@ unsafe extern "C" fn CM_NeedsSubdivision(
         i += 1
     }
     // see if the curve is far enough away from the linear mid
-    delta[0 as i32 as usize] =
-        cmid[0 as i32 as usize] - lmid[0 as i32 as usize];
-    delta[1 as i32 as usize] =
-        cmid[1 as i32 as usize] - lmid[1 as i32 as usize];
-    delta[2 as i32 as usize] =
-        cmid[2 as i32 as usize] - lmid[2 as i32 as usize];
+    delta[0 as i32 as usize] = cmid[0 as i32 as usize] - lmid[0 as i32 as usize];
+    delta[1 as i32 as usize] = cmid[1 as i32 as usize] - lmid[1 as i32 as usize];
+    delta[2 as i32 as usize] = cmid[2 as i32 as usize] - lmid[2 as i32 as usize];
     dist = VectorLength(delta.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
-    return (dist >= 16 as i32 as f32) as i32
-        as crate::src::qcommon::q_shared::qboolean;
+    return (dist >= 16 as i32 as f32) as i32 as crate::src::qcommon::q_shared::qboolean;
 }
 /*
 ===============
@@ -539,11 +525,9 @@ unsafe extern "C" fn CM_Subdivide(
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 3 as i32 {
-        *out1.offset(i as isize) = (0.5f64
-            * (*a.offset(i as isize) + *b.offset(i as isize)) as f64)
+        *out1.offset(i as isize) = (0.5f64 * (*a.offset(i as isize) + *b.offset(i as isize)) as f64)
             as crate::src::qcommon::q_shared::vec_t;
-        *out3.offset(i as isize) = (0.5f64
-            * (*b.offset(i as isize) + *c.offset(i as isize)) as f64)
+        *out3.offset(i as isize) = (0.5f64 * (*b.offset(i as isize) + *c.offset(i as isize)) as f64)
             as crate::src::qcommon::q_shared::vec_t;
         *out2.offset(i as isize) = (0.5f64
             * (*out1.offset(i as isize) + *out3.offset(i as isize)) as f64)
@@ -667,8 +651,7 @@ unsafe extern "C" fn CM_SetGridWrapWidth(mut grid: *mut crate::src::qcommon::cm_
         j = 0 as i32;
         while j < 3 as i32 {
             d = (*grid).points[0 as i32 as usize][i as usize][j as usize]
-                - (*grid).points[((*grid).width - 1 as i32) as usize][i as usize]
-                    [j as usize];
+                - (*grid).points[((*grid).width - 1 as i32) as usize][i as usize][j as usize];
             if (d as f64) < -0.1f64 || d as f64 > 0.1f64 {
                 break;
             }
@@ -732,14 +715,11 @@ unsafe extern "C" fn CM_SubdivideGridColumns(
                 // remove the column
                 k = i + 2 as i32;
                 while k < (*grid).width {
-                    (*grid).points[(k - 1 as i32) as usize][j as usize]
-                        [0 as i32 as usize] =
+                    (*grid).points[(k - 1 as i32) as usize][j as usize][0 as i32 as usize] =
                         (*grid).points[k as usize][j as usize][0 as i32 as usize];
-                    (*grid).points[(k - 1 as i32) as usize][j as usize]
-                        [1 as i32 as usize] =
+                    (*grid).points[(k - 1 as i32) as usize][j as usize][1 as i32 as usize] =
                         (*grid).points[k as usize][j as usize][1 as i32 as usize];
-                    (*grid).points[(k - 1 as i32) as usize][j as usize]
-                        [2 as i32 as usize] =
+                    (*grid).points[(k - 1 as i32) as usize][j as usize][2 as i32 as usize] =
                         (*grid).points[k as usize][j as usize][2 as i32 as usize];
                     k += 1
                 }
@@ -758,37 +738,31 @@ unsafe extern "C" fn CM_SubdivideGridColumns(
                 let mut mid: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
                 let mut next: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
                 // save the control points now
-                prev[0 as i32 as usize] =
-                    (*grid).points[i as usize][j as usize][0 as i32 as usize];
-                prev[1 as i32 as usize] =
-                    (*grid).points[i as usize][j as usize][1 as i32 as usize];
-                prev[2 as i32 as usize] =
-                    (*grid).points[i as usize][j as usize][2 as i32 as usize];
-                mid[0 as i32 as usize] = (*grid).points[(i + 1 as i32) as usize]
-                    [j as usize][0 as i32 as usize];
-                mid[1 as i32 as usize] = (*grid).points[(i + 1 as i32) as usize]
-                    [j as usize][1 as i32 as usize];
-                mid[2 as i32 as usize] = (*grid).points[(i + 1 as i32) as usize]
-                    [j as usize][2 as i32 as usize];
-                next[0 as i32 as usize] = (*grid).points[(i + 2 as i32) as usize]
-                    [j as usize][0 as i32 as usize];
-                next[1 as i32 as usize] = (*grid).points[(i + 2 as i32) as usize]
-                    [j as usize][1 as i32 as usize];
-                next[2 as i32 as usize] = (*grid).points[(i + 2 as i32) as usize]
-                    [j as usize][2 as i32 as usize];
+                prev[0 as i32 as usize] = (*grid).points[i as usize][j as usize][0 as i32 as usize];
+                prev[1 as i32 as usize] = (*grid).points[i as usize][j as usize][1 as i32 as usize];
+                prev[2 as i32 as usize] = (*grid).points[i as usize][j as usize][2 as i32 as usize];
+                mid[0 as i32 as usize] =
+                    (*grid).points[(i + 1 as i32) as usize][j as usize][0 as i32 as usize];
+                mid[1 as i32 as usize] =
+                    (*grid).points[(i + 1 as i32) as usize][j as usize][1 as i32 as usize];
+                mid[2 as i32 as usize] =
+                    (*grid).points[(i + 1 as i32) as usize][j as usize][2 as i32 as usize];
+                next[0 as i32 as usize] =
+                    (*grid).points[(i + 2 as i32) as usize][j as usize][0 as i32 as usize];
+                next[1 as i32 as usize] =
+                    (*grid).points[(i + 2 as i32) as usize][j as usize][1 as i32 as usize];
+                next[2 as i32 as usize] =
+                    (*grid).points[(i + 2 as i32) as usize][j as usize][2 as i32 as usize];
                 // make room for two additional columns in the grid
                 // columns i+1 will be replaced, column i+2 will become i+4
                 // i+1, i+2, and i+3 will be generated
                 k = (*grid).width - 1 as i32;
                 while k > i + 1 as i32 {
-                    (*grid).points[(k + 2 as i32) as usize][j as usize]
-                        [0 as i32 as usize] =
+                    (*grid).points[(k + 2 as i32) as usize][j as usize][0 as i32 as usize] =
                         (*grid).points[k as usize][j as usize][0 as i32 as usize];
-                    (*grid).points[(k + 2 as i32) as usize][j as usize]
-                        [1 as i32 as usize] =
+                    (*grid).points[(k + 2 as i32) as usize][j as usize][1 as i32 as usize] =
                         (*grid).points[k as usize][j as usize][1 as i32 as usize];
-                    (*grid).points[(k + 2 as i32) as usize][j as usize]
-                        [2 as i32 as usize] =
+                    (*grid).points[(k + 2 as i32) as usize][j as usize][2 as i32 as usize] =
                         (*grid).points[k as usize][j as usize][2 as i32 as usize];
                     k -= 1
                 }
@@ -861,14 +835,11 @@ unsafe extern "C" fn CM_RemoveDegenerateColumns(
                 // remove the column
                 k = i + 2 as i32;
                 while k < (*grid).width {
-                    (*grid).points[(k - 1 as i32) as usize][j as usize]
-                        [0 as i32 as usize] =
+                    (*grid).points[(k - 1 as i32) as usize][j as usize][0 as i32 as usize] =
                         (*grid).points[k as usize][j as usize][0 as i32 as usize];
-                    (*grid).points[(k - 1 as i32) as usize][j as usize]
-                        [1 as i32 as usize] =
+                    (*grid).points[(k - 1 as i32) as usize][j as usize][1 as i32 as usize] =
                         (*grid).points[k as usize][j as usize][1 as i32 as usize];
-                    (*grid).points[(k - 1 as i32) as usize][j as usize]
-                        [2 as i32 as usize] =
+                    (*grid).points[(k - 1 as i32) as usize][j as usize][2 as i32 as usize] =
                         (*grid).points[k as usize][j as usize][2 as i32 as usize];
                     k += 1
                 }
@@ -922,20 +893,16 @@ pub unsafe extern "C" fn CM_PlaneEqual(
 ) -> i32 {
     let mut invplane: [f32; 4] = [0.; 4];
     if crate::stdlib::fabs(
-        ((*p).plane[0 as i32 as usize] - *plane.offset(0 as i32 as isize))
-            as f64,
+        ((*p).plane[0 as i32 as usize] - *plane.offset(0 as i32 as isize)) as f64,
     ) < 0.0001f64
         && crate::stdlib::fabs(
-            ((*p).plane[1 as i32 as usize] - *plane.offset(1 as i32 as isize))
-                as f64,
+            ((*p).plane[1 as i32 as usize] - *plane.offset(1 as i32 as isize)) as f64,
         ) < 0.0001f64
         && crate::stdlib::fabs(
-            ((*p).plane[2 as i32 as usize] - *plane.offset(2 as i32 as isize))
-                as f64,
+            ((*p).plane[2 as i32 as usize] - *plane.offset(2 as i32 as isize)) as f64,
         ) < 0.0001f64
         && crate::stdlib::fabs(
-            ((*p).plane[3 as i32 as usize] - *plane.offset(3 as i32 as isize))
-                as f64,
+            ((*p).plane[3 as i32 as usize] - *plane.offset(3 as i32 as isize)) as f64,
         ) < 0.02f64
     {
         *flipped = crate::src::qcommon::q_shared::qfalse as i32;
@@ -945,22 +912,14 @@ pub unsafe extern "C" fn CM_PlaneEqual(
     invplane[1 as i32 as usize] = -*plane.offset(1 as i32 as isize);
     invplane[2 as i32 as usize] = -*plane.offset(2 as i32 as isize);
     invplane[3 as i32 as usize] = -*plane.offset(3 as i32 as isize);
-    if crate::stdlib::fabs(
-        ((*p).plane[0 as i32 as usize] - invplane[0 as i32 as usize])
-            as f64,
-    ) < 0.0001f64
-        && crate::stdlib::fabs(
-            ((*p).plane[1 as i32 as usize] - invplane[1 as i32 as usize])
-                as f64,
-        ) < 0.0001f64
-        && crate::stdlib::fabs(
-            ((*p).plane[2 as i32 as usize] - invplane[2 as i32 as usize])
-                as f64,
-        ) < 0.0001f64
-        && crate::stdlib::fabs(
-            ((*p).plane[3 as i32 as usize] - invplane[3 as i32 as usize])
-                as f64,
-        ) < 0.02f64
+    if crate::stdlib::fabs(((*p).plane[0 as i32 as usize] - invplane[0 as i32 as usize]) as f64)
+        < 0.0001f64
+        && crate::stdlib::fabs(((*p).plane[1 as i32 as usize] - invplane[1 as i32 as usize]) as f64)
+            < 0.0001f64
+        && crate::stdlib::fabs(((*p).plane[2 as i32 as usize] - invplane[2 as i32 as usize]) as f64)
+            < 0.0001f64
+        && crate::stdlib::fabs(((*p).plane[3 as i32 as usize] - invplane[3 as i32 as usize]) as f64)
+            < 0.02f64
     {
         *flipped = crate::src::qcommon::q_shared::qtrue as i32;
         return crate::src::qcommon::q_shared::qtrue as i32;
@@ -978,10 +937,7 @@ pub unsafe extern "C" fn CM_SnapVector(mut normal: *mut crate::src::qcommon::q_s
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < 3 as i32 {
-        if crate::stdlib::fabs(
-            (*normal.offset(i as isize) - 1 as i32 as f32) as f64,
-        ) < 0.0001f64
-        {
+        if crate::stdlib::fabs((*normal.offset(i as isize) - 1 as i32 as f32) as f64) < 0.0001f64 {
             let ref mut fresh0 = *normal.offset(2 as i32 as isize);
             *fresh0 = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
             let ref mut fresh1 = *normal.offset(1 as i32 as isize);
@@ -989,17 +945,15 @@ pub unsafe extern "C" fn CM_SnapVector(mut normal: *mut crate::src::qcommon::q_s
             *normal.offset(0 as i32 as isize) = *fresh1;
             *normal.offset(i as isize) = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
             break;
-        } else if crate::stdlib::fabs(
-            (*normal.offset(i as isize) - -(1 as i32) as f32) as f64,
-        ) < 0.0001f64
+        } else if crate::stdlib::fabs((*normal.offset(i as isize) - -(1 as i32) as f32) as f64)
+            < 0.0001f64
         {
             let ref mut fresh2 = *normal.offset(2 as i32 as isize);
             *fresh2 = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
             let ref mut fresh3 = *normal.offset(1 as i32 as isize);
             *fresh3 = *fresh2;
             *normal.offset(0 as i32 as isize) = *fresh3;
-            *normal.offset(i as isize) =
-                -(1 as i32) as crate::src::qcommon::q_shared::vec_t;
+            *normal.offset(i as isize) = -(1 as i32) as crate::src::qcommon::q_shared::vec_t;
             break;
         } else {
             i += 1
@@ -1013,10 +967,7 @@ CM_FindPlane2
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CM_FindPlane2(
-    mut plane: *mut f32,
-    mut flipped: *mut i32,
-) -> i32 {
+pub unsafe extern "C" fn CM_FindPlane2(mut plane: *mut f32, mut flipped: *mut i32) -> i32 {
     let mut i: i32 = 0;
     // see if the points are close enough to an existing plane
     i = 0 as i32;
@@ -1033,14 +984,10 @@ pub unsafe extern "C" fn CM_FindPlane2(
             b"MAX_PATCH_PLANES\x00" as *const u8 as *const libc::c_char,
         );
     }
-    planes[numPlanes as usize].plane[0 as i32 as usize] =
-        *plane.offset(0 as i32 as isize);
-    planes[numPlanes as usize].plane[1 as i32 as usize] =
-        *plane.offset(1 as i32 as isize);
-    planes[numPlanes as usize].plane[2 as i32 as usize] =
-        *plane.offset(2 as i32 as isize);
-    planes[numPlanes as usize].plane[3 as i32 as usize] =
-        *plane.offset(3 as i32 as isize);
+    planes[numPlanes as usize].plane[0 as i32 as usize] = *plane.offset(0 as i32 as isize);
+    planes[numPlanes as usize].plane[1 as i32 as usize] = *plane.offset(1 as i32 as isize);
+    planes[numPlanes as usize].plane[2 as i32 as usize] = *plane.offset(2 as i32 as isize);
+    planes[numPlanes as usize].plane[3 as i32 as usize] = *plane.offset(3 as i32 as isize);
     planes[numPlanes as usize].signbits = CM_SignbitsForNormal(plane);
     numPlanes += 1;
     *flipped = crate::src::qcommon::q_shared::qfalse as i32;
@@ -1052,11 +999,7 @@ CM_FindPlane
 ==================
 */
 
-unsafe extern "C" fn CM_FindPlane(
-    mut p1: *mut f32,
-    mut p2: *mut f32,
-    mut p3: *mut f32,
-) -> i32 {
+unsafe extern "C" fn CM_FindPlane(mut p1: *mut f32, mut p2: *mut f32, mut p3: *mut f32) -> i32 {
     let mut plane: [f32; 4] = [0.; 4];
     let mut i: i32 = 0;
     let mut d: f32 = 0.;
@@ -1067,30 +1010,21 @@ unsafe extern "C" fn CM_FindPlane(
     i = 0 as i32;
     while i < numPlanes {
         if !(plane[0 as i32 as usize] * planes[i as usize].plane[0 as i32 as usize]
-            + plane[1 as i32 as usize]
-                * planes[i as usize].plane[1 as i32 as usize]
-            + plane[2 as i32 as usize]
-                * planes[i as usize].plane[2 as i32 as usize]
+            + plane[1 as i32 as usize] * planes[i as usize].plane[1 as i32 as usize]
+            + plane[2 as i32 as usize] * planes[i as usize].plane[2 as i32 as usize]
             < 0 as i32 as f32)
         {
-            d = *p1.offset(0 as i32 as isize)
-                * planes[i as usize].plane[0 as i32 as usize]
-                + *p1.offset(1 as i32 as isize)
-                    * planes[i as usize].plane[1 as i32 as usize]
-                + *p1.offset(2 as i32 as isize)
-                    * planes[i as usize].plane[2 as i32 as usize]
+            d = *p1.offset(0 as i32 as isize) * planes[i as usize].plane[0 as i32 as usize]
+                + *p1.offset(1 as i32 as isize) * planes[i as usize].plane[1 as i32 as usize]
+                + *p1.offset(2 as i32 as isize) * planes[i as usize].plane[2 as i32 as usize]
                 - planes[i as usize].plane[3 as i32 as usize];
             if !((d as f64) < -0.1f64 || d as f64 > 0.1f64) {
-                d = *p2.offset(0 as i32 as isize)
-                    * planes[i as usize].plane[0 as i32 as usize]
-                    + *p2.offset(1 as i32 as isize)
-                        * planes[i as usize].plane[1 as i32 as usize]
-                    + *p2.offset(2 as i32 as isize)
-                        * planes[i as usize].plane[2 as i32 as usize]
+                d = *p2.offset(0 as i32 as isize) * planes[i as usize].plane[0 as i32 as usize]
+                    + *p2.offset(1 as i32 as isize) * planes[i as usize].plane[1 as i32 as usize]
+                    + *p2.offset(2 as i32 as isize) * planes[i as usize].plane[2 as i32 as usize]
                     - planes[i as usize].plane[3 as i32 as usize];
                 if !((d as f64) < -0.1f64 || d as f64 > 0.1f64) {
-                    d = *p3.offset(0 as i32 as isize)
-                        * planes[i as usize].plane[0 as i32 as usize]
+                    d = *p3.offset(0 as i32 as isize) * planes[i as usize].plane[0 as i32 as usize]
                         + *p3.offset(1 as i32 as isize)
                             * planes[i as usize].plane[1 as i32 as usize]
                         + *p3.offset(2 as i32 as isize)
@@ -1127,10 +1061,7 @@ CM_PointOnPlaneSide
 ==================
 */
 
-unsafe extern "C" fn CM_PointOnPlaneSide(
-    mut p: *mut f32,
-    mut planeNum: i32,
-) -> i32 {
+unsafe extern "C" fn CM_PointOnPlaneSide(mut p: *mut f32, mut planeNum: i32) -> i32 {
     let mut plane: *mut f32 = 0 as *mut f32;
     let mut d: f32 = 0.;
     if planeNum == -(1 as i32) {
@@ -1203,34 +1134,27 @@ unsafe extern "C" fn CM_EdgePlaneNum(
                 return -(1 as i32);
             }
             up[0 as i32 as usize] = *p1.offset(0 as i32 as isize)
-                + planes[p as usize].plane[0 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[0 as i32 as usize] * 4 as i32 as f32;
             up[1 as i32 as usize] = *p1.offset(1 as i32 as isize)
-                + planes[p as usize].plane[1 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[1 as i32 as usize] * 4 as i32 as f32;
             up[2 as i32 as usize] = *p1.offset(2 as i32 as isize)
-                + planes[p as usize].plane[2 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[2 as i32 as usize] * 4 as i32 as f32;
             return CM_FindPlane(p1, p2, up.as_mut_ptr());
         }
         2 => {
             // bottom border
             p1 = (*grid).points[i as usize][(j + 1 as i32) as usize].as_mut_ptr();
-            p2 = (*grid).points[(i + 1 as i32) as usize][(j + 1 as i32) as usize]
-                .as_mut_ptr();
+            p2 = (*grid).points[(i + 1 as i32) as usize][(j + 1 as i32) as usize].as_mut_ptr();
             p = CM_GridPlane(gridPlanes, i, j, 1 as i32);
             if p == -(1 as i32) {
                 return -(1 as i32);
             }
             up[0 as i32 as usize] = *p1.offset(0 as i32 as isize)
-                + planes[p as usize].plane[0 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[0 as i32 as usize] * 4 as i32 as f32;
             up[1 as i32 as usize] = *p1.offset(1 as i32 as isize)
-                + planes[p as usize].plane[1 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[1 as i32 as usize] * 4 as i32 as f32;
             up[2 as i32 as usize] = *p1.offset(2 as i32 as isize)
-                + planes[p as usize].plane[2 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[2 as i32 as usize] * 4 as i32 as f32;
             return CM_FindPlane(p2, p1, up.as_mut_ptr());
         }
         3 => {
@@ -1242,74 +1166,59 @@ unsafe extern "C" fn CM_EdgePlaneNum(
                 return -(1 as i32);
             }
             up[0 as i32 as usize] = *p1.offset(0 as i32 as isize)
-                + planes[p as usize].plane[0 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[0 as i32 as usize] * 4 as i32 as f32;
             up[1 as i32 as usize] = *p1.offset(1 as i32 as isize)
-                + planes[p as usize].plane[1 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[1 as i32 as usize] * 4 as i32 as f32;
             up[2 as i32 as usize] = *p1.offset(2 as i32 as isize)
-                + planes[p as usize].plane[2 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[2 as i32 as usize] * 4 as i32 as f32;
             return CM_FindPlane(p2, p1, up.as_mut_ptr());
         }
         1 => {
             // right border
             p1 = (*grid).points[(i + 1 as i32) as usize][j as usize].as_mut_ptr();
-            p2 = (*grid).points[(i + 1 as i32) as usize][(j + 1 as i32) as usize]
-                .as_mut_ptr();
+            p2 = (*grid).points[(i + 1 as i32) as usize][(j + 1 as i32) as usize].as_mut_ptr();
             p = CM_GridPlane(gridPlanes, i, j, 0 as i32);
             if p == -(1 as i32) {
                 return -(1 as i32);
             }
             up[0 as i32 as usize] = *p1.offset(0 as i32 as isize)
-                + planes[p as usize].plane[0 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[0 as i32 as usize] * 4 as i32 as f32;
             up[1 as i32 as usize] = *p1.offset(1 as i32 as isize)
-                + planes[p as usize].plane[1 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[1 as i32 as usize] * 4 as i32 as f32;
             up[2 as i32 as usize] = *p1.offset(2 as i32 as isize)
-                + planes[p as usize].plane[2 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[2 as i32 as usize] * 4 as i32 as f32;
             return CM_FindPlane(p1, p2, up.as_mut_ptr());
         }
         4 => {
             // diagonal out of triangle 0
-            p1 = (*grid).points[(i + 1 as i32) as usize][(j + 1 as i32) as usize]
-                .as_mut_ptr();
+            p1 = (*grid).points[(i + 1 as i32) as usize][(j + 1 as i32) as usize].as_mut_ptr();
             p2 = (*grid).points[i as usize][j as usize].as_mut_ptr();
             p = CM_GridPlane(gridPlanes, i, j, 0 as i32);
             if p == -(1 as i32) {
                 return -(1 as i32);
             }
             up[0 as i32 as usize] = *p1.offset(0 as i32 as isize)
-                + planes[p as usize].plane[0 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[0 as i32 as usize] * 4 as i32 as f32;
             up[1 as i32 as usize] = *p1.offset(1 as i32 as isize)
-                + planes[p as usize].plane[1 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[1 as i32 as usize] * 4 as i32 as f32;
             up[2 as i32 as usize] = *p1.offset(2 as i32 as isize)
-                + planes[p as usize].plane[2 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[2 as i32 as usize] * 4 as i32 as f32;
             return CM_FindPlane(p1, p2, up.as_mut_ptr());
         }
         5 => {
             // diagonal out of triangle 1
             p1 = (*grid).points[i as usize][j as usize].as_mut_ptr();
-            p2 = (*grid).points[(i + 1 as i32) as usize][(j + 1 as i32) as usize]
-                .as_mut_ptr();
+            p2 = (*grid).points[(i + 1 as i32) as usize][(j + 1 as i32) as usize].as_mut_ptr();
             p = CM_GridPlane(gridPlanes, i, j, 1 as i32);
             if p == -(1 as i32) {
                 return -(1 as i32);
             }
             up[0 as i32 as usize] = *p1.offset(0 as i32 as isize)
-                + planes[p as usize].plane[0 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[0 as i32 as usize] * 4 as i32 as f32;
             up[1 as i32 as usize] = *p1.offset(1 as i32 as isize)
-                + planes[p as usize].plane[1 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[1 as i32 as usize] * 4 as i32 as f32;
             up[2 as i32 as usize] = *p1.offset(2 as i32 as isize)
-                + planes[p as usize].plane[2 as i32 as usize]
-                    * 4 as i32 as f32;
+                + planes[p as usize].plane[2 as i32 as usize] * 4 as i32 as f32;
             return CM_FindPlane(p1, p2, up.as_mut_ptr());
         }
         _ => {}
@@ -1342,9 +1251,8 @@ unsafe extern "C" fn CM_SetBorderInward(
             points[0 as i32 as usize] = (*grid).points[i as usize][j as usize].as_mut_ptr();
             points[1 as i32 as usize] =
                 (*grid).points[(i + 1 as i32) as usize][j as usize].as_mut_ptr();
-            points[2 as i32 as usize] = (*grid).points[(i + 1 as i32) as usize]
-                [(j + 1 as i32) as usize]
-                .as_mut_ptr();
+            points[2 as i32 as usize] =
+                (*grid).points[(i + 1 as i32) as usize][(j + 1 as i32) as usize].as_mut_ptr();
             points[3 as i32 as usize] =
                 (*grid).points[i as usize][(j + 1 as i32) as usize].as_mut_ptr();
             numPoints = 4 as i32
@@ -1353,15 +1261,13 @@ unsafe extern "C" fn CM_SetBorderInward(
             points[0 as i32 as usize] = (*grid).points[i as usize][j as usize].as_mut_ptr();
             points[1 as i32 as usize] =
                 (*grid).points[(i + 1 as i32) as usize][j as usize].as_mut_ptr();
-            points[2 as i32 as usize] = (*grid).points[(i + 1 as i32) as usize]
-                [(j + 1 as i32) as usize]
-                .as_mut_ptr();
+            points[2 as i32 as usize] =
+                (*grid).points[(i + 1 as i32) as usize][(j + 1 as i32) as usize].as_mut_ptr();
             numPoints = 3 as i32
         }
         1 => {
-            points[0 as i32 as usize] = (*grid).points[(i + 1 as i32) as usize]
-                [(j + 1 as i32) as usize]
-                .as_mut_ptr();
+            points[0 as i32 as usize] =
+                (*grid).points[(i + 1 as i32) as usize][(j + 1 as i32) as usize].as_mut_ptr();
             points[1 as i32 as usize] =
                 (*grid).points[i as usize][(j + 1 as i32) as usize].as_mut_ptr();
             points[2 as i32 as usize] = (*grid).points[i as usize][j as usize].as_mut_ptr();
@@ -1405,8 +1311,7 @@ unsafe extern "C" fn CM_SetBorderInward(
                 b"WARNING: CM_SetBorderInward: mixed plane sides\n\x00" as *const u8
                     as *const libc::c_char,
             );
-            (*facet).borderInward[k as usize] =
-                crate::src::qcommon::q_shared::qfalse as i32;
+            (*facet).borderInward[k as usize] = crate::src::qcommon::q_shared::qfalse as i32;
             if debugBlock as u64 == 0 {
                 debugBlock = crate::src::qcommon::q_shared::qtrue;
                 debugBlockPoints[0 as i32 as usize][0 as i32 as usize] =
@@ -1415,33 +1320,24 @@ unsafe extern "C" fn CM_SetBorderInward(
                     (*grid).points[i as usize][j as usize][1 as i32 as usize];
                 debugBlockPoints[0 as i32 as usize][2 as i32 as usize] =
                     (*grid).points[i as usize][j as usize][2 as i32 as usize];
-                debugBlockPoints[1 as i32 as usize][0 as i32 as usize] = (*grid)
-                    .points[(i + 1 as i32) as usize][j as usize]
-                    [0 as i32 as usize];
-                debugBlockPoints[1 as i32 as usize][1 as i32 as usize] = (*grid)
-                    .points[(i + 1 as i32) as usize][j as usize]
-                    [1 as i32 as usize];
-                debugBlockPoints[1 as i32 as usize][2 as i32 as usize] = (*grid)
-                    .points[(i + 1 as i32) as usize][j as usize]
-                    [2 as i32 as usize];
-                debugBlockPoints[2 as i32 as usize][0 as i32 as usize] = (*grid)
-                    .points[(i + 1 as i32) as usize][(j + 1 as i32) as usize]
-                    [0 as i32 as usize];
-                debugBlockPoints[2 as i32 as usize][1 as i32 as usize] = (*grid)
-                    .points[(i + 1 as i32) as usize][(j + 1 as i32) as usize]
-                    [1 as i32 as usize];
-                debugBlockPoints[2 as i32 as usize][2 as i32 as usize] = (*grid)
-                    .points[(i + 1 as i32) as usize][(j + 1 as i32) as usize]
-                    [2 as i32 as usize];
-                debugBlockPoints[3 as i32 as usize][0 as i32 as usize] = (*grid)
-                    .points[i as usize][(j + 1 as i32) as usize]
-                    [0 as i32 as usize];
-                debugBlockPoints[3 as i32 as usize][1 as i32 as usize] = (*grid)
-                    .points[i as usize][(j + 1 as i32) as usize]
-                    [1 as i32 as usize];
-                debugBlockPoints[3 as i32 as usize][2 as i32 as usize] = (*grid)
-                    .points[i as usize][(j + 1 as i32) as usize]
-                    [2 as i32 as usize]
+                debugBlockPoints[1 as i32 as usize][0 as i32 as usize] =
+                    (*grid).points[(i + 1 as i32) as usize][j as usize][0 as i32 as usize];
+                debugBlockPoints[1 as i32 as usize][1 as i32 as usize] =
+                    (*grid).points[(i + 1 as i32) as usize][j as usize][1 as i32 as usize];
+                debugBlockPoints[1 as i32 as usize][2 as i32 as usize] =
+                    (*grid).points[(i + 1 as i32) as usize][j as usize][2 as i32 as usize];
+                debugBlockPoints[2 as i32 as usize][0 as i32 as usize] = (*grid).points
+                    [(i + 1 as i32) as usize][(j + 1 as i32) as usize][0 as i32 as usize];
+                debugBlockPoints[2 as i32 as usize][1 as i32 as usize] = (*grid).points
+                    [(i + 1 as i32) as usize][(j + 1 as i32) as usize][1 as i32 as usize];
+                debugBlockPoints[2 as i32 as usize][2 as i32 as usize] = (*grid).points
+                    [(i + 1 as i32) as usize][(j + 1 as i32) as usize][2 as i32 as usize];
+                debugBlockPoints[3 as i32 as usize][0 as i32 as usize] =
+                    (*grid).points[i as usize][(j + 1 as i32) as usize][0 as i32 as usize];
+                debugBlockPoints[3 as i32 as usize][1 as i32 as usize] =
+                    (*grid).points[i as usize][(j + 1 as i32) as usize][1 as i32 as usize];
+                debugBlockPoints[3 as i32 as usize][2 as i32 as usize] =
+                    (*grid).points[i as usize][(j + 1 as i32) as usize][2 as i32 as usize]
             }
         }
         k += 1
@@ -1466,14 +1362,10 @@ unsafe extern "C" fn CM_ValidateFacet(
     if (*facet).surfacePlane == -(1 as i32) {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    plane[0 as i32 as usize] =
-        planes[(*facet).surfacePlane as usize].plane[0 as i32 as usize];
-    plane[1 as i32 as usize] =
-        planes[(*facet).surfacePlane as usize].plane[1 as i32 as usize];
-    plane[2 as i32 as usize] =
-        planes[(*facet).surfacePlane as usize].plane[2 as i32 as usize];
-    plane[3 as i32 as usize] =
-        planes[(*facet).surfacePlane as usize].plane[3 as i32 as usize];
+    plane[0 as i32 as usize] = planes[(*facet).surfacePlane as usize].plane[0 as i32 as usize];
+    plane[1 as i32 as usize] = planes[(*facet).surfacePlane as usize].plane[1 as i32 as usize];
+    plane[2 as i32 as usize] = planes[(*facet).surfacePlane as usize].plane[2 as i32 as usize];
+    plane[3 as i32 as usize] = planes[(*facet).surfacePlane as usize].plane[3 as i32 as usize];
     w = crate::src::qcommon::cm_polylib::BaseWindingForPlane(
         plane.as_mut_ptr(),
         plane[3 as i32 as usize],
@@ -1495,14 +1387,11 @@ unsafe extern "C" fn CM_ValidateFacet(
         plane[3 as i32 as usize] =
             planes[(*facet).borderPlanes[j as usize] as usize].plane[3 as i32 as usize];
         if (*facet).borderInward[j as usize] == 0 {
-            plane[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
-                [0 as i32 as usize]
+            plane[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize]
                 - plane[0 as i32 as usize];
-            plane[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
-                [1 as i32 as usize]
+            plane[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize]
                 - plane[1 as i32 as usize];
-            plane[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
-                [2 as i32 as usize]
+            plane[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize]
                 - plane[2 as i32 as usize];
             plane[3 as i32 as usize] = -plane[3 as i32 as usize]
         }
@@ -1529,8 +1418,7 @@ unsafe extern "C" fn CM_ValidateFacet(
     );
     j = 0 as i32;
     while j < 3 as i32 {
-        if bounds[1 as i32 as usize][j as usize]
-            - bounds[0 as i32 as usize][j as usize]
+        if bounds[1 as i32 as usize][j as usize] - bounds[0 as i32 as usize][j as usize]
             > 65535 as i32 as f32
         {
             return crate::src::qcommon::q_shared::qfalse;
@@ -1539,8 +1427,7 @@ unsafe extern "C" fn CM_ValidateFacet(
         if bounds[0 as i32 as usize][j as usize] >= 65535 as i32 as f32 {
             return crate::src::qcommon::q_shared::qfalse;
         }
-        if bounds[1 as i32 as usize][j as usize] <= -(65535 as i32) as f32
-        {
+        if bounds[1 as i32 as usize][j as usize] <= -(65535 as i32) as f32 {
             return crate::src::qcommon::q_shared::qfalse;
         }
         j += 1
@@ -1574,14 +1461,10 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
     let mut maxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut vec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut vec2: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    plane[0 as i32 as usize] =
-        planes[(*facet).surfacePlane as usize].plane[0 as i32 as usize];
-    plane[1 as i32 as usize] =
-        planes[(*facet).surfacePlane as usize].plane[1 as i32 as usize];
-    plane[2 as i32 as usize] =
-        planes[(*facet).surfacePlane as usize].plane[2 as i32 as usize];
-    plane[3 as i32 as usize] =
-        planes[(*facet).surfacePlane as usize].plane[3 as i32 as usize];
+    plane[0 as i32 as usize] = planes[(*facet).surfacePlane as usize].plane[0 as i32 as usize];
+    plane[1 as i32 as usize] = planes[(*facet).surfacePlane as usize].plane[1 as i32 as usize];
+    plane[2 as i32 as usize] = planes[(*facet).surfacePlane as usize].plane[2 as i32 as usize];
+    plane[3 as i32 as usize] = planes[(*facet).surfacePlane as usize].plane[3 as i32 as usize];
     w = crate::src::qcommon::cm_polylib::BaseWindingForPlane(
         plane.as_mut_ptr(),
         plane[3 as i32 as usize],
@@ -1661,9 +1544,7 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
                     i += 1
                 }
                 if i == (*facet).numBorders {
-                    if (*facet).numBorders
-                        >= 4 as i32 + 6 as i32 + 16 as i32
-                    {
+                    if (*facet).numBorders >= 4 as i32 + 6 as i32 + 16 as i32 {
                         crate::src::qcommon::common::Com_Printf(
                             b"ERROR: too many bevels\n\x00" as *const u8 as *const libc::c_char,
                         );
@@ -1688,25 +1569,18 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
     j = 0 as i32;
     while j < (*w).numpoints {
         k = (j + 1 as i32) % (*w).numpoints;
-        vec[0 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(j as isize))
-            [0 as i32 as usize]
+        vec[0 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(j as isize))[0 as i32 as usize]
             - (*(*w).p.as_mut_ptr().offset(k as isize))[0 as i32 as usize];
-        vec[1 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(j as isize))
-            [1 as i32 as usize]
+        vec[1 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(j as isize))[1 as i32 as usize]
             - (*(*w).p.as_mut_ptr().offset(k as isize))[1 as i32 as usize];
-        vec[2 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(j as isize))
-            [2 as i32 as usize]
+        vec[2 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(j as isize))[2 as i32 as usize]
             - (*(*w).p.as_mut_ptr().offset(k as isize))[2 as i32 as usize];
         //if it's a degenerate edge
-        if !((crate::src::qcommon::q_math::VectorNormalize(vec.as_mut_ptr()) as f64)
-            < 0.5f64)
-        {
+        if !((crate::src::qcommon::q_math::VectorNormalize(vec.as_mut_ptr()) as f64) < 0.5f64) {
             CM_SnapVector(vec.as_mut_ptr()); // axial
             k = 0 as i32; // only test non-axial edges
             while k < 3 as i32 {
-                if vec[k as usize] == -(1 as i32) as f32
-                    || vec[k as usize] == 1 as i32 as f32
-                {
+                if vec[k as usize] == -(1 as i32) as f32 || vec[k as usize] == 1 as i32 as f32 {
                     break;
                 }
                 k += 1
@@ -1718,8 +1592,7 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
                     dir = -(1 as i32);
                     while dir <= 1 as i32 {
                         // construct a plane
-                        vec2[2 as i32 as usize] =
-                            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                        vec2[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
                         vec2[1 as i32 as usize] = vec2[2 as i32 as usize];
                         vec2[0 as i32 as usize] = vec2[1 as i32 as usize];
                         vec2[axis as usize] = dir as crate::src::qcommon::q_shared::vec_t;
@@ -1732,28 +1605,22 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
                             as f64)
                             < 0.5f64)
                         {
-                            plane[3 as i32 as usize] =
-                                (*(*w).p.as_mut_ptr().offset(j as isize))
-                                    [0 as i32 as usize]
-                                    * plane[0 as i32 as usize]
-                                    + (*(*w).p.as_mut_ptr().offset(j as isize))
-                                        [1 as i32 as usize]
-                                        * plane[1 as i32 as usize]
-                                    + (*(*w).p.as_mut_ptr().offset(j as isize))
-                                        [2 as i32 as usize]
-                                        * plane[2 as i32 as usize];
+                            plane[3 as i32 as usize] = (*(*w).p.as_mut_ptr().offset(j as isize))
+                                [0 as i32 as usize]
+                                * plane[0 as i32 as usize]
+                                + (*(*w).p.as_mut_ptr().offset(j as isize))[1 as i32 as usize]
+                                    * plane[1 as i32 as usize]
+                                + (*(*w).p.as_mut_ptr().offset(j as isize))[2 as i32 as usize]
+                                    * plane[2 as i32 as usize];
                             // if all the points of the facet winding are
                             // behind this plane, it is a proper edge bevel
                             l = 0 as i32;
                             while l < (*w).numpoints {
-                                d = (*(*w).p.as_mut_ptr().offset(l as isize))
-                                    [0 as i32 as usize]
+                                d = (*(*w).p.as_mut_ptr().offset(l as isize))[0 as i32 as usize]
                                     * plane[0 as i32 as usize]
-                                    + (*(*w).p.as_mut_ptr().offset(l as isize))
-                                        [1 as i32 as usize]
+                                    + (*(*w).p.as_mut_ptr().offset(l as isize))[1 as i32 as usize]
                                         * plane[1 as i32 as usize]
-                                    + (*(*w).p.as_mut_ptr().offset(l as isize))
-                                        [2 as i32 as usize]
+                                    + (*(*w).p.as_mut_ptr().offset(l as isize))[2 as i32 as usize]
                                         * plane[2 as i32 as usize]
                                     - plane[3 as i32 as usize];
                                 if d as f64 > 0.1f64 {
@@ -1792,11 +1659,7 @@ pub unsafe extern "C" fn CM_AddFacetBevels(mut facet: *mut crate::src::qcommon::
                                         i += 1
                                     }
                                     if i == (*facet).numBorders {
-                                        if (*facet).numBorders
-                                            >= 4 as i32
-                                                + 6 as i32
-                                                + 16 as i32
-                                        {
+                                        if (*facet).numBorders >= 4 as i32 + 6 as i32 + 16 as i32 {
                                             crate::src::qcommon::common::Com_Printf(
                                                 b"ERROR: too many bevels\n\x00" as *const u8
                                                     as *const libc::c_char,
@@ -1939,16 +1802,12 @@ unsafe extern "C" fn CM_PatchCollideFromGrid(
         while j < (*grid).height - 1 as i32 {
             p1 = (*grid).points[i as usize][j as usize].as_mut_ptr();
             p2 = (*grid).points[(i + 1 as i32) as usize][j as usize].as_mut_ptr();
-            p3 = (*grid).points[(i + 1 as i32) as usize][(j + 1 as i32) as usize]
-                .as_mut_ptr();
-            gridPlanes[i as usize][j as usize][0 as i32 as usize] =
-                CM_FindPlane(p1, p2, p3);
-            p1 = (*grid).points[(i + 1 as i32) as usize][(j + 1 as i32) as usize]
-                .as_mut_ptr();
+            p3 = (*grid).points[(i + 1 as i32) as usize][(j + 1 as i32) as usize].as_mut_ptr();
+            gridPlanes[i as usize][j as usize][0 as i32 as usize] = CM_FindPlane(p1, p2, p3);
+            p1 = (*grid).points[(i + 1 as i32) as usize][(j + 1 as i32) as usize].as_mut_ptr();
             p2 = (*grid).points[i as usize][(j + 1 as i32) as usize].as_mut_ptr();
             p3 = (*grid).points[i as usize][j as usize].as_mut_ptr();
-            gridPlanes[i as usize][j as usize][1 as i32 as usize] =
-                CM_FindPlane(p1, p2, p3);
+            gridPlanes[i as usize][j as usize][1 as i32 as usize] = CM_FindPlane(p1, p2, p3);
             j += 1
         }
         i += 1
@@ -1960,11 +1819,11 @@ unsafe extern "C" fn CM_PatchCollideFromGrid(
         while j < (*grid).height - 1 as i32 {
             borders[EN_TOP as i32 as usize] = -(1 as i32);
             if j > 0 as i32 {
-                borders[EN_TOP as i32 as usize] = gridPlanes[i as usize]
-                    [(j - 1 as i32) as usize][1 as i32 as usize]
+                borders[EN_TOP as i32 as usize] =
+                    gridPlanes[i as usize][(j - 1 as i32) as usize][1 as i32 as usize]
             } else if (*grid).wrapHeight as u64 != 0 {
-                borders[EN_TOP as i32 as usize] = gridPlanes[i as usize]
-                    [((*grid).height - 2 as i32) as usize][1 as i32 as usize]
+                borders[EN_TOP as i32 as usize] =
+                    gridPlanes[i as usize][((*grid).height - 2 as i32) as usize][1 as i32 as usize]
             }
             noAdjust[EN_TOP as i32 as usize] = (borders[EN_TOP as i32 as usize]
                 == gridPlanes[i as usize][j as usize][0 as i32 as usize])
@@ -1977,14 +1836,13 @@ unsafe extern "C" fn CM_PatchCollideFromGrid(
             }
             borders[EN_BOTTOM as i32 as usize] = -(1 as i32);
             if j < (*grid).height - 2 as i32 {
-                borders[EN_BOTTOM as i32 as usize] = gridPlanes[i as usize]
-                    [(j + 1 as i32) as usize][0 as i32 as usize]
+                borders[EN_BOTTOM as i32 as usize] =
+                    gridPlanes[i as usize][(j + 1 as i32) as usize][0 as i32 as usize]
             } else if (*grid).wrapHeight as u64 != 0 {
                 borders[EN_BOTTOM as i32 as usize] =
                     gridPlanes[i as usize][0 as i32 as usize][0 as i32 as usize]
             }
-            noAdjust[EN_BOTTOM as i32 as usize] = (borders
-                [EN_BOTTOM as i32 as usize]
+            noAdjust[EN_BOTTOM as i32 as usize] = (borders[EN_BOTTOM as i32 as usize]
                 == gridPlanes[i as usize][j as usize][1 as i32 as usize])
                 as i32;
             if borders[EN_BOTTOM as i32 as usize] == -(1 as i32)
@@ -1995,12 +1853,11 @@ unsafe extern "C" fn CM_PatchCollideFromGrid(
             }
             borders[EN_LEFT as i32 as usize] = -(1 as i32);
             if i > 0 as i32 {
-                borders[EN_LEFT as i32 as usize] = gridPlanes
-                    [(i - 1 as i32) as usize][j as usize][0 as i32 as usize]
+                borders[EN_LEFT as i32 as usize] =
+                    gridPlanes[(i - 1 as i32) as usize][j as usize][0 as i32 as usize]
             } else if (*grid).wrapWidth as u64 != 0 {
-                borders[EN_LEFT as i32 as usize] = gridPlanes
-                    [((*grid).width - 2 as i32) as usize][j as usize]
-                    [0 as i32 as usize]
+                borders[EN_LEFT as i32 as usize] =
+                    gridPlanes[((*grid).width - 2 as i32) as usize][j as usize][0 as i32 as usize]
             }
             noAdjust[EN_LEFT as i32 as usize] = (borders[EN_LEFT as i32 as usize]
                 == gridPlanes[i as usize][j as usize][1 as i32 as usize])
@@ -2013,8 +1870,8 @@ unsafe extern "C" fn CM_PatchCollideFromGrid(
             }
             borders[EN_RIGHT as i32 as usize] = -(1 as i32);
             if i < (*grid).width - 2 as i32 {
-                borders[EN_RIGHT as i32 as usize] = gridPlanes
-                    [(i + 1 as i32) as usize][j as usize][1 as i32 as usize]
+                borders[EN_RIGHT as i32 as usize] =
+                    gridPlanes[(i + 1 as i32) as usize][j as usize][1 as i32 as usize]
             } else if (*grid).wrapWidth as u64 != 0 {
                 borders[EN_RIGHT as i32 as usize] =
                     gridPlanes[0 as i32 as usize][j as usize][1 as i32 as usize]
@@ -2044,40 +1901,22 @@ unsafe extern "C" fn CM_PatchCollideFromGrid(
             if gridPlanes[i as usize][j as usize][0 as i32 as usize]
                 == gridPlanes[i as usize][j as usize][1 as i32 as usize]
             {
-                if !(gridPlanes[i as usize][j as usize][0 as i32 as usize]
-                    == -(1 as i32))
-                {
-                    (*facet).surfacePlane =
-                        gridPlanes[i as usize][j as usize][0 as i32 as usize];
+                if !(gridPlanes[i as usize][j as usize][0 as i32 as usize] == -(1 as i32)) {
+                    (*facet).surfacePlane = gridPlanes[i as usize][j as usize][0 as i32 as usize];
                     (*facet).numBorders = 4 as i32;
-                    (*facet).borderPlanes[0 as i32 as usize] =
-                        borders[EN_TOP as i32 as usize];
-                    (*facet).borderNoAdjust[0 as i32 as usize] = noAdjust
-                        [EN_TOP as i32 as usize]
+                    (*facet).borderPlanes[0 as i32 as usize] = borders[EN_TOP as i32 as usize];
+                    (*facet).borderNoAdjust[0 as i32 as usize] =
+                        noAdjust[EN_TOP as i32 as usize] as crate::src::qcommon::q_shared::qboolean;
+                    (*facet).borderPlanes[1 as i32 as usize] = borders[EN_RIGHT as i32 as usize];
+                    (*facet).borderNoAdjust[1 as i32 as usize] = noAdjust[EN_RIGHT as i32 as usize]
                         as crate::src::qcommon::q_shared::qboolean;
-                    (*facet).borderPlanes[1 as i32 as usize] =
-                        borders[EN_RIGHT as i32 as usize];
-                    (*facet).borderNoAdjust[1 as i32 as usize] = noAdjust
-                        [EN_RIGHT as i32 as usize]
+                    (*facet).borderPlanes[2 as i32 as usize] = borders[EN_BOTTOM as i32 as usize];
+                    (*facet).borderNoAdjust[2 as i32 as usize] = noAdjust[EN_BOTTOM as i32 as usize]
                         as crate::src::qcommon::q_shared::qboolean;
-                    (*facet).borderPlanes[2 as i32 as usize] =
-                        borders[EN_BOTTOM as i32 as usize];
-                    (*facet).borderNoAdjust[2 as i32 as usize] = noAdjust
-                        [EN_BOTTOM as i32 as usize]
+                    (*facet).borderPlanes[3 as i32 as usize] = borders[EN_LEFT as i32 as usize];
+                    (*facet).borderNoAdjust[3 as i32 as usize] = noAdjust[EN_LEFT as i32 as usize]
                         as crate::src::qcommon::q_shared::qboolean;
-                    (*facet).borderPlanes[3 as i32 as usize] =
-                        borders[EN_LEFT as i32 as usize];
-                    (*facet).borderNoAdjust[3 as i32 as usize] = noAdjust
-                        [EN_LEFT as i32 as usize]
-                        as crate::src::qcommon::q_shared::qboolean;
-                    CM_SetBorderInward(
-                        facet,
-                        grid,
-                        gridPlanes.as_mut_ptr(),
-                        i,
-                        j,
-                        -(1 as i32),
-                    );
+                    CM_SetBorderInward(facet, grid, gridPlanes.as_mut_ptr(), i, j, -(1 as i32));
                     if CM_ValidateFacet(facet) as u64 != 0 {
                         CM_AddFacetBevels(facet);
                         numFacets += 1
@@ -2085,24 +1924,18 @@ unsafe extern "C" fn CM_PatchCollideFromGrid(
                 }
             } else {
                 // two separate triangles
-                (*facet).surfacePlane =
-                    gridPlanes[i as usize][j as usize][0 as i32 as usize];
+                (*facet).surfacePlane = gridPlanes[i as usize][j as usize][0 as i32 as usize];
                 (*facet).numBorders = 3 as i32;
-                (*facet).borderPlanes[0 as i32 as usize] =
-                    borders[EN_TOP as i32 as usize];
-                (*facet).borderNoAdjust[0 as i32 as usize] = noAdjust
-                    [EN_TOP as i32 as usize]
-                    as crate::src::qcommon::q_shared::qboolean;
-                (*facet).borderPlanes[1 as i32 as usize] =
-                    borders[EN_RIGHT as i32 as usize];
-                (*facet).borderNoAdjust[1 as i32 as usize] = noAdjust
-                    [EN_RIGHT as i32 as usize]
-                    as crate::src::qcommon::q_shared::qboolean;
+                (*facet).borderPlanes[0 as i32 as usize] = borders[EN_TOP as i32 as usize];
+                (*facet).borderNoAdjust[0 as i32 as usize] =
+                    noAdjust[EN_TOP as i32 as usize] as crate::src::qcommon::q_shared::qboolean;
+                (*facet).borderPlanes[1 as i32 as usize] = borders[EN_RIGHT as i32 as usize];
+                (*facet).borderNoAdjust[1 as i32 as usize] =
+                    noAdjust[EN_RIGHT as i32 as usize] as crate::src::qcommon::q_shared::qboolean;
                 (*facet).borderPlanes[2 as i32 as usize] =
                     gridPlanes[i as usize][j as usize][1 as i32 as usize];
                 if (*facet).borderPlanes[2 as i32 as usize] == -(1 as i32) {
-                    (*facet).borderPlanes[2 as i32 as usize] =
-                        borders[EN_BOTTOM as i32 as usize];
+                    (*facet).borderPlanes[2 as i32 as usize] = borders[EN_BOTTOM as i32 as usize];
                     if (*facet).borderPlanes[2 as i32 as usize] == -(1 as i32) {
                         (*facet).borderPlanes[2 as i32 as usize] =
                             CM_EdgePlaneNum(grid, gridPlanes.as_mut_ptr(), i, j, 4 as i32)
@@ -2127,24 +1960,18 @@ unsafe extern "C" fn CM_PatchCollideFromGrid(
                     ::std::mem::size_of::<crate::src::qcommon::cm_patch::facet_t>()
                         as libc::c_ulong,
                 );
-                (*facet).surfacePlane =
-                    gridPlanes[i as usize][j as usize][1 as i32 as usize];
+                (*facet).surfacePlane = gridPlanes[i as usize][j as usize][1 as i32 as usize];
                 (*facet).numBorders = 3 as i32;
-                (*facet).borderPlanes[0 as i32 as usize] =
-                    borders[EN_BOTTOM as i32 as usize];
-                (*facet).borderNoAdjust[0 as i32 as usize] = noAdjust
-                    [EN_BOTTOM as i32 as usize]
-                    as crate::src::qcommon::q_shared::qboolean;
-                (*facet).borderPlanes[1 as i32 as usize] =
-                    borders[EN_LEFT as i32 as usize];
-                (*facet).borderNoAdjust[1 as i32 as usize] = noAdjust
-                    [EN_LEFT as i32 as usize]
-                    as crate::src::qcommon::q_shared::qboolean;
+                (*facet).borderPlanes[0 as i32 as usize] = borders[EN_BOTTOM as i32 as usize];
+                (*facet).borderNoAdjust[0 as i32 as usize] =
+                    noAdjust[EN_BOTTOM as i32 as usize] as crate::src::qcommon::q_shared::qboolean;
+                (*facet).borderPlanes[1 as i32 as usize] = borders[EN_LEFT as i32 as usize];
+                (*facet).borderNoAdjust[1 as i32 as usize] =
+                    noAdjust[EN_LEFT as i32 as usize] as crate::src::qcommon::q_shared::qboolean;
                 (*facet).borderPlanes[2 as i32 as usize] =
                     gridPlanes[i as usize][j as usize][0 as i32 as usize];
                 if (*facet).borderPlanes[2 as i32 as usize] == -(1 as i32) {
-                    (*facet).borderPlanes[2 as i32 as usize] =
-                        borders[EN_TOP as i32 as usize];
+                    (*facet).borderPlanes[2 as i32 as usize] = borders[EN_TOP as i32 as usize];
                     if (*facet).borderPlanes[2 as i32 as usize] == -(1 as i32) {
                         (*facet).borderPlanes[2 as i32 as usize] =
                             CM_EdgePlaneNum(grid, gridPlanes.as_mut_ptr(), i, j, 5 as i32)
@@ -2300,18 +2127,12 @@ pub unsafe extern "C" fn CM_GeneratePatchCollide(
     // generate a bsp tree for the surface
     CM_PatchCollideFromGrid(&mut grid, pf);
     // expand by one unit for epsilon purposes
-    (*pf).bounds[0 as i32 as usize][0 as i32 as usize] -=
-        1 as i32 as f32;
-    (*pf).bounds[0 as i32 as usize][1 as i32 as usize] -=
-        1 as i32 as f32;
-    (*pf).bounds[0 as i32 as usize][2 as i32 as usize] -=
-        1 as i32 as f32;
-    (*pf).bounds[1 as i32 as usize][0 as i32 as usize] +=
-        1 as i32 as f32;
-    (*pf).bounds[1 as i32 as usize][1 as i32 as usize] +=
-        1 as i32 as f32;
-    (*pf).bounds[1 as i32 as usize][2 as i32 as usize] +=
-        1 as i32 as f32;
+    (*pf).bounds[0 as i32 as usize][0 as i32 as usize] -= 1 as i32 as f32;
+    (*pf).bounds[0 as i32 as usize][1 as i32 as usize] -= 1 as i32 as f32;
+    (*pf).bounds[0 as i32 as usize][2 as i32 as usize] -= 1 as i32 as f32;
+    (*pf).bounds[1 as i32 as usize][0 as i32 as usize] += 1 as i32 as f32;
+    (*pf).bounds[1 as i32 as usize][1 as i32 as usize] += 1 as i32 as f32;
+    (*pf).bounds[1 as i32 as usize][2 as i32 as usize] += 1 as i32 as f32;
     return pf;
 }
 /*
@@ -2403,8 +2224,7 @@ pub unsafe extern "C" fn CM_TracePointThroughPatchCollide(
                     j = 0 as i32;
                     while j < (*facet).numBorders {
                         k = (*facet).borderPlanes[j as usize];
-                        if frontFacing[k as usize] as u32
-                            ^ (*facet).borderInward[j as usize] as u32
+                        if frontFacing[k as usize] as u32 ^ (*facet).borderInward[j as usize] as u32
                             != 0
                         {
                             if intersection[k as usize] > intersect {
@@ -2433,34 +2253,23 @@ pub unsafe extern "C" fn CM_TracePointThroughPatchCollide(
                         planes_0 = &mut *(*pc).planes.offset((*facet).surfacePlane as isize)
                             as *mut crate::src::qcommon::cm_patch::patchPlane_t;
                         // calculate intersection with a slight pushoff
-                        offset = (*tw).offsets[(*planes_0).signbits as usize]
-                            [0 as i32 as usize]
+                        offset = (*tw).offsets[(*planes_0).signbits as usize][0 as i32 as usize]
                             * (*planes_0).plane[0 as i32 as usize]
-                            + (*tw).offsets[(*planes_0).signbits as usize]
-                                [1 as i32 as usize]
+                            + (*tw).offsets[(*planes_0).signbits as usize][1 as i32 as usize]
                                 * (*planes_0).plane[1 as i32 as usize]
-                            + (*tw).offsets[(*planes_0).signbits as usize]
-                                [2 as i32 as usize]
+                            + (*tw).offsets[(*planes_0).signbits as usize][2 as i32 as usize]
                                 * (*planes_0).plane[2 as i32 as usize];
-                        d1 = (*tw).start[0 as i32 as usize]
-                            * (*planes_0).plane[0 as i32 as usize]
-                            + (*tw).start[1 as i32 as usize]
-                                * (*planes_0).plane[1 as i32 as usize]
-                            + (*tw).start[2 as i32 as usize]
-                                * (*planes_0).plane[2 as i32 as usize]
+                        d1 = (*tw).start[0 as i32 as usize] * (*planes_0).plane[0 as i32 as usize]
+                            + (*tw).start[1 as i32 as usize] * (*planes_0).plane[1 as i32 as usize]
+                            + (*tw).start[2 as i32 as usize] * (*planes_0).plane[2 as i32 as usize]
                             - (*planes_0).plane[3 as i32 as usize]
                             + offset;
-                        d2 = (*tw).end[0 as i32 as usize]
-                            * (*planes_0).plane[0 as i32 as usize]
-                            + (*tw).end[1 as i32 as usize]
-                                * (*planes_0).plane[1 as i32 as usize]
-                            + (*tw).end[2 as i32 as usize]
-                                * (*planes_0).plane[2 as i32 as usize]
+                        d2 = (*tw).end[0 as i32 as usize] * (*planes_0).plane[0 as i32 as usize]
+                            + (*tw).end[1 as i32 as usize] * (*planes_0).plane[1 as i32 as usize]
+                            + (*tw).end[2 as i32 as usize] * (*planes_0).plane[2 as i32 as usize]
                             - (*planes_0).plane[3 as i32 as usize]
                             + offset;
-                        (*tw).trace.fraction = ((d1 as f64 - 0.125f64)
-                            / (d1 - d2) as f64)
-                            as f32;
+                        (*tw).trace.fraction = ((d1 as f64 - 0.125f64) / (d1 - d2) as f64) as f32;
                         if (*tw).trace.fraction < 0 as i32 as f32 {
                             (*tw).trace.fraction = 0 as i32 as f32
                         }
@@ -2580,10 +2389,8 @@ pub unsafe extern "C" fn CM_TraceThroughPatchCollide(
         as *mut crate::src::qcommon::q_shared::cvar_t;
     //BSPC
     if crate::src::qcommon::cm_test::CM_BoundsIntersect(
-        (*tw).bounds[0 as i32 as usize].as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
-        (*tw).bounds[1 as i32 as usize].as_mut_ptr()
-            as *const crate::src::qcommon::q_shared::vec_t,
+        (*tw).bounds[0 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
+        (*tw).bounds[1 as i32 as usize].as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         (*pc).bounds[0 as i32 as usize].as_ptr(),
         (*pc).bounds[1 as i32 as usize].as_ptr(),
     ) as u64
@@ -2616,31 +2423,31 @@ pub unsafe extern "C" fn CM_TraceThroughPatchCollide(
                 + plane[1 as i32 as usize] * (*tw).sphere.offset[1 as i32 as usize]
                 + plane[2 as i32 as usize] * (*tw).sphere.offset[2 as i32 as usize];
             if t > 0.0f32 {
-                startp[0 as i32 as usize] = (*tw).start[0 as i32 as usize]
-                    - (*tw).sphere.offset[0 as i32 as usize];
-                startp[1 as i32 as usize] = (*tw).start[1 as i32 as usize]
-                    - (*tw).sphere.offset[1 as i32 as usize];
-                startp[2 as i32 as usize] = (*tw).start[2 as i32 as usize]
-                    - (*tw).sphere.offset[2 as i32 as usize];
-                endp[0 as i32 as usize] = (*tw).end[0 as i32 as usize]
-                    - (*tw).sphere.offset[0 as i32 as usize];
-                endp[1 as i32 as usize] = (*tw).end[1 as i32 as usize]
-                    - (*tw).sphere.offset[1 as i32 as usize];
-                endp[2 as i32 as usize] = (*tw).end[2 as i32 as usize]
-                    - (*tw).sphere.offset[2 as i32 as usize]
+                startp[0 as i32 as usize] =
+                    (*tw).start[0 as i32 as usize] - (*tw).sphere.offset[0 as i32 as usize];
+                startp[1 as i32 as usize] =
+                    (*tw).start[1 as i32 as usize] - (*tw).sphere.offset[1 as i32 as usize];
+                startp[2 as i32 as usize] =
+                    (*tw).start[2 as i32 as usize] - (*tw).sphere.offset[2 as i32 as usize];
+                endp[0 as i32 as usize] =
+                    (*tw).end[0 as i32 as usize] - (*tw).sphere.offset[0 as i32 as usize];
+                endp[1 as i32 as usize] =
+                    (*tw).end[1 as i32 as usize] - (*tw).sphere.offset[1 as i32 as usize];
+                endp[2 as i32 as usize] =
+                    (*tw).end[2 as i32 as usize] - (*tw).sphere.offset[2 as i32 as usize]
             } else {
-                startp[0 as i32 as usize] = (*tw).start[0 as i32 as usize]
-                    + (*tw).sphere.offset[0 as i32 as usize];
-                startp[1 as i32 as usize] = (*tw).start[1 as i32 as usize]
-                    + (*tw).sphere.offset[1 as i32 as usize];
-                startp[2 as i32 as usize] = (*tw).start[2 as i32 as usize]
-                    + (*tw).sphere.offset[2 as i32 as usize];
-                endp[0 as i32 as usize] = (*tw).end[0 as i32 as usize]
-                    + (*tw).sphere.offset[0 as i32 as usize];
-                endp[1 as i32 as usize] = (*tw).end[1 as i32 as usize]
-                    + (*tw).sphere.offset[1 as i32 as usize];
-                endp[2 as i32 as usize] = (*tw).end[2 as i32 as usize]
-                    + (*tw).sphere.offset[2 as i32 as usize]
+                startp[0 as i32 as usize] =
+                    (*tw).start[0 as i32 as usize] + (*tw).sphere.offset[0 as i32 as usize];
+                startp[1 as i32 as usize] =
+                    (*tw).start[1 as i32 as usize] + (*tw).sphere.offset[1 as i32 as usize];
+                startp[2 as i32 as usize] =
+                    (*tw).start[2 as i32 as usize] + (*tw).sphere.offset[2 as i32 as usize];
+                endp[0 as i32 as usize] =
+                    (*tw).end[0 as i32 as usize] + (*tw).sphere.offset[0 as i32 as usize];
+                endp[1 as i32 as usize] =
+                    (*tw).end[1 as i32 as usize] + (*tw).sphere.offset[1 as i32 as usize];
+                endp[2 as i32 as usize] =
+                    (*tw).end[2 as i32 as usize] + (*tw).sphere.offset[2 as i32 as usize]
             }
         } else {
             offset = (*tw).offsets[(*planes_0).signbits as usize][0 as i32 as usize]
@@ -2679,12 +2486,9 @@ pub unsafe extern "C" fn CM_TraceThroughPatchCollide(
                     .offset(*(*facet).borderPlanes.as_mut_ptr().offset(j as isize) as isize)
                     as *mut crate::src::qcommon::cm_patch::patchPlane_t;
                 if (*facet).borderInward[j as usize] != 0 {
-                    plane[0 as i32 as usize] =
-                        -(*planes_0).plane[0 as i32 as usize];
-                    plane[1 as i32 as usize] =
-                        -(*planes_0).plane[1 as i32 as usize];
-                    plane[2 as i32 as usize] =
-                        -(*planes_0).plane[2 as i32 as usize];
+                    plane[0 as i32 as usize] = -(*planes_0).plane[0 as i32 as usize];
+                    plane[1 as i32 as usize] = -(*planes_0).plane[1 as i32 as usize];
+                    plane[2 as i32 as usize] = -(*planes_0).plane[2 as i32 as usize];
                     plane[3 as i32 as usize] = -(*planes_0).plane[3 as i32 as usize]
                 } else {
                     plane[0 as i32 as usize] = (*planes_0).plane[0 as i32 as usize];
@@ -2696,50 +2500,45 @@ pub unsafe extern "C" fn CM_TraceThroughPatchCollide(
                     // adjust the plane distance appropriately for radius
                     plane[3 as i32 as usize] += (*tw).sphere.radius;
                     // find the closest point on the capsule to the plane
-                    t = plane[0 as i32 as usize]
-                        * (*tw).sphere.offset[0 as i32 as usize]
-                        + plane[1 as i32 as usize]
-                            * (*tw).sphere.offset[1 as i32 as usize]
-                        + plane[2 as i32 as usize]
-                            * (*tw).sphere.offset[2 as i32 as usize];
+                    t = plane[0 as i32 as usize] * (*tw).sphere.offset[0 as i32 as usize]
+                        + plane[1 as i32 as usize] * (*tw).sphere.offset[1 as i32 as usize]
+                        + plane[2 as i32 as usize] * (*tw).sphere.offset[2 as i32 as usize];
                     if t > 0.0f32 {
-                        startp[0 as i32 as usize] = (*tw).start[0 as i32 as usize]
-                            - (*tw).sphere.offset[0 as i32 as usize];
-                        startp[1 as i32 as usize] = (*tw).start[1 as i32 as usize]
-                            - (*tw).sphere.offset[1 as i32 as usize];
-                        startp[2 as i32 as usize] = (*tw).start[2 as i32 as usize]
-                            - (*tw).sphere.offset[2 as i32 as usize];
-                        endp[0 as i32 as usize] = (*tw).end[0 as i32 as usize]
-                            - (*tw).sphere.offset[0 as i32 as usize];
-                        endp[1 as i32 as usize] = (*tw).end[1 as i32 as usize]
-                            - (*tw).sphere.offset[1 as i32 as usize];
-                        endp[2 as i32 as usize] = (*tw).end[2 as i32 as usize]
-                            - (*tw).sphere.offset[2 as i32 as usize]
+                        startp[0 as i32 as usize] =
+                            (*tw).start[0 as i32 as usize] - (*tw).sphere.offset[0 as i32 as usize];
+                        startp[1 as i32 as usize] =
+                            (*tw).start[1 as i32 as usize] - (*tw).sphere.offset[1 as i32 as usize];
+                        startp[2 as i32 as usize] =
+                            (*tw).start[2 as i32 as usize] - (*tw).sphere.offset[2 as i32 as usize];
+                        endp[0 as i32 as usize] =
+                            (*tw).end[0 as i32 as usize] - (*tw).sphere.offset[0 as i32 as usize];
+                        endp[1 as i32 as usize] =
+                            (*tw).end[1 as i32 as usize] - (*tw).sphere.offset[1 as i32 as usize];
+                        endp[2 as i32 as usize] =
+                            (*tw).end[2 as i32 as usize] - (*tw).sphere.offset[2 as i32 as usize]
                     } else {
-                        startp[0 as i32 as usize] = (*tw).start[0 as i32 as usize]
-                            + (*tw).sphere.offset[0 as i32 as usize];
-                        startp[1 as i32 as usize] = (*tw).start[1 as i32 as usize]
-                            + (*tw).sphere.offset[1 as i32 as usize];
-                        startp[2 as i32 as usize] = (*tw).start[2 as i32 as usize]
-                            + (*tw).sphere.offset[2 as i32 as usize];
-                        endp[0 as i32 as usize] = (*tw).end[0 as i32 as usize]
-                            + (*tw).sphere.offset[0 as i32 as usize];
-                        endp[1 as i32 as usize] = (*tw).end[1 as i32 as usize]
-                            + (*tw).sphere.offset[1 as i32 as usize];
-                        endp[2 as i32 as usize] = (*tw).end[2 as i32 as usize]
-                            + (*tw).sphere.offset[2 as i32 as usize]
+                        startp[0 as i32 as usize] =
+                            (*tw).start[0 as i32 as usize] + (*tw).sphere.offset[0 as i32 as usize];
+                        startp[1 as i32 as usize] =
+                            (*tw).start[1 as i32 as usize] + (*tw).sphere.offset[1 as i32 as usize];
+                        startp[2 as i32 as usize] =
+                            (*tw).start[2 as i32 as usize] + (*tw).sphere.offset[2 as i32 as usize];
+                        endp[0 as i32 as usize] =
+                            (*tw).end[0 as i32 as usize] + (*tw).sphere.offset[0 as i32 as usize];
+                        endp[1 as i32 as usize] =
+                            (*tw).end[1 as i32 as usize] + (*tw).sphere.offset[1 as i32 as usize];
+                        endp[2 as i32 as usize] =
+                            (*tw).end[2 as i32 as usize] + (*tw).sphere.offset[2 as i32 as usize]
                     }
                 } else {
                     // NOTE: this works even though the plane might be flipped because the bbox is centered
-                    offset = (*tw).offsets[(*planes_0).signbits as usize]
-                        [0 as i32 as usize]
+                    offset = (*tw).offsets[(*planes_0).signbits as usize][0 as i32 as usize]
                         * plane[0 as i32 as usize]
                         + (*tw).offsets[(*planes_0).signbits as usize][1 as i32 as usize]
                             * plane[1 as i32 as usize]
                         + (*tw).offsets[(*planes_0).signbits as usize][2 as i32 as usize]
                             * plane[2 as i32 as usize];
-                    plane[3 as i32 as usize] = (plane[3 as i32 as usize]
-                        as f64
+                    plane[3 as i32 as usize] = (plane[3 as i32 as usize] as f64
                         + crate::stdlib::fabs(offset as f64))
                         as f32;
                     startp[0 as i32 as usize] = (*tw).start[0 as i32 as usize];
@@ -2902,19 +2701,19 @@ pub unsafe extern "C" fn CM_PositionTestInPatchCollide(
                 + plane[1 as i32 as usize] * (*tw).sphere.offset[1 as i32 as usize]
                 + plane[2 as i32 as usize] * (*tw).sphere.offset[2 as i32 as usize];
             if t > 0 as i32 as f32 {
-                startp[0 as i32 as usize] = (*tw).start[0 as i32 as usize]
-                    - (*tw).sphere.offset[0 as i32 as usize];
-                startp[1 as i32 as usize] = (*tw).start[1 as i32 as usize]
-                    - (*tw).sphere.offset[1 as i32 as usize];
-                startp[2 as i32 as usize] = (*tw).start[2 as i32 as usize]
-                    - (*tw).sphere.offset[2 as i32 as usize]
+                startp[0 as i32 as usize] =
+                    (*tw).start[0 as i32 as usize] - (*tw).sphere.offset[0 as i32 as usize];
+                startp[1 as i32 as usize] =
+                    (*tw).start[1 as i32 as usize] - (*tw).sphere.offset[1 as i32 as usize];
+                startp[2 as i32 as usize] =
+                    (*tw).start[2 as i32 as usize] - (*tw).sphere.offset[2 as i32 as usize]
             } else {
-                startp[0 as i32 as usize] = (*tw).start[0 as i32 as usize]
-                    + (*tw).sphere.offset[0 as i32 as usize];
-                startp[1 as i32 as usize] = (*tw).start[1 as i32 as usize]
-                    + (*tw).sphere.offset[1 as i32 as usize];
-                startp[2 as i32 as usize] = (*tw).start[2 as i32 as usize]
-                    + (*tw).sphere.offset[2 as i32 as usize]
+                startp[0 as i32 as usize] =
+                    (*tw).start[0 as i32 as usize] + (*tw).sphere.offset[0 as i32 as usize];
+                startp[1 as i32 as usize] =
+                    (*tw).start[1 as i32 as usize] + (*tw).sphere.offset[1 as i32 as usize];
+                startp[2 as i32 as usize] =
+                    (*tw).start[2 as i32 as usize] + (*tw).sphere.offset[2 as i32 as usize]
             }
         } else {
             offset = (*tw).offsets[(*planes_0).signbits as usize][0 as i32 as usize]
@@ -2941,12 +2740,9 @@ pub unsafe extern "C" fn CM_PositionTestInPatchCollide(
                     .offset(*(*facet).borderPlanes.as_mut_ptr().offset(j as isize) as isize)
                     as *mut crate::src::qcommon::cm_patch::patchPlane_t;
                 if (*facet).borderInward[j as usize] != 0 {
-                    plane[0 as i32 as usize] =
-                        -(*planes_0).plane[0 as i32 as usize];
-                    plane[1 as i32 as usize] =
-                        -(*planes_0).plane[1 as i32 as usize];
-                    plane[2 as i32 as usize] =
-                        -(*planes_0).plane[2 as i32 as usize];
+                    plane[0 as i32 as usize] = -(*planes_0).plane[0 as i32 as usize];
+                    plane[1 as i32 as usize] = -(*planes_0).plane[1 as i32 as usize];
+                    plane[2 as i32 as usize] = -(*planes_0).plane[2 as i32 as usize];
                     plane[3 as i32 as usize] = -(*planes_0).plane[3 as i32 as usize]
                 } else {
                     plane[0 as i32 as usize] = (*planes_0).plane[0 as i32 as usize];
@@ -2958,38 +2754,33 @@ pub unsafe extern "C" fn CM_PositionTestInPatchCollide(
                     // adjust the plane distance appropriately for radius
                     plane[3 as i32 as usize] += (*tw).sphere.radius;
                     // find the closest point on the capsule to the plane
-                    t = plane[0 as i32 as usize]
-                        * (*tw).sphere.offset[0 as i32 as usize]
-                        + plane[1 as i32 as usize]
-                            * (*tw).sphere.offset[1 as i32 as usize]
-                        + plane[2 as i32 as usize]
-                            * (*tw).sphere.offset[2 as i32 as usize];
+                    t = plane[0 as i32 as usize] * (*tw).sphere.offset[0 as i32 as usize]
+                        + plane[1 as i32 as usize] * (*tw).sphere.offset[1 as i32 as usize]
+                        + plane[2 as i32 as usize] * (*tw).sphere.offset[2 as i32 as usize];
                     if t > 0.0f32 {
-                        startp[0 as i32 as usize] = (*tw).start[0 as i32 as usize]
-                            - (*tw).sphere.offset[0 as i32 as usize];
-                        startp[1 as i32 as usize] = (*tw).start[1 as i32 as usize]
-                            - (*tw).sphere.offset[1 as i32 as usize];
-                        startp[2 as i32 as usize] = (*tw).start[2 as i32 as usize]
-                            - (*tw).sphere.offset[2 as i32 as usize]
+                        startp[0 as i32 as usize] =
+                            (*tw).start[0 as i32 as usize] - (*tw).sphere.offset[0 as i32 as usize];
+                        startp[1 as i32 as usize] =
+                            (*tw).start[1 as i32 as usize] - (*tw).sphere.offset[1 as i32 as usize];
+                        startp[2 as i32 as usize] =
+                            (*tw).start[2 as i32 as usize] - (*tw).sphere.offset[2 as i32 as usize]
                     } else {
-                        startp[0 as i32 as usize] = (*tw).start[0 as i32 as usize]
-                            + (*tw).sphere.offset[0 as i32 as usize];
-                        startp[1 as i32 as usize] = (*tw).start[1 as i32 as usize]
-                            + (*tw).sphere.offset[1 as i32 as usize];
-                        startp[2 as i32 as usize] = (*tw).start[2 as i32 as usize]
-                            + (*tw).sphere.offset[2 as i32 as usize]
+                        startp[0 as i32 as usize] =
+                            (*tw).start[0 as i32 as usize] + (*tw).sphere.offset[0 as i32 as usize];
+                        startp[1 as i32 as usize] =
+                            (*tw).start[1 as i32 as usize] + (*tw).sphere.offset[1 as i32 as usize];
+                        startp[2 as i32 as usize] =
+                            (*tw).start[2 as i32 as usize] + (*tw).sphere.offset[2 as i32 as usize]
                     }
                 } else {
                     // NOTE: this works even though the plane might be flipped because the bbox is centered
-                    offset = (*tw).offsets[(*planes_0).signbits as usize]
-                        [0 as i32 as usize]
+                    offset = (*tw).offsets[(*planes_0).signbits as usize][0 as i32 as usize]
                         * plane[0 as i32 as usize]
                         + (*tw).offsets[(*planes_0).signbits as usize][1 as i32 as usize]
                             * plane[1 as i32 as usize]
                         + (*tw).offsets[(*planes_0).signbits as usize][2 as i32 as usize]
                             * plane[2 as i32 as usize];
-                    plane[3 as i32 as usize] = (plane[3 as i32 as usize]
-                        as f64
+                    plane[3 as i32 as usize] = (plane[3 as i32 as usize] as f64
                         + crate::stdlib::fabs(offset as f64))
                         as f32;
                     startp[0 as i32 as usize] = (*tw).start[0 as i32 as usize];
@@ -3045,9 +2836,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #[no_mangle]
 
 pub unsafe extern "C" fn CM_DrawDebugSurface(
-    mut drawPoly: Option<
-        unsafe extern "C" fn(_: i32, _: i32, _: *mut f32) -> (),
-    >,
+    mut drawPoly: Option<unsafe extern "C" fn(_: i32, _: i32, _: *mut f32) -> ()>,
 ) {
     static mut cv: *mut crate::src::qcommon::q_shared::cvar_t = 0
         as *const crate::src::qcommon::q_shared::cvar_t
@@ -3158,8 +2947,7 @@ pub unsafe extern "C" fn CM_DrawDebugSurface(
                 + crate::stdlib::fabs(
                     (v1[0 as i32 as usize] * v2[0 as i32 as usize]
                         + v1[1 as i32 as usize] * v2[1 as i32 as usize]
-                        + v1[2 as i32 as usize] * v2[2 as i32 as usize])
-                        as f64,
+                        + v1[2 as i32 as usize] * v2[2 as i32 as usize]) as f64,
                 )) as f32;
             //*/
             w = crate::src::qcommon::cm_polylib::BaseWindingForPlane(
@@ -3179,14 +2967,14 @@ pub unsafe extern "C" fn CM_DrawDebugSurface(
                 }
                 //
                 if !(curplanenum == planenum) {
-                    plane[0 as i32 as usize] = (*(*pc).planes.offset(curplanenum as isize))
-                        .plane[0 as i32 as usize];
-                    plane[1 as i32 as usize] = (*(*pc).planes.offset(curplanenum as isize))
-                        .plane[1 as i32 as usize];
-                    plane[2 as i32 as usize] = (*(*pc).planes.offset(curplanenum as isize))
-                        .plane[2 as i32 as usize];
-                    plane[3 as i32 as usize] = (*(*pc).planes.offset(curplanenum as isize))
-                        .plane[3 as i32 as usize];
+                    plane[0 as i32 as usize] =
+                        (*(*pc).planes.offset(curplanenum as isize)).plane[0 as i32 as usize];
+                    plane[1 as i32 as usize] =
+                        (*(*pc).planes.offset(curplanenum as isize)).plane[1 as i32 as usize];
+                    plane[2 as i32 as usize] =
+                        (*(*pc).planes.offset(curplanenum as isize)).plane[2 as i32 as usize];
+                    plane[3 as i32 as usize] =
+                        (*(*pc).planes.offset(curplanenum as isize)).plane[3 as i32 as usize];
                     if curinward == 0 {
                         plane[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
                             [0 as i32 as usize]
@@ -3214,8 +3002,7 @@ pub unsafe extern "C" fn CM_DrawDebugSurface(
                     v2[0 as i32 as usize] = -plane[0 as i32 as usize];
                     v2[1 as i32 as usize] = -plane[1 as i32 as usize];
                     v2[2 as i32 as usize] = -plane[2 as i32 as usize];
-                    plane[3 as i32 as usize] = (plane[3 as i32 as usize]
-                        as f64
+                    plane[3 as i32 as usize] = (plane[3 as i32 as usize] as f64
                         - crate::stdlib::fabs(
                             (v1[0 as i32 as usize] * v2[0 as i32 as usize]
                                 + v1[1 as i32 as usize] * v2[1 as i32 as usize]

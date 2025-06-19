@@ -276,8 +276,7 @@ unsafe extern "C" fn UI_Mods_ParseInfos(
             as isize,
     );
     s_mods.fs_gamePtr = s_mods.fs_gamePtr.offset(
-        crate::stdlib::strlen(s_mods.fs_gamePtr).wrapping_add(1 as i32 as libc::c_ulong)
-            as isize,
+        crate::stdlib::strlen(s_mods.fs_gamePtr).wrapping_add(1 as i32 as libc::c_ulong) as isize,
     );
     s_mods.list.numitems += 1;
 }
@@ -314,8 +313,7 @@ unsafe extern "C" fn UI_Mods_LoadMods() {
     dirptr = dirlist.as_mut_ptr();
     i = 0 as i32;
     while i < numdirs {
-        dirlen = crate::stdlib::strlen(dirptr).wrapping_add(1 as i32 as libc::c_ulong)
-            as i32;
+        dirlen = crate::stdlib::strlen(dirptr).wrapping_add(1 as i32 as libc::c_ulong) as i32;
         descptr = dirptr.offset(dirlen as isize);
         UI_Mods_ParseInfos(dirptr, descptr);
         dirptr = dirptr.offset(
@@ -370,8 +368,7 @@ unsafe extern "C" fn UI_Mods_MenuInit() {
     s_mods.framer.height = 334 as i32;
     s_mods.back.generic.type_0 = 6 as i32;
     s_mods.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    s_mods.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_mods.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_mods.back.generic.id = 10 as i32;
     s_mods.back.generic.callback =
         Some(UI_Mods_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
@@ -383,8 +380,7 @@ unsafe extern "C" fn UI_Mods_MenuInit() {
         b"menu/art/back_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_mods.go.generic.type_0 = 6 as i32;
     s_mods.go.generic.name = b"menu/art/load_0\x00" as *const u8 as *const libc::c_char;
-    s_mods.go.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_mods.go.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     s_mods.go.generic.id = 11 as i32;
     s_mods.go.generic.callback =
         Some(UI_Mods_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
@@ -396,8 +392,7 @@ unsafe extern "C" fn UI_Mods_MenuInit() {
         b"menu/art/load_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     // scan for mods
     s_mods.list.generic.type_0 = 8 as i32;
-    s_mods.list.generic.flags =
-        0x100 as i32 as u32 | 0x8 as i32 as u32;
+    s_mods.list.generic.flags = 0x100 as i32 as u32 | 0x8 as i32 as u32;
     s_mods.list.generic.callback =
         Some(UI_Mods_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_mods.list.generic.id = 12 as i32;

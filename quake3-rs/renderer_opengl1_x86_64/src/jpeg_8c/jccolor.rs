@@ -239,61 +239,45 @@ unsafe extern "C" fn rgb_ycc_start(mut cinfo: crate::jpeglib_h::j_compress_ptr) 
             (0.29900f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
                 as crate::jmorecfg_h::INT32
                 * i;
-        *rgb_ycc_tab.offset(
-            (i + (1 as i32 * (255 as i32 + 1 as i32)) as libc::c_long)
-                as isize,
-        ) = (0.58700f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
-            as crate::jmorecfg_h::INT32
-            * i;
-        *rgb_ycc_tab.offset(
-            (i + (2 as i32 * (255 as i32 + 1 as i32)) as libc::c_long)
-                as isize,
-        ) = (0.11400f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
-            as crate::jmorecfg_h::INT32
-            * i
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
-                << 16 as i32 - 1 as i32);
-        *rgb_ycc_tab.offset(
-            (i + (3 as i32 * (255 as i32 + 1 as i32)) as libc::c_long)
-                as isize,
-        ) = -((0.16874f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
-            as crate::jmorecfg_h::INT32)
-            * i;
-        *rgb_ycc_tab.offset(
-            (i + (4 as i32 * (255 as i32 + 1 as i32)) as libc::c_long)
-                as isize,
-        ) = -((0.33126f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
-            as crate::jmorecfg_h::INT32)
-            * i;
+        *rgb_ycc_tab.offset((i + (1 as i32 * (255 as i32 + 1 as i32)) as libc::c_long) as isize) =
+            (0.58700f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+                as crate::jmorecfg_h::INT32
+                * i;
+        *rgb_ycc_tab.offset((i + (2 as i32 * (255 as i32 + 1 as i32)) as libc::c_long) as isize) =
+            (0.11400f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+                as crate::jmorecfg_h::INT32
+                * i
+                + ((1 as i32 as crate::jmorecfg_h::INT32) << 16 as i32 - 1 as i32);
+        *rgb_ycc_tab.offset((i + (3 as i32 * (255 as i32 + 1 as i32)) as libc::c_long) as isize) =
+            -((0.16874f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+                as crate::jmorecfg_h::INT32)
+                * i;
+        *rgb_ycc_tab.offset((i + (4 as i32 * (255 as i32 + 1 as i32)) as libc::c_long) as isize) =
+            -((0.33126f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+                as crate::jmorecfg_h::INT32)
+                * i;
         /* We use a rounding fudge-factor of 0.5-epsilon for Cb and Cr.
          * This ensures that the maximum output will round to MAXJSAMPLE
          * not MAXJSAMPLE+1, and thus that we don't have to range-limit.
          */
-        *rgb_ycc_tab.offset(
-            (i + (5 as i32 * (255 as i32 + 1 as i32)) as libc::c_long)
-                as isize,
-        ) = (0.50000f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
-            as crate::jmorecfg_h::INT32
-            * i
-            + ((128 as i32 as crate::jmorecfg_h::INT32) << 16 as i32)
-            + ((1 as i32 as crate::jmorecfg_h::INT32)
-                << 16 as i32 - 1 as i32)
-            - 1 as i32 as libc::c_long;
+        *rgb_ycc_tab.offset((i + (5 as i32 * (255 as i32 + 1 as i32)) as libc::c_long) as isize) =
+            (0.50000f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+                as crate::jmorecfg_h::INT32
+                * i
+                + ((128 as i32 as crate::jmorecfg_h::INT32) << 16 as i32)
+                + ((1 as i32 as crate::jmorecfg_h::INT32) << 16 as i32 - 1 as i32)
+                - 1 as i32 as libc::c_long;
         /*  B=>Cb and R=>Cr tables are the same
             rgb_ycc_tab[i+R_CR_OFF] = FIX(0.50000) * i    + CBCR_OFFSET + ONE_HALF-1;
         */
-        *rgb_ycc_tab.offset(
-            (i + (6 as i32 * (255 as i32 + 1 as i32)) as libc::c_long)
-                as isize,
-        ) = -((0.41869f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
-            as crate::jmorecfg_h::INT32)
-            * i;
-        *rgb_ycc_tab.offset(
-            (i + (7 as i32 * (255 as i32 + 1 as i32)) as libc::c_long)
-                as isize,
-        ) = -((0.08131f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
-            as crate::jmorecfg_h::INT32)
-            * i;
+        *rgb_ycc_tab.offset((i + (6 as i32 * (255 as i32 + 1 as i32)) as libc::c_long) as isize) =
+            -((0.41869f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+                as crate::jmorecfg_h::INT32)
+                * i;
+        *rgb_ycc_tab.offset((i + (7 as i32 * (255 as i32 + 1 as i32)) as libc::c_long) as isize) =
+            -((0.08131f64 * ((1 as libc::c_long) << 16 as i32) as f64 + 0.5f64)
+                as crate::jmorecfg_h::INT32)
+                * i;
         i += 1
     }
 }
@@ -352,32 +336,22 @@ unsafe extern "C" fn rgb_ycc_convert(
              */
             /* Y */
             *outptr0.offset(col as isize) = (*ctab.offset((r + 0 as i32) as isize)
-                + *ctab.offset(
-                    (g + 1 as i32 * (255 as i32 + 1 as i32)) as isize,
-                )
-                + *ctab.offset(
-                    (b + 2 as i32 * (255 as i32 + 1 as i32)) as isize,
-                )
+                + *ctab.offset((g + 1 as i32 * (255 as i32 + 1 as i32)) as isize)
+                + *ctab.offset((b + 2 as i32 * (255 as i32 + 1 as i32)) as isize)
                 >> 16 as i32)
                 as crate::jmorecfg_h::JSAMPLE;
             /* Cb */
             *outptr1.offset(col as isize) =
-                (*ctab.offset(
-                    (r + 3 as i32 * (255 as i32 + 1 as i32)) as isize,
-                ) + *ctab.offset(
-                    (g + 4 as i32 * (255 as i32 + 1 as i32)) as isize,
-                ) + *ctab.offset(
-                    (b + 5 as i32 * (255 as i32 + 1 as i32)) as isize,
-                ) >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
+                (*ctab.offset((r + 3 as i32 * (255 as i32 + 1 as i32)) as isize)
+                    + *ctab.offset((g + 4 as i32 * (255 as i32 + 1 as i32)) as isize)
+                    + *ctab.offset((b + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
+                    >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
             /* Cr */
             *outptr2.offset(col as isize) =
-                (*ctab.offset(
-                    (r + 5 as i32 * (255 as i32 + 1 as i32)) as isize,
-                ) + *ctab.offset(
-                    (g + 6 as i32 * (255 as i32 + 1 as i32)) as isize,
-                ) + *ctab.offset(
-                    (b + 7 as i32 * (255 as i32 + 1 as i32)) as isize,
-                ) >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
+                (*ctab.offset((r + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
+                    + *ctab.offset((g + 6 as i32 * (255 as i32 + 1 as i32)) as isize)
+                    + *ctab.offset((b + 7 as i32 * (255 as i32 + 1 as i32)) as isize)
+                    >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
             col = col.wrapping_add(1)
         }
     }
@@ -424,12 +398,8 @@ unsafe extern "C" fn rgb_gray_convert(
             inptr = inptr.offset(3 as i32 as isize);
             /* Y */
             *outptr.offset(col as isize) = (*ctab.offset((r + 0 as i32) as isize)
-                + *ctab.offset(
-                    (g + 1 as i32 * (255 as i32 + 1 as i32)) as isize,
-                )
-                + *ctab.offset(
-                    (b + 2 as i32 * (255 as i32 + 1 as i32)) as isize,
-                )
+                + *ctab.offset((g + 1 as i32 * (255 as i32 + 1 as i32)) as isize)
+                + *ctab.offset((b + 2 as i32 * (255 as i32 + 1 as i32)) as isize)
                 >> 16 as i32)
                 as crate::jmorecfg_h::JSAMPLE;
             col = col.wrapping_add(1)
@@ -491,32 +461,22 @@ unsafe extern "C" fn cmyk_ycck_convert(
              */
             /* Y */
             *outptr0.offset(col as isize) = (*ctab.offset((r + 0 as i32) as isize)
-                + *ctab.offset(
-                    (g + 1 as i32 * (255 as i32 + 1 as i32)) as isize,
-                )
-                + *ctab.offset(
-                    (b + 2 as i32 * (255 as i32 + 1 as i32)) as isize,
-                )
+                + *ctab.offset((g + 1 as i32 * (255 as i32 + 1 as i32)) as isize)
+                + *ctab.offset((b + 2 as i32 * (255 as i32 + 1 as i32)) as isize)
                 >> 16 as i32)
                 as crate::jmorecfg_h::JSAMPLE;
             /* Cb */
             *outptr1.offset(col as isize) =
-                (*ctab.offset(
-                    (r + 3 as i32 * (255 as i32 + 1 as i32)) as isize,
-                ) + *ctab.offset(
-                    (g + 4 as i32 * (255 as i32 + 1 as i32)) as isize,
-                ) + *ctab.offset(
-                    (b + 5 as i32 * (255 as i32 + 1 as i32)) as isize,
-                ) >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
+                (*ctab.offset((r + 3 as i32 * (255 as i32 + 1 as i32)) as isize)
+                    + *ctab.offset((g + 4 as i32 * (255 as i32 + 1 as i32)) as isize)
+                    + *ctab.offset((b + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
+                    >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
             /* Cr */
             *outptr2.offset(col as isize) =
-                (*ctab.offset(
-                    (r + 5 as i32 * (255 as i32 + 1 as i32)) as isize,
-                ) + *ctab.offset(
-                    (g + 6 as i32 * (255 as i32 + 1 as i32)) as isize,
-                ) + *ctab.offset(
-                    (b + 7 as i32 * (255 as i32 + 1 as i32)) as isize,
-                ) >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
+                (*ctab.offset((r + 5 as i32 * (255 as i32 + 1 as i32)) as isize)
+                    + *ctab.offset((g + 6 as i32 * (255 as i32 + 1 as i32)) as isize)
+                    + *ctab.offset((b + 7 as i32 * (255 as i32 + 1 as i32)) as isize)
+                    >> 16 as i32) as crate::jmorecfg_h::JSAMPLE;
             col = col.wrapping_add(1)
         }
     }
@@ -702,9 +662,7 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: crate::jpeglib_h::j_co
                     cinfo as crate::jpeglib_h::j_common_ptr
                 );
             }
-            if (*cinfo).in_color_space as u32
-                == crate::jpeglib_h::JCS_GRAYSCALE as i32 as u32
-            {
+            if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_GRAYSCALE as i32 as u32 {
                 (*cconvert).pub_0.color_convert = Some(
                     grayscale_convert
                         as unsafe extern "C" fn(
@@ -715,9 +673,7 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: crate::jpeglib_h::j_co
                             _: i32,
                         ) -> (),
                 )
-            } else if (*cinfo).in_color_space as u32
-                == crate::jpeglib_h::JCS_RGB as i32 as u32
-            {
+            } else if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_RGB as i32 as u32 {
                 (*cconvert).pub_0.start_pass = Some(
                     rgb_ycc_start
                         as unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr) -> (),
@@ -732,9 +688,7 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: crate::jpeglib_h::j_co
                             _: i32,
                         ) -> (),
                 )
-            } else if (*cinfo).in_color_space as u32
-                == crate::jpeglib_h::JCS_YCbCr as i32 as u32
-            {
+            } else if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_YCbCr as i32 as u32 {
                 (*cconvert).pub_0.color_convert = Some(
                     grayscale_convert
                         as unsafe extern "C" fn(
@@ -771,8 +725,7 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: crate::jpeglib_h::j_co
                     cinfo as crate::jpeglib_h::j_common_ptr
                 );
             }
-            if (*cinfo).in_color_space as u32
-                == crate::jpeglib_h::JCS_RGB as i32 as u32
+            if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_RGB as i32 as u32
                 && 3 as i32 == 3 as i32
             {
                 (*cconvert).pub_0.color_convert = Some(
@@ -811,9 +764,7 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: crate::jpeglib_h::j_co
                     cinfo as crate::jpeglib_h::j_common_ptr
                 );
             }
-            if (*cinfo).in_color_space as u32
-                == crate::jpeglib_h::JCS_RGB as i32 as u32
-            {
+            if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_RGB as i32 as u32 {
                 (*cconvert).pub_0.start_pass = Some(
                     rgb_ycc_start
                         as unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr) -> (),
@@ -828,9 +779,7 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: crate::jpeglib_h::j_co
                             _: i32,
                         ) -> (),
                 )
-            } else if (*cinfo).in_color_space as u32
-                == crate::jpeglib_h::JCS_YCbCr as i32 as u32
-            {
+            } else if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_YCbCr as i32 as u32 {
                 (*cconvert).pub_0.color_convert = Some(
                     null_convert
                         as unsafe extern "C" fn(
@@ -867,9 +816,7 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: crate::jpeglib_h::j_co
                     cinfo as crate::jpeglib_h::j_common_ptr
                 );
             }
-            if (*cinfo).in_color_space as u32
-                == crate::jpeglib_h::JCS_CMYK as i32 as u32
-            {
+            if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_CMYK as i32 as u32 {
                 (*cconvert).pub_0.color_convert = Some(
                     null_convert
                         as unsafe extern "C" fn(
@@ -906,9 +853,7 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: crate::jpeglib_h::j_co
                     cinfo as crate::jpeglib_h::j_common_ptr
                 );
             }
-            if (*cinfo).in_color_space as u32
-                == crate::jpeglib_h::JCS_CMYK as i32 as u32
-            {
+            if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_CMYK as i32 as u32 {
                 (*cconvert).pub_0.start_pass = Some(
                     rgb_ycc_start
                         as unsafe extern "C" fn(_: crate::jpeglib_h::j_compress_ptr) -> (),
@@ -923,9 +868,7 @@ pub unsafe extern "C" fn jinit_color_converter(mut cinfo: crate::jpeglib_h::j_co
                             _: i32,
                         ) -> (),
                 )
-            } else if (*cinfo).in_color_space as u32
-                == crate::jpeglib_h::JCS_YCCK as i32 as u32
-            {
+            } else if (*cinfo).in_color_space as u32 == crate::jpeglib_h::JCS_YCCK as i32 as u32 {
                 (*cconvert).pub_0.color_convert = Some(
                     null_convert
                         as unsafe extern "C" fn(

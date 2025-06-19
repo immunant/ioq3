@@ -210,9 +210,7 @@ pub unsafe extern "C" fn ReadNumber(
             floatval = -floatval
         }
         if (*fd).type_0 & 0x200 as i32 != 0 {
-            if floatval < (*fd).floatmin as f64
-                || floatval > (*fd).floatmax as f64
-            {
+            if floatval < (*fd).floatmin as f64 || floatval > (*fd).floatmax as f64 {
                 crate::src::botlib::l_precomp::SourceError(
                     source as *mut crate::src::botlib::l_precomp::source_s,
                     b"float out of range [%f, %f]\x00" as *const u8 as *const libc::c_char
@@ -251,9 +249,7 @@ pub unsafe extern "C" fn ReadNumber(
             intmax = 32767 as i32 as libc::c_long
         }
     }
-    if (*fd).type_0 & 0xff as i32 == 1 as i32
-        || (*fd).type_0 & 0xff as i32 == 2 as i32
-    {
+    if (*fd).type_0 & 0xff as i32 == 1 as i32 || (*fd).type_0 & 0xff as i32 == 2 as i32 {
         if (*fd).type_0 & 0x200 as i32 != 0 {
             intmin = if intmin as f32 > (*fd).floatmin {
                 intmin as f32
@@ -280,9 +276,7 @@ pub unsafe extern "C" fn ReadNumber(
     //end if
     } else if (*fd).type_0 & 0xff as i32 == 3 as i32 {
         if (*fd).type_0 & 0x200 as i32 != 0 {
-            if (intval as f32) < (*fd).floatmin
-                || intval as f32 > (*fd).floatmax
-            {
+            if (intval as f32) < (*fd).floatmin || intval as f32 > (*fd).floatmax {
                 crate::src::botlib::l_precomp::SourceError(
                     source as *mut crate::src::botlib::l_precomp::source_s,
                     b"value %ld out of range [%f, %f]\x00" as *const u8 as *const libc::c_char
@@ -537,8 +531,7 @@ pub unsafe extern "C" fn ReadStructure(
                     if ReadString(source, fd, p) == 0 {
                         return crate::src::qcommon::q_shared::qfalse as i32;
                     } //end case
-                    p = (p as *mut libc::c_char).offset(80 as i32 as isize)
-                        as *mut libc::c_void
+                    p = (p as *mut libc::c_char).offset(80 as i32 as isize) as *mut libc::c_void
                 }
                 6 => {
                     if (*fd).substruct.is_null() {
@@ -601,19 +594,14 @@ pub unsafe extern "C" fn ReadStructure(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn WriteIndent(
-    mut fp: *mut crate::stdlib::FILE,
-    mut indent: i32,
-) -> i32 {
+pub unsafe extern "C" fn WriteIndent(mut fp: *mut crate::stdlib::FILE, mut indent: i32) -> i32 {
     loop {
         let fresh1 = indent; //end while
         indent = indent - 1;
         if !(fresh1 > 0 as i32) {
             break;
         }
-        if crate::stdlib::fprintf(fp, b"\t\x00" as *const u8 as *const libc::c_char)
-            < 0 as i32
-        {
+        if crate::stdlib::fprintf(fp, b"\t\x00" as *const u8 as *const libc::c_char) < 0 as i32 {
             return crate::src::qcommon::q_shared::qfalse as i32;
         }
     }
@@ -629,10 +617,7 @@ pub unsafe extern "C" fn WriteIndent(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn WriteFloat(
-    mut fp: *mut crate::stdlib::FILE,
-    mut value: f32,
-) -> i32 {
+pub unsafe extern "C" fn WriteFloat(mut fp: *mut crate::stdlib::FILE, mut value: f32) -> i32 {
     let mut buf: [libc::c_char; 128] = [0; 128];
     let mut l: i32 = 0;
     crate::src::qcommon::q_shared::Com_sprintf(
@@ -650,9 +635,7 @@ pub unsafe extern "C" fn WriteFloat(
         if !(fresh2 > 1 as i32) {
             break;
         }
-        if buf[l as usize] as i32 != '0' as i32
-            && buf[l as usize] as i32 != '.' as i32
-        {
+        if buf[l as usize] as i32 != '0' as i32 && buf[l as usize] as i32 != '.' as i32 {
             break;
         }
         if buf[l as usize] as i32 == '.' as i32 {
@@ -696,9 +679,7 @@ pub unsafe extern "C" fn WriteStructWithIndent(
     if WriteIndent(fp, indent) == 0 {
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
-    if crate::stdlib::fprintf(fp, b"{\r\n\x00" as *const u8 as *const libc::c_char)
-        < 0 as i32
-    {
+    if crate::stdlib::fprintf(fp, b"{\r\n\x00" as *const u8 as *const libc::c_char) < 0 as i32 {
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
     indent += 1;
@@ -720,9 +701,7 @@ pub unsafe extern "C" fn WriteStructWithIndent(
         p = structure.offset((*fd).offset as isize) as *mut libc::c_void;
         if (*fd).type_0 & 0x100 as i32 != 0 {
             num = (*fd).maxarray;
-            if crate::stdlib::fprintf(fp, b"{\x00" as *const u8 as *const libc::c_char)
-                < 0 as i32
-            {
+            if crate::stdlib::fprintf(fp, b"{\x00" as *const u8 as *const libc::c_char) < 0 as i32 {
                 return crate::src::qcommon::q_shared::qfalse as i32;
             }
         } else {
@@ -781,8 +760,7 @@ pub unsafe extern "C" fn WriteStructWithIndent(
                     {
                         return crate::src::qcommon::q_shared::qfalse as i32;
                     } //end case
-                    p = (p as *mut libc::c_char).offset(80 as i32 as isize)
-                        as *mut libc::c_void
+                    p = (p as *mut libc::c_char).offset(80 as i32 as isize) as *mut libc::c_void
                 }
                 6 => {
                     if WriteStructWithIndent(fp, (*fd).substruct, structure, indent) == 0 {
@@ -808,9 +786,7 @@ pub unsafe extern "C" fn WriteStructWithIndent(
                 //end else
             }
         }
-        if crate::stdlib::fprintf(fp, b"\r\n\x00" as *const u8 as *const libc::c_char)
-            < 0 as i32
-        {
+        if crate::stdlib::fprintf(fp, b"\r\n\x00" as *const u8 as *const libc::c_char) < 0 as i32 {
             return crate::src::qcommon::q_shared::qfalse as i32;
         }
         i += 1
@@ -819,9 +795,7 @@ pub unsafe extern "C" fn WriteStructWithIndent(
     if WriteIndent(fp, indent) == 0 {
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
-    if crate::stdlib::fprintf(fp, b"}\r\n\x00" as *const u8 as *const libc::c_char)
-        < 0 as i32
-    {
+    if crate::stdlib::fprintf(fp, b"}\r\n\x00" as *const u8 as *const libc::c_char) < 0 as i32 {
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
     return crate::src::qcommon::q_shared::qtrue as i32;

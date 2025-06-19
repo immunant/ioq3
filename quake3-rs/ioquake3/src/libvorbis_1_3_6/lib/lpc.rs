@@ -76,8 +76,7 @@ pub unsafe extern "C" fn vorbis_lpc_from_data(
     let mut aut: *mut f64 = fresh0.as_mut_ptr() as *mut f64;
     let mut fresh1 = ::std::vec::from_elem(
         0,
-        (::std::mem::size_of::<f64>() as libc::c_ulong).wrapping_mul(m as libc::c_ulong)
-            as usize,
+        (::std::mem::size_of::<f64>() as libc::c_ulong).wrapping_mul(m as libc::c_ulong) as usize,
     );
     let mut lpc: *mut f64 = fresh1.as_mut_ptr() as *mut f64;
     let mut error: f64 = 0.;
@@ -95,8 +94,7 @@ pub unsafe extern "C" fn vorbis_lpc_from_data(
         let mut d: f64 = 0 as i32 as f64;
         i = j;
         while i < n {
-            d += *data.offset(i as isize) as f64
-                * *data.offset((i - j) as isize) as f64;
+            d += *data.offset(i as isize) as f64 * *data.offset((i - j) as isize) as f64;
             i += 1
         }
         *aut.offset(j as isize) = d

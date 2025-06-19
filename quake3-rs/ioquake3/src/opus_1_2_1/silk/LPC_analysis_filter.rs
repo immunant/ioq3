@@ -146,8 +146,7 @@ pub unsafe extern "C" fn silk_LPC_analysis_filter(
         0 as *const crate::opus_types_h::opus_int16;
     ix = d;
     while ix < len {
-        in_ptr = &*in_0.offset((ix - 1 as i32) as isize)
-            as *const crate::opus_types_h::opus_int16;
+        in_ptr = &*in_0.offset((ix - 1 as i32) as isize) as *const crate::opus_types_h::opus_int16;
         out32_Q12 = *in_ptr.offset(0 as i32 as isize) as crate::opus_types_h::opus_int32
             * *B.offset(0 as i32 as isize) as crate::opus_types_h::opus_int32;
         /* Allowing wrap around so that two wraps can cancel each other. The rare
@@ -185,8 +184,7 @@ pub unsafe extern "C" fn silk_LPC_analysis_filter(
                     as crate::opus_types_h::opus_uint32,
             ) as crate::opus_types_h::opus_int32;
             out32_Q12 = (out32_Q12 as crate::opus_types_h::opus_uint32).wrapping_add(
-                (*in_ptr.offset((-j - 1 as i32) as isize)
-                    as crate::opus_types_h::opus_int32
+                (*in_ptr.offset((-j - 1 as i32) as isize) as crate::opus_types_h::opus_int32
                     * *B.offset((j + 1 as i32) as isize) as crate::opus_types_h::opus_int32)
                     as crate::opus_types_h::opus_uint32,
             ) as crate::opus_types_h::opus_int32;
@@ -203,8 +201,7 @@ pub unsafe extern "C" fn silk_LPC_analysis_filter(
         out32 = if 12 as i32 == 1 as i32 {
             (out32_Q12 >> 1 as i32) + (out32_Q12 & 1 as i32)
         } else {
-            ((out32_Q12 >> 12 as i32 - 1 as i32) + 1 as i32)
-                >> 1 as i32
+            ((out32_Q12 >> 12 as i32 - 1 as i32) + 1 as i32) >> 1 as i32
         };
         /* Saturate output */
         *out.offset(ix as isize) = if out32 > 0x7fff as i32 {

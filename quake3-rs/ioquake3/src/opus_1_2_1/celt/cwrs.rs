@@ -1451,16 +1451,12 @@ static mut CELT_PVQ_U_DATA: [crate::opus_types_h::opus_uint32; 1272] = [
 static mut CELT_PVQ_U_ROW: [*const crate::opus_types_h::opus_uint32; 15] =
     [0 as *const crate::opus_types_h::opus_uint32; 15];
 
-unsafe extern "C" fn icwrs(
-    mut _n: i32,
-    mut _y: *const i32,
-) -> crate::opus_types_h::opus_uint32 {
+unsafe extern "C" fn icwrs(mut _n: i32, mut _y: *const i32) -> crate::opus_types_h::opus_uint32 {
     let mut i: crate::opus_types_h::opus_uint32 = 0;
     let mut j: i32 = 0;
     let mut k: i32 = 0;
     j = _n - 1 as i32;
-    i = (*_y.offset(j as isize) < 0 as i32) as i32
-        as crate::opus_types_h::opus_uint32;
+    i = (*_y.offset(j as isize) < 0 as i32) as i32 as crate::opus_types_h::opus_uint32;
     k = ::libc::abs(*_y.offset(j as isize));
     loop {
         j -= 1;
@@ -1542,8 +1538,7 @@ unsafe extern "C" fn cwrsi(
             /*Are the pulses in this dimension negative?*/
             p = *row.offset((_k + 1 as i32) as isize);
             s = -((_i >= p) as i32);
-            _i = (_i as u32).wrapping_sub(p & s as u32)
-                as crate::opus_types_h::opus_uint32
+            _i = (_i as u32).wrapping_sub(p & s as u32) as crate::opus_types_h::opus_uint32
                 as crate::opus_types_h::opus_uint32;
             /*Count how many pulses were placed in this dimension.*/
             k0 = _k;
@@ -1585,8 +1580,7 @@ unsafe extern "C" fn cwrsi(
             } else {
                 /*Are the pulses in this dimension negative?*/
                 s = -((_i >= q) as i32);
-                _i = (_i as u32).wrapping_sub(q & s as u32)
-                    as crate::opus_types_h::opus_uint32
+                _i = (_i as u32).wrapping_sub(q & s as u32) as crate::opus_types_h::opus_uint32
                     as crate::opus_types_h::opus_uint32;
                 /*Count how many pulses were placed in this dimension.*/
                 k0 = _k;
@@ -1611,13 +1605,12 @@ unsafe extern "C" fn cwrsi(
     /*_n==2*/
     p = (2 as i32 * _k + 1 as i32) as crate::opus_types_h::opus_uint32;
     s = -((_i >= p) as i32);
-    _i = (_i as u32).wrapping_sub(p & s as u32)
-        as crate::opus_types_h::opus_uint32 as crate::opus_types_h::opus_uint32;
+    _i = (_i as u32).wrapping_sub(p & s as u32) as crate::opus_types_h::opus_uint32
+        as crate::opus_types_h::opus_uint32;
     k0 = _k;
     _k = (_i.wrapping_add(1 as i32 as u32) >> 1 as i32) as i32;
     if _k != 0 {
-        _i = (_i as u32)
-            .wrapping_sub((2 as i32 * _k - 1 as i32) as u32)
+        _i = (_i as u32).wrapping_sub((2 as i32 * _k - 1 as i32) as u32)
             as crate::opus_types_h::opus_uint32 as crate::opus_types_h::opus_uint32
     }
     val = (k0 - _k + s ^ s) as crate::opus_types_h::opus_int16;
@@ -1701,33 +1694,15 @@ unsafe extern "C" fn run_static_initializers() {
         CELT_PVQ_U_DATA.as_ptr().offset(525 as i32 as isize),
         CELT_PVQ_U_DATA.as_ptr().offset(698 as i32 as isize),
         CELT_PVQ_U_DATA.as_ptr().offset(870 as i32 as isize),
-        CELT_PVQ_U_DATA
-            .as_ptr()
-            .offset(1041 as i32 as isize),
-        CELT_PVQ_U_DATA
-            .as_ptr()
-            .offset(1131 as i32 as isize),
-        CELT_PVQ_U_DATA
-            .as_ptr()
-            .offset(1178 as i32 as isize),
-        CELT_PVQ_U_DATA
-            .as_ptr()
-            .offset(1207 as i32 as isize),
-        CELT_PVQ_U_DATA
-            .as_ptr()
-            .offset(1226 as i32 as isize),
-        CELT_PVQ_U_DATA
-            .as_ptr()
-            .offset(1240 as i32 as isize),
-        CELT_PVQ_U_DATA
-            .as_ptr()
-            .offset(1248 as i32 as isize),
-        CELT_PVQ_U_DATA
-            .as_ptr()
-            .offset(1254 as i32 as isize),
-        CELT_PVQ_U_DATA
-            .as_ptr()
-            .offset(1257 as i32 as isize),
+        CELT_PVQ_U_DATA.as_ptr().offset(1041 as i32 as isize),
+        CELT_PVQ_U_DATA.as_ptr().offset(1131 as i32 as isize),
+        CELT_PVQ_U_DATA.as_ptr().offset(1178 as i32 as isize),
+        CELT_PVQ_U_DATA.as_ptr().offset(1207 as i32 as isize),
+        CELT_PVQ_U_DATA.as_ptr().offset(1226 as i32 as isize),
+        CELT_PVQ_U_DATA.as_ptr().offset(1240 as i32 as isize),
+        CELT_PVQ_U_DATA.as_ptr().offset(1248 as i32 as isize),
+        CELT_PVQ_U_DATA.as_ptr().offset(1254 as i32 as isize),
+        CELT_PVQ_U_DATA.as_ptr().offset(1257 as i32 as isize),
     ]
 }
 #[used]

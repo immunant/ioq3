@@ -177,10 +177,8 @@ pub unsafe extern "C" fn silk_log2lin(
                     + ((frac_Q7 as crate::opus_types_h::opus_int16
                         as crate::opus_types_h::opus_int32
                         * (128 as i32 - frac_Q7) as crate::opus_types_h::opus_int16
-                            as crate::opus_types_h::opus_int32)
-                        as i64
-                        * -(174 as i32) as crate::opus_types_h::opus_int16
-                            as i64
+                            as crate::opus_types_h::opus_int32) as i64
+                        * -(174 as i32) as crate::opus_types_h::opus_int16 as i64
                         >> 16 as i32)) as crate::opus_types_h::opus_int32
                 >> 7 as i32)
     } else {
@@ -191,10 +189,8 @@ pub unsafe extern "C" fn silk_log2lin(
                     + ((frac_Q7 as crate::opus_types_h::opus_int16
                         as crate::opus_types_h::opus_int32
                         * (128 as i32 - frac_Q7) as crate::opus_types_h::opus_int16
-                            as crate::opus_types_h::opus_int32)
-                        as i64
-                        * -(174 as i32) as crate::opus_types_h::opus_int16
-                            as i64
+                            as crate::opus_types_h::opus_int32) as i64
+                        * -(174 as i32) as crate::opus_types_h::opus_int16 as i64
                         >> 16 as i32)) as crate::opus_types_h::opus_int32
     }
     return out;

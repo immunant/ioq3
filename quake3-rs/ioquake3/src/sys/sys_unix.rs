@@ -12689,9 +12689,7 @@ pub unsafe extern "C" fn Sys_FOpen(
         __glibc_reserved: [0; 3],
     };
     // check if path exists and is a directory
-    if stat(ospath, &mut buf) == 0
-        && buf.st_mode & 0o170000 as i32 as u32
-            == 0o40000 as i32 as u32
+    if stat(ospath, &mut buf) == 0 && buf.st_mode & 0o170000 as i32 as u32 == 0o40000 as i32 as u32
     {
         return 0 as *mut crate::stdlib::FILE;
     }
@@ -12707,8 +12705,7 @@ Sys_Mkdir
 pub unsafe extern "C" fn Sys_Mkdir(
     mut path: *const libc::c_char,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    let mut result: i32 =
-        ::libc::mkdir(path, 0o750 as i32 as crate::stdlib::__mode_t);
+    let mut result: i32 = ::libc::mkdir(path, 0o750 as i32 as crate::stdlib::__mode_t);
     if result != 0 as i32 {
         return (*::libc::__errno_location() == 17 as i32) as i32
             as crate::src::qcommon::q_shared::qboolean;
@@ -12753,9 +12750,7 @@ pub unsafe extern "C" fn Sys_Mkfifo(mut ospath: *const libc::c_char) -> *mut cra
         __glibc_reserved: [0; 3],
     };
     // if file already exists AND is a pipefile, remove it
-    if stat(ospath, &mut buf) == 0
-        && buf.st_mode & 0o170000 as i32 as u32
-            == 0o10000 as i32 as u32
+    if stat(ospath, &mut buf) == 0 && buf.st_mode & 0o170000 as i32 as u32 == 0o10000 as i32 as u32
     {
         crate::src::qcommon::files::FS_Remove(ospath);
     }
@@ -12886,8 +12881,7 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
                 if crate::stdlib::strlen(subdirs) != 0 {
                     crate::src::qcommon::q_shared::Com_sprintf(
                         newsubdirs.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong
-                            as i32,
+                        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
                         b"%s/%s\x00" as *const u8 as *const libc::c_char,
                         subdirs,
                         (*d).d_name.as_mut_ptr(),
@@ -12895,8 +12889,7 @@ pub unsafe extern "C" fn Sys_ListFilteredFiles(
                 } else {
                     crate::src::qcommon::q_shared::Com_sprintf(
                         newsubdirs.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong
-                            as i32,
+                        ::std::mem::size_of::<[libc::c_char; 4096]>() as libc::c_ulong as i32,
                         b"%s\x00" as *const u8 as *const libc::c_char,
                         (*d).d_name.as_mut_ptr(),
                     );
@@ -13129,10 +13122,7 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
         let fresh8;
         let fresh9 = (::std::mem::size_of::<crate::stdlib::fd_set>() as libc::c_ulong)
             .wrapping_div(::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong);
-        let fresh10 = &mut *fdset
-            .__fds_bits
-            .as_mut_ptr()
-            .offset(0 as i32 as isize)
+        let fresh10 = &mut *fdset.__fds_bits.as_mut_ptr().offset(0 as i32 as isize)
             as *mut crate::stdlib::__fd_mask;
         asm!("cld; rep; stosq" : "={cx}" (fresh6), "={di}" (fresh8) : "{ax}"
      (0 as i32), "0"
@@ -13143,12 +13133,11 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
         c2rust_asm_casts::AsmCast::cast_out(fresh7, fresh10, fresh8);
         fdset.__fds_bits[(0 as i32
             / (8 as i32
-                * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
-                    as i32)) as usize] |= ((1 as libc::c_ulong)
+                * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong as i32))
+            as usize] |= ((1 as libc::c_ulong)
             << 0 as i32
                 % (8 as i32
-                    * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
-                        as i32))
+                    * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong as i32))
             as crate::stdlib::__fd_mask;
         if msec < 0 as i32 {
             crate::stdlib::select(
@@ -13164,8 +13153,7 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
                 tv_usec: 0,
             };
             timeout.tv_sec = (msec / 1000 as i32) as crate::stdlib::__time_t;
-            timeout.tv_usec =
-                (msec % 1000 as i32 * 1000 as i32) as crate::stdlib::__suseconds_t;
+            timeout.tv_usec = (msec % 1000 as i32 * 1000 as i32) as crate::stdlib::__suseconds_t;
             crate::stdlib::select(
                 0 as i32 + 1 as i32,
                 &mut fdset,
@@ -13712,9 +13700,7 @@ Sys_PIDIsRunning
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Sys_PIDIsRunning(
-    mut pid: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+pub unsafe extern "C" fn Sys_PIDIsRunning(mut pid: i32) -> crate::src::qcommon::q_shared::qboolean {
     return (::libc::kill(pid, 0 as i32) == 0 as i32) as i32
         as crate::src::qcommon::q_shared::qboolean;
 }

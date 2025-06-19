@@ -60,31 +60,11 @@ POSSIBILITY OF SUCH DAMAGE.
 /* Tables with delay compensation values to equalize total delay for different modes */
 
 static mut delay_matrix_enc: [[i8; 3]; 5] = [
-    [
-        6 as i32 as i8,
-        0 as i32 as i8,
-        3 as i32 as i8,
-    ],
-    [
-        0 as i32 as i8,
-        7 as i32 as i8,
-        3 as i32 as i8,
-    ],
-    [
-        0 as i32 as i8,
-        1 as i32 as i8,
-        10 as i32 as i8,
-    ],
-    [
-        0 as i32 as i8,
-        2 as i32 as i8,
-        6 as i32 as i8,
-    ],
-    [
-        18 as i32 as i8,
-        10 as i32 as i8,
-        12 as i32 as i8,
-    ],
+    [6 as i32 as i8, 0 as i32 as i8, 3 as i32 as i8],
+    [0 as i32 as i8, 7 as i32 as i8, 3 as i32 as i8],
+    [0 as i32 as i8, 1 as i32 as i8, 10 as i32 as i8],
+    [0 as i32 as i8, 2 as i32 as i8, 6 as i32 as i8],
+    [18 as i32 as i8, 10 as i32 as i8, 12 as i32 as i8],
 ];
 
 static mut delay_matrix_dec: [[i8; 5]; 3] = [
@@ -135,9 +115,7 @@ pub unsafe extern "C" fn silk_resampler_init(
             && Fs_Hz_in != 16000 as i32
             && Fs_Hz_in != 24000 as i32
             && Fs_Hz_in != 48000 as i32
-            || Fs_Hz_out != 8000 as i32
-                && Fs_Hz_out != 12000 as i32
-                && Fs_Hz_out != 16000 as i32
+            || Fs_Hz_out != 8000 as i32 && Fs_Hz_out != 12000 as i32 && Fs_Hz_out != 16000 as i32
         {
             return -(1 as i32);
         }
@@ -149,9 +127,7 @@ pub unsafe extern "C" fn silk_resampler_init(
             >> (Fs_Hz_out > 24000 as i32) as i32)
             - 1 as i32) as usize] as i32
     } else {
-        if Fs_Hz_in != 8000 as i32
-            && Fs_Hz_in != 12000 as i32
-            && Fs_Hz_in != 16000 as i32
+        if Fs_Hz_in != 8000 as i32 && Fs_Hz_in != 12000 as i32 && Fs_Hz_in != 16000 as i32
             || Fs_Hz_out != 8000 as i32
                 && Fs_Hz_out != 12000 as i32
                 && Fs_Hz_out != 16000 as i32
@@ -233,13 +209,13 @@ pub unsafe extern "C" fn silk_resampler_init(
         (*S).resampler_function = 0 as i32
     }
     /* Ratio of input/output samples */
-    (*S).invRatio_Q16 = (((((Fs_Hz_in as crate::opus_types_h::opus_uint32)
-        << 14 as i32 + up2x) as crate::opus_types_h::opus_int32
+    (*S).invRatio_Q16 = (((((Fs_Hz_in as crate::opus_types_h::opus_uint32) << 14 as i32 + up2x)
+        as crate::opus_types_h::opus_int32
         / Fs_Hz_out) as crate::opus_types_h::opus_uint32)
         << 2 as i32) as crate::opus_types_h::opus_int32;
     /* Make sure the ratio is rounded up */
-    while (((*S).invRatio_Q16 as i64 * Fs_Hz_out as i64
-        >> 16 as i32) as crate::opus_types_h::opus_int32)
+    while (((*S).invRatio_Q16 as i64 * Fs_Hz_out as i64 >> 16 as i32)
+        as crate::opus_types_h::opus_int32)
         < ((Fs_Hz_in as crate::opus_types_h::opus_uint32) << up2x)
             as crate::opus_types_h::opus_int32
     {

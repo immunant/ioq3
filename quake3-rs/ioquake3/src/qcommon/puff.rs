@@ -112,19 +112,14 @@ unsafe extern "C" fn stored(mut s: *mut state) -> crate::stdlib::int32_t {
     len = *(*s).in_0.offset(fresh1 as isize) as crate::stdlib::uint32_t;
     let fresh2 = (*s).incnt;
     (*s).incnt = (*s).incnt.wrapping_add(1);
-    len |=
-        ((*(*s).in_0.offset(fresh2 as isize) as i32) << 8 as i32) as u32;
+    len |= ((*(*s).in_0.offset(fresh2 as isize) as i32) << 8 as i32) as u32;
     let fresh3 = (*s).incnt;
     (*s).incnt = (*s).incnt.wrapping_add(1);
-    if *(*s).in_0.offset(fresh3 as isize) as u32
-        != !len & 0xff as i32 as u32
-        || {
-            let fresh4 = (*s).incnt;
-            (*s).incnt = (*s).incnt.wrapping_add(1);
-            (*(*s).in_0.offset(fresh4 as isize) as u32)
-                != !len >> 8 as i32 & 0xff as i32 as u32
-        }
-    {
+    if *(*s).in_0.offset(fresh3 as isize) as u32 != !len & 0xff as i32 as u32 || {
+        let fresh4 = (*s).incnt;
+        (*s).incnt = (*s).incnt.wrapping_add(1);
+        (*(*s).in_0.offset(fresh4 as isize) as u32) != !len >> 8 as i32 & 0xff as i32 as u32
+    } {
         return -(2 as i32);
     }
     /* copy len bytes from in to out */
@@ -820,8 +815,7 @@ unsafe extern "C" fn dynamic(mut s: *mut state) -> crate::stdlib::int32_t {
     /* read code length code lengths (really), missing lengths are zero */
     index = 0 as i32;
     while index < ncode {
-        lengths[order[index as usize] as usize] =
-            bits(s, 3 as i32) as crate::stdlib::int16_t;
+        lengths[order[index as usize] as usize] = bits(s, 3 as i32) as crate::stdlib::int16_t;
         index += 1
     }
     while index < 19 as i32 {
@@ -880,9 +874,7 @@ unsafe extern "C" fn dynamic(mut s: *mut state) -> crate::stdlib::int32_t {
     /* build huffman table for literal/length codes */
     err = construct(&mut lencode, lengths.as_mut_ptr(), nlen); /* only allow incomplete codes if just one code */
     if err < 0 as i32
-        || err > 0 as i32
-            && nlen - *lencode.count.offset(0 as i32 as isize) as i32
-                != 1 as i32
+        || err > 0 as i32 && nlen - *lencode.count.offset(0 as i32 as isize) as i32 != 1 as i32
     {
         return -(7 as i32);
     }
@@ -893,9 +885,7 @@ unsafe extern "C" fn dynamic(mut s: *mut state) -> crate::stdlib::int32_t {
         ndist,
     ); /* only allow incomplete codes if just one code */
     if err < 0 as i32
-        || err > 0 as i32
-            && ndist - *distcode.count.offset(0 as i32 as isize) as i32
-                != 1 as i32
+        || err > 0 as i32 && ndist - *distcode.count.offset(0 as i32 as isize) as i32 != 1 as i32
     {
         return -(8 as i32);
     }

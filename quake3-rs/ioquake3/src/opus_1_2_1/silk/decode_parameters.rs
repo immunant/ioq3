@@ -369,8 +369,7 @@ pub unsafe extern "C" fn silk_decode_parameters(
         while i < (*psDec).LPC_order {
             pNLSF0_Q15[i as usize] = ((*psDec).prevNLSF_Q15[i as usize] as i32
                 + ((*psDec).indices.NLSFInterpCoef_Q2 as i32
-                    * (pNLSF_Q15[i as usize] as i32
-                        - (*psDec).prevNLSF_Q15[i as usize] as i32)
+                    * (pNLSF_Q15[i as usize] as i32 - (*psDec).prevNLSF_Q15[i as usize] as i32)
                     >> 2 as i32))
                 as crate::opus_types_h::opus_int16;
             i += 1
@@ -386,8 +385,7 @@ pub unsafe extern "C" fn silk_decode_parameters(
         /* Copy LPC coefficients for first half from second half */
         crate::stdlib::memcpy(
             (*psDecCtrl).PredCoef_Q12[0 as i32 as usize].as_mut_ptr() as *mut libc::c_void,
-            (*psDecCtrl).PredCoef_Q12[1 as i32 as usize].as_mut_ptr()
-                as *const libc::c_void,
+            (*psDecCtrl).PredCoef_Q12[1 as i32 as usize].as_mut_ptr() as *const libc::c_void,
             ((*psDec).LPC_order as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
                 crate::opus_types_h::opus_int16,
             >() as libc::c_ulong),
@@ -445,8 +443,7 @@ pub unsafe extern "C" fn silk_decode_parameters(
         /* *********************/
         Ix = (*psDec).indices.LTP_scaleIndex as i32;
         (*psDecCtrl).LTP_scale_Q14 =
-            crate::src::opus_1_2_1::silk::tables_other::silk_LTPScales_table_Q14[Ix as usize]
-                as i32
+            crate::src::opus_1_2_1::silk::tables_other::silk_LTPScales_table_Q14[Ix as usize] as i32
     } else {
         crate::stdlib::memset(
             (*psDecCtrl).pitchL.as_mut_ptr() as *mut libc::c_void,
@@ -457,9 +454,10 @@ pub unsafe extern "C" fn silk_decode_parameters(
         crate::stdlib::memset(
             (*psDecCtrl).LTPCoef_Q14.as_mut_ptr() as *mut libc::c_void,
             0 as i32,
-            ((5 as i32 * (*psDec).nb_subfr) as libc::c_ulong).wrapping_mul(
-                ::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong,
-            ),
+            ((5 as i32 * (*psDec).nb_subfr) as libc::c_ulong)
+                .wrapping_mul(
+                    ::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong
+                ),
         );
         (*psDec).indices.PERIndex = 0 as i32 as i8;
         (*psDecCtrl).LTP_scale_Q14 = 0 as i32

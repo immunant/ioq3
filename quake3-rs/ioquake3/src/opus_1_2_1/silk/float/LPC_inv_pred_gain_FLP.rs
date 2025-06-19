@@ -88,8 +88,7 @@ pub unsafe extern "C" fn silk_LPC_inverse_pred_gain_FLP(
     crate::stdlib::memcpy(
         Atmp.as_mut_ptr() as *mut libc::c_void,
         A as *const libc::c_void,
-        (order as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+        (order as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
     );
     invGain = 1.0f64;
     k = order - 1 as i32;
@@ -106,8 +105,7 @@ pub unsafe extern "C" fn silk_LPC_inverse_pred_gain_FLP(
             tmp1 = Atmp[n as usize] as f64;
             tmp2 = Atmp[(k - n - 1 as i32) as usize] as f64;
             Atmp[n as usize] = ((tmp1 - tmp2 * rc) * rc_mult2) as f32;
-            Atmp[(k - n - 1 as i32) as usize] =
-                ((tmp2 - tmp1 * rc) * rc_mult2) as f32;
+            Atmp[(k - n - 1 as i32) as usize] = ((tmp2 - tmp1 * rc) * rc_mult2) as f32;
             n += 1
         }
         k -= 1

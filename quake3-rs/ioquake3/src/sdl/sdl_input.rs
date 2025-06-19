@@ -1330,18 +1330,14 @@ unsafe extern "C" fn IN_TranslateSDLToQ3Key(
     mut down: crate::src::qcommon::q_shared::qboolean,
 ) -> crate::keycodes_h::keyNum_t {
     let mut key: crate::keycodes_h::keyNum_t = 0 as crate::keycodes_h::keyNum_t;
-    if (*keysym).scancode as u32
-        >= crate::stdlib::SDL_SCANCODE_1 as i32 as u32
-        && (*keysym).scancode as u32
-            <= crate::stdlib::SDL_SCANCODE_0 as i32 as u32
+    if (*keysym).scancode as u32 >= crate::stdlib::SDL_SCANCODE_1 as i32 as u32
+        && (*keysym).scancode as u32 <= crate::stdlib::SDL_SCANCODE_0 as i32 as u32
     {
         // Always map the number keys as such even if they actually map
         // to other characters (eg, "1" is "&" on an AZERTY keyboard).
         // This is required for SDL before 2.0.6, except on Windows
         // which already had this behavior.
-        if (*keysym).scancode as u32
-            == crate::stdlib::SDL_SCANCODE_0 as i32 as u32
-        {
+        if (*keysym).scancode as u32 == crate::stdlib::SDL_SCANCODE_0 as i32 as u32 {
             key = '0' as i32 as crate::keycodes_h::keyNum_t
         } else {
             key = ('1' as i32 as u32)
@@ -1426,8 +1422,7 @@ unsafe extern "C" fn IN_TranslateSDLToQ3Key(
                     // Maybe create a map of scancode to quake key at start up and on
                     // key map change; allocate world key numbers as needed similar
                     // to SDL 1.2.
-                    key = (crate::keycodes_h::K_WORLD_0 as i32
-                        + (*keysym).scancode as i32)
+                    key = (crate::keycodes_h::K_WORLD_0 as i32 + (*keysym).scancode as i32)
                         as crate::keycodes_h::keyNum_t
                 }
             }
@@ -1901,8 +1896,7 @@ unsafe extern "C" fn KeyToAxisAndSign(
             1 as i32
         }
     }
-    return (*outSign != 0 as i32) as i32
-        as crate::src::qcommon::q_shared::qboolean;
+    return (*outSign != 0 as i32) as i32 as crate::src::qcommon::q_shared::qboolean;
 }
 /*
 ===============
@@ -1958,14 +1952,12 @@ unsafe extern "C" fn IN_GamepadMove() {
         ) as i32;
         let mut oldAxis: i32 = stick_state.oldaaxes[i as usize];
         // Smoothly ramp from dead zone to maximum value
-        let mut f: f32 = (::libc::abs(axis) as f32 / 32767.0f32
-            - (*in_joystickThreshold).value)
+        let mut f: f32 = (::libc::abs(axis) as f32 / 32767.0f32 - (*in_joystickThreshold).value)
             / (1.0f32 - (*in_joystickThreshold).value);
         if f < 0.0f32 {
             f = 0.0f32
         }
-        axis = (32767 as i32 as f32
-            * (if axis < 0 as i32 { -f } else { f })) as i32;
+        axis = (32767 as i32 as f32 * (if axis < 0 as i32 { -f } else { f })) as i32;
         if axis != oldAxis {
             let negMap: [i32; 6] = [
                 crate::keycodes_h::K_PAD0_LEFTSTICK_LEFT as i32,
@@ -2028,11 +2020,7 @@ unsafe extern "C" fn IN_GamepadMove() {
             }
             // keyups first so they get overridden by keydowns later
             // positive to negative/neutral -> keyup
-            if posAnalog as u64 == 0
-                && posKey != 0
-                && oldAxis > 0 as i32
-                && axis <= 0 as i32
-            {
+            if posAnalog as u64 == 0 && posKey != 0 && oldAxis > 0 as i32 && axis <= 0 as i32 {
                 crate::src::qcommon::common::Com_QueueEvent(
                     in_eventTime,
                     crate::qcommon_h::SE_KEY,
@@ -2043,11 +2031,7 @@ unsafe extern "C" fn IN_GamepadMove() {
                 );
             }
             // negative to positive/neutral -> keyup
-            if negAnalog as u64 == 0
-                && negKey != 0
-                && oldAxis < 0 as i32
-                && axis >= 0 as i32
-            {
+            if negAnalog as u64 == 0 && negKey != 0 && oldAxis < 0 as i32 && axis >= 0 as i32 {
                 crate::src::qcommon::common::Com_QueueEvent(
                     in_eventTime,
                     crate::qcommon_h::SE_KEY,
@@ -2058,11 +2042,7 @@ unsafe extern "C" fn IN_GamepadMove() {
                 );
             }
             // negative/neutral to positive -> keydown
-            if posAnalog as u64 == 0
-                && posKey != 0
-                && oldAxis <= 0 as i32
-                && axis > 0 as i32
-            {
+            if posAnalog as u64 == 0 && posKey != 0 && oldAxis <= 0 as i32 && axis > 0 as i32 {
                 crate::src::qcommon::common::Com_QueueEvent(
                     in_eventTime,
                     crate::qcommon_h::SE_KEY,
@@ -2073,11 +2053,7 @@ unsafe extern "C" fn IN_GamepadMove() {
                 );
             }
             // positive/neutral to negative -> keydown
-            if negAnalog as u64 == 0
-                && negKey != 0
-                && oldAxis >= 0 as i32
-                && axis < 0 as i32
-            {
+            if negAnalog as u64 == 0 && negKey != 0 && oldAxis >= 0 as i32 && axis < 0 as i32 {
                 crate::src::qcommon::common::Com_QueueEvent(
                     in_eventTime,
                     crate::qcommon_h::SE_KEY,
@@ -2182,8 +2158,8 @@ unsafe extern "C" fn IN_JoyMove() {
         i = 0 as i32;
         while i < total {
             let mut pressed: crate::src::qcommon::q_shared::qboolean =
-                (crate::stdlib::SDL_JoystickGetButton(stick, i) as i32 != 0 as i32)
-                    as i32 as crate::src::qcommon::q_shared::qboolean;
+                (crate::stdlib::SDL_JoystickGetButton(stick, i) as i32 != 0 as i32) as i32
+                    as crate::src::qcommon::q_shared::qboolean;
             if pressed as u32 != stick_state.buttons[i as usize] as u32 {
                 crate::src::qcommon::common::Com_QueueEvent(
                     in_eventTime,
@@ -2215,8 +2191,7 @@ unsafe extern "C" fn IN_JoyMove() {
     if hats != stick_state.oldhats {
         i = 0 as i32;
         while i < 4 as i32 {
-            if *(&mut hats as *mut u32 as *mut crate::stdlib::Uint8).offset(i as isize)
-                as i32
+            if *(&mut hats as *mut u32 as *mut crate::stdlib::Uint8).offset(i as isize) as i32
                 != *(&mut stick_state.oldhats as *mut u32 as *mut crate::stdlib::Uint8)
                     .offset(i as isize) as i32
             {
@@ -2339,8 +2314,8 @@ unsafe extern "C" fn IN_JoyMove() {
                     _ => {}
                 }
                 // press event
-                match *(&mut hats as *mut u32 as *mut crate::stdlib::Uint8)
-                    .offset(i as isize) as i32
+                match *(&mut hats as *mut u32 as *mut crate::stdlib::Uint8).offset(i as isize)
+                    as i32
                 {
                     1 => {
                         crate::src::qcommon::common::Com_QueueEvent(
@@ -2472,8 +2447,7 @@ unsafe extern "C" fn IN_JoyMove() {
             i = 0 as i32;
             while i < total {
                 let mut axis: crate::stdlib::Sint16 = crate::stdlib::SDL_JoystickGetAxis(stick, i);
-                let mut f: f32 =
-                    ::libc::abs(axis as i32) as f32 / 32767.0f32;
+                let mut f: f32 = ::libc::abs(axis as i32) as f32 / 32767.0f32;
                 if f < (*in_joystickThreshold).value {
                     axis = 0 as i32 as crate::stdlib::Sint16
                 }
@@ -2502,8 +2476,7 @@ unsafe extern "C" fn IN_JoyMove() {
                 if f_0 < -(*in_joystickThreshold).value {
                     axes |= ((1 as i32) << i * 2 as i32) as u32
                 } else if f_0 > (*in_joystickThreshold).value {
-                    axes |= ((1 as i32) << i * 2 as i32 + 1 as i32)
-                        as u32
+                    axes |= ((1 as i32) << i * 2 as i32 + 1 as i32) as u32
                 }
                 i += 1
             }
@@ -2576,9 +2549,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                             0 as *mut libc::c_void,
                         );
                     }
-                    if key as u32
-                        == crate::keycodes_h::K_BACKSPACE as i32 as u32
-                    {
+                    if key as u32 == crate::keycodes_h::K_BACKSPACE as i32 as u32 {
                         crate::src::qcommon::common::Com_QueueEvent(
                             in_eventTime,
                             crate::qcommon_h::SE_CHAR,
@@ -2599,8 +2570,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                             crate::qcommon_h::SE_CHAR,
                             (key as u32)
                                 .wrapping_sub('a' as i32 as u32)
-                                .wrapping_add(1 as i32 as u32)
-                                as i32,
+                                .wrapping_add(1 as i32 as u32) as i32,
                             0 as i32,
                             0 as i32,
                             0 as *mut libc::c_void,
@@ -2627,9 +2597,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                 lastKeyDown = 0 as crate::keycodes_h::keyNum_t
             }
             771 => {
-                if lastKeyDown as u32
-                    != crate::keycodes_h::K_CONSOLE as i32 as u32
-                {
+                if lastKeyDown as u32 != crate::keycodes_h::K_CONSOLE as i32 as u32 {
                     let mut c: *mut libc::c_char = e.text.text.as_mut_ptr();
                     // Quick and dirty UTF-8 to UTF-32 conversion
                     while *c != 0 {
@@ -2642,8 +2610,7 @@ unsafe extern "C" fn IN_ProcessEvents() {
                             // 110x xxxx
                             let fresh1 = c;
                             c = c.offset(1);
-                            utf32 |=
-                                (*fresh1 as i32 & 0x1f as i32) << 6 as i32;
+                            utf32 |= (*fresh1 as i32 & 0x1f as i32) << 6 as i32;
                             let fresh2 = c;
                             c = c.offset(1);
                             utf32 |= *fresh2 as i32 & 0x3f as i32
@@ -2651,12 +2618,10 @@ unsafe extern "C" fn IN_ProcessEvents() {
                             // 1110 xxxx
                             let fresh3 = c;
                             c = c.offset(1);
-                            utf32 |=
-                                (*fresh3 as i32 & 0xf as i32) << 12 as i32;
+                            utf32 |= (*fresh3 as i32 & 0xf as i32) << 12 as i32;
                             let fresh4 = c;
                             c = c.offset(1);
-                            utf32 |=
-                                (*fresh4 as i32 & 0x3f as i32) << 6 as i32;
+                            utf32 |= (*fresh4 as i32 & 0x3f as i32) << 6 as i32;
                             let fresh5 = c;
                             c = c.offset(1);
                             utf32 |= *fresh5 as i32 & 0x3f as i32
@@ -2664,16 +2629,13 @@ unsafe extern "C" fn IN_ProcessEvents() {
                             // 1111 0xxx
                             let fresh6 = c;
                             c = c.offset(1);
-                            utf32 |=
-                                (*fresh6 as i32 & 0x7 as i32) << 18 as i32;
+                            utf32 |= (*fresh6 as i32 & 0x7 as i32) << 18 as i32;
                             let fresh7 = c;
                             c = c.offset(1);
-                            utf32 |=
-                                (*fresh7 as i32 & 0x3f as i32) << 12 as i32;
+                            utf32 |= (*fresh7 as i32 & 0x3f as i32) << 12 as i32;
                             let fresh8 = c;
                             c = c.offset(1);
-                            utf32 |=
-                                (*fresh8 as i32 & 0x3f as i32) << 6 as i32;
+                            utf32 |= (*fresh8 as i32 & 0x3f as i32) << 6 as i32;
                             let fresh9 = c;
                             c = c.offset(1);
                             utf32 |= *fresh9 as i32 & 0x3f as i32
@@ -2742,16 +2704,14 @@ unsafe extern "C" fn IN_ProcessEvents() {
                     5 => b = crate::keycodes_h::K_MOUSE5 as i32,
                     _ => {
                         b = crate::keycodes_h::K_AUX1 as i32
-                            + (e.button.button as i32 - 5 as i32 + 1 as i32)
-                                % 16 as i32
+                            + (e.button.button as i32 - 5 as i32 + 1 as i32) % 16 as i32
                     }
                 }
                 crate::src::qcommon::common::Com_QueueEvent(
                     in_eventTime,
                     crate::qcommon_h::SE_KEY,
                     b,
-                    if e.type_0 == crate::stdlib::SDL_MOUSEBUTTONDOWN as i32 as u32
-                    {
+                    if e.type_0 == crate::stdlib::SDL_MOUSEBUTTONDOWN as i32 as u32 {
                         crate::src::qcommon::q_shared::qtrue as i32
                     } else {
                         crate::src::qcommon::q_shared::qfalse as i32
@@ -2836,8 +2796,8 @@ unsafe extern "C" fn IN_ProcessEvents() {
                                 // Wait until user stops dragging for 1 second, so
                                 // we aren't constantly recreating the GL context while
                                 // he tries to drag...
-                                vidRestartTime = crate::src::sys::sys_unix::Sys_Milliseconds()
-                                    + 1000 as i32
+                                vidRestartTime =
+                                    crate::src::sys::sys_unix::Sys_Milliseconds() + 1000 as i32
                             }
                         }
                     }
@@ -2887,8 +2847,8 @@ pub unsafe extern "C" fn IN_Frame() {
     loading = (crate::src::client::cl_main::clc.state as u32
         != crate::src::qcommon::q_shared::CA_DISCONNECTED as i32 as u32
         && crate::src::client::cl_main::clc.state as u32
-            != crate::src::qcommon::q_shared::CA_ACTIVE as i32 as u32)
-        as i32 as crate::src::qcommon::q_shared::qboolean;
+            != crate::src::qcommon::q_shared::CA_ACTIVE as i32 as u32) as i32
+        as crate::src::qcommon::q_shared::qboolean;
     // update isFullscreen since it might of changed since the last vid_restart
     crate::src::client::cl_main::cls.glconfig.isFullscreen =
         (crate::src::qcommon::cvar::Cvar_VariableIntegerValue(
@@ -2917,8 +2877,7 @@ pub unsafe extern "C" fn IN_Frame() {
     // Set event time for next frame to earliest possible time an event could happen
     in_eventTime = crate::src::sys::sys_unix::Sys_Milliseconds();
     // In case we had to delay actual restart of video system
-    if vidRestartTime != 0 as i32
-        && vidRestartTime < crate::src::sys::sys_unix::Sys_Milliseconds()
+    if vidRestartTime != 0 as i32 && vidRestartTime < crate::src::sys::sys_unix::Sys_Milliseconds()
     {
         vidRestartTime = 0 as i32;
         crate::src::qcommon::cmd::Cbuf_AddText(
@@ -2973,8 +2932,8 @@ pub unsafe extern "C" fn IN_Init(mut windowData: *mut libc::c_void) {
         0x1 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
     crate::stdlib::SDL_StartTextInput();
-    mouseAvailable = ((*in_mouse).value != 0 as i32 as f32) as i32
-        as crate::src::qcommon::q_shared::qboolean;
+    mouseAvailable =
+        ((*in_mouse).value != 0 as i32 as f32) as i32 as crate::src::qcommon::q_shared::qboolean;
     IN_DeactivateMouse(
         (crate::src::qcommon::cvar::Cvar_VariableIntegerValue(
             b"r_fullscreen\x00" as *const u8 as *const libc::c_char,
@@ -2983,8 +2942,7 @@ pub unsafe extern "C" fn IN_Init(mut windowData: *mut libc::c_void) {
     appState = crate::stdlib::SDL_GetWindowFlags(SDL_window) as i32;
     crate::src::qcommon::cvar::Cvar_SetValue(
         b"com_unfocused\x00" as *const u8 as *const libc::c_char,
-        (appState & crate::stdlib::SDL_WINDOW_INPUT_FOCUS as i32 == 0) as i32
-            as f32,
+        (appState & crate::stdlib::SDL_WINDOW_INPUT_FOCUS as i32 == 0) as i32 as f32,
     );
     crate::src::qcommon::cvar::Cvar_SetValue(
         b"com_minimized\x00" as *const u8 as *const libc::c_char,

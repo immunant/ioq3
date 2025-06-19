@@ -427,11 +427,7 @@ pub unsafe extern "C" fn AAS_ValueForBSPEpairKey(
     epair = bspworld.entities[ent as usize].epairs;
     while !epair.is_null() {
         if ::libc::strcmp((*epair).key, key) == 0 {
-            crate::stdlib::strncpy(
-                value,
-                (*epair).value,
-                (size - 1 as i32) as libc::c_ulong,
-            );
+            crate::stdlib::strncpy(value, (*epair).value, (size - 1 as i32) as libc::c_ulong);
             *value.offset((size - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char;
             return crate::src::qcommon::q_shared::qtrue as i32;
         }

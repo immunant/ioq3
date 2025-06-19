@@ -163,9 +163,7 @@ unsafe extern "C" fn generateHashValue(mut fname: *const libc::c_char) -> libc::
     while *fname.offset(i as isize) as i32 != '\u{0}' as i32 {
         letter = ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
-                > 1 as i32 as libc::c_ulong
-            {
+            if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
                 if 0 != 0 {
                     let mut __c: i32 = *fname.offset(i as isize) as i32;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -257,9 +255,7 @@ Cvar_VariableIntegerValue
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cvar_VariableIntegerValue(
-    mut var_name: *const libc::c_char,
-) -> i32 {
+pub unsafe extern "C" fn Cvar_VariableIntegerValue(mut var_name: *const libc::c_char) -> i32 {
     let mut var: *mut crate::src::qcommon::q_shared::cvar_t =
         0 as *mut crate::src::qcommon::q_shared::cvar_t;
     var = Cvar_FindVar(var_name);
@@ -880,10 +876,7 @@ Cvar_SetValue
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cvar_SetValue(
-    mut var_name: *const libc::c_char,
-    mut value: f32,
-) {
+pub unsafe extern "C" fn Cvar_SetValue(mut var_name: *const libc::c_char, mut value: f32) {
     let mut val: [libc::c_char; 32] = [0; 32];
     if value == value as i32 as f32 {
         crate::src::qcommon::q_shared::Com_sprintf(
@@ -909,10 +902,7 @@ Cvar_SetValueSafe
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cvar_SetValueSafe(
-    mut var_name: *const libc::c_char,
-    mut value: f32,
-) {
+pub unsafe extern "C" fn Cvar_SetValueSafe(mut var_name: *const libc::c_char, mut value: f32) {
     let mut val: [libc::c_char; 32] = [0; 32];
     if crate::src::qcommon::q_shared::Q_isintegral(value) as u64 != 0 {
         crate::src::qcommon::q_shared::Com_sprintf(
@@ -1077,8 +1067,7 @@ pub unsafe extern "C" fn Cvar_Toggle_f() {
             crate::src::qcommon::cmd::Cmd_Argv(1 as i32),
             crate::src::qcommon::q_shared::va(
                 b"%d\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                (Cvar_VariableValue(crate::src::qcommon::cmd::Cmd_Argv(1 as i32)) == 0.)
-                    as i32,
+                (Cvar_VariableValue(crate::src::qcommon::cmd::Cmd_Argv(1 as i32)) == 0.) as i32,
             ),
             crate::src::qcommon::q_shared::qfalse,
         );
@@ -1229,8 +1218,7 @@ pub unsafe extern "C" fn Cvar_WriteVariables(mut f: crate::src::qcommon::q_share
                     } else {
                         crate::src::qcommon::q_shared::Com_sprintf(
                             buffer.as_mut_ptr(),
-                            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
-                                as i32,
+                            ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                             b"seta %s \"%s\"\n\x00" as *const u8 as *const libc::c_char,
                             (*var).name,
                             (*var).latchedString,
@@ -1251,8 +1239,7 @@ pub unsafe extern "C" fn Cvar_WriteVariables(mut f: crate::src::qcommon::q_share
                 } else {
                     crate::src::qcommon::q_shared::Com_sprintf(
                         buffer.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
-                            as i32,
+                        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                         b"seta %s \"%s\"\n\x00" as *const u8 as *const libc::c_char,
                         (*var).name,
                         (*var).string,
@@ -1642,9 +1629,7 @@ pub unsafe extern "C" fn Cvar_Restart(mut unsetVM: crate::src::qcommon::q_shared
             // throw out any variables the user/vm created
             curvar = Cvar_Unset(curvar)
         } else {
-            if (*curvar).flags & (0x40 as i32 | 0x10 as i32 | 0x400 as i32)
-                == 0
-            {
+            if (*curvar).flags & (0x40 as i32 | 0x10 as i32 | 0x400 as i32) == 0 {
                 // Just reset the rest to their default values.
                 Cvar_Set2(
                     (*curvar).name,
@@ -1801,9 +1786,7 @@ pub unsafe extern "C" fn Cvar_Register(
     // user. In other words CVAR_ARCHIVE and CVAR_ROM are mutually exclusive
     // flags. Unfortunately some historical game code (including single player
     // baseq3) sets both flags. We unset CVAR_ROM for such cvars.
-    if flags & (0x1 as i32 | 0x40 as i32)
-        == 0x1 as i32 | 0x40 as i32
-    {
+    if flags & (0x1 as i32 | 0x40 as i32) == 0x1 as i32 | 0x40 as i32 {
         crate::src::qcommon::common::Com_DPrintf(
             b"^3WARNING: Unsetting CVAR_ROM from cvar \'%s\', since it is also CVAR_ARCHIVE\n\x00"
                 as *const u8 as *const libc::c_char,
@@ -1931,10 +1914,7 @@ Cvar_CompleteCvarName
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn Cvar_CompleteCvarName(
-    mut args: *mut libc::c_char,
-    mut argNum: i32,
-) {
+pub unsafe extern "C" fn Cvar_CompleteCvarName(mut args: *mut libc::c_char, mut argNum: i32) {
     if argNum == 2 as i32 {
         // Skip "<cmd> "
         let mut p: *mut libc::c_char = crate::src::qcommon::q_shared::Com_SkipTokens(
@@ -1988,10 +1968,7 @@ pub unsafe extern "C" fn Cvar_Init() {
     );
     crate::src::qcommon::cmd::Cmd_SetCommandCompletionFunc(
         b"toggle\x00" as *const u8 as *const libc::c_char,
-        Some(
-            Cvar_CompleteCvarName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
-        ),
+        Some(Cvar_CompleteCvarName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
         b"set\x00" as *const u8 as *const libc::c_char,
@@ -1999,10 +1976,7 @@ pub unsafe extern "C" fn Cvar_Init() {
     );
     crate::src::qcommon::cmd::Cmd_SetCommandCompletionFunc(
         b"set\x00" as *const u8 as *const libc::c_char,
-        Some(
-            Cvar_CompleteCvarName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
-        ),
+        Some(Cvar_CompleteCvarName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
         b"sets\x00" as *const u8 as *const libc::c_char,
@@ -2010,10 +1984,7 @@ pub unsafe extern "C" fn Cvar_Init() {
     );
     crate::src::qcommon::cmd::Cmd_SetCommandCompletionFunc(
         b"sets\x00" as *const u8 as *const libc::c_char,
-        Some(
-            Cvar_CompleteCvarName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
-        ),
+        Some(Cvar_CompleteCvarName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
         b"setu\x00" as *const u8 as *const libc::c_char,
@@ -2021,10 +1992,7 @@ pub unsafe extern "C" fn Cvar_Init() {
     );
     crate::src::qcommon::cmd::Cmd_SetCommandCompletionFunc(
         b"setu\x00" as *const u8 as *const libc::c_char,
-        Some(
-            Cvar_CompleteCvarName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
-        ),
+        Some(Cvar_CompleteCvarName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
         b"seta\x00" as *const u8 as *const libc::c_char,
@@ -2032,10 +2000,7 @@ pub unsafe extern "C" fn Cvar_Init() {
     );
     crate::src::qcommon::cmd::Cmd_SetCommandCompletionFunc(
         b"seta\x00" as *const u8 as *const libc::c_char,
-        Some(
-            Cvar_CompleteCvarName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
-        ),
+        Some(Cvar_CompleteCvarName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
         b"reset\x00" as *const u8 as *const libc::c_char,
@@ -2043,10 +2008,7 @@ pub unsafe extern "C" fn Cvar_Init() {
     );
     crate::src::qcommon::cmd::Cmd_SetCommandCompletionFunc(
         b"reset\x00" as *const u8 as *const libc::c_char,
-        Some(
-            Cvar_CompleteCvarName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
-        ),
+        Some(Cvar_CompleteCvarName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
         b"unset\x00" as *const u8 as *const libc::c_char,
@@ -2054,10 +2016,7 @@ pub unsafe extern "C" fn Cvar_Init() {
     );
     crate::src::qcommon::cmd::Cmd_SetCommandCompletionFunc(
         b"unset\x00" as *const u8 as *const libc::c_char,
-        Some(
-            Cvar_CompleteCvarName
-                as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> (),
-        ),
+        Some(Cvar_CompleteCvarName as unsafe extern "C" fn(_: *mut libc::c_char, _: i32) -> ()),
     );
     crate::src::qcommon::cmd::Cmd_AddCommand(
         b"cvarlist\x00" as *const u8 as *const libc::c_char,

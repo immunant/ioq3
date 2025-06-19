@@ -375,9 +375,7 @@ unsafe extern "C" fn UI_CDKeyMenu_Init() {
     cdkeyMenuInfo.cdkey.generic.type_0 = 4 as i32;
     cdkeyMenuInfo.cdkey.generic.name = b"CD Key:\x00" as *const u8 as *const libc::c_char;
     cdkeyMenuInfo.cdkey.generic.flags = 0x40000 as i32 as u32;
-    cdkeyMenuInfo.cdkey.generic.x = (320 as i32 as f64
-        - 16 as i32 as f64 * 2.5f64)
-        as i32;
+    cdkeyMenuInfo.cdkey.generic.x = (320 as i32 as f64 - 16 as i32 as f64 * 2.5f64) as i32;
     cdkeyMenuInfo.cdkey.generic.y = 240 as i32 - 16 as i32 / 2 as i32;
     cdkeyMenuInfo.cdkey.field.widthInChars = 16 as i32;
     cdkeyMenuInfo.cdkey.field.maxchars = 16 as i32;
@@ -386,12 +384,10 @@ unsafe extern "C" fn UI_CDKeyMenu_Init() {
     cdkeyMenuInfo.accept.generic.type_0 = 6 as i32;
     cdkeyMenuInfo.accept.generic.name =
         b"menu/art/accept_0\x00" as *const u8 as *const libc::c_char;
-    cdkeyMenuInfo.accept.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    cdkeyMenuInfo.accept.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     cdkeyMenuInfo.accept.generic.id = 11 as i32;
-    cdkeyMenuInfo.accept.generic.callback = Some(
-        UI_CDKeyMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    cdkeyMenuInfo.accept.generic.callback =
+        Some(UI_CDKeyMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     cdkeyMenuInfo.accept.generic.x = 640 as i32;
     cdkeyMenuInfo.accept.generic.y = 480 as i32 - 64 as i32;
     cdkeyMenuInfo.accept.width = 128 as i32;
@@ -400,12 +396,10 @@ unsafe extern "C" fn UI_CDKeyMenu_Init() {
         b"menu/art/accept_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     cdkeyMenuInfo.back.generic.type_0 = 6 as i32;
     cdkeyMenuInfo.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    cdkeyMenuInfo.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    cdkeyMenuInfo.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     cdkeyMenuInfo.back.generic.id = 12 as i32;
-    cdkeyMenuInfo.back.generic.callback = Some(
-        UI_CDKeyMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    cdkeyMenuInfo.back.generic.callback =
+        Some(UI_CDKeyMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     cdkeyMenuInfo.back.generic.x = 0 as i32;
     cdkeyMenuInfo.back.generic.y = 480 as i32 - 64 as i32;
     cdkeyMenuInfo.back.width = 128 as i32;
@@ -444,8 +438,7 @@ unsafe extern "C" fn UI_CDKeyMenu_Init() {
     ) as u32
         == crate::src::qcommon::q_shared::qfalse as i32 as u32
     {
-        cdkeyMenuInfo.cdkey.field.buffer[0 as i32 as usize] =
-            0 as i32 as libc::c_char
+        cdkeyMenuInfo.cdkey.field.buffer[0 as i32 as usize] = 0 as i32 as libc::c_char
     };
 }
 /*

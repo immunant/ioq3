@@ -135,8 +135,7 @@ pub unsafe extern "C" fn silk_find_LTP_FLP(
     XX_ptr = XX;
     k = 0 as i32;
     while k < nb_subfr {
-        lag_ptr = r_ptr
-            .offset(-((*lag.offset(k as isize) + 5 as i32 / 2 as i32) as isize));
+        lag_ptr = r_ptr.offset(-((*lag.offset(k as isize) + 5 as i32 / 2 as i32) as isize));
         crate::src::opus_1_2_1::silk::float::corrMatrix_FLP::silk_corrMatrix_FLP(
             lag_ptr,
             subfr_length,
@@ -158,16 +157,14 @@ pub unsafe extern "C" fn silk_find_LTP_FLP(
             / (if xx
                 > 0.03f32
                     * 0.5f32
-                    * (*XX_ptr.offset(0 as i32 as isize)
-                        + *XX_ptr.offset(24 as i32 as isize))
+                    * (*XX_ptr.offset(0 as i32 as isize) + *XX_ptr.offset(24 as i32 as isize))
                     + 1.0f32
             {
                 xx
             } else {
                 (0.03f32
                     * 0.5f32
-                    * (*XX_ptr.offset(0 as i32 as isize)
-                        + *XX_ptr.offset(24 as i32 as isize)))
+                    * (*XX_ptr.offset(0 as i32 as isize) + *XX_ptr.offset(24 as i32 as isize)))
                     + 1.0f32
             });
         crate::src::opus_1_2_1::silk::float::scale_vector_FLP::silk_scale_vector_FLP(
@@ -176,9 +173,7 @@ pub unsafe extern "C" fn silk_find_LTP_FLP(
             5 as i32 * 5 as i32,
         );
         crate::src::opus_1_2_1::silk::float::scale_vector_FLP::silk_scale_vector_FLP(
-            xX_ptr,
-            temp,
-            5 as i32,
+            xX_ptr, temp, 5 as i32,
         );
         r_ptr = r_ptr.offset(subfr_length as isize);
         XX_ptr = XX_ptr.offset((5 as i32 * 5 as i32) as isize);

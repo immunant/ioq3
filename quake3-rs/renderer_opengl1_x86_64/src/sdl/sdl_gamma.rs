@@ -144,11 +144,7 @@ GLimp_SetGamma
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn GLimp_SetGamma(
-    mut red: *mut u8,
-    mut green: *mut u8,
-    mut blue: *mut u8,
-) {
+pub unsafe extern "C" fn GLimp_SetGamma(mut red: *mut u8, mut green: *mut u8, mut blue: *mut u8) {
     let mut table: [[crate::stdlib::Uint16; 256]; 3] = [[0; 256]; 3];
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -163,8 +159,7 @@ pub unsafe extern "C" fn GLimp_SetGamma(
             ((*red.offset(i as isize) as crate::stdlib::Uint16 as i32) << 8 as i32
                 | *red.offset(i as isize) as i32) as crate::stdlib::Uint16;
         table[1 as i32 as usize][i as usize] =
-            ((*green.offset(i as isize) as crate::stdlib::Uint16 as i32)
-                << 8 as i32
+            ((*green.offset(i as isize) as crate::stdlib::Uint16 as i32) << 8 as i32
                 | *green.offset(i as isize) as i32) as crate::stdlib::Uint16;
         table[2 as i32 as usize][i as usize] =
             ((*blue.offset(i as isize) as crate::stdlib::Uint16 as i32) << 8 as i32

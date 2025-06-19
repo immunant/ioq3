@@ -389,9 +389,7 @@ ConfirmMenu_Key
 =================
 */
 
-unsafe extern "C" fn ConfirmMenu_Key(
-    mut key: i32,
-) -> crate::src::qcommon::q_shared::sfxHandle_t {
+unsafe extern "C" fn ConfirmMenu_Key(mut key: i32) -> crate::src::qcommon::q_shared::sfxHandle_t {
     match key {
         163 | 134 | 165 | 135 => key = crate::keycodes_h::K_TAB as i32,
         110 | 78 => {
@@ -556,16 +554,13 @@ pub unsafe extern "C" fn UI_ConfirmMenu_Style(
     crate::src::ui::ui_syscalls::trap_GetClientState(
         &mut cstate as *mut _ as *mut crate::ui_public_h::uiClientState_t,
     );
-    if cstate.connState as u32
-        >= crate::src::qcommon::q_shared::CA_CONNECTED as i32 as u32
-    {
+    if cstate.connState as u32 >= crate::src::qcommon::q_shared::CA_CONNECTED as i32 as u32 {
         s_confirm.menu.fullscreen = crate::src::qcommon::q_shared::qfalse
     } else {
         s_confirm.menu.fullscreen = crate::src::qcommon::q_shared::qtrue
     }
     s_confirm.yes.generic.type_0 = 9 as i32;
-    s_confirm.yes.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_confirm.yes.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_confirm.yes.generic.callback =
         Some(ConfirmMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_confirm.yes.generic.id = 11 as i32;
@@ -575,8 +570,7 @@ pub unsafe extern "C" fn UI_ConfirmMenu_Style(
     s_confirm.yes.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     s_confirm.yes.style = 0 as i32;
     s_confirm.no.generic.type_0 = 9 as i32;
-    s_confirm.no.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_confirm.no.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_confirm.no.generic.callback =
         Some(ConfirmMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_confirm.no.generic.id = 10 as i32;
@@ -613,12 +607,7 @@ pub unsafe extern "C" fn UI_ConfirmMenu(
     mut draw: Option<unsafe extern "C" fn() -> ()>,
     mut action: Option<unsafe extern "C" fn(_: crate::src::qcommon::q_shared::qboolean) -> ()>,
 ) {
-    UI_ConfirmMenu_Style(
-        question,
-        0x1 as i32 | 0x2000 as i32,
-        draw,
-        action,
-    );
+    UI_ConfirmMenu_Style(question, 0x1 as i32 | 0x2000 as i32, draw, action);
 }
 /*
 ===========================================================================
@@ -714,16 +703,13 @@ pub unsafe extern "C" fn UI_Message(mut lines: *mut *const libc::c_char) {
     crate::src::ui::ui_syscalls::trap_GetClientState(
         &mut cstate as *mut _ as *mut crate::ui_public_h::uiClientState_t,
     );
-    if cstate.connState as u32
-        >= crate::src::qcommon::q_shared::CA_CONNECTED as i32 as u32
-    {
+    if cstate.connState as u32 >= crate::src::qcommon::q_shared::CA_CONNECTED as i32 as u32 {
         s_confirm.menu.fullscreen = crate::src::qcommon::q_shared::qfalse
     } else {
         s_confirm.menu.fullscreen = crate::src::qcommon::q_shared::qtrue
     }
     s_confirm.yes.generic.type_0 = 9 as i32;
-    s_confirm.yes.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_confirm.yes.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     s_confirm.yes.generic.callback =
         Some(ConfirmMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_confirm.yes.generic.id = 11 as i32;

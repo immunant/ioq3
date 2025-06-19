@@ -249,9 +249,9 @@ pub unsafe extern "C" fn jpeg_CreateDecompress(
         != ::std::mem::size_of::<crate::jpeglib_h::jpeg_decompress_struct>() as libc::c_ulong
     {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STRUCT_SIZE as i32;
-        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] =
-            ::std::mem::size_of::<crate::jpeglib_h::jpeg_decompress_struct>() as libc::c_ulong
-                as i32;
+        (*(*cinfo).err).msg_parm.i[0 as i32 as usize] = ::std::mem::size_of::<
+            crate::jpeglib_h::jpeg_decompress_struct,
+        >() as libc::c_ulong as i32;
         (*(*cinfo).err).msg_parm.i[1 as i32 as usize] = structsize as i32;
         Some(
             (*(*cinfo).err)
@@ -387,27 +387,19 @@ unsafe extern "C" fn default_decompress_parms(mut cinfo: crate::jpeglib_h::j_dec
                 }
             } else {
                 /* Saw no special markers, try to guess from the component IDs */
-                let mut cid0: i32 =
-                    (*(*cinfo).comp_info.offset(0 as i32 as isize)).component_id; /* assume JFIF w/out marker */
-                let mut cid1: i32 =
-                    (*(*cinfo).comp_info.offset(1 as i32 as isize)).component_id; /* ASCII 'R', 'G', 'B' */
-                let mut cid2: i32 =
-                    (*(*cinfo).comp_info.offset(2 as i32 as isize)).component_id;
-                if cid0 == 1 as i32 && cid1 == 2 as i32 && cid2 == 3 as i32
-                {
+                let mut cid0: i32 = (*(*cinfo).comp_info.offset(0 as i32 as isize)).component_id; /* assume JFIF w/out marker */
+                let mut cid1: i32 = (*(*cinfo).comp_info.offset(1 as i32 as isize)).component_id; /* ASCII 'R', 'G', 'B' */
+                let mut cid2: i32 = (*(*cinfo).comp_info.offset(2 as i32 as isize)).component_id;
+                if cid0 == 1 as i32 && cid1 == 2 as i32 && cid2 == 3 as i32 {
                     (*cinfo).jpeg_color_space = crate::jpeglib_h::JCS_YCbCr
-                } else if cid0 == 82 as i32
-                    && cid1 == 71 as i32
-                    && cid2 == 66 as i32
-                {
+                } else if cid0 == 82 as i32 && cid1 == 71 as i32 && cid2 == 66 as i32 {
                     (*cinfo).jpeg_color_space = crate::jpeglib_h::JCS_RGB
                 } else {
                     let mut _mp: *mut i32 = (*(*cinfo).err).msg_parm.i.as_mut_ptr();
                     *_mp.offset(0 as i32 as isize) = cid0;
                     *_mp.offset(1 as i32 as isize) = cid1;
                     *_mp.offset(2 as i32 as isize) = cid2;
-                    (*(*cinfo).err).msg_code =
-                        crate::src::jpeg_8c::jerror::JTRC_UNKNOWN_IDS as i32;
+                    (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JTRC_UNKNOWN_IDS as i32;
                     Some(
                         (*(*cinfo).err)
                             .emit_message
@@ -526,8 +518,7 @@ pub unsafe extern "C" fn jpeg_read_header(
         2 => {
             if require_image != 0 {
                 /* Complain if application wanted an image */
-                (*(*cinfo).err).msg_code =
-                    crate::src::jpeg_8c::jerror::JERR_NO_IMAGE as i32;
+                (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NO_IMAGE as i32;
                 Some(
                     (*(*cinfo).err)
                         .error_exit
@@ -564,9 +555,7 @@ pub unsafe extern "C" fn jpeg_read_header(
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn jpeg_consume_input(
-    mut cinfo: crate::jpeglib_h::j_decompress_ptr,
-) -> i32 {
+pub unsafe extern "C" fn jpeg_consume_input(mut cinfo: crate::jpeglib_h::j_decompress_ptr) -> i32 {
     let mut retcode: i32 = 0 as i32;
     let mut current_block_10: u64;
     /* NB: every possible DSTATE value should be listed in this switch */
@@ -756,8 +745,7 @@ pub unsafe extern "C" fn jpeg_finish_decompress(
     {
         /* Terminate final pass of non-buffered mode */
         if (*cinfo).output_scanline < (*cinfo).output_height {
-            (*(*cinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_TOO_LITTLE_DATA as i32;
+            (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_TOO_LITTLE_DATA as i32;
             Some(
                 (*(*cinfo).err)
                     .error_exit

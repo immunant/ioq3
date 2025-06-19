@@ -24,8 +24,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
     #[inline]
@@ -713,9 +712,7 @@ BotTeam
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotTeam(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
-) -> i32 {
+pub unsafe extern "C" fn BotTeam(mut bs: *mut crate::src::game::ai_main::bot_state_t) -> i32 {
     if (*bs).client < 0 as i32 || (*bs).client >= 64 as i32 {
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
@@ -873,14 +870,10 @@ EntityCarriesFlag
 pub unsafe extern "C" fn EntityCarriesFlag(
     mut entinfo: *mut crate::be_aas_h::aas_entityinfo_t,
 ) -> crate::src::qcommon::q_shared::qboolean {
-    if (*entinfo).powerups & (1 as i32) << crate::bg_public_h::PW_REDFLAG as i32
-        != 0
-    {
+    if (*entinfo).powerups & (1 as i32) << crate::bg_public_h::PW_REDFLAG as i32 != 0 {
         return crate::src::qcommon::q_shared::qtrue;
     }
-    if (*entinfo).powerups & (1 as i32) << crate::bg_public_h::PW_BLUEFLAG as i32
-        != 0
-    {
+    if (*entinfo).powerups & (1 as i32) << crate::bg_public_h::PW_BLUEFLAG as i32 != 0 {
         return crate::src::qcommon::q_shared::qtrue;
     }
     return crate::src::qcommon::q_shared::qfalse;
@@ -900,8 +893,7 @@ pub unsafe extern "C" fn EntityIsInvisible(
     if EntityCarriesFlag(entinfo) as u64 != 0 {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    if (*entinfo).powerups & (1 as i32) << crate::bg_public_h::PW_INVIS as i32 != 0
-    {
+    if (*entinfo).powerups & (1 as i32) << crate::bg_public_h::PW_INVIS as i32 != 0 {
         return crate::src::qcommon::q_shared::qtrue;
     }
     return crate::src::qcommon::q_shared::qfalse;
@@ -1018,8 +1010,7 @@ pub unsafe extern "C" fn BotSetLastOrderedTask(
             ::std::mem::size_of::<crate::be_ai_goal_h::bot_goal_t>() as libc::c_ulong,
         );
         (*bs).teammate = (*bs).lastgoal_teammate;
-        (*bs).teamgoal_time =
-            crate::src::game::ai_main::floattime + 300 as i32 as f32;
+        (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 300 as i32 as f32;
         BotSetTeamStatus(bs);
         //
         if gametype == crate::bg_public_h::GT_CTF as i32 {
@@ -1094,8 +1085,7 @@ pub unsafe extern "C" fn BotRefuseOrder(mut bs: *mut crate::src::game::ai_main::
     }
     // if the bot was ordered to do something
     if (*bs).order_time != 0.
-        && (*bs).order_time
-            > crate::src::game::ai_main::floattime - 10 as i32 as f32
+        && (*bs).order_time > crate::src::game::ai_main::floattime - 10 as i32 as f32
     {
         crate::src::game::g_syscalls::trap_EA_Action((*bs).client, 0x200000 as i32);
         crate::src::game::ai_team::BotVoiceChat(
@@ -1152,36 +1142,32 @@ pub unsafe extern "C" fn BotCTFSeekGoals(mut bs: *mut crate::src::game::ai_main:
         if (*bs).ltgtype != 5 as i32 {
             BotRefuseOrder(bs);
             (*bs).ltgtype = 5 as i32;
-            (*bs).teamgoal_time =
-                crate::src::game::ai_main::floattime + 120 as i32 as f32;
+            (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 120 as i32 as f32;
             (*bs).rushbaseaway_time = 0 as i32 as f32;
             (*bs).decisionmaker = (*bs).client;
             (*bs).ordered = crate::src::qcommon::q_shared::qfalse as i32;
             //
             match BotTeam(bs) {
                 1 => {
-                    dir[0 as i32 as usize] = (*bs).origin[0 as i32 as usize]
-                        - ctf_blueflag.origin[0 as i32 as usize];
-                    dir[1 as i32 as usize] = (*bs).origin[1 as i32 as usize]
-                        - ctf_blueflag.origin[1 as i32 as usize];
-                    dir[2 as i32 as usize] = (*bs).origin[2 as i32 as usize]
-                        - ctf_blueflag.origin[2 as i32 as usize]
+                    dir[0 as i32 as usize] =
+                        (*bs).origin[0 as i32 as usize] - ctf_blueflag.origin[0 as i32 as usize];
+                    dir[1 as i32 as usize] =
+                        (*bs).origin[1 as i32 as usize] - ctf_blueflag.origin[1 as i32 as usize];
+                    dir[2 as i32 as usize] =
+                        (*bs).origin[2 as i32 as usize] - ctf_blueflag.origin[2 as i32 as usize]
                 }
                 2 => {
-                    dir[0 as i32 as usize] = (*bs).origin[0 as i32 as usize]
-                        - ctf_redflag.origin[0 as i32 as usize];
-                    dir[1 as i32 as usize] = (*bs).origin[1 as i32 as usize]
-                        - ctf_redflag.origin[1 as i32 as usize];
-                    dir[2 as i32 as usize] = (*bs).origin[2 as i32 as usize]
-                        - ctf_redflag.origin[2 as i32 as usize]
+                    dir[0 as i32 as usize] =
+                        (*bs).origin[0 as i32 as usize] - ctf_redflag.origin[0 as i32 as usize];
+                    dir[1 as i32 as usize] =
+                        (*bs).origin[1 as i32 as usize] - ctf_redflag.origin[1 as i32 as usize];
+                    dir[2 as i32 as usize] =
+                        (*bs).origin[2 as i32 as usize] - ctf_redflag.origin[2 as i32 as usize]
                 }
                 _ => {
-                    dir[0 as i32 as usize] =
-                        999 as i32 as crate::src::qcommon::q_shared::vec_t;
-                    dir[1 as i32 as usize] =
-                        999 as i32 as crate::src::qcommon::q_shared::vec_t;
-                    dir[2 as i32 as usize] =
-                        999 as i32 as crate::src::qcommon::q_shared::vec_t
+                    dir[0 as i32 as usize] = 999 as i32 as crate::src::qcommon::q_shared::vec_t;
+                    dir[1 as i32 as usize] = 999 as i32 as crate::src::qcommon::q_shared::vec_t;
+                    dir[2 as i32 as usize] = 999 as i32 as crate::src::qcommon::q_shared::vec_t
                 }
             }
             // if the bot picked up the flag very close to the enemy base
@@ -1248,9 +1234,7 @@ pub unsafe extern "C" fn BotCTFSeekGoals(mut bs: *mut crate::src::game::ai_main:
             {
                 //if there is a visible team mate flag carrier
                 c = BotTeamFlagCarrierVisible(bs);
-                if c >= 0 as i32
-                    && ((*bs).ltgtype != 2 as i32 || (*bs).teammate != c)
-                {
+                if c >= 0 as i32 && ((*bs).ltgtype != 2 as i32 || (*bs).teammate != c) {
                     //
                     BotRefuseOrder(bs);
                     //follow the flag carrier
@@ -1271,15 +1255,12 @@ pub unsafe extern "C" fn BotCTFSeekGoals(mut bs: *mut crate::src::game::ai_main:
                         b"onfollow\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     );
                     //get the team goal time
-                    (*bs).teamgoal_time =
-                        crate::src::game::ai_main::floattime + 600 as i32 as f32; //3.5 meter
+                    (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 600 as i32 as f32; //3.5 meter
                     (*bs).ltgtype = 2 as i32;
-                    (*bs).formation_dist =
-                        (3.5f64 * 32 as i32 as f64) as f32;
+                    (*bs).formation_dist = (3.5f64 * 32 as i32 as f64) as f32;
                     BotSetTeamStatus(bs);
-                    (*bs).owndecision_time = (crate::src::game::ai_main::floattime
-                        + 5 as i32 as f32)
-                        as i32
+                    (*bs).owndecision_time =
+                        (crate::src::game::ai_main::floattime + 5 as i32 as f32) as i32
                 }
             }
         }
@@ -1304,9 +1285,7 @@ pub unsafe extern "C" fn BotCTFSeekGoals(mut bs: *mut crate::src::game::ai_main:
                     (*bs).decisionmaker = (*bs).client;
                     (*bs).ordered = crate::src::qcommon::q_shared::qfalse as i32;
                     //
-                    if (((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
-                        as f64)
+                    if (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64)
                         < 0.5f64
                     {
                         //go for the enemy flag
@@ -1317,15 +1296,13 @@ pub unsafe extern "C" fn BotCTFSeekGoals(mut bs: *mut crate::src::game::ai_main:
                     //no team message
                     (*bs).teammessage_time = 0 as i32 as f32;
                     //set the time the bot will stop getting the flag
-                    (*bs).teamgoal_time =
-                        crate::src::game::ai_main::floattime + 600 as i32 as f32;
+                    (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 600 as i32 as f32;
                     //get an alternative route goal towards the enemy base
                     BotGetAlternateRouteGoal(bs, BotOppositeTeam(bs));
                     //
                     BotSetTeamStatus(bs);
-                    (*bs).owndecision_time = (crate::src::game::ai_main::floattime
-                        + 5 as i32 as f32)
-                        as i32
+                    (*bs).owndecision_time =
+                        (crate::src::game::ai_main::floattime + 5 as i32 as f32) as i32
                 }
             }
             return;
@@ -1333,8 +1310,7 @@ pub unsafe extern "C" fn BotCTFSeekGoals(mut bs: *mut crate::src::game::ai_main:
             //if both flags Not at their bases
             if flagstatus == 3 as i32 {
                 //
-                if ((*bs).owndecision_time as f32) < crate::src::game::ai_main::floattime
-                {
+                if ((*bs).owndecision_time as f32) < crate::src::game::ai_main::floattime {
                     // if not trying to return the flag and not following the team flag carrier
                     if (*bs).ltgtype != 6 as i32 && (*bs).ltgtype != 2 as i32 {
                         //
@@ -1361,16 +1337,14 @@ pub unsafe extern "C" fn BotCTFSeekGoals(mut bs: *mut crate::src::game::ai_main:
                                     as *mut libc::c_char,
                             );
                             //get the team goal time
-                            (*bs).teamgoal_time = crate::src::game::ai_main::floattime
-                                + 600 as i32 as f32; //3.5 meter
+                            (*bs).teamgoal_time =
+                                crate::src::game::ai_main::floattime + 600 as i32 as f32; //3.5 meter
                             (*bs).ltgtype = 2 as i32;
-                            (*bs).formation_dist =
-                                (3.5f64 * 32 as i32 as f64) as f32;
+                            (*bs).formation_dist = (3.5f64 * 32 as i32 as f64) as f32;
                             //
                             BotSetTeamStatus(bs);
-                            (*bs).owndecision_time = (crate::src::game::ai_main::floattime
-                                + 5 as i32 as f32)
-                                as i32
+                            (*bs).owndecision_time =
+                                (crate::src::game::ai_main::floattime + 5 as i32 as f32) as i32
                         } else {
                             BotRefuseOrder(bs);
                             (*bs).decisionmaker = (*bs).client;
@@ -1383,15 +1357,14 @@ pub unsafe extern "C" fn BotCTFSeekGoals(mut bs: *mut crate::src::game::ai_main:
                             //get the flag
                             (*bs).ltgtype = 6 as i32;
                             //set the time the bot will stop getting the flag
-                            (*bs).teamgoal_time = crate::src::game::ai_main::floattime
-                                + 180 as i32 as f32;
+                            (*bs).teamgoal_time =
+                                crate::src::game::ai_main::floattime + 180 as i32 as f32;
                             //get an alternative route goal towards the enemy base
                             BotGetAlternateRouteGoal(bs, BotOppositeTeam(bs));
                             //
                             BotSetTeamStatus(bs);
-                            (*bs).owndecision_time = (crate::src::game::ai_main::floattime
-                                + 5 as i32 as f32)
-                                as i32
+                            (*bs).owndecision_time =
+                                (crate::src::game::ai_main::floattime + 5 as i32 as f32) as i32
                         }
                     }
                 }
@@ -1446,9 +1419,7 @@ pub unsafe extern "C" fn BotCTFSeekGoals(mut bs: *mut crate::src::game::ai_main:
     }
     //set the time to send a message to the team mates
     (*bs).teammessage_time = crate::src::game::ai_main::floattime
-        + 2 as i32 as f32
-            * ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32);
+        + 2 as i32 as f32 * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //
     if (*bs).teamtaskpreference & (2 as i32 | 1 as i32) != 0 {
         if (*bs).teamtaskpreference & 2 as i32 != 0 {
@@ -1462,15 +1433,13 @@ pub unsafe extern "C" fn BotCTFSeekGoals(mut bs: *mut crate::src::game::ai_main:
         l2 = 0.7f32
     }
     //get the flag or defend the base
-    rnd = (::libc::rand() & 0x7fff as i32) as f32
-        / 0x7fff as i32 as f32;
+    rnd = (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32;
     if rnd < l1 && ctf_redflag.areanum != 0 && ctf_blueflag.areanum != 0 {
         (*bs).decisionmaker = (*bs).client;
         (*bs).ordered = crate::src::qcommon::q_shared::qfalse as i32;
         (*bs).ltgtype = 4 as i32;
         //set the time the bot will stop getting the flag
-        (*bs).teamgoal_time =
-            crate::src::game::ai_main::floattime + 600 as i32 as f32;
+        (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 600 as i32 as f32;
         //get an alternative route goal towards the enemy base
         BotGetAlternateRouteGoal(bs, BotOppositeTeam(bs));
         BotSetTeamStatus(bs);
@@ -1494,19 +1463,16 @@ pub unsafe extern "C" fn BotCTFSeekGoals(mut bs: *mut crate::src::game::ai_main:
         //set the ltg type
         (*bs).ltgtype = 3 as i32;
         //set the time the bot stops defending the base
-        (*bs).teamgoal_time =
-            crate::src::game::ai_main::floattime + 600 as i32 as f32;
+        (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 600 as i32 as f32;
         (*bs).defendaway_time = 0 as i32 as f32;
         BotSetTeamStatus(bs);
     } else {
         (*bs).ltgtype = 0 as i32;
         //set the time the bot will stop roaming
-        (*bs).ctfroam_time =
-            crate::src::game::ai_main::floattime + 60 as i32 as f32;
+        (*bs).ctfroam_time = crate::src::game::ai_main::floattime + 60 as i32 as f32;
         BotSetTeamStatus(bs);
     }
-    (*bs).owndecision_time =
-        (crate::src::game::ai_main::floattime + 5 as i32 as f32) as i32;
+    (*bs).owndecision_time = (crate::src::game::ai_main::floattime + 5 as i32 as f32) as i32;
     //DEBUG
 }
 //set ctf goals (defend base, get enemy flag) during retreat
@@ -1524,8 +1490,7 @@ pub unsafe extern "C" fn BotCTFRetreatGoals(mut bs: *mut crate::src::game::ai_ma
         if (*bs).ltgtype != 5 as i32 {
             BotRefuseOrder(bs);
             (*bs).ltgtype = 5 as i32;
-            (*bs).teamgoal_time =
-                crate::src::game::ai_main::floattime + 120 as i32 as f32;
+            (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 120 as i32 as f32;
             (*bs).rushbaseaway_time = 0 as i32 as f32;
             (*bs).decisionmaker = (*bs).client;
             (*bs).ordered = crate::src::qcommon::q_shared::qfalse as i32;
@@ -1756,9 +1721,7 @@ pub unsafe extern "C" fn stristr(
     let mut i: i32 = 0;
     while *str != 0 {
         i = 0 as i32;
-        while *charset.offset(i as isize) as i32 != 0
-            && *str.offset(i as isize) as i32 != 0
-        {
+        while *charset.offset(i as isize) as i32 != 0 && *str.offset(i as isize) as i32 != 0 {
             if ({
                 let mut __res: i32 = 0;
                 if ::std::mem::size_of::<libc::c_char>() as libc::c_ulong
@@ -2046,11 +2009,7 @@ pub unsafe extern "C" fn EasyClientName(
             );
         }
     }
-    crate::stdlib::strncpy(
-        buf,
-        name.as_mut_ptr(),
-        (size - 1 as i32) as libc::c_ulong,
-    );
+    crate::stdlib::strncpy(buf, name.as_mut_ptr(), (size - 1 as i32) as libc::c_ulong);
     *buf.offset((size - 1 as i32) as isize) = '\u{0}' as i32 as libc::c_char;
     return buf;
 }
@@ -2135,8 +2094,7 @@ pub unsafe extern "C" fn BotSetupForMovement(mut bs: *mut crate::src::game::ai_m
     initmove.velocity[0 as i32 as usize] = (*bs).cur_ps.velocity[0 as i32 as usize];
     initmove.velocity[1 as i32 as usize] = (*bs).cur_ps.velocity[1 as i32 as usize];
     initmove.velocity[2 as i32 as usize] = (*bs).cur_ps.velocity[2 as i32 as usize];
-    initmove.viewoffset[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    initmove.viewoffset[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     initmove.viewoffset[1 as i32 as usize] = initmove.viewoffset[2 as i32 as usize];
     initmove.viewoffset[0 as i32 as usize] = initmove.viewoffset[1 as i32 as usize];
     initmove.viewoffset[2 as i32 as usize] += (*bs).cur_ps.viewheight as f32;
@@ -2144,8 +2102,7 @@ pub unsafe extern "C" fn BotSetupForMovement(mut bs: *mut crate::src::game::ai_m
     initmove.client = (*bs).client;
     initmove.thinktime = (*bs).thinktime;
     //set the onground flag
-    if (*bs).cur_ps.groundEntityNum != ((1 as i32) << 10 as i32) - 1 as i32
-    {
+    if (*bs).cur_ps.groundEntityNum != ((1 as i32) << 10 as i32) - 1 as i32 {
         initmove.or_moveflags |= 2 as i32
     }
     //set the teleported flag
@@ -2273,30 +2230,23 @@ pub unsafe extern "C" fn BotUpdateInventory(mut bs: *mut crate::src::game::ai_ma
     (*bs).inventory[31 as i32 as usize] = ((*bs).cur_ps.stats
         [crate::bg_public_h::STAT_HOLDABLE_ITEM as i32 as usize]
         == 27 as i32) as i32;
-    (*bs).inventory[35 as i32 as usize] = ((*bs).cur_ps.powerups
-        [crate::bg_public_h::PW_QUAD as i32 as usize]
-        != 0 as i32) as i32;
+    (*bs).inventory[35 as i32 as usize] =
+        ((*bs).cur_ps.powerups[crate::bg_public_h::PW_QUAD as i32 as usize] != 0 as i32) as i32;
     (*bs).inventory[36 as i32 as usize] = ((*bs).cur_ps.powerups
         [crate::bg_public_h::PW_BATTLESUIT as i32 as usize]
         != 0 as i32) as i32;
-    (*bs).inventory[37 as i32 as usize] = ((*bs).cur_ps.powerups
-        [crate::bg_public_h::PW_HASTE as i32 as usize]
-        != 0 as i32) as i32;
-    (*bs).inventory[38 as i32 as usize] = ((*bs).cur_ps.powerups
-        [crate::bg_public_h::PW_INVIS as i32 as usize]
-        != 0 as i32) as i32;
-    (*bs).inventory[39 as i32 as usize] = ((*bs).cur_ps.powerups
-        [crate::bg_public_h::PW_REGEN as i32 as usize]
-        != 0 as i32) as i32;
-    (*bs).inventory[40 as i32 as usize] = ((*bs).cur_ps.powerups
-        [crate::bg_public_h::PW_FLIGHT as i32 as usize]
-        != 0 as i32) as i32;
-    (*bs).inventory[45 as i32 as usize] = ((*bs).cur_ps.powerups
-        [crate::bg_public_h::PW_REDFLAG as i32 as usize]
-        != 0 as i32) as i32;
-    (*bs).inventory[46 as i32 as usize] = ((*bs).cur_ps.powerups
-        [crate::bg_public_h::PW_BLUEFLAG as i32 as usize]
-        != 0 as i32) as i32;
+    (*bs).inventory[37 as i32 as usize] =
+        ((*bs).cur_ps.powerups[crate::bg_public_h::PW_HASTE as i32 as usize] != 0 as i32) as i32;
+    (*bs).inventory[38 as i32 as usize] =
+        ((*bs).cur_ps.powerups[crate::bg_public_h::PW_INVIS as i32 as usize] != 0 as i32) as i32;
+    (*bs).inventory[39 as i32 as usize] =
+        ((*bs).cur_ps.powerups[crate::bg_public_h::PW_REGEN as i32 as usize] != 0 as i32) as i32;
+    (*bs).inventory[40 as i32 as usize] =
+        ((*bs).cur_ps.powerups[crate::bg_public_h::PW_FLIGHT as i32 as usize] != 0 as i32) as i32;
+    (*bs).inventory[45 as i32 as usize] =
+        ((*bs).cur_ps.powerups[crate::bg_public_h::PW_REDFLAG as i32 as usize] != 0 as i32) as i32;
+    (*bs).inventory[46 as i32 as usize] =
+        ((*bs).cur_ps.powerups[crate::bg_public_h::PW_BLUEFLAG as i32 as usize] != 0 as i32) as i32;
     BotCheckItemPickup(bs, oldinventory.as_mut_ptr());
 }
 //update the inventory during battle
@@ -2341,17 +2291,13 @@ pub unsafe extern "C" fn BotUpdateBattleInventory(
         enemy,
         &mut entinfo as *mut _ as *mut crate::be_aas_h::aas_entityinfo_s,
     );
-    dir[0 as i32 as usize] =
-        entinfo.origin[0 as i32 as usize] - (*bs).origin[0 as i32 as usize];
-    dir[1 as i32 as usize] =
-        entinfo.origin[1 as i32 as usize] - (*bs).origin[1 as i32 as usize];
-    dir[2 as i32 as usize] =
-        entinfo.origin[2 as i32 as usize] - (*bs).origin[2 as i32 as usize];
+    dir[0 as i32 as usize] = entinfo.origin[0 as i32 as usize] - (*bs).origin[0 as i32 as usize];
+    dir[1 as i32 as usize] = entinfo.origin[1 as i32 as usize] - (*bs).origin[1 as i32 as usize];
+    dir[2 as i32 as usize] = entinfo.origin[2 as i32 as usize] - (*bs).origin[2 as i32 as usize];
     (*bs).inventory[201 as i32 as usize] = dir[2 as i32 as usize] as i32;
     dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     (*bs).inventory[200 as i32 as usize] =
-        VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
-            as i32;
+        VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t) as i32;
     //FIXME: add num visible enemies and num visible team mates to the inventory
 }
 //use holdable items during battle
@@ -2448,8 +2394,8 @@ pub unsafe extern "C" fn BotIntermission(
         return crate::src::qcommon::q_shared::qtrue;
     }
     return ((*bs).cur_ps.pm_type == crate::bg_public_h::PM_FREEZE as i32
-        || (*bs).cur_ps.pm_type == crate::bg_public_h::PM_INTERMISSION as i32)
-        as i32 as crate::src::qcommon::q_shared::qboolean;
+        || (*bs).cur_ps.pm_type == crate::bg_public_h::PM_INTERMISSION as i32) as i32
+        as crate::src::qcommon::q_shared::qboolean;
 }
 //returns true if the bot is in lava or slime
 /*
@@ -2468,8 +2414,7 @@ pub unsafe extern "C" fn BotInLavaOrSlime(
     feet[2 as i32 as usize] = (*bs).origin[2 as i32 as usize];
     feet[2 as i32 as usize] -= 23 as i32 as f32;
     return (crate::src::game::g_syscalls::trap_AAS_PointContents(feet.as_mut_ptr())
-        & (8 as i32 | 16 as i32))
-        as crate::src::qcommon::q_shared::qboolean;
+        & (8 as i32 | 16 as i32)) as crate::src::qcommon::q_shared::qboolean;
 }
 //create a new waypoint
 /*
@@ -2603,9 +2548,7 @@ BotAggression
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotAggression(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
-) -> f32 {
+pub unsafe extern "C" fn BotAggression(mut bs: *mut crate::src::game::ai_main::bot_state_t) -> f32 {
     //if the bot has quad
     if (*bs).inventory[35 as i32 as usize] != 0 {
         //if the bot is not holding the gauntlet or the enemy is really nearby
@@ -2683,9 +2626,7 @@ BotFeelingBad
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotFeelingBad(
-    mut bs: *mut crate::src::game::ai_main::bot_state_t,
-) -> f32 {
+pub unsafe extern "C" fn BotFeelingBad(mut bs: *mut crate::src::game::ai_main::bot_state_t) -> f32 {
     if (*bs).weaponnum == crate::bg_public_h::WP_GAUNTLET as i32 {
         return 100 as i32 as f32;
     }
@@ -2989,15 +2930,12 @@ pub unsafe extern "C" fn BotGoCamp(
         1 as i32 as f32,
     );
     if camper as f64 > 0.99f64 {
-        (*bs).teamgoal_time =
-            crate::src::game::ai_main::floattime + 99999 as i32 as f32
+        (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 99999 as i32 as f32
     } else {
         (*bs).teamgoal_time = crate::src::game::ai_main::floattime
             + 120 as i32 as f32
             + 180 as i32 as f32 * camper
-            + (::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32
-                * 15 as i32 as f32
+            + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 15 as i32 as f32
     }
     //set the last time the bot started camping
     (*bs).camp_time = crate::src::game::ai_main::floattime;
@@ -3070,10 +3008,7 @@ pub unsafe extern "C" fn BotWantsToCamp(
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
     //
-    if (::libc::rand() & 0x7fff as i32) as f32
-        / 0x7fff as i32 as f32
-        > camper
-    {
+    if (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 > camper {
         (*bs).camp_time = crate::src::game::ai_main::floattime;
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
@@ -3256,39 +3191,28 @@ pub unsafe extern "C" fn BotRoamGoal(
         bestorg[0 as i32 as usize] = (*bs).origin[0 as i32 as usize];
         bestorg[1 as i32 as usize] = (*bs).origin[1 as i32 as usize];
         bestorg[2 as i32 as usize] = (*bs).origin[2 as i32 as usize];
-        rnd = (::libc::rand() & 0x7fff as i32) as f32
-            / 0x7fff as i32 as f32;
+        rnd = (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32;
         if rnd as f64 > 0.25f64 {
             //add a random value to the x-coordinate
-            if (((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32) as f64)
-                < 0.5f64
-            {
+            if (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64) < 0.5f64 {
                 bestorg[0 as i32 as usize] -= 800 as i32 as f32
-                    * ((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
+                    * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                     + 100 as i32 as f32
             } else {
                 bestorg[0 as i32 as usize] += 800 as i32 as f32
-                    * ((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
+                    * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                     + 100 as i32 as f32
             }
         }
         if (rnd as f64) < 0.75f64 {
             //add a random value to the y-coordinate
-            if (((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32) as f64)
-                < 0.5f64
-            {
+            if (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64) < 0.5f64 {
                 bestorg[1 as i32 as usize] -= 800 as i32 as f32
-                    * ((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
+                    * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                     + 100 as i32 as f32
             } else {
                 bestorg[1 as i32 as usize] += 800 as i32 as f32
-                    * ((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
+                    * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                     + 100 as i32 as f32
             }
         }
@@ -3296,9 +3220,7 @@ pub unsafe extern "C" fn BotRoamGoal(
         bestorg[2 as i32 as usize] = (bestorg[2 as i32 as usize] as f64
             + (2 as i32 * 48 as i32) as f64
                 * (2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
-                        as f64
+                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)))
             as crate::src::qcommon::q_shared::vec_t;
         //trace a line from the origin to the roam target
@@ -3312,33 +3234,26 @@ pub unsafe extern "C" fn BotRoamGoal(
             1 as i32,
         );
         //direction and length towards the roam target
-        dir[0 as i32 as usize] =
-            trace.endpos[0 as i32 as usize] - (*bs).origin[0 as i32 as usize];
-        dir[1 as i32 as usize] =
-            trace.endpos[1 as i32 as usize] - (*bs).origin[1 as i32 as usize];
-        dir[2 as i32 as usize] =
-            trace.endpos[2 as i32 as usize] - (*bs).origin[2 as i32 as usize];
+        dir[0 as i32 as usize] = trace.endpos[0 as i32 as usize] - (*bs).origin[0 as i32 as usize];
+        dir[1 as i32 as usize] = trace.endpos[1 as i32 as usize] - (*bs).origin[1 as i32 as usize];
+        dir[2 as i32 as usize] = trace.endpos[2 as i32 as usize] - (*bs).origin[2 as i32 as usize];
         len = crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
         //if the roam target is far away enough
         if len > 200 as i32 as f32 {
             //the roam target is in the given direction before walls
-            dir[0 as i32 as usize] = dir[0 as i32 as usize]
-                * (len * trace.fraction - 40 as i32 as f32);
-            dir[1 as i32 as usize] = dir[1 as i32 as usize]
-                * (len * trace.fraction - 40 as i32 as f32);
-            dir[2 as i32 as usize] = dir[2 as i32 as usize]
-                * (len * trace.fraction - 40 as i32 as f32);
-            bestorg[0 as i32 as usize] =
-                (*bs).origin[0 as i32 as usize] + dir[0 as i32 as usize];
-            bestorg[1 as i32 as usize] =
-                (*bs).origin[1 as i32 as usize] + dir[1 as i32 as usize];
-            bestorg[2 as i32 as usize] =
-                (*bs).origin[2 as i32 as usize] + dir[2 as i32 as usize];
+            dir[0 as i32 as usize] =
+                dir[0 as i32 as usize] * (len * trace.fraction - 40 as i32 as f32);
+            dir[1 as i32 as usize] =
+                dir[1 as i32 as usize] * (len * trace.fraction - 40 as i32 as f32);
+            dir[2 as i32 as usize] =
+                dir[2 as i32 as usize] * (len * trace.fraction - 40 as i32 as f32);
+            bestorg[0 as i32 as usize] = (*bs).origin[0 as i32 as usize] + dir[0 as i32 as usize];
+            bestorg[1 as i32 as usize] = (*bs).origin[1 as i32 as usize] + dir[1 as i32 as usize];
+            bestorg[2 as i32 as usize] = (*bs).origin[2 as i32 as usize] + dir[2 as i32 as usize];
             //get the coordinates of the floor below the roam target
             belowbestorg[0 as i32 as usize] = bestorg[0 as i32 as usize];
             belowbestorg[1 as i32 as usize] = bestorg[1 as i32 as usize];
-            belowbestorg[2 as i32 as usize] =
-                bestorg[2 as i32 as usize] - 800 as i32 as f32;
+            belowbestorg[2 as i32 as usize] = bestorg[2 as i32 as usize] - 800 as i32 as f32;
             crate::src::game::ai_main::BotAI_Trace(
                 &mut trace as *mut _ as *mut crate::botlib_h::bsp_trace_s,
                 bestorg.as_mut_ptr(),
@@ -3456,18 +3371,12 @@ pub unsafe extern "C" fn BotAttackMove(
         goal.origin[0 as i32 as usize] = (*bs).lastenemyorigin[0 as i32 as usize];
         goal.origin[1 as i32 as usize] = (*bs).lastenemyorigin[1 as i32 as usize];
         goal.origin[2 as i32 as usize] = (*bs).lastenemyorigin[2 as i32 as usize];
-        goal.mins[0 as i32 as usize] =
-            -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
-        goal.mins[1 as i32 as usize] =
-            -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
-        goal.mins[2 as i32 as usize] =
-            -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
-        goal.maxs[0 as i32 as usize] =
-            8 as i32 as crate::src::qcommon::q_shared::vec_t;
-        goal.maxs[1 as i32 as usize] =
-            8 as i32 as crate::src::qcommon::q_shared::vec_t;
-        goal.maxs[2 as i32 as usize] =
-            8 as i32 as crate::src::qcommon::q_shared::vec_t;
+        goal.mins[0 as i32 as usize] = -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
+        goal.mins[1 as i32 as usize] = -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
+        goal.mins[2 as i32 as usize] = -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
+        goal.maxs[0 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
+        goal.maxs[1 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
+        goal.maxs[2 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
         //initialize the movement state
         BotSetupForMovement(bs);
         //move towards the goal
@@ -3530,19 +3439,11 @@ pub unsafe extern "C" fn BotAttackMove(
     //walk, crouch or jump
     movetype = 1 as i32;
     //
-    if (*bs).attackcrouch_time
-        < crate::src::game::ai_main::floattime - 1 as i32 as f32
-    {
-        if ((::libc::rand() & 0x7fff as i32) as f32
-            / 0x7fff as i32 as f32)
-            < jumper
-        {
+    if (*bs).attackcrouch_time < crate::src::game::ai_main::floattime - 1 as i32 as f32 {
+        if ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) < jumper {
             movetype = 4 as i32
-        } else if (*bs).attackcrouch_time
-            < crate::src::game::ai_main::floattime - 1 as i32 as f32
-            && ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32)
-                < croucher
+        } else if (*bs).attackcrouch_time < crate::src::game::ai_main::floattime - 1 as i32 as f32
+            && ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) < croucher
         {
             (*bs).attackcrouch_time =
                 crate::src::game::ai_main::floattime + croucher * 5 as i32 as f32
@@ -3558,8 +3459,7 @@ pub unsafe extern "C" fn BotAttackMove(
         if (*bs).attackjump_time > crate::src::game::ai_main::floattime {
             movetype = 1 as i32
         } else {
-            (*bs).attackjump_time =
-                crate::src::game::ai_main::floattime + 1 as i32 as f32
+            (*bs).attackjump_time = crate::src::game::ai_main::floattime + 1 as i32 as f32
         }
     }
     if (*bs).cur_ps.weapon == crate::bg_public_h::WP_GAUNTLET as i32 {
@@ -3599,24 +3499,18 @@ pub unsafe extern "C" fn BotAttackMove(
     //increase the strafe time
     (*bs).attackstrafe_time += (*bs).thinktime;
     //get the strafe change time
-    strafechange_time = (0.4f64
-        + (1 as i32 as f32 - attack_skill) as f64 * 0.2f64)
-        as f32;
+    strafechange_time = (0.4f64 + (1 as i32 as f32 - attack_skill) as f64 * 0.2f64) as f32;
     if attack_skill as f64 > 0.7f64 {
         strafechange_time = (strafechange_time as f64
             + 2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32) as f64
+                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)
                 * 0.2f64) as f32
     }
     //if the strafe direction should be changed
     if (*bs).attackstrafe_time > strafechange_time {
         //some magic number :)
-        if ((::libc::rand() & 0x7fff as i32) as f32
-            / 0x7fff as i32 as f32) as f64
-            > 0.935f64
-        {
+        if ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 > 0.935f64 {
             //flip the strafe direction
             (*bs).flags ^= 1 as i32;
             (*bs).attackstrafe_time = 0 as i32 as f32
@@ -3627,8 +3521,7 @@ pub unsafe extern "C" fn BotAttackMove(
     while i < 2 as i32 {
         hordir[0 as i32 as usize] = forward[0 as i32 as usize];
         hordir[1 as i32 as usize] = forward[1 as i32 as usize];
-        hordir[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr());
         //get the sideward vector
         CrossProduct(
@@ -3643,30 +3536,18 @@ pub unsafe extern "C" fn BotAttackMove(
             sideward[2 as i32 as usize] = -sideward[2 as i32 as usize]
         }
         //randomly go back a little
-        if ((::libc::rand() & 0x7fff as i32) as f32
-            / 0x7fff as i32 as f32) as f64
-            > 0.9f64
-        {
-            sideward[0 as i32 as usize] =
-                sideward[0 as i32 as usize] + backward[0 as i32 as usize];
-            sideward[1 as i32 as usize] =
-                sideward[1 as i32 as usize] + backward[1 as i32 as usize];
-            sideward[2 as i32 as usize] =
-                sideward[2 as i32 as usize] + backward[2 as i32 as usize]
+        if ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 > 0.9f64 {
+            sideward[0 as i32 as usize] = sideward[0 as i32 as usize] + backward[0 as i32 as usize];
+            sideward[1 as i32 as usize] = sideward[1 as i32 as usize] + backward[1 as i32 as usize];
+            sideward[2 as i32 as usize] = sideward[2 as i32 as usize] + backward[2 as i32 as usize]
         } else if dist > attack_dist + attack_range {
-            sideward[0 as i32 as usize] =
-                sideward[0 as i32 as usize] + forward[0 as i32 as usize];
-            sideward[1 as i32 as usize] =
-                sideward[1 as i32 as usize] + forward[1 as i32 as usize];
-            sideward[2 as i32 as usize] =
-                sideward[2 as i32 as usize] + forward[2 as i32 as usize]
+            sideward[0 as i32 as usize] = sideward[0 as i32 as usize] + forward[0 as i32 as usize];
+            sideward[1 as i32 as usize] = sideward[1 as i32 as usize] + forward[1 as i32 as usize];
+            sideward[2 as i32 as usize] = sideward[2 as i32 as usize] + forward[2 as i32 as usize]
         } else if dist < attack_dist - attack_range {
-            sideward[0 as i32 as usize] =
-                sideward[0 as i32 as usize] + backward[0 as i32 as usize];
-            sideward[1 as i32 as usize] =
-                sideward[1 as i32 as usize] + backward[1 as i32 as usize];
-            sideward[2 as i32 as usize] =
-                sideward[2 as i32 as usize] + backward[2 as i32 as usize]
+            sideward[0 as i32 as usize] = sideward[0 as i32 as usize] + backward[0 as i32 as usize];
+            sideward[1 as i32 as usize] = sideward[1 as i32 as usize] + backward[1 as i32 as usize];
+            sideward[2 as i32 as usize] = sideward[2 as i32 as usize] + backward[2 as i32 as usize]
         }
         //walk forward or backward to get at the ideal attack distance
         //perform the movement
@@ -3852,31 +3733,22 @@ pub unsafe extern "C" fn BotEntityVisible(
         return 0 as i32 as f32;
     }
     //calculate middle of bounding box
+    middle[0 as i32 as usize] = entinfo.mins[0 as i32 as usize] + entinfo.maxs[0 as i32 as usize];
+    middle[1 as i32 as usize] = entinfo.mins[1 as i32 as usize] + entinfo.maxs[1 as i32 as usize];
+    middle[2 as i32 as usize] = entinfo.mins[2 as i32 as usize] + entinfo.maxs[2 as i32 as usize];
     middle[0 as i32 as usize] =
-        entinfo.mins[0 as i32 as usize] + entinfo.maxs[0 as i32 as usize];
+        (middle[0 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     middle[1 as i32 as usize] =
-        entinfo.mins[1 as i32 as usize] + entinfo.maxs[1 as i32 as usize];
+        (middle[1 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     middle[2 as i32 as usize] =
-        entinfo.mins[2 as i32 as usize] + entinfo.maxs[2 as i32 as usize];
-    middle[0 as i32 as usize] = (middle[0 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    middle[1 as i32 as usize] = (middle[1 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    middle[2 as i32 as usize] = (middle[2 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    middle[0 as i32 as usize] =
-        entinfo.origin[0 as i32 as usize] + middle[0 as i32 as usize];
-    middle[1 as i32 as usize] =
-        entinfo.origin[1 as i32 as usize] + middle[1 as i32 as usize];
-    middle[2 as i32 as usize] =
-        entinfo.origin[2 as i32 as usize] + middle[2 as i32 as usize];
+        (middle[2 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+    middle[0 as i32 as usize] = entinfo.origin[0 as i32 as usize] + middle[0 as i32 as usize];
+    middle[1 as i32 as usize] = entinfo.origin[1 as i32 as usize] + middle[1 as i32 as usize];
+    middle[2 as i32 as usize] = entinfo.origin[2 as i32 as usize] + middle[2 as i32 as usize];
     //check if entity is within field of vision
-    dir[0 as i32 as usize] =
-        middle[0 as i32 as usize] - *eye.offset(0 as i32 as isize);
-    dir[1 as i32 as usize] =
-        middle[1 as i32 as usize] - *eye.offset(1 as i32 as isize);
-    dir[2 as i32 as usize] =
-        middle[2 as i32 as usize] - *eye.offset(2 as i32 as isize);
+    dir[0 as i32 as usize] = middle[0 as i32 as usize] - *eye.offset(0 as i32 as isize);
+    dir[1 as i32 as usize] = middle[1 as i32 as usize] - *eye.offset(1 as i32 as isize);
+    dir[2 as i32 as usize] = middle[2 as i32 as usize] - *eye.offset(2 as i32 as isize);
     crate::src::qcommon::q_math::vectoangles(
         dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         entangles.as_mut_ptr(),
@@ -3960,12 +3832,12 @@ pub unsafe extern "C" fn BotEntityVisible(
             otherinfog = crate::src::game::g_syscalls::trap_AAS_PointContents(middle.as_mut_ptr())
                 & 64 as i32;
             if infog != 0 && otherinfog != 0 {
-                dir[0 as i32 as usize] = trace.endpos[0 as i32 as usize]
-                    - *eye.offset(0 as i32 as isize);
-                dir[1 as i32 as usize] = trace.endpos[1 as i32 as usize]
-                    - *eye.offset(1 as i32 as isize);
-                dir[2 as i32 as usize] = trace.endpos[2 as i32 as usize]
-                    - *eye.offset(2 as i32 as isize);
+                dir[0 as i32 as usize] =
+                    trace.endpos[0 as i32 as usize] - *eye.offset(0 as i32 as isize);
+                dir[1 as i32 as usize] =
+                    trace.endpos[1 as i32 as usize] - *eye.offset(1 as i32 as isize);
+                dir[2 as i32 as usize] =
+                    trace.endpos[2 as i32 as usize] - *eye.offset(2 as i32 as isize);
                 squaredfogdist = VectorLengthSquared(
                     dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                 )
@@ -3982,12 +3854,12 @@ pub unsafe extern "C" fn BotEntityVisible(
                     viewer,
                     64 as i32,
                 );
-                dir[0 as i32 as usize] = *eye.offset(0 as i32 as isize)
-                    - trace.endpos[0 as i32 as usize];
-                dir[1 as i32 as usize] = *eye.offset(1 as i32 as isize)
-                    - trace.endpos[1 as i32 as usize];
-                dir[2 as i32 as usize] = *eye.offset(2 as i32 as isize)
-                    - trace.endpos[2 as i32 as usize];
+                dir[0 as i32 as usize] =
+                    *eye.offset(0 as i32 as isize) - trace.endpos[0 as i32 as usize];
+                dir[1 as i32 as usize] =
+                    *eye.offset(1 as i32 as isize) - trace.endpos[1 as i32 as usize];
+                dir[2 as i32 as usize] =
+                    *eye.offset(2 as i32 as isize) - trace.endpos[2 as i32 as usize];
                 squaredfogdist = VectorLengthSquared(
                     dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                 )
@@ -4004,12 +3876,9 @@ pub unsafe extern "C" fn BotEntityVisible(
                     viewer,
                     64 as i32,
                 );
-                dir[0 as i32 as usize] =
-                    end[0 as i32 as usize] - trace.endpos[0 as i32 as usize];
-                dir[1 as i32 as usize] =
-                    end[1 as i32 as usize] - trace.endpos[1 as i32 as usize];
-                dir[2 as i32 as usize] =
-                    end[2 as i32 as usize] - trace.endpos[2 as i32 as usize];
+                dir[0 as i32 as usize] = end[0 as i32 as usize] - trace.endpos[0 as i32 as usize];
+                dir[1 as i32 as usize] = end[1 as i32 as usize] - trace.endpos[1 as i32 as usize];
+                dir[2 as i32 as usize] = end[2 as i32 as usize] - trace.endpos[2 as i32 as usize];
                 squaredfogdist = VectorLengthSquared(
                     dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                 )
@@ -4019,9 +3888,7 @@ pub unsafe extern "C" fn BotEntityVisible(
             }
             //decrease visibility with the view distance through fog
             vis = (1 as i32 as f64
-                / (if squaredfogdist as f64 * 0.001f64
-                    < 1 as i32 as f64
-                {
+                / (if squaredfogdist as f64 * 0.001f64 < 1 as i32 as f64 {
                     1 as i32 as f64
                 } else {
                     (squaredfogdist as f64) * 0.001f64
@@ -4133,8 +4000,7 @@ pub unsafe extern "C" fn BotFindEnemy(
         1 as i32 as f32,
     );
     //check if the health decreased
-    healthdecrease =
-        ((*bs).lasthealth > (*bs).inventory[29 as i32 as usize]) as i32;
+    healthdecrease = ((*bs).lasthealth > (*bs).inventory[29 as i32 as usize]) as i32;
     //remember the current health value
     (*bs).lasthealth = (*bs).inventory[29 as i32 as usize];
     //
@@ -4146,12 +4012,12 @@ pub unsafe extern "C" fn BotFindEnemy(
         if EntityCarriesFlag(&mut curenemyinfo) as u64 != 0 {
             return crate::src::qcommon::q_shared::qfalse as i32;
         }
-        dir[0 as i32 as usize] = curenemyinfo.origin[0 as i32 as usize]
-            - (*bs).origin[0 as i32 as usize];
-        dir[1 as i32 as usize] = curenemyinfo.origin[1 as i32 as usize]
-            - (*bs).origin[1 as i32 as usize];
-        dir[2 as i32 as usize] = curenemyinfo.origin[2 as i32 as usize]
-            - (*bs).origin[2 as i32 as usize];
+        dir[0 as i32 as usize] =
+            curenemyinfo.origin[0 as i32 as usize] - (*bs).origin[0 as i32 as usize];
+        dir[1 as i32 as usize] =
+            curenemyinfo.origin[1 as i32 as usize] - (*bs).origin[1 as i32 as usize];
+        dir[2 as i32 as usize] =
+            curenemyinfo.origin[2 as i32 as usize] - (*bs).origin[2 as i32 as usize];
         cursquaredist =
             VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
     } else {
@@ -4165,9 +4031,7 @@ pub unsafe extern "C" fn BotFindEnemy(
             //if it's the current enemy
             if !(i == curenemy) {
                 //if the enemy has targeting disabled
-                if !(crate::src::game::g_main::g_entities[i as usize].flags & 0x20 as i32
-                    != 0)
-                {
+                if !(crate::src::game::g_main::g_entities[i as usize].flags & 0x20 as i32 != 0) {
                     //
                     crate::src::game::ai_main::BotEntityInfo(
                         i,
@@ -4189,22 +4053,17 @@ pub unsafe extern "C" fn BotFindEnemy(
                                 {
                                     //
                                     if lastteleport_time
-                                        > crate::src::game::ai_main::floattime
-                                            - 3 as i32 as f32
+                                        > crate::src::game::ai_main::floattime - 3 as i32 as f32
                                     {
-                                        dir[0 as i32 as usize] = entinfo.origin
-                                            [0 as i32 as usize]
+                                        dir[0 as i32 as usize] = entinfo.origin[0 as i32 as usize]
                                             - lastteleport_origin[0 as i32 as usize];
-                                        dir[1 as i32 as usize] = entinfo.origin
-                                            [1 as i32 as usize]
+                                        dir[1 as i32 as usize] = entinfo.origin[1 as i32 as usize]
                                             - lastteleport_origin[1 as i32 as usize];
-                                        dir[2 as i32 as usize] = entinfo.origin
-                                            [2 as i32 as usize]
+                                        dir[2 as i32 as usize] = entinfo.origin[2 as i32 as usize]
                                             - lastteleport_origin[2 as i32 as usize];
                                         if VectorLengthSquared(dir.as_mut_ptr()
                                             as *const crate::src::qcommon::q_shared::vec_t)
-                                            < (70 as i32 * 70 as i32)
-                                                as f32
+                                            < (70 as i32 * 70 as i32) as f32
                                         {
                                             current_block_32 = 8236137900636309791;
                                         } else {
@@ -4248,12 +4107,9 @@ pub unsafe extern "C" fn BotFindEnemy(
                                                 //if the bot has no
                                                 {
                                                     if !(squaredist as f64
-                                                        > (900.0f64
-                                                            + alertness as f64
-                                                                * 4000.0f64)
+                                                        > (900.0f64 + alertness as f64 * 4000.0f64)
                                                             * (900.0f64
-                                                                + alertness as f64
-                                                                    * 4000.0f64))
+                                                                + alertness as f64 * 4000.0f64))
                                                     {
                                                         //if on the same team
                                                         if !(BotSameTeam(bs, i) != 0) {
@@ -4266,23 +4122,17 @@ pub unsafe extern "C" fn BotFindEnemy(
                                                                         as u32
                                                                         != 0)
                                                             {
-                                                                f = 360 as i32
-                                                                    as f32
+                                                                f = 360 as i32 as f32
                                                             } else {
-                                                                f = (90 as i32
-                                                                    + 90 as i32)
-                                                                    as f32
-                                                                    - (90 as i32
-                                                                        as f32
+                                                                f = (90 as i32 + 90 as i32) as f32
+                                                                    - (90 as i32 as f32
                                                                         - (if squaredist
                                                                             > (810 as i32
-                                                                                * 810
-                                                                                    as i32)
+                                                                                * 810 as i32)
                                                                                 as f32
                                                                         {
                                                                             (810 as i32
-                                                                                * 810
-                                                                                    as i32)
+                                                                                * 810 as i32)
                                                                                 as f32
                                                                         } else {
                                                                             squaredist
@@ -4298,15 +4148,11 @@ pub unsafe extern "C" fn BotFindEnemy(
                                                                 f,
                                                                 i,
                                                             );
-                                                            if !(vis
-                                                                <= 0 as i32
-                                                                    as f32)
-                                                            {
+                                                            if !(vis <= 0 as i32 as f32) {
                                                                 //if the enemy is quite far away, not shooting and the bot is not damaged
                                                                 if curenemy < 0 as i32
                                                                     && squaredist
-                                                                        > (100 as i32
-                                                                            * 100 as i32)
+                                                                        > (100 as i32 * 100 as i32)
                                                                             as f32
                                                                     && healthdecrease == 0
                                                                     && EntityIsShooting(
@@ -4316,24 +4162,21 @@ pub unsafe extern "C" fn BotFindEnemy(
                                                                         == 0
                                                                 {
                                                                     //check if we can avoid this enemy
-                                                                    dir[0 as i32
-                                                                        as usize] = (*bs).origin
+                                                                    dir[0 as i32 as usize] = (*bs)
+                                                                        .origin
                                                                         [0 as i32 as usize]
-                                                                        - entinfo.origin[0
-                                                                            as i32
-                                                                            as usize];
-                                                                    dir[1 as i32
-                                                                        as usize] = (*bs).origin
+                                                                        - entinfo.origin
+                                                                            [0 as i32 as usize];
+                                                                    dir[1 as i32 as usize] = (*bs)
+                                                                        .origin
                                                                         [1 as i32 as usize]
-                                                                        - entinfo.origin[1
-                                                                            as i32
-                                                                            as usize];
-                                                                    dir[2 as i32
-                                                                        as usize] = (*bs).origin
+                                                                        - entinfo.origin
+                                                                            [1 as i32 as usize];
+                                                                    dir[2 as i32 as usize] = (*bs)
+                                                                        .origin
                                                                         [2 as i32 as usize]
-                                                                        - entinfo.origin[2
-                                                                            as i32
-                                                                            as usize];
+                                                                        - entinfo.origin
+                                                                            [2 as i32 as usize];
                                                                     crate::src::qcommon::q_math::vectoangles(dir.as_mut_ptr()
                                                                                     as
                                                                                     *const crate::src::qcommon::q_shared::vec_t,
@@ -4341,8 +4184,7 @@ pub unsafe extern "C" fn BotFindEnemy(
                                                                     //if the bot isn't in the fov of the enemy
                                                                     if InFieldOfVision(
                                                                         entinfo.angles.as_mut_ptr(),
-                                                                        90 as i32
-                                                                            as f32,
+                                                                        90 as i32 as f32,
                                                                         angles.as_mut_ptr(),
                                                                     )
                                                                         as u64
@@ -4377,9 +4219,7 @@ pub unsafe extern "C" fn BotFindEnemy(
                                                                         //found an enemy
                                                                         (*bs).enemy =
                                                                             entinfo.number;
-                                                                        if curenemy
-                                                                            >= 0 as i32
-                                                                        {
+                                                                        if curenemy >= 0 as i32 {
                                                                             (*bs).enemysight_time
                                                                                 =
                                                                                 crate::src::game::ai_main::floattime
@@ -4399,9 +4239,8 @@ pub unsafe extern "C" fn BotFindEnemy(
                                                                             crate::src::qcommon::q_shared::qfalse
                                                                                 as
                                                                                 i32;
-                                                                        (*bs).enemydeath_time = 0
-                                                                            as i32
-                                                                            as f32;
+                                                                        (*bs).enemydeath_time =
+                                                                            0 as i32 as f32;
                                                                         (*bs).enemyvisible_time
                                                                             =
                                                                             crate::src::game::ai_main::floattime;
@@ -4694,12 +4533,12 @@ pub unsafe extern "C" fn BotVisibleTeamMatesAndEnemies(
                 //if this player is carrying a flag
                 if !(EntityCarriesFlag(&mut entinfo) as u64 == 0) {
                     //if not within range
-                    dir[0 as i32 as usize] = entinfo.origin[0 as i32 as usize]
-                        - (*bs).origin[0 as i32 as usize];
-                    dir[1 as i32 as usize] = entinfo.origin[1 as i32 as usize]
-                        - (*bs).origin[1 as i32 as usize];
-                    dir[2 as i32 as usize] = entinfo.origin[2 as i32 as usize]
-                        - (*bs).origin[2 as i32 as usize];
+                    dir[0 as i32 as usize] =
+                        entinfo.origin[0 as i32 as usize] - (*bs).origin[0 as i32 as usize];
+                    dir[1 as i32 as usize] =
+                        entinfo.origin[1 as i32 as usize] - (*bs).origin[1 as i32 as usize];
+                    dir[2 as i32 as usize] =
+                        entinfo.origin[2 as i32 as usize] - (*bs).origin[2 as i32 as usize];
                     if !(VectorLengthSquared(
                         dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                     ) > range * range)
@@ -4878,12 +4717,9 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
         target[1 as i32 as usize] = entinfo.origin[1 as i32 as usize];
         target[2 as i32 as usize] = entinfo.origin[2 as i32 as usize];
         //aim at the obelisk
-        dir[0 as i32 as usize] =
-            target[0 as i32 as usize] - (*bs).eye[0 as i32 as usize];
-        dir[1 as i32 as usize] =
-            target[1 as i32 as usize] - (*bs).eye[1 as i32 as usize];
-        dir[2 as i32 as usize] =
-            target[2 as i32 as usize] - (*bs).eye[2 as i32 as usize];
+        dir[0 as i32 as usize] = target[0 as i32 as usize] - (*bs).eye[0 as i32 as usize];
+        dir[1 as i32 as usize] = target[1 as i32 as usize] - (*bs).eye[1 as i32 as usize];
+        dir[2 as i32 as usize] = target[2 as i32 as usize] - (*bs).eye[2 as i32 as usize];
         crate::src::qcommon::q_math::vectoangles(
             dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             (*bs).ideal_viewangles.as_mut_ptr(),
@@ -5025,31 +4861,27 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
     );
     //if the enemy is invisible then shoot crappy most of the time
     if EntityIsInvisible(&mut entinfo) as u64 != 0 {
-        if ((::libc::rand() & 0x7fff as i32) as f32
-            / 0x7fff as i32 as f32) as f64
-            > 0.1f64
-        {
+        if ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 > 0.1f64 {
             aim_accuracy *= 0.4f32
         }
     }
     //
-    enemyvelocity[0 as i32 as usize] = entinfo.origin[0 as i32 as usize]
-        - entinfo.lastvisorigin[0 as i32 as usize];
-    enemyvelocity[1 as i32 as usize] = entinfo.origin[1 as i32 as usize]
-        - entinfo.lastvisorigin[1 as i32 as usize];
-    enemyvelocity[2 as i32 as usize] = entinfo.origin[2 as i32 as usize]
-        - entinfo.lastvisorigin[2 as i32 as usize];
-    enemyvelocity[0 as i32 as usize] = enemyvelocity[0 as i32 as usize]
-        * (1 as i32 as f32 / entinfo.update_time);
-    enemyvelocity[1 as i32 as usize] = enemyvelocity[1 as i32 as usize]
-        * (1 as i32 as f32 / entinfo.update_time);
-    enemyvelocity[2 as i32 as usize] = enemyvelocity[2 as i32 as usize]
-        * (1 as i32 as f32 / entinfo.update_time);
+    enemyvelocity[0 as i32 as usize] =
+        entinfo.origin[0 as i32 as usize] - entinfo.lastvisorigin[0 as i32 as usize];
+    enemyvelocity[1 as i32 as usize] =
+        entinfo.origin[1 as i32 as usize] - entinfo.lastvisorigin[1 as i32 as usize];
+    enemyvelocity[2 as i32 as usize] =
+        entinfo.origin[2 as i32 as usize] - entinfo.lastvisorigin[2 as i32 as usize];
+    enemyvelocity[0 as i32 as usize] =
+        enemyvelocity[0 as i32 as usize] * (1 as i32 as f32 / entinfo.update_time);
+    enemyvelocity[1 as i32 as usize] =
+        enemyvelocity[1 as i32 as usize] * (1 as i32 as f32 / entinfo.update_time);
+    enemyvelocity[2 as i32 as usize] =
+        enemyvelocity[2 as i32 as usize] * (1 as i32 as f32 / entinfo.update_time);
     //enemy origin and velocity is remembered every 0.5 seconds
     if (*bs).enemyposition_time < crate::src::game::ai_main::floattime {
         //
-        (*bs).enemyposition_time =
-            (crate::src::game::ai_main::floattime as f64 + 0.5f64) as f32;
+        (*bs).enemyposition_time = (crate::src::game::ai_main::floattime as f64 + 0.5f64) as f32;
         (*bs).enemyvelocity[0 as i32 as usize] = enemyvelocity[0 as i32 as usize];
         (*bs).enemyvelocity[1 as i32 as usize] = enemyvelocity[1 as i32 as usize];
         (*bs).enemyvelocity[2 as i32 as usize] = enemyvelocity[2 as i32 as usize];
@@ -5059,23 +4891,20 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
     }
     //if not extremely skilled
     if (aim_skill as f64) < 0.9f64 {
-        dir[0 as i32 as usize] = entinfo.origin[0 as i32 as usize]
-            - (*bs).enemyorigin[0 as i32 as usize];
-        dir[1 as i32 as usize] = entinfo.origin[1 as i32 as usize]
-            - (*bs).enemyorigin[1 as i32 as usize];
-        dir[2 as i32 as usize] = entinfo.origin[2 as i32 as usize]
-            - (*bs).enemyorigin[2 as i32 as usize];
+        dir[0 as i32 as usize] =
+            entinfo.origin[0 as i32 as usize] - (*bs).enemyorigin[0 as i32 as usize];
+        dir[1 as i32 as usize] =
+            entinfo.origin[1 as i32 as usize] - (*bs).enemyorigin[1 as i32 as usize];
+        dir[2 as i32 as usize] =
+            entinfo.origin[2 as i32 as usize] - (*bs).enemyorigin[2 as i32 as usize];
         //if the enemy moved a bit
         if VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
             > (48 as i32 * 48 as i32) as f32
         {
             //if the enemy changed direction
-            if (*bs).enemyvelocity[0 as i32 as usize]
-                * enemyvelocity[0 as i32 as usize]
-                + (*bs).enemyvelocity[1 as i32 as usize]
-                    * enemyvelocity[1 as i32 as usize]
-                + (*bs).enemyvelocity[2 as i32 as usize]
-                    * enemyvelocity[2 as i32 as usize]
+            if (*bs).enemyvelocity[0 as i32 as usize] * enemyvelocity[0 as i32 as usize]
+                + (*bs).enemyvelocity[1 as i32 as usize] * enemyvelocity[1 as i32 as usize]
+                + (*bs).enemyvelocity[2 as i32 as usize] * enemyvelocity[2 as i32 as usize]
                 < 0 as i32 as f32
             {
                 //aim accuracy should be worse now
@@ -5129,12 +4958,12 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
             dir[2 as i32 as usize] =
                 bestorigin[2 as i32 as usize] - (*bs).origin[2 as i32 as usize];
             dist = VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
-            dir[0 as i32 as usize] = entinfo.origin[0 as i32 as usize]
-                - (*bs).enemyorigin[0 as i32 as usize];
-            dir[1 as i32 as usize] = entinfo.origin[1 as i32 as usize]
-                - (*bs).enemyorigin[1 as i32 as usize];
-            dir[2 as i32 as usize] = entinfo.origin[2 as i32 as usize]
-                - (*bs).enemyorigin[2 as i32 as usize];
+            dir[0 as i32 as usize] =
+                entinfo.origin[0 as i32 as usize] - (*bs).enemyorigin[0 as i32 as usize];
+            dir[1 as i32 as usize] =
+                entinfo.origin[1 as i32 as usize] - (*bs).enemyorigin[1 as i32 as usize];
+            dir[2 as i32 as usize] =
+                entinfo.origin[2 as i32 as usize] - (*bs).enemyorigin[2 as i32 as usize];
             //if the enemy is NOT pretty far away and strafing just small steps left and right
             if !(dist > 100 as i32 as f32
                 && VectorLengthSquared(
@@ -5166,12 +4995,12 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
                             frames: 0,
                         };
                     let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-                    dir[0 as i32 as usize] = entinfo.origin[0 as i32 as usize]
-                        - (*bs).origin[0 as i32 as usize];
-                    dir[1 as i32 as usize] = entinfo.origin[1 as i32 as usize]
-                        - (*bs).origin[1 as i32 as usize];
-                    dir[2 as i32 as usize] = entinfo.origin[2 as i32 as usize]
-                        - (*bs).origin[2 as i32 as usize];
+                    dir[0 as i32 as usize] =
+                        entinfo.origin[0 as i32 as usize] - (*bs).origin[0 as i32 as usize];
+                    dir[1 as i32 as usize] =
+                        entinfo.origin[1 as i32 as usize] - (*bs).origin[1 as i32 as usize];
+                    dir[2 as i32 as usize] =
+                        entinfo.origin[2 as i32 as usize] - (*bs).origin[2 as i32 as usize];
                     //BotAI_Print(PRT_MESSAGE, "%1.1f predicted speed = %f, frames = %f\n", FloatTime(), VectorLength(dir), dist * 10 / wi.speed);
                     dist = VectorLength(
                         dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
@@ -5182,18 +5011,17 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
                         - entinfo.lastvisorigin[1 as i32 as usize];
                     dir[2 as i32 as usize] = entinfo.origin[2 as i32 as usize]
                         - entinfo.lastvisorigin[2 as i32 as usize];
-                    dir[0 as i32 as usize] = dir[0 as i32 as usize]
-                        * (1 as i32 as f32 / entinfo.update_time);
-                    dir[1 as i32 as usize] = dir[1 as i32 as usize]
-                        * (1 as i32 as f32 / entinfo.update_time);
-                    dir[2 as i32 as usize] = dir[2 as i32 as usize]
-                        * (1 as i32 as f32 / entinfo.update_time);
+                    dir[0 as i32 as usize] =
+                        dir[0 as i32 as usize] * (1 as i32 as f32 / entinfo.update_time);
+                    dir[1 as i32 as usize] =
+                        dir[1 as i32 as usize] * (1 as i32 as f32 / entinfo.update_time);
+                    dir[2 as i32 as usize] =
+                        dir[2 as i32 as usize] * (1 as i32 as f32 / entinfo.update_time);
                     origin[0 as i32 as usize] = entinfo.origin[0 as i32 as usize];
                     origin[1 as i32 as usize] = entinfo.origin[1 as i32 as usize];
                     origin[2 as i32 as usize] = entinfo.origin[2 as i32 as usize];
                     origin[2 as i32 as usize] += 1 as i32 as f32;
-                    cmdmove[2 as i32 as usize] =
-                        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                    cmdmove[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
                     cmdmove[1 as i32 as usize] = cmdmove[2 as i32 as usize];
                     cmdmove[0 as i32 as usize] = cmdmove[1 as i32 as usize];
                     crate::src::game::g_syscalls::trap_AAS_PredictClientMovement(
@@ -5211,18 +5039,16 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
                         0 as i32,
                         crate::src::qcommon::q_shared::qfalse as i32,
                     );
-                    bestorigin[0 as i32 as usize] =
-                        move_0.endpos[0 as i32 as usize];
-                    bestorigin[1 as i32 as usize] =
-                        move_0.endpos[1 as i32 as usize];
+                    bestorigin[0 as i32 as usize] = move_0.endpos[0 as i32 as usize];
+                    bestorigin[1 as i32 as usize] = move_0.endpos[1 as i32 as usize];
                     bestorigin[2 as i32 as usize] = move_0.endpos[2 as i32 as usize]
                 } else if aim_skill as f64 > 0.4f64 {
-                    dir[0 as i32 as usize] = entinfo.origin[0 as i32 as usize]
-                        - (*bs).origin[0 as i32 as usize];
-                    dir[1 as i32 as usize] = entinfo.origin[1 as i32 as usize]
-                        - (*bs).origin[1 as i32 as usize];
-                    dir[2 as i32 as usize] = entinfo.origin[2 as i32 as usize]
-                        - (*bs).origin[2 as i32 as usize];
+                    dir[0 as i32 as usize] =
+                        entinfo.origin[0 as i32 as usize] - (*bs).origin[0 as i32 as usize];
+                    dir[1 as i32 as usize] =
+                        entinfo.origin[1 as i32 as usize] - (*bs).origin[1 as i32 as usize];
+                    dir[2 as i32 as usize] =
+                        entinfo.origin[2 as i32 as usize] - (*bs).origin[2 as i32 as usize];
                     //distance towards the enemy
                     //direction the enemy is moving in
                     //
@@ -5241,21 +5067,17 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
                         - entinfo.lastvisorigin[1 as i32 as usize];
                     dir[2 as i32 as usize] = entinfo.origin[2 as i32 as usize]
                         - entinfo.lastvisorigin[2 as i32 as usize];
-                    dir[2 as i32 as usize] =
-                        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                    dir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
                     //
                     speed = crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr())
                         / entinfo.update_time;
                     //botimport.Print(PRT_MESSAGE, "speed = %f, wi->speed = %f\n", speed, wi->speed);
                     //best spot to aim at
-                    bestorigin[0 as i32 as usize] = entinfo.origin
-                        [0 as i32 as usize]
+                    bestorigin[0 as i32 as usize] = entinfo.origin[0 as i32 as usize]
                         + dir[0 as i32 as usize] * (dist / wi.speed * speed);
-                    bestorigin[1 as i32 as usize] = entinfo.origin
-                        [1 as i32 as usize]
+                    bestorigin[1 as i32 as usize] = entinfo.origin[1 as i32 as usize]
                         + dir[1 as i32 as usize] * (dist / wi.speed * speed);
-                    bestorigin[2 as i32 as usize] = entinfo.origin
-                        [2 as i32 as usize]
+                    bestorigin[2 as i32 as usize] = entinfo.origin[2 as i32 as usize]
                         + dir[2 as i32 as usize] * (dist / wi.speed * speed)
                 }
             }
@@ -5285,9 +5107,8 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
                 groundtarget[1 as i32 as usize] = bestorigin[1 as i32 as usize];
                 groundtarget[2 as i32 as usize] = bestorigin[2 as i32 as usize];
                 if trace.startsolid as u64 != 0 {
-                    groundtarget[2 as i32 as usize] = entinfo.origin
-                        [2 as i32 as usize]
-                        - 16 as i32 as f32
+                    groundtarget[2 as i32 as usize] =
+                        entinfo.origin[2 as i32 as usize] - 16 as i32 as f32
                 } else {
                     groundtarget[2 as i32 as usize] =
                         trace.endpos[2 as i32 as usize] - 8 as i32 as f32
@@ -5304,36 +5125,33 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
                 );
                 //if hitpoint is not vertically too far from the ground target
                 if crate::stdlib::fabs(
-                    (trace.endpos[2 as i32 as usize]
-                        - groundtarget[2 as i32 as usize])
-                        as f64,
+                    (trace.endpos[2 as i32 as usize] - groundtarget[2 as i32 as usize]) as f64,
                 ) < 50 as i32 as f64
                 {
-                    dir[0 as i32 as usize] = trace.endpos[0 as i32 as usize]
-                        - groundtarget[0 as i32 as usize];
-                    dir[1 as i32 as usize] = trace.endpos[1 as i32 as usize]
-                        - groundtarget[1 as i32 as usize];
-                    dir[2 as i32 as usize] = trace.endpos[2 as i32 as usize]
-                        - groundtarget[2 as i32 as usize];
+                    dir[0 as i32 as usize] =
+                        trace.endpos[0 as i32 as usize] - groundtarget[0 as i32 as usize];
+                    dir[1 as i32 as usize] =
+                        trace.endpos[1 as i32 as usize] - groundtarget[1 as i32 as usize];
+                    dir[2 as i32 as usize] =
+                        trace.endpos[2 as i32 as usize] - groundtarget[2 as i32 as usize];
                     //if the hitpoint is near enough the ground target
                     if VectorLengthSquared(
                         dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                     ) < (60 as i32 * 60 as i32) as f32
                     {
-                        dir[0 as i32 as usize] = trace.endpos[0 as i32 as usize]
-                            - start[0 as i32 as usize];
-                        dir[1 as i32 as usize] = trace.endpos[1 as i32 as usize]
-                            - start[1 as i32 as usize];
-                        dir[2 as i32 as usize] = trace.endpos[2 as i32 as usize]
-                            - start[2 as i32 as usize];
+                        dir[0 as i32 as usize] =
+                            trace.endpos[0 as i32 as usize] - start[0 as i32 as usize];
+                        dir[1 as i32 as usize] =
+                            trace.endpos[1 as i32 as usize] - start[1 as i32 as usize];
+                        dir[2 as i32 as usize] =
+                            trace.endpos[2 as i32 as usize] - start[2 as i32 as usize];
                         //if the hitpoint is far enough from the bot
                         if VectorLengthSquared(
                             dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                         ) > (100 as i32 * 100 as i32) as f32
                         {
                             //check if the bot is visible from the ground target
-                            trace.endpos[2 as i32 as usize] +=
-                                1 as i32 as f32;
+                            trace.endpos[2 as i32 as usize] += 1 as i32 as f32;
                             crate::src::game::ai_main::BotAI_Trace(
                                 &mut trace as *mut _ as *mut crate::botlib_h::bsp_trace_s,
                                 trace.endpos.as_mut_ptr(),
@@ -5341,51 +5159,37 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
                                 0 as *mut crate::src::qcommon::q_shared::vec_t,
                                 entinfo.origin.as_mut_ptr(),
                                 entinfo.number,
-                                1 as i32
-                                    | 0x2000000 as i32
-                                    | 0x4000000 as i32,
+                                1 as i32 | 0x2000000 as i32 | 0x4000000 as i32,
                             );
                             if trace.fraction >= 1 as i32 as f32 {
                                 //botimport.Print(PRT_MESSAGE, "%1.1f aiming at ground\n", AAS_Time());
-                                bestorigin[0 as i32 as usize] =
-                                    groundtarget[0 as i32 as usize];
-                                bestorigin[1 as i32 as usize] =
-                                    groundtarget[1 as i32 as usize];
-                                bestorigin[2 as i32 as usize] =
-                                    groundtarget[2 as i32 as usize]
+                                bestorigin[0 as i32 as usize] = groundtarget[0 as i32 as usize];
+                                bestorigin[1 as i32 as usize] = groundtarget[1 as i32 as usize];
+                                bestorigin[2 as i32 as usize] = groundtarget[2 as i32 as usize]
                             }
                         }
                     }
                 }
             }
         }
-        bestorigin[0 as i32 as usize] = (bestorigin[0 as i32 as usize]
-            as f64
+        bestorigin[0 as i32 as usize] = (bestorigin[0 as i32 as usize] as f64
             + 20 as i32 as f64
                 * (2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
-                        as f64
+                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64))
                 * (1 as i32 as f32 - aim_accuracy) as f64)
             as crate::src::qcommon::q_shared::vec_t;
-        bestorigin[1 as i32 as usize] = (bestorigin[1 as i32 as usize]
-            as f64
+        bestorigin[1 as i32 as usize] = (bestorigin[1 as i32 as usize] as f64
             + 20 as i32 as f64
                 * (2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
-                        as f64
+                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64))
                 * (1 as i32 as f32 - aim_accuracy) as f64)
             as crate::src::qcommon::q_shared::vec_t;
-        bestorigin[2 as i32 as usize] = (bestorigin[2 as i32 as usize]
-            as f64
+        bestorigin[2 as i32 as usize] = (bestorigin[2 as i32 as usize] as f64
             + 10 as i32 as f64
                 * (2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
-                        as f64
+                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64))
                 * (1 as i32 as f32 - aim_accuracy) as f64)
             as crate::src::qcommon::q_shared::vec_t
@@ -5408,18 +5212,12 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
                 goal.origin[0 as i32 as usize] = (*bs).eye[0 as i32 as usize];
                 goal.origin[1 as i32 as usize] = (*bs).eye[1 as i32 as usize];
                 goal.origin[2 as i32 as usize] = (*bs).eye[2 as i32 as usize];
-                goal.mins[0 as i32 as usize] =
-                    -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
-                goal.mins[1 as i32 as usize] =
-                    -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
-                goal.mins[2 as i32 as usize] =
-                    -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
-                goal.maxs[0 as i32 as usize] =
-                    8 as i32 as crate::src::qcommon::q_shared::vec_t;
-                goal.maxs[1 as i32 as usize] =
-                    8 as i32 as crate::src::qcommon::q_shared::vec_t;
-                goal.maxs[2 as i32 as usize] =
-                    8 as i32 as crate::src::qcommon::q_shared::vec_t;
+                goal.mins[0 as i32 as usize] = -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
+                goal.mins[1 as i32 as usize] = -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
+                goal.mins[2 as i32 as usize] = -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
+                goal.maxs[0 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
+                goal.maxs[1 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
+                goal.maxs[2 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
                 //
                 if crate::src::game::g_syscalls::trap_BotPredictVisiblePosition(
                     (*bs).lastenemyorigin.as_mut_ptr(),
@@ -5482,12 +5280,9 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
         (*bs).aimtarget[2 as i32 as usize] = bestorigin[2 as i32 as usize]
     }
     //get aim direction
-    dir[0 as i32 as usize] =
-        bestorigin[0 as i32 as usize] - (*bs).eye[0 as i32 as usize];
-    dir[1 as i32 as usize] =
-        bestorigin[1 as i32 as usize] - (*bs).eye[1 as i32 as usize];
-    dir[2 as i32 as usize] =
-        bestorigin[2 as i32 as usize] - (*bs).eye[2 as i32 as usize];
+    dir[0 as i32 as usize] = bestorigin[0 as i32 as usize] - (*bs).eye[0 as i32 as usize];
+    dir[1 as i32 as usize] = bestorigin[1 as i32 as usize] - (*bs).eye[1 as i32 as usize];
+    dir[2 as i32 as usize] = bestorigin[2 as i32 as usize] - (*bs).eye[2 as i32 as usize];
     //
     if wi.number == crate::bg_public_h::WP_MACHINEGUN as i32
         || wi.number == crate::bg_public_h::WP_SHOTGUN as i32
@@ -5499,8 +5294,7 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
         if dist > 150 as i32 as f32 {
             dist = 150 as i32 as f32
         }
-        f = (0.6f64 + (dist / 150 as i32 as f32) as f64 * 0.4f64)
-            as f32;
+        f = (0.6f64 + (dist / 150 as i32 as f32) as f64 * 0.4f64) as f32;
         aim_accuracy *= f
     }
     //add some random stuff to the aim direction depending on the aim accuracy
@@ -5511,8 +5305,7 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
             dir[i as usize] = (dir[i as usize] as f64
                 + 0.3f64
                     * (2.0f64
-                        * (((::libc::rand() & 0x7fff as i32) as f32
-                            / 0x7fff as i32 as f32)
+                        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                             as f64
                             - 0.5f64))
                     * (1 as i32 as f32 - aim_accuracy) as f64)
@@ -5526,50 +5319,37 @@ pub unsafe extern "C" fn BotAimAtEnemy(mut bs: *mut crate::src::game::ai_main::b
         (*bs).ideal_viewangles.as_mut_ptr(),
     );
     //take the weapon spread into account for lower skilled bots
-    (*bs).ideal_viewangles[0 as i32 as usize] =
-        ((*bs).ideal_viewangles[0 as i32 as usize] as f64
-            + (6 as i32 as f32 * wi.vspread) as f64
-                * (2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
-                        as f64
-                        - 0.5f64))
-                * (1 as i32 as f32 - aim_accuracy) as f64)
-            as crate::src::qcommon::q_shared::vec_t;
+    (*bs).ideal_viewangles[0 as i32 as usize] = ((*bs).ideal_viewangles[0 as i32 as usize] as f64
+        + (6 as i32 as f32 * wi.vspread) as f64
+            * (2.0f64
+                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                    - 0.5f64))
+            * (1 as i32 as f32 - aim_accuracy) as f64)
+        as crate::src::qcommon::q_shared::vec_t;
     (*bs).ideal_viewangles[0 as i32 as usize] =
         crate::src::qcommon::q_math::AngleMod((*bs).ideal_viewangles[0 as i32 as usize]);
-    (*bs).ideal_viewangles[1 as i32 as usize] =
-        ((*bs).ideal_viewangles[1 as i32 as usize] as f64
-            + (6 as i32 as f32 * wi.hspread) as f64
-                * (2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
-                        as f64
-                        - 0.5f64))
-                * (1 as i32 as f32 - aim_accuracy) as f64)
-            as crate::src::qcommon::q_shared::vec_t;
+    (*bs).ideal_viewangles[1 as i32 as usize] = ((*bs).ideal_viewangles[1 as i32 as usize] as f64
+        + (6 as i32 as f32 * wi.hspread) as f64
+            * (2.0f64
+                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
+                    - 0.5f64))
+            * (1 as i32 as f32 - aim_accuracy) as f64)
+        as crate::src::qcommon::q_shared::vec_t;
     (*bs).ideal_viewangles[1 as i32 as usize] =
         crate::src::qcommon::q_math::AngleMod((*bs).ideal_viewangles[1 as i32 as usize]);
     //if the bots should be really challenging
     if bot_challenge.integer != 0 {
         //if the bot is really accurate and has the enemy in view for some time
         if aim_accuracy as f64 > 0.9f64
-            && (*bs).enemysight_time
-                < crate::src::game::ai_main::floattime - 1 as i32 as f32
+            && (*bs).enemysight_time < crate::src::game::ai_main::floattime - 1 as i32 as f32
         {
             //set the view angles directly
-            if (*bs).ideal_viewangles[0 as i32 as usize]
-                > 180 as i32 as f32
-            {
-                (*bs).ideal_viewangles[0 as i32 as usize] -=
-                    360 as i32 as f32
+            if (*bs).ideal_viewangles[0 as i32 as usize] > 180 as i32 as f32 {
+                (*bs).ideal_viewangles[0 as i32 as usize] -= 360 as i32 as f32
             }
-            (*bs).viewangles[0 as i32 as usize] =
-                (*bs).ideal_viewangles[0 as i32 as usize];
-            (*bs).viewangles[1 as i32 as usize] =
-                (*bs).ideal_viewangles[1 as i32 as usize];
-            (*bs).viewangles[2 as i32 as usize] =
-                (*bs).ideal_viewangles[2 as i32 as usize];
+            (*bs).viewangles[0 as i32 as usize] = (*bs).ideal_viewangles[0 as i32 as usize];
+            (*bs).viewangles[1 as i32 as usize] = (*bs).ideal_viewangles[1 as i32 as usize];
+            (*bs).viewangles[2 as i32 as usize] = (*bs).ideal_viewangles[2 as i32 as usize];
             crate::src::game::g_syscalls::trap_EA_View((*bs).client, (*bs).viewangles.as_mut_ptr());
         }
     };
@@ -5737,9 +5517,7 @@ pub unsafe extern "C" fn BotCheckAttack(mut bs: *mut crate::src::game::ai_main::
         return;
     }
     //if changing weapons
-    if (*bs).weaponchange_time as f64
-        > crate::src::game::ai_main::floattime as f64 - 0.1f64
-    {
+    if (*bs).weaponchange_time as f64 > crate::src::game::ai_main::floattime as f64 - 0.1f64 {
         return;
     }
     //check fire throttle characteristic
@@ -5753,27 +5531,20 @@ pub unsafe extern "C" fn BotCheckAttack(mut bs: *mut crate::src::game::ai_main::
         1 as i32 as f32,
     );
     if (*bs).firethrottleshoot_time < crate::src::game::ai_main::floattime {
-        if (::libc::rand() & 0x7fff as i32) as f32
-            / 0x7fff as i32 as f32
-            > firethrottle
-        {
+        if (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 > firethrottle {
             (*bs).firethrottlewait_time = crate::src::game::ai_main::floattime + firethrottle;
             (*bs).firethrottleshoot_time = 0 as i32 as f32
         } else {
-            (*bs).firethrottleshoot_time = crate::src::game::ai_main::floattime
-                + 1 as i32 as f32
-                - firethrottle;
+            (*bs).firethrottleshoot_time =
+                crate::src::game::ai_main::floattime + 1 as i32 as f32 - firethrottle;
             (*bs).firethrottlewait_time = 0 as i32 as f32
         }
     }
     //
     //
-    dir[0 as i32 as usize] =
-        (*bs).aimtarget[0 as i32 as usize] - (*bs).eye[0 as i32 as usize];
-    dir[1 as i32 as usize] =
-        (*bs).aimtarget[1 as i32 as usize] - (*bs).eye[1 as i32 as usize];
-    dir[2 as i32 as usize] =
-        (*bs).aimtarget[2 as i32 as usize] - (*bs).eye[2 as i32 as usize];
+    dir[0 as i32 as usize] = (*bs).aimtarget[0 as i32 as usize] - (*bs).eye[0 as i32 as usize];
+    dir[1 as i32 as usize] = (*bs).aimtarget[1 as i32 as usize] - (*bs).eye[1 as i32 as usize];
+    dir[2 as i32 as usize] = (*bs).aimtarget[2 as i32 as usize] - (*bs).eye[2 as i32 as usize];
     //
     if (*bs).weaponnum == crate::bg_public_h::WP_GAUNTLET as i32 {
         if VectorLengthSquared(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
@@ -5826,30 +5597,27 @@ pub unsafe extern "C" fn BotCheckAttack(mut bs: *mut crate::src::game::ai_main::
         right.as_mut_ptr(),
         0 as *mut crate::src::qcommon::q_shared::vec_t,
     );
-    start[0 as i32 as usize] += forward[0 as i32 as usize]
-        * wi.offset[0 as i32 as usize]
+    start[0 as i32 as usize] += forward[0 as i32 as usize] * wi.offset[0 as i32 as usize]
         + right[0 as i32 as usize] * wi.offset[1 as i32 as usize];
-    start[1 as i32 as usize] += forward[1 as i32 as usize]
-        * wi.offset[0 as i32 as usize]
+    start[1 as i32 as usize] += forward[1 as i32 as usize] * wi.offset[0 as i32 as usize]
         + right[1 as i32 as usize] * wi.offset[1 as i32 as usize];
-    start[2 as i32 as usize] += forward[2 as i32 as usize]
-        * wi.offset[0 as i32 as usize]
+    start[2 as i32 as usize] += forward[2 as i32 as usize] * wi.offset[0 as i32 as usize]
         + right[2 as i32 as usize] * wi.offset[1 as i32 as usize]
         + wi.offset[2 as i32 as usize];
     //end point aiming at
-    end[0 as i32 as usize] = start[0 as i32 as usize]
-        + forward[0 as i32 as usize] * 1000 as i32 as f32;
-    end[1 as i32 as usize] = start[1 as i32 as usize]
-        + forward[1 as i32 as usize] * 1000 as i32 as f32;
-    end[2 as i32 as usize] = start[2 as i32 as usize]
-        + forward[2 as i32 as usize] * 1000 as i32 as f32;
+    end[0 as i32 as usize] =
+        start[0 as i32 as usize] + forward[0 as i32 as usize] * 1000 as i32 as f32;
+    end[1 as i32 as usize] =
+        start[1 as i32 as usize] + forward[1 as i32 as usize] * 1000 as i32 as f32;
+    end[2 as i32 as usize] =
+        start[2 as i32 as usize] + forward[2 as i32 as usize] * 1000 as i32 as f32;
     //a little back to make sure not inside a very close enemy
-    start[0 as i32 as usize] = start[0 as i32 as usize]
-        + forward[0 as i32 as usize] * -(12 as i32) as f32;
-    start[1 as i32 as usize] = start[1 as i32 as usize]
-        + forward[1 as i32 as usize] * -(12 as i32) as f32;
-    start[2 as i32 as usize] = start[2 as i32 as usize]
-        + forward[2 as i32 as usize] * -(12 as i32) as f32;
+    start[0 as i32 as usize] =
+        start[0 as i32 as usize] + forward[0 as i32 as usize] * -(12 as i32) as f32;
+    start[1 as i32 as usize] =
+        start[1 as i32 as usize] + forward[1 as i32 as usize] * -(12 as i32) as f32;
+    start[2 as i32 as usize] =
+        start[2 as i32 as usize] + forward[2 as i32 as usize] * -(12 as i32) as f32;
     crate::src::game::ai_main::BotAI_Trace(
         &mut trace as *mut _ as *mut crate::botlib_h::bsp_trace_s,
         start.as_mut_ptr(),
@@ -5874,9 +5642,7 @@ pub unsafe extern "C" fn BotCheckAttack(mut bs: *mut crate::src::game::ai_main::
         if wi.proj.damagetype & 2 as i32 != 0 {
             if (trace.fraction * 1000 as i32 as f32) < wi.proj.radius {
                 points = ((wi.proj.damage as f64
-                    - 0.5f64
-                        * trace.fraction as f64
-                        * 1000 as i32 as f64)
+                    - 0.5f64 * trace.fraction as f64 * 1000 as i32 as f64)
                     * 0.5f64) as f32;
                 if points > 0 as i32 as f32 {
                     return;
@@ -6020,29 +5786,21 @@ pub unsafe extern "C" fn BotMapScripts(mut bs: *mut crate::src::game::ai_main::b
                         || entinfo.number == (*bs).entitynum)
                     {
                         //
-                        if entinfo.origin[0 as i32 as usize]
-                            > mins[0 as i32 as usize]
-                            && entinfo.origin[0 as i32 as usize]
-                                < maxs[0 as i32 as usize]
+                        if entinfo.origin[0 as i32 as usize] > mins[0 as i32 as usize]
+                            && entinfo.origin[0 as i32 as usize] < maxs[0 as i32 as usize]
                         {
-                            if entinfo.origin[1 as i32 as usize]
-                                > mins[1 as i32 as usize]
-                                && entinfo.origin[1 as i32 as usize]
-                                    < maxs[1 as i32 as usize]
+                            if entinfo.origin[1 as i32 as usize] > mins[1 as i32 as usize]
+                                && entinfo.origin[1 as i32 as usize] < maxs[1 as i32 as usize]
                             {
-                                if entinfo.origin[2 as i32 as usize]
-                                    > mins[2 as i32 as usize]
-                                    && entinfo.origin[2 as i32 as usize]
-                                        < maxs[2 as i32 as usize]
+                                if entinfo.origin[2 as i32 as usize] > mins[2 as i32 as usize]
+                                    && entinfo.origin[2 as i32 as usize] < maxs[2 as i32 as usize]
                                 {
                                     //if there's a team mate below the crusher
                                     if BotSameTeam(bs, i) != 0 {
-                                        shootbutton =
-                                            crate::src::qcommon::q_shared::qfalse as i32;
+                                        shootbutton = crate::src::qcommon::q_shared::qfalse as i32;
                                         break;
                                     } else if (*bs).enemy == i {
-                                        shootbutton =
-                                            crate::src::qcommon::q_shared::qtrue as i32
+                                        shootbutton = crate::src::qcommon::q_shared::qtrue as i32
                                     }
                                 }
                             }
@@ -6054,12 +5812,9 @@ pub unsafe extern "C" fn BotMapScripts(mut bs: *mut crate::src::game::ai_main::b
         }
         if shootbutton != 0 {
             (*bs).flags |= 32 as i32;
-            dir[0 as i32 as usize] =
-                buttonorg[0 as i32 as usize] - (*bs).eye[0 as i32 as usize];
-            dir[1 as i32 as usize] =
-                buttonorg[1 as i32 as usize] - (*bs).eye[1 as i32 as usize];
-            dir[2 as i32 as usize] =
-                buttonorg[2 as i32 as usize] - (*bs).eye[2 as i32 as usize];
+            dir[0 as i32 as usize] = buttonorg[0 as i32 as usize] - (*bs).eye[0 as i32 as usize];
+            dir[1 as i32 as usize] = buttonorg[1 as i32 as usize] - (*bs).eye[1 as i32 as usize];
+            dir[2 as i32 as usize] = buttonorg[2 as i32 as usize] - (*bs).eye[2 as i32 as usize];
             crate::src::qcommon::q_math::vectoangles(
                 dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
                 (*bs).ideal_viewangles.as_mut_ptr(),
@@ -6070,34 +5825,28 @@ pub unsafe extern "C" fn BotMapScripts(mut bs: *mut crate::src::game::ai_main::b
                 0 as i32 as f32,
                 1 as i32 as f32,
             );
+            (*bs).ideal_viewangles[0 as i32 as usize] = ((*bs).ideal_viewangles[0 as i32 as usize]
+                as f64
+                + 8 as i32 as f64
+                    * (2.0f64
+                        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
+                            as f64
+                            - 0.5f64))
+                    * (1 as i32 as f32 - aim_accuracy) as f64)
+                as crate::src::qcommon::q_shared::vec_t;
             (*bs).ideal_viewangles[0 as i32 as usize] =
-                ((*bs).ideal_viewangles[0 as i32 as usize] as f64
-                    + 8 as i32 as f64
-                        * (2.0f64
-                            * (((::libc::rand() & 0x7fff as i32) as f32
-                                / 0x7fff as i32 as f32)
-                                as f64
-                                - 0.5f64))
-                        * (1 as i32 as f32 - aim_accuracy) as f64)
-                    as crate::src::qcommon::q_shared::vec_t;
-            (*bs).ideal_viewangles[0 as i32 as usize] =
-                crate::src::qcommon::q_math::AngleMod(
-                    (*bs).ideal_viewangles[0 as i32 as usize],
-                );
+                crate::src::qcommon::q_math::AngleMod((*bs).ideal_viewangles[0 as i32 as usize]);
+            (*bs).ideal_viewangles[1 as i32 as usize] = ((*bs).ideal_viewangles[1 as i32 as usize]
+                as f64
+                + 8 as i32 as f64
+                    * (2.0f64
+                        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
+                            as f64
+                            - 0.5f64))
+                    * (1 as i32 as f32 - aim_accuracy) as f64)
+                as crate::src::qcommon::q_shared::vec_t;
             (*bs).ideal_viewangles[1 as i32 as usize] =
-                ((*bs).ideal_viewangles[1 as i32 as usize] as f64
-                    + 8 as i32 as f64
-                        * (2.0f64
-                            * (((::libc::rand() & 0x7fff as i32) as f32
-                                / 0x7fff as i32 as f32)
-                                as f64
-                                - 0.5f64))
-                        * (1 as i32 as f32 - aim_accuracy) as f64)
-                    as crate::src::qcommon::q_shared::vec_t;
-            (*bs).ideal_viewangles[1 as i32 as usize] =
-                crate::src::qcommon::q_math::AngleMod(
-                    (*bs).ideal_viewangles[1 as i32 as usize],
-                );
+                crate::src::qcommon::q_math::AngleMod((*bs).ideal_viewangles[1 as i32 as usize]);
             //
             if InFieldOfVision(
                 (*bs).viewangles.as_mut_ptr(),
@@ -6311,12 +6060,9 @@ pub unsafe extern "C" fn BotFuncButtonActivateGoal(
         ent: 0,
     };
     (*activategoal).shoot = crate::src::qcommon::q_shared::qfalse as i32;
-    (*activategoal).target[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*activategoal).target[1 as i32 as usize] =
-        (*activategoal).target[2 as i32 as usize];
-    (*activategoal).target[0 as i32 as usize] =
-        (*activategoal).target[1 as i32 as usize];
+    (*activategoal).target[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*activategoal).target[1 as i32 as usize] = (*activategoal).target[2 as i32 as usize];
+    (*activategoal).target[0 as i32 as usize] = (*activategoal).target[1 as i32 as usize];
     //create a bot goal towards the button
     crate::src::game::g_syscalls::trap_AAS_ValueForBSPEpairKey(
         bspent,
@@ -6358,32 +6104,24 @@ pub unsafe extern "C" fn BotFuncButtonActivateGoal(
     angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     BotSetMovedir(angles.as_mut_ptr(), movedir.as_mut_ptr());
     //button size
-    size[0 as i32 as usize] =
-        maxs[0 as i32 as usize] - mins[0 as i32 as usize];
-    size[1 as i32 as usize] =
-        maxs[1 as i32 as usize] - mins[1 as i32 as usize];
-    size[2 as i32 as usize] =
-        maxs[2 as i32 as usize] - mins[2 as i32 as usize];
+    size[0 as i32 as usize] = maxs[0 as i32 as usize] - mins[0 as i32 as usize];
+    size[1 as i32 as usize] = maxs[1 as i32 as usize] - mins[1 as i32 as usize];
+    size[2 as i32 as usize] = maxs[2 as i32 as usize] - mins[2 as i32 as usize];
     //button origin
+    origin[0 as i32 as usize] = mins[0 as i32 as usize] + maxs[0 as i32 as usize];
+    origin[1 as i32 as usize] = mins[1 as i32 as usize] + maxs[1 as i32 as usize];
+    origin[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
     origin[0 as i32 as usize] =
-        mins[0 as i32 as usize] + maxs[0 as i32 as usize];
+        (origin[0 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     origin[1 as i32 as usize] =
-        mins[1 as i32 as usize] + maxs[1 as i32 as usize];
+        (origin[1 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     origin[2 as i32 as usize] =
-        mins[2 as i32 as usize] + maxs[2 as i32 as usize];
-    origin[0 as i32 as usize] = (origin[0 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    origin[1 as i32 as usize] = (origin[1 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    origin[2 as i32 as usize] = (origin[2 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (origin[2 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     //touch distance of the button
-    dist = (crate::stdlib::fabs(movedir[0 as i32 as usize] as f64)
-        * size[0 as i32 as usize] as f64
-        + crate::stdlib::fabs(movedir[1 as i32 as usize] as f64)
-            * size[1 as i32 as usize] as f64
-        + crate::stdlib::fabs(movedir[2 as i32 as usize] as f64)
-            * size[2 as i32 as usize] as f64) as f32;
+    dist = (crate::stdlib::fabs(movedir[0 as i32 as usize] as f64) * size[0 as i32 as usize] as f64
+        + crate::stdlib::fabs(movedir[1 as i32 as usize] as f64) * size[1 as i32 as usize] as f64
+        + crate::stdlib::fabs(movedir[2 as i32 as usize] as f64) * size[2 as i32 as usize] as f64)
+        as f32;
     dist = (dist as f64 * 0.5f64) as f32;
     //
     crate::src::game::g_syscalls::trap_AAS_FloatForBSPEpairKey(
@@ -6421,12 +6159,9 @@ pub unsafe extern "C" fn BotFuncButtonActivateGoal(
             (*activategoal).goal.entitynum = entitynum; //NOTE: this is the entity number of the shootable button
             (*activategoal).goal.number = 0 as i32;
             (*activategoal).goal.flags = 0 as i32;
-            (*activategoal).goal.origin[0 as i32 as usize] =
-                (*bs).origin[0 as i32 as usize];
-            (*activategoal).goal.origin[1 as i32 as usize] =
-                (*bs).origin[1 as i32 as usize];
-            (*activategoal).goal.origin[2 as i32 as usize] =
-                (*bs).origin[2 as i32 as usize];
+            (*activategoal).goal.origin[0 as i32 as usize] = (*bs).origin[0 as i32 as usize];
+            (*activategoal).goal.origin[1 as i32 as usize] = (*bs).origin[1 as i32 as usize];
+            (*activategoal).goal.origin[2 as i32 as usize] = (*bs).origin[2 as i32 as usize];
             (*activategoal).goal.areanum = (*bs).areanum;
             (*activategoal).goal.mins[0 as i32 as usize] =
                 -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
@@ -6599,12 +6334,9 @@ pub unsafe extern "C" fn BotFuncButtonActivateGoal(
         }
         if i < numareas {
             //
-            (*activategoal).goal.origin[0 as i32 as usize] =
-                origin[0 as i32 as usize];
-            (*activategoal).goal.origin[1 as i32 as usize] =
-                origin[1 as i32 as usize];
-            (*activategoal).goal.origin[2 as i32 as usize] =
-                origin[2 as i32 as usize];
+            (*activategoal).goal.origin[0 as i32 as usize] = origin[0 as i32 as usize];
+            (*activategoal).goal.origin[1 as i32 as usize] = origin[1 as i32 as usize];
+            (*activategoal).goal.origin[2 as i32 as usize] = origin[2 as i32 as usize];
             (*activategoal).goal.areanum = areas[i as usize];
             (*activategoal).goal.mins[0 as i32 as usize] =
                 mins[0 as i32 as usize] - origin[0 as i32 as usize];
@@ -6685,18 +6417,15 @@ pub unsafe extern "C" fn BotFuncDoorActivateGoal(
         maxs.as_mut_ptr(),
     );
     //door origin
+    origin[0 as i32 as usize] = mins[0 as i32 as usize] + maxs[0 as i32 as usize];
+    origin[1 as i32 as usize] = mins[1 as i32 as usize] + maxs[1 as i32 as usize];
+    origin[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
     origin[0 as i32 as usize] =
-        mins[0 as i32 as usize] + maxs[0 as i32 as usize];
+        (origin[0 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     origin[1 as i32 as usize] =
-        mins[1 as i32 as usize] + maxs[1 as i32 as usize];
+        (origin[1 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     origin[2 as i32 as usize] =
-        mins[2 as i32 as usize] + maxs[2 as i32 as usize];
-    origin[0 as i32 as usize] = (origin[0 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    origin[1 as i32 as usize] = (origin[1 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    origin[2 as i32 as usize] = (origin[2 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (origin[2 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     (*activategoal).target[0 as i32 as usize] = origin[0 as i32 as usize];
     (*activategoal).target[1 as i32 as usize] = origin[1 as i32 as usize];
     (*activategoal).target[2 as i32 as usize] = origin[2 as i32 as usize];
@@ -6705,12 +6434,9 @@ pub unsafe extern "C" fn BotFuncDoorActivateGoal(
     (*activategoal).goal.entitynum = entitynum; //NOTE: this is the entity number of the shootable door
     (*activategoal).goal.number = 0 as i32;
     (*activategoal).goal.flags = 0 as i32;
-    (*activategoal).goal.origin[0 as i32 as usize] =
-        (*bs).origin[0 as i32 as usize];
-    (*activategoal).goal.origin[1 as i32 as usize] =
-        (*bs).origin[1 as i32 as usize];
-    (*activategoal).goal.origin[2 as i32 as usize] =
-        (*bs).origin[2 as i32 as usize];
+    (*activategoal).goal.origin[0 as i32 as usize] = (*bs).origin[0 as i32 as usize];
+    (*activategoal).goal.origin[1 as i32 as usize] = (*bs).origin[1 as i32 as usize];
+    (*activategoal).goal.origin[2 as i32 as usize] = (*bs).origin[2 as i32 as usize];
     (*activategoal).goal.areanum = (*bs).areanum;
     (*activategoal).goal.mins[0 as i32 as usize] =
         -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
@@ -6718,12 +6444,9 @@ pub unsafe extern "C" fn BotFuncDoorActivateGoal(
         -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
     (*activategoal).goal.mins[2 as i32 as usize] =
         -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*activategoal).goal.maxs[0 as i32 as usize] =
-        8 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*activategoal).goal.maxs[1 as i32 as usize] =
-        8 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*activategoal).goal.maxs[2 as i32 as usize] =
-        8 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*activategoal).goal.maxs[0 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*activategoal).goal.maxs[1 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*activategoal).goal.maxs[2 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
     return crate::src::qcommon::q_shared::qtrue as i32;
 }
 /*
@@ -6751,12 +6474,9 @@ pub unsafe extern "C" fn BotTriggerMultipleActivateGoal(
     let mut origin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut goalorigin: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     (*activategoal).shoot = crate::src::qcommon::q_shared::qfalse as i32;
-    (*activategoal).target[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*activategoal).target[1 as i32 as usize] =
-        (*activategoal).target[2 as i32 as usize];
-    (*activategoal).target[0 as i32 as usize] =
-        (*activategoal).target[1 as i32 as usize];
+    (*activategoal).target[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*activategoal).target[1 as i32 as usize] = (*activategoal).target[2 as i32 as usize];
+    (*activategoal).target[0 as i32 as usize] = (*activategoal).target[1 as i32 as usize];
     //create a bot goal towards the trigger
     crate::src::game::g_syscalls::trap_AAS_ValueForBSPEpairKey(
         bspent,
@@ -6779,18 +6499,15 @@ pub unsafe extern "C" fn BotTriggerMultipleActivateGoal(
         maxs.as_mut_ptr(),
     );
     //trigger origin
+    origin[0 as i32 as usize] = mins[0 as i32 as usize] + maxs[0 as i32 as usize];
+    origin[1 as i32 as usize] = mins[1 as i32 as usize] + maxs[1 as i32 as usize];
+    origin[2 as i32 as usize] = mins[2 as i32 as usize] + maxs[2 as i32 as usize];
     origin[0 as i32 as usize] =
-        mins[0 as i32 as usize] + maxs[0 as i32 as usize];
+        (origin[0 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     origin[1 as i32 as usize] =
-        mins[1 as i32 as usize] + maxs[1 as i32 as usize];
+        (origin[1 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     origin[2 as i32 as usize] =
-        mins[2 as i32 as usize] + maxs[2 as i32 as usize];
-    origin[0 as i32 as usize] = (origin[0 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    origin[1 as i32 as usize] = (origin[1 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    origin[2 as i32 as usize] = (origin[2 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+        (origin[2 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     goalorigin[0 as i32 as usize] = origin[0 as i32 as usize];
     goalorigin[1 as i32 as usize] = origin[1 as i32 as usize];
     goalorigin[2 as i32 as usize] = origin[2 as i32 as usize];
@@ -6901,8 +6618,7 @@ pub unsafe extern "C" fn BotPushOntoActivateGoalStack(
             activategoal as *const libc::c_void,
             ::std::mem::size_of::<crate::src::game::ai_main::bot_activategoal_t>() as libc::c_ulong,
         );
-        (*bs).activategoalheap[best as usize].inuse =
-            crate::src::qcommon::q_shared::qtrue as i32;
+        (*bs).activategoalheap[best as usize].inuse = crate::src::qcommon::q_shared::qtrue as i32;
         (*bs).activategoalheap[best as usize].next = (*bs).activatestack;
         (*bs).activatestack = &mut *(*bs).activategoalheap.as_mut_ptr().offset(best as isize)
             as *mut crate::src::game::ai_main::bot_activategoal_t;
@@ -7147,8 +6863,7 @@ pub unsafe extern "C" fn BotGetActivateGoal(
             origin.as_mut_ptr(),
         ) == 0
         {
-            origin[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            origin[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
             origin[1 as i32 as usize] = origin[2 as i32 as usize];
             origin[0 as i32 as usize] = origin[1 as i32 as usize]
         }
@@ -7346,8 +7061,7 @@ pub unsafe extern "C" fn BotGetActivateGoal(
                 }
                 (*activategoal).time = (crate::src::game::ai_main::floattime as f64
                     + t as f64 * 0.01f64
-                    + 5 as i32 as f64)
-                    as f32
+                    + 5 as i32 as f64) as f32
             }
             return ent;
         } else if ::libc::strcmp(
@@ -7390,8 +7104,7 @@ pub unsafe extern "C" fn BotGetActivateGoal(
                 }
                 (*activategoal).time = (crate::src::game::ai_main::floattime as f64
                     + t as f64 * 0.01f64
-                    + 5 as i32 as f64)
-                    as f32
+                    + 5 as i32 as f64) as f32
             }
             return ent;
         } else {
@@ -7466,20 +7179,16 @@ pub unsafe extern "C" fn BotGoForActivateGoal(
     };
     (*activategoal).inuse = crate::src::qcommon::q_shared::qtrue as i32;
     if (*activategoal).time == 0. {
-        (*activategoal).time =
-            crate::src::game::ai_main::floattime + 10 as i32 as f32
+        (*activategoal).time = crate::src::game::ai_main::floattime + 10 as i32 as f32
     }
     (*activategoal).start_time = crate::src::game::ai_main::floattime;
     crate::src::game::ai_main::BotEntityInfo(
         (*activategoal).goal.entitynum,
         &mut activateinfo as *mut _ as *mut crate::be_aas_h::aas_entityinfo_s,
     );
-    (*activategoal).origin[0 as i32 as usize] =
-        activateinfo.origin[0 as i32 as usize];
-    (*activategoal).origin[1 as i32 as usize] =
-        activateinfo.origin[1 as i32 as usize];
-    (*activategoal).origin[2 as i32 as usize] =
-        activateinfo.origin[2 as i32 as usize];
+    (*activategoal).origin[0 as i32 as usize] = activateinfo.origin[0 as i32 as usize];
+    (*activategoal).origin[1 as i32 as usize] = activateinfo.origin[1 as i32 as usize];
+    (*activategoal).origin[2 as i32 as usize] = activateinfo.origin[2 as i32 as usize];
     //
     if BotPushOntoActivateGoalStack(bs, activategoal) != 0 {
         // enter the activate entity AI node
@@ -7490,10 +7199,7 @@ pub unsafe extern "C" fn BotGoForActivateGoal(
         return crate::src::qcommon::q_shared::qtrue as i32;
     } else {
         // enable any routing areas that were disabled
-        BotEnableActivateGoalAreas(
-            activategoal,
-            crate::src::qcommon::q_shared::qtrue as i32,
-        );
+        BotEnableActivateGoalAreas(activategoal, crate::src::qcommon::q_shared::qtrue as i32);
         return crate::src::qcommon::q_shared::qfalse as i32;
     };
 }
@@ -7566,9 +7272,8 @@ pub unsafe extern "C" fn BotRandomMove(
     let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     angles[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
-    angles[1 as i32 as usize] = (::libc::rand() & 0x7fff as i32) as f32
-        / 0x7fff as i32 as f32
-        * 360 as i32 as f32;
+    angles[1 as i32 as usize] =
+        (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 360 as i32 as f32;
     angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     crate::src::qcommon::q_math::AngleVectors(
         angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -7686,10 +7391,7 @@ pub unsafe extern "C" fn BotAIBlocked(
     );
     // OBSTACLEDEBUG
     // if blocked by a bsp model and the bot wants to activate it
-    if activate != 0
-        && entinfo.modelindex > 0 as i32
-        && entinfo.modelindex <= max_bspmodelindex
-    {
+    if activate != 0 && entinfo.modelindex > 0 as i32 && entinfo.modelindex <= max_bspmodelindex {
         // find the bsp entity which should be activated in order to get the blocking entity out of the way
         bspent = BotGetActivateGoal(bs, entinfo.number, &mut activategoal);
         if bspent != 0 {
@@ -7723,16 +7425,11 @@ pub unsafe extern "C" fn BotAIBlocked(
     hordir[1 as i32 as usize] = (*moveresult).movedir[1 as i32 as usize];
     hordir[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     // if no direction just take a random direction
-    if (crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr()) as f64)
-        < 0.1f64
-    {
-        angles[0 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        angles[1 as i32 as usize] = 360 as i32 as f32
-            * ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32);
-        angles[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    if (crate::src::qcommon::q_math::VectorNormalize(hordir.as_mut_ptr()) as f64) < 0.1f64 {
+        angles[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        angles[1 as i32 as usize] =
+            360 as i32 as f32 * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
+        angles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::AngleVectors(
             angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             hordir.as_mut_ptr(),
@@ -7787,12 +7484,12 @@ pub unsafe extern "C" fn BotAIBlocked(
             (*bs).flags ^= 16 as i32;
             // flip the direction
             // VectorNegate(sideward, sideward);
-            sideward[0 as i32 as usize] = sideward[0 as i32 as usize]
-                + hordir[0 as i32 as usize] * -(1 as i32) as f32;
-            sideward[1 as i32 as usize] = sideward[1 as i32 as usize]
-                + hordir[1 as i32 as usize] * -(1 as i32) as f32;
-            sideward[2 as i32 as usize] = sideward[2 as i32 as usize]
-                + hordir[2 as i32 as usize] * -(1 as i32) as f32;
+            sideward[0 as i32 as usize] =
+                sideward[0 as i32 as usize] + hordir[0 as i32 as usize] * -(1 as i32) as f32;
+            sideward[1 as i32 as usize] =
+                sideward[1 as i32 as usize] + hordir[1 as i32 as usize] * -(1 as i32) as f32;
+            sideward[2 as i32 as usize] =
+                sideward[2 as i32 as usize] + hordir[2 as i32 as usize] * -(1 as i32) as f32;
             // move in the other direction
             crate::src::game::g_syscalls::trap_BotMoveInDirection(
                 (*bs).ms,
@@ -7803,26 +7500,20 @@ pub unsafe extern "C" fn BotAIBlocked(
         }
     }
     //
-    if ((*bs).notblocked_time as f64)
-        < crate::src::game::ai_main::floattime as f64 - 0.4f64
-    {
+    if ((*bs).notblocked_time as f64) < crate::src::game::ai_main::floattime as f64 - 0.4f64 {
         // just reset goals and hope the bot will go into another direction?
         // is this still needed??
         if (*bs).ainode
             == Some(
                 crate::src::game::ai_dmnet::AINode_Seek_NBG
-                    as unsafe extern "C" fn(
-                        _: *mut crate::src::game::ai_main::bot_state_t,
-                    ) -> i32,
+                    as unsafe extern "C" fn(_: *mut crate::src::game::ai_main::bot_state_t) -> i32,
             )
         {
             (*bs).nbg_time = 0 as i32 as f32
         } else if (*bs).ainode
             == Some(
                 crate::src::game::ai_dmnet::AINode_Seek_LTG
-                    as unsafe extern "C" fn(
-                        _: *mut crate::src::game::ai_main::bot_state_t,
-                    ) -> i32,
+                    as unsafe extern "C" fn(_: *mut crate::src::game::ai_main::bot_state_t) -> i32,
             )
         {
             (*bs).ltg_time = 0 as i32 as f32
@@ -7888,8 +7579,7 @@ pub unsafe extern "C" fn BotAIPredictObstacles(
     }
     // always predict when the goal change or at regular intervals
     if (*bs).predictobstacles_goalareanum == (*goal).areanum
-        && (*bs).predictobstacles_time
-            > crate::src::game::ai_main::floattime - 6 as i32 as f32
+        && (*bs).predictobstacles_time > crate::src::game::ai_main::floattime - 6 as i32 as f32
     {
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
@@ -7914,8 +7604,7 @@ pub unsafe extern "C" fn BotAIPredictObstacles(
         // if the bot will run into a mover
         if route.endcontents & 1024 as i32 != 0 {
             //NOTE: this only works with bspc 2.1 or higher
-            modelnum = (route.endcontents & (0xff as i32) << 24 as i32)
-                >> 24 as i32;
+            modelnum = (route.endcontents & (0xff as i32) << 24 as i32) >> 24 as i32;
             if modelnum != 0 {
                 //
                 entitynum = BotModelMinsMaxs(
@@ -8015,8 +7704,7 @@ pub unsafe extern "C" fn BotCheckConsoleMessages(
                 && m.time
                     > crate::src::game::ai_main::floattime
                         - (1 as i32 as f32
-                            + (::libc::rand() & 0x7fff as i32) as f32
-                                / 0x7fff as i32 as f32)
+                            + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
             {
                 break;
             }
@@ -8033,9 +7721,10 @@ pub unsafe extern "C" fn BotCheckConsoleMessages(
                 128 as i32 as libc::c_ulong,
             ) != 0
             {
-                ptr = m.message.as_mut_ptr().offset(
-                    match_0.variables[2 as i32 as usize].offset as i32 as isize,
-                )
+                ptr = m
+                    .message
+                    .as_mut_ptr()
+                    .offset(match_0.variables[2 as i32 as usize].offset as i32 as isize)
             }
         }
         //unify the white spaces in the message
@@ -8076,8 +7765,7 @@ pub unsafe extern "C" fn BotCheckConsoleMessages(
                         &mut match_0 as *mut crate::be_ai_chat_h::bot_match_t as *mut libc::c_void,
                         2 as i32,
                         message.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong
-                            as i32,
+                        ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
                     );
                     //if this is a message from the bot self
                     if (*bs).client == ClientFromName(netname.as_mut_ptr()) {
@@ -8150,14 +7838,10 @@ pub unsafe extern "C" fn BotCheckConsoleMessages(
                                 0 as i32 as f32,
                                 1 as i32 as f32,
                             );
-                            if (((::libc::rand() & 0x7fff as i32) as f32
-                                / 0x7fff as i32 as f32)
+                            if (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                                 as f64)
-                                < 1.5f64
-                                    / (crate::src::game::ai_main::NumBots() + 1 as i32)
-                                        as f64
-                                && ((::libc::rand() & 0x7fff as i32) as f32
-                                    / 0x7fff as i32 as f32)
+                                < 1.5f64 / (crate::src::game::ai_main::NumBots() + 1 as i32) as f64
+                                && ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                                     < chat_reply
                             {
                                 //if at a valid chat position and not chatting already and not in teamplay
@@ -8253,8 +7937,8 @@ pub unsafe extern "C" fn BotCheckEvents(
         crate::src::game::g_main::g_entities[(*state).number as usize].eventTime;
     //if it's an event only entity
     if (*state).eType > crate::bg_public_h::ET_EVENTS as i32 {
-        event = (*state).eType - crate::bg_public_h::ET_EVENTS as i32
-            & !(0x100 as i32 | 0x200 as i32)
+        event =
+            (*state).eType - crate::bg_public_h::ET_EVENTS as i32 & !(0x100 as i32 | 0x200 as i32)
     } else {
         event = (*state).event & !(0x100 as i32 | 0x200 as i32)
     }
@@ -8336,58 +8020,48 @@ pub unsafe extern "C" fn BotCheckEvents(
                     0 => {
                         (*bs).blueflagstatus = 0 as i32;
                         (*bs).redflagstatus = 0 as i32;
-                        (*bs).flagstatuschanged =
-                            crate::src::qcommon::q_shared::qtrue as i32
+                        (*bs).flagstatuschanged = crate::src::qcommon::q_shared::qtrue as i32
                         //see BotMatch_CTF
                     }
                     1 => {
                         (*bs).blueflagstatus = 0 as i32;
                         (*bs).redflagstatus = 0 as i32;
-                        (*bs).flagstatuschanged =
-                            crate::src::qcommon::q_shared::qtrue as i32
+                        (*bs).flagstatuschanged = crate::src::qcommon::q_shared::qtrue as i32
                     }
                     2 => {
                         //blue flag is returned
                         (*bs).blueflagstatus = 0 as i32;
-                        (*bs).flagstatuschanged =
-                            crate::src::qcommon::q_shared::qtrue as i32
+                        (*bs).flagstatuschanged = crate::src::qcommon::q_shared::qtrue as i32
                     }
                     3 => {
                         //red flag is returned
                         (*bs).redflagstatus = 0 as i32;
-                        (*bs).flagstatuschanged =
-                            crate::src::qcommon::q_shared::qtrue as i32
+                        (*bs).flagstatuschanged = crate::src::qcommon::q_shared::qtrue as i32
                     }
                     4 => {
                         //blue flag is taken
                         (*bs).blueflagstatus = 1 as i32;
-                        (*bs).flagstatuschanged =
-                            crate::src::qcommon::q_shared::qtrue as i32
+                        (*bs).flagstatuschanged = crate::src::qcommon::q_shared::qtrue as i32
                     }
                     5 => {
                         //red flag is taken
                         (*bs).redflagstatus = 1 as i32;
-                        (*bs).flagstatuschanged =
-                            crate::src::qcommon::q_shared::qtrue as i32
+                        (*bs).flagstatuschanged = crate::src::qcommon::q_shared::qtrue as i32
                     }
                     _ => {}
                 }
             }
         }
         42 => {
-            lastteleport_origin[0 as i32 as usize] =
-                (*state).origin[0 as i32 as usize];
-            lastteleport_origin[1 as i32 as usize] =
-                (*state).origin[1 as i32 as usize];
-            lastteleport_origin[2 as i32 as usize] =
-                (*state).origin[2 as i32 as usize];
+            lastteleport_origin[0 as i32 as usize] = (*state).origin[0 as i32 as usize];
+            lastteleport_origin[1 as i32 as usize] = (*state).origin[1 as i32 as usize];
+            lastteleport_origin[2 as i32 as usize] = (*state).origin[2 as i32 as usize];
             lastteleport_time = crate::src::game::ai_main::floattime
         }
         45 => {
             //if this sound is played on the bot
             if (*state).number == (*bs).client {
-                if (*state).eventParm < 0 as i32 || (*state).eventParm >= 256 as i32
-                {
+                if (*state).eventParm < 0 as i32 || (*state).eventParm >= 256 as i32 {
                     crate::src::game::ai_main::BotAI_Print(
                         3 as i32,
                         b"EV_GENERAL_SOUND: eventParm (%d) out of range\n\x00" as *const u8
@@ -8399,8 +8073,7 @@ pub unsafe extern "C" fn BotCheckEvents(
                     crate::src::game::g_syscalls::trap_GetConfigstring(
                         32 as i32 + 256 as i32 + (*state).eventParm,
                         buf.as_mut_ptr(),
-                        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong
-                            as i32,
+                        ::std::mem::size_of::<[libc::c_char; 128]>() as libc::c_ulong as i32,
                     );
                     //if falling into a death pit
                     if ::libc::strcmp(
@@ -8598,9 +8271,8 @@ pub unsafe extern "C" fn BotGetAlternateRouteGoal(
     if numaltroutegoals == 0 {
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
-    rnd = ((::libc::rand() & 0x7fff as i32) as f32
-        / 0x7fff as i32 as f32
-        * numaltroutegoals as f32) as i32;
+    rnd = ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * numaltroutegoals as f32)
+        as i32;
     if rnd >= numaltroutegoals {
         rnd = numaltroutegoals - 1 as i32
     }
@@ -8612,18 +8284,12 @@ pub unsafe extern "C" fn BotGetAlternateRouteGoal(
         (*altroutegoals.offset(rnd as isize)).origin[1 as i32 as usize];
     (*goal).origin[2 as i32 as usize] =
         (*altroutegoals.offset(rnd as isize)).origin[2 as i32 as usize];
-    (*goal).mins[0 as i32 as usize] =
-        -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*goal).mins[1 as i32 as usize] =
-        -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*goal).mins[2 as i32 as usize] =
-        -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*goal).maxs[0 as i32 as usize] =
-        8 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*goal).maxs[1 as i32 as usize] =
-        8 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*goal).maxs[2 as i32 as usize] =
-        8 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*goal).mins[0 as i32 as usize] = -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*goal).mins[1 as i32 as usize] = -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*goal).mins[2 as i32 as usize] = -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
+    (*goal).maxs[0 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*goal).maxs[1 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*goal).maxs[2 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
     (*goal).entitynum = 0 as i32;
     (*goal).iteminfo = 0 as i32;
     (*goal).number = 0 as i32;
@@ -8707,8 +8373,7 @@ pub unsafe extern "C" fn BotDeathmatchAI(
         );
         //
         (*bs).lastframe_health = (*bs).inventory[29 as i32 as usize];
-        (*bs).lasthitcount =
-            (*bs).cur_ps.persistant[crate::bg_public_h::PERS_HITS as i32 as usize];
+        (*bs).lasthitcount = (*bs).cur_ps.persistant[crate::bg_public_h::PERS_HITS as i32 as usize];
         //
         (*bs).setupcount = 0 as i32;
         //
@@ -8744,8 +8409,7 @@ pub unsafe extern "C" fn BotDeathmatchAI(
     }
     //if the bot entered the game less than 8 seconds ago
     if (*bs).entergamechat == 0
-        && (*bs).entergame_time
-            > crate::src::game::ai_main::floattime - 8 as i32 as f32
+        && (*bs).entergame_time > crate::src::game::ai_main::floattime - 8 as i32 as f32
     {
         if crate::src::game::ai_chat::BotChat_EnterGame(
             bs as *mut crate::src::game::ai_main::bot_state_s,
@@ -8800,8 +8464,7 @@ pub unsafe extern "C" fn BotDeathmatchAI(
     }
     //
     (*bs).lastframe_health = (*bs).inventory[29 as i32 as usize];
-    (*bs).lasthitcount =
-        (*bs).cur_ps.persistant[crate::bg_public_h::PERS_HITS as i32 as usize];
+    (*bs).lasthitcount = (*bs).cur_ps.persistant[crate::bg_public_h::PERS_HITS as i32 as usize];
 }
 /*
 ==================
@@ -8828,12 +8491,12 @@ pub unsafe extern "C" fn BotSetEntityNumForGoalWithModel(
         if !((*ent).inuse as u64 == 0) {
             if !(eType != 0 && (*ent).s.eType != eType) {
                 if !((*ent).s.modelindex != modelindex) {
-                    dir[0 as i32 as usize] = (*goal).origin[0 as i32 as usize]
-                        - (*ent).s.origin[0 as i32 as usize];
-                    dir[1 as i32 as usize] = (*goal).origin[1 as i32 as usize]
-                        - (*ent).s.origin[1 as i32 as usize];
-                    dir[2 as i32 as usize] = (*goal).origin[2 as i32 as usize]
-                        - (*ent).s.origin[2 as i32 as usize];
+                    dir[0 as i32 as usize] =
+                        (*goal).origin[0 as i32 as usize] - (*ent).s.origin[0 as i32 as usize];
+                    dir[1 as i32 as usize] =
+                        (*goal).origin[1 as i32 as usize] - (*ent).s.origin[1 as i32 as usize];
+                    dir[2 as i32 as usize] =
+                        (*goal).origin[2 as i32 as usize] - (*ent).s.origin[2 as i32 as usize];
                     if VectorLengthSquared(
                         dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                     ) < (10 as i32 * 10 as i32) as f32
@@ -8868,15 +8531,14 @@ pub unsafe extern "C" fn BotSetEntityNumForGoal(
     i = 0 as i32;
     while i < crate::src::game::g_main::level.num_entities {
         if !((*ent).inuse as u64 == 0) {
-            if !(crate::src::qcommon::q_shared::Q_stricmp((*ent).classname, classname)
-                != 0 as i32)
+            if !(crate::src::qcommon::q_shared::Q_stricmp((*ent).classname, classname) != 0 as i32)
             {
-                dir[0 as i32 as usize] = (*goal).origin[0 as i32 as usize]
-                    - (*ent).s.origin[0 as i32 as usize];
-                dir[1 as i32 as usize] = (*goal).origin[1 as i32 as usize]
-                    - (*ent).s.origin[1 as i32 as usize];
-                dir[2 as i32 as usize] = (*goal).origin[2 as i32 as usize]
-                    - (*ent).s.origin[2 as i32 as usize];
+                dir[0 as i32 as usize] =
+                    (*goal).origin[0 as i32 as usize] - (*ent).s.origin[0 as i32 as usize];
+                dir[1 as i32 as usize] =
+                    (*goal).origin[1 as i32 as usize] - (*ent).s.origin[1 as i32 as usize];
+                dir[2 as i32 as usize] =
+                    (*goal).origin[2 as i32 as usize] - (*ent).s.origin[2 as i32 as usize];
                 if VectorLengthSquared(
                     dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                 ) < (10 as i32 * 10 as i32) as f32
@@ -8913,12 +8575,12 @@ pub unsafe extern "C" fn BotSetEntityNumForGoalWithActivator(
             if !(crate::src::qcommon::q_shared::Q_stricmp((*(*ent).activator).classname, classname)
                 != 0 as i32)
             {
-                dir[0 as i32 as usize] = (*goal).origin[0 as i32 as usize]
-                    - (*ent).s.origin[0 as i32 as usize];
-                dir[1 as i32 as usize] = (*goal).origin[1 as i32 as usize]
-                    - (*ent).s.origin[1 as i32 as usize];
-                dir[2 as i32 as usize] = (*goal).origin[2 as i32 as usize]
-                    - (*ent).s.origin[2 as i32 as usize];
+                dir[0 as i32 as usize] =
+                    (*goal).origin[0 as i32 as usize] - (*ent).s.origin[0 as i32 as usize];
+                dir[1 as i32 as usize] =
+                    (*goal).origin[1 as i32 as usize] - (*ent).s.origin[1 as i32 as usize];
+                dir[2 as i32 as usize] =
+                    (*goal).origin[2 as i32 as usize] - (*ent).s.origin[2 as i32 as usize];
                 if VectorLengthSquared(
                     dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                 ) < (10 as i32 * 10 as i32) as f32

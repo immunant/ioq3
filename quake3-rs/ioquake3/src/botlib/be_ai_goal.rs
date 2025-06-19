@@ -25,8 +25,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -391,10 +390,7 @@ pub unsafe extern "C" fn BotSaveGoalFuzzyLogic(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn BotMutateGoalFuzzyLogic(
-    mut goalstate: i32,
-    mut _range: f32,
-) {
+pub unsafe extern "C" fn BotMutateGoalFuzzyLogic(mut goalstate: i32, mut _range: f32) {
     let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
     gs = BotGoalStateFromHandle(goalstate);
     if gs.is_null() {
@@ -1173,12 +1169,9 @@ pub unsafe extern "C" fn BotInitLevelItems() {
                         if goalareanum != 0 {
                             //end else
                             (*li).goalareanum = goalareanum; //end if
-                            (*li).goalorigin[0 as i32 as usize] =
-                                origin[0 as i32 as usize];
-                            (*li).goalorigin[1 as i32 as usize] =
-                                origin[1 as i32 as usize];
-                            (*li).goalorigin[2 as i32 as usize] =
-                                origin[2 as i32 as usize]
+                            (*li).goalorigin[0 as i32 as usize] = origin[0 as i32 as usize];
+                            (*li).goalorigin[1 as i32 as usize] = origin[1 as i32 as usize];
+                            (*li).goalorigin[2 as i32 as usize] = origin[2 as i32 as usize]
                         } else {
                             //get the item goal area and goal origin
                             (*li).goalareanum =
@@ -1231,11 +1224,7 @@ pub unsafe extern "C" fn BotInitLevelItems() {
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn BotGoalName(
-    mut number: i32,
-    mut name: *mut libc::c_char,
-    mut size: i32,
-) {
+pub unsafe extern "C" fn BotGoalName(mut number: i32, mut name: *mut libc::c_char, mut size: i32) {
     let mut li: *mut levelitem_t = 0 as *mut levelitem_t;
     if itemconfig.is_null() {
         return;
@@ -1277,14 +1266,12 @@ pub unsafe extern "C" fn BotResetAvoidGoals(mut goalstate: i32) {
     crate::stdlib::memset(
         (*gs).avoidgoals.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (256 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
+        (256 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
     );
     crate::stdlib::memset(
         (*gs).avoidgoaltimes.as_mut_ptr() as *mut libc::c_void,
         0 as i32,
-        (256 as i32 as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+        (256 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
     );
 }
 //dump the avoid goals
@@ -1308,11 +1295,7 @@ pub unsafe extern "C" fn BotDumpAvoidGoals(mut goalstate: i32) {
     i = 0 as i32;
     while i < 256 as i32 {
         if (*gs).avoidgoaltimes[i as usize] >= crate::src::botlib::be_aas_main::AAS_Time() {
-            BotGoalName(
-                (*gs).avoidgoals[i as usize],
-                name.as_mut_ptr(),
-                32 as i32,
-            );
+            BotGoalName((*gs).avoidgoals[i as usize], name.as_mut_ptr(), 32 as i32);
             crate::src::botlib::l_log::Log_Write(
                 b"avoid goal %s, number %d for %f seconds\x00" as *const u8 as *const libc::c_char
                     as *mut libc::c_char,
@@ -1378,10 +1361,7 @@ pub unsafe extern "C" fn BotAddToAvoidGoals(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn BotRemoveFromAvoidGoals(
-    mut goalstate: i32,
-    mut number: i32,
-) {
+pub unsafe extern "C" fn BotRemoveFromAvoidGoals(mut goalstate: i32, mut number: i32) {
     let mut i: i32 = 0;
     let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
     gs = BotGoalStateFromHandle(goalstate);
@@ -1412,10 +1392,7 @@ pub unsafe extern "C" fn BotRemoveFromAvoidGoals(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn BotAvoidGoalTime(
-    mut goalstate: i32,
-    mut number: i32,
-) -> f32 {
+pub unsafe extern "C" fn BotAvoidGoalTime(mut goalstate: i32, mut number: i32) -> f32 {
     let mut i: i32 = 0;
     let mut gs: *mut bot_goalstate_t = 0 as *mut bot_goalstate_t;
     gs = BotGoalStateFromHandle(goalstate);
@@ -1550,12 +1527,9 @@ pub unsafe extern "C" fn BotGetLevelItemGoal(
                     ) == 0
                     {
                         (*goal).areanum = (*li).goalareanum;
-                        (*goal).origin[0 as i32 as usize] =
-                            (*li).goalorigin[0 as i32 as usize];
-                        (*goal).origin[1 as i32 as usize] =
-                            (*li).goalorigin[1 as i32 as usize];
-                        (*goal).origin[2 as i32 as usize] =
-                            (*li).goalorigin[2 as i32 as usize];
+                        (*goal).origin[0 as i32 as usize] = (*li).goalorigin[0 as i32 as usize];
+                        (*goal).origin[1 as i32 as usize] = (*li).goalorigin[1 as i32 as usize];
+                        (*goal).origin[2 as i32 as usize] = (*li).goalorigin[2 as i32 as usize];
                         (*goal).entitynum = (*li).entitynum;
                         (*goal).mins[0 as i32 as usize] =
                             (*(*itemconfig).iteminfo.offset((*li).iteminfo as isize)).mins
@@ -1752,22 +1726,19 @@ pub unsafe extern "C" fn BotFindEntityForLevelItem(mut li: *mut levelitem_t) {
                 &mut entinfo as *mut _ as *mut crate::be_aas_h::aas_entityinfo_s,
             );
             //if the entity is still moving
-            if !(entinfo.origin[0 as i32 as usize]
-                != entinfo.lastvisorigin[0 as i32 as usize]
-                || entinfo.origin[1 as i32 as usize]
-                    != entinfo.lastvisorigin[1 as i32 as usize]
-                || entinfo.origin[2 as i32 as usize]
-                    != entinfo.lastvisorigin[2 as i32 as usize])
+            if !(entinfo.origin[0 as i32 as usize] != entinfo.lastvisorigin[0 as i32 as usize]
+                || entinfo.origin[1 as i32 as usize] != entinfo.lastvisorigin[1 as i32 as usize]
+                || entinfo.origin[2 as i32 as usize] != entinfo.lastvisorigin[2 as i32 as usize])
             {
                 //
                 if (*(*ic).iteminfo.offset((*li).iteminfo as isize)).modelindex == modelindex {
                     //check if the entity is very close
-                    dir[0 as i32 as usize] = (*li).origin[0 as i32 as usize]
-                        - entinfo.origin[0 as i32 as usize];
-                    dir[1 as i32 as usize] = (*li).origin[1 as i32 as usize]
-                        - entinfo.origin[1 as i32 as usize];
-                    dir[2 as i32 as usize] = (*li).origin[2 as i32 as usize]
-                        - entinfo.origin[2 as i32 as usize];
+                    dir[0 as i32 as usize] =
+                        (*li).origin[0 as i32 as usize] - entinfo.origin[0 as i32 as usize];
+                    dir[1 as i32 as usize] =
+                        (*li).origin[1 as i32 as usize] - entinfo.origin[1 as i32 as usize];
+                    dir[2 as i32 as usize] =
+                        (*li).origin[2 as i32 as usize] - entinfo.origin[2 as i32 as usize];
                     if VectorLength(dir.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t)
                         < 30 as i32 as f32
                     {
@@ -1856,8 +1827,7 @@ pub unsafe extern "C" fn BotUpdateEntityItems() {
                 //skip all floating items for now
                 //if (entinfo.groundent != ENTITYNUM_WORLD) continue;
                 //if the entity is still moving
-                if !(entinfo.origin[0 as i32 as usize]
-                    != entinfo.lastvisorigin[0 as i32 as usize]
+                if !(entinfo.origin[0 as i32 as usize] != entinfo.lastvisorigin[0 as i32 as usize]
                     || entinfo.origin[1 as i32 as usize]
                         != entinfo.lastvisorigin[1 as i32 as usize]
                     || entinfo.origin[2 as i32 as usize]
@@ -2384,14 +2354,12 @@ pub unsafe extern "C" fn BotChooseLTGItem(
                                         //if the goal is reachable
                                         //if this item won't respawn before we get there
                                         avoidtime = BotAvoidGoalTime(goalstate, (*li).number);
-                                        if !(avoidtime as f64
-                                            - t as f64 * 0.009f64
+                                        if !(avoidtime as f64 - t as f64 * 0.009f64
                                             > 0 as i32 as f64)
                                         {
                                             //end if
                                             //
-                                            weight = (weight as f64
-                                                / (t as f32 as f64 * 0.01f64))
+                                            weight = (weight as f64 / (t as f32 as f64 * 0.01f64))
                                                 as f32;
                                             //
                                             if weight > bestweight {
@@ -2632,14 +2600,12 @@ pub unsafe extern "C" fn BotChooseNBGItem(
                                         //if the goal is reachable
                                         //if this item won't respawn before we get there
                                         avoidtime = BotAvoidGoalTime(goalstate, (*li).number);
-                                        if !(avoidtime as f64
-                                            - t as f64 * 0.009f64
+                                        if !(avoidtime as f64 - t as f64 * 0.009f64
                                             > 0 as i32 as f64)
                                         {
                                             //end if
                                             //
-                                            weight = (weight as f64
-                                                / (t as f32 as f64 * 0.01f64))
+                                            weight = (weight as f64 / (t as f32 as f64 * 0.01f64))
                                                 as f32;
                                             //
                                             if weight > bestweight {
@@ -2752,43 +2718,25 @@ pub unsafe extern "C" fn BotTouchingGoal(
         boxmins.as_mut_ptr(),
         boxmaxs.as_mut_ptr(),
     );
-    absmins[0 as i32 as usize] =
-        (*goal).mins[0 as i32 as usize] - boxmaxs[0 as i32 as usize];
-    absmins[1 as i32 as usize] =
-        (*goal).mins[1 as i32 as usize] - boxmaxs[1 as i32 as usize];
-    absmins[2 as i32 as usize] =
-        (*goal).mins[2 as i32 as usize] - boxmaxs[2 as i32 as usize];
-    absmaxs[0 as i32 as usize] =
-        (*goal).maxs[0 as i32 as usize] - boxmins[0 as i32 as usize];
-    absmaxs[1 as i32 as usize] =
-        (*goal).maxs[1 as i32 as usize] - boxmins[1 as i32 as usize];
-    absmaxs[2 as i32 as usize] =
-        (*goal).maxs[2 as i32 as usize] - boxmins[2 as i32 as usize];
-    absmins[0 as i32 as usize] =
-        absmins[0 as i32 as usize] + (*goal).origin[0 as i32 as usize];
-    absmins[1 as i32 as usize] =
-        absmins[1 as i32 as usize] + (*goal).origin[1 as i32 as usize];
-    absmins[2 as i32 as usize] =
-        absmins[2 as i32 as usize] + (*goal).origin[2 as i32 as usize];
-    absmaxs[0 as i32 as usize] =
-        absmaxs[0 as i32 as usize] + (*goal).origin[0 as i32 as usize];
-    absmaxs[1 as i32 as usize] =
-        absmaxs[1 as i32 as usize] + (*goal).origin[1 as i32 as usize];
-    absmaxs[2 as i32 as usize] =
-        absmaxs[2 as i32 as usize] + (*goal).origin[2 as i32 as usize];
+    absmins[0 as i32 as usize] = (*goal).mins[0 as i32 as usize] - boxmaxs[0 as i32 as usize];
+    absmins[1 as i32 as usize] = (*goal).mins[1 as i32 as usize] - boxmaxs[1 as i32 as usize];
+    absmins[2 as i32 as usize] = (*goal).mins[2 as i32 as usize] - boxmaxs[2 as i32 as usize];
+    absmaxs[0 as i32 as usize] = (*goal).maxs[0 as i32 as usize] - boxmins[0 as i32 as usize];
+    absmaxs[1 as i32 as usize] = (*goal).maxs[1 as i32 as usize] - boxmins[1 as i32 as usize];
+    absmaxs[2 as i32 as usize] = (*goal).maxs[2 as i32 as usize] - boxmins[2 as i32 as usize];
+    absmins[0 as i32 as usize] = absmins[0 as i32 as usize] + (*goal).origin[0 as i32 as usize];
+    absmins[1 as i32 as usize] = absmins[1 as i32 as usize] + (*goal).origin[1 as i32 as usize];
+    absmins[2 as i32 as usize] = absmins[2 as i32 as usize] + (*goal).origin[2 as i32 as usize];
+    absmaxs[0 as i32 as usize] = absmaxs[0 as i32 as usize] + (*goal).origin[0 as i32 as usize];
+    absmaxs[1 as i32 as usize] = absmaxs[1 as i32 as usize] + (*goal).origin[1 as i32 as usize];
+    absmaxs[2 as i32 as usize] = absmaxs[2 as i32 as usize] + (*goal).origin[2 as i32 as usize];
     //make the box a little smaller for safety
-    absmaxs[0 as i32 as usize] =
-        absmaxs[0 as i32 as usize] - safety_maxs[0 as i32 as usize]; //end for
-    absmaxs[1 as i32 as usize] =
-        absmaxs[1 as i32 as usize] - safety_maxs[1 as i32 as usize];
-    absmaxs[2 as i32 as usize] =
-        absmaxs[2 as i32 as usize] - safety_maxs[2 as i32 as usize];
-    absmins[0 as i32 as usize] =
-        absmins[0 as i32 as usize] - safety_mins[0 as i32 as usize];
-    absmins[1 as i32 as usize] =
-        absmins[1 as i32 as usize] - safety_mins[1 as i32 as usize];
-    absmins[2 as i32 as usize] =
-        absmins[2 as i32 as usize] - safety_mins[2 as i32 as usize];
+    absmaxs[0 as i32 as usize] = absmaxs[0 as i32 as usize] - safety_maxs[0 as i32 as usize]; //end for
+    absmaxs[1 as i32 as usize] = absmaxs[1 as i32 as usize] - safety_maxs[1 as i32 as usize];
+    absmaxs[2 as i32 as usize] = absmaxs[2 as i32 as usize] - safety_maxs[2 as i32 as usize];
+    absmins[0 as i32 as usize] = absmins[0 as i32 as usize] - safety_mins[0 as i32 as usize];
+    absmins[1 as i32 as usize] = absmins[1 as i32 as usize] - safety_mins[1 as i32 as usize];
+    absmins[2 as i32 as usize] = absmins[2 as i32 as usize] - safety_mins[2 as i32 as usize];
     i = 0 as i32;
     while i < 3 as i32 {
         if *origin.offset(i as isize) < absmins[i as usize]
@@ -2868,24 +2816,18 @@ pub unsafe extern "C" fn BotItemGoalInVisButNotVisible(
         return crate::src::qcommon::q_shared::qfalse as i32;
     }
     //
+    middle[0 as i32 as usize] = (*goal).mins[0 as i32 as usize] + (*goal).mins[0 as i32 as usize];
+    middle[1 as i32 as usize] = (*goal).mins[1 as i32 as usize] + (*goal).mins[1 as i32 as usize];
+    middle[2 as i32 as usize] = (*goal).mins[2 as i32 as usize] + (*goal).mins[2 as i32 as usize];
     middle[0 as i32 as usize] =
-        (*goal).mins[0 as i32 as usize] + (*goal).mins[0 as i32 as usize];
+        (middle[0 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     middle[1 as i32 as usize] =
-        (*goal).mins[1 as i32 as usize] + (*goal).mins[1 as i32 as usize];
+        (middle[1 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     middle[2 as i32 as usize] =
-        (*goal).mins[2 as i32 as usize] + (*goal).mins[2 as i32 as usize];
-    middle[0 as i32 as usize] = (middle[0 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    middle[1 as i32 as usize] = (middle[1 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    middle[2 as i32 as usize] = (middle[2 as i32 as usize] as f64
-        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    middle[0 as i32 as usize] =
-        (*goal).origin[0 as i32 as usize] + middle[0 as i32 as usize];
-    middle[1 as i32 as usize] =
-        (*goal).origin[1 as i32 as usize] + middle[1 as i32 as usize];
-    middle[2 as i32 as usize] =
-        (*goal).origin[2 as i32 as usize] + middle[2 as i32 as usize];
+        (middle[2 as i32 as usize] as f64 * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+    middle[0 as i32 as usize] = (*goal).origin[0 as i32 as usize] + middle[0 as i32 as usize];
+    middle[1 as i32 as usize] = (*goal).origin[1 as i32 as usize] + middle[1 as i32 as usize];
+    middle[2 as i32 as usize] = (*goal).origin[2 as i32 as usize] + middle[2 as i32 as usize];
     //
     trace = crate::src::botlib::be_aas_bspq3::AAS_Trace(
         eye,
@@ -2912,9 +2854,7 @@ pub unsafe extern "C" fn BotItemGoalInVisButNotVisible(
         //NOTE: for some wacko reason entities are sometimes
         // not updated
         //if (!entinfo.valid) return qtrue;
-        if (entinfo.ltime as f64)
-            < crate::src::botlib::be_aas_main::AAS_Time() as f64 - 0.5f64
-        {
+        if (entinfo.ltime as f64) < crate::src::botlib::be_aas_main::AAS_Time() as f64 - 0.5f64 {
             return crate::src::qcommon::q_shared::qtrue as i32;
         }
     }
@@ -3195,8 +3135,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = crate::src::botlib::l_struct::fielddef_s {
                 name: b"type\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).type_0 as *mut i32
-                    as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut iteminfo_t)).type_0 as *mut i32 as crate::stddef_h::size_t
+                    as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,
@@ -3208,8 +3148,8 @@ unsafe extern "C" fn run_static_initializers() {
         {
             let mut init = crate::src::botlib::l_struct::fielddef_s {
                 name: b"index\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
-                offset: &mut (*(0 as *mut iteminfo_t)).index as *mut i32
-                    as crate::stddef_h::size_t as i32,
+                offset: &mut (*(0 as *mut iteminfo_t)).index as *mut i32 as crate::stddef_h::size_t
+                    as i32,
                 type_0: 2 as i32,
                 maxarray: 0,
                 floatmin: 0.,

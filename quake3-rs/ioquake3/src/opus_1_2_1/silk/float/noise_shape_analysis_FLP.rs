@@ -81,11 +81,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /* coefficient in an array of coefficients, for monic filters.                                    */
 #[inline]
 
-unsafe extern "C" fn warped_gain(
-    mut coefs: *const f32,
-    mut lambda: f32,
-    mut order: i32,
-) -> f32 {
+unsafe extern "C" fn warped_gain(mut coefs: *const f32, mut lambda: f32, mut order: i32) -> f32 {
     let mut i: i32 = 0;
     let mut gain: f32 = 0.;
     lambda = -lambda;
@@ -120,8 +116,7 @@ unsafe extern "C" fn warped_true2monic_coefs(
         *coefs.offset((i - 1 as i32) as isize) -= lambda * *coefs.offset(i as isize);
         i -= 1
     }
-    gain =
-        (1.0f32 - lambda * lambda) / (1.0f32 + lambda * *coefs.offset(0 as i32 as isize));
+    gain = (1.0f32 - lambda * lambda) / (1.0f32 + lambda * *coefs.offset(0 as i32 as isize));
     i = 0 as i32;
     while i < order {
         *coefs.offset(i as isize) *= gain;
@@ -170,8 +165,7 @@ unsafe extern "C" fn warped_true2monic_coefs(
             *coefs.offset((i - 1 as i32) as isize) -= lambda * *coefs.offset(i as isize);
             i -= 1
         }
-        gain = (1.0f32 - lambda * lambda)
-            / (1.0f32 + lambda * *coefs.offset(0 as i32 as isize));
+        gain = (1.0f32 - lambda * lambda) / (1.0f32 + lambda * *coefs.offset(0 as i32 as isize));
         i = 0 as i32;
         while i < order {
             *coefs.offset(i as isize) *= gain;
@@ -182,11 +176,7 @@ unsafe extern "C" fn warped_true2monic_coefs(
 }
 #[inline]
 
-unsafe extern "C" fn limit_coefs(
-    mut coefs: *mut f32,
-    mut limit: f32,
-    mut order: i32,
-) {
+unsafe extern "C" fn limit_coefs(mut coefs: *mut f32, mut limit: f32, mut order: i32) {
     let mut i: i32 = 0;
     let mut iter: i32 = 0;
     let mut ind: i32 = 0 as i32;
@@ -310,13 +300,11 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
     /* ***************/
     /* GAIN CONTROL */
     /* ***************/
-    SNR_adj_dB =
-        (*psEnc).sCmn.SNR_dB_Q7 as f32 * (1 as i32 as f32 / 128.0f32);
+    SNR_adj_dB = (*psEnc).sCmn.SNR_dB_Q7 as f32 * (1 as i32 as f32 / 128.0f32);
     /* Input quality is the average of the quality in the lowest two VAD bands */
     (*psEncCtrl).input_quality = 0.5f32
         * ((*psEnc).sCmn.input_quality_bands_Q15[0 as i32 as usize]
-            + (*psEnc).sCmn.input_quality_bands_Q15[1 as i32 as usize])
-            as f32
+            + (*psEnc).sCmn.input_quality_bands_Q15[1 as i32 as usize]) as f32
         * (1.0f32 / 32768.0f32);
     /* Coding quality level, between 0.0 and 1.0 */
     (*psEncCtrl).coding_quality = silk_sigmoid(0.25f32 * (SNR_adj_dB - 20.0f32));
@@ -334,9 +322,7 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
         SNR_adj_dB += 2.0f32 * (*psEnc).LTPCorr
     } else {
         /* For unvoiced signals and low-quality input, adjust the quality slower than SNR_dB setting */
-        SNR_adj_dB += (-0.4f32
-            * (*psEnc).sCmn.SNR_dB_Q7 as f32
-            * (1 as i32 as f32 / 128.0f32)
+        SNR_adj_dB += (-0.4f32 * (*psEnc).sCmn.SNR_dB_Q7 as f32 * (1 as i32 as f32 / 128.0f32)
             + 6.0f32)
             * (1.0f32 - (*psEncCtrl).input_quality)
     }
@@ -353,8 +339,7 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
         energy_variation = 0.0f32;
         log_energy_prev = 0.0f32;
         pitch_res_ptr = pitch_res;
-        nSegs = 5 as i32 as crate::opus_types_h::opus_int16
-            as crate::opus_types_h::opus_int32
+        nSegs = 5 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
             * (*psEnc).sCmn.nb_subfr as crate::opus_types_h::opus_int16
                 as crate::opus_types_h::opus_int32
             / 2 as i32;
@@ -368,8 +353,7 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
             log_energy = silk_log2(nrg as f64);
             if k > 0 as i32 {
                 energy_variation +=
-                    crate::stdlib::fabs((log_energy - log_energy_prev) as f64)
-                        as f32
+                    crate::stdlib::fabs((log_energy - log_energy_prev) as f64) as f32
             }
             log_energy_prev = log_energy;
             pitch_res_ptr = pitch_res_ptr.offset(nSamples as isize);
@@ -389,8 +373,7 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
     strength = 1e-3f32 * (*psEncCtrl).predGain; /* between 0.0 and 1.0 */
     BWExp = 0.94f32 / (1.0f32 + strength * strength);
     /* Slightly more warping in analysis will move quantization noise up in frequency, where it's better masked */
-    warping = (*psEnc).sCmn.warping_Q16 as f32 / 65536.0f32
-        + 0.01f32 * (*psEncCtrl).coding_quality;
+    warping = (*psEnc).sCmn.warping_Q16 as f32 / 65536.0f32 + 0.01f32 * (*psEncCtrl).coding_quality;
     /* *******************************************/
     /* Compute noise shaping AR coefs and gains */
     /* *******************************************/
@@ -440,8 +423,7 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
             );
         }
         /* Add white noise, as a fraction of energy */
-        auto_corr[0 as i32 as usize] +=
-            auto_corr[0 as i32 as usize] * 3e-5f32 + 1.0f32;
+        auto_corr[0 as i32 as usize] += auto_corr[0 as i32 as usize] * 3e-5f32 + 1.0f32;
         /* Convert correlations to prediction coefficients, and compute residual energy */
         nrg = crate::src::opus_1_2_1::silk::float::schur_FLP::silk_schur_FLP(
             rc.as_mut_ptr(),
@@ -456,8 +438,7 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
             rc.as_mut_ptr(),
             (*psEnc).sCmn.shapingLPCOrder,
         );
-        (*psEncCtrl).Gains[k as usize] =
-            crate::stdlib::sqrt(nrg as f64) as f32;
+        (*psEncCtrl).Gains[k as usize] = crate::stdlib::sqrt(nrg as f64) as f32;
         if (*psEnc).sCmn.warping_Q16 > 0 as i32 {
             /* Adjust gain for warping */
             (*psEncCtrl).Gains[k as usize] *= warped_gain(
@@ -506,14 +487,8 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
     /* Gain tweaking */
     /* ****************/
     /* Increase gains during low speech activity */
-    gain_mult = crate::stdlib::pow(
-        2.0f32 as f64,
-        (-0.16f32 * SNR_adj_dB) as f64,
-    ) as f32;
-    gain_add = crate::stdlib::pow(
-        2.0f32 as f64,
-        (0.16f32 * 2 as i32 as f32) as f64,
-    ) as f32;
+    gain_mult = crate::stdlib::pow(2.0f32 as f64, (-0.16f32 * SNR_adj_dB) as f64) as f32;
+    gain_add = crate::stdlib::pow(2.0f32 as f64, (0.16f32 * 2 as i32 as f32) as f64) as f32;
     k = 0 as i32;
     while k < (*psEnc).sCmn.nb_subfr {
         (*psEncCtrl).Gains[k as usize] *= gain_mult;
@@ -527,8 +502,7 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
     strength = 4.0f32
         * (1.0f32
             + 0.5f32
-                * ((*psEnc).sCmn.input_quality_bands_Q15[0 as i32 as usize]
-                    as f32
+                * ((*psEnc).sCmn.input_quality_bands_Q15[0 as i32 as usize] as f32
                     * (1.0f32 / 32768.0f32)
                     - 1.0f32));
     strength *= (*psEnc).sCmn.speech_activity_Q8 as f32 * (1.0f32 / 256.0f32);
@@ -563,8 +537,7 @@ pub unsafe extern "C" fn silk_noise_shape_analysis_FLP(
     /* ***************************/
     /* HARMONIC SHAPING CONTROL */
     /* ***************************/
-    if 1 as i32 != 0 && (*psEnc).sCmn.indices.signalType as i32 == 2 as i32
-    {
+    if 1 as i32 != 0 && (*psEnc).sCmn.indices.signalType as i32 == 2 as i32 {
         /* Harmonic noise shaping */
         HarmShapeGain = 0.3f32;
         /* More harmonic noise shaping for high bitrates or noisy input */

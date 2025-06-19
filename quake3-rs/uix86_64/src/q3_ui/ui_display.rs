@@ -323,10 +323,7 @@ UI_DisplayOptionsMenu_Event
 =================
 */
 
-unsafe extern "C" fn UI_DisplayOptionsMenu_Event(
-    mut ptr: *mut libc::c_void,
-    mut event: i32,
-) {
+unsafe extern "C" fn UI_DisplayOptionsMenu_Event(mut ptr: *mut libc::c_void, mut event: i32) {
     if event != 3 as i32 {
         return;
     }
@@ -402,16 +399,13 @@ unsafe extern "C" fn UI_DisplayOptionsMenu_Init() {
     displayOptionsInfo.framer.width = 256 as i32;
     displayOptionsInfo.framer.height = 334 as i32;
     displayOptionsInfo.graphics.generic.type_0 = 9 as i32;
-    displayOptionsInfo.graphics.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    displayOptionsInfo.graphics.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     displayOptionsInfo.graphics.generic.id = 10 as i32;
     displayOptionsInfo.graphics.generic.callback = Some(
-        UI_DisplayOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_DisplayOptionsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     displayOptionsInfo.graphics.generic.x = 216 as i32;
-    displayOptionsInfo.graphics.generic.y =
-        240 as i32 - 2 as i32 * 27 as i32;
+    displayOptionsInfo.graphics.generic.y = 240 as i32 - 2 as i32 * 27 as i32;
     displayOptionsInfo.graphics.string =
         b"GRAPHICS\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     displayOptionsInfo.graphics.style = 0x2 as i32;
@@ -420,8 +414,7 @@ unsafe extern "C" fn UI_DisplayOptionsMenu_Init() {
     displayOptionsInfo.display.generic.flags = 0x10 as i32 as u32;
     displayOptionsInfo.display.generic.id = 11 as i32;
     displayOptionsInfo.display.generic.callback = Some(
-        UI_DisplayOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_DisplayOptionsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     displayOptionsInfo.display.generic.x = 216 as i32;
     displayOptionsInfo.display.generic.y = 240 as i32 - 27 as i32;
@@ -430,12 +423,10 @@ unsafe extern "C" fn UI_DisplayOptionsMenu_Init() {
     displayOptionsInfo.display.style = 0x2 as i32;
     displayOptionsInfo.display.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     displayOptionsInfo.sound.generic.type_0 = 9 as i32;
-    displayOptionsInfo.sound.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    displayOptionsInfo.sound.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     displayOptionsInfo.sound.generic.id = 12 as i32;
     displayOptionsInfo.sound.generic.callback = Some(
-        UI_DisplayOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_DisplayOptionsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     displayOptionsInfo.sound.generic.x = 216 as i32;
     displayOptionsInfo.sound.generic.y = 240 as i32;
@@ -444,12 +435,10 @@ unsafe extern "C" fn UI_DisplayOptionsMenu_Init() {
     displayOptionsInfo.sound.style = 0x2 as i32;
     displayOptionsInfo.sound.color = crate::src::q3_ui::ui_qmenu::color_red.as_mut_ptr();
     displayOptionsInfo.network.generic.type_0 = 9 as i32;
-    displayOptionsInfo.network.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
+    displayOptionsInfo.network.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
     displayOptionsInfo.network.generic.id = 13 as i32;
     displayOptionsInfo.network.generic.callback = Some(
-        UI_DisplayOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_DisplayOptionsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     displayOptionsInfo.network.generic.x = 216 as i32;
     displayOptionsInfo.network.generic.y = 240 as i32 + 27 as i32;
@@ -461,11 +450,9 @@ unsafe extern "C" fn UI_DisplayOptionsMenu_Init() {
     displayOptionsInfo.brightness.generic.type_0 = 1 as i32;
     displayOptionsInfo.brightness.generic.name =
         b"Brightness:\x00" as *const u8 as *const libc::c_char;
-    displayOptionsInfo.brightness.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    displayOptionsInfo.brightness.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     displayOptionsInfo.brightness.generic.callback = Some(
-        UI_DisplayOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_DisplayOptionsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     displayOptionsInfo.brightness.generic.id = 14 as i32;
     displayOptionsInfo.brightness.generic.x = 400 as i32;
@@ -483,11 +470,9 @@ unsafe extern "C" fn UI_DisplayOptionsMenu_Init() {
     displayOptionsInfo.screensize.generic.type_0 = 1 as i32;
     displayOptionsInfo.screensize.generic.name =
         b"Screen Size:\x00" as *const u8 as *const libc::c_char;
-    displayOptionsInfo.screensize.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    displayOptionsInfo.screensize.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     displayOptionsInfo.screensize.generic.callback = Some(
-        UI_DisplayOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_DisplayOptionsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     displayOptionsInfo.screensize.generic.id = 15 as i32;
     displayOptionsInfo.screensize.generic.x = 400 as i32;
@@ -497,11 +482,9 @@ unsafe extern "C" fn UI_DisplayOptionsMenu_Init() {
     displayOptionsInfo.back.generic.type_0 = 6 as i32;
     displayOptionsInfo.back.generic.name =
         b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    displayOptionsInfo.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
+    displayOptionsInfo.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
     displayOptionsInfo.back.generic.callback = Some(
-        UI_DisplayOptionsMenu_Event
-            as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
+        UI_DisplayOptionsMenu_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
     );
     displayOptionsInfo.back.generic.id = 16 as i32;
     displayOptionsInfo.back.generic.x = 0 as i32;

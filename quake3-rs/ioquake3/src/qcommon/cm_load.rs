@@ -282,8 +282,7 @@ pub unsafe extern "C" fn CMod_LoadSubmodels(mut l: *mut crate::qfiles_h::lump_t)
                 (*out).leaf.numLeafBrushes * 4 as i32,
                 crate::src::qcommon::q_shared::h_high,
             ) as *mut i32;
-            (*out).leaf.firstLeafBrush =
-                indexes.offset_from(cm.leafbrushes) as libc::c_long as i32;
+            (*out).leaf.firstLeafBrush = indexes.offset_from(cm.leafbrushes) as libc::c_long as i32;
             j = 0 as i32;
             while j < (*out).leaf.numLeafBrushes {
                 *indexes.offset(j as isize) = (*in_0).firstBrush + j;
@@ -506,8 +505,7 @@ pub unsafe extern "C" fn CMod_LoadLeafs(mut l: *mut crate::qfiles_h::lump_t) {
     ) as *mut crate::cm_local_h::cArea_t;
     cm.areaPortals = crate::src::qcommon::common::Hunk_Alloc(
         ((cm.numAreas * cm.numAreas) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as i32,
         crate::src::qcommon::q_shared::h_high,
     ) as *mut i32;
 }
@@ -594,8 +592,7 @@ pub unsafe extern "C" fn CMod_LoadLeafBrushes(mut l: *mut crate::qfiles_h::lump_
     let mut in_0: *mut i32 = 0 as *mut i32;
     let mut count: i32 = 0;
     in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut i32;
-    if ((*l).filelen as libc::c_ulong)
-        .wrapping_rem(::std::mem::size_of::<i32>() as libc::c_ulong)
+    if ((*l).filelen as libc::c_ulong).wrapping_rem(::std::mem::size_of::<i32>() as libc::c_ulong)
         != 0
     {
         crate::src::qcommon::common::Com_Error(
@@ -604,12 +601,10 @@ pub unsafe extern "C" fn CMod_LoadLeafBrushes(mut l: *mut crate::qfiles_h::lump_
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong)
-        as i32;
+        .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong) as i32;
     cm.leafbrushes = crate::src::qcommon::common::Hunk_Alloc(
         ((count + 1 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
-            as i32,
+            .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as i32,
         crate::src::qcommon::q_shared::h_high,
     ) as *mut i32;
     cm.numLeafBrushes = count;
@@ -635,8 +630,7 @@ pub unsafe extern "C" fn CMod_LoadLeafSurfaces(mut l: *mut crate::qfiles_h::lump
     let mut in_0: *mut i32 = 0 as *mut i32;
     let mut count: i32 = 0;
     in_0 = cmod_base.offset((*l).fileofs as isize) as *mut libc::c_void as *mut i32;
-    if ((*l).filelen as libc::c_ulong)
-        .wrapping_rem(::std::mem::size_of::<i32>() as libc::c_ulong)
+    if ((*l).filelen as libc::c_ulong).wrapping_rem(::std::mem::size_of::<i32>() as libc::c_ulong)
         != 0
     {
         crate::src::qcommon::common::Com_Error(
@@ -645,11 +639,9 @@ pub unsafe extern "C" fn CMod_LoadLeafSurfaces(mut l: *mut crate::qfiles_h::lump
         );
     }
     count = ((*l).filelen as libc::c_ulong)
-        .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong)
-        as i32;
+        .wrapping_div(::std::mem::size_of::<i32>() as libc::c_ulong) as i32;
     cm.leafsurfaces = crate::src::qcommon::common::Hunk_Alloc(
-        (count as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
-            as i32,
+        (count as libc::c_ulong).wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as i32,
         crate::src::qcommon::q_shared::h_high,
     ) as *mut i32;
     cm.numLeafSurfaces = count;
@@ -826,8 +818,7 @@ pub unsafe extern "C" fn CMod_LoadPatches(
         if !((*in_0).surfaceType != crate::qfiles_h::MST_PATCH as i32) {
             // FIXME: check for non-colliding patches
             patch = crate::src::qcommon::common::Hunk_Alloc(
-                ::std::mem::size_of::<crate::cm_local_h::cPatch_t>() as libc::c_ulong
-                    as i32,
+                ::std::mem::size_of::<crate::cm_local_h::cPatch_t>() as libc::c_ulong as i32,
                 crate::src::qcommon::q_shared::h_high,
             ) as *mut crate::cm_local_h::cPatch_t;
             let ref mut fresh0 = *cm.surfaces.offset(i as isize);
@@ -845,12 +836,9 @@ pub unsafe extern "C" fn CMod_LoadPatches(
             dv_p = dv.offset((*in_0).firstVert as isize);
             j = 0 as i32;
             while j < c {
-                points[j as usize][0 as i32 as usize] =
-                    (*dv_p).xyz[0 as i32 as usize];
-                points[j as usize][1 as i32 as usize] =
-                    (*dv_p).xyz[1 as i32 as usize];
-                points[j as usize][2 as i32 as usize] =
-                    (*dv_p).xyz[2 as i32 as usize];
+                points[j as usize][0 as i32 as usize] = (*dv_p).xyz[0 as i32 as usize];
+                points[j as usize][1 as i32 as usize] = (*dv_p).xyz[1 as i32 as usize];
+                points[j as usize][2 as i32 as usize] = (*dv_p).xyz[2 as i32 as usize];
                 j += 1;
                 dv_p = dv_p.offset(1)
             }
@@ -882,72 +870,28 @@ pub unsafe extern "C" fn CM_LumpChecksum(mut lump: *mut crate::qfiles_h::lump_t)
 
 pub unsafe extern "C" fn CM_Checksum(mut header: *mut crate::qfiles_h::dheader_t) -> u32 {
     let mut checksums: [u32; 16] = [0; 16];
-    checksums[0 as i32 as usize] = CM_LumpChecksum(
-        &mut *(*header)
-            .lumps
-            .as_mut_ptr()
-            .offset(1 as i32 as isize),
-    );
-    checksums[1 as i32 as usize] = CM_LumpChecksum(
-        &mut *(*header)
-            .lumps
-            .as_mut_ptr()
-            .offset(4 as i32 as isize),
-    );
-    checksums[2 as i32 as usize] = CM_LumpChecksum(
-        &mut *(*header)
-            .lumps
-            .as_mut_ptr()
-            .offset(6 as i32 as isize),
-    );
-    checksums[3 as i32 as usize] = CM_LumpChecksum(
-        &mut *(*header)
-            .lumps
-            .as_mut_ptr()
-            .offset(5 as i32 as isize),
-    );
-    checksums[4 as i32 as usize] = CM_LumpChecksum(
-        &mut *(*header)
-            .lumps
-            .as_mut_ptr()
-            .offset(2 as i32 as isize),
-    );
-    checksums[5 as i32 as usize] = CM_LumpChecksum(
-        &mut *(*header)
-            .lumps
-            .as_mut_ptr()
-            .offset(9 as i32 as isize),
-    );
-    checksums[6 as i32 as usize] = CM_LumpChecksum(
-        &mut *(*header)
-            .lumps
-            .as_mut_ptr()
-            .offset(8 as i32 as isize),
-    );
-    checksums[7 as i32 as usize] = CM_LumpChecksum(
-        &mut *(*header)
-            .lumps
-            .as_mut_ptr()
-            .offset(7 as i32 as isize),
-    );
-    checksums[8 as i32 as usize] = CM_LumpChecksum(
-        &mut *(*header)
-            .lumps
-            .as_mut_ptr()
-            .offset(3 as i32 as isize),
-    );
-    checksums[9 as i32 as usize] = CM_LumpChecksum(
-        &mut *(*header)
-            .lumps
-            .as_mut_ptr()
-            .offset(13 as i32 as isize),
-    );
-    checksums[10 as i32 as usize] = CM_LumpChecksum(
-        &mut *(*header)
-            .lumps
-            .as_mut_ptr()
-            .offset(10 as i32 as isize),
-    );
+    checksums[0 as i32 as usize] =
+        CM_LumpChecksum(&mut *(*header).lumps.as_mut_ptr().offset(1 as i32 as isize));
+    checksums[1 as i32 as usize] =
+        CM_LumpChecksum(&mut *(*header).lumps.as_mut_ptr().offset(4 as i32 as isize));
+    checksums[2 as i32 as usize] =
+        CM_LumpChecksum(&mut *(*header).lumps.as_mut_ptr().offset(6 as i32 as isize));
+    checksums[3 as i32 as usize] =
+        CM_LumpChecksum(&mut *(*header).lumps.as_mut_ptr().offset(5 as i32 as isize));
+    checksums[4 as i32 as usize] =
+        CM_LumpChecksum(&mut *(*header).lumps.as_mut_ptr().offset(2 as i32 as isize));
+    checksums[5 as i32 as usize] =
+        CM_LumpChecksum(&mut *(*header).lumps.as_mut_ptr().offset(9 as i32 as isize));
+    checksums[6 as i32 as usize] =
+        CM_LumpChecksum(&mut *(*header).lumps.as_mut_ptr().offset(8 as i32 as isize));
+    checksums[7 as i32 as usize] =
+        CM_LumpChecksum(&mut *(*header).lumps.as_mut_ptr().offset(7 as i32 as isize));
+    checksums[8 as i32 as usize] =
+        CM_LumpChecksum(&mut *(*header).lumps.as_mut_ptr().offset(3 as i32 as isize));
+    checksums[9 as i32 as usize] =
+        CM_LumpChecksum(&mut *(*header).lumps.as_mut_ptr().offset(13 as i32 as isize));
+    checksums[10 as i32 as usize] =
+        CM_LumpChecksum(&mut *(*header).lumps.as_mut_ptr().offset(10 as i32 as isize));
     return crate::src::qcommon::md4::Com_BlockChecksum(
         checksums.as_mut_ptr() as *const libc::c_void,
         11 as i32 * 4 as i32,
@@ -967,9 +911,7 @@ pub unsafe extern "C" fn CM_LoadMap(
     mut clientload: crate::src::qcommon::q_shared::qboolean,
     mut checksum: *mut i32,
 ) {
-    let mut buf: C2RustUnnamed_111 = C2RustUnnamed_111 {
-        i: 0 as *mut i32,
-    };
+    let mut buf: C2RustUnnamed_111 = C2RustUnnamed_111 { i: 0 as *mut i32 };
     let mut i: i32 = 0;
     let mut header: crate::qfiles_h::dheader_t = crate::qfiles_h::dheader_t {
         ident: 0,
@@ -1050,8 +992,7 @@ pub unsafe extern "C" fn CM_LoadMap(
             .wrapping_div(4 as i32 as libc::c_ulong)
     {
         *(&mut header as *mut crate::qfiles_h::dheader_t as *mut i32).offset(i as isize) =
-            *(&mut header as *mut crate::qfiles_h::dheader_t as *mut i32)
-                .offset(i as isize);
+            *(&mut header as *mut crate::qfiles_h::dheader_t as *mut i32).offset(i as isize);
         i += 1
     }
     if header.version != 46 as i32 {
@@ -1293,23 +1234,18 @@ pub unsafe extern "C" fn CM_InitBoxHull() {
             as *mut crate::src::qcommon::q_shared::cplane_t;
         (*p).type_0 = (i >> 1 as i32) as crate::src::qcommon::q_shared::byte;
         (*p).signbits = 0 as i32 as crate::src::qcommon::q_shared::byte;
-        (*p).normal[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*p).normal[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         (*p).normal[1 as i32 as usize] = (*p).normal[2 as i32 as usize];
         (*p).normal[0 as i32 as usize] = (*p).normal[1 as i32 as usize];
-        (*p).normal[(i >> 1 as i32) as usize] =
-            1 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*p).normal[(i >> 1 as i32) as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
         p = &mut *box_planes.offset((i * 2 as i32 + 1 as i32) as isize)
             as *mut crate::src::qcommon::q_shared::cplane_t;
-        (*p).type_0 =
-            (3 as i32 + (i >> 1 as i32)) as crate::src::qcommon::q_shared::byte;
+        (*p).type_0 = (3 as i32 + (i >> 1 as i32)) as crate::src::qcommon::q_shared::byte;
         (*p).signbits = 0 as i32 as crate::src::qcommon::q_shared::byte;
-        (*p).normal[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*p).normal[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         (*p).normal[1 as i32 as usize] = (*p).normal[2 as i32 as usize];
         (*p).normal[0 as i32 as usize] = (*p).normal[1 as i32 as usize];
-        (*p).normal[(i >> 1 as i32) as usize] =
-            -(1 as i32) as crate::src::qcommon::q_shared::vec_t;
+        (*p).normal[(i >> 1 as i32) as usize] = -(1 as i32) as crate::src::qcommon::q_shared::vec_t;
         crate::src::qcommon::q_math::SetPlaneSignbits(
             p as *mut crate::src::qcommon::q_shared::cplane_s,
         );
@@ -1352,20 +1288,13 @@ pub unsafe extern "C" fn CM_TempBoxModel(
     (*box_planes.offset(8 as i32 as isize)).dist = *maxs.offset(2 as i32 as isize);
     (*box_planes.offset(9 as i32 as isize)).dist = -*maxs.offset(2 as i32 as isize);
     (*box_planes.offset(10 as i32 as isize)).dist = *mins.offset(2 as i32 as isize);
-    (*box_planes.offset(11 as i32 as isize)).dist =
-        -*mins.offset(2 as i32 as isize);
-    (*box_brush).bounds[0 as i32 as usize][0 as i32 as usize] =
-        *mins.offset(0 as i32 as isize);
-    (*box_brush).bounds[0 as i32 as usize][1 as i32 as usize] =
-        *mins.offset(1 as i32 as isize);
-    (*box_brush).bounds[0 as i32 as usize][2 as i32 as usize] =
-        *mins.offset(2 as i32 as isize);
-    (*box_brush).bounds[1 as i32 as usize][0 as i32 as usize] =
-        *maxs.offset(0 as i32 as isize);
-    (*box_brush).bounds[1 as i32 as usize][1 as i32 as usize] =
-        *maxs.offset(1 as i32 as isize);
-    (*box_brush).bounds[1 as i32 as usize][2 as i32 as usize] =
-        *maxs.offset(2 as i32 as isize);
+    (*box_planes.offset(11 as i32 as isize)).dist = -*mins.offset(2 as i32 as isize);
+    (*box_brush).bounds[0 as i32 as usize][0 as i32 as usize] = *mins.offset(0 as i32 as isize);
+    (*box_brush).bounds[0 as i32 as usize][1 as i32 as usize] = *mins.offset(1 as i32 as isize);
+    (*box_brush).bounds[0 as i32 as usize][2 as i32 as usize] = *mins.offset(2 as i32 as isize);
+    (*box_brush).bounds[1 as i32 as usize][0 as i32 as usize] = *maxs.offset(0 as i32 as isize);
+    (*box_brush).bounds[1 as i32 as usize][1 as i32 as usize] = *maxs.offset(1 as i32 as isize);
+    (*box_brush).bounds[1 as i32 as usize][2 as i32 as usize] = *maxs.offset(2 as i32 as isize);
     return 255 as i32;
 }
 /*

@@ -134,9 +134,7 @@ pub type directive_t = directive_s;
 #[derive(Copy, Clone)]
 pub struct directive_s {
     pub name: *mut libc::c_char,
-    pub func: Option<
-        unsafe extern "C" fn(_: *mut crate::src::botlib::l_precomp::source_t) -> i32,
-    >,
+    pub func: Option<unsafe extern "C" fn(_: *mut crate::src::botlib::l_precomp::source_t) -> i32>,
 }
 
 #[repr(C)]
@@ -644,9 +642,7 @@ pub unsafe extern "C" fn PC_ReadDefineParms(
                     if indent <= 0 as i32 {
                         //end if
                         //end if
-                        if (*parms.offset(((*define).numparms - 1 as i32) as isize))
-                            .is_null()
-                        {
+                        if (*parms.offset(((*define).numparms - 1 as i32) as isize)).is_null() {
                             SourceWarning(
                                 source,
                                 b"too few define parms\x00" as *const u8 as *const libc::c_char
@@ -733,9 +729,7 @@ pub unsafe extern "C" fn PC_MergeTokens(
     mut t2: *mut crate::src::botlib::l_script::token_t,
 ) -> i32 {
     //merging of a name with a name or number
-    if (*t1).type_0 == 4 as i32
-        && ((*t2).type_0 == 4 as i32 || (*t2).type_0 == 3 as i32)
-    {
+    if (*t1).type_0 == 4 as i32 && ((*t2).type_0 == 4 as i32 || (*t2).type_0 == 3 as i32) {
         ::libc::strcat((*t1).string.as_mut_ptr(), (*t2).string.as_mut_ptr()); //end if
         return crate::src::qcommon::q_shared::qtrue as i32;
     }
@@ -744,8 +738,7 @@ pub unsafe extern "C" fn PC_MergeTokens(
         //end if
         //remove trailing double quote
         (*t1).string[crate::stdlib::strlen((*t1).string.as_mut_ptr())
-            .wrapping_sub(1 as i32 as libc::c_ulong) as usize] =
-            '\u{0}' as i32 as libc::c_char;
+            .wrapping_sub(1 as i32 as libc::c_ulong) as usize] = '\u{0}' as i32 as libc::c_char;
         //concat without leading double quote
         ::libc::strcat(
             (*t1).string.as_mut_ptr(),
@@ -830,8 +823,7 @@ pub unsafe extern "C" fn PC_NameHash(mut name: *mut libc::c_char) -> i32 {
         //hash += (name[i] << 7) + i;
         //hash += (name[i] << (i&15));
     }
-    hash = (hash ^ hash >> 10 as i32 ^ hash >> 20 as i32)
-        & 1024 as i32 - 1 as i32;
+    hash = (hash ^ hash >> 10 as i32 ^ hash >> 20 as i32) & 1024 as i32 - 1 as i32;
     return hash;
 }
 //end of the function PC_NameHash
@@ -1101,10 +1093,7 @@ pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
                 7 as i32 as libc::c_ulong,
             );
             crate::stdlib::strncat(
-                (*token)
-                    .string
-                    .as_mut_ptr()
-                    .offset(7 as i32 as isize),
+                (*token).string.as_mut_ptr().offset(7 as i32 as isize),
                 curtime.offset(20 as i32 as isize),
                 4 as i32 as libc::c_ulong,
             );
@@ -1607,9 +1596,7 @@ pub unsafe extern "C" fn PC_Directive_include(
                 as *mut crate::src::botlib::l_script::script_s
         }
     //end if
-    } else if token.type_0 == 5 as i32
-        && *token.string.as_mut_ptr() as i32 == '<' as i32
-    {
+    } else if token.type_0 == 5 as i32 && *token.string.as_mut_ptr() as i32 == '<' as i32 {
         crate::src::qcommon::q_shared::Q_strncpyz(
             path.as_mut_ptr(),
             (*source).includepath.as_mut_ptr(),
@@ -1621,9 +1608,7 @@ pub unsafe extern "C" fn PC_Directive_include(
                 PC_UnreadSourceToken(source, &mut token); //end if
                 break; //end if
             } else {
-                if token.type_0 == 5 as i32
-                    && *token.string.as_mut_ptr() as i32 == '>' as i32
-                {
+                if token.type_0 == 5 as i32 && *token.string.as_mut_ptr() as i32 == '>' as i32 {
                     break; //end if
                 }
                 crate::src::qcommon::q_shared::Q_strcat(
@@ -1667,7 +1652,7 @@ pub unsafe extern "C" fn PC_Directive_include(
             path.as_mut_ptr(),
         );
         return crate::src::qcommon::q_shared::qfalse as i32; //end if
-                                                                     //SCREWUP
+                                                             //SCREWUP
     }
     PC_PushScript(source, script);
     return crate::src::qcommon::q_shared::qtrue as i32;
@@ -1905,8 +1890,7 @@ pub unsafe extern "C" fn PC_Directive_define(
         ::std::mem::size_of::<crate::src::botlib::l_precomp::define_t>() as libc::c_ulong,
     );
     (*define).name = crate::src::botlib::l_memory::GetMemory(
-        crate::stdlib::strlen(token.string.as_mut_ptr())
-            .wrapping_add(1 as i32 as libc::c_ulong),
+        crate::stdlib::strlen(token.string.as_mut_ptr()).wrapping_add(1 as i32 as libc::c_ulong),
     ) as *mut libc::c_char;
     ::libc::strcpy((*define).name, token.string.as_mut_ptr());
     //add the define to the source
@@ -2012,8 +1996,7 @@ pub unsafe extern "C" fn PC_Directive_define(
     last = 0 as *mut crate::src::botlib::l_script::token_t; //end if
     loop {
         t = PC_CopyToken(&mut token);
-        if (*t).type_0 == 4 as i32
-            && ::libc::strcmp((*t).string.as_mut_ptr(), (*define).name) == 0
+        if (*t).type_0 == 4 as i32 && ::libc::strcmp((*t).string.as_mut_ptr(), (*define).name) == 0
         {
             SourceError(
                 source,
@@ -2120,11 +2103,10 @@ pub unsafe extern "C" fn PC_DefineFromString(
         ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
     );
     src.scriptstack = script;
-    src.definehash = crate::src::botlib::l_memory::GetClearedMemory(
-        (1024 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            *mut crate::src::botlib::l_precomp::define_t,
-        >() as libc::c_ulong),
-    ) as *mut *mut crate::src::botlib::l_precomp::define_t;
+    src.definehash =
+        crate::src::botlib::l_memory::GetClearedMemory((1024 as i32 as libc::c_ulong).wrapping_mul(
+            ::std::mem::size_of::<*mut crate::src::botlib::l_precomp::define_t>() as libc::c_ulong,
+        )) as *mut *mut crate::src::botlib::l_precomp::define_t;
     //DEFINEHASHING
     //create a define from the source
     res = PC_Directive_define(&mut src);
@@ -2394,8 +2376,8 @@ pub unsafe extern "C" fn PC_Directive_if_def(
     d = PC_FindHashedDefine((*source).definehash, token.string.as_mut_ptr());
     //DEFINEHASHING
     skip = ((type_0 == 0x8 as i32) as i32
-        == (d == 0 as *mut libc::c_void as *mut crate::src::botlib::l_precomp::define_t)
-            as i32) as i32;
+        == (d == 0 as *mut libc::c_void as *mut crate::src::botlib::l_precomp::define_t) as i32)
+        as i32;
     PC_PushIndent(source, type_0, skip);
     return crate::src::qcommon::q_shared::qtrue as i32;
 }
@@ -2997,44 +2979,36 @@ pub unsafe extern "C" fn PC_EvaluateTokens(
             5 => {
                 (*v1).intvalue =
                     ((*v1).intvalue != 0 && (*v2).intvalue != 0) as i32 as libc::c_long;
-                (*v1).floatvalue = ((*v1).floatvalue != 0. && (*v2).floatvalue != 0.) as i32
-                    as f32
+                (*v1).floatvalue = ((*v1).floatvalue != 0. && (*v2).floatvalue != 0.) as i32 as f32
             }
             6 => {
                 (*v1).intvalue =
                     ((*v1).intvalue != 0 || (*v2).intvalue != 0) as i32 as libc::c_long;
-                (*v1).floatvalue = ((*v1).floatvalue != 0. || (*v2).floatvalue != 0.) as i32
-                    as f32
+                (*v1).floatvalue = ((*v1).floatvalue != 0. || (*v2).floatvalue != 0.) as i32 as f32
             }
             7 => {
                 (*v1).intvalue = ((*v1).intvalue >= (*v2).intvalue) as i32 as libc::c_long;
-                (*v1).floatvalue =
-                    ((*v1).floatvalue >= (*v2).floatvalue) as i32 as f32
+                (*v1).floatvalue = ((*v1).floatvalue >= (*v2).floatvalue) as i32 as f32
             }
             8 => {
                 (*v1).intvalue = ((*v1).intvalue <= (*v2).intvalue) as i32 as libc::c_long;
-                (*v1).floatvalue =
-                    ((*v1).floatvalue <= (*v2).floatvalue) as i32 as f32
+                (*v1).floatvalue = ((*v1).floatvalue <= (*v2).floatvalue) as i32 as f32
             }
             9 => {
                 (*v1).intvalue = ((*v1).intvalue == (*v2).intvalue) as i32 as libc::c_long;
-                (*v1).floatvalue =
-                    ((*v1).floatvalue == (*v2).floatvalue) as i32 as f32
+                (*v1).floatvalue = ((*v1).floatvalue == (*v2).floatvalue) as i32 as f32
             }
             10 => {
                 (*v1).intvalue = ((*v1).intvalue != (*v2).intvalue) as i32 as libc::c_long;
-                (*v1).floatvalue =
-                    ((*v1).floatvalue != (*v2).floatvalue) as i32 as f32
+                (*v1).floatvalue = ((*v1).floatvalue != (*v2).floatvalue) as i32 as f32
             }
             37 => {
                 (*v1).intvalue = ((*v1).intvalue > (*v2).intvalue) as i32 as libc::c_long;
-                (*v1).floatvalue =
-                    ((*v1).floatvalue > (*v2).floatvalue) as i32 as f32
+                (*v1).floatvalue = ((*v1).floatvalue > (*v2).floatvalue) as i32 as f32
             }
             38 => {
                 (*v1).intvalue = ((*v1).intvalue < (*v2).intvalue) as i32 as libc::c_long;
-                (*v1).floatvalue =
-                    ((*v1).floatvalue < (*v2).floatvalue) as i32 as f32
+                (*v1).floatvalue = ((*v1).floatvalue < (*v2).floatvalue) as i32 as f32
             }
             21 => (*v1).intvalue >>= (*v2).intvalue,
             22 => (*v1).intvalue <<= (*v2).intvalue,
@@ -4295,9 +4269,7 @@ pub unsafe extern "C" fn PC_ReadToken(
             return crate::src::qcommon::q_shared::qfalse as i32;
         }
         //check for precompiler directives
-        if (*token).type_0 == 5 as i32
-            && *(*token).string.as_mut_ptr() as i32 == '#' as i32
-        {
+        if (*token).type_0 == 5 as i32 && *(*token).string.as_mut_ptr() as i32 == '#' as i32 {
             //end if
             //QUAKC
             //read the precompiler directive
@@ -4305,8 +4277,7 @@ pub unsafe extern "C" fn PC_ReadToken(
                 return crate::src::qcommon::q_shared::qfalse as i32;
             }
         //end if
-        } else if (*token).type_0 == 5 as i32
-            && *(*token).string.as_mut_ptr() as i32 == '$' as i32
+        } else if (*token).type_0 == 5 as i32 && *(*token).string.as_mut_ptr() as i32 == '$' as i32
         {
             //end if
             //QUAKEC
@@ -4338,10 +4309,7 @@ pub unsafe extern "C" fn PC_ReadToken(
                             as usize] = '\u{0}' as i32 as libc::c_char;
                         if crate::stdlib::strlen((*token).string.as_mut_ptr())
                             .wrapping_add(crate::stdlib::strlen(
-                                newtoken
-                                    .string
-                                    .as_mut_ptr()
-                                    .offset(1 as i32 as isize),
+                                newtoken.string.as_mut_ptr().offset(1 as i32 as isize),
                             ))
                             .wrapping_add(1 as i32 as libc::c_ulong)
                             >= 1024 as i32 as libc::c_ulong
@@ -4357,10 +4325,7 @@ pub unsafe extern "C" fn PC_ReadToken(
                         }
                         ::libc::strcat(
                             (*token).string.as_mut_ptr(),
-                            newtoken
-                                .string
-                                .as_mut_ptr()
-                                .offset(1 as i32 as isize),
+                            newtoken.string.as_mut_ptr().offset(1 as i32 as isize),
                         );
                     } else {
                         PC_UnreadToken(source, &mut newtoken);
@@ -4786,11 +4751,9 @@ pub unsafe extern "C" fn PC_SetIncludePath(
     len = crate::stdlib::strlen((*source).includepath.as_mut_ptr());
     //add trailing path seperator
     if len > 0 as i32 as libc::c_ulong
-        && (*source).includepath[len.wrapping_sub(1 as i32 as libc::c_ulong) as usize]
-            as i32
+        && (*source).includepath[len.wrapping_sub(1 as i32 as libc::c_ulong) as usize] as i32
             != '\\' as i32
-        && (*source).includepath[len.wrapping_sub(1 as i32 as libc::c_ulong) as usize]
-            as i32
+        && (*source).includepath[len.wrapping_sub(1 as i32 as libc::c_ulong) as usize] as i32
             != '/' as i32
     {
         ::libc::strcat(
@@ -4858,11 +4821,10 @@ pub unsafe extern "C" fn LoadSourceFile(
     (*source).defines = 0 as *mut crate::src::botlib::l_precomp::define_t;
     (*source).indentstack = 0 as *mut crate::src::botlib::l_precomp::indent_t;
     (*source).skip = 0 as i32;
-    (*source).definehash = crate::src::botlib::l_memory::GetClearedMemory(
-        (1024 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            *mut crate::src::botlib::l_precomp::define_t,
-        >() as libc::c_ulong),
-    ) as *mut *mut crate::src::botlib::l_precomp::define_t;
+    (*source).definehash =
+        crate::src::botlib::l_memory::GetClearedMemory((1024 as i32 as libc::c_ulong).wrapping_mul(
+            ::std::mem::size_of::<*mut crate::src::botlib::l_precomp::define_t>() as libc::c_ulong,
+        )) as *mut *mut crate::src::botlib::l_precomp::define_t;
     //DEFINEHASHING
     PC_AddGlobalDefinesToSource(source);
     return source;
@@ -4911,11 +4873,10 @@ pub unsafe extern "C" fn LoadSourceMemory(
     (*source).defines = 0 as *mut crate::src::botlib::l_precomp::define_t;
     (*source).indentstack = 0 as *mut crate::src::botlib::l_precomp::indent_t;
     (*source).skip = 0 as i32;
-    (*source).definehash = crate::src::botlib::l_memory::GetClearedMemory(
-        (1024 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
-            *mut crate::src::botlib::l_precomp::define_t,
-        >() as libc::c_ulong),
-    ) as *mut *mut crate::src::botlib::l_precomp::define_t;
+    (*source).definehash =
+        crate::src::botlib::l_memory::GetClearedMemory((1024 as i32 as libc::c_ulong).wrapping_mul(
+            ::std::mem::size_of::<*mut crate::src::botlib::l_precomp::define_t>() as libc::c_ulong,
+        )) as *mut *mut crate::src::botlib::l_precomp::define_t;
     //DEFINEHASHING
     PC_AddGlobalDefinesToSource(source);
     return source;

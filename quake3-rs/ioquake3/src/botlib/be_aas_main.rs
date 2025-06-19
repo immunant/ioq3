@@ -436,18 +436,12 @@ pub unsafe extern "C" fn AAS_ProjectPointOntoVector(
 ) {
     let mut pVec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut vec: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-    pVec[0 as i32 as usize] =
-        *point.offset(0 as i32 as isize) - *vStart.offset(0 as i32 as isize);
-    pVec[1 as i32 as usize] =
-        *point.offset(1 as i32 as isize) - *vStart.offset(1 as i32 as isize);
-    pVec[2 as i32 as usize] =
-        *point.offset(2 as i32 as isize) - *vStart.offset(2 as i32 as isize);
-    vec[0 as i32 as usize] =
-        *vEnd.offset(0 as i32 as isize) - *vStart.offset(0 as i32 as isize);
-    vec[1 as i32 as usize] =
-        *vEnd.offset(1 as i32 as isize) - *vStart.offset(1 as i32 as isize);
-    vec[2 as i32 as usize] =
-        *vEnd.offset(2 as i32 as isize) - *vStart.offset(2 as i32 as isize);
+    pVec[0 as i32 as usize] = *point.offset(0 as i32 as isize) - *vStart.offset(0 as i32 as isize);
+    pVec[1 as i32 as usize] = *point.offset(1 as i32 as isize) - *vStart.offset(1 as i32 as isize);
+    pVec[2 as i32 as usize] = *point.offset(2 as i32 as isize) - *vStart.offset(2 as i32 as isize);
+    vec[0 as i32 as usize] = *vEnd.offset(0 as i32 as isize) - *vStart.offset(0 as i32 as isize);
+    vec[1 as i32 as usize] = *vEnd.offset(1 as i32 as isize) - *vStart.offset(1 as i32 as isize);
+    vec[2 as i32 as usize] = *vEnd.offset(2 as i32 as isize) - *vStart.offset(2 as i32 as isize);
     crate::src::qcommon::q_math::VectorNormalize(vec.as_mut_ptr());
     // project onto the directional vector for this segment
     *vProj.offset(0 as i32 as isize) = *vStart.offset(0 as i32 as isize)

@@ -204,8 +204,7 @@ unsafe extern "C" fn WRITE_STRING(mut s: *const libc::c_char) {
         s as *const libc::c_void,
         crate::stdlib::strlen(s),
     );
-    bufIndex = (bufIndex as libc::c_ulong).wrapping_add(crate::stdlib::strlen(s)) as i32
-        as i32;
+    bufIndex = (bufIndex as libc::c_ulong).wrapping_add(crate::stdlib::strlen(s)) as i32 as i32;
 }
 /*
 ===============
@@ -278,8 +277,7 @@ unsafe extern "C" fn END_CHUNK() {
     bufIndex += 4 as i32;
     WRITE_4BYTES(endIndex - bufIndex - 4 as i32);
     bufIndex = endIndex;
-    bufIndex =
-        bufIndex + 2 as i32 - 1 as i32 & !(2 as i32 - 1 as i32);
+    bufIndex = bufIndex + 2 as i32 - 1 as i32 & !(2 as i32 - 1 as i32);
 }
 /*
 ===============
@@ -356,7 +354,7 @@ pub unsafe extern "C" fn CL_WriteAVIHeader() {
     } else {
         WRITE_4BYTES(0 as i32);
         WRITE_4BYTES(afd.width * afd.height * 3 as i32); // BI_RGB
-                                                                 //biSizeImage
+                                                         //biSizeImage
     } //biXPelsPetMeter
     WRITE_4BYTES(0 as i32); //biYPelsPetMeter
     WRITE_4BYTES(0 as i32); //biClrUsed
@@ -441,11 +439,7 @@ pub unsafe extern "C" fn CL_OpenAVIForWriting(
         crate::src::qcommon::files::FS_FCloseFile(afd.f);
         return crate::src::qcommon::q_shared::qfalse;
     }
-    crate::src::qcommon::q_shared::Q_strncpyz(
-        afd.fileName.as_mut_ptr(),
-        fileName,
-        64 as i32,
-    );
+    crate::src::qcommon::q_shared::Q_strncpyz(afd.fileName.as_mut_ptr(), fileName, 64 as i32);
     afd.frameRate = (*crate::src::client::cl_main::cl_aviFrameRate).integer;
     afd.framePeriod = (1000000.0f32 / afd.frameRate as f32) as i32;
     afd.width = crate::src::client::cl_main::cls.glconfig.vidWidth;
@@ -459,15 +453,11 @@ pub unsafe extern "C" fn CL_OpenAVIForWriting(
     // Allocate a bit more space for the capture buffer to account for possible
     // padding at the end of pixel lines, and padding for alignment
     afd.cBuffer = crate::src::qcommon::common::Z_Malloc(
-        (afd.width * 3 as i32 + 16 as i32 - 1 as i32) * afd.height
-            + 16 as i32
-            - 1 as i32,
+        (afd.width * 3 as i32 + 16 as i32 - 1 as i32) * afd.height + 16 as i32 - 1 as i32,
     ) as *mut crate::src::qcommon::q_shared::byte;
     // raw avi files have pixel lines start on 4-byte boundaries
     afd.eBuffer = crate::src::qcommon::common::Z_Malloc(
-        (afd.width * 3 as i32 + 4 as i32 - 1 as i32
-            & !(4 as i32 - 1 as i32))
-            * afd.height,
+        (afd.width * 3 as i32 + 4 as i32 - 1 as i32 & !(4 as i32 - 1 as i32)) * afd.height,
     ) as *mut crate::src::qcommon::q_shared::byte;
     afd.a.rate = crate::src::client::snd_dma::dma.speed;
     afd.a.format = 1 as i32;
@@ -542,9 +532,7 @@ unsafe extern "C" fn CL_CheckFileSize(
     mut bytesToAdd: i32,
 ) -> crate::src::qcommon::q_shared::qboolean {
     let mut newFileSize: u32 = 0; // The index size
-    newFileSize =
-        (afd.fileSize + bytesToAdd + afd.numIndices * 16 as i32 + 4 as i32)
-            as u32;
+    newFileSize = (afd.fileSize + bytesToAdd + afd.numIndices * 16 as i32 + 4 as i32) as u32;
     // I assume all the operating systems
     // we target can handle a 2Gb file
     if newFileSize > 2147483647 as i32 as u32 {
@@ -572,15 +560,9 @@ pub unsafe extern "C" fn CL_WriteAVIVideoFrame(
 ) {
     let mut chunkOffset: i32 = afd.fileSize - afd.moviOffset - 8 as i32;
     let mut chunkSize: i32 = 8 as i32 + size;
-    let mut paddingSize: i32 = (size + 2 as i32 - 1 as i32
-        & !(2 as i32 - 1 as i32))
-        - size;
-    let mut padding: [crate::src::qcommon::q_shared::byte; 4] = [
-        0 as i32 as crate::src::qcommon::q_shared::byte,
-        0,
-        0,
-        0,
-    ];
+    let mut paddingSize: i32 = (size + 2 as i32 - 1 as i32 & !(2 as i32 - 1 as i32)) - size;
+    let mut padding: [crate::src::qcommon::q_shared::byte; 4] =
+        [0 as i32 as crate::src::qcommon::q_shared::byte, 0, 0, 0];
     if afd.fileOpen as u64 == 0 {
         return;
     }
@@ -591,11 +573,7 @@ pub unsafe extern "C" fn CL_WriteAVIVideoFrame(
     bufIndex = 0 as i32;
     WRITE_STRING(b"00dc\x00" as *const u8 as *const libc::c_char);
     WRITE_4BYTES(size);
-    SafeFS_Write(
-        buffer.as_mut_ptr() as *const libc::c_void,
-        8 as i32,
-        afd.f,
-    );
+    SafeFS_Write(buffer.as_mut_ptr() as *const libc::c_void, 8 as i32, afd.f);
     SafeFS_Write(imageBuffer as *const libc::c_void, size, afd.f);
     SafeFS_Write(
         padding.as_mut_ptr() as *const libc::c_void,
@@ -44761,30 +44739,19 @@ pub unsafe extern "C" fn CL_WriteAVIAudioFrame(
     bytesInBuffer += size;
     // Only write if we have a frame's worth of audio
     if bytesInBuffer
-        >= crate::stdlib::ceil(
-            (afd.a.rate as f32 / afd.frameRate as f32) as f64,
-        ) as i32
+        >= crate::stdlib::ceil((afd.a.rate as f32 / afd.frameRate as f32) as f64) as i32
             * afd.a.sampleSize
     {
         let mut chunkOffset: i32 = afd.fileSize - afd.moviOffset - 8 as i32;
         let mut chunkSize: i32 = 8 as i32 + bytesInBuffer;
-        let mut paddingSize: i32 = (bytesInBuffer + 2 as i32 - 1 as i32
-            & !(2 as i32 - 1 as i32))
-            - bytesInBuffer;
-        let mut padding: [crate::src::qcommon::q_shared::byte; 4] = [
-            0 as i32 as crate::src::qcommon::q_shared::byte,
-            0,
-            0,
-            0,
-        ];
+        let mut paddingSize: i32 =
+            (bytesInBuffer + 2 as i32 - 1 as i32 & !(2 as i32 - 1 as i32)) - bytesInBuffer;
+        let mut padding: [crate::src::qcommon::q_shared::byte; 4] =
+            [0 as i32 as crate::src::qcommon::q_shared::byte, 0, 0, 0];
         bufIndex = 0 as i32;
         WRITE_STRING(b"01wb\x00" as *const u8 as *const libc::c_char);
         WRITE_4BYTES(bytesInBuffer);
-        SafeFS_Write(
-            buffer.as_mut_ptr() as *const libc::c_void,
-            8 as i32,
-            afd.f,
-        );
+        SafeFS_Write(buffer.as_mut_ptr() as *const libc::c_void, 8 as i32, afd.f);
         SafeFS_Write(
             pcmCaptureBuffer.as_mut_ptr() as *const libc::c_void,
             bytesInBuffer,

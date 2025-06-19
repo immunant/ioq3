@@ -10,8 +10,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
     #[inline]
@@ -21,12 +20,9 @@ pub mod q_shared_h {
         mut p2: *const crate::src::qcommon::q_shared::vec_t,
     ) -> crate::src::qcommon::q_shared::vec_t {
         let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        v[0 as i32 as usize] =
-            *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
-        v[1 as i32 as usize] =
-            *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
-        v[2 as i32 as usize] =
-            *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
+        v[0 as i32 as usize] = *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
+        v[1 as i32 as usize] = *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
+        v[2 as i32 as usize] = *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
         return VectorLength(v.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
     }
     #[inline]
@@ -36,12 +32,9 @@ pub mod q_shared_h {
         mut p2: *const crate::src::qcommon::q_shared::vec_t,
     ) -> crate::src::qcommon::q_shared::vec_t {
         let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        v[0 as i32 as usize] =
-            *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
-        v[1 as i32 as usize] =
-            *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
-        v[2 as i32 as usize] =
-            *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
+        v[0 as i32 as usize] = *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
+        v[1 as i32 as usize] = *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
+        v[2 as i32 as usize] = *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
         return v[0 as i32 as usize] * v[0 as i32 as usize]
             + v[1 as i32 as usize] * v[1 as i32 as usize]
             + v[2 as i32 as usize] * v[2 as i32 as usize];
@@ -342,10 +335,7 @@ S_AL_Format
 =================
 */
 
-unsafe extern "C" fn S_AL_Format(
-    mut width: i32,
-    mut channels: i32,
-) -> crate::al_h::ALuint {
+unsafe extern "C" fn S_AL_Format(mut width: i32, mut channels: i32) -> crate::al_h::ALuint {
     let mut format: crate::al_h::ALuint = 0x1101 as i32 as crate::al_h::ALuint;
     // Work out format
     if width == 1 as i32 {
@@ -387,8 +377,7 @@ S_AL_ClearError
 */
 
 unsafe extern "C" fn S_AL_ClearError(mut quiet: crate::src::qcommon::q_shared::qboolean) {
-    let mut error: i32 =
-        crate::src::client::qal::qalGetError.expect("non-null function pointer")();
+    let mut error: i32 = crate::src::client::qal::qalGetError.expect("non-null function pointer")();
     if quiet as u64 != 0 {
         return;
     }
@@ -440,8 +429,7 @@ unsafe extern "C" fn S_AL_BufferFindFree() -> crate::src::qcommon::q_shared::sfx
     i = 0 as i32;
     while i < 4096 as i32 {
         // Got one
-        if knownSfx[i as usize].filename[0 as i32 as usize] as i32 == '\u{0}' as i32
-        {
+        if knownSfx[i as usize].filename[0 as i32 as usize] as i32 == '\u{0}' as i32 {
             if i >= numSfx {
                 numSfx = i + 1 as i32
             }
@@ -566,9 +554,7 @@ unsafe extern "C" fn S_AL_BufferUnload(mut sfx: crate::src::qcommon::q_shared::s
         1 as i32,
         &mut (*knownSfx.as_mut_ptr().offset(sfx as isize)).buffer,
     );
-    if crate::src::client::qal::qalGetError.expect("non-null function pointer")()
-        != 0 as i32
-    {
+    if crate::src::client::qal::qalGetError.expect("non-null function pointer")() != 0 as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"^1ERROR: Can\'t delete sound buffer for %s\n\x00" as *const u8 as *const libc::c_char,
             knownSfx[sfx as usize].filename.as_mut_ptr(),
@@ -1074,9 +1060,7 @@ unsafe extern "C" fn S_AL_SrcInit() -> crate::src::qcommon::q_shared::qboolean {
             1 as i32,
             &mut (*srcList.as_mut_ptr().offset(i as isize)).alSource,
         );
-        if crate::src::client::qal::qalGetError.expect("non-null function pointer")()
-            != 0 as i32
-        {
+        if crate::src::client::qal::qalGetError.expect("non-null function pointer")() != 0 as i32 {
             break;
         }
         srcCount += 1;
@@ -1275,9 +1259,7 @@ unsafe extern "C" fn S_AL_NewLoopMaster(
         (*curSfx).loopCnt -= 1
     }
     if (*curSfx).loopCnt != 0 {
-        if (*rmSource).priority as u32
-            == crate::snd_local_h::SRCPRI_ENTITY as i32 as u32
-        {
+        if (*rmSource).priority as u32 == crate::snd_local_h::SRCPRI_ENTITY as i32 as u32 {
             if iskilled as u64 == 0 && (*rmSource).isPlaying as u32 != 0 {
                 // only sync ambient loops...
                 // It makes more sense to have sounds for weapons/projectiles unsynced
@@ -1522,12 +1504,9 @@ unsafe extern "C" fn S_AL_UpdateEntityPosition(
             entityNum,
         );
     }
-    entityList[entityNum as usize].origin[0 as i32 as usize] =
-        sanOrigin[0 as i32 as usize];
-    entityList[entityNum as usize].origin[1 as i32 as usize] =
-        sanOrigin[1 as i32 as usize];
-    entityList[entityNum as usize].origin[2 as i32 as usize] =
-        sanOrigin[2 as i32 as usize];
+    entityList[entityNum as usize].origin[0 as i32 as usize] = sanOrigin[0 as i32 as usize];
+    entityList[entityNum as usize].origin[1 as i32 as usize] = sanOrigin[1 as i32 as usize];
+    entityList[entityNum as usize].origin[2 as i32 as usize] = sanOrigin[2 as i32 as usize];
 }
 /*
 =================
@@ -1575,11 +1554,7 @@ unsafe extern "C" fn S_AL_StartLocalSound(
         return;
     }
     // Try to grab a source
-    src = S_AL_SrcAlloc(
-        crate::snd_local_h::SRCPRI_LOCAL,
-        -(1 as i32),
-        channel,
-    );
+    src = S_AL_SrcAlloc(crate::snd_local_h::SRCPRI_LOCAL, -(1 as i32), channel);
     if src == -(1 as i32) {
         return;
     }
@@ -1630,12 +1605,9 @@ unsafe extern "C" fn S_AL_StartSound(
             S_AL_StartLocalSound(sfx, entchannel);
             return;
         }
-        sorigin[0 as i32 as usize] =
-            entityList[entnum as usize].origin[0 as i32 as usize];
-        sorigin[1 as i32 as usize] =
-            entityList[entnum as usize].origin[1 as i32 as usize];
-        sorigin[2 as i32 as usize] =
-            entityList[entnum as usize].origin[2 as i32 as usize]
+        sorigin[0 as i32 as usize] = entityList[entnum as usize].origin[0 as i32 as usize];
+        sorigin[1 as i32 as usize] = entityList[entnum as usize].origin[1 as i32 as usize];
+        sorigin[2 as i32 as usize] = entityList[entnum as usize].origin[2 as i32 as usize]
     }
     _S_AL_SanitiseVector(sorigin.as_mut_ptr(), 1265 as i32);
     if srcActiveCnt > 5 as i32 * srcCount / 3 as i32
@@ -1689,9 +1661,7 @@ unsafe extern "C" fn S_AL_ClearLoopingSounds(
     let mut i: i32 = 0;
     i = 0 as i32;
     while i < srcCount {
-        if srcList[i as usize].isLooping as u32 != 0
-            && srcList[i as usize].entity != -(1 as i32)
-        {
+        if srcList[i as usize].isLooping as u32 != 0 && srcList[i as usize].entity != -(1 as i32) {
             entityList[srcList[i as usize].entity as usize].loopAddedThisFrame =
                 crate::src::qcommon::q_shared::qfalse
         }
@@ -1755,8 +1725,7 @@ unsafe extern "C" fn S_AL_SrcLoop(
     (*curSource).isLooping = crate::src::qcommon::q_shared::qtrue;
     if S_AL_HearingThroughEntity(entityNum) as u64 != 0 {
         (*curSource).local = crate::src::qcommon::q_shared::qtrue;
-        sorigin[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        sorigin[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         sorigin[1 as i32 as usize] = sorigin[2 as i32 as usize];
         sorigin[0 as i32 as usize] = sorigin[1 as i32 as usize];
         crate::src::client::qal::qalSourcefv.expect("non-null function pointer")(
@@ -1790,8 +1759,7 @@ unsafe extern "C" fn S_AL_SrcLoop(
             svelocity[2 as i32 as usize] = *velocity.offset(2 as i32 as isize);
             _S_AL_SanitiseVector(svelocity.as_mut_ptr(), 1393 as i32);
         } else {
-            svelocity[2 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            svelocity[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
             svelocity[1 as i32 as usize] = svelocity[2 as i32 as usize];
             svelocity[0 as i32 as usize] = svelocity[1 as i32 as usize]
         }
@@ -1971,8 +1939,7 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                                     (*curSource).alSource
                                 );
                                 if (*curSource).priority as u32
-                                    == crate::snd_local_h::SRCPRI_AMBIENT as i32
-                                        as u32
+                                    == crate::snd_local_h::SRCPRI_AMBIENT as i32 as u32
                                 {
                                     // If there are other ambient looping sources with the same sound,
                                     // make sure the sound of these sources are in sync.
@@ -2016,9 +1983,7 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                                             as *mut src_t;
                                         // This loop sound used to be played, but all sources are stopped. Use last sample position/time
                                         // to calculate offset so the player thinks the sources continued playing while they were inaudible.
-                                        if (*master).lastTimePos
-                                            >= 0 as i32 as f32
-                                        {
+                                        if (*master).lastTimePos >= 0 as i32 as f32 {
                                             secofs = (*master).lastTimePos
                                                 + (crate::src::sys::sys_unix::Sys_Milliseconds()
                                                     - (*master).lastSampleTime)
@@ -2041,9 +2006,7 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                                     } else {
                                         (*curSfx).masterLoopSrc = i
                                     }
-                                } else if (*curSource).lastTimePos
-                                    >= 0 as i32 as f32
-                                {
+                                } else if (*curSource).lastTimePos >= 0 as i32 as f32 {
                                     let mut secofs_0: f32 = 0.;
                                     // For unsynced loops (SRCPRI_ENTITY) just carry on playing as if the sound was never stopped
                                     secofs_0 = (*curSource).lastTimePos
@@ -2053,8 +2016,7 @@ unsafe extern "C" fn S_AL_SrcUpdate() {
                                             / 1000.0f32;
                                     secofs_0 = crate::stdlib::fmodf(
                                         secofs_0,
-                                        (*curSfx).info.samples as f32
-                                            / (*curSfx).info.rate as f32,
+                                        (*curSfx).info.samples as f32 / (*curSfx).info.rate as f32,
                                     );
                                     crate::src::client::qal::qalSourcef
                                         .expect("non-null function pointer")(
@@ -2199,25 +2161,16 @@ S_AL_AllocateStreamChannel
 =================
 */
 
-unsafe extern "C" fn S_AL_AllocateStreamChannel(
-    mut stream: i32,
-    mut entityNum: i32,
-) {
+unsafe extern "C" fn S_AL_AllocateStreamChannel(mut stream: i32, mut entityNum: i32) {
     let mut cursrc: crate::snd_local_h::srcHandle_t = 0;
     let mut alsrc: crate::al_h::ALuint = 0;
-    if stream < 0 as i32
-        || stream >= 64 as i32 * 2 as i32 + 1 as i32
-    {
+    if stream < 0 as i32 || stream >= 64 as i32 * 2 as i32 + 1 as i32 {
         return;
     }
     if entityNum >= 0 as i32 {
         // This is a stream that tracks an entity
         // Allocate a streamSource at normal priority
-        cursrc = S_AL_SrcAlloc(
-            crate::snd_local_h::SRCPRI_ENTITY,
-            entityNum,
-            0 as i32,
-        );
+        cursrc = S_AL_SrcAlloc(crate::snd_local_h::SRCPRI_ENTITY, entityNum, 0 as i32);
         if cursrc < 0 as i32 {
             return;
         }
@@ -2235,11 +2188,7 @@ unsafe extern "C" fn S_AL_AllocateStreamChannel(
     } else {
         // Unspatialized stream source
         // Allocate a streamSource at high priority
-        cursrc = S_AL_SrcAlloc(
-            crate::snd_local_h::SRCPRI_STREAM,
-            -(2 as i32),
-            0 as i32,
-        );
+        cursrc = S_AL_SrcAlloc(crate::snd_local_h::SRCPRI_STREAM, -(2 as i32), 0 as i32);
         if cursrc < 0 as i32 {
             return;
         }
@@ -2304,9 +2253,7 @@ S_AL_FreeStreamChannel
 */
 
 unsafe extern "C" fn S_AL_FreeStreamChannel(mut stream: i32) {
-    if stream < 0 as i32
-        || stream >= 64 as i32 * 2 as i32 + 1 as i32
-    {
+    if stream < 0 as i32 || stream >= 64 as i32 * 2 as i32 + 1 as i32 {
         return;
     }
     // Detach any buffers
@@ -2348,9 +2295,7 @@ unsafe extern "C" fn S_AL_RawSamples(
     let mut numBuffers: i32 = 0;
     let mut buffer: crate::al_h::ALuint = 0;
     let mut format: crate::al_h::ALuint = 0;
-    if stream < 0 as i32
-        || stream >= 64 as i32 * 2 as i32 + 1 as i32
-    {
+    if stream < 0 as i32 || stream >= 64 as i32 * 2 as i32 + 1 as i32 {
         return;
     }
     format = S_AL_Format(width, channels);
@@ -2452,9 +2397,7 @@ S_AL_StreamUpdate
 unsafe extern "C" fn S_AL_StreamUpdate(mut stream: i32) {
     let mut numBuffers: i32 = 0;
     let mut state: crate::al_h::ALint = 0;
-    if stream < 0 as i32
-        || stream >= 64 as i32 * 2 as i32 + 1 as i32
-    {
+    if stream < 0 as i32 || stream >= 64 as i32 * 2 as i32 + 1 as i32 {
         return;
     }
     if streamSourceHandles[stream as usize] == -(1 as i32) {
@@ -2511,9 +2454,7 @@ S_AL_StreamDie
 */
 
 unsafe extern "C" fn S_AL_StreamDie(mut stream: i32) {
-    if stream < 0 as i32
-        || stream >= 64 as i32 * 2 as i32 + 1 as i32
-    {
+    if stream < 0 as i32 || stream >= 64 as i32 * 2 as i32 + 1 as i32 {
         return;
     }
     if streamSourceHandles[stream as usize] == -(1 as i32) {
@@ -2554,11 +2495,7 @@ S_AL_MusicSourceGet
 
 unsafe extern "C" fn S_AL_MusicSourceGet() {
     // Allocate a musicSource at high priority
-    musicSourceHandle = S_AL_SrcAlloc(
-        crate::snd_local_h::SRCPRI_STREAM,
-        -(2 as i32),
-        0 as i32,
-    );
+    musicSourceHandle = S_AL_SrcAlloc(crate::snd_local_h::SRCPRI_STREAM, -(2 as i32), 0 as i32);
     if musicSourceHandle == -(1 as i32) {
         return;
     }
@@ -2936,30 +2873,15 @@ unsafe extern "C" fn S_AL_Respatialize(
     sorigin[1 as i32 as usize] = *origin.offset(1 as i32 as isize);
     sorigin[2 as i32 as usize] = *origin.offset(2 as i32 as isize);
     _S_AL_SanitiseVector(sorigin.as_mut_ptr(), 2249 as i32);
-    _S_AL_SanitiseVector(
-        (*axis.offset(0 as i32 as isize)).as_mut_ptr(),
-        2251 as i32,
-    );
-    _S_AL_SanitiseVector(
-        (*axis.offset(1 as i32 as isize)).as_mut_ptr(),
-        2252 as i32,
-    );
-    _S_AL_SanitiseVector(
-        (*axis.offset(2 as i32 as isize)).as_mut_ptr(),
-        2253 as i32,
-    );
-    orientation[0 as i32 as usize] =
-        (*axis.offset(0 as i32 as isize))[0 as i32 as usize];
-    orientation[1 as i32 as usize] =
-        (*axis.offset(0 as i32 as isize))[1 as i32 as usize];
-    orientation[2 as i32 as usize] =
-        (*axis.offset(0 as i32 as isize))[2 as i32 as usize];
-    orientation[3 as i32 as usize] =
-        (*axis.offset(2 as i32 as isize))[0 as i32 as usize];
-    orientation[4 as i32 as usize] =
-        (*axis.offset(2 as i32 as isize))[1 as i32 as usize];
-    orientation[5 as i32 as usize] =
-        (*axis.offset(2 as i32 as isize))[2 as i32 as usize];
+    _S_AL_SanitiseVector((*axis.offset(0 as i32 as isize)).as_mut_ptr(), 2251 as i32);
+    _S_AL_SanitiseVector((*axis.offset(1 as i32 as isize)).as_mut_ptr(), 2252 as i32);
+    _S_AL_SanitiseVector((*axis.offset(2 as i32 as isize)).as_mut_ptr(), 2253 as i32);
+    orientation[0 as i32 as usize] = (*axis.offset(0 as i32 as isize))[0 as i32 as usize];
+    orientation[1 as i32 as usize] = (*axis.offset(0 as i32 as isize))[1 as i32 as usize];
+    orientation[2 as i32 as usize] = (*axis.offset(0 as i32 as isize))[2 as i32 as usize];
+    orientation[3 as i32 as usize] = (*axis.offset(2 as i32 as isize))[0 as i32 as usize];
+    orientation[4 as i32 as usize] = (*axis.offset(2 as i32 as isize))[1 as i32 as usize];
+    orientation[5 as i32 as usize] = (*axis.offset(2 as i32 as isize))[2 as i32 as usize];
     lastListenerNumber = entityNum;
     lastListenerOrigin[0 as i32 as usize] = sorigin[0 as i32 as usize];
     lastListenerOrigin[1 as i32 as usize] = sorigin[1 as i32 as usize];
@@ -3117,10 +3039,7 @@ pub unsafe extern "C" fn S_AL_StopCapture() {
 #[no_mangle]
 
 pub unsafe extern "C" fn S_AL_MasterGain(mut gain: f32) {
-    crate::src::client::qal::qalListenerf.expect("non-null function pointer")(
-        0x100a as i32,
-        gain,
-    );
+    crate::src::client::qal::qalListenerf.expect("non-null function pointer")(0x100a as i32, gain);
 }
 /*
 =================
@@ -3134,27 +3053,19 @@ unsafe extern "C" fn S_AL_SoundInfo() {
     );
     crate::src::qcommon::common::Com_Printf(
         b"  Vendor:         %s\n\x00" as *const u8 as *const libc::c_char,
-        crate::src::client::qal::qalGetString.expect("non-null function pointer")(
-            0xb001 as i32,
-        ),
+        crate::src::client::qal::qalGetString.expect("non-null function pointer")(0xb001 as i32),
     );
     crate::src::qcommon::common::Com_Printf(
         b"  Version:        %s\n\x00" as *const u8 as *const libc::c_char,
-        crate::src::client::qal::qalGetString.expect("non-null function pointer")(
-            0xb002 as i32,
-        ),
+        crate::src::client::qal::qalGetString.expect("non-null function pointer")(0xb002 as i32),
     );
     crate::src::qcommon::common::Com_Printf(
         b"  Renderer:       %s\n\x00" as *const u8 as *const libc::c_char,
-        crate::src::client::qal::qalGetString.expect("non-null function pointer")(
-            0xb003 as i32,
-        ),
+        crate::src::client::qal::qalGetString.expect("non-null function pointer")(0xb003 as i32),
     );
     crate::src::qcommon::common::Com_Printf(
         b"  AL Extensions:  %s\n\x00" as *const u8 as *const libc::c_char,
-        crate::src::client::qal::qalGetString.expect("non-null function pointer")(
-            0xb004 as i32,
-        ),
+        crate::src::client::qal::qalGetString.expect("non-null function pointer")(0xb004 as i32),
     );
     crate::src::qcommon::common::Com_Printf(
         b"  ALC Extensions: %s\n\x00" as *const u8 as *const libc::c_char,
@@ -3512,9 +3423,7 @@ pub unsafe extern "C" fn S_AL_Init(
     S_AL_BufferInit();
     S_AL_SrcInit();
     // Set up OpenAL parameters (doppler, etc)
-    crate::src::client::qal::qalDistanceModel.expect("non-null function pointer")(
-        0xd002 as i32,
-    );
+    crate::src::client::qal::qalDistanceModel.expect("non-null function pointer")(0xd002 as i32);
     crate::src::client::qal::qalDopplerFactor.expect("non-null function pointer")(
         (*s_alDopplerFactor).value,
     );
@@ -3559,13 +3468,11 @@ pub unsafe extern "C" fn S_AL_Init(
         // get all available input devices + the default input device name.
         inputdevicelist = crate::src::client::qal::qalcGetString
             .expect("non-null function pointer")(
-            0 as *mut crate::alc_h::ALCdevice,
-            0x310 as i32,
+            0 as *mut crate::alc_h::ALCdevice, 0x310 as i32
         );
         defaultinputdevice = crate::src::client::qal::qalcGetString
             .expect("non-null function pointer")(
-            0 as *mut crate::alc_h::ALCdevice,
-            0x311 as i32,
+            0 as *mut crate::alc_h::ALCdevice, 0x311 as i32
         );
         // dump a list of available devices to a cvar for the user to see.
         if !inputdevicelist.is_null() {
@@ -3642,10 +3549,7 @@ pub unsafe extern "C" fn S_AL_Init(
     );
     (*si).StartLocalSound = Some(
         S_AL_StartLocalSound
-            as unsafe extern "C" fn(
-                _: crate::src::qcommon::q_shared::sfxHandle_t,
-                _: i32,
-            ) -> (),
+            as unsafe extern "C" fn(_: crate::src::qcommon::q_shared::sfxHandle_t, _: i32) -> (),
     );
     (*si).StartBackgroundTrack = Some(
         S_AL_StartBackgroundTrack
@@ -3688,8 +3592,7 @@ pub unsafe extern "C" fn S_AL_Init(
                 _: crate::src::qcommon::q_shared::sfxHandle_t,
             ) -> (),
     );
-    (*si).StopLoopingSound =
-        Some(S_AL_StopLoopingSound as unsafe extern "C" fn(_: i32) -> ());
+    (*si).StopLoopingSound = Some(S_AL_StopLoopingSound as unsafe extern "C" fn(_: i32) -> ());
     (*si).Respatialize = Some(
         S_AL_Respatialize
             as unsafe extern "C" fn(
@@ -3701,10 +3604,7 @@ pub unsafe extern "C" fn S_AL_Init(
     );
     (*si).UpdateEntityPosition = Some(
         S_AL_UpdateEntityPosition
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *const crate::src::qcommon::q_shared::vec_t,
-            ) -> (),
+            as unsafe extern "C" fn(_: i32, _: *const crate::src::qcommon::q_shared::vec_t) -> (),
     );
     (*si).Update = Some(S_AL_Update as unsafe extern "C" fn() -> ());
     (*si).DisableSounds = Some(S_AL_DisableSounds as unsafe extern "C" fn() -> ());
@@ -3724,10 +3624,7 @@ pub unsafe extern "C" fn S_AL_Init(
         Some(S_AL_AvailableCaptureSamples as unsafe extern "C" fn() -> i32);
     (*si).Capture = Some(
         S_AL_Capture
-            as unsafe extern "C" fn(
-                _: i32,
-                _: *mut crate::src::qcommon::q_shared::byte,
-            ) -> (),
+            as unsafe extern "C" fn(_: i32, _: *mut crate::src::qcommon::q_shared::byte) -> (),
     );
     (*si).StopCapture = Some(S_AL_StopCapture as unsafe extern "C" fn() -> ());
     (*si).MasterGain = Some(S_AL_MasterGain as unsafe extern "C" fn(_: f32) -> ());

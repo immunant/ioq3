@@ -148,9 +148,8 @@ pub unsafe extern "C" fn _ve_envelope_init(
     );
     i = 0 as i32;
     while i < n {
-        *(*e).mdct_win.offset(i as isize) = crate::stdlib::sin(
-            i as f64 / (n as f64 - 1.0f64) * 3.14159265358979323846f64,
-        ) as f32;
+        *(*e).mdct_win.offset(i as isize) =
+            crate::stdlib::sin(i as f64 / (n as f64 - 1.0f64) * 3.14159265358979323846f64) as f32;
         *(*e).mdct_win.offset(i as isize) *= *(*e).mdct_win.offset(i as isize);
         i += 1
     }
@@ -173,19 +172,17 @@ pub unsafe extern "C" fn _ve_envelope_init(
     while j < 7 as i32 {
         n = (*e).band[j as usize].end;
         (*e).band[j as usize].window = crate::stdlib::malloc(
-            (n as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
+            (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
         ) as *mut f32;
         i = 0 as i32;
         while i < n {
-            *(*e).band[j as usize].window.offset(i as isize) = crate::stdlib::sin(
-                (i as f64 + 0.5f64) / n as f64 * 3.14159265358979323846f64,
-            ) as f32;
+            *(*e).band[j as usize].window.offset(i as isize) =
+                crate::stdlib::sin((i as f64 + 0.5f64) / n as f64 * 3.14159265358979323846f64)
+                    as f32;
             (*e).band[j as usize].total += *(*e).band[j as usize].window.offset(i as isize);
             i += 1
         }
-        (*e).band[j as usize].total =
-            (1.0f64 / (*e).band[j as usize].total as f64) as f32;
+        (*e).band[j as usize].total = (1.0f64 / (*e).band[j as usize].total as f64) as f32;
         j += 1
     }
     (*e).filter = crate::stdlib::calloc(
@@ -243,8 +240,7 @@ unsafe extern "C" fn _ve_amp(
     let mut minV: f32 = (*ve).minenergy;
     let mut fresh0 = ::std::vec::from_elem(
         0,
-        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-            as usize,
+        (n as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as usize,
     );
     let mut vec: *mut f32 = fresh0.as_mut_ptr() as *mut f32;
     /* stretch is used to gradually lengthen the number of windows
@@ -254,8 +250,7 @@ unsafe extern "C" fn _ve_amp(
     } else {
         2 as i32
     };
-    let mut penalty: f32 = (*gi).stretch_penalty
-        - ((*ve).stretch / 2 as i32 - 2 as i32) as f32;
+    let mut penalty: f32 = (*gi).stretch_penalty - ((*ve).stretch / 2 as i32 - 2 as i32) as f32;
     if penalty < 0.0f32 {
         penalty = 0.0f32
     }
@@ -278,15 +273,9 @@ unsafe extern "C" fn _ve_amp(
     /*_analysis_output_always("mdct",seq2,vec,n/2,0,1,0); */
     /* near-DC spreading function; this has nothing to do with
     psychoacoustics, just sidelobe leakage and window size */
-    let mut temp: f32 = ((*vec.offset(0 as i32 as isize)
-        * *vec.offset(0 as i32 as isize))
-        as f64
-        + 0.7f64
-            * *vec.offset(1 as i32 as isize) as f64
-            * *vec.offset(1 as i32 as isize) as f64
-        + 0.2f64
-            * *vec.offset(2 as i32 as isize) as f64
-            * *vec.offset(2 as i32 as isize) as f64)
+    let mut temp: f32 = ((*vec.offset(0 as i32 as isize) * *vec.offset(0 as i32 as isize)) as f64
+        + 0.7f64 * *vec.offset(1 as i32 as isize) as f64 * *vec.offset(1 as i32 as isize) as f64
+        + 0.2f64 * *vec.offset(2 as i32 as isize) as f64 * *vec.offset(2 as i32 as isize) as f64)
         as f32;
     let mut ptr: i32 = (*filters).nearptr;
     /* the accumulation is regularly refreshed from scratch to avoid
@@ -302,15 +291,12 @@ unsafe extern "C" fn _ve_amp(
     }
     (*filters).nearDC_acc -= (*filters).nearDC[ptr as usize];
     (*filters).nearDC[ptr as usize] = temp;
-    decay = (decay as f64
-        * (1.0f64 / (15 as i32 + 1 as i32) as f64))
-        as f32;
+    decay = (decay as f64 * (1.0f64 / (15 as i32 + 1 as i32) as f64)) as f32;
     (*filters).nearptr += 1;
     if (*filters).nearptr >= 15 as i32 {
         (*filters).nearptr = 0 as i32
     }
-    decay =
-        (todB(&mut decay) as f64 * 0.5f64 - 15.0f32 as f64) as f32;
+    decay = (todB(&mut decay) as f64 * 0.5f64 - 15.0f32 as f64) as f32;
     /* perform spreading and limiting, also smooth the spectrum.  yes,
     the MDCT results in all real coefficients, but it still *behaves*
     like real/imaginary pairs */
@@ -391,9 +377,7 @@ unsafe extern "C" fn _ve_amp(
         (*filters.offset(j as isize)).ampbuf[this as usize] = acc;
         let ref mut fresh1 = (*filters.offset(j as isize)).ampptr;
         *fresh1 += 1;
-        if (*filters.offset(j as isize)).ampptr
-            >= 16 as i32 + 2 as i32 - 1 as i32
-        {
+        if (*filters.offset(j as isize)).ampptr >= 16 as i32 + 2 as i32 - 1 as i32 {
             (*filters.offset(j as isize)).ampptr = 0 as i32
         }
         /* look at min/max, decide trigger */
@@ -452,27 +436,19 @@ pub unsafe extern "C" fn _ve_envelope_search(
                 gi,
                 pcm,
                 (*ve).band.as_mut_ptr(),
-                (*ve)
-                    .filter
-                    .offset((i * 7 as i32 as libc::c_long) as isize),
+                (*ve).filter.offset((i * 7 as i32 as libc::c_long) as isize),
             );
             i += 1
         }
-        *(*ve)
-            .mark
-            .offset((j + 2 as i32 as libc::c_long) as isize) = 0 as i32;
+        *(*ve).mark.offset((j + 2 as i32 as libc::c_long) as isize) = 0 as i32;
         if ret & 1 as i32 != 0 {
             *(*ve).mark.offset(j as isize) = 1 as i32;
-            *(*ve)
-                .mark
-                .offset((j + 1 as i32 as libc::c_long) as isize) = 1 as i32
+            *(*ve).mark.offset((j + 1 as i32 as libc::c_long) as isize) = 1 as i32
         }
         if ret & 2 as i32 != 0 {
             *(*ve).mark.offset(j as isize) = 1 as i32;
             if j > 0 as i32 as libc::c_long {
-                *(*ve)
-                    .mark
-                    .offset((j - 1 as i32 as libc::c_long) as isize) = 1 as i32
+                *(*ve).mark.offset((j - 1 as i32 as libc::c_long) as isize) = 1 as i32
             }
         }
         if ret & 4 as i32 != 0 {
@@ -513,9 +489,7 @@ pub unsafe extern "C" fn _ve_envelope_search(
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn _ve_envelope_mark(
-    mut v: *mut crate::codec_h::vorbis_dsp_state,
-) -> i32 {
+pub unsafe extern "C" fn _ve_envelope_mark(mut v: *mut crate::codec_h::vorbis_dsp_state) -> i32 {
     let mut ve: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup =
         (*((*v).backend_state as *mut crate::codec_internal_h::private_state)).ve;
     let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
@@ -571,9 +545,9 @@ pub unsafe extern "C" fn _ve_envelope_shift(
     mut e: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup,
     mut shift: libc::c_long,
 ) {
-    let mut smallsize: i32 = ((*e).current / (*e).searchstep as libc::c_long
-        + 2 as i32 as libc::c_long) as i32; /* adjust for placing marks
-                                                            ahead of ve->current */
+    let mut smallsize: i32 =
+        ((*e).current / (*e).searchstep as libc::c_long + 2 as i32 as libc::c_long) as i32; /* adjust for placing marks
+                                                                                            ahead of ve->current */
     let mut smallshift: i32 = (shift / (*e).searchstep as libc::c_long) as i32;
     crate::stdlib::memmove(
         (*e).mark as *mut libc::c_void,

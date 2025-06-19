@@ -262,12 +262,10 @@ pub unsafe extern "C" fn TeamMain_MenuInit() {
     s_teammain.frame.height = 256 as i32;
     y = 194 as i32;
     s_teammain.joinred.generic.type_0 = 9 as i32;
-    s_teammain.joinred.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_teammain.joinred.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_teammain.joinred.generic.id = 100 as i32;
-    s_teammain.joinred.generic.callback = Some(
-        TeamMain_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_teammain.joinred.generic.callback =
+        Some(TeamMain_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_teammain.joinred.generic.x = 320 as i32;
     s_teammain.joinred.generic.y = y;
     s_teammain.joinred.string =
@@ -276,12 +274,10 @@ pub unsafe extern "C" fn TeamMain_MenuInit() {
     s_teammain.joinred.color = crate::src::qcommon::q_math::colorRed.as_mut_ptr();
     y += 20 as i32;
     s_teammain.joinblue.generic.type_0 = 9 as i32;
-    s_teammain.joinblue.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_teammain.joinblue.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_teammain.joinblue.generic.id = 101 as i32;
-    s_teammain.joinblue.generic.callback = Some(
-        TeamMain_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_teammain.joinblue.generic.callback =
+        Some(TeamMain_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_teammain.joinblue.generic.x = 320 as i32;
     s_teammain.joinblue.generic.y = y;
     s_teammain.joinblue.string =
@@ -290,12 +286,10 @@ pub unsafe extern "C" fn TeamMain_MenuInit() {
     s_teammain.joinblue.color = crate::src::qcommon::q_math::colorRed.as_mut_ptr();
     y += 20 as i32;
     s_teammain.joingame.generic.type_0 = 9 as i32;
-    s_teammain.joingame.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_teammain.joingame.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_teammain.joingame.generic.id = 102 as i32;
-    s_teammain.joingame.generic.callback = Some(
-        TeamMain_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_teammain.joingame.generic.callback =
+        Some(TeamMain_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_teammain.joingame.generic.x = 320 as i32;
     s_teammain.joingame.generic.y = y;
     s_teammain.joingame.string =
@@ -304,23 +298,17 @@ pub unsafe extern "C" fn TeamMain_MenuInit() {
     s_teammain.joingame.color = crate::src::qcommon::q_math::colorRed.as_mut_ptr();
     y += 20 as i32;
     s_teammain.spectate.generic.type_0 = 9 as i32;
-    s_teammain.spectate.generic.flags =
-        0x8 as i32 as u32 | 0x100 as i32 as u32;
+    s_teammain.spectate.generic.flags = 0x8 as i32 as u32 | 0x100 as i32 as u32;
     s_teammain.spectate.generic.id = 103 as i32;
-    s_teammain.spectate.generic.callback = Some(
-        TeamMain_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_teammain.spectate.generic.callback =
+        Some(TeamMain_MenuEvent as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_teammain.spectate.generic.x = 320 as i32;
     s_teammain.spectate.generic.y = y;
     s_teammain.spectate.string =
         b"SPECTATE\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_teammain.spectate.style = 0x1 as i32 | 0x10 as i32;
     s_teammain.spectate.color = crate::src::qcommon::q_math::colorRed.as_mut_ptr();
-    crate::src::ui::ui_syscalls::trap_GetConfigString(
-        0 as i32,
-        info.as_mut_ptr(),
-        1024 as i32,
-    );
+    crate::src::ui::ui_syscalls::trap_GetConfigString(0 as i32, info.as_mut_ptr(), 1024 as i32);
     gametype = atoi(crate::src::qcommon::q_shared::Info_ValueForKey(
         info.as_mut_ptr(),
         b"g_gametype\x00" as *const u8 as *const libc::c_char,

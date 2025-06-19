@@ -327,8 +327,7 @@ pub unsafe extern "C" fn S_CodecUtilOpen(
     // Allocate a stream
     stream = crate::src::qcommon::common::Z_Malloc(::std::mem::size_of::<
         crate::src::client::snd_codec::snd_stream_t,
-    >() as libc::c_ulong as i32)
-        as *mut crate::src::client::snd_codec::snd_stream_t;
+    >() as libc::c_ulong as i32) as *mut crate::src::client::snd_codec::snd_stream_t;
     if stream.is_null() {
         crate::src::qcommon::files::FS_FCloseFile(hnd);
         return 0 as *mut crate::src::client::snd_codec::snd_stream_t;

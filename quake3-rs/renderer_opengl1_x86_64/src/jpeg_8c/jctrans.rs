@@ -370,10 +370,8 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
      * Note we assume jpeg_set_defaults has allocated the dest comp_info array.
      */
     (*dstinfo).num_components = (*srcinfo).num_components;
-    if (*dstinfo).num_components < 1 as i32 || (*dstinfo).num_components > 10 as i32
-    {
-        (*(*dstinfo).err).msg_code =
-            crate::src::jpeg_8c::jerror::JERR_COMPONENT_COUNT as i32;
+    if (*dstinfo).num_components < 1 as i32 || (*dstinfo).num_components > 10 as i32 {
+        (*(*dstinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_COMPONENT_COUNT as i32;
         (*(*dstinfo).err).msg_parm.i[0 as i32 as usize] = (*dstinfo).num_components;
         (*(*dstinfo).err).msg_parm.i[1 as i32 as usize] = 10 as i32;
         Some(
@@ -399,8 +397,7 @@ pub unsafe extern "C" fn jpeg_copy_critical_parameters(
             || tblno >= 4 as i32
             || (*srcinfo).quant_tbl_ptrs[tblno as usize].is_null()
         {
-            (*(*dstinfo).err).msg_code =
-                crate::src::jpeg_8c::jerror::JERR_NO_QUANT_TABLE as i32;
+            (*(*dstinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_NO_QUANT_TABLE as i32;
             (*(*dstinfo).err).msg_parm.i[0 as i32 as usize] = tblno;
             Some(
                 (*(*dstinfo).err)
@@ -531,16 +528,10 @@ unsafe extern "C" fn start_iMCU_row(mut cinfo: crate::jpeglib_h::j_compress_ptr)
      */
     if (*cinfo).comps_in_scan > 1 as i32 {
         (*coef).MCU_rows_per_iMCU_row = 1 as i32
-    } else if (*coef).iMCU_row_num
-        < (*cinfo)
-            .total_iMCU_rows
-            .wrapping_sub(1 as i32 as u32)
-    {
-        (*coef).MCU_rows_per_iMCU_row =
-            (*(*cinfo).cur_comp_info[0 as i32 as usize]).v_samp_factor
+    } else if (*coef).iMCU_row_num < (*cinfo).total_iMCU_rows.wrapping_sub(1 as i32 as u32) {
+        (*coef).MCU_rows_per_iMCU_row = (*(*cinfo).cur_comp_info[0 as i32 as usize]).v_samp_factor
     } else {
-        (*coef).MCU_rows_per_iMCU_row =
-            (*(*cinfo).cur_comp_info[0 as i32 as usize]).last_row_height
+        (*coef).MCU_rows_per_iMCU_row = (*(*cinfo).cur_comp_info[0 as i32 as usize]).last_row_height
     }
     (*coef).mcu_ctr = 0 as i32 as crate::jmorecfg_h::JDIMENSION;
     (*coef).MCU_vert_offset = 0 as i32;
@@ -554,8 +545,7 @@ unsafe extern "C" fn start_pass_coef(
     mut pass_mode: crate::jpegint_h::J_BUF_MODE,
 ) {
     let mut coef: my_coef_ptr = (*cinfo).coef as my_coef_ptr;
-    if pass_mode as u32 != crate::jpegint_h::JBUF_CRANK_DEST as i32 as u32
-    {
+    if pass_mode as u32 != crate::jpegint_h::JBUF_CRANK_DEST as i32 as u32 {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_BUFFER_MODE as i32;
         Some(
             (*(*cinfo).err)
@@ -583,12 +573,10 @@ unsafe extern "C" fn compress_output(
 ) -> crate::jmorecfg_h::boolean {
     let mut coef: my_coef_ptr = (*cinfo).coef as my_coef_ptr; /* index of current MCU within row */
     let mut MCU_col_num: crate::jmorecfg_h::JDIMENSION = 0;
-    let mut last_MCU_col: crate::jmorecfg_h::JDIMENSION = (*cinfo)
-        .MCUs_per_row
-        .wrapping_sub(1 as i32 as u32);
-    let mut last_iMCU_row: crate::jmorecfg_h::JDIMENSION = (*cinfo)
-        .total_iMCU_rows
-        .wrapping_sub(1 as i32 as u32);
+    let mut last_MCU_col: crate::jmorecfg_h::JDIMENSION =
+        (*cinfo).MCUs_per_row.wrapping_sub(1 as i32 as u32);
+    let mut last_iMCU_row: crate::jmorecfg_h::JDIMENSION =
+        (*cinfo).total_iMCU_rows.wrapping_sub(1 as i32 as u32);
     let mut blkn: i32 = 0;
     let mut ci: i32 = 0;
     let mut xindex: i32 = 0;
@@ -669,11 +657,9 @@ unsafe extern "C" fn compress_output(
                      */
                     while xindex < (*compptr).MCU_width {
                         MCU_buffer[blkn as usize] = (*coef).dummy_buffer[blkn as usize];
-                        (*MCU_buffer[blkn as usize].offset(0 as i32 as isize))
-                            [0 as i32 as usize] = (*MCU_buffer
-                            [(blkn - 1 as i32) as usize]
-                            .offset(0 as i32 as isize))
-                            [0 as i32 as usize];
+                        (*MCU_buffer[blkn as usize].offset(0 as i32 as isize))[0 as i32 as usize] =
+                            (*MCU_buffer[(blkn - 1 as i32) as usize].offset(0 as i32 as isize))
+                                [0 as i32 as usize];
                         blkn += 1;
                         xindex += 1
                     }

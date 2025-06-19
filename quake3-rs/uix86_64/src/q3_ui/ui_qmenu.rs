@@ -508,18 +508,16 @@ unsafe extern "C" fn PText_Init(mut t: *mut crate::ui_local_h::menutext_s) {
     sizeScale = crate::src::q3_ui::ui_atoms::UI_ProportionalSizeScale((*t).style);
     x = (*t).generic.x;
     y = (*t).generic.y;
-    w = (crate::src::q3_ui::ui_atoms::UI_ProportionalStringWidth((*t).string) as f32
-        * sizeScale) as i32;
+    w = (crate::src::q3_ui::ui_atoms::UI_ProportionalStringWidth((*t).string) as f32 * sizeScale)
+        as i32;
     h = (27 as i32 as f32 * sizeScale) as i32;
     if (*t).generic.flags & 0x10 as i32 as u32 != 0 {
         x -= w
     } else if (*t).generic.flags & 0x8 as i32 as u32 != 0 {
         x -= w / 2 as i32
     }
-    (*t).generic.left =
-        (x as f32 - 3 as i32 as f32 * sizeScale) as i32;
-    (*t).generic.right =
-        ((x + w) as f32 + 3 as i32 as f32 * sizeScale) as i32;
+    (*t).generic.left = (x as f32 - 3 as i32 as f32 * sizeScale) as i32;
+    (*t).generic.right = ((x + w) as f32 + 3 as i32 as f32 * sizeScale) as i32;
     (*t).generic.top = y;
     (*t).generic.bottom = y + h;
 }
@@ -635,12 +633,9 @@ pub unsafe extern "C" fn Bitmap_Draw(mut b: *mut crate::ui_local_h::menubitmap_s
             && Menu_ItemAtCursor((*b).generic.parent) == b as *mut libc::c_void
         {
             if !(*b).focuscolor.is_null() {
-                tempcolor[0 as i32 as usize] =
-                    *(*b).focuscolor.offset(0 as i32 as isize);
-                tempcolor[1 as i32 as usize] =
-                    *(*b).focuscolor.offset(1 as i32 as isize);
-                tempcolor[2 as i32 as usize] =
-                    *(*b).focuscolor.offset(2 as i32 as isize);
+                tempcolor[0 as i32 as usize] = *(*b).focuscolor.offset(0 as i32 as isize);
+                tempcolor[1 as i32 as usize] = *(*b).focuscolor.offset(1 as i32 as isize);
+                tempcolor[2 as i32 as usize] = *(*b).focuscolor.offset(2 as i32 as isize);
                 color = tempcolor.as_mut_ptr()
             } else {
                 color = pulse_color.as_mut_ptr()
@@ -648,8 +643,7 @@ pub unsafe extern "C" fn Bitmap_Draw(mut b: *mut crate::ui_local_h::menubitmap_s
             *color.offset(3 as i32 as isize) = (0.5f64
                 + 0.5f64
                     * crate::stdlib::sin(
-                        (crate::src::q3_ui::ui_atoms::uis.realtime / 75 as i32)
-                            as f64,
+                        (crate::src::q3_ui::ui_atoms::uis.realtime / 75 as i32) as f64,
                     )) as f32;
             crate::src::ui::ui_syscalls::trap_R_SetColor(color);
             crate::src::q3_ui::ui_atoms::UI_DrawHandlePic(x, y, w, h, (*b).focusshader);
@@ -720,13 +714,7 @@ unsafe extern "C" fn Action_Draw(mut a: *mut crate::ui_local_h::menuaction_s) {
     }
     x = (*a).generic.x;
     y = (*a).generic.y;
-    crate::src::q3_ui::ui_atoms::UI_DrawString(
-        x,
-        y,
-        (*a).generic.name,
-        0 as i32 | style,
-        color,
-    );
+    crate::src::q3_ui::ui_atoms::UI_DrawString(x, y, (*a).generic.name, 0 as i32 | style, color);
     if (*(*a).generic.parent).cursor == (*a).generic.menuPosition {
         // draw cursor
         crate::src::q3_ui::ui_atoms::UI_DrawChar(
@@ -900,8 +888,7 @@ unsafe extern "C" fn Slider_Init(mut s: *mut crate::ui_local_h::menuslider_s) {
         len = 0 as i32
     }
     (*s).generic.left = (*s).generic.x - (len + 1 as i32) * 8 as i32;
-    (*s).generic.right = (*s).generic.x
-        + (10 as i32 + 2 as i32 + 1 as i32) * 8 as i32;
+    (*s).generic.right = (*s).generic.x + (10 as i32 + 2 as i32 + 1 as i32) * 8 as i32;
     (*s).generic.top = (*s).generic.y;
     (*s).generic.bottom = (*s).generic.y + 16 as i32;
 }
@@ -920,12 +907,9 @@ unsafe extern "C" fn Slider_Key(
     let mut oldvalue: i32 = 0;
     match key {
         178 => {
-            x = crate::src::q3_ui::ui_atoms::uis.cursorx
-                - (*s).generic.x
-                - 2 as i32 * 8 as i32;
+            x = crate::src::q3_ui::ui_atoms::uis.cursorx - (*s).generic.x - 2 as i32 * 8 as i32;
             oldvalue = (*s).curvalue as i32;
-            (*s).curvalue = x as f32
-                / (10 as i32 * 8 as i32) as f32
+            (*s).curvalue = x as f32 / (10 as i32 * 8 as i32) as f32
                 * ((*s).maxvalue - (*s).minvalue)
                 + (*s).minvalue;
             if (*s).curvalue < (*s).minvalue {
@@ -961,10 +945,7 @@ unsafe extern "C" fn Slider_Key(
         }
     }
     if sound != 0 && (*s).generic.callback.is_some() {
-        (*s).generic.callback.expect("non-null function pointer")(
-            s as *mut libc::c_void,
-            3 as i32,
-        );
+        (*s).generic.callback.expect("non-null function pointer")(s as *mut libc::c_void, 3 as i32);
     }
     return sound;
 }
@@ -1032,8 +1013,7 @@ unsafe extern "C" fn Slider_Draw(mut s: *mut crate::ui_local_h::menuslider_s) {
     }
     crate::src::q3_ui::ui_atoms::UI_DrawHandlePic(
         (((x + 2 as i32 * 8 as i32) as f32
-            + ((10 as i32 - 1 as i32) * 8 as i32) as f32
-                * (*s).range) as i32
+            + ((10 as i32 - 1 as i32) * 8 as i32) as f32 * (*s).range) as i32
             - 2 as i32) as f32,
         (y - 2 as i32) as f32,
         12 as i32 as f32,
@@ -1053,8 +1033,8 @@ unsafe extern "C" fn SpinControl_Init(mut s: *mut crate::ui_local_h::menulist_s)
     let mut l: i32 = 0;
     let mut str: *const libc::c_char = 0 as *const libc::c_char;
     if !(*s).generic.name.is_null() {
-        len = crate::stdlib::strlen((*s).generic.name)
-            .wrapping_mul(8 as i32 as libc::c_ulong) as i32
+        len =
+            crate::stdlib::strlen((*s).generic.name).wrapping_mul(8 as i32 as libc::c_ulong) as i32
     } else {
         len = 0 as i32
     }
@@ -1106,10 +1086,7 @@ unsafe extern "C" fn SpinControl_Key(
         _ => {}
     }
     if sound != 0 && (*s).generic.callback.is_some() {
-        (*s).generic.callback.expect("non-null function pointer")(
-            s as *mut libc::c_void,
-            3 as i32,
-        );
+        (*s).generic.callback.expect("non-null function pointer")(s as *mut libc::c_void, 3 as i32);
     }
     return sound;
 }
@@ -1228,17 +1205,12 @@ pub unsafe extern "C" fn ScrollList_Key(
                 // check scroll region
                 x = (*l).generic.x;
                 y = (*l).generic.y;
-                w = (((*l).width + (*l).separation) * (*l).columns - (*l).separation)
-                    * 8 as i32;
+                w = (((*l).width + (*l).separation) * (*l).columns - (*l).separation) * 8 as i32;
                 if (*l).generic.flags & 0x8 as i32 as u32 != 0 {
                     x -= w / 2 as i32
                 }
-                if crate::src::q3_ui::ui_atoms::UI_CursorInRect(
-                    x,
-                    y,
-                    w,
-                    (*l).height * 16 as i32,
-                ) as u64
+                if crate::src::q3_ui::ui_atoms::UI_CursorInRect(x, y, w, (*l).height * 16 as i32)
+                    as u64
                     != 0
                 {
                     cursorx = (crate::src::q3_ui::ui_atoms::uis.cursorx - x) / 8 as i32;
@@ -1675,8 +1647,7 @@ Menu_CursorMoved
 #[no_mangle]
 
 pub unsafe extern "C" fn Menu_CursorMoved(mut m: *mut crate::ui_local_h::menuframework_s) {
-    let mut callback: Option<unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ()> =
-        None;
+    let mut callback: Option<unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ()> = None;
     if (*m).cursor_prev == (*m).cursor {
         return;
     }
@@ -1765,9 +1736,7 @@ pub unsafe extern "C" fn Menu_AdjustCursor(
         while (*m).cursor >= 0 as i32 && (*m).cursor < (*m).nitems {
             item = (*m).items[(*m).cursor as usize] as *mut crate::ui_local_h::menucommon_s;
             if !((*item).flags
-                & (0x2000 as i32 as u32
-                    | 0x800 as i32 as u32
-                    | 0x4000 as i32 as u32)
+                & (0x2000 as i32 as u32 | 0x800 as i32 as u32 | 0x4000 as i32 as u32)
                 != 0)
             {
                 break;
@@ -1907,10 +1876,7 @@ pub unsafe extern "C" fn Menu_ActivateItem(
     mut item: *mut crate::ui_local_h::menucommon_s,
 ) -> crate::src::qcommon::q_shared::sfxHandle_t {
     if (*item).callback.is_some() {
-        (*item).callback.expect("non-null function pointer")(
-            item as *mut libc::c_void,
-            3 as i32,
-        );
+        (*item).callback.expect("non-null function pointer")(item as *mut libc::c_void, 3 as i32);
         if (*item).flags & 0x100000 as i32 as u32 == 0 {
             return menu_move_sound;
         }
@@ -1944,11 +1910,7 @@ pub unsafe extern "C" fn Menu_DefaultKey(
     }
     // route key stimulus to widget
     item = Menu_ItemAtCursor(m) as *mut crate::ui_local_h::menucommon_s;
-    if !item.is_null()
-        && (*item).flags
-            & (0x2000 as i32 as u32 | 0x4000 as i32 as u32)
-            == 0
-    {
+    if !item.is_null() && (*item).flags & (0x2000 as i32 as u32 | 0x4000 as i32 as u32) == 0 {
         match (*item).type_0 {
             3 => sound = SpinControl_Key(item as *mut crate::ui_local_h::menulist_s, key),
             5 => sound = RadioButton_Key(item as *mut crate::ui_local_h::menuradiobutton_s, key),
@@ -1993,10 +1955,7 @@ pub unsafe extern "C" fn Menu_DefaultKey(
         178 | 180 => {
             if !item.is_null() {
                 if (*item).flags & 0x200 as i32 as u32 != 0
-                    && (*item).flags
-                        & (0x2000 as i32 as u32
-                            | 0x4000 as i32 as u32)
-                        == 0
+                    && (*item).flags & (0x2000 as i32 as u32 | 0x4000 as i32 as u32) == 0
                 {
                     return Menu_ActivateItem(m, item);
                 }
@@ -2006,9 +1965,7 @@ pub unsafe extern "C" fn Menu_DefaultKey(
         | 228 | 229 | 230 | 231 | 232 | 169 | 13 => {
             if !item.is_null() {
                 if (*item).flags
-                    & (0x800 as i32 as u32
-                        | 0x2000 as i32 as u32
-                        | 0x4000 as i32 as u32)
+                    & (0x800 as i32 as u32 | 0x2000 as i32 as u32 | 0x4000 as i32 as u32)
                     == 0
                 {
                     return Menu_ActivateItem(m, item);

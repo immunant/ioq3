@@ -214,9 +214,7 @@ unsafe extern "C" fn UI_PlayerInfo_SetWeapon(
             .as_mut_ptr()
             .offset(1 as i32 as isize);
         while !(*item).classname.is_null() {
-            if !((*item).giType as u32
-                != crate::bg_public_h::IT_WEAPON as i32 as u32)
-            {
+            if !((*item).giType as u32 != crate::bg_public_h::IT_WEAPON as i32 as u32) {
                 if (*item).giTag as u32 == weaponNum as u32 {
                     break;
                 }
@@ -231,17 +229,14 @@ unsafe extern "C" fn UI_PlayerInfo_SetWeapon(
         if !((*pi).weaponModel == 0 as i32) {
             break;
         }
-        if weaponNum as u32
-            == crate::bg_public_h::WP_MACHINEGUN as i32 as u32
-        {
+        if weaponNum as u32 == crate::bg_public_h::WP_MACHINEGUN as i32 as u32 {
             weaponNum = crate::bg_public_h::WP_NONE
         } else {
             weaponNum = crate::bg_public_h::WP_MACHINEGUN
         }
     }
     if weaponNum as u32 == crate::bg_public_h::WP_MACHINEGUN as i32 as u32
-        || weaponNum as u32
-            == crate::bg_public_h::WP_GAUNTLET as i32 as u32
+        || weaponNum as u32 == crate::bg_public_h::WP_GAUNTLET as i32 as u32
         || weaponNum as u32 == crate::bg_public_h::WP_BFG as i32 as u32
     {
         crate::src::qcommon::q_shared::COM_StripExtension(
@@ -351,10 +346,7 @@ UI_ForceLegsAnim
 ===============
 */
 
-unsafe extern "C" fn UI_ForceLegsAnim(
-    mut pi: *mut crate::ui_local_h::playerInfo_t,
-    mut anim: i32,
-) {
+unsafe extern "C" fn UI_ForceLegsAnim(mut pi: *mut crate::ui_local_h::playerInfo_t, mut anim: i32) {
     (*pi).legsAnim = (*pi).legsAnim & 128 as i32 ^ 128 as i32 | anim;
     if anim == crate::bg_public_h::LEGS_JUMP as i32 {
         (*pi).legsAnimationTimer = 1000 as i32
@@ -366,10 +358,7 @@ UI_SetLegsAnim
 ===============
 */
 
-unsafe extern "C" fn UI_SetLegsAnim(
-    mut pi: *mut crate::ui_local_h::playerInfo_t,
-    mut anim: i32,
-) {
+unsafe extern "C" fn UI_SetLegsAnim(mut pi: *mut crate::ui_local_h::playerInfo_t, mut anim: i32) {
     if (*pi).pendingLegsAnim != 0 {
         anim = (*pi).pendingLegsAnim;
         (*pi).pendingLegsAnim = 0 as i32
@@ -402,10 +391,7 @@ UI_SetTorsoAnim
 ===============
 */
 
-unsafe extern "C" fn UI_SetTorsoAnim(
-    mut pi: *mut crate::ui_local_h::playerInfo_t,
-    mut anim: i32,
-) {
+unsafe extern "C" fn UI_SetTorsoAnim(mut pi: *mut crate::ui_local_h::playerInfo_t, mut anim: i32) {
     if (*pi).pendingTorsoAnim != 0 {
         anim = (*pi).pendingTorsoAnim;
         (*pi).pendingTorsoAnim = 0 as i32
@@ -464,8 +450,7 @@ unsafe extern "C" fn UI_LegsSequencing(mut pi: *mut crate::ui_local_h::playerInf
         if currentAnim == crate::bg_public_h::LEGS_JUMP as i32 {
             jumpHeight = (56 as i32 as f64
                 * crate::stdlib::sin(
-                    3.14159265358979323846f64
-                        * (1000 as i32 - (*pi).legsAnimationTimer) as f64
+                    3.14159265358979323846f64 * (1000 as i32 - (*pi).legsAnimationTimer) as f64
                         / 1000 as i32 as f64,
                 )) as f32
         }
@@ -603,9 +588,7 @@ unsafe extern "C" fn UI_SetLerpFrameAnimation(
     let mut anim: *mut crate::bg_public_h::animation_t = 0 as *mut crate::bg_public_h::animation_t;
     (*lf).animationNumber = newAnimation;
     newAnimation &= !(128 as i32);
-    if newAnimation < 0 as i32
-        || newAnimation >= crate::bg_public_h::MAX_ANIMATIONS as i32
-    {
+    if newAnimation < 0 as i32 || newAnimation >= crate::bg_public_h::MAX_ANIMATIONS as i32 {
         crate::src::ui::ui_syscalls::trap_Error(crate::src::qcommon::q_shared::va(
             b"Bad animation number: %i\x00" as *const u8 as *const libc::c_char
                 as *mut libc::c_char,
@@ -672,8 +655,7 @@ unsafe extern "C" fn UI_RunLerpFrame(
         if (*anim).reversed != 0 {
             (*lf).frame = (*anim).firstFrame + (*anim).numFrames - 1 as i32 - f
         } else if (*anim).flipflop != 0 && f >= (*anim).numFrames {
-            (*lf).frame =
-                (*anim).firstFrame + (*anim).numFrames - 1 as i32 - f % (*anim).numFrames
+            (*lf).frame = (*anim).firstFrame + (*anim).numFrames - 1 as i32 - f % (*anim).numFrames
         } else {
             (*lf).frame = (*anim).firstFrame + f
         }
@@ -693,8 +675,8 @@ unsafe extern "C" fn UI_RunLerpFrame(
     } else {
         (*lf).backlerp = (1.0f64
             - ((dp_realtime - (*lf).oldFrameTime) as f32
-                / ((*lf).frameTime - (*lf).oldFrameTime) as f32)
-                as f64) as f32
+                / ((*lf).frameTime - (*lf).oldFrameTime) as f32) as f64)
+            as f32
     };
 }
 /*
@@ -721,11 +703,7 @@ unsafe extern "C" fn UI_PlayerAnimation(
     if (*pi).legs.yawing as u32 != 0
         && (*pi).legsAnim & !(128 as i32) == crate::bg_public_h::LEGS_IDLE as i32
     {
-        UI_RunLerpFrame(
-            pi,
-            &mut (*pi).legs,
-            crate::bg_public_h::LEGS_TURN as i32,
-        );
+        UI_RunLerpFrame(pi, &mut (*pi).legs, crate::bg_public_h::LEGS_TURN as i32);
     } else {
         UI_RunLerpFrame(pi, &mut (*pi).legs, (*pi).legsAnim);
     }
@@ -800,13 +778,11 @@ unsafe extern "C" fn UI_SwingAngles(
     // clamp to no more than tolerance
     swing = crate::src::qcommon::q_math::AngleSubtract(destination, *angle);
     if swing > clampTolerance {
-        *angle = crate::src::qcommon::q_math::AngleMod(
-            destination - (clampTolerance - 1 as i32 as f32),
-        )
+        *angle =
+            crate::src::qcommon::q_math::AngleMod(destination - (clampTolerance - 1 as i32 as f32))
     } else if swing < -clampTolerance {
-        *angle = crate::src::qcommon::q_math::AngleMod(
-            destination + (clampTolerance - 1 as i32 as f32),
-        )
+        *angle =
+            crate::src::qcommon::q_math::AngleMod(destination + (clampTolerance - 1 as i32 as f32))
     };
 }
 /*
@@ -815,9 +791,7 @@ UI_MovedirAdjustment
 ======================
 */
 
-unsafe extern "C" fn UI_MovedirAdjustment(
-    mut pi: *mut crate::ui_local_h::playerInfo_t,
-) -> f32 {
+unsafe extern "C" fn UI_MovedirAdjustment(mut pi: *mut crate::ui_local_h::playerInfo_t) -> f32 {
     let mut relativeAngles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut moveVector: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     relativeAngles[0 as i32 as usize] =
@@ -832,16 +806,10 @@ unsafe extern "C" fn UI_MovedirAdjustment(
         0 as *mut crate::src::qcommon::q_shared::vec_t,
         0 as *mut crate::src::qcommon::q_shared::vec_t,
     );
-    if (crate::src::qcommon::q_math::Q_fabs(moveVector[0 as i32 as usize])
-        as f64)
-        < 0.01f64
-    {
+    if (crate::src::qcommon::q_math::Q_fabs(moveVector[0 as i32 as usize]) as f64) < 0.01f64 {
         moveVector[0 as i32 as usize] = 0.0f64 as crate::src::qcommon::q_shared::vec_t
     }
-    if (crate::src::qcommon::q_math::Q_fabs(moveVector[1 as i32 as usize])
-        as f64)
-        < 0.01f64
-    {
+    if (crate::src::qcommon::q_math::Q_fabs(moveVector[1 as i32 as usize]) as f64) < 0.01f64 {
         moveVector[1 as i32 as usize] = 0.0f64 as crate::src::qcommon::q_shared::vec_t
     }
     if moveVector[1 as i32 as usize] == 0 as i32 as f32
@@ -903,12 +871,10 @@ unsafe extern "C" fn UI_PlayerAngles(
     headAngles[2 as i32 as usize] = (*pi).viewAngles[2 as i32 as usize];
     headAngles[1 as i32 as usize] =
         crate::src::qcommon::q_math::AngleMod(headAngles[1 as i32 as usize]);
-    legsAngles[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    legsAngles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     legsAngles[1 as i32 as usize] = legsAngles[2 as i32 as usize];
     legsAngles[0 as i32 as usize] = legsAngles[1 as i32 as usize];
-    torsoAngles[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    torsoAngles[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     torsoAngles[1 as i32 as usize] = torsoAngles[2 as i32 as usize];
     torsoAngles[0 as i32 as usize] = torsoAngles[1 as i32 as usize];
     // --------- yaw -------------
@@ -925,9 +891,9 @@ unsafe extern "C" fn UI_PlayerAngles(
     // adjust legs for movement dir
     adjust = UI_MovedirAdjustment(pi);
     legsAngles[1 as i32 as usize] = headAngles[1 as i32 as usize] + adjust;
-    torsoAngles[1 as i32 as usize] =
-        (headAngles[1 as i32 as usize] as f64
-            + 0.25f64 * adjust as f64) as crate::src::qcommon::q_shared::vec_t;
+    torsoAngles[1 as i32 as usize] = (headAngles[1 as i32 as usize] as f64
+        + 0.25f64 * adjust as f64)
+        as crate::src::qcommon::q_shared::vec_t;
     // torso
     UI_SwingAngles(
         torsoAngles[1 as i32 as usize],
@@ -950,9 +916,7 @@ unsafe extern "C" fn UI_PlayerAngles(
     // --------- pitch -------------
     // only show a fraction of the pitch angle in the torso
     if headAngles[0 as i32 as usize] > 180 as i32 as f32 {
-        dest = ((-(360 as i32) as f32 + headAngles[0 as i32 as usize])
-            as f64
-            * 0.75f64) as f32
+        dest = ((-(360 as i32) as f32 + headAngles[0 as i32 as usize]) as f64 * 0.75f64) as f32
     } else {
         dest = (headAngles[0 as i32 as usize] as f64 * 0.75f64) as f32
     }
@@ -1068,11 +1032,8 @@ pub unsafe extern "C" fn UI_MachinegunSpinAngle(
         if delta > 1000 as i32 {
             delta = 1000 as i32
         }
-        speed = (0.5f64
-            * (0.9f32
-                + (1000 as i32 - delta) as f32
-                    / 1000 as i32 as f32) as f64)
-            as f32;
+        speed =
+            (0.5f64 * (0.9f32 + (1000 as i32 - delta) as f32 / 1000 as i32 as f32) as f64) as f32;
         angle = (*pi).barrelAngle + delta as f32 * speed
     }
     torsoAnim = (*pi).torsoAnim & !(128 as i32);
@@ -1080,13 +1041,12 @@ pub unsafe extern "C" fn UI_MachinegunSpinAngle(
         torsoAnim = crate::bg_public_h::TORSO_ATTACK as i32
     }
     if (*pi).barrelSpinning as u32
-        == !(torsoAnim == crate::bg_public_h::TORSO_ATTACK as i32) as i32
-            as u32
+        == !(torsoAnim == crate::bg_public_h::TORSO_ATTACK as i32) as i32 as u32
     {
         (*pi).barrelTime = dp_realtime;
         (*pi).barrelAngle = crate::src::qcommon::q_math::AngleMod(angle);
-        (*pi).barrelSpinning = (torsoAnim == crate::bg_public_h::TORSO_ATTACK as i32)
-            as i32 as crate::src::qcommon::q_shared::qboolean
+        (*pi).barrelSpinning = (torsoAnim == crate::bg_public_h::TORSO_ATTACK as i32) as i32
+            as crate::src::qcommon::q_shared::qboolean
     }
     return angle;
 }
@@ -1291,8 +1251,7 @@ pub unsafe extern "C" fn UI_DrawPlayer(
         return;
     }
     dp_realtime = time;
-    if (*pi).pendingWeapon as u32
-        != crate::bg_public_h::WP_NUM_WEAPONS as i32 as u32
+    if (*pi).pendingWeapon as u32 != crate::bg_public_h::WP_NUM_WEAPONS as i32 as u32
         && dp_realtime > (*pi).weaponTimer
     {
         (*pi).weapon = (*pi).pendingWeapon;
@@ -1334,31 +1293,21 @@ pub unsafe extern "C" fn UI_DrawPlayer(
     refdef.y = y as i32;
     refdef.width = w as i32;
     refdef.height = h as i32;
-    refdef.fov_x =
-        (refdef.width as f32 / crate::src::q3_ui::ui_atoms::uis.xscale / 640.0f32
-            * 90.0f32) as i32 as f32;
-    xx = ((refdef.width as f32 / crate::src::q3_ui::ui_atoms::uis.xscale)
-        as f64
-        / crate::stdlib::tan(
-            (refdef.fov_x / 360 as i32 as f32) as f64
-                * 3.14159265358979323846f64,
-        )) as f32;
+    refdef.fov_x = (refdef.width as f32 / crate::src::q3_ui::ui_atoms::uis.xscale / 640.0f32
+        * 90.0f32) as i32 as f32;
+    xx = ((refdef.width as f32 / crate::src::q3_ui::ui_atoms::uis.xscale) as f64
+        / crate::stdlib::tan((refdef.fov_x / 360 as i32 as f32) as f64 * 3.14159265358979323846f64))
+        as f32;
     refdef.fov_y = crate::stdlib::atan2(
-        (refdef.height as f32 / crate::src::q3_ui::ui_atoms::uis.yscale)
-            as f64,
+        (refdef.height as f32 / crate::src::q3_ui::ui_atoms::uis.yscale) as f64,
         xx as f64,
     ) as f32;
-    refdef.fov_y = (refdef.fov_y as f64
-        * (360 as i32 as f64 / 3.14159265358979323846f64))
-        as f32;
+    refdef.fov_y = (refdef.fov_y as f64 * (360 as i32 as f64 / 3.14159265358979323846f64)) as f32;
     // calculate distance so the player nearly fills the box
-    len = (0.7f64
-        * (maxs[2 as i32 as usize] - mins[2 as i32 as usize]) as f64)
-        as f32;
+    len = (0.7f64 * (maxs[2 as i32 as usize] - mins[2 as i32 as usize]) as f64) as f32;
     origin[0 as i32 as usize] = (len as f64
         / crate::stdlib::tan(
-            refdef.fov_x as f64 * 3.14159265358979323846f64 / 180.0f32 as f64
-                * 0.5f64,
+            refdef.fov_x as f64 * 3.14159265358979323846f64 / 180.0f32 as f64 * 0.5f64,
         )) as crate::src::qcommon::q_shared::vec_t;
     origin[1 as i32 as usize] = (0.5f64
         * (mins[1 as i32 as usize] + maxs[1 as i32 as usize]) as f64)
@@ -1452,18 +1401,14 @@ pub unsafe extern "C" fn UI_DrawPlayer(
     //
     // add the gun
     //
-    if (*pi).currentWeapon as u32
-        != crate::bg_public_h::WP_NONE as i32 as u32
-    {
+    if (*pi).currentWeapon as u32 != crate::bg_public_h::WP_NONE as i32 as u32 {
         crate::stdlib::memset(
             &mut gun as *mut crate::tr_types_h::refEntity_t as *mut libc::c_void,
             0 as i32,
             ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
         );
         gun.hModel = (*pi).weaponModel;
-        if (*pi).currentWeapon as u32
-            == crate::bg_public_h::WP_RAILGUN as i32 as u32
-        {
+        if (*pi).currentWeapon as u32 == crate::bg_public_h::WP_RAILGUN as i32 as u32 {
             gun.shaderRGBA[0 as i32 as usize] = (*pi).c1RGBA[0 as i32 as usize];
             gun.shaderRGBA[1 as i32 as usize] = (*pi).c1RGBA[1 as i32 as usize];
             gun.shaderRGBA[2 as i32 as usize] = (*pi).c1RGBA[2 as i32 as usize];
@@ -1514,10 +1459,8 @@ pub unsafe extern "C" fn UI_DrawPlayer(
         barrel.lightingOrigin[2 as i32 as usize] = origin[2 as i32 as usize];
         barrel.renderfx = renderfx;
         barrel.hModel = (*pi).barrelModel;
-        angles[1 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        angles[0 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        angles[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        angles[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         angles[2 as i32 as usize] = UI_MachinegunSpinAngle(pi);
         crate::src::qcommon::q_math::AnglesToAxis(
             angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -1544,30 +1487,24 @@ pub unsafe extern "C" fn UI_DrawPlayer(
                 ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
             );
             flash.hModel = (*pi).flashModel;
-            if (*pi).currentWeapon as u32
-                == crate::bg_public_h::WP_RAILGUN as i32 as u32
-            {
-                flash.shaderRGBA[0 as i32 as usize] =
-                    (*pi).c1RGBA[0 as i32 as usize];
-                flash.shaderRGBA[1 as i32 as usize] =
-                    (*pi).c1RGBA[1 as i32 as usize];
-                flash.shaderRGBA[2 as i32 as usize] =
-                    (*pi).c1RGBA[2 as i32 as usize];
-                flash.shaderRGBA[3 as i32 as usize] =
-                    (*pi).c1RGBA[3 as i32 as usize]
+            if (*pi).currentWeapon as u32 == crate::bg_public_h::WP_RAILGUN as i32 as u32 {
+                flash.shaderRGBA[0 as i32 as usize] = (*pi).c1RGBA[0 as i32 as usize];
+                flash.shaderRGBA[1 as i32 as usize] = (*pi).c1RGBA[1 as i32 as usize];
+                flash.shaderRGBA[2 as i32 as usize] = (*pi).c1RGBA[2 as i32 as usize];
+                flash.shaderRGBA[3 as i32 as usize] = (*pi).c1RGBA[3 as i32 as usize]
             } else {
-                flash.shaderRGBA[0 as i32 as usize] =
-                    crate::src::qcommon::q_math::colorWhite[0 as i32 as usize]
-                        as crate::src::qcommon::q_shared::byte;
-                flash.shaderRGBA[1 as i32 as usize] =
-                    crate::src::qcommon::q_math::colorWhite[1 as i32 as usize]
-                        as crate::src::qcommon::q_shared::byte;
-                flash.shaderRGBA[2 as i32 as usize] =
-                    crate::src::qcommon::q_math::colorWhite[2 as i32 as usize]
-                        as crate::src::qcommon::q_shared::byte;
-                flash.shaderRGBA[3 as i32 as usize] =
-                    crate::src::qcommon::q_math::colorWhite[3 as i32 as usize]
-                        as crate::src::qcommon::q_shared::byte
+                flash.shaderRGBA[0 as i32 as usize] = crate::src::qcommon::q_math::colorWhite
+                    [0 as i32 as usize]
+                    as crate::src::qcommon::q_shared::byte;
+                flash.shaderRGBA[1 as i32 as usize] = crate::src::qcommon::q_math::colorWhite
+                    [1 as i32 as usize]
+                    as crate::src::qcommon::q_shared::byte;
+                flash.shaderRGBA[2 as i32 as usize] = crate::src::qcommon::q_math::colorWhite
+                    [2 as i32 as usize]
+                    as crate::src::qcommon::q_shared::byte;
+                flash.shaderRGBA[3 as i32 as usize] = crate::src::qcommon::q_math::colorWhite
+                    [3 as i32 as usize]
+                    as crate::src::qcommon::q_shared::byte
             }
             flash.lightingOrigin[0 as i32 as usize] = origin[0 as i32 as usize];
             flash.lightingOrigin[1 as i32 as usize] = origin[1 as i32 as usize];
@@ -1808,34 +1745,27 @@ unsafe extern "C" fn UI_ParseAnimationFile(
             {
                 break;
             }
-            (*animations.offset(i as isize)).firstFrame = (*animations
-                .offset(crate::bg_public_h::TORSO_GESTURE as i32 as isize))
-            .firstFrame;
-            (*animations.offset(i as isize)).frameLerp = (*animations
-                .offset(crate::bg_public_h::TORSO_GESTURE as i32 as isize))
-            .frameLerp;
-            (*animations.offset(i as isize)).initialLerp = (*animations
-                .offset(crate::bg_public_h::TORSO_GESTURE as i32 as isize))
-            .initialLerp;
-            (*animations.offset(i as isize)).loopFrames = (*animations
-                .offset(crate::bg_public_h::TORSO_GESTURE as i32 as isize))
-            .loopFrames;
-            (*animations.offset(i as isize)).numFrames = (*animations
-                .offset(crate::bg_public_h::TORSO_GESTURE as i32 as isize))
-            .numFrames;
+            (*animations.offset(i as isize)).firstFrame =
+                (*animations.offset(crate::bg_public_h::TORSO_GESTURE as i32 as isize)).firstFrame;
+            (*animations.offset(i as isize)).frameLerp =
+                (*animations.offset(crate::bg_public_h::TORSO_GESTURE as i32 as isize)).frameLerp;
+            (*animations.offset(i as isize)).initialLerp =
+                (*animations.offset(crate::bg_public_h::TORSO_GESTURE as i32 as isize)).initialLerp;
+            (*animations.offset(i as isize)).loopFrames =
+                (*animations.offset(crate::bg_public_h::TORSO_GESTURE as i32 as isize)).loopFrames;
+            (*animations.offset(i as isize)).numFrames =
+                (*animations.offset(crate::bg_public_h::TORSO_GESTURE as i32 as isize)).numFrames;
             (*animations.offset(i as isize)).reversed =
                 crate::src::qcommon::q_shared::qfalse as i32;
-            (*animations.offset(i as isize)).flipflop =
-                crate::src::qcommon::q_shared::qfalse as i32
+            (*animations.offset(i as isize)).flipflop = crate::src::qcommon::q_shared::qfalse as i32
         } else {
             (*animations.offset(i as isize)).firstFrame = atoi(token);
             // leg only frames are adjusted to not count the upper body only frames
             if i == crate::bg_public_h::LEGS_WALKCR as i32 {
                 skip = (*animations.offset(crate::bg_public_h::LEGS_WALKCR as i32 as isize))
                     .firstFrame
-                    - (*animations
-                        .offset(crate::bg_public_h::TORSO_GESTURE as i32 as isize))
-                    .firstFrame
+                    - (*animations.offset(crate::bg_public_h::TORSO_GESTURE as i32 as isize))
+                        .firstFrame
             }
             if i >= crate::bg_public_h::LEGS_WALKCR as i32
                 && i < crate::bg_public_h::TORSO_GETFLAG as i32
@@ -1871,10 +1801,8 @@ unsafe extern "C" fn UI_ParseAnimationFile(
             if fps == 0 as i32 as f32 {
                 fps = 1 as i32 as f32
             }
-            (*animations.offset(i as isize)).frameLerp =
-                (1000 as i32 as f32 / fps) as i32;
-            (*animations.offset(i as isize)).initialLerp =
-                (1000 as i32 as f32 / fps) as i32
+            (*animations.offset(i as isize)).frameLerp = (1000 as i32 as f32 / fps) as i32;
+            (*animations.offset(i as isize)).initialLerp = (1000 as i32 as f32 / fps) as i32
         }
         i += 1
     }
@@ -2171,17 +2099,13 @@ pub unsafe extern "C" fn UI_PlayerInfo_SetInfo(
     c = crate::src::ui::ui_syscalls::trap_Cvar_VariableValue(
         b"color1\x00" as *const u8 as *const libc::c_char,
     ) as i32;
-    (*pi).color1[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*pi).color1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     (*pi).color1[1 as i32 as usize] = (*pi).color1[2 as i32 as usize];
     (*pi).color1[0 as i32 as usize] = (*pi).color1[1 as i32 as usize];
     if c < 1 as i32 || c > 7 as i32 {
-        (*pi).color1[0 as i32 as usize] =
-            1 as i32 as crate::src::qcommon::q_shared::vec_t;
-        (*pi).color1[1 as i32 as usize] =
-            1 as i32 as crate::src::qcommon::q_shared::vec_t;
-        (*pi).color1[2 as i32 as usize] =
-            1 as i32 as crate::src::qcommon::q_shared::vec_t
+        (*pi).color1[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*pi).color1[1 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*pi).color1[2 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t
     } else {
         if c & 1 as i32 != 0 {
             (*pi).color1[2 as i32 as usize] = 1.0f32
@@ -2193,17 +2117,13 @@ pub unsafe extern "C" fn UI_PlayerInfo_SetInfo(
             (*pi).color1[0 as i32 as usize] = 1.0f32
         }
     }
-    (*pi).c1RGBA[0 as i32 as usize] = (255 as i32 as f32
-        * (*pi).color1[0 as i32 as usize])
+    (*pi).c1RGBA[0 as i32 as usize] = (255 as i32 as f32 * (*pi).color1[0 as i32 as usize])
         as crate::src::qcommon::q_shared::byte;
-    (*pi).c1RGBA[1 as i32 as usize] = (255 as i32 as f32
-        * (*pi).color1[1 as i32 as usize])
+    (*pi).c1RGBA[1 as i32 as usize] = (255 as i32 as f32 * (*pi).color1[1 as i32 as usize])
         as crate::src::qcommon::q_shared::byte;
-    (*pi).c1RGBA[2 as i32 as usize] = (255 as i32 as f32
-        * (*pi).color1[2 as i32 as usize])
+    (*pi).c1RGBA[2 as i32 as usize] = (255 as i32 as f32 * (*pi).color1[2 as i32 as usize])
         as crate::src::qcommon::q_shared::byte;
-    (*pi).c1RGBA[3 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
+    (*pi).c1RGBA[3 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
     // view angles
     (*pi).viewAngles[0 as i32 as usize] = *viewAngles.offset(0 as i32 as isize);
     (*pi).viewAngles[1 as i32 as usize] = *viewAngles.offset(1 as i32 as isize);
@@ -2223,9 +2143,7 @@ pub unsafe extern "C" fn UI_PlayerInfo_SetInfo(
         UI_ForceTorsoAnim(pi, torsoAnim);
         (*pi).torso.yawAngle = *viewAngles.offset(1 as i32 as isize);
         (*pi).torso.yawing = crate::src::qcommon::q_shared::qfalse;
-        if weaponNumber as u32
-            != crate::bg_public_h::WP_NUM_WEAPONS as i32 as u32
-        {
+        if weaponNumber as u32 != crate::bg_public_h::WP_NUM_WEAPONS as i32 as u32 {
             (*pi).weapon = weaponNumber;
             (*pi).currentWeapon = weaponNumber;
             (*pi).lastWeapon = weaponNumber;
@@ -2236,14 +2154,10 @@ pub unsafe extern "C" fn UI_PlayerInfo_SetInfo(
         return;
     }
     // weapon
-    if weaponNumber as u32
-        == crate::bg_public_h::WP_NUM_WEAPONS as i32 as u32
-    {
+    if weaponNumber as u32 == crate::bg_public_h::WP_NUM_WEAPONS as i32 as u32 {
         (*pi).pendingWeapon = crate::bg_public_h::WP_NUM_WEAPONS;
         (*pi).weaponTimer = 0 as i32
-    } else if weaponNumber as u32
-        != crate::bg_public_h::WP_NONE as i32 as u32
-    {
+    } else if weaponNumber as u32 != crate::bg_public_h::WP_NONE as i32 as u32 {
         (*pi).pendingWeapon = weaponNumber;
         (*pi).weaponTimer = dp_realtime + 250 as i32
     }
@@ -2281,8 +2195,7 @@ pub unsafe extern "C" fn UI_PlayerInfo_SetInfo(
         || torsoAnim == crate::bg_public_h::TORSO_STAND2 as i32
     {
         if weaponNum as u32 == crate::bg_public_h::WP_NONE as i32 as u32
-            || weaponNum as u32
-                == crate::bg_public_h::WP_GAUNTLET as i32 as u32
+            || weaponNum as u32 == crate::bg_public_h::WP_GAUNTLET as i32 as u32
         {
             torsoAnim = crate::bg_public_h::TORSO_STAND2 as i32
         } else {
@@ -2293,8 +2206,7 @@ pub unsafe extern "C" fn UI_PlayerInfo_SetInfo(
         || torsoAnim == crate::bg_public_h::TORSO_ATTACK2 as i32
     {
         if weaponNum as u32 == crate::bg_public_h::WP_NONE as i32 as u32
-            || weaponNum as u32
-                == crate::bg_public_h::WP_GAUNTLET as i32 as u32
+            || weaponNum as u32 == crate::bg_public_h::WP_GAUNTLET as i32 as u32
         {
             torsoAnim = crate::bg_public_h::TORSO_ATTACK2 as i32
         } else {

@@ -204,8 +204,7 @@ pub unsafe extern "C" fn Netchan_TransmitNextFragment(mut chan: *mut crate::qcom
         ::std::mem::size_of::<[crate::src::qcommon::q_shared::byte; 1400]>() as libc::c_ulong
             as i32,
     ); // <-- only do the oob here
-    outgoingSequence = ((*chan).outgoingSequence as u32
-        | (1 as u32) << 31 as i32) as i32;
+    outgoingSequence = ((*chan).outgoingSequence as u32 | (1 as u32) << 31 as i32) as i32;
     crate::src::qcommon::msg::MSG_WriteLong(
         &mut send as *mut _ as *mut crate::qcommon_h::msg_t,
         outgoingSequence,
@@ -403,8 +402,7 @@ pub unsafe extern "C" fn Netchan_Process(
     sequence = crate::src::qcommon::msg::MSG_ReadLong(msg as *mut crate::qcommon_h::msg_t);
     // check for fragment information
     if sequence as u32 & (1 as u32) << 31 as i32 != 0 {
-        sequence =
-            (sequence as u32 & !((1 as u32) << 31 as i32)) as i32;
+        sequence = (sequence as u32 & !((1 as u32) << 31 as i32)) as i32;
         fragmented = crate::src::qcommon::q_shared::qtrue
     } else {
         fragmented = crate::src::qcommon::q_shared::qfalse
@@ -627,8 +625,7 @@ pub unsafe extern "C" fn NET_SendLoopPacket(
     let mut loop_0: *mut loopback_t = 0 as *mut loopback_t;
     loop_0 = &mut *loopbacks
         .as_mut_ptr()
-        .offset((sock as u32 ^ 1 as i32 as u32) as isize)
-        as *mut loopback_t;
+        .offset((sock as u32 ^ 1 as i32 as u32) as isize) as *mut loopback_t;
     i = (*loop_0).send & 16 as i32 - 1 as i32;
     (*loop_0).send += 1;
     crate::stdlib::memcpy(
@@ -666,8 +663,7 @@ unsafe extern "C" fn NET_QueuePacket(
     (*new).length = length;
     (*new).to = to;
     (*new).release = crate::src::sys::sys_unix::Sys_Milliseconds()
-        + (offset as f32 / (*crate::src::qcommon::common::com_timescale).value)
-            as i32;
+        + (offset as f32 / (*crate::src::qcommon::common::com_timescale).value) as i32;
     (*new).next = 0 as *mut packetQueue_s;
     if packetQueue.is_null() {
         packetQueue = new;
@@ -904,12 +900,10 @@ pub unsafe extern "C" fn NET_StringToAdr(
         return 0 as i32;
     }
     if !port.is_null() {
-        (*a).port =
-            crate::src::qcommon::q_shared::ShortSwap(atoi(port) as i16) as u16;
+        (*a).port = crate::src::qcommon::q_shared::ShortSwap(atoi(port) as i16) as u16;
         return 1 as i32;
     } else {
-        (*a).port = crate::src::qcommon::q_shared::ShortSwap(27960 as i32 as i16)
-            as u16;
+        (*a).port = crate::src::qcommon::q_shared::ShortSwap(27960 as i32 as i16) as u16;
         return 2 as i32;
     };
 }

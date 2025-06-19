@@ -335,8 +335,8 @@ pub unsafe extern "C" fn MField_Draw(
     let mut cursorChar: i32 = 0;
     let mut str: [libc::c_char; 1024] = [0; 1024];
     drawLen = (*edit).widthInChars;
-    len = crate::stdlib::strlen((*edit).buffer.as_mut_ptr())
-        .wrapping_add(1 as i32 as libc::c_ulong) as i32;
+    len = crate::stdlib::strlen((*edit).buffer.as_mut_ptr()).wrapping_add(1 as i32 as libc::c_ulong)
+        as i32;
     // guarantee that cursor will be visible
     if len <= drawLen {
         prestep = 0 as i32
@@ -436,19 +436,15 @@ pub unsafe extern "C" fn MField_KeyDownEvent(
 ) {
     let mut len: i32 = 0;
     // shift-insert is paste
-    if (key == crate::keycodes_h::K_INS as i32
-        || key == crate::keycodes_h::K_KP_INS as i32)
-        && crate::src::ui::ui_syscalls::trap_Key_IsDown(crate::keycodes_h::K_SHIFT as i32)
-            as u32
+    if (key == crate::keycodes_h::K_INS as i32 || key == crate::keycodes_h::K_KP_INS as i32)
+        && crate::src::ui::ui_syscalls::trap_Key_IsDown(crate::keycodes_h::K_SHIFT as i32) as u32
             != 0
     {
         MField_Paste(edit);
         return;
     }
     len = crate::stdlib::strlen((*edit).buffer.as_mut_ptr()) as i32;
-    if key == crate::keycodes_h::K_DEL as i32
-        || key == crate::keycodes_h::K_KP_DEL as i32
-    {
+    if key == crate::keycodes_h::K_DEL as i32 || key == crate::keycodes_h::K_KP_DEL as i32 {
         if (*edit).cursor < len {
             crate::stdlib::memmove(
                 (*edit).buffer.as_mut_ptr().offset((*edit).cursor as isize) as *mut libc::c_void,
@@ -488,9 +484,7 @@ pub unsafe extern "C" fn MField_KeyDownEvent(
         || key == crate::keycodes_h::K_KP_HOME as i32
         || ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<i32>() as libc::c_ulong
-                > 1 as i32 as libc::c_ulong
-            {
+            if ::std::mem::size_of::<i32>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
                 if 0 != 0 {
                     let mut __c: i32 = key;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -506,9 +500,7 @@ pub unsafe extern "C" fn MField_KeyDownEvent(
             }
             __res
         }) == 'a' as i32
-            && crate::src::ui::ui_syscalls::trap_Key_IsDown(
-                crate::keycodes_h::K_CTRL as i32,
-            ) as u32
+            && crate::src::ui::ui_syscalls::trap_Key_IsDown(crate::keycodes_h::K_CTRL as i32) as u32
                 != 0
     {
         (*edit).cursor = 0 as i32;
@@ -519,9 +511,7 @@ pub unsafe extern "C" fn MField_KeyDownEvent(
         || key == crate::keycodes_h::K_KP_END as i32
         || ({
             let mut __res: i32 = 0;
-            if ::std::mem::size_of::<i32>() as libc::c_ulong
-                > 1 as i32 as libc::c_ulong
-            {
+            if ::std::mem::size_of::<i32>() as libc::c_ulong > 1 as i32 as libc::c_ulong {
                 if 0 != 0 {
                     let mut __c: i32 = key;
                     __res = if __c < -(128 as i32) || __c > 255 as i32 {
@@ -537,9 +527,7 @@ pub unsafe extern "C" fn MField_KeyDownEvent(
             }
             __res
         }) == 'e' as i32
-            && crate::src::ui::ui_syscalls::trap_Key_IsDown(
-                crate::keycodes_h::K_CTRL as i32,
-            ) as u32
+            && crate::src::ui::ui_syscalls::trap_Key_IsDown(crate::keycodes_h::K_CTRL as i32) as u32
                 != 0
     {
         (*edit).cursor = len;
@@ -549,9 +537,7 @@ pub unsafe extern "C" fn MField_KeyDownEvent(
         }
         return;
     }
-    if key == crate::keycodes_h::K_INS as i32
-        || key == crate::keycodes_h::K_KP_INS as i32
-    {
+    if key == crate::keycodes_h::K_INS as i32 || key == crate::keycodes_h::K_KP_INS as i32 {
         crate::src::ui::ui_syscalls::trap_Key_SetOverstrikeMode(
             (crate::src::ui::ui_syscalls::trap_Key_GetOverstrikeMode() as u64 == 0) as i32
                 as crate::src::qcommon::q_shared::qboolean,
@@ -566,10 +552,7 @@ MField_CharEvent
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn MField_CharEvent(
-    mut edit: *mut crate::ui_local_h::mfield_t,
-    mut ch: i32,
-) {
+pub unsafe extern "C" fn MField_CharEvent(mut edit: *mut crate::ui_local_h::mfield_t, mut ch: i32) {
     let mut len: i32 = 0;
     if ch == 'v' as i32 - 'a' as i32 + 1 as i32 {
         // ctrl-v is paste
@@ -630,9 +613,7 @@ pub unsafe extern "C" fn MField_CharEvent(
         }
     } else {
         // insert mode
-        if len == 256 as i32 - 1 as i32
-            || (*edit).maxchars != 0 && len >= (*edit).maxchars
-        {
+        if len == 256 as i32 - 1 as i32 || (*edit).maxchars != 0 && len >= (*edit).maxchars {
             return;
         }
         crate::stdlib::memmove(

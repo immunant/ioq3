@@ -66,56 +66,40 @@ pub mod pitch_h {
             let fresh4 = y;
             y = y.offset(1);
             y_3 = *fresh4;
-            *sum.offset(0 as i32 as isize) =
-                *sum.offset(0 as i32 as isize) + tmp * y_0;
-            *sum.offset(1 as i32 as isize) =
-                *sum.offset(1 as i32 as isize) + tmp * y_1;
-            *sum.offset(2 as i32 as isize) =
-                *sum.offset(2 as i32 as isize) + tmp * y_2;
-            *sum.offset(3 as i32 as isize) =
-                *sum.offset(3 as i32 as isize) + tmp * y_3;
+            *sum.offset(0 as i32 as isize) = *sum.offset(0 as i32 as isize) + tmp * y_0;
+            *sum.offset(1 as i32 as isize) = *sum.offset(1 as i32 as isize) + tmp * y_1;
+            *sum.offset(2 as i32 as isize) = *sum.offset(2 as i32 as isize) + tmp * y_2;
+            *sum.offset(3 as i32 as isize) = *sum.offset(3 as i32 as isize) + tmp * y_3;
             let fresh5 = x;
             x = x.offset(1);
             tmp = *fresh5;
             let fresh6 = y;
             y = y.offset(1);
             y_0 = *fresh6;
-            *sum.offset(0 as i32 as isize) =
-                *sum.offset(0 as i32 as isize) + tmp * y_1;
-            *sum.offset(1 as i32 as isize) =
-                *sum.offset(1 as i32 as isize) + tmp * y_2;
-            *sum.offset(2 as i32 as isize) =
-                *sum.offset(2 as i32 as isize) + tmp * y_3;
-            *sum.offset(3 as i32 as isize) =
-                *sum.offset(3 as i32 as isize) + tmp * y_0;
+            *sum.offset(0 as i32 as isize) = *sum.offset(0 as i32 as isize) + tmp * y_1;
+            *sum.offset(1 as i32 as isize) = *sum.offset(1 as i32 as isize) + tmp * y_2;
+            *sum.offset(2 as i32 as isize) = *sum.offset(2 as i32 as isize) + tmp * y_3;
+            *sum.offset(3 as i32 as isize) = *sum.offset(3 as i32 as isize) + tmp * y_0;
             let fresh7 = x;
             x = x.offset(1);
             tmp = *fresh7;
             let fresh8 = y;
             y = y.offset(1);
             y_1 = *fresh8;
-            *sum.offset(0 as i32 as isize) =
-                *sum.offset(0 as i32 as isize) + tmp * y_2;
-            *sum.offset(1 as i32 as isize) =
-                *sum.offset(1 as i32 as isize) + tmp * y_3;
-            *sum.offset(2 as i32 as isize) =
-                *sum.offset(2 as i32 as isize) + tmp * y_0;
-            *sum.offset(3 as i32 as isize) =
-                *sum.offset(3 as i32 as isize) + tmp * y_1;
+            *sum.offset(0 as i32 as isize) = *sum.offset(0 as i32 as isize) + tmp * y_2;
+            *sum.offset(1 as i32 as isize) = *sum.offset(1 as i32 as isize) + tmp * y_3;
+            *sum.offset(2 as i32 as isize) = *sum.offset(2 as i32 as isize) + tmp * y_0;
+            *sum.offset(3 as i32 as isize) = *sum.offset(3 as i32 as isize) + tmp * y_1;
             let fresh9 = x;
             x = x.offset(1);
             tmp = *fresh9;
             let fresh10 = y;
             y = y.offset(1);
             y_2 = *fresh10;
-            *sum.offset(0 as i32 as isize) =
-                *sum.offset(0 as i32 as isize) + tmp * y_3;
-            *sum.offset(1 as i32 as isize) =
-                *sum.offset(1 as i32 as isize) + tmp * y_0;
-            *sum.offset(2 as i32 as isize) =
-                *sum.offset(2 as i32 as isize) + tmp * y_1;
-            *sum.offset(3 as i32 as isize) =
-                *sum.offset(3 as i32 as isize) + tmp * y_2;
+            *sum.offset(0 as i32 as isize) = *sum.offset(0 as i32 as isize) + tmp * y_3;
+            *sum.offset(1 as i32 as isize) = *sum.offset(1 as i32 as isize) + tmp * y_0;
+            *sum.offset(2 as i32 as isize) = *sum.offset(2 as i32 as isize) + tmp * y_1;
+            *sum.offset(3 as i32 as isize) = *sum.offset(3 as i32 as isize) + tmp * y_2;
             j += 4 as i32
         }
         let fresh11 = j;
@@ -127,14 +111,10 @@ pub mod pitch_h {
             let fresh13 = y;
             y = y.offset(1);
             y_3 = *fresh13;
-            *sum.offset(0 as i32 as isize) =
-                *sum.offset(0 as i32 as isize) + tmp_0 * y_0;
-            *sum.offset(1 as i32 as isize) =
-                *sum.offset(1 as i32 as isize) + tmp_0 * y_1;
-            *sum.offset(2 as i32 as isize) =
-                *sum.offset(2 as i32 as isize) + tmp_0 * y_2;
-            *sum.offset(3 as i32 as isize) =
-                *sum.offset(3 as i32 as isize) + tmp_0 * y_3
+            *sum.offset(0 as i32 as isize) = *sum.offset(0 as i32 as isize) + tmp_0 * y_0;
+            *sum.offset(1 as i32 as isize) = *sum.offset(1 as i32 as isize) + tmp_0 * y_1;
+            *sum.offset(2 as i32 as isize) = *sum.offset(2 as i32 as isize) + tmp_0 * y_2;
+            *sum.offset(3 as i32 as isize) = *sum.offset(3 as i32 as isize) + tmp_0 * y_3
         }
         let fresh14 = j;
         j = j + 1;
@@ -145,14 +125,10 @@ pub mod pitch_h {
             let fresh16 = y;
             y = y.offset(1);
             y_0 = *fresh16;
-            *sum.offset(0 as i32 as isize) =
-                *sum.offset(0 as i32 as isize) + tmp_1 * y_1;
-            *sum.offset(1 as i32 as isize) =
-                *sum.offset(1 as i32 as isize) + tmp_1 * y_2;
-            *sum.offset(2 as i32 as isize) =
-                *sum.offset(2 as i32 as isize) + tmp_1 * y_3;
-            *sum.offset(3 as i32 as isize) =
-                *sum.offset(3 as i32 as isize) + tmp_1 * y_0
+            *sum.offset(0 as i32 as isize) = *sum.offset(0 as i32 as isize) + tmp_1 * y_1;
+            *sum.offset(1 as i32 as isize) = *sum.offset(1 as i32 as isize) + tmp_1 * y_2;
+            *sum.offset(2 as i32 as isize) = *sum.offset(2 as i32 as isize) + tmp_1 * y_3;
+            *sum.offset(3 as i32 as isize) = *sum.offset(3 as i32 as isize) + tmp_1 * y_0
         }
         if j < len {
             let fresh17 = x;
@@ -161,14 +137,10 @@ pub mod pitch_h {
             let fresh18 = y;
             y = y.offset(1);
             y_1 = *fresh18;
-            *sum.offset(0 as i32 as isize) =
-                *sum.offset(0 as i32 as isize) + tmp_2 * y_2;
-            *sum.offset(1 as i32 as isize) =
-                *sum.offset(1 as i32 as isize) + tmp_2 * y_3;
-            *sum.offset(2 as i32 as isize) =
-                *sum.offset(2 as i32 as isize) + tmp_2 * y_0;
-            *sum.offset(3 as i32 as isize) =
-                *sum.offset(3 as i32 as isize) + tmp_2 * y_1
+            *sum.offset(0 as i32 as isize) = *sum.offset(0 as i32 as isize) + tmp_2 * y_2;
+            *sum.offset(1 as i32 as isize) = *sum.offset(1 as i32 as isize) + tmp_2 * y_3;
+            *sum.offset(2 as i32 as isize) = *sum.offset(2 as i32 as isize) + tmp_2 * y_0;
+            *sum.offset(3 as i32 as isize) = *sum.offset(3 as i32 as isize) + tmp_2 * y_1
         };
     }
 }
@@ -386,25 +358,22 @@ pub unsafe extern "C" fn celt_iir(
         /* Patch up the result to compensate for the fact that this is an IIR */
         *y.offset((i + ord) as isize) = -sum[0 as i32 as usize];
         *_y.offset(i as isize) = sum[0 as i32 as usize];
-        sum[1 as i32 as usize] = sum[1 as i32 as usize]
-            + *y.offset((i + ord) as isize) * *den.offset(0 as i32 as isize);
+        sum[1 as i32 as usize] =
+            sum[1 as i32 as usize] + *y.offset((i + ord) as isize) * *den.offset(0 as i32 as isize);
         *y.offset((i + ord + 1 as i32) as isize) = -sum[1 as i32 as usize];
         *_y.offset((i + 1 as i32) as isize) = sum[1 as i32 as usize];
         sum[2 as i32 as usize] = sum[2 as i32 as usize]
-            + *y.offset((i + ord + 1 as i32) as isize)
-                * *den.offset(0 as i32 as isize);
-        sum[2 as i32 as usize] = sum[2 as i32 as usize]
-            + *y.offset((i + ord) as isize) * *den.offset(1 as i32 as isize);
+            + *y.offset((i + ord + 1 as i32) as isize) * *den.offset(0 as i32 as isize);
+        sum[2 as i32 as usize] =
+            sum[2 as i32 as usize] + *y.offset((i + ord) as isize) * *den.offset(1 as i32 as isize);
         *y.offset((i + ord + 2 as i32) as isize) = -sum[2 as i32 as usize];
         *_y.offset((i + 2 as i32) as isize) = sum[2 as i32 as usize];
         sum[3 as i32 as usize] = sum[3 as i32 as usize]
-            + *y.offset((i + ord + 2 as i32) as isize)
-                * *den.offset(0 as i32 as isize);
+            + *y.offset((i + ord + 2 as i32) as isize) * *den.offset(0 as i32 as isize);
         sum[3 as i32 as usize] = sum[3 as i32 as usize]
-            + *y.offset((i + ord + 1 as i32) as isize)
-                * *den.offset(1 as i32 as isize);
-        sum[3 as i32 as usize] = sum[3 as i32 as usize]
-            + *y.offset((i + ord) as isize) * *den.offset(2 as i32 as isize);
+            + *y.offset((i + ord + 1 as i32) as isize) * *den.offset(1 as i32 as isize);
+        sum[3 as i32 as usize] =
+            sum[3 as i32 as usize] + *y.offset((i + ord) as isize) * *den.offset(2 as i32 as isize);
         *y.offset((i + ord + 3 as i32) as isize) = -sum[3 as i32 as usize];
         *_y.offset((i + 3 as i32) as isize) = sum[3 as i32 as usize];
         i += 4 as i32

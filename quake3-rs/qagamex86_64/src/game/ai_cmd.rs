@@ -10,8 +10,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
 
@@ -258,9 +257,7 @@ BotGetTime
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn BotGetTime(
-    mut match_0: *mut crate::be_ai_chat_h::bot_match_t,
-) -> f32 {
+pub unsafe extern "C" fn BotGetTime(mut match_0: *mut crate::be_ai_chat_h::bot_match_t) -> f32 {
     let mut timematch: crate::be_ai_chat_h::bot_match_t = crate::be_ai_chat_h::bot_match_t {
         string: [0; 256],
         type_0: 0,
@@ -304,8 +301,7 @@ pub unsafe extern "C" fn BotGetTime(
                     256 as i32,
                 );
                 if timematch.type_0 == 105 as i32 {
-                    t = (atof(timestring.as_mut_ptr()) * 60 as i32 as f64)
-                        as f32
+                    t = (atof(timestring.as_mut_ptr()) * 60 as i32 as f64) as f32
                 } else if timematch.type_0 == 106 as i32 {
                     t = atof(timestring.as_mut_ptr()) as f32
                 } else {
@@ -634,11 +630,7 @@ pub unsafe extern "C" fn BotAddressedToBot(
             ::std::mem::size_of::<[libc::c_char; 256]>() as libc::c_ulong as i32,
         );
         //the name of this bot
-        crate::src::game::ai_dmq3::ClientName(
-            (*bs).client,
-            botname.as_mut_ptr(),
-            128 as i32,
-        );
+        crate::src::game::ai_dmq3::ClientName((*bs).client, botname.as_mut_ptr(), 128 as i32);
         //
         while crate::src::game::g_syscalls::trap_BotFindMatch(
             addressedto.as_mut_ptr(),
@@ -727,10 +719,8 @@ pub unsafe extern "C" fn BotAddressedToBot(
             || tellmatch.type_0 != 202 as i32
         {
             //make sure not everyone reacts to this message
-            if (::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32
-                > 1.0f64 as f32
-                    / (NumPlayersOnSameTeam(bs) - 1 as i32) as f32
+            if (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32
+                > 1.0f64 as f32 / (NumPlayersOnSameTeam(bs) - 1 as i32) as f32
             {
                 return crate::src::qcommon::q_shared::qfalse as i32;
             }
@@ -923,12 +913,9 @@ pub unsafe extern "C" fn BotMatch_HelpAccompany(
             // && trap_AAS_AreaReachability(areanum)) {
             (*bs).teamgoal.entitynum = client;
             (*bs).teamgoal.areanum = areanum;
-            (*bs).teamgoal.origin[0 as i32 as usize] =
-                entinfo.origin[0 as i32 as usize];
-            (*bs).teamgoal.origin[1 as i32 as usize] =
-                entinfo.origin[1 as i32 as usize];
-            (*bs).teamgoal.origin[2 as i32 as usize] =
-                entinfo.origin[2 as i32 as usize];
+            (*bs).teamgoal.origin[0 as i32 as usize] = entinfo.origin[0 as i32 as usize];
+            (*bs).teamgoal.origin[1 as i32 as usize] = entinfo.origin[1 as i32 as usize];
+            (*bs).teamgoal.origin[2 as i32 as usize] = entinfo.origin[2 as i32 as usize];
             (*bs).teamgoal.mins[0 as i32 as usize] =
                 -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
             (*bs).teamgoal.mins[1 as i32 as usize] =
@@ -1002,23 +989,19 @@ pub unsafe extern "C" fn BotMatch_HelpAccompany(
     (*bs).teammatevisible_time = crate::src::game::ai_main::floattime;
     //set the time to send a message to the team mates
     (*bs).teammessage_time = crate::src::game::ai_main::floattime
-        + 2 as i32 as f32
-            * ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32);
+        + 2 as i32 as f32 * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //get the team goal time
     (*bs).teamgoal_time = BotGetTime(match_0);
     //set the ltg type
     if (*match_0).type_0 == 3 as i32 {
         (*bs).ltgtype = 1 as i32; //3.5 meter
         if (*bs).teamgoal_time == 0. {
-            (*bs).teamgoal_time =
-                crate::src::game::ai_main::floattime + 60 as i32 as f32
+            (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 60 as i32 as f32
         }
     } else {
         (*bs).ltgtype = 2 as i32;
         if (*bs).teamgoal_time == 0. {
-            (*bs).teamgoal_time =
-                crate::src::game::ai_main::floattime + 600 as i32 as f32
+            (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 600 as i32 as f32
         }
         (*bs).formation_dist = (3.5f64 * 32 as i32 as f64) as f32;
         (*bs).arrive_time = 0 as i32 as f32;
@@ -1082,17 +1065,14 @@ pub unsafe extern "C" fn BotMatch_DefendKeyArea(
     (*bs).order_time = crate::src::game::ai_main::floattime;
     //set the time to send a message to the team mates
     (*bs).teammessage_time = crate::src::game::ai_main::floattime
-        + 2 as i32 as f32
-            * ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32);
+        + 2 as i32 as f32 * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //set the ltg type
     (*bs).ltgtype = 3 as i32;
     //get the team goal time
     (*bs).teamgoal_time = BotGetTime(match_0);
     //set the team goal time
     if (*bs).teamgoal_time == 0. {
-        (*bs).teamgoal_time =
-            crate::src::game::ai_main::floattime + 600 as i32 as f32
+        (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 600 as i32 as f32
     }
     //away from defending
     (*bs).defendaway_time = 0 as i32 as f32;
@@ -1154,9 +1134,7 @@ pub unsafe extern "C" fn BotMatch_GetItem(
     (*bs).order_time = crate::src::game::ai_main::floattime;
     //set the time to send a message to the team mates
     (*bs).teammessage_time = crate::src::game::ai_main::floattime
-        + 2 as i32 as f32
-            * ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32);
+        + 2 as i32 as f32 * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //set the ltg type
     (*bs).ltgtype = 10 as i32;
     //set the team goal time
@@ -1253,12 +1231,9 @@ pub unsafe extern "C" fn BotMatch_Camp(
             -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
         (*bs).teamgoal.mins[2 as i32 as usize] =
             -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
-        (*bs).teamgoal.maxs[0 as i32 as usize] =
-            8 as i32 as crate::src::qcommon::q_shared::vec_t;
-        (*bs).teamgoal.maxs[1 as i32 as usize] =
-            8 as i32 as crate::src::qcommon::q_shared::vec_t;
-        (*bs).teamgoal.maxs[2 as i32 as usize] =
-            8 as i32 as crate::src::qcommon::q_shared::vec_t
+        (*bs).teamgoal.maxs[0 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*bs).teamgoal.maxs[1 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*bs).teamgoal.maxs[2 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t
     } else if (*match_0).subtype & 32 as i32 != 0 {
         //if this is the bot self
         if client == (*bs).client {
@@ -1279,12 +1254,9 @@ pub unsafe extern "C" fn BotMatch_Camp(
                 //if (BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, client)) {
                 (*bs).teamgoal.entitynum = client;
                 (*bs).teamgoal.areanum = areanum;
-                (*bs).teamgoal.origin[0 as i32 as usize] =
-                    entinfo.origin[0 as i32 as usize];
-                (*bs).teamgoal.origin[1 as i32 as usize] =
-                    entinfo.origin[1 as i32 as usize];
-                (*bs).teamgoal.origin[2 as i32 as usize] =
-                    entinfo.origin[2 as i32 as usize];
+                (*bs).teamgoal.origin[0 as i32 as usize] = entinfo.origin[0 as i32 as usize];
+                (*bs).teamgoal.origin[1 as i32 as usize] = entinfo.origin[1 as i32 as usize];
+                (*bs).teamgoal.origin[2 as i32 as usize] = entinfo.origin[2 as i32 as usize];
                 (*bs).teamgoal.mins[0 as i32 as usize] =
                     -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
                 (*bs).teamgoal.mins[1 as i32 as usize] =
@@ -1324,17 +1296,14 @@ pub unsafe extern "C" fn BotMatch_Camp(
     (*bs).order_time = crate::src::game::ai_main::floattime;
     //set the time to send a message to the team mates
     (*bs).teammessage_time = crate::src::game::ai_main::floattime
-        + 2 as i32 as f32
-            * ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32);
+        + 2 as i32 as f32 * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //set the ltg type
     (*bs).ltgtype = 8 as i32;
     //get the team goal time
     (*bs).teamgoal_time = BotGetTime(match_0);
     //set the team goal time
     if (*bs).teamgoal_time == 0. {
-        (*bs).teamgoal_time =
-            crate::src::game::ai_main::floattime + 600 as i32 as f32
+        (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 600 as i32 as f32
     }
     //not arrived yet
     (*bs).arrive_time = 0 as i32 as f32;
@@ -1385,17 +1354,14 @@ pub unsafe extern "C" fn BotMatch_Patrol(
     (*bs).order_time = crate::src::game::ai_main::floattime;
     //set the time to send a message to the team mates
     (*bs).teammessage_time = crate::src::game::ai_main::floattime
-        + 2 as i32 as f32
-            * ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32);
+        + 2 as i32 as f32 * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //set the ltg type
     (*bs).ltgtype = 9 as i32;
     //get the team goal time
     (*bs).teamgoal_time = BotGetTime(match_0);
     //set the team goal time if not set already
     if (*bs).teamgoal_time == 0. {
-        (*bs).teamgoal_time =
-            crate::src::game::ai_main::floattime + 600 as i32 as f32
+        (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 600 as i32 as f32
     }
     //
     crate::src::game::ai_dmq3::BotSetTeamStatus(bs as *mut crate::src::game::ai_main::bot_state_s);
@@ -1446,14 +1412,11 @@ pub unsafe extern "C" fn BotMatch_GetFlag(
     (*bs).order_time = crate::src::game::ai_main::floattime;
     //set the time to send a message to the team mates
     (*bs).teammessage_time = crate::src::game::ai_main::floattime
-        + 2 as i32 as f32
-            * ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32);
+        + 2 as i32 as f32 * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //set the ltg type
     (*bs).ltgtype = 4 as i32;
     //set the team goal time
-    (*bs).teamgoal_time =
-        crate::src::game::ai_main::floattime + 600 as i32 as f32;
+    (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 600 as i32 as f32;
     // get an alternate route in ctf
     if crate::src::game::ai_dmq3::gametype == crate::bg_public_h::GT_CTF as i32 {
         //get an alternative route goal towards the enemy base
@@ -1509,14 +1472,11 @@ pub unsafe extern "C" fn BotMatch_AttackEnemyBase(
     (*bs).order_time = crate::src::game::ai_main::floattime;
     //set the time to send a message to the team mates
     (*bs).teammessage_time = crate::src::game::ai_main::floattime
-        + 2 as i32 as f32
-            * ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32);
+        + 2 as i32 as f32 * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //set the ltg type
     (*bs).ltgtype = 13 as i32;
     //set the team goal time
-    (*bs).teamgoal_time =
-        crate::src::game::ai_main::floattime + 600 as i32 as f32;
+    (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 600 as i32 as f32;
     (*bs).attackaway_time = 0 as i32 as f32;
     //
     crate::src::game::ai_dmq3::BotSetTeamStatus(bs as *mut crate::src::game::ai_main::bot_state_s);
@@ -1567,14 +1527,11 @@ pub unsafe extern "C" fn BotMatch_RushBase(
     (*bs).order_time = crate::src::game::ai_main::floattime;
     //set the time to send a message to the team mates
     (*bs).teammessage_time = crate::src::game::ai_main::floattime
-        + 2 as i32 as f32
-            * ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32);
+        + 2 as i32 as f32 * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //set the ltg type
     (*bs).ltgtype = 5 as i32;
     //set the team goal time
-    (*bs).teamgoal_time =
-        crate::src::game::ai_main::floattime + 120 as i32 as f32;
+    (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 120 as i32 as f32;
     (*bs).rushbaseaway_time = 0 as i32 as f32;
     //
     crate::src::game::ai_dmq3::BotSetTeamStatus(bs as *mut crate::src::game::ai_main::bot_state_s);
@@ -1692,14 +1649,11 @@ pub unsafe extern "C" fn BotMatch_ReturnFlag(
     (*bs).order_time = crate::src::game::ai_main::floattime;
     //set the time to send a message to the team mates
     (*bs).teammessage_time = crate::src::game::ai_main::floattime
-        + 2 as i32 as f32
-            * ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32);
+        + 2 as i32 as f32 * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //set the ltg type
     (*bs).ltgtype = 6 as i32;
     //set the team goal time
-    (*bs).teamgoal_time =
-        crate::src::game::ai_main::floattime + 180 as i32 as f32;
+    (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 180 as i32 as f32;
     (*bs).rushbaseaway_time = 0 as i32 as f32;
     //
     crate::src::game::ai_dmq3::BotSetTeamStatus(bs as *mut crate::src::game::ai_main::bot_state_s);
@@ -1883,8 +1837,8 @@ pub unsafe extern "C" fn BotMatch_CheckPoint(
         &mut *position.as_mut_ptr().offset(2 as i32 as isize)
             as *mut crate::src::qcommon::q_shared::vec_t,
     );
-    position[2 as i32 as usize] = (position[2 as i32 as usize] as f64
-        + 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+    position[2 as i32 as usize] =
+        (position[2 as i32 as usize] as f64 + 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     areanum = crate::src::game::ai_dmq3::BotPointAreaNum(position.as_mut_ptr());
     if areanum == 0 {
         if BotAddressedToBot(bs, match_0) != 0 {
@@ -1981,8 +1935,7 @@ pub unsafe extern "C" fn BotMatch_FormationSpace(
     );
     //if it's the distance in feet
     if (*match_0).subtype & 8 as i32 != 0 {
-        space = (0.3048f64 * 32 as i32 as f64 * atof(buf.as_mut_ptr()))
-            as f32
+        space = (0.3048f64 * 32 as i32 as f64 * atof(buf.as_mut_ptr())) as f32
     } else {
         //else it's in meters
         space = (32 as i32 as f64 * atof(buf.as_mut_ptr())) as f32
@@ -2106,8 +2059,7 @@ pub unsafe extern "C" fn BotMatch_StartTeamLeaderShip(
             ::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong,
         );
         (*bs).teamleader[(::std::mem::size_of::<[libc::c_char; 36]>() as libc::c_ulong)
-            .wrapping_sub(1 as i32 as libc::c_ulong) as usize] =
-            '\u{0}' as i32 as libc::c_char
+            .wrapping_sub(1 as i32 as libc::c_ulong) as usize] = '\u{0}' as i32 as libc::c_char
     } else {
         //chats for someone else
         //get the team mate that will be the team leader
@@ -2433,9 +2385,7 @@ pub unsafe extern "C" fn BotNearestVisibleItem(
             name.as_mut_ptr(),
             ::std::mem::size_of::<[libc::c_char; 64]>() as libc::c_ulong as i32,
         );
-        if !(crate::src::qcommon::q_shared::Q_stricmp(itemname, name.as_mut_ptr())
-            != 0 as i32)
-        {
+        if !(crate::src::qcommon::q_shared::Q_stricmp(itemname, name.as_mut_ptr()) != 0 as i32) {
             dir[0 as i32 as usize] =
                 tmpgoal.origin[0 as i32 as usize] - (*bs).origin[0 as i32 as usize];
             dir[1 as i32 as usize] =
@@ -2726,12 +2676,9 @@ pub unsafe extern "C" fn BotMatch_LeadTheWay(
             // && trap_AAS_AreaReachability(areanum)) {
             (*bs).lead_teamgoal.entitynum = client;
             (*bs).lead_teamgoal.areanum = areanum;
-            (*bs).lead_teamgoal.origin[0 as i32 as usize] =
-                entinfo.origin[0 as i32 as usize];
-            (*bs).lead_teamgoal.origin[1 as i32 as usize] =
-                entinfo.origin[1 as i32 as usize];
-            (*bs).lead_teamgoal.origin[2 as i32 as usize] =
-                entinfo.origin[2 as i32 as usize];
+            (*bs).lead_teamgoal.origin[0 as i32 as usize] = entinfo.origin[0 as i32 as usize];
+            (*bs).lead_teamgoal.origin[1 as i32 as usize] = entinfo.origin[1 as i32 as usize];
+            (*bs).lead_teamgoal.origin[2 as i32 as usize] = entinfo.origin[2 as i32 as usize];
             (*bs).lead_teamgoal.mins[0 as i32 as usize] =
                 -(8 as i32) as crate::src::qcommon::q_shared::vec_t;
             (*bs).lead_teamgoal.mins[1 as i32 as usize] =
@@ -2769,9 +2716,7 @@ pub unsafe extern "C" fn BotMatch_LeadTheWay(
     (*bs).lead_time = crate::src::game::ai_main::floattime + 600 as i32 as f32;
     (*bs).leadvisible_time = 0 as i32 as f32;
     (*bs).leadmessage_time = -(crate::src::game::ai_main::floattime
-        + 2 as i32 as f32
-            * ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32));
+        + 2 as i32 as f32 * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32));
 }
 /*
 ==================
@@ -2822,14 +2767,11 @@ pub unsafe extern "C" fn BotMatch_Kill(
     (*bs).teamgoal.entitynum = client;
     //set the time to send a message to the team mates
     (*bs).teammessage_time = crate::src::game::ai_main::floattime
-        + 2 as i32 as f32
-            * ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32);
+        + 2 as i32 as f32 * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32);
     //set the ltg type
     (*bs).ltgtype = 11 as i32;
     //set the team goal time
-    (*bs).teamgoal_time =
-        crate::src::game::ai_main::floattime + 180 as i32 as f32;
+    (*bs).teamgoal_time = crate::src::game::ai_main::floattime + 180 as i32 as f32;
     //
     crate::src::game::ai_dmq3::BotSetTeamStatus(bs as *mut crate::src::game::ai_main::bot_state_s);
     //DEBUG

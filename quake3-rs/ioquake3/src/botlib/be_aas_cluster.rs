@@ -201,10 +201,7 @@ pub unsafe extern "C" fn AAS_RemovePortalsClusterReference(mut clusternum: i32) 
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_UpdatePortal(
-    mut areanum: i32,
-    mut clusternum: i32,
-) -> i32 {
+pub unsafe extern "C" fn AAS_UpdatePortal(mut areanum: i32, mut clusternum: i32) -> i32 {
     let mut portalnum: i32 = 0;
     let mut portal: *mut crate::aasfile_h::aas_portal_t = 0 as *mut crate::aasfile_h::aas_portal_t;
     let mut cluster: *mut crate::aasfile_h::aas_cluster_t =
@@ -295,17 +292,13 @@ pub unsafe extern "C" fn AAS_UpdatePortal(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_FloodClusterAreas_r(
-    mut areanum: i32,
-    mut clusternum: i32,
-) -> i32 {
+pub unsafe extern "C" fn AAS_FloodClusterAreas_r(mut areanum: i32, mut clusternum: i32) -> i32 {
     let mut area: *mut crate::aasfile_h::aas_area_t = 0 as *mut crate::aasfile_h::aas_area_t;
     let mut face: *mut crate::aasfile_h::aas_face_t = 0 as *mut crate::aasfile_h::aas_face_t;
     let mut facenum: i32 = 0;
     let mut i: i32 = 0;
     //
-    if areanum <= 0 as i32 || areanum >= crate::src::botlib::be_aas_main::aasworld.numareas
-    {
+    if areanum <= 0 as i32 || areanum >= crate::src::botlib::be_aas_main::aasworld.numareas {
         crate::src::botlib::be_aas_main::AAS_Error(
             b"AAS_FloodClusterAreas_r: areanum out of range\n\x00" as *const u8
                 as *const libc::c_char as *mut libc::c_char,
@@ -452,9 +445,7 @@ pub unsafe extern "C" fn AAS_FloodClusterAreas_r(
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_FloodClusterAreasUsingReachabilities(
-    mut clusternum: i32,
-) -> i32 {
+pub unsafe extern "C" fn AAS_FloodClusterAreasUsingReachabilities(mut clusternum: i32) -> i32 {
     let mut i: i32 = 0; //end for
     let mut j: i32 = 0;
     let mut areanum: i32 = 0;
@@ -770,9 +761,7 @@ pub unsafe extern "C" fn AAS_FindClusters() -> i32 {
                         & 8 as i32
                         != 0)
                     {
-                        if crate::src::botlib::be_aas_main::aasworld.numclusters
-                            >= 65536 as i32
-                        {
+                        if crate::src::botlib::be_aas_main::aasworld.numclusters >= 65536 as i32 {
                             crate::src::botlib::be_aas_main::AAS_Error(
                                 b"AAS_MAX_CLUSTERS\n\x00" as *const u8 as *const libc::c_char
                                     as *mut libc::c_char,
@@ -1170,12 +1159,7 @@ pub unsafe extern "C" fn AAS_ConnectedAreas(
     if numareas == 1 as i32 {
         return crate::src::qcommon::q_shared::qtrue;
     }
-    AAS_ConnectedAreas_r(
-        areanums,
-        numareas,
-        connectedareas.as_mut_ptr(),
-        0 as i32,
-    );
+    AAS_ConnectedAreas_r(areanums, numareas, connectedareas.as_mut_ptr(), 0 as i32);
     i = 0 as i32;
     while i < numareas {
         if connectedareas[i as usize] == 0 {
@@ -1350,11 +1334,8 @@ pub unsafe extern "C" fn AAS_CheckAreaForPossiblePortals(mut areanum: i32) -> i3
     backplanenum = -(1 as i32);
     frontplanenum = backplanenum;
     //add any adjacent areas with less presence types
-    numareas = AAS_GetAdjacentAreasWithLessPresenceTypes_r(
-        areanums.as_mut_ptr(),
-        0 as i32,
-        areanum,
-    );
+    numareas =
+        AAS_GetAdjacentAreasWithLessPresenceTypes_r(areanums.as_mut_ptr(), 0 as i32, areanum);
     //
     i = 0 as i32; //end for
     while i < numareas {

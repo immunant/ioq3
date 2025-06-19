@@ -45,8 +45,7 @@ pub unsafe extern "C" fn CON_LogWrite(mut in_0: *const libc::c_char) -> u32 {
     let mut secondChunk: u32 = 0;
     while CON_LogFree() < length && CON_LogSize() > 0 as i32 as u32 {
         // Free enough space
-        while consoleLog[readPos as usize] as i32 != '\n' as i32
-            && CON_LogSize() > 1 as i32 as u32
+        while consoleLog[readPos as usize] as i32 != '\n' as i32 && CON_LogSize() > 1 as i32 as u32
         {
             readPos = readPos
                 .wrapping_add(1 as i32 as u32)
@@ -112,10 +111,7 @@ CON_LogRead
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn CON_LogRead(
-    mut out: *mut libc::c_char,
-    mut outSize: u32,
-) -> u32 {
+pub unsafe extern "C" fn CON_LogRead(mut out: *mut libc::c_char, mut outSize: u32) -> u32 {
     let mut firstChunk: u32 = 0;
     let mut secondChunk: u32 = 0;
     if CON_LogSize() < outSize {

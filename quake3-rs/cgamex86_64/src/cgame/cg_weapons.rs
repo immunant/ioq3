@@ -10,8 +10,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
     #[inline]
@@ -21,12 +20,9 @@ pub mod q_shared_h {
         mut p2: *const crate::src::qcommon::q_shared::vec_t,
     ) -> crate::src::qcommon::q_shared::vec_t {
         let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        v[0 as i32 as usize] =
-            *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
-        v[1 as i32 as usize] =
-            *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
-        v[2 as i32 as usize] =
-            *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
+        v[0 as i32 as usize] = *p2.offset(0 as i32 as isize) - *p1.offset(0 as i32 as isize);
+        v[1 as i32 as usize] = *p2.offset(1 as i32 as isize) - *p1.offset(1 as i32 as isize);
+        v[2 as i32 as usize] = *p2.offset(2 as i32 as isize) - *p1.offset(2 as i32 as isize);
         return VectorLength(v.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t);
     }
     #[inline]
@@ -444,26 +440,21 @@ unsafe extern "C" fn CG_MachineGunEjectBrass(mut cent: *mut crate::cg_local_h::c
     velocity[1 as i32 as usize] = (-(50 as i32) as f64
         + 40 as i32 as f64
             * (2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32)
-                    as f64
+                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)))
         as crate::src::qcommon::q_shared::vec_t;
     velocity[2 as i32 as usize] = (100 as i32 as f64
         + 50 as i32 as f64
             * (2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32)
-                    as f64
+                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)))
         as crate::src::qcommon::q_shared::vec_t;
     (*le).leType = crate::cg_local_h::LE_FRAGMENT;
     (*le).startTime = crate::src::cgame::cg_main::cg.time;
-    (*le).endTime = (((*le).startTime + crate::src::cgame::cg_main::cg_brassTime.integer)
-        as f32
+    (*le).endTime = (((*le).startTime + crate::src::cgame::cg_main::cg_brassTime.integer) as f32
         + (crate::src::cgame::cg_main::cg_brassTime.integer / 4 as i32) as f32
-            * ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32)) as i32;
+            * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32))
+        as i32;
     (*le).pos.trType = crate::src::qcommon::q_shared::TR_GRAVITY;
     (*le).pos.trTime = crate::src::cgame::cg_main::cg.time - (::libc::rand() & 15 as i32);
     crate::src::qcommon::q_math::AnglesToAxis(
@@ -475,22 +466,16 @@ unsafe extern "C" fn CG_MachineGunEjectBrass(mut cent: *mut crate::cg_local_h::c
     offset[2 as i32 as usize] = 24 as i32 as crate::src::qcommon::q_shared::vec_t;
     xoffset[0 as i32 as usize] = offset[0 as i32 as usize]
         * v[0 as i32 as usize][0 as i32 as usize]
-        + offset[1 as i32 as usize]
-            * v[1 as i32 as usize][0 as i32 as usize]
-        + offset[2 as i32 as usize]
-            * v[2 as i32 as usize][0 as i32 as usize];
+        + offset[1 as i32 as usize] * v[1 as i32 as usize][0 as i32 as usize]
+        + offset[2 as i32 as usize] * v[2 as i32 as usize][0 as i32 as usize];
     xoffset[1 as i32 as usize] = offset[0 as i32 as usize]
         * v[0 as i32 as usize][1 as i32 as usize]
-        + offset[1 as i32 as usize]
-            * v[1 as i32 as usize][1 as i32 as usize]
-        + offset[2 as i32 as usize]
-            * v[2 as i32 as usize][1 as i32 as usize];
+        + offset[1 as i32 as usize] * v[1 as i32 as usize][1 as i32 as usize]
+        + offset[2 as i32 as usize] * v[2 as i32 as usize][1 as i32 as usize];
     xoffset[2 as i32 as usize] = offset[0 as i32 as usize]
         * v[0 as i32 as usize][2 as i32 as usize]
-        + offset[1 as i32 as usize]
-            * v[1 as i32 as usize][2 as i32 as usize]
-        + offset[2 as i32 as usize]
-            * v[2 as i32 as usize][2 as i32 as usize];
+        + offset[1 as i32 as usize] * v[1 as i32 as usize][2 as i32 as usize]
+        + offset[2 as i32 as usize] * v[2 as i32 as usize][2 as i32 as usize];
     (*re).origin[0 as i32 as usize] =
         (*cent).lerpOrigin[0 as i32 as usize] + xoffset[0 as i32 as usize];
     (*re).origin[1 as i32 as usize] =
@@ -510,28 +495,19 @@ unsafe extern "C" fn CG_MachineGunEjectBrass(mut cent: *mut crate::cg_local_h::c
     }
     xvelocity[0 as i32 as usize] = velocity[0 as i32 as usize]
         * v[0 as i32 as usize][0 as i32 as usize]
-        + velocity[1 as i32 as usize]
-            * v[1 as i32 as usize][0 as i32 as usize]
-        + velocity[2 as i32 as usize]
-            * v[2 as i32 as usize][0 as i32 as usize];
+        + velocity[1 as i32 as usize] * v[1 as i32 as usize][0 as i32 as usize]
+        + velocity[2 as i32 as usize] * v[2 as i32 as usize][0 as i32 as usize];
     xvelocity[1 as i32 as usize] = velocity[0 as i32 as usize]
         * v[0 as i32 as usize][1 as i32 as usize]
-        + velocity[1 as i32 as usize]
-            * v[1 as i32 as usize][1 as i32 as usize]
-        + velocity[2 as i32 as usize]
-            * v[2 as i32 as usize][1 as i32 as usize];
+        + velocity[1 as i32 as usize] * v[1 as i32 as usize][1 as i32 as usize]
+        + velocity[2 as i32 as usize] * v[2 as i32 as usize][1 as i32 as usize];
     xvelocity[2 as i32 as usize] = velocity[0 as i32 as usize]
         * v[0 as i32 as usize][2 as i32 as usize]
-        + velocity[1 as i32 as usize]
-            * v[1 as i32 as usize][2 as i32 as usize]
-        + velocity[2 as i32 as usize]
-            * v[2 as i32 as usize][2 as i32 as usize];
-    (*le).pos.trDelta[0 as i32 as usize] =
-        xvelocity[0 as i32 as usize] * waterScale;
-    (*le).pos.trDelta[1 as i32 as usize] =
-        xvelocity[1 as i32 as usize] * waterScale;
-    (*le).pos.trDelta[2 as i32 as usize] =
-        xvelocity[2 as i32 as usize] * waterScale;
+        + velocity[1 as i32 as usize] * v[1 as i32 as usize][2 as i32 as usize]
+        + velocity[2 as i32 as usize] * v[2 as i32 as usize][2 as i32 as usize];
+    (*le).pos.trDelta[0 as i32 as usize] = xvelocity[0 as i32 as usize] * waterScale;
+    (*le).pos.trDelta[1 as i32 as usize] = xvelocity[1 as i32 as usize] * waterScale;
+    (*le).pos.trDelta[2 as i32 as usize] = xvelocity[2 as i32 as usize] * waterScale;
     crate::src::qcommon::q_math::AxisCopy(
         crate::src::qcommon::q_math::axisDefault.as_mut_ptr(),
         (*re).axis.as_mut_ptr(),
@@ -546,12 +522,9 @@ unsafe extern "C" fn CG_MachineGunEjectBrass(mut cent: *mut crate::cg_local_h::c
         (::libc::rand() & 31 as i32) as crate::src::qcommon::q_shared::vec_t;
     (*le).angles.trBase[2 as i32 as usize] =
         (::libc::rand() & 31 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*le).angles.trDelta[0 as i32 as usize] =
-        2 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*le).angles.trDelta[1 as i32 as usize] =
-        1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*le).angles.trDelta[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*le).angles.trDelta[0 as i32 as usize] = 2 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*le).angles.trDelta[1 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*le).angles.trDelta[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     (*le).leFlags = crate::cg_local_h::LEF_TUMBLE as i32;
     (*le).leBounceSoundType = crate::cg_local_h::LEBS_BRASS;
     (*le).leMarkType = crate::cg_local_h::LEMT_NONE;
@@ -583,17 +556,14 @@ unsafe extern "C" fn CG_ShotgunEjectBrass(mut cent: *mut crate::cg_local_h::cent
         velocity[0 as i32 as usize] = (60 as i32 as f64
             + 60 as i32 as f64
                 * (2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
-                        as f64
+                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)))
             as crate::src::qcommon::q_shared::vec_t;
         if i == 0 as i32 {
             velocity[1 as i32 as usize] = (40 as i32 as f64
                 + 10 as i32 as f64
                     * (2.0f64
-                        * (((::libc::rand() & 0x7fff as i32) as f32
-                            / 0x7fff as i32 as f32)
+                        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                             as f64
                             - 0.5f64)))
                 as crate::src::qcommon::q_shared::vec_t
@@ -601,8 +571,7 @@ unsafe extern "C" fn CG_ShotgunEjectBrass(mut cent: *mut crate::cg_local_h::cent
             velocity[1 as i32 as usize] = (-(40 as i32) as f64
                 + 10 as i32 as f64
                     * (2.0f64
-                        * (((::libc::rand() & 0x7fff as i32) as f32
-                            / 0x7fff as i32 as f32)
+                        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                             as f64
                             - 0.5f64)))
                 as crate::src::qcommon::q_shared::vec_t
@@ -610,50 +579,37 @@ unsafe extern "C" fn CG_ShotgunEjectBrass(mut cent: *mut crate::cg_local_h::cent
         velocity[2 as i32 as usize] = (100 as i32 as f64
             + 50 as i32 as f64
                 * (2.0f64
-                    * (((::libc::rand() & 0x7fff as i32) as f32
-                        / 0x7fff as i32 as f32)
-                        as f64
+                    * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                         - 0.5f64)))
             as crate::src::qcommon::q_shared::vec_t;
         (*le).leType = crate::cg_local_h::LE_FRAGMENT;
         (*le).startTime = crate::src::cgame::cg_main::cg.time;
-        (*le).endTime = (((*le).startTime
-            + crate::src::cgame::cg_main::cg_brassTime.integer * 3 as i32)
-            as f32
-            + crate::src::cgame::cg_main::cg_brassTime.integer as f32
-                * ((::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32))
-            as i32;
+        (*le).endTime =
+            (((*le).startTime + crate::src::cgame::cg_main::cg_brassTime.integer * 3 as i32) as f32
+                + crate::src::cgame::cg_main::cg_brassTime.integer as f32
+                    * ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32))
+                as i32;
         (*le).pos.trType = crate::src::qcommon::q_shared::TR_GRAVITY;
         (*le).pos.trTime = crate::src::cgame::cg_main::cg.time;
         crate::src::qcommon::q_math::AnglesToAxis(
             (*cent).lerpAngles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
             v.as_mut_ptr(),
         );
-        offset[0 as i32 as usize] =
-            8 as i32 as crate::src::qcommon::q_shared::vec_t;
-        offset[1 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        offset[2 as i32 as usize] =
-            24 as i32 as crate::src::qcommon::q_shared::vec_t;
+        offset[0 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
+        offset[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        offset[2 as i32 as usize] = 24 as i32 as crate::src::qcommon::q_shared::vec_t;
         xoffset[0 as i32 as usize] = offset[0 as i32 as usize]
             * v[0 as i32 as usize][0 as i32 as usize]
-            + offset[1 as i32 as usize]
-                * v[1 as i32 as usize][0 as i32 as usize]
-            + offset[2 as i32 as usize]
-                * v[2 as i32 as usize][0 as i32 as usize];
+            + offset[1 as i32 as usize] * v[1 as i32 as usize][0 as i32 as usize]
+            + offset[2 as i32 as usize] * v[2 as i32 as usize][0 as i32 as usize];
         xoffset[1 as i32 as usize] = offset[0 as i32 as usize]
             * v[0 as i32 as usize][1 as i32 as usize]
-            + offset[1 as i32 as usize]
-                * v[1 as i32 as usize][1 as i32 as usize]
-            + offset[2 as i32 as usize]
-                * v[2 as i32 as usize][1 as i32 as usize];
+            + offset[1 as i32 as usize] * v[1 as i32 as usize][1 as i32 as usize]
+            + offset[2 as i32 as usize] * v[2 as i32 as usize][1 as i32 as usize];
         xoffset[2 as i32 as usize] = offset[0 as i32 as usize]
             * v[0 as i32 as usize][2 as i32 as usize]
-            + offset[1 as i32 as usize]
-                * v[1 as i32 as usize][2 as i32 as usize]
-            + offset[2 as i32 as usize]
-                * v[2 as i32 as usize][2 as i32 as usize];
+            + offset[1 as i32 as usize] * v[1 as i32 as usize][2 as i32 as usize]
+            + offset[2 as i32 as usize] * v[2 as i32 as usize][2 as i32 as usize];
         (*re).origin[0 as i32 as usize] =
             (*cent).lerpOrigin[0 as i32 as usize] + xoffset[0 as i32 as usize];
         (*re).origin[1 as i32 as usize] =
@@ -673,28 +629,19 @@ unsafe extern "C" fn CG_ShotgunEjectBrass(mut cent: *mut crate::cg_local_h::cent
         }
         xvelocity[0 as i32 as usize] = velocity[0 as i32 as usize]
             * v[0 as i32 as usize][0 as i32 as usize]
-            + velocity[1 as i32 as usize]
-                * v[1 as i32 as usize][0 as i32 as usize]
-            + velocity[2 as i32 as usize]
-                * v[2 as i32 as usize][0 as i32 as usize];
+            + velocity[1 as i32 as usize] * v[1 as i32 as usize][0 as i32 as usize]
+            + velocity[2 as i32 as usize] * v[2 as i32 as usize][0 as i32 as usize];
         xvelocity[1 as i32 as usize] = velocity[0 as i32 as usize]
             * v[0 as i32 as usize][1 as i32 as usize]
-            + velocity[1 as i32 as usize]
-                * v[1 as i32 as usize][1 as i32 as usize]
-            + velocity[2 as i32 as usize]
-                * v[2 as i32 as usize][1 as i32 as usize];
+            + velocity[1 as i32 as usize] * v[1 as i32 as usize][1 as i32 as usize]
+            + velocity[2 as i32 as usize] * v[2 as i32 as usize][1 as i32 as usize];
         xvelocity[2 as i32 as usize] = velocity[0 as i32 as usize]
             * v[0 as i32 as usize][2 as i32 as usize]
-            + velocity[1 as i32 as usize]
-                * v[1 as i32 as usize][2 as i32 as usize]
-            + velocity[2 as i32 as usize]
-                * v[2 as i32 as usize][2 as i32 as usize];
-        (*le).pos.trDelta[0 as i32 as usize] =
-            xvelocity[0 as i32 as usize] * waterScale;
-        (*le).pos.trDelta[1 as i32 as usize] =
-            xvelocity[1 as i32 as usize] * waterScale;
-        (*le).pos.trDelta[2 as i32 as usize] =
-            xvelocity[2 as i32 as usize] * waterScale;
+            + velocity[1 as i32 as usize] * v[1 as i32 as usize][2 as i32 as usize]
+            + velocity[2 as i32 as usize] * v[2 as i32 as usize][2 as i32 as usize];
+        (*le).pos.trDelta[0 as i32 as usize] = xvelocity[0 as i32 as usize] * waterScale;
+        (*le).pos.trDelta[1 as i32 as usize] = xvelocity[1 as i32 as usize] * waterScale;
+        (*le).pos.trDelta[2 as i32 as usize] = xvelocity[2 as i32 as usize] * waterScale;
         crate::src::qcommon::q_math::AxisCopy(
             crate::src::qcommon::q_math::axisDefault.as_mut_ptr(),
             (*re).axis.as_mut_ptr(),
@@ -709,12 +656,9 @@ unsafe extern "C" fn CG_ShotgunEjectBrass(mut cent: *mut crate::cg_local_h::cent
             (::libc::rand() & 31 as i32) as crate::src::qcommon::q_shared::vec_t;
         (*le).angles.trBase[2 as i32 as usize] =
             (::libc::rand() & 31 as i32) as crate::src::qcommon::q_shared::vec_t;
-        (*le).angles.trDelta[0 as i32 as usize] =
-            1 as i32 as crate::src::qcommon::q_shared::vec_t;
-        (*le).angles.trDelta[1 as i32 as usize] =
-            0.5f64 as crate::src::qcommon::q_shared::vec_t;
-        (*le).angles.trDelta[2 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*le).angles.trDelta[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
+        (*le).angles.trDelta[1 as i32 as usize] = 0.5f64 as crate::src::qcommon::q_shared::vec_t;
+        (*le).angles.trDelta[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         (*le).leFlags = crate::cg_local_h::LEF_TUMBLE as i32;
         (*le).leBounceSoundType = crate::cg_local_h::LEBS_BRASS;
         (*le).leMarkType = crate::cg_local_h::LEMT_NONE;
@@ -753,8 +697,7 @@ pub unsafe extern "C" fn CG_RailTrail(
     (*le).startTime = crate::src::cgame::cg_main::cg.time;
     (*le).endTime = (crate::src::cgame::cg_main::cg.time as f32
         + crate::src::cgame::cg_main::cg_railTrailTime.value) as i32;
-    (*le).lifeRate =
-        (1.0f64 / ((*le).endTime - (*le).startTime) as f64) as f32;
+    (*le).lifeRate = (1.0f64 / ((*le).endTime - (*le).startTime) as f64) as f32;
     (*re).shaderTime = crate::src::cgame::cg_main::cg.time as f32 / 1000.0f32;
     (*re).reType = crate::tr_types_h::RT_RAIL_CORE;
     (*re).customShader = crate::src::cgame::cg_main::cgs.media.railCoreShader;
@@ -764,23 +707,16 @@ pub unsafe extern "C" fn CG_RailTrail(
     (*re).oldorigin[0 as i32 as usize] = *end.offset(0 as i32 as isize);
     (*re).oldorigin[1 as i32 as usize] = *end.offset(1 as i32 as isize);
     (*re).oldorigin[2 as i32 as usize] = *end.offset(2 as i32 as isize);
-    (*re).shaderRGBA[0 as i32 as usize] = ((*ci).color1[0 as i32 as usize]
-        * 255 as i32 as f32)
+    (*re).shaderRGBA[0 as i32 as usize] = ((*ci).color1[0 as i32 as usize] * 255 as i32 as f32)
         as crate::src::qcommon::q_shared::byte;
-    (*re).shaderRGBA[1 as i32 as usize] = ((*ci).color1[1 as i32 as usize]
-        * 255 as i32 as f32)
+    (*re).shaderRGBA[1 as i32 as usize] = ((*ci).color1[1 as i32 as usize] * 255 as i32 as f32)
         as crate::src::qcommon::q_shared::byte;
-    (*re).shaderRGBA[2 as i32 as usize] = ((*ci).color1[2 as i32 as usize]
-        * 255 as i32 as f32)
+    (*re).shaderRGBA[2 as i32 as usize] = ((*ci).color1[2 as i32 as usize] * 255 as i32 as f32)
         as crate::src::qcommon::q_shared::byte;
-    (*re).shaderRGBA[3 as i32 as usize] =
-        255 as i32 as crate::src::qcommon::q_shared::byte;
-    (*le).color[0 as i32 as usize] =
-        ((*ci).color1[0 as i32 as usize] as f64 * 0.75f64) as f32;
-    (*le).color[1 as i32 as usize] =
-        ((*ci).color1[1 as i32 as usize] as f64 * 0.75f64) as f32;
-    (*le).color[2 as i32 as usize] =
-        ((*ci).color1[2 as i32 as usize] as f64 * 0.75f64) as f32;
+    (*re).shaderRGBA[3 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
+    (*le).color[0 as i32 as usize] = ((*ci).color1[0 as i32 as usize] as f64 * 0.75f64) as f32;
+    (*le).color[1 as i32 as usize] = ((*ci).color1[1 as i32 as usize] as f64 * 0.75f64) as f32;
+    (*le).color[2 as i32 as usize] = ((*ci).color1[2 as i32 as usize] as f64 * 0.75f64) as f32;
     (*le).color[3 as i32 as usize] = 1.0f32;
     crate::src::qcommon::q_math::AxisClear((*re).axis.as_mut_ptr());
     if crate::src::cgame::cg_main::cg_oldRail.integer != 0 {
@@ -792,12 +728,9 @@ pub unsafe extern "C" fn CG_RailTrail(
     move_0[0 as i32 as usize] = *start.offset(0 as i32 as isize);
     move_0[1 as i32 as usize] = *start.offset(1 as i32 as isize);
     move_0[2 as i32 as usize] = *start.offset(2 as i32 as isize);
-    vec[0 as i32 as usize] =
-        *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
-    vec[1 as i32 as usize] =
-        *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
-    vec[2 as i32 as usize] =
-        *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
+    vec[0 as i32 as usize] = *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
+    vec[1 as i32 as usize] = *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
+    vec[2 as i32 as usize] = *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
     len = crate::src::qcommon::q_math::VectorNormalize(vec.as_mut_ptr());
     crate::src::qcommon::q_math::PerpendicularVector(
         temp.as_mut_ptr(),
@@ -814,18 +747,15 @@ pub unsafe extern "C" fn CG_RailTrail(
         i += 1
         //banshee 2.4 was 10
     }
-    move_0[0 as i32 as usize] = move_0[0 as i32 as usize]
-        + vec[0 as i32 as usize] * 20 as i32 as f32;
-    move_0[1 as i32 as usize] = move_0[1 as i32 as usize]
-        + vec[1 as i32 as usize] * 20 as i32 as f32;
-    move_0[2 as i32 as usize] = move_0[2 as i32 as usize]
-        + vec[2 as i32 as usize] * 20 as i32 as f32;
-    vec[0 as i32 as usize] =
-        vec[0 as i32 as usize] * 5 as i32 as f32;
-    vec[1 as i32 as usize] =
-        vec[1 as i32 as usize] * 5 as i32 as f32;
-    vec[2 as i32 as usize] =
-        vec[2 as i32 as usize] * 5 as i32 as f32;
+    move_0[0 as i32 as usize] =
+        move_0[0 as i32 as usize] + vec[0 as i32 as usize] * 20 as i32 as f32;
+    move_0[1 as i32 as usize] =
+        move_0[1 as i32 as usize] + vec[1 as i32 as usize] * 20 as i32 as f32;
+    move_0[2 as i32 as usize] =
+        move_0[2 as i32 as usize] + vec[2 as i32 as usize] * 20 as i32 as f32;
+    vec[0 as i32 as usize] = vec[0 as i32 as usize] * 5 as i32 as f32;
+    vec[1 as i32 as usize] = vec[1 as i32 as usize] * 5 as i32 as f32;
+    vec[2 as i32 as usize] = vec[2 as i32 as usize] * 5 as i32 as f32;
     skip = -(1 as i32);
     j = 18 as i32;
     i = 0 as i32;
@@ -838,10 +768,8 @@ pub unsafe extern "C" fn CG_RailTrail(
             (*le).leFlags = crate::cg_local_h::LEF_PUFF_DONT_SCALE as i32;
             (*le).leType = crate::cg_local_h::LE_MOVE_SCALE_FADE;
             (*le).startTime = crate::src::cgame::cg_main::cg.time;
-            (*le).endTime =
-                crate::src::cgame::cg_main::cg.time + (i >> 1 as i32) + 600 as i32;
-            (*le).lifeRate =
-                (1.0f64 / ((*le).endTime - (*le).startTime) as f64) as f32;
+            (*le).endTime = crate::src::cgame::cg_main::cg.time + (i >> 1 as i32) + 600 as i32;
+            (*le).lifeRate = (1.0f64 / ((*le).endTime - (*le).startTime) as f64) as f32;
             (*re).shaderTime = crate::src::cgame::cg_main::cg.time as f32 / 1000.0f32;
             (*re).reType = crate::tr_types_h::RT_SPRITE;
             (*re).radius = 1.1f32;
@@ -855,29 +783,25 @@ pub unsafe extern "C" fn CG_RailTrail(
             (*re).shaderRGBA[2 as i32 as usize] = ((*ci).color2[2 as i32 as usize]
                 * 255 as i32 as f32)
                 as crate::src::qcommon::q_shared::byte;
-            (*re).shaderRGBA[3 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte;
-            (*le).color[0 as i32 as usize] = ((*ci).color2[0 as i32 as usize]
-                as f64
-                * 0.75f64) as f32;
-            (*le).color[1 as i32 as usize] = ((*ci).color2[1 as i32 as usize]
-                as f64
-                * 0.75f64) as f32;
-            (*le).color[2 as i32 as usize] = ((*ci).color2[2 as i32 as usize]
-                as f64
-                * 0.75f64) as f32;
+            (*re).shaderRGBA[3 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte;
+            (*le).color[0 as i32 as usize] =
+                ((*ci).color2[0 as i32 as usize] as f64 * 0.75f64) as f32;
+            (*le).color[1 as i32 as usize] =
+                ((*ci).color2[1 as i32 as usize] as f64 * 0.75f64) as f32;
+            (*le).color[2 as i32 as usize] =
+                ((*ci).color2[2 as i32 as usize] as f64 * 0.75f64) as f32;
             (*le).color[3 as i32 as usize] = 1.0f32;
             (*le).pos.trType = crate::src::qcommon::q_shared::TR_LINEAR;
             (*le).pos.trTime = crate::src::cgame::cg_main::cg.time;
             move2[0 as i32 as usize] = move_0[0 as i32 as usize];
             move2[1 as i32 as usize] = move_0[1 as i32 as usize];
             move2[2 as i32 as usize] = move_0[2 as i32 as usize];
-            move2[0 as i32 as usize] = move2[0 as i32 as usize]
-                + axis[j as usize][0 as i32 as usize] * 4 as i32 as f32;
-            move2[1 as i32 as usize] = move2[1 as i32 as usize]
-                + axis[j as usize][1 as i32 as usize] * 4 as i32 as f32;
-            move2[2 as i32 as usize] = move2[2 as i32 as usize]
-                + axis[j as usize][2 as i32 as usize] * 4 as i32 as f32;
+            move2[0 as i32 as usize] =
+                move2[0 as i32 as usize] + axis[j as usize][0 as i32 as usize] * 4 as i32 as f32;
+            move2[1 as i32 as usize] =
+                move2[1 as i32 as usize] + axis[j as usize][1 as i32 as usize] * 4 as i32 as f32;
+            move2[2 as i32 as usize] =
+                move2[2 as i32 as usize] + axis[j as usize][2 as i32 as usize] * 4 as i32 as f32;
             (*le).pos.trBase[0 as i32 as usize] = move2[0 as i32 as usize];
             (*le).pos.trBase[1 as i32 as usize] = move2[1 as i32 as usize];
             (*le).pos.trBase[2 as i32 as usize] = move2[2 as i32 as usize];
@@ -888,12 +812,9 @@ pub unsafe extern "C" fn CG_RailTrail(
             (*le).pos.trDelta[2 as i32 as usize] =
                 axis[j as usize][2 as i32 as usize] * 6 as i32 as f32
         }
-        move_0[0 as i32 as usize] =
-            move_0[0 as i32 as usize] + vec[0 as i32 as usize];
-        move_0[1 as i32 as usize] =
-            move_0[1 as i32 as usize] + vec[1 as i32 as usize];
-        move_0[2 as i32 as usize] =
-            move_0[2 as i32 as usize] + vec[2 as i32 as usize];
+        move_0[0 as i32 as usize] = move_0[0 as i32 as usize] + vec[0 as i32 as usize];
+        move_0[1 as i32 as usize] = move_0[1 as i32 as usize] + vec[1 as i32 as usize];
+        move_0[2 as i32 as usize] = move_0[2 as i32 as usize] + vec[2 as i32 as usize];
         j = (j + 1 as i32) % 36 as i32;
         i += 5 as i32
     }
@@ -940,9 +861,7 @@ unsafe extern "C" fn CG_RocketTrail(
         -(1 as i32),
     );
     // if object (e.g. grenade) is stationary, don't toss up smoke
-    if (*es).pos.trType as u32
-        == crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32
-    {
+    if (*es).pos.trType as u32 == crate::src::qcommon::q_shared::TR_STATIONARY as i32 as u32 {
         (*ent).trailTime = crate::src::cgame::cg_main::cg.time;
         return;
     }
@@ -1029,25 +948,19 @@ unsafe extern "C" fn CG_PlasmaTrail(
     velocity[0 as i32 as usize] = (60 as i32 as f64
         - 120 as i32 as f64
             * (2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32)
-                    as f64
+                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)))
         as crate::src::qcommon::q_shared::vec_t;
     velocity[1 as i32 as usize] = (40 as i32 as f64
         - 80 as i32 as f64
             * (2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32)
-                    as f64
+                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)))
         as crate::src::qcommon::q_shared::vec_t;
     velocity[2 as i32 as usize] = (100 as i32 as f64
         - 200 as i32 as f64
             * (2.0f64
-                * (((::libc::rand() & 0x7fff as i32) as f32
-                    / 0x7fff as i32 as f32)
-                    as f64
+                * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64
                     - 0.5f64)))
         as crate::src::qcommon::q_shared::vec_t;
     (*le).leType = crate::cg_local_h::LE_MOVE_SCALE_FADE;
@@ -1067,28 +980,19 @@ unsafe extern "C" fn CG_PlasmaTrail(
     offset[2 as i32 as usize] = 2 as i32 as crate::src::qcommon::q_shared::vec_t;
     xoffset[0 as i32 as usize] = offset[0 as i32 as usize]
         * v[0 as i32 as usize][0 as i32 as usize]
-        + offset[1 as i32 as usize]
-            * v[1 as i32 as usize][0 as i32 as usize]
-        + offset[2 as i32 as usize]
-            * v[2 as i32 as usize][0 as i32 as usize];
+        + offset[1 as i32 as usize] * v[1 as i32 as usize][0 as i32 as usize]
+        + offset[2 as i32 as usize] * v[2 as i32 as usize][0 as i32 as usize];
     xoffset[1 as i32 as usize] = offset[0 as i32 as usize]
         * v[0 as i32 as usize][1 as i32 as usize]
-        + offset[1 as i32 as usize]
-            * v[1 as i32 as usize][1 as i32 as usize]
-        + offset[2 as i32 as usize]
-            * v[2 as i32 as usize][1 as i32 as usize];
+        + offset[1 as i32 as usize] * v[1 as i32 as usize][1 as i32 as usize]
+        + offset[2 as i32 as usize] * v[2 as i32 as usize][1 as i32 as usize];
     xoffset[2 as i32 as usize] = offset[0 as i32 as usize]
         * v[0 as i32 as usize][2 as i32 as usize]
-        + offset[1 as i32 as usize]
-            * v[1 as i32 as usize][2 as i32 as usize]
-        + offset[2 as i32 as usize]
-            * v[2 as i32 as usize][2 as i32 as usize];
-    (*re).origin[0 as i32 as usize] =
-        origin[0 as i32 as usize] + xoffset[0 as i32 as usize];
-    (*re).origin[1 as i32 as usize] =
-        origin[1 as i32 as usize] + xoffset[1 as i32 as usize];
-    (*re).origin[2 as i32 as usize] =
-        origin[2 as i32 as usize] + xoffset[2 as i32 as usize];
+        + offset[1 as i32 as usize] * v[1 as i32 as usize][2 as i32 as usize]
+        + offset[2 as i32 as usize] * v[2 as i32 as usize][2 as i32 as usize];
+    (*re).origin[0 as i32 as usize] = origin[0 as i32 as usize] + xoffset[0 as i32 as usize];
+    (*re).origin[1 as i32 as usize] = origin[1 as i32 as usize] + xoffset[1 as i32 as usize];
+    (*re).origin[2 as i32 as usize] = origin[2 as i32 as usize] + xoffset[2 as i32 as usize];
     (*le).pos.trBase[0 as i32 as usize] = (*re).origin[0 as i32 as usize];
     (*le).pos.trBase[1 as i32 as usize] = (*re).origin[1 as i32 as usize];
     (*le).pos.trBase[2 as i32 as usize] = (*re).origin[2 as i32 as usize];
@@ -1102,28 +1006,19 @@ unsafe extern "C" fn CG_PlasmaTrail(
     }
     xvelocity[0 as i32 as usize] = velocity[0 as i32 as usize]
         * v[0 as i32 as usize][0 as i32 as usize]
-        + velocity[1 as i32 as usize]
-            * v[1 as i32 as usize][0 as i32 as usize]
-        + velocity[2 as i32 as usize]
-            * v[2 as i32 as usize][0 as i32 as usize];
+        + velocity[1 as i32 as usize] * v[1 as i32 as usize][0 as i32 as usize]
+        + velocity[2 as i32 as usize] * v[2 as i32 as usize][0 as i32 as usize];
     xvelocity[1 as i32 as usize] = velocity[0 as i32 as usize]
         * v[0 as i32 as usize][1 as i32 as usize]
-        + velocity[1 as i32 as usize]
-            * v[1 as i32 as usize][1 as i32 as usize]
-        + velocity[2 as i32 as usize]
-            * v[2 as i32 as usize][1 as i32 as usize];
+        + velocity[1 as i32 as usize] * v[1 as i32 as usize][1 as i32 as usize]
+        + velocity[2 as i32 as usize] * v[2 as i32 as usize][1 as i32 as usize];
     xvelocity[2 as i32 as usize] = velocity[0 as i32 as usize]
         * v[0 as i32 as usize][2 as i32 as usize]
-        + velocity[1 as i32 as usize]
-            * v[1 as i32 as usize][2 as i32 as usize]
-        + velocity[2 as i32 as usize]
-            * v[2 as i32 as usize][2 as i32 as usize];
-    (*le).pos.trDelta[0 as i32 as usize] =
-        xvelocity[0 as i32 as usize] * waterScale;
-    (*le).pos.trDelta[1 as i32 as usize] =
-        xvelocity[1 as i32 as usize] * waterScale;
-    (*le).pos.trDelta[2 as i32 as usize] =
-        xvelocity[2 as i32 as usize] * waterScale;
+        + velocity[1 as i32 as usize] * v[1 as i32 as usize][2 as i32 as usize]
+        + velocity[2 as i32 as usize] * v[2 as i32 as usize][2 as i32 as usize];
+    (*le).pos.trDelta[0 as i32 as usize] = xvelocity[0 as i32 as usize] * waterScale;
+    (*le).pos.trDelta[1 as i32 as usize] = xvelocity[1 as i32 as usize] * waterScale;
+    (*le).pos.trDelta[2 as i32 as usize] = xvelocity[2 as i32 as usize] * waterScale;
     crate::src::qcommon::q_math::AxisCopy(
         crate::src::qcommon::q_math::axisDefault.as_mut_ptr(),
         (*re).axis.as_mut_ptr(),
@@ -1133,26 +1028,22 @@ unsafe extern "C" fn CG_PlasmaTrail(
     (*re).radius = 0.25f32;
     (*re).customShader = crate::src::cgame::cg_main::cgs.media.railRingsShader;
     (*le).bounceFactor = 0.3f32;
-    (*re).shaderRGBA[0 as i32 as usize] =
-        ((*wi).flashDlightColor[0 as i32 as usize] * 63 as i32 as f32)
-            as crate::src::qcommon::q_shared::byte;
-    (*re).shaderRGBA[1 as i32 as usize] =
-        ((*wi).flashDlightColor[1 as i32 as usize] * 63 as i32 as f32)
-            as crate::src::qcommon::q_shared::byte;
-    (*re).shaderRGBA[2 as i32 as usize] =
-        ((*wi).flashDlightColor[2 as i32 as usize] * 63 as i32 as f32)
-            as crate::src::qcommon::q_shared::byte;
-    (*re).shaderRGBA[3 as i32 as usize] =
-        63 as i32 as crate::src::qcommon::q_shared::byte;
-    (*le).color[0 as i32 as usize] = ((*wi).flashDlightColor[0 as i32 as usize]
-        as f64
-        * 0.2f64) as f32;
-    (*le).color[1 as i32 as usize] = ((*wi).flashDlightColor[1 as i32 as usize]
-        as f64
-        * 0.2f64) as f32;
-    (*le).color[2 as i32 as usize] = ((*wi).flashDlightColor[2 as i32 as usize]
-        as f64
-        * 0.2f64) as f32;
+    (*re).shaderRGBA[0 as i32 as usize] = ((*wi).flashDlightColor[0 as i32 as usize]
+        * 63 as i32 as f32)
+        as crate::src::qcommon::q_shared::byte;
+    (*re).shaderRGBA[1 as i32 as usize] = ((*wi).flashDlightColor[1 as i32 as usize]
+        * 63 as i32 as f32)
+        as crate::src::qcommon::q_shared::byte;
+    (*re).shaderRGBA[2 as i32 as usize] = ((*wi).flashDlightColor[2 as i32 as usize]
+        * 63 as i32 as f32)
+        as crate::src::qcommon::q_shared::byte;
+    (*re).shaderRGBA[3 as i32 as usize] = 63 as i32 as crate::src::qcommon::q_shared::byte;
+    (*le).color[0 as i32 as usize] =
+        ((*wi).flashDlightColor[0 as i32 as usize] as f64 * 0.2f64) as f32;
+    (*le).color[1 as i32 as usize] =
+        ((*wi).flashDlightColor[1 as i32 as usize] as f64 * 0.2f64) as f32;
+    (*le).color[2 as i32 as usize] =
+        ((*wi).flashDlightColor[2 as i32 as usize] as f64 * 0.2f64) as f32;
     (*le).color[3 as i32 as usize] = 0.25f32;
     (*le).angles.trType = crate::src::qcommon::q_shared::TR_LINEAR;
     (*le).angles.trTime = crate::src::cgame::cg_main::cg.time;
@@ -1162,12 +1053,9 @@ unsafe extern "C" fn CG_PlasmaTrail(
         (::libc::rand() & 31 as i32) as crate::src::qcommon::q_shared::vec_t;
     (*le).angles.trBase[2 as i32 as usize] =
         (::libc::rand() & 31 as i32) as crate::src::qcommon::q_shared::vec_t;
-    (*le).angles.trDelta[0 as i32 as usize] =
-        1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    (*le).angles.trDelta[1 as i32 as usize] =
-        0.5f64 as crate::src::qcommon::q_shared::vec_t;
-    (*le).angles.trDelta[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*le).angles.trDelta[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
+    (*le).angles.trDelta[1 as i32 as usize] = 0.5f64 as crate::src::qcommon::q_shared::vec_t;
+    (*le).angles.trDelta[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
 }
 /*
 ==========================
@@ -1238,12 +1126,12 @@ pub unsafe extern "C" fn CG_GrappleTrail(
         0 as *mut crate::src::qcommon::q_shared::vec_t,
         up.as_mut_ptr(),
     );
-    beam.origin[0 as i32 as usize] = beam.origin[0 as i32 as usize]
-        + up[0 as i32 as usize] * -(6 as i32) as f32;
-    beam.origin[1 as i32 as usize] = beam.origin[1 as i32 as usize]
-        + up[1 as i32 as usize] * -(6 as i32) as f32;
-    beam.origin[2 as i32 as usize] = beam.origin[2 as i32 as usize]
-        + up[2 as i32 as usize] * -(6 as i32) as f32;
+    beam.origin[0 as i32 as usize] =
+        beam.origin[0 as i32 as usize] + up[0 as i32 as usize] * -(6 as i32) as f32;
+    beam.origin[1 as i32 as usize] =
+        beam.origin[1 as i32 as usize] + up[1 as i32 as usize] * -(6 as i32) as f32;
+    beam.origin[2 as i32 as usize] =
+        beam.origin[2 as i32 as usize] + up[2 as i32 as usize] * -(6 as i32) as f32;
     beam.oldorigin[0 as i32 as usize] = origin[0 as i32 as usize];
     beam.oldorigin[1 as i32 as usize] = origin[1 as i32 as usize];
     beam.oldorigin[2 as i32 as usize] = origin[2 as i32 as usize];
@@ -1257,14 +1145,10 @@ pub unsafe extern "C" fn CG_GrappleTrail(
     beam.reType = crate::tr_types_h::RT_LIGHTNING;
     beam.customShader = crate::src::cgame::cg_main::cgs.media.lightningShader;
     crate::src::qcommon::q_math::AxisClear(beam.axis.as_mut_ptr());
-    beam.shaderRGBA[0 as i32 as usize] =
-        0xff as i32 as crate::src::qcommon::q_shared::byte;
-    beam.shaderRGBA[1 as i32 as usize] =
-        0xff as i32 as crate::src::qcommon::q_shared::byte;
-    beam.shaderRGBA[2 as i32 as usize] =
-        0xff as i32 as crate::src::qcommon::q_shared::byte;
-    beam.shaderRGBA[3 as i32 as usize] =
-        0xff as i32 as crate::src::qcommon::q_shared::byte;
+    beam.shaderRGBA[0 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
+    beam.shaderRGBA[1 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
+    beam.shaderRGBA[2 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
+    beam.shaderRGBA[3 as i32 as usize] = 0xff as i32 as crate::src::qcommon::q_shared::byte;
     crate::src::cgame::cg_syscalls::trap_R_AddRefEntityToScene(
         &mut beam as *mut _ as *const crate::tr_types_h::refEntity_t,
     );
@@ -1318,8 +1202,7 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
         .as_mut_ptr()
         .offset(1 as i32 as isize);
     while !(*item).classname.is_null() {
-        if (*item).giType as u32
-            == crate::bg_public_h::IT_WEAPON as i32 as u32
+        if (*item).giType as u32 == crate::bg_public_h::IT_WEAPON as i32 as u32
             && (*item).giTag == weaponNum
         {
             (*weaponInfo).item = item;
@@ -1361,8 +1244,7 @@ pub unsafe extern "C" fn CG_RegisterWeapon(mut weaponNum: i32) {
         .as_mut_ptr()
         .offset(1 as i32 as isize);
     while !(*ammo).classname.is_null() {
-        if (*ammo).giType as u32
-            == crate::bg_public_h::IT_AMMO as i32 as u32
+        if (*ammo).giType as u32 == crate::bg_public_h::IT_AMMO as i32 as u32
             && (*ammo).giTag == weaponNum
         {
             break;
@@ -1763,27 +1645,20 @@ pub unsafe extern "C" fn CG_RegisterItemVisuals(mut itemNum: i32) {
         ::std::mem::size_of::<crate::cg_local_h::itemInfo_t>() as libc::c_ulong,
     );
     (*itemInfo).registered = crate::src::qcommon::q_shared::qtrue;
-    (*itemInfo).models[0 as i32 as usize] =
-        crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
-            (*item).world_model[0 as i32 as usize],
-        );
+    (*itemInfo).models[0 as i32 as usize] = crate::src::cgame::cg_syscalls::trap_R_RegisterModel(
+        (*item).world_model[0 as i32 as usize],
+    );
     (*itemInfo).icon = crate::src::cgame::cg_syscalls::trap_R_RegisterShader((*item).icon);
-    if (*item).giType as u32
-        == crate::bg_public_h::IT_WEAPON as i32 as u32
-    {
+    if (*item).giType as u32 == crate::bg_public_h::IT_WEAPON as i32 as u32 {
         CG_RegisterWeapon((*item).giTag);
     }
     //
     // powerups have an accompanying ring or sphere
     //
-    if (*item).giType as u32
-        == crate::bg_public_h::IT_POWERUP as i32 as u32
-        || (*item).giType as u32
-            == crate::bg_public_h::IT_HEALTH as i32 as u32
-        || (*item).giType as u32
-            == crate::bg_public_h::IT_ARMOR as i32 as u32
-        || (*item).giType as u32
-            == crate::bg_public_h::IT_HOLDABLE as i32 as u32
+    if (*item).giType as u32 == crate::bg_public_h::IT_POWERUP as i32 as u32
+        || (*item).giType as u32 == crate::bg_public_h::IT_HEALTH as i32 as u32
+        || (*item).giType as u32 == crate::bg_public_h::IT_ARMOR as i32 as u32
+        || (*item).giType as u32 == crate::bg_public_h::IT_HOLDABLE as i32 as u32
     {
         if !(*item).world_model[1 as i32 as usize].is_null() {
             (*itemInfo).models[1 as i32 as usize] =
@@ -1814,34 +1689,28 @@ unsafe extern "C" fn CG_MapTorsoToWeaponFrame(
     // change weapon
     if frame >= (*ci).animations[crate::bg_public_h::TORSO_DROP as i32 as usize].firstFrame
         && frame
-            < (*ci).animations[crate::bg_public_h::TORSO_DROP as i32 as usize].firstFrame
-                + 9 as i32
+            < (*ci).animations[crate::bg_public_h::TORSO_DROP as i32 as usize].firstFrame + 9 as i32
     {
-        return frame
-            - (*ci).animations[crate::bg_public_h::TORSO_DROP as i32 as usize].firstFrame
+        return frame - (*ci).animations[crate::bg_public_h::TORSO_DROP as i32 as usize].firstFrame
             + 6 as i32;
     }
     // stand attack
-    if frame
-        >= (*ci).animations[crate::bg_public_h::TORSO_ATTACK as i32 as usize].firstFrame
+    if frame >= (*ci).animations[crate::bg_public_h::TORSO_ATTACK as i32 as usize].firstFrame
         && frame
             < (*ci).animations[crate::bg_public_h::TORSO_ATTACK as i32 as usize].firstFrame
                 + 6 as i32
     {
         return 1 as i32 + frame
-            - (*ci).animations[crate::bg_public_h::TORSO_ATTACK as i32 as usize]
-                .firstFrame;
+            - (*ci).animations[crate::bg_public_h::TORSO_ATTACK as i32 as usize].firstFrame;
     }
     // stand attack 2
-    if frame
-        >= (*ci).animations[crate::bg_public_h::TORSO_ATTACK2 as i32 as usize].firstFrame
+    if frame >= (*ci).animations[crate::bg_public_h::TORSO_ATTACK2 as i32 as usize].firstFrame
         && frame
             < (*ci).animations[crate::bg_public_h::TORSO_ATTACK2 as i32 as usize].firstFrame
                 + 6 as i32
     {
         return 1 as i32 + frame
-            - (*ci).animations[crate::bg_public_h::TORSO_ATTACK2 as i32 as usize]
-                .firstFrame;
+            - (*ci).animations[crate::bg_public_h::TORSO_ATTACK2 as i32 as usize].firstFrame;
     }
     return 0 as i32;
 }
@@ -1895,24 +1764,19 @@ unsafe extern "C" fn CG_CalculateWeaponPosition(
     if delta < 150 as i32 {
         let ref mut fresh4 = *origin.offset(2 as i32 as isize);
         *fresh4 = (*fresh4 as f64
-            + crate::src::cgame::cg_main::cg.landChange as f64
-                * 0.25f64
-                * delta as f64
-                / 150 as i32 as f64)
-            as crate::src::qcommon::q_shared::vec_t
+            + crate::src::cgame::cg_main::cg.landChange as f64 * 0.25f64 * delta as f64
+                / 150 as i32 as f64) as crate::src::qcommon::q_shared::vec_t
     } else if delta < 150 as i32 + 300 as i32 {
         let ref mut fresh5 = *origin.offset(2 as i32 as isize);
         *fresh5 = (*fresh5 as f64
             + crate::src::cgame::cg_main::cg.landChange as f64
                 * 0.25f64
                 * (150 as i32 + 300 as i32 - delta) as f64
-                / 300 as i32 as f64)
-            as crate::src::qcommon::q_shared::vec_t
+                / 300 as i32 as f64) as crate::src::qcommon::q_shared::vec_t
     }
     // idle drift
     scale = crate::src::cgame::cg_main::cg.xyspeed + 40 as i32 as f32;
-    fracsin = crate::stdlib::sin(crate::src::cgame::cg_main::cg.time as f64 * 0.001f64)
-        as f32;
+    fracsin = crate::stdlib::sin(crate::src::cgame::cg_main::cg.time as f64 * 0.001f64) as f32;
     let ref mut fresh6 = *angles.offset(2 as i32 as isize);
     *fresh6 = (*fresh6 as f64 + (scale * fracsin) as f64 * 0.01f64)
         as crate::src::qcommon::q_shared::vec_t;
@@ -2009,11 +1873,8 @@ unsafe extern "C" fn CG_LightningBolt(
             if a < -(180 as i32) as f32 {
                 a += 360 as i32 as f32
             }
-            angle[i as usize] = (crate::src::cgame::cg_main::cg.refdefViewAngles[i as usize]
-                as f64
-                + a as f64
-                    * (1.0f64
-                        - crate::src::cgame::cg_main::cg_trueLightning.value as f64))
+            angle[i as usize] = (crate::src::cgame::cg_main::cg.refdefViewAngles[i as usize] as f64
+                + a as f64 * (1.0f64 - crate::src::cgame::cg_main::cg_trueLightning.value as f64))
                 as crate::src::qcommon::q_shared::vec_t;
             if angle[i as usize] < 0 as i32 as f32 {
                 angle[i as usize] += 360 as i32 as f32
@@ -2053,19 +1914,19 @@ unsafe extern "C" fn CG_LightningBolt(
     } else {
         muzzlePoint[2 as i32 as usize] += 26 as i32 as f32
     }
-    muzzlePoint[0 as i32 as usize] = muzzlePoint[0 as i32 as usize]
-        + forward[0 as i32 as usize] * 14 as i32 as f32;
-    muzzlePoint[1 as i32 as usize] = muzzlePoint[1 as i32 as usize]
-        + forward[1 as i32 as usize] * 14 as i32 as f32;
-    muzzlePoint[2 as i32 as usize] = muzzlePoint[2 as i32 as usize]
-        + forward[2 as i32 as usize] * 14 as i32 as f32;
+    muzzlePoint[0 as i32 as usize] =
+        muzzlePoint[0 as i32 as usize] + forward[0 as i32 as usize] * 14 as i32 as f32;
+    muzzlePoint[1 as i32 as usize] =
+        muzzlePoint[1 as i32 as usize] + forward[1 as i32 as usize] * 14 as i32 as f32;
+    muzzlePoint[2 as i32 as usize] =
+        muzzlePoint[2 as i32 as usize] + forward[2 as i32 as usize] * 14 as i32 as f32;
     // project forward by the lightning range
-    endPoint[0 as i32 as usize] = muzzlePoint[0 as i32 as usize]
-        + forward[0 as i32 as usize] * 768 as i32 as f32;
-    endPoint[1 as i32 as usize] = muzzlePoint[1 as i32 as usize]
-        + forward[1 as i32 as usize] * 768 as i32 as f32;
-    endPoint[2 as i32 as usize] = muzzlePoint[2 as i32 as usize]
-        + forward[2 as i32 as usize] * 768 as i32 as f32;
+    endPoint[0 as i32 as usize] =
+        muzzlePoint[0 as i32 as usize] + forward[0 as i32 as usize] * 768 as i32 as f32;
+    endPoint[1 as i32 as usize] =
+        muzzlePoint[1 as i32 as usize] + forward[1 as i32 as usize] * 768 as i32 as f32;
+    endPoint[2 as i32 as usize] =
+        muzzlePoint[2 as i32 as usize] + forward[2 as i32 as usize] * 768 as i32 as f32;
     // see if it hit a wall
     crate::src::cgame::cg_predict::CG_Trace(
         &mut trace as *mut _ as *mut crate::src::qcommon::q_shared::trace_t,
@@ -2096,12 +1957,9 @@ unsafe extern "C" fn CG_LightningBolt(
     if (trace.fraction as f64) < 1.0f64 {
         let mut angles: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
         let mut dir: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
-        dir[0 as i32 as usize] =
-            beam.oldorigin[0 as i32 as usize] - beam.origin[0 as i32 as usize];
-        dir[1 as i32 as usize] =
-            beam.oldorigin[1 as i32 as usize] - beam.origin[1 as i32 as usize];
-        dir[2 as i32 as usize] =
-            beam.oldorigin[2 as i32 as usize] - beam.origin[2 as i32 as usize];
+        dir[0 as i32 as usize] = beam.oldorigin[0 as i32 as usize] - beam.origin[0 as i32 as usize];
+        dir[1 as i32 as usize] = beam.oldorigin[1 as i32 as usize] - beam.origin[1 as i32 as usize];
+        dir[2 as i32 as usize] = beam.oldorigin[2 as i32 as usize] - beam.origin[2 as i32 as usize];
         crate::src::qcommon::q_math::VectorNormalize(dir.as_mut_ptr());
         crate::stdlib::memset(
             &mut beam as *mut crate::tr_types_h::refEntity_t as *mut libc::c_void,
@@ -2111,12 +1969,12 @@ unsafe extern "C" fn CG_LightningBolt(
         beam.hModel = crate::src::cgame::cg_main::cgs
             .media
             .lightningExplosionModel;
-        beam.origin[0 as i32 as usize] = trace.endpos[0 as i32 as usize]
-            + dir[0 as i32 as usize] * -(16 as i32) as f32;
-        beam.origin[1 as i32 as usize] = trace.endpos[1 as i32 as usize]
-            + dir[1 as i32 as usize] * -(16 as i32) as f32;
-        beam.origin[2 as i32 as usize] = trace.endpos[2 as i32 as usize]
-            + dir[2 as i32 as usize] * -(16 as i32) as f32;
+        beam.origin[0 as i32 as usize] =
+            trace.endpos[0 as i32 as usize] + dir[0 as i32 as usize] * -(16 as i32) as f32;
+        beam.origin[1 as i32 as usize] =
+            trace.endpos[1 as i32 as usize] + dir[1 as i32 as usize] * -(16 as i32) as f32;
+        beam.origin[2 as i32 as usize] =
+            trace.endpos[2 as i32 as usize] + dir[2 as i32 as usize] * -(16 as i32) as f32;
         // make a random orientation
         angles[0 as i32 as usize] =
             (::libc::rand() % 360 as i32) as crate::src::qcommon::q_shared::vec_t;
@@ -2134,25 +1992,19 @@ unsafe extern "C" fn CG_LightningBolt(
     };
 }
 
-unsafe extern "C" fn CG_MachinegunSpinAngle(
-    mut cent: *mut crate::cg_local_h::centity_t,
-) -> f32 {
+unsafe extern "C" fn CG_MachinegunSpinAngle(mut cent: *mut crate::cg_local_h::centity_t) -> f32 {
     let mut delta: i32 = 0;
     let mut angle: f32 = 0.;
     let mut speed: f32 = 0.;
     delta = crate::src::cgame::cg_main::cg.time - (*cent).pe.barrelTime;
     if (*cent).pe.barrelSpinning as u64 != 0 {
-        angle = ((*cent).pe.barrelAngle as f64 + delta as f64 * 0.9f64)
-            as f32
+        angle = ((*cent).pe.barrelAngle as f64 + delta as f64 * 0.9f64) as f32
     } else {
         if delta > 1000 as i32 {
             delta = 1000 as i32
         }
-        speed = (0.5f64
-            * (0.9f64
-                + ((1000 as i32 - delta) as f32
-                    / 1000 as i32 as f32) as f64))
-            as f32;
+        speed =
+            (0.5f64 * (0.9f64 + ((1000 as i32 - delta) as f32 / 1000 as i32 as f32) as f64)) as f32;
         angle = (*cent).pe.barrelAngle + delta as f32 * speed
     }
     if (*cent).pe.barrelSpinning as u32
@@ -2160,8 +2012,7 @@ unsafe extern "C" fn CG_MachinegunSpinAngle(
     {
         (*cent).pe.barrelTime = crate::src::cgame::cg_main::cg.time;
         (*cent).pe.barrelAngle = crate::src::qcommon::q_math::AngleMod(angle);
-        (*cent).pe.barrelSpinning = ((*cent).currentState.eFlags & 0x100 as i32 != 0)
-            as i32
+        (*cent).pe.barrelSpinning = ((*cent).currentState.eFlags & 0x100 as i32 != 0) as i32
             as crate::src::qcommon::q_shared::qboolean
     }
     return angle;
@@ -2305,12 +2156,9 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
         0 as i32,
         ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
     );
-    gun.lightingOrigin[0 as i32 as usize] =
-        (*parent).lightingOrigin[0 as i32 as usize];
-    gun.lightingOrigin[1 as i32 as usize] =
-        (*parent).lightingOrigin[1 as i32 as usize];
-    gun.lightingOrigin[2 as i32 as usize] =
-        (*parent).lightingOrigin[2 as i32 as usize];
+    gun.lightingOrigin[0 as i32 as usize] = (*parent).lightingOrigin[0 as i32 as usize];
+    gun.lightingOrigin[1 as i32 as usize] = (*parent).lightingOrigin[1 as i32 as usize];
+    gun.lightingOrigin[2 as i32 as usize] = (*parent).lightingOrigin[2 as i32 as usize];
     gun.shadowPlane = (*parent).shadowPlane;
     gun.renderfx = (*parent).renderfx;
     // set custom shading for railgun refire rate
@@ -2324,23 +2172,16 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
             let mut scale: i32 = 255 as i32
                 * (crate::src::cgame::cg_main::cg.time - (*cent).pe.railFireTime)
                 / 1500 as i32;
-            gun.shaderRGBA[0 as i32 as usize] = ((*ci).c1RGBA[0 as i32 as usize]
-                as i32
-                * scale
+            gun.shaderRGBA[0 as i32 as usize] = ((*ci).c1RGBA[0 as i32 as usize] as i32 * scale
                 >> 8 as i32)
                 as crate::src::qcommon::q_shared::byte;
-            gun.shaderRGBA[1 as i32 as usize] = ((*ci).c1RGBA[1 as i32 as usize]
-                as i32
-                * scale
+            gun.shaderRGBA[1 as i32 as usize] = ((*ci).c1RGBA[1 as i32 as usize] as i32 * scale
                 >> 8 as i32)
                 as crate::src::qcommon::q_shared::byte;
-            gun.shaderRGBA[2 as i32 as usize] = ((*ci).c1RGBA[2 as i32 as usize]
-                as i32
-                * scale
+            gun.shaderRGBA[2 as i32 as usize] = ((*ci).c1RGBA[2 as i32 as usize] as i32 * scale
                 >> 8 as i32)
                 as crate::src::qcommon::q_shared::byte;
-            gun.shaderRGBA[3 as i32 as usize] =
-                255 as i32 as crate::src::qcommon::q_shared::byte
+            gun.shaderRGBA[3 as i32 as usize] = 255 as i32 as crate::src::qcommon::q_shared::byte
         } else {
             gun.shaderRGBA[0 as i32 as usize] = (*ci).c1RGBA[0 as i32 as usize];
             gun.shaderRGBA[1 as i32 as usize] = (*ci).c1RGBA[1 as i32 as usize];
@@ -2387,14 +2228,11 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     gun.origin[1 as i32 as usize] = (*parent).origin[1 as i32 as usize];
     gun.origin[2 as i32 as usize] = (*parent).origin[2 as i32 as usize];
     gun.origin[0 as i32 as usize] = gun.origin[0 as i32 as usize]
-        + (*parent).axis[0 as i32 as usize][0 as i32 as usize]
-            * lerped.origin[0 as i32 as usize];
+        + (*parent).axis[0 as i32 as usize][0 as i32 as usize] * lerped.origin[0 as i32 as usize];
     gun.origin[1 as i32 as usize] = gun.origin[1 as i32 as usize]
-        + (*parent).axis[0 as i32 as usize][1 as i32 as usize]
-            * lerped.origin[0 as i32 as usize];
+        + (*parent).axis[0 as i32 as usize][1 as i32 as usize] * lerped.origin[0 as i32 as usize];
     gun.origin[2 as i32 as usize] = gun.origin[2 as i32 as usize]
-        + (*parent).axis[0 as i32 as usize][2 as i32 as usize]
-            * lerped.origin[0 as i32 as usize];
+        + (*parent).axis[0 as i32 as usize][2 as i32 as usize] * lerped.origin[0 as i32 as usize];
     // Make weapon appear left-handed for 2 and centered for 3
     if !ps.is_null() && crate::src::cgame::cg_main::cg_drawGun.integer == 2 as i32 {
         gun.origin[0 as i32 as usize] = gun.origin[0 as i32 as usize]
@@ -2418,14 +2256,11 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
                 * lerped.origin[1 as i32 as usize]
     }
     gun.origin[0 as i32 as usize] = gun.origin[0 as i32 as usize]
-        + (*parent).axis[2 as i32 as usize][0 as i32 as usize]
-            * lerped.origin[2 as i32 as usize];
+        + (*parent).axis[2 as i32 as usize][0 as i32 as usize] * lerped.origin[2 as i32 as usize];
     gun.origin[1 as i32 as usize] = gun.origin[1 as i32 as usize]
-        + (*parent).axis[2 as i32 as usize][1 as i32 as usize]
-            * lerped.origin[2 as i32 as usize];
+        + (*parent).axis[2 as i32 as usize][1 as i32 as usize] * lerped.origin[2 as i32 as usize];
     gun.origin[2 as i32 as usize] = gun.origin[2 as i32 as usize]
-        + (*parent).axis[2 as i32 as usize][2 as i32 as usize]
-            * lerped.origin[2 as i32 as usize];
+        + (*parent).axis[2 as i32 as usize][2 as i32 as usize] * lerped.origin[2 as i32 as usize];
     crate::src::qcommon::q_math::MatrixMultiply(
         lerped.axis.as_mut_ptr(),
         (*parent).axis.as_mut_ptr(),
@@ -2440,19 +2275,14 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
             0 as i32,
             ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
         );
-        barrel.lightingOrigin[0 as i32 as usize] =
-            (*parent).lightingOrigin[0 as i32 as usize];
-        barrel.lightingOrigin[1 as i32 as usize] =
-            (*parent).lightingOrigin[1 as i32 as usize];
-        barrel.lightingOrigin[2 as i32 as usize] =
-            (*parent).lightingOrigin[2 as i32 as usize];
+        barrel.lightingOrigin[0 as i32 as usize] = (*parent).lightingOrigin[0 as i32 as usize];
+        barrel.lightingOrigin[1 as i32 as usize] = (*parent).lightingOrigin[1 as i32 as usize];
+        barrel.lightingOrigin[2 as i32 as usize] = (*parent).lightingOrigin[2 as i32 as usize];
         barrel.shadowPlane = (*parent).shadowPlane;
         barrel.renderfx = (*parent).renderfx;
         barrel.hModel = (*weapon).barrelModel;
-        angles[1 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
-        angles[0 as i32 as usize] =
-            0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        angles[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+        angles[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
         angles[2 as i32 as usize] = CG_MachinegunSpinAngle(cent);
         crate::src::qcommon::q_math::AnglesToAxis(
             angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -2481,12 +2311,9 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
         nonPredictedCent = cent
     }
     // add the flash
-    if !((weaponNum as u32
-        == crate::bg_public_h::WP_LIGHTNING as i32 as u32
-        || weaponNum as u32
-            == crate::bg_public_h::WP_GAUNTLET as i32 as u32
-        || weaponNum as u32
-            == crate::bg_public_h::WP_GRAPPLING_HOOK as i32 as u32)
+    if !((weaponNum as u32 == crate::bg_public_h::WP_LIGHTNING as i32 as u32
+        || weaponNum as u32 == crate::bg_public_h::WP_GAUNTLET as i32 as u32
+        || weaponNum as u32 == crate::bg_public_h::WP_GRAPPLING_HOOK as i32 as u32)
         && (*nonPredictedCent).currentState.eFlags & 0x100 as i32 != 0)
     {
         // impulse flash
@@ -2499,12 +2326,9 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
         0 as i32,
         ::std::mem::size_of::<crate::tr_types_h::refEntity_t>() as libc::c_ulong,
     );
-    flash.lightingOrigin[0 as i32 as usize] =
-        (*parent).lightingOrigin[0 as i32 as usize];
-    flash.lightingOrigin[1 as i32 as usize] =
-        (*parent).lightingOrigin[1 as i32 as usize];
-    flash.lightingOrigin[2 as i32 as usize] =
-        (*parent).lightingOrigin[2 as i32 as usize];
+    flash.lightingOrigin[0 as i32 as usize] = (*parent).lightingOrigin[0 as i32 as usize];
+    flash.lightingOrigin[1 as i32 as usize] = (*parent).lightingOrigin[1 as i32 as usize];
+    flash.lightingOrigin[2 as i32 as usize] = (*parent).lightingOrigin[2 as i32 as usize];
     flash.shadowPlane = (*parent).shadowPlane;
     flash.renderfx = (*parent).renderfx;
     flash.hModel = (*weapon).flashModel;
@@ -2514,11 +2338,8 @@ pub unsafe extern "C" fn CG_AddPlayerWeapon(
     angles[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     angles[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     angles[2 as i32 as usize] = (2.0f64
-        * (((::libc::rand() & 0x7fff as i32) as f32
-            / 0x7fff as i32 as f32) as f64
-            - 0.5f64)
-        * 10 as i32 as f64)
-        as crate::src::qcommon::q_shared::vec_t;
+        * (((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32) as f64 - 0.5f64)
+        * 10 as i32 as f64) as crate::src::qcommon::q_shared::vec_t;
     crate::src::qcommon::q_math::AnglesToAxis(
         angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         flash.axis.as_mut_ptr(),
@@ -2665,9 +2486,8 @@ pub unsafe extern "C" fn CG_AddViewWeapon(
     }
     // drop gun lower at higher fov
     if crate::src::cgame::cg_main::cg_fov.integer > 90 as i32 {
-        fovOffset = (-0.2f64
-            * (crate::src::cgame::cg_main::cg_fov.integer - 90 as i32) as f64)
-            as f32
+        fovOffset =
+            (-0.2f64 * (crate::src::cgame::cg_main::cg_fov.integer - 90 as i32) as f64) as f32
     } else {
         fovOffset = 0 as i32 as f32
     } // &cg_entities[cg.snap->ps.clientNum];
@@ -2684,40 +2504,31 @@ pub unsafe extern "C" fn CG_AddViewWeapon(
     // set up gun position
     CG_CalculateWeaponPosition(hand.origin.as_mut_ptr(), angles.as_mut_ptr());
     hand.origin[0 as i32 as usize] = hand.origin[0 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
-            [0 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][0 as i32 as usize]
             * crate::src::cgame::cg_main::cg_gun_x.value;
     hand.origin[1 as i32 as usize] = hand.origin[1 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
-            [1 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][1 as i32 as usize]
             * crate::src::cgame::cg_main::cg_gun_x.value;
     hand.origin[2 as i32 as usize] = hand.origin[2 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize]
-            [2 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[0 as i32 as usize][2 as i32 as usize]
             * crate::src::cgame::cg_main::cg_gun_x.value;
     hand.origin[0 as i32 as usize] = hand.origin[0 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
-            [0 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
             * crate::src::cgame::cg_main::cg_gun_y.value;
     hand.origin[1 as i32 as usize] = hand.origin[1 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
-            [1 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize]
             * crate::src::cgame::cg_main::cg_gun_y.value;
     hand.origin[2 as i32 as usize] = hand.origin[2 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
-            [2 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize]
             * crate::src::cgame::cg_main::cg_gun_y.value;
     hand.origin[0 as i32 as usize] = hand.origin[0 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
-            [0 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
             * (crate::src::cgame::cg_main::cg_gun_z.value + fovOffset);
     hand.origin[1 as i32 as usize] = hand.origin[1 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
-            [1 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
             * (crate::src::cgame::cg_main::cg_gun_z.value + fovOffset);
     hand.origin[2 as i32 as usize] = hand.origin[2 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
-            [2 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize]
             * (crate::src::cgame::cg_main::cg_gun_z.value + fovOffset);
     crate::src::qcommon::q_math::AnglesToAxis(
         angles.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -2851,12 +2662,7 @@ pub unsafe extern "C" fn CG_DrawWeaponSelect() {
         if !name.is_null() {
             w = crate::src::cgame::cg_drawtools::CG_DrawStrlen(name) * 16 as i32;
             x = (640 as i32 - w) / 2 as i32;
-            crate::src::cgame::cg_drawtools::CG_DrawBigStringColor(
-                x,
-                y - 22 as i32,
-                name,
-                color,
-            );
+            crate::src::cgame::cg_drawtools::CG_DrawBigStringColor(x, y - 22 as i32, name, color);
         }
     }
     crate::src::cgame::cg_syscalls::trap_R_SetColor(0 as *const f32);
@@ -2867,9 +2673,7 @@ CG_WeaponSelectable
 ===============
 */
 
-unsafe extern "C" fn CG_WeaponSelectable(
-    mut i: i32,
-) -> crate::src::qcommon::q_shared::qboolean {
+unsafe extern "C" fn CG_WeaponSelectable(mut i: i32) -> crate::src::qcommon::q_shared::qboolean {
     if (*crate::src::cgame::cg_main::cg.snap).ps.ammo[i as usize] == 0 {
         return crate::src::qcommon::q_shared::qfalse;
     }
@@ -2906,8 +2710,7 @@ pub unsafe extern "C" fn CG_NextWeapon_f() {
         if crate::src::cgame::cg_main::cg.weaponSelect == 16 as i32 {
             crate::src::cgame::cg_main::cg.weaponSelect = 0 as i32
         }
-        if !(crate::src::cgame::cg_main::cg.weaponSelect
-            == crate::bg_public_h::WP_GAUNTLET as i32)
+        if !(crate::src::cgame::cg_main::cg.weaponSelect == crate::bg_public_h::WP_GAUNTLET as i32)
         {
             if CG_WeaponSelectable(crate::src::cgame::cg_main::cg.weaponSelect) as u64 != 0 {
                 break;
@@ -2944,8 +2747,7 @@ pub unsafe extern "C" fn CG_PrevWeapon_f() {
         if crate::src::cgame::cg_main::cg.weaponSelect == -(1 as i32) {
             crate::src::cgame::cg_main::cg.weaponSelect = 16 as i32 - 1 as i32
         }
-        if !(crate::src::cgame::cg_main::cg.weaponSelect
-            == crate::bg_public_h::WP_GAUNTLET as i32)
+        if !(crate::src::cgame::cg_main::cg.weaponSelect == crate::bg_public_h::WP_GAUNTLET as i32)
         {
             if CG_WeaponSelectable(crate::src::cgame::cg_main::cg.weaponSelect) as u64 != 0 {
                 break;
@@ -3056,10 +2858,7 @@ pub unsafe extern "C" fn CG_FireWeapon(mut cent: *mut crate::cg_local_h::centity
         (*cent).pe.railFireTime = crate::src::cgame::cg_main::cg.time
     }
     // play quad sound if needed
-    if (*cent).currentState.powerups
-        & (1 as i32) << crate::bg_public_h::PW_QUAD as i32
-        != 0
-    {
+    if (*cent).currentState.powerups & (1 as i32) << crate::bg_public_h::PW_QUAD as i32 != 0 {
         crate::src::cgame::cg_syscalls::trap_S_StartSound(
             0 as *mut crate::src::qcommon::q_shared::vec_t,
             (*cent).currentState.number,
@@ -3128,12 +2927,9 @@ pub unsafe extern "C" fn CG_MissileHitWall(
     mod_0 = 0 as i32;
     shader = 0 as i32;
     light = 0 as i32 as f32;
-    lightColor[0 as i32 as usize] =
-        1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    lightColor[1 as i32 as usize] =
-        1 as i32 as crate::src::qcommon::q_shared::vec_t;
-    lightColor[2 as i32 as usize] =
-        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+    lightColor[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
+    lightColor[1 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
+    lightColor[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     // set defaults
     isSprite = crate::src::qcommon::q_shared::qfalse;
     duration = 600 as i32;
@@ -3156,8 +2952,7 @@ pub unsafe extern "C" fn CG_MissileHitWall(
             light = 300 as i32 as f32;
             isSprite = crate::src::qcommon::q_shared::qtrue;
             duration = 1000 as i32;
-            lightColor[0 as i32 as usize] =
-                1 as i32 as crate::src::qcommon::q_shared::vec_t;
+            lightColor[0 as i32 as usize] = 1 as i32 as crate::src::qcommon::q_shared::vec_t;
             lightColor[1 as i32 as usize] = 0.75f64 as crate::src::qcommon::q_shared::vec_t;
             lightColor[2 as i32 as usize] = 0.0f64 as crate::src::qcommon::q_shared::vec_t;
             if crate::src::cgame::cg_main::cg_oldRocket.integer == 0 as i32 {
@@ -3168,12 +2963,9 @@ pub unsafe extern "C" fn CG_MissileHitWall(
                     + *dir.offset(1 as i32 as isize) * 24 as i32 as f32;
                 sprOrg[2 as i32 as usize] = *origin.offset(2 as i32 as isize)
                     + *dir.offset(2 as i32 as isize) * 24 as i32 as f32;
-                sprVel[0 as i32 as usize] =
-                    *dir.offset(0 as i32 as isize) * 64 as i32 as f32;
-                sprVel[1 as i32 as usize] =
-                    *dir.offset(1 as i32 as isize) * 64 as i32 as f32;
-                sprVel[2 as i32 as usize] =
-                    *dir.offset(2 as i32 as isize) * 64 as i32 as f32;
+                sprVel[0 as i32 as usize] = *dir.offset(0 as i32 as isize) * 64 as i32 as f32;
+                sprVel[1 as i32 as usize] = *dir.offset(1 as i32 as isize) * 64 as i32 as f32;
+                sprVel[2 as i32 as usize] = *dir.offset(2 as i32 as isize) * 64 as i32 as f32;
                 crate::src::cgame::cg_particles::CG_ParticleExplosion(
                     b"explode1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char,
                     sprOrg.as_mut_ptr(),
@@ -3272,15 +3064,15 @@ pub unsafe extern "C" fn CG_MissileHitWall(
             (*le).color[2 as i32 as usize] = crate::src::cgame::cg_main::cgs.clientinfo
                 [clientNum as usize]
                 .color1[2 as i32 as usize];
-            (*le).refEntity.shaderRGBA[0 as i32 as usize] =
-                ((*le).color[0 as i32 as usize] * 0xff as i32 as f32)
-                    as crate::src::qcommon::q_shared::byte;
-            (*le).refEntity.shaderRGBA[1 as i32 as usize] =
-                ((*le).color[1 as i32 as usize] * 0xff as i32 as f32)
-                    as crate::src::qcommon::q_shared::byte;
-            (*le).refEntity.shaderRGBA[2 as i32 as usize] =
-                ((*le).color[2 as i32 as usize] * 0xff as i32 as f32)
-                    as crate::src::qcommon::q_shared::byte;
+            (*le).refEntity.shaderRGBA[0 as i32 as usize] = ((*le).color[0 as i32 as usize]
+                * 0xff as i32 as f32)
+                as crate::src::qcommon::q_shared::byte;
+            (*le).refEntity.shaderRGBA[1 as i32 as usize] = ((*le).color[1 as i32 as usize]
+                * 0xff as i32 as f32)
+                as crate::src::qcommon::q_shared::byte;
+            (*le).refEntity.shaderRGBA[2 as i32 as usize] = ((*le).color[2 as i32 as usize]
+                * 0xff as i32 as f32)
+                as crate::src::qcommon::q_shared::byte;
             (*le).refEntity.shaderRGBA[3 as i32 as usize] =
                 0xff as i32 as crate::src::qcommon::q_shared::byte
         }
@@ -3300,9 +3092,7 @@ pub unsafe extern "C" fn CG_MissileHitWall(
             mark,
             origin as *const crate::src::qcommon::q_shared::vec_t,
             dir as *const crate::src::qcommon::q_shared::vec_t,
-            (::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32
-                * 360 as i32 as f32,
+            (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 360 as i32 as f32,
             *color.offset(0 as i32 as isize),
             *color.offset(1 as i32 as isize),
             *color.offset(2 as i32 as isize),
@@ -3316,9 +3106,7 @@ pub unsafe extern "C" fn CG_MissileHitWall(
             mark,
             origin as *const crate::src::qcommon::q_shared::vec_t,
             dir as *const crate::src::qcommon::q_shared::vec_t,
-            (::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32
-                * 360 as i32 as f32,
+            (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * 360 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
             1 as i32 as f32,
@@ -3570,26 +3358,17 @@ unsafe extern "C" fn CG_ShotgunPattern(
             * 700 as i32 as f32
             * 16 as i32 as f32;
         end[0 as i32 as usize] = *origin.offset(0 as i32 as isize)
-            + forward[0 as i32 as usize]
-                * (8192 as i32 * 16 as i32) as f32;
+            + forward[0 as i32 as usize] * (8192 as i32 * 16 as i32) as f32;
         end[1 as i32 as usize] = *origin.offset(1 as i32 as isize)
-            + forward[1 as i32 as usize]
-                * (8192 as i32 * 16 as i32) as f32;
+            + forward[1 as i32 as usize] * (8192 as i32 * 16 as i32) as f32;
         end[2 as i32 as usize] = *origin.offset(2 as i32 as isize)
-            + forward[2 as i32 as usize]
-                * (8192 as i32 * 16 as i32) as f32;
-        end[0 as i32 as usize] =
-            end[0 as i32 as usize] + right[0 as i32 as usize] * r;
-        end[1 as i32 as usize] =
-            end[1 as i32 as usize] + right[1 as i32 as usize] * r;
-        end[2 as i32 as usize] =
-            end[2 as i32 as usize] + right[2 as i32 as usize] * r;
-        end[0 as i32 as usize] =
-            end[0 as i32 as usize] + up[0 as i32 as usize] * u;
-        end[1 as i32 as usize] =
-            end[1 as i32 as usize] + up[1 as i32 as usize] * u;
-        end[2 as i32 as usize] =
-            end[2 as i32 as usize] + up[2 as i32 as usize] * u;
+            + forward[2 as i32 as usize] * (8192 as i32 * 16 as i32) as f32;
+        end[0 as i32 as usize] = end[0 as i32 as usize] + right[0 as i32 as usize] * r;
+        end[1 as i32 as usize] = end[1 as i32 as usize] + right[1 as i32 as usize] * r;
+        end[2 as i32 as usize] = end[2 as i32 as usize] + right[2 as i32 as usize] * r;
+        end[0 as i32 as usize] = end[0 as i32 as usize] + up[0 as i32 as usize] * u;
+        end[1 as i32 as usize] = end[1 as i32 as usize] + up[1 as i32 as usize] * u;
+        end[2 as i32 as usize] = end[2 as i32 as usize] + up[2 as i32 as usize] * u;
         CG_ShotgunPellet(origin, end.as_mut_ptr(), otherEntNum);
         i += 1
     }
@@ -3604,25 +3383,16 @@ CG_ShotgunFire
 pub unsafe extern "C" fn CG_ShotgunFire(mut es: *mut crate::src::qcommon::q_shared::entityState_t) {
     let mut v: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut contents: i32 = 0;
-    v[0 as i32 as usize] =
-        (*es).origin2[0 as i32 as usize] - (*es).pos.trBase[0 as i32 as usize];
-    v[1 as i32 as usize] =
-        (*es).origin2[1 as i32 as usize] - (*es).pos.trBase[1 as i32 as usize];
-    v[2 as i32 as usize] =
-        (*es).origin2[2 as i32 as usize] - (*es).pos.trBase[2 as i32 as usize];
+    v[0 as i32 as usize] = (*es).origin2[0 as i32 as usize] - (*es).pos.trBase[0 as i32 as usize];
+    v[1 as i32 as usize] = (*es).origin2[1 as i32 as usize] - (*es).pos.trBase[1 as i32 as usize];
+    v[2 as i32 as usize] = (*es).origin2[2 as i32 as usize] - (*es).pos.trBase[2 as i32 as usize];
     crate::src::qcommon::q_math::VectorNormalize(v.as_mut_ptr());
-    v[0 as i32 as usize] =
-        v[0 as i32 as usize] * 32 as i32 as f32;
-    v[1 as i32 as usize] =
-        v[1 as i32 as usize] * 32 as i32 as f32;
-    v[2 as i32 as usize] =
-        v[2 as i32 as usize] * 32 as i32 as f32;
-    v[0 as i32 as usize] =
-        (*es).pos.trBase[0 as i32 as usize] + v[0 as i32 as usize];
-    v[1 as i32 as usize] =
-        (*es).pos.trBase[1 as i32 as usize] + v[1 as i32 as usize];
-    v[2 as i32 as usize] =
-        (*es).pos.trBase[2 as i32 as usize] + v[2 as i32 as usize];
+    v[0 as i32 as usize] = v[0 as i32 as usize] * 32 as i32 as f32;
+    v[1 as i32 as usize] = v[1 as i32 as usize] * 32 as i32 as f32;
+    v[2 as i32 as usize] = v[2 as i32 as usize] * 32 as i32 as f32;
+    v[0 as i32 as usize] = (*es).pos.trBase[0 as i32 as usize] + v[0 as i32 as usize];
+    v[1 as i32 as usize] = (*es).pos.trBase[1 as i32 as usize] + v[1 as i32 as usize];
+    v[2 as i32 as usize] = (*es).pos.trBase[2 as i32 as usize] + v[2 as i32 as usize];
     if crate::src::cgame::cg_main::cgs.glconfig.hardwareType as u32
         != crate::tr_types_h::GLHW_RAGEPRO as i32 as u32
     {
@@ -3633,12 +3403,9 @@ pub unsafe extern "C" fn CG_ShotgunFire(mut es: *mut crate::src::qcommon::q_shar
             0 as i32,
         );
         if contents & 32 as i32 == 0 {
-            up[0 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
-            up[1 as i32 as usize] =
-                0 as i32 as crate::src::qcommon::q_shared::vec_t;
-            up[2 as i32 as usize] =
-                8 as i32 as crate::src::qcommon::q_shared::vec_t;
+            up[0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            up[1 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
+            up[2 as i32 as usize] = 8 as i32 as crate::src::qcommon::q_shared::vec_t;
 
             crate::src::cgame::cg_effects::CG_SmokePuff(
                 v.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -3708,9 +3475,7 @@ pub unsafe extern "C" fn CG_Tracer(
         return;
     }
     begin = 50 as i32 as f32
-        + (::libc::rand() & 0x7fff as i32) as f32
-            / 0x7fff as i32 as f32
-            * (len - 60 as i32 as f32);
+        + (::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32 * (len - 60 as i32 as f32);
     end = begin + crate::src::cgame::cg_main::cg_tracerLength.value;
     if end > len {
         end = len
@@ -3728,58 +3493,44 @@ pub unsafe extern "C" fn CG_Tracer(
     finish[2 as i32 as usize] =
         *source.offset(2 as i32 as isize) + forward[2 as i32 as usize] * end;
     line[0 as i32 as usize] = forward[0 as i32 as usize]
-        * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
-            [0 as i32 as usize]
+        * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][0 as i32 as usize]
         + forward[1 as i32 as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
-                [1 as i32 as usize]
+            * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][1 as i32 as usize]
         + forward[2 as i32 as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
-                [2 as i32 as usize];
+            * crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize][2 as i32 as usize];
     line[1 as i32 as usize] = forward[0 as i32 as usize]
-        * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
-            [0 as i32 as usize]
+        * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
         + forward[1 as i32 as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
-                [1 as i32 as usize]
+            * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
         + forward[2 as i32 as usize]
-            * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
-                [2 as i32 as usize];
-    right[0 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis
-        [1 as i32 as usize][0 as i32 as usize]
+            * crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize];
+    right[0 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
+        [0 as i32 as usize]
         * line[1 as i32 as usize];
-    right[1 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis
-        [1 as i32 as usize][1 as i32 as usize]
+    right[1 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
+        [1 as i32 as usize]
         * line[1 as i32 as usize];
-    right[2 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis
-        [1 as i32 as usize][2 as i32 as usize]
+    right[2 as i32 as usize] = crate::src::cgame::cg_main::cg.refdef.viewaxis[1 as i32 as usize]
+        [2 as i32 as usize]
         * line[1 as i32 as usize];
     right[0 as i32 as usize] = right[0 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
-            [0 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][0 as i32 as usize]
             * -line[0 as i32 as usize];
     right[1 as i32 as usize] = right[1 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
-            [1 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][1 as i32 as usize]
             * -line[0 as i32 as usize];
     right[2 as i32 as usize] = right[2 as i32 as usize]
-        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize]
-            [2 as i32 as usize]
+        + crate::src::cgame::cg_main::cg.refdef.viewaxis[2 as i32 as usize][2 as i32 as usize]
             * -line[0 as i32 as usize];
     crate::src::qcommon::q_math::VectorNormalize(right.as_mut_ptr());
-    verts[0 as i32 as usize].xyz[0 as i32 as usize] = finish
-        [0 as i32 as usize]
+    verts[0 as i32 as usize].xyz[0 as i32 as usize] = finish[0 as i32 as usize]
         + right[0 as i32 as usize] * crate::src::cgame::cg_main::cg_tracerWidth.value;
-    verts[0 as i32 as usize].xyz[1 as i32 as usize] = finish
-        [1 as i32 as usize]
+    verts[0 as i32 as usize].xyz[1 as i32 as usize] = finish[1 as i32 as usize]
         + right[1 as i32 as usize] * crate::src::cgame::cg_main::cg_tracerWidth.value;
-    verts[0 as i32 as usize].xyz[2 as i32 as usize] = finish
-        [2 as i32 as usize]
+    verts[0 as i32 as usize].xyz[2 as i32 as usize] = finish[2 as i32 as usize]
         + right[2 as i32 as usize] * crate::src::cgame::cg_main::cg_tracerWidth.value;
-    verts[0 as i32 as usize].st[0 as i32 as usize] =
-        0 as i32 as f32;
-    verts[0 as i32 as usize].st[1 as i32 as usize] =
-        1 as i32 as f32;
+    verts[0 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
+    verts[0 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
     verts[0 as i32 as usize].modulate[0 as i32 as usize] =
         255 as i32 as crate::src::qcommon::q_shared::byte;
     verts[0 as i32 as usize].modulate[1 as i32 as usize] =
@@ -3788,19 +3539,14 @@ pub unsafe extern "C" fn CG_Tracer(
         255 as i32 as crate::src::qcommon::q_shared::byte;
     verts[0 as i32 as usize].modulate[3 as i32 as usize] =
         255 as i32 as crate::src::qcommon::q_shared::byte;
-    verts[1 as i32 as usize].xyz[0 as i32 as usize] = finish
-        [0 as i32 as usize]
+    verts[1 as i32 as usize].xyz[0 as i32 as usize] = finish[0 as i32 as usize]
         + right[0 as i32 as usize] * -crate::src::cgame::cg_main::cg_tracerWidth.value;
-    verts[1 as i32 as usize].xyz[1 as i32 as usize] = finish
-        [1 as i32 as usize]
+    verts[1 as i32 as usize].xyz[1 as i32 as usize] = finish[1 as i32 as usize]
         + right[1 as i32 as usize] * -crate::src::cgame::cg_main::cg_tracerWidth.value;
-    verts[1 as i32 as usize].xyz[2 as i32 as usize] = finish
-        [2 as i32 as usize]
+    verts[1 as i32 as usize].xyz[2 as i32 as usize] = finish[2 as i32 as usize]
         + right[2 as i32 as usize] * -crate::src::cgame::cg_main::cg_tracerWidth.value;
-    verts[1 as i32 as usize].st[0 as i32 as usize] =
-        1 as i32 as f32;
-    verts[1 as i32 as usize].st[1 as i32 as usize] =
-        0 as i32 as f32;
+    verts[1 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
+    verts[1 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
     verts[1 as i32 as usize].modulate[0 as i32 as usize] =
         255 as i32 as crate::src::qcommon::q_shared::byte;
     verts[1 as i32 as usize].modulate[1 as i32 as usize] =
@@ -3809,19 +3555,14 @@ pub unsafe extern "C" fn CG_Tracer(
         255 as i32 as crate::src::qcommon::q_shared::byte;
     verts[1 as i32 as usize].modulate[3 as i32 as usize] =
         255 as i32 as crate::src::qcommon::q_shared::byte;
-    verts[2 as i32 as usize].xyz[0 as i32 as usize] = start
-        [0 as i32 as usize]
+    verts[2 as i32 as usize].xyz[0 as i32 as usize] = start[0 as i32 as usize]
         + right[0 as i32 as usize] * -crate::src::cgame::cg_main::cg_tracerWidth.value;
-    verts[2 as i32 as usize].xyz[1 as i32 as usize] = start
-        [1 as i32 as usize]
+    verts[2 as i32 as usize].xyz[1 as i32 as usize] = start[1 as i32 as usize]
         + right[1 as i32 as usize] * -crate::src::cgame::cg_main::cg_tracerWidth.value;
-    verts[2 as i32 as usize].xyz[2 as i32 as usize] = start
-        [2 as i32 as usize]
+    verts[2 as i32 as usize].xyz[2 as i32 as usize] = start[2 as i32 as usize]
         + right[2 as i32 as usize] * -crate::src::cgame::cg_main::cg_tracerWidth.value;
-    verts[2 as i32 as usize].st[0 as i32 as usize] =
-        1 as i32 as f32;
-    verts[2 as i32 as usize].st[1 as i32 as usize] =
-        1 as i32 as f32;
+    verts[2 as i32 as usize].st[0 as i32 as usize] = 1 as i32 as f32;
+    verts[2 as i32 as usize].st[1 as i32 as usize] = 1 as i32 as f32;
     verts[2 as i32 as usize].modulate[0 as i32 as usize] =
         255 as i32 as crate::src::qcommon::q_shared::byte;
     verts[2 as i32 as usize].modulate[1 as i32 as usize] =
@@ -3830,19 +3571,14 @@ pub unsafe extern "C" fn CG_Tracer(
         255 as i32 as crate::src::qcommon::q_shared::byte;
     verts[2 as i32 as usize].modulate[3 as i32 as usize] =
         255 as i32 as crate::src::qcommon::q_shared::byte;
-    verts[3 as i32 as usize].xyz[0 as i32 as usize] = start
-        [0 as i32 as usize]
+    verts[3 as i32 as usize].xyz[0 as i32 as usize] = start[0 as i32 as usize]
         + right[0 as i32 as usize] * crate::src::cgame::cg_main::cg_tracerWidth.value;
-    verts[3 as i32 as usize].xyz[1 as i32 as usize] = start
-        [1 as i32 as usize]
+    verts[3 as i32 as usize].xyz[1 as i32 as usize] = start[1 as i32 as usize]
         + right[1 as i32 as usize] * crate::src::cgame::cg_main::cg_tracerWidth.value;
-    verts[3 as i32 as usize].xyz[2 as i32 as usize] = start
-        [2 as i32 as usize]
+    verts[3 as i32 as usize].xyz[2 as i32 as usize] = start[2 as i32 as usize]
         + right[2 as i32 as usize] * crate::src::cgame::cg_main::cg_tracerWidth.value;
-    verts[3 as i32 as usize].st[0 as i32 as usize] =
-        0 as i32 as f32;
-    verts[3 as i32 as usize].st[1 as i32 as usize] =
-        0 as i32 as f32;
+    verts[3 as i32 as usize].st[0 as i32 as usize] = 0 as i32 as f32;
+    verts[3 as i32 as usize].st[1 as i32 as usize] = 0 as i32 as f32;
     verts[3 as i32 as usize].modulate[0 as i32 as usize] =
         255 as i32 as crate::src::qcommon::q_shared::byte;
     verts[3 as i32 as usize].modulate[1 as i32 as usize] =
@@ -3856,15 +3592,12 @@ pub unsafe extern "C" fn CG_Tracer(
         4 as i32,
         verts.as_mut_ptr() as *const crate::tr_types_h::polyVert_t,
     );
-    midpoint[0 as i32 as usize] =
-        ((start[0 as i32 as usize] + finish[0 as i32 as usize]) as f64
-            * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    midpoint[1 as i32 as usize] =
-        ((start[1 as i32 as usize] + finish[1 as i32 as usize]) as f64
-            * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
-    midpoint[2 as i32 as usize] =
-        ((start[2 as i32 as usize] + finish[2 as i32 as usize]) as f64
-            * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+    midpoint[0 as i32 as usize] = ((start[0 as i32 as usize] + finish[0 as i32 as usize]) as f64
+        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+    midpoint[1 as i32 as usize] = ((start[1 as i32 as usize] + finish[1 as i32 as usize]) as f64
+        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
+    midpoint[2 as i32 as usize] = ((start[2 as i32 as usize] + finish[2 as i32 as usize]) as f64
+        * 0.5f64) as crate::src::qcommon::q_shared::vec_t;
     // add the tracer sound
     crate::src::cgame::cg_syscalls::trap_S_StartSound(
         midpoint.as_mut_ptr(),
@@ -3904,12 +3637,12 @@ unsafe extern "C" fn CG_CalcMuzzlePoint(
             0 as *mut crate::src::qcommon::q_shared::vec_t,
             0 as *mut crate::src::qcommon::q_shared::vec_t,
         );
-        *muzzle.offset(0 as i32 as isize) = *muzzle.offset(0 as i32 as isize)
-            + forward[0 as i32 as usize] * 14 as i32 as f32;
-        *muzzle.offset(1 as i32 as isize) = *muzzle.offset(1 as i32 as isize)
-            + forward[1 as i32 as usize] * 14 as i32 as f32;
-        *muzzle.offset(2 as i32 as isize) = *muzzle.offset(2 as i32 as isize)
-            + forward[2 as i32 as usize] * 14 as i32 as f32;
+        *muzzle.offset(0 as i32 as isize) =
+            *muzzle.offset(0 as i32 as isize) + forward[0 as i32 as usize] * 14 as i32 as f32;
+        *muzzle.offset(1 as i32 as isize) =
+            *muzzle.offset(1 as i32 as isize) + forward[1 as i32 as usize] * 14 as i32 as f32;
+        *muzzle.offset(2 as i32 as isize) =
+            *muzzle.offset(2 as i32 as isize) + forward[2 as i32 as usize] * 14 as i32 as f32;
         return crate::src::qcommon::q_shared::qtrue;
     }
     cent = &mut *crate::src::cgame::cg_main::cg_entities
@@ -3918,12 +3651,9 @@ unsafe extern "C" fn CG_CalcMuzzlePoint(
     if (*cent).currentValid as u64 == 0 {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    *muzzle.offset(0 as i32 as isize) =
-        (*cent).currentState.pos.trBase[0 as i32 as usize];
-    *muzzle.offset(1 as i32 as isize) =
-        (*cent).currentState.pos.trBase[1 as i32 as usize];
-    *muzzle.offset(2 as i32 as isize) =
-        (*cent).currentState.pos.trBase[2 as i32 as usize];
+    *muzzle.offset(0 as i32 as isize) = (*cent).currentState.pos.trBase[0 as i32 as usize];
+    *muzzle.offset(1 as i32 as isize) = (*cent).currentState.pos.trBase[1 as i32 as usize];
+    *muzzle.offset(2 as i32 as isize) = (*cent).currentState.pos.trBase[2 as i32 as usize];
     crate::src::qcommon::q_math::AngleVectors(
         (*cent).currentState.apos.trBase.as_mut_ptr()
             as *const crate::src::qcommon::q_shared::vec_t,
@@ -3941,12 +3671,12 @@ unsafe extern "C" fn CG_CalcMuzzlePoint(
         let ref mut fresh11 = *muzzle.offset(2 as i32 as isize);
         *fresh11 += 26 as i32 as f32
     }
-    *muzzle.offset(0 as i32 as isize) = *muzzle.offset(0 as i32 as isize)
-        + forward[0 as i32 as usize] * 14 as i32 as f32;
-    *muzzle.offset(1 as i32 as isize) = *muzzle.offset(1 as i32 as isize)
-        + forward[1 as i32 as usize] * 14 as i32 as f32;
-    *muzzle.offset(2 as i32 as isize) = *muzzle.offset(2 as i32 as isize)
-        + forward[2 as i32 as usize] * 14 as i32 as f32;
+    *muzzle.offset(0 as i32 as isize) =
+        *muzzle.offset(0 as i32 as isize) + forward[0 as i32 as usize] * 14 as i32 as f32;
+    *muzzle.offset(1 as i32 as isize) =
+        *muzzle.offset(1 as i32 as isize) + forward[1 as i32 as usize] * 14 as i32 as f32;
+    *muzzle.offset(2 as i32 as isize) =
+        *muzzle.offset(2 as i32 as isize) + forward[2 as i32 as usize] * 14 as i32 as f32;
     return crate::src::qcommon::q_shared::qtrue;
 }
 //
@@ -4058,8 +3788,7 @@ pub unsafe extern "C" fn CG_Bullet(
             // bubble trail from water into air
             // bubble trail from air into water
             // draw a tracer
-            if ((::libc::rand() & 0x7fff as i32) as f32
-                / 0x7fff as i32 as f32)
+            if ((::libc::rand() & 0x7fff as i32) as f32 / 0x7fff as i32 as f32)
                 < crate::src::cgame::cg_main::cg_tracerChance.value
             {
                 CG_Tracer(start.as_mut_ptr(), end);

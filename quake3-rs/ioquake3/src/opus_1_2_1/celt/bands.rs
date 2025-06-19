@@ -48,10 +48,7 @@ pub mod mathops_h {
         /* K0 = 1, K1 = log(2), K2 = 3-4*log(2), K3 = 3*log(2) - 2 */
         res.f =
             0.99992522f32 + frac * (0.69583354f32 + frac * (0.22606716f32 + 0.078024523f32 * frac));
-        res.i = res
-            .i
-            .wrapping_add((integer << 23 as i32) as u32)
-            & 0x7fffffff as i32 as u32;
+        res.i = res.i.wrapping_add((integer << 23 as i32) as u32) & 0x7fffffff as i32 as u32;
         return res.f;
     }
 
@@ -66,8 +63,7 @@ pub mod rate_h {
         return if i < 8 as i32 {
             i
         } else {
-            (8 as i32 + (i & 7 as i32))
-                << (i >> 3 as i32) - 1 as i32
+            (8 as i32 + (i & 7 as i32)) << (i >> 3 as i32) - 1 as i32
         };
     }
     #[inline]
@@ -328,8 +324,7 @@ pub unsafe extern "C" fn bitexact_cos(
 ) -> crate::opus_types_h::opus_int16 {
     let mut tmp: crate::opus_types_h::opus_int32 = 0;
     let mut x2: crate::opus_types_h::opus_int16 = 0;
-    tmp = 4096 as i32 + x as crate::opus_types_h::opus_int32 * x as i32
-        >> 13 as i32;
+    tmp = 4096 as i32 + x as crate::opus_types_h::opus_int32 * x as i32 >> 13 as i32;
     x2 = tmp as crate::opus_types_h::opus_int16;
     x2 = (32767 as i32 - x2 as i32
         + (16384 as i32
@@ -345,17 +340,13 @@ pub unsafe extern "C" fn bitexact_cos(
                                     >> 15 as i32))
                                 as crate::opus_types_h::opus_int16
                                 as i32
-                        >> 15 as i32)) as crate::opus_types_h::opus_int16
-                    as i32
+                        >> 15 as i32)) as crate::opus_types_h::opus_int16 as i32
             >> 15 as i32)) as crate::opus_types_h::opus_int16;
     return (1 as i32 + x2 as i32) as crate::opus_types_h::opus_int16;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn bitexact_log2tan(
-    mut isin: i32,
-    mut icos: i32,
-) -> i32 {
+pub unsafe extern "C" fn bitexact_log2tan(mut isin: i32, mut icos: i32) -> i32 {
     let mut lc: i32 = 0;
     let mut ls: i32 = 0;
     lc = ::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
@@ -371,8 +362,7 @@ pub unsafe extern "C" fn bitexact_log2tan(
                     + isin as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
                         * -(2597 as i32) as crate::opus_types_h::opus_int16 as i32
                     >> 15 as i32)
-                    + 7932 as i32) as crate::opus_types_h::opus_int16
-                    as i32
+                    + 7932 as i32) as crate::opus_types_h::opus_int16 as i32
             >> 15 as i32)
         - (16384 as i32
             + icos as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
@@ -380,8 +370,7 @@ pub unsafe extern "C" fn bitexact_log2tan(
                     + icos as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
                         * -(2597 as i32) as crate::opus_types_h::opus_int16 as i32
                     >> 15 as i32)
-                    + 7932 as i32) as crate::opus_types_h::opus_int16
-                    as i32
+                    + 7932 as i32) as crate::opus_types_h::opus_int16 as i32
             >> 15 as i32);
 }
 /* FIXED_POINT */
@@ -409,12 +398,8 @@ pub unsafe extern "C" fn compute_band_energies(
             let mut sum: crate::arch_h::opus_val32 = 0.;
             sum = 1e-27f32
                 + celt_inner_prod_c(
-                    &*X.offset(
-                        (c * N + ((*eBands.offset(i as isize) as i32) << LM)) as isize,
-                    ),
-                    &*X.offset(
-                        (c * N + ((*eBands.offset(i as isize) as i32) << LM)) as isize,
-                    ),
+                    &*X.offset((c * N + ((*eBands.offset(i as isize) as i32) << LM)) as isize),
+                    &*X.offset((c * N + ((*eBands.offset(i as isize) as i32) << LM)) as isize),
                     (*eBands.offset((i + 1 as i32) as isize) as i32
                         - *eBands.offset(i as isize) as i32)
                         << LM,
@@ -628,20 +613,16 @@ pub unsafe extern "C" fn anti_collapse(
             k = 0 as i32;
             while k < (1 as i32) << LM {
                 /* Detect collapse */
-                if *collapse_masks.offset((i * C + c) as isize) as i32
-                    & (1 as i32) << k
-                    == 0
-                {
+                if *collapse_masks.offset((i * C + c) as isize) as i32 & (1 as i32) << k == 0 {
                     /* Fill with noise */
                     j = 0 as i32;
                     while j < N0 {
                         seed = celt_lcg_rand(seed);
-                        *X.offset(((j << LM) + k) as isize) =
-                            if seed & 0x8000 as i32 as u32 != 0 {
-                                r
-                            } else {
-                                -r
-                            };
+                        *X.offset(((j << LM) + k) as isize) = if seed & 0x8000 as i32 as u32 != 0 {
+                            r
+                        } else {
+                            -r
+                        };
                         j += 1
                     }
                     renormalize = 1 as i32
@@ -699,9 +680,7 @@ unsafe extern "C" fn intensity_stereo(
     let mut norm: crate::arch_h::opus_val16 = 0.;
     left = *bandE.offset(i as isize);
     right = *bandE.offset((i + (*m).nbEBands) as isize);
-    norm = 1e-15f32
-        + crate::stdlib::sqrt((1e-15f32 + left * left + right * right) as f64)
-            as f32;
+    norm = 1e-15f32 + crate::stdlib::sqrt((1e-15f32 + left * left + right * right) as f64) as f32;
     a1 = left / norm;
     a2 = right / norm;
     j = 0 as i32;
@@ -765,8 +744,7 @@ unsafe extern "C" fn stereo_merge(
             (N as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as libc::c_long * Y.offset_from(X) as libc::c_long)
-                        as libc::c_ulong,
+                    (0 as i32 as libc::c_long * Y.offset_from(X) as libc::c_long) as libc::c_ulong,
                 ),
         );
         return;
@@ -811,8 +789,7 @@ pub unsafe extern "C" fn spreading_decision(
     let mut decision: i32 = 0;
     let mut hf_sum: i32 = 0 as i32;
     N0 = M * (*m).shortMdctSize;
-    if M * (*eBands.offset(end as isize) as i32
-        - *eBands.offset((end - 1 as i32) as isize) as i32)
+    if M * (*eBands.offset(end as isize) as i32 - *eBands.offset((end - 1 as i32) as isize) as i32)
         <= 8 as i32
     {
         return 0 as i32;
@@ -824,8 +801,7 @@ pub unsafe extern "C" fn spreading_decision(
             let mut j: i32 = 0;
             let mut N: i32 = 0;
             let mut tmp: i32 = 0 as i32;
-            let mut tcount: [i32; 3] =
-                [0 as i32, 0 as i32, 0 as i32];
+            let mut tcount: [i32; 3] = [0 as i32, 0 as i32, 0 as i32];
             let mut x: *const crate::arch_h::celt_norm = X
                 .offset((M * *eBands.offset(i as isize) as i32) as isize)
                 .offset((c * N0) as isize);
@@ -854,9 +830,7 @@ pub unsafe extern "C" fn spreading_decision(
                 /* Only include four last bands (8 kHz and up) */
                 if i > (*m).nbEBands - 4 as i32 {
                     hf_sum = (hf_sum as u32).wrapping_add(celt_udiv(
-                        (32 as i32
-                            * (tcount[1 as i32 as usize]
-                                + tcount[0 as i32 as usize]))
+                        (32 as i32 * (tcount[1 as i32 as usize] + tcount[0 as i32 as usize]))
                             as crate::opus_types_h::opus_uint32,
                         N as crate::opus_types_h::opus_uint32,
                     )) as i32 as i32
@@ -906,9 +880,7 @@ pub unsafe extern "C" fn spreading_decision(
     sum = sum + *average >> 1 as i32;
     *average = sum;
     /* Hysteresis */
-    sum = 3 as i32 * sum
-        + ((3 as i32 - last_decision << 7 as i32) + 64 as i32)
-        + 2 as i32
+    sum = 3 as i32 * sum + ((3 as i32 - last_decision << 7 as i32) + 64 as i32) + 2 as i32
         >> 2 as i32;
     if sum < 80 as i32 {
         decision = 3 as i32
@@ -927,36 +899,10 @@ an inversion of the order because we want the DC at the end rather than
 the beginning. The lines are for N=2, 4, 8, 16 */
 
 static mut ordery_table: [i32; 30] = [
-    1 as i32,
-    0 as i32,
-    3 as i32,
-    0 as i32,
-    2 as i32,
-    1 as i32,
-    7 as i32,
-    0 as i32,
-    4 as i32,
-    3 as i32,
-    6 as i32,
-    1 as i32,
-    5 as i32,
-    2 as i32,
-    15 as i32,
-    0 as i32,
-    8 as i32,
-    7 as i32,
-    12 as i32,
-    3 as i32,
-    11 as i32,
-    4 as i32,
-    14 as i32,
-    1 as i32,
-    9 as i32,
-    6 as i32,
-    13 as i32,
-    2 as i32,
-    10 as i32,
-    5 as i32,
+    1 as i32, 0 as i32, 3 as i32, 0 as i32, 2 as i32, 1 as i32, 7 as i32, 0 as i32, 4 as i32,
+    3 as i32, 6 as i32, 1 as i32, 5 as i32, 2 as i32, 15 as i32, 0 as i32, 8 as i32, 7 as i32,
+    12 as i32, 3 as i32, 11 as i32, 4 as i32, 14 as i32, 1 as i32, 9 as i32, 6 as i32, 13 as i32,
+    2 as i32, 10 as i32, 5 as i32,
 ];
 
 unsafe extern "C" fn deinterleave_hadamard(
@@ -1008,8 +954,7 @@ unsafe extern "C" fn deinterleave_hadamard(
         (N as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong)
             .wrapping_add(
-                (0 as i32 as libc::c_long * X.offset_from(tmp) as libc::c_long)
-                    as libc::c_ulong,
+                (0 as i32 as libc::c_long * X.offset_from(tmp) as libc::c_long) as libc::c_ulong,
             ),
     );
 }
@@ -1063,18 +1008,13 @@ unsafe extern "C" fn interleave_hadamard(
         (N as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong)
             .wrapping_add(
-                (0 as i32 as libc::c_long * X.offset_from(tmp) as libc::c_long)
-                    as libc::c_ulong,
+                (0 as i32 as libc::c_long * X.offset_from(tmp) as libc::c_long) as libc::c_ulong,
             ),
     );
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn haar1(
-    mut X: *mut crate::arch_h::celt_norm,
-    mut N0: i32,
-    mut stride: i32,
-) {
+pub unsafe extern "C" fn haar1(mut X: *mut crate::arch_h::celt_norm, mut N0: i32, mut stride: i32) {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     N0 >>= 1 as i32;
@@ -1085,11 +1025,9 @@ pub unsafe extern "C" fn haar1(
             let mut tmp1: crate::arch_h::opus_val32 = 0.;
             let mut tmp2: crate::arch_h::opus_val32 = 0.;
             tmp1 = 0.70710678f32 * *X.offset((stride * 2 as i32 * j + i) as isize);
-            tmp2 = 0.70710678f32
-                * *X.offset((stride * (2 as i32 * j + 1 as i32) + i) as isize);
+            tmp2 = 0.70710678f32 * *X.offset((stride * (2 as i32 * j + 1 as i32) + i) as isize);
             *X.offset((stride * 2 as i32 * j + i) as isize) = tmp1 + tmp2;
-            *X.offset((stride * (2 as i32 * j + 1 as i32) + i) as isize) =
-                tmp1 - tmp2;
+            *X.offset((stride * (2 as i32 * j + 1 as i32) + i) as isize) = tmp1 - tmp2;
             j += 1
         }
         i += 1
@@ -1136,8 +1074,7 @@ unsafe extern "C" fn compute_qn(
     if qb < (1 as i32) << 3 as i32 >> 1 as i32 {
         qn = 1 as i32
     } else {
-        qn = exp2_table8[(qb & 0x7 as i32) as usize] as i32
-            >> 14 as i32 - (qb >> 3 as i32);
+        qn = exp2_table8[(qb & 0x7 as i32) as usize] as i32 >> 14 as i32 - (qb >> 3 as i32);
         qn = (qn + 1 as i32 >> 1 as i32) << 1 as i32
     }
     return qn;
@@ -1181,8 +1118,7 @@ unsafe extern "C" fn compute_theta(
     ec = (*ctx).ec;
     bandE = (*ctx).bandE;
     /* Decide on the resolution to give to the split parameter theta */
-    pulse_cap = *(*m).logN.offset(i as isize) as i32
-        + LM * ((1 as i32) << 3 as i32);
+    pulse_cap = *(*m).logN.offset(i as isize) as i32 + LM * ((1 as i32) << 3 as i32);
     offset = (pulse_cap >> 1 as i32)
         - (if stereo != 0 && N == 2 as i32 {
             16 as i32
@@ -1207,10 +1143,7 @@ unsafe extern "C" fn compute_theta(
         if encode != 0 {
             if stereo == 0 || (*ctx).theta_round == 0 as i32 {
                 itheta = itheta * qn + 8192 as i32 >> 14 as i32;
-                if stereo == 0
-                    && (*ctx).avoid_split_noise != 0
-                    && itheta > 0 as i32
-                    && itheta < qn
+                if stereo == 0 && (*ctx).avoid_split_noise != 0 && itheta > 0 as i32 && itheta < qn
                 {
                     /* Check if the selected value of theta will cause the bit allocation
                     to inject noise on one side. If so, make sure the energy of that side
@@ -1219,14 +1152,12 @@ unsafe extern "C" fn compute_theta(
                         (itheta * 16384 as i32) as crate::opus_types_h::opus_uint32,
                         qn as crate::opus_types_h::opus_uint32,
                     ) as i32;
-                    imid =
-                        bitexact_cos(unquantized as crate::opus_types_h::opus_int16) as i32;
+                    imid = bitexact_cos(unquantized as crate::opus_types_h::opus_int16) as i32;
                     iside = bitexact_cos(
                         (16384 as i32 - unquantized) as crate::opus_types_h::opus_int16,
                     ) as i32;
                     delta = 16384 as i32
-                        + ((N - 1 as i32) << 7 as i32)
-                            as crate::opus_types_h::opus_int16
+                        + ((N - 1 as i32) << 7 as i32) as crate::opus_types_h::opus_int16
                             as crate::opus_types_h::opus_int32
                             * bitexact_log2tan(iside, imid) as crate::opus_types_h::opus_int16
                                 as i32
@@ -1333,8 +1264,7 @@ unsafe extern "C" fn compute_theta(
         } else {
             let mut fs_0: i32 = 1 as i32;
             let mut ft_0: i32 = 0;
-            ft_0 = ((qn >> 1 as i32) + 1 as i32)
-                * ((qn >> 1 as i32) + 1 as i32);
+            ft_0 = ((qn >> 1 as i32) + 1 as i32) * ((qn >> 1 as i32) + 1 as i32);
             if encode != 0 {
                 let mut fl: i32 = 0;
                 fs_0 = if itheta <= qn >> 1 as i32 {
@@ -1345,9 +1275,7 @@ unsafe extern "C" fn compute_theta(
                 fl = if itheta <= qn >> 1 as i32 {
                     (itheta * (itheta + 1 as i32)) >> 1 as i32
                 } else {
-                    (ft_0)
-                        - ((qn + 1 as i32 - itheta) * (qn + 2 as i32 - itheta)
-                            >> 1 as i32)
+                    (ft_0) - ((qn + 1 as i32 - itheta) * (qn + 2 as i32 - itheta) >> 1 as i32)
                 };
                 crate::src::opus_1_2_1::celt::entenc::ec_encode(
                     ec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
@@ -1363,10 +1291,7 @@ unsafe extern "C" fn compute_theta(
                     ec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                     ft_0 as u32,
                 ) as i32;
-                if fm
-                    < (qn >> 1 as i32) * ((qn >> 1 as i32) + 1 as i32)
-                        >> 1 as i32
-                {
+                if fm < (qn >> 1 as i32) * ((qn >> 1 as i32) + 1 as i32) >> 1 as i32 {
                     itheta = (crate::src::opus_1_2_1::celt::mathops::isqrt32(
                         (8 as i32 as u32)
                             .wrapping_mul(fm as crate::opus_types_h::opus_uint32)
@@ -1377,20 +1302,17 @@ unsafe extern "C" fn compute_theta(
                     fs_0 = itheta + 1 as i32;
                     fl_0 = itheta * (itheta + 1 as i32) >> 1 as i32
                 } else {
-                    itheta = (((2 as i32 * (qn + 1 as i32)) as u32)
-                        .wrapping_sub(crate::src::opus_1_2_1::celt::mathops::isqrt32(
+                    itheta = (((2 as i32 * (qn + 1 as i32)) as u32).wrapping_sub(
+                        crate::src::opus_1_2_1::celt::mathops::isqrt32(
                             (8 as i32 as u32)
                                 .wrapping_mul(
-                                    (ft_0 - fm - 1 as i32)
-                                        as crate::opus_types_h::opus_uint32,
+                                    (ft_0 - fm - 1 as i32) as crate::opus_types_h::opus_uint32,
                                 )
                                 .wrapping_add(1 as i32 as u32),
-                        ))
-                        >> 1 as i32) as i32;
+                        ),
+                    ) >> 1 as i32) as i32;
                     fs_0 = qn + 1 as i32 - itheta;
-                    fl_0 = ft_0
-                        - ((qn + 1 as i32 - itheta) * (qn + 2 as i32 - itheta)
-                            >> 1 as i32)
+                    fl_0 = ft_0 - ((qn + 1 as i32 - itheta) * (qn + 2 as i32 - itheta) >> 1 as i32)
                 }
                 crate::src::opus_1_2_1::celt::entdec::ec_dec_update(
                     ec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
@@ -1424,9 +1346,7 @@ unsafe extern "C" fn compute_theta(
             }
             intensity_stereo(m, X, Y, bandE, i, N);
         }
-        if *b > (2 as i32) << 3 as i32
-            && (*ctx).remaining_bits > (2 as i32) << 3 as i32
-        {
+        if *b > (2 as i32) << 3 as i32 && (*ctx).remaining_bits > (2 as i32) << 3 as i32 {
             if encode != 0 {
                 crate::src::opus_1_2_1::celt::entenc::ec_enc_bit_logp(
                     ec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
@@ -1465,8 +1385,7 @@ unsafe extern "C" fn compute_theta(
         delta = 16384 as i32
     } else {
         imid = bitexact_cos(itheta as crate::opus_types_h::opus_int16) as i32;
-        iside = bitexact_cos((16384 as i32 - itheta) as crate::opus_types_h::opus_int16)
-            as i32;
+        iside = bitexact_cos((16384 as i32 - itheta) as crate::opus_types_h::opus_int16) as i32;
         /* This is the mid vs side allocation that minimizes squared error
         in that band. */
         delta = 16384 as i32
@@ -1504,8 +1423,7 @@ unsafe extern "C" fn quant_band_n1(
         let mut sign: i32 = 0 as i32;
         if (*ctx).remaining_bits >= (1 as i32) << 3 as i32 {
             if encode != 0 {
-                sign = (*x.offset(0 as i32 as isize) < 0 as i32 as f32)
-                    as i32;
+                sign = (*x.offset(0 as i32 as isize) < 0 as i32 as f32) as i32;
                 crate::src::opus_1_2_1::celt::entenc::ec_enc_bits(
                     ec as *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
                     sign as crate::opus_types_h::opus_uint32,
@@ -1577,12 +1495,10 @@ unsafe extern "C" fn quant_partition(
         *(*m)
             .cache
             .index
-            .offset(((LM + 1 as i32) * (*m).nbEBands + i) as isize) as i32
-            as isize,
+            .offset(((LM + 1 as i32) * (*m).nbEBands + i) as isize) as i32 as isize,
     );
     if LM != -(1 as i32)
-        && b > *cache.offset(*cache.offset(0 as i32 as isize) as isize) as i32
-            + 12 as i32
+        && b > *cache.offset(*cache.offset(0 as i32 as isize) as isize) as i32 + 12 as i32
         && N > 2 as i32
     {
         let mut mbits: i32 = 0;
@@ -1608,17 +1524,7 @@ unsafe extern "C" fn quant_partition(
         }
         B = B + 1 as i32 >> 1 as i32;
         compute_theta(
-            ctx,
-            &mut sctx,
-            X,
-            Y,
-            N,
-            &mut b,
-            B,
-            B0,
-            LM,
-            0 as i32,
-            &mut fill,
+            ctx, &mut sctx, X, Y, N, &mut b, B, B0, LM, 0 as i32, &mut fill,
         );
         imid = sctx.imid;
         iside = sctx.iside;
@@ -1634,9 +1540,7 @@ unsafe extern "C" fn quant_partition(
                 delta -= delta >> 4 as i32 - LM
             } else {
                 /* Corresponds to a forward-masking slope of 1.5 dB per 10 ms */
-                delta = if (0 as i32)
-                    < delta + (N << 3 as i32 >> 5 as i32 - LM)
-                {
+                delta = if (0 as i32) < delta + (N << 3 as i32 >> 5 as i32 - LM) {
                     0 as i32
                 } else {
                     (delta) + (N << 3 as i32 >> 5 as i32 - LM)
@@ -1691,8 +1595,7 @@ unsafe extern "C" fn quant_partition(
                 fill >> B,
             ) << (B0 >> 1 as i32);
             rebalance = sbits - (rebalance - (*ctx).remaining_bits);
-            if rebalance > (3 as i32) << 3 as i32 && itheta != 16384 as i32
-            {
+            if rebalance > (3 as i32) << 3 as i32 && itheta != 16384 as i32 {
                 mbits += rebalance - ((3 as i32) << 3 as i32)
             }
             cm |= quant_partition(ctx, X, N, mbits, B, lowband, LM, gain * mid, fill)
@@ -1742,8 +1645,7 @@ unsafe extern "C" fn quant_partition(
                 let mut cm_mask: u32 = 0;
                 /* B can be as large as 16, so this shift might overflow an int on a
                 16-bit platform; use a long to get defined behavior.*/
-                cm_mask = (((1 as libc::c_ulong) << B) as u32)
-                    .wrapping_sub(1 as i32 as u32);
+                cm_mask = (((1 as libc::c_ulong) << B) as u32).wrapping_sub(1 as i32 as u32);
                 fill = (fill as u32 & cm_mask) as i32;
                 if fill == 0 {
                     crate::stdlib::memset(
@@ -1834,9 +1736,7 @@ unsafe extern "C" fn quant_band(
     /* Band recombining to increase frequency resolution */
     if !lowband_scratch.is_null()
         && !lowband.is_null()
-        && (recombine != 0
-            || N_B & 1 as i32 == 0 as i32 && tf_change < 0 as i32
-            || B0 > 1 as i32)
+        && (recombine != 0 || N_B & 1 as i32 == 0 as i32 && tf_change < 0 as i32 || B0 > 1 as i32)
     {
         crate::stdlib::memcpy(
             lowband_scratch as *mut libc::c_void,
@@ -1878,8 +1778,7 @@ unsafe extern "C" fn quant_band(
             haar1(lowband, N >> k, (1 as i32) << k);
         }
         fill = bit_interleave_table[(fill & 0xf as i32) as usize] as i32
-            | (bit_interleave_table[(fill >> 4 as i32) as usize] as i32)
-                << 2 as i32;
+            | (bit_interleave_table[(fill >> 4 as i32) as usize] as i32) << 2 as i32;
         k += 1
     }
     B >>= recombine;
@@ -2013,17 +1912,7 @@ unsafe extern "C" fn quant_band_stereo(
     }
     orig_fill = fill;
     compute_theta(
-        ctx,
-        &mut sctx,
-        X,
-        Y,
-        N,
-        &mut b,
-        B,
-        B,
-        LM,
-        1 as i32,
-        &mut fill,
+        ctx, &mut sctx, X, Y, N, &mut b, B, B, LM, 1 as i32, &mut fill,
     );
     inv = sctx.inv;
     imid = sctx.imid;
@@ -2055,8 +1944,7 @@ unsafe extern "C" fn quant_band_stereo(
         if sbits != 0 {
             if encode != 0 {
                 /* Here we only need to encode a sign for the side. */
-                sign = (*x2.offset(0 as i32 as isize)
-                    * *y2.offset(1 as i32 as isize)
+                sign = (*x2.offset(0 as i32 as isize) * *y2.offset(1 as i32 as isize)
                     - *x2.offset(1 as i32 as isize) * *y2.offset(0 as i32 as isize)
                     < 0 as i32 as f32) as i32;
                 crate::src::opus_1_2_1::celt::entenc::ec_enc_bits(
@@ -2089,10 +1977,8 @@ unsafe extern "C" fn quant_band_stereo(
         );
         /* We don't split N=2 bands, so cm is either 1 or 0 (for a fold-collapse),
         and there's no need to worry about mixing with the other channel. */
-        *y2.offset(0 as i32 as isize) =
-            -sign as f32 * *x2.offset(1 as i32 as isize);
-        *y2.offset(1 as i32 as isize) =
-            sign as f32 * *x2.offset(0 as i32 as isize);
+        *y2.offset(0 as i32 as isize) = -sign as f32 * *x2.offset(1 as i32 as isize);
+        *y2.offset(1 as i32 as isize) = sign as f32 * *x2.offset(0 as i32 as isize);
         if (*ctx).resynth != 0 {
             let mut tmp: crate::arch_h::celt_norm = 0.;
             *X.offset(0 as i32 as isize) = mid * *X.offset(0 as i32 as isize);
@@ -2176,8 +2062,7 @@ unsafe extern "C" fn quant_band_stereo(
                 fill >> B,
             );
             rebalance = sbits - (rebalance - (*ctx).remaining_bits);
-            if rebalance > (3 as i32) << 3 as i32 && itheta != 16384 as i32
-            {
+            if rebalance > (3 as i32) << 3 as i32 && itheta != 16384 as i32 {
                 mbits += rebalance - ((3 as i32) << 3 as i32)
             }
             /* In stereo mode, we do not apply a scaling to the mid because we need the normalized
@@ -2249,8 +2134,8 @@ unsafe extern "C" fn special_hybrid_folding(
     if dual_stereo != 0 {
         crate::stdlib::memcpy(
             &mut *norm2.offset(n1 as isize) as *mut crate::arch_h::celt_norm as *mut libc::c_void,
-            &mut *norm2.offset((2 as i32 * n1 - n2) as isize)
-                as *mut crate::arch_h::celt_norm as *const libc::c_void,
+            &mut *norm2.offset((2 as i32 * n1 - n2) as isize) as *mut crate::arch_h::celt_norm
+                as *const libc::c_void,
             ((n2 - n1) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong)
                 .wrapping_add(
@@ -2375,15 +2260,10 @@ pub unsafe extern "C" fn quant_all_bands(
     let mut M: i32 = 0;
     let mut lowband_offset: i32 = 0;
     let mut update_lowband: i32 = 1 as i32;
-    let mut C: i32 = if !Y_.is_null() {
-        2 as i32
-    } else {
-        1 as i32
-    };
+    let mut C: i32 = if !Y_.is_null() { 2 as i32 } else { 1 as i32 };
     let mut norm_offset: i32 = 0;
     let mut theta_rdo: i32 =
-        (encode != 0 && !Y_.is_null() && dual_stereo == 0 && complexity >= 8 as i32)
-            as i32;
+        (encode != 0 && !Y_.is_null() && dual_stereo == 0 && complexity >= 8 as i32) as i32;
     let mut resynth: i32 = (encode == 0 || theta_rdo != 0) as i32;
     let mut ctx: band_ctx = band_ctx {
         encode: 0,
@@ -2403,28 +2283,21 @@ pub unsafe extern "C" fn quant_all_bands(
         avoid_split_noise: 0,
     };
     M = (1 as i32) << LM;
-    B = if shortBlocks != 0 {
-        M
-    } else {
-        1 as i32
-    };
+    B = if shortBlocks != 0 { M } else { 1 as i32 };
     norm_offset = M * *eBands.offset(start as isize) as i32;
     /* No need to allocate norm for the last band because we don't need an
     output in that band. */
     let mut fresh5 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong).wrapping_mul(
-            (C * (M * *eBands.offset(((*m).nbEBands - 1 as i32) as isize) as i32
-                - norm_offset)) as libc::c_ulong,
+            (C * (M * *eBands.offset(((*m).nbEBands - 1 as i32) as isize) as i32 - norm_offset))
+                as libc::c_ulong,
         ) as usize,
     );
     _norm = fresh5.as_mut_ptr() as *mut crate::arch_h::celt_norm;
     norm = _norm;
     norm2 = norm
-        .offset(
-            (M * *eBands.offset(((*m).nbEBands - 1 as i32) as isize) as i32)
-                as isize,
-        )
+        .offset((M * *eBands.offset(((*m).nbEBands - 1 as i32) as isize) as i32) as isize)
         .offset(-(norm_offset as isize));
     /* For decoding, we can use the last band as scratch space because we don't need that
     scratch space for the last band and we don't care about the data there until we're
@@ -2445,10 +2318,8 @@ pub unsafe extern "C" fn quant_all_bands(
     if encode != 0 && resynth != 0 {
         lowband_scratch = _lowband_scratch
     } else {
-        lowband_scratch = X_.offset(
-            (M * *eBands.offset(((*m).nbEBands - 1 as i32) as isize) as i32)
-                as isize,
-        )
+        lowband_scratch =
+            X_.offset((M * *eBands.offset(((*m).nbEBands - 1 as i32) as isize) as i32) as isize)
     }
     let mut fresh7 = ::std::vec::from_elem(
         0,
@@ -2537,9 +2408,7 @@ pub unsafe extern "C" fn quant_all_bands(
             );
             b = if 0 as i32
                 > (if (16383 as i32)
-                    < (if (remaining_bits + 1 as i32)
-                        < *pulses.offset(i as isize) + curr_balance
-                    {
+                    < (if (remaining_bits + 1 as i32) < *pulses.offset(i as isize) + curr_balance {
                         (remaining_bits) + 1 as i32
                     } else {
                         (*pulses.offset(i as isize)) + curr_balance
@@ -2547,9 +2416,7 @@ pub unsafe extern "C" fn quant_all_bands(
                 {
                     16383 as i32
                 } else {
-                    (if (remaining_bits + 1 as i32)
-                        < *pulses.offset(i as isize) + curr_balance
-                    {
+                    (if (remaining_bits + 1 as i32) < *pulses.offset(i as isize) + curr_balance {
                         (remaining_bits) + 1 as i32
                     } else {
                         (*pulses.offset(i as isize)) + curr_balance
@@ -2557,18 +2424,14 @@ pub unsafe extern "C" fn quant_all_bands(
                 }) {
                 0 as i32
             } else if (16383 as i32)
-                < (if (remaining_bits + 1 as i32)
-                    < *pulses.offset(i as isize) + curr_balance
-                {
+                < (if (remaining_bits + 1 as i32) < *pulses.offset(i as isize) + curr_balance {
                     (remaining_bits) + 1 as i32
                 } else {
                     (*pulses.offset(i as isize)) + curr_balance
                 })
             {
                 16383 as i32
-            } else if (remaining_bits + 1 as i32)
-                < *pulses.offset(i as isize) + curr_balance
-            {
+            } else if (remaining_bits + 1 as i32) < *pulses.offset(i as isize) + curr_balance {
                 (remaining_bits) + 1 as i32
             } else {
                 (*pulses.offset(i as isize)) + curr_balance
@@ -2633,10 +2496,8 @@ pub unsafe extern "C" fn quant_all_bands(
             x_cm = y_cm;
             fold_i = fold_start;
             loop {
-                x_cm |= *collapse_masks.offset((fold_i * C + 0 as i32) as isize)
-                    as u32;
-                y_cm |= *collapse_masks.offset((fold_i * C + C - 1 as i32) as isize)
-                    as u32;
+                x_cm |= *collapse_masks.offset((fold_i * C + 0 as i32) as isize) as u32;
+                y_cm |= *collapse_masks.offset((fold_i * C + C - 1 as i32) as isize) as u32;
                 fold_i += 1;
                 if !(fold_i < fold_end) {
                     break;
@@ -2801,8 +2662,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                 ::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong
                             )
                             .wrapping_add(
-                                (0 as i32 as libc::c_long
-                                    * X_save.offset_from(X) as libc::c_long)
+                                (0 as i32 as libc::c_long * X_save.offset_from(X) as libc::c_long)
                                     as libc::c_ulong,
                             ),
                     );
@@ -2814,8 +2674,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                 ::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong
                             )
                             .wrapping_add(
-                                (0 as i32 as libc::c_long
-                                    * Y_save.offset_from(Y) as libc::c_long)
+                                (0 as i32 as libc::c_long * Y_save.offset_from(Y) as libc::c_long)
                                     as libc::c_ulong,
                             ),
                     );
@@ -2857,8 +2716,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                 ::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong
                             )
                             .wrapping_add(
-                                (0 as i32 as libc::c_long
-                                    * X_save2.offset_from(X) as libc::c_long)
+                                (0 as i32 as libc::c_long * X_save2.offset_from(X) as libc::c_long)
                                     as libc::c_ulong,
                             ),
                     );
@@ -2870,8 +2728,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                 ::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong
                             )
                             .wrapping_add(
-                                (0 as i32 as libc::c_long
-                                    * Y_save2.offset_from(Y) as libc::c_long)
+                                (0 as i32 as libc::c_long * Y_save2.offset_from(Y) as libc::c_long)
                                     as libc::c_ulong,
                             ),
                     );
@@ -2888,8 +2745,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                     (0 as i32 as libc::c_long
                                         * norm_save2.offset_from(
                                             norm.offset(
-                                                (M * *eBands.offset(i as isize) as i32)
-                                                    as isize,
+                                                (M * *eBands.offset(i as isize) as i32) as isize,
                                             )
                                             .offset(-(norm_offset as isize)),
                                         ) as libc::c_long)
@@ -2924,8 +2780,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                 ::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong
                             )
                             .wrapping_add(
-                                (0 as i32 as libc::c_long
-                                    * X.offset_from(X_save) as libc::c_long)
+                                (0 as i32 as libc::c_long * X.offset_from(X_save) as libc::c_long)
                                     as libc::c_ulong,
                             ),
                     );
@@ -2937,8 +2792,7 @@ pub unsafe extern "C" fn quant_all_bands(
                                 ::std::mem::size_of::<crate::arch_h::celt_norm>() as libc::c_ulong
                             )
                             .wrapping_add(
-                                (0 as i32 as libc::c_long
-                                    * Y.offset_from(Y_save) as libc::c_long)
+                                (0 as i32 as libc::c_long * Y.offset_from(Y_save) as libc::c_long)
                                     as libc::c_ulong,
                             ),
                     );
@@ -3001,10 +2855,8 @@ pub unsafe extern "C" fn quant_all_bands(
                         );
                         if last == 0 {
                             crate::stdlib::memcpy(
-                                norm.offset(
-                                    (M * *eBands.offset(i as isize) as i32) as isize,
-                                )
-                                .offset(-(norm_offset as isize))
+                                norm.offset((M * *eBands.offset(i as isize) as i32) as isize)
+                                    .offset(-(norm_offset as isize))
                                     as *mut libc::c_void,
                                 norm_save2 as *const libc::c_void,
                                 (N as libc::c_ulong)
@@ -3028,9 +2880,7 @@ pub unsafe extern "C" fn quant_all_bands(
                             bytes_buf as *mut libc::c_void,
                             bytes_save.as_mut_ptr() as *const libc::c_void,
                             (save_bytes as libc::c_ulong)
-                                .wrapping_mul(
-                                    ::std::mem::size_of::<u8>() as libc::c_ulong
-                                )
+                                .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
                                 .wrapping_add(
                                     (0 as i32 as libc::c_long
                                         * bytes_buf.offset_from(bytes_save.as_mut_ptr())

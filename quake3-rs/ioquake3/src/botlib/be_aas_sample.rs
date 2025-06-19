@@ -10,8 +10,7 @@ pub mod q_shared_h {
         return crate::stdlib::sqrt(
             (*v.offset(0 as i32 as isize) * *v.offset(0 as i32 as isize)
                 + *v.offset(1 as i32 as isize) * *v.offset(1 as i32 as isize)
-                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize))
-                as f64,
+                + *v.offset(2 as i32 as isize) * *v.offset(2 as i32 as isize)) as f64,
         ) as crate::src::qcommon::q_shared::vec_t;
     }
     #[inline]
@@ -465,8 +464,7 @@ pub unsafe extern "C" fn AAS_PointAreaNum(
             .planes
             .offset((*node).planenum as isize)
             as *mut crate::aasfile_h::aas_plane_t; //end if
-        dist = *point.offset(0 as i32 as isize)
-            * (*plane).normal[0 as i32 as usize]
+        dist = *point.offset(0 as i32 as isize) * (*plane).normal[0 as i32 as usize]
             + *point.offset(1 as i32 as isize) * (*plane).normal[1 as i32 as usize]
             + *point.offset(2 as i32 as isize) * (*plane).normal[2 as i32 as usize]
             - (*plane).dist;
@@ -557,8 +555,7 @@ pub unsafe extern "C" fn AAS_PointReachabilityAreaIndex(
 #[no_mangle]
 
 pub unsafe extern "C" fn AAS_AreaCluster(mut areanum: i32) -> i32 {
-    if areanum <= 0 as i32 || areanum >= crate::src::botlib::be_aas_main::aasworld.numareas
-    {
+    if areanum <= 0 as i32 || areanum >= crate::src::botlib::be_aas_main::aasworld.numareas {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
@@ -587,8 +584,7 @@ pub unsafe extern "C" fn AAS_AreaPresenceType(mut areanum: i32) -> i32 {
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
         return 0 as i32;
     } //end if
-    if areanum <= 0 as i32 || areanum >= crate::src::botlib::be_aas_main::aasworld.numareas
-    {
+    if areanum <= 0 as i32 || areanum >= crate::src::botlib::be_aas_main::aasworld.numareas {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
@@ -890,12 +886,9 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                 == 0
             {
                 //end else
-                if (*tstack_p).start[0 as i32 as usize]
-                    == *start.offset(0 as i32 as isize)
-                    && (*tstack_p).start[1 as i32 as usize]
-                        == *start.offset(1 as i32 as isize)
-                    && (*tstack_p).start[2 as i32 as usize]
-                        == *start.offset(2 as i32 as isize)
+                if (*tstack_p).start[0 as i32 as usize] == *start.offset(0 as i32 as isize)
+                    && (*tstack_p).start[1 as i32 as usize] == *start.offset(1 as i32 as isize)
+                    && (*tstack_p).start[2 as i32 as usize] == *start.offset(2 as i32 as isize)
                 {
                     //end if
                     //if the start point is still the initial start point
@@ -904,48 +897,44 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                     //end else
                     trace.startsolid = crate::src::qcommon::q_shared::qtrue; //end if
                     trace.fraction = 0.0f64 as f32;
-                    v1[2 as i32 as usize] =
-                        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                    v1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
                     v1[1 as i32 as usize] = v1[2 as i32 as usize];
                     v1[0 as i32 as usize] = v1[1 as i32 as usize]
                 } else {
                     trace.startsolid = crate::src::qcommon::q_shared::qfalse;
-                    v1[0 as i32 as usize] = *end.offset(0 as i32 as isize)
-                        - *start.offset(0 as i32 as isize);
-                    v1[1 as i32 as usize] = *end.offset(1 as i32 as isize)
-                        - *start.offset(1 as i32 as isize);
-                    v1[2 as i32 as usize] = *end.offset(2 as i32 as isize)
-                        - *start.offset(2 as i32 as isize);
-                    v2[0 as i32 as usize] = (*tstack_p).start[0 as i32 as usize]
-                        - *start.offset(0 as i32 as isize);
-                    v2[1 as i32 as usize] = (*tstack_p).start[1 as i32 as usize]
-                        - *start.offset(1 as i32 as isize);
-                    v2[2 as i32 as usize] = (*tstack_p).start[2 as i32 as usize]
-                        - *start.offset(2 as i32 as isize);
+                    v1[0 as i32 as usize] =
+                        *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
+                    v1[1 as i32 as usize] =
+                        *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
+                    v1[2 as i32 as usize] =
+                        *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
+                    v2[0 as i32 as usize] =
+                        (*tstack_p).start[0 as i32 as usize] - *start.offset(0 as i32 as isize);
+                    v2[1 as i32 as usize] =
+                        (*tstack_p).start[1 as i32 as usize] - *start.offset(1 as i32 as isize);
+                    v2[2 as i32 as usize] =
+                        (*tstack_p).start[2 as i32 as usize] - *start.offset(2 as i32 as isize);
                     trace.fraction = VectorLength(
                         v2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                     ) / crate::src::qcommon::q_math::VectorNormalize(
                         v1.as_mut_ptr(),
                     );
-                    (*tstack_p).start[0 as i32 as usize] =
-                        ((*tstack_p).start[0 as i32 as usize] as f64
-                            + v1[0 as i32 as usize] as f64 * -0.125f64)
-                            as crate::src::qcommon::q_shared::vec_t;
-                    (*tstack_p).start[1 as i32 as usize] =
-                        ((*tstack_p).start[1 as i32 as usize] as f64
-                            + v1[1 as i32 as usize] as f64 * -0.125f64)
-                            as crate::src::qcommon::q_shared::vec_t;
-                    (*tstack_p).start[2 as i32 as usize] =
-                        ((*tstack_p).start[2 as i32 as usize] as f64
-                            + v1[2 as i32 as usize] as f64 * -0.125f64)
-                            as crate::src::qcommon::q_shared::vec_t
+                    (*tstack_p).start[0 as i32 as usize] = ((*tstack_p).start[0 as i32 as usize]
+                        as f64
+                        + v1[0 as i32 as usize] as f64 * -0.125f64)
+                        as crate::src::qcommon::q_shared::vec_t;
+                    (*tstack_p).start[1 as i32 as usize] = ((*tstack_p).start[1 as i32 as usize]
+                        as f64
+                        + v1[1 as i32 as usize] as f64 * -0.125f64)
+                        as crate::src::qcommon::q_shared::vec_t;
+                    (*tstack_p).start[2 as i32 as usize] = ((*tstack_p).start[2 as i32 as usize]
+                        as f64
+                        + v1[2 as i32 as usize] as f64 * -0.125f64)
+                        as crate::src::qcommon::q_shared::vec_t
                 }
-                trace.endpos[0 as i32 as usize] =
-                    (*tstack_p).start[0 as i32 as usize];
-                trace.endpos[1 as i32 as usize] =
-                    (*tstack_p).start[1 as i32 as usize];
-                trace.endpos[2 as i32 as usize] =
-                    (*tstack_p).start[2 as i32 as usize];
+                trace.endpos[0 as i32 as usize] = (*tstack_p).start[0 as i32 as usize];
+                trace.endpos[1 as i32 as usize] = (*tstack_p).start[1 as i32 as usize];
+                trace.endpos[2 as i32 as usize] = (*tstack_p).start[2 as i32 as usize];
                 trace.ent = 0 as i32;
                 trace.area = -nodenum;
                 //				VectorSubtract(end, start, v1);
@@ -976,18 +965,18 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                         != 0
                     {
                         if trace.startsolid as u64 == 0 {
-                            v1[0 as i32 as usize] = *end.offset(0 as i32 as isize)
-                                - *start.offset(0 as i32 as isize);
-                            v1[1 as i32 as usize] = *end.offset(1 as i32 as isize)
-                                - *start.offset(1 as i32 as isize);
-                            v1[2 as i32 as usize] = *end.offset(2 as i32 as isize)
-                                - *start.offset(2 as i32 as isize);
-                            v2[0 as i32 as usize] = trace.endpos[0 as i32 as usize]
-                                - *start.offset(0 as i32 as isize);
-                            v2[1 as i32 as usize] = trace.endpos[1 as i32 as usize]
-                                - *start.offset(1 as i32 as isize);
-                            v2[2 as i32 as usize] = trace.endpos[2 as i32 as usize]
-                                - *start.offset(2 as i32 as isize);
+                            v1[0 as i32 as usize] =
+                                *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
+                            v1[1 as i32 as usize] =
+                                *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
+                            v1[2 as i32 as usize] =
+                                *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
+                            v2[0 as i32 as usize] =
+                                trace.endpos[0 as i32 as usize] - *start.offset(0 as i32 as isize);
+                            v2[1 as i32 as usize] =
+                                trace.endpos[1 as i32 as usize] - *start.offset(1 as i32 as isize);
+                            v2[2 as i32 as usize] =
+                                trace.endpos[2 as i32 as usize] - *start.offset(2 as i32 as isize);
                             trace.fraction = VectorLength(
                                 v2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                             ) / VectorLength(
@@ -1008,58 +997,51 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                 //if the start point is still the initial start point
                 //NOTE: no need for epsilons because the points will be
                 //exactly the same when they're both the start point
-                if (*tstack_p).start[0 as i32 as usize]
-                    == *start.offset(0 as i32 as isize)
-                    && (*tstack_p).start[1 as i32 as usize]
-                        == *start.offset(1 as i32 as isize)
-                    && (*tstack_p).start[2 as i32 as usize]
-                        == *start.offset(2 as i32 as isize)
+                if (*tstack_p).start[0 as i32 as usize] == *start.offset(0 as i32 as isize)
+                    && (*tstack_p).start[1 as i32 as usize] == *start.offset(1 as i32 as isize)
+                    && (*tstack_p).start[2 as i32 as usize] == *start.offset(2 as i32 as isize)
                 {
                     //end else
                     trace.startsolid = crate::src::qcommon::q_shared::qtrue; //end if
                     trace.fraction = 0.0f64 as f32; //hit solid leaf
-                    v1[2 as i32 as usize] =
-                        0 as i32 as crate::src::qcommon::q_shared::vec_t;
+                    v1[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
                     v1[1 as i32 as usize] = v1[2 as i32 as usize];
                     v1[0 as i32 as usize] = v1[1 as i32 as usize]
                 } else {
                     trace.startsolid = crate::src::qcommon::q_shared::qfalse;
-                    v1[0 as i32 as usize] = *end.offset(0 as i32 as isize)
-                        - *start.offset(0 as i32 as isize);
-                    v1[1 as i32 as usize] = *end.offset(1 as i32 as isize)
-                        - *start.offset(1 as i32 as isize);
-                    v1[2 as i32 as usize] = *end.offset(2 as i32 as isize)
-                        - *start.offset(2 as i32 as isize);
-                    v2[0 as i32 as usize] = (*tstack_p).start[0 as i32 as usize]
-                        - *start.offset(0 as i32 as isize);
-                    v2[1 as i32 as usize] = (*tstack_p).start[1 as i32 as usize]
-                        - *start.offset(1 as i32 as isize);
-                    v2[2 as i32 as usize] = (*tstack_p).start[2 as i32 as usize]
-                        - *start.offset(2 as i32 as isize);
+                    v1[0 as i32 as usize] =
+                        *end.offset(0 as i32 as isize) - *start.offset(0 as i32 as isize);
+                    v1[1 as i32 as usize] =
+                        *end.offset(1 as i32 as isize) - *start.offset(1 as i32 as isize);
+                    v1[2 as i32 as usize] =
+                        *end.offset(2 as i32 as isize) - *start.offset(2 as i32 as isize);
+                    v2[0 as i32 as usize] =
+                        (*tstack_p).start[0 as i32 as usize] - *start.offset(0 as i32 as isize);
+                    v2[1 as i32 as usize] =
+                        (*tstack_p).start[1 as i32 as usize] - *start.offset(1 as i32 as isize);
+                    v2[2 as i32 as usize] =
+                        (*tstack_p).start[2 as i32 as usize] - *start.offset(2 as i32 as isize);
                     trace.fraction = VectorLength(
                         v2.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t
                     ) / crate::src::qcommon::q_math::VectorNormalize(
                         v1.as_mut_ptr(),
                     );
-                    (*tstack_p).start[0 as i32 as usize] =
-                        ((*tstack_p).start[0 as i32 as usize] as f64
-                            + v1[0 as i32 as usize] as f64 * -0.125f64)
-                            as crate::src::qcommon::q_shared::vec_t;
-                    (*tstack_p).start[1 as i32 as usize] =
-                        ((*tstack_p).start[1 as i32 as usize] as f64
-                            + v1[1 as i32 as usize] as f64 * -0.125f64)
-                            as crate::src::qcommon::q_shared::vec_t;
-                    (*tstack_p).start[2 as i32 as usize] =
-                        ((*tstack_p).start[2 as i32 as usize] as f64
-                            + v1[2 as i32 as usize] as f64 * -0.125f64)
-                            as crate::src::qcommon::q_shared::vec_t
+                    (*tstack_p).start[0 as i32 as usize] = ((*tstack_p).start[0 as i32 as usize]
+                        as f64
+                        + v1[0 as i32 as usize] as f64 * -0.125f64)
+                        as crate::src::qcommon::q_shared::vec_t;
+                    (*tstack_p).start[1 as i32 as usize] = ((*tstack_p).start[1 as i32 as usize]
+                        as f64
+                        + v1[1 as i32 as usize] as f64 * -0.125f64)
+                        as crate::src::qcommon::q_shared::vec_t;
+                    (*tstack_p).start[2 as i32 as usize] = ((*tstack_p).start[2 as i32 as usize]
+                        as f64
+                        + v1[2 as i32 as usize] as f64 * -0.125f64)
+                        as crate::src::qcommon::q_shared::vec_t
                 }
-                trace.endpos[0 as i32 as usize] =
-                    (*tstack_p).start[0 as i32 as usize];
-                trace.endpos[1 as i32 as usize] =
-                    (*tstack_p).start[1 as i32 as usize];
-                trace.endpos[2 as i32 as usize] =
-                    (*tstack_p).start[2 as i32 as usize];
+                trace.endpos[0 as i32 as usize] = (*tstack_p).start[0 as i32 as usize];
+                trace.endpos[1 as i32 as usize] = (*tstack_p).start[1 as i32 as usize];
+                trace.endpos[2 as i32 as usize] = (*tstack_p).start[2 as i32 as usize];
                 trace.ent = 0 as i32;
                 trace.area = 0 as i32;
                 //			VectorSubtract(end, start, v1);
@@ -1101,8 +1083,7 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
             match (*plane).type_0 {
                 _ => {}
             } //end switch
-            front = cur_start[0 as i32 as usize]
-                * (*plane).normal[0 as i32 as usize]
+            front = cur_start[0 as i32 as usize] * (*plane).normal[0 as i32 as usize]
                 + cur_start[1 as i32 as usize] * (*plane).normal[1 as i32 as usize]
                 + cur_start[2 as i32 as usize] * (*plane).normal[2 as i32 as usize]
                 - (*plane).dist;
@@ -1110,9 +1091,7 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                 + cur_end[1 as i32 as usize] * (*plane).normal[1 as i32 as usize]
                 + cur_end[2 as i32 as usize] * (*plane).normal[2 as i32 as usize]
                 - (*plane).dist;
-            if front >= -(0 as i32) as f32
-                && back >= -(0 as i32) as f32
-            {
+            if front >= -(0 as i32) as f32 && back >= -(0 as i32) as f32 {
                 //gee it's not an axial plane
                 //keep the current start and end point on the stack
                 //and go down the tree with the front child
@@ -1132,9 +1111,7 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                     return trace;
                 }
             //end if
-            } else if front < 0 as i32 as f32
-                && back < 0 as i32 as f32
-            {
+            } else if front < 0 as i32 as f32 && back < 0 as i32 as f32 {
                 //if the whole to be traced line is totally at the back of this node
                 //only go down the tree with the back child
                 //keep the current start and end point on the stack
@@ -1163,11 +1140,9 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                     front -= 0.001f32
                 }
                 if front < 0 as i32 as f32 {
-                    frac = ((front as f64 + 0.125f64) / (front - back) as f64)
-                        as f32
+                    frac = ((front as f64 + 0.125f64) / (front - back) as f64) as f32
                 } else {
-                    frac = ((front as f64 - 0.125f64) / (front - back) as f64)
-                        as f32
+                    frac = ((front as f64 - 0.125f64) / (front - back) as f64) as f32
                 }
                 if frac < 0 as i32 as f32 {
                     // bk010221 - new location of divide by zero (see above)
@@ -1182,14 +1157,11 @@ pub unsafe extern "C" fn AAS_TraceClientBBox(
                     frac = 0.999f32
                 } //0
                 cur_mid[0 as i32 as usize] = cur_start[0 as i32 as usize]
-                    + (cur_end[0 as i32 as usize] - cur_start[0 as i32 as usize])
-                        * frac;
+                    + (cur_end[0 as i32 as usize] - cur_start[0 as i32 as usize]) * frac;
                 cur_mid[1 as i32 as usize] = cur_start[1 as i32 as usize]
-                    + (cur_end[1 as i32 as usize] - cur_start[1 as i32 as usize])
-                        * frac;
+                    + (cur_end[1 as i32 as usize] - cur_start[1 as i32 as usize]) * frac;
                 cur_mid[2 as i32 as usize] = cur_start[2 as i32 as usize]
-                    + (cur_end[2 as i32 as usize] - cur_start[2 as i32 as usize])
-                        * frac;
+                    + (cur_end[2 as i32 as usize] - cur_start[2 as i32 as usize]) * frac;
                 side = (front < 0 as i32 as f32) as i32;
                 (*tstack_p).start[0 as i32 as usize] = cur_mid[0 as i32 as usize];
                 (*tstack_p).start[1 as i32 as usize] = cur_mid[1 as i32 as usize];
@@ -1362,8 +1334,7 @@ pub unsafe extern "C" fn AAS_TraceAreas(
             match (*plane).type_0 {
                 _ => {}
             } //end switch
-            front = cur_start[0 as i32 as usize]
-                * (*plane).normal[0 as i32 as usize]
+            front = cur_start[0 as i32 as usize] * (*plane).normal[0 as i32 as usize]
                 + cur_start[1 as i32 as usize] * (*plane).normal[1 as i32 as usize]
                 + cur_start[2 as i32 as usize] * (*plane).normal[2 as i32 as usize]
                 - (*plane).dist;
@@ -1371,8 +1342,7 @@ pub unsafe extern "C" fn AAS_TraceAreas(
                 + cur_end[1 as i32 as usize] * (*plane).normal[1 as i32 as usize]
                 + cur_end[2 as i32 as usize] * (*plane).normal[2 as i32 as usize]
                 - (*plane).dist;
-            if front > 0 as i32 as f32 && back > 0 as i32 as f32
-            {
+            if front > 0 as i32 as f32 && back > 0 as i32 as f32 {
                 //gee it's not an axial plane
                 //keep the current start and end point on the stack
                 //and go down the tree with the front child
@@ -1392,9 +1362,7 @@ pub unsafe extern "C" fn AAS_TraceAreas(
                     return numareas;
                 }
             //end if
-            } else if front <= 0 as i32 as f32
-                && back <= 0 as i32 as f32
-            {
+            } else if front <= 0 as i32 as f32 && back <= 0 as i32 as f32 {
                 //if the whole to be traced line is totally at the back of this node
                 //only go down the tree with the back child
                 //keep the current start and end point on the stack
@@ -1430,14 +1398,11 @@ pub unsafe extern "C" fn AAS_TraceAreas(
                     frac = 1 as i32 as f32
                 }
                 cur_mid[0 as i32 as usize] = cur_start[0 as i32 as usize]
-                    + (cur_end[0 as i32 as usize] - cur_start[0 as i32 as usize])
-                        * frac;
+                    + (cur_end[0 as i32 as usize] - cur_start[0 as i32 as usize]) * frac;
                 cur_mid[1 as i32 as usize] = cur_start[1 as i32 as usize]
-                    + (cur_end[1 as i32 as usize] - cur_start[1 as i32 as usize])
-                        * frac;
+                    + (cur_end[1 as i32 as usize] - cur_start[1 as i32 as usize]) * frac;
                 cur_mid[2 as i32 as usize] = cur_start[2 as i32 as usize]
-                    + (cur_end[2 as i32 as usize] - cur_start[2 as i32 as usize])
-                        * frac;
+                    + (cur_end[2 as i32 as usize] - cur_start[2 as i32 as usize]) * frac;
                 side = (front < 0 as i32 as f32) as i32;
                 (*tstack_p).start[0 as i32 as usize] = cur_mid[0 as i32 as usize];
                 (*tstack_p).start[1 as i32 as usize] = cur_mid[1 as i32 as usize];
@@ -1546,10 +1511,8 @@ pub unsafe extern "C" fn AAS_InsideFace(
             .offset(((*face).firstedge + i) as isize);
         edge = &mut *crate::src::botlib::be_aas_main::aasworld
             .edges
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum)
-                    as isize,
-            ) as *mut crate::aasfile_h::aas_edge_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
+            as *mut crate::aasfile_h::aas_edge_t;
         //get the first vertex of the edge
         firstvertex = (edgenum < 0 as i32) as i32;
         v0[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
@@ -1564,28 +1527,22 @@ pub unsafe extern "C" fn AAS_InsideFace(
         //edge vector
         edgevec[0 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
             .vertexes
-            .offset((*edge).v[(firstvertex == 0) as i32 as usize] as isize))
-            [0 as i32 as usize]
+            .offset((*edge).v[(firstvertex == 0) as i32 as usize] as isize))[0 as i32 as usize]
             - v0[0 as i32 as usize];
         edgevec[1 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
             .vertexes
-            .offset((*edge).v[(firstvertex == 0) as i32 as usize] as isize))
-            [1 as i32 as usize]
+            .offset((*edge).v[(firstvertex == 0) as i32 as usize] as isize))[1 as i32 as usize]
             - v0[1 as i32 as usize];
         edgevec[2 as i32 as usize] = (*crate::src::botlib::be_aas_main::aasworld
             .vertexes
-            .offset((*edge).v[(firstvertex == 0) as i32 as usize] as isize))
-            [2 as i32 as usize]
+            .offset((*edge).v[(firstvertex == 0) as i32 as usize] as isize))[2 as i32 as usize]
             - v0[2 as i32 as usize];
         //
         //AAS_SAMPLE_DEBUG
         //vector from first edge point to point possible in face
-        pointvec[0 as i32 as usize] =
-            *point.offset(0 as i32 as isize) - v0[0 as i32 as usize];
-        pointvec[1 as i32 as usize] =
-            *point.offset(1 as i32 as isize) - v0[1 as i32 as usize];
-        pointvec[2 as i32 as usize] =
-            *point.offset(2 as i32 as isize) - v0[2 as i32 as usize];
+        pointvec[0 as i32 as usize] = *point.offset(0 as i32 as isize) - v0[0 as i32 as usize];
+        pointvec[1 as i32 as usize] = *point.offset(1 as i32 as isize) - v0[1 as i32 as usize];
+        pointvec[2 as i32 as usize] = *point.offset(2 as i32 as isize) - v0[2 as i32 as usize];
         //get a vector pointing inside the face orthogonal to both the
         //edge vector and the normal vector of the plane the face is in
         //this vector defines a plane through the origin (first vertex of
@@ -1660,10 +1617,8 @@ pub unsafe extern "C" fn AAS_PointInsideFace(
             .offset(((*face).firstedge + i) as isize);
         edge = &mut *crate::src::botlib::be_aas_main::aasworld
             .edges
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum)
-                    as isize,
-            ) as *mut crate::aasfile_h::aas_edge_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(edgenum) as isize)
+            as *mut crate::aasfile_h::aas_edge_t;
         //get the first vertex of the edge
         firstvertex = (edgenum < 0 as i32) as i32;
         v1 = (*crate::src::botlib::be_aas_main::aasworld
@@ -1675,12 +1630,9 @@ pub unsafe extern "C" fn AAS_PointInsideFace(
             .offset((*edge).v[(firstvertex == 0) as i32 as usize] as isize))
         .as_mut_ptr();
         //edge vector
-        edgevec[0 as i32 as usize] =
-            *v2.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
-        edgevec[1 as i32 as usize] =
-            *v2.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
-        edgevec[2 as i32 as usize] =
-            *v2.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
+        edgevec[0 as i32 as usize] = *v2.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
+        edgevec[1 as i32 as usize] = *v2.offset(1 as i32 as isize) - *v1.offset(1 as i32 as isize);
+        edgevec[2 as i32 as usize] = *v2.offset(2 as i32 as isize) - *v1.offset(2 as i32 as isize);
         //vector from first edge point to point possible in face
         pointvec[0 as i32 as usize] =
             *point.offset(0 as i32 as isize) - *v1.offset(0 as i32 as isize);
@@ -1743,10 +1695,8 @@ pub unsafe extern "C" fn AAS_AreaGroundFace(
             .offset(((*area).firstface + i) as isize);
         face = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum)
-                    as isize,
-            ) as *mut crate::aasfile_h::aas_face_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
+            as *mut crate::aasfile_h::aas_face_t;
         //end if
         if (*face).faceflags & 4 as i32 != 0 {
             //if this is a ground face
@@ -1844,10 +1794,8 @@ pub unsafe extern "C" fn AAS_TraceEndFace(
             .offset(((*area).firstface + i) as isize);
         face = &mut *crate::src::botlib::be_aas_main::aasworld
             .faces
-            .offset(
-                (::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum)
-                    as isize,
-            ) as *mut crate::aasfile_h::aas_face_t;
+            .offset((::libc::abs as unsafe extern "C" fn(_: i32) -> i32)(facenum) as isize)
+            as *mut crate::aasfile_h::aas_face_t;
         //end if
         if (*face).planenum & !(1 as i32) == (*trace).planenum & !(1 as i32) {
             //if the face is in the same plane as the trace end point
@@ -1929,19 +1877,13 @@ pub unsafe extern "C" fn AAS_BoxOnPlaneSide2(
         i += 1
         //end else
     }
-    dist1 = (*p).normal[0 as i32 as usize]
-        * corners[0 as i32 as usize][0 as i32 as usize]
-        + (*p).normal[1 as i32 as usize]
-            * corners[0 as i32 as usize][1 as i32 as usize]
-        + (*p).normal[2 as i32 as usize]
-            * corners[0 as i32 as usize][2 as i32 as usize]
+    dist1 = (*p).normal[0 as i32 as usize] * corners[0 as i32 as usize][0 as i32 as usize]
+        + (*p).normal[1 as i32 as usize] * corners[0 as i32 as usize][1 as i32 as usize]
+        + (*p).normal[2 as i32 as usize] * corners[0 as i32 as usize][2 as i32 as usize]
         - (*p).dist;
-    dist2 = (*p).normal[0 as i32 as usize]
-        * corners[1 as i32 as usize][0 as i32 as usize]
-        + (*p).normal[1 as i32 as usize]
-            * corners[1 as i32 as usize][1 as i32 as usize]
-        + (*p).normal[2 as i32 as usize]
-            * corners[1 as i32 as usize][2 as i32 as usize]
+    dist2 = (*p).normal[0 as i32 as usize] * corners[1 as i32 as usize][0 as i32 as usize]
+        + (*p).normal[1 as i32 as usize] * corners[1 as i32 as usize][1 as i32 as usize]
+        + (*p).normal[2 as i32 as usize] * corners[1 as i32 as usize][2 as i32 as usize]
         - (*p).dist;
     sides = 0 as i32;
     if dist1 >= 0 as i32 as f32 {
@@ -2113,8 +2055,7 @@ pub unsafe extern "C" fn AAS_AASLinkEntity(
                 lstack_p = lstack_p.offset(1)
             } //end if
             if lstack_p
-                >= &mut *linkstack.as_mut_ptr().offset(127 as i32 as isize)
-                    as *mut aas_linkstack_t
+                >= &mut *linkstack.as_mut_ptr().offset(127 as i32 as isize) as *mut aas_linkstack_t
             {
                 crate::src::botlib::be_interface::botimport
                     .Print
@@ -2169,18 +2110,12 @@ pub unsafe extern "C" fn AAS_LinkEntityClientBBox(
     let mut newabsmins: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut newabsmaxs: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     AAS_PresenceTypeBoundingBox(presencetype, mins.as_mut_ptr(), maxs.as_mut_ptr());
-    newabsmins[0 as i32 as usize] =
-        *absmins.offset(0 as i32 as isize) - maxs[0 as i32 as usize];
-    newabsmins[1 as i32 as usize] =
-        *absmins.offset(1 as i32 as isize) - maxs[1 as i32 as usize];
-    newabsmins[2 as i32 as usize] =
-        *absmins.offset(2 as i32 as isize) - maxs[2 as i32 as usize];
-    newabsmaxs[0 as i32 as usize] =
-        *absmaxs.offset(0 as i32 as isize) - mins[0 as i32 as usize];
-    newabsmaxs[1 as i32 as usize] =
-        *absmaxs.offset(1 as i32 as isize) - mins[1 as i32 as usize];
-    newabsmaxs[2 as i32 as usize] =
-        *absmaxs.offset(2 as i32 as isize) - mins[2 as i32 as usize];
+    newabsmins[0 as i32 as usize] = *absmins.offset(0 as i32 as isize) - maxs[0 as i32 as usize];
+    newabsmins[1 as i32 as usize] = *absmins.offset(1 as i32 as isize) - maxs[1 as i32 as usize];
+    newabsmins[2 as i32 as usize] = *absmins.offset(2 as i32 as isize) - maxs[2 as i32 as usize];
+    newabsmaxs[0 as i32 as usize] = *absmaxs.offset(0 as i32 as isize) - mins[0 as i32 as usize];
+    newabsmaxs[1 as i32 as usize] = *absmaxs.offset(1 as i32 as isize) - mins[1 as i32 as usize];
+    newabsmaxs[2 as i32 as usize] = *absmaxs.offset(2 as i32 as isize) - mins[2 as i32 as usize];
     //relink the entity
     return AAS_AASLinkEntity(newabsmins.as_mut_ptr(), newabsmaxs.as_mut_ptr(), entnum);
 }
@@ -2253,8 +2188,7 @@ pub unsafe extern "C" fn AAS_AreaInfo(
     if info.is_null() {
         return 0 as i32;
     }
-    if areanum <= 0 as i32 || areanum >= crate::src::botlib::be_aas_main::aasworld.numareas
-    {
+    if areanum <= 0 as i32 || areanum >= crate::src::botlib::be_aas_main::aasworld.numareas {
         crate::src::botlib::be_interface::botimport
             .Print
             .expect("non-null function pointer")(
@@ -2308,8 +2242,7 @@ pub unsafe extern "C" fn AAS_AreaInfo(
         .areas
         .offset(areanum as isize))
     .center[2 as i32 as usize];
-    return ::std::mem::size_of::<crate::be_aas_h::aas_areainfo_t>() as libc::c_ulong
-        as i32;
+    return ::std::mem::size_of::<crate::be_aas_h::aas_areainfo_t>() as libc::c_ulong as i32;
 }
 /*
 ===========================================================================
@@ -2378,9 +2311,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //===========================================================================
 #[no_mangle]
 
-pub unsafe extern "C" fn AAS_PlaneFromNum(
-    mut planenum: i32,
-) -> *mut crate::aasfile_h::aas_plane_t {
+pub unsafe extern "C" fn AAS_PlaneFromNum(mut planenum: i32) -> *mut crate::aasfile_h::aas_plane_t {
     if crate::src::botlib::be_aas_main::aasworld.loaded == 0 {
         return 0 as *mut crate::aasfile_h::aas_plane_t;
     }

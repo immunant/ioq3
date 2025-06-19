@@ -23,8 +23,7 @@ pub mod entcode_h {
         mut _this: *mut crate::src::opus_1_2_1::celt::entcode::ec_ctx,
     ) -> i32 {
         return (*_this).nbits_total
-            - (::std::mem::size_of::<u32>() as libc::c_ulong as i32
-                * 8 as i32
+            - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
                 - (*_this).rng.leading_zeros() as i32);
     }
 }
@@ -168,9 +167,8 @@ pub unsafe extern "C" fn silk_encode_do_VAD_FLP(
     /* Convert speech activity into VAD and DTX flags */
     /* *************************************************/
     if (*psEnc).sCmn.speech_activity_Q8
-        < ((0.05f32 * ((1 as i32 as i64) << 8 as i32) as f32)
-            as f64
-            + 0.5f64) as crate::opus_types_h::opus_int32
+        < ((0.05f32 * ((1 as i32 as i64) << 8 as i32) as f32) as f64 + 0.5f64)
+            as crate::opus_types_h::opus_int32
     {
         (*psEnc).sCmn.indices.signalType = 0 as i32 as i8;
         (*psEnc).sCmn.noSpeechCounter += 1;
@@ -180,14 +178,12 @@ pub unsafe extern "C" fn silk_encode_do_VAD_FLP(
             (*psEnc).sCmn.noSpeechCounter = 10 as i32;
             (*psEnc).sCmn.inDTX = 0 as i32
         }
-        (*psEnc).sCmn.VAD_flags[(*psEnc).sCmn.nFramesEncoded as usize] =
-            0 as i32 as i8
+        (*psEnc).sCmn.VAD_flags[(*psEnc).sCmn.nFramesEncoded as usize] = 0 as i32 as i8
     } else {
         (*psEnc).sCmn.noSpeechCounter = 0 as i32;
         (*psEnc).sCmn.inDTX = 0 as i32;
         (*psEnc).sCmn.indices.signalType = 1 as i32 as i8;
-        (*psEnc).sCmn.VAD_flags[(*psEnc).sCmn.nFramesEncoded as usize] =
-            1 as i32 as i8
+        (*psEnc).sCmn.VAD_flags[(*psEnc).sCmn.nFramesEncoded as usize] = 1 as i32 as i8
     };
 }
 /* **********************************************************************
@@ -392,8 +388,8 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
     i = 0 as i32;
     while i < 8 as i32 {
         *x_frame.offset(
-            (5 as i32 * (*psEnc).sCmn.fs_kHz
-                + i * ((*psEnc).sCmn.frame_length >> 3 as i32)) as isize,
+            (5 as i32 * (*psEnc).sCmn.fs_kHz + i * ((*psEnc).sCmn.frame_length >> 3 as i32))
+                as isize,
         ) += (1 as i32 - (i & 2 as i32)) as f32 * 1e-6f32;
         i += 1
     }
@@ -434,18 +430,11 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
         /* ***************************************/
         /* Low Bitrate Redundant Encoding       */
         /* ***************************************/
-        silk_LBRR_encode_FLP(
-            psEnc,
-            &mut sEncCtrl,
-            x_frame as *const f32,
-            condCoding,
-        );
+        silk_LBRR_encode_FLP(psEnc, &mut sEncCtrl, x_frame as *const f32, condCoding);
         /* Loop over quantizer and entroy coding to control bitrate */
         maxIter = 6 as i32;
-        gainMult_Q8 = ((1 as i32 as i64
-            * ((1 as i32 as i64) << 8 as i32))
-            as f64
-            + 0.5f64) as crate::opus_types_h::opus_int32
+        gainMult_Q8 = ((1 as i32 as i64 * ((1 as i32 as i64) << 8 as i32)) as f64 + 0.5f64)
+            as crate::opus_types_h::opus_int32
             as crate::opus_types_h::opus_int16;
         found_lower = 0 as i32;
         found_upper = 0 as i32;
@@ -551,8 +540,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                     (*psEnc).sShape.LastGainIndex = sEncCtrl.lastGainIndexPrev;
                     i = 0 as i32;
                     while i < (*psEnc).sCmn.nb_subfr {
-                        (*psEnc).sCmn.indices.GainsIndices[i as usize] =
-                            4 as i32 as i8;
+                        (*psEnc).sCmn.indices.GainsIndices[i as usize] = 4 as i32 as i8;
                         i += 1
                     }
                     if condCoding != 2 as i32 {
@@ -690,27 +678,22 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                     /* Adjust gain according to high-rate rate/distortion curve */
                     if nBits > maxBits {
                         if (gainMult_Q8 as i32) < 16384 as i32 {
-                            gainMult_Q8 = (gainMult_Q8 as i32 * 2 as i32)
-                                as crate::opus_types_h::opus_int16
+                            gainMult_Q8 =
+                                (gainMult_Q8 as i32 * 2 as i32) as crate::opus_types_h::opus_int16
                         } else {
                             gainMult_Q8 = 32767 as i32 as crate::opus_types_h::opus_int16
                         }
                     } else {
                         let mut gain_factor_Q16: crate::opus_types_h::opus_int32 = 0;
                         gain_factor_Q16 = crate::src::opus_1_2_1::silk::log2lin::silk_log2lin(
-                            (((nBits - maxBits) as crate::opus_types_h::opus_uint32)
-                                << 7 as i32)
+                            (((nBits - maxBits) as crate::opus_types_h::opus_uint32) << 7 as i32)
                                 as crate::opus_types_h::opus_int32
                                 / (*psEnc).sCmn.frame_length
-                                + ((16 as i32 as i64
-                                    * ((1 as i32 as i64) << 7 as i32))
-                                    as f64
+                                + ((16 as i32 as i64 * ((1 as i32 as i64) << 7 as i32)) as f64
                                     + 0.5f64)
                                     as crate::opus_types_h::opus_int32,
                         );
-                        gainMult_Q8 = (gain_factor_Q16 as i64
-                            * gainMult_Q8 as i64
-                            >> 16 as i32)
+                        gainMult_Q8 = (gain_factor_Q16 as i64 * gainMult_Q8 as i64 >> 16 as i32)
                             as crate::opus_types_h::opus_int32
                             as crate::opus_types_h::opus_int16
                     }
@@ -743,63 +726,50 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                     } else {
                         tmp = gainMult_Q8
                     }
-                    pGains_Q16[i as usize] =
-                        (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                            >> 8 as i32
-                            > 0x7fffffff as i32 >> 8 as i32
+                    pGains_Q16[i as usize] = (((if 0x80000000 as u32
+                        as crate::opus_types_h::opus_int32
+                        >> 8 as i32
+                        > 0x7fffffff as i32 >> 8 as i32
+                    {
+                        (if (sEncCtrl.GainsUnq_Q16[i as usize] as i64 * tmp as i64 >> 16 as i32)
+                            as crate::opus_types_h::opus_int32
+                            > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 8 as i32
                         {
-                            (if (sEncCtrl.GainsUnq_Q16[i as usize] as i64
-                                * tmp as i64
-                                >> 16 as i32)
-                                as crate::opus_types_h::opus_int32
-                                > 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                                    >> 8 as i32
-                            {
-                                (0x80000000 as u32 as crate::opus_types_h::opus_int32)
-                                    >> 8 as i32
-                            } else {
-                                (if ((sEncCtrl.GainsUnq_Q16[i as usize] as i64
-                                    * tmp as i64
-                                    >> 16 as i32)
-                                    as crate::opus_types_h::opus_int32)
-                                    < 0x7fffffff as i32 >> 8 as i32
-                                {
-                                    (0x7fffffff as i32) >> 8 as i32
-                                } else {
-                                    (sEncCtrl.GainsUnq_Q16[i as usize] as i64
-                                        * tmp as i64
-                                        >> 16 as i32)
-                                        as crate::opus_types_h::opus_int32
-                                })
-                            })
+                            (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 8 as i32
                         } else {
-                            (if (sEncCtrl.GainsUnq_Q16[i as usize] as i64
-                                * tmp as i64
+                            (if ((sEncCtrl.GainsUnq_Q16[i as usize] as i64 * tmp as i64
                                 >> 16 as i32)
-                                as crate::opus_types_h::opus_int32
-                                > 0x7fffffff as i32 >> 8 as i32
+                                as crate::opus_types_h::opus_int32)
+                                < 0x7fffffff as i32 >> 8 as i32
                             {
                                 (0x7fffffff as i32) >> 8 as i32
                             } else {
-                                (if ((sEncCtrl.GainsUnq_Q16[i as usize] as i64
-                                    * tmp as i64
-                                    >> 16 as i32)
-                                    as crate::opus_types_h::opus_int32)
-                                    < 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                                        >> 8 as i32
-                                {
-                                    (0x80000000 as u32 as crate::opus_types_h::opus_int32)
-                                        >> 8 as i32
-                                } else {
-                                    (sEncCtrl.GainsUnq_Q16[i as usize] as i64
-                                        * tmp as i64
-                                        >> 16 as i32)
-                                        as crate::opus_types_h::opus_int32
-                                })
+                                (sEncCtrl.GainsUnq_Q16[i as usize] as i64 * tmp as i64 >> 16 as i32)
+                                    as crate::opus_types_h::opus_int32
                             })
-                        }) as crate::opus_types_h::opus_uint32)
-                            << 8 as i32)
-                            as crate::opus_types_h::opus_int32;
+                        })
+                    } else {
+                        (if (sEncCtrl.GainsUnq_Q16[i as usize] as i64 * tmp as i64 >> 16 as i32)
+                            as crate::opus_types_h::opus_int32
+                            > 0x7fffffff as i32 >> 8 as i32
+                        {
+                            (0x7fffffff as i32) >> 8 as i32
+                        } else {
+                            (if ((sEncCtrl.GainsUnq_Q16[i as usize] as i64 * tmp as i64
+                                >> 16 as i32)
+                                as crate::opus_types_h::opus_int32)
+                                < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 8 as i32
+                            {
+                                (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 8 as i32
+                            } else {
+                                (sEncCtrl.GainsUnq_Q16[i as usize] as i64 * tmp as i64 >> 16 as i32)
+                                    as crate::opus_types_h::opus_int32
+                            })
+                        })
+                    })
+                        as crate::opus_types_h::opus_uint32)
+                        << 8 as i32)
+                        as crate::opus_types_h::opus_int32;
                     i += 1
                 }
                 /* Quantize gains */
@@ -819,8 +789,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
                 /* Overwrite unquantized gains with quantized gains and convert back to Q0 from Q16 */
                 i = 0 as i32;
                 while i < (*psEnc).sCmn.nb_subfr {
-                    sEncCtrl.Gains[i as usize] =
-                        pGains_Q16[i as usize] as f32 / 65536.0f32;
+                    sEncCtrl.Gains[i as usize] = pGains_Q16[i as usize] as f32 / 65536.0f32;
                     i += 1
                 }
                 iter += 1
@@ -833,8 +802,7 @@ pub unsafe extern "C" fn silk_encode_frame_FLP(
         &mut *(*psEnc)
             .x_buf
             .as_mut_ptr()
-            .offset((*psEnc).sCmn.frame_length as isize) as *mut f32
-            as *const libc::c_void,
+            .offset((*psEnc).sCmn.frame_length as isize) as *mut f32 as *const libc::c_void,
         (((*psEnc).sCmn.ltp_mem_length + 5 as i32 * (*psEnc).sCmn.fs_kHz) as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
     );
@@ -921,10 +889,8 @@ unsafe extern "C" fn silk_LBRR_encode_FLP(
     /* ******************************************/
     if (*psEnc).sCmn.LBRR_enabled != 0
         && (*psEnc).sCmn.speech_activity_Q8
-            > ((0.3f32
-                * ((1 as i32 as i64) << 8 as i32) as f32)
-                as f64
-                + 0.5f64) as crate::opus_types_h::opus_int32
+            > ((0.3f32 * ((1 as i32 as i64) << 8 as i32) as f32) as f64 + 0.5f64)
+                as crate::opus_types_h::opus_int32
     {
         (*psEnc).sCmn.LBRR_flags[(*psEnc).sCmn.nFramesEncoded as usize] = 1 as i32;
         /* Copy noise shaping quantizer state and quantization indices from regular encoding */
@@ -959,8 +925,7 @@ unsafe extern "C" fn silk_LBRR_encode_FLP(
             (*psIndices_LBRR).GainsIndices[0 as i32 as usize] = silk_min_int(
                 (*psIndices_LBRR).GainsIndices[0 as i32 as usize] as i32,
                 64 as i32 - 1 as i32,
-            )
-                as i8
+            ) as i8
         }
         /* Decode to get gains in sync with decoder */
         crate::src::opus_1_2_1::silk::gain_quant::silk_gains_dequant(
@@ -973,8 +938,7 @@ unsafe extern "C" fn silk_LBRR_encode_FLP(
         /* Overwrite unquantized gains with quantized gains and convert back to Q0 from Q16 */
         k = 0 as i32;
         while k < (*psEnc).sCmn.nb_subfr {
-            (*psEncCtrl).Gains[k as usize] =
-                Gains_Q16[k as usize] as f32 * (1.0f32 / 65536.0f32);
+            (*psEncCtrl).Gains[k as usize] = Gains_Q16[k as usize] as f32 * (1.0f32 / 65536.0f32);
             k += 1
         }
         /* ****************************************/

@@ -7,8 +7,7 @@ pub struct _tag_menuframework {
     pub nitems: i32,
     pub items: [*mut libc::c_void; 64],
     pub draw: Option<unsafe extern "C" fn() -> ()>,
-    pub key:
-        Option<unsafe extern "C" fn(_: i32) -> crate::src::qcommon::q_shared::sfxHandle_t>,
+    pub key: Option<unsafe extern "C" fn(_: i32) -> crate::src::qcommon::q_shared::sfxHandle_t>,
     pub wrapAround: crate::src::qcommon::q_shared::qboolean,
     pub fullscreen: crate::src::qcommon::q_shared::qboolean,
     pub showlogo: crate::src::qcommon::q_shared::qboolean,

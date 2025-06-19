@@ -8,8 +8,7 @@ pub mod macros_h {
     ) -> crate::opus_types_h::opus_int32 {
         return if in32 != 0 {
             (32 as i32)
-                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32
-                    * 8 as i32
+                - (::std::mem::size_of::<u32>() as libc::c_ulong as i32 * 8 as i32
                     - (in32 as u32).leading_zeros() as i32)
         } else {
             32 as i32
@@ -104,8 +103,7 @@ pub mod Inlines_h {
         /* increment using fractional part of input */
         y = (y as i64
             + (y as i64
-                * (213 as i32 as crate::opus_types_h::opus_int16
-                    as crate::opus_types_h::opus_int32
+                * (213 as i32 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32
                     * frac_Q7 as crate::opus_types_h::opus_int16 as crate::opus_types_h::opus_int32)
                     as crate::opus_types_h::opus_int16 as i64
                 >> 16 as i32)) as crate::opus_types_h::opus_int32;
@@ -543,8 +541,7 @@ pub unsafe extern "C" fn silk_CNG(
         /* Smoothing of LSF's  */
         i = 0 as i32;
         while i < (*psDec).LPC_order {
-            (*psCNG).CNG_smth_NLSF_Q15[i as usize] = ((*psCNG).CNG_smth_NLSF_Q15[i as usize]
-                as i32
+            (*psCNG).CNG_smth_NLSF_Q15[i as usize] = ((*psCNG).CNG_smth_NLSF_Q15[i as usize] as i32
                 + (((*psDec).prevNLSF_Q15[i as usize] as crate::opus_types_h::opus_int32
                     - (*psCNG).CNG_smth_NLSF_Q15[i as usize] as crate::opus_types_h::opus_int32)
                     as i64
@@ -592,8 +589,7 @@ pub unsafe extern "C" fn silk_CNG(
         i = 0 as i32;
         while i < (*psDec).nb_subfr {
             (*psCNG).CNG_smth_Gain_Q16 +=
-                (((*psDecCtrl).Gains_Q16[i as usize] - (*psCNG).CNG_smth_Gain_Q16)
-                    as i64
+                (((*psDecCtrl).Gains_Q16[i as usize] - (*psCNG).CNG_smth_Gain_Q16) as i64
                     * 4634 as i32 as crate::opus_types_h::opus_int16 as i64
                     >> 16 as i32) as crate::opus_types_h::opus_int32;
             i += 1
@@ -624,10 +620,9 @@ pub unsafe extern "C" fn silk_CNG(
             gain_Q16 = ((silk_SQRT_APPROX(gain_Q16) as crate::opus_types_h::opus_uint32)
                 << 16 as i32) as crate::opus_types_h::opus_int32
         } else {
-            gain_Q16 = (gain_Q16 as i64 * gain_Q16 as i64
-                >> 16 as i32) as crate::opus_types_h::opus_int32;
-            gain_Q16 = ((*psCNG).CNG_smth_Gain_Q16 as i64
-                * (*psCNG).CNG_smth_Gain_Q16 as i64
+            gain_Q16 =
+                (gain_Q16 as i64 * gain_Q16 as i64 >> 16 as i32) as crate::opus_types_h::opus_int32;
+            gain_Q16 = ((*psCNG).CNG_smth_Gain_Q16 as i64 * (*psCNG).CNG_smth_Gain_Q16 as i64
                 >> 16 as i32) as crate::opus_types_h::opus_int32
                 - ((gain_Q16 as crate::opus_types_h::opus_uint32) << 5 as i32)
                     as crate::opus_types_h::opus_int32;
@@ -661,99 +656,73 @@ pub unsafe extern "C" fn silk_CNG(
             /* Avoids introducing a bias because silk_SMLAWB() always rounds to -inf */
             LPC_pred_Q10 = (*psDec).LPC_order >> 1 as i32;
             LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                + (*CNG_sig_Q14.offset((16 as i32 + i - 1 as i32) as isize)
-                    as i64
+                + (*CNG_sig_Q14.offset((16 as i32 + i - 1 as i32) as isize) as i64
                     * A_Q12[0 as i32 as usize] as i64
-                    >> 16 as i32))
-                as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
             LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                + (*CNG_sig_Q14.offset((16 as i32 + i - 2 as i32) as isize)
-                    as i64
+                + (*CNG_sig_Q14.offset((16 as i32 + i - 2 as i32) as isize) as i64
                     * A_Q12[1 as i32 as usize] as i64
-                    >> 16 as i32))
-                as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
             LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                + (*CNG_sig_Q14.offset((16 as i32 + i - 3 as i32) as isize)
-                    as i64
+                + (*CNG_sig_Q14.offset((16 as i32 + i - 3 as i32) as isize) as i64
                     * A_Q12[2 as i32 as usize] as i64
-                    >> 16 as i32))
-                as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
             LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                + (*CNG_sig_Q14.offset((16 as i32 + i - 4 as i32) as isize)
-                    as i64
+                + (*CNG_sig_Q14.offset((16 as i32 + i - 4 as i32) as isize) as i64
                     * A_Q12[3 as i32 as usize] as i64
-                    >> 16 as i32))
-                as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
             LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                + (*CNG_sig_Q14.offset((16 as i32 + i - 5 as i32) as isize)
-                    as i64
+                + (*CNG_sig_Q14.offset((16 as i32 + i - 5 as i32) as isize) as i64
                     * A_Q12[4 as i32 as usize] as i64
-                    >> 16 as i32))
-                as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
             LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                + (*CNG_sig_Q14.offset((16 as i32 + i - 6 as i32) as isize)
-                    as i64
+                + (*CNG_sig_Q14.offset((16 as i32 + i - 6 as i32) as isize) as i64
                     * A_Q12[5 as i32 as usize] as i64
-                    >> 16 as i32))
-                as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
             LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                + (*CNG_sig_Q14.offset((16 as i32 + i - 7 as i32) as isize)
-                    as i64
+                + (*CNG_sig_Q14.offset((16 as i32 + i - 7 as i32) as isize) as i64
                     * A_Q12[6 as i32 as usize] as i64
-                    >> 16 as i32))
-                as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
             LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                + (*CNG_sig_Q14.offset((16 as i32 + i - 8 as i32) as isize)
-                    as i64
+                + (*CNG_sig_Q14.offset((16 as i32 + i - 8 as i32) as isize) as i64
                     * A_Q12[7 as i32 as usize] as i64
-                    >> 16 as i32))
-                as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
             LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                + (*CNG_sig_Q14.offset((16 as i32 + i - 9 as i32) as isize)
-                    as i64
+                + (*CNG_sig_Q14.offset((16 as i32 + i - 9 as i32) as isize) as i64
                     * A_Q12[8 as i32 as usize] as i64
-                    >> 16 as i32))
-                as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
             LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                + (*CNG_sig_Q14.offset((16 as i32 + i - 10 as i32) as isize)
-                    as i64
+                + (*CNG_sig_Q14.offset((16 as i32 + i - 10 as i32) as isize) as i64
                     * A_Q12[9 as i32 as usize] as i64
-                    >> 16 as i32))
-                as crate::opus_types_h::opus_int32;
+                    >> 16 as i32)) as crate::opus_types_h::opus_int32;
             if (*psDec).LPC_order == 16 as i32 {
                 LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                    + (*CNG_sig_Q14.offset((16 as i32 + i - 11 as i32) as isize)
-                        as i64
+                    + (*CNG_sig_Q14.offset((16 as i32 + i - 11 as i32) as isize) as i64
                         * A_Q12[10 as i32 as usize] as i64
                         >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
                 LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                    + (*CNG_sig_Q14.offset((16 as i32 + i - 12 as i32) as isize)
-                        as i64
+                    + (*CNG_sig_Q14.offset((16 as i32 + i - 12 as i32) as isize) as i64
                         * A_Q12[11 as i32 as usize] as i64
                         >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
                 LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                    + (*CNG_sig_Q14.offset((16 as i32 + i - 13 as i32) as isize)
-                        as i64
+                    + (*CNG_sig_Q14.offset((16 as i32 + i - 13 as i32) as isize) as i64
                         * A_Q12[12 as i32 as usize] as i64
                         >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
                 LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                    + (*CNG_sig_Q14.offset((16 as i32 + i - 14 as i32) as isize)
-                        as i64
+                    + (*CNG_sig_Q14.offset((16 as i32 + i - 14 as i32) as isize) as i64
                         * A_Q12[13 as i32 as usize] as i64
                         >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
                 LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                    + (*CNG_sig_Q14.offset((16 as i32 + i - 15 as i32) as isize)
-                        as i64
+                    + (*CNG_sig_Q14.offset((16 as i32 + i - 15 as i32) as isize) as i64
                         * A_Q12[14 as i32 as usize] as i64
                         >> 16 as i32))
                     as crate::opus_types_h::opus_int32;
                 LPC_pred_Q10 = (LPC_pred_Q10 as i64
-                    + (*CNG_sig_Q14.offset((16 as i32 + i - 16 as i32) as isize)
-                        as i64
+                    + (*CNG_sig_Q14.offset((16 as i32 + i - 16 as i32) as isize) as i64
                         * A_Q12[15 as i32 as usize] as i64
                         >> 16 as i32))
                     as crate::opus_types_h::opus_int32
@@ -763,16 +732,13 @@ pub unsafe extern "C" fn silk_CNG(
                 .offset((16 as i32 + i) as isize)
                 as crate::opus_types_h::opus_uint32)
                 .wrapping_add(
-                    (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                        >> 4 as i32
+                    (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
                         > 0x7fffffff as i32 >> 4 as i32
                     {
                         (if LPC_pred_Q10
-                            > 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                                >> 4 as i32
+                            > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
                         {
-                            (0x80000000 as u32 as crate::opus_types_h::opus_int32)
-                                >> 4 as i32
+                            (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
                         } else {
                             (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
                                 (0x7fffffff as i32) >> 4 as i32
@@ -785,11 +751,9 @@ pub unsafe extern "C" fn silk_CNG(
                             (0x7fffffff as i32) >> 4 as i32
                         } else {
                             (if LPC_pred_Q10
-                                < 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                                    >> 4 as i32
+                                < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
                             {
-                                (0x80000000 as u32 as crate::opus_types_h::opus_int32)
-                                    >> 4 as i32
+                                (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
                             } else {
                                 LPC_pred_Q10
                             })
@@ -802,16 +766,13 @@ pub unsafe extern "C" fn silk_CNG(
                 == 0 as i32 as u32
             {
                 if (*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                    & (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                        >> 4 as i32
+                    & (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
                         > 0x7fffffff as i32 >> 4 as i32
                     {
                         (if LPC_pred_Q10
-                            > 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                                >> 4 as i32
+                            > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
                         {
-                            (0x80000000 as u32 as crate::opus_types_h::opus_int32)
-                                >> 4 as i32
+                            (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
                         } else {
                             (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
                                 (0x7fffffff as i32) >> 4 as i32
@@ -824,34 +785,28 @@ pub unsafe extern "C" fn silk_CNG(
                             (0x7fffffff as i32) >> 4 as i32
                         } else {
                             (if LPC_pred_Q10
-                                < 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                                    >> 4 as i32
+                                < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
                             {
-                                (0x80000000 as u32 as crate::opus_types_h::opus_int32)
-                                    >> 4 as i32
+                                (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
                             } else {
                                 LPC_pred_Q10
                             })
                         })
                     }) as crate::opus_types_h::opus_uint32)
-                        << 4 as i32)
-                        as crate::opus_types_h::opus_int32) as u32
+                        << 4 as i32) as crate::opus_types_h::opus_int32) as u32
                     & 0x80000000 as u32
                     != 0 as i32 as u32
                 {
                     0x80000000 as u32 as crate::opus_types_h::opus_int32
                 } else {
                     (*CNG_sig_Q14.offset((16 as i32 + i) as isize))
-                        + (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                            >> 4 as i32
+                        + (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
                             > 0x7fffffff as i32 >> 4 as i32
                         {
                             (if LPC_pred_Q10
-                                > 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                                    >> 4 as i32
+                                > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
                             {
-                                (0x80000000 as u32 as crate::opus_types_h::opus_int32)
-                                    >> 4 as i32
+                                (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
                             } else {
                                 (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
                                     (0x7fffffff as i32) >> 4 as i32
@@ -878,16 +833,13 @@ pub unsafe extern "C" fn silk_CNG(
                             as crate::opus_types_h::opus_int32
                 }
             } else if (*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                | (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                    >> 4 as i32
+                | (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
                     > 0x7fffffff as i32 >> 4 as i32
                 {
                     (if LPC_pred_Q10
-                        > 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                            >> 4 as i32
+                        > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
                     {
-                        (0x80000000 as u32 as crate::opus_types_h::opus_int32)
-                            >> 4 as i32
+                        (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
                     } else {
                         (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
                             (0x7fffffff as i32) >> 4 as i32
@@ -900,34 +852,28 @@ pub unsafe extern "C" fn silk_CNG(
                         (0x7fffffff as i32) >> 4 as i32
                     } else {
                         (if LPC_pred_Q10
-                            < 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                                >> 4 as i32
+                            < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
                         {
-                            (0x80000000 as u32 as crate::opus_types_h::opus_int32)
-                                >> 4 as i32
+                            (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
                         } else {
                             LPC_pred_Q10
                         })
                     })
                 }) as crate::opus_types_h::opus_uint32)
-                    << 4 as i32) as crate::opus_types_h::opus_int32)
-                as u32
+                    << 4 as i32) as crate::opus_types_h::opus_int32) as u32
                 & 0x80000000 as u32
                 == 0 as i32 as u32
             {
                 0x7fffffff as i32
             } else {
                 (*CNG_sig_Q14.offset((16 as i32 + i) as isize))
-                    + (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                        >> 4 as i32
+                    + (((if 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
                         > 0x7fffffff as i32 >> 4 as i32
                     {
                         (if LPC_pred_Q10
-                            > 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                                >> 4 as i32
+                            > 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
                         {
-                            (0x80000000 as u32 as crate::opus_types_h::opus_int32)
-                                >> 4 as i32
+                            (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
                         } else {
                             (if LPC_pred_Q10 < 0x7fffffff as i32 >> 4 as i32 {
                                 (0x7fffffff as i32) >> 4 as i32
@@ -940,39 +886,30 @@ pub unsafe extern "C" fn silk_CNG(
                             (0x7fffffff as i32) >> 4 as i32
                         } else {
                             (if LPC_pred_Q10
-                                < 0x80000000 as u32 as crate::opus_types_h::opus_int32
-                                    >> 4 as i32
+                                < 0x80000000 as u32 as crate::opus_types_h::opus_int32 >> 4 as i32
                             {
-                                (0x80000000 as u32 as crate::opus_types_h::opus_int32)
-                                    >> 4 as i32
+                                (0x80000000 as u32 as crate::opus_types_h::opus_int32) >> 4 as i32
                             } else {
                                 LPC_pred_Q10
                             })
                         })
                     }) as crate::opus_types_h::opus_uint32)
-                        << 4 as i32)
-                        as crate::opus_types_h::opus_int32
+                        << 4 as i32) as crate::opus_types_h::opus_int32
             };
             /* Scale with Gain and add to input signal */
             *frame.offset(i as isize) = if *frame.offset(i as isize)
                 as crate::opus_types_h::opus_int32
                 + (if (if 8 as i32 == 1 as i32 {
-                    ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
-                        * gain_Q10 as i64
-                        >> 16 as i32)
-                        as crate::opus_types_h::opus_int32
+                    ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64 * gain_Q10 as i64
+                        >> 16 as i32) as crate::opus_types_h::opus_int32
                         >> 1 as i32)
-                        + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                            as i64
-                            * gain_Q10 as i64
+                        + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64 * gain_Q10 as i64
                             >> 16 as i32)
                             as crate::opus_types_h::opus_int32
                             & 1 as i32)
                 } else {
-                    (((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
-                        * gain_Q10 as i64
-                        >> 16 as i32)
-                        as crate::opus_types_h::opus_int32
+                    (((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64 * gain_Q10 as i64
+                        >> 16 as i32) as crate::opus_types_h::opus_int32
                         >> 8 as i32 - 1 as i32)
                         + 1 as i32)
                         >> 1 as i32
@@ -981,21 +918,17 @@ pub unsafe extern "C" fn silk_CNG(
                     0x7fff as i32
                 } else {
                     (if (if 8 as i32 == 1 as i32 {
-                        ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
-                            * gain_Q10 as i64
+                        ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64 * gain_Q10 as i64
                             >> 16 as i32)
                             as crate::opus_types_h::opus_int32
                             >> 1 as i32)
-                            + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                                as i64
+                            + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
                                 * gain_Q10 as i64
                                 >> 16 as i32)
                                 as crate::opus_types_h::opus_int32
                                 & 1 as i32)
                     } else {
-                        (((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                            as i64
-                            * gain_Q10 as i64
+                        (((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64 * gain_Q10 as i64
                             >> 16 as i32)
                             as crate::opus_types_h::opus_int32
                             >> 8 as i32 - 1 as i32)
@@ -1006,21 +939,18 @@ pub unsafe extern "C" fn silk_CNG(
                         0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
                     } else {
                         (if 8 as i32 == 1 as i32 {
-                            ((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                                as i64
+                            ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
                                 * gain_Q10 as i64
                                 >> 16 as i32)
                                 as crate::opus_types_h::opus_int32
                                 >> 1 as i32)
-                                + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                                    as i64
+                                + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
                                     * gain_Q10 as i64
                                     >> 16 as i32)
                                     as crate::opus_types_h::opus_int32
                                     & 1 as i32)
                         } else {
-                            (((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                                as i64
+                            (((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
                                 * gain_Q10 as i64
                                 >> 16 as i32)
                                 as crate::opus_types_h::opus_int32
@@ -1035,22 +965,16 @@ pub unsafe extern "C" fn silk_CNG(
                 0x7fff as i32
             } else if *frame.offset(i as isize) as crate::opus_types_h::opus_int32
                 + (if (if 8 as i32 == 1 as i32 {
-                    ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
-                        * gain_Q10 as i64
-                        >> 16 as i32)
-                        as crate::opus_types_h::opus_int32
+                    ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64 * gain_Q10 as i64
+                        >> 16 as i32) as crate::opus_types_h::opus_int32
                         >> 1 as i32)
-                        + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                            as i64
-                            * gain_Q10 as i64
+                        + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64 * gain_Q10 as i64
                             >> 16 as i32)
                             as crate::opus_types_h::opus_int32
                             & 1 as i32)
                 } else {
-                    (((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
-                        * gain_Q10 as i64
-                        >> 16 as i32)
-                        as crate::opus_types_h::opus_int32
+                    (((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64 * gain_Q10 as i64
+                        >> 16 as i32) as crate::opus_types_h::opus_int32
                         >> 8 as i32 - 1 as i32)
                         + 1 as i32)
                         >> 1 as i32
@@ -1059,21 +983,17 @@ pub unsafe extern "C" fn silk_CNG(
                     0x7fff as i32
                 } else {
                     (if (if 8 as i32 == 1 as i32 {
-                        ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
-                            * gain_Q10 as i64
+                        ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64 * gain_Q10 as i64
                             >> 16 as i32)
                             as crate::opus_types_h::opus_int32
                             >> 1 as i32)
-                            + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                                as i64
+                            + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
                                 * gain_Q10 as i64
                                 >> 16 as i32)
                                 as crate::opus_types_h::opus_int32
                                 & 1 as i32)
                     } else {
-                        (((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                            as i64
-                            * gain_Q10 as i64
+                        (((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64 * gain_Q10 as i64
                             >> 16 as i32)
                             as crate::opus_types_h::opus_int32
                             >> 8 as i32 - 1 as i32)
@@ -1084,21 +1004,18 @@ pub unsafe extern "C" fn silk_CNG(
                         0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
                     } else {
                         (if 8 as i32 == 1 as i32 {
-                            ((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                                as i64
+                            ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
                                 * gain_Q10 as i64
                                 >> 16 as i32)
                                 as crate::opus_types_h::opus_int32
                                 >> 1 as i32)
-                                + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                                    as i64
+                                + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
                                     * gain_Q10 as i64
                                     >> 16 as i32)
                                     as crate::opus_types_h::opus_int32
                                     & 1 as i32)
                         } else {
-                            (((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                                as i64
+                            (((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
                                 * gain_Q10 as i64
                                 >> 16 as i32)
                                 as crate::opus_types_h::opus_int32
@@ -1114,21 +1031,17 @@ pub unsafe extern "C" fn silk_CNG(
             } else {
                 (*frame.offset(i as isize) as crate::opus_types_h::opus_int32)
                     + (if (if 8 as i32 == 1 as i32 {
-                        ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
-                            * gain_Q10 as i64
+                        ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64 * gain_Q10 as i64
                             >> 16 as i32)
                             as crate::opus_types_h::opus_int32
                             >> 1 as i32)
-                            + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                                as i64
+                            + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
                                 * gain_Q10 as i64
                                 >> 16 as i32)
                                 as crate::opus_types_h::opus_int32
                                 & 1 as i32)
                     } else {
-                        (((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                            as i64
-                            * gain_Q10 as i64
+                        (((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64 * gain_Q10 as i64
                             >> 16 as i32)
                             as crate::opus_types_h::opus_int32
                             >> 8 as i32 - 1 as i32)
@@ -1139,48 +1052,41 @@ pub unsafe extern "C" fn silk_CNG(
                         0x7fff as i32
                     } else {
                         (if (if 8 as i32 == 1 as i32 {
-                            ((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                                as i64
+                            ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
                                 * gain_Q10 as i64
                                 >> 16 as i32)
                                 as crate::opus_types_h::opus_int32
                                 >> 1 as i32)
-                                + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                                    as i64
+                                + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
                                     * gain_Q10 as i64
                                     >> 16 as i32)
                                     as crate::opus_types_h::opus_int32
                                     & 1 as i32)
                         } else {
-                            (((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                                as i64
+                            (((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
                                 * gain_Q10 as i64
                                 >> 16 as i32)
                                 as crate::opus_types_h::opus_int32
                                 >> 8 as i32 - 1 as i32)
                                 + 1 as i32)
                                 >> 1 as i32
-                        }) < 0x8000 as i32 as crate::opus_types_h::opus_int16
-                            as i32
+                        }) < 0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
                         {
                             0x8000 as i32 as crate::opus_types_h::opus_int16 as i32
                         } else {
                             (if 8 as i32 == 1 as i32 {
-                                ((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                                    as i64
+                                ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
                                     * gain_Q10 as i64
                                     >> 16 as i32)
                                     as crate::opus_types_h::opus_int32
                                     >> 1 as i32)
-                                    + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                                        as i64
+                                    + ((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
                                         * gain_Q10 as i64
                                         >> 16 as i32)
                                         as crate::opus_types_h::opus_int32
                                         & 1 as i32)
                             } else {
-                                (((*CNG_sig_Q14.offset((16 as i32 + i) as isize)
-                                    as i64
+                                (((*CNG_sig_Q14.offset((16 as i32 + i) as isize) as i64
                                     * gain_Q10 as i64
                                     >> 16 as i32)
                                     as crate::opus_types_h::opus_int32

@@ -59,8 +59,7 @@ pub struct gentity_s {
     >,
     pub use_0:
         Option<unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: *mut gentity_t) -> ()>,
-    pub pain:
-        Option<unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: i32) -> ()>,
+    pub pain: Option<unsafe extern "C" fn(_: *mut gentity_t, _: *mut gentity_t, _: i32) -> ()>,
     pub die: Option<
         unsafe extern "C" fn(
             _: *mut gentity_t,

@@ -561,8 +561,7 @@ RB_CheckOverflow
 
 pub unsafe extern "C" fn RB_CheckOverflow(mut verts: i32, mut indexes: i32) {
     if crate::src::renderergl1::tr_shade::tess.numVertexes + verts < 1000 as i32
-        && crate::src::renderergl1::tr_shade::tess.numIndexes + indexes
-            < 6 as i32 * 1000 as i32
+        && crate::src::renderergl1::tr_shade::tess.numIndexes + indexes < 6 as i32 * 1000 as i32
     {
         return;
     }
@@ -612,8 +611,7 @@ pub unsafe extern "C" fn RB_AddQuadStampExt(
     let mut normal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut ndx: i32 = 0;
     if crate::src::renderergl1::tr_shade::tess.numVertexes + 4 as i32 >= 1000 as i32
-        || crate::src::renderergl1::tr_shade::tess.numIndexes + 6 as i32
-            >= 6 as i32 * 1000 as i32
+        || crate::src::renderergl1::tr_shade::tess.numIndexes + 6 as i32 >= 6 as i32 * 1000 as i32
     {
         RB_CheckOverflow(4 as i32, 6 as i32);
     }
@@ -649,91 +647,82 @@ pub unsafe extern "C" fn RB_AddQuadStampExt(
         .offset(2 as i32 as isize)
         + *left.offset(2 as i32 as isize)
         + *up.offset(2 as i32 as isize);
-    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 1 as i32) as usize]
-        [0 as i32 as usize] = *origin.offset(0 as i32 as isize)
-        - *left.offset(0 as i32 as isize)
-        + *up.offset(0 as i32 as isize);
-    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 1 as i32) as usize]
-        [1 as i32 as usize] = *origin.offset(1 as i32 as isize)
-        - *left.offset(1 as i32 as isize)
-        + *up.offset(1 as i32 as isize);
-    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 1 as i32) as usize]
-        [2 as i32 as usize] = *origin.offset(2 as i32 as isize)
-        - *left.offset(2 as i32 as isize)
-        + *up.offset(2 as i32 as isize);
-    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 2 as i32) as usize]
-        [0 as i32 as usize] = *origin.offset(0 as i32 as isize)
-        - *left.offset(0 as i32 as isize)
-        - *up.offset(0 as i32 as isize);
-    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 2 as i32) as usize]
-        [1 as i32 as usize] = *origin.offset(1 as i32 as isize)
-        - *left.offset(1 as i32 as isize)
-        - *up.offset(1 as i32 as isize);
-    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 2 as i32) as usize]
-        [2 as i32 as usize] = *origin.offset(2 as i32 as isize)
-        - *left.offset(2 as i32 as isize)
-        - *up.offset(2 as i32 as isize);
-    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 3 as i32) as usize]
-        [0 as i32 as usize] = *origin.offset(0 as i32 as isize)
-        + *left.offset(0 as i32 as isize)
-        - *up.offset(0 as i32 as isize);
-    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 3 as i32) as usize]
-        [1 as i32 as usize] = *origin.offset(1 as i32 as isize)
-        + *left.offset(1 as i32 as isize)
-        - *up.offset(1 as i32 as isize);
-    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 3 as i32) as usize]
-        [2 as i32 as usize] = *origin.offset(2 as i32 as isize)
-        + *left.offset(2 as i32 as isize)
-        - *up.offset(2 as i32 as isize);
+    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 1 as i32) as usize][0 as i32 as usize] =
+        *origin.offset(0 as i32 as isize) - *left.offset(0 as i32 as isize)
+            + *up.offset(0 as i32 as isize);
+    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 1 as i32) as usize][1 as i32 as usize] =
+        *origin.offset(1 as i32 as isize) - *left.offset(1 as i32 as isize)
+            + *up.offset(1 as i32 as isize);
+    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 1 as i32) as usize][2 as i32 as usize] =
+        *origin.offset(2 as i32 as isize) - *left.offset(2 as i32 as isize)
+            + *up.offset(2 as i32 as isize);
+    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 2 as i32) as usize][0 as i32 as usize] =
+        *origin.offset(0 as i32 as isize)
+            - *left.offset(0 as i32 as isize)
+            - *up.offset(0 as i32 as isize);
+    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 2 as i32) as usize][1 as i32 as usize] =
+        *origin.offset(1 as i32 as isize)
+            - *left.offset(1 as i32 as isize)
+            - *up.offset(1 as i32 as isize);
+    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 2 as i32) as usize][2 as i32 as usize] =
+        *origin.offset(2 as i32 as isize)
+            - *left.offset(2 as i32 as isize)
+            - *up.offset(2 as i32 as isize);
+    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 3 as i32) as usize][0 as i32 as usize] =
+        *origin.offset(0 as i32 as isize) + *left.offset(0 as i32 as isize)
+            - *up.offset(0 as i32 as isize);
+    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 3 as i32) as usize][1 as i32 as usize] =
+        *origin.offset(1 as i32 as isize) + *left.offset(1 as i32 as isize)
+            - *up.offset(1 as i32 as isize);
+    crate::src::renderergl1::tr_shade::tess.xyz[(ndx + 3 as i32) as usize][2 as i32 as usize] =
+        *origin.offset(2 as i32 as isize) + *left.offset(2 as i32 as isize)
+            - *up.offset(2 as i32 as isize);
     // constant normal all the way around
-    normal[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
-        [0 as i32 as usize]
+    normal[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize]
         - crate::src::renderergl1::tr_backend::backEnd
             .viewParms
             .or
             .axis[0 as i32 as usize][0 as i32 as usize];
-    normal[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
-        [1 as i32 as usize]
+    normal[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize]
         - crate::src::renderergl1::tr_backend::backEnd
             .viewParms
             .or
             .axis[0 as i32 as usize][1 as i32 as usize];
-    normal[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
-        [2 as i32 as usize]
+    normal[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize]
         - crate::src::renderergl1::tr_backend::backEnd
             .viewParms
             .or
             .axis[0 as i32 as usize][2 as i32 as usize];
-    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 3 as i32) as usize]
-        [0 as i32 as usize] = normal[0 as i32 as usize];
-    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 2 as i32) as usize]
-        [0 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.normal
-        [(ndx + 3 as i32) as usize][0 as i32 as usize];
-    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 1 as i32) as usize]
-        [0 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.normal
-        [(ndx + 2 as i32) as usize][0 as i32 as usize];
+    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 3 as i32) as usize][0 as i32 as usize] =
+        normal[0 as i32 as usize];
+    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 2 as i32) as usize][0 as i32 as usize] =
+        crate::src::renderergl1::tr_shade::tess.normal[(ndx + 3 as i32) as usize]
+            [0 as i32 as usize];
+    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 1 as i32) as usize][0 as i32 as usize] =
+        crate::src::renderergl1::tr_shade::tess.normal[(ndx + 2 as i32) as usize]
+            [0 as i32 as usize];
     crate::src::renderergl1::tr_shade::tess.normal[ndx as usize][0 as i32 as usize] =
         crate::src::renderergl1::tr_shade::tess.normal[(ndx + 1 as i32) as usize]
             [0 as i32 as usize];
-    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 3 as i32) as usize]
-        [1 as i32 as usize] = normal[1 as i32 as usize];
-    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 2 as i32) as usize]
-        [1 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.normal
-        [(ndx + 3 as i32) as usize][1 as i32 as usize];
-    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 1 as i32) as usize]
-        [1 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.normal
-        [(ndx + 2 as i32) as usize][1 as i32 as usize];
+    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 3 as i32) as usize][1 as i32 as usize] =
+        normal[1 as i32 as usize];
+    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 2 as i32) as usize][1 as i32 as usize] =
+        crate::src::renderergl1::tr_shade::tess.normal[(ndx + 3 as i32) as usize]
+            [1 as i32 as usize];
+    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 1 as i32) as usize][1 as i32 as usize] =
+        crate::src::renderergl1::tr_shade::tess.normal[(ndx + 2 as i32) as usize]
+            [1 as i32 as usize];
     crate::src::renderergl1::tr_shade::tess.normal[ndx as usize][1 as i32 as usize] =
         crate::src::renderergl1::tr_shade::tess.normal[(ndx + 1 as i32) as usize]
             [1 as i32 as usize];
-    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 3 as i32) as usize]
-        [2 as i32 as usize] = normal[2 as i32 as usize];
-    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 2 as i32) as usize]
-        [2 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.normal
-        [(ndx + 3 as i32) as usize][2 as i32 as usize];
-    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 1 as i32) as usize]
-        [2 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.normal
-        [(ndx + 2 as i32) as usize][2 as i32 as usize];
+    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 3 as i32) as usize][2 as i32 as usize] =
+        normal[2 as i32 as usize];
+    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 2 as i32) as usize][2 as i32 as usize] =
+        crate::src::renderergl1::tr_shade::tess.normal[(ndx + 3 as i32) as usize]
+            [2 as i32 as usize];
+    crate::src::renderergl1::tr_shade::tess.normal[(ndx + 1 as i32) as usize][2 as i32 as usize] =
+        crate::src::renderergl1::tr_shade::tess.normal[(ndx + 2 as i32) as usize]
+            [2 as i32 as usize];
     crate::src::renderergl1::tr_shade::tess.normal[ndx as usize][2 as i32 as usize] =
         crate::src::renderergl1::tr_shade::tess.normal[(ndx + 1 as i32) as usize]
             [2 as i32 as usize];
@@ -741,49 +730,43 @@ pub unsafe extern "C" fn RB_AddQuadStampExt(
     crate::src::renderergl1::tr_shade::tess.texCoords[ndx as usize][1 as i32 as usize]
         [0 as i32 as usize] = s1;
     crate::src::renderergl1::tr_shade::tess.texCoords[ndx as usize][0 as i32 as usize]
-        [0 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.texCoords
-        [ndx as usize][1 as i32 as usize][0 as i32 as usize];
+        [0 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.texCoords[ndx as usize]
+        [1 as i32 as usize][0 as i32 as usize];
     crate::src::renderergl1::tr_shade::tess.texCoords[ndx as usize][1 as i32 as usize]
         [1 as i32 as usize] = t1;
     crate::src::renderergl1::tr_shade::tess.texCoords[ndx as usize][0 as i32 as usize]
-        [1 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.texCoords
-        [ndx as usize][1 as i32 as usize][1 as i32 as usize];
+        [1 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.texCoords[ndx as usize]
+        [1 as i32 as usize][1 as i32 as usize];
     crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 1 as i32) as usize]
         [1 as i32 as usize][0 as i32 as usize] = s2;
     crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 1 as i32) as usize]
-        [0 as i32 as usize][0 as i32 as usize] =
-        crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 1 as i32) as usize]
-            [1 as i32 as usize][0 as i32 as usize];
+        [0 as i32 as usize][0 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.texCoords
+        [(ndx + 1 as i32) as usize][1 as i32 as usize][0 as i32 as usize];
     crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 1 as i32) as usize]
         [1 as i32 as usize][1 as i32 as usize] = t1;
     crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 1 as i32) as usize]
-        [0 as i32 as usize][1 as i32 as usize] =
-        crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 1 as i32) as usize]
-            [1 as i32 as usize][1 as i32 as usize];
+        [0 as i32 as usize][1 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.texCoords
+        [(ndx + 1 as i32) as usize][1 as i32 as usize][1 as i32 as usize];
     crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 2 as i32) as usize]
         [1 as i32 as usize][0 as i32 as usize] = s2;
     crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 2 as i32) as usize]
-        [0 as i32 as usize][0 as i32 as usize] =
-        crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 2 as i32) as usize]
-            [1 as i32 as usize][0 as i32 as usize];
+        [0 as i32 as usize][0 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.texCoords
+        [(ndx + 2 as i32) as usize][1 as i32 as usize][0 as i32 as usize];
     crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 2 as i32) as usize]
         [1 as i32 as usize][1 as i32 as usize] = t2;
     crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 2 as i32) as usize]
-        [0 as i32 as usize][1 as i32 as usize] =
-        crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 2 as i32) as usize]
-            [1 as i32 as usize][1 as i32 as usize];
+        [0 as i32 as usize][1 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.texCoords
+        [(ndx + 2 as i32) as usize][1 as i32 as usize][1 as i32 as usize];
     crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 3 as i32) as usize]
         [1 as i32 as usize][0 as i32 as usize] = s1;
     crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 3 as i32) as usize]
-        [0 as i32 as usize][0 as i32 as usize] =
-        crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 3 as i32) as usize]
-            [1 as i32 as usize][0 as i32 as usize];
+        [0 as i32 as usize][0 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.texCoords
+        [(ndx + 3 as i32) as usize][1 as i32 as usize][0 as i32 as usize];
     crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 3 as i32) as usize]
         [1 as i32 as usize][1 as i32 as usize] = t2;
     crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 3 as i32) as usize]
-        [0 as i32 as usize][1 as i32 as usize] =
-        crate::src::renderergl1::tr_shade::tess.texCoords[(ndx + 3 as i32) as usize]
-            [1 as i32 as usize][1 as i32 as usize];
+        [0 as i32 as usize][1 as i32 as usize] = crate::src::renderergl1::tr_shade::tess.texCoords
+        [(ndx + 3 as i32) as usize][1 as i32 as usize][1 as i32 as usize];
     // constant color all the way around
     // should this be identity and let the shader specify from entity?
     let ref mut fresh3 = *(&mut *crate::src::renderergl1::tr_shade::tess
@@ -967,15 +950,12 @@ unsafe extern "C" fn RB_SurfaceSprite() {
         .isMirror as u64
         != 0
     {
-        left[0 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
-            [0 as i32 as usize]
-            - left[0 as i32 as usize];
-        left[1 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
-            [1 as i32 as usize]
-            - left[1 as i32 as usize];
-        left[2 as i32 as usize] = crate::src::qcommon::q_math::vec3_origin
-            [2 as i32 as usize]
-            - left[2 as i32 as usize]
+        left[0 as i32 as usize] =
+            crate::src::qcommon::q_math::vec3_origin[0 as i32 as usize] - left[0 as i32 as usize];
+        left[1 as i32 as usize] =
+            crate::src::qcommon::q_math::vec3_origin[1 as i32 as usize] - left[1 as i32 as usize];
+        left[2 as i32 as usize] =
+            crate::src::qcommon::q_math::vec3_origin[2 as i32 as usize] - left[2 as i32 as usize]
     }
     RB_AddQuadStamp(
         (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
@@ -1004,10 +984,7 @@ unsafe extern "C" fn RB_SurfacePolychain(mut p: *mut crate::tr_local_h::srfPoly_
             + 3 as i32 * ((*p).numVerts - 2 as i32)
             >= 6 as i32 * 1000 as i32
     {
-        RB_CheckOverflow(
-            (*p).numVerts,
-            3 as i32 * ((*p).numVerts - 2 as i32),
-        );
+        RB_CheckOverflow((*p).numVerts, 3 as i32 * ((*p).numVerts - 2 as i32));
     }
     // fan triangles into the tess array
     numv = crate::src::renderergl1::tr_shade::tess.numVertexes;
@@ -1019,17 +996,14 @@ unsafe extern "C" fn RB_SurfacePolychain(mut p: *mut crate::tr_local_h::srfPoly_
             (*(*p).verts.offset(i as isize)).xyz[1 as i32 as usize];
         crate::src::renderergl1::tr_shade::tess.xyz[numv as usize][2 as i32 as usize] =
             (*(*p).verts.offset(i as isize)).xyz[2 as i32 as usize];
-        crate::src::renderergl1::tr_shade::tess.texCoords[numv as usize]
-            [0 as i32 as usize][0 as i32 as usize] =
-            (*(*p).verts.offset(i as isize)).st[0 as i32 as usize];
-        crate::src::renderergl1::tr_shade::tess.texCoords[numv as usize]
-            [0 as i32 as usize][1 as i32 as usize] =
-            (*(*p).verts.offset(i as isize)).st[1 as i32 as usize];
+        crate::src::renderergl1::tr_shade::tess.texCoords[numv as usize][0 as i32 as usize]
+            [0 as i32 as usize] = (*(*p).verts.offset(i as isize)).st[0 as i32 as usize];
+        crate::src::renderergl1::tr_shade::tess.texCoords[numv as usize][0 as i32 as usize]
+            [1 as i32 as usize] = (*(*p).verts.offset(i as isize)).st[1 as i32 as usize];
         *(&mut *crate::src::renderergl1::tr_shade::tess
             .vertexColors
             .as_mut_ptr()
-            .offset(numv as isize) as *mut crate::tr_local_h::color4ub_t
-            as *mut i32) =
+            .offset(numv as isize) as *mut crate::tr_local_h::color4ub_t as *mut i32) =
             *((*(*p).verts.offset(i as isize)).modulate.as_mut_ptr() as *mut i32);
         numv += 1;
         i += 1
@@ -1080,24 +1054,21 @@ unsafe extern "C" fn RB_SurfaceTriangles(mut srf: *mut crate::tr_local_h::srfTri
     }
     i = 0 as i32;
     while i < (*srf).numIndexes {
-        crate::src::renderergl1::tr_shade::tess.indexes[(crate::src::renderergl1::tr_shade::tess
-            .numIndexes
-            + i
-            + 0 as i32) as usize] = (crate::src::renderergl1::tr_shade::tess.numVertexes
-            + *(*srf).indexes.offset((i + 0 as i32) as isize))
-            as crate::tr_local_h::glIndex_t;
-        crate::src::renderergl1::tr_shade::tess.indexes[(crate::src::renderergl1::tr_shade::tess
-            .numIndexes
-            + i
-            + 1 as i32) as usize] = (crate::src::renderergl1::tr_shade::tess.numVertexes
-            + *(*srf).indexes.offset((i + 1 as i32) as isize))
-            as crate::tr_local_h::glIndex_t;
-        crate::src::renderergl1::tr_shade::tess.indexes[(crate::src::renderergl1::tr_shade::tess
-            .numIndexes
-            + i
-            + 2 as i32) as usize] = (crate::src::renderergl1::tr_shade::tess.numVertexes
-            + *(*srf).indexes.offset((i + 2 as i32) as isize))
-            as crate::tr_local_h::glIndex_t;
+        crate::src::renderergl1::tr_shade::tess.indexes
+            [(crate::src::renderergl1::tr_shade::tess.numIndexes + i + 0 as i32) as usize] =
+            (crate::src::renderergl1::tr_shade::tess.numVertexes
+                + *(*srf).indexes.offset((i + 0 as i32) as isize))
+                as crate::tr_local_h::glIndex_t;
+        crate::src::renderergl1::tr_shade::tess.indexes
+            [(crate::src::renderergl1::tr_shade::tess.numIndexes + i + 1 as i32) as usize] =
+            (crate::src::renderergl1::tr_shade::tess.numVertexes
+                + *(*srf).indexes.offset((i + 1 as i32) as isize))
+                as crate::tr_local_h::glIndex_t;
+        crate::src::renderergl1::tr_shade::tess.indexes
+            [(crate::src::renderergl1::tr_shade::tess.numIndexes + i + 2 as i32) as usize] =
+            (crate::src::renderergl1::tr_shade::tess.numVertexes
+                + *(*srf).indexes.offset((i + 2 as i32) as isize))
+                as crate::tr_local_h::glIndex_t;
         i += 3 as i32
     }
     crate::src::renderergl1::tr_shade::tess.numIndexes += (*srf).numIndexes;
@@ -1168,14 +1139,11 @@ unsafe extern "C" fn RB_SurfaceBeam() {
     origin[0 as i32 as usize] = (*e).origin[0 as i32 as usize];
     origin[1 as i32 as usize] = (*e).origin[1 as i32 as usize];
     origin[2 as i32 as usize] = (*e).origin[2 as i32 as usize];
-    direction[0 as i32 as usize] =
-        oldorigin[0 as i32 as usize] - origin[0 as i32 as usize];
+    direction[0 as i32 as usize] = oldorigin[0 as i32 as usize] - origin[0 as i32 as usize];
     normalized_direction[0 as i32 as usize] = direction[0 as i32 as usize];
-    direction[1 as i32 as usize] =
-        oldorigin[1 as i32 as usize] - origin[1 as i32 as usize];
+    direction[1 as i32 as usize] = oldorigin[1 as i32 as usize] - origin[1 as i32 as usize];
     normalized_direction[1 as i32 as usize] = direction[1 as i32 as usize];
-    direction[2 as i32 as usize] =
-        oldorigin[2 as i32 as usize] - origin[2 as i32 as usize];
+    direction[2 as i32 as usize] = oldorigin[2 as i32 as usize] - origin[2 as i32 as usize];
     normalized_direction[2 as i32 as usize] = direction[2 as i32 as usize];
     if crate::src::qcommon::q_math::VectorNormalize(normalized_direction.as_mut_ptr())
         == 0 as i32 as f32
@@ -1186,12 +1154,9 @@ unsafe extern "C" fn RB_SurfaceBeam() {
         perpvec.as_mut_ptr(),
         normalized_direction.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
     );
-    perpvec[0 as i32 as usize] =
-        perpvec[0 as i32 as usize] * 4 as i32 as f32;
-    perpvec[1 as i32 as usize] =
-        perpvec[1 as i32 as usize] * 4 as i32 as f32;
-    perpvec[2 as i32 as usize] =
-        perpvec[2 as i32 as usize] * 4 as i32 as f32;
+    perpvec[0 as i32 as usize] = perpvec[0 as i32 as usize] * 4 as i32 as f32;
+    perpvec[1 as i32 as usize] = perpvec[1 as i32 as usize] * 4 as i32 as f32;
+    perpvec[2 as i32 as usize] = perpvec[2 as i32 as usize] * 4 as i32 as f32;
     i = 0 as i32;
     while i < 6 as i32 {
         crate::src::qcommon::q_math::RotatePointAroundVector(
@@ -1201,23 +1166,18 @@ unsafe extern "C" fn RB_SurfaceBeam() {
             (360.0f64 / 6 as i32 as f64 * i as f64) as f32,
         );
         //		VectorAdd( start_points[i], origin, start_points[i] );
-        end_points[i as usize][0 as i32 as usize] = start_points[i as usize]
-            [0 as i32 as usize]
-            + direction[0 as i32 as usize];
-        end_points[i as usize][1 as i32 as usize] = start_points[i as usize]
-            [1 as i32 as usize]
-            + direction[1 as i32 as usize];
-        end_points[i as usize][2 as i32 as usize] = start_points[i as usize]
-            [2 as i32 as usize]
-            + direction[2 as i32 as usize];
+        end_points[i as usize][0 as i32 as usize] =
+            start_points[i as usize][0 as i32 as usize] + direction[0 as i32 as usize];
+        end_points[i as usize][1 as i32 as usize] =
+            start_points[i as usize][1 as i32 as usize] + direction[1 as i32 as usize];
+        end_points[i as usize][2 as i32 as usize] =
+            start_points[i as usize][2 as i32 as usize] + direction[2 as i32 as usize];
         i += 1
     }
     crate::src::renderergl1::tr_backend::GL_Bind(
         crate::src::renderergl1::tr_main::tr.whiteImage as *mut crate::tr_common_h::image_s,
     );
-    crate::src::renderergl1::tr_backend::GL_State(
-        (0x2 as i32 | 0x20 as i32) as libc::c_ulong,
-    );
+    crate::src::renderergl1::tr_backend::GL_State((0x2 as i32 | 0x20 as i32) as libc::c_ulong);
     crate::src::sdl::sdl_glimp::qglColor3f.expect("non-null function pointer")(
         1 as i32 as crate::stdlib::GLfloat,
         0 as i32 as crate::stdlib::GLfloat,
@@ -1251,8 +1211,7 @@ unsafe extern "C" fn DoRailCore(
     let mut vbase: i32 = 0;
     let mut t: f32 = len / 256.0f32;
     if crate::src::renderergl1::tr_shade::tess.numVertexes + 4 as i32 >= 1000 as i32
-        || crate::src::renderergl1::tr_shade::tess.numIndexes + 6 as i32
-            >= 6 as i32 * 1000 as i32
+        || crate::src::renderergl1::tr_shade::tess.numIndexes + 6 as i32 >= 6 as i32 * 1000 as i32
     {
         RB_CheckOverflow(4 as i32, 6 as i32);
     }
@@ -1295,16 +1254,13 @@ unsafe extern "C" fn DoRailCore(
     crate::src::renderergl1::tr_shade::tess.numVertexes += 1;
     crate::src::renderergl1::tr_shade::tess.xyz
         [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][0 as i32 as usize] =
-        *start.offset(0 as i32 as isize)
-            + *up.offset(0 as i32 as isize) * spanWidth2;
+        *start.offset(0 as i32 as isize) + *up.offset(0 as i32 as isize) * spanWidth2;
     crate::src::renderergl1::tr_shade::tess.xyz
         [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][1 as i32 as usize] =
-        *start.offset(1 as i32 as isize)
-            + *up.offset(1 as i32 as isize) * spanWidth2;
+        *start.offset(1 as i32 as isize) + *up.offset(1 as i32 as isize) * spanWidth2;
     crate::src::renderergl1::tr_shade::tess.xyz
         [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][2 as i32 as usize] =
-        *start.offset(2 as i32 as isize)
-            + *up.offset(2 as i32 as isize) * spanWidth2;
+        *start.offset(2 as i32 as isize) + *up.offset(2 as i32 as isize) * spanWidth2;
     crate::src::renderergl1::tr_shade::tess.texCoords
         [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][0 as i32 as usize]
         [0 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
@@ -1445,14 +1401,10 @@ unsafe extern "C" fn DoRailDiscs(
     i = 0 as i32;
     while i < 4 as i32 {
         c = crate::stdlib::cos(
-            (45 as i32 + i * 90 as i32) as f64
-                * 3.14159265358979323846f64
-                / 180.0f32 as f64,
+            (45 as i32 + i * 90 as i32) as f64 * 3.14159265358979323846f64 / 180.0f32 as f64,
         ) as f32;
         s = crate::stdlib::sin(
-            (45 as i32 + i * 90 as i32) as f64
-                * 3.14159265358979323846f64
-                / 180.0f32 as f64,
+            (45 as i32 + i * 90 as i32) as f64 * 3.14159265358979323846f64 / 180.0f32 as f64,
         ) as f32;
         v[0 as i32 as usize] = (*right.offset(0 as i32 as isize) * c
             + *up.offset(0 as i32 as isize) * s)
@@ -1486,8 +1438,7 @@ unsafe extern "C" fn DoRailDiscs(
     i = 0 as i32;
     while i < numSegs {
         let mut j: i32 = 0;
-        if crate::src::renderergl1::tr_shade::tess.numVertexes + 4 as i32
-            >= 1000 as i32
+        if crate::src::renderergl1::tr_shade::tess.numVertexes + 4 as i32 >= 1000 as i32
             || crate::src::renderergl1::tr_shade::tess.numIndexes + 6 as i32
                 >= 6 as i32 * 1000 as i32
         {
@@ -1496,41 +1447,36 @@ unsafe extern "C" fn DoRailDiscs(
         j = 0 as i32;
         while j < 4 as i32 {
             crate::src::renderergl1::tr_shade::tess.xyz
-                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize]
-                [0 as i32 as usize] = pos[j as usize][0 as i32 as usize];
+                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][0 as i32 as usize] =
+                pos[j as usize][0 as i32 as usize];
             crate::src::renderergl1::tr_shade::tess.xyz
-                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize]
-                [1 as i32 as usize] = pos[j as usize][1 as i32 as usize];
+                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][1 as i32 as usize] =
+                pos[j as usize][1 as i32 as usize];
             crate::src::renderergl1::tr_shade::tess.xyz
-                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize]
-                [2 as i32 as usize] = pos[j as usize][2 as i32 as usize];
+                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][2 as i32 as usize] =
+                pos[j as usize][2 as i32 as usize];
             crate::src::renderergl1::tr_shade::tess.texCoords
-                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize]
-                [0 as i32 as usize][0 as i32 as usize] =
-                (j < 2 as i32) as i32 as crate::src::qcommon::q_shared::vec_t;
+                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][0 as i32 as usize]
+                [0 as i32 as usize] = (j < 2 as i32) as i32 as crate::src::qcommon::q_shared::vec_t;
             crate::src::renderergl1::tr_shade::tess.texCoords
-                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize]
-                [0 as i32 as usize][1 as i32 as usize] =
-                (j != 0 && j != 3 as i32) as i32
-                    as crate::src::qcommon::q_shared::vec_t;
+                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][0 as i32 as usize]
+                [1 as i32 as usize] =
+                (j != 0 && j != 3 as i32) as i32 as crate::src::qcommon::q_shared::vec_t;
             crate::src::renderergl1::tr_shade::tess.vertexColors
-                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize]
-                [0 as i32 as usize] = (*crate::src::renderergl1::tr_backend::backEnd
-                .currentEntity)
-                .e
-                .shaderRGBA[0 as i32 as usize];
+                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][0 as i32 as usize] =
+                (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+                    .e
+                    .shaderRGBA[0 as i32 as usize];
             crate::src::renderergl1::tr_shade::tess.vertexColors
-                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize]
-                [1 as i32 as usize] = (*crate::src::renderergl1::tr_backend::backEnd
-                .currentEntity)
-                .e
-                .shaderRGBA[1 as i32 as usize];
+                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][1 as i32 as usize] =
+                (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+                    .e
+                    .shaderRGBA[1 as i32 as usize];
             crate::src::renderergl1::tr_shade::tess.vertexColors
-                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize]
-                [2 as i32 as usize] = (*crate::src::renderergl1::tr_backend::backEnd
-                .currentEntity)
-                .e
-                .shaderRGBA[2 as i32 as usize];
+                [crate::src::renderergl1::tr_shade::tess.numVertexes as usize][2 as i32 as usize] =
+                (*crate::src::renderergl1::tr_backend::backEnd.currentEntity)
+                    .e
+                    .shaderRGBA[2 as i32 as usize];
             crate::src::renderergl1::tr_shade::tess.numVertexes += 1;
             pos[j as usize][0 as i32 as usize] =
                 pos[j as usize][0 as i32 as usize] + *dir.offset(0 as i32 as isize);
@@ -1544,38 +1490,38 @@ unsafe extern "C" fn DoRailDiscs(
         crate::src::renderergl1::tr_shade::tess.numIndexes =
             crate::src::renderergl1::tr_shade::tess.numIndexes + 1;
         crate::src::renderergl1::tr_shade::tess.indexes[fresh12 as usize] =
-            (crate::src::renderergl1::tr_shade::tess.numVertexes - 4 as i32
-                + 0 as i32) as crate::tr_local_h::glIndex_t;
+            (crate::src::renderergl1::tr_shade::tess.numVertexes - 4 as i32 + 0 as i32)
+                as crate::tr_local_h::glIndex_t;
         let fresh13 = crate::src::renderergl1::tr_shade::tess.numIndexes;
         crate::src::renderergl1::tr_shade::tess.numIndexes =
             crate::src::renderergl1::tr_shade::tess.numIndexes + 1;
         crate::src::renderergl1::tr_shade::tess.indexes[fresh13 as usize] =
-            (crate::src::renderergl1::tr_shade::tess.numVertexes - 4 as i32
-                + 1 as i32) as crate::tr_local_h::glIndex_t;
+            (crate::src::renderergl1::tr_shade::tess.numVertexes - 4 as i32 + 1 as i32)
+                as crate::tr_local_h::glIndex_t;
         let fresh14 = crate::src::renderergl1::tr_shade::tess.numIndexes;
         crate::src::renderergl1::tr_shade::tess.numIndexes =
             crate::src::renderergl1::tr_shade::tess.numIndexes + 1;
         crate::src::renderergl1::tr_shade::tess.indexes[fresh14 as usize] =
-            (crate::src::renderergl1::tr_shade::tess.numVertexes - 4 as i32
-                + 3 as i32) as crate::tr_local_h::glIndex_t;
+            (crate::src::renderergl1::tr_shade::tess.numVertexes - 4 as i32 + 3 as i32)
+                as crate::tr_local_h::glIndex_t;
         let fresh15 = crate::src::renderergl1::tr_shade::tess.numIndexes;
         crate::src::renderergl1::tr_shade::tess.numIndexes =
             crate::src::renderergl1::tr_shade::tess.numIndexes + 1;
         crate::src::renderergl1::tr_shade::tess.indexes[fresh15 as usize] =
-            (crate::src::renderergl1::tr_shade::tess.numVertexes - 4 as i32
-                + 3 as i32) as crate::tr_local_h::glIndex_t;
+            (crate::src::renderergl1::tr_shade::tess.numVertexes - 4 as i32 + 3 as i32)
+                as crate::tr_local_h::glIndex_t;
         let fresh16 = crate::src::renderergl1::tr_shade::tess.numIndexes;
         crate::src::renderergl1::tr_shade::tess.numIndexes =
             crate::src::renderergl1::tr_shade::tess.numIndexes + 1;
         crate::src::renderergl1::tr_shade::tess.indexes[fresh16 as usize] =
-            (crate::src::renderergl1::tr_shade::tess.numVertexes - 4 as i32
-                + 1 as i32) as crate::tr_local_h::glIndex_t;
+            (crate::src::renderergl1::tr_shade::tess.numVertexes - 4 as i32 + 1 as i32)
+                as crate::tr_local_h::glIndex_t;
         let fresh17 = crate::src::renderergl1::tr_shade::tess.numIndexes;
         crate::src::renderergl1::tr_shade::tess.numIndexes =
             crate::src::renderergl1::tr_shade::tess.numIndexes + 1;
         crate::src::renderergl1::tr_shade::tess.indexes[fresh17 as usize] =
-            (crate::src::renderergl1::tr_shade::tess.numVertexes - 4 as i32
-                + 2 as i32) as crate::tr_local_h::glIndex_t;
+            (crate::src::renderergl1::tr_shade::tess.numVertexes - 4 as i32 + 2 as i32)
+                as crate::tr_local_h::glIndex_t;
         i += 1
     }
 }
@@ -1600,30 +1546,25 @@ unsafe extern "C" fn RB_SurfaceRailRings() {
     end[1 as i32 as usize] = (*e).origin[1 as i32 as usize];
     end[2 as i32 as usize] = (*e).origin[2 as i32 as usize];
     // compute variables
-    vec[0 as i32 as usize] =
-        end[0 as i32 as usize] - start[0 as i32 as usize];
-    vec[1 as i32 as usize] =
-        end[1 as i32 as usize] - start[1 as i32 as usize];
-    vec[2 as i32 as usize] =
-        end[2 as i32 as usize] - start[2 as i32 as usize];
+    vec[0 as i32 as usize] = end[0 as i32 as usize] - start[0 as i32 as usize];
+    vec[1 as i32 as usize] = end[1 as i32 as usize] - start[1 as i32 as usize];
+    vec[2 as i32 as usize] = end[2 as i32 as usize] - start[2 as i32 as usize];
     len = crate::src::qcommon::q_math::VectorNormalize(vec.as_mut_ptr()) as i32;
     crate::src::qcommon::q_math::MakeNormalVectors(
         vec.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
         right.as_mut_ptr(),
         up.as_mut_ptr(),
     );
-    numSegs = (len as f32
-        / (*crate::src::renderergl1::tr_init::r_railSegmentLength).value)
-        as i32;
+    numSegs = (len as f32 / (*crate::src::renderergl1::tr_init::r_railSegmentLength).value) as i32;
     if numSegs <= 0 as i32 {
         numSegs = 1 as i32
     }
-    vec[0 as i32 as usize] = vec[0 as i32 as usize]
-        * (*crate::src::renderergl1::tr_init::r_railSegmentLength).value;
-    vec[1 as i32 as usize] = vec[1 as i32 as usize]
-        * (*crate::src::renderergl1::tr_init::r_railSegmentLength).value;
-    vec[2 as i32 as usize] = vec[2 as i32 as usize]
-        * (*crate::src::renderergl1::tr_init::r_railSegmentLength).value;
+    vec[0 as i32 as usize] =
+        vec[0 as i32 as usize] * (*crate::src::renderergl1::tr_init::r_railSegmentLength).value;
+    vec[1 as i32 as usize] =
+        vec[1 as i32 as usize] * (*crate::src::renderergl1::tr_init::r_railSegmentLength).value;
+    vec[2 as i32 as usize] =
+        vec[2 as i32 as usize] * (*crate::src::renderergl1::tr_init::r_railSegmentLength).value;
     DoRailDiscs(
         numSegs,
         start.as_mut_ptr() as *const crate::src::qcommon::q_shared::vec_t,
@@ -1652,12 +1593,9 @@ unsafe extern "C" fn RB_SurfaceRailCore() {
     end[0 as i32 as usize] = (*e).origin[0 as i32 as usize];
     end[1 as i32 as usize] = (*e).origin[1 as i32 as usize];
     end[2 as i32 as usize] = (*e).origin[2 as i32 as usize];
-    vec[0 as i32 as usize] =
-        end[0 as i32 as usize] - start[0 as i32 as usize];
-    vec[1 as i32 as usize] =
-        end[1 as i32 as usize] - start[1 as i32 as usize];
-    vec[2 as i32 as usize] =
-        end[2 as i32 as usize] - start[2 as i32 as usize];
+    vec[0 as i32 as usize] = end[0 as i32 as usize] - start[0 as i32 as usize];
+    vec[1 as i32 as usize] = end[1 as i32 as usize] - start[1 as i32 as usize];
+    vec[2 as i32 as usize] = end[2 as i32 as usize] - start[2 as i32 as usize];
     len = crate::src::qcommon::q_math::VectorNormalize(vec.as_mut_ptr()) as i32;
     // compute side vector
     v1[0 as i32 as usize] = start[0 as i32 as usize]
@@ -1728,12 +1666,9 @@ unsafe extern "C" fn RB_SurfaceLightningBolt() {
     start[1 as i32 as usize] = (*e).origin[1 as i32 as usize];
     start[2 as i32 as usize] = (*e).origin[2 as i32 as usize];
     // compute variables
-    vec[0 as i32 as usize] =
-        end[0 as i32 as usize] - start[0 as i32 as usize];
-    vec[1 as i32 as usize] =
-        end[1 as i32 as usize] - start[1 as i32 as usize];
-    vec[2 as i32 as usize] =
-        end[2 as i32 as usize] - start[2 as i32 as usize];
+    vec[0 as i32 as usize] = end[0 as i32 as usize] - start[0 as i32 as usize];
+    vec[1 as i32 as usize] = end[1 as i32 as usize] - start[1 as i32 as usize];
+    vec[2 as i32 as usize] = end[2 as i32 as usize] - start[2 as i32 as usize];
     len = crate::src::qcommon::q_math::VectorNormalize(vec.as_mut_ptr()) as i32;
     // compute side vector
     v1[0 as i32 as usize] = start[0 as i32 as usize]
@@ -2287,8 +2222,7 @@ unsafe extern "C" fn LerpMeshVertexes_scalar(
                 * 4 as i32) as isize,
         );
     newNormals = newXyz.offset(3 as i32 as isize);
-    newXyzScale = (1.0f64 / 64 as i32 as f64
-        * (1.0f64 - backlerp as f64)) as f32;
+    newXyzScale = (1.0f64 / 64 as i32 as f64 * (1.0f64 - backlerp as f64)) as f32;
     newNormalScale = (1.0f64 - backlerp as f64) as f32;
     numVerts = (*surf).numVerts;
     if backlerp == 0 as i32 as f32 {
@@ -2298,37 +2232,28 @@ unsafe extern "C" fn LerpMeshVertexes_scalar(
         vertNum = 0 as i32;
         while vertNum < numVerts {
             *outXyz.offset(0 as i32 as isize) =
-                *newXyz.offset(0 as i32 as isize) as i32 as f32
-                    * newXyzScale;
+                *newXyz.offset(0 as i32 as isize) as i32 as f32 * newXyzScale;
             *outXyz.offset(1 as i32 as isize) =
-                *newXyz.offset(1 as i32 as isize) as i32 as f32
-                    * newXyzScale;
+                *newXyz.offset(1 as i32 as isize) as i32 as f32 * newXyzScale;
             *outXyz.offset(2 as i32 as isize) =
-                *newXyz.offset(2 as i32 as isize) as i32 as f32
-                    * newXyzScale;
-            lat = (*newNormals.offset(0 as i32 as isize) as i32 >> 8 as i32
-                & 0xff as i32) as u32;
-            lng = (*newNormals.offset(0 as i32 as isize) as i32
-                & 0xff as i32) as u32;
+                *newXyz.offset(2 as i32 as isize) as i32 as f32 * newXyzScale;
+            lat = (*newNormals.offset(0 as i32 as isize) as i32 >> 8 as i32 & 0xff as i32) as u32;
+            lng = (*newNormals.offset(0 as i32 as isize) as i32 & 0xff as i32) as u32;
             lat = lat.wrapping_mul((1024 as i32 / 256 as i32) as u32);
             lng = lng.wrapping_mul((1024 as i32 / 256 as i32) as u32);
             // decode X as cos( lat ) * sin( long )
             // decode Y as sin( lat ) * sin( long )
             // decode Z as cos( long )
-            *outNormal.offset(0 as i32 as isize) = crate::src::renderergl1::tr_main::tr
-                .sinTable[(lat
-                .wrapping_add((1024 as i32 / 4 as i32) as u32)
-                & (1024 as i32 - 1 as i32) as u32)
-                as usize]
+            *outNormal.offset(0 as i32 as isize) = crate::src::renderergl1::tr_main::tr.sinTable
+                [(lat.wrapping_add((1024 as i32 / 4 as i32) as u32)
+                    & (1024 as i32 - 1 as i32) as u32) as usize]
                 * crate::src::renderergl1::tr_main::tr.sinTable[lng as usize];
-            *outNormal.offset(1 as i32 as isize) = crate::src::renderergl1::tr_main::tr
-                .sinTable[lat as usize]
+            *outNormal.offset(1 as i32 as isize) = crate::src::renderergl1::tr_main::tr.sinTable
+                [lat as usize]
                 * crate::src::renderergl1::tr_main::tr.sinTable[lng as usize];
-            *outNormal.offset(2 as i32 as isize) = crate::src::renderergl1::tr_main::tr
-                .sinTable[(lng
-                .wrapping_add((1024 as i32 / 4 as i32) as u32)
-                & (1024 as i32 - 1 as i32) as u32)
-                as usize];
+            *outNormal.offset(2 as i32 as isize) = crate::src::renderergl1::tr_main::tr.sinTable
+                [(lng.wrapping_add((1024 as i32 / 4 as i32) as u32)
+                    & (1024 as i32 - 1 as i32) as u32) as usize];
             vertNum += 1;
             newXyz = newXyz.offset(4 as i32 as isize);
             newNormals = newNormals.offset(4 as i32 as isize);
@@ -2349,78 +2274,59 @@ unsafe extern "C" fn LerpMeshVertexes_scalar(
                     * 4 as i32) as isize,
             );
         oldNormals = oldXyz.offset(3 as i32 as isize);
-        oldXyzScale = (1.0f64 / 64 as i32 as f64 * backlerp as f64)
-            as f32;
+        oldXyzScale = (1.0f64 / 64 as i32 as f64 * backlerp as f64) as f32;
         oldNormalScale = backlerp;
         vertNum = 0 as i32;
         while vertNum < numVerts {
             let mut uncompressedOldNormal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
             let mut uncompressedNewNormal: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
             //			VectorNormalize (outNormal);
-            *outXyz.offset(0 as i32 as isize) =
-                *oldXyz.offset(0 as i32 as isize) as i32 as f32
-                    * oldXyzScale
-                    + *newXyz.offset(0 as i32 as isize) as i32 as f32
-                        * newXyzScale;
-            *outXyz.offset(1 as i32 as isize) =
-                *oldXyz.offset(1 as i32 as isize) as i32 as f32
-                    * oldXyzScale
-                    + *newXyz.offset(1 as i32 as isize) as i32 as f32
-                        * newXyzScale;
-            *outXyz.offset(2 as i32 as isize) =
-                *oldXyz.offset(2 as i32 as isize) as i32 as f32
-                    * oldXyzScale
-                    + *newXyz.offset(2 as i32 as isize) as i32 as f32
-                        * newXyzScale;
-            lat = (*newNormals.offset(0 as i32 as isize) as i32 >> 8 as i32
-                & 0xff as i32) as u32;
-            lng = (*newNormals.offset(0 as i32 as isize) as i32
-                & 0xff as i32) as u32;
+            *outXyz.offset(0 as i32 as isize) = *oldXyz.offset(0 as i32 as isize) as i32 as f32
+                * oldXyzScale
+                + *newXyz.offset(0 as i32 as isize) as i32 as f32 * newXyzScale;
+            *outXyz.offset(1 as i32 as isize) = *oldXyz.offset(1 as i32 as isize) as i32 as f32
+                * oldXyzScale
+                + *newXyz.offset(1 as i32 as isize) as i32 as f32 * newXyzScale;
+            *outXyz.offset(2 as i32 as isize) = *oldXyz.offset(2 as i32 as isize) as i32 as f32
+                * oldXyzScale
+                + *newXyz.offset(2 as i32 as isize) as i32 as f32 * newXyzScale;
+            lat = (*newNormals.offset(0 as i32 as isize) as i32 >> 8 as i32 & 0xff as i32) as u32;
+            lng = (*newNormals.offset(0 as i32 as isize) as i32 & 0xff as i32) as u32;
             lat = lat.wrapping_mul(4 as i32 as u32);
             lng = lng.wrapping_mul(4 as i32 as u32);
             uncompressedNewNormal[0 as i32 as usize] = crate::src::renderergl1::tr_main::tr
-                .sinTable[(lat
-                .wrapping_add((1024 as i32 / 4 as i32) as u32)
-                & (1024 as i32 - 1 as i32) as u32)
-                as usize]
+                .sinTable[(lat.wrapping_add((1024 as i32 / 4 as i32) as u32)
+                & (1024 as i32 - 1 as i32) as u32) as usize]
                 * crate::src::renderergl1::tr_main::tr.sinTable[lng as usize];
             uncompressedNewNormal[1 as i32 as usize] = crate::src::renderergl1::tr_main::tr
                 .sinTable[lat as usize]
                 * crate::src::renderergl1::tr_main::tr.sinTable[lng as usize];
             uncompressedNewNormal[2 as i32 as usize] = crate::src::renderergl1::tr_main::tr
-                .sinTable[(lng
-                .wrapping_add((1024 as i32 / 4 as i32) as u32)
-                & (1024 as i32 - 1 as i32) as u32)
-                as usize];
-            lat = (*oldNormals.offset(0 as i32 as isize) as i32 >> 8 as i32
-                & 0xff as i32) as u32;
-            lng = (*oldNormals.offset(0 as i32 as isize) as i32
-                & 0xff as i32) as u32;
+                .sinTable[(lng.wrapping_add((1024 as i32 / 4 as i32) as u32)
+                & (1024 as i32 - 1 as i32) as u32) as usize];
+            lat = (*oldNormals.offset(0 as i32 as isize) as i32 >> 8 as i32 & 0xff as i32) as u32;
+            lng = (*oldNormals.offset(0 as i32 as isize) as i32 & 0xff as i32) as u32;
             lat = lat.wrapping_mul(4 as i32 as u32);
             lng = lng.wrapping_mul(4 as i32 as u32);
             uncompressedOldNormal[0 as i32 as usize] = crate::src::renderergl1::tr_main::tr
-                .sinTable[(lat
-                .wrapping_add((1024 as i32 / 4 as i32) as u32)
-                & (1024 as i32 - 1 as i32) as u32)
-                as usize]
+                .sinTable[(lat.wrapping_add((1024 as i32 / 4 as i32) as u32)
+                & (1024 as i32 - 1 as i32) as u32) as usize]
                 * crate::src::renderergl1::tr_main::tr.sinTable[lng as usize];
             uncompressedOldNormal[1 as i32 as usize] = crate::src::renderergl1::tr_main::tr
                 .sinTable[lat as usize]
                 * crate::src::renderergl1::tr_main::tr.sinTable[lng as usize];
             uncompressedOldNormal[2 as i32 as usize] = crate::src::renderergl1::tr_main::tr
-                .sinTable[(lng
-                .wrapping_add((1024 as i32 / 4 as i32) as u32)
-                & (1024 as i32 - 1 as i32) as u32)
-                as usize];
-            *outNormal.offset(0 as i32 as isize) =
-                uncompressedOldNormal[0 as i32 as usize] * oldNormalScale
-                    + uncompressedNewNormal[0 as i32 as usize] * newNormalScale;
-            *outNormal.offset(1 as i32 as isize) =
-                uncompressedOldNormal[1 as i32 as usize] * oldNormalScale
-                    + uncompressedNewNormal[1 as i32 as usize] * newNormalScale;
-            *outNormal.offset(2 as i32 as isize) =
-                uncompressedOldNormal[2 as i32 as usize] * oldNormalScale
-                    + uncompressedNewNormal[2 as i32 as usize] * newNormalScale;
+                .sinTable[(lng.wrapping_add((1024 as i32 / 4 as i32) as u32)
+                & (1024 as i32 - 1 as i32) as u32) as usize];
+            *outNormal.offset(0 as i32 as isize) = uncompressedOldNormal[0 as i32 as usize]
+                * oldNormalScale
+                + uncompressedNewNormal[0 as i32 as usize] * newNormalScale;
+            *outNormal.offset(1 as i32 as isize) = uncompressedOldNormal[1 as i32 as usize]
+                * oldNormalScale
+                + uncompressedNewNormal[1 as i32 as usize] * newNormalScale;
+            *outNormal.offset(2 as i32 as isize) = uncompressedOldNormal[2 as i32 as usize]
+                * oldNormalScale
+                + uncompressedNewNormal[2 as i32 as usize] * newNormalScale;
             vertNum += 1;
             oldXyz = oldXyz.offset(4 as i32 as isize);
             newXyz = newXyz.offset(4 as i32 as isize);
@@ -2475,16 +2381,11 @@ unsafe extern "C" fn RB_SurfaceMesh(mut surface: *mut crate::qfiles_h::md3Surfac
             .e
             .backlerp
     }
-    if crate::src::renderergl1::tr_shade::tess.numVertexes + (*surface).numVerts
-        >= 1000 as i32
-        || crate::src::renderergl1::tr_shade::tess.numIndexes
-            + (*surface).numTriangles * 3 as i32
+    if crate::src::renderergl1::tr_shade::tess.numVertexes + (*surface).numVerts >= 1000 as i32
+        || crate::src::renderergl1::tr_shade::tess.numIndexes + (*surface).numTriangles * 3 as i32
             >= 6 as i32 * 1000 as i32
     {
-        RB_CheckOverflow(
-            (*surface).numVerts,
-            (*surface).numTriangles * 3 as i32,
-        );
+        RB_CheckOverflow((*surface).numVerts, (*surface).numTriangles * 3 as i32);
     }
     LerpMeshVertexes(surface, backlerp);
     triangles = (surface as *mut crate::src::qcommon::q_shared::byte)
@@ -2504,12 +2405,10 @@ unsafe extern "C" fn RB_SurfaceMesh(mut surface: *mut crate::qfiles_h::md3Surfac
     numVerts = (*surface).numVerts;
     j = 0 as i32;
     while j < numVerts {
-        crate::src::renderergl1::tr_shade::tess.texCoords[(Doug + j) as usize]
-            [0 as i32 as usize][0 as i32 as usize] =
-            *texCoords.offset((j * 2 as i32 + 0 as i32) as isize);
-        crate::src::renderergl1::tr_shade::tess.texCoords[(Doug + j) as usize]
-            [0 as i32 as usize][1 as i32 as usize] =
-            *texCoords.offset((j * 2 as i32 + 1 as i32) as isize);
+        crate::src::renderergl1::tr_shade::tess.texCoords[(Doug + j) as usize][0 as i32 as usize]
+            [0 as i32 as usize] = *texCoords.offset((j * 2 as i32 + 0 as i32) as isize);
+        crate::src::renderergl1::tr_shade::tess.texCoords[(Doug + j) as usize][0 as i32 as usize]
+            [1 as i32 as usize] = *texCoords.offset((j * 2 as i32 + 1 as i32) as isize);
         j += 1
         // FIXME: fill in lightmapST for completeness?
     }
@@ -2531,8 +2430,7 @@ unsafe extern "C" fn RB_SurfaceFace(mut surf: *mut crate::tr_local_h::srfSurface
     let mut Bob: i32 = 0;
     let mut numPoints: i32 = 0;
     let mut dlightBits: i32 = 0;
-    if crate::src::renderergl1::tr_shade::tess.numVertexes + (*surf).numPoints
-        >= 1000 as i32
+    if crate::src::renderergl1::tr_shade::tess.numVertexes + (*surf).numPoints >= 1000 as i32
         || crate::src::renderergl1::tr_shade::tess.numIndexes + (*surf).numIndices
             >= 6 as i32 * 1000 as i32
     {
@@ -2548,8 +2446,7 @@ unsafe extern "C" fn RB_SurfaceFace(mut surf: *mut crate::tr_local_h::srfSurface
         .offset(crate::src::renderergl1::tr_shade::tess.numIndexes as isize);
     i = (*surf).numIndices - 1 as i32;
     while i >= 0 as i32 {
-        *tessIndexes.offset(i as isize) =
-            (*indices.offset(i as isize)).wrapping_add(Bob as u32);
+        *tessIndexes.offset(i as isize) = (*indices.offset(i as isize)).wrapping_add(Bob as u32);
         i -= 1
     }
     crate::src::renderergl1::tr_shade::tess.numIndexes += (*surf).numIndices;
@@ -2559,22 +2456,18 @@ unsafe extern "C" fn RB_SurfaceFace(mut surf: *mut crate::tr_local_h::srfSurface
         i = 0 as i32;
         ndx = crate::src::renderergl1::tr_shade::tess.numVertexes;
         while i < numPoints {
-            crate::src::renderergl1::tr_shade::tess.normal[ndx as usize]
-                [0 as i32 as usize] = *normal.offset(0 as i32 as isize);
-            crate::src::renderergl1::tr_shade::tess.normal[ndx as usize]
-                [1 as i32 as usize] = *normal.offset(1 as i32 as isize);
-            crate::src::renderergl1::tr_shade::tess.normal[ndx as usize]
-                [2 as i32 as usize] = *normal.offset(2 as i32 as isize);
+            crate::src::renderergl1::tr_shade::tess.normal[ndx as usize][0 as i32 as usize] =
+                *normal.offset(0 as i32 as isize);
+            crate::src::renderergl1::tr_shade::tess.normal[ndx as usize][1 as i32 as usize] =
+                *normal.offset(1 as i32 as isize);
+            crate::src::renderergl1::tr_shade::tess.normal[ndx as usize][2 as i32 as usize] =
+                *normal.offset(2 as i32 as isize);
             i += 1;
             ndx += 1
         }
     }
     i = 0 as i32;
-    v = (*(*surf)
-        .points
-        .as_mut_ptr()
-        .offset(0 as i32 as isize))
-    .as_mut_ptr();
+    v = (*(*surf).points.as_mut_ptr().offset(0 as i32 as isize)).as_mut_ptr();
     ndx = crate::src::renderergl1::tr_shade::tess.numVertexes;
     while i < numPoints {
         crate::src::renderergl1::tr_shade::tess.xyz[ndx as usize][0 as i32 as usize] =
@@ -2583,23 +2476,18 @@ unsafe extern "C" fn RB_SurfaceFace(mut surf: *mut crate::tr_local_h::srfSurface
             *v.offset(1 as i32 as isize);
         crate::src::renderergl1::tr_shade::tess.xyz[ndx as usize][2 as i32 as usize] =
             *v.offset(2 as i32 as isize);
-        crate::src::renderergl1::tr_shade::tess.texCoords[ndx as usize]
-            [0 as i32 as usize][0 as i32 as usize] =
-            *v.offset(3 as i32 as isize);
-        crate::src::renderergl1::tr_shade::tess.texCoords[ndx as usize]
-            [0 as i32 as usize][1 as i32 as usize] =
-            *v.offset(4 as i32 as isize);
-        crate::src::renderergl1::tr_shade::tess.texCoords[ndx as usize]
-            [1 as i32 as usize][0 as i32 as usize] =
-            *v.offset(5 as i32 as isize);
-        crate::src::renderergl1::tr_shade::tess.texCoords[ndx as usize]
-            [1 as i32 as usize][1 as i32 as usize] =
-            *v.offset(6 as i32 as isize);
+        crate::src::renderergl1::tr_shade::tess.texCoords[ndx as usize][0 as i32 as usize]
+            [0 as i32 as usize] = *v.offset(3 as i32 as isize);
+        crate::src::renderergl1::tr_shade::tess.texCoords[ndx as usize][0 as i32 as usize]
+            [1 as i32 as usize] = *v.offset(4 as i32 as isize);
+        crate::src::renderergl1::tr_shade::tess.texCoords[ndx as usize][1 as i32 as usize]
+            [0 as i32 as usize] = *v.offset(5 as i32 as isize);
+        crate::src::renderergl1::tr_shade::tess.texCoords[ndx as usize][1 as i32 as usize]
+            [1 as i32 as usize] = *v.offset(6 as i32 as isize);
         *(&mut *crate::src::renderergl1::tr_shade::tess
             .vertexColors
             .as_mut_ptr()
-            .offset(ndx as isize) as *mut crate::tr_local_h::color4ub_t
-            as *mut u32) =
+            .offset(ndx as isize) as *mut crate::tr_local_h::color4ub_t as *mut u32) =
             *(&mut *v.offset(7 as i32 as isize) as *mut f32 as *mut u32);
         crate::src::renderergl1::tr_shade::tess.vertexDlightBits[ndx as usize] = dlightBits;
         i += 1;
@@ -2616,9 +2504,7 @@ unsafe extern "C" fn LodErrorForVolume(
     let mut world: crate::src::qcommon::q_shared::vec3_t = [0.; 3];
     let mut d: f32 = 0.;
     // never let it go negative
-    if (*crate::src::renderergl1::tr_init::r_lodCurveError).value
-        < 0 as i32 as f32
-    {
+    if (*crate::src::renderergl1::tr_init::r_lodCurveError).value < 0 as i32 as f32 {
         return 0 as i32 as f32;
     }
     world[0 as i32 as usize] = *local.offset(0 as i32 as isize)
@@ -2757,10 +2643,8 @@ unsafe extern "C" fn RB_SurfaceGrid(mut cv: *mut crate::tr_local_h::srfGridMesh_
         loop
         // see how many rows of both verts and indexes we can add without overflowing
         {
-            vrows = (1000 as i32 - crate::src::renderergl1::tr_shade::tess.numVertexes)
-                / lodWidth;
-            irows = (6 as i32 * 1000 as i32
-                - crate::src::renderergl1::tr_shade::tess.numIndexes)
+            vrows = (1000 as i32 - crate::src::renderergl1::tr_shade::tess.numVertexes) / lodWidth;
+            irows = (6 as i32 * 1000 as i32 - crate::src::renderergl1::tr_shade::tess.numIndexes)
                 / (lodWidth * 6 as i32);
             // if we don't have enough space for at least one strip, flush the buffer
             if !(vrows < 2 as i32 || irows < 1 as i32) {
@@ -2809,17 +2693,12 @@ unsafe extern "C" fn RB_SurfaceGrid(mut cv: *mut crate::tr_local_h::srfGridMesh_
                 *xyz.offset(2 as i32 as isize) = (*dv).xyz[2 as i32 as usize];
                 *texCoords.offset(0 as i32 as isize) = (*dv).st[0 as i32 as usize];
                 *texCoords.offset(1 as i32 as isize) = (*dv).st[1 as i32 as usize];
-                *texCoords.offset(2 as i32 as isize) =
-                    (*dv).lightmap[0 as i32 as usize];
-                *texCoords.offset(3 as i32 as isize) =
-                    (*dv).lightmap[1 as i32 as usize];
+                *texCoords.offset(2 as i32 as isize) = (*dv).lightmap[0 as i32 as usize];
+                *texCoords.offset(3 as i32 as isize) = (*dv).lightmap[1 as i32 as usize];
                 if needsNormal as u64 != 0 {
-                    *normal.offset(0 as i32 as isize) =
-                        (*dv).normal[0 as i32 as usize];
-                    *normal.offset(1 as i32 as isize) =
-                        (*dv).normal[1 as i32 as usize];
-                    *normal.offset(2 as i32 as isize) =
-                        (*dv).normal[2 as i32 as usize]
+                    *normal.offset(0 as i32 as isize) = (*dv).normal[0 as i32 as usize];
+                    *normal.offset(1 as i32 as isize) = (*dv).normal[1 as i32 as usize];
+                    *normal.offset(2 as i32 as isize) = (*dv).normal[2 as i32 as usize]
                 }
                 *(color as *mut u32) = *((*dv).color.as_mut_ptr() as *mut u32);
                 let fresh19 = vDlightBits;
@@ -2855,16 +2734,16 @@ unsafe extern "C" fn RB_SurfaceGrid(mut cv: *mut crate::tr_local_h::srfGridMesh_
                 v4 = v3 + 1 as i32;
                 crate::src::renderergl1::tr_shade::tess.indexes[numIndexes as usize] =
                     v2 as crate::tr_local_h::glIndex_t;
-                crate::src::renderergl1::tr_shade::tess.indexes
-                    [(numIndexes + 1 as i32) as usize] = v3 as crate::tr_local_h::glIndex_t;
-                crate::src::renderergl1::tr_shade::tess.indexes
-                    [(numIndexes + 2 as i32) as usize] = v1 as crate::tr_local_h::glIndex_t;
-                crate::src::renderergl1::tr_shade::tess.indexes
-                    [(numIndexes + 3 as i32) as usize] = v1 as crate::tr_local_h::glIndex_t;
-                crate::src::renderergl1::tr_shade::tess.indexes
-                    [(numIndexes + 4 as i32) as usize] = v3 as crate::tr_local_h::glIndex_t;
-                crate::src::renderergl1::tr_shade::tess.indexes
-                    [(numIndexes + 5 as i32) as usize] = v4 as crate::tr_local_h::glIndex_t;
+                crate::src::renderergl1::tr_shade::tess.indexes[(numIndexes + 1 as i32) as usize] =
+                    v3 as crate::tr_local_h::glIndex_t;
+                crate::src::renderergl1::tr_shade::tess.indexes[(numIndexes + 2 as i32) as usize] =
+                    v1 as crate::tr_local_h::glIndex_t;
+                crate::src::renderergl1::tr_shade::tess.indexes[(numIndexes + 3 as i32) as usize] =
+                    v1 as crate::tr_local_h::glIndex_t;
+                crate::src::renderergl1::tr_shade::tess.indexes[(numIndexes + 4 as i32) as usize] =
+                    v3 as crate::tr_local_h::glIndex_t;
+                crate::src::renderergl1::tr_shade::tess.indexes[(numIndexes + 5 as i32) as usize] =
+                    v4 as crate::tr_local_h::glIndex_t;
                 numIndexes += 6 as i32;
                 j += 1
             }

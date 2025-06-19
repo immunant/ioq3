@@ -274,8 +274,7 @@ unsafe extern "C" fn floor1_unpack(
                         (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                             opb as *mut crate::ogg_h::oggpack_buffer,
                             8 as i32,
-                        ) - 1 as i32 as libc::c_long)
-                            as i32;
+                        ) - 1 as i32 as libc::c_long) as i32;
                     if (*info).class_subbook[j as usize][k as usize] < -(1 as i32)
                         || (*info).class_subbook[j as usize][k as usize] >= (*ci).books
                     {
@@ -293,8 +292,7 @@ unsafe extern "C" fn floor1_unpack(
                     (*info).mult = (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                         opb as *mut crate::ogg_h::oggpack_buffer,
                         2 as i32,
-                    ) + 1 as i32 as libc::c_long)
-                        as i32; /* only 1,2,3,4 legal now */
+                    ) + 1 as i32 as libc::c_long) as i32; /* only 1,2,3,4 legal now */
                     rangebits = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                         opb as *mut crate::ogg_h::oggpack_buffer,
                         4 as i32,
@@ -318,8 +316,7 @@ unsafe extern "C" fn floor1_unpack(
                                         opb as *mut crate::ogg_h::oggpack_buffer,
                                         rangebits,
                                     ) as i32;
-                                let mut t: i32 =
-                                    (*info).postlist[(k + 2 as i32) as usize];
+                                let mut t: i32 = (*info).postlist[(k + 2 as i32) as usize];
                                 if t < 0 as i32 || t >= (1 as i32) << rangebits {
                                     current_block = 4682380797242156875;
                                     break 's_130;
@@ -332,12 +329,10 @@ unsafe extern "C" fn floor1_unpack(
                             4682380797242156875 => {}
                             _ => {
                                 (*info).postlist[0 as i32 as usize] = 0 as i32;
-                                (*info).postlist[1 as i32 as usize] =
-                                    (1 as i32) << rangebits;
+                                (*info).postlist[1 as i32 as usize] = (1 as i32) << rangebits;
                                 /* don't allow repeated values in post list as they'd result in
                                 zero-length segments */
-                                let mut sortpointer: [*mut i32; 65] =
-                                    [0 as *mut i32; 65];
+                                let mut sortpointer: [*mut i32; 65] = [0 as *mut i32; 65];
                                 j = 0 as i32;
                                 while j < count + 2 as i32 {
                                     sortpointer[j as usize] =
@@ -427,13 +422,7 @@ unsafe extern "C" fn floor1_look(
         sortpointer.as_mut_ptr() as *mut libc::c_void,
         n as crate::stddef_h::size_t,
         ::std::mem::size_of::<*mut i32>() as libc::c_ulong,
-        Some(
-            icomp
-                as unsafe extern "C" fn(
-                    _: *const libc::c_void,
-                    _: *const libc::c_void,
-                ) -> i32,
-        ),
+        Some(icomp as unsafe extern "C" fn(_: *const libc::c_void, _: *const libc::c_void) -> i32),
     );
     /* points from sort order back to range number */
     i = 0 as i32;
@@ -969,24 +958,16 @@ unsafe extern "C" fn fit_line(
     let mut x1: i32 = (*a.offset((fits - 1 as i32) as isize)).x1;
     i = 0 as i32;
     while i < fits {
-        let mut weight: f64 = (((*a.offset(i as isize)).bn + (*a.offset(i as isize)).an)
-            as f32
+        let mut weight: f64 = (((*a.offset(i as isize)).bn + (*a.offset(i as isize)).an) as f32
             * (*info).twofitweight
-            / ((*a.offset(i as isize)).an + 1 as i32) as f32)
-            as f64
+            / ((*a.offset(i as isize)).an + 1 as i32) as f32) as f64
             + 1.0f64;
-        xb += (*a.offset(i as isize)).xb as f64
-            + (*a.offset(i as isize)).xa as f64 * weight;
-        yb += (*a.offset(i as isize)).yb as f64
-            + (*a.offset(i as isize)).ya as f64 * weight;
-        x2b += (*a.offset(i as isize)).x2b as f64
-            + (*a.offset(i as isize)).x2a as f64 * weight;
-        _y2b += (*a.offset(i as isize)).y2b as f64
-            + (*a.offset(i as isize)).y2a as f64 * weight;
-        xyb += (*a.offset(i as isize)).xyb as f64
-            + (*a.offset(i as isize)).xya as f64 * weight;
-        bn += (*a.offset(i as isize)).bn as f64
-            + (*a.offset(i as isize)).an as f64 * weight;
+        xb += (*a.offset(i as isize)).xb as f64 + (*a.offset(i as isize)).xa as f64 * weight;
+        yb += (*a.offset(i as isize)).yb as f64 + (*a.offset(i as isize)).ya as f64 * weight;
+        x2b += (*a.offset(i as isize)).x2b as f64 + (*a.offset(i as isize)).x2a as f64 * weight;
+        _y2b += (*a.offset(i as isize)).y2b as f64 + (*a.offset(i as isize)).y2a as f64 * weight;
+        xyb += (*a.offset(i as isize)).xyb as f64 + (*a.offset(i as isize)).xya as f64 * weight;
+        bn += (*a.offset(i as isize)).bn as f64 + (*a.offset(i as isize)).an as f64 * weight;
         i += 1
     }
     if *y0 >= 0 as i32 {
@@ -1106,11 +1087,7 @@ unsafe extern "C" fn inspect_error(
     return 0 as i32;
 }
 
-unsafe extern "C" fn post_Y(
-    mut A: *mut i32,
-    mut B: *mut i32,
-    mut pos: i32,
-) -> i32 {
+unsafe extern "C" fn post_Y(mut A: *mut i32, mut B: *mut i32, mut pos: i32) -> i32 {
     if *A.offset(pos as isize) < 0 as i32 {
         return *B.offset(pos as isize);
     }
@@ -1240,10 +1217,8 @@ pub unsafe extern "C" fn floor1_fit(
                 /* A note: we want to bound/minimize *local*, not global, error */
                 let mut lx: i32 = (*info).postlist[ln as usize];
                 let mut hx: i32 = (*info).postlist[hn as usize];
-                let mut ly: i32 =
-                    post_Y(fit_valueA.as_mut_ptr(), fit_valueB.as_mut_ptr(), ln);
-                let mut hy: i32 =
-                    post_Y(fit_valueA.as_mut_ptr(), fit_valueB.as_mut_ptr(), hn);
+                let mut ly: i32 = post_Y(fit_valueA.as_mut_ptr(), fit_valueB.as_mut_ptr(), ln);
+                let mut hy: i32 = post_Y(fit_valueA.as_mut_ptr(), fit_valueB.as_mut_ptr(), hn);
                 if ly == -(1 as i32) || hy == -(1 as i32) {
                     ::libc::exit(1 as i32);
                 }
@@ -1319,39 +1294,26 @@ pub unsafe extern "C" fn floor1_fit(
         }
         output = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut crate::codec_h::vorbis_block,
-            (::std::mem::size_of::<i32>() as libc::c_ulong)
-                .wrapping_mul(posts as libc::c_ulong) as libc::c_long,
+            (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(posts as libc::c_ulong)
+                as libc::c_long,
         ) as *mut i32;
-        *output.offset(0 as i32 as isize) = post_Y(
-            fit_valueA.as_mut_ptr(),
-            fit_valueB.as_mut_ptr(),
-            0 as i32,
-        );
-        *output.offset(1 as i32 as isize) = post_Y(
-            fit_valueA.as_mut_ptr(),
-            fit_valueB.as_mut_ptr(),
-            1 as i32,
-        );
+        *output.offset(0 as i32 as isize) =
+            post_Y(fit_valueA.as_mut_ptr(), fit_valueB.as_mut_ptr(), 0 as i32);
+        *output.offset(1 as i32 as isize) =
+            post_Y(fit_valueA.as_mut_ptr(), fit_valueB.as_mut_ptr(), 1 as i32);
         /* fill in posts marked as not using a fit; we will zero
         back out to 'unused' when encoding them so long as curve
         interpolation doesn't force them into use */
         i = 2 as i32 as libc::c_long;
         while i < posts {
-            let mut ln_0: i32 =
-                (*look).loneighbor[(i - 2 as i32 as libc::c_long) as usize];
-            let mut hn_0: i32 =
-                (*look).hineighbor[(i - 2 as i32 as libc::c_long) as usize];
+            let mut ln_0: i32 = (*look).loneighbor[(i - 2 as i32 as libc::c_long) as usize];
+            let mut hn_0: i32 = (*look).hineighbor[(i - 2 as i32 as libc::c_long) as usize];
             let mut x0: i32 = (*info).postlist[ln_0 as usize];
             let mut x1: i32 = (*info).postlist[hn_0 as usize];
             let mut y0_0: i32 = *output.offset(ln_0 as isize);
             let mut y1_0: i32 = *output.offset(hn_0 as isize);
-            let mut predicted: i32 =
-                render_point(x0, x1, y0_0, y1_0, (*info).postlist[i as usize]);
-            let mut vx: i32 = post_Y(
-                fit_valueA.as_mut_ptr(),
-                fit_valueB.as_mut_ptr(),
-                i as i32,
-            );
+            let mut predicted: i32 = render_point(x0, x1, y0_0, y1_0, (*info).postlist[i as usize]);
+            let mut vx: i32 = post_Y(fit_valueA.as_mut_ptr(), fit_valueB.as_mut_ptr(), i as i32);
             if vx >= 0 as i32 && predicted != vx {
                 *output.offset(i as isize) = vx
             } else {
@@ -1377,8 +1339,8 @@ pub unsafe extern "C" fn floor1_interpolate_fit(
     if !A.is_null() && !B.is_null() {
         output = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut crate::codec_h::vorbis_block,
-            (::std::mem::size_of::<i32>() as libc::c_ulong)
-                .wrapping_mul(posts as libc::c_ulong) as libc::c_long,
+            (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(posts as libc::c_ulong)
+                as libc::c_long,
         ) as *mut i32;
         /* overly simpleminded--- look again post 1.2 */
         i = 0 as i32 as libc::c_long;
@@ -1473,18 +1435,15 @@ pub unsafe extern "C" fn floor1_encode(
         out[1 as i32 as usize] = *post.offset(1 as i32 as isize);
         /* find prediction values for each post and subtract them */
         i = 2 as i32 as libc::c_long; /* in case there was roundoff jitter
-                                              in interpolation */
+                                      in interpolation */
         while i < posts {
-            let mut ln: i32 =
-                (*look).loneighbor[(i - 2 as i32 as libc::c_long) as usize];
-            let mut hn: i32 =
-                (*look).hineighbor[(i - 2 as i32 as libc::c_long) as usize];
+            let mut ln: i32 = (*look).loneighbor[(i - 2 as i32 as libc::c_long) as usize];
+            let mut hn: i32 = (*look).hineighbor[(i - 2 as i32 as libc::c_long) as usize];
             let mut x0: i32 = (*info).postlist[ln as usize];
             let mut x1: i32 = (*info).postlist[hn as usize];
             let mut y0: i32 = *post.offset(ln as isize);
             let mut y1: i32 = *post.offset(hn as isize);
-            let mut predicted: i32 =
-                render_point(x0, x1, y0, y1, (*info).postlist[i as usize]);
+            let mut predicted: i32 = render_point(x0, x1, y0, y1, (*info).postlist[i as usize]);
             if *post.offset(i as isize) & 0x8000 as i32 != 0
                 || predicted == *post.offset(i as isize)
             {
@@ -1554,14 +1513,7 @@ pub unsafe extern "C" fn floor1_encode(
             let mut csubbits: i32 = (*info).class_subs[class as usize];
             let mut csub: i32 = (1 as i32) << csubbits;
             let mut bookas: [i32; 8] = [
-                0 as i32,
-                0 as i32,
-                0 as i32,
-                0 as i32,
-                0 as i32,
-                0 as i32,
-                0 as i32,
-                0 as i32,
+                0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32,
             ];
             let mut cval: i32 = 0 as i32;
             let mut cshift: i32 = 0 as i32;
@@ -1570,21 +1522,13 @@ pub unsafe extern "C" fn floor1_encode(
             /* generate the partition's first stage cascade value */
             if csubbits != 0 {
                 let mut maxval: [i32; 8] = [
-                    0 as i32,
-                    0 as i32,
-                    0 as i32,
-                    0 as i32,
-                    0 as i32,
-                    0 as i32,
-                    0 as i32,
-                    0 as i32,
+                    0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32, 0 as i32,
                 ]; /* gcc's static analysis
                    issues a warning without
                    initialization */
                 k = 0 as i32;
                 while k < csub {
-                    let mut booknum: i32 =
-                        (*info).class_subbook[class as usize][k as usize];
+                    let mut booknum: i32 = (*info).class_subbook[class as usize][k as usize];
                     if booknum < 0 as i32 {
                         maxval[k as usize] = 1 as i32
                     } else {
@@ -1649,8 +1593,7 @@ pub unsafe extern "C" fn floor1_encode(
         let mut hx: i32 = 0 as i32; /* be certain */
         let mut lx: i32 = 0 as i32;
         let mut ly: i32 = *post.offset(0 as i32 as isize) * (*info).mult;
-        let mut n: i32 =
-            ((*ci).blocksizes[(*vb).W as usize] / 2 as i32 as libc::c_long) as i32;
+        let mut n: i32 = ((*ci).blocksizes[(*vb).W as usize] / 2 as i32 as libc::c_long) as i32;
         j = 1 as i32 as libc::c_long;
         while j < (*look).posts as libc::c_long {
             let mut current: i32 = (*look).forward_index[j as usize];
@@ -1706,27 +1649,24 @@ unsafe extern "C" fn floor1_inverse1(
         1 as i32,
     ) == 1 as i32 as libc::c_long
     {
-        let mut fit_value: *mut i32 =
-            crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
-                vb as *mut crate::codec_h::vorbis_block,
-                ((*look).posts as libc::c_ulong)
-                    .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
-                    as libc::c_long,
-            ) as *mut i32;
-        *fit_value.offset(0 as i32 as isize) =
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
-                crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-                    ((*look).quant_q - 1 as i32) as crate::config_types_h::ogg_uint32_t,
-                ),
-            ) as i32;
-        *fit_value.offset(1 as i32 as isize) =
-            crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
-                &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
-                crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
-                    ((*look).quant_q - 1 as i32) as crate::config_types_h::ogg_uint32_t,
-                ),
-            ) as i32;
+        let mut fit_value: *mut i32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
+            vb as *mut crate::codec_h::vorbis_block,
+            ((*look).posts as libc::c_ulong)
+                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
+                as libc::c_long,
+        ) as *mut i32;
+        *fit_value.offset(0 as i32 as isize) = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
+            &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+            crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
+                ((*look).quant_q - 1 as i32) as crate::config_types_h::ogg_uint32_t,
+            ),
+        ) as i32;
+        *fit_value.offset(1 as i32 as isize) = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
+            &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
+            crate::src::libvorbis_1_3_6::lib::sharedbook::ov_ilog(
+                ((*look).quant_q - 1 as i32) as crate::config_types_h::ogg_uint32_t,
+            ),
+        ) as i32;
         /* partition by partition */
         i = 0 as i32;
         j = 2 as i32;
@@ -1754,8 +1694,8 @@ unsafe extern "C" fn floor1_inverse1(
             }
             k = 0 as i32;
             while k < cdim {
-                let mut book: i32 = (*info).class_subbook[class as usize]
-                    [(cval & csub - 1 as i32) as usize];
+                let mut book: i32 =
+                    (*info).class_subbook[class as usize][(cval & csub - 1 as i32) as usize];
                 cval >>= csubbits;
                 if book >= 0 as i32 {
                     let ref mut fresh0 = *fit_value.offset((j + k) as isize);
@@ -1783,20 +1723,15 @@ unsafe extern "C" fn floor1_inverse1(
                 i = 2 as i32;
                 while i < (*look).posts {
                     let mut predicted: i32 = render_point(
-                        (*info).postlist
-                            [(*look).loneighbor[(i - 2 as i32) as usize] as usize],
-                        (*info).postlist
-                            [(*look).hineighbor[(i - 2 as i32) as usize] as usize],
-                        *fit_value
-                            .offset((*look).loneighbor[(i - 2 as i32) as usize] as isize),
-                        *fit_value
-                            .offset((*look).hineighbor[(i - 2 as i32) as usize] as isize),
+                        (*info).postlist[(*look).loneighbor[(i - 2 as i32) as usize] as usize],
+                        (*info).postlist[(*look).hineighbor[(i - 2 as i32) as usize] as usize],
+                        *fit_value.offset((*look).loneighbor[(i - 2 as i32) as usize] as isize),
+                        *fit_value.offset((*look).hineighbor[(i - 2 as i32) as usize] as isize),
                         (*info).postlist[i as usize],
                     );
                     let mut hiroom: i32 = (*look).quant_q - predicted;
                     let mut loroom: i32 = predicted;
-                    let mut room: i32 =
-                        (if hiroom < loroom { hiroom } else { loroom }) << 1 as i32;
+                    let mut room: i32 = (if hiroom < loroom { hiroom } else { loroom }) << 1 as i32;
                     let mut val: i32 = *fit_value.offset(i as isize);
                     if val != 0 {
                         if val >= room {
@@ -1811,11 +1746,9 @@ unsafe extern "C" fn floor1_inverse1(
                             val >>= 1 as i32
                         }
                         *fit_value.offset(i as isize) = val + predicted & 0x7fff as i32;
-                        *fit_value.offset(
-                            (*look).loneighbor[(i - 2 as i32) as usize] as isize,
-                        ) &= 0x7fff as i32;
-                        *fit_value
-                            .offset((*look).hineighbor[(i - 2 as i32) as usize] as isize) &=
+                        *fit_value.offset((*look).loneighbor[(i - 2 as i32) as usize] as isize) &=
+                            0x7fff as i32;
+                        *fit_value.offset((*look).hineighbor[(i - 2 as i32) as usize] as isize) &=
                             0x7fff as i32
                     } else {
                         *fit_value.offset(i as isize) = predicted | 0x8000 as i32
@@ -1840,8 +1773,7 @@ unsafe extern "C" fn floor1_inverse2(
     let mut info: *mut crate::backends_h::vorbis_info_floor1 = (*look).vi;
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*(*(*vb).vd).vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
-    let mut n: i32 =
-        ((*ci).blocksizes[(*vb).W as usize] / 2 as i32 as libc::c_long) as i32;
+    let mut n: i32 = ((*ci).blocksizes[(*vb).W as usize] / 2 as i32 as libc::c_long) as i32;
     let mut j: i32 = 0;
     if !memo.is_null() {
         /* render the lines */

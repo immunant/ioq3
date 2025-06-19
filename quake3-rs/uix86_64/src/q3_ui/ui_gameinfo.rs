@@ -174,8 +174,7 @@ pub unsafe extern "C" fn UI_ParseInfos(
                     crate::src::qcommon::q_shared::Q_strncpyz(
                         key.as_mut_ptr(),
                         token,
-                        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
-                            as i32,
+                        ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong as i32,
                     );
                     token = crate::src::qcommon::q_shared::COM_ParseExt(
                         &mut buf,
@@ -689,11 +688,7 @@ Returns the player's best finish on a given level, 0 if the have not played the 
 */
 #[no_mangle]
 
-pub unsafe extern "C" fn UI_GetBestScore(
-    mut level: i32,
-    mut score: *mut i32,
-    mut skill: *mut i32,
-) {
+pub unsafe extern "C" fn UI_GetBestScore(mut level: i32, mut score: *mut i32, mut skill: *mut i32) {
     let mut n: i32 = 0;
     let mut skillScore: i32 = 0;
     let mut bestScore: i32 = 0;
@@ -991,8 +986,7 @@ pub unsafe extern "C" fn UI_CanShowTierVideo(
     if tier == 0 {
         return crate::src::qcommon::q_shared::qfalse;
     }
-    if crate::src::q3_ui::ui_atoms::uis.demoversion as u32 != 0 && tier != 8 as i32
-    {
+    if crate::src::q3_ui::ui_atoms::uis.demoversion as u32 != 0 && tier != 8 as i32 {
         return crate::src::qcommon::q_shared::qfalse;
     }
     crate::src::ui::ui_syscalls::trap_Cvar_VariableStringBuffer(

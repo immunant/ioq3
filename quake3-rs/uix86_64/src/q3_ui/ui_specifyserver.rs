@@ -335,28 +335,24 @@ pub unsafe extern "C" fn SpecifyServer_MenuInit() {
     s_specifyserver.framer.height = 334 as i32;
     s_specifyserver.domain.generic.type_0 = 4 as i32;
     s_specifyserver.domain.generic.name = b"Address:\x00" as *const u8 as *const libc::c_char;
-    s_specifyserver.domain.generic.flags =
-        0x100 as i32 as u32 | 0x2 as i32 as u32;
+    s_specifyserver.domain.generic.flags = 0x100 as i32 as u32 | 0x2 as i32 as u32;
     s_specifyserver.domain.generic.x = 206 as i32;
     s_specifyserver.domain.generic.y = 220 as i32;
     s_specifyserver.domain.field.widthInChars = 38 as i32;
     s_specifyserver.domain.field.maxchars = 80 as i32;
     s_specifyserver.port.generic.type_0 = 4 as i32;
     s_specifyserver.port.generic.name = b"Port:\x00" as *const u8 as *const libc::c_char;
-    s_specifyserver.port.generic.flags = 0x100 as i32 as u32
-        | 0x2 as i32 as u32
-        | 0x20 as i32 as u32;
+    s_specifyserver.port.generic.flags =
+        0x100 as i32 as u32 | 0x2 as i32 as u32 | 0x20 as i32 as u32;
     s_specifyserver.port.generic.x = 206 as i32;
     s_specifyserver.port.generic.y = 250 as i32;
     s_specifyserver.port.field.widthInChars = 6 as i32;
     s_specifyserver.port.field.maxchars = 5 as i32;
     s_specifyserver.go.generic.type_0 = 6 as i32;
     s_specifyserver.go.generic.name = b"menu/art/fight_0\x00" as *const u8 as *const libc::c_char;
-    s_specifyserver.go.generic.flags =
-        0x10 as i32 as u32 | 0x100 as i32 as u32;
-    s_specifyserver.go.generic.callback = Some(
-        SpecifyServer_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_specifyserver.go.generic.flags = 0x10 as i32 as u32 | 0x100 as i32 as u32;
+    s_specifyserver.go.generic.callback =
+        Some(SpecifyServer_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_specifyserver.go.generic.id = 103 as i32;
     s_specifyserver.go.generic.x = 640 as i32;
     s_specifyserver.go.generic.y = 480 as i32 - 64 as i32;
@@ -366,11 +362,9 @@ pub unsafe extern "C" fn SpecifyServer_MenuInit() {
         b"menu/art/fight_1\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     s_specifyserver.back.generic.type_0 = 6 as i32;
     s_specifyserver.back.generic.name = b"menu/art/back_0\x00" as *const u8 as *const libc::c_char;
-    s_specifyserver.back.generic.flags =
-        0x4 as i32 as u32 | 0x100 as i32 as u32;
-    s_specifyserver.back.generic.callback = Some(
-        SpecifyServer_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> (),
-    );
+    s_specifyserver.back.generic.flags = 0x4 as i32 as u32 | 0x100 as i32 as u32;
+    s_specifyserver.back.generic.callback =
+        Some(SpecifyServer_Event as unsafe extern "C" fn(_: *mut libc::c_void, _: i32) -> ());
     s_specifyserver.back.generic.id = 102 as i32;
     s_specifyserver.back.generic.x = 0 as i32;
     s_specifyserver.back.generic.y = 480 as i32 - 64 as i32;

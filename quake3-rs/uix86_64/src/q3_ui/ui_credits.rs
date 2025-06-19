@@ -83,8 +83,7 @@ unsafe extern "C" fn UI_CreditMenu_Draw_ioq3() {
         0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
     );
-    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64)
-        as i32;
+    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
     i = 0 as i32;
     while !names[i as usize].is_null() {
         crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
@@ -94,8 +93,7 @@ unsafe extern "C" fn UI_CreditMenu_Draw_ioq3() {
             0x1 as i32 | 0x10 as i32,
             crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
         );
-        y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64)
-            as i32;
+        y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
         i += 1
     }
     crate::src::q3_ui::ui_atoms::UI_DrawString(
@@ -112,9 +110,7 @@ UI_CreditMenu_Key
 =================
 */
 
-unsafe extern "C" fn UI_CreditMenu_Key(
-    mut key: i32,
-) -> crate::src::qcommon::q_shared::sfxHandle_t {
+unsafe extern "C" fn UI_CreditMenu_Key(mut key: i32) -> crate::src::qcommon::q_shared::sfxHandle_t {
     if key & 1024 as i32 != 0 {
         return 0 as i32;
     }
@@ -145,8 +141,7 @@ unsafe extern "C" fn UI_CreditMenu_Draw() {
         0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
     );
-    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64)
-        as i32;
+    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
         320 as i32,
         y,
@@ -162,8 +157,7 @@ unsafe extern "C" fn UI_CreditMenu_Draw() {
         0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
     );
-    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64)
-        as i32;
+    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
         320 as i32,
         y,
@@ -187,8 +181,7 @@ unsafe extern "C" fn UI_CreditMenu_Draw() {
         0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
     );
-    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64)
-        as i32;
+    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
         320 as i32,
         y,
@@ -204,8 +197,7 @@ unsafe extern "C" fn UI_CreditMenu_Draw() {
         0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
     );
-    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64)
-        as i32;
+    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
         320 as i32,
         y,
@@ -221,8 +213,7 @@ unsafe extern "C" fn UI_CreditMenu_Draw() {
         0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
     );
-    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64)
-        as i32;
+    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
         320 as i32,
         y,
@@ -238,8 +229,7 @@ unsafe extern "C" fn UI_CreditMenu_Draw() {
         0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
     );
-    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64)
-        as i32;
+    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
         320 as i32,
         y,
@@ -255,8 +245,7 @@ unsafe extern "C" fn UI_CreditMenu_Draw() {
         0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
     );
-    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64)
-        as i32;
+    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
         320 as i32,
         y,
@@ -272,8 +261,7 @@ unsafe extern "C" fn UI_CreditMenu_Draw() {
         0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
     );
-    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64)
-        as i32;
+    y = (y as f64 + 1.42f64 * 27 as i32 as f64 * 0.75f64) as i32;
     crate::src::q3_ui::ui_atoms::UI_DrawProportionalString(
         320 as i32,
         y,
@@ -289,8 +277,7 @@ unsafe extern "C" fn UI_CreditMenu_Draw() {
         0x1 as i32 | 0x10 as i32,
         crate::src::q3_ui::ui_qmenu::color_white.as_mut_ptr(),
     );
-    y = (y as f64 + 1.35f64 * 27 as i32 as f64 * 0.75f64)
-        as i32;
+    y = (y as f64 + 1.35f64 * 27 as i32 as f64 * 0.75f64) as i32;
     crate::src::q3_ui::ui_atoms::UI_DrawString(
         320 as i32,
         y,
