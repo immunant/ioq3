@@ -1,16 +1,16 @@
 pub type moverState_t = libc::c_uint;
-pub const MOVER_POS1: crate::g_local_h::moverState_t = 0;
-pub const MOVER_POS2: crate::g_local_h::moverState_t = 1;
-pub const MOVER_1TO2: crate::g_local_h::moverState_t = 2;
-pub const MOVER_2TO1: crate::g_local_h::moverState_t = 3;
-pub type gentity_t = crate::g_local_h::gentity_s;
-pub type gclient_t = crate::g_local_h::gclient_s;
+pub const MOVER_POS1: moverState_t = 0;
+pub const MOVER_POS2: moverState_t = 1;
+pub const MOVER_1TO2: moverState_t = 2;
+pub const MOVER_2TO1: moverState_t = 3;
+pub type gentity_t = gentity_s;
+pub type gclient_t = gclient_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct gentity_s {
     pub s: crate::src::qcommon::q_shared::entityState_t,
     pub r: crate::g_public_h::entityShared_t,
-    pub client: *mut crate::g_local_h::gclient_s,
+    pub client: *mut gclient_s,
     pub inuse: crate::src::qcommon::q_shared::qboolean,
     pub classname: *mut libc::c_char,
     pub spawnflags: libc::c_int,
@@ -25,15 +25,15 @@ pub struct gentity_s {
     pub physicsObject: crate::src::qcommon::q_shared::qboolean,
     pub physicsBounce: libc::c_float,
     pub clipmask: libc::c_int,
-    pub moverState: crate::g_local_h::moverState_t,
+    pub moverState: moverState_t,
     pub soundPos1: libc::c_int,
     pub sound1to2: libc::c_int,
     pub sound2to1: libc::c_int,
     pub soundPos2: libc::c_int,
     pub soundLoop: libc::c_int,
-    pub parent: *mut crate::g_local_h::gentity_t,
-    pub nextTrain: *mut crate::g_local_h::gentity_t,
-    pub prevTrain: *mut crate::g_local_h::gentity_t,
+    pub parent: *mut gentity_t,
+    pub nextTrain: *mut gentity_t,
+    pub prevTrain: *mut gentity_t,
     pub pos1: crate::src::qcommon::q_shared::vec3_t,
     pub pos2: crate::src::qcommon::q_shared::vec3_t,
     pub message: *mut libc::c_char,
@@ -43,44 +43,44 @@ pub struct gentity_s {
     pub team: *mut libc::c_char,
     pub targetShaderName: *mut libc::c_char,
     pub targetShaderNewName: *mut libc::c_char,
-    pub target_ent: *mut crate::g_local_h::gentity_t,
+    pub target_ent: *mut gentity_t,
     pub speed: libc::c_float,
     pub movedir: crate::src::qcommon::q_shared::vec3_t,
     pub nextthink: libc::c_int,
-    pub think: Option<unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ()>,
-    pub reached: Option<unsafe extern "C" fn(_: *mut crate::g_local_h::gentity_t) -> ()>,
+    pub think: Option<unsafe extern "C" fn(_: *mut gentity_t) -> ()>,
+    pub reached: Option<unsafe extern "C" fn(_: *mut gentity_t) -> ()>,
     pub blocked: Option<
         unsafe extern "C" fn(
-            _: *mut crate::g_local_h::gentity_t,
-            _: *mut crate::g_local_h::gentity_t,
+            _: *mut gentity_t,
+            _: *mut gentity_t,
         ) -> (),
     >,
     pub touch: Option<
         unsafe extern "C" fn(
-            _: *mut crate::g_local_h::gentity_t,
-            _: *mut crate::g_local_h::gentity_t,
+            _: *mut gentity_t,
+            _: *mut gentity_t,
             _: *mut crate::src::qcommon::q_shared::trace_t,
         ) -> (),
     >,
     pub use_0: Option<
         unsafe extern "C" fn(
-            _: *mut crate::g_local_h::gentity_t,
-            _: *mut crate::g_local_h::gentity_t,
-            _: *mut crate::g_local_h::gentity_t,
+            _: *mut gentity_t,
+            _: *mut gentity_t,
+            _: *mut gentity_t,
         ) -> (),
     >,
     pub pain: Option<
         unsafe extern "C" fn(
-            _: *mut crate::g_local_h::gentity_t,
-            _: *mut crate::g_local_h::gentity_t,
+            _: *mut gentity_t,
+            _: *mut gentity_t,
             _: libc::c_int,
         ) -> (),
     >,
     pub die: Option<
         unsafe extern "C" fn(
-            _: *mut crate::g_local_h::gentity_t,
-            _: *mut crate::g_local_h::gentity_t,
-            _: *mut crate::g_local_h::gentity_t,
+            _: *mut gentity_t,
+            _: *mut gentity_t,
+            _: *mut gentity_t,
             _: libc::c_int,
             _: libc::c_int,
         ) -> (),
@@ -96,11 +96,11 @@ pub struct gentity_s {
     pub methodOfDeath: libc::c_int,
     pub splashMethodOfDeath: libc::c_int,
     pub count: libc::c_int,
-    pub chain: *mut crate::g_local_h::gentity_t,
-    pub enemy: *mut crate::g_local_h::gentity_t,
-    pub activator: *mut crate::g_local_h::gentity_t,
-    pub teamchain: *mut crate::g_local_h::gentity_t,
-    pub teammaster: *mut crate::g_local_h::gentity_t,
+    pub chain: *mut gentity_t,
+    pub enemy: *mut gentity_t,
+    pub activator: *mut gentity_t,
+    pub teamchain: *mut gentity_t,
+    pub teammaster: *mut gentity_t,
     pub watertype: libc::c_int,
     pub waterlevel: libc::c_int,
     pub noise_index: libc::c_int,
@@ -109,21 +109,21 @@ pub struct gentity_s {
     pub item: *mut crate::bg_public_h::gitem_t,
 }
 pub type clientConnected_t = libc::c_uint;
-pub const CON_DISCONNECTED: crate::g_local_h::clientConnected_t = 0;
-pub const CON_CONNECTING: crate::g_local_h::clientConnected_t = 1;
-pub const CON_CONNECTED: crate::g_local_h::clientConnected_t = 2;
+pub const CON_DISCONNECTED: clientConnected_t = 0;
+pub const CON_CONNECTING: clientConnected_t = 1;
+pub const CON_CONNECTED: clientConnected_t = 2;
 pub type spectatorState_t = libc::c_uint;
-pub const SPECTATOR_NOT: crate::g_local_h::spectatorState_t = 0;
-pub const SPECTATOR_FREE: crate::g_local_h::spectatorState_t = 1;
-pub const SPECTATOR_FOLLOW: crate::g_local_h::spectatorState_t = 2;
-pub const SPECTATOR_SCOREBOARD: crate::g_local_h::spectatorState_t = 3;
+pub const SPECTATOR_NOT: spectatorState_t = 0;
+pub const SPECTATOR_FREE: spectatorState_t = 1;
+pub const SPECTATOR_FOLLOW: spectatorState_t = 2;
+pub const SPECTATOR_SCOREBOARD: spectatorState_t = 3;
 pub type playerTeamStateState_t = libc::c_uint;
-pub const TEAM_BEGIN: crate::g_local_h::playerTeamStateState_t = 0;
-pub const TEAM_ACTIVE: crate::g_local_h::playerTeamStateState_t = 1;
+pub const TEAM_BEGIN: playerTeamStateState_t = 0;
+pub const TEAM_ACTIVE: playerTeamStateState_t = 1;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct playerTeamState_t {
-    pub state: crate::g_local_h::playerTeamStateState_t,
+    pub state: playerTeamStateState_t,
     pub location: libc::c_int,
     pub captures: libc::c_int,
     pub basedefense: libc::c_int,
@@ -141,7 +141,7 @@ pub struct playerTeamState_t {
 pub struct clientSession_t {
     pub sessionTeam: crate::bg_public_h::team_t,
     pub spectatorNum: libc::c_int,
-    pub spectatorState: crate::g_local_h::spectatorState_t,
+    pub spectatorState: spectatorState_t,
     pub spectatorClient: libc::c_int,
     pub wins: libc::c_int,
     pub losses: libc::c_int,
@@ -150,7 +150,7 @@ pub struct clientSession_t {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct clientPersistant_t {
-    pub connected: crate::g_local_h::clientConnected_t,
+    pub connected: clientConnected_t,
     pub cmd: crate::src::qcommon::q_shared::usercmd_t,
     pub localClient: crate::src::qcommon::q_shared::qboolean,
     pub initialSpawn: crate::src::qcommon::q_shared::qboolean,
@@ -159,7 +159,7 @@ pub struct clientPersistant_t {
     pub netname: [libc::c_char; 36],
     pub maxHealth: libc::c_int,
     pub enterTime: libc::c_int,
-    pub teamState: crate::g_local_h::playerTeamState_t,
+    pub teamState: playerTeamState_t,
     pub voteCount: libc::c_int,
     pub teamVoteCount: libc::c_int,
     pub teamInfo: crate::src::qcommon::q_shared::qboolean,
@@ -168,8 +168,8 @@ pub struct clientPersistant_t {
 #[derive(Copy, Clone)]
 pub struct gclient_s {
     pub ps: crate::src::qcommon::q_shared::playerState_t,
-    pub pers: crate::g_local_h::clientPersistant_t,
-    pub sess: crate::g_local_h::clientSession_t,
+    pub pers: clientPersistant_t,
+    pub sess: clientSession_t,
     pub readyToExit: crate::src::qcommon::q_shared::qboolean,
     pub noclip: crate::src::qcommon::q_shared::qboolean,
     pub lastCmdTime: libc::c_int,
@@ -195,7 +195,7 @@ pub struct gclient_s {
     pub airOutTime: libc::c_int,
     pub lastKillTime: libc::c_int,
     pub fireHeld: crate::src::qcommon::q_shared::qboolean,
-    pub hook: *mut crate::g_local_h::gentity_t,
+    pub hook: *mut gentity_t,
     pub switchTeamTime: libc::c_int,
     pub timeResidual: libc::c_int,
     pub areabits: *mut libc::c_char,
@@ -203,8 +203,8 @@ pub struct gclient_s {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct level_locals_t {
-    pub clients: *mut crate::g_local_h::gclient_s,
-    pub gentities: *mut crate::g_local_h::gentity_s,
+    pub clients: *mut gclient_s,
+    pub gentities: *mut gentity_s,
     pub gentitySize: libc::c_int,
     pub num_entities: libc::c_int,
     pub warmupTime: libc::c_int,
@@ -251,11 +251,11 @@ pub struct level_locals_t {
     pub intermission_origin: crate::src::qcommon::q_shared::vec3_t,
     pub intermission_angle: crate::src::qcommon::q_shared::vec3_t,
     pub locationLinked: crate::src::qcommon::q_shared::qboolean,
-    pub locationHead: *mut crate::g_local_h::gentity_t,
+    pub locationHead: *mut gentity_t,
     pub bodyQueIndex: libc::c_int,
-    pub bodyQue: [*mut crate::g_local_h::gentity_t; 8],
+    pub bodyQue: [*mut gentity_t; 8],
 }
-pub type bot_settings_t = crate::g_local_h::bot_settings_s;
+pub type bot_settings_t = bot_settings_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct bot_settings_s {

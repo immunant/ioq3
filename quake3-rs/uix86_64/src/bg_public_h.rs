@@ -37,43 +37,43 @@ pub const PERS_ASSIST_COUNT: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 12
 pub const PERS_GAUNTLET_FRAG_COUNT: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 13;
 pub const PERS_CAPTURES: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 14;
 pub type powerup_t = libc::c_uint;
-pub const PW_NONE: crate::bg_public_h::powerup_t = 0;
-pub const PW_QUAD: crate::bg_public_h::powerup_t = 1;
-pub const PW_BATTLESUIT: crate::bg_public_h::powerup_t = 2;
-pub const PW_HASTE: crate::bg_public_h::powerup_t = 3;
-pub const PW_INVIS: crate::bg_public_h::powerup_t = 4;
-pub const PW_REGEN: crate::bg_public_h::powerup_t = 5;
-pub const PW_FLIGHT: crate::bg_public_h::powerup_t = 6;
-pub const PW_REDFLAG: crate::bg_public_h::powerup_t = 7;
-pub const PW_BLUEFLAG: crate::bg_public_h::powerup_t = 8;
-pub const PW_NEUTRALFLAG: crate::bg_public_h::powerup_t = 9;
-pub const PW_SCOUT: crate::bg_public_h::powerup_t = 10;
-pub const PW_GUARD: crate::bg_public_h::powerup_t = 11;
-pub const PW_DOUBLER: crate::bg_public_h::powerup_t = 12;
-pub const PW_AMMOREGEN: crate::bg_public_h::powerup_t = 13;
-pub const PW_INVULNERABILITY: crate::bg_public_h::powerup_t = 14;
-pub const PW_NUM_POWERUPS: crate::bg_public_h::powerup_t = 15;
+pub const PW_NONE: powerup_t = 0;
+pub const PW_QUAD: powerup_t = 1;
+pub const PW_BATTLESUIT: powerup_t = 2;
+pub const PW_HASTE: powerup_t = 3;
+pub const PW_INVIS: powerup_t = 4;
+pub const PW_REGEN: powerup_t = 5;
+pub const PW_FLIGHT: powerup_t = 6;
+pub const PW_REDFLAG: powerup_t = 7;
+pub const PW_BLUEFLAG: powerup_t = 8;
+pub const PW_NEUTRALFLAG: powerup_t = 9;
+pub const PW_SCOUT: powerup_t = 10;
+pub const PW_GUARD: powerup_t = 11;
+pub const PW_DOUBLER: powerup_t = 12;
+pub const PW_AMMOREGEN: powerup_t = 13;
+pub const PW_INVULNERABILITY: powerup_t = 14;
+pub const PW_NUM_POWERUPS: powerup_t = 15;
 pub type holdable_t = libc::c_uint;
-pub const HI_NONE: crate::bg_public_h::holdable_t = 0;
-pub const HI_TELEPORTER: crate::bg_public_h::holdable_t = 1;
-pub const HI_MEDKIT: crate::bg_public_h::holdable_t = 2;
-pub const HI_KAMIKAZE: crate::bg_public_h::holdable_t = 3;
-pub const HI_PORTAL: crate::bg_public_h::holdable_t = 4;
-pub const HI_INVULNERABILITY: crate::bg_public_h::holdable_t = 5;
-pub const HI_NUM_HOLDABLE: crate::bg_public_h::holdable_t = 6;
+pub const HI_NONE: holdable_t = 0;
+pub const HI_TELEPORTER: holdable_t = 1;
+pub const HI_MEDKIT: holdable_t = 2;
+pub const HI_KAMIKAZE: holdable_t = 3;
+pub const HI_PORTAL: holdable_t = 4;
+pub const HI_INVULNERABILITY: holdable_t = 5;
+pub const HI_NUM_HOLDABLE: holdable_t = 6;
 pub type weapon_t = libc::c_uint;
-pub const WP_NONE: crate::bg_public_h::weapon_t = 0;
-pub const WP_GAUNTLET: crate::bg_public_h::weapon_t = 1;
-pub const WP_MACHINEGUN: crate::bg_public_h::weapon_t = 2;
-pub const WP_SHOTGUN: crate::bg_public_h::weapon_t = 3;
-pub const WP_GRENADE_LAUNCHER: crate::bg_public_h::weapon_t = 4;
-pub const WP_ROCKET_LAUNCHER: crate::bg_public_h::weapon_t = 5;
-pub const WP_LIGHTNING: crate::bg_public_h::weapon_t = 6;
-pub const WP_RAILGUN: crate::bg_public_h::weapon_t = 7;
-pub const WP_PLASMAGUN: crate::bg_public_h::weapon_t = 8;
-pub const WP_BFG: crate::bg_public_h::weapon_t = 9;
-pub const WP_GRAPPLING_HOOK: crate::bg_public_h::weapon_t = 10;
-pub const WP_NUM_WEAPONS: crate::bg_public_h::weapon_t = 11;
+pub const WP_NONE: weapon_t = 0;
+pub const WP_GAUNTLET: weapon_t = 1;
+pub const WP_MACHINEGUN: weapon_t = 2;
+pub const WP_SHOTGUN: weapon_t = 3;
+pub const WP_GRENADE_LAUNCHER: weapon_t = 4;
+pub const WP_ROCKET_LAUNCHER: weapon_t = 5;
+pub const WP_LIGHTNING: weapon_t = 6;
+pub const WP_RAILGUN: weapon_t = 7;
+pub const WP_PLASMAGUN: weapon_t = 8;
+pub const WP_BFG: weapon_t = 9;
+pub const WP_GRAPPLING_HOOK: weapon_t = 10;
+pub const WP_NUM_WEAPONS: weapon_t = 11;
 pub const EV_NONE: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 0;
 pub const EV_FOOTSTEP: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 1;
 pub const EV_FOOTSTEP_METAL: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 2;
@@ -195,7 +195,7 @@ pub const FLAG_RUN: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 34;
 pub const FLAG_STAND: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 35;
 pub const FLAG_STAND2RUN: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 36;
 pub const MAX_TOTALANIMATIONS: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 37;
-pub type animation_t = crate::bg_public_h::animation_s;
+pub type animation_t = animation_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct animation_s {
@@ -213,16 +213,16 @@ pub const TEAM_BLUE: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 2;
 pub const TEAM_SPECTATOR: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 3;
 pub const TEAM_NUM_TEAMS: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 4;
 pub type itemType_t = libc::c_uint;
-pub const IT_BAD: crate::bg_public_h::itemType_t = 0;
-pub const IT_WEAPON: crate::bg_public_h::itemType_t = 1;
-pub const IT_AMMO: crate::bg_public_h::itemType_t = 2;
-pub const IT_ARMOR: crate::bg_public_h::itemType_t = 3;
-pub const IT_HEALTH: crate::bg_public_h::itemType_t = 4;
-pub const IT_POWERUP: crate::bg_public_h::itemType_t = 5;
-pub const IT_HOLDABLE: crate::bg_public_h::itemType_t = 6;
-pub const IT_PERSISTANT_POWERUP: crate::bg_public_h::itemType_t = 7;
-pub const IT_TEAM: crate::bg_public_h::itemType_t = 8;
-pub type gitem_t = crate::bg_public_h::gitem_s;
+pub const IT_BAD: itemType_t = 0;
+pub const IT_WEAPON: itemType_t = 1;
+pub const IT_AMMO: itemType_t = 2;
+pub const IT_ARMOR: itemType_t = 3;
+pub const IT_HEALTH: itemType_t = 4;
+pub const IT_POWERUP: itemType_t = 5;
+pub const IT_HOLDABLE: itemType_t = 6;
+pub const IT_PERSISTANT_POWERUP: itemType_t = 7;
+pub const IT_TEAM: itemType_t = 8;
+pub type gitem_t = gitem_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct gitem_s {
@@ -232,7 +232,7 @@ pub struct gitem_s {
     pub icon: *mut libc::c_char,
     pub pickup_name: *mut libc::c_char,
     pub quantity: libc::c_int,
-    pub giType: crate::bg_public_h::itemType_t,
+    pub giType: itemType_t,
     pub giTag: libc::c_int,
     pub precaches: *mut libc::c_char,
     pub sounds: *mut libc::c_char,

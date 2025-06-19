@@ -1,4 +1,4 @@
-pub type bot_goal_t = crate::be_ai_goal_h::bot_goal_s;
+pub type bot_goal_t = bot_goal_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct bot_goal_s {

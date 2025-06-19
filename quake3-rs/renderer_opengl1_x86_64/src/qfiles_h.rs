@@ -1,4 +1,4 @@
-pub type md3Frame_t = crate::qfiles_h::md3Frame_s;
+pub type md3Frame_t = md3Frame_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct md3Frame_s {
@@ -7,7 +7,7 @@ pub struct md3Frame_s {
     pub radius: libc::c_float,
     pub name: [libc::c_char; 16],
 }
-pub type md3Tag_t = crate::qfiles_h::md3Tag_s;
+pub type md3Tag_t = md3Tag_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct md3Tag_s {
@@ -82,7 +82,7 @@ pub struct mdrVertex_t {
     pub normal: crate::src::qcommon::q_shared::vec3_t,
     pub texCoords: crate::src::qcommon::q_shared::vec2_t,
     pub numWeights: libc::c_int,
-    pub weights: [crate::qfiles_h::mdrWeight_t; 1],
+    pub weights: [mdrWeight_t; 1],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -117,7 +117,7 @@ pub struct mdrFrame_t {
     pub localOrigin: crate::src::qcommon::q_shared::vec3_t,
     pub radius: libc::c_float,
     pub name: [libc::c_char; 16],
-    pub bones: [crate::qfiles_h::mdrBone_t; 1],
+    pub bones: [mdrBone_t; 1],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -130,7 +130,7 @@ pub struct mdrCompFrame_t {
     pub bounds: [crate::src::qcommon::q_shared::vec3_t; 2],
     pub localOrigin: crate::src::qcommon::q_shared::vec3_t,
     pub radius: libc::c_float,
-    pub bones: [crate::qfiles_h::mdrCompBone_t; 1],
+    pub bones: [mdrCompBone_t; 1],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -171,7 +171,7 @@ pub struct lump_t {
 pub struct dheader_t {
     pub ident: libc::c_int,
     pub version: libc::c_int,
-    pub lumps: [crate::qfiles_h::lump_t; 17],
+    pub lumps: [lump_t; 17],
 }
 #[repr(C)]
 #[derive(Copy, Clone)]

@@ -1,16 +1,16 @@
 pub type footstep_t = libc::c_uint;
-pub const FOOTSTEP_NORMAL: crate::cg_local_h::footstep_t = 0;
-pub const FOOTSTEP_BOOT: crate::cg_local_h::footstep_t = 1;
-pub const FOOTSTEP_FLESH: crate::cg_local_h::footstep_t = 2;
-pub const FOOTSTEP_MECH: crate::cg_local_h::footstep_t = 3;
-pub const FOOTSTEP_ENERGY: crate::cg_local_h::footstep_t = 4;
-pub const FOOTSTEP_METAL: crate::cg_local_h::footstep_t = 5;
-pub const FOOTSTEP_SPLASH: crate::cg_local_h::footstep_t = 6;
-pub const FOOTSTEP_TOTAL: crate::cg_local_h::footstep_t = 7;
+pub const FOOTSTEP_NORMAL: footstep_t = 0;
+pub const FOOTSTEP_BOOT: footstep_t = 1;
+pub const FOOTSTEP_FLESH: footstep_t = 2;
+pub const FOOTSTEP_MECH: footstep_t = 3;
+pub const FOOTSTEP_ENERGY: footstep_t = 4;
+pub const FOOTSTEP_METAL: footstep_t = 5;
+pub const FOOTSTEP_SPLASH: footstep_t = 6;
+pub const FOOTSTEP_TOTAL: footstep_t = 7;
 pub type impactSound_t = libc::c_uint;
-pub const IMPACTSOUND_DEFAULT: crate::cg_local_h::impactSound_t = 0;
-pub const IMPACTSOUND_METAL: crate::cg_local_h::impactSound_t = 1;
-pub const IMPACTSOUND_FLESH: crate::cg_local_h::impactSound_t = 2;
+pub const IMPACTSOUND_DEFAULT: impactSound_t = 0;
+pub const IMPACTSOUND_METAL: impactSound_t = 1;
+pub const IMPACTSOUND_FLESH: impactSound_t = 2;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct lerpFrame_t {
@@ -30,9 +30,9 @@ pub struct lerpFrame_t {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct playerEntity_t {
-    pub legs: crate::cg_local_h::lerpFrame_t,
-    pub torso: crate::cg_local_h::lerpFrame_t,
-    pub flag: crate::cg_local_h::lerpFrame_t,
+    pub legs: lerpFrame_t,
+    pub torso: lerpFrame_t,
+    pub flag: lerpFrame_t,
     pub painTime: libc::c_int,
     pub painDirection: libc::c_int,
     pub lightningFiring: libc::c_int,
@@ -41,7 +41,7 @@ pub struct playerEntity_t {
     pub barrelTime: libc::c_int,
     pub barrelSpinning: crate::src::qcommon::q_shared::qboolean,
 }
-pub type centity_t = crate::cg_local_h::centity_s;
+pub type centity_t = centity_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct centity_s {
@@ -56,7 +56,7 @@ pub struct centity_s {
     pub dustTrailTime: libc::c_int,
     pub miscTime: libc::c_int,
     pub snapShotTime: libc::c_int,
-    pub pe: crate::cg_local_h::playerEntity_t,
+    pub pe: playerEntity_t,
     pub errorTime: libc::c_int,
     pub errorOrigin: crate::src::qcommon::q_shared::vec3_t,
     pub errorAngles: crate::src::qcommon::q_shared::vec3_t,
@@ -67,12 +67,12 @@ pub struct centity_s {
     pub lerpOrigin: crate::src::qcommon::q_shared::vec3_t,
     pub lerpAngles: crate::src::qcommon::q_shared::vec3_t,
 }
-pub type markPoly_t = crate::cg_local_h::markPoly_s;
+pub type markPoly_t = markPoly_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct markPoly_s {
-    pub prevMark: *mut crate::cg_local_h::markPoly_s,
-    pub nextMark: *mut crate::cg_local_h::markPoly_s,
+    pub prevMark: *mut markPoly_s,
+    pub nextMark: *mut markPoly_s,
     pub time: libc::c_int,
     pub markShader: crate::src::qcommon::q_shared::qhandle_t,
     pub alphaFade: crate::src::qcommon::q_shared::qboolean,
@@ -81,34 +81,34 @@ pub struct markPoly_s {
     pub verts: [crate::tr_types_h::polyVert_t; 10],
 }
 pub type leType_t = libc::c_uint;
-pub const LE_MARK: crate::cg_local_h::leType_t = 0;
-pub const LE_EXPLOSION: crate::cg_local_h::leType_t = 1;
-pub const LE_SPRITE_EXPLOSION: crate::cg_local_h::leType_t = 2;
-pub const LE_FRAGMENT: crate::cg_local_h::leType_t = 3;
-pub const LE_MOVE_SCALE_FADE: crate::cg_local_h::leType_t = 4;
-pub const LE_FALL_SCALE_FADE: crate::cg_local_h::leType_t = 5;
-pub const LE_FADE_RGB: crate::cg_local_h::leType_t = 6;
-pub const LE_SCALE_FADE: crate::cg_local_h::leType_t = 7;
-pub const LE_SCOREPLUM: crate::cg_local_h::leType_t = 8;
+pub const LE_MARK: leType_t = 0;
+pub const LE_EXPLOSION: leType_t = 1;
+pub const LE_SPRITE_EXPLOSION: leType_t = 2;
+pub const LE_FRAGMENT: leType_t = 3;
+pub const LE_MOVE_SCALE_FADE: leType_t = 4;
+pub const LE_FALL_SCALE_FADE: leType_t = 5;
+pub const LE_FADE_RGB: leType_t = 6;
+pub const LE_SCALE_FADE: leType_t = 7;
+pub const LE_SCOREPLUM: leType_t = 8;
 pub const LEF_PUFF_DONT_SCALE: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 1;
 pub const LEF_TUMBLE: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 2;
 pub const LEF_SOUND1: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 4;
 pub const LEF_SOUND2: crate::src::qcommon::q_shared::C2RustUnnamed_0 = 8;
 pub type leMarkType_t = libc::c_uint;
-pub const LEMT_NONE: crate::cg_local_h::leMarkType_t = 0;
-pub const LEMT_BURN: crate::cg_local_h::leMarkType_t = 1;
-pub const LEMT_BLOOD: crate::cg_local_h::leMarkType_t = 2;
+pub const LEMT_NONE: leMarkType_t = 0;
+pub const LEMT_BURN: leMarkType_t = 1;
+pub const LEMT_BLOOD: leMarkType_t = 2;
 pub type leBounceSoundType_t = libc::c_uint;
-pub const LEBS_NONE: crate::cg_local_h::leBounceSoundType_t = 0;
-pub const LEBS_BLOOD: crate::cg_local_h::leBounceSoundType_t = 1;
-pub const LEBS_BRASS: crate::cg_local_h::leBounceSoundType_t = 2;
-pub type localEntity_t = crate::cg_local_h::localEntity_s;
+pub const LEBS_NONE: leBounceSoundType_t = 0;
+pub const LEBS_BLOOD: leBounceSoundType_t = 1;
+pub const LEBS_BRASS: leBounceSoundType_t = 2;
+pub type localEntity_t = localEntity_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct localEntity_s {
-    pub prev: *mut crate::cg_local_h::localEntity_s,
-    pub next: *mut crate::cg_local_h::localEntity_s,
-    pub leType: crate::cg_local_h::leType_t,
+    pub prev: *mut localEntity_s,
+    pub next: *mut localEntity_s,
+    pub leType: leType_t,
     pub leFlags: libc::c_int,
     pub startTime: libc::c_int,
     pub endTime: libc::c_int,
@@ -121,8 +121,8 @@ pub struct localEntity_s {
     pub radius: libc::c_float,
     pub light: libc::c_float,
     pub lightColor: crate::src::qcommon::q_shared::vec3_t,
-    pub leMarkType: crate::cg_local_h::leMarkType_t,
-    pub leBounceSoundType: crate::cg_local_h::leBounceSoundType_t,
+    pub leMarkType: leMarkType_t,
+    pub leBounceSoundType: leBounceSoundType_t,
     pub refEntity: crate::tr_types_h::refEntity_t,
 }
 #[repr(C)]
@@ -181,7 +181,7 @@ pub struct clientInfo_t {
     pub fixedlegs: crate::src::qcommon::q_shared::qboolean,
     pub fixedtorso: crate::src::qcommon::q_shared::qboolean,
     pub headOffset: crate::src::qcommon::q_shared::vec3_t,
-    pub footsteps: crate::cg_local_h::footstep_t,
+    pub footsteps: footstep_t,
     pub gender: crate::bg_public_h::gender_t,
     pub legsModel: crate::src::qcommon::q_shared::qhandle_t,
     pub legsSkin: crate::src::qcommon::q_shared::qhandle_t,
@@ -193,7 +193,7 @@ pub struct clientInfo_t {
     pub animations: [crate::bg_public_h::animation_t; 37],
     pub sounds: [crate::src::qcommon::q_shared::sfxHandle_t; 32],
 }
-pub type weaponInfo_t = crate::cg_local_h::weaponInfo_s;
+pub type weaponInfo_t = weaponInfo_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct weaponInfo_s {
@@ -214,14 +214,14 @@ pub struct weaponInfo_s {
     pub missileSound: crate::src::qcommon::q_shared::sfxHandle_t,
     pub missileTrailFunc: Option<
         unsafe extern "C" fn(
-            _: *mut crate::cg_local_h::centity_t,
-            _: *const crate::cg_local_h::weaponInfo_s,
+            _: *mut centity_t,
+            _: *const weaponInfo_s,
         ) -> (),
     >,
     pub missileDlight: libc::c_float,
     pub missileDlightColor: crate::src::qcommon::q_shared::vec3_t,
     pub missileRenderfx: libc::c_int,
-    pub ejectBrassFunc: Option<unsafe extern "C" fn(_: *mut crate::cg_local_h::centity_t) -> ()>,
+    pub ejectBrassFunc: Option<unsafe extern "C" fn(_: *mut centity_t) -> ()>,
     pub trailRadius: libc::c_float,
     pub wiTrailTime: libc::c_float,
     pub readySound: crate::src::qcommon::q_shared::sfxHandle_t,
@@ -262,7 +262,7 @@ pub struct cg_t {
     pub renderingThirdPerson: crate::src::qcommon::q_shared::qboolean,
     pub hyperspace: crate::src::qcommon::q_shared::qboolean,
     pub predictedPlayerState: crate::src::qcommon::q_shared::playerState_t,
-    pub predictedPlayerEntity: crate::cg_local_h::centity_t,
+    pub predictedPlayerEntity: centity_t,
     pub validPPS: crate::src::qcommon::q_shared::qboolean,
     pub predictedErrorTime: libc::c_int,
     pub predictedError: crate::src::qcommon::q_shared::vec3_t,
@@ -289,7 +289,7 @@ pub struct cg_t {
     pub numScores: libc::c_int,
     pub selectedScore: libc::c_int,
     pub teamScores: [libc::c_int; 2],
-    pub scores: [crate::cg_local_h::score_t; 64],
+    pub scores: [score_t; 64],
     pub showScores: crate::src::qcommon::q_shared::qboolean,
     pub scoreBoardShowing: crate::src::qcommon::q_shared::qboolean,
     pub scoreFadeTime: libc::c_int,
@@ -583,7 +583,7 @@ pub struct cgs_t {
     pub numInlineModels: libc::c_int,
     pub inlineDrawModel: [crate::src::qcommon::q_shared::qhandle_t; 256],
     pub inlineModelMidpoints: [crate::src::qcommon::q_shared::vec3_t; 256],
-    pub clientinfo: [crate::cg_local_h::clientInfo_t; 64],
+    pub clientinfo: [clientInfo_t; 64],
     pub teamChatMsgs: [[libc::c_char; 241]; 8],
     pub teamChatMsgTimes: [libc::c_int; 8],
     pub teamChatPos: libc::c_int,
@@ -603,5 +603,5 @@ pub struct cgs_t {
     pub acceptTask: libc::c_int,
     pub acceptLeader: libc::c_int,
     pub acceptVoice: [libc::c_char; 32],
-    pub media: crate::cg_local_h::cgMedia_t,
+    pub media: cgMedia_t,
 }

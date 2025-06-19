@@ -3,7 +3,7 @@ pub const SOLID_TRIGGER: crate::bg_public_h::C2RustUnnamed_0 = 1;
 pub const SOLID_BBOX: crate::bg_public_h::C2RustUnnamed_0 = 2;
 pub const SOLID_BSP: crate::bg_public_h::C2RustUnnamed_0 = 3;
 //a trace is returned when a box is swept through the AAS world
-pub type aas_trace_t = crate::be_aas_h::aas_trace_s;
+pub type aas_trace_t = aas_trace_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct aas_trace_s {
@@ -43,7 +43,7 @@ typedef struct bsp_trace_s
 */
 
 //entity info
-pub type aas_entityinfo_t = crate::be_aas_h::aas_entityinfo_s;
+pub type aas_entityinfo_t = aas_entityinfo_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct aas_entityinfo_s {
@@ -118,7 +118,7 @@ pub struct aas_entityinfo_s {
 // mask off ANIM_TOGGLEBIT
 
 // area info
-pub type aas_areainfo_t = crate::be_aas_h::aas_areainfo_s;
+pub type aas_areainfo_t = aas_areainfo_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct aas_areainfo_s {
@@ -157,14 +157,14 @@ pub struct aas_areainfo_s {
 // hit the specified bounding box
 
 // touching a cluster portal
-pub type aas_clientmove_t = crate::be_aas_h::aas_clientmove_s;
+pub type aas_clientmove_t = aas_clientmove_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct aas_clientmove_s {
     pub endpos: crate::src::qcommon::q_shared::vec3_t,
     pub endarea: libc::c_int,
     pub velocity: crate::src::qcommon::q_shared::vec3_t,
-    pub trace: crate::be_aas_h::aas_trace_t,
+    pub trace: aas_trace_t,
     pub presencetype: libc::c_int,
     pub stopevent: libc::c_int,
     pub endcontents: libc::c_int,
@@ -190,7 +190,7 @@ pub struct aas_clientmove_s {
 //number of frames predicted ahead
 
 // alternate route goals
-pub type aas_altroutegoal_t = crate::be_aas_h::aas_altroutegoal_s;
+pub type aas_altroutegoal_t = aas_altroutegoal_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct aas_altroutegoal_s {
@@ -203,7 +203,7 @@ pub struct aas_altroutegoal_s {
 //stop when entering the given contents
 
 //stop when entering the given area
-pub type aas_predictroute_t = crate::be_aas_h::aas_predictroute_s;
+pub type aas_predictroute_t = aas_predictroute_s;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct aas_predictroute_s {

@@ -2,7 +2,7 @@ pub type DCTELEM = libc::c_int;
 /* 16 or 32 bits is fine */
 pub type forward_DCT_method_ptr = Option<
     unsafe extern "C" fn(
-        _: *mut crate::jdct_h::DCTELEM,
+        _: *mut DCTELEM,
         _: crate::jpeglib_h::JSAMPARRAY,
         _: crate::jmorecfg_h::JDIMENSION,
     ) -> (),

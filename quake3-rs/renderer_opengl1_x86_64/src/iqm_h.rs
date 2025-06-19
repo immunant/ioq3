@@ -1,4 +1,4 @@
-pub type iqmHeader_t = crate::iqm_h::iqmheader;
+pub type iqmHeader_t = iqmheader;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct iqmheader {
@@ -31,7 +31,7 @@ pub struct iqmheader {
     pub num_extensions: libc::c_uint,
     pub ofs_extensions: libc::c_uint,
 }
-pub type iqmMesh_t = crate::iqm_h::iqmmesh;
+pub type iqmMesh_t = iqmmesh;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct iqmmesh {
@@ -59,13 +59,13 @@ pub const IQM_UINT: crate::src::jpeg_8c::jerror::C2RustUnnamed_1 = 5;
 pub const IQM_HALF: crate::src::jpeg_8c::jerror::C2RustUnnamed_1 = 6;
 pub const IQM_FLOAT: crate::src::jpeg_8c::jerror::C2RustUnnamed_1 = 7;
 pub const IQM_DOUBLE: crate::src::jpeg_8c::jerror::C2RustUnnamed_1 = 8;
-pub type iqmTriangle_t = crate::iqm_h::iqmtriangle;
+pub type iqmTriangle_t = iqmtriangle;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct iqmtriangle {
     pub vertex: [libc::c_uint; 3],
 }
-pub type iqmJoint_t = crate::iqm_h::iqmjoint;
+pub type iqmJoint_t = iqmjoint;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct iqmjoint {
@@ -75,7 +75,7 @@ pub struct iqmjoint {
     pub rotate: [libc::c_float; 4],
     pub scale: [libc::c_float; 3],
 }
-pub type iqmPose_t = crate::iqm_h::iqmpose;
+pub type iqmPose_t = iqmpose;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct iqmpose {
@@ -84,7 +84,7 @@ pub struct iqmpose {
     pub channeloffset: [libc::c_float; 10],
     pub channelscale: [libc::c_float; 10],
 }
-pub type iqmVertexArray_t = crate::iqm_h::iqmvertexarray;
+pub type iqmVertexArray_t = iqmvertexarray;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct iqmvertexarray {
@@ -94,7 +94,7 @@ pub struct iqmvertexarray {
     pub size: libc::c_uint,
     pub offset: libc::c_uint,
 }
-pub type iqmBounds_t = crate::iqm_h::iqmbounds;
+pub type iqmBounds_t = iqmbounds;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct iqmbounds {

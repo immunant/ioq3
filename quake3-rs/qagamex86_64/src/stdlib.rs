@@ -3,10 +3,10 @@ extern "C" {
     pub fn __ctype_b_loc() -> *mut *const libc::c_ushort;
 
     #[no_mangle]
-    pub fn __ctype_tolower_loc() -> *mut *const crate::stdlib::__int32_t;
+    pub fn __ctype_tolower_loc() -> *mut *const __int32_t;
 
     #[no_mangle]
-    pub fn __ctype_toupper_loc() -> *mut *const crate::stdlib::__int32_t;
+    pub fn __ctype_toupper_loc() -> *mut *const __int32_t;
     #[no_mangle]
     pub fn acos(_: libc::c_double) -> libc::c_double;
 
@@ -42,7 +42,7 @@ extern "C" {
         __base: *mut libc::c_void,
         __nmemb: crate::stddef_h::size_t,
         __size: crate::stddef_h::size_t,
-        __compar: crate::stdlib::__compar_fn_t,
+        __compar: __compar_fn_t,
     );
     #[no_mangle]
     pub fn memcpy(
