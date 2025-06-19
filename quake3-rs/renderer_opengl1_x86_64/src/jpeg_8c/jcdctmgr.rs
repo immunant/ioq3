@@ -337,7 +337,7 @@ unsafe extern "C" fn forward_DCT(
         }
         bi = bi.wrapping_add(1);
         start_col = (start_col as u32).wrapping_add((*compptr).DCT_h_scaled_size as u32)
-            as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION
+            as crate::jmorecfg_h::JDIMENSION
     }
 }
 
@@ -389,7 +389,7 @@ unsafe extern "C" fn forward_DCT_float(
         }
         bi = bi.wrapping_add(1);
         start_col = (start_col as u32).wrapping_add((*compptr).DCT_h_scaled_size as u32)
-            as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION
+            as crate::jmorecfg_h::JDIMENSION
     }
 }
 /* DCT_FLOAT_SUPPORTED */

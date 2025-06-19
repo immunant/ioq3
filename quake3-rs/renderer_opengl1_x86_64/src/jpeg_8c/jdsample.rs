@@ -315,7 +315,7 @@ unsafe extern "C" fn sep_upsample(
     }
     /* And not more than what the client can accept: */
     out_rows_avail = (out_rows_avail as u32).wrapping_sub(*out_row_ctr)
-        as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
+        as crate::jmorecfg_h::JDIMENSION;
     if num_rows > out_rows_avail {
         num_rows = out_rows_avail
     }
@@ -332,13 +332,11 @@ unsafe extern "C" fn sep_upsample(
         num_rows as i32,
     );
     /* Adjust counts */
-    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION
-        as crate::jmorecfg_h::JDIMENSION;
+    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION;
     (*upsample).rows_to_go = ((*upsample).rows_to_go as u32).wrapping_sub(num_rows)
-        as crate::jmorecfg_h::JDIMENSION
         as crate::jmorecfg_h::JDIMENSION;
     (*upsample).next_row_out =
-        ((*upsample).next_row_out as u32).wrapping_add(num_rows) as i32 as i32;
+        ((*upsample).next_row_out as u32).wrapping_add(num_rows) as i32;
     /* When the buffer is emptied, declare this input row group consumed */
     if (*upsample).next_row_out >= (*cinfo).max_v_samp_factor {
         *in_row_group_ctr = (*in_row_group_ctr).wrapping_add(1)

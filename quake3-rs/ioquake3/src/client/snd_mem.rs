@@ -58,7 +58,7 @@ pub unsafe extern "C" fn SND_free(mut v: *mut crate::snd_local_h::sndBuffer) {
     freelist = v;
     inUse = (inUse as libc::c_ulong)
         .wrapping_add(::std::mem::size_of::<crate::snd_local_h::sndBuffer>() as libc::c_ulong)
-        as i32 as i32;
+        as i32;
 }
 #[no_mangle]
 
@@ -69,10 +69,10 @@ pub unsafe extern "C" fn SND_malloc() -> *mut crate::snd_local_h::sndBuffer {
     }
     inUse = (inUse as libc::c_ulong)
         .wrapping_sub(::std::mem::size_of::<crate::snd_local_h::sndBuffer>() as libc::c_ulong)
-        as i32 as i32;
+        as i32;
     totalInUse = (totalInUse as libc::c_ulong)
         .wrapping_add(::std::mem::size_of::<crate::snd_local_h::sndBuffer>() as libc::c_ulong)
-        as i32 as i32;
+        as i32;
     v = freelist;
     freelist = *(freelist as *mut *mut crate::snd_local_h::sndBuffer);
     (*v).next = 0 as *mut crate::snd_local_h::sndBuffer_s;

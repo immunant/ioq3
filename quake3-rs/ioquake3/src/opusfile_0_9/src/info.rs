@@ -309,12 +309,10 @@ unsafe extern "C" fn opus_tags_parse_impl(
         return -(133 as i32);
     }
     _data = _data.offset(8 as i32 as isize);
-    len = (len as libc::c_ulong).wrapping_sub(8 as i32 as libc::c_ulong) as crate::stddef_h::size_t
-        as crate::stddef_h::size_t;
+    len = (len as libc::c_ulong).wrapping_sub(8 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
     count = op_parse_uint32le(_data);
     _data = _data.offset(4 as i32 as isize);
-    len = (len as libc::c_ulong).wrapping_sub(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t
-        as crate::stddef_h::size_t;
+    len = (len as libc::c_ulong).wrapping_sub(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
     if count as libc::c_ulong > len {
         return -(133 as i32);
     }
@@ -326,15 +324,13 @@ unsafe extern "C" fn opus_tags_parse_impl(
         }
     }
     _data = _data.offset(count as isize);
-    len = (len as libc::c_ulong).wrapping_sub(count as libc::c_ulong) as crate::stddef_h::size_t
-        as crate::stddef_h::size_t;
+    len = (len as libc::c_ulong).wrapping_sub(count as libc::c_ulong) as crate::stddef_h::size_t;
     if len < 4 as i32 as libc::c_ulong {
         return -(133 as i32);
     }
     count = op_parse_uint32le(_data);
     _data = _data.offset(4 as i32 as isize);
-    len = (len as libc::c_ulong).wrapping_sub(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t
-        as crate::stddef_h::size_t;
+    len = (len as libc::c_ulong).wrapping_sub(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
     /*Check to make sure there's minimally sufficient data left in the packet.*/
     if count as libc::c_ulong > len >> 2 as i32 {
         return -(133 as i32);
@@ -361,7 +357,7 @@ unsafe extern "C" fn opus_tags_parse_impl(
         count = op_parse_uint32le(_data);
         _data = _data.offset(4 as i32 as isize);
         len = (len as libc::c_ulong).wrapping_sub(4 as i32 as libc::c_ulong)
-            as crate::stddef_h::size_t as crate::stddef_h::size_t;
+            as crate::stddef_h::size_t;
         if count as libc::c_ulong > len {
             return -(133 as i32);
         }
@@ -384,8 +380,7 @@ unsafe extern "C" fn opus_tags_parse_impl(
             *fresh4 = 0 as *mut libc::c_char
         }
         _data = _data.offset(count as isize);
-        len = (len as libc::c_ulong).wrapping_sub(count as libc::c_ulong) as crate::stddef_h::size_t
-            as crate::stddef_h::size_t;
+        len = (len as libc::c_ulong).wrapping_sub(count as libc::c_ulong) as crate::stddef_h::size_t;
         ci += 1
     }
     if len > 0 as i32 as libc::c_ulong && *_data.offset(0 as i32 as isize) as i32 & 1 as i32 != 0 {
@@ -925,7 +920,6 @@ unsafe extern "C" fn op_extract_jpeg_params(
             } else {
                 /*Other markers: skip the whole marker segment.*/
                 offs = (offs as libc::c_ulong).wrapping_add(segment_len) as crate::stddef_h::size_t
-                    as crate::stddef_h::size_t
             }
         }
     };
@@ -1007,7 +1001,7 @@ unsafe extern "C" fn op_extract_png_params(
             }
             offs = (offs as libc::c_ulong)
                 .wrapping_add((12 as i32 as u32).wrapping_add(chunk_len) as libc::c_ulong)
-                as crate::stddef_h::size_t as crate::stddef_h::size_t
+                as crate::stddef_h::size_t
         }
     };
 }
@@ -1152,12 +1146,10 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
     }
     i = 0 as i32 as crate::stddef_h::size_t;
     picture_type = op_parse_uint32be(_buf.offset(i as isize)) as crate::opus_types_h::opus_int32;
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t
-        as crate::stddef_h::size_t;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
     /*Extract the MIME type.*/
     mime_type_length = op_parse_uint32be(_buf.offset(i as isize));
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t
-        as crate::stddef_h::size_t;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
     if mime_type_length as libc::c_ulong > _buf_sz.wrapping_sub(32 as i32 as libc::c_ulong) {
         return -(132 as i32);
     }
@@ -1177,11 +1169,10 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
     *mime_type.offset(mime_type_length as isize) = '\u{0}' as i32 as libc::c_char;
     (*_pic).mime_type = mime_type;
     i = (i as libc::c_ulong).wrapping_add(mime_type_length as libc::c_ulong)
-        as crate::stddef_h::size_t as crate::stddef_h::size_t;
+        as crate::stddef_h::size_t;
     /*Extract the description string.*/
     description_length = op_parse_uint32be(_buf.offset(i as isize));
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t
-        as crate::stddef_h::size_t;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
     if description_length as libc::c_ulong
         > _buf_sz
             .wrapping_sub(mime_type_length as libc::c_ulong)
@@ -1205,20 +1196,16 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
     *description.offset(description_length as isize) = '\u{0}' as i32 as libc::c_char;
     (*_pic).description = description;
     i = (i as libc::c_ulong).wrapping_add(description_length as libc::c_ulong)
-        as crate::stddef_h::size_t as crate::stddef_h::size_t;
+        as crate::stddef_h::size_t;
     /*Extract the remaining fields.*/
     width = op_parse_uint32be(_buf.offset(i as isize));
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t
-        as crate::stddef_h::size_t;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
     height = op_parse_uint32be(_buf.offset(i as isize));
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t
-        as crate::stddef_h::size_t;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
     depth = op_parse_uint32be(_buf.offset(i as isize));
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t
-        as crate::stddef_h::size_t;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
     colors = op_parse_uint32be(_buf.offset(i as isize));
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t
-        as crate::stddef_h::size_t;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
     /*If one of these is set, they all must be, but colors==0 is a valid value.*/
     colors_set = (width != 0 as i32 as u32
         || height != 0 as i32 as u32
@@ -1230,8 +1217,7 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
         return -(132 as i32);
     }
     data_length = op_parse_uint32be(_buf.offset(i as isize));
-    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t
-        as crate::stddef_h::size_t;
+    i = (i as libc::c_ulong).wrapping_add(4 as i32 as libc::c_ulong) as crate::stddef_h::size_t;
     if data_length as libc::c_ulong > _buf_sz.wrapping_sub(i) {
         return -(132 as i32);
     }
@@ -1383,8 +1369,7 @@ unsafe extern "C" fn opus_picture_tag_parse_impl(
     }
     /*Adjust _buf_sz instead of using data_length to capture the terminating NUL
     for URLs.*/
-    _buf_sz = (_buf_sz as libc::c_ulong).wrapping_sub(i) as crate::stddef_h::size_t
-        as crate::stddef_h::size_t;
+    _buf_sz = (_buf_sz as libc::c_ulong).wrapping_sub(i) as crate::stddef_h::size_t;
     crate::stdlib::memmove(
         _buf as *mut libc::c_void,
         _buf.offset(i as isize) as *const libc::c_void,

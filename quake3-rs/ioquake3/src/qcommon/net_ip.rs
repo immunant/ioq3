@@ -2085,14 +2085,14 @@ unsafe extern "C" fn NET_GetCvars() -> crate::src::qcommon::q_shared::qboolean {
         b"0.0.0.0\x00" as *const u8 as *const libc::c_char,
         0x20 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    modified = (modified as u32).wrapping_add((*net_ip).modified as u32) as i32 as i32;
+    modified = (modified as u32).wrapping_add((*net_ip).modified as u32) as i32;
     (*net_ip).modified = crate::src::qcommon::q_shared::qfalse;
     net_ip6 = crate::src::qcommon::cvar::Cvar_Get(
         b"net_ip6\x00" as *const u8 as *const libc::c_char,
         b"::\x00" as *const u8 as *const libc::c_char,
         0x20 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    modified = (modified as u32).wrapping_add((*net_ip6).modified as u32) as i32 as i32;
+    modified = (modified as u32).wrapping_add((*net_ip6).modified as u32) as i32;
     (*net_ip6).modified = crate::src::qcommon::q_shared::qfalse;
     net_port = crate::src::qcommon::cvar::Cvar_Get(
         b"net_port\x00" as *const u8 as *const libc::c_char,
@@ -2102,7 +2102,7 @@ unsafe extern "C" fn NET_GetCvars() -> crate::src::qcommon::q_shared::qboolean {
         ),
         0x20 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    modified = (modified as u32).wrapping_add((*net_port).modified as u32) as i32 as i32;
+    modified = (modified as u32).wrapping_add((*net_port).modified as u32) as i32;
     (*net_port).modified = crate::src::qcommon::q_shared::qfalse;
     net_port6 = crate::src::qcommon::cvar::Cvar_Get(
         b"net_port6\x00" as *const u8 as *const libc::c_char,
@@ -2112,7 +2112,7 @@ unsafe extern "C" fn NET_GetCvars() -> crate::src::qcommon::q_shared::qboolean {
         ),
         0x20 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    modified = (modified as u32).wrapping_add((*net_port6).modified as u32) as i32 as i32;
+    modified = (modified as u32).wrapping_add((*net_port6).modified as u32) as i32;
     (*net_port6).modified = crate::src::qcommon::q_shared::qfalse;
     // Some cvars for configuring multicast options which facilitates scanning for servers on local subnets.
     net_mcast6addr = crate::src::qcommon::cvar::Cvar_Get(
@@ -2120,49 +2120,49 @@ unsafe extern "C" fn NET_GetCvars() -> crate::src::qcommon::q_shared::qboolean {
         b"ff04::696f:7175:616b:6533\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x1 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    modified = (modified as u32).wrapping_add((*net_mcast6addr).modified as u32) as i32 as i32;
+    modified = (modified as u32).wrapping_add((*net_mcast6addr).modified as u32) as i32;
     (*net_mcast6addr).modified = crate::src::qcommon::q_shared::qfalse;
     net_mcast6iface = crate::src::qcommon::cvar::Cvar_Get(
         b"net_mcast6iface\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x1 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    modified = (modified as u32).wrapping_add((*net_mcast6iface).modified as u32) as i32 as i32;
+    modified = (modified as u32).wrapping_add((*net_mcast6iface).modified as u32) as i32;
     (*net_mcast6iface).modified = crate::src::qcommon::q_shared::qfalse;
     net_socksEnabled = crate::src::qcommon::cvar::Cvar_Get(
         b"net_socksEnabled\x00" as *const u8 as *const libc::c_char,
         b"0\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x1 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    modified = (modified as u32).wrapping_add((*net_socksEnabled).modified as u32) as i32 as i32;
+    modified = (modified as u32).wrapping_add((*net_socksEnabled).modified as u32) as i32;
     (*net_socksEnabled).modified = crate::src::qcommon::q_shared::qfalse;
     net_socksServer = crate::src::qcommon::cvar::Cvar_Get(
         b"net_socksServer\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x1 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    modified = (modified as u32).wrapping_add((*net_socksServer).modified as u32) as i32 as i32;
+    modified = (modified as u32).wrapping_add((*net_socksServer).modified as u32) as i32;
     (*net_socksServer).modified = crate::src::qcommon::q_shared::qfalse;
     net_socksPort = crate::src::qcommon::cvar::Cvar_Get(
         b"net_socksPort\x00" as *const u8 as *const libc::c_char,
         b"1080\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x1 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    modified = (modified as u32).wrapping_add((*net_socksPort).modified as u32) as i32 as i32;
+    modified = (modified as u32).wrapping_add((*net_socksPort).modified as u32) as i32;
     (*net_socksPort).modified = crate::src::qcommon::q_shared::qfalse;
     net_socksUsername = crate::src::qcommon::cvar::Cvar_Get(
         b"net_socksUsername\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x1 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    modified = (modified as u32).wrapping_add((*net_socksUsername).modified as u32) as i32 as i32;
+    modified = (modified as u32).wrapping_add((*net_socksUsername).modified as u32) as i32;
     (*net_socksUsername).modified = crate::src::qcommon::q_shared::qfalse;
     net_socksPassword = crate::src::qcommon::cvar::Cvar_Get(
         b"net_socksPassword\x00" as *const u8 as *const libc::c_char,
         b"\x00" as *const u8 as *const libc::c_char,
         0x20 as i32 | 0x1 as i32,
     ) as *mut crate::src::qcommon::q_shared::cvar_s;
-    modified = (modified as u32).wrapping_add((*net_socksPassword).modified as u32) as i32 as i32;
+    modified = (modified as u32).wrapping_add((*net_socksPassword).modified as u32) as i32;
     (*net_socksPassword).modified = crate::src::qcommon::q_shared::qfalse;
     net_dropsim = crate::src::qcommon::cvar::Cvar_Get(
         b"net_dropsim\x00" as *const u8 as *const libc::c_char,

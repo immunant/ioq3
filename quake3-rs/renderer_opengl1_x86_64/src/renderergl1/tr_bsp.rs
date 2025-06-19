@@ -951,7 +951,7 @@ unsafe extern "C" fn ParseFace(
     ofsIndexes = sfaceSize;
     sfaceSize = (sfaceSize as libc::c_ulong).wrapping_add(
         (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(numIndexes as libc::c_ulong),
-    ) as i32 as i32;
+    ) as i32;
     cv = crate::src::renderergl1::tr_main::ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
