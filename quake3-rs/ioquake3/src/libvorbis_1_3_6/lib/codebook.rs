@@ -277,7 +277,7 @@ pub unsafe extern "C" fn vorbis_staticbook_pack(
             while i < quantvals as isize {
                 crate::src::libogg_1_3_3::src::bitwise::oggpack_write(
                     opb as *mut crate::ogg_h::oggpack_buffer,
-                    ::libc::labs(*(*c).quantlist.offset(i as isize)) as libc::c_ulong,
+                    ::libc::labs(*(*c).quantlist.offset(i as isize) as libc::c_long) as libc::c_ulong,
                     (*c).q_quant,
                 );
                 i += 1

@@ -2394,8 +2394,8 @@ pub unsafe extern "C" fn NET_Sleep(mut msec: i32) {
             highestfd = ip6_socket
         }
     }
-    timeout.tv_sec = (msec / 1000 as i32) as crate::stdlib::__time_t;
-    timeout.tv_usec = (msec % 1000 as i32 * 1000 as i32) as crate::stdlib::__suseconds_t;
+    timeout.tv_sec = ((msec / 1000 as i32) as crate::stdlib::__time_t) as libc::time_t;
+    timeout.tv_usec = ((msec % 1000 as i32 * 1000 as i32) as crate::stdlib::__suseconds_t) as libc::suseconds_t;
     retval = crate::stdlib::select(
         highestfd + 1 as i32,
         &mut fdr,

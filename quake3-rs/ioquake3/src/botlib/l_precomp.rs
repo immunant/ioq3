@@ -1081,7 +1081,7 @@ pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
             *lasttoken = token
         }
         3 => {
-            t = ::libc::time(0 as *mut crate::stdlib::time_t);
+            t = ::libc::time(0 as *mut libc::c_long) as crate::stdlib::time_t;
             curtime = crate::stdlib::ctime(&mut t);
             ::libc::strcpy(
                 (*token).string.as_mut_ptr(),
@@ -1108,7 +1108,7 @@ pub unsafe extern "C" fn PC_ExpandBuiltinDefine(
             *lasttoken = token
         }
         4 => {
-            t = ::libc::time(0 as *mut crate::stdlib::time_t);
+            t = ::libc::time(0 as *mut libc::c_long) as crate::stdlib::time_t;
             curtime = crate::stdlib::ctime(&mut t);
             ::libc::strcpy(
                 (*token).string.as_mut_ptr(),
@@ -3638,7 +3638,7 @@ pub unsafe extern "C" fn PC_Directive_eval(
     ::libc::sprintf(
         token.string.as_mut_ptr(),
         b"%ld\x00" as *const u8 as *const libc::c_char,
-        ::libc::labs(value),
+        ::libc::labs(value as libc::c_long),
     );
     token.type_0 = 3 as i32;
     token.subtype = 0x1000 as i32 | 0x2000 as i32 | 0x8 as i32;
@@ -4008,11 +4008,11 @@ pub unsafe extern "C" fn PC_DollarDirective_evalint(
     ::libc::sprintf(
         token.string.as_mut_ptr(),
         b"%ld\x00" as *const u8 as *const libc::c_char,
-        ::libc::labs(value),
+        ::libc::labs(value as libc::c_long),
     );
     token.type_0 = 3 as i32;
     token.subtype = 0x1000 as i32 | 0x2000 as i32 | 0x8 as i32;
-    token.intvalue = ::libc::labs(value) as libc::c_ulong;
+    token.intvalue = ::libc::labs(value as libc::c_long) as libc::c_ulong;
     token.floatvalue = token.intvalue as f32;
     //NUMBERVALUE
     PC_UnreadSourceToken(source, &mut token);

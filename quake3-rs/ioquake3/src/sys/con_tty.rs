@@ -645,8 +645,8 @@ pub unsafe extern "C" fn CON_Input() -> *mut libc::c_char {
                     % (8 as i32
                         * ::std::mem::size_of::<crate::stdlib::__fd_mask>() as libc::c_ulong
                             as i32)) as crate::stdlib::__fd_mask;
-            timeout.tv_sec = 0 as i32 as crate::stdlib::__time_t;
-            timeout.tv_usec = 0 as i32 as crate::stdlib::__suseconds_t;
+            timeout.tv_sec = (0 as i32 as crate::stdlib::__time_t) as libc::time_t;
+            timeout.tv_usec = (0 as i32 as crate::stdlib::__suseconds_t) as libc::suseconds_t;
             if crate::stdlib::select(
                 0 as i32 + 1 as i32,
                 &mut fdset,

@@ -12557,12 +12557,12 @@ pub unsafe extern "C" fn Sys_Milliseconds() -> i32 {
     crate::stdlib::gettimeofday(&mut tp, 0 as *mut crate::stdlib::timezone);
     if sys_timeBase == 0 {
         sys_timeBase = tp.tv_sec as libc::c_ulong;
-        return (tp.tv_usec / 1000 as i32 as isize) as i32;
+        return (tp.tv_usec as isize / 1000) as i32;
     }
     curtime = (tp.tv_sec as libc::c_ulong)
         .wrapping_sub(sys_timeBase)
         .wrapping_mul(1000 as i32 as libc::c_ulong)
-        .wrapping_add((tp.tv_usec / 1000 as i32 as isize) as libc::c_ulong)
+        .wrapping_add((tp.tv_usec as isize / 1000) as libc::c_ulong)
         as i32;
     return curtime;
 }
@@ -13152,8 +13152,8 @@ pub unsafe extern "C" fn Sys_Sleep(mut msec: i32) {
                 tv_sec: 0,
                 tv_usec: 0,
             };
-            timeout.tv_sec = (msec / 1000 as i32) as crate::stdlib::__time_t;
-            timeout.tv_usec = (msec % 1000 as i32 * 1000 as i32) as crate::stdlib::__suseconds_t;
+            timeout.tv_sec = ((msec / 1000 as i32) as crate::stdlib::__time_t) as libc::time_t;
+            timeout.tv_usec = ((msec % 1000 as i32 * 1000 as i32) as crate::stdlib::__suseconds_t) as libc::suseconds_t;
             crate::stdlib::select(
                 0 as i32 + 1 as i32,
                 &mut fdset,
