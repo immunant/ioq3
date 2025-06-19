@@ -1623,10 +1623,10 @@ pub unsafe extern "C" fn unzReadCurrentFile(
             {
                 return -(1 as i32);
             }
-            (*pfile_in_zip_read_info).pos_in_zipfile =
-                ((*pfile_in_zip_read_info).pos_in_zipfile as libc::c_ulong)
-                    .wrapping_add(uReadThis as libc::c_ulong)
-                    as crate::zconf_h::uLong;
+            (*pfile_in_zip_read_info).pos_in_zipfile = ((*pfile_in_zip_read_info).pos_in_zipfile
+                as libc::c_ulong)
+                .wrapping_add(uReadThis as libc::c_ulong)
+                as crate::zconf_h::uLong;
             (*pfile_in_zip_read_info).rest_read_compressed =
                 ((*pfile_in_zip_read_info).rest_read_compressed as libc::c_ulong)
                     .wrapping_sub(uReadThis as libc::c_ulong)
@@ -1669,7 +1669,8 @@ pub unsafe extern "C" fn unzReadCurrentFile(
             );
             (*pfile_in_zip_read_info).rest_read_uncompressed =
                 ((*pfile_in_zip_read_info).rest_read_uncompressed as libc::c_ulong)
-                    .wrapping_sub(uDoCopy as libc::c_ulong) as crate::zconf_h::uLong;
+                    .wrapping_sub(uDoCopy as libc::c_ulong)
+                    as crate::zconf_h::uLong;
             (*pfile_in_zip_read_info).stream.avail_in =
                 ((*pfile_in_zip_read_info).stream.avail_in as u32).wrapping_sub(uDoCopy)
                     as crate::zconf_h::uInt;
@@ -1684,11 +1685,11 @@ pub unsafe extern "C" fn unzReadCurrentFile(
                 .stream
                 .next_in
                 .offset(uDoCopy as isize);
-            (*pfile_in_zip_read_info).stream.total_out =
-                ((*pfile_in_zip_read_info).stream.total_out as libc::c_ulong)
-                    .wrapping_add(uDoCopy as libc::c_ulong) as crate::zconf_h::uLong;
-            iRead =
-                (iRead as u32).wrapping_add(uDoCopy) as crate::zconf_h::uInt
+            (*pfile_in_zip_read_info).stream.total_out = ((*pfile_in_zip_read_info).stream.total_out
+                as libc::c_ulong)
+                .wrapping_add(uDoCopy as libc::c_ulong)
+                as crate::zconf_h::uLong;
+            iRead = (iRead as u32).wrapping_add(uDoCopy) as crate::zconf_h::uInt
         } else {
             let mut uTotalOutBefore: crate::zconf_h::uLong = 0;
             let mut uTotalOutAfter: crate::zconf_h::uLong = 0;

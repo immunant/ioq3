@@ -417,8 +417,8 @@ unsafe extern "C" fn DecompressIDATs(
                 BytesToRewind = (BytesToRewind as u32)
                     .wrapping_add(Length.wrapping_add(4 as i32 as u32))
                     as i32;
-                CompressedDataLength = (CompressedDataLength as u32).wrapping_add(Length)
-                    as crate::stdlib::uint32_t
+                CompressedDataLength =
+                    (CompressedDataLength as u32).wrapping_add(Length) as crate::stdlib::uint32_t
             }
         }
     }

@@ -268,9 +268,9 @@ pub unsafe extern "C" fn ec_enc_icdf(
                 as u32,
         )
     } else {
-        (*_this).rng =
-            ((*_this).rng as u32).wrapping_sub(r.wrapping_mul(*_icdf.offset(_s as isize) as u32))
-                as crate::opus_types_h::opus_uint32
+        (*_this).rng = ((*_this).rng as u32)
+            .wrapping_sub(r.wrapping_mul(*_icdf.offset(_s as isize) as u32))
+            as crate::opus_types_h::opus_uint32
     }
     ec_enc_normalize(_this);
 }

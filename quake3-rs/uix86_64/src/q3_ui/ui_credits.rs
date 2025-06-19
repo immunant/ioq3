@@ -357,10 +357,7 @@ pub unsafe extern "C" fn UI_CreditMenu() {
         ::std::mem::size_of::<creditsmenu_t>() as libc::c_ulong,
     );
     s_credits.menu.draw = Some(UI_CreditMenu_Draw as unsafe extern "C" fn() -> ());
-    s_credits.menu.key = Some(
-        UI_CreditMenu_Key
-            as unsafe extern "C" fn(_: i32) -> sfxHandle_t,
-    );
+    s_credits.menu.key = Some(UI_CreditMenu_Key as unsafe extern "C" fn(_: i32) -> sfxHandle_t);
     s_credits.menu.fullscreen = qtrue;
     crate::src::q3_ui::ui_atoms::UI_PushMenu(
         &mut s_credits.menu as *mut _ as *mut _tag_menuframework,

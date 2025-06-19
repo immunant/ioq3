@@ -137,8 +137,8 @@ pub unsafe extern "C" fn adler32(
                 break;
             }
         }
-        adler = (adler as libc::c_ulong).wrapping_rem(65521 as libc::c_ulong)
-            as crate::zconf_h::uLong;
+        adler =
+            (adler as libc::c_ulong).wrapping_rem(65521 as libc::c_ulong) as crate::zconf_h::uLong;
         sum2 = sum2.wrapping_rem(65521 as libc::c_ulong)
     }
     /* do remaining bytes (less than NMAX, still just one modulo) */
@@ -224,8 +224,8 @@ pub unsafe extern "C" fn adler32(
                 as crate::zconf_h::uLong;
             sum2 = sum2.wrapping_add(adler)
         }
-        adler = (adler as libc::c_ulong).wrapping_rem(65521 as libc::c_ulong)
-            as crate::zconf_h::uLong;
+        adler =
+            (adler as libc::c_ulong).wrapping_rem(65521 as libc::c_ulong) as crate::zconf_h::uLong;
         sum2 = sum2.wrapping_rem(65521 as libc::c_ulong)
     }
     /* return recombined sums */

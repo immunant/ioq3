@@ -520,17 +520,13 @@ unsafe extern "C" fn MD5Transform(
     b = b << 21 as i32 | b >> 32 as i32 - 21 as i32;
     b = (b as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     let ref mut fresh0 = *buf.offset(0 as i32 as isize);
-    *fresh0 =
-        (*fresh0 as u32).wrapping_add(a) as crate::stdlib::uint32_t;
+    *fresh0 = (*fresh0 as u32).wrapping_add(a) as crate::stdlib::uint32_t;
     let ref mut fresh1 = *buf.offset(1 as i32 as isize);
-    *fresh1 =
-        (*fresh1 as u32).wrapping_add(b) as crate::stdlib::uint32_t;
+    *fresh1 = (*fresh1 as u32).wrapping_add(b) as crate::stdlib::uint32_t;
     let ref mut fresh2 = *buf.offset(2 as i32 as isize);
-    *fresh2 =
-        (*fresh2 as u32).wrapping_add(c) as crate::stdlib::uint32_t;
+    *fresh2 = (*fresh2 as u32).wrapping_add(c) as crate::stdlib::uint32_t;
     let ref mut fresh3 = *buf.offset(3 as i32 as isize);
-    *fresh3 =
-        (*fresh3 as u32).wrapping_add(d) as crate::stdlib::uint32_t;
+    *fresh3 = (*fresh3 as u32).wrapping_add(d) as crate::stdlib::uint32_t;
 }
 /*
  * Update context to reflect the concatenation of another buffer full

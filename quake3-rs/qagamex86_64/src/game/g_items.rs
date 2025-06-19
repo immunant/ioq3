@@ -774,8 +774,8 @@ pub unsafe extern "C" fn LaunchItem(
     let mut dropped: *mut crate::g_local_h::gentity_t = 0 as *mut crate::g_local_h::gentity_t; // store item number in modelindex
     dropped = crate::src::game::g_utils::G_Spawn() as *mut crate::g_local_h::gentity_s; // This is non-zero is it's a dropped item
     (*dropped).s.eType = crate::bg_public_h::ET_ITEM as i32; // auto-remove after 30 seconds
-    (*dropped).s.modelindex = item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
-        as isize as i32;
+    (*dropped).s.modelindex =
+        item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr()) as isize as i32;
     (*dropped).s.modelindex2 = 1 as i32;
     (*dropped).classname = (*item).classname;
     (*dropped).item = item;
@@ -1086,8 +1086,9 @@ pub unsafe extern "C" fn RegisterItem(mut item: *mut crate::bg_public_h::gitem_t
             b"RegisterItem: NULL\x00" as *const u8 as *const libc::c_char,
         );
     }
-    itemRegistered[item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr())
-        as isize as usize] = crate::src::qcommon::q_shared::qtrue;
+    itemRegistered
+        [item.offset_from(crate::src::game::bg_misc::bg_itemlist.as_mut_ptr()) as isize as usize] =
+        crate::src::qcommon::q_shared::qtrue;
 }
 /*
 ===============

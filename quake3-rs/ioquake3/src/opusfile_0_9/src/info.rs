@@ -380,7 +380,8 @@ unsafe extern "C" fn opus_tags_parse_impl(
             *fresh4 = 0 as *mut libc::c_char
         }
         _data = _data.offset(count as isize);
-        len = (len as libc::c_ulong).wrapping_sub(count as libc::c_ulong) as crate::stddef_h::size_t;
+        len =
+            (len as libc::c_ulong).wrapping_sub(count as libc::c_ulong) as crate::stddef_h::size_t;
         ci += 1
     }
     if len > 0 as i32 as libc::c_ulong && *_data.offset(0 as i32 as isize) as i32 & 1 as i32 != 0 {
