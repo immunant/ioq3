@@ -968,7 +968,7 @@ pub unsafe extern "C" fn G_InitGentity(mut e: *mut crate::g_local_h::gentity_t) 
     (*e).inuse = crate::src::qcommon::q_shared::qtrue;
     (*e).classname = b"noclass\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*e).s.number =
-        e.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32;
+        e.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as isize as i32;
     (*e).r.ownerNum = ((1 as i32) << 10 as i32) - 1 as i32;
 }
 /*

@@ -846,7 +846,7 @@ pub unsafe extern "C" fn ClientInactivityTimer(
     } else if (*client).pers.localClient as u64 == 0 {
         if crate::src::game::g_main::level.time > (*client).inactivityTime {
             crate::src::game::g_syscalls::trap_DropClient(
-                client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long as i32,
+                client.offset_from(crate::src::game::g_main::level.clients) as isize as i32,
                 b"Dropped due to inactivity\x00" as *const u8 as *const libc::c_char,
             );
             return crate::src::qcommon::q_shared::qfalse;
@@ -856,7 +856,7 @@ pub unsafe extern "C" fn ClientInactivityTimer(
         {
             (*client).inactivityWarning = crate::src::qcommon::q_shared::qtrue;
             crate::src::game::g_syscalls::trap_SendServerCommand(
-                client.offset_from(crate::src::game::g_main::level.clients) as libc::c_long as i32,
+                client.offset_from(crate::src::game::g_main::level.clients) as isize as i32,
                 b"cp \"Ten seconds until inactivity drop!\n\"\x00" as *const u8
                     as *const libc::c_char,
             );
@@ -1498,7 +1498,7 @@ pub unsafe extern "C" fn SpectatorClientEndFrame(mut ent: *mut crate::g_local_h:
                 (*ent)
                     .client
                     .offset_from(crate::src::game::g_main::level.clients)
-                    as libc::c_long as i32,
+                    as isize as i32,
             );
         }
     }

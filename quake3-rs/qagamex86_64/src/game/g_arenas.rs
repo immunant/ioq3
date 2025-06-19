@@ -444,7 +444,7 @@ unsafe extern "C" fn SpawnModelOnVictoryPad(
     (*body).s.powerups = 0 as i32;
     (*body).s.loopSound = 0 as i32;
     (*body).s.number =
-        body.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as libc::c_long as i32;
+        body.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as isize as i32;
     (*body).timestamp = crate::src::game::g_main::level.time;
     (*body).physicsObject = crate::src::qcommon::q_shared::qtrue;
     (*body).physicsBounce = 0 as i32 as f32;
@@ -763,7 +763,7 @@ unsafe extern "C" fn SpawnPodium() -> *mut crate::g_local_h::gentity_t {
     (*podium).classname = b"podium\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*podium).s.eType = crate::bg_public_h::ET_GENERAL as i32;
     (*podium).s.number = podium.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-        as libc::c_long as i32;
+        as isize as i32;
     (*podium).clipmask = 1 as i32;
     (*podium).r.contents = 1 as i32;
     (*podium).s.modelindex = crate::src::game::g_utils::G_ModelIndex(
