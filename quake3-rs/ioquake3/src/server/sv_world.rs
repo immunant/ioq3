@@ -523,7 +523,7 @@ unsafe extern "C" fn SV_AreaEntities_r(mut node: *mut worldSector_t, mut ap: *mu
             }
             *(*ap).list.offset((*ap).count as isize) = check
                 .offset_from(crate::src::server::sv_main::sv.svEntities.as_mut_ptr())
-                as libc::c_long as i32;
+                as isize as i32;
             (*ap).count += 1
         }
         check = next

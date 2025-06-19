@@ -1497,8 +1497,8 @@ pub unsafe extern "C" fn SpectatorClientEndFrame(mut ent: *mut crate::g_local_h:
             crate::src::game::g_client::ClientBegin(
                 (*ent)
                     .client
-                    .offset_from(crate::src::game::g_main::level.clients)
-                    as isize as i32,
+                    .offset_from(crate::src::game::g_main::level.clients) as isize
+                    as i32,
             );
         }
     }

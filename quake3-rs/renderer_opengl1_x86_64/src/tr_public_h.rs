@@ -218,9 +218,8 @@ pub struct refimport_t {
         ) -> (),
     >,
     pub FS_FileIsInPAK: Option<unsafe extern "C" fn(_: *const libc::c_char, _: *mut i32) -> i32>,
-    pub FS_ReadFile: Option<
-        unsafe extern "C" fn(_: *const libc::c_char, _: *mut *mut libc::c_void) -> libc::c_long,
-    >,
+    pub FS_ReadFile:
+        Option<unsafe extern "C" fn(_: *const libc::c_char, _: *mut *mut libc::c_void) -> isize>,
     pub FS_FreeFile: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
     pub FS_ListFiles: Option<
         unsafe extern "C" fn(
@@ -246,7 +245,7 @@ pub struct refimport_t {
     pub IN_Init: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
     pub IN_Shutdown: Option<unsafe extern "C" fn() -> ()>,
     pub IN_Restart: Option<unsafe extern "C" fn() -> ()>,
-    pub ftol: Option<unsafe extern "C" fn(_: f32) -> libc::c_long>,
+    pub ftol: Option<unsafe extern "C" fn(_: f32) -> isize>,
     pub Sys_SetEnv:
         Option<unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> ()>,
     pub Sys_GLimpSafeInit: Option<unsafe extern "C" fn() -> ()>,

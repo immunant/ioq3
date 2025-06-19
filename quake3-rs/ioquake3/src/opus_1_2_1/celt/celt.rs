@@ -136,10 +136,7 @@ pub unsafe extern "C" fn comb_filter(
                     .wrapping_mul(
                         ::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong
                     )
-                    .wrapping_add(
-                        (0 as i32 as libc::c_long * y.offset_from(x) as libc::c_long)
-                            as libc::c_ulong,
-                    ),
+                    .wrapping_add((0 as i32 as isize * y.offset_from(x) as isize) as libc::c_ulong),
             );
         }
         return;
@@ -198,10 +195,10 @@ pub unsafe extern "C" fn comb_filter(
                         ::std::mem::size_of::<crate::arch_h::opus_val32>() as libc::c_ulong
                     )
                     .wrapping_add(
-                        (0 as i32 as libc::c_long
+                        (0 as i32 as isize
                             * y.offset(overlap as isize)
                                 .offset_from(x.offset(overlap as isize))
-                                as libc::c_long) as libc::c_ulong,
+                                as isize) as libc::c_ulong,
                     ),
             );
         }

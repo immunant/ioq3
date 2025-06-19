@@ -636,11 +636,11 @@ pub unsafe extern "C" fn MuLawEncode(mut s: i16) -> crate::src::qcommon::q_share
     if (s as i32) < 0 as i32 {
         s = -(s as i32) as i16
     }
-    adjusted = ((s as libc::c_long)
+    adjusted = ((s as isize)
         << (16 as i32 as libc::c_ulong).wrapping_sub(
             (::std::mem::size_of::<i16>() as libc::c_ulong).wrapping_mul(8 as i32 as libc::c_ulong),
         )) as libc::c_ulong;
-    adjusted = adjusted.wrapping_add((128 as libc::c_long + 4 as libc::c_long) as libc::c_ulong);
+    adjusted = adjusted.wrapping_add((128 as isize + 4 as isize) as libc::c_ulong);
     if adjusted > 32767 as i32 as libc::c_ulong {
         adjusted = 32767 as i32 as libc::c_ulong
     }
@@ -654,14 +654,13 @@ pub unsafe extern "C" fn MuLawEncode(mut s: i16) -> crate::src::qcommon::q_share
 #[no_mangle]
 
 pub unsafe extern "C" fn MuLawDecode(mut uLaw: crate::src::qcommon::q_shared::byte) -> i16 {
-    let mut adjusted: libc::c_long = 0;
+    let mut adjusted: isize = 0;
     let mut exponent: crate::src::qcommon::q_shared::byte = 0;
     let mut mantissa: crate::src::qcommon::q_shared::byte = 0;
     uLaw = !(uLaw as i32) as crate::src::qcommon::q_shared::byte;
     exponent = (uLaw as i32 >> 4 as i32 & 0x7 as i32) as crate::src::qcommon::q_shared::byte;
     mantissa = ((uLaw as i32 & 0xf as i32) + 16 as i32) as crate::src::qcommon::q_shared::byte;
-    adjusted =
-        (((mantissa as i32) << exponent as i32 + 3 as i32) - 128 as i32 - 4 as i32) as libc::c_long;
+    adjusted = (((mantissa as i32) << exponent as i32 + 3 as i32) - 128 as i32 - 4 as i32) as isize;
     return if uLaw as i32 & 0x80 as i32 != 0 {
         adjusted
     } else {

@@ -1151,7 +1151,7 @@ pub unsafe extern "C" fn SV_DirectConnect(mut from: crate::qcommon_h::netadr_t) 
     // accept the new client
     // this is the only place a client_t is ever initialized
     *newcl = temp;
-    clientNum = newcl.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32;
+    clientNum = newcl.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32;
     ent = crate::src::server::sv_game::SV_GentityNum(clientNum)
         as *mut crate::g_public_h::sharedEntity_t;
     (*newcl).gentity = ent;
@@ -1258,7 +1258,7 @@ pub unsafe extern "C" fn SV_FreeClient(mut client: *mut crate::server_h::client_
                     ::std::mem::size_of::<*mut crate::server_h::voipServerPacket_t>()
                         as libc::c_ulong,
                 ),
-        ) as i32 as i32;
+        ) as i32;
         crate::src::qcommon::common::Z_Free(
             (*client).voipPacket[index as usize] as *mut libc::c_void,
         );
@@ -1332,7 +1332,7 @@ pub unsafe extern "C" fn SV_DropClient(
     crate::src::qcommon::vm::VM_Call(
         crate::src::server::sv_main::gvm,
         crate::g_public_h::GAME_CLIENT_DISCONNECT as i32,
-        drop_0.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long,
+        drop_0.offset_from(crate::src::server::sv_main::svs.clients) as isize,
     );
     // add the disconnect command
     crate::src::server::sv_main::SV_SendServerCommand(
@@ -1342,7 +1342,7 @@ pub unsafe extern "C" fn SV_DropClient(
     );
     if isBot as u64 != 0 {
         crate::src::server::sv_bot::SV_BotFreeClient(
-            drop_0.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32,
+            drop_0.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32,
         );
         // bots shouldn't go zombie, as there's no real net connection.
         (*drop_0).state = crate::server_h::CS_FREE
@@ -1356,7 +1356,7 @@ pub unsafe extern "C" fn SV_DropClient(
     }
     // nuke user info
     crate::src::server::sv_init::SV_SetUserinfo(
-        drop_0.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32,
+        drop_0.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32,
         b"\x00" as *const u8 as *const libc::c_char,
     );
     // if this was the last client on the server, send a heartbeat
@@ -1544,7 +1544,7 @@ unsafe extern "C" fn SV_SendClientGameState(mut client: *mut crate::server_h::cl
     );
     crate::src::qcommon::msg::MSG_WriteLong(
         &mut msg as *mut _ as *mut crate::qcommon_h::msg_t,
-        client.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32,
+        client.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32,
     );
     // write the checksum feed
     crate::src::qcommon::msg::MSG_WriteLong(
@@ -1580,7 +1580,7 @@ pub unsafe extern "C" fn SV_ClientEnterWorld(
     // no longer sent when the client is CS_PRIMED
     crate::src::server::sv_init::SV_UpdateConfigstrings(client as *mut crate::server_h::client_s);
     // set up the entity for the client
-    clientNum = client.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32; // generate a snapshot immediately
+    clientNum = client.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32; // generate a snapshot immediately
     ent = crate::src::server::sv_game::SV_GentityNum(clientNum)
         as *mut crate::g_public_h::sharedEntity_t;
     (*ent).s.number = clientNum;
@@ -1606,7 +1606,7 @@ pub unsafe extern "C" fn SV_ClientEnterWorld(
     crate::src::qcommon::vm::VM_Call(
         crate::src::server::sv_main::gvm,
         crate::g_public_h::GAME_CLIENT_BEGIN as i32,
-        client.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long,
+        client.offset_from(crate::src::server::sv_main::svs.clients) as isize,
     );
 }
 /*
@@ -1678,7 +1678,7 @@ unsafe extern "C" fn SV_StopDownload_f(mut cl: *mut crate::server_h::client_t) {
     if *(*cl).downloadName.as_mut_ptr() != 0 {
         crate::src::qcommon::common::Com_DPrintf(
             b"clientDownload: %d : file \"%s\" aborted\n\x00" as *const u8 as *const libc::c_char,
-            cl.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32,
+            cl.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32,
             (*cl).downloadName.as_mut_ptr(),
         );
     }
@@ -1718,7 +1718,7 @@ unsafe extern "C" fn SV_NextDownload_f(mut cl: *mut crate::server_h::client_t) {
         crate::src::qcommon::common::Com_DPrintf(
             b"clientDownload: %d : client acknowledge of block %d\n\x00" as *const u8
                 as *const libc::c_char,
-            cl.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32,
+            cl.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32,
             block,
         );
         // Find out if we are done.  A zero-length block indicates EOF
@@ -1726,7 +1726,7 @@ unsafe extern "C" fn SV_NextDownload_f(mut cl: *mut crate::server_h::client_t) {
             crate::src::qcommon::common::Com_Printf(
                 b"clientDownload: %d : file \"%s\" completed\n\x00" as *const u8
                     as *const libc::c_char,
-                cl.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32,
+                cl.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32,
                 (*cl).downloadName.as_mut_ptr(),
             );
             SV_CloseDownload(cl);
@@ -1864,7 +1864,7 @@ pub unsafe extern "C" fn SV_WriteDownloadToClient(
                 crate::src::qcommon::common::Com_Printf(
                     b"clientDownload: %d : \"%s\" is not referenced and cannot be downloaded.\n\x00"
                         as *const u8 as *const libc::c_char,
-                    cl.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32,
+                    cl.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32,
                     (*cl).downloadName.as_mut_ptr(),
                 );
                 crate::src::qcommon::q_shared::Com_sprintf(
@@ -1878,7 +1878,7 @@ pub unsafe extern "C" fn SV_WriteDownloadToClient(
                 crate::src::qcommon::common::Com_Printf(
                     b"clientDownload: %d : \"%s\" cannot download id pk3 files\n\x00" as *const u8
                         as *const libc::c_char,
-                    cl.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32,
+                    cl.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32,
                     (*cl).downloadName.as_mut_ptr(),
                 );
                 if missionPack as u64 != 0 {
@@ -1903,7 +1903,7 @@ pub unsafe extern "C" fn SV_WriteDownloadToClient(
                 crate::src::qcommon::common::Com_Printf(
                     b"clientDownload: %d : \"%s\" download disabled\n\x00" as *const u8
                         as *const libc::c_char,
-                    cl.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32,
+                    cl.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32,
                     (*cl).downloadName.as_mut_ptr(),
                 );
                 if (*crate::src::server::sv_main::sv_pure).integer != 0 {
@@ -1927,7 +1927,7 @@ pub unsafe extern "C" fn SV_WriteDownloadToClient(
                 crate::src::qcommon::common::Com_Printf(
                     b"clientDownload: %d : \"%s\" file not found on server\n\x00" as *const u8
                         as *const libc::c_char,
-                    cl.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32,
+                    cl.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32,
                     (*cl).downloadName.as_mut_ptr(),
                 ); // client is expecting block zero
                 crate::src::qcommon::q_shared::Com_sprintf(
@@ -1959,7 +1959,7 @@ pub unsafe extern "C" fn SV_WriteDownloadToClient(
         }
         crate::src::qcommon::common::Com_Printf(
             b"clientDownload: %d : beginning \"%s\"\n\x00" as *const u8 as *const libc::c_char,
-            cl.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32,
+            cl.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32,
             (*cl).downloadName.as_mut_ptr(),
         );
         // Init
@@ -2047,7 +2047,7 @@ pub unsafe extern "C" fn SV_WriteDownloadToClient(
     }
     crate::src::qcommon::common::Com_DPrintf(
         b"clientDownload: %d : writing block %d\n\x00" as *const u8 as *const libc::c_char,
-        cl.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32,
+        cl.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32,
         (*cl).downloadXmitBlock,
     );
     // Move on to the next block
@@ -2523,7 +2523,7 @@ unsafe extern "C" fn SV_UpdateUserinfo_f(mut cl: *mut crate::server_h::client_t)
     crate::src::qcommon::vm::VM_Call(
         crate::src::server::sv_main::gvm,
         crate::g_public_h::GAME_CLIENT_USERINFO_CHANGED as i32,
-        cl.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long,
+        cl.offset_from(crate::src::server::sv_main::svs.clients) as isize,
     );
 }
 
@@ -2708,7 +2708,7 @@ pub unsafe extern "C" fn SV_ExecuteClientCommand(
             crate::src::qcommon::vm::VM_Call(
                 crate::src::server::sv_main::gvm,
                 crate::g_public_h::GAME_CLIENT_COMMAND as i32,
-                cl.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long,
+                cl.offset_from(crate::src::server::sv_main::svs.clients) as isize,
             );
         }
     } else if bProcessed as u64 == 0 {
@@ -2809,7 +2809,7 @@ pub unsafe extern "C" fn SV_ClientThink(
     crate::src::qcommon::vm::VM_Call(
         crate::src::server::sv_main::gvm,
         crate::g_public_h::GAME_CLIENT_THINK as i32,
-        cl.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long,
+        cl.offset_from(crate::src::server::sv_main::svs.clients) as isize,
     );
 }
 /*
@@ -3008,7 +3008,7 @@ unsafe extern "C" fn SV_UserVoip(
     let mut packet: *mut crate::server_h::voipServerPacket_t =
         0 as *mut crate::server_h::voipServerPacket_t;
     let mut i: i32 = 0;
-    sender = cl.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32;
+    sender = cl.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32;
     generation = crate::src::qcommon::msg::MSG_ReadByte(msg as *mut crate::qcommon_h::msg_t);
     sequence = crate::src::qcommon::msg::MSG_ReadLong(msg as *mut crate::qcommon_h::msg_t);
     frames = crate::src::qcommon::msg::MSG_ReadByte(msg as *mut crate::qcommon_h::msg_t);
@@ -3413,7 +3413,7 @@ pub unsafe extern "C" fn SV_ExecuteClientMessage(
     } else if c != crate::qcommon_h::clc_EOF as i32 {
         crate::src::qcommon::common::Com_Printf(
             b"WARNING: bad command byte for client %i\n\x00" as *const u8 as *const libc::c_char,
-            cl.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32,
+            cl.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32,
         );
     };
     //	if ( msg->readcount != msg->cursize ) {

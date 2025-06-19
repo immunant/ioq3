@@ -1834,8 +1834,7 @@ pub unsafe extern "C" fn ClientSpawn(mut ent: *mut crate::g_local_h::gentity_t) 
     let mut accuracy_shots: i32 = 0;
     let mut eventSequence: i32 = 0;
     let mut userinfo: [libc::c_char; 1024] = [0; 1024];
-    index =
-        ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as isize as i32;
+    index = ent.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as isize as i32;
     client = (*ent).client;
     spawn_origin[2 as i32 as usize] = 0 as i32 as crate::src::qcommon::q_shared::vec_t;
     spawn_origin[1 as i32 as usize] = spawn_origin[2 as i32 as usize];

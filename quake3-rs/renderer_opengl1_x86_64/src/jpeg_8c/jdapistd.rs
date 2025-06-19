@@ -282,7 +282,7 @@ pub unsafe extern "C" fn jpeg_start_decompress(
                     (*(*cinfo).progress).pass_counter += 1;
                     if (*(*cinfo).progress).pass_counter >= (*(*cinfo).progress).pass_limit {
                         /* jdmaster underestimated number of scans; ratchet up one scan */
-                        (*(*cinfo).progress).pass_limit += (*cinfo).total_iMCU_rows as libc::c_long
+                        (*(*cinfo).progress).pass_limit += (*cinfo).total_iMCU_rows as isize
                     }
                 }
             }
@@ -347,8 +347,8 @@ unsafe extern "C" fn output_pass_setup(
             let mut last_scanline: crate::jmorecfg_h::JDIMENSION = 0;
             /* No progress made, must suspend */
             if !(*cinfo).progress.is_null() {
-                (*(*cinfo).progress).pass_counter = (*cinfo).output_scanline as libc::c_long;
-                (*(*cinfo).progress).pass_limit = (*cinfo).output_height as libc::c_long;
+                (*(*cinfo).progress).pass_counter = (*cinfo).output_scanline as isize;
+                (*(*cinfo).progress).pass_limit = (*cinfo).output_height as isize;
                 Some(
                     (*(*cinfo).progress)
                         .progress_monitor
@@ -446,8 +446,8 @@ pub unsafe extern "C" fn jpeg_read_scanlines(
     }
     /* Call progress monitor hook if present */
     if !(*cinfo).progress.is_null() {
-        (*(*cinfo).progress).pass_counter = (*cinfo).output_scanline as libc::c_long;
-        (*(*cinfo).progress).pass_limit = (*cinfo).output_height as libc::c_long;
+        (*(*cinfo).progress).pass_counter = (*cinfo).output_scanline as isize;
+        (*(*cinfo).progress).pass_limit = (*cinfo).output_height as isize;
         Some(
             (*(*cinfo).progress)
                 .progress_monitor
@@ -505,8 +505,8 @@ pub unsafe extern "C" fn jpeg_read_raw_data(
     }
     /* Call progress monitor hook if present */
     if !(*cinfo).progress.is_null() {
-        (*(*cinfo).progress).pass_counter = (*cinfo).output_scanline as libc::c_long;
-        (*(*cinfo).progress).pass_limit = (*cinfo).output_height as libc::c_long;
+        (*(*cinfo).progress).pass_counter = (*cinfo).output_scanline as isize;
+        (*(*cinfo).progress).pass_limit = (*cinfo).output_height as isize;
         Some(
             (*(*cinfo).progress)
                 .progress_monitor

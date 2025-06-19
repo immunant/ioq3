@@ -59,36 +59,36 @@ pub unsafe extern "C" fn ov_ilog(mut v: crate::config_types_h::ogg_uint32_t) -> 
 /* doesn't currently guard under/overflow */
 #[no_mangle]
 
-pub unsafe extern "C" fn _float32_pack(mut val: f32) -> libc::c_long {
+pub unsafe extern "C" fn _float32_pack(mut val: f32) -> isize {
     let mut sign: i32 = 0 as i32; //+epsilon
-    let mut exp: libc::c_long = 0;
-    let mut mant: libc::c_long = 0;
+    let mut exp: isize = 0;
+    let mut mant: isize = 0;
     if val < 0 as i32 as f32 {
         sign = 0x80000000 as u32 as i32;
         val = -val
     }
     exp = crate::stdlib::floor(
         crate::stdlib::log(val as f64) / crate::stdlib::log(2.0f32 as f64) + 0.001f64,
-    ) as libc::c_long;
+    ) as isize;
     mant = crate::stdlib::rint(crate::stdlib::ldexp(
         val as f64,
-        ((21 as i32 - 1 as i32) as libc::c_long - exp) as i32,
-    )) as libc::c_long;
-    exp = (exp + 768 as i32 as libc::c_long) << 21 as i32;
-    return sign as libc::c_long | exp | mant;
+        ((21 as i32 - 1 as i32) as isize - exp) as i32,
+    )) as isize;
+    exp = (exp + 768 as i32 as isize) << 21 as i32;
+    return sign as isize | exp | mant;
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn _float32_unpack(mut val: libc::c_long) -> f32 {
-    let mut mant: f64 = (val & 0x1fffff as i32 as libc::c_long) as f64;
-    let mut sign: i32 = (val & 0x80000000 as u32 as libc::c_long) as i32;
-    let mut exp: libc::c_long = (val & 0x7fe00000 as libc::c_long) >> 21 as i32;
+pub unsafe extern "C" fn _float32_unpack(mut val: isize) -> f32 {
+    let mut mant: f64 = (val & 0x1fffff as i32 as isize) as f64;
+    let mut sign: i32 = (val & 0x80000000 as u32 as isize) as i32;
+    let mut exp: isize = (val & 0x7fe00000 as isize) >> 21 as i32;
     if sign != 0 {
         mant = -mant
     }
     return crate::stdlib::ldexp(
         mant,
-        (exp - (21 as i32 - 1 as i32) as libc::c_long - 768 as i32 as libc::c_long) as i32,
+        (exp - (21 as i32 - 1 as i32) as isize - 768 as i32 as isize) as i32,
     ) as f32;
 }
 /* given a list of word lengths, generate a list of codewords.  Works
@@ -98,12 +98,12 @@ codewords first.  Extended to handle unused entries (length 0) */
 
 pub unsafe extern "C" fn _make_words(
     mut l: *mut libc::c_char,
-    mut n: libc::c_long,
-    mut sparsecount: libc::c_long,
+    mut n: isize,
+    mut sparsecount: isize,
 ) -> *mut crate::config_types_h::ogg_uint32_t {
-    let mut i: libc::c_long = 0;
-    let mut j: libc::c_long = 0;
-    let mut count: libc::c_long = 0 as i32 as libc::c_long;
+    let mut i: isize = 0;
+    let mut j: isize = 0;
+    let mut count: isize = 0 as i32 as isize;
     let mut marker: [crate::config_types_h::ogg_uint32_t; 33] = [0; 33];
     let mut r: *mut crate::config_types_h::ogg_uint32_t = crate::stdlib::malloc(
         ((if sparsecount != 0 { sparsecount } else { n }) as libc::c_ulong).wrapping_mul(
@@ -116,17 +116,17 @@ pub unsafe extern "C" fn _make_words(
         0 as i32,
         ::std::mem::size_of::<[crate::config_types_h::ogg_uint32_t; 33]>() as libc::c_ulong,
     );
-    i = 0 as i32 as libc::c_long;
+    i = 0 as i32 as isize;
     while i < n {
-        let mut length: libc::c_long = *l.offset(i as isize) as libc::c_long;
-        if length > 0 as i32 as libc::c_long {
+        let mut length: isize = *l.offset(i as isize) as isize;
+        if length > 0 as i32 as isize {
             let mut entry: crate::config_types_h::ogg_uint32_t = marker[length as usize];
             /* when we claim a node for an entry, we also claim the nodes
             below it (pruning off the imagined tree that may have dangled
             from it) as well as blocking the use of any nodes directly
             above for leaves */
             /* update ourself */
-            if length < 32 as i32 as libc::c_long && entry >> length != 0 {
+            if length < 32 as i32 as isize && entry >> length != 0 {
                 /* error condition; the lengths must specify an overpopulated tree */
                 ::libc::free(r as *mut libc::c_void);
                 return 0 as *mut crate::config_types_h::ogg_uint32_t;
@@ -137,14 +137,13 @@ pub unsafe extern "C" fn _make_words(
             /* Look to see if the next shorter marker points to the node
             above. if so, update it and repeat.  */
             j = length;
-            while j > 0 as i32 as libc::c_long {
+            while j > 0 as i32 as isize {
                 if marker[j as usize] & 1 as i32 as u32 != 0 {
                     /* have to jump branches */
-                    if j == 1 as i32 as libc::c_long {
+                    if j == 1 as i32 as isize {
                         marker[1 as i32 as usize] = marker[1 as i32 as usize].wrapping_add(1)
                     } else {
-                        marker[j as usize] =
-                            marker[(j - 1 as i32 as libc::c_long) as usize] << 1 as i32
+                        marker[j as usize] = marker[(j - 1 as i32 as isize) as usize] << 1 as i32
                     }
                     break;
                 /* invariant says next upper marker would already
@@ -157,16 +156,16 @@ pub unsafe extern "C" fn _make_words(
             /* prune the tree; the implicit invariant says all the longer
             markers were dangling from our just-taken node.  Dangle them
             from our *new* node. */
-            j = length + 1 as i32 as libc::c_long;
-            while j < 33 as i32 as libc::c_long {
+            j = length + 1 as i32 as isize;
+            while j < 33 as i32 as isize {
                 if !(marker[j as usize] >> 1 as i32 == entry) {
                     break;
                 }
                 entry = marker[j as usize];
-                marker[j as usize] = marker[(j - 1 as i32 as libc::c_long) as usize] << 1 as i32;
+                marker[j as usize] = marker[(j - 1 as i32 as isize) as usize] << 1 as i32;
                 j += 1
             }
-        } else if sparsecount == 0 as i32 as libc::c_long {
+        } else if sparsecount == 0 as i32 as isize {
             count += 1
         }
         i += 1
@@ -175,11 +174,11 @@ pub unsafe extern "C" fn _make_words(
     /* Single-entry codebooks are a retconned extension to the spec.
     They have a single codeword '0' of length 1 that results in an
     underpopulated tree.  Shield that case from the underformed tree check. */
-    if !(count == 1 as i32 as libc::c_long && marker[2 as i32 as usize] == 2 as i32 as u32) {
-        i = 1 as i32 as libc::c_long;
-        while i < 33 as i32 as libc::c_long {
+    if !(count == 1 as i32 as isize && marker[2 as i32 as usize] == 2 as i32 as u32) {
+        i = 1 as i32 as isize;
+        while i < 33 as i32 as isize {
             if marker[i as usize] as libc::c_ulong
-                & 0xffffffff as libc::c_ulong >> 32 as i32 as libc::c_long - i
+                & 0xffffffff as libc::c_ulong >> 32 as i32 as isize - i
                 != 0
             {
                 ::libc::free(r as *mut libc::c_void);
@@ -190,13 +189,13 @@ pub unsafe extern "C" fn _make_words(
     }
     /* bitreverse the words because our bitwise packer/unpacker is LSb
     endian */
-    i = 0 as i32 as libc::c_long;
-    count = 0 as i32 as libc::c_long;
+    i = 0 as i32 as isize;
+    count = 0 as i32 as isize;
     while i < n {
         let mut temp: crate::config_types_h::ogg_uint32_t =
             0 as i32 as crate::config_types_h::ogg_uint32_t;
-        j = 0 as i32 as libc::c_long;
-        while j < *l.offset(i as isize) as libc::c_long {
+        j = 0 as i32 as isize;
+        while j < *l.offset(i as isize) as isize {
             temp <<= 1 as i32;
             temp |= *r.offset(count as isize) >> j & 1 as i32 as u32;
             j += 1
@@ -223,44 +222,44 @@ thought of it.  Therefore, we opt on the side of caution */
 
 pub unsafe extern "C" fn _book_maptype1_quantvals(
     mut b: *const crate::src::libvorbis_1_3_6::lib::codebook::static_codebook,
-) -> libc::c_long {
-    let mut vals: libc::c_long = 0;
-    if (*b).entries < 1 as i32 as libc::c_long {
-        return 0 as i32 as libc::c_long;
+) -> isize {
+    let mut vals: isize = 0;
+    if (*b).entries < 1 as i32 as isize {
+        return 0 as i32 as isize;
     }
     vals = crate::stdlib::floor(crate::stdlib::pow(
         (*b).entries as f32 as f64,
         (1.0f32 / (*b).dim as f32) as f64,
-    )) as libc::c_long;
+    )) as isize;
     /* the above *should* be reliable, but we'll not assume that FP is
     ever reliable when bitstream sync is at stake; verify via integer
     means that vals really is the greatest value of dim for which
     vals^b->bim <= b->entries */
     /* treat the above as an initial guess */
-    if vals < 1 as i32 as libc::c_long {
-        vals = 1 as i32 as libc::c_long
+    if vals < 1 as i32 as isize {
+        vals = 1 as i32 as isize
     }
     loop {
-        let mut acc: libc::c_long = 1 as i32 as libc::c_long;
-        let mut acc1: libc::c_long = 1 as i32 as libc::c_long;
+        let mut acc: isize = 1 as i32 as isize;
+        let mut acc1: isize = 1 as i32 as isize;
         let mut i: i32 = 0;
         i = 0 as i32;
-        while (i as libc::c_long) < (*b).dim {
+        while (i as isize) < (*b).dim {
             if (*b).entries / vals < acc {
                 break;
             }
             acc *= vals;
-            if (9223372036854775807 as libc::c_long / (vals + 1 as i32 as libc::c_long)) < acc1 {
-                acc1 = 9223372036854775807 as libc::c_long
+            if (9223372036854775807 as isize / (vals + 1 as i32 as isize)) < acc1 {
+                acc1 = 9223372036854775807 as isize
             } else {
-                acc1 *= vals + 1 as i32 as libc::c_long
+                acc1 *= vals + 1 as i32 as isize
             }
             i += 1
         }
-        if i as libc::c_long >= (*b).dim && acc <= (*b).entries && acc1 > (*b).entries {
+        if i as isize >= (*b).dim && acc <= (*b).entries && acc1 > (*b).entries {
             return vals;
         } else {
-            if (i as libc::c_long) < (*b).dim || acc > (*b).entries {
+            if (i as isize) < (*b).dim || acc > (*b).entries {
                 vals -= 1
             } else {
                 vals += 1
@@ -280,15 +279,15 @@ pub unsafe extern "C" fn _book_unquantize(
     mut n: i32,
     mut sparsemap: *mut i32,
 ) -> *mut f32 {
-    let mut j: libc::c_long = 0;
-    let mut k: libc::c_long = 0;
-    let mut count: libc::c_long = 0 as i32 as libc::c_long;
+    let mut j: isize = 0;
+    let mut k: isize = 0;
+    let mut count: isize = 0 as i32 as isize;
     if (*b).maptype == 1 as i32 || (*b).maptype == 2 as i32 {
         let mut quantvals: i32 = 0;
         let mut mindel: f32 = _float32_unpack((*b).q_min);
         let mut delta: f32 = _float32_unpack((*b).q_delta);
         let mut r: *mut f32 = crate::stdlib::calloc(
-            (n as libc::c_long * (*b).dim) as libc::c_ulong,
+            (n as isize * (*b).dim) as libc::c_ulong,
             ::std::mem::size_of::<f32>() as libc::c_ulong,
         ) as *mut f32;
         /* maptype 1 and 2 both use a quantized value vector, but
@@ -303,17 +302,17 @@ pub unsafe extern "C" fn _book_unquantize(
                 values (and are wasted).  So don't generate codebooks like
                 that */
                 quantvals = _book_maptype1_quantvals(b) as i32;
-                j = 0 as i32 as libc::c_long;
+                j = 0 as i32 as isize;
                 while j < (*b).entries {
                     if !sparsemap.is_null() && *(*b).lengthlist.offset(j as isize) as i32 != 0
                         || sparsemap.is_null()
                     {
                         let mut last: f32 = 0.0f32;
                         let mut indexdiv: i32 = 1 as i32;
-                        k = 0 as i32 as libc::c_long;
+                        k = 0 as i32 as isize;
                         while k < (*b).dim {
                             let mut index: i32 =
-                                (j / indexdiv as libc::c_long % quantvals as libc::c_long) as i32;
+                                (j / indexdiv as isize % quantvals as isize) as i32;
                             let mut val: f32 = *(*b).quantlist.offset(index as isize) as f32;
                             val = (crate::stdlib::fabs(val as f64) * delta as f64
                                 + mindel as f64
@@ -323,8 +322,8 @@ pub unsafe extern "C" fn _book_unquantize(
                             }
                             if !sparsemap.is_null() {
                                 *r.offset(
-                                    (*sparsemap.offset(count as isize) as libc::c_long * (*b).dim
-                                        + k) as isize,
+                                    (*sparsemap.offset(count as isize) as isize * (*b).dim + k)
+                                        as isize,
                                 ) = val
                             } else {
                                 *r.offset((count * (*b).dim + k) as isize) = val
@@ -338,13 +337,13 @@ pub unsafe extern "C" fn _book_unquantize(
                 }
             }
             2 => {
-                j = 0 as i32 as libc::c_long;
+                j = 0 as i32 as isize;
                 while j < (*b).entries {
                     if !sparsemap.is_null() && *(*b).lengthlist.offset(j as isize) as i32 != 0
                         || sparsemap.is_null()
                     {
                         let mut last_0: f32 = 0.0f32;
-                        k = 0 as i32 as libc::c_long;
+                        k = 0 as i32 as isize;
                         while k < (*b).dim {
                             let mut val_0: f32 =
                                 *(*b).quantlist.offset((j * (*b).dim + k) as isize) as f32;
@@ -356,8 +355,8 @@ pub unsafe extern "C" fn _book_unquantize(
                             }
                             if !sparsemap.is_null() {
                                 *r.offset(
-                                    (*sparsemap.offset(count as isize) as libc::c_long * (*b).dim
-                                        + k) as isize,
+                                    (*sparsemap.offset(count as isize) as isize * (*b).dim + k)
+                                        as isize,
                                 ) = val_0
                             } else {
                                 *r.offset((count * (*b).dim + k) as isize) = val_0
@@ -442,7 +441,7 @@ pub unsafe extern "C" fn vorbis_book_init_encode(
     (*c).entries = (*s).entries;
     (*c).used_entries = (*s).entries;
     (*c).dim = (*s).dim;
-    (*c).codelist = _make_words((*s).lengthlist, (*s).entries, 0 as i32 as libc::c_long);
+    (*c).codelist = _make_words((*s).lengthlist, (*s).entries, 0 as i32 as isize);
     //c->valuelist=_book_unquantize(s,s->entries,NULL);
     (*c).quantvals = _book_maptype1_quantvals(s) as i32;
     (*c).minval = crate::stdlib::rint(_float32_unpack((*s).q_min) as f64) as i32;
@@ -496,14 +495,14 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
     );
     /* count actually used entries and find max length */
     i = 0 as i32;
-    while (i as libc::c_long) < (*s).entries {
+    while (i as isize) < (*s).entries {
         if *(*s).lengthlist.offset(i as isize) as i32 > 0 as i32 {
             n += 1
         }
         i += 1
     }
     (*c).entries = (*s).entries;
-    (*c).used_entries = n as libc::c_long;
+    (*c).used_entries = n as isize;
     (*c).dim = (*s).dim;
     if n > 0 as i32 {
         /* two different remappings go on here.
@@ -561,7 +560,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
             i = 0 as i32;
             while i < n {
                 let mut position: i32 =
-                    (*codep.offset(i as isize)).offset_from(codes) as libc::c_long as i32;
+                    (*codep.offset(i as isize)).offset_from(codes) as isize as i32;
                 *sortindex.offset(position as isize) = i;
                 i += 1
             }
@@ -578,7 +577,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
             ) as *mut i32;
             n = 0 as i32;
             i = 0 as i32;
-            while (i as libc::c_long) < (*s).entries {
+            while (i as isize) < (*s).entries {
                 if *(*s).lengthlist.offset(i as isize) as i32 > 0 as i32 {
                     let fresh6 = n;
                     n = n + 1;
@@ -595,7 +594,7 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
             (*c).dec_maxlength = 0 as i32;
             n = 0 as i32;
             i = 0 as i32;
-            while (i as libc::c_long) < (*s).entries {
+            while (i as isize) < (*s).entries {
                 if *(*s).lengthlist.offset(i as isize) as i32 > 0 as i32 {
                     let fresh7 = n;
                     n = n + 1;
@@ -661,32 +660,27 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
                 let mut mask: crate::config_types_h::ogg_uint32_t = ((0xfffffffe as libc::c_ulong)
                     << 31 as i32 - (*c).dec_firsttablen)
                     as crate::config_types_h::ogg_uint32_t;
-                let mut lo: libc::c_long = 0 as i32 as libc::c_long;
-                let mut hi: libc::c_long = 0 as i32 as libc::c_long;
+                let mut lo: isize = 0 as i32 as isize;
+                let mut hi: isize = 0 as i32 as isize;
                 i = 0 as i32;
                 while i < tabn {
                     let mut word: crate::config_types_h::ogg_uint32_t = (i
                         << 32 as i32 - (*c).dec_firsttablen)
                         as crate::config_types_h::ogg_uint32_t;
                     if *(*c).dec_firsttable.offset(bitreverse(word) as isize) == 0 as i32 as u32 {
-                        while (lo + 1 as i32 as libc::c_long) < n as libc::c_long
-                            && *(*c)
-                                .codelist
-                                .offset((lo + 1 as i32 as libc::c_long) as isize)
-                                <= word
+                        while (lo + 1 as i32 as isize) < n as isize
+                            && *(*c).codelist.offset((lo + 1 as i32 as isize) as isize) <= word
                         {
                             lo += 1
                         }
-                        while hi < n as libc::c_long
-                            && word >= *(*c).codelist.offset(hi as isize) & mask
-                        {
+                        while hi < n as isize && word >= *(*c).codelist.offset(hi as isize) & mask {
                             hi += 1
                         }
                         /* we only actually have 15 bits per hint to play with here.
                         In order to overflow gracefully (nothing breaks, efficiency
                         just drops), encode as the difference from the extremes. */
                         let mut loval: libc::c_ulong = lo as libc::c_ulong;
-                        let mut hival: libc::c_ulong = (n as libc::c_long - hi) as libc::c_ulong;
+                        let mut hival: libc::c_ulong = (n as isize - hi) as libc::c_ulong;
                         if loval > 0x7fff as i32 as libc::c_ulong {
                             loval = 0x7fff as i32 as libc::c_ulong
                         }
@@ -709,24 +703,24 @@ pub unsafe extern "C" fn vorbis_book_init_decode(
 pub unsafe extern "C" fn vorbis_book_codeword(
     mut book: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
     mut entry: i32,
-) -> libc::c_long {
+) -> isize {
     if !(*book).c.is_null() {
         /* only use with encode; decode optimizations are
         allowed to break this */
-        return *(*book).codelist.offset(entry as isize) as libc::c_long;
+        return *(*book).codelist.offset(entry as isize) as isize;
     }
-    return -(1 as i32) as libc::c_long;
+    return -(1 as i32) as isize;
 }
 #[no_mangle]
 
 pub unsafe extern "C" fn vorbis_book_codelen(
     mut book: *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
     mut entry: i32,
-) -> libc::c_long {
+) -> isize {
     if !(*book).c.is_null() {
         /* only use with encode; decode optimizations are
         allowed to break this */
-        return *(*(*book).c).lengthlist.offset(entry as isize) as libc::c_long;
+        return *(*(*book).c).lengthlist.offset(entry as isize) as isize;
     }
-    return -(1 as i32) as libc::c_long;
+    return -(1 as i32) as isize;
 }

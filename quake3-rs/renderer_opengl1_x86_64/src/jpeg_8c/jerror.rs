@@ -542,7 +542,7 @@ unsafe extern "C" fn emit_message(mut cinfo: crate::jpeglib_h::j_common_ptr, mut
          * the policy implemented here is to show only the first warning,
          * unless trace_level >= 3.
          */
-        if (*err).num_warnings == 0 as i32 as libc::c_long || (*err).trace_level >= 3 as i32 {
+        if (*err).num_warnings == 0 as i32 as isize || (*err).trace_level >= 3 as i32 {
             Some((*err).output_message.expect("non-null function pointer"))
                 .expect("non-null function pointer")(cinfo);
         }
@@ -632,7 +632,7 @@ unsafe extern "C" fn format_message(
  */
 
 unsafe extern "C" fn reset_error_mgr(mut cinfo: crate::jpeglib_h::j_common_ptr) {
-    (*(*cinfo).err).num_warnings = 0 as i32 as libc::c_long;
+    (*(*cinfo).err).num_warnings = 0 as i32 as isize;
     /* trace_level is not reset since it is an application-supplied parameter */
     (*(*cinfo).err).msg_code = 0 as i32;
     /* may be useful as a flag for "no error" */
@@ -676,7 +676,7 @@ pub unsafe extern "C" fn jpeg_std_error(
     (*err).reset_error_mgr =
         Some(reset_error_mgr as unsafe extern "C" fn(_: crate::jpeglib_h::j_common_ptr) -> ());
     (*err).trace_level = 0 as i32;
-    (*err).num_warnings = 0 as i32 as libc::c_long;
+    (*err).num_warnings = 0 as i32 as isize;
     (*err).msg_code = 0 as i32;
     /* Initialize message table pointers */
     (*err).jpeg_message_table = jpeg_std_message_table.as_ptr(); /* for safety */

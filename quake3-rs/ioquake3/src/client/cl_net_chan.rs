@@ -157,9 +157,9 @@ CL_Netchan_Decode
 */
 
 unsafe extern "C" fn CL_Netchan_Decode(mut msg: *mut crate::qcommon_h::msg_t) {
-    let mut reliableAcknowledge: libc::c_long = 0;
-    let mut i: libc::c_long = 0;
-    let mut index: libc::c_long = 0;
+    let mut reliableAcknowledge: isize = 0;
+    let mut i: isize = 0;
+    let mut index: isize = 0;
     let mut key: crate::src::qcommon::q_shared::byte = 0;
     let mut string: *mut crate::src::qcommon::q_shared::byte =
         0 as *mut crate::src::qcommon::q_shared::byte;
@@ -171,31 +171,30 @@ unsafe extern "C" fn CL_Netchan_Decode(mut msg: *mut crate::qcommon_h::msg_t) {
     soob = (*msg).oob as i32;
     (*msg).oob = crate::src::qcommon::q_shared::qfalse;
     reliableAcknowledge =
-        crate::src::qcommon::msg::MSG_ReadLong(msg as *mut crate::qcommon_h::msg_t) as libc::c_long;
+        crate::src::qcommon::msg::MSG_ReadLong(msg as *mut crate::qcommon_h::msg_t) as isize;
     (*msg).oob = soob as crate::src::qcommon::q_shared::qboolean;
     (*msg).bit = sbit;
     (*msg).readcount = srdc;
     string = crate::src::client::cl_main::clc.reliableCommands
-        [(reliableAcknowledge & (64 as i32 - 1 as i32) as libc::c_long) as usize]
+        [(reliableAcknowledge & (64 as i32 - 1 as i32) as isize) as usize]
         .as_mut_ptr() as *mut crate::src::qcommon::q_shared::byte;
-    index = 0 as i32 as libc::c_long;
+    index = 0 as i32 as isize;
     // xor the client challenge with the netchan sequence number (need something that changes every message)
     key = (crate::src::client::cl_main::clc.challenge as u32 ^ *((*msg).data as *mut u32))
         as crate::src::qcommon::q_shared::byte;
-    i = ((*msg).readcount + 4 as i32) as libc::c_long;
-    while i < (*msg).cursize as libc::c_long {
+    i = ((*msg).readcount + 4 as i32) as isize;
+    while i < (*msg).cursize as isize {
         // modify the key with the last sent and with this message acknowledged client command
         if *string.offset(index as isize) == 0 {
-            index = 0 as i32 as libc::c_long
+            index = 0 as i32 as isize
         }
         if *string.offset(index as isize) as i32 > 127 as i32
             || *string.offset(index as isize) as i32 == '%' as i32
         {
-            key = (key as i32 ^ ('.' as i32) << (i & 1 as i32 as libc::c_long))
+            key = (key as i32 ^ ('.' as i32) << (i & 1 as i32 as isize))
                 as crate::src::qcommon::q_shared::byte
         } else {
-            key = (key as i32
-                ^ (*string.offset(index as isize) as i32) << (i & 1 as i32 as libc::c_long))
+            key = (key as i32 ^ (*string.offset(index as isize) as i32) << (i & 1 as i32 as isize))
                 as crate::src::qcommon::q_shared::byte
         }
         index += 1;

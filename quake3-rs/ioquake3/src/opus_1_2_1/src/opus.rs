@@ -1,5 +1,3 @@
-use ::libc;
-
 pub use crate::opus_types_h::opus_int16;
 pub use crate::opus_types_h::opus_int32;
 pub use crate::stdlib::__int16_t;
@@ -464,7 +462,7 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
         *size.offset((count - 1 as i32) as isize) = last_size as crate::opus_types_h::opus_int16
     }
     if !payload_offset.is_null() {
-        *payload_offset = data.offset_from(data0) as libc::c_long as i32
+        *payload_offset = data.offset_from(data0) as isize as i32
     }
     i = 0 as i32;
     while i < count {
@@ -476,8 +474,7 @@ pub unsafe extern "C" fn opus_packet_parse_impl(
         i += 1
     }
     if !packet_offset.is_null() {
-        *packet_offset =
-            pad + data.offset_from(data0) as libc::c_long as crate::opus_types_h::opus_int32
+        *packet_offset = pad + data.offset_from(data0) as isize as crate::opus_types_h::opus_int32
     }
     if !out_toc.is_null() {
         *out_toc = toc

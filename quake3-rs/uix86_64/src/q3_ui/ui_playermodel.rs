@@ -1124,14 +1124,14 @@ unsafe extern "C" fn PlayerModel_PicEvent(mut ptr: *mut libc::c_void, mut event:
         crate::src::qcommon::q_shared::Q_strncpyz(
             s_playermodel.modelskin.as_mut_ptr(),
             buffptr,
-            (pdest.offset_from(buffptr) as libc::c_long + 1 as i32 as libc::c_long) as i32,
+            (pdest.offset_from(buffptr) as isize + 1 as i32 as isize) as i32,
         );
         ::libc::strcat(
             s_playermodel.modelskin.as_mut_ptr(),
             pdest.offset(5 as i32 as isize),
         );
         // separate the model name
-        maxlen = pdest.offset_from(buffptr) as libc::c_long as i32;
+        maxlen = pdest.offset_from(buffptr) as isize as i32;
         if maxlen > 16 as i32 {
             maxlen = 16 as i32
         }
@@ -1337,7 +1337,7 @@ unsafe extern "C" fn PlayerModel_SetMenuItems() {
             crate::src::qcommon::q_shared::Q_strncpyz(
                 modelskin.as_mut_ptr(),
                 buffptr,
-                (pdest.offset_from(buffptr) as libc::c_long + 1 as i32 as libc::c_long) as i32,
+                (pdest.offset_from(buffptr) as isize + 1 as i32 as isize) as i32,
             );
             ::libc::strcat(modelskin.as_mut_ptr(), pdest.offset(5 as i32 as isize));
             if crate::src::qcommon::q_shared::Q_stricmp(
@@ -1349,7 +1349,7 @@ unsafe extern "C" fn PlayerModel_SetMenuItems() {
                 s_playermodel.selectedmodel = i;
                 s_playermodel.modelpage = i / (4 as i32 * 4 as i32);
                 // separate the model name
-                maxlen = pdest.offset_from(buffptr) as libc::c_long as i32;
+                maxlen = pdest.offset_from(buffptr) as isize as i32;
                 if maxlen > 16 as i32 {
                     maxlen = 16 as i32
                 }

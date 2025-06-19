@@ -1,4 +1,3 @@
-use ::libc;
 /*
 ===========================================================================
 Copyright (C) 2011 Thilo Schulz <thilo@tjps.eu>
@@ -27,8 +26,8 @@ static mut fpucw: u16 = 0xc7f as i32 as u16;
  */
 #[no_mangle]
 
-pub unsafe extern "C" fn qftolsse(mut f: f32) -> libc::c_long {
-    let mut retval: libc::c_long = 0;
+pub unsafe extern "C" fn qftolsse(mut f: f32) -> isize {
+    let mut retval: isize = 0;
     asm!("cvttss2si $1, $0\n" : "=r" (retval) : "x" (f) : : "volatile");
     return retval;
 }
@@ -42,8 +41,8 @@ pub unsafe extern "C" fn qvmftolsse() -> i32 {
 }
 #[no_mangle]
 
-pub unsafe extern "C" fn qftolx87(mut f: f32) -> libc::c_long {
-    let mut retval: libc::c_long = 0;
+pub unsafe extern "C" fn qftolx87(mut f: f32) -> isize {
+    let mut retval: isize = 0;
     let mut oldcw: u16 = 0 as i32 as u16;
     asm!("fnstcw $2\nfldcw $3\nflds $1\nfistpl $1\nfldcw $2\nmov $1, $0\n" : "=r"
      (retval) : "*m" (&f), "*m" (&oldcw), "*m" (&fpucw) : : "volatile");

@@ -47,65 +47,64 @@ pub unsafe extern "C" fn zlibCompileFlags() -> crate::zconf_h::uLong {
         2 => {}
         4 => {
             flags = (flags as libc::c_ulong).wrapping_add(1 as i32 as libc::c_ulong)
-                as crate::zconf_h::uLong as crate::zconf_h::uLong
+                as crate::zconf_h::uLong
         }
         8 => {
             flags = (flags as libc::c_ulong).wrapping_add(2 as i32 as libc::c_ulong)
-                as crate::zconf_h::uLong as crate::zconf_h::uLong
+                as crate::zconf_h::uLong
         }
         _ => {
             flags = (flags as libc::c_ulong).wrapping_add(3 as i32 as libc::c_ulong)
-                as crate::zconf_h::uLong as crate::zconf_h::uLong
+                as crate::zconf_h::uLong
         }
     }
     match ::std::mem::size_of::<crate::zconf_h::uLong>() as libc::c_ulong {
         2 => {}
         4 => {
             flags = (flags as libc::c_ulong).wrapping_add(((1 as i32) << 2 as i32) as libc::c_ulong)
-                as crate::zconf_h::uLong as crate::zconf_h::uLong
+                as crate::zconf_h::uLong
         }
         8 => {
             flags = (flags as libc::c_ulong).wrapping_add(((2 as i32) << 2 as i32) as libc::c_ulong)
-                as crate::zconf_h::uLong as crate::zconf_h::uLong
+                as crate::zconf_h::uLong
         }
         _ => {
             flags = (flags as libc::c_ulong).wrapping_add(((3 as i32) << 2 as i32) as libc::c_ulong)
-                as crate::zconf_h::uLong as crate::zconf_h::uLong
+                as crate::zconf_h::uLong
         }
     }
     match ::std::mem::size_of::<crate::zconf_h::voidpf>() as libc::c_ulong {
         2 => {}
         4 => {
             flags = (flags as libc::c_ulong).wrapping_add(((1 as i32) << 4 as i32) as libc::c_ulong)
-                as crate::zconf_h::uLong as crate::zconf_h::uLong
+                as crate::zconf_h::uLong
         }
         8 => {
             flags = (flags as libc::c_ulong).wrapping_add(((2 as i32) << 4 as i32) as libc::c_ulong)
-                as crate::zconf_h::uLong as crate::zconf_h::uLong
+                as crate::zconf_h::uLong
         }
         _ => {
             flags = (flags as libc::c_ulong).wrapping_add(((3 as i32) << 4 as i32) as libc::c_ulong)
-                as crate::zconf_h::uLong as crate::zconf_h::uLong
+                as crate::zconf_h::uLong
         }
     }
     match ::std::mem::size_of::<crate::stdlib::off_t>() as libc::c_ulong {
         2 => {}
         4 => {
             flags = (flags as libc::c_ulong).wrapping_add(((1 as i32) << 6 as i32) as libc::c_ulong)
-                as crate::zconf_h::uLong as crate::zconf_h::uLong
+                as crate::zconf_h::uLong
         }
         8 => {
             flags = (flags as libc::c_ulong).wrapping_add(((2 as i32) << 6 as i32) as libc::c_ulong)
-                as crate::zconf_h::uLong as crate::zconf_h::uLong
+                as crate::zconf_h::uLong
         }
         _ => {
             flags = (flags as libc::c_ulong).wrapping_add(((3 as i32) << 6 as i32) as libc::c_ulong)
-                as crate::zconf_h::uLong as crate::zconf_h::uLong
+                as crate::zconf_h::uLong
         }
     }
-    flags = (flags as libc::c_ulong)
-        .wrapping_add(((1 as libc::c_long) << 17 as i32) as libc::c_ulong)
-        as crate::zconf_h::uLong as crate::zconf_h::uLong;
+    flags = (flags as libc::c_ulong).wrapping_add(((1 as isize) << 17 as i32) as libc::c_ulong)
+        as crate::zconf_h::uLong;
     return flags;
 }
 /*

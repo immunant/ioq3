@@ -223,7 +223,7 @@ pub unsafe extern "C" fn jpeg_add_quant_table(
     let mut qtblptr: *mut *mut crate::jpeglib_h::JQUANT_TBL =
         0 as *mut *mut crate::jpeglib_h::JQUANT_TBL;
     let mut i: i32 = 0;
-    let mut temp: libc::c_long = 0;
+    let mut temp: isize = 0;
     /* Safety check to ensure start_compress not called yet. */
     if (*cinfo).global_state != 100 as i32 {
         (*(*cinfo).err).msg_code = crate::src::jpeg_8c::jerror::JERR_BAD_STATE as i32;
@@ -256,18 +256,17 @@ pub unsafe extern "C" fn jpeg_add_quant_table(
     }
     i = 0 as i32;
     while i < 64 as i32 {
-        temp = (*basic_table.offset(i as isize) as libc::c_long * scale_factor as libc::c_long
-            + 50 as libc::c_long)
-            / 100 as libc::c_long;
+        temp = (*basic_table.offset(i as isize) as isize * scale_factor as isize + 50 as isize)
+            / 100 as isize;
         /* limit the values to the valid range */
-        if temp <= 0 as libc::c_long {
-            temp = 1 as libc::c_long
+        if temp <= 0 as isize {
+            temp = 1 as isize
         } /* max quantizer needed for 12 bits */
-        if temp > 32767 as libc::c_long {
-            temp = 32767 as libc::c_long
+        if temp > 32767 as isize {
+            temp = 32767 as isize
         } /* limit to baseline range if requested */
-        if force_baseline != 0 && temp > 255 as libc::c_long {
-            temp = 255 as libc::c_long
+        if force_baseline != 0 && temp > 255 as isize {
+            temp = 255 as isize
         }
         (**qtblptr).quantval[i as usize] = temp as crate::jmorecfg_h::UINT16;
         i += 1

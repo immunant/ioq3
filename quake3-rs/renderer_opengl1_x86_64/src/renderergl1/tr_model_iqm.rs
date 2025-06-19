@@ -1323,7 +1323,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                         .offset((*joint).name as isize),
                 )
                 .wrapping_add(1 as i32 as libc::c_ulong),
-            ) as crate::stddef_h::size_t as crate::stddef_h::size_t;
+            ) as crate::stddef_h::size_t;
             i += 1;
             joint = joint.offset(1)
         }
@@ -1404,28 +1404,28 @@ pub unsafe extern "C" fn R_LoadIQM(
             ((*header).num_meshes as libc::c_ulong).wrapping_mul(::std::mem::size_of::<
                 crate::tr_local_h::srfIQModel_t,
             >() as libc::c_ulong),
-        ) as crate::stddef_h::size_t as crate::stddef_h::size_t; // triangles
+        ) as crate::stddef_h::size_t; // triangles
         size = (size as libc::c_ulong).wrapping_add(
             ((*header).num_triangles.wrapping_mul(3 as i32 as u32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t as crate::stddef_h::size_t; // positions
+        ) as crate::stddef_h::size_t; // positions
         size = (size as libc::c_ulong).wrapping_add(
             ((*header).num_vertexes.wrapping_mul(3 as i32 as u32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t as crate::stddef_h::size_t; // texcoords
+        ) as crate::stddef_h::size_t; // texcoords
         size = (size as libc::c_ulong).wrapping_add(
             ((*header).num_vertexes.wrapping_mul(2 as i32 as u32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t as crate::stddef_h::size_t; // normals
+        ) as crate::stddef_h::size_t; // normals
         size = (size as libc::c_ulong).wrapping_add(
             ((*header).num_vertexes.wrapping_mul(3 as i32 as u32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t as crate::stddef_h::size_t;
+        ) as crate::stddef_h::size_t;
         if vertexArrayFormat[crate::iqm_h::IQM_TANGENT as i32 as usize] != -(1 as i32) {
             size = (size as libc::c_ulong).wrapping_add(
                 ((*header).num_vertexes.wrapping_mul(4 as i32 as u32) as libc::c_ulong)
                     .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-            ) as crate::stddef_h::size_t as crate::stddef_h::size_t
+            ) as crate::stddef_h::size_t
             // tangents
         }
         if vertexArrayFormat[crate::iqm_h::IQM_COLOR as i32 as usize] != -(1 as i32) {
@@ -1433,19 +1433,19 @@ pub unsafe extern "C" fn R_LoadIQM(
                 ((*header).num_vertexes.wrapping_mul(4 as i32 as u32) as libc::c_ulong)
                     .wrapping_mul(::std::mem::size_of::<crate::src::qcommon::q_shared::byte>()
                         as libc::c_ulong),
-            ) as crate::stddef_h::size_t as crate::stddef_h::size_t
+            ) as crate::stddef_h::size_t
             // colors
         } // influences
         if allocateInfluences != 0 {
             size = (size as libc::c_ulong).wrapping_add(
                 ((*header).num_vertexes as libc::c_ulong)
                     .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
-            ) as crate::stddef_h::size_t as crate::stddef_h::size_t; // influenceBlendIndexes
+            ) as crate::stddef_h::size_t; // influenceBlendIndexes
             size = (size as libc::c_ulong).wrapping_add(
                 ((allocateInfluences * 4 as i32) as libc::c_ulong)
                     .wrapping_mul(::std::mem::size_of::<crate::src::qcommon::q_shared::byte>()
                         as libc::c_ulong),
-            ) as crate::stddef_h::size_t as crate::stddef_h::size_t;
+            ) as crate::stddef_h::size_t;
             if vertexArrayFormat[crate::iqm_h::IQM_BLENDWEIGHTS as i32 as usize]
                 == crate::iqm_h::IQM_UBYTE as i32
             {
@@ -1453,7 +1453,7 @@ pub unsafe extern "C" fn R_LoadIQM(
                     ((allocateInfluences * 4 as i32) as libc::c_ulong)
                         .wrapping_mul(::std::mem::size_of::<crate::src::qcommon::q_shared::byte>()
                             as libc::c_ulong),
-                ) as crate::stddef_h::size_t as crate::stddef_h::size_t
+                ) as crate::stddef_h::size_t
             // influenceBlendWeights
             } else if vertexArrayFormat[crate::iqm_h::IQM_BLENDWEIGHTS as i32 as usize]
                 == crate::iqm_h::IQM_FLOAT as i32
@@ -1461,23 +1461,22 @@ pub unsafe extern "C" fn R_LoadIQM(
                 size = (size as libc::c_ulong).wrapping_add(
                     ((allocateInfluences * 4 as i32) as libc::c_ulong)
                         .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-                ) as crate::stddef_h::size_t as crate::stddef_h::size_t
+                ) as crate::stddef_h::size_t
                 // influenceBlendWeights
             }
         }
     } // joint names
     if (*header).num_joints != 0 {
-        size = (size as libc::c_ulong).wrapping_add(joint_names) as crate::stddef_h::size_t
-            as crate::stddef_h::size_t;
+        size = (size as libc::c_ulong).wrapping_add(joint_names) as crate::stddef_h::size_t;
         // joint mats
         size = (size as libc::c_ulong).wrapping_add(
             ((*header).num_joints as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t as crate::stddef_h::size_t; // joint parents
+        ) as crate::stddef_h::size_t; // joint parents
         size = (size as libc::c_ulong).wrapping_add(
             ((*header).num_joints.wrapping_mul(12 as i32 as u32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t as crate::stddef_h::size_t
+        ) as crate::stddef_h::size_t
     }
     if (*header).num_poses != 0 {
         size = (size as libc::c_ulong).wrapping_add(
@@ -1486,19 +1485,19 @@ pub unsafe extern "C" fn R_LoadIQM(
                 .wrapping_mul((*header).num_frames)
                 .wrapping_mul(12 as i32 as u32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t as crate::stddef_h::size_t
+        ) as crate::stddef_h::size_t
         // pose mats
     }
     if (*header).ofs_bounds != 0 {
         size = (size as libc::c_ulong).wrapping_add(
             ((*header).num_frames.wrapping_mul(6 as i32 as u32) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t as crate::stddef_h::size_t
+        ) as crate::stddef_h::size_t
     // model bounds
     } else if (*header).num_meshes != 0 && (*header).num_frames == 0 as i32 as u32 {
         size = (size as libc::c_ulong).wrapping_add(
             (6 as i32 as libc::c_ulong).wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong),
-        ) as crate::stddef_h::size_t as crate::stddef_h::size_t
+        ) as crate::stddef_h::size_t
         // model bounds
     }
     (*mod_0).type_0 = crate::tr_local_h::MOD_IQM;

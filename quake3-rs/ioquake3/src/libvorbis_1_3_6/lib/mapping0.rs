@@ -253,7 +253,7 @@ unsafe extern "C" fn mapping0_unpack(
                 (*info).submaps = (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                     opb as *mut crate::ogg_h::oggpack_buffer,
                     4 as i32,
-                ) + 1 as i32 as libc::c_long) as i32;
+                ) + 1 as i32 as isize) as i32;
                 if (*info).submaps <= 0 as i32 {
                     current_block = 1977384903651761240;
                 } else {
@@ -276,8 +276,7 @@ unsafe extern "C" fn mapping0_unpack(
                                 (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                                     opb as *mut crate::ogg_h::oggpack_buffer,
                                     8 as i32,
-                                ) + 1 as i32 as libc::c_long)
-                                    as i32;
+                                ) + 1 as i32 as isize) as i32;
                             if (*info).coupling_steps <= 0 as i32 {
                                 current_block = 1977384903651761240;
                             } else {
@@ -340,7 +339,7 @@ unsafe extern "C" fn mapping0_unpack(
                                 if !(crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
                                     opb as *mut crate::ogg_h::oggpack_buffer,
                                     2 as i32,
-                                ) != 0 as i32 as libc::c_long)
+                                ) != 0 as i32 as isize)
                                 {
                                     if (*info).submaps > 1 as i32 {
                                         i = 0 as i32;
@@ -447,21 +446,19 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
     let mut gmdct: *mut *mut f32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut crate::codec_h::vorbis_block,
         ((*vi).channels as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong)
-            as libc::c_long,
+            .wrapping_mul(::std::mem::size_of::<*mut f32>() as libc::c_ulong) as isize,
     ) as *mut *mut f32;
     let mut iwork: *mut *mut i32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut crate::codec_h::vorbis_block,
         ((*vi).channels as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<*mut i32>() as libc::c_ulong)
-            as libc::c_long,
+            .wrapping_mul(::std::mem::size_of::<*mut i32>() as libc::c_ulong) as isize,
     ) as *mut *mut i32;
     let mut floor_posts: *mut *mut *mut i32 =
         crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut crate::codec_h::vorbis_block,
             ((*vi).channels as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<*mut *mut i32>() as libc::c_ulong)
-                as libc::c_long,
+                as isize,
         ) as *mut *mut *mut i32;
     let mut global_ampmax: f32 = (*vbi).ampmax;
     let mut fresh1 = ::std::vec::from_elem(
@@ -489,15 +486,13 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
         *fresh2 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut crate::codec_h::vorbis_block,
             ((n / 2 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong)
-                as libc::c_long,
+                .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong) as isize,
         ) as *mut i32;
         let ref mut fresh3 = *gmdct.offset(i as isize);
         *fresh3 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
             vb as *mut crate::codec_h::vorbis_block,
             ((n / 2 as i32) as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong)
-                as libc::c_long,
+                .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as isize,
         ) as *mut f32;
         scale_dB = (todB(&mut scale) as f64 + 0.345f64) as f32;
         /* window the PCM data */
@@ -576,12 +571,12 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
     let mut noise: *mut f32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut crate::codec_h::vorbis_block,
         ((n / 2 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as libc::c_long,
+            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as isize,
     ) as *mut f32;
     let mut tone: *mut f32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
         vb as *mut crate::codec_h::vorbis_block,
         ((n / 2 as i32) as libc::c_ulong)
-            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as libc::c_long,
+            .wrapping_mul(::std::mem::size_of::<f32>() as libc::c_ulong) as isize,
     ) as *mut f32;
     i = 0 as i32;
     while i < (*vi).channels {
@@ -612,7 +607,7 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
             vb as *mut crate::codec_h::vorbis_block,
             (15 as i32 as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<*mut i32>() as libc::c_ulong)
-                as libc::c_long,
+                as isize,
         ) as *mut *mut i32;
         crate::stdlib::memset(
             *floor_posts.offset(i as isize) as *mut libc::c_void,
@@ -864,7 +859,7 @@ unsafe extern "C" fn mapping0_forward(mut vb: *mut crate::codec_h::vorbis_block)
         i = 0 as i32;
         while i < (*info).submaps {
             let mut ch_in_bundle: i32 = 0 as i32;
-            let mut classifications: *mut *mut libc::c_long = 0 as *mut *mut libc::c_long;
+            let mut classifications: *mut *mut isize = 0 as *mut *mut isize;
             let mut resnum: i32 = (*info).residuesubmap[i as usize];
             j = 0 as i32;
             while j < (*vi).channels {
@@ -938,7 +933,7 @@ unsafe extern "C" fn mapping0_inverse(
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     (*vb).pcmend = (*ci).blocksizes[(*vb).W as usize] as i32;
-    let mut n: libc::c_long = (*vb).pcmend as libc::c_long;
+    let mut n: isize = (*vb).pcmend as isize;
     let mut fresh17 = ::std::vec::from_elem(
         0,
         (::std::mem::size_of::<*mut f32>() as libc::c_ulong)
@@ -1054,7 +1049,7 @@ unsafe extern "C" fn mapping0_inverse(
         let mut pcmM: *mut f32 = *(*vb).pcm.offset((*info).coupling_mag[i as usize] as isize);
         let mut pcmA: *mut f32 = *(*vb).pcm.offset((*info).coupling_ang[i as usize] as isize);
         j = 0 as i32;
-        while (j as libc::c_long) < n / 2 as i32 as libc::c_long {
+        while (j as isize) < n / 2 as i32 as isize {
             let mut mag: f32 = *pcmM.offset(j as isize);
             let mut ang: f32 = *pcmA.offset(j as isize);
             if mag > 0 as i32 as f32 {

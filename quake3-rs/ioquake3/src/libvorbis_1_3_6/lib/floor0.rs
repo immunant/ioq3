@@ -39,8 +39,8 @@ pub struct vorbis_look_floor0 {
     pub linearmap: *mut *mut i32,
     pub n: [i32; 2],
     pub vi: *mut crate::backends_h::vorbis_info_floor0,
-    pub bits: libc::c_long,
-    pub frames: libc::c_long,
+    pub bits: isize,
+    pub frames: isize,
 }
 /* **********************************************/
 
@@ -113,10 +113,10 @@ unsafe extern "C" fn floor0_unpack(
     (*info).numbooks = (crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
         opb as *mut crate::ogg_h::oggpack_buffer,
         4 as i32,
-    ) + 1 as i32 as libc::c_long) as i32;
+    ) + 1 as i32 as isize) as i32;
     if !((*info).order < 1 as i32) {
-        if !((*info).rate < 1 as i32 as libc::c_long) {
-            if !((*info).barkmap < 1 as i32 as libc::c_long) {
+        if !((*info).rate < 1 as i32 as isize) {
+            if !((*info).barkmap < 1 as i32 as isize) {
                 if !((*info).numbooks < 1 as i32) {
                     j = 0 as i32;
                     loop {
@@ -142,7 +142,7 @@ unsafe extern "C" fn floor0_unpack(
                             break;
                         }
                         if (*(*ci).book_param[(*info).books[j as usize] as usize]).dim
-                            < 1 as i32 as libc::c_long
+                            < 1 as i32 as isize
                         {
                             current_block = 8027669132317143458;
                             break;
@@ -181,7 +181,7 @@ unsafe extern "C" fn floor0_map_lazy_init(
         let mut info: *mut crate::backends_h::vorbis_info_floor0 =
             infoX as *mut crate::backends_h::vorbis_info_floor0;
         let mut W: i32 = (*vb).W as i32;
-        let mut n: i32 = ((*ci).blocksizes[W as usize] / 2 as i32 as libc::c_long) as i32;
+        let mut n: i32 = ((*ci).blocksizes[W as usize] / 2 as i32 as isize) as i32;
         let mut j: i32 = 0;
         /* we choose a scaling constant so that:
           floor(bark(rate/2-1)*C)=mapped-1
@@ -269,7 +269,7 @@ unsafe extern "C" fn floor0_inverse1(
     ) as i32;
     if ampraw > 0 as i32 {
         /* also handles the -1 out of data case */
-        let mut maxval: libc::c_long = (((1 as i32) << (*info).ampbits) - 1 as i32) as libc::c_long;
+        let mut maxval: isize = (((1 as i32) << (*info).ampbits) - 1 as i32) as isize;
         let mut amp: f32 = ampraw as f32 / maxval as f32 * (*info).ampdB as f32;
         let mut booknum: i32 = crate::src::libogg_1_3_3::src::bitwise::oggpack_read(
             &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
@@ -291,21 +291,20 @@ unsafe extern "C" fn floor0_inverse1(
             let mut lsp: *mut f32 = crate::src::libvorbis_1_3_6::lib::block::_vorbis_block_alloc(
                 vb as *mut crate::codec_h::vorbis_block,
                 (::std::mem::size_of::<f32>() as libc::c_ulong).wrapping_mul(
-                    ((*look).m as libc::c_long + (*b).dim + 1 as i32 as libc::c_long)
-                        as libc::c_ulong,
-                ) as libc::c_long,
+                    ((*look).m as isize + (*b).dim + 1 as i32 as isize) as libc::c_ulong,
+                ) as isize,
             ) as *mut f32;
             if !(crate::src::libvorbis_1_3_6::lib::codebook::vorbis_book_decodev_set(
                 b as *mut crate::src::libvorbis_1_3_6::lib::codebook::codebook,
                 lsp,
                 &mut (*vb).opb as *mut _ as *mut crate::ogg_h::oggpack_buffer,
                 (*look).m,
-            ) == -(1 as i32) as libc::c_long)
+            ) == -(1 as i32) as isize)
             {
                 j = 0 as i32;
                 while j < (*look).m {
                     k = 0 as i32;
-                    while j < (*look).m && (k as libc::c_long) < (*b).dim {
+                    while j < (*look).m && (k as isize) < (*b).dim {
                         *lsp.offset(j as isize) += last;
                         k += 1;
                         j += 1

@@ -403,8 +403,8 @@ pub unsafe extern "C" fn UpdateTournamentInfo() {
                 .ps
                 .persistant[crate::bg_public_h::PERS_SCORE as i32 as usize],
         );
-        msglen = (msglen as libc::c_ulong).wrapping_add(crate::stdlib::strlen(buf.as_mut_ptr()))
-            as i32 as i32;
+        msglen =
+            (msglen as libc::c_ulong).wrapping_add(crate::stdlib::strlen(buf.as_mut_ptr())) as i32;
         if msglen as libc::c_ulong >= ::std::mem::size_of::<[libc::c_char; 1024]>() as libc::c_ulong
         {
             break;
@@ -762,8 +762,8 @@ unsafe extern "C" fn SpawnPodium() -> *mut crate::g_local_h::gentity_t {
     }
     (*podium).classname = b"podium\x00" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*podium).s.eType = crate::bg_public_h::ET_GENERAL as i32;
-    (*podium).s.number = podium.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr())
-        as isize as i32;
+    (*podium).s.number =
+        podium.offset_from(crate::src::game::g_main::g_entities.as_mut_ptr()) as isize as i32;
     (*podium).clipmask = 1 as i32;
     (*podium).r.contents = 1 as i32;
     (*podium).s.modelindex = crate::src::game::g_utils::G_ModelIndex(

@@ -1,5 +1,3 @@
-use ::libc;
-
 pub use crate::stddef_h::size_t;
 
 pub use crate::jmorecfg_h::boolean;
@@ -286,7 +284,7 @@ pub unsafe extern "C" fn jpeg_read_coefficients(
                 (*(*cinfo).progress).pass_counter += 1;
                 if (*(*cinfo).progress).pass_counter >= (*(*cinfo).progress).pass_limit {
                     /* startup underestimated number of scans; ratchet up one scan */
-                    (*(*cinfo).progress).pass_limit += (*cinfo).total_iMCU_rows as libc::c_long
+                    (*(*cinfo).progress).pass_limit += (*cinfo).total_iMCU_rows as isize
                 }
             }
         }
@@ -381,9 +379,8 @@ unsafe extern "C" fn transdecode_master_selection(mut cinfo: crate::jpeglib_h::j
         } else {
             nscans = 1 as i32
         }
-        (*(*cinfo).progress).pass_counter = 0 as libc::c_long;
-        (*(*cinfo).progress).pass_limit =
-            (*cinfo).total_iMCU_rows as libc::c_long * nscans as libc::c_long;
+        (*(*cinfo).progress).pass_counter = 0 as isize;
+        (*(*cinfo).progress).pass_limit = (*cinfo).total_iMCU_rows as isize * nscans as isize;
         (*(*cinfo).progress).completed_passes = 0 as i32;
         (*(*cinfo).progress).total_passes = 1 as i32
     };

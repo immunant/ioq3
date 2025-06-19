@@ -449,8 +449,8 @@ pub unsafe extern "C" fn SV_NumForGentity(mut ent: *mut crate::g_public_h::share
     let mut num: i32 = 0;
     num = ((ent as *mut crate::src::qcommon::q_shared::byte).offset_from(
         crate::src::server::sv_main::sv.gentities as *mut crate::src::qcommon::q_shared::byte,
-    ) as libc::c_long
-        / crate::src::server::sv_main::sv.gentitySize as libc::c_long) as i32;
+    ) as isize
+        / crate::src::server::sv_main::sv.gentitySize as isize) as i32;
     return num;
 }
 #[no_mangle]
@@ -498,8 +498,8 @@ pub unsafe extern "C" fn SV_GEntityForSvEntity(
     mut svEnt: *mut crate::server_h::svEntity_t,
 ) -> *mut crate::g_public_h::sharedEntity_t {
     let mut num: i32 = 0;
-    num = svEnt.offset_from(crate::src::server::sv_main::sv.svEntities.as_mut_ptr()) as libc::c_long
-        as i32;
+    num =
+        svEnt.offset_from(crate::src::server::sv_main::sv.svEntities.as_mut_ptr()) as isize as i32;
     return SV_GentityNum(num);
 }
 /*

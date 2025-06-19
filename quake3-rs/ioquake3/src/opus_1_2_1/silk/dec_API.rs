@@ -600,8 +600,7 @@ pub unsafe extern "C" fn silk_Decode(
                     ::std::mem::size_of::<crate::opus_types_h::opus_int16>() as libc::c_ulong
                 )
                 .wrapping_add(
-                    (0 as i32 as libc::c_long
-                        * samplesOut1_tmp_storage2.offset_from(samplesOut) as libc::c_long)
+                    (0 as i32 as isize * samplesOut1_tmp_storage2.offset_from(samplesOut) as isize)
                         as libc::c_ulong,
                 ),
         );

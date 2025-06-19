@@ -18,7 +18,7 @@ pub struct ov_callbacks {
         ) -> i32,
     >,
     pub close_func: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> i32>,
-    pub tell_func: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> libc::c_long>,
+    pub tell_func: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> isize>,
 }
 
 #[repr(C)]
@@ -32,13 +32,13 @@ pub struct OggVorbis_File {
     pub links: i32,
     pub offsets: *mut crate::config_types_h::ogg_int64_t,
     pub dataoffsets: *mut crate::config_types_h::ogg_int64_t,
-    pub serialnos: *mut libc::c_long,
+    pub serialnos: *mut isize,
     pub pcmlengths: *mut crate::config_types_h::ogg_int64_t,
     pub vi: *mut crate::codec_h::vorbis_info,
     pub vc: *mut crate::codec_h::vorbis_comment,
     pub pcm_offset: crate::config_types_h::ogg_int64_t,
     pub ready_state: i32,
-    pub current_serialno: libc::c_long,
+    pub current_serialno: isize,
     pub current_link: i32,
     pub bittrack: f64,
     pub samptrack: f64,
@@ -177,17 +177,17 @@ extern "C" {
 
 unsafe extern "C" fn _get_data(
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
-) -> libc::c_long {
+) -> isize {
     *::libc::__errno_location() = 0 as i32;
     if (*vf).callbacks.read_func.is_none() {
-        return -(1 as i32) as libc::c_long;
+        return -(1 as i32) as isize;
     }
     if !(*vf).datasource.is_null() {
         let mut buffer: *mut libc::c_char = crate::src::libogg_1_3_3::src::framing::ogg_sync_buffer(
             &mut (*vf).oy as *mut _ as *mut crate::ogg_h::ogg_sync_state,
-            2048 as i32 as libc::c_long,
+            2048 as i32 as isize,
         );
-        let mut bytes: libc::c_long = (*vf)
+        let mut bytes: isize = (*vf)
             .callbacks
             .read_func
             .expect("non-null function pointer")(
@@ -195,19 +195,19 @@ unsafe extern "C" fn _get_data(
             1 as i32 as crate::stddef_h::size_t,
             2048 as i32 as crate::stddef_h::size_t,
             (*vf).datasource,
-        ) as libc::c_long;
-        if bytes > 0 as i32 as libc::c_long {
+        ) as isize;
+        if bytes > 0 as i32 as isize {
             crate::src::libogg_1_3_3::src::framing::ogg_sync_wrote(
                 &mut (*vf).oy as *mut _ as *mut crate::ogg_h::ogg_sync_state,
                 bytes,
             );
         }
-        if bytes == 0 as i32 as libc::c_long && *::libc::__errno_location() != 0 {
-            return -(1 as i32) as libc::c_long;
+        if bytes == 0 as i32 as isize && *::libc::__errno_location() != 0 {
+            return -(1 as i32) as isize;
         }
         return bytes;
     } else {
-        return 0 as i32 as libc::c_long;
+        return 0 as i32 as isize;
     };
 }
 /* save a tiny smidge of verbosity to make the code more readable */
@@ -257,31 +257,31 @@ unsafe extern "C" fn _get_next_page(
     mut og: *mut crate::ogg_h::ogg_page,
     mut boundary: crate::config_types_h::ogg_int64_t,
 ) -> crate::config_types_h::ogg_int64_t {
-    if boundary > 0 as i32 as libc::c_long {
+    if boundary > 0 as i32 as isize {
         boundary += (*vf).offset
     }
     loop {
-        let mut more: libc::c_long = 0;
-        if boundary > 0 as i32 as libc::c_long && (*vf).offset >= boundary {
+        let mut more: isize = 0;
+        if boundary > 0 as i32 as isize && (*vf).offset >= boundary {
             return -(1 as i32) as crate::config_types_h::ogg_int64_t;
         }
         more = crate::src::libogg_1_3_3::src::framing::ogg_sync_pageseek(
             &mut (*vf).oy as *mut _ as *mut crate::ogg_h::ogg_sync_state,
             og as *mut crate::ogg_h::ogg_page,
         );
-        if more < 0 as i32 as libc::c_long {
+        if more < 0 as i32 as isize {
             /* skipped n bytes */
             (*vf).offset -= more
-        } else if more == 0 as i32 as libc::c_long {
+        } else if more == 0 as i32 as isize {
             /* send more paramedics */
             if boundary == 0 {
                 return -(1 as i32) as crate::config_types_h::ogg_int64_t;
             }
-            let mut ret: libc::c_long = _get_data(vf);
-            if ret == 0 as i32 as libc::c_long {
+            let mut ret: isize = _get_data(vf);
+            if ret == 0 as i32 as isize {
                 return -(2 as i32) as crate::config_types_h::ogg_int64_t;
             }
-            if ret < 0 as i32 as libc::c_long {
+            if ret < 0 as i32 as isize {
                 return -(128 as i32) as crate::config_types_h::ogg_int64_t;
             }
         } else {
@@ -307,9 +307,9 @@ unsafe extern "C" fn _get_prev_page(
     let mut ret: crate::config_types_h::ogg_int64_t = 0;
     let mut offset: crate::config_types_h::ogg_int64_t =
         -(1 as i32) as crate::config_types_h::ogg_int64_t;
-    while offset == -(1 as i32) as libc::c_long {
-        begin -= 65536 as i32 as libc::c_long;
-        if begin < 0 as i32 as libc::c_long {
+    while offset == -(1 as i32) as isize {
+        begin -= 65536 as i32 as isize;
+        if begin < 0 as i32 as isize {
             begin = 0 as i32 as crate::config_types_h::ogg_int64_t
         }
         ret = _seek_helper(vf, begin) as crate::config_types_h::ogg_int64_t;
@@ -323,10 +323,10 @@ unsafe extern "C" fn _get_prev_page(
                 ::std::mem::size_of::<crate::ogg_h::ogg_page>() as libc::c_ulong,
             );
             ret = _get_next_page(vf, og, end - (*vf).offset);
-            if ret == -(128 as i32) as libc::c_long {
+            if ret == -(128 as i32) as isize {
                 return -(128 as i32) as crate::config_types_h::ogg_int64_t;
             }
-            if ret < 0 as i32 as libc::c_long {
+            if ret < 0 as i32 as isize {
                 break;
             }
             offset = ret
@@ -335,13 +335,13 @@ unsafe extern "C" fn _get_prev_page(
     /* In a fully compliant, non-multiplexed stream, we'll still be
     holding the last page.  In multiplexed (or noncompliant streams),
     we will probably have to re-read the last page we saw */
-    if (*og).header_len == 0 as i32 as libc::c_long {
+    if (*og).header_len == 0 as i32 as isize {
         ret = _seek_helper(vf, offset) as crate::config_types_h::ogg_int64_t;
         if ret != 0 {
             return ret;
         }
         ret = _get_next_page(vf, og, 65536 as i32 as crate::config_types_h::ogg_int64_t);
-        if ret < 0 as i32 as libc::c_long {
+        if ret < 0 as i32 as isize {
             /* this shouldn't be possible */
             return -(129 as i32) as crate::config_types_h::ogg_int64_t;
         }
@@ -351,31 +351,29 @@ unsafe extern "C" fn _get_prev_page(
 
 unsafe extern "C" fn _add_serialno(
     mut og: *mut crate::ogg_h::ogg_page,
-    mut serialno_list: *mut *mut libc::c_long,
+    mut serialno_list: *mut *mut isize,
     mut n: *mut i32,
 ) {
-    let mut s: libc::c_long = crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
+    let mut s: isize = crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
         og as *const crate::ogg_h::ogg_page,
-    ) as libc::c_long;
+    ) as isize;
     *n += 1;
     if !(*serialno_list).is_null() {
         *serialno_list = crate::stdlib::realloc(
             *serialno_list as *mut libc::c_void,
-            (::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
-                .wrapping_mul(*n as libc::c_ulong),
-        ) as *mut libc::c_long
+            (::std::mem::size_of::<isize>() as libc::c_ulong).wrapping_mul(*n as libc::c_ulong),
+        ) as *mut isize
     } else {
         *serialno_list =
-            crate::stdlib::malloc(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
-                as *mut libc::c_long
+            crate::stdlib::malloc(::std::mem::size_of::<isize>() as libc::c_ulong) as *mut isize
     }
     *(*serialno_list).offset((*n - 1 as i32) as isize) = s;
 }
 /* returns nonzero if found */
 
 unsafe extern "C" fn _lookup_serialno(
-    mut s: libc::c_long,
-    mut serialno_list: *mut libc::c_long,
+    mut s: isize,
+    mut serialno_list: *mut isize,
     mut n: i32,
 ) -> i32 {
     if !serialno_list.is_null() {
@@ -396,12 +394,12 @@ unsafe extern "C" fn _lookup_serialno(
 
 unsafe extern "C" fn _lookup_page_serialno(
     mut og: *mut crate::ogg_h::ogg_page,
-    mut serialno_list: *mut libc::c_long,
+    mut serialno_list: *mut isize,
     mut n: i32,
 ) -> i32 {
-    let mut s: libc::c_long = crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
+    let mut s: isize = crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
         og as *const crate::ogg_h::ogg_page,
-    ) as libc::c_long;
+    ) as isize;
     return _lookup_serialno(s, serialno_list, n);
 }
 /* performs the same search as _get_prev_page, but prefers pages of
@@ -414,7 +412,7 @@ return the info of last page and alter *serialno.  */
 unsafe extern "C" fn _get_prev_page_serial(
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
     mut begin: crate::config_types_h::ogg_int64_t,
-    mut serial_list: *mut libc::c_long,
+    mut serial_list: *mut isize,
     mut serial_n: i32,
     mut serialno: *mut i32,
     mut granpos: *mut crate::config_types_h::ogg_int64_t,
@@ -435,9 +433,9 @@ unsafe extern "C" fn _get_prev_page_serial(
         -(1 as i32) as crate::config_types_h::ogg_int64_t;
     let mut ret_gran: crate::config_types_h::ogg_int64_t =
         -(1 as i32) as crate::config_types_h::ogg_int64_t;
-    while offset == -(1 as i32) as libc::c_long {
-        begin -= 65536 as i32 as libc::c_long;
-        if begin < 0 as i32 as libc::c_long {
+    while offset == -(1 as i32) as isize {
+        begin -= 65536 as i32 as isize;
+        if begin < 0 as i32 as isize {
             begin = 0 as i32 as crate::config_types_h::ogg_int64_t
         }
         ret = _seek_helper(vf, begin) as crate::config_types_h::ogg_int64_t;
@@ -446,10 +444,10 @@ unsafe extern "C" fn _get_prev_page_serial(
         }
         while (*vf).offset < end {
             ret = _get_next_page(vf, &mut og, end - (*vf).offset);
-            if ret == -(128 as i32) as libc::c_long {
+            if ret == -(128 as i32) as isize {
                 return -(128 as i32) as crate::config_types_h::ogg_int64_t;
             }
-            if ret < 0 as i32 as libc::c_long {
+            if ret < 0 as i32 as isize {
                 break;
             }
             ret_serialno = crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
@@ -459,7 +457,7 @@ unsafe extern "C" fn _get_prev_page_serial(
                 &mut og as *mut _ as *const crate::ogg_h::ogg_page,
             );
             offset = ret;
-            if ret_serialno == *serialno as libc::c_long {
+            if ret_serialno == *serialno as isize {
                 prefoffset = ret;
                 *granpos = ret_gran
             }
@@ -473,7 +471,7 @@ unsafe extern "C" fn _get_prev_page_serial(
         }
     }
     /* we're not interested in the page... just the serialno and granpos. */
-    if prefoffset >= 0 as i32 as libc::c_long {
+    if prefoffset >= 0 as i32 as isize {
         return prefoffset;
     }
     *serialno = ret_serialno as i32;
@@ -487,7 +485,7 @@ unsafe extern "C" fn _fetch_headers(
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
     mut vi: *mut crate::codec_h::vorbis_info,
     mut vc: *mut crate::codec_h::vorbis_comment,
-    mut serialno_list: *mut *mut libc::c_long,
+    mut serialno_list: *mut *mut isize,
     mut serialno_n: *mut i32,
     mut og_ptr: *mut crate::ogg_h::ogg_page,
 ) -> i32 {
@@ -515,10 +513,10 @@ unsafe extern "C" fn _fetch_headers(
             &mut og,
             65536 as i32 as crate::config_types_h::ogg_int64_t,
         );
-        if llret == -(128 as i32) as libc::c_long {
+        if llret == -(128 as i32) as isize {
             return -(128 as i32);
         }
-        if llret < 0 as i32 as libc::c_long {
+        if llret < 0 as i32 as isize {
             return -(132 as i32);
         }
         og_ptr = &mut og
@@ -547,7 +545,7 @@ unsafe extern "C" fn _fetch_headers(
                 if !(*serialno_list).is_null() {
                     ::libc::free(*serialno_list as *mut libc::c_void);
                 }
-                *serialno_list = 0 as *mut libc::c_long;
+                *serialno_list = 0 as *mut isize;
                 *serialno_n = 0 as i32;
                 ret = -(133 as i32);
                 current_block = 5963935241184096755;
@@ -597,11 +595,11 @@ unsafe extern "C" fn _fetch_headers(
             og_ptr,
             65536 as i32 as crate::config_types_h::ogg_int64_t,
         );
-        if llret_0 == -(128 as i32) as libc::c_long {
+        if llret_0 == -(128 as i32) as isize {
             ret = -(128 as i32);
             current_block = 5963935241184096755;
             break;
-        } else if llret_0 < 0 as i32 as libc::c_long {
+        } else if llret_0 < 0 as i32 as isize {
             ret = -(132 as i32);
             current_block = 5963935241184096755;
             break;
@@ -611,7 +609,7 @@ unsafe extern "C" fn _fetch_headers(
                 && (*vf).os.serialno
                     == crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
                         og_ptr as *const crate::ogg_h::ogg_page,
-                    ) as libc::c_long)
+                    ) as isize)
             {
                 continue;
             }
@@ -667,7 +665,7 @@ unsafe extern "C" fn _fetch_headers(
                             vf,
                             og_ptr,
                             65536 as i32 as crate::config_types_h::ogg_int64_t,
-                        ) < 0 as i32 as libc::c_long
+                        ) < 0 as i32 as isize
                         {
                             ret = -(133 as i32);
                             current_block = 5963935241184096755;
@@ -675,7 +673,7 @@ unsafe extern "C" fn _fetch_headers(
                         } else if (*vf).os.serialno
                             == crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
                                 og_ptr as *const crate::ogg_h::ogg_page,
-                            ) as libc::c_long
+                            ) as isize
                         {
                             crate::src::libogg_1_3_3::src::framing::ogg_stream_pagein(
                                 &mut (*vf).os as *mut _ as *mut crate::ogg_h::ogg_stream_state,
@@ -737,7 +735,7 @@ unsafe extern "C" fn _initial_pcmoffset(
     }; /* should not be possible unless the file is truncated/mangled */
     let mut accumulated: crate::config_types_h::ogg_int64_t =
         0 as i32 as crate::config_types_h::ogg_int64_t;
-    let mut lastblock: libc::c_long = -(1 as i32) as libc::c_long;
+    let mut lastblock: isize = -(1 as i32) as isize;
     let mut result: i32 = 0;
     let mut serialno: i32 = (*vf).os.serialno as i32;
     loop {
@@ -753,7 +751,7 @@ unsafe extern "C" fn _initial_pcmoffset(
             vf,
             &mut og,
             -(1 as i32) as crate::config_types_h::ogg_int64_t,
-        ) < 0 as i32 as libc::c_long
+        ) < 0 as i32 as isize
         {
             break;
         }
@@ -784,13 +782,13 @@ unsafe extern "C" fn _initial_pcmoffset(
             }
             if result > 0 as i32 {
                 /* ignore holes */
-                let mut thisblock: libc::c_long =
+                let mut thisblock: isize =
                     crate::src::libvorbis_1_3_6::lib::synthesis::vorbis_packet_blocksize(
                         vi as *mut crate::codec_h::vorbis_info,
                         &mut op as *mut _ as *mut crate::ogg_h::ogg_packet,
                     );
-                if thisblock >= 0 as i32 as libc::c_long {
-                    if lastblock != -(1 as i32) as libc::c_long {
+                if thisblock >= 0 as i32 as isize {
+                    if lastblock != -(1 as i32) as isize {
                         accumulated += lastblock + thisblock >> 2 as i32
                     }
                     lastblock = thisblock
@@ -799,7 +797,7 @@ unsafe extern "C" fn _initial_pcmoffset(
         }
         if !(crate::src::libogg_1_3_3::src::framing::ogg_page_granulepos(
             &mut og as *mut _ as *const crate::ogg_h::ogg_page,
-        ) != -(1 as i32) as libc::c_long)
+        ) != -(1 as i32) as isize)
         {
             continue;
         }
@@ -812,7 +810,7 @@ unsafe extern "C" fn _initial_pcmoffset(
     /* less than zero?  Either a corrupt file or a stream with samples
     trimmed off the beginning, a normal occurrence; in both cases set
     the offset to zero */
-    if accumulated < 0 as i32 as libc::c_long {
+    if accumulated < 0 as i32 as isize {
         accumulated = 0 as i32 as crate::config_types_h::ogg_int64_t
     }
     return accumulated;
@@ -829,9 +827,9 @@ unsafe extern "C" fn _bisect_forward_serialno(
     mut end: crate::config_types_h::ogg_int64_t,
     mut endgran: crate::config_types_h::ogg_int64_t,
     mut endserial: i32,
-    mut currentno_list: *mut libc::c_long,
+    mut currentno_list: *mut isize,
     mut currentnos: i32,
-    mut m: libc::c_long,
+    mut m: isize,
 ) -> i32 {
     let mut pcmoffset: crate::config_types_h::ogg_int64_t = 0;
     let mut dataoffset: crate::config_types_h::ogg_int64_t = searched;
@@ -854,7 +852,7 @@ unsafe extern "C" fn _bisect_forward_serialno(
          not a page we care about)
     */
     /* Is the last page in our list of current serialnumbers? */
-    if _lookup_serialno(endserial as libc::c_long, currentno_list, currentnos) != 0 {
+    if _lookup_serialno(endserial as isize, currentno_list, currentnos) != 0 {
         /* last page is in the starting serialno list, so we've bisected
         down to (or just started with) a single link.  Now we need to
         find the last vorbis page belonging to the first vorbis stream
@@ -871,7 +869,7 @@ unsafe extern "C" fn _bisect_forward_serialno(
                 &mut endgran,
             )
         }
-        (*vf).links = (m + 1 as i32 as libc::c_long) as i32;
+        (*vf).links = (m + 1 as i32 as isize) as i32;
         if !(*vf).offsets.is_null() {
             ::libc::free((*vf).offsets as *mut libc::c_void);
         }
@@ -900,8 +898,8 @@ unsafe extern "C" fn _bisect_forward_serialno(
         ) as *mut crate::codec_h::vorbis_comment;
         (*vf).serialnos = crate::stdlib::malloc(
             ((*vf).links as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<libc::c_long>() as libc::c_ulong),
-        ) as *mut libc::c_long;
+                .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
+        ) as *mut isize;
         (*vf).dataoffsets = crate::stdlib::malloc(((*vf).links as libc::c_ulong).wrapping_mul(
             ::std::mem::size_of::<crate::config_types_h::ogg_int64_t>() as libc::c_ulong,
         )) as *mut crate::config_types_h::ogg_int64_t;
@@ -909,15 +907,13 @@ unsafe extern "C" fn _bisect_forward_serialno(
             crate::stdlib::malloc((((*vf).links * 2 as i32) as libc::c_ulong).wrapping_mul(
                 ::std::mem::size_of::<crate::config_types_h::ogg_int64_t>() as libc::c_ulong,
             )) as *mut crate::config_types_h::ogg_int64_t;
-        *(*vf)
-            .offsets
-            .offset((m + 1 as i32 as libc::c_long) as isize) = end;
+        *(*vf).offsets.offset((m + 1 as i32 as isize) as isize) = end;
         *(*vf).offsets.offset(m as isize) = begin;
         *(*vf)
             .pcmlengths
-            .offset((m * 2 as i32 as libc::c_long + 1 as i32 as libc::c_long) as isize) =
-            if endgran < 0 as i32 as libc::c_long {
-                0 as i32 as libc::c_long
+            .offset((m * 2 as i32 as isize + 1 as i32 as isize) as isize) =
+            if endgran < 0 as i32 as isize {
+                0 as i32 as isize
             } else {
                 endgran
             }
@@ -925,7 +921,7 @@ unsafe extern "C" fn _bisect_forward_serialno(
         /* last page is not in the starting stream's serial number list,
         so we have multiple links.  Find where the stream that begins
         our bisection ends. */
-        let mut next_serialno_list: *mut libc::c_long = 0 as *mut libc::c_long;
+        let mut next_serialno_list: *mut isize = 0 as *mut isize;
         let mut next_serialnos: i32 = 0 as i32;
         let mut vi: crate::codec_h::vorbis_info = crate::codec_h::vorbis_info {
             version: 0,
@@ -948,10 +944,10 @@ unsafe extern "C" fn _bisect_forward_serialno(
         first pages of two links. */
         while searched < endsearched {
             let mut bisect: crate::config_types_h::ogg_int64_t = 0;
-            if endsearched - searched < 65536 as i32 as libc::c_long {
+            if endsearched - searched < 65536 as i32 as isize {
                 bisect = searched
             } else {
-                bisect = (searched + endsearched) / 2 as i32 as libc::c_long
+                bisect = (searched + endsearched) / 2 as i32 as isize
             }
             ret = _seek_helper(vf, bisect) as crate::config_types_h::ogg_int64_t;
             if ret != 0 {
@@ -962,14 +958,14 @@ unsafe extern "C" fn _bisect_forward_serialno(
                 &mut og,
                 -(1 as i32) as crate::config_types_h::ogg_int64_t,
             );
-            if last == -(128 as i32) as libc::c_long {
+            if last == -(128 as i32) as isize {
                 return -(128 as i32);
             }
-            if last < 0 as i32 as libc::c_long
+            if last < 0 as i32 as isize
                 || _lookup_page_serialno(&mut og, currentno_list, currentnos) == 0
             {
                 endsearched = bisect;
-                if last >= 0 as i32 as libc::c_long {
+                if last >= 0 as i32 as isize {
                     next = last
                 }
             } else {
@@ -1019,7 +1015,7 @@ unsafe extern "C" fn _bisect_forward_serialno(
             endserial,
             next_serialno_list,
             next_serialnos,
-            m + 1 as i32 as libc::c_long,
+            m + 1 as i32 as isize,
         ) as crate::config_types_h::ogg_int64_t;
         if ret != 0 {
             return ret as i32;
@@ -1027,36 +1023,29 @@ unsafe extern "C" fn _bisect_forward_serialno(
         if !next_serialno_list.is_null() {
             ::libc::free(next_serialno_list as *mut libc::c_void);
         }
-        *(*vf)
-            .offsets
-            .offset((m + 1 as i32 as libc::c_long) as isize) = next;
-        *(*vf)
-            .serialnos
-            .offset((m + 1 as i32 as libc::c_long) as isize) = serialno as libc::c_long;
-        *(*vf)
-            .dataoffsets
-            .offset((m + 1 as i32 as libc::c_long) as isize) = dataoffset;
-        *(*vf).vi.offset((m + 1 as i32 as libc::c_long) as isize) = vi;
-        *(*vf).vc.offset((m + 1 as i32 as libc::c_long) as isize) = vc;
+        *(*vf).offsets.offset((m + 1 as i32 as isize) as isize) = next;
+        *(*vf).serialnos.offset((m + 1 as i32 as isize) as isize) = serialno as isize;
+        *(*vf).dataoffsets.offset((m + 1 as i32 as isize) as isize) = dataoffset;
+        *(*vf).vi.offset((m + 1 as i32 as isize) as isize) = vi;
+        *(*vf).vc.offset((m + 1 as i32 as isize) as isize) = vc;
         *(*vf)
             .pcmlengths
-            .offset((m * 2 as i32 as libc::c_long + 1 as i32 as libc::c_long) as isize) =
-            searchgran;
+            .offset((m * 2 as i32 as isize + 1 as i32 as isize) as isize) = searchgran;
         *(*vf)
             .pcmlengths
-            .offset((m * 2 as i32 as libc::c_long + 2 as i32 as libc::c_long) as isize) = pcmoffset;
+            .offset((m * 2 as i32 as isize + 2 as i32 as isize) as isize) = pcmoffset;
         let ref mut fresh1 = *(*vf)
             .pcmlengths
-            .offset((m * 2 as i32 as libc::c_long + 3 as i32 as libc::c_long) as isize);
+            .offset((m * 2 as i32 as isize + 3 as i32 as isize) as isize);
         *fresh1 -= pcmoffset;
         if *(*vf)
             .pcmlengths
-            .offset((m * 2 as i32 as libc::c_long + 3 as i32 as libc::c_long) as isize)
-            < 0 as i32 as libc::c_long
+            .offset((m * 2 as i32 as isize + 3 as i32 as isize) as isize)
+            < 0 as i32 as isize
         {
             *(*vf)
                 .pcmlengths
-                .offset((m * 2 as i32 as libc::c_long + 3 as i32 as libc::c_long) as isize) =
+                .offset((m * 2 as i32 as isize + 3 as i32 as isize) as isize) =
                 0 as i32 as crate::config_types_h::ogg_int64_t
         }
     }
@@ -1131,7 +1120,7 @@ unsafe extern "C" fn _open_seekable2(
         (*vf).offset = (*vf).end
     }
     /* If seek_func is implemented, tell_func must also be implemented */
-    if (*vf).end == -(1 as i32) as libc::c_long {
+    if (*vf).end == -(1 as i32) as isize {
         return -(131 as i32);
     }
     /* Get the offset of the last page of the physical bitstream, or, if
@@ -1145,7 +1134,7 @@ unsafe extern "C" fn _open_seekable2(
         &mut endserial,
         &mut endgran,
     );
-    if end < 0 as i32 as libc::c_long {
+    if end < 0 as i32 as isize {
         return end as i32;
     }
     /* now determine bitstream structure recursively */
@@ -1158,18 +1147,18 @@ unsafe extern "C" fn _open_seekable2(
         endserial,
         (*vf).serialnos.offset(2 as i32 as isize),
         *(*vf).serialnos.offset(1 as i32 as isize) as i32,
-        0 as i32 as libc::c_long,
+        0 as i32 as isize,
     ) < 0 as i32
     {
         return -(128 as i32);
     }
     *(*vf).offsets.offset(0 as i32 as isize) = 0 as i32 as crate::config_types_h::ogg_int64_t;
-    *(*vf).serialnos.offset(0 as i32 as isize) = serialno as libc::c_long;
+    *(*vf).serialnos.offset(0 as i32 as isize) = serialno as isize;
     *(*vf).dataoffsets.offset(0 as i32 as isize) = dataoffset;
     *(*vf).pcmlengths.offset(0 as i32 as isize) = pcmoffset;
     let ref mut fresh2 = *(*vf).pcmlengths.offset(1 as i32 as isize);
     *fresh2 -= pcmoffset;
-    if *(*vf).pcmlengths.offset(1 as i32 as isize) < 0 as i32 as libc::c_long {
+    if *(*vf).pcmlengths.offset(1 as i32 as isize) < 0 as i32 as isize {
         *(*vf).pcmlengths.offset(1 as i32 as isize) = 0 as i32 as crate::config_types_h::ogg_int64_t
     }
     return ov_raw_seek(vf, dataoffset);
@@ -1283,9 +1272,9 @@ unsafe extern "C" fn _fetch_and_process_packet(
                             &mut (*vf).vd as *mut _ as *mut crate::codec_h::vorbis_dsp_state,
                             0 as *mut *mut *mut f32,
                         ) << hs) as f64;
-                    (*vf).bittrack += ((*op_ptr).bytes * 8 as i32 as libc::c_long) as f64;
+                    (*vf).bittrack += ((*op_ptr).bytes * 8 as i32 as isize) as f64;
                     /* update the pcm offset. */
-                    if granulepos != -(1 as i32) as libc::c_long && (*op_ptr).e_o_s == 0 {
+                    if granulepos != -(1 as i32) as isize && (*op_ptr).e_o_s == 0 {
                         let mut link: i32 = if (*vf).seekable != 0 {
                             (*vf).current_link
                         } else {
@@ -1311,14 +1300,14 @@ unsafe extern "C" fn _fetch_and_process_packet(
                           shouldn't be possible
                           here unless the stream
                           is very broken */
-                        if granulepos < 0 as i32 as libc::c_long {
+                        if granulepos < 0 as i32 as isize {
                             granulepos = 0 as i32 as crate::config_types_h::ogg_int64_t
                         }
                         samples = crate::src::libvorbis_1_3_6::lib::block::vorbis_synthesis_pcmout(
                             &mut (*vf).vd as *mut _ as *mut crate::codec_h::vorbis_dsp_state,
                             0 as *mut *mut *mut f32,
                         ) << hs;
-                        granulepos -= samples as libc::c_long;
+                        granulepos -= samples as isize;
                         i = 0 as i32;
                         while i < link {
                             granulepos +=
@@ -1347,20 +1336,20 @@ unsafe extern "C" fn _fetch_and_process_packet(
                     &mut og,
                     -(1 as i32) as crate::config_types_h::ogg_int64_t,
                 );
-                if ret_0 < 0 as i32 as libc::c_long {
+                if ret_0 < 0 as i32 as isize {
                     return -(2 as i32);
                     /* eof. leave unitialized */
                 }
                 /* bitrate tracking; add the header's bytes here, the body bytes
                 are done by packet above */
-                (*vf).bittrack += (og.header_len * 8 as i32 as libc::c_long) as f64;
+                (*vf).bittrack += (og.header_len * 8 as i32 as isize) as f64;
                 if !((*vf).ready_state == 4 as i32) {
                     break;
                 }
                 if !((*vf).current_serialno
                     != crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
                         &mut og as *mut _ as *const crate::ogg_h::ogg_page,
-                    ) as libc::c_long)
+                    ) as isize)
                 {
                     break;
                 }
@@ -1405,10 +1394,10 @@ unsafe extern "C" fn _fetch_and_process_packet(
             let mut link_0: i32 = 0;
             if (*vf).ready_state < 3 as i32 {
                 if (*vf).seekable != 0 {
-                    let mut serialno: libc::c_long =
+                    let mut serialno: isize =
                         crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
                             &mut og as *mut _ as *const crate::ogg_h::ogg_page,
-                        ) as libc::c_long;
+                        ) as isize;
                     /* match the serialno to bitstream section.  We use this rather than
                     offset positions to avoid problems near logical bitstream
                     boundaries */
@@ -1438,7 +1427,7 @@ unsafe extern "C" fn _fetch_and_process_packet(
                         vf,
                         (*vf).vi,
                         (*vf).vc,
-                        0 as *mut *mut libc::c_long,
+                        0 as *mut *mut isize,
                         0 as *mut i32,
                         &mut og,
                     );
@@ -1477,7 +1466,7 @@ unsafe extern "C" fn _ov_open1(
     mut f: *mut libc::c_void,
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
     mut initial: *const libc::c_char,
-    mut ibytes: libc::c_long,
+    mut ibytes: isize,
     mut callbacks: crate::src::libvorbis_1_3_6::lib::vorbisfile::ov_callbacks,
 ) -> i32 {
     let mut offsettest: i32 = if !f.is_null() && callbacks.seek_func.is_some() {
@@ -1489,7 +1478,7 @@ unsafe extern "C" fn _ov_open1(
     } else {
         -(1 as i32)
     };
-    let mut serialno_list: *mut libc::c_long = 0 as *mut libc::c_long;
+    let mut serialno_list: *mut isize = 0 as *mut isize;
     let mut serialno_list_size: i32 = 0 as i32;
     let mut ret: i32 = 0;
     crate::stdlib::memset(
@@ -1561,16 +1550,16 @@ unsafe extern "C" fn _ov_open1(
         seek/reread first link's serialnumber data then. */
         (*vf).serialnos = crate::stdlib::calloc(
             (serialno_list_size + 2 as i32) as libc::c_ulong,
-            ::std::mem::size_of::<libc::c_long>() as libc::c_ulong,
-        ) as *mut libc::c_long;
+            ::std::mem::size_of::<isize>() as libc::c_ulong,
+        ) as *mut isize;
         (*vf).current_serialno = (*vf).os.serialno;
         *(*vf).serialnos.offset(0 as i32 as isize) = (*vf).current_serialno;
-        *(*vf).serialnos.offset(1 as i32 as isize) = serialno_list_size as libc::c_long;
+        *(*vf).serialnos.offset(1 as i32 as isize) = serialno_list_size as isize;
         crate::stdlib::memcpy(
             (*vf).serialnos.offset(2 as i32 as isize) as *mut libc::c_void,
             serialno_list as *const libc::c_void,
             (serialno_list_size as libc::c_ulong)
-                .wrapping_mul(::std::mem::size_of::<libc::c_long>() as libc::c_ulong),
+                .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
         );
         (*vf).offsets = crate::stdlib::calloc(
             1 as i32 as libc::c_ulong,
@@ -1683,7 +1672,7 @@ pub unsafe extern "C" fn ov_open_callbacks(
     mut f: *mut libc::c_void,
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
     mut initial: *const libc::c_char,
-    mut ibytes: libc::c_long,
+    mut ibytes: isize,
     mut callbacks: crate::src::libvorbis_1_3_6::lib::vorbisfile::ov_callbacks,
 ) -> i32 {
     let mut ret: i32 = _ov_open1(f, vf, initial, ibytes, callbacks);
@@ -1698,7 +1687,7 @@ pub unsafe extern "C" fn ov_open(
     mut f: *mut crate::stdlib::FILE,
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
     mut initial: *const libc::c_char,
-    mut ibytes: libc::c_long,
+    mut ibytes: isize,
 ) -> i32 {
     let mut callbacks: crate::src::libvorbis_1_3_6::lib::vorbisfile::ov_callbacks = {
         let mut init = crate::src::libvorbis_1_3_6::lib::vorbisfile::ov_callbacks {
@@ -1758,11 +1747,10 @@ pub unsafe extern "C" fn ov_open(
                 crate::stdlib::fclose as unsafe extern "C" fn(_: *mut crate::stdlib::FILE) -> i32,
             )),
             tell_func: ::std::mem::transmute::<
-                Option<unsafe extern "C" fn(_: *mut crate::stdlib::FILE) -> libc::c_long>,
-                Option<unsafe extern "C" fn(_: *mut libc::c_void) -> libc::c_long>,
+                Option<unsafe extern "C" fn(_: *mut crate::stdlib::FILE) -> isize>,
+                Option<unsafe extern "C" fn(_: *mut libc::c_void) -> isize>,
             >(Some(
-                crate::stdlib::ftell
-                    as unsafe extern "C" fn(_: *mut crate::stdlib::FILE) -> libc::c_long,
+                crate::stdlib::ftell as unsafe extern "C" fn(_: *mut crate::stdlib::FILE) -> isize,
             )),
         };
         init
@@ -1781,7 +1769,7 @@ pub unsafe extern "C" fn ov_fopen(
     if f.is_null() {
         return -(1 as i32);
     }
-    ret = ov_open(f, vf, 0 as *const libc::c_char, 0 as i32 as libc::c_long);
+    ret = ov_open(f, vf, 0 as *const libc::c_char, 0 as i32 as isize);
     if ret != 0 {
         crate::stdlib::fclose(f);
     }
@@ -1809,7 +1797,7 @@ pub unsafe extern "C" fn ov_halfrate(
             &mut (*vf).vb as *mut _ as *mut crate::codec_h::vorbis_block,
         );
         (*vf).ready_state = 3 as i32;
-        if (*vf).pcm_offset >= 0 as i32 as libc::c_long {
+        if (*vf).pcm_offset >= 0 as i32 as isize {
             let mut pos: crate::config_types_h::ogg_int64_t = (*vf).pcm_offset;
             (*vf).pcm_offset = -(1 as i32) as crate::config_types_h::ogg_int64_t;
             ov_pcm_seek(vf, pos);
@@ -1857,7 +1845,7 @@ pub unsafe extern "C" fn ov_test_callbacks(
     mut f: *mut libc::c_void,
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
     mut initial: *const libc::c_char,
-    mut ibytes: libc::c_long,
+    mut ibytes: isize,
     mut callbacks: crate::src::libvorbis_1_3_6::lib::vorbisfile::ov_callbacks,
 ) -> i32 {
     return _ov_open1(f, vf, initial, ibytes, callbacks);
@@ -1868,7 +1856,7 @@ pub unsafe extern "C" fn ov_test(
     mut f: *mut crate::stdlib::FILE,
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
     mut initial: *const libc::c_char,
-    mut ibytes: libc::c_long,
+    mut ibytes: isize,
 ) -> i32 {
     let mut callbacks: crate::src::libvorbis_1_3_6::lib::vorbisfile::ov_callbacks = {
         let mut init = crate::src::libvorbis_1_3_6::lib::vorbisfile::ov_callbacks {
@@ -1928,11 +1916,10 @@ pub unsafe extern "C" fn ov_test(
                 crate::stdlib::fclose as unsafe extern "C" fn(_: *mut crate::stdlib::FILE) -> i32,
             )),
             tell_func: ::std::mem::transmute::<
-                Option<unsafe extern "C" fn(_: *mut crate::stdlib::FILE) -> libc::c_long>,
-                Option<unsafe extern "C" fn(_: *mut libc::c_void) -> libc::c_long>,
+                Option<unsafe extern "C" fn(_: *mut crate::stdlib::FILE) -> isize>,
+                Option<unsafe extern "C" fn(_: *mut libc::c_void) -> isize>,
             >(Some(
-                crate::stdlib::ftell
-                    as unsafe extern "C" fn(_: *mut crate::stdlib::FILE) -> libc::c_long,
+                crate::stdlib::ftell as unsafe extern "C" fn(_: *mut crate::stdlib::FILE) -> isize,
             )),
         };
         init
@@ -1954,16 +1941,16 @@ pub unsafe extern "C" fn ov_test_open(
 
 pub unsafe extern "C" fn ov_streams(
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
-) -> libc::c_long {
-    return (*vf).links as libc::c_long;
+) -> isize {
+    return (*vf).links as isize;
 }
 /* Is the FILE * associated with vf seekable? */
 #[no_mangle]
 
 pub unsafe extern "C" fn ov_seekable(
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
-) -> libc::c_long {
-    return (*vf).seekable as libc::c_long;
+) -> isize {
+    return (*vf).seekable as isize;
 }
 /* returns the bitrate for a given logical bitstream or the entire
 physical bitstream.  If the file is open for random access, it will
@@ -1978,12 +1965,12 @@ vorbis_info structs */
 pub unsafe extern "C" fn ov_bitrate(
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
     mut i: i32,
-) -> libc::c_long {
+) -> isize {
     if (*vf).ready_state < 2 as i32 {
-        return -(131 as i32) as libc::c_long;
+        return -(131 as i32) as isize;
     }
     if i >= (*vf).links {
-        return -(131 as i32) as libc::c_long;
+        return -(131 as i32) as isize;
     }
     if (*vf).seekable == 0 && i != 0 as i32 {
         return ov_bitrate(vf, 0 as i32);
@@ -1997,7 +1984,7 @@ pub unsafe extern "C" fn ov_bitrate(
         while i_0 < (*vf).links {
             bits += (*(*vf).offsets.offset((i_0 + 1 as i32) as isize)
                 - *(*vf).dataoffsets.offset(i_0 as isize))
-                * 8 as i32 as libc::c_long;
+                * 8 as i32 as isize;
             i_0 += 1
         }
         /* This once read: return(rint(bits/ov_time_total(vf,-1)));
@@ -2005,28 +1992,28 @@ pub unsafe extern "C" fn ov_bitrate(
          * so this is slightly transformed to make it work.
          */
         br = (bits as f64 / ov_time_total(vf, -(1 as i32))) as f32;
-        return crate::stdlib::rint(br as f64) as libc::c_long;
+        return crate::stdlib::rint(br as f64) as isize;
     } else if (*vf).seekable != 0 {
         /* return the actual bitrate */
         return crate::stdlib::rint(
             ((*(*vf).offsets.offset((i + 1 as i32) as isize)
                 - *(*vf).dataoffsets.offset(i as isize))
-                * 8 as i32 as libc::c_long) as f64
+                * 8 as i32 as isize) as f64
                 / ov_time_total(vf, i),
-        ) as libc::c_long;
-    } else if (*(*vf).vi.offset(i as isize)).bitrate_nominal > 0 as i32 as libc::c_long {
+        ) as isize;
+    } else if (*(*vf).vi.offset(i as isize)).bitrate_nominal > 0 as i32 as isize {
         return (*(*vf).vi.offset(i as isize)).bitrate_nominal;
     } else {
-        if (*(*vf).vi.offset(i as isize)).bitrate_upper > 0 as i32 as libc::c_long {
-            if (*(*vf).vi.offset(i as isize)).bitrate_lower > 0 as i32 as libc::c_long {
+        if (*(*vf).vi.offset(i as isize)).bitrate_upper > 0 as i32 as isize {
+            if (*(*vf).vi.offset(i as isize)).bitrate_lower > 0 as i32 as isize {
                 return ((*(*vf).vi.offset(i as isize)).bitrate_upper
                     + (*(*vf).vi.offset(i as isize)).bitrate_lower)
-                    / 2 as i32 as libc::c_long;
+                    / 2 as i32 as isize;
             } else {
                 return (*(*vf).vi.offset(i as isize)).bitrate_upper;
             }
         }
-        return -(1 as i32) as libc::c_long;
+        return -(1 as i32) as isize;
     };
 }
 /* return nominal if set */
@@ -2038,21 +2025,21 @@ pub unsafe extern "C" fn ov_bitrate(
 
 pub unsafe extern "C" fn ov_bitrate_instant(
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
-) -> libc::c_long {
+) -> isize {
     let mut link: i32 = if (*vf).seekable != 0 {
         (*vf).current_link
     } else {
         0 as i32
     };
-    let mut ret: libc::c_long = 0;
+    let mut ret: isize = 0;
     if (*vf).ready_state < 2 as i32 {
-        return -(131 as i32) as libc::c_long;
+        return -(131 as i32) as isize;
     }
     if (*vf).samptrack == 0 as i32 as f64 {
-        return -(1 as i32) as libc::c_long;
+        return -(1 as i32) as isize;
     }
     ret = ((*vf).bittrack / (*vf).samptrack * (*(*vf).vi.offset(link as isize)).rate as f64
-        + 0.5f64) as libc::c_long;
+        + 0.5f64) as isize;
     (*vf).bittrack = 0.0f32 as f64;
     (*vf).samptrack = 0.0f32 as f64;
     return ret;
@@ -2063,7 +2050,7 @@ pub unsafe extern "C" fn ov_bitrate_instant(
 pub unsafe extern "C" fn ov_serialnumber(
     mut vf: *mut crate::src::libvorbis_1_3_6::lib::vorbisfile::OggVorbis_File,
     mut i: i32,
-) -> libc::c_long {
+) -> isize {
     if i >= (*vf).links {
         return ov_serialnumber(vf, (*vf).links - 1 as i32);
     }
@@ -2208,7 +2195,7 @@ pub unsafe extern "C" fn ov_raw_seek(
     if (*vf).seekable == 0 {
         return -(138 as i32);
     }
-    if pos < 0 as i32 as libc::c_long || pos > (*vf).end {
+    if pos < 0 as i32 as isize || pos > (*vf).end {
         return -(131 as i32);
     }
     /* is the seek position outside our current link [if any]? */
@@ -2321,12 +2308,12 @@ pub unsafe extern "C" fn ov_raw_seek(
                         } else if lastblock != 0 {
                             accblock += lastblock + thisblock >> 2 as i32
                         }
-                        if op.granulepos != -(1 as i32) as libc::c_long {
+                        if op.granulepos != -(1 as i32) as isize {
                             let mut i: i32 = 0;
                             let mut link: i32 = (*vf).current_link;
                             let mut granulepos: crate::config_types_h::ogg_int64_t = op.granulepos
                                 - *(*vf).pcmlengths.offset((link * 2 as i32) as isize);
-                            if granulepos < 0 as i32 as libc::c_long {
+                            if granulepos < 0 as i32 as isize {
                                 granulepos = 0 as i32 as crate::config_types_h::ogg_int64_t
                             }
                             i = 0 as i32;
@@ -2335,8 +2322,8 @@ pub unsafe extern "C" fn ov_raw_seek(
                                     *(*vf).pcmlengths.offset((i * 2 as i32 + 1 as i32) as isize);
                                 i += 1
                             }
-                            (*vf).pcm_offset = granulepos - accblock as libc::c_long;
-                            if (*vf).pcm_offset < 0 as i32 as libc::c_long {
+                            (*vf).pcm_offset = granulepos - accblock as isize;
+                            if (*vf).pcm_offset < 0 as i32 as isize {
                                 (*vf).pcm_offset = 0 as i32 as crate::config_types_h::ogg_int64_t
                             }
                             break;
@@ -2358,7 +2345,7 @@ pub unsafe extern "C" fn ov_raw_seek(
                     &mut og,
                     -(1 as i32) as crate::config_types_h::ogg_int64_t,
                 );
-                if pagepos < 0 as i32 as libc::c_long {
+                if pagepos < 0 as i32 as isize {
                     (*vf).pcm_offset = ov_pcm_total(vf, -(1 as i32));
                     break;
                 } else {
@@ -2374,7 +2361,7 @@ pub unsafe extern "C" fn ov_raw_seek(
                         if (*vf).current_serialno
                             != crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
                                 &mut og as *mut _ as *const crate::ogg_h::ogg_page,
-                            ) as libc::c_long
+                            ) as isize
                         {
                             /* two possibilities:
                             1) our decoding just traversed a bitstream boundary
@@ -2396,10 +2383,10 @@ pub unsafe extern "C" fn ov_raw_seek(
                       trying */
                     if (*vf).ready_state < 3 as i32 {
                         let mut link_0: i32 = 0;
-                        let mut serialno: libc::c_long =
+                        let mut serialno: isize =
                             crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
                                 &mut og as *mut _ as *const crate::ogg_h::ogg_page,
-                            ) as libc::c_long;
+                            ) as isize;
                         link_0 = 0 as i32;
                         while link_0 < (*vf).links {
                             if *(*vf).serialnos.offset(link_0 as isize) == serialno {
@@ -2472,7 +2459,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
     if (*vf).seekable == 0 {
         return -(138 as i32);
     }
-    if pos < 0 as i32 as libc::c_long || pos > total {
+    if pos < 0 as i32 as isize || pos > total {
         return -(131 as i32);
     }
     /* which bitstream section does this pcm offset occur in? */
@@ -2522,7 +2509,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
             current_block = 11555952146732080064;
         } else {
             result = _get_next_page(vf, &mut og, 1 as i32 as crate::config_types_h::ogg_int64_t);
-            if result < 0 as i32 as libc::c_long {
+            if result < 0 as i32 as isize {
                 current_block = 11555952146732080064;
             } else {
                 got_page = 1 as i32;
@@ -2545,7 +2532,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
             {
                 if begin < end {
                     let mut bisect: crate::config_types_h::ogg_int64_t = 0;
-                    if end - begin < 65536 as i32 as libc::c_long {
+                    if end - begin < 65536 as i32 as isize {
                         bisect = begin
                     } else {
                         /* take a (pretty decent) guess. */
@@ -2553,8 +2540,8 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                             + ((target - begintime) as f64 * (end - begin) as f64
                                 / (endtime - begintime) as f64)
                                 as crate::config_types_h::ogg_int64_t
-                            - 65536 as i32 as libc::c_long;
-                        if bisect < begin + 65536 as i32 as libc::c_long {
+                            - 65536 as i32 as isize;
+                        if bisect < begin + 65536 as i32 as isize {
                             bisect = begin
                         }
                     }
@@ -2571,27 +2558,27 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                             break;
                         }
                         result = _get_next_page(vf, &mut og, end - (*vf).offset);
-                        if result == -(128 as i32) as libc::c_long {
+                        if result == -(128 as i32) as isize {
                             current_block = 11555952146732080064;
                             break;
                         }
-                        if result < 0 as i32 as libc::c_long {
+                        if result < 0 as i32 as isize {
                             /* there is no next page! */
-                            if bisect <= begin + 1 as i32 as libc::c_long {
+                            if bisect <= begin + 1 as i32 as isize {
                                 /* No bisection left to perform.  We've either found the
                                 best candidate already or failed. Exit loop. */
                                 end = begin
                             } else {
                                 /* We tried to load a fraction of the last page; back up a
                                 bit and try to get the whole last page */
-                                if bisect == 0 as i32 as libc::c_long {
+                                if bisect == 0 as i32 as isize {
                                     current_block = 11555952146732080064;
                                     break;
                                 }
-                                bisect -= 65536 as i32 as libc::c_long;
+                                bisect -= 65536 as i32 as isize;
                                 /* don't repeat/loop on a read we've already performed */
                                 if bisect <= begin {
-                                    bisect = begin + 1 as i32 as libc::c_long
+                                    bisect = begin + 1 as i32 as isize
                                 }
                                 /* seek and cntinue bisection */
                                 result =
@@ -2608,7 +2595,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                             /* only consider pages from primary vorbis stream */
                             if crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
                                 &mut og as *mut _ as *const crate::ogg_h::ogg_page,
-                            ) as libc::c_long
+                            ) as isize
                                 != *(*vf).serialnos.offset(link as isize)
                             {
                                 continue;
@@ -2618,7 +2605,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                                 crate::src::libogg_1_3_3::src::framing::ogg_page_granulepos(
                                     &mut og as *mut _ as *const crate::ogg_h::ogg_page,
                                 );
-                            if granulepos == -(1 as i32) as libc::c_long {
+                            if granulepos == -(1 as i32) as isize {
                                 continue;
                             }
                             if granulepos < target {
@@ -2629,12 +2616,12 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                                 begintime = granulepos;
                                 /* if we're before our target but within a short distance,
                                 don't bisect; read forward */
-                                if target - begintime > 44100 as i32 as libc::c_long {
+                                if target - begintime > 44100 as i32 as isize {
                                     current_block = 11307063007268554308;
                                     break;
                                 }
                                 bisect = begin
-                            } else if bisect <= begin + 1 as i32 as libc::c_long {
+                            } else if bisect <= begin + 1 as i32 as isize {
                                 /* This is one of our pages, but the granpos is
                                 post-target; it is not a bisection return
                                 candidate. (The only way we'd use it is if it's the
@@ -2648,9 +2635,9 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                                 boundary (result) to update bisection, back up a
                                 little bit, and try again */
                                 end = result;
-                                bisect -= 65536 as i32 as libc::c_long;
+                                bisect -= 65536 as i32 as isize;
                                 if bisect <= begin {
-                                    bisect = begin + 1 as i32 as libc::c_long
+                                    bisect = begin + 1 as i32 as isize
                                 }
                                 result =
                                     _seek_helper(vf, bisect) as crate::config_types_h::ogg_int64_t;
@@ -2669,7 +2656,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                     }
                 } else {
                     /* Out of bisection: did it 'fail?' */
-                    if best == -(1 as i32) as libc::c_long {
+                    if best == -(1 as i32) as isize {
                         /* Check the 'looking for data in first page' special case;
                         bisection would 'fail' because our search target was before the
                         first PCM granule position fencepost. */
@@ -2677,7 +2664,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                             && begin == *(*vf).dataoffsets.offset(link as isize)
                             && crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
                                 &mut og as *mut _ as *const crate::ogg_h::ogg_page,
-                            ) as libc::c_long
+                            ) as isize
                                 == *(*vf).serialnos.offset(link as isize))
                         {
                             current_block = 11555952146732080064;
@@ -2735,7 +2722,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                             &mut og_0,
                             -(1 as i32) as crate::config_types_h::ogg_int64_t,
                         );
-                        if result < 0 as i32 as libc::c_long {
+                        if result < 0 as i32 as isize {
                             current_block = 11555952146732080064;
                             continue;
                         }
@@ -2766,7 +2753,7 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                                 &mut op as *mut _ as *mut crate::ogg_h::ogg_packet,
                             )
                                 as crate::config_types_h::ogg_int64_t;
-                            if result == 0 as i32 as libc::c_long {
+                            if result == 0 as i32 as isize {
                                 /* No packet returned; we exited the bisection with 'best'
                                 pointing to a page with a granule position, so the packet
                                 finishing this page ('best') originated on a preceding
@@ -2778,33 +2765,33 @@ pub unsafe extern "C" fn ov_pcm_seek_page(
                                 result = best;
                                 while result > *(*vf).dataoffsets.offset(link as isize) {
                                     result = _get_prev_page(vf, result, &mut og_0);
-                                    if result < 0 as i32 as libc::c_long {
+                                    if result < 0 as i32 as isize {
                                         current_block = 11555952146732080064;
                                         continue 's_118;
                                     }
                                     if crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(&mut og_0 as *mut _ as *const crate::ogg_h::ogg_page) as
-                                               libc::c_long ==
+                                               isize ==
                                                (*vf).current_serialno &&
                                                (crate::src::libogg_1_3_3::src::framing::ogg_page_granulepos(&mut og_0 as *mut _ as *const crate::ogg_h::ogg_page)
                                                     >
                                                     -(1 as i32) as
-                                                        libc::c_long ||
+                                                        isize ||
                                                     crate::src::libogg_1_3_3::src::framing::ogg_page_continued(&mut og_0 as *mut _ as *const crate::ogg_h::ogg_page)
                                                         == 0) {
                                             return ov_raw_seek(vf, result)
                                         }
                                 }
                             }
-                            if result < 0 as i32 as libc::c_long {
+                            if result < 0 as i32 as isize {
                                 result = -(136 as i32) as crate::config_types_h::ogg_int64_t;
                                 current_block = 11555952146732080064;
                                 continue 's_118;
-                            } else if op.granulepos != -(1 as i32) as libc::c_long {
+                            } else if op.granulepos != -(1 as i32) as isize {
                                 (*vf).pcm_offset = op.granulepos
                                     - *(*vf)
                                         .pcmlengths
                                         .offset(((*vf).current_link * 2 as i32) as isize);
-                                if (*vf).pcm_offset < 0 as i32 as libc::c_long {
+                                if (*vf).pcm_offset < 0 as i32 as isize {
                                     (*vf).pcm_offset =
                                         0 as i32 as crate::config_types_h::ogg_int64_t
                                 }
@@ -2889,7 +2876,7 @@ pub unsafe extern "C" fn ov_pcm_seek(
             /* non audio packet */
             } else {
                 if lastblock != 0 {
-                    (*vf).pcm_offset += (lastblock + thisblock >> 2 as i32) as libc::c_long
+                    (*vf).pcm_offset += (lastblock + thisblock >> 2 as i32) as isize
                 }
                 if (*vf).pcm_offset
                     + (thisblock
@@ -2897,7 +2884,7 @@ pub unsafe extern "C" fn ov_pcm_seek(
                             (*vf).vi as *mut crate::codec_h::vorbis_info,
                             1 as i32,
                         )
-                        >> 2 as i32) as libc::c_long
+                        >> 2 as i32) as isize
                     >= pos
                 {
                     break;
@@ -2919,14 +2906,14 @@ pub unsafe extern "C" fn ov_pcm_seek(
                 );
                 /* end of logical stream case is hard, especially with exact
                 length positioning. */
-                if op.granulepos > -(1 as i32) as libc::c_long {
+                if op.granulepos > -(1 as i32) as isize {
                     let mut i: i32 = 0;
                     /* always believe the stream markers */
                     (*vf).pcm_offset = op.granulepos
                         - *(*vf)
                             .pcmlengths
                             .offset(((*vf).current_link * 2 as i32) as isize);
-                    if (*vf).pcm_offset < 0 as i32 as libc::c_long {
+                    if (*vf).pcm_offset < 0 as i32 as isize {
                         (*vf).pcm_offset = 0 as i32 as crate::config_types_h::ogg_int64_t
                     }
                     i = 0 as i32;
@@ -2947,7 +2934,7 @@ pub unsafe extern "C" fn ov_pcm_seek(
                 vf,
                 &mut og,
                 -(1 as i32) as crate::config_types_h::ogg_int64_t,
-            ) < 0 as i32 as libc::c_long
+            ) < 0 as i32 as isize
             {
                 break;
             }
@@ -2958,10 +2945,9 @@ pub unsafe extern "C" fn ov_pcm_seek(
                 _decode_clear(vf);
             }
             if (*vf).ready_state < 3 as i32 {
-                let mut serialno: libc::c_long =
-                    crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
-                        &mut og as *mut _ as *const crate::ogg_h::ogg_page,
-                    ) as libc::c_long;
+                let mut serialno: isize = crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
+                    &mut og as *mut _ as *const crate::ogg_h::ogg_page,
+                ) as isize;
                 let mut link: i32 = 0;
                 link = 0 as i32;
                 while link < (*vf).links {
@@ -2977,7 +2963,7 @@ pub unsafe extern "C" fn ov_pcm_seek(
                 (*vf).ready_state = 3 as i32;
                 (*vf).current_serialno = crate::src::libogg_1_3_3::src::framing::ogg_page_serialno(
                     &mut og as *mut _ as *const crate::ogg_h::ogg_page,
-                ) as libc::c_long;
+                ) as isize;
                 crate::src::libogg_1_3_3::src::framing::ogg_stream_reset_serialno(
                     &mut (*vf).os as *mut _ as *mut crate::ogg_h::ogg_stream_state,
                     serialno as i32,
@@ -3005,11 +2991,10 @@ pub unsafe extern "C" fn ov_pcm_seek(
     );
     while (*vf).pcm_offset < pos >> hs << hs {
         let mut target: crate::config_types_h::ogg_int64_t = pos - (*vf).pcm_offset >> hs;
-        let mut samples: libc::c_long =
-            crate::src::libvorbis_1_3_6::lib::block::vorbis_synthesis_pcmout(
-                &mut (*vf).vd as *mut _ as *mut crate::codec_h::vorbis_dsp_state,
-                0 as *mut *mut *mut f32,
-            ) as libc::c_long;
+        let mut samples: isize = crate::src::libvorbis_1_3_6::lib::block::vorbis_synthesis_pcmout(
+            &mut (*vf).vd as *mut _ as *mut crate::codec_h::vorbis_dsp_state,
+            0 as *mut *mut *mut f32,
+        ) as isize;
         if samples > target {
             samples = target
         }
@@ -3280,30 +3265,25 @@ pub unsafe extern "C" fn ov_read_filter(
     mut sgned: i32,
     mut bitstream: *mut i32,
     mut filter: Option<
-        unsafe extern "C" fn(
-            _: *mut *mut f32,
-            _: libc::c_long,
-            _: libc::c_long,
-            _: *mut libc::c_void,
-        ) -> (),
+        unsafe extern "C" fn(_: *mut *mut f32, _: isize, _: isize, _: *mut libc::c_void) -> (),
     >,
     mut filter_param: *mut libc::c_void,
-) -> libc::c_long {
+) -> isize {
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut host_endian: i32 = host_is_big_endian();
     let mut hs: i32 = 0;
     let mut pcm: *mut *mut f32 = 0 as *mut *mut f32;
-    let mut samples: libc::c_long = 0;
+    let mut samples: isize = 0;
     if (*vf).ready_state < 2 as i32 {
-        return -(131 as i32) as libc::c_long;
+        return -(131 as i32) as isize;
     }
     loop {
         if (*vf).ready_state == 4 as i32 {
             samples = crate::src::libvorbis_1_3_6::lib::block::vorbis_synthesis_pcmout(
                 &mut (*vf).vd as *mut _ as *mut crate::codec_h::vorbis_dsp_state,
                 &mut pcm,
-            ) as libc::c_long;
+            ) as isize;
             if samples != 0 {
                 break;
             }
@@ -3312,22 +3292,22 @@ pub unsafe extern "C" fn ov_read_filter(
         let mut ret: i32 =
             _fetch_and_process_packet(vf, 0 as *mut crate::ogg_h::ogg_packet, 1 as i32, 1 as i32);
         if ret == -(2 as i32) {
-            return 0 as i32 as libc::c_long;
+            return 0 as i32 as isize;
         }
         if ret <= 0 as i32 {
-            return ret as libc::c_long;
+            return ret as isize;
         }
     }
-    if samples > 0 as i32 as libc::c_long {
+    if samples > 0 as i32 as isize {
         /* yay! proceed to pack data into the byte buffer */
-        let mut channels: libc::c_long = (*ov_info(vf, -(1 as i32))).channels as libc::c_long;
-        let mut bytespersample: libc::c_long = word as libc::c_long * channels;
+        let mut channels: isize = (*ov_info(vf, -(1 as i32))).channels as isize;
+        let mut bytespersample: isize = word as isize * channels;
         let mut fpu: crate::os_h::vorbis_fpu_control = 0;
-        if samples > length as libc::c_long / bytespersample {
-            samples = length as libc::c_long / bytespersample
+        if samples > length as isize / bytespersample {
+            samples = length as isize / bytespersample
         }
-        if samples <= 0 as i32 as libc::c_long {
-            return -(131 as i32) as libc::c_long;
+        if samples <= 0 as i32 as isize {
+            return -(131 as i32) as isize;
         }
         /* Here. */
         if filter.is_some() {
@@ -3339,9 +3319,9 @@ pub unsafe extern "C" fn ov_read_filter(
             let mut off: i32 = if sgned != 0 { 0 as i32 } else { 128 as i32 };
             vorbis_fpu_setround(&mut fpu);
             j = 0 as i32;
-            while (j as libc::c_long) < samples {
+            while (j as isize) < samples {
                 i = 0 as i32;
-                while (i as libc::c_long) < channels {
+                while (i as isize) < channels {
                     val = vorbis_ftoi(
                         (*(*pcm.offset(i as isize)).offset(j as isize) * 128.0f32) as f64,
                     );
@@ -3364,12 +3344,12 @@ pub unsafe extern "C" fn ov_read_filter(
                 if sgned != 0 {
                     vorbis_fpu_setround(&mut fpu);
                     i = 0 as i32;
-                    while (i as libc::c_long) < channels {
+                    while (i as isize) < channels {
                         /* It's faster in this order */
                         let mut src: *mut f32 = *pcm.offset(i as isize);
                         let mut dest: *mut i16 = (buffer as *mut i16).offset(i as isize);
                         j = 0 as i32;
-                        while (j as libc::c_long) < samples {
+                        while (j as isize) < samples {
                             val = vorbis_ftoi((*src.offset(j as isize) * 32768.0f32) as f64);
                             if val > 32767 as i32 {
                                 val = 32767 as i32
@@ -3386,11 +3366,11 @@ pub unsafe extern "C" fn ov_read_filter(
                 } else {
                     vorbis_fpu_setround(&mut fpu);
                     i = 0 as i32;
-                    while (i as libc::c_long) < channels {
+                    while (i as isize) < channels {
                         let mut src_0: *mut f32 = *pcm.offset(i as isize);
                         let mut dest_0: *mut i16 = (buffer as *mut i16).offset(i as isize);
                         j = 0 as i32;
-                        while (j as libc::c_long) < samples {
+                        while (j as isize) < samples {
                             val = vorbis_ftoi((*src_0.offset(j as isize) * 32768.0f32) as f64);
                             if val > 32767 as i32 {
                                 val = 32767 as i32
@@ -3408,9 +3388,9 @@ pub unsafe extern "C" fn ov_read_filter(
             } else if bigendianp != 0 {
                 vorbis_fpu_setround(&mut fpu);
                 j = 0 as i32;
-                while (j as libc::c_long) < samples {
+                while (j as isize) < samples {
                     i = 0 as i32;
-                    while (i as libc::c_long) < channels {
+                    while (i as isize) < channels {
                         val = vorbis_ftoi(
                             (*(*pcm.offset(i as isize)).offset(j as isize) * 32768.0f32) as f64,
                         );
@@ -3435,9 +3415,9 @@ pub unsafe extern "C" fn ov_read_filter(
                 let mut val_0: i32 = 0;
                 vorbis_fpu_setround(&mut fpu);
                 j = 0 as i32;
-                while (j as libc::c_long) < samples {
+                while (j as isize) < samples {
                     i = 0 as i32;
-                    while (i as libc::c_long) < channels {
+                    while (i as isize) < channels {
                         val_0 = vorbis_ftoi(
                             (*(*pcm.offset(i as isize)).offset(j as isize) * 32768.0f32) as f64,
                         );
@@ -3486,7 +3466,7 @@ pub unsafe extern "C" fn ov_read(
     mut word: i32,
     mut sgned: i32,
     mut bitstream: *mut i32,
-) -> libc::c_long {
+) -> isize {
     return ov_read_filter(
         vf,
         buffer,
@@ -3517,18 +3497,18 @@ pub unsafe extern "C" fn ov_read_float(
     mut pcm_channels: *mut *mut *mut f32,
     mut length: i32,
     mut bitstream: *mut i32,
-) -> libc::c_long {
+) -> isize {
     if (*vf).ready_state < 2 as i32 {
-        return -(131 as i32) as libc::c_long;
+        return -(131 as i32) as isize;
     }
     loop {
         if (*vf).ready_state == 4 as i32 {
             let mut pcm: *mut *mut f32 = 0 as *mut *mut f32;
-            let mut samples: libc::c_long =
+            let mut samples: isize =
                 crate::src::libvorbis_1_3_6::lib::block::vorbis_synthesis_pcmout(
                     &mut (*vf).vd as *mut _ as *mut crate::codec_h::vorbis_dsp_state,
                     &mut pcm,
-                ) as libc::c_long;
+                ) as isize;
             if samples != 0 {
                 let mut hs: i32 =
                     crate::src::libvorbis_1_3_6::lib::synthesis::vorbis_synthesis_halfrate_p(
@@ -3537,8 +3517,8 @@ pub unsafe extern "C" fn ov_read_float(
                 if !pcm_channels.is_null() {
                     *pcm_channels = pcm
                 }
-                if samples > length as libc::c_long {
-                    samples = length as libc::c_long
+                if samples > length as isize {
+                    samples = length as isize
                 }
                 crate::src::libvorbis_1_3_6::lib::block::vorbis_synthesis_read(
                     &mut (*vf).vd as *mut _ as *mut crate::codec_h::vorbis_dsp_state,
@@ -3555,10 +3535,10 @@ pub unsafe extern "C" fn ov_read_float(
         let mut ret: i32 =
             _fetch_and_process_packet(vf, 0 as *mut crate::ogg_h::ogg_packet, 1 as i32, 1 as i32);
         if ret == -(2 as i32) {
-            return 0 as i32 as libc::c_long;
+            return 0 as i32 as isize;
         }
         if ret <= 0 as i32 {
-            return ret as libc::c_long;
+            return ret as isize;
         }
     }
 }

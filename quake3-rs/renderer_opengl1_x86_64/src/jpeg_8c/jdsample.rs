@@ -314,8 +314,8 @@ unsafe extern "C" fn sep_upsample(
         num_rows = (*upsample).rows_to_go
     }
     /* And not more than what the client can accept: */
-    out_rows_avail = (out_rows_avail as u32).wrapping_sub(*out_row_ctr)
-        as crate::jmorecfg_h::JDIMENSION as crate::jmorecfg_h::JDIMENSION;
+    out_rows_avail =
+        (out_rows_avail as u32).wrapping_sub(*out_row_ctr) as crate::jmorecfg_h::JDIMENSION;
     if num_rows > out_rows_avail {
         num_rows = out_rows_avail
     }
@@ -332,13 +332,10 @@ unsafe extern "C" fn sep_upsample(
         num_rows as i32,
     );
     /* Adjust counts */
-    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION
-        as crate::jmorecfg_h::JDIMENSION;
-    (*upsample).rows_to_go = ((*upsample).rows_to_go as u32).wrapping_sub(num_rows)
-        as crate::jmorecfg_h::JDIMENSION
-        as crate::jmorecfg_h::JDIMENSION;
-    (*upsample).next_row_out =
-        ((*upsample).next_row_out as u32).wrapping_add(num_rows) as i32 as i32;
+    *out_row_ctr = (*out_row_ctr as u32).wrapping_add(num_rows) as crate::jmorecfg_h::JDIMENSION;
+    (*upsample).rows_to_go =
+        ((*upsample).rows_to_go as u32).wrapping_sub(num_rows) as crate::jmorecfg_h::JDIMENSION;
+    (*upsample).next_row_out = ((*upsample).next_row_out as u32).wrapping_add(num_rows) as i32;
     /* When the buffer is emptied, declare this input row group consumed */
     if (*upsample).next_row_out >= (*cinfo).max_v_samp_factor {
         *in_row_group_ctr = (*in_row_group_ctr).wrapping_add(1)
@@ -676,8 +673,8 @@ pub unsafe extern "C" fn jinit_upsampler(mut cinfo: crate::jpeglib_h::j_decompre
                 cinfo as crate::jpeglib_h::j_common_ptr,
                 1 as i32,
                 crate::src::jpeg_8c::jutils::jround_up(
-                    (*cinfo).output_width as libc::c_long,
-                    (*cinfo).max_h_samp_factor as libc::c_long,
+                    (*cinfo).output_width as isize,
+                    (*cinfo).max_h_samp_factor as isize,
                 ) as crate::jmorecfg_h::JDIMENSION,
                 (*cinfo).max_v_samp_factor as crate::jmorecfg_h::JDIMENSION,
             )

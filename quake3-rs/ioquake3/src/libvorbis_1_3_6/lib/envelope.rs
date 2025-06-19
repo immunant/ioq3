@@ -32,10 +32,10 @@ pub struct envelope_lookup {
     pub filter: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_filter_state,
     pub stretch: i32,
     pub mark: *mut i32,
-    pub storage: libc::c_long,
-    pub current: libc::c_long,
-    pub curmark: libc::c_long,
-    pub cursor: libc::c_long,
+    pub storage: isize,
+    pub current: isize,
+    pub curmark: isize,
+    pub cursor: isize,
 }
 use ::libc;
 
@@ -136,8 +136,8 @@ pub unsafe extern "C" fn _ve_envelope_init(
     (*e).searchstep = 64 as i32;
     (*e).minenergy = (*gi).preecho_minenergy;
     (*e).ch = ch;
-    (*e).storage = 128 as i32 as libc::c_long;
-    (*e).cursor = (*ci).blocksizes[1 as i32 as usize] / 2 as i32 as libc::c_long;
+    (*e).storage = 128 as i32 as isize;
+    (*e).cursor = (*ci).blocksizes[1 as i32 as usize] / 2 as i32 as isize;
     (*e).mdct_win = crate::stdlib::calloc(
         n as libc::c_ulong,
         ::std::mem::size_of::<f32>() as libc::c_ulong,
@@ -229,10 +229,10 @@ unsafe extern "C" fn _ve_amp(
     mut bands: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_band,
     mut filters: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_filter_state,
 ) -> i32 {
-    let mut n: libc::c_long = (*ve).winlength as libc::c_long;
+    let mut n: isize = (*ve).winlength as isize;
     let mut ret: i32 = 0 as i32;
-    let mut i: libc::c_long = 0;
-    let mut j: libc::c_long = 0;
+    let mut i: isize = 0;
+    let mut j: isize = 0;
     let mut decay: f32 = 0.;
     /* we want to have a 'minimum bar' for energy, else we're just
     basing blocks on quantization noise that outweighs the signal
@@ -260,7 +260,7 @@ unsafe extern "C" fn _ve_amp(
     /*_analysis_output_always("lpcm",seq2,data,n,0,0,
     totalshift+pos*ve->searchstep);*/
     /* window and transform */
-    i = 0 as i32 as libc::c_long;
+    i = 0 as i32 as isize;
     while i < n {
         *vec.offset(i as isize) = *data.offset(i as isize) * *(*ve).mdct_win.offset(i as isize);
         i += 1
@@ -300,11 +300,11 @@ unsafe extern "C" fn _ve_amp(
     /* perform spreading and limiting, also smooth the spectrum.  yes,
     the MDCT results in all real coefficients, but it still *behaves*
     like real/imaginary pairs */
-    i = 0 as i32 as libc::c_long;
-    while i < n / 2 as i32 as libc::c_long {
+    i = 0 as i32 as isize;
+    while i < n / 2 as i32 as isize {
         let mut val: f32 = *vec.offset(i as isize) * *vec.offset(i as isize)
-            + *vec.offset((i + 1 as i32 as libc::c_long) as isize)
-                * *vec.offset((i + 1 as i32 as libc::c_long) as isize);
+            + *vec.offset((i + 1 as i32 as isize) as isize)
+                * *vec.offset((i + 1 as i32 as isize) as isize);
         val = todB(&mut val) * 0.5f32;
         if val < decay {
             val = decay
@@ -314,19 +314,19 @@ unsafe extern "C" fn _ve_amp(
         }
         *vec.offset((i >> 1 as i32) as isize) = val;
         decay = (decay as f64 - 8.0f64) as f32;
-        i += 2 as i32 as libc::c_long
+        i += 2 as i32 as isize
     }
     /*_analysis_output_always("spread",seq2++,vec,n/4,0,0,0);*/
     /* perform preecho/postecho triggering by band */
-    j = 0 as i32 as libc::c_long;
-    while j < 7 as i32 as libc::c_long {
+    j = 0 as i32 as isize;
+    while j < 7 as i32 as isize {
         let mut acc: f32 = 0.0f64 as f32;
         let mut valmax: f32 = 0.;
         let mut valmin: f32 = 0.;
         /* accumulate amplitude */
-        i = 0 as i32 as libc::c_long;
-        while i < (*bands.offset(j as isize)).end as libc::c_long {
-            acc += *vec.offset((i + (*bands.offset(j as isize)).begin as libc::c_long) as isize)
+        i = 0 as i32 as isize;
+        while i < (*bands.offset(j as isize)).end as isize {
+            acc += *vec.offset((i + (*bands.offset(j as isize)).begin as isize) as isize)
                 * *(*bands.offset(j as isize)).window.offset(i as isize);
             i += 1
         }
@@ -353,8 +353,8 @@ unsafe extern "C" fn _ve_amp(
         } else {
             acc
         };
-        i = 0 as i32 as libc::c_long;
-        while i < stretch as libc::c_long {
+        i = 0 as i32 as isize;
+        while i < stretch as isize {
             p -= 1;
             if p < 0 as i32 {
                 p += 16 as i32 + 2 as i32 - 1 as i32
@@ -396,7 +396,7 @@ unsafe extern "C" fn _ve_amp(
 
 pub unsafe extern "C" fn _ve_envelope_search(
     mut v: *mut crate::codec_h::vorbis_dsp_state,
-) -> libc::c_long {
+) -> isize {
     let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
@@ -404,51 +404,51 @@ pub unsafe extern "C" fn _ve_envelope_search(
         &mut (*ci).psy_g_param;
     let mut ve: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup =
         (*((*v).backend_state as *mut crate::codec_internal_h::private_state)).ve;
-    let mut i: libc::c_long = 0;
-    let mut j: libc::c_long = 0;
-    let mut first: i32 = ((*ve).current / (*ve).searchstep as libc::c_long) as i32;
+    let mut i: isize = 0;
+    let mut j: isize = 0;
+    let mut first: i32 = ((*ve).current / (*ve).searchstep as isize) as i32;
     let mut last: i32 = (*v).pcm_current / (*ve).searchstep - 4 as i32;
     if first < 0 as i32 {
         first = 0 as i32
     }
     /* make sure we have enough storage to match the PCM */
-    if (last + 4 as i32 + 2 as i32) as libc::c_long > (*ve).storage {
-        (*ve).storage = (last + 4 as i32 + 2 as i32) as libc::c_long; /* be sure */
+    if (last + 4 as i32 + 2 as i32) as isize > (*ve).storage {
+        (*ve).storage = (last + 4 as i32 + 2 as i32) as isize; /* be sure */
         (*ve).mark = crate::stdlib::realloc(
             (*ve).mark as *mut libc::c_void,
             ((*ve).storage as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
         ) as *mut i32
     }
-    j = first as libc::c_long;
-    while j < last as libc::c_long {
+    j = first as isize;
+    while j < last as isize {
         let mut ret: i32 = 0 as i32;
         (*ve).stretch += 1;
         if (*ve).stretch > 12 as i32 * 2 as i32 {
             (*ve).stretch = 12 as i32 * 2 as i32
         }
-        i = 0 as i32 as libc::c_long;
-        while i < (*ve).ch as libc::c_long {
-            let mut pcm: *mut f32 = (*(*v).pcm.offset(i as isize))
-                .offset(((*ve).searchstep as libc::c_long * j) as isize);
+        i = 0 as i32 as isize;
+        while i < (*ve).ch as isize {
+            let mut pcm: *mut f32 =
+                (*(*v).pcm.offset(i as isize)).offset(((*ve).searchstep as isize * j) as isize);
             ret |= _ve_amp(
                 ve,
                 gi,
                 pcm,
                 (*ve).band.as_mut_ptr(),
-                (*ve).filter.offset((i * 7 as i32 as libc::c_long) as isize),
+                (*ve).filter.offset((i * 7 as i32 as isize) as isize),
             );
             i += 1
         }
-        *(*ve).mark.offset((j + 2 as i32 as libc::c_long) as isize) = 0 as i32;
+        *(*ve).mark.offset((j + 2 as i32 as isize) as isize) = 0 as i32;
         if ret & 1 as i32 != 0 {
             *(*ve).mark.offset(j as isize) = 1 as i32;
-            *(*ve).mark.offset((j + 1 as i32 as libc::c_long) as isize) = 1 as i32
+            *(*ve).mark.offset((j + 1 as i32 as isize) as isize) = 1 as i32
         }
         if ret & 2 as i32 != 0 {
             *(*ve).mark.offset(j as isize) = 1 as i32;
-            if j > 0 as i32 as libc::c_long {
-                *(*ve).mark.offset((j - 1 as i32 as libc::c_long) as isize) = 1 as i32
+            if j > 0 as i32 as isize {
+                *(*ve).mark.offset((j - 1 as i32 as isize) as isize) = 1 as i32
             }
         }
         if ret & 4 as i32 != 0 {
@@ -456,36 +456,32 @@ pub unsafe extern "C" fn _ve_envelope_search(
         }
         j += 1
     }
-    (*ve).current = (last * (*ve).searchstep) as libc::c_long;
-    let mut centerW: libc::c_long = (*v).centerW;
-    let mut testW: libc::c_long = centerW
-        + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as libc::c_long
-        + (*ci).blocksizes[1 as i32 as usize] / 2 as i32 as libc::c_long
-        + (*ci).blocksizes[0 as i32 as usize] / 4 as i32 as libc::c_long;
+    (*ve).current = (last * (*ve).searchstep) as isize;
+    let mut centerW: isize = (*v).centerW;
+    let mut testW: isize = centerW
+        + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize
+        + (*ci).blocksizes[1 as i32 as usize] / 2 as i32 as isize
+        + (*ci).blocksizes[0 as i32 as usize] / 4 as i32 as isize;
     j = (*ve).cursor;
-    while j < (*ve).current - (*ve).searchstep as libc::c_long {
+    while j < (*ve).current - (*ve).searchstep as isize {
         /* account for postecho
         working back one window */
         if j >= testW {
-            return 1 as i32 as libc::c_long;
+            return 1 as i32 as isize;
         }
         (*ve).cursor = j;
-        if *(*ve)
-            .mark
-            .offset((j / (*ve).searchstep as libc::c_long) as isize)
-            != 0
-        {
+        if *(*ve).mark.offset((j / (*ve).searchstep as isize) as isize) != 0 {
             if j > centerW {
                 (*ve).curmark = j;
                 if j >= testW {
-                    return 1 as i32 as libc::c_long;
+                    return 1 as i32 as isize;
                 }
-                return 0 as i32 as libc::c_long;
+                return 0 as i32 as isize;
             }
         }
-        j += (*ve).searchstep as libc::c_long
+        j += (*ve).searchstep as isize
     }
-    return -(1 as i32) as libc::c_long;
+    return -(1 as i32) as isize;
 }
 #[no_mangle]
 
@@ -495,24 +491,22 @@ pub unsafe extern "C" fn _ve_envelope_mark(mut v: *mut crate::codec_h::vorbis_ds
     let mut vi: *mut crate::codec_h::vorbis_info = (*v).vi;
     let mut ci: *mut crate::codec_internal_h::codec_setup_info =
         (*vi).codec_setup as *mut crate::codec_internal_h::codec_setup_info;
-    let mut centerW: libc::c_long = (*v).centerW;
-    let mut beginW: libc::c_long =
-        centerW - (*ci).blocksizes[(*v).W as usize] / 4 as i32 as libc::c_long;
-    let mut endW: libc::c_long =
-        centerW + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as libc::c_long;
+    let mut centerW: isize = (*v).centerW;
+    let mut beginW: isize = centerW - (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize;
+    let mut endW: isize = centerW + (*ci).blocksizes[(*v).W as usize] / 4 as i32 as isize;
     if (*v).W != 0 {
-        beginW -= (*ci).blocksizes[(*v).lW as usize] / 4 as i32 as libc::c_long;
-        endW += (*ci).blocksizes[(*v).nW as usize] / 4 as i32 as libc::c_long
+        beginW -= (*ci).blocksizes[(*v).lW as usize] / 4 as i32 as isize;
+        endW += (*ci).blocksizes[(*v).nW as usize] / 4 as i32 as isize
     } else {
-        beginW -= (*ci).blocksizes[0 as i32 as usize] / 4 as i32 as libc::c_long;
-        endW += (*ci).blocksizes[0 as i32 as usize] / 4 as i32 as libc::c_long
+        beginW -= (*ci).blocksizes[0 as i32 as usize] / 4 as i32 as isize;
+        endW += (*ci).blocksizes[0 as i32 as usize] / 4 as i32 as isize
     }
     if (*ve).curmark >= beginW && (*ve).curmark < endW {
         return 1 as i32;
     }
-    let mut first: libc::c_long = beginW / (*ve).searchstep as libc::c_long;
-    let mut last: libc::c_long = endW / (*ve).searchstep as libc::c_long;
-    let mut i: libc::c_long = 0;
+    let mut first: isize = beginW / (*ve).searchstep as isize;
+    let mut last: isize = endW / (*ve).searchstep as isize;
+    let mut i: isize = 0;
     i = first;
     while i < last {
         if *(*ve).mark.offset(i as isize) != 0 {
@@ -543,12 +537,11 @@ function: PCM data envelope analysis and manipulation
 
 pub unsafe extern "C" fn _ve_envelope_shift(
     mut e: *mut crate::src::libvorbis_1_3_6::lib::envelope::envelope_lookup,
-    mut shift: libc::c_long,
+    mut shift: isize,
 ) {
-    let mut smallsize: i32 =
-        ((*e).current / (*e).searchstep as libc::c_long + 2 as i32 as libc::c_long) as i32; /* adjust for placing marks
-                                                                                            ahead of ve->current */
-    let mut smallshift: i32 = (shift / (*e).searchstep as libc::c_long) as i32;
+    let mut smallsize: i32 = ((*e).current / (*e).searchstep as isize + 2 as i32 as isize) as i32; /* adjust for placing marks
+                                                                                                   ahead of ve->current */
+    let mut smallshift: i32 = (shift / (*e).searchstep as isize) as i32;
     crate::stdlib::memmove(
         (*e).mark as *mut libc::c_void,
         (*e).mark.offset(smallshift as isize) as *const libc::c_void,
@@ -556,7 +549,7 @@ pub unsafe extern "C" fn _ve_envelope_shift(
             .wrapping_mul(::std::mem::size_of::<i32>() as libc::c_ulong),
     );
     (*e).current -= shift;
-    if (*e).curmark >= 0 as i32 as libc::c_long {
+    if (*e).curmark >= 0 as i32 as isize {
         (*e).curmark -= shift
     }
     (*e).cursor -= shift;

@@ -1148,7 +1148,7 @@ pub unsafe extern "C" fn BotLoadSynonyms(
                 {
                     size = (size as libc::c_ulong)
                         .wrapping_add(::std::mem::size_of::<bot_synonymlist_t>() as libc::c_ulong)
-                        as i32 as i32;
+                        as i32;
                     //end if
                     if pass != 0 && !ptr.is_null() {
                         syn = ptr as *mut bot_synonymlist_t; //end if
@@ -1202,14 +1202,14 @@ pub unsafe extern "C" fn BotLoadSynonyms(
                         len = crate::stdlib::strlen(token.string.as_mut_ptr())
                             .wrapping_add(1 as i32 as libc::c_ulong);
                         len = len
-                            .wrapping_add(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
+                            .wrapping_add(::std::mem::size_of::<isize>() as libc::c_ulong)
                             .wrapping_sub(1 as i32 as libc::c_ulong)
-                            & !(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
+                            & !(::std::mem::size_of::<isize>() as libc::c_ulong)
                                 .wrapping_sub(1 as i32 as libc::c_ulong);
                         size = (size as libc::c_ulong).wrapping_add(
                             (::std::mem::size_of::<bot_synonym_t>() as libc::c_ulong)
                                 .wrapping_add(len),
-                        ) as i32 as i32;
+                        ) as i32;
                         if pass != 0 && !ptr.is_null() {
                             synonym = ptr as *mut bot_synonym_t;
                             ptr = ptr
@@ -1751,13 +1751,13 @@ pub unsafe extern "C" fn BotLoadRandomStrings(
             len = crate::stdlib::strlen(token.string.as_mut_ptr())
                 .wrapping_add(1 as i32 as libc::c_ulong);
             len = len
-                .wrapping_add(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
+                .wrapping_add(::std::mem::size_of::<isize>() as libc::c_ulong)
                 .wrapping_sub(1 as i32 as libc::c_ulong)
-                & !(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
+                & !(::std::mem::size_of::<isize>() as libc::c_ulong)
                     .wrapping_sub(1 as i32 as libc::c_ulong);
             size = (size as libc::c_ulong).wrapping_add(
                 (::std::mem::size_of::<bot_randomlist_t>() as libc::c_ulong).wrapping_add(len),
-            ) as i32 as i32;
+            ) as i32;
             if pass != 0 && !ptr.is_null() {
                 random = ptr as *mut bot_randomlist_t;
                 ptr =
@@ -1803,14 +1803,14 @@ pub unsafe extern "C" fn BotLoadRandomStrings(
                 len = crate::stdlib::strlen(chatmessagestring.as_mut_ptr())
                     .wrapping_add(1 as i32 as libc::c_ulong);
                 len = len
-                    .wrapping_add(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
+                    .wrapping_add(::std::mem::size_of::<isize>() as libc::c_ulong)
                     .wrapping_sub(1 as i32 as libc::c_ulong)
-                    & !(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
+                    & !(::std::mem::size_of::<isize>() as libc::c_ulong)
                         .wrapping_sub(1 as i32 as libc::c_ulong);
                 size = (size as libc::c_ulong).wrapping_add(
                     (::std::mem::size_of::<bot_randomstring_t>() as libc::c_ulong)
                         .wrapping_add(len),
-                ) as i32 as i32;
+                ) as i32;
                 if pass != 0 && !ptr.is_null() {
                     randomstring = ptr as *mut bot_randomstring_t;
                     ptr = ptr.offset(
@@ -2420,10 +2420,9 @@ pub unsafe extern "C" fn StringsMatch(
                         newstrptr = strptr.offset(index as isize); //end if
                         if lastvariable >= 0 as i32 {
                             (*match_0).variables[lastvariable as usize].length =
-                                (newstrptr.offset_from((*match_0).string.as_mut_ptr())
-                                    as libc::c_long
-                                    - (*match_0).variables[lastvariable as usize].offset
-                                        as libc::c_long) as i32;
+                                (newstrptr.offset_from((*match_0).string.as_mut_ptr()) as isize
+                                    - (*match_0).variables[lastvariable as usize].offset as isize)
+                                    as i32;
                             //newstrptr - match->variables[lastvariable].ptr;
                             lastvariable = -(1 as i32);
                             break;
@@ -2446,7 +2445,7 @@ pub unsafe extern "C" fn StringsMatch(
             //if it is a variable piece of string
             //Log_Write("MT_VARIABLE");
             (*match_0).variables[(*mp).variable as usize].offset =
-                strptr.offset_from((*match_0).string.as_mut_ptr()) as libc::c_long as libc::c_char;
+                strptr.offset_from((*match_0).string.as_mut_ptr()) as isize as libc::c_char;
             lastvariable = (*mp).variable
         }
         mp = (*mp).next
@@ -3636,7 +3635,7 @@ pub unsafe extern "C" fn BotLoadInitialChat(
                         }
                         size = (size as libc::c_ulong)
                             .wrapping_add(::std::mem::size_of::<bot_chattype_t>() as libc::c_ulong)
-                            as i32 as i32;
+                            as i32;
                         //read the chat messages
                         while crate::src::botlib::l_precomp::PC_CheckTokenString(
                             source as *mut crate::src::botlib::l_precomp::source_s,
@@ -3652,13 +3651,11 @@ pub unsafe extern "C" fn BotLoadInitialChat(
                             }
                             len = crate::stdlib::strlen(chatmessagestring.as_mut_ptr())
                                 .wrapping_add(1 as i32 as libc::c_ulong);
-                            len =
-                                len.wrapping_add(
-                                    ::std::mem::size_of::<libc::c_long>() as libc::c_ulong
-                                )
+                            len = len
+                                .wrapping_add(::std::mem::size_of::<isize>() as libc::c_ulong)
                                 .wrapping_sub(1 as i32 as libc::c_ulong)
-                                    & !(::std::mem::size_of::<libc::c_long>() as libc::c_ulong)
-                                        .wrapping_sub(1 as i32 as libc::c_ulong);
+                                & !(::std::mem::size_of::<isize>() as libc::c_ulong)
+                                    .wrapping_sub(1 as i32 as libc::c_ulong);
                             if pass != 0 && !ptr.is_null() {
                                 chatmessage = ptr as *mut bot_chatmessage_t;
                                 (*chatmessage).time = (-(2 as i32) * 20 as i32) as f32;
@@ -3681,7 +3678,7 @@ pub unsafe extern "C" fn BotLoadInitialChat(
                             size = (size as libc::c_ulong).wrapping_add(
                                 (::std::mem::size_of::<bot_chatmessage_t>() as libc::c_ulong)
                                     .wrapping_add(len),
-                            ) as i32 as i32
+                            ) as i32
                         }
                     }
                 } else {
@@ -3982,7 +3979,7 @@ pub unsafe extern "C" fn BotExpandChatMessage(
                         ::libc::strcpy(&mut *outputbuf.offset(len as isize), temp.as_mut_ptr());
                         len = (len as libc::c_ulong)
                             .wrapping_add(crate::stdlib::strlen(temp.as_mut_ptr()))
-                            as i32 as i32
+                            as i32
                     }
                 }
                 114 => {
@@ -4029,8 +4026,7 @@ pub unsafe extern "C" fn BotExpandChatMessage(
                         return crate::src::qcommon::q_shared::qfalse as i32;
                     }
                     ::libc::strcpy(&mut *outputbuf.offset(len as isize), ptr);
-                    len = (len as libc::c_ulong).wrapping_add(crate::stdlib::strlen(ptr)) as i32
-                        as i32;
+                    len = (len as libc::c_ulong).wrapping_add(crate::stdlib::strlen(ptr)) as i32;
                     expansion = crate::src::qcommon::q_shared::qtrue as i32
                 }
                 _ => {
@@ -4319,43 +4315,43 @@ pub unsafe extern "C" fn BotInitialChat(
         ::libc::strcat(match_0.string.as_mut_ptr(), var0);
         match_0.variables[0 as i32 as usize].offset = index as libc::c_char;
         match_0.variables[0 as i32 as usize].length = crate::stdlib::strlen(var0) as i32;
-        index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var0)) as i32 as i32
+        index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var0)) as i32
     }
     if !var1.is_null() {
         ::libc::strcat(match_0.string.as_mut_ptr(), var1);
         match_0.variables[1 as i32 as usize].offset = index as libc::c_char;
         match_0.variables[1 as i32 as usize].length = crate::stdlib::strlen(var1) as i32;
-        index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var1)) as i32 as i32
+        index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var1)) as i32
     }
     if !var2.is_null() {
         ::libc::strcat(match_0.string.as_mut_ptr(), var2);
         match_0.variables[2 as i32 as usize].offset = index as libc::c_char;
         match_0.variables[2 as i32 as usize].length = crate::stdlib::strlen(var2) as i32;
-        index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var2)) as i32 as i32
+        index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var2)) as i32
     }
     if !var3.is_null() {
         ::libc::strcat(match_0.string.as_mut_ptr(), var3);
         match_0.variables[3 as i32 as usize].offset = index as libc::c_char;
         match_0.variables[3 as i32 as usize].length = crate::stdlib::strlen(var3) as i32;
-        index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var3)) as i32 as i32
+        index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var3)) as i32
     }
     if !var4.is_null() {
         ::libc::strcat(match_0.string.as_mut_ptr(), var4);
         match_0.variables[4 as i32 as usize].offset = index as libc::c_char;
         match_0.variables[4 as i32 as usize].length = crate::stdlib::strlen(var4) as i32;
-        index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var4)) as i32 as i32
+        index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var4)) as i32
     }
     if !var5.is_null() {
         ::libc::strcat(match_0.string.as_mut_ptr(), var5);
         match_0.variables[5 as i32 as usize].offset = index as libc::c_char;
         match_0.variables[5 as i32 as usize].length = crate::stdlib::strlen(var5) as i32;
-        index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var5)) as i32 as i32
+        index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var5)) as i32
     }
     if !var6.is_null() {
         ::libc::strcat(match_0.string.as_mut_ptr(), var6);
         match_0.variables[6 as i32 as usize].offset = index as libc::c_char;
         match_0.variables[6 as i32 as usize].length = crate::stdlib::strlen(var6) as i32;
-        index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var6)) as i32 as i32
+        index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var6)) as i32
     }
     if !var7.is_null() {
         ::libc::strcat(match_0.string.as_mut_ptr(), var7);
@@ -4685,43 +4681,43 @@ pub unsafe extern "C" fn BotReplyChat(
             ::libc::strcat(bestmatch.string.as_mut_ptr(), var0);
             bestmatch.variables[0 as i32 as usize].offset = index as libc::c_char;
             bestmatch.variables[0 as i32 as usize].length = crate::stdlib::strlen(var0) as i32;
-            index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var0)) as i32 as i32
+            index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var0)) as i32
         }
         if !var1.is_null() {
             ::libc::strcat(bestmatch.string.as_mut_ptr(), var1);
             bestmatch.variables[1 as i32 as usize].offset = index as libc::c_char;
             bestmatch.variables[1 as i32 as usize].length = crate::stdlib::strlen(var1) as i32;
-            index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var1)) as i32 as i32
+            index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var1)) as i32
         }
         if !var2.is_null() {
             ::libc::strcat(bestmatch.string.as_mut_ptr(), var2);
             bestmatch.variables[2 as i32 as usize].offset = index as libc::c_char;
             bestmatch.variables[2 as i32 as usize].length = crate::stdlib::strlen(var2) as i32;
-            index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var2)) as i32 as i32
+            index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var2)) as i32
         }
         if !var3.is_null() {
             ::libc::strcat(bestmatch.string.as_mut_ptr(), var3);
             bestmatch.variables[3 as i32 as usize].offset = index as libc::c_char;
             bestmatch.variables[3 as i32 as usize].length = crate::stdlib::strlen(var3) as i32;
-            index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var3)) as i32 as i32
+            index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var3)) as i32
         }
         if !var4.is_null() {
             ::libc::strcat(bestmatch.string.as_mut_ptr(), var4);
             bestmatch.variables[4 as i32 as usize].offset = index as libc::c_char;
             bestmatch.variables[4 as i32 as usize].length = crate::stdlib::strlen(var4) as i32;
-            index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var4)) as i32 as i32
+            index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var4)) as i32
         }
         if !var5.is_null() {
             ::libc::strcat(bestmatch.string.as_mut_ptr(), var5);
             bestmatch.variables[5 as i32 as usize].offset = index as libc::c_char;
             bestmatch.variables[5 as i32 as usize].length = crate::stdlib::strlen(var5) as i32;
-            index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var5)) as i32 as i32
+            index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var5)) as i32
         }
         if !var6.is_null() {
             ::libc::strcat(bestmatch.string.as_mut_ptr(), var6);
             bestmatch.variables[6 as i32 as usize].offset = index as libc::c_char;
             bestmatch.variables[6 as i32 as usize].length = crate::stdlib::strlen(var6) as i32;
-            index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var6)) as i32 as i32
+            index = (index as libc::c_ulong).wrapping_add(crate::stdlib::strlen(var6)) as i32
         }
         if !var7.is_null() {
             ::libc::strcat(bestmatch.string.as_mut_ptr(), var7);

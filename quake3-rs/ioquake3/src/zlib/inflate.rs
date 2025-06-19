@@ -166,8 +166,7 @@ pub unsafe extern "C" fn inflatePrime(
     if bits > 16 as i32 || (*state).bits.wrapping_add(bits as u32) > 32 as i32 as u32 {
         return -(2 as i32);
     }
-    value =
-        (value as libc::c_long & ((1 as libc::c_long) << bits) - 1 as i32 as libc::c_long) as i32;
+    value = (value as isize & ((1 as isize) << bits) - 1 as i32 as isize) as i32;
     (*state).hold = (*state)
         .hold
         .wrapping_add((value << (*state).bits) as libc::c_ulong);
@@ -5010,7 +5009,7 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
                         } else {
                             (*state).dmax = (1 as u32) << len;
                             (*state).check = crate::src::zlib::adler32::adler32(
-                                0 as libc::c_long as crate::zconf_h::uLong,
+                                0 as isize as crate::zconf_h::uLong,
                                 0 as *const crate::zconf_h::Bytef,
                                 0 as i32 as crate::zconf_h::uInt,
                             );
@@ -5175,7 +5174,6 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
                     out = out.wrapping_sub(left);
                     (*strm).total_out = ((*strm).total_out as libc::c_ulong)
                         .wrapping_add(out as libc::c_ulong)
-                        as crate::zconf_h::uLong
                         as crate::zconf_h::uLong;
                     (*state).total = (*state).total.wrapping_add(out as libc::c_ulong);
                     if out != 0 {
@@ -5304,7 +5302,7 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
                     return 2 as i32;
                 }
                 (*state).check = crate::src::zlib::adler32::adler32(
-                    0 as libc::c_long as crate::zconf_h::uLong,
+                    0 as isize as crate::zconf_h::uLong,
                     0 as *const crate::zconf_h::Bytef,
                     0 as i32 as crate::zconf_h::uInt,
                 );
@@ -5829,9 +5827,9 @@ pub unsafe extern "C" fn inflate(mut strm: crate::zlib_h::z_streamp, mut flush: 
     in_0 = in_0.wrapping_sub((*strm).avail_in);
     out = out.wrapping_sub((*strm).avail_out);
     (*strm).total_in = ((*strm).total_in as libc::c_ulong).wrapping_add(in_0 as libc::c_ulong)
-        as crate::zconf_h::uLong as crate::zconf_h::uLong;
+        as crate::zconf_h::uLong;
     (*strm).total_out = ((*strm).total_out as libc::c_ulong).wrapping_add(out as libc::c_ulong)
-        as crate::zconf_h::uLong as crate::zconf_h::uLong;
+        as crate::zconf_h::uLong;
     (*state).total = (*state).total.wrapping_add(out as libc::c_ulong);
     if (*state).wrap != 0 && out != 0 {
         (*state).check = crate::src::zlib::adler32::adler32(
@@ -5907,7 +5905,7 @@ pub unsafe extern "C" fn inflateSetDictionary(
     /* check for correct dictionary id */
     if (*state).mode as u32 == crate::src::zlib::inflate::DICT as i32 as u32 {
         id = crate::src::zlib::adler32::adler32(
-            0 as libc::c_long as crate::zconf_h::uLong,
+            0 as isize as crate::zconf_h::uLong,
             0 as *const crate::zconf_h::Bytef,
             0 as i32 as crate::zconf_h::uInt,
         );
@@ -6036,11 +6034,10 @@ pub unsafe extern "C" fn inflateSync(mut strm: crate::zlib_h::z_streamp) -> i32 
     }
     /* search available input */
     len = syncsearch(&mut (*state).have, (*strm).next_in, (*strm).avail_in);
-    (*strm).avail_in =
-        ((*strm).avail_in as u32).wrapping_sub(len) as crate::zconf_h::uInt as crate::zconf_h::uInt;
+    (*strm).avail_in = ((*strm).avail_in as u32).wrapping_sub(len) as crate::zconf_h::uInt;
     (*strm).next_in = (*strm).next_in.offset(len as isize);
     (*strm).total_in = ((*strm).total_in as libc::c_ulong).wrapping_add(len as libc::c_ulong)
-        as crate::zconf_h::uLong as crate::zconf_h::uLong;
+        as crate::zconf_h::uLong;
     /* return no joy or set up to restart inflate() on a new block */
     if (*state).have != 4 as i32 as u32 {
         return -(3 as i32);
@@ -6788,17 +6785,19 @@ pub unsafe extern "C" fn inflateCopy(
                 .offset(-(1 as i32 as isize))
                 as *const crate::src::zlib::inftrees::code
     {
-        (*copy).lencode = (*copy).codes.as_mut_ptr().offset(
-            (*state).lencode.offset_from((*state).codes.as_mut_ptr()) as libc::c_long as isize,
-        );
-        (*copy).distcode = (*copy).codes.as_mut_ptr().offset(
-            (*state).distcode.offset_from((*state).codes.as_mut_ptr()) as libc::c_long as isize,
-        )
+        (*copy).lencode = (*copy)
+            .codes
+            .as_mut_ptr()
+            .offset((*state).lencode.offset_from((*state).codes.as_mut_ptr()) as isize as isize);
+        (*copy).distcode = (*copy)
+            .codes
+            .as_mut_ptr()
+            .offset((*state).distcode.offset_from((*state).codes.as_mut_ptr()) as isize as isize)
     }
     (*copy).next = (*copy)
         .codes
         .as_mut_ptr()
-        .offset((*state).next.offset_from((*state).codes.as_mut_ptr()) as libc::c_long as isize);
+        .offset((*state).next.offset_from((*state).codes.as_mut_ptr()) as isize as isize);
     if !window.is_null() {
         wsize = (1 as u32) << (*state).wbits;
         crate::stdlib::memcpy(

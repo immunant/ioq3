@@ -204,7 +204,7 @@ unsafe extern "C" fn WRITE_STRING(mut s: *const libc::c_char) {
         s as *const libc::c_void,
         crate::stdlib::strlen(s),
     );
-    bufIndex = (bufIndex as libc::c_ulong).wrapping_add(crate::stdlib::strlen(s)) as i32 as i32;
+    bufIndex = (bufIndex as libc::c_ulong).wrapping_add(crate::stdlib::strlen(s)) as i32;
 }
 /*
 ===============
@@ -44826,7 +44826,7 @@ pub unsafe extern "C" fn CL_CloseAVI() -> crate::src::qcommon::q_shared::qboolea
     afd.fileOpen = crate::src::qcommon::q_shared::qfalse;
     crate::src::qcommon::files::FS_Seek(
         afd.idxF,
-        4 as i32 as libc::c_long,
+        4 as i32 as isize,
         crate::src::qcommon::q_shared::FS_SEEK_SET as i32,
     );
     bufIndex = 0 as i32;
@@ -44881,7 +44881,7 @@ pub unsafe extern "C" fn CL_CloseAVI() -> crate::src::qcommon::q_shared::qboolea
     // Write the real header
     crate::src::qcommon::files::FS_Seek(
         afd.f,
-        0 as i32 as libc::c_long,
+        0 as i32 as isize,
         crate::src::qcommon::q_shared::FS_SEEK_SET as i32,
     ); // "RIFF" size
     CL_WriteAVIHeader(); // Skip "LIST"

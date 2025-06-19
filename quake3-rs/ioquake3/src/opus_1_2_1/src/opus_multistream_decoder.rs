@@ -449,8 +449,8 @@ unsafe extern "C" fn opus_multistream_decode_native(
         4029 as i32,
         (&mut Fs as *mut crate::opus_types_h::opus_int32).offset(
             (&mut Fs as *mut crate::opus_types_h::opus_int32)
-                .offset_from(&mut Fs as *mut crate::opus_types_h::opus_int32)
-                as libc::c_long as isize,
+                .offset_from(&mut Fs as *mut crate::opus_types_h::opus_int32) as isize
+                as isize,
         ),
     );
     frame_size = if frame_size < Fs / 25 as i32 * 3 as i32 {

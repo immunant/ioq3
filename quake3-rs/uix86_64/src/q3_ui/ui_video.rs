@@ -1362,7 +1362,7 @@ unsafe extern "C" fn GraphicsOptions_GetAspectRatios() {
         crate::src::qcommon::q_shared::Q_strncpyz(
             str.as_mut_ptr(),
             *resolutions.offset(r as isize),
-            x.offset_from(*resolutions.offset(r as isize)) as libc::c_long as i32,
+            x.offset_from(*resolutions.offset(r as isize)) as isize as i32,
         );
         w = atoi(str.as_mut_ptr());
         h = atoi(x);

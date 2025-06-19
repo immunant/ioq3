@@ -951,7 +951,7 @@ unsafe extern "C" fn ParseFace(
     ofsIndexes = sfaceSize;
     sfaceSize = (sfaceSize as libc::c_ulong).wrapping_add(
         (::std::mem::size_of::<i32>() as libc::c_ulong).wrapping_mul(numIndexes as libc::c_ulong),
-    ) as i32 as i32;
+    ) as i32;
     cv = crate::src::renderergl1::tr_main::ri
         .Hunk_Alloc
         .expect("non-null function pointer")(
@@ -4719,7 +4719,7 @@ pub unsafe extern "C" fn RE_LoadWorldMap(mut name: *const libc::c_char) {
         .expect("non-null function pointer")(
         0 as i32, crate::src::qcommon::q_shared::h_low
     ) as *mut crate::src::qcommon::q_shared::byte)
-        .offset_from(startMarker) as libc::c_long as i32;
+        .offset_from(startMarker) as isize as i32;
     // only set tr.world now that we know the entire level has loaded properly
     crate::src::renderergl1::tr_main::tr.world = &mut s_worldData;
     crate::src::renderergl1::tr_main::ri

@@ -884,7 +884,7 @@ unsafe extern "C" fn SV_BuildClientSnapshot(mut client: *mut crate::server_h::cl
     }
     // grab the current playerState_t
     ps = crate::src::server::sv_game::SV_GameClientNum(
-        client.offset_from(crate::src::server::sv_main::svs.clients) as libc::c_long as i32,
+        client.offset_from(crate::src::server::sv_main::svs.clients) as isize as i32,
     ) as *mut crate::src::qcommon::q_shared::playerState_s;
     (*frame).ps = *ps;
     // never send client's own entity, because it can
@@ -1039,7 +1039,7 @@ unsafe extern "C" fn SV_WriteVoipToClient(
                     ::std::mem::size_of::<*mut crate::server_h::voipServerPacket_t>()
                         as libc::c_ulong,
                 ),
-        ) as i32 as i32
+        ) as i32
     };
 }
 /*

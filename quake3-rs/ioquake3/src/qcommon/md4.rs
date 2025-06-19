@@ -474,10 +474,10 @@ unsafe extern "C" fn mdfour64(mut M: *mut crate::stdlib::uint32_t) {
             .wrapping_add(X[15 as i32 as usize])
             .wrapping_add(0x6ed9eba1 as i32 as u32)
             >> 32 as i32 - 15 as i32;
-    A = (A as u32).wrapping_add(AA) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
-    B = (B as u32).wrapping_add(BB) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
-    C = (C as u32).wrapping_add(CC) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
-    D = (D as u32).wrapping_add(DD) as crate::stdlib::uint32_t as crate::stdlib::uint32_t;
+    A = (A as u32).wrapping_add(AA) as crate::stdlib::uint32_t;
+    B = (B as u32).wrapping_add(BB) as crate::stdlib::uint32_t;
+    C = (C as u32).wrapping_add(CC) as crate::stdlib::uint32_t;
+    D = (D as u32).wrapping_add(DD) as crate::stdlib::uint32_t;
     j = 0 as i32;
     while j < 16 as i32 {
         X[j as usize] = 0 as i32 as crate::stdlib::uint32_t;
@@ -536,8 +536,7 @@ unsafe extern "C" fn mdfour_tail(mut in_0: *mut crate::src::qcommon::q_shared::b
     let mut buf: [crate::src::qcommon::q_shared::byte; 128] = [0; 128];
     let mut M: [crate::stdlib::uint32_t; 16] = [0; 16];
     let mut b: crate::stdlib::uint32_t = 0;
-    (*m).totalN = ((*m).totalN as u32).wrapping_add(n as u32) as crate::stdlib::uint32_t
-        as crate::stdlib::uint32_t;
+    (*m).totalN = ((*m).totalN as u32).wrapping_add(n as u32) as crate::stdlib::uint32_t;
     b = (*m).totalN.wrapping_mul(8 as i32 as u32);
     crate::stdlib::memset(
         buf.as_mut_ptr() as *mut libc::c_void,
@@ -581,7 +580,6 @@ unsafe extern "C" fn mdfour_update(
         in_0 = in_0.offset(64 as i32 as isize);
         n -= 64 as i32;
         (*m).totalN = ((*m).totalN as u32).wrapping_add(64 as i32 as u32) as crate::stdlib::uint32_t
-            as crate::stdlib::uint32_t
     }
     mdfour_tail(in_0, n);
 }

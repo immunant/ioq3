@@ -253,9 +253,8 @@ pub unsafe extern "C" fn G_InitSessionData(
             crate::src::game::g_cmds::SetTeam(
                 &mut *crate::src::game::g_main::g_entities
                     .as_mut_ptr()
-                    .offset(client.offset_from(crate::src::game::g_main::level.clients)
-                        as isize) as *mut _
-                    as *mut crate::g_local_h::gentity_s,
+                    .offset(client.offset_from(crate::src::game::g_main::level.clients) as isize)
+                    as *mut _ as *mut crate::g_local_h::gentity_s,
                 value,
             );
         }

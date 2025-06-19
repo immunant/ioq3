@@ -585,12 +585,10 @@ pub unsafe extern "C" fn COM_StripExtension(
         slash = ::libc::strrchr(in_0, '/' as i32);
         (slash.is_null()) || slash < dot
     } {
-        destsize = if (destsize as libc::c_long)
-            < dot.offset_from(in_0) as libc::c_long + 1 as i32 as libc::c_long
-        {
-            destsize as libc::c_long
+        destsize = if (destsize as isize) < dot.offset_from(in_0) as isize + 1 as i32 as isize {
+            destsize as isize
         } else {
-            (dot.offset_from(in_0) as libc::c_long) + 1 as i32 as libc::c_long
+            (dot.offset_from(in_0) as isize) + 1 as i32 as isize
         } as i32
     }
     if in_0 == out as *const libc::c_char && destsize > 1 as i32 {
@@ -1052,7 +1050,7 @@ pub unsafe extern "C" fn COM_Compress(mut data_p: *mut libc::c_char) -> i32 {
         }
         *out = 0 as i32 as libc::c_char
     }
-    return out.offset_from(data_p) as libc::c_long as i32;
+    return out.offset_from(data_p) as isize as i32;
 }
 #[no_mangle]
 

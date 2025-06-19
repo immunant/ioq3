@@ -736,11 +736,11 @@ pub mod highlevel_h {
         pub impulse_noisetune: f64,
         pub req: f32,
         pub managed: i32,
-        pub bitrate_min: libc::c_long,
-        pub bitrate_av: libc::c_long,
+        pub bitrate_min: isize,
+        pub bitrate_av: isize,
         pub bitrate_av_damp: f64,
-        pub bitrate_max: libc::c_long,
-        pub bitrate_reservoir: libc::c_long,
+        pub bitrate_max: isize,
+        pub bitrate_reservoir: isize,
         pub bitrate_reservoir_bias: f64,
         pub impulse_block_p: i32,
         pub noise_normalize_p: i32,
@@ -808,7 +808,7 @@ pub mod codec_internal_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct codec_setup_info {
-        pub blocksizes: [libc::c_long; 2],
+        pub blocksizes: [isize; 2],
         pub modes: i32,
         pub maps: i32,
         pub floors: i32,
@@ -843,9 +843,9 @@ pub mod codec_internal_h {
         pub n: i32,
         pub quant_q: i32,
         pub vi: *mut crate::backends_h::vorbis_info_floor1,
-        pub phrasebits: libc::c_long,
-        pub postbits: libc::c_long,
-        pub frames: libc::c_long,
+        pub phrasebits: isize,
+        pub postbits: isize,
+        pub frames: isize,
     }
 }
 pub mod backends_h {
@@ -889,8 +889,8 @@ pub mod backends_h {
     #[derive(Copy, Clone)]
     pub struct vorbis_info_floor0 {
         pub order: i32,
-        pub rate: libc::c_long,
-        pub barkmap: libc::c_long,
+        pub rate: isize,
+        pub barkmap: isize,
         pub ampbits: i32,
         pub ampdB: i32,
         pub numbooks: i32,
@@ -945,7 +945,7 @@ pub mod backends_h {
                 _: *mut *mut i32,
                 _: *mut i32,
                 _: i32,
-            ) -> *mut *mut libc::c_long,
+            ) -> *mut *mut isize,
         >,
         pub forward: Option<
             unsafe extern "C" fn(
@@ -955,7 +955,7 @@ pub mod backends_h {
                 _: *mut *mut i32,
                 _: *mut i32,
                 _: i32,
-                _: *mut *mut libc::c_long,
+                _: *mut *mut isize,
                 _: i32,
             ) -> i32,
         >,
@@ -973,8 +973,8 @@ pub mod backends_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct vorbis_info_residue0 {
-        pub begin: libc::c_long,
-        pub end: libc::c_long,
+        pub begin: isize,
+        pub end: isize,
         pub grouping: i32,
         pub partitions: i32,
         pub partvals: i32,
@@ -1089,11 +1089,11 @@ pub mod codec_h {
     pub struct vorbis_info {
         pub version: i32,
         pub channels: i32,
-        pub rate: libc::c_long,
-        pub bitrate_upper: libc::c_long,
-        pub bitrate_nominal: libc::c_long,
-        pub bitrate_lower: libc::c_long,
-        pub bitrate_window: libc::c_long,
+        pub rate: isize,
+        pub bitrate_upper: isize,
+        pub bitrate_nominal: isize,
+        pub bitrate_lower: isize,
+        pub bitrate_window: isize,
         pub codec_setup: *mut libc::c_void,
     }
 
@@ -1109,10 +1109,10 @@ pub mod codec_h {
         pub pcm_returned: i32,
         pub preextrapolate: i32,
         pub eofflag: i32,
-        pub lW: libc::c_long,
-        pub W: libc::c_long,
-        pub nW: libc::c_long,
-        pub centerW: libc::c_long,
+        pub lW: isize,
+        pub W: isize,
+        pub nW: isize,
+        pub centerW: isize,
         pub granulepos: crate::config_types_h::ogg_int64_t,
         pub sequence: crate::config_types_h::ogg_int64_t,
         pub glue_bits: crate::config_types_h::ogg_int64_t,
@@ -1127,9 +1127,9 @@ pub mod codec_h {
     pub struct vorbis_block {
         pub pcm: *mut *mut f32,
         pub opb: crate::ogg_h::oggpack_buffer,
-        pub lW: libc::c_long,
-        pub W: libc::c_long,
-        pub nW: libc::c_long,
+        pub lW: isize,
+        pub W: isize,
+        pub nW: isize,
         pub pcmend: i32,
         pub mode: i32,
         pub eofflag: i32,
@@ -1137,14 +1137,14 @@ pub mod codec_h {
         pub sequence: crate::config_types_h::ogg_int64_t,
         pub vd: *mut crate::codec_h::vorbis_dsp_state,
         pub localstore: *mut libc::c_void,
-        pub localtop: libc::c_long,
-        pub localalloc: libc::c_long,
-        pub totaluse: libc::c_long,
+        pub localtop: isize,
+        pub localalloc: isize,
+        pub totaluse: isize,
         pub reap: *mut crate::codec_h::alloc_chain,
-        pub glue_bits: libc::c_long,
-        pub time_bits: libc::c_long,
-        pub floor_bits: libc::c_long,
-        pub res_bits: libc::c_long,
+        pub glue_bits: isize,
+        pub time_bits: isize,
+        pub floor_bits: isize,
+        pub res_bits: isize,
         pub internal: *mut libc::c_void,
     }
 
@@ -1175,41 +1175,41 @@ pub mod ogg_h {
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct oggpack_buffer {
-        pub endbyte: libc::c_long,
+        pub endbyte: isize,
         pub endbit: i32,
         pub buffer: *mut u8,
         pub ptr: *mut u8,
-        pub storage: libc::c_long,
+        pub storage: isize,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct ogg_page {
         pub header: *mut u8,
-        pub header_len: libc::c_long,
+        pub header_len: isize,
         pub body: *mut u8,
-        pub body_len: libc::c_long,
+        pub body_len: isize,
     }
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct ogg_stream_state {
         pub body_data: *mut u8,
-        pub body_storage: libc::c_long,
-        pub body_fill: libc::c_long,
-        pub body_returned: libc::c_long,
+        pub body_storage: isize,
+        pub body_fill: isize,
+        pub body_returned: isize,
         pub lacing_vals: *mut i32,
         pub granule_vals: *mut crate::config_types_h::ogg_int64_t,
-        pub lacing_storage: libc::c_long,
-        pub lacing_fill: libc::c_long,
-        pub lacing_packet: libc::c_long,
-        pub lacing_returned: libc::c_long,
+        pub lacing_storage: isize,
+        pub lacing_fill: isize,
+        pub lacing_packet: isize,
+        pub lacing_returned: isize,
         pub header: [u8; 282],
         pub header_fill: i32,
         pub e_o_s: i32,
         pub b_o_s: i32,
-        pub serialno: libc::c_long,
-        pub pageno: libc::c_long,
+        pub serialno: isize,
+        pub pageno: isize,
         pub packetno: crate::config_types_h::ogg_int64_t,
         pub granulepos: crate::config_types_h::ogg_int64_t,
     }
@@ -1218,9 +1218,9 @@ pub mod ogg_h {
     #[derive(Copy, Clone)]
     pub struct ogg_packet {
         pub packet: *mut u8,
-        pub bytes: libc::c_long,
-        pub b_o_s: libc::c_long,
-        pub e_o_s: libc::c_long,
+        pub bytes: isize,
+        pub b_o_s: isize,
+        pub e_o_s: isize,
         pub granulepos: crate::config_types_h::ogg_int64_t,
         pub packetno: crate::config_types_h::ogg_int64_t,
     }
@@ -1632,7 +1632,7 @@ pub mod keys_h {
     }
 }
 pub mod curlbuild_h {
-    pub type curl_off_t = libc::c_long;
+    pub type curl_off_t = isize;
 }
 pub mod opus_types_h {
     pub type opus_int16 = crate::stdlib::int16_t;
@@ -2082,7 +2082,7 @@ pub mod tr_public_h {
         pub FS_FileIsInPAK:
             Option<unsafe extern "C" fn(_: *const libc::c_char, _: *mut i32) -> i32>,
         pub FS_ReadFile: Option<
-            unsafe extern "C" fn(_: *const libc::c_char, _: *mut *mut libc::c_void) -> libc::c_long,
+            unsafe extern "C" fn(_: *const libc::c_char, _: *mut *mut libc::c_void) -> isize,
         >,
         pub FS_FreeFile: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
         pub FS_ListFiles: Option<
@@ -2118,7 +2118,7 @@ pub mod tr_public_h {
         pub IN_Init: Option<unsafe extern "C" fn(_: *mut libc::c_void) -> ()>,
         pub IN_Shutdown: Option<unsafe extern "C" fn() -> ()>,
         pub IN_Restart: Option<unsafe extern "C" fn() -> ()>,
-        pub ftol: Option<unsafe extern "C" fn(_: f32) -> libc::c_long>,
+        pub ftol: Option<unsafe extern "C" fn(_: f32) -> isize>,
         pub Sys_SetEnv:
             Option<unsafe extern "C" fn(_: *const libc::c_char, _: *const libc::c_char) -> ()>,
         pub Sys_GLimpSafeInit: Option<unsafe extern "C" fn() -> ()>,
@@ -2135,7 +2135,7 @@ pub mod tr_public_h {
     >;
 }
 pub mod stddef_h {
-    pub type ptrdiff_t = libc::c_long;
+    pub type ptrdiff_t = isize;
 
     pub type size_t = libc::c_ulong;
 
@@ -2774,7 +2774,7 @@ pub mod botlib_h {
         pub FS_Seek: Option<
             unsafe extern "C" fn(
                 _: crate::src::qcommon::q_shared::fileHandle_t,
-                _: libc::c_long,
+                _: isize,
                 _: i32,
             ) -> i32,
         >,
@@ -3433,7 +3433,7 @@ pub mod server_h {
         pub ipv: crate::server_h::C2RustUnnamed_164,
         pub lastTime: i32,
         pub burst: i8,
-        pub hash: libc::c_long,
+        pub hash: isize,
         pub prev: *mut crate::server_h::leakyBucket_t,
         pub next: *mut crate::server_h::leakyBucket_t,
     }
@@ -7240,11 +7240,10 @@ pub mod stdlib {
         ) -> libc::c_ulong;
 
         #[no_mangle]
-        pub fn fseek(__stream: *mut crate::stdlib::FILE, __off: libc::c_long, __whence: i32)
-            -> i32;
+        pub fn fseek(__stream: *mut crate::stdlib::FILE, __off: isize, __whence: i32) -> i32;
 
         #[no_mangle]
-        pub fn ftell(__stream: *mut crate::stdlib::FILE) -> libc::c_long;
+        pub fn ftell(__stream: *mut crate::stdlib::FILE) -> isize;
 
         #[no_mangle]
         pub fn fseeko(
@@ -9232,14 +9231,14 @@ pub mod stdlib {
     pub type jmp_buf = [crate::stdlib::__jmp_buf_tag; 1];
     pub type mbstate_t = crate::stdlib::__mbstate_t;
     pub type mode_t = crate::stdlib::__mode_t;
-    pub type __fd_mask = libc::c_long;
+    pub type __fd_mask = isize;
 
     #[repr(C)]
     #[derive(Copy, Clone)]
     pub struct fd_set {
         pub __fds_bits: [crate::stdlib::__fd_mask; 16],
     }
-    pub type __jmp_buf = [libc::c_long; 8];
+    pub type __jmp_buf = [isize; 8];
     pub type __sighandler_t = Option<unsafe extern "C" fn(_: i32) -> ()>;
     pub type sa_family_t = u16;
     pub type socklen_t = crate::stdlib::__socklen_t;
@@ -9289,7 +9288,7 @@ pub mod stdlib {
         pub st_ctim: ::libc::timespec,
         pub __glibc_reserved: [crate::stdlib::__syscall_slong_t; 3],
     }
-    pub type intptr_t = libc::c_long;
+    pub type intptr_t = isize;
     pub type int16_t = crate::stdlib::__int16_t;
 
     pub type int32_t = crate::stdlib::__int32_t;
@@ -9365,7 +9364,7 @@ pub mod stdlib {
 
     pub type __uint32_t = u32;
 
-    pub type __int64_t = libc::c_long;
+    pub type __int64_t = isize;
 
     pub type __dev_t = libc::c_ulong;
 
@@ -9379,27 +9378,27 @@ pub mod stdlib {
 
     pub type __nlink_t = libc::c_ulong;
 
-    pub type __off_t = libc::c_long;
+    pub type __off_t = isize;
 
-    pub type __off64_t = libc::c_long;
+    pub type __off64_t = isize;
 
     pub type __pid_t = i32;
 
-    pub type __clock_t = libc::c_long;
+    pub type __clock_t = isize;
 
-    pub type __time_t = libc::c_long;
+    pub type __time_t = isize;
 
     pub type __useconds_t = u32;
 
-    pub type __suseconds_t = libc::c_long;
+    pub type __suseconds_t = isize;
 
-    pub type __blksize_t = libc::c_long;
+    pub type __blksize_t = isize;
 
-    pub type __blkcnt_t = libc::c_long;
+    pub type __blkcnt_t = isize;
 
-    pub type __ssize_t = libc::c_long;
+    pub type __ssize_t = isize;
 
-    pub type __syscall_slong_t = libc::c_long;
+    pub type __syscall_slong_t = isize;
 
     pub type __socklen_t = u32;
 }

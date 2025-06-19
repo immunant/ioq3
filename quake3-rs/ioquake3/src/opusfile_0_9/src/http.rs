@@ -57,16 +57,16 @@ unsafe extern "C" fn op_string_range_dup(
 ) -> *mut libc::c_char {
     let mut len: crate::stddef_h::size_t = 0;
     let mut ret: *mut libc::c_char = 0 as *mut libc::c_char;
-    len = _end.offset_from(_start) as libc::c_long as crate::stddef_h::size_t;
+    len = _end.offset_from(_start) as isize as crate::stddef_h::size_t;
     /*This is to help avoid overflow elsewhere, later.*/
-    if (len >= 2147483647 as i32 as libc::c_ulong) as i32 as libc::c_long != 0 {
+    if (len >= 2147483647 as i32 as libc::c_ulong) as i32 as isize != 0 {
         return 0 as *mut libc::c_char;
     }
     ret = crate::stdlib::malloc(
         (::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
             .wrapping_mul(len.wrapping_add(1 as i32 as libc::c_ulong)),
     ) as *mut libc::c_char;
-    if !ret.is_null() as i32 as libc::c_long != 0 {
+    if !ret.is_null() as i32 as isize != 0 {
         ret = crate::stdlib::memcpy(
             ret as *mut libc::c_void,
             _start as *const libc::c_void,
@@ -115,17 +115,17 @@ unsafe extern "C" fn op_validate_url_escapes(mut _s: *const libc::c_char) -> i32
             if (*(*crate::stdlib::__ctype_b_loc())
                 .offset(*_s.offset((i + 1 as i32) as isize) as i32 as isize) as i32
                 & crate::stdlib::_ISxdigit as i32 as u16 as i32
-                == 0) as i32 as libc::c_long
+                == 0) as i32 as isize
                 != 0
                 || (*(*crate::stdlib::__ctype_b_loc())
                     .offset(*_s.offset((i + 2 as i32) as isize) as i32 as isize)
                     as i32
                     & crate::stdlib::_ISxdigit as i32 as u16 as i32
-                    == 0) as i32 as libc::c_long
+                    == 0) as i32 as isize
                     != 0
                 || (*_s.offset((i + 1 as i32) as isize) as i32 == '0' as i32
                     && *_s.offset((i + 2 as i32) as isize) as i32 == '0' as i32)
-                    as i32 as libc::c_long
+                    as i32 as isize
                     != 0
             {
                 return -(1 as i32);
@@ -185,8 +185,8 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
         b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-.\x00" as *const u8
             as *const libc::c_char,
     ) as isize);
-    if (*scheme_end as i32 != ':' as i32) as i32 as libc::c_long != 0
-        || scheme_end.offset_from(_src) as libc::c_long != 4 as i32 as libc::c_long
+    if (*scheme_end as i32 != ':' as i32) as i32 as isize != 0
+        || scheme_end.offset_from(_src) as isize != 4 as i32 as isize
         || crate::src::opusfile_0_9::src::internal::op_strncasecmp(
             _src,
             b"file\x00" as *const u8 as *const libc::c_char,
@@ -197,8 +197,7 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
         return 0 as *const libc::c_char;
     }
     /*Make sure all escape sequences are valid to simplify unescaping later.*/
-    if (op_validate_url_escapes(scheme_end.offset(1 as i32 as isize)) < 0 as i32) as i32
-        as libc::c_long
+    if (op_validate_url_escapes(scheme_end.offset(1 as i32 as isize)) < 0 as i32) as i32 as isize
         != 0
     {
         return 0 as *const libc::c_char;
@@ -215,7 +214,7 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
          understatement.*/
         host = scheme_end.offset(3 as i32 as isize);
         /*The empty host is what we expect.*/
-        if (*host as i32 == '/' as i32) as i32 as libc::c_long != 0 {
+        if (*host as i32 == '/' as i32) as i32 as isize != 0 {
             path = host
         } else {
             let mut host_end: *const libc::c_char = 0 as *const libc::c_char;
@@ -233,27 +232,23 @@ unsafe extern "C" fn op_parse_file_url(mut _src: *const libc::c_char) -> *const 
                 return 0 as *const libc::c_char;
             }
             /*An escaped "localhost" can take at most 27 characters.*/
-            if (host_end.offset_from(host) as libc::c_long > 27 as i32 as libc::c_long) as i32
-                as libc::c_long
-                != 0
-            {
+            if (host_end.offset_from(host) as isize > 27 as i32 as isize) as i32 as isize != 0 {
                 return 0 as *const libc::c_char;
             }
             crate::stdlib::memcpy(
                 host_buf.as_mut_ptr() as *mut libc::c_void,
                 host as *const libc::c_void,
                 (::std::mem::size_of::<libc::c_char>() as libc::c_ulong)
-                    .wrapping_mul(host_end.offset_from(host) as libc::c_long as libc::c_ulong),
+                    .wrapping_mul(host_end.offset_from(host) as isize as libc::c_ulong),
             );
-            host_buf[host_end.offset_from(host) as libc::c_long as usize] =
-                '\u{0}' as i32 as libc::c_char;
+            host_buf[host_end.offset_from(host) as isize as usize] = '\u{0}' as i32 as libc::c_char;
             op_unescape_url_component(host_buf.as_mut_ptr());
             op_string_tolower(host_buf.as_mut_ptr());
             /*Some other host: give up.*/
             if (::libc::strcmp(
                 host_buf.as_mut_ptr(),
                 b"localhost\x00" as *const u8 as *const libc::c_char,
-            ) != 0 as i32) as i32 as libc::c_long
+            ) != 0 as i32) as i32 as isize
                 != 0
             {
                 return 0 as *const libc::c_char;
@@ -327,7 +322,7 @@ unsafe extern "C" fn op_url_stream_create_impl(
         let mut unescaped_path: *mut libc::c_char = 0 as *mut libc::c_char;
         let mut ret: *mut libc::c_void = 0 as *mut libc::c_void;
         unescaped_path = op_string_dup(path);
-        if unescaped_path.is_null() as i32 as libc::c_long != 0 {
+        if unescaped_path.is_null() as i32 as isize != 0 {
             return 0 as *mut libc::c_void;
         }
         ret = crate::src::opusfile_0_9::src::stream::op_fopen(
@@ -381,8 +376,7 @@ unsafe extern "C" fn op_url_stream_vcreate_impl(
         request = _ap
             .as_va_list()
             .arg::<*mut libc::c_char>()
-            .offset_from(0 as *mut libc::c_void as *mut libc::c_char)
-            as libc::c_long;
+            .offset_from(0 as *mut libc::c_void as *mut libc::c_char) as isize;
         /*If we hit NULL, we're done processing options.*/
         if request == 0 {
             break;
@@ -518,7 +512,7 @@ pub unsafe extern "C" fn op_vopen_url(
         0 as *mut crate::src::opusfile_0_9::src::opusfile::OpusServerInfo;
     let mut source: *mut libc::c_void = 0 as *mut libc::c_void;
     source = op_url_stream_vcreate_impl(&mut cb, _url, &mut info, &mut pinfo, _ap.as_va_list());
-    if source.is_null() as i32 as libc::c_long != 0 {
+    if source.is_null() as i32 as isize != 0 {
         if !_error.is_null() {
             *_error = -(129 as i32)
         }
@@ -531,7 +525,7 @@ pub unsafe extern "C" fn op_vopen_url(
         0 as i32 as crate::stddef_h::size_t,
         _error,
     ) as *mut crate::internal_h::OggOpusFile;
-    if of.is_null() as i32 as libc::c_long != 0 {
+    if of.is_null() as i32 as isize != 0 {
         if !pinfo.is_null() {
             opus_server_info_clear(&mut info);
         }
@@ -587,7 +581,7 @@ pub unsafe extern "C" fn op_vtest_url(
         0 as *mut crate::src::opusfile_0_9::src::opusfile::OpusServerInfo;
     let mut source: *mut libc::c_void = 0 as *mut libc::c_void;
     source = op_url_stream_vcreate_impl(&mut cb, _url, &mut info, &mut pinfo, _ap.as_va_list());
-    if source.is_null() as i32 as libc::c_long != 0 {
+    if source.is_null() as i32 as isize != 0 {
         if !_error.is_null() {
             *_error = -(129 as i32)
         }
@@ -600,7 +594,7 @@ pub unsafe extern "C" fn op_vtest_url(
         0 as i32 as crate::stddef_h::size_t,
         _error,
     ) as *mut crate::internal_h::OggOpusFile;
-    if of.is_null() as i32 as libc::c_long != 0 {
+    if of.is_null() as i32 as isize != 0 {
         if !pinfo.is_null() {
             opus_server_info_clear(&mut info);
         }

@@ -1546,7 +1546,7 @@ pub unsafe extern "C" fn CL_CgameSystemCalls(
             // Don't allow the cgame module to close the console
             crate::src::client::cl_keys::Key_SetCatcher(
                 (*args.offset(1 as i32 as isize)
-                    | (crate::src::client::cl_keys::Key_GetCatcher() & 0x1 as i32) as libc::c_long)
+                    | (crate::src::client::cl_keys::Key_GetCatcher() & 0x1 as i32) as isize)
                     as i32,
             );
             return 0 as i32 as crate::stdlib::intptr_t;

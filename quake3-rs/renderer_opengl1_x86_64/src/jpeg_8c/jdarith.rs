@@ -279,7 +279,7 @@ unsafe extern "C" fn arith_decode(
     let mut sv: i32 = 0;
     let mut data: i32 = 0;
     /* Renormalization & data input per section D.2.6 */
-    while (*e).a < 0x8000 as libc::c_long {
+    while (*e).a < 0x8000 as isize {
         (*e).ct -= 1;
         if (*e).ct < 0 as i32 {
             /* Need to fetch next data byte */
@@ -312,7 +312,7 @@ unsafe extern "C" fn arith_decode(
                 }
             }
             /* => e->a = 0x10000L after loop exit */
-            (*e).c = (*e).c << 8 as i32 | data as libc::c_long; /* insert data into C register */
+            (*e).c = (*e).c << 8 as i32 | data as isize; /* insert data into C register */
             (*e).ct += 8 as i32;
             if (*e).ct < 0 as i32 {
                 /* update bit shift counter */
@@ -320,7 +320,7 @@ unsafe extern "C" fn arith_decode(
                 (*e).ct += 1;
                 if (*e).ct == 0 as i32 {
                     /* Got 2 initial bytes -> re-init A and exit loop */
-                    (*e).a = 0x8000 as libc::c_long
+                    (*e).a = 0x8000 as isize
                 }
             }
         }
@@ -333,9 +333,9 @@ unsafe extern "C" fn arith_decode(
     qe = *crate::src::jpeg_8c::jaricom::jpeg_aritab
         .as_ptr()
         .offset((sv & 0x7f as i32) as isize); /* Next_Index_LPS + Switch_MPS */
-    nl = (qe & 0xff as i32 as libc::c_long) as u8; /* Next_Index_MPS */
+    nl = (qe & 0xff as i32 as isize) as u8; /* Next_Index_MPS */
     qe >>= 8 as i32;
-    nm = (qe & 0xff as i32 as libc::c_long) as u8;
+    nm = (qe & 0xff as i32 as isize) as u8;
     qe >>= 8 as i32;
     /* Decode & estimation procedures per sections D.2.4 & D.2.5 */
     temp = (*e).a - qe;
@@ -354,7 +354,7 @@ unsafe extern "C" fn arith_decode(
             *st = (sv & 0x80 as i32 ^ nl as i32) as u8; /* Estimate_after_LPS */
             sv ^= 0x80 as i32
         }
-    } else if (*e).a < 0x8000 as libc::c_long {
+    } else if (*e).a < 0x8000 as isize {
         /* Conditional MPS (more probable symbol) exchange */
         if (*e).a < qe {
             *st = (sv & 0x80 as i32 ^ nl as i32) as u8;
@@ -506,14 +506,11 @@ unsafe extern "C" fn decode_mcu_DC_first(
                 }
             }
             /* Section F.1.4.4.1.2: Establish dc_context conditioning category */
-            if m < ((1 as libc::c_long) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32)
-                as i32
-            {
+            if m < ((1 as isize) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32) as i32 {
                 /* small diff category */
                 (*entropy).dc_context[ci as usize] = 0 as i32
             } else if m
-                > ((1 as libc::c_long) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32)
-                    as i32
+                > ((1 as isize) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32) as i32
             {
                 /* zero diff category */
                 (*entropy).dc_context[ci as usize] = 12 as i32 + sign * 4 as i32
@@ -869,14 +866,11 @@ unsafe extern "C" fn decode_mcu(
                 }
             }
             /* Section F.1.4.4.1.2: Establish dc_context conditioning category */
-            if m < ((1 as libc::c_long) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32)
-                as i32
-            {
+            if m < ((1 as isize) << (*cinfo).arith_dc_L[tbl as usize] as i32 >> 1 as i32) as i32 {
                 /* small diff category */
                 (*entropy).dc_context[ci as usize] = 0 as i32
             } else if m
-                > ((1 as libc::c_long) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32)
-                    as i32
+                > ((1 as isize) << (*cinfo).arith_dc_U[tbl as usize] as i32 >> 1 as i32) as i32
             {
                 /* zero diff category */
                 (*entropy).dc_context[ci as usize] = 12 as i32 + sign * 4 as i32

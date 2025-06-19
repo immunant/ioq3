@@ -209,8 +209,8 @@ pub struct huff_entropy_encoder {
     pub next_restart_num: i32,
     pub dc_derived_tbls: [*mut c_derived_tbl; 4],
     pub ac_derived_tbls: [*mut c_derived_tbl; 4],
-    pub dc_count_ptrs: [*mut libc::c_long; 4],
-    pub ac_count_ptrs: [*mut libc::c_long; 4],
+    pub dc_count_ptrs: [*mut isize; 4],
+    pub ac_count_ptrs: [*mut isize; 4],
     pub gather_statistics: crate::jmorecfg_h::boolean,
     pub next_output_byte: *mut crate::jmorecfg_h::JOCTET,
     pub free_in_buffer: crate::stddef_h::size_t,
@@ -485,12 +485,12 @@ unsafe extern "C" fn emit_bits_s(
             (*state).cinfo as crate::jpeglib_h::j_common_ptr
         ); /* new number of bits in buffer */
     } /* align incoming bits */
-    put_buffer &= ((1 as i32 as crate::jmorecfg_h::INT32) << size) - 1 as i32 as libc::c_long; /* and merge with old buffer contents */
+    put_buffer &= ((1 as i32 as crate::jmorecfg_h::INT32) << size) - 1 as i32 as isize; /* and merge with old buffer contents */
     put_bits += size;
     put_buffer <<= 24 as i32 - put_bits;
     put_buffer |= (*state).cur.put_buffer;
     while put_bits >= 8 as i32 {
-        let mut c: i32 = (put_buffer >> 16 as i32 & 0xff as i32 as libc::c_long) as i32;
+        let mut c: i32 = (put_buffer >> 16 as i32 & 0xff as i32 as isize) as i32;
         let fresh3 = (*state).next_output_byte;
         (*state).next_output_byte = (*state).next_output_byte.offset(1);
         *fresh3 = c as crate::jmorecfg_h::JOCTET;
@@ -543,13 +543,13 @@ unsafe extern "C" fn emit_bits_e(mut entropy: huff_entropy_ptr, mut code: u32, m
     if (*entropy).gather_statistics != 0 {
         return;
     } /* align incoming bits */
-    put_buffer &= ((1 as i32 as crate::jmorecfg_h::INT32) << size) - 1 as i32 as libc::c_long;
+    put_buffer &= ((1 as i32 as crate::jmorecfg_h::INT32) << size) - 1 as i32 as isize;
     put_bits += size;
     put_buffer <<= 24 as i32 - put_bits;
     /* and merge with old buffer contents */
     put_buffer |= (*entropy).saved.put_buffer;
     while put_bits >= 8 as i32 {
-        let mut c: i32 = (put_buffer >> 16 as i32 & 0xff as i32 as libc::c_long) as i32;
+        let mut c: i32 = (put_buffer >> 16 as i32 & 0xff as i32 as isize) as i32;
         let fresh5 = (*entropy).next_output_byte;
         (*entropy).next_output_byte = (*entropy).next_output_byte.offset(1);
         *fresh5 = c as crate::jmorecfg_h::JOCTET;
@@ -1437,8 +1437,8 @@ unsafe extern "C" fn htest_one_block(
     mut cinfo: crate::jpeglib_h::j_compress_ptr,
     mut block: crate::jpeglib_h::JCOEFPTR,
     mut last_dc_val: i32,
-    mut dc_counts: *mut libc::c_long,
-    mut ac_counts: *mut libc::c_long,
+    mut dc_counts: *mut isize,
+    mut ac_counts: *mut isize,
 ) {
     let mut temp: i32 = 0;
     let mut nbits: i32 = 0;
@@ -1600,7 +1600,7 @@ unsafe extern "C" fn encode_mcu_gather(
 unsafe extern "C" fn jpeg_gen_optimal_table(
     mut cinfo: crate::jpeglib_h::j_compress_ptr,
     mut htbl: *mut crate::jpeglib_h::JHUFF_TBL,
-    mut freq: *mut libc::c_long,
+    mut freq: *mut isize,
 ) {
     /* assumed maximum initial code length */
     let mut bits: [crate::jmorecfg_h::UINT8; 33] = [0; 33]; /* bits[k] = # of symbols with code length k */
@@ -1611,7 +1611,7 @@ unsafe extern "C" fn jpeg_gen_optimal_table(
     let mut p: i32 = 0;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
-    let mut v: libc::c_long = 0;
+    let mut v: isize = 0;
     /* This algorithm is explained in section K.2 of the JPEG standard */
     crate::stdlib::memset(
         bits.as_mut_ptr() as *mut libc::c_void,
@@ -1628,7 +1628,7 @@ unsafe extern "C" fn jpeg_gen_optimal_table(
         others[i as usize] = -(1 as i32);
         i += 1
     }
-    *freq.offset(256 as i32 as isize) = 1 as i32 as libc::c_long;
+    *freq.offset(256 as i32 as isize) = 1 as i32 as isize;
     loop
     /* Including the pseudo-symbol 256 in the Huffman procedure guarantees
      * that no real symbol is given code-value of all ones, because 256
@@ -1639,7 +1639,7 @@ unsafe extern "C" fn jpeg_gen_optimal_table(
     /* In case of ties, take the larger symbol number */
     {
         c1 = -(1 as i32);
-        v = 1000000000 as libc::c_long;
+        v = 1000000000 as isize;
         i = 0 as i32;
         while i <= 256 as i32 {
             if *freq.offset(i as isize) != 0 && *freq.offset(i as isize) <= v {
@@ -1651,7 +1651,7 @@ unsafe extern "C" fn jpeg_gen_optimal_table(
         /* Find the next smallest nonzero frequency, set c2 = its symbol */
         /* In case of ties, take the larger symbol number */
         c2 = -(1 as i32);
-        v = 1000000000 as libc::c_long;
+        v = 1000000000 as isize;
         i = 0 as i32;
         while i <= 256 as i32 {
             if *freq.offset(i as isize) != 0 && *freq.offset(i as isize) <= v && i != c1 {
@@ -1666,7 +1666,7 @@ unsafe extern "C" fn jpeg_gen_optimal_table(
         }
         /* Else merge the two counts/trees */
         *freq.offset(c1 as isize) += *freq.offset(c2 as isize);
-        *freq.offset(c2 as isize) = 0 as i32 as libc::c_long;
+        *freq.offset(c2 as isize) = 0 as i32 as isize;
         /* Increment the codesize of everything in c1's tree branch */
         codesize[c1 as usize] += 1; /* chain c2 onto c1's tree branch */
         while others[c1 as usize] >= 0 as i32 {
@@ -1966,15 +1966,14 @@ unsafe extern "C" fn start_pass_huff(
                         cinfo as crate::jpeglib_h::j_common_ptr,
                         1 as i32,
                         (257 as i32 as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<libc::c_long>() as libc::c_ulong),
-                    )
-                        as *mut libc::c_long
+                            .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
+                    ) as *mut isize
                 }
                 crate::stdlib::memset(
                     (*entropy).dc_count_ptrs[tbl as usize] as *mut libc::c_void,
                     0 as i32,
                     (257 as i32 as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<libc::c_long>() as libc::c_ulong),
+                        .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
                 );
             } else {
                 /* Compute derived values for Huffman tables */
@@ -2016,15 +2015,14 @@ unsafe extern "C" fn start_pass_huff(
                         cinfo as crate::jpeglib_h::j_common_ptr,
                         1 as i32,
                         (257 as i32 as libc::c_ulong)
-                            .wrapping_mul(::std::mem::size_of::<libc::c_long>() as libc::c_ulong),
-                    )
-                        as *mut libc::c_long
+                            .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
+                    ) as *mut isize
                 }
                 crate::stdlib::memset(
                     (*entropy).ac_count_ptrs[tbl as usize] as *mut libc::c_void,
                     0 as i32,
                     (257 as i32 as libc::c_ulong)
-                        .wrapping_mul(::std::mem::size_of::<libc::c_long>() as libc::c_ulong),
+                        .wrapping_mul(::std::mem::size_of::<isize>() as libc::c_ulong),
                 );
             } else {
                 jpeg_make_c_derived_tbl(
@@ -2075,7 +2073,7 @@ pub unsafe extern "C" fn jinit_huff_encoder(mut cinfo: crate::jpeglib_h::j_compr
     while i < 4 as i32 {
         (*entropy).ac_derived_tbls[i as usize] = 0 as *mut c_derived_tbl;
         (*entropy).dc_derived_tbls[i as usize] = (*entropy).ac_derived_tbls[i as usize];
-        (*entropy).ac_count_ptrs[i as usize] = 0 as *mut libc::c_long;
+        (*entropy).ac_count_ptrs[i as usize] = 0 as *mut isize;
         (*entropy).dc_count_ptrs[i as usize] = (*entropy).ac_count_ptrs[i as usize];
         i += 1
     }

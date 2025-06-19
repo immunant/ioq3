@@ -367,8 +367,7 @@ pub unsafe extern "C" fn opus_repacketizer_out_range_impl(
             (*len.offset(i as isize) as libc::c_ulong)
                 .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
                 .wrapping_add(
-                    (0 as i32 as libc::c_long
-                        * ptr.offset_from(*frames.offset(i as isize)) as libc::c_long)
+                    (0 as i32 as isize * ptr.offset_from(*frames.offset(i as isize)) as isize)
                         as libc::c_ulong,
                 ),
         );
@@ -446,11 +445,11 @@ pub unsafe extern "C" fn opus_packet_pad(
         (len as libc::c_ulong)
             .wrapping_mul(::std::mem::size_of::<u8>() as libc::c_ulong)
             .wrapping_add(
-                (0 as i32 as libc::c_long
+                (0 as i32 as isize
                     * data
                         .offset(new_len as isize)
                         .offset(-(len as isize))
-                        .offset_from(data) as libc::c_long) as libc::c_ulong,
+                        .offset_from(data) as isize) as libc::c_ulong,
             ),
     );
     ret = opus_repacketizer_cat(
